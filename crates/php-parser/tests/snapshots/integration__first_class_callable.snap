@@ -1,0 +1,144 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: fn
+              span:
+                start: 6
+                end: 9
+            op: Assign
+            value:
+              kind:
+                CallableCreate:
+                  kind:
+                    Function:
+                      kind:
+                        Identifier: strlen
+                      span:
+                        start: 12
+                        end: 18
+              span:
+                start: 12
+                end: 23
+        span:
+          start: 6
+          end: 23
+    span:
+      start: 6
+      end: 25
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: fn
+              span:
+                start: 25
+                end: 28
+            op: Assign
+            value:
+              kind:
+                CallableCreate:
+                  kind:
+                    Method:
+                      object:
+                        kind:
+                          Variable: obj
+                        span:
+                          start: 31
+                          end: 35
+                      method:
+                        kind:
+                          Identifier: method
+                        span:
+                          start: 37
+                          end: 43
+              span:
+                start: 31
+                end: 48
+        span:
+          start: 25
+          end: 48
+    span:
+      start: 25
+      end: 50
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: fn
+              span:
+                start: 50
+                end: 53
+            op: Assign
+            value:
+              kind:
+                CallableCreate:
+                  kind:
+                    StaticMethod:
+                      class:
+                        kind:
+                          Identifier: Foo
+                        span:
+                          start: 56
+                          end: 59
+                      method: bar
+              span:
+                start: 56
+                end: 69
+        span:
+          start: 50
+          end: 69
+    span:
+      start: 50
+      end: 71
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: fn
+              span:
+                start: 71
+                end: 74
+            op: Assign
+            value:
+              kind:
+                CallableCreate:
+                  kind:
+                    NullsafeMethod:
+                      object:
+                        kind:
+                          Variable: obj
+                        span:
+                          start: 77
+                          end: 81
+                      method:
+                        kind:
+                          Identifier: method
+                        span:
+                          start: 84
+                          end: 90
+              span:
+                start: 77
+                end: 95
+        span:
+          start: 71
+          end: 95
+    span:
+      start: 71
+      end: 97
+span:
+  start: 0
+  end: 97

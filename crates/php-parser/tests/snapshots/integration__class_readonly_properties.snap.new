@@ -1,0 +1,200 @@
+---
+source: crates/php-parser/tests/integration.rs
+assertion_line: 530
+expression: result.program
+---
+stmts:
+  - kind:
+      Class:
+        name: Point
+        modifiers:
+          is_abstract: false
+          is_final: false
+          is_readonly: false
+        extends: ~
+        implements: []
+        members:
+          - kind:
+              Property:
+                name: x
+                visibility: Public
+                set_visibility: ~
+                is_static: false
+                is_readonly: true
+                type_hint:
+                  kind:
+                    Named:
+                      parts:
+                        - float
+                      kind: Unqualified
+                      span:
+                        start: 40
+                        end: 45
+                  span:
+                    start: 40
+                    end: 45
+                default: ~
+                attributes: []
+            span:
+              start: 24
+              end: 54
+          - kind:
+              Property:
+                name: y
+                visibility: Public
+                set_visibility: ~
+                is_static: false
+                is_readonly: true
+                type_hint:
+                  kind:
+                    Named:
+                      parts:
+                        - float
+                      kind: Unqualified
+                      span:
+                        start: 70
+                        end: 75
+                  span:
+                    start: 70
+                    end: 75
+                default: ~
+                attributes: []
+            span:
+              start: 54
+              end: 84
+          - kind:
+              Method:
+                name: __construct
+                visibility: Public
+                is_static: false
+                is_abstract: false
+                is_final: false
+                by_ref: false
+                params:
+                  - name: x
+                    type_hint:
+                      kind:
+                        Named:
+                          parts:
+                            - float
+                          kind: Unqualified
+                          span:
+                            start: 112
+                            end: 117
+                      span:
+                        start: 112
+                        end: 117
+                    default: ~
+                    by_ref: false
+                    variadic: false
+                    visibility: ~
+                    set_visibility: ~
+                    attributes: []
+                    span:
+                      start: 112
+                      end: 120
+                  - name: y
+                    type_hint:
+                      kind:
+                        Named:
+                          parts:
+                            - float
+                          kind: Unqualified
+                          span:
+                            start: 122
+                            end: 127
+                      span:
+                        start: 122
+                        end: 127
+                    default: ~
+                    by_ref: false
+                    variadic: false
+                    visibility: ~
+                    set_visibility: ~
+                    attributes: []
+                    span:
+                      start: 122
+                      end: 130
+                return_type: ~
+                body:
+                  - kind:
+                      Expression:
+                        kind:
+                          Assign:
+                            target:
+                              kind:
+                                PropertyAccess:
+                                  object:
+                                    kind:
+                                      Variable: this
+                                    span:
+                                      start: 142
+                                      end: 147
+                                  property:
+                                    kind:
+                                      Identifier: x
+                                    span:
+                                      start: 149
+                                      end: 150
+                              span:
+                                start: 142
+                                end: 150
+                            op: Assign
+                            value:
+                              kind:
+                                Variable: x
+                              span:
+                                start: 153
+                                end: 155
+                        span:
+                          start: 142
+                          end: 155
+                    span:
+                      start: 142
+                      end: 165
+                  - kind:
+                      Expression:
+                        kind:
+                          Assign:
+                            target:
+                              kind:
+                                PropertyAccess:
+                                  object:
+                                    kind:
+                                      Variable: this
+                                    span:
+                                      start: 165
+                                      end: 170
+                                  property:
+                                    kind:
+                                      Identifier: y
+                                    span:
+                                      start: 172
+                                      end: 173
+                              span:
+                                start: 165
+                                end: 173
+                            op: Assign
+                            value:
+                              kind:
+                                Variable: y
+                              span:
+                                start: 176
+                                end: 178
+                        span:
+                          start: 165
+                          end: 178
+                    span:
+                      start: 165
+                      end: 184
+                attributes: []
+            span:
+              start: 84
+              end: 186
+        attributes: []
+    span:
+      start: 6
+      end: 187
+span:
+  start: 0
+  end: 187

@@ -1,0 +1,318 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      If:
+        condition:
+          kind:
+            Binary:
+              left:
+                kind:
+                  Variable: x
+                span:
+                  start: 10
+                  end: 12
+              op: Greater
+              right:
+                kind:
+                  Int: 0
+                span:
+                  start: 15
+                  end: 16
+          span:
+            start: 10
+            end: 16
+        then_branch:
+          kind:
+            Block:
+              - kind:
+                  Echo:
+                    - kind:
+                        String: positive
+                      span:
+                        start: 28
+                        end: 38
+                span:
+                  start: 23
+                  end: 40
+          span:
+            start: 6
+            end: 40
+        elseif_branches:
+          - condition:
+              kind:
+                Binary:
+                  left:
+                    kind:
+                      Variable: x
+                    span:
+                      start: 48
+                      end: 50
+                  op: Less
+                  right:
+                    kind:
+                      Int: 0
+                    span:
+                      start: 53
+                      end: 54
+              span:
+                start: 48
+                end: 54
+            body:
+              kind:
+                Block:
+                  - kind:
+                      Echo:
+                        - kind:
+                            String: negative
+                          span:
+                            start: 66
+                            end: 76
+                    span:
+                      start: 61
+                      end: 78
+              span:
+                start: 47
+                end: 78
+            span:
+              start: 47
+              end: 78
+        else_branch:
+          kind:
+            Block:
+              - kind:
+                  Echo:
+                    - kind:
+                        String: zero
+                      span:
+                        start: 93
+                        end: 99
+                span:
+                  start: 88
+                  end: 101
+          span:
+            start: 6
+            end: 101
+    span:
+      start: 6
+      end: 108
+  - kind:
+      While:
+        condition:
+          kind:
+            Binary:
+              left:
+                kind:
+                  Variable: i
+                span:
+                  start: 115
+                  end: 117
+              op: Less
+              right:
+                kind:
+                  Int: 5
+                span:
+                  start: 120
+                  end: 121
+          span:
+            start: 115
+            end: 121
+        body:
+          kind:
+            Block:
+              - kind:
+                  Echo:
+                    - kind:
+                        Variable: i
+                      span:
+                        start: 133
+                        end: 135
+                span:
+                  start: 128
+                  end: 141
+              - kind:
+                  Expression:
+                    kind:
+                      UnaryPostfix:
+                        operand:
+                          kind:
+                            Variable: i
+                          span:
+                            start: 141
+                            end: 143
+                        op: PostIncrement
+                    span:
+                      start: 141
+                      end: 145
+                span:
+                  start: 141
+                  end: 147
+          span:
+            start: 108
+            end: 157
+    span:
+      start: 108
+      end: 157
+  - kind:
+      For:
+        init:
+          - kind:
+              Assign:
+                target:
+                  kind:
+                    Variable: i
+                  span:
+                    start: 162
+                    end: 164
+                op: Assign
+                value:
+                  kind:
+                    Int: 0
+                  span:
+                    start: 167
+                    end: 168
+            span:
+              start: 162
+              end: 168
+        condition:
+          - kind:
+              Binary:
+                left:
+                  kind:
+                    Variable: i
+                  span:
+                    start: 170
+                    end: 172
+                op: Less
+                right:
+                  kind:
+                    Int: 3
+                  span:
+                    start: 175
+                    end: 176
+            span:
+              start: 170
+              end: 176
+        update:
+          - kind:
+              UnaryPostfix:
+                operand:
+                  kind:
+                    Variable: i
+                  span:
+                    start: 178
+                    end: 180
+                op: PostIncrement
+            span:
+              start: 178
+              end: 182
+        body:
+          kind:
+            Block:
+              - kind:
+                  Echo:
+                    - kind:
+                        Variable: i
+                      span:
+                        start: 194
+                        end: 196
+                span:
+                  start: 189
+                  end: 198
+          span:
+            start: 157
+            end: 206
+    span:
+      start: 157
+      end: 206
+  - kind:
+      Foreach:
+        expr:
+          kind:
+            Variable: items
+          span:
+            start: 215
+            end: 221
+        key: ~
+        value:
+          kind:
+            Variable: item
+          span:
+            start: 225
+            end: 230
+        body:
+          kind:
+            Block:
+              - kind:
+                  Echo:
+                    - kind:
+                        Variable: item
+                      span:
+                        start: 242
+                        end: 247
+                span:
+                  start: 237
+                  end: 249
+          span:
+            start: 206
+            end: 261
+    span:
+      start: 206
+      end: 261
+  - kind:
+      Switch:
+        expr:
+          kind:
+            Variable: color
+          span:
+            start: 269
+            end: 275
+        cases:
+          - value:
+              kind:
+                String: red
+              span:
+                start: 287
+                end: 292
+            body:
+              - kind:
+                  Echo:
+                    - kind:
+                        String: red
+                      span:
+                        start: 307
+                        end: 312
+                span:
+                  start: 302
+                  end: 322
+              - kind:
+                  Break: ~
+                span:
+                  start: 322
+                  end: 333
+            span:
+              start: 282
+              end: 333
+          - value: ~
+            body:
+              - kind:
+                  Echo:
+                    - kind:
+                        String: other
+                      span:
+                        start: 355
+                        end: 362
+                span:
+                  start: 350
+                  end: 364
+            span:
+              start: 333
+              end: 364
+    span:
+      start: 261
+      end: 375
+span:
+  start: 0
+  end: 375

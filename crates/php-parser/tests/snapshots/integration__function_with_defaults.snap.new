@@ -1,0 +1,86 @@
+---
+source: crates/php-parser/tests/integration.rs
+assertion_line: 200
+expression: result.program
+---
+stmts:
+  - kind:
+      Function:
+        name: foo
+        params:
+          - name: a
+            type_hint: ~
+            default: ~
+            by_ref: false
+            variadic: false
+            visibility: ~
+            set_visibility: ~
+            attributes: []
+            span:
+              start: 19
+              end: 21
+          - name: b
+            type_hint: ~
+            default:
+              kind:
+                Int: 10
+              span:
+                start: 28
+                end: 30
+            by_ref: false
+            variadic: false
+            visibility: ~
+            set_visibility: ~
+            attributes: []
+            span:
+              start: 23
+              end: 30
+          - name: c
+            type_hint: ~
+            default:
+              kind:
+                String: x
+              span:
+                start: 37
+                end: 40
+            by_ref: false
+            variadic: false
+            visibility: ~
+            set_visibility: ~
+            attributes: []
+            span:
+              start: 32
+              end: 40
+        body:
+          - kind:
+              Return:
+                kind:
+                  Binary:
+                    left:
+                      kind:
+                        Variable: a
+                      span:
+                        start: 51
+                        end: 53
+                    op: Add
+                    right:
+                      kind:
+                        Variable: b
+                      span:
+                        start: 56
+                        end: 58
+                span:
+                  start: 51
+                  end: 58
+            span:
+              start: 44
+              end: 60
+        return_type: ~
+        by_ref: false
+        attributes: []
+    span:
+      start: 6
+      end: 61
+span:
+  start: 0
+  end: 61

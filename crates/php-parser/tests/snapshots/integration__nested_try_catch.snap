@@ -1,0 +1,131 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      TryCatch:
+        body:
+          - kind:
+              TryCatch:
+                body:
+                  - kind:
+                      Expression:
+                        kind:
+                          FunctionCall:
+                            name:
+                              kind:
+                                Identifier: dangerousOp
+                              span:
+                                start: 30
+                                end: 41
+                            args: []
+                        span:
+                          start: 30
+                          end: 43
+                    span:
+                      start: 30
+                      end: 49
+                catches:
+                  - types:
+                      - parts:
+                          - InnerException
+                        kind: Unqualified
+                        span:
+                          start: 58
+                          end: 73
+                    var: e
+                    body:
+                      - kind:
+                          Expression:
+                            kind:
+                              FunctionCall:
+                                name:
+                                  kind:
+                                    Identifier: log
+                                  span:
+                                    start: 87
+                                    end: 90
+                                args:
+                                  - name: ~
+                                    value:
+                                      kind:
+                                        Variable: e
+                                      span:
+                                        start: 91
+                                        end: 93
+                                    unpack: false
+                                    span:
+                                      start: 91
+                                      end: 93
+                            span:
+                              start: 87
+                              end: 94
+                        span:
+                          start: 87
+                          end: 104
+                      - kind:
+                          Throw:
+                            kind:
+                              Variable: e
+                            span:
+                              start: 110
+                              end: 112
+                        span:
+                          start: 104
+                          end: 118
+                    span:
+                      start: 57
+                      end: 120
+                finally: ~
+            span:
+              start: 16
+              end: 120
+        catches:
+          - types:
+              - parts:
+                  - OuterException
+                kind: Unqualified
+                span:
+                  start: 129
+                  end: 144
+            var: e
+            body:
+              - kind:
+                  Expression:
+                    kind:
+                      FunctionCall:
+                        name:
+                          kind:
+                            Identifier: handleOuter
+                          span:
+                            start: 154
+                            end: 165
+                        args:
+                          - name: ~
+                            value:
+                              kind:
+                                Variable: e
+                              span:
+                                start: 166
+                                end: 168
+                            unpack: false
+                            span:
+                              start: 166
+                              end: 168
+                    span:
+                      start: 154
+                      end: 169
+                span:
+                  start: 154
+                  end: 171
+            span:
+              start: 128
+              end: 173
+        finally: ~
+    span:
+      start: 6
+      end: 173
+span:
+  start: 0
+  end: 173

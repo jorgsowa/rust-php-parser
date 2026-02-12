@@ -1,0 +1,116 @@
+---
+source: crates/php-parser/tests/integration.rs
+assertion_line: 496
+expression: result.program
+---
+stmts:
+  - kind:
+      Trait:
+        name: Timestampable
+        members:
+          - kind:
+              Method:
+                name: getCreatedAt
+                visibility: Public
+                is_static: false
+                is_abstract: false
+                is_final: false
+                by_ref: false
+                params: []
+                return_type:
+                  kind:
+                    Named:
+                      parts:
+                        - string
+                      kind: Unqualified
+                      span:
+                        start: 64
+                        end: 70
+                  span:
+                    start: 64
+                    end: 70
+                body:
+                  - kind:
+                      Return:
+                        kind:
+                          PropertyAccess:
+                            object:
+                              kind:
+                                Variable: this
+                              span:
+                                start: 88
+                                end: 93
+                            property:
+                              kind:
+                                Identifier: createdAt
+                              span:
+                                start: 95
+                                end: 104
+                        span:
+                          start: 88
+                          end: 104
+                    span:
+                      start: 81
+                      end: 110
+                attributes: []
+            span:
+              start: 32
+              end: 112
+        attributes: []
+    span:
+      start: 6
+      end: 113
+  - kind:
+      Class:
+        name: Post
+        modifiers:
+          is_abstract: false
+          is_final: false
+          is_readonly: false
+        extends: ~
+        implements: []
+        members:
+          - kind:
+              TraitUse:
+                traits:
+                  - parts:
+                      - Timestampable
+                    kind: Unqualified
+                    span:
+                      start: 135
+                      end: 148
+                adaptations: []
+            span:
+              start: 131
+              end: 154
+          - kind:
+              Property:
+                name: title
+                visibility: Public
+                set_visibility: ~
+                is_static: false
+                is_readonly: false
+                type_hint:
+                  kind:
+                    Named:
+                      parts:
+                        - string
+                      kind: Unqualified
+                      span:
+                        start: 161
+                        end: 167
+                  span:
+                    start: 161
+                    end: 167
+                default: ~
+                attributes: []
+            span:
+              start: 154
+              end: 176
+        attributes: []
+    span:
+      start: 114
+      end: 177
+span:
+  start: 0
+  end: 177

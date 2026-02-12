@@ -1,0 +1,864 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Namespace:
+        name:
+          parts:
+            - App
+            - Controllers
+          kind: Qualified
+          span:
+            start: 16
+            end: 31
+        body: Simple
+    span:
+      start: 6
+      end: 34
+  - kind:
+      Use:
+        kind: Normal
+        uses:
+          - name:
+              parts:
+                - App
+                - Models
+                - User
+              kind: Qualified
+              span:
+                start: 38
+                end: 53
+            alias: ~
+            span:
+              start: 38
+              end: 53
+    span:
+      start: 34
+      end: 55
+  - kind:
+      Use:
+        kind: Normal
+        uses:
+          - name:
+              parts:
+                - App
+                - Services
+                - AuthService
+              kind: Qualified
+              span:
+                start: 59
+                end: 84
+            alias: Auth
+            span:
+              start: 59
+              end: 91
+    span:
+      start: 55
+      end: 94
+  - kind:
+      Class:
+        name: UserController
+        modifiers:
+          is_abstract: false
+          is_final: false
+          is_readonly: false
+        extends:
+          parts:
+            - BaseController
+          kind: Unqualified
+          span:
+            start: 123
+            end: 138
+        implements:
+          - parts:
+              - JsonResponder
+            kind: Unqualified
+            span:
+              start: 149
+              end: 163
+        members:
+          - kind:
+              Property:
+                name: auth
+                visibility: Private
+                is_static: false
+                is_readonly: true
+                type_hint:
+                  kind:
+                    Named:
+                      parts:
+                        - AuthService
+                      kind: Unqualified
+                      span:
+                        start: 186
+                        end: 198
+                  span:
+                    start: 186
+                    end: 198
+                default: ~
+                attributes: []
+            span:
+              start: 169
+              end: 210
+          - kind:
+              Method:
+                name: __construct
+                visibility: Public
+                is_static: false
+                is_abstract: false
+                is_final: false
+                by_ref: false
+                params:
+                  - name: auth
+                    type_hint:
+                      kind:
+                        Named:
+                          parts:
+                            - AuthService
+                          kind: Unqualified
+                          span:
+                            start: 238
+                            end: 250
+                      span:
+                        start: 238
+                        end: 250
+                    default: ~
+                    by_ref: false
+                    variadic: false
+                    visibility: ~
+                    attributes: []
+                    span:
+                      start: 238
+                      end: 255
+                return_type: ~
+                body:
+                  - kind:
+                      Expression:
+                        kind:
+                          Assign:
+                            target:
+                              kind:
+                                PropertyAccess:
+                                  object:
+                                    kind:
+                                      Variable: this
+                                    span:
+                                      start: 271
+                                      end: 276
+                                  property:
+                                    kind:
+                                      Identifier: auth
+                                    span:
+                                      start: 278
+                                      end: 282
+                              span:
+                                start: 271
+                                end: 282
+                            op: Assign
+                            value:
+                              kind:
+                                Variable: auth
+                              span:
+                                start: 285
+                                end: 290
+                        span:
+                          start: 271
+                          end: 290
+                    span:
+                      start: 271
+                      end: 296
+                attributes: []
+            span:
+              start: 210
+              end: 303
+          - kind:
+              Method:
+                name: show
+                visibility: Public
+                is_static: false
+                is_abstract: false
+                is_final: false
+                by_ref: false
+                params:
+                  - name: id
+                    type_hint:
+                      kind:
+                        Named:
+                          parts:
+                            - int
+                          kind: Unqualified
+                          span:
+                            start: 324
+                            end: 327
+                      span:
+                        start: 324
+                        end: 327
+                    default: ~
+                    by_ref: false
+                    variadic: false
+                    visibility: ~
+                    attributes: []
+                    span:
+                      start: 324
+                      end: 331
+                return_type:
+                  kind:
+                    Named:
+                      parts:
+                        - array
+                      kind: Unqualified
+                      span:
+                        start: 334
+                        end: 339
+                  span:
+                    start: 334
+                    end: 339
+                body:
+                  - kind:
+                      TryCatch:
+                        body:
+                          - kind:
+                              Expression:
+                                kind:
+                                  Assign:
+                                    target:
+                                      kind:
+                                        Variable: user
+                                      span:
+                                        start: 372
+                                        end: 377
+                                    op: Assign
+                                    value:
+                                      kind:
+                                        NullCoalesce:
+                                          left:
+                                            kind:
+                                              StaticMethodCall:
+                                                class:
+                                                  kind:
+                                                    Identifier: User
+                                                  span:
+                                                    start: 380
+                                                    end: 384
+                                                method: find
+                                                args:
+                                                  - name: ~
+                                                    value:
+                                                      kind:
+                                                        Variable: id
+                                                      span:
+                                                        start: 391
+                                                        end: 394
+                                                    unpack: false
+                                                    span:
+                                                      start: 391
+                                                      end: 394
+                                            span:
+                                              start: 380
+                                              end: 396
+                                          right:
+                                            kind:
+                                              ThrowExpr:
+                                                kind:
+                                                  New:
+                                                    class:
+                                                      kind:
+                                                        Identifier: NotFoundException
+                                                      span:
+                                                        start: 409
+                                                        end: 426
+                                                    args:
+                                                      - name: ~
+                                                        value:
+                                                          kind:
+                                                            String: User not found
+                                                          span:
+                                                            start: 427
+                                                            end: 443
+                                                        unpack: false
+                                                        span:
+                                                          start: 427
+                                                          end: 443
+                                                span:
+                                                  start: 405
+                                                  end: 444
+                                            span:
+                                              start: 399
+                                              end: 444
+                                      span:
+                                        start: 380
+                                        end: 444
+                                span:
+                                  start: 372
+                                  end: 444
+                            span:
+                              start: 372
+                              end: 458
+                          - kind:
+                              Expression:
+                                kind:
+                                  Assign:
+                                    target:
+                                      kind:
+                                        Variable: role
+                                      span:
+                                        start: 458
+                                        end: 463
+                                    op: Assign
+                                    value:
+                                      kind:
+                                        Match:
+                                          subject:
+                                            kind:
+                                              PropertyAccess:
+                                                object:
+                                                  kind:
+                                                    Variable: user
+                                                  span:
+                                                    start: 473
+                                                    end: 478
+                                                property:
+                                                  kind:
+                                                    Identifier: role
+                                                  span:
+                                                    start: 480
+                                                    end: 484
+                                            span:
+                                              start: 473
+                                              end: 484
+                                          arms:
+                                            - conditions:
+                                                - kind:
+                                                    String: admin
+                                                  span:
+                                                    start: 504
+                                                    end: 511
+                                              body:
+                                                kind:
+                                                  String: Administrator
+                                                span:
+                                                  start: 515
+                                                  end: 530
+                                              span:
+                                                start: 504
+                                                end: 530
+                                            - conditions:
+                                                - kind:
+                                                    String: editor
+                                                  span:
+                                                    start: 548
+                                                    end: 556
+                                              body:
+                                                kind:
+                                                  String: Editor
+                                                span:
+                                                  start: 560
+                                                  end: 568
+                                              span:
+                                                start: 548
+                                                end: 568
+                                            - conditions: ~
+                                              body:
+                                                kind:
+                                                  String: User
+                                                span:
+                                                  start: 597
+                                                  end: 603
+                                              span:
+                                                start: 586
+                                                end: 603
+                                      span:
+                                        start: 466
+                                        end: 618
+                                span:
+                                  start: 458
+                                  end: 618
+                            span:
+                              start: 458
+                              end: 632
+                          - kind:
+                              Expression:
+                                kind:
+                                  Assign:
+                                    target:
+                                      kind:
+                                        Variable: data
+                                      span:
+                                        start: 632
+                                        end: 637
+                                    op: Assign
+                                    value:
+                                      kind:
+                                        Array:
+                                          - key:
+                                              kind:
+                                                String: name
+                                              span:
+                                                start: 658
+                                                end: 664
+                                            value:
+                                              kind:
+                                                PropertyAccess:
+                                                  object:
+                                                    kind:
+                                                      Variable: user
+                                                    span:
+                                                      start: 668
+                                                      end: 673
+                                                  property:
+                                                    kind:
+                                                      Identifier: name
+                                                    span:
+                                                      start: 675
+                                                      end: 679
+                                              span:
+                                                start: 668
+                                                end: 679
+                                            unpack: false
+                                            span:
+                                              start: 658
+                                              end: 679
+                                          - key:
+                                              kind:
+                                                String: email
+                                              span:
+                                                start: 697
+                                                end: 704
+                                            value:
+                                              kind:
+                                                NullsafePropertyAccess:
+                                                  object:
+                                                    kind:
+                                                      Variable: user
+                                                    span:
+                                                      start: 708
+                                                      end: 713
+                                                  property:
+                                                    kind:
+                                                      Identifier: email
+                                                    span:
+                                                      start: 716
+                                                      end: 721
+                                              span:
+                                                start: 708
+                                                end: 721
+                                            unpack: false
+                                            span:
+                                              start: 697
+                                              end: 721
+                                          - key:
+                                              kind:
+                                                String: role
+                                              span:
+                                                start: 739
+                                                end: 745
+                                            value:
+                                              kind:
+                                                Variable: role
+                                              span:
+                                                start: 749
+                                                end: 754
+                                            unpack: false
+                                            span:
+                                              start: 739
+                                              end: 754
+                                      span:
+                                        start: 640
+                                        end: 769
+                                span:
+                                  start: 632
+                                  end: 769
+                            span:
+                              start: 632
+                              end: 783
+                          - kind:
+                              Return:
+                                kind:
+                                  Variable: data
+                                span:
+                                  start: 790
+                                  end: 795
+                            span:
+                              start: 783
+                              end: 805
+                        catches:
+                          - types:
+                              - parts:
+                                  - NotFoundException
+                                kind: Unqualified
+                                span:
+                                  start: 814
+                                  end: 832
+                            var: e
+                            body:
+                              - kind:
+                                  Return:
+                                    kind:
+                                      Array:
+                                        - key:
+                                            kind:
+                                              String: error
+                                            span:
+                                              start: 858
+                                              end: 865
+                                          value:
+                                            kind:
+                                              MethodCall:
+                                                object:
+                                                  kind:
+                                                    Variable: e
+                                                  span:
+                                                    start: 869
+                                                    end: 871
+                                                method:
+                                                  kind:
+                                                    Identifier: getMessage
+                                                  span:
+                                                    start: 873
+                                                    end: 883
+                                                args: []
+                                            span:
+                                              start: 869
+                                              end: 885
+                                          unpack: false
+                                          span:
+                                            start: 858
+                                            end: 885
+                                    span:
+                                      start: 857
+                                      end: 886
+                                span:
+                                  start: 850
+                                  end: 896
+                            span:
+                              start: 813
+                              end: 898
+                        finally:
+                          - kind:
+                              Expression:
+                                kind:
+                                  MethodCall:
+                                    object:
+                                      kind:
+                                        PropertyAccess:
+                                          object:
+                                            kind:
+                                              Variable: this
+                                            span:
+                                              start: 920
+                                              end: 925
+                                          property:
+                                            kind:
+                                              Identifier: auth
+                                            span:
+                                              start: 927
+                                              end: 931
+                                      span:
+                                        start: 920
+                                        end: 931
+                                    method:
+                                      kind:
+                                        Identifier: logAccess
+                                      span:
+                                        start: 933
+                                        end: 942
+                                    args:
+                                      - name: ~
+                                        value:
+                                          kind:
+                                            Variable: id
+                                          span:
+                                            start: 943
+                                            end: 946
+                                        unpack: false
+                                        span:
+                                          start: 943
+                                          end: 946
+                                span:
+                                  start: 920
+                                  end: 947
+                            span:
+                              start: 920
+                              end: 957
+                    span:
+                      start: 354
+                      end: 963
+                attributes: []
+            span:
+              start: 303
+              end: 970
+          - kind:
+              Method:
+                name: list
+                visibility: Public
+                is_static: false
+                is_abstract: false
+                is_final: false
+                by_ref: false
+                params: []
+                return_type:
+                  kind:
+                    Named:
+                      parts:
+                        - array
+                      kind: Unqualified
+                      span:
+                        start: 994
+                        end: 999
+                  span:
+                    start: 994
+                    end: 999
+                body:
+                  - kind:
+                      Expression:
+                        kind:
+                          Assign:
+                            target:
+                              kind:
+                                Variable: users
+                              span:
+                                start: 1014
+                                end: 1020
+                            op: Assign
+                            value:
+                              kind:
+                                StaticMethodCall:
+                                  class:
+                                    kind:
+                                      Identifier: User
+                                    span:
+                                      start: 1023
+                                      end: 1027
+                                  method: all
+                                  args: []
+                              span:
+                                start: 1023
+                                end: 1034
+                        span:
+                          start: 1014
+                          end: 1034
+                    span:
+                      start: 1014
+                      end: 1044
+                  - kind:
+                      Expression:
+                        kind:
+                          Assign:
+                            target:
+                              kind:
+                                Variable: names
+                              span:
+                                start: 1044
+                                end: 1050
+                            op: Assign
+                            value:
+                              kind:
+                                FunctionCall:
+                                  name:
+                                    kind:
+                                      Identifier: array_map
+                                    span:
+                                      start: 1053
+                                      end: 1062
+                                  args:
+                                    - name: ~
+                                      value:
+                                        kind:
+                                          ArrowFunction:
+                                            is_static: false
+                                            by_ref: false
+                                            params:
+                                              - name: u
+                                                type_hint: ~
+                                                default: ~
+                                                by_ref: false
+                                                variadic: false
+                                                visibility: ~
+                                                attributes: []
+                                                span:
+                                                  start: 1066
+                                                  end: 1068
+                                            return_type: ~
+                                            body:
+                                              kind:
+                                                MethodCall:
+                                                  object:
+                                                    kind:
+                                                      Variable: u
+                                                    span:
+                                                      start: 1073
+                                                      end: 1075
+                                                  method:
+                                                    kind:
+                                                      Identifier: getName
+                                                    span:
+                                                      start: 1077
+                                                      end: 1084
+                                                  args: []
+                                              span:
+                                                start: 1073
+                                                end: 1086
+                                        span:
+                                          start: 1063
+                                          end: 1086
+                                      unpack: false
+                                      span:
+                                        start: 1063
+                                        end: 1086
+                                    - name: ~
+                                      value:
+                                        kind:
+                                          Variable: users
+                                        span:
+                                          start: 1088
+                                          end: 1094
+                                      unpack: false
+                                      span:
+                                        start: 1088
+                                        end: 1094
+                              span:
+                                start: 1053
+                                end: 1095
+                        span:
+                          start: 1044
+                          end: 1095
+                    span:
+                      start: 1044
+                      end: 1105
+                  - kind:
+                      Expression:
+                        kind:
+                          Assign:
+                            target:
+                              kind:
+                                Variable: filtered
+                              span:
+                                start: 1105
+                                end: 1114
+                            op: Assign
+                            value:
+                              kind:
+                                FunctionCall:
+                                  name:
+                                    kind:
+                                      Identifier: array_filter
+                                    span:
+                                      start: 1117
+                                      end: 1129
+                                  args:
+                                    - name: ~
+                                      value:
+                                        kind:
+                                          Variable: names
+                                        span:
+                                          start: 1130
+                                          end: 1136
+                                      unpack: false
+                                      span:
+                                        start: 1130
+                                        end: 1136
+                                    - name: ~
+                                      value:
+                                        kind:
+                                          Closure:
+                                            is_static: false
+                                            by_ref: false
+                                            params:
+                                              - name: name
+                                                type_hint: ~
+                                                default: ~
+                                                by_ref: false
+                                                variadic: false
+                                                visibility: ~
+                                                attributes: []
+                                                span:
+                                                  start: 1147
+                                                  end: 1152
+                                            use_vars:
+                                              - name: users
+                                                by_ref: false
+                                                span:
+                                                  start: 1159
+                                                  end: 1165
+                                            return_type: ~
+                                            body:
+                                              - kind:
+                                                  Return:
+                                                    kind:
+                                                      Binary:
+                                                        left:
+                                                          kind:
+                                                            FunctionCall:
+                                                              name:
+                                                                kind:
+                                                                  Identifier: strlen
+                                                                span:
+                                                                  start: 1188
+                                                                  end: 1194
+                                                              args:
+                                                                - name: ~
+                                                                  value:
+                                                                    kind:
+                                                                      Variable: name
+                                                                    span:
+                                                                      start: 1195
+                                                                      end: 1200
+                                                                  unpack: false
+                                                                  span:
+                                                                    start: 1195
+                                                                    end: 1200
+                                                          span:
+                                                            start: 1188
+                                                            end: 1202
+                                                        op: Greater
+                                                        right:
+                                                          kind:
+                                                            Int: 0
+                                                          span:
+                                                            start: 1204
+                                                            end: 1205
+                                                    span:
+                                                      start: 1188
+                                                      end: 1205
+                                                span:
+                                                  start: 1181
+                                                  end: 1215
+                                        span:
+                                          start: 1138
+                                          end: 1216
+                                      unpack: false
+                                      span:
+                                        start: 1138
+                                        end: 1216
+                              span:
+                                start: 1117
+                                end: 1217
+                        span:
+                          start: 1105
+                          end: 1217
+                    span:
+                      start: 1105
+                      end: 1227
+                  - kind:
+                      Return:
+                        kind:
+                          Variable: filtered
+                        span:
+                          start: 1234
+                          end: 1243
+                    span:
+                      start: 1227
+                      end: 1249
+                attributes: []
+            span:
+              start: 970
+              end: 1251
+        attributes: []
+    span:
+      start: 94
+      end: 1252
+span:
+  start: 0
+  end: 1252

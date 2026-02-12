@@ -1,0 +1,369 @@
+---
+source: crates/php-parser/tests/integration.rs
+assertion_line: 1258
+expression: result.program
+---
+stmts:
+  - kind:
+      Function:
+        name: foo
+        params:
+          - name: x
+            type_hint: ~
+            default:
+              kind:
+                New:
+                  class:
+                    kind:
+                      Identifier: Foo
+                    span:
+                      start: 28
+                      end: 31
+                  args: []
+              span:
+                start: 24
+                end: 33
+            by_ref: false
+            variadic: false
+            visibility: ~
+            set_visibility: ~
+            attributes: []
+            span:
+              start: 19
+              end: 33
+          - name: y
+            type_hint: ~
+            default:
+              kind:
+                New:
+                  class:
+                    kind:
+                      Identifier: Bar
+                    span:
+                      start: 44
+                      end: 47
+                  args:
+                    - name: ~
+                      value:
+                        kind:
+                          Int: 1
+                        span:
+                          start: 48
+                          end: 49
+                      unpack: false
+                      span:
+                        start: 48
+                        end: 49
+                    - name: ~
+                      value:
+                        kind:
+                          Int: 2
+                        span:
+                          start: 51
+                          end: 52
+                      unpack: false
+                      span:
+                        start: 51
+                        end: 52
+              span:
+                start: 40
+                end: 53
+            by_ref: false
+            variadic: false
+            visibility: ~
+            set_visibility: ~
+            attributes: []
+            span:
+              start: 35
+              end: 53
+        body: []
+        return_type: ~
+        by_ref: false
+        attributes: []
+    span:
+      start: 6
+      end: 57
+  - kind:
+      Class:
+        name: MyClass
+        modifiers:
+          is_abstract: false
+          is_final: false
+          is_readonly: false
+        extends: ~
+        implements: []
+        members:
+          - kind:
+              Property:
+                name: prop
+                visibility: Public
+                set_visibility: ~
+                is_static: false
+                is_readonly: false
+                type_hint: ~
+                default:
+                  kind:
+                    New:
+                      class:
+                        kind:
+                          Identifier: DefaultObj
+                        span:
+                          start: 98
+                          end: 108
+                      args: []
+                  span:
+                    start: 94
+                    end: 110
+                attributes: []
+            span:
+              start: 79
+              end: 116
+          - kind:
+              ClassConst:
+                name: C
+                visibility: ~
+                value:
+                  kind:
+                    New:
+                      class:
+                        kind:
+                          Identifier: Config
+                        span:
+                          start: 130
+                          end: 136
+                      args: []
+                  span:
+                    start: 126
+                    end: 138
+                attributes: []
+            span:
+              start: 116
+              end: 145
+          - kind:
+              Method:
+                name: method
+                visibility: Public
+                is_static: false
+                is_abstract: false
+                is_final: false
+                by_ref: false
+                params:
+                  - name: p
+                    type_hint: ~
+                    default:
+                      kind:
+                        New:
+                          class:
+                            kind:
+                              Identifier: Param
+                            span:
+                              start: 177
+                              end: 182
+                          args: []
+                      span:
+                        start: 173
+                        end: 184
+                    by_ref: false
+                    variadic: false
+                    visibility: ~
+                    set_visibility: ~
+                    attributes: []
+                    span:
+                      start: 168
+                      end: 184
+                return_type: ~
+                body: []
+                attributes: []
+            span:
+              start: 145
+              end: 189
+        attributes: []
+    span:
+      start: 59
+      end: 190
+  - kind:
+      Function:
+        name: baz
+        params: []
+        body:
+          - kind:
+              StaticVar:
+                - name: cache
+                  default:
+                    kind:
+                      New:
+                        class:
+                          kind:
+                            Identifier: Cache
+                          span:
+                            start: 233
+                            end: 238
+                        args: []
+                    span:
+                      start: 229
+                      end: 240
+                  span:
+                    start: 220
+                    end: 240
+            span:
+              start: 213
+              end: 242
+        return_type: ~
+        by_ref: false
+        attributes: []
+    span:
+      start: 192
+      end: 243
+  - kind:
+      Function:
+        name: qux
+        params: []
+        body: []
+        return_type: ~
+        by_ref: false
+        attributes:
+          - name:
+              parts:
+                - Attr
+              kind: Unqualified
+              span:
+                start: 247
+                end: 251
+            args:
+              - name: ~
+                value:
+                  kind:
+                    New:
+                      class:
+                        kind:
+                          Identifier: Foo
+                        span:
+                          start: 256
+                          end: 259
+                      args: []
+                  span:
+                    start: 252
+                    end: 261
+                unpack: false
+                span:
+                  start: 252
+                  end: 261
+            span:
+              start: 247
+              end: 262
+    span:
+      start: 264
+      end: 281
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: f
+              span:
+                start: 283
+                end: 285
+            op: Assign
+            value:
+              kind:
+                Closure:
+                  is_static: false
+                  by_ref: false
+                  params:
+                    - name: x
+                      type_hint: ~
+                      default:
+                        kind:
+                          New:
+                            class:
+                              kind:
+                                Identifier: Foo
+                              span:
+                                start: 307
+                                end: 310
+                            args: []
+                        span:
+                          start: 303
+                          end: 312
+                      by_ref: false
+                      variadic: false
+                      visibility: ~
+                      set_visibility: ~
+                      attributes: []
+                      span:
+                        start: 298
+                        end: 312
+                  use_vars: []
+                  return_type: ~
+                  body: []
+                  attributes: []
+              span:
+                start: 288
+                end: 316
+        span:
+          start: 283
+          end: 316
+    span:
+      start: 283
+      end: 318
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: g
+              span:
+                start: 318
+                end: 320
+            op: Assign
+            value:
+              kind:
+                ArrowFunction:
+                  is_static: false
+                  by_ref: false
+                  params:
+                    - name: x
+                      type_hint: ~
+                      default:
+                        kind:
+                          New:
+                            class:
+                              kind:
+                                Identifier: Foo
+                              span:
+                                start: 335
+                                end: 338
+                            args: []
+                        span:
+                          start: 331
+                          end: 340
+                      by_ref: false
+                      variadic: false
+                      visibility: ~
+                      set_visibility: ~
+                      attributes: []
+                      span:
+                        start: 326
+                        end: 340
+                  return_type: ~
+                  body:
+                    kind:
+                      Variable: x
+                    span:
+                      start: 345
+                      end: 347
+                  attributes: []
+              span:
+                start: 323
+                end: 347
+        span:
+          start: 318
+          end: 347
+    span:
+      start: 318
+      end: 349
+span:
+  start: 0
+  end: 349

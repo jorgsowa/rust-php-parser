@@ -1,0 +1,64 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Expression:
+        kind:
+          PropertyAccess:
+            object:
+              kind:
+                Variable: obj
+              span:
+                start: 6
+                end: 10
+            property:
+              kind:
+                Identifier: name
+              span:
+                start: 12
+                end: 16
+        span:
+          start: 6
+          end: 16
+    span:
+      start: 6
+      end: 18
+  - kind:
+      Expression:
+        kind:
+          PropertyAccess:
+            object:
+              kind:
+                PropertyAccess:
+                  object:
+                    kind:
+                      Variable: a
+                    span:
+                      start: 18
+                      end: 20
+                  property:
+                    kind:
+                      Identifier: b
+                    span:
+                      start: 22
+                      end: 23
+              span:
+                start: 18
+                end: 23
+            property:
+              kind:
+                Identifier: c
+              span:
+                start: 25
+                end: 26
+        span:
+          start: 18
+          end: 26
+    span:
+      start: 18
+      end: 27
+span:
+  start: 0
+  end: 27

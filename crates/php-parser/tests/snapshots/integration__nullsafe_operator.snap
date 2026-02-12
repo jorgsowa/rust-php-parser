@@ -1,0 +1,78 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Expression:
+        kind:
+          NullsafePropertyAccess:
+            object:
+              kind:
+                NullsafePropertyAccess:
+                  object:
+                    kind:
+                      Variable: obj
+                    span:
+                      start: 6
+                      end: 10
+                  property:
+                    kind:
+                      Identifier: address
+                    span:
+                      start: 13
+                      end: 20
+              span:
+                start: 6
+                end: 20
+            property:
+              kind:
+                Identifier: city
+              span:
+                start: 23
+                end: 27
+        span:
+          start: 6
+          end: 27
+    span:
+      start: 6
+      end: 29
+  - kind:
+      Expression:
+        kind:
+          NullsafeMethodCall:
+            object:
+              kind:
+                NullsafeMethodCall:
+                  object:
+                    kind:
+                      Variable: obj
+                    span:
+                      start: 29
+                      end: 33
+                  method:
+                    kind:
+                      Identifier: getAddress
+                    span:
+                      start: 36
+                      end: 46
+                  args: []
+              span:
+                start: 29
+                end: 48
+            method:
+              kind:
+                Identifier: getCity
+              span:
+                start: 51
+                end: 58
+            args: []
+        span:
+          start: 29
+          end: 60
+    span:
+      start: 29
+      end: 61
+span:
+  start: 0
+  end: 61

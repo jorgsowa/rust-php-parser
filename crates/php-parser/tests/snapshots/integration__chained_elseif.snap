@@ -1,0 +1,179 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      If:
+        condition:
+          kind:
+            Binary:
+              left:
+                kind:
+                  Variable: x
+                span:
+                  start: 10
+                  end: 12
+              op: Identical
+              right:
+                kind:
+                  Int: 1
+                span:
+                  start: 17
+                  end: 18
+          span:
+            start: 10
+            end: 18
+        then_branch:
+          kind:
+            Block:
+              - kind:
+                  Echo:
+                    - kind:
+                        String: one
+                      span:
+                        start: 31
+                        end: 36
+                span:
+                  start: 26
+                  end: 38
+          span:
+            start: 20
+            end: 39
+        elseif_branches:
+          - condition:
+              kind:
+                Binary:
+                  left:
+                    kind:
+                      Variable: x
+                    span:
+                      start: 48
+                      end: 50
+                  op: Identical
+                  right:
+                    kind:
+                      Int: 2
+                    span:
+                      start: 55
+                      end: 56
+              span:
+                start: 48
+                end: 56
+            body:
+              kind:
+                Block:
+                  - kind:
+                      Echo:
+                        - kind:
+                            String: two
+                          span:
+                            start: 69
+                            end: 74
+                    span:
+                      start: 64
+                      end: 76
+              span:
+                start: 58
+                end: 77
+            span:
+              start: 47
+              end: 77
+          - condition:
+              kind:
+                Binary:
+                  left:
+                    kind:
+                      Variable: x
+                    span:
+                      start: 86
+                      end: 88
+                  op: Identical
+                  right:
+                    kind:
+                      Int: 3
+                    span:
+                      start: 93
+                      end: 94
+              span:
+                start: 86
+                end: 94
+            body:
+              kind:
+                Block:
+                  - kind:
+                      Echo:
+                        - kind:
+                            String: three
+                          span:
+                            start: 107
+                            end: 114
+                    span:
+                      start: 102
+                      end: 116
+              span:
+                start: 96
+                end: 117
+            span:
+              start: 85
+              end: 117
+          - condition:
+              kind:
+                Binary:
+                  left:
+                    kind:
+                      Variable: x
+                    span:
+                      start: 126
+                      end: 128
+                  op: Identical
+                  right:
+                    kind:
+                      Int: 4
+                    span:
+                      start: 133
+                      end: 134
+              span:
+                start: 126
+                end: 134
+            body:
+              kind:
+                Block:
+                  - kind:
+                      Echo:
+                        - kind:
+                            String: four
+                          span:
+                            start: 147
+                            end: 153
+                    span:
+                      start: 142
+                      end: 155
+              span:
+                start: 136
+                end: 156
+            span:
+              start: 125
+              end: 156
+        else_branch:
+          kind:
+            Block:
+              - kind:
+                  Echo:
+                    - kind:
+                        String: other
+                      span:
+                        start: 173
+                        end: 180
+                span:
+                  start: 168
+                  end: 182
+          span:
+            start: 162
+            end: 183
+    span:
+      start: 6
+      end: 183
+span:
+  start: 0
+  end: 183

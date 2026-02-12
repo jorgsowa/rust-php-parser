@@ -1,0 +1,22 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/php-ast",
+    "crates/php-lexer",
+    "crates/php-parser",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[workspace.dependencies]
+php-ast = { path = "crates/php-ast" }
+php-lexer = { path = "crates/php-lexer" }
+php-parser = { path = "crates/php-parser" }
+logos = "0.15"
+miette = { version = "7", features = ["fancy"] }
+thiserror = "2"
+serde = { version = "1", features = ["derive"] }
+insta = { version = "1", features = ["yaml"] }

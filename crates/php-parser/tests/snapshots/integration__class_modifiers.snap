@@ -1,0 +1,159 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Class:
+        name: Base
+        modifiers:
+          is_abstract: true
+          is_final: false
+          is_readonly: false
+        extends: ~
+        implements: []
+        members:
+          - kind:
+              Method:
+                name: doSomething
+                visibility: Public
+                is_static: false
+                is_abstract: true
+                is_final: false
+                by_ref: false
+                params: []
+                return_type:
+                  kind:
+                    Named:
+                      parts:
+                        - void
+                      kind: Unqualified
+                      span:
+                        start: 72
+                        end: 76
+                  span:
+                    start: 72
+                    end: 76
+                body: ~
+                attributes: []
+            span:
+              start: 32
+              end: 78
+        attributes: []
+    span:
+      start: 15
+      end: 79
+  - kind:
+      Class:
+        name: Sealed
+        modifiers:
+          is_abstract: false
+          is_final: true
+          is_readonly: false
+        extends: ~
+        implements: []
+        members:
+          - kind:
+              Method:
+                name: run
+                visibility: Public
+                is_static: false
+                is_abstract: false
+                is_final: false
+                by_ref: false
+                params: []
+                return_type:
+                  kind:
+                    Named:
+                      parts:
+                        - void
+                      kind: Unqualified
+                      span:
+                        start: 128
+                        end: 132
+                  span:
+                    start: 128
+                    end: 132
+                body: []
+                attributes: []
+            span:
+              start: 105
+              end: 136
+        attributes: []
+    span:
+      start: 86
+      end: 137
+  - kind:
+      Class:
+        name: Value
+        modifiers:
+          is_abstract: false
+          is_final: false
+          is_readonly: true
+        extends: ~
+        implements: []
+        members:
+          - kind:
+              Method:
+                name: __construct
+                visibility: Public
+                is_static: false
+                is_abstract: false
+                is_final: false
+                by_ref: false
+                params:
+                  - name: name
+                    type_hint:
+                      kind:
+                        Named:
+                          parts:
+                            - string
+                          kind: Unqualified
+                          span:
+                            start: 209
+                            end: 215
+                      span:
+                        start: 209
+                        end: 215
+                    default: ~
+                    by_ref: false
+                    variadic: false
+                    visibility: Public
+                    attributes: []
+                    span:
+                      start: 202
+                      end: 221
+                  - name: age
+                    type_hint:
+                      kind:
+                        Named:
+                          parts:
+                            - int
+                          kind: Unqualified
+                          span:
+                            start: 238
+                            end: 241
+                      span:
+                        start: 238
+                        end: 241
+                    default: ~
+                    by_ref: false
+                    variadic: false
+                    visibility: Public
+                    attributes: []
+                    span:
+                      start: 231
+                      end: 246
+                return_type: ~
+                body: []
+                attributes: []
+            span:
+              start: 165
+              end: 257
+        attributes: []
+    span:
+      start: 147
+      end: 258
+span:
+  start: 0
+  end: 258

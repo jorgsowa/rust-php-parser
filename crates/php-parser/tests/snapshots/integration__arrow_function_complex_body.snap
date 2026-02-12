@@ -1,0 +1,118 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: f
+              span:
+                start: 6
+                end: 8
+            op: Assign
+            value:
+              kind:
+                ArrowFunction:
+                  is_static: false
+                  by_ref: false
+                  params:
+                    - name: x
+                      type_hint: ~
+                      default: ~
+                      by_ref: false
+                      variadic: false
+                      visibility: ~
+                      attributes: []
+                      span:
+                        start: 14
+                        end: 16
+                    - name: y
+                      type_hint: ~
+                      default: ~
+                      by_ref: false
+                      variadic: false
+                      visibility: ~
+                      attributes: []
+                      span:
+                        start: 18
+                        end: 20
+                  return_type: ~
+                  body:
+                    kind:
+                      Ternary:
+                        condition:
+                          kind:
+                            Binary:
+                              left:
+                                kind:
+                                  Variable: x
+                                span:
+                                  start: 25
+                                  end: 27
+                              op: Greater
+                              right:
+                                kind:
+                                  Variable: y
+                                span:
+                                  start: 30
+                                  end: 32
+                          span:
+                            start: 25
+                            end: 32
+                        then_expr:
+                          kind:
+                            Binary:
+                              left:
+                                kind:
+                                  Variable: x
+                                span:
+                                  start: 35
+                                  end: 37
+                              op: Sub
+                              right:
+                                kind:
+                                  Variable: y
+                                span:
+                                  start: 40
+                                  end: 42
+                          span:
+                            start: 35
+                            end: 42
+                        else_expr:
+                          kind:
+                            Binary:
+                              left:
+                                kind:
+                                  Variable: y
+                                span:
+                                  start: 45
+                                  end: 47
+                              op: Sub
+                              right:
+                                kind:
+                                  Variable: x
+                                span:
+                                  start: 50
+                                  end: 52
+                          span:
+                            start: 45
+                            end: 52
+                    span:
+                      start: 25
+                      end: 52
+              span:
+                start: 11
+                end: 52
+        span:
+          start: 6
+          end: 52
+    span:
+      start: 6
+      end: 53
+span:
+  start: 0
+  end: 53

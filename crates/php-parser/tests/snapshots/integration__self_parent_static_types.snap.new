@@ -1,0 +1,124 @@
+---
+source: crates/php-parser/tests/integration.rs
+assertion_line: 1725
+expression: result.program
+---
+stmts:
+  - kind:
+      Class:
+        name: Builder
+        modifiers:
+          is_abstract: false
+          is_final: false
+          is_readonly: false
+        extends: ~
+        implements: []
+        members:
+          - kind:
+              Method:
+                name: setName
+                visibility: Public
+                is_static: false
+                is_abstract: false
+                is_final: false
+                by_ref: false
+                params:
+                  - name: name
+                    type_hint:
+                      kind:
+                        Named:
+                          parts:
+                            - string
+                          kind: Unqualified
+                          span:
+                            start: 50
+                            end: 56
+                      span:
+                        start: 50
+                        end: 56
+                    default: ~
+                    by_ref: false
+                    variadic: false
+                    visibility: ~
+                    set_visibility: ~
+                    attributes: []
+                    span:
+                      start: 50
+                      end: 62
+                return_type:
+                  kind:
+                    Named:
+                      parts:
+                        - self
+                      kind: Unqualified
+                      span:
+                        start: 65
+                        end: 69
+                  span:
+                    start: 65
+                    end: 69
+                body:
+                  - kind:
+                      Return:
+                        kind:
+                          Variable: this
+                        span:
+                          start: 79
+                          end: 84
+                    span:
+                      start: 72
+                      end: 86
+                attributes: []
+            span:
+              start: 26
+              end: 92
+          - kind:
+              Method:
+                name: create
+                visibility: Public
+                is_static: true
+                is_abstract: false
+                is_final: false
+                by_ref: false
+                params: []
+                return_type:
+                  kind:
+                    Named:
+                      parts:
+                        - static
+                      kind: Unqualified
+                      span:
+                        start: 125
+                        end: 131
+                  span:
+                    start: 125
+                    end: 131
+                body:
+                  - kind:
+                      Return:
+                        kind:
+                          New:
+                            class:
+                              kind:
+                                Identifier: static
+                              span:
+                                start: 145
+                                end: 151
+                            args: []
+                        span:
+                          start: 141
+                          end: 153
+                    span:
+                      start: 134
+                      end: 155
+                attributes: []
+            span:
+              start: 92
+              end: 157
+        attributes: []
+    span:
+      start: 6
+      end: 158
+span:
+  start: 0
+  end: 158

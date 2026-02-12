@@ -1,0 +1,9 @@
+[package]
+name = "php-lexer"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+logos = { workspace = true }
+php-ast = { workspace = true }

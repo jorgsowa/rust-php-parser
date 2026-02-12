@@ -1,0 +1,104 @@
+---
+source: crates/php-parser/tests/integration.rs
+assertion_line: 602
+expression: result.program
+---
+stmts:
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: f
+              span:
+                start: 6
+                end: 8
+            op: Assign
+            value:
+              kind:
+                Closure:
+                  is_static: false
+                  by_ref: false
+                  params:
+                    - name: x
+                      type_hint:
+                        kind:
+                          Named:
+                            parts:
+                              - int
+                            kind: Unqualified
+                            span:
+                              start: 20
+                              end: 23
+                        span:
+                          start: 20
+                          end: 23
+                      default: ~
+                      by_ref: false
+                      variadic: false
+                      visibility: ~
+                      set_visibility: ~
+                      attributes: []
+                      span:
+                        start: 20
+                        end: 26
+                    - name: y
+                      type_hint:
+                        kind:
+                          Named:
+                            parts:
+                              - string
+                            kind: Unqualified
+                            span:
+                              start: 28
+                              end: 34
+                        span:
+                          start: 28
+                          end: 34
+                      default: ~
+                      by_ref: false
+                      variadic: false
+                      visibility: ~
+                      set_visibility: ~
+                      attributes: []
+                      span:
+                        start: 28
+                        end: 37
+                  use_vars: []
+                  return_type:
+                    kind:
+                      Named:
+                        parts:
+                          - int
+                        kind: Unqualified
+                        span:
+                          start: 40
+                          end: 43
+                    span:
+                      start: 40
+                      end: 43
+                  body:
+                    - kind:
+                        Return:
+                          kind:
+                            Variable: x
+                          span:
+                            start: 53
+                            end: 55
+                      span:
+                        start: 46
+                        end: 57
+                  attributes: []
+              span:
+                start: 11
+                end: 58
+        span:
+          start: 6
+          end: 58
+    span:
+      start: 6
+      end: 59
+span:
+  start: 0
+  end: 59

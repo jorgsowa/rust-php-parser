@@ -1,0 +1,172 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Interface:
+        name: Loggable
+        extends: []
+        members:
+          - kind:
+              Method:
+                name: log
+                visibility: Public
+                is_static: false
+                is_abstract: false
+                is_final: false
+                by_ref: false
+                params: []
+                return_type:
+                  kind:
+                    Named:
+                      parts:
+                        - void
+                      kind: Unqualified
+                      span:
+                        start: 54
+                        end: 58
+                  span:
+                    start: 54
+                    end: 58
+                body: ~
+                attributes: []
+            span:
+              start: 31
+              end: 60
+        attributes: []
+    span:
+      start: 6
+      end: 61
+  - kind:
+      Interface:
+        name: Serializable
+        extends: []
+        members:
+          - kind:
+              Method:
+                name: serialize
+                visibility: Public
+                is_static: false
+                is_abstract: false
+                is_final: false
+                by_ref: false
+                params: []
+                return_type:
+                  kind:
+                    Named:
+                      parts:
+                        - string
+                      kind: Unqualified
+                      span:
+                        start: 120
+                        end: 126
+                  span:
+                    start: 120
+                    end: 126
+                body: ~
+                attributes: []
+            span:
+              start: 91
+              end: 128
+        attributes: []
+    span:
+      start: 62
+      end: 129
+  - kind:
+      Class:
+        name: User
+        modifiers:
+          is_abstract: false
+          is_final: false
+          is_readonly: false
+        extends:
+          parts:
+            - Model
+          kind: Unqualified
+          span:
+            start: 149
+            end: 155
+        implements:
+          - parts:
+              - Loggable
+            kind: Unqualified
+            span:
+              start: 166
+              end: 174
+          - parts:
+              - Serializable
+            kind: Unqualified
+            span:
+              start: 176
+              end: 189
+        members:
+          - kind:
+              Method:
+                name: log
+                visibility: Public
+                is_static: false
+                is_abstract: false
+                is_final: false
+                by_ref: false
+                params: []
+                return_type:
+                  kind:
+                    Named:
+                      parts:
+                        - void
+                      kind: Unqualified
+                      span:
+                        start: 218
+                        end: 222
+                  span:
+                    start: 218
+                    end: 222
+                body: []
+                attributes: []
+            span:
+              start: 195
+              end: 230
+          - kind:
+              Method:
+                name: serialize
+                visibility: Public
+                is_static: false
+                is_abstract: false
+                is_final: false
+                by_ref: false
+                params: []
+                return_type:
+                  kind:
+                    Named:
+                      parts:
+                        - string
+                      kind: Unqualified
+                      span:
+                        start: 259
+                        end: 265
+                  span:
+                    start: 259
+                    end: 265
+                body:
+                  - kind:
+                      Return:
+                        kind:
+                          String: ""
+                        span:
+                          start: 283
+                          end: 285
+                    span:
+                      start: 276
+                      end: 291
+                attributes: []
+            span:
+              start: 230
+              end: 293
+        attributes: []
+    span:
+      start: 130
+      end: 294
+span:
+  start: 0
+  end: 294

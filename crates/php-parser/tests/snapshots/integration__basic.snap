@@ -1,0 +1,122 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: x
+              span:
+                start: 6
+                end: 8
+            op: Assign
+            value:
+              kind:
+                Int: 42
+              span:
+                start: 11
+                end: 13
+        span:
+          start: 6
+          end: 13
+    span:
+      start: 6
+      end: 15
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: name
+              span:
+                start: 15
+                end: 20
+            op: Assign
+            value:
+              kind:
+                String: hello
+              span:
+                start: 23
+                end: 30
+        span:
+          start: 15
+          end: 30
+    span:
+      start: 15
+      end: 32
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: pi
+              span:
+                start: 32
+                end: 35
+            op: Assign
+            value:
+              kind:
+                Float: 3.14
+              span:
+                start: 38
+                end: 42
+        span:
+          start: 32
+          end: 42
+    span:
+      start: 32
+      end: 44
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: flag
+              span:
+                start: 44
+                end: 49
+            op: Assign
+            value:
+              kind:
+                Bool: true
+              span:
+                start: 52
+                end: 56
+        span:
+          start: 44
+          end: 56
+    span:
+      start: 44
+      end: 58
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: nothing
+              span:
+                start: 58
+                end: 66
+            op: Assign
+            value:
+              kind: "Null"
+              span:
+                start: 69
+                end: 73
+        span:
+          start: 58
+          end: 73
+    span:
+      start: 58
+      end: 75
+span:
+  start: 0
+  end: 75

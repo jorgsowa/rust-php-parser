@@ -1,0 +1,129 @@
+---
+source: crates/php-parser/tests/integration.rs
+assertion_line: 1357
+expression: result.program
+---
+stmts:
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: outer
+              span:
+                start: 6
+                end: 12
+            op: Assign
+            value:
+              kind:
+                Closure:
+                  is_static: false
+                  by_ref: false
+                  params:
+                    - name: x
+                      type_hint: ~
+                      default: ~
+                      by_ref: false
+                      variadic: false
+                      visibility: ~
+                      set_visibility: ~
+                      attributes: []
+                      span:
+                        start: 24
+                        end: 26
+                  use_vars: []
+                  return_type: ~
+                  body:
+                    - kind:
+                        Expression:
+                          kind:
+                            Assign:
+                              target:
+                                kind:
+                                  Variable: inner
+                                span:
+                                  start: 34
+                                  end: 40
+                              op: Assign
+                              value:
+                                kind:
+                                  Closure:
+                                    is_static: false
+                                    by_ref: false
+                                    params:
+                                      - name: y
+                                        type_hint: ~
+                                        default: ~
+                                        by_ref: false
+                                        variadic: false
+                                        visibility: ~
+                                        set_visibility: ~
+                                        attributes: []
+                                        span:
+                                          start: 52
+                                          end: 54
+                                    use_vars:
+                                      - name: x
+                                        by_ref: false
+                                        span:
+                                          start: 61
+                                          end: 63
+                                    return_type: ~
+                                    body:
+                                      - kind:
+                                          Return:
+                                            kind:
+                                              Binary:
+                                                left:
+                                                  kind:
+                                                    Variable: x
+                                                  span:
+                                                    start: 82
+                                                    end: 84
+                                                op: Add
+                                                right:
+                                                  kind:
+                                                    Variable: y
+                                                  span:
+                                                    start: 87
+                                                    end: 89
+                                            span:
+                                              start: 82
+                                              end: 89
+                                        span:
+                                          start: 75
+                                          end: 95
+                                    attributes: []
+                                span:
+                                  start: 43
+                                  end: 96
+                          span:
+                            start: 34
+                            end: 96
+                      span:
+                        start: 34
+                        end: 102
+                    - kind:
+                        Return:
+                          kind:
+                            Variable: inner
+                          span:
+                            start: 109
+                            end: 115
+                      span:
+                        start: 102
+                        end: 117
+                  attributes: []
+              span:
+                start: 15
+                end: 118
+        span:
+          start: 6
+          end: 118
+    span:
+      start: 6
+      end: 120
+span:
+  start: 0
+  end: 120
