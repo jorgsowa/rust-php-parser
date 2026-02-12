@@ -1,0 +1,95 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Switch:
+        expr:
+          kind:
+            Variable: x
+          span:
+            start: 14
+            end: 16
+        cases:
+          - value:
+              kind:
+                Int: 1
+              span:
+                start: 29
+                end: 30
+            body:
+              - kind:
+                  Echo:
+                    - kind:
+                        String: one
+                      span:
+                        start: 45
+                        end: 50
+                span:
+                  start: 40
+                  end: 60
+              - kind:
+                  Break: ~
+                span:
+                  start: 60
+                  end: 71
+            span:
+              start: 24
+              end: 71
+          - value:
+              kind:
+                Int: 2
+              span:
+                start: 76
+                end: 77
+            body: []
+            span:
+              start: 71
+              end: 83
+          - value:
+              kind:
+                Int: 3
+              span:
+                start: 88
+                end: 89
+            body:
+              - kind:
+                  Echo:
+                    - kind:
+                        String: two or three
+                      span:
+                        start: 104
+                        end: 118
+                span:
+                  start: 99
+                  end: 128
+              - kind:
+                  Break: ~
+                span:
+                  start: 128
+                  end: 139
+            span:
+              start: 83
+              end: 139
+          - value: ~
+            body:
+              - kind:
+                  Echo:
+                    - kind:
+                        String: other
+                      span:
+                        start: 161
+                        end: 168
+                span:
+                  start: 156
+                  end: 170
+            span:
+              start: 139
+              end: 170
+    span:
+      start: 6
+      end: 172
+span:
+  start: 0
+  end: 172

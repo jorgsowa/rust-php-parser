@@ -1,0 +1,207 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Function:
+        name: fib
+        params:
+          - name: n
+            type_hint: ~
+            default: ~
+            by_ref: false
+            variadic: false
+            visibility: ~
+            attributes: []
+            span:
+              start: 19
+              end: 21
+        body:
+          - kind:
+              If:
+                condition:
+                  kind:
+                    Binary:
+                      left:
+                        kind:
+                          Variable: n
+                        span:
+                          start: 33
+                          end: 35
+                      op: LessOrEqual
+                      right:
+                        kind:
+                          Int: 1
+                        span:
+                          start: 39
+                          end: 40
+                  span:
+                    start: 33
+                    end: 40
+                then_branch:
+                  kind:
+                    Block:
+                      - kind:
+                          Return:
+                            kind:
+                              Variable: n
+                            span:
+                              start: 59
+                              end: 61
+                        span:
+                          start: 52
+                          end: 67
+                  span:
+                    start: 42
+                    end: 68
+                elseif_branches: []
+                else_branch: ~
+            span:
+              start: 29
+              end: 68
+          - kind:
+              Return:
+                kind:
+                  Binary:
+                    left:
+                      kind:
+                        FunctionCall:
+                          name:
+                            kind:
+                              Identifier: fib
+                            span:
+                              start: 80
+                              end: 83
+                          args:
+                            - name: ~
+                              value:
+                                kind:
+                                  Binary:
+                                    left:
+                                      kind:
+                                        Variable: n
+                                      span:
+                                        start: 84
+                                        end: 86
+                                    op: Sub
+                                    right:
+                                      kind:
+                                        Int: 1
+                                      span:
+                                        start: 89
+                                        end: 90
+                                span:
+                                  start: 84
+                                  end: 90
+                              unpack: false
+                              span:
+                                start: 84
+                                end: 90
+                      span:
+                        start: 80
+                        end: 92
+                    op: Add
+                    right:
+                      kind:
+                        FunctionCall:
+                          name:
+                            kind:
+                              Identifier: fib
+                            span:
+                              start: 94
+                              end: 97
+                          args:
+                            - name: ~
+                              value:
+                                kind:
+                                  Binary:
+                                    left:
+                                      kind:
+                                        Variable: n
+                                      span:
+                                        start: 98
+                                        end: 100
+                                    op: Sub
+                                    right:
+                                      kind:
+                                        Int: 2
+                                      span:
+                                        start: 103
+                                        end: 104
+                                span:
+                                  start: 98
+                                  end: 104
+                              unpack: false
+                              span:
+                                start: 98
+                                end: 104
+                      span:
+                        start: 94
+                        end: 105
+                span:
+                  start: 80
+                  end: 105
+            span:
+              start: 73
+              end: 107
+        return_type: ~
+        by_ref: false
+        attributes: []
+    span:
+      start: 6
+      end: 108
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: result
+              span:
+                start: 110
+                end: 117
+            op: Assign
+            value:
+              kind:
+                FunctionCall:
+                  name:
+                    kind:
+                      Identifier: fib
+                    span:
+                      start: 120
+                      end: 123
+                  args:
+                    - name: ~
+                      value:
+                        kind:
+                          Int: 10
+                        span:
+                          start: 124
+                          end: 126
+                      unpack: false
+                      span:
+                        start: 124
+                        end: 126
+              span:
+                start: 120
+                end: 127
+        span:
+          start: 110
+          end: 127
+    span:
+      start: 110
+      end: 129
+  - kind:
+      Echo:
+        - kind:
+            Variable: result
+          span:
+            start: 134
+            end: 141
+    span:
+      start: 129
+      end: 143
+span:
+  start: 0
+  end: 143

@@ -1,0 +1,324 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      If:
+        condition:
+          kind:
+            Binary:
+              left:
+                kind:
+                  Variable: x
+                span:
+                  start: 10
+                  end: 12
+              op: Greater
+              right:
+                kind:
+                  Int: 0
+                span:
+                  start: 15
+                  end: 16
+          span:
+            start: 10
+            end: 16
+        then_branch:
+          kind:
+            Block:
+              - kind:
+                  Echo:
+                    - kind:
+                        String: positive
+                      span:
+                        start: 29
+                        end: 39
+                span:
+                  start: 24
+                  end: 41
+          span:
+            start: 18
+            end: 42
+        elseif_branches:
+          - condition:
+              kind:
+                Binary:
+                  left:
+                    kind:
+                      Variable: x
+                    span:
+                      start: 51
+                      end: 53
+                  op: Less
+                  right:
+                    kind:
+                      Int: 0
+                    span:
+                      start: 56
+                      end: 57
+              span:
+                start: 51
+                end: 57
+            body:
+              kind:
+                Block:
+                  - kind:
+                      Echo:
+                        - kind:
+                            String: negative
+                          span:
+                            start: 70
+                            end: 80
+                    span:
+                      start: 65
+                      end: 82
+              span:
+                start: 59
+                end: 83
+            span:
+              start: 50
+              end: 83
+        else_branch:
+          kind:
+            Block:
+              - kind:
+                  Echo:
+                    - kind:
+                        String: zero
+                      span:
+                        start: 100
+                        end: 106
+                span:
+                  start: 95
+                  end: 108
+          span:
+            start: 89
+            end: 109
+    span:
+      start: 6
+      end: 109
+  - kind:
+      While:
+        condition:
+          kind:
+            Binary:
+              left:
+                kind:
+                  Variable: i
+                span:
+                  start: 118
+                  end: 120
+              op: Less
+              right:
+                kind:
+                  Int: 10
+                span:
+                  start: 123
+                  end: 125
+          span:
+            start: 118
+            end: 125
+        body:
+          kind:
+            Block:
+              - kind:
+                  Expression:
+                    kind:
+                      Assign:
+                        target:
+                          kind:
+                            Variable: i
+                          span:
+                            start: 133
+                            end: 135
+                        op: Assign
+                        value:
+                          kind:
+                            Binary:
+                              left:
+                                kind:
+                                  Variable: i
+                                span:
+                                  start: 138
+                                  end: 140
+                              op: Add
+                              right:
+                                kind:
+                                  Int: 1
+                                span:
+                                  start: 143
+                                  end: 144
+                          span:
+                            start: 138
+                            end: 144
+                    span:
+                      start: 133
+                      end: 144
+                span:
+                  start: 133
+                  end: 146
+          span:
+            start: 127
+            end: 147
+    span:
+      start: 111
+      end: 147
+  - kind:
+      For:
+        init:
+          - kind:
+              Assign:
+                target:
+                  kind:
+                    Variable: i
+                  span:
+                    start: 154
+                    end: 156
+                op: Assign
+                value:
+                  kind:
+                    Int: 0
+                  span:
+                    start: 159
+                    end: 160
+            span:
+              start: 154
+              end: 160
+        condition:
+          - kind:
+              Binary:
+                left:
+                  kind:
+                    Variable: i
+                  span:
+                    start: 162
+                    end: 164
+                op: Less
+                right:
+                  kind:
+                    Int: 10
+                  span:
+                    start: 167
+                    end: 169
+            span:
+              start: 162
+              end: 169
+        update:
+          - kind:
+              UnaryPostfix:
+                operand:
+                  kind:
+                    Variable: i
+                  span:
+                    start: 171
+                    end: 173
+                op: PostIncrement
+            span:
+              start: 171
+              end: 175
+        body:
+          kind:
+            Block:
+              - kind:
+                  Echo:
+                    - kind:
+                        Variable: i
+                      span:
+                        start: 188
+                        end: 190
+                span:
+                  start: 183
+                  end: 192
+          span:
+            start: 177
+            end: 193
+    span:
+      start: 149
+      end: 193
+  - kind:
+      Foreach:
+        expr:
+          kind:
+            Variable: items
+          span:
+            start: 204
+            end: 210
+        key: ~
+        value:
+          kind:
+            Variable: item
+          span:
+            start: 214
+            end: 219
+        body:
+          kind:
+            Block:
+              - kind:
+                  Echo:
+                    - kind:
+                        Variable: item
+                      span:
+                        start: 232
+                        end: 237
+                span:
+                  start: 227
+                  end: 239
+          span:
+            start: 221
+            end: 240
+    span:
+      start: 195
+      end: 240
+  - kind:
+      Foreach:
+        expr:
+          kind:
+            Variable: map
+          span:
+            start: 251
+            end: 255
+        key:
+          kind:
+            Variable: key
+          span:
+            start: 259
+            end: 263
+        value:
+          kind:
+            Variable: value
+          span:
+            start: 267
+            end: 273
+        body:
+          kind:
+            Block:
+              - kind:
+                  Echo:
+                    - kind:
+                        Variable: key
+                      span:
+                        start: 286
+                        end: 290
+                span:
+                  start: 281
+                  end: 296
+              - kind:
+                  Echo:
+                    - kind:
+                        Variable: value
+                      span:
+                        start: 301
+                        end: 307
+                span:
+                  start: 296
+                  end: 309
+          span:
+            start: 275
+            end: 310
+    span:
+      start: 242
+      end: 310
+span:
+  start: 0
+  end: 310

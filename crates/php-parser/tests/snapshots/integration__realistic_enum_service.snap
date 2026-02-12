@@ -1,0 +1,767 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Namespace:
+        name:
+          parts:
+            - App
+            - Enums
+          kind: Qualified
+          span:
+            start: 16
+            end: 25
+        body: Simple
+    span:
+      start: 6
+      end: 28
+  - kind:
+      Enum:
+        name: Priority
+        scalar_type:
+          parts:
+            - int
+          kind: Unqualified
+          span:
+            start: 43
+            end: 47
+        implements: []
+        members:
+          - kind:
+              Case:
+                name: Low
+                value:
+                  kind:
+                    Int: 1
+                  span:
+                    start: 64
+                    end: 65
+                attributes: []
+            span:
+              start: 53
+              end: 71
+          - kind:
+              Case:
+                name: Medium
+                value:
+                  kind:
+                    Int: 2
+                  span:
+                    start: 85
+                    end: 86
+                attributes: []
+            span:
+              start: 71
+              end: 92
+          - kind:
+              Case:
+                name: High
+                value:
+                  kind:
+                    Int: 3
+                  span:
+                    start: 104
+                    end: 105
+                attributes: []
+            span:
+              start: 92
+              end: 111
+          - kind:
+              Case:
+                name: Critical
+                value:
+                  kind:
+                    Int: 4
+                  span:
+                    start: 127
+                    end: 128
+                attributes: []
+            span:
+              start: 111
+              end: 135
+          - kind:
+              Method:
+                name: label
+                visibility: Public
+                is_static: false
+                is_abstract: false
+                is_final: false
+                by_ref: false
+                params: []
+                return_type:
+                  kind:
+                    Named:
+                      parts:
+                        - string
+                      kind: Unqualified
+                      span:
+                        start: 160
+                        end: 166
+                  span:
+                    start: 160
+                    end: 166
+                body:
+                  - kind:
+                      Return:
+                        kind:
+                          Match:
+                            subject:
+                              kind:
+                                Variable: this
+                              span:
+                                start: 195
+                                end: 200
+                            arms:
+                              - conditions:
+                                  - kind:
+                                      ClassConstAccess:
+                                        class:
+                                          kind:
+                                            Identifier: Priority
+                                          span:
+                                            start: 216
+                                            end: 224
+                                        member: Low
+                                    span:
+                                      start: 216
+                                      end: 230
+                                body:
+                                  kind:
+                                    String: Low Priority
+                                  span:
+                                    start: 233
+                                    end: 247
+                                span:
+                                  start: 216
+                                  end: 247
+                              - conditions:
+                                  - kind:
+                                      ClassConstAccess:
+                                        class:
+                                          kind:
+                                            Identifier: Priority
+                                          span:
+                                            start: 261
+                                            end: 269
+                                        member: Medium
+                                    span:
+                                      start: 261
+                                      end: 278
+                                body:
+                                  kind:
+                                    String: Medium Priority
+                                  span:
+                                    start: 281
+                                    end: 298
+                                span:
+                                  start: 261
+                                  end: 298
+                              - conditions:
+                                  - kind:
+                                      ClassConstAccess:
+                                        class:
+                                          kind:
+                                            Identifier: Priority
+                                          span:
+                                            start: 312
+                                            end: 320
+                                        member: High
+                                    span:
+                                      start: 312
+                                      end: 327
+                                body:
+                                  kind:
+                                    String: High Priority
+                                  span:
+                                    start: 330
+                                    end: 345
+                                span:
+                                  start: 312
+                                  end: 345
+                              - conditions:
+                                  - kind:
+                                      ClassConstAccess:
+                                        class:
+                                          kind:
+                                            Identifier: Priority
+                                          span:
+                                            start: 359
+                                            end: 367
+                                        member: Critical
+                                    span:
+                                      start: 359
+                                      end: 378
+                                body:
+                                  kind:
+                                    String: Critical Priority
+                                  span:
+                                    start: 381
+                                    end: 400
+                                span:
+                                  start: 359
+                                  end: 400
+                        span:
+                          start: 188
+                          end: 411
+                    span:
+                      start: 181
+                      end: 417
+                attributes: []
+            span:
+              start: 135
+              end: 424
+          - kind:
+              Method:
+                name: fromLabel
+                visibility: Public
+                is_static: true
+                is_abstract: false
+                is_final: false
+                by_ref: false
+                params:
+                  - name: label
+                    type_hint:
+                      kind:
+                        Named:
+                          parts:
+                            - string
+                          kind: Unqualified
+                          span:
+                            start: 457
+                            end: 463
+                      span:
+                        start: 457
+                        end: 463
+                    default: ~
+                    by_ref: false
+                    variadic: false
+                    visibility: ~
+                    attributes: []
+                    span:
+                      start: 457
+                      end: 470
+                return_type:
+                  kind:
+                    Named:
+                      parts:
+                        - self
+                      kind: Unqualified
+                      span:
+                        start: 473
+                        end: 477
+                  span:
+                    start: 473
+                    end: 477
+                body:
+                  - kind:
+                      StaticVar:
+                        - name: map
+                          default:
+                            kind: "Null"
+                            span:
+                              start: 506
+                              end: 510
+                          span:
+                            start: 499
+                            end: 510
+                    span:
+                      start: 492
+                      end: 520
+                  - kind:
+                      Return:
+                        kind:
+                          ClassConstAccess:
+                            class:
+                              kind:
+                                Identifier: static
+                              span:
+                                start: 527
+                                end: 533
+                            member: Critical
+                        span:
+                          start: 527
+                          end: 543
+                    span:
+                      start: 520
+                      end: 549
+                attributes: []
+            span:
+              start: 424
+              end: 551
+        attributes: []
+    span:
+      start: 28
+      end: 552
+  - kind:
+      Class:
+        name: TaskService
+        modifiers:
+          is_abstract: false
+          is_final: false
+          is_readonly: false
+        extends: ~
+        implements: []
+        members:
+          - kind:
+              Property:
+                name: counter
+                visibility: Private
+                is_static: true
+                is_readonly: false
+                type_hint:
+                  kind:
+                    Named:
+                      parts:
+                        - int
+                      kind: Unqualified
+                      span:
+                        start: 593
+                        end: 596
+                  span:
+                    start: 593
+                    end: 596
+                default:
+                  kind:
+                    Int: 0
+                  span:
+                    start: 608
+                    end: 609
+                attributes: []
+            span:
+              start: 578
+              end: 616
+          - kind:
+              Method:
+                name: create
+                visibility: Public
+                is_static: true
+                is_abstract: false
+                is_final: false
+                by_ref: false
+                params:
+                  - name: title
+                    type_hint:
+                      kind:
+                        Named:
+                          parts:
+                            - string
+                          kind: Unqualified
+                          span:
+                            start: 646
+                            end: 652
+                      span:
+                        start: 646
+                        end: 652
+                    default: ~
+                    by_ref: false
+                    variadic: false
+                    visibility: ~
+                    attributes: []
+                    span:
+                      start: 646
+                      end: 659
+                  - name: priority
+                    type_hint:
+                      kind:
+                        Named:
+                          parts:
+                            - Priority
+                          kind: Unqualified
+                          span:
+                            start: 661
+                            end: 670
+                      span:
+                        start: 661
+                        end: 670
+                    default: ~
+                    by_ref: false
+                    variadic: false
+                    visibility: ~
+                    attributes: []
+                    span:
+                      start: 661
+                      end: 679
+                return_type:
+                  kind:
+                    Named:
+                      parts:
+                        - array
+                      kind: Unqualified
+                      span:
+                        start: 682
+                        end: 687
+                  span:
+                    start: 682
+                    end: 687
+                body:
+                  - kind:
+                      Expression:
+                        kind:
+                          UnaryPostfix:
+                            operand:
+                              kind:
+                                StaticPropertyAccess:
+                                  class:
+                                    kind:
+                                      Identifier: self
+                                    span:
+                                      start: 702
+                                      end: 706
+                                  member: counter
+                              span:
+                                start: 702
+                                end: 716
+                            op: PostIncrement
+                        span:
+                          start: 702
+                          end: 718
+                    span:
+                      start: 702
+                      end: 728
+                  - kind:
+                      Expression:
+                        kind:
+                          Assign:
+                            target:
+                              kind:
+                                Variable: id
+                              span:
+                                start: 728
+                                end: 731
+                            op: Assign
+                            value:
+                              kind:
+                                StaticPropertyAccess:
+                                  class:
+                                    kind:
+                                      Identifier: self
+                                    span:
+                                      start: 734
+                                      end: 738
+                                  member: counter
+                              span:
+                                start: 734
+                                end: 748
+                        span:
+                          start: 728
+                          end: 748
+                    span:
+                      start: 728
+                      end: 758
+                  - kind:
+                      Expression:
+                        kind:
+                          Assign:
+                            target:
+                              kind:
+                                Variable: formatter
+                              span:
+                                start: 758
+                                end: 768
+                            op: Assign
+                            value:
+                              kind:
+                                ArrowFunction:
+                                  is_static: true
+                                  by_ref: false
+                                  params:
+                                    - name: t
+                                      type_hint:
+                                        kind:
+                                          Named:
+                                            parts:
+                                              - string
+                                            kind: Unqualified
+                                            span:
+                                              start: 781
+                                              end: 787
+                                        span:
+                                          start: 781
+                                          end: 787
+                                      default: ~
+                                      by_ref: false
+                                      variadic: false
+                                      visibility: ~
+                                      attributes: []
+                                      span:
+                                        start: 781
+                                        end: 790
+                                    - name: i
+                                      type_hint:
+                                        kind:
+                                          Named:
+                                            parts:
+                                              - int
+                                            kind: Unqualified
+                                            span:
+                                              start: 792
+                                              end: 795
+                                        span:
+                                          start: 792
+                                          end: 795
+                                      default: ~
+                                      by_ref: false
+                                      variadic: false
+                                      visibility: ~
+                                      attributes: []
+                                      span:
+                                        start: 792
+                                        end: 798
+                                  return_type:
+                                    kind:
+                                      Named:
+                                        parts:
+                                          - string
+                                        kind: Unqualified
+                                        span:
+                                          start: 801
+                                          end: 807
+                                    span:
+                                      start: 801
+                                      end: 807
+                                  body:
+                                    kind:
+                                      Binary:
+                                        left:
+                                          kind:
+                                            Binary:
+                                              left:
+                                                kind:
+                                                  Variable: t
+                                                span:
+                                                  start: 811
+                                                  end: 813
+                                              op: Concat
+                                              right:
+                                                kind:
+                                                  String: "#"
+                                                span:
+                                                  start: 816
+                                                  end: 819
+                                          span:
+                                            start: 811
+                                            end: 819
+                                        op: Concat
+                                        right:
+                                          kind:
+                                            Variable: i
+                                          span:
+                                            start: 822
+                                            end: 824
+                                    span:
+                                      start: 811
+                                      end: 824
+                              span:
+                                start: 771
+                                end: 824
+                        span:
+                          start: 758
+                          end: 824
+                    span:
+                      start: 758
+                      end: 834
+                  - kind:
+                      Expression:
+                        kind:
+                          Assign:
+                            target:
+                              kind:
+                                Variable: formatted
+                              span:
+                                start: 834
+                                end: 844
+                            op: Assign
+                            value:
+                              kind:
+                                FunctionCall:
+                                  name:
+                                    kind:
+                                      Variable: formatter
+                                    span:
+                                      start: 847
+                                      end: 857
+                                  args:
+                                    - name: ~
+                                      value:
+                                        kind:
+                                          Variable: title
+                                        span:
+                                          start: 858
+                                          end: 864
+                                      unpack: false
+                                      span:
+                                        start: 858
+                                        end: 864
+                                    - name: ~
+                                      value:
+                                        kind:
+                                          Variable: id
+                                        span:
+                                          start: 866
+                                          end: 869
+                                      unpack: false
+                                      span:
+                                        start: 866
+                                        end: 869
+                              span:
+                                start: 847
+                                end: 870
+                        span:
+                          start: 834
+                          end: 870
+                    span:
+                      start: 834
+                      end: 880
+                  - kind:
+                      Return:
+                        kind:
+                          Array:
+                            - key:
+                                kind:
+                                  String: id
+                                span:
+                                  start: 901
+                                  end: 905
+                              value:
+                                kind:
+                                  Variable: id
+                                span:
+                                  start: 909
+                                  end: 912
+                              unpack: false
+                              span:
+                                start: 901
+                                end: 912
+                            - key:
+                                kind:
+                                  String: title
+                                span:
+                                  start: 926
+                                  end: 933
+                              value:
+                                kind:
+                                  Variable: formatted
+                                span:
+                                  start: 937
+                                  end: 947
+                              unpack: false
+                              span:
+                                start: 926
+                                end: 947
+                            - key:
+                                kind:
+                                  String: priority
+                                span:
+                                  start: 961
+                                  end: 971
+                              value:
+                                kind:
+                                  MethodCall:
+                                    object:
+                                      kind:
+                                        Variable: priority
+                                      span:
+                                        start: 975
+                                        end: 984
+                                    method:
+                                      kind:
+                                        Identifier: label
+                                      span:
+                                        start: 986
+                                        end: 991
+                                    args: []
+                                span:
+                                  start: 975
+                                  end: 993
+                              unpack: false
+                              span:
+                                start: 961
+                                end: 993
+                            - key:
+                                kind:
+                                  String: is_urgent
+                                span:
+                                  start: 1007
+                                  end: 1018
+                              value:
+                                kind:
+                                  Binary:
+                                    left:
+                                      kind:
+                                        Binary:
+                                          left:
+                                            kind:
+                                              Variable: priority
+                                            span:
+                                              start: 1022
+                                              end: 1031
+                                          op: Identical
+                                          right:
+                                            kind:
+                                              ClassConstAccess:
+                                                class:
+                                                  kind:
+                                                    Identifier: Priority
+                                                  span:
+                                                    start: 1036
+                                                    end: 1044
+                                                member: Critical
+                                            span:
+                                              start: 1036
+                                              end: 1055
+                                      span:
+                                        start: 1022
+                                        end: 1055
+                                    op: BooleanOr
+                                    right:
+                                      kind:
+                                        Binary:
+                                          left:
+                                            kind:
+                                              Variable: priority
+                                            span:
+                                              start: 1058
+                                              end: 1067
+                                          op: Identical
+                                          right:
+                                            kind:
+                                              ClassConstAccess:
+                                                class:
+                                                  kind:
+                                                    Identifier: Priority
+                                                  span:
+                                                    start: 1072
+                                                    end: 1080
+                                                member: High
+                                            span:
+                                              start: 1072
+                                              end: 1086
+                                      span:
+                                        start: 1058
+                                        end: 1086
+                                span:
+                                  start: 1022
+                                  end: 1086
+                              unpack: false
+                              span:
+                                start: 1007
+                                end: 1086
+                        span:
+                          start: 887
+                          end: 1097
+                    span:
+                      start: 880
+                      end: 1103
+                attributes: []
+            span:
+              start: 616
+              end: 1105
+        attributes: []
+    span:
+      start: 554
+      end: 1106
+span:
+  start: 0
+  end: 1106

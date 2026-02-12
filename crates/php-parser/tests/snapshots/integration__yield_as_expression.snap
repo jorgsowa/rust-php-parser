@@ -1,0 +1,84 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Function:
+        name: gen
+        params: []
+        body:
+          - kind:
+              Expression:
+                kind:
+                  Assign:
+                    target:
+                      kind:
+                        Variable: received
+                      span:
+                        start: 27
+                        end: 36
+                    op: Assign
+                    value:
+                      kind:
+                        Yield:
+                          key: ~
+                          value:
+                            kind:
+                              String: value
+                            span:
+                              start: 45
+                              end: 52
+                      span:
+                        start: 39
+                        end: 52
+                span:
+                  start: 27
+                  end: 52
+            span:
+              start: 27
+              end: 58
+          - kind:
+              Expression:
+                kind:
+                  Assign:
+                    target:
+                      kind:
+                        Variable: received
+                      span:
+                        start: 58
+                        end: 67
+                    op: Assign
+                    value:
+                      kind:
+                        Yield:
+                          key:
+                            kind:
+                              Variable: key
+                            span:
+                              start: 76
+                              end: 80
+                          value:
+                            kind:
+                              Variable: value
+                            span:
+                              start: 84
+                              end: 90
+                      span:
+                        start: 70
+                        end: 90
+                span:
+                  start: 58
+                  end: 90
+            span:
+              start: 58
+              end: 92
+        return_type: ~
+        by_ref: false
+        attributes: []
+    span:
+      start: 6
+      end: 93
+span:
+  start: 0
+  end: 93

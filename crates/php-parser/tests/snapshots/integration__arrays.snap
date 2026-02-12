@@ -1,0 +1,404 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: empty
+              span:
+                start: 6
+                end: 12
+            op: Assign
+            value:
+              kind:
+                Array: []
+              span:
+                start: 15
+                end: 17
+        span:
+          start: 6
+          end: 17
+    span:
+      start: 6
+      end: 19
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: numbers
+              span:
+                start: 19
+                end: 27
+            op: Assign
+            value:
+              kind:
+                Array:
+                  - key: ~
+                    value:
+                      kind:
+                        Int: 1
+                      span:
+                        start: 31
+                        end: 32
+                    unpack: false
+                    span:
+                      start: 31
+                      end: 32
+                  - key: ~
+                    value:
+                      kind:
+                        Int: 2
+                      span:
+                        start: 34
+                        end: 35
+                    unpack: false
+                    span:
+                      start: 34
+                      end: 35
+                  - key: ~
+                    value:
+                      kind:
+                        Int: 3
+                      span:
+                        start: 37
+                        end: 38
+                    unpack: false
+                    span:
+                      start: 37
+                      end: 38
+              span:
+                start: 30
+                end: 39
+        span:
+          start: 19
+          end: 39
+    span:
+      start: 19
+      end: 41
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: map
+              span:
+                start: 41
+                end: 45
+            op: Assign
+            value:
+              kind:
+                Array:
+                  - key:
+                      kind:
+                        String: name
+                      span:
+                        start: 49
+                        end: 55
+                    value:
+                      kind:
+                        String: PHP
+                      span:
+                        start: 59
+                        end: 64
+                    unpack: false
+                    span:
+                      start: 49
+                      end: 64
+                  - key:
+                      kind:
+                        String: version
+                      span:
+                        start: 66
+                        end: 75
+                    value:
+                      kind:
+                        Int: 8
+                      span:
+                        start: 79
+                        end: 80
+                    unpack: false
+                    span:
+                      start: 66
+                      end: 80
+              span:
+                start: 48
+                end: 81
+        span:
+          start: 41
+          end: 81
+    span:
+      start: 41
+      end: 83
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: nested
+              span:
+                start: 83
+                end: 90
+            op: Assign
+            value:
+              kind:
+                Array:
+                  - key: ~
+                    value:
+                      kind:
+                        Array:
+                          - key: ~
+                            value:
+                              kind:
+                                Int: 1
+                              span:
+                                start: 95
+                                end: 96
+                            unpack: false
+                            span:
+                              start: 95
+                              end: 96
+                          - key: ~
+                            value:
+                              kind:
+                                Int: 2
+                              span:
+                                start: 98
+                                end: 99
+                            unpack: false
+                            span:
+                              start: 98
+                              end: 99
+                      span:
+                        start: 94
+                        end: 100
+                    unpack: false
+                    span:
+                      start: 94
+                      end: 100
+                  - key: ~
+                    value:
+                      kind:
+                        Array:
+                          - key: ~
+                            value:
+                              kind:
+                                Int: 3
+                              span:
+                                start: 103
+                                end: 104
+                            unpack: false
+                            span:
+                              start: 103
+                              end: 104
+                          - key: ~
+                            value:
+                              kind:
+                                Int: 4
+                              span:
+                                start: 106
+                                end: 107
+                            unpack: false
+                            span:
+                              start: 106
+                              end: 107
+                      span:
+                        start: 102
+                        end: 108
+                    unpack: false
+                    span:
+                      start: 102
+                      end: 108
+              span:
+                start: 93
+                end: 109
+        span:
+          start: 83
+          end: 109
+    span:
+      start: 83
+      end: 111
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: first
+              span:
+                start: 111
+                end: 117
+            op: Assign
+            value:
+              kind:
+                ArrayAccess:
+                  array:
+                    kind:
+                      Variable: numbers
+                    span:
+                      start: 120
+                      end: 128
+                  index:
+                    kind:
+                      Int: 0
+                    span:
+                      start: 129
+                      end: 130
+              span:
+                start: 120
+                end: 131
+        span:
+          start: 111
+          end: 131
+    span:
+      start: 111
+      end: 133
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: name
+              span:
+                start: 133
+                end: 138
+            op: Assign
+            value:
+              kind:
+                ArrayAccess:
+                  array:
+                    kind:
+                      Variable: map
+                    span:
+                      start: 141
+                      end: 145
+                  index:
+                    kind:
+                      String: name
+                    span:
+                      start: 146
+                      end: 152
+              span:
+                start: 141
+                end: 153
+        span:
+          start: 133
+          end: 153
+    span:
+      start: 133
+      end: 155
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: deep
+              span:
+                start: 155
+                end: 160
+            op: Assign
+            value:
+              kind:
+                ArrayAccess:
+                  array:
+                    kind:
+                      ArrayAccess:
+                        array:
+                          kind:
+                            Variable: nested
+                          span:
+                            start: 163
+                            end: 170
+                        index:
+                          kind:
+                            Int: 0
+                          span:
+                            start: 171
+                            end: 172
+                    span:
+                      start: 163
+                      end: 173
+                  index:
+                    kind:
+                      Int: 1
+                    span:
+                      start: 174
+                      end: 175
+              span:
+                start: 163
+                end: 176
+        span:
+          start: 155
+          end: 176
+    span:
+      start: 155
+      end: 178
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: trailing
+              span:
+                start: 178
+                end: 187
+            op: Assign
+            value:
+              kind:
+                Array:
+                  - key: ~
+                    value:
+                      kind:
+                        Int: 1
+                      span:
+                        start: 191
+                        end: 192
+                    unpack: false
+                    span:
+                      start: 191
+                      end: 192
+                  - key: ~
+                    value:
+                      kind:
+                        Int: 2
+                      span:
+                        start: 194
+                        end: 195
+                    unpack: false
+                    span:
+                      start: 194
+                      end: 195
+                  - key: ~
+                    value:
+                      kind:
+                        Int: 3
+                      span:
+                        start: 197
+                        end: 198
+                    unpack: false
+                    span:
+                      start: 197
+                      end: 198
+              span:
+                start: 190
+                end: 200
+        span:
+          start: 178
+          end: 200
+    span:
+      start: 178
+      end: 202
+span:
+  start: 0
+  end: 202

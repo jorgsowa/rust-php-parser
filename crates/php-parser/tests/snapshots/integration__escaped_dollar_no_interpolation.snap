@@ -1,0 +1,19 @@
+---
+source: crates/php-parser/tests/integration.rs
+assertion_line: 1709
+expression: result.program
+---
+stmts:
+  - kind:
+      Echo:
+        - kind:
+            String: "Price: \\$100"
+          span:
+            start: 11
+            end: 25
+    span:
+      start: 6
+      end: 26
+span:
+  start: 0
+  end: 26

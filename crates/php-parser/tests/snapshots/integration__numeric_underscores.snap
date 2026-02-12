@@ -1,0 +1,146 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: a
+              span:
+                start: 6
+                end: 8
+            op: Assign
+            value:
+              kind:
+                Int: 1000000
+              span:
+                start: 11
+                end: 20
+        span:
+          start: 6
+          end: 20
+    span:
+      start: 6
+      end: 22
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: b
+              span:
+                start: 22
+                end: 24
+            op: Assign
+            value:
+              kind:
+                Int: 65535
+              span:
+                start: 27
+                end: 34
+        span:
+          start: 22
+          end: 34
+    span:
+      start: 22
+      end: 36
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: c
+              span:
+                start: 36
+                end: 38
+            op: Assign
+            value:
+              kind:
+                Int: 165
+              span:
+                start: 41
+                end: 52
+        span:
+          start: 36
+          end: 52
+    span:
+      start: 36
+      end: 54
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: d
+              span:
+                start: 54
+                end: 56
+            op: Assign
+            value:
+              kind:
+                Int: 4095
+              span:
+                start: 59
+                end: 66
+        span:
+          start: 54
+          end: 66
+    span:
+      start: 54
+      end: 68
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: e
+              span:
+                start: 68
+                end: 70
+            op: Assign
+            value:
+              kind:
+                Float: 1000.5
+              span:
+                start: 73
+                end: 81
+        span:
+          start: 68
+          end: 81
+    span:
+      start: 68
+      end: 83
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: f
+              span:
+                start: 83
+                end: 85
+            op: Assign
+            value:
+              kind:
+                Float: 100000000000
+              span:
+                start: 88
+                end: 95
+        span:
+          start: 83
+          end: 95
+    span:
+      start: 83
+      end: 97
+span:
+  start: 0
+  end: 97

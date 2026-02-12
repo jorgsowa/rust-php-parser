@@ -1,0 +1,113 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Expression:
+        kind:
+          ClassConstAccess:
+            class:
+              kind:
+                Identifier: Foo
+              span:
+                start: 6
+                end: 9
+            member: BAR
+        span:
+          start: 6
+          end: 14
+    span:
+      start: 6
+      end: 16
+  - kind:
+      Expression:
+        kind:
+          StaticPropertyAccess:
+            class:
+              kind:
+                Identifier: Foo
+              span:
+                start: 16
+                end: 19
+            member: instance
+        span:
+          start: 16
+          end: 30
+    span:
+      start: 16
+      end: 32
+  - kind:
+      Expression:
+        kind:
+          StaticMethodCall:
+            class:
+              kind:
+                Identifier: Foo
+              span:
+                start: 32
+                end: 35
+            method: create
+            args: []
+        span:
+          start: 32
+          end: 45
+    span:
+      start: 32
+      end: 47
+  - kind:
+      Expression:
+        kind:
+          StaticPropertyAccess:
+            class:
+              kind:
+                Identifier: self
+              span:
+                start: 47
+                end: 51
+            member: x
+        span:
+          start: 47
+          end: 55
+    span:
+      start: 47
+      end: 57
+  - kind:
+      Expression:
+        kind:
+          StaticMethodCall:
+            class:
+              kind:
+                Identifier: parent
+              span:
+                start: 57
+                end: 63
+            method: __construct
+            args: []
+        span:
+          start: 57
+          end: 78
+    span:
+      start: 57
+      end: 80
+  - kind:
+      Expression:
+        kind:
+          StaticMethodCall:
+            class:
+              kind:
+                Identifier: static
+              span:
+                start: 80
+                end: 86
+            method: factory
+            args: []
+        span:
+          start: 80
+          end: 97
+    span:
+      start: 80
+      end: 99
+span:
+  start: 0
+  end: 99

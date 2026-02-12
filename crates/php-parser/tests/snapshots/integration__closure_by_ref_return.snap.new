@@ -1,0 +1,64 @@
+---
+source: crates/php-parser/tests/integration.rs
+assertion_line: 1364
+expression: result.program
+---
+stmts:
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: f
+              span:
+                start: 6
+                end: 8
+            op: Assign
+            value:
+              kind:
+                Closure:
+                  is_static: false
+                  by_ref: true
+                  params: []
+                  use_vars: []
+                  return_type: ~
+                  body:
+                    - kind:
+                        StaticVar:
+                          - name: x
+                            default:
+                              kind:
+                                Int: 0
+                              span:
+                                start: 38
+                                end: 39
+                            span:
+                              start: 33
+                              end: 39
+                      span:
+                        start: 26
+                        end: 41
+                    - kind:
+                        Return:
+                          kind:
+                            Variable: x
+                          span:
+                            start: 48
+                            end: 50
+                      span:
+                        start: 41
+                        end: 52
+                  attributes: []
+              span:
+                start: 11
+                end: 53
+        span:
+          start: 6
+          end: 53
+    span:
+      start: 6
+      end: 54
+span:
+  start: 0
+  end: 54

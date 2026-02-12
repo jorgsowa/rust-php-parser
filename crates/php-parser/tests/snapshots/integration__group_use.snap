@@ -1,0 +1,140 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Use:
+        kind: Normal
+        uses:
+          - name:
+              parts:
+                - App
+                - Models
+                - User
+              kind: Qualified
+              span:
+                start: 10
+                end: 26
+            alias: ~
+            span:
+              start: 15
+              end: 26
+          - name:
+              parts:
+                - App
+                - Services
+                - Auth
+              kind: Qualified
+              span:
+                start: 10
+                end: 41
+            alias: ~
+            span:
+              start: 28
+              end: 41
+    span:
+      start: 6
+      end: 44
+  - kind:
+      Use:
+        kind: Function
+        uses:
+          - name:
+              parts:
+                - App
+                - Helpers
+                - format
+              kind: Qualified
+              span:
+                start: 57
+                end: 76
+            alias: ~
+            span:
+              start: 70
+              end: 76
+          - name:
+              parts:
+                - App
+                - Helpers
+                - validate
+              kind: Qualified
+              span:
+                start: 57
+                end: 86
+            alias: ~
+            span:
+              start: 78
+              end: 86
+    span:
+      start: 44
+      end: 89
+  - kind:
+      Use:
+        kind: Const
+        uses:
+          - name:
+              parts:
+                - App
+                - Config
+                - DB_HOST
+              kind: Qualified
+              span:
+                start: 99
+                end: 118
+            alias: ~
+            span:
+              start: 111
+              end: 118
+          - name:
+              parts:
+                - App
+                - Config
+                - DB_PORT
+              kind: Qualified
+              span:
+                start: 99
+                end: 127
+            alias: ~
+            span:
+              start: 120
+              end: 127
+    span:
+      start: 89
+      end: 130
+  - kind:
+      Use:
+        kind: Normal
+        uses:
+          - name:
+              parts:
+                - App
+                - Models
+                - User
+              kind: Qualified
+              span:
+                start: 134
+                end: 151
+            alias: U
+            span:
+              start: 139
+              end: 155
+          - name:
+              parts:
+                - App
+                - Services
+                - Auth
+              kind: Qualified
+              span:
+                start: 134
+                end: 171
+            alias: A
+            span:
+              start: 157
+              end: 175
+    span:
+      start: 130
+      end: 178
+span:
+  start: 0
+  end: 178

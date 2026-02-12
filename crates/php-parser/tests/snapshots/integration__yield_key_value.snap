@@ -1,0 +1,63 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Function:
+        name: indexedGen
+        params: []
+        body:
+          - kind:
+              Expression:
+                kind:
+                  Yield:
+                    key:
+                      kind:
+                        String: a
+                      span:
+                        start: 40
+                        end: 43
+                    value:
+                      kind:
+                        Int: 1
+                      span:
+                        start: 47
+                        end: 48
+                span:
+                  start: 34
+                  end: 48
+            span:
+              start: 34
+              end: 54
+          - kind:
+              Expression:
+                kind:
+                  Yield:
+                    key:
+                      kind:
+                        String: b
+                      span:
+                        start: 60
+                        end: 63
+                    value:
+                      kind:
+                        Int: 2
+                      span:
+                        start: 67
+                        end: 68
+                span:
+                  start: 54
+                  end: 68
+            span:
+              start: 54
+              end: 70
+        return_type: ~
+        by_ref: false
+        attributes: []
+    span:
+      start: 6
+      end: 71
+span:
+  start: 0
+  end: 71

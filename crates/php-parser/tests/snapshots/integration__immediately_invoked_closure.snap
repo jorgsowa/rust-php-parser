@@ -1,0 +1,46 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Expression:
+        kind:
+          FunctionCall:
+            name:
+              kind:
+                Parenthesized:
+                  kind:
+                    Closure:
+                      is_static: false
+                      by_ref: false
+                      params: []
+                      use_vars: []
+                      return_type: ~
+                      body:
+                        - kind:
+                            Echo:
+                              - kind:
+                                  String: hi
+                                span:
+                                  start: 25
+                                  end: 29
+                          span:
+                            start: 20
+                            end: 31
+                  span:
+                    start: 7
+                    end: 32
+              span:
+                start: 6
+                end: 33
+            args: []
+        span:
+          start: 6
+          end: 35
+    span:
+      start: 6
+      end: 36
+span:
+  start: 0
+  end: 36

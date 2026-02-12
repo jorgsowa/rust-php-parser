@@ -1,0 +1,85 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Expression:
+        kind:
+          Ternary:
+            condition:
+              kind:
+                Binary:
+                  left:
+                    kind:
+                      Variable: x
+                    span:
+                      start: 6
+                      end: 8
+                  op: Greater
+                  right:
+                    kind:
+                      Int: 0
+                    span:
+                      start: 11
+                      end: 12
+              span:
+                start: 6
+                end: 12
+            then_expr:
+              kind:
+                String: pos
+              span:
+                start: 15
+                end: 20
+            else_expr:
+              kind:
+                Parenthesized:
+                  kind:
+                    Ternary:
+                      condition:
+                        kind:
+                          Binary:
+                            left:
+                              kind:
+                                Variable: x
+                              span:
+                                start: 24
+                                end: 26
+                            op: Less
+                            right:
+                              kind:
+                                Int: 0
+                              span:
+                                start: 29
+                                end: 30
+                        span:
+                          start: 24
+                          end: 30
+                      then_expr:
+                        kind:
+                          String: neg
+                        span:
+                          start: 33
+                          end: 38
+                      else_expr:
+                        kind:
+                          String: zero
+                        span:
+                          start: 41
+                          end: 47
+                  span:
+                    start: 24
+                    end: 47
+              span:
+                start: 23
+                end: 48
+        span:
+          start: 6
+          end: 48
+    span:
+      start: 6
+      end: 49
+span:
+  start: 0
+  end: 49

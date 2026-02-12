@@ -1,0 +1,88 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Use:
+        kind: Normal
+        uses:
+          - name:
+              parts:
+                - App
+                - Models
+                - User
+              kind: Qualified
+              span:
+                start: 10
+                end: 25
+            alias: ~
+            span:
+              start: 10
+              end: 25
+    span:
+      start: 6
+      end: 27
+  - kind:
+      Use:
+        kind: Normal
+        uses:
+          - name:
+              parts:
+                - App
+                - Services
+                - Auth
+              kind: Qualified
+              span:
+                start: 31
+                end: 49
+            alias: AuthService
+            span:
+              start: 31
+              end: 63
+    span:
+      start: 27
+      end: 65
+  - kind:
+      Use:
+        kind: Function
+        uses:
+          - name:
+              parts:
+                - App
+                - Helpers
+                - formatDate
+              kind: Qualified
+              span:
+                start: 78
+                end: 100
+            alias: ~
+            span:
+              start: 78
+              end: 100
+    span:
+      start: 65
+      end: 102
+  - kind:
+      Use:
+        kind: Const
+        uses:
+          - name:
+              parts:
+                - App
+                - Config
+                - VERSION
+              kind: Qualified
+              span:
+                start: 112
+                end: 130
+            alias: ~
+            span:
+              start: 112
+              end: 130
+    span:
+      start: 102
+      end: 132
+span:
+  start: 0
+  end: 132

@@ -1,0 +1,63 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Expression:
+        kind:
+          Eval:
+            kind:
+              String: echo 1;
+            span:
+              start: 11
+              end: 20
+        span:
+          start: 6
+          end: 21
+    span:
+      start: 6
+      end: 23
+  - kind:
+      Expression:
+        kind:
+          Exit: ~
+        span:
+          start: 23
+          end: 27
+    span:
+      start: 23
+      end: 29
+  - kind:
+      Expression:
+        kind:
+          Exit:
+            kind:
+              Int: 1
+            span:
+              start: 34
+              end: 35
+        span:
+          start: 29
+          end: 35
+    span:
+      start: 29
+      end: 38
+  - kind:
+      Expression:
+        kind:
+          Exit:
+            kind:
+              String: fatal
+            span:
+              start: 42
+              end: 49
+        span:
+          start: 38
+          end: 49
+    span:
+      start: 38
+      end: 51
+span:
+  start: 0
+  end: 51

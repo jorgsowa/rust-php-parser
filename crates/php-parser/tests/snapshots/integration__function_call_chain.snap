@@ -1,0 +1,65 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Expression:
+        kind:
+          FunctionCall:
+            name:
+              kind:
+                Identifier: foo
+              span:
+                start: 6
+                end: 9
+            args:
+              - name: ~
+                value:
+                  kind:
+                    FunctionCall:
+                      name:
+                        kind:
+                          Identifier: bar
+                        span:
+                          start: 10
+                          end: 13
+                      args:
+                        - name: ~
+                          value:
+                            kind:
+                              Int: 1
+                            span:
+                              start: 14
+                              end: 15
+                          unpack: false
+                          span:
+                            start: 14
+                            end: 15
+                  span:
+                    start: 10
+                    end: 16
+                unpack: false
+                span:
+                  start: 10
+                  end: 16
+              - name: ~
+                value:
+                  kind:
+                    Int: 2
+                  span:
+                    start: 18
+                    end: 19
+                unpack: false
+                span:
+                  start: 18
+                  end: 19
+        span:
+          start: 6
+          end: 20
+    span:
+      start: 6
+      end: 21
+span:
+  start: 0
+  end: 21

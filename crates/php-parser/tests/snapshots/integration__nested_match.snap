@@ -1,0 +1,132 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: result.program
+---
+stmts:
+  - kind:
+      Expression:
+        kind:
+          Assign:
+            target:
+              kind:
+                Variable: result
+              span:
+                start: 6
+                end: 13
+            op: Assign
+            value:
+              kind:
+                Match:
+                  subject:
+                    kind:
+                      Variable: type
+                    span:
+                      start: 23
+                      end: 28
+                  arms:
+                    - conditions:
+                        - kind:
+                            String: a
+                          span:
+                            start: 36
+                            end: 39
+                      body:
+                        kind:
+                          Match:
+                            subject:
+                              kind:
+                                Variable: subtype
+                              span:
+                                start: 50
+                                end: 58
+                            arms:
+                              - conditions:
+                                  - kind:
+                                      String: x
+                                    span:
+                                      start: 70
+                                      end: 73
+                                body:
+                                  kind:
+                                    Int: 1
+                                  span:
+                                    start: 77
+                                    end: 78
+                                span:
+                                  start: 70
+                                  end: 78
+                              - conditions:
+                                  - kind:
+                                      String: y
+                                    span:
+                                      start: 88
+                                      end: 91
+                                body:
+                                  kind:
+                                    Int: 2
+                                  span:
+                                    start: 95
+                                    end: 96
+                                span:
+                                  start: 88
+                                  end: 96
+                              - conditions: ~
+                                body:
+                                  kind:
+                                    Int: 0
+                                  span:
+                                    start: 117
+                                    end: 118
+                                span:
+                                  start: 106
+                                  end: 118
+                        span:
+                          start: 43
+                          end: 125
+                      span:
+                        start: 36
+                        end: 125
+                    - conditions:
+                        - kind:
+                            String: b
+                          span:
+                            start: 131
+                            end: 134
+                      body:
+                        kind:
+                          Int: 10
+                        span:
+                          start: 138
+                          end: 140
+                      span:
+                        start: 131
+                        end: 140
+                    - conditions: ~
+                      body:
+                        kind:
+                          UnaryPrefix:
+                            op: Negate
+                            operand:
+                              kind:
+                                Int: 1
+                              span:
+                                start: 158
+                                end: 159
+                        span:
+                          start: 157
+                          end: 159
+                      span:
+                        start: 146
+                        end: 159
+              span:
+                start: 16
+                end: 162
+        span:
+          start: 6
+          end: 162
+    span:
+      start: 6
+      end: 164
+span:
+  start: 0
+  end: 164
