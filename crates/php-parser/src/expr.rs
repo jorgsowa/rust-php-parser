@@ -14,11 +14,13 @@ const CAST_KEYWORDS: &[(&str, CastKind)] = &[
     ("double", CastKind::Float),
     ("real", CastKind::Float),
     ("string", CastKind::String),
+    ("binary", CastKind::String),
     ("bool", CastKind::Bool),
     ("boolean", CastKind::Bool),
     ("array", CastKind::Array),
     ("object", CastKind::Object),
     ("unset", CastKind::Unset),
+    ("void", CastKind::Void),
 ];
 
 /// Parse an expression.
@@ -216,6 +218,66 @@ pub fn parse_expr_bp(parser: &mut Parser, min_bp: u8) -> Expr {
                     }),
                     span,
                 };
+            } else if parser.check(TokenKind::Dollar) {
+                // Dynamic static property: A::$$b, A::${'b'}
+                let member = parse_atom(parser);
+                let span = Span::new(lhs.span.start, member.span.end);
+                lhs = Expr {
+                    kind: ExprKind::StaticPropertyAccessDynamic {
+                        class: Box::new(lhs),
+                        member: Box::new(member),
+                    },
+                    span,
+                };
+            } else if parser.check(TokenKind::LeftBrace) {
+                // Dynamic class constant/method: A::{'b'}(), Foo::{bar()}
+                parser.advance(); // consume {
+                let member = parse_expr(parser);
+                parser.expect(TokenKind::RightBrace);
+                if parser.check(TokenKind::LeftParen) {
+                    // Dynamic static method call: A::{'b'}()
+                    match parse_arg_list_or_callable(parser) {
+                        ArgListResult::CallableMarker => {
+                            let span = Span::new(lhs.span.start, parser.current_span().start);
+                            lhs = Expr {
+                                kind: ExprKind::CallableCreate(CallableCreateExpr {
+                                    kind: CallableCreateKind::StaticMethod {
+                                        class: Box::new(lhs),
+                                        method: format!("{{{}}}", "dynamic"),
+                                    },
+                                }),
+                                span,
+                            };
+                        }
+                        ArgListResult::Args(args) => {
+                            let callee = Expr {
+                                kind: ExprKind::ClassConstAccessDynamic {
+                                    class: Box::new(lhs),
+                                    member: Box::new(member),
+                                },
+                                span: Span::new(0, 0), // placeholder, will be wrapped
+                            };
+                            let span = Span::new(callee.span.start, parser.current_span().start);
+                            lhs = Expr {
+                                kind: ExprKind::FunctionCall(FunctionCallExpr {
+                                    name: Box::new(callee),
+                                    args,
+                                }),
+                                span,
+                            };
+                        }
+                    }
+                } else {
+                    // Dynamic class constant: Foo::{bar()}
+                    let span = Span::new(lhs.span.start, parser.current_span().start);
+                    lhs = Expr {
+                        kind: ExprKind::ClassConstAccessDynamic {
+                            class: Box::new(lhs),
+                            member: Box::new(member),
+                        },
+                        span,
+                    };
+                }
             } else if parser.check(TokenKind::Class) {
                 // Special: Class::class (class name resolution)
                 let token = parser.advance();
@@ -294,6 +356,29 @@ pub fn parse_expr_bp(parser: &mut Parser, min_bp: u8) -> Expr {
                 Some(Box::new(parse_expr(parser)))
             };
             parser.expect(TokenKind::RightBracket);
+            let span = Span::new(lhs.span.start, parser.current_span().start);
+            lhs = Expr {
+                kind: ExprKind::ArrayAccess(ArrayAccessExpr {
+                    array: Box::new(lhs),
+                    index,
+                }),
+                span,
+            };
+            continue;
+        }
+
+        // Curly brace array/string access: $a{'b'} (deprecated PHP 7.x syntax)
+        if kind == TokenKind::LeftBrace {
+            if 44u8 < min_bp {
+                break;
+            }
+            parser.advance(); // consume {
+            let index = if parser.check(TokenKind::RightBrace) {
+                None
+            } else {
+                Some(Box::new(parse_expr(parser)))
+            };
+            parser.expect(TokenKind::RightBrace);
             let span = Span::new(lhs.span.start, parser.current_span().start);
             lhs = Expr {
                 kind: ExprKind::ArrayAccess(ArrayAccessExpr {
@@ -399,6 +484,27 @@ fn parse_member_name(parser: &mut Parser) -> Expr {
 /// Parse an atomic expression (prefix unaries, literals, variables, etc.)
 fn parse_atom(parser: &mut Parser) -> Expr {
     let kind = parser.current_kind();
+
+    // Keywords followed by backslash are namespace-qualified names (e.g., fn\use(), private\protected\...)
+    // Exclude keywords that have their own parse_atom handlers and can precede `\ClassName` expressions
+    if parser.is_semi_reserved_keyword()
+        && !matches!(kind, TokenKind::New | TokenKind::Throw | TokenKind::Yield_ | TokenKind::Instanceof)
+        && parser.peek_kind() == Some(TokenKind::Backslash)
+    {
+        let token = parser.advance();
+        let text = &parser.source()[token.span.start as usize..token.span.end as usize];
+        let mut parts = vec![text.to_string()];
+        while parser.eat(TokenKind::Backslash).is_some() {
+            if let Some((part, _)) = parser.eat_identifier_or_keyword() {
+                parts.push(part);
+            }
+        }
+        let span = Span::new(token.span.start, parser.current_span().start);
+        return Expr {
+            kind: ExprKind::Identifier(parts.join("\\")),
+            span,
+        };
+    }
 
     // Attributed closure/arrow function: #[Attr] function(...) { } or #[Attr] fn(...) => ...
     if kind == TokenKind::HashBracket {
@@ -767,16 +873,8 @@ fn parse_atom(parser: &mut Parser) -> Expr {
 
         // Function keyword — closure expression (when used as expression)
         TokenKind::Function => {
-            // Check if next token is ( or & — if so, it's a closure
-            let next = parser.peek_kind();
-            if matches!(next, Some(TokenKind::LeftParen | TokenKind::Ampersand)) {
-                let start = parser.start_span();
-                return parse_closure(parser, false, start, Vec::new());
-            }
-            // Otherwise fall through to error (function declarations handled in stmt)
-            let span = parser.current_span();
-            parser.error(ParseError::ExpectedExpression { span });
-            Expr { kind: ExprKind::Error, span }
+            let start = parser.start_span();
+            return parse_closure(parser, false, start, Vec::new());
         }
 
         // Fn keyword — arrow function: fn($x) => expr
@@ -899,29 +997,63 @@ fn parse_atom(parser: &mut Parser) -> Expr {
         // exit / die
         TokenKind::Exit | TokenKind::Die => {
             let token = parser.advance();
-            let expr = if parser.check(TokenKind::LeftParen) {
-                parser.advance();
-                if parser.check(TokenKind::RightParen) {
-                    parser.advance();
-                    None
-                } else {
-                    let inner = parse_expr(parser);
-                    parser.expect(TokenKind::RightParen);
-                    Some(Box::new(inner))
+            let name_text = parser.source()[token.span.start as usize..token.span.end as usize].to_string();
+            if parser.check(TokenKind::LeftParen) {
+                match parse_arg_list_or_callable(parser) {
+                    ArgListResult::CallableMarker => {
+                        // exit(...) - first class callable
+                        let callee = Expr { kind: ExprKind::Identifier(name_text), span: token.span };
+                        let span = Span::new(token.span.start, parser.current_span().start);
+                        Expr {
+                            kind: ExprKind::CallableCreate(CallableCreateExpr {
+                                kind: CallableCreateKind::Function(Box::new(callee)),
+                            }),
+                            span,
+                        }
+                    }
+                    ArgListResult::Args(args) => {
+                        let span = Span::new(token.span.start, parser.current_span().start);
+                        if args.is_empty() {
+                            // exit()
+                            Expr { kind: ExprKind::Exit(None), span }
+                        } else if args.len() == 1 && args[0].name.is_none() && !args[0].unpack {
+                            // exit(expr)
+                            let value = args.into_iter().next().unwrap().value;
+                            Expr { kind: ExprKind::Exit(Some(Box::new(value))), span }
+                        } else {
+                            // exit(status: 42), exit(...$args), exit($a, $b) - function call form
+                            let callee = Expr { kind: ExprKind::Identifier(name_text), span: token.span };
+                            Expr {
+                                kind: ExprKind::FunctionCall(FunctionCallExpr {
+                                    name: Box::new(callee),
+                                    args,
+                                }),
+                                span,
+                            }
+                        }
+                    }
                 }
             } else {
-                None
-            };
-            let end = expr.as_ref().map(|e| e.span.end).unwrap_or(token.span.end);
-            Expr { kind: ExprKind::Exit(expr), span: Span::new(token.span.start, end) }
+                // bare exit/die
+                Expr { kind: ExprKind::Exit(None), span: token.span }
+            }
         }
 
-        // clone
+        // clone — unary prefix or function call (PHP 8.4)
         TokenKind::Clone => {
             let token = parser.advance();
-            let operand = parse_expr_bp(parser, 41);
-            let span = token.span.merge(operand.span);
-            Expr { kind: ExprKind::Clone(Box::new(operand)), span }
+            if parser.check(TokenKind::LeftParen) {
+                // PHP 8.4: clone() function call syntax
+                let callee = Expr {
+                    kind: ExprKind::Identifier("clone".to_string()),
+                    span: token.span,
+                };
+                parse_function_call(parser, callee)
+            } else {
+                let operand = parse_expr_bp(parser, 41);
+                let span = token.span.merge(operand.span);
+                Expr { kind: ExprKind::Clone(Box::new(operand)), span }
+            }
         }
 
         // Magic constants
@@ -934,6 +1066,32 @@ fn parse_atom(parser: &mut Parser) -> Expr {
         TokenKind::MagicNamespace => { let t = parser.advance(); Expr { kind: ExprKind::MagicConst(MagicConstKind::Namespace), span: t.span } }
         TokenKind::MagicTrait => { let t = parser.advance(); Expr { kind: ExprKind::MagicConst(MagicConstKind::Trait), span: t.span } }
         TokenKind::MagicProperty => { let t = parser.advance(); Expr { kind: ExprKind::MagicConst(MagicConstKind::Property), span: t.span } }
+
+        // namespace\Foo\Bar — relative name in expression context
+        TokenKind::Namespace => {
+            if parser.peek_kind() == Some(TokenKind::Backslash) {
+                let start = parser.start_span();
+                let name = parser.parse_name();
+                let text = format!("namespace\\{}", name.parts.join("\\"));
+                Expr {
+                    kind: ExprKind::Identifier(text),
+                    span: Span::new(start, name.span.end),
+                }
+            } else {
+                let span = parser.current_span();
+                parser.error(ParseError::ExpectedExpression { span });
+                Expr { kind: ExprKind::Error, span }
+            }
+        }
+
+        // readonly used as identifier (function name, etc.)
+        TokenKind::Readonly => {
+            let token = parser.advance();
+            Expr {
+                kind: ExprKind::Identifier("readonly".to_string()),
+                span: token.span,
+            }
+        }
 
         // Error: unexpected token
         _ => {
@@ -955,8 +1113,12 @@ fn parse_new_expr(parser: &mut Parser) -> Expr {
     let start = parser.start_span();
     parser.advance(); // consume 'new'
 
-    // Anonymous class: new class(...) extends Foo implements Bar { ... }
-    if parser.check(TokenKind::Class) {
+    // Anonymous class: new class(...) or new readonly class(...)
+    let anon_readonly = parser.check(TokenKind::Readonly) && parser.peek_kind() == Some(TokenKind::Class);
+    if parser.check(TokenKind::Class) || anon_readonly {
+        if anon_readonly {
+            parser.advance(); // consume 'readonly'
+        }
         parser.advance(); // consume 'class'
 
         // Optional constructor args (before extends/implements)
@@ -985,7 +1147,7 @@ fn parse_new_expr(parser: &mut Parser) -> Expr {
 
         let class_decl = ClassDecl {
             name: None,
-            modifiers: ClassModifiers::default(),
+            modifiers: ClassModifiers { is_readonly: anon_readonly, ..Default::default() },
             extends,
             implements,
             members,
@@ -1006,7 +1168,7 @@ fn parse_new_expr(parser: &mut Parser) -> Expr {
         };
     }
 
-    // Parse the class name — can be an identifier, self, parent, static, or qualified name
+    // Parse the class name — can be an identifier, self, parent, static, qualified name, or parenthesized expr
     let class = match parser.current_kind() {
         TokenKind::Self_ => {
             let t = parser.advance();
@@ -1025,6 +1187,18 @@ fn parse_new_expr(parser: &mut Parser) -> Expr {
             let t = parser.advance();
             let text = &parser.source()[t.span.start as usize..t.span.end as usize];
             Expr { kind: ExprKind::Variable(text[1..].to_string()), span: t.span }
+        }
+        TokenKind::LeftParen => {
+            // new (expr)() - dynamic class name from expression (PHP 8.1+)
+            let paren_start = parser.start_span();
+            let open = parser.advance(); // consume (
+            let inner = parse_expr(parser);
+            parser.expect_closing(TokenKind::RightParen, open.span);
+            let paren_span = Span::new(paren_start, parser.current_span().start);
+            Expr {
+                kind: ExprKind::Parenthesized(Box::new(inner)),
+                span: paren_span,
+            }
         }
         _ => {
             // Parse as a name (possibly qualified)
@@ -1189,6 +1363,8 @@ fn parse_match_expr(parser: &mut Parser) -> Expr {
         let arm_start = parser.start_span();
 
         let conditions = if parser.eat(TokenKind::Default).is_some() {
+            // Allow trailing comma after default: `default, => ...`
+            parser.eat(TokenKind::Comma);
             None
         } else {
             let mut conds = Vec::new();
@@ -1246,10 +1422,17 @@ fn parse_yield_expr(parser: &mut Parser) -> Expr {
         };
     }
 
-    // Bare yield (no value)
+    // Bare yield (no value) — also bare when next token is a binary-only operator
+    // e.g. `yield * -1` → `(yield) * (-1)`, but `yield +1` → `yield (+1)`
+    let kind = parser.current_kind();
+    let is_binary_only = precedence::infix_binding_power(&kind).is_some()
+        && precedence::prefix_binding_power(&kind).is_none();
     if parser.check(TokenKind::Semicolon)
         || parser.check(TokenKind::RightParen)
         || parser.check(TokenKind::RightBracket)
+        || parser.check(TokenKind::RightBrace)
+        || parser.check(TokenKind::Comma)
+        || is_binary_only
     {
         let span = Span::new(start, parser.current_span().start);
         return Expr {
@@ -1365,6 +1548,9 @@ fn parse_arg(parser: &mut Parser) -> Arg {
 
     // Check for unpack: ...expr
     let unpack = parser.eat(TokenKind::Ellipsis).is_some();
+
+    // Check for by-reference: &$var (deprecated call-time pass-by-ref)
+    let _by_ref = parser.eat(TokenKind::Ampersand).is_some();
 
     let value = parse_expr(parser);
     let span = Span::new(start, value.span.end);
@@ -1529,15 +1715,7 @@ fn parse_list_expr(parser: &mut Parser) -> Expr {
                     span,
                 });
             } else {
-                let elem_start = parser.start_span();
-                let value = parse_expr(parser);
-                let elem_span = Span::new(elem_start, value.span.end);
-                elements.push(ArrayElement {
-                    key: None,
-                    value,
-                    unpack: false,
-                    span: elem_span,
-                });
+                elements.push(parse_list_element(parser));
             }
 
             if parser.eat(TokenKind::Comma).is_none() {
@@ -1553,6 +1731,50 @@ fn parse_list_expr(parser: &mut Parser) -> Expr {
     Expr {
         kind: ExprKind::Array(elements),
         span,
+    }
+}
+
+/// Parse a single element in a list() or short list destructuring.
+/// Handles: `$var`, `&$var`, `'key' => $var`, `'key' => &$var`, `list($a, $b)`, etc.
+fn parse_list_element(parser: &mut Parser) -> ArrayElement {
+    let elem_start = parser.start_span();
+
+    // Handle &$var (by-reference)
+    if parser.check(TokenKind::Ampersand) {
+        parser.advance();
+        let value = parse_expr(parser);
+        let elem_span = Span::new(elem_start, value.span.end);
+        return ArrayElement {
+            key: None,
+            value,
+            unpack: false,
+            span: elem_span,
+        };
+    }
+
+    let first = parse_expr(parser);
+
+    if parser.eat(TokenKind::FatArrow).is_some() {
+        // key => value or key => &value
+        if parser.check(TokenKind::Ampersand) {
+            parser.advance();
+        }
+        let value = parse_expr(parser);
+        let elem_span = Span::new(elem_start, value.span.end);
+        ArrayElement {
+            key: Some(first),
+            value,
+            unpack: false,
+            span: elem_span,
+        }
+    } else {
+        let elem_span = Span::new(elem_start, first.span.end);
+        ArrayElement {
+            key: None,
+            value: first,
+            unpack: false,
+            span: elem_span,
+        }
     }
 }
 

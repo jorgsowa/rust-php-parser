@@ -1,0 +1,265 @@
+---
+source: crates/php-parser/tests/nikic_scalar_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Nowdoc": {
+              "label": "EOS",
+              "value": ""
+            }
+          },
+          "span": {
+            "start": 24,
+            "end": 36
+          }
+        }
+      },
+      "span": {
+        "start": 24,
+        "end": 38
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Heredoc": {
+              "label": "EOS",
+              "parts": [
+                {
+                  "Literal": ""
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 38,
+            "end": 48
+          }
+        }
+      },
+      "span": {
+        "start": 38,
+        "end": 80
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Nowdoc": {
+              "label": "EOS",
+              "value": "Test '\" $a \\n"
+            }
+          },
+          "span": {
+            "start": 80,
+            "end": 106
+          }
+        }
+      },
+      "span": {
+        "start": 80,
+        "end": 108
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Heredoc": {
+              "label": "EOS",
+              "parts": [
+                {
+                  "Literal": "Test '\" \\$a \\n"
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 108,
+            "end": 133
+          }
+        }
+      },
+      "span": {
+        "start": 108,
+        "end": 156
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Heredoc": {
+              "label": "EOS",
+              "parts": [
+                {
+                  "Literal": "Test "
+                },
+                {
+                  "Expr": {
+                    "kind": {
+                      "Variable": "a"
+                    },
+                    "span": {
+                      "start": 168,
+                      "end": 170
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 156,
+            "end": 174
+          }
+        }
+      },
+      "span": {
+        "start": 156,
+        "end": 176
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Heredoc": {
+              "label": "EOS",
+              "parts": [
+                {
+                  "Literal": "Test "
+                },
+                {
+                  "Expr": {
+                    "kind": {
+                      "Variable": "a"
+                    },
+                    "span": {
+                      "start": 188,
+                      "end": 190
+                    }
+                  }
+                },
+                {
+                  "Literal": " and "
+                },
+                {
+                  "Expr": {
+                    "kind": {
+                      "PropertyAccess": {
+                        "object": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 195,
+                            "end": 197
+                          }
+                        },
+                        "property": {
+                          "kind": {
+                            "Identifier": "c"
+                          },
+                          "span": {
+                            "start": 199,
+                            "end": 200
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 195,
+                      "end": 200
+                    }
+                  }
+                },
+                {
+                  "Literal": " test"
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 176,
+            "end": 209
+          }
+        }
+      },
+      "span": {
+        "start": 176,
+        "end": 212
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Heredoc": {
+              "label": "b",
+              "parts": [
+                {
+                  "Literal": "Binary\nEOS"
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 212,
+            "end": 230
+          }
+        }
+      },
+      "span": {
+        "start": 212,
+        "end": 233
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Heredoc": {
+              "label": "EOS",
+              "parts": [
+                {
+                  "Expr": {
+                    "kind": {
+                      "Variable": "x"
+                    },
+                    "span": {
+                      "start": 240,
+                      "end": 242
+                    }
+                  }
+                },
+                {
+                  "Literal": "\r"
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 233,
+            "end": 248
+          }
+        }
+      },
+      "span": {
+        "start": 233,
+        "end": 250
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 250
+  }
+}

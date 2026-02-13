@@ -1,0 +1,881 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "gen",
+          "params": [],
+          "body": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Yield": {
+                      "key": null,
+                      "value": null
+                    }
+                  },
+                  "span": {
+                    "start": 46,
+                    "end": 51
+                  }
+                }
+              },
+              "span": {
+                "start": 46,
+                "end": 57
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Yield": {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "value"
+                        },
+                        "span": {
+                          "start": 63,
+                          "end": 69
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 57,
+                    "end": 69
+                  }
+                }
+              },
+              "span": {
+                "start": 57,
+                "end": 75
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Yield": {
+                      "key": {
+                        "kind": {
+                          "Variable": "key"
+                        },
+                        "span": {
+                          "start": 81,
+                          "end": 85
+                        }
+                      },
+                      "value": {
+                        "kind": {
+                          "Variable": "value"
+                        },
+                        "span": {
+                          "start": 89,
+                          "end": 95
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 75,
+                    "end": 95
+                  }
+                }
+              },
+              "span": {
+                "start": 75,
+                "end": 121
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Assign": {
+                      "target": {
+                        "kind": {
+                          "Variable": "data"
+                        },
+                        "span": {
+                          "start": 121,
+                          "end": 126
+                        }
+                      },
+                      "op": "Assign",
+                      "value": {
+                        "kind": {
+                          "Yield": {
+                            "key": null,
+                            "value": null
+                          }
+                        },
+                        "span": {
+                          "start": 129,
+                          "end": 134
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 121,
+                    "end": 134
+                  }
+                }
+              },
+              "span": {
+                "start": 121,
+                "end": 140
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Assign": {
+                      "target": {
+                        "kind": {
+                          "Variable": "data"
+                        },
+                        "span": {
+                          "start": 140,
+                          "end": 145
+                        }
+                      },
+                      "op": "Assign",
+                      "value": {
+                        "kind": {
+                          "Parenthesized": {
+                            "kind": {
+                              "Yield": {
+                                "key": null,
+                                "value": {
+                                  "kind": {
+                                    "Variable": "value"
+                                  },
+                                  "span": {
+                                    "start": 155,
+                                    "end": 161
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 149,
+                              "end": 161
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 148,
+                          "end": 162
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 140,
+                    "end": 162
+                  }
+                }
+              },
+              "span": {
+                "start": 140,
+                "end": 168
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Assign": {
+                      "target": {
+                        "kind": {
+                          "Variable": "data"
+                        },
+                        "span": {
+                          "start": 168,
+                          "end": 173
+                        }
+                      },
+                      "op": "Assign",
+                      "value": {
+                        "kind": {
+                          "Parenthesized": {
+                            "kind": {
+                              "Yield": {
+                                "key": {
+                                  "kind": {
+                                    "Variable": "key"
+                                  },
+                                  "span": {
+                                    "start": 183,
+                                    "end": 187
+                                  }
+                                },
+                                "value": {
+                                  "kind": {
+                                    "Variable": "value"
+                                  },
+                                  "span": {
+                                    "start": 191,
+                                    "end": 197
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 177,
+                              "end": 197
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 176,
+                          "end": 198
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 168,
+                    "end": 198
+                  }
+                }
+              },
+              "span": {
+                "start": 168,
+                "end": 268
+              }
+            },
+            {
+              "kind": {
+                "If": {
+                  "condition": {
+                    "kind": {
+                      "Yield": {
+                        "key": null,
+                        "value": {
+                          "kind": {
+                            "Variable": "foo"
+                          },
+                          "span": {
+                            "start": 278,
+                            "end": 282
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 272,
+                      "end": 282
+                    }
+                  },
+                  "then_branch": {
+                    "kind": "Nop",
+                    "span": {
+                      "start": 283,
+                      "end": 284
+                    }
+                  },
+                  "elseif_branches": [
+                    {
+                      "condition": {
+                        "kind": {
+                          "Yield": {
+                            "key": null,
+                            "value": {
+                              "kind": {
+                                "Variable": "foo"
+                              },
+                              "span": {
+                                "start": 299,
+                                "end": 303
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 293,
+                          "end": 303
+                        }
+                      },
+                      "body": {
+                        "kind": "Nop",
+                        "span": {
+                          "start": 304,
+                          "end": 305
+                        }
+                      },
+                      "span": {
+                        "start": 292,
+                        "end": 305
+                      }
+                    }
+                  ],
+                  "else_branch": null
+                }
+              },
+              "span": {
+                "start": 268,
+                "end": 305
+              }
+            },
+            {
+              "kind": {
+                "If": {
+                  "condition": {
+                    "kind": {
+                      "Yield": {
+                        "key": null,
+                        "value": {
+                          "kind": {
+                            "Variable": "foo"
+                          },
+                          "span": {
+                            "start": 320,
+                            "end": 324
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 314,
+                      "end": 324
+                    }
+                  },
+                  "then_branch": {
+                    "kind": {
+                      "Block": []
+                    },
+                    "span": {
+                      "start": 310,
+                      "end": 327
+                    }
+                  },
+                  "elseif_branches": [
+                    {
+                      "condition": {
+                        "kind": {
+                          "Yield": {
+                            "key": null,
+                            "value": {
+                              "kind": {
+                                "Variable": "foo"
+                              },
+                              "span": {
+                                "start": 341,
+                                "end": 345
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 335,
+                          "end": 345
+                        }
+                      },
+                      "body": {
+                        "kind": {
+                          "Block": []
+                        },
+                        "span": {
+                          "start": 334,
+                          "end": 348
+                        }
+                      },
+                      "span": {
+                        "start": 334,
+                        "end": 348
+                      }
+                    }
+                  ],
+                  "else_branch": null
+                }
+              },
+              "span": {
+                "start": 310,
+                "end": 359
+              }
+            },
+            {
+              "kind": {
+                "While": {
+                  "condition": {
+                    "kind": {
+                      "Yield": {
+                        "key": null,
+                        "value": {
+                          "kind": {
+                            "Variable": "foo"
+                          },
+                          "span": {
+                            "start": 372,
+                            "end": 376
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 366,
+                      "end": 376
+                    }
+                  },
+                  "body": {
+                    "kind": "Nop",
+                    "span": {
+                      "start": 377,
+                      "end": 378
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 359,
+                "end": 378
+              }
+            },
+            {
+              "kind": {
+                "DoWhile": {
+                  "body": {
+                    "kind": {
+                      "Block": []
+                    },
+                    "span": {
+                      "start": 386,
+                      "end": 388
+                    }
+                  },
+                  "condition": {
+                    "kind": {
+                      "Yield": {
+                        "key": null,
+                        "value": {
+                          "kind": {
+                            "Variable": "foo"
+                          },
+                          "span": {
+                            "start": 402,
+                            "end": 406
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 396,
+                      "end": 406
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 383,
+                "end": 413
+              }
+            },
+            {
+              "kind": {
+                "Switch": {
+                  "expr": {
+                    "kind": {
+                      "Yield": {
+                        "key": null,
+                        "value": {
+                          "kind": {
+                            "Variable": "foo"
+                          },
+                          "span": {
+                            "start": 427,
+                            "end": 431
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 421,
+                      "end": 431
+                    }
+                  },
+                  "cases": []
+                }
+              },
+              "span": {
+                "start": 413,
+                "end": 440
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Exit": {
+                      "kind": {
+                        "Yield": {
+                          "key": null,
+                          "value": {
+                            "kind": {
+                              "Variable": "foo"
+                            },
+                            "span": {
+                              "start": 450,
+                              "end": 454
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 444,
+                        "end": 454
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 440,
+                    "end": 455
+                  }
+                }
+              },
+              "span": {
+                "start": 440,
+                "end": 493
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "FunctionCall": {
+                      "name": {
+                        "kind": {
+                          "Identifier": "func"
+                        },
+                        "span": {
+                          "start": 493,
+                          "end": 497
+                        }
+                      },
+                      "args": [
+                        {
+                          "name": null,
+                          "value": {
+                            "kind": {
+                              "Yield": {
+                                "key": null,
+                                "value": {
+                                  "kind": {
+                                    "Variable": "foo"
+                                  },
+                                  "span": {
+                                    "start": 504,
+                                    "end": 508
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 498,
+                              "end": 508
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 498,
+                            "end": 508
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "span": {
+                    "start": 493,
+                    "end": 509
+                  }
+                }
+              },
+              "span": {
+                "start": 493,
+                "end": 515
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "MethodCall": {
+                      "object": {
+                        "kind": {
+                          "Variable": "foo"
+                        },
+                        "span": {
+                          "start": 515,
+                          "end": 519
+                        }
+                      },
+                      "method": {
+                        "kind": {
+                          "Identifier": "func"
+                        },
+                        "span": {
+                          "start": 521,
+                          "end": 525
+                        }
+                      },
+                      "args": [
+                        {
+                          "name": null,
+                          "value": {
+                            "kind": {
+                              "Yield": {
+                                "key": null,
+                                "value": {
+                                  "kind": {
+                                    "Variable": "foo"
+                                  },
+                                  "span": {
+                                    "start": 532,
+                                    "end": 536
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 526,
+                              "end": 536
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 526,
+                            "end": 536
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "span": {
+                    "start": 515,
+                    "end": 537
+                  }
+                }
+              },
+              "span": {
+                "start": 515,
+                "end": 543
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "New": {
+                      "class": {
+                        "kind": {
+                          "Identifier": "Foo"
+                        },
+                        "span": {
+                          "start": 547,
+                          "end": 550
+                        }
+                      },
+                      "args": [
+                        {
+                          "name": null,
+                          "value": {
+                            "kind": {
+                              "Yield": {
+                                "key": null,
+                                "value": {
+                                  "kind": {
+                                    "Variable": "foo"
+                                  },
+                                  "span": {
+                                    "start": 557,
+                                    "end": 561
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 551,
+                              "end": 561
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 551,
+                            "end": 561
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "span": {
+                    "start": 543,
+                    "end": 562
+                  }
+                }
+              },
+              "span": {
+                "start": 543,
+                "end": 569
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Yield": {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "foo"
+                        },
+                        "span": {
+                          "start": 580,
+                          "end": 584
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 569,
+                    "end": 584
+                  }
+                }
+              },
+              "span": {
+                "start": 569,
+                "end": 590
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Yield": {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Binary": {
+                            "left": {
+                              "kind": {
+                                "Variable": "foo"
+                              },
+                              "span": {
+                                "start": 601,
+                                "end": 605
+                              }
+                            },
+                            "op": "LogicalAnd",
+                            "right": {
+                              "kind": {
+                                "Yield": {
+                                  "key": null,
+                                  "value": {
+                                    "kind": {
+                                      "Variable": "bar"
+                                    },
+                                    "span": {
+                                      "start": 621,
+                                      "end": 625
+                                    }
+                                  }
+                                }
+                              },
+                              "span": {
+                                "start": 610,
+                                "end": 625
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 601,
+                          "end": 625
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 590,
+                    "end": 625
+                  }
+                }
+              },
+              "span": {
+                "start": 590,
+                "end": 631
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Yield": {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Binary": {
+                            "left": {
+                              "kind": {
+                                "Variable": "foo"
+                              },
+                              "span": {
+                                "start": 642,
+                                "end": 646
+                              }
+                            },
+                            "op": "Add",
+                            "right": {
+                              "kind": {
+                                "Variable": "bar"
+                              },
+                              "span": {
+                                "start": 649,
+                                "end": 653
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 642,
+                          "end": 653
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 631,
+                    "end": 653
+                  }
+                }
+              },
+              "span": {
+                "start": 631,
+                "end": 655
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 656
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 656
+  }
+}

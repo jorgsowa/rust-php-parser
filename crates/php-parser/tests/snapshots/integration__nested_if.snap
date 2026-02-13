@@ -1,56 +1,93 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      If:
-        condition:
-          kind:
-            Variable: a
-          span:
-            start: 10
-            end: 12
-        then_branch:
-          kind:
-            Block:
-              - kind:
-                  If:
-                    condition:
-                      kind:
-                        Variable: b
-                      span:
-                        start: 20
-                        end: 22
-                    then_branch:
-                      kind:
-                        Block:
-                          - kind:
-                              Echo:
-                                - kind:
-                                    Int: 1
-                                  span:
-                                    start: 31
-                                    end: 32
-                            span:
-                              start: 26
-                              end: 34
-                      span:
-                        start: 24
-                        end: 35
-                    elseif_branches: []
-                    else_branch: ~
-                span:
-                  start: 16
-                  end: 35
-          span:
-            start: 14
-            end: 37
-        elseif_branches: []
-        else_branch: ~
-    span:
-      start: 6
-      end: 37
-span:
-  start: 0
-  end: 37
+{
+  "stmts": [
+    {
+      "kind": {
+        "If": {
+          "condition": {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 10,
+              "end": 12
+            }
+          },
+          "then_branch": {
+            "kind": {
+              "Block": [
+                {
+                  "kind": {
+                    "If": {
+                      "condition": {
+                        "kind": {
+                          "Variable": "b"
+                        },
+                        "span": {
+                          "start": 20,
+                          "end": 22
+                        }
+                      },
+                      "then_branch": {
+                        "kind": {
+                          "Block": [
+                            {
+                              "kind": {
+                                "Echo": [
+                                  {
+                                    "kind": {
+                                      "Int": 1
+                                    },
+                                    "span": {
+                                      "start": 31,
+                                      "end": 32
+                                    }
+                                  }
+                                ]
+                              },
+                              "span": {
+                                "start": 26,
+                                "end": 34
+                              }
+                            }
+                          ]
+                        },
+                        "span": {
+                          "start": 24,
+                          "end": 35
+                        }
+                      },
+                      "elseif_branches": [],
+                      "else_branch": null
+                    }
+                  },
+                  "span": {
+                    "start": 16,
+                    "end": 35
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 14,
+              "end": 37
+            }
+          },
+          "elseif_branches": [],
+          "else_branch": null
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 37
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 37
+  }
+}

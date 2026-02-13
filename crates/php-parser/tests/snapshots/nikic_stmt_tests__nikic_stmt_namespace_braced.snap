@@ -1,0 +1,86 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Namespace": {
+          "name": {
+            "parts": [
+              "Foo",
+              "Bar"
+            ],
+            "kind": "Qualified",
+            "span": {
+              "start": 17,
+              "end": 25
+            }
+          },
+          "body": {
+            "Braced": [
+              {
+                "kind": {
+                  "Expression": {
+                    "kind": {
+                      "Identifier": "foo"
+                    },
+                    "span": {
+                      "start": 31,
+                      "end": 34
+                    }
+                  }
+                },
+                "span": {
+                  "start": 31,
+                  "end": 36
+                }
+              }
+            ]
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 37
+      }
+    },
+    {
+      "kind": {
+        "Namespace": {
+          "name": null,
+          "body": {
+            "Braced": [
+              {
+                "kind": {
+                  "Expression": {
+                    "kind": {
+                      "Identifier": "bar"
+                    },
+                    "span": {
+                      "start": 54,
+                      "end": 57
+                    }
+                  }
+                },
+                "span": {
+                  "start": 54,
+                  "end": 59
+                }
+              }
+            ]
+          }
+        }
+      },
+      "span": {
+        "start": 38,
+        "end": 60
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 60
+  }
+}

@@ -1,59 +1,96 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Expression:
-        kind:
-          New:
-            class:
-              kind:
-                Identifier: Foo
-              span:
-                start: 10
-                end: 13
-            args: []
-        span:
-          start: 6
-          end: 15
-    span:
-      start: 6
-      end: 17
-  - kind:
-      Expression:
-        kind:
-          New:
-            class:
-              kind:
-                Variable: className
-              span:
-                start: 21
-                end: 31
-            args: []
-        span:
-          start: 17
-          end: 33
-    span:
-      start: 17
-      end: 35
-  - kind:
-      Expression:
-        kind:
-          New:
-            class:
-              kind:
-                Identifier: self
-              span:
-                start: 39
-                end: 43
-            args: []
-        span:
-          start: 35
-          end: 45
-    span:
-      start: 35
-      end: 46
-span:
-  start: 0
-  end: 46
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "New": {
+              "class": {
+                "kind": {
+                  "Identifier": "Foo"
+                },
+                "span": {
+                  "start": 10,
+                  "end": 13
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 15
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 17
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "New": {
+              "class": {
+                "kind": {
+                  "Variable": "className"
+                },
+                "span": {
+                  "start": 21,
+                  "end": 31
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 17,
+            "end": 33
+          }
+        }
+      },
+      "span": {
+        "start": 17,
+        "end": 35
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "New": {
+              "class": {
+                "kind": {
+                  "Identifier": "self"
+                },
+                "span": {
+                  "start": 39,
+                  "end": 43
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 35,
+            "end": 45
+          }
+        }
+      },
+      "span": {
+        "start": 35,
+        "end": 46
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 46
+  }
+}

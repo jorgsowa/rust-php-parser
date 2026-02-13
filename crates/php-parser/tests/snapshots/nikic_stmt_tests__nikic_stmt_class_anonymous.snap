@@ -1,0 +1,437 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "New": {
+              "class": {
+                "kind": {
+                  "AnonymousClass": {
+                    "name": null,
+                    "modifiers": {
+                      "is_abstract": false,
+                      "is_final": false,
+                      "is_readonly": false
+                    },
+                    "extends": null,
+                    "implements": [],
+                    "members": [
+                      {
+                        "kind": {
+                          "Method": {
+                            "name": "test",
+                            "visibility": "Public",
+                            "is_static": false,
+                            "is_abstract": false,
+                            "is_final": false,
+                            "by_ref": false,
+                            "params": [],
+                            "return_type": null,
+                            "body": [],
+                            "attributes": []
+                          }
+                        },
+                        "span": {
+                          "start": 23,
+                          "end": 49
+                        }
+                      }
+                    ],
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 7,
+                  "end": 50
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 7,
+            "end": 50
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 52
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "New": {
+              "class": {
+                "kind": {
+                  "AnonymousClass": {
+                    "name": null,
+                    "modifiers": {
+                      "is_abstract": false,
+                      "is_final": false,
+                      "is_readonly": false
+                    },
+                    "extends": {
+                      "parts": [
+                        "A"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 70,
+                        "end": 72
+                      }
+                    },
+                    "implements": [
+                      {
+                        "parts": [
+                          "B"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 83,
+                          "end": 84
+                        }
+                      },
+                      {
+                        "parts": [
+                          "C"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 86,
+                          "end": 88
+                        }
+                      }
+                    ],
+                    "members": [],
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 52,
+                  "end": 90
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 52,
+            "end": 90
+          }
+        }
+      },
+      "span": {
+        "start": 52,
+        "end": 92
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "New": {
+              "class": {
+                "kind": {
+                  "AnonymousClass": {
+                    "name": null,
+                    "modifiers": {
+                      "is_abstract": false,
+                      "is_final": false,
+                      "is_readonly": false
+                    },
+                    "extends": null,
+                    "implements": [],
+                    "members": [
+                      {
+                        "kind": {
+                          "Property": {
+                            "name": "foo",
+                            "visibility": "Public",
+                            "set_visibility": null,
+                            "is_static": false,
+                            "is_readonly": false,
+                            "type_hint": null,
+                            "default": null,
+                            "attributes": []
+                          }
+                        },
+                        "span": {
+                          "start": 110,
+                          "end": 121
+                        }
+                      }
+                    ],
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 92,
+                  "end": 124
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 92,
+            "end": 124
+          }
+        }
+      },
+      "span": {
+        "start": 92,
+        "end": 126
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "New": {
+              "class": {
+                "kind": {
+                  "AnonymousClass": {
+                    "name": null,
+                    "modifiers": {
+                      "is_abstract": false,
+                      "is_final": false,
+                      "is_readonly": false
+                    },
+                    "extends": {
+                      "parts": [
+                        "A"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 152,
+                        "end": 154
+                      }
+                    },
+                    "implements": [],
+                    "members": [
+                      {
+                        "kind": {
+                          "TraitUse": {
+                            "traits": [
+                              {
+                                "parts": [
+                                  "T"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 164,
+                                  "end": 165
+                                }
+                              }
+                            ],
+                            "adaptations": []
+                          }
+                        },
+                        "span": {
+                          "start": 160,
+                          "end": 167
+                        }
+                      }
+                    ],
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 126,
+                  "end": 168
+                }
+              },
+              "args": [
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Variable": "a"
+                    },
+                    "span": {
+                      "start": 136,
+                      "end": 138
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 136,
+                    "end": 138
+                  }
+                },
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Variable": "b"
+                    },
+                    "span": {
+                      "start": 140,
+                      "end": 142
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 140,
+                    "end": 142
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 126,
+            "end": 168
+          }
+        }
+      },
+      "span": {
+        "start": 126,
+        "end": 171
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": "A",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Method": {
+                  "name": "test",
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": null,
+                  "body": [
+                    {
+                      "kind": {
+                        "Return": {
+                          "kind": {
+                            "New": {
+                              "class": {
+                                "kind": {
+                                  "AnonymousClass": {
+                                    "name": null,
+                                    "modifiers": {
+                                      "is_abstract": false,
+                                      "is_final": false,
+                                      "is_readonly": false
+                                    },
+                                    "extends": {
+                                      "parts": [
+                                        "A"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 250,
+                                        "end": 252
+                                      }
+                                    },
+                                    "implements": [],
+                                    "members": [
+                                      {
+                                        "kind": {
+                                          "ClassConst": {
+                                            "name": "A",
+                                            "visibility": null,
+                                            "value": {
+                                              "kind": {
+                                                "String": "B"
+                                              },
+                                              "span": {
+                                                "start": 276,
+                                                "end": 279
+                                              }
+                                            },
+                                            "attributes": []
+                                          }
+                                        },
+                                        "span": {
+                                          "start": 266,
+                                          "end": 289
+                                        }
+                                      }
+                                    ],
+                                    "attributes": []
+                                  }
+                                },
+                                "span": {
+                                  "start": 225,
+                                  "end": 290
+                                }
+                              },
+                              "args": [
+                                {
+                                  "name": null,
+                                  "value": {
+                                    "kind": {
+                                      "Variable": "this"
+                                    },
+                                    "span": {
+                                      "start": 235,
+                                      "end": 240
+                                    }
+                                  },
+                                  "unpack": false,
+                                  "span": {
+                                    "start": 235,
+                                    "end": 240
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          "span": {
+                            "start": 225,
+                            "end": 290
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 218,
+                        "end": 296
+                      }
+                    }
+                  ],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 185,
+                "end": 298
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 171,
+        "end": 299
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 299
+  }
+}

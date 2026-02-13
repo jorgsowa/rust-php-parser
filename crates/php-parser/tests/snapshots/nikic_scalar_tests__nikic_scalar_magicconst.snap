@@ -1,0 +1,165 @@
+---
+source: crates/php-parser/tests/nikic_scalar_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MagicConst": "Class"
+          },
+          "span": {
+            "start": 7,
+            "end": 16
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 18
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MagicConst": "Dir"
+          },
+          "span": {
+            "start": 18,
+            "end": 25
+          }
+        }
+      },
+      "span": {
+        "start": 18,
+        "end": 27
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MagicConst": "File"
+          },
+          "span": {
+            "start": 27,
+            "end": 35
+          }
+        }
+      },
+      "span": {
+        "start": 27,
+        "end": 37
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MagicConst": "Function"
+          },
+          "span": {
+            "start": 37,
+            "end": 49
+          }
+        }
+      },
+      "span": {
+        "start": 37,
+        "end": 51
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MagicConst": "Line"
+          },
+          "span": {
+            "start": 51,
+            "end": 59
+          }
+        }
+      },
+      "span": {
+        "start": 51,
+        "end": 61
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MagicConst": "Method"
+          },
+          "span": {
+            "start": 61,
+            "end": 71
+          }
+        }
+      },
+      "span": {
+        "start": 61,
+        "end": 73
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MagicConst": "Namespace"
+          },
+          "span": {
+            "start": 73,
+            "end": 86
+          }
+        }
+      },
+      "span": {
+        "start": 73,
+        "end": 88
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MagicConst": "Trait"
+          },
+          "span": {
+            "start": 88,
+            "end": 97
+          }
+        }
+      },
+      "span": {
+        "start": 88,
+        "end": 99
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MagicConst": "Property"
+          },
+          "span": {
+            "start": 99,
+            "end": 111
+          }
+        }
+      },
+      "span": {
+        "start": 99,
+        "end": 112
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 112
+  }
+}

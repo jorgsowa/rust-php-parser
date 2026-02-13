@@ -1,144 +1,233 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: value
-              span:
-                start: 6
-                end: 12
-            op: Assign
-            value:
-              kind:
-                NullCoalesce:
-                  left:
-                    kind:
-                      Variable: x
-                    span:
-                      start: 15
-                      end: 17
-                  right:
-                    kind:
-                      ThrowExpr:
-                        kind:
-                          New:
-                            class:
-                              kind:
-                                Identifier: InvalidArgumentException
-                              span:
-                                start: 31
-                                end: 55
-                            args:
-                              - name: ~
-                                value:
-                                  kind:
-                                    String: Missing value
-                                  span:
-                                    start: 56
-                                    end: 71
-                                unpack: false
-                                span:
-                                  start: 56
-                                  end: 71
-                        span:
-                          start: 27
-                          end: 72
-                    span:
-                      start: 21
-                      end: 72
-              span:
-                start: 15
-                end: 72
-        span:
-          start: 6
-          end: 72
-    span:
-      start: 6
-      end: 74
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: result
-              span:
-                start: 74
-                end: 81
-            op: Assign
-            value:
-              kind:
-                Match:
-                  subject:
-                    kind:
-                      Variable: status
-                    span:
-                      start: 91
-                      end: 98
-                  arms:
-                    - conditions:
-                        - kind:
-                            Int: 200
-                          span:
-                            start: 106
-                            end: 109
-                      body:
-                        kind:
-                          String: ok
-                        span:
-                          start: 113
-                          end: 117
-                      span:
-                        start: 106
-                        end: 117
-                    - conditions: ~
-                      body:
-                        kind:
-                          ThrowExpr:
-                            kind:
-                              New:
-                                class:
-                                  kind:
-                                    Identifier: RuntimeException
-                                  span:
-                                    start: 144
-                                    end: 160
-                                args:
-                                  - name: ~
-                                    value:
-                                      kind:
-                                        String: Unexpected status
-                                      span:
-                                        start: 161
-                                        end: 180
-                                    unpack: false
-                                    span:
-                                      start: 161
-                                      end: 180
-                            span:
-                              start: 140
-                              end: 181
-                        span:
-                          start: 134
-                          end: 181
-                      span:
-                        start: 123
-                        end: 181
-              span:
-                start: 84
-                end: 184
-        span:
-          start: 74
-          end: 184
-    span:
-      start: 74
-      end: 186
-span:
-  start: 0
-  end: 186
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "value"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 12
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "NullCoalesce": {
+                    "left": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 15,
+                        "end": 17
+                      }
+                    },
+                    "right": {
+                      "kind": {
+                        "ThrowExpr": {
+                          "kind": {
+                            "New": {
+                              "class": {
+                                "kind": {
+                                  "Identifier": "InvalidArgumentException"
+                                },
+                                "span": {
+                                  "start": 31,
+                                  "end": 55
+                                }
+                              },
+                              "args": [
+                                {
+                                  "name": null,
+                                  "value": {
+                                    "kind": {
+                                      "String": "Missing value"
+                                    },
+                                    "span": {
+                                      "start": 56,
+                                      "end": 71
+                                    }
+                                  },
+                                  "unpack": false,
+                                  "span": {
+                                    "start": 56,
+                                    "end": 71
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          "span": {
+                            "start": 27,
+                            "end": 72
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 21,
+                        "end": 72
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 15,
+                  "end": 72
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 72
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 74
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "result"
+                },
+                "span": {
+                  "start": 74,
+                  "end": 81
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Match": {
+                    "subject": {
+                      "kind": {
+                        "Variable": "status"
+                      },
+                      "span": {
+                        "start": 91,
+                        "end": 98
+                      }
+                    },
+                    "arms": [
+                      {
+                        "conditions": [
+                          {
+                            "kind": {
+                              "Int": 200
+                            },
+                            "span": {
+                              "start": 106,
+                              "end": 109
+                            }
+                          }
+                        ],
+                        "body": {
+                          "kind": {
+                            "String": "ok"
+                          },
+                          "span": {
+                            "start": 113,
+                            "end": 117
+                          }
+                        },
+                        "span": {
+                          "start": 106,
+                          "end": 117
+                        }
+                      },
+                      {
+                        "conditions": null,
+                        "body": {
+                          "kind": {
+                            "ThrowExpr": {
+                              "kind": {
+                                "New": {
+                                  "class": {
+                                    "kind": {
+                                      "Identifier": "RuntimeException"
+                                    },
+                                    "span": {
+                                      "start": 144,
+                                      "end": 160
+                                    }
+                                  },
+                                  "args": [
+                                    {
+                                      "name": null,
+                                      "value": {
+                                        "kind": {
+                                          "String": "Unexpected status"
+                                        },
+                                        "span": {
+                                          "start": 161,
+                                          "end": 180
+                                        }
+                                      },
+                                      "unpack": false,
+                                      "span": {
+                                        "start": 161,
+                                        "end": 180
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              "span": {
+                                "start": 140,
+                                "end": 181
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 134,
+                            "end": 181
+                          }
+                        },
+                        "span": {
+                          "start": 123,
+                          "end": 181
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 84,
+                  "end": 184
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 74,
+            "end": 184
+          }
+        }
+      },
+      "span": {
+        "start": 74,
+        "end": 186
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 186
+  }
+}

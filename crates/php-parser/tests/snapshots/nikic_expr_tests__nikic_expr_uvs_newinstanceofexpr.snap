@@ -1,0 +1,207 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "New": {
+              "class": {
+                "kind": {
+                  "Parenthesized": {
+                    "kind": {
+                      "Binary": {
+                        "left": {
+                          "kind": {
+                            "String": "Foo"
+                          },
+                          "span": {
+                            "start": 12,
+                            "end": 17
+                          }
+                        },
+                        "op": "Concat",
+                        "right": {
+                          "kind": {
+                            "Variable": "bar"
+                          },
+                          "span": {
+                            "start": 20,
+                            "end": 24
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 12,
+                      "end": 24
+                    }
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 25
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 7,
+            "end": 25
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 27
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "New": {
+              "class": {
+                "kind": {
+                  "Parenthesized": {
+                    "kind": {
+                      "Binary": {
+                        "left": {
+                          "kind": {
+                            "String": "Foo"
+                          },
+                          "span": {
+                            "start": 32,
+                            "end": 37
+                          }
+                        },
+                        "op": "Concat",
+                        "right": {
+                          "kind": {
+                            "Variable": "bar"
+                          },
+                          "span": {
+                            "start": 40,
+                            "end": 44
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 32,
+                      "end": 44
+                    }
+                  }
+                },
+                "span": {
+                  "start": 31,
+                  "end": 45
+                }
+              },
+              "args": [
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Variable": "arg"
+                    },
+                    "span": {
+                      "start": 46,
+                      "end": 50
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 46,
+                    "end": 50
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 27,
+            "end": 51
+          }
+        }
+      },
+      "span": {
+        "start": 27,
+        "end": 53
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Variable": "obj"
+                },
+                "span": {
+                  "start": 53,
+                  "end": 57
+                }
+              },
+              "op": "Instanceof",
+              "right": {
+                "kind": {
+                  "Parenthesized": {
+                    "kind": {
+                      "Binary": {
+                        "left": {
+                          "kind": {
+                            "String": "Foo"
+                          },
+                          "span": {
+                            "start": 70,
+                            "end": 75
+                          }
+                        },
+                        "op": "Concat",
+                        "right": {
+                          "kind": {
+                            "Variable": "bar"
+                          },
+                          "span": {
+                            "start": 78,
+                            "end": 82
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 70,
+                      "end": 82
+                    }
+                  }
+                },
+                "span": {
+                  "start": 69,
+                  "end": 83
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 53,
+            "end": 83
+          }
+        }
+      },
+      "span": {
+        "start": 53,
+        "end": 84
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 84
+  }
+}

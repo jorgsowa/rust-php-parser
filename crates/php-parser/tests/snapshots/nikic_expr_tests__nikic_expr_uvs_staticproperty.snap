@@ -1,0 +1,345 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "StaticPropertyAccess": {
+              "class": {
+                "kind": {
+                  "Identifier": "A"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 7
+                }
+              },
+              "member": "b"
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 11
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 13
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "StaticPropertyAccess": {
+              "class": {
+                "kind": {
+                  "Variable": "A"
+                },
+                "span": {
+                  "start": 13,
+                  "end": 15
+                }
+              },
+              "member": "b"
+            }
+          },
+          "span": {
+            "start": 13,
+            "end": 19
+          }
+        }
+      },
+      "span": {
+        "start": 13,
+        "end": 21
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "StaticPropertyAccess": {
+              "class": {
+                "kind": {
+                  "String": "A"
+                },
+                "span": {
+                  "start": 21,
+                  "end": 24
+                }
+              },
+              "member": "b"
+            }
+          },
+          "span": {
+            "start": 21,
+            "end": 28
+          }
+        }
+      },
+      "span": {
+        "start": 21,
+        "end": 30
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "StaticPropertyAccess": {
+              "class": {
+                "kind": {
+                  "Parenthesized": {
+                    "kind": {
+                      "Binary": {
+                        "left": {
+                          "kind": {
+                            "String": "A"
+                          },
+                          "span": {
+                            "start": 31,
+                            "end": 34
+                          }
+                        },
+                        "op": "Concat",
+                        "right": {
+                          "kind": {
+                            "String": ""
+                          },
+                          "span": {
+                            "start": 37,
+                            "end": 39
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 31,
+                      "end": 39
+                    }
+                  }
+                },
+                "span": {
+                  "start": 30,
+                  "end": 40
+                }
+              },
+              "member": "b"
+            }
+          },
+          "span": {
+            "start": 30,
+            "end": 44
+          }
+        }
+      },
+      "span": {
+        "start": 30,
+        "end": 46
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "StaticPropertyAccess": {
+              "class": {
+                "kind": {
+                  "ArrayAccess": {
+                    "array": {
+                      "kind": {
+                        "String": "A"
+                      },
+                      "span": {
+                        "start": 46,
+                        "end": 49
+                      }
+                    },
+                    "index": {
+                      "kind": {
+                        "Int": 0
+                      },
+                      "span": {
+                        "start": 50,
+                        "end": 51
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 46,
+                  "end": 52
+                }
+              },
+              "member": "b"
+            }
+          },
+          "span": {
+            "start": 46,
+            "end": 56
+          }
+        }
+      },
+      "span": {
+        "start": 46,
+        "end": 58
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "StaticPropertyAccessDynamic": {
+              "class": {
+                "kind": {
+                  "Identifier": "A"
+                },
+                "span": {
+                  "start": 58,
+                  "end": 59
+                }
+              },
+              "member": {
+                "kind": {
+                  "VariableVariable": {
+                    "kind": {
+                      "Variable": "b"
+                    },
+                    "span": {
+                      "start": 62,
+                      "end": 64
+                    }
+                  }
+                },
+                "span": {
+                  "start": 61,
+                  "end": 64
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 58,
+            "end": 64
+          }
+        }
+      },
+      "span": {
+        "start": 58,
+        "end": 66
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ArrayAccess": {
+              "array": {
+                "kind": {
+                  "StaticPropertyAccessDynamic": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "A"
+                      },
+                      "span": {
+                        "start": 66,
+                        "end": 67
+                      }
+                    },
+                    "member": {
+                      "kind": {
+                        "VariableVariable": {
+                          "kind": {
+                            "Variable": "c"
+                          },
+                          "span": {
+                            "start": 70,
+                            "end": 72
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 69,
+                        "end": 72
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 66,
+                  "end": 72
+                }
+              },
+              "index": {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 73,
+                  "end": 74
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 66,
+            "end": 75
+          }
+        }
+      },
+      "span": {
+        "start": 66,
+        "end": 77
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "StaticPropertyAccess": {
+              "class": {
+                "kind": {
+                  "StaticPropertyAccess": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "A"
+                      },
+                      "span": {
+                        "start": 77,
+                        "end": 78
+                      }
+                    },
+                    "member": "A"
+                  }
+                },
+                "span": {
+                  "start": 77,
+                  "end": 82
+                }
+              },
+              "member": "b"
+            }
+          },
+          "span": {
+            "start": 77,
+            "end": 86
+          }
+        }
+      },
+      "span": {
+        "start": 77,
+        "end": 87
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 87
+  }
+}

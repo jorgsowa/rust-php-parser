@@ -1,0 +1,103 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "A",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Property": {
+                  "name": "a",
+                  "visibility": "Public",
+                  "set_visibility": null,
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": null,
+                  "default": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 28,
+                      "end": 29
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 16,
+                "end": 29
+              }
+            },
+            {
+              "kind": {
+                "Property": {
+                  "name": "b",
+                  "visibility": null,
+                  "set_visibility": null,
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": null,
+                  "default": {
+                    "kind": {
+                      "Int": 2
+                    },
+                    "span": {
+                      "start": 36,
+                      "end": 37
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 16,
+                "end": 37
+              }
+            },
+            {
+              "kind": {
+                "Property": {
+                  "name": "c",
+                  "visibility": null,
+                  "set_visibility": null,
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": null,
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 16,
+                "end": 41
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 44
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 44
+  }
+}

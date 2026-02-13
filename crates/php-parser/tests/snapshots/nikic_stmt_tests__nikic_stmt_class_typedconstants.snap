@@ -1,0 +1,277 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "Test",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "ClassConst": {
+                  "name": "X",
+                  "visibility": null,
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "int"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 29,
+                          "end": 32
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 29,
+                      "end": 32
+                    }
+                  },
+                  "value": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 37,
+                      "end": 38
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 23,
+                "end": 44
+              }
+            },
+            {
+              "kind": {
+                "ClassConst": {
+                  "name": "Y",
+                  "visibility": "Private",
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "string"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 58,
+                          "end": 64
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 58,
+                      "end": 64
+                    }
+                  },
+                  "value": {
+                    "kind": {
+                      "String": "a"
+                    },
+                    "span": {
+                      "start": 69,
+                      "end": 72
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 44,
+                "end": 87
+              }
+            },
+            {
+              "kind": {
+                "ClassConst": {
+                  "name": "Z",
+                  "visibility": "Private",
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "string"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 58,
+                          "end": 64
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 58,
+                      "end": 64
+                    }
+                  },
+                  "value": {
+                    "kind": {
+                      "String": "b"
+                    },
+                    "span": {
+                      "start": 78,
+                      "end": 81
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 44,
+                "end": 87
+              }
+            },
+            {
+              "kind": {
+                "ClassConst": {
+                  "name": "ARRAY",
+                  "visibility": null,
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "array"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 93,
+                          "end": 98
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 93,
+                      "end": 98
+                    }
+                  },
+                  "value": {
+                    "kind": {
+                      "Array": []
+                    },
+                    "span": {
+                      "start": 107,
+                      "end": 109
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 87,
+                "end": 115
+              }
+            },
+            {
+              "kind": {
+                "ClassConst": {
+                  "name": "FOO",
+                  "visibility": null,
+                  "type_hint": {
+                    "kind": {
+                      "Union": [
+                        {
+                          "kind": {
+                            "Named": {
+                              "parts": [
+                                "Foo"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 121,
+                                "end": 124
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 121,
+                            "end": 124
+                          }
+                        },
+                        {
+                          "kind": {
+                            "Named": {
+                              "parts": [
+                                "Bar"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 125,
+                                "end": 128
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 125,
+                            "end": 128
+                          }
+                        },
+                        {
+                          "kind": {
+                            "Named": {
+                              "parts": [
+                                "null"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 129,
+                                "end": 133
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 129,
+                            "end": 133
+                          }
+                        }
+                      ]
+                    },
+                    "span": {
+                      "start": 121,
+                      "end": 133
+                    }
+                  },
+                  "value": {
+                    "kind": "Null",
+                    "span": {
+                      "start": 140,
+                      "end": 144
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 115,
+                "end": 146
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 147
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 147
+  }
+}

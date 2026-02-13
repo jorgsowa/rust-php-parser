@@ -1,385 +1,591 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Class:
-        name: Complete
-        modifiers:
-          is_abstract: false
-          is_final: false
-          is_readonly: false
-        extends: ~
-        implements: []
-        members:
-          - kind:
-              TraitUse:
-                traits:
-                  - parts:
-                      - SomeTrait
-                    kind: Unqualified
-                    span:
-                      start: 31
-                      end: 40
-                adaptations: []
-            span:
-              start: 27
-              end: 47
-          - kind:
-              ClassConst:
-                name: MAX
-                visibility: Public
-                value:
-                  kind:
-                    Int: 100
-                  span:
-                    start: 66
-                    end: 69
-                attributes: []
-            span:
-              start: 47
-              end: 75
-          - kind:
-              ClassConst:
-                name: MIN
-                visibility: Protected
-                value:
-                  kind:
-                    Int: 0
-                  span:
-                    start: 97
-                    end: 98
-                attributes: []
-            span:
-              start: 75
-              end: 105
-          - kind:
-              Property:
-                name: name
-                visibility: Public
-                is_static: false
-                is_readonly: false
-                type_hint:
-                  kind:
-                    Named:
-                      parts:
-                        - string
-                      kind: Unqualified
-                      span:
-                        start: 112
-                        end: 118
-                  span:
-                    start: 112
-                    end: 118
-                default: ~
-                attributes: []
-            span:
-              start: 105
-              end: 130
-          - kind:
-              Property:
-                name: age
-                visibility: Protected
-                is_static: false
-                is_readonly: false
-                type_hint:
-                  kind:
-                    Named:
-                      parts:
-                        - int
-                      kind: Unqualified
-                      span:
-                        start: 140
-                        end: 143
-                  span:
-                    start: 140
-                    end: 143
-                default:
-                  kind:
-                    Int: 0
-                  span:
-                    start: 151
-                    end: 152
-                attributes: []
-            span:
-              start: 130
-              end: 158
-          - kind:
-              Property:
-                name: instances
-                visibility: Private
-                is_static: true
-                is_readonly: false
-                type_hint:
-                  kind:
-                    Named:
-                      parts:
-                        - array
-                      kind: Unqualified
-                      span:
-                        start: 173
-                        end: 178
-                  span:
-                    start: 173
-                    end: 178
-                default:
-                  kind:
-                    Array: []
-                  span:
-                    start: 192
-                    end: 194
-                attributes: []
-            span:
-              start: 158
-              end: 200
-          - kind:
-              Property:
-                name: id
-                visibility: Public
-                is_static: false
-                is_readonly: true
-                type_hint:
-                  kind:
-                    Named:
-                      parts:
-                        - string
-                      kind: Unqualified
-                      span:
-                        start: 216
-                        end: 222
-                  span:
-                    start: 216
-                    end: 222
-                default: ~
-                attributes: []
-            span:
-              start: 200
-              end: 233
-          - kind:
-              Method:
-                name: __construct
-                visibility: Public
-                is_static: false
-                is_abstract: false
-                is_final: false
-                by_ref: false
-                params:
-                  - name: name
-                    type_hint:
-                      kind:
-                        Named:
-                          parts:
-                            - string
-                          kind: Unqualified
-                          span:
-                            start: 261
-                            end: 267
-                      span:
-                        start: 261
-                        end: 267
-                    default: ~
-                    by_ref: false
-                    variadic: false
-                    visibility: ~
-                    attributes: []
-                    span:
-                      start: 261
-                      end: 273
-                  - name: score
-                    type_hint:
-                      kind:
-                        Named:
-                          parts:
-                            - int
-                          kind: Unqualified
-                          span:
-                            start: 291
-                            end: 294
-                      span:
-                        start: 291
-                        end: 294
-                    default: ~
-                    by_ref: false
-                    variadic: false
-                    visibility: Public
-                    attributes: []
-                    span:
-                      start: 275
-                      end: 301
-                return_type: ~
-                body:
-                  - kind:
-                      Expression:
-                        kind:
-                          Assign:
-                            target:
-                              kind:
-                                PropertyAccess:
-                                  object:
-                                    kind:
-                                      Variable: this
-                                    span:
-                                      start: 313
-                                      end: 318
-                                  property:
-                                    kind:
-                                      Identifier: name
-                                    span:
-                                      start: 320
-                                      end: 324
-                              span:
-                                start: 313
-                                end: 324
-                            op: Assign
-                            value:
-                              kind:
-                                Variable: name
-                              span:
-                                start: 327
-                                end: 332
-                        span:
-                          start: 313
-                          end: 332
-                    span:
-                      start: 313
-                      end: 338
-                attributes: []
-            span:
-              start: 233
-              end: 345
-          - kind:
-              Method:
-                name: create
-                visibility: Public
-                is_static: true
-                is_abstract: false
-                is_final: false
-                by_ref: false
-                params: []
-                return_type:
-                  kind:
-                    Named:
-                      parts:
-                        - self
-                      kind: Unqualified
-                      span:
-                        start: 378
-                        end: 382
-                  span:
-                    start: 378
-                    end: 382
-                body:
-                  - kind:
-                      Return:
-                        kind:
-                          New:
-                            class:
-                              kind:
-                                Identifier: self
-                              span:
-                                start: 404
-                                end: 408
-                            args:
-                              - name: ~
-                                value:
-                                  kind:
-                                    String: default
-                                  span:
-                                    start: 409
-                                    end: 418
-                                unpack: false
-                                span:
-                                  start: 409
-                                  end: 418
-                        span:
-                          start: 400
-                          end: 419
-                    span:
-                      start: 393
-                      end: 425
-                attributes: []
-            span:
-              start: 345
-              end: 432
-          - kind:
-              Method:
-                name: validate
-                visibility: Protected
-                is_static: false
-                is_abstract: true
-                is_final: false
-                by_ref: false
-                params: []
-                return_type:
-                  kind:
-                    Named:
-                      parts:
-                        - bool
-                      kind: Unqualified
-                      span:
-                        start: 472
-                        end: 476
-                  span:
-                    start: 472
-                    end: 476
-                body: ~
-                attributes: []
-            span:
-              start: 432
-              end: 483
-          - kind:
-              Method:
-                name: getId
-                visibility: Public
-                is_static: false
-                is_abstract: false
-                is_final: true
-                by_ref: false
-                params: []
-                return_type:
-                  kind:
-                    Named:
-                      parts:
-                        - string
-                      kind: Unqualified
-                      span:
-                        start: 514
-                        end: 520
-                  span:
-                    start: 514
-                    end: 520
-                body:
-                  - kind:
-                      Return:
-                        kind:
-                          PropertyAccess:
-                            object:
-                              kind:
-                                Variable: this
-                              span:
-                                start: 538
-                                end: 543
-                            property:
-                              kind:
-                                Identifier: id
-                              span:
-                                start: 545
-                                end: 547
-                        span:
-                          start: 538
-                          end: 547
-                    span:
-                      start: 531
-                      end: 553
-                attributes: []
-            span:
-              start: 483
-              end: 555
-        attributes: []
-    span:
-      start: 6
-      end: 556
-span:
-  start: 0
-  end: 556
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "Complete",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "TraitUse": {
+                  "traits": [
+                    {
+                      "parts": [
+                        "SomeTrait"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 31,
+                        "end": 40
+                      }
+                    }
+                  ],
+                  "adaptations": []
+                }
+              },
+              "span": {
+                "start": 27,
+                "end": 47
+              }
+            },
+            {
+              "kind": {
+                "ClassConst": {
+                  "name": "MAX",
+                  "visibility": "Public",
+                  "value": {
+                    "kind": {
+                      "Int": 100
+                    },
+                    "span": {
+                      "start": 66,
+                      "end": 69
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 47,
+                "end": 75
+              }
+            },
+            {
+              "kind": {
+                "ClassConst": {
+                  "name": "MIN",
+                  "visibility": "Protected",
+                  "value": {
+                    "kind": {
+                      "Int": 0
+                    },
+                    "span": {
+                      "start": 97,
+                      "end": 98
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 75,
+                "end": 105
+              }
+            },
+            {
+              "kind": {
+                "Property": {
+                  "name": "name",
+                  "visibility": "Public",
+                  "set_visibility": null,
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "string"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 112,
+                          "end": 118
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 112,
+                      "end": 118
+                    }
+                  },
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 105,
+                "end": 124
+              }
+            },
+            {
+              "kind": {
+                "Property": {
+                  "name": "age",
+                  "visibility": "Protected",
+                  "set_visibility": null,
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "int"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 140,
+                          "end": 143
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 140,
+                      "end": 143
+                    }
+                  },
+                  "default": {
+                    "kind": {
+                      "Int": 0
+                    },
+                    "span": {
+                      "start": 151,
+                      "end": 152
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 130,
+                "end": 152
+              }
+            },
+            {
+              "kind": {
+                "Property": {
+                  "name": "instances",
+                  "visibility": "Private",
+                  "set_visibility": null,
+                  "is_static": true,
+                  "is_readonly": false,
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "array"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 173,
+                          "end": 178
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 173,
+                      "end": 178
+                    }
+                  },
+                  "default": {
+                    "kind": {
+                      "Array": []
+                    },
+                    "span": {
+                      "start": 192,
+                      "end": 194
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 158,
+                "end": 194
+              }
+            },
+            {
+              "kind": {
+                "Property": {
+                  "name": "id",
+                  "visibility": "Public",
+                  "set_visibility": null,
+                  "is_static": false,
+                  "is_readonly": true,
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "string"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 216,
+                          "end": 222
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 216,
+                      "end": 222
+                    }
+                  },
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 200,
+                "end": 226
+              }
+            },
+            {
+              "kind": {
+                "Method": {
+                  "name": "__construct",
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [
+                    {
+                      "name": "name",
+                      "type_hint": {
+                        "kind": {
+                          "Named": {
+                            "parts": [
+                              "string"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 261,
+                              "end": 267
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 261,
+                          "end": 267
+                        }
+                      },
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "visibility": null,
+                      "set_visibility": null,
+                      "attributes": [],
+                      "span": {
+                        "start": 261,
+                        "end": 273
+                      }
+                    },
+                    {
+                      "name": "score",
+                      "type_hint": {
+                        "kind": {
+                          "Named": {
+                            "parts": [
+                              "int"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 291,
+                              "end": 294
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 291,
+                          "end": 294
+                        }
+                      },
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "visibility": "Public",
+                      "set_visibility": null,
+                      "attributes": [],
+                      "span": {
+                        "start": 275,
+                        "end": 301
+                      }
+                    }
+                  ],
+                  "return_type": null,
+                  "body": [
+                    {
+                      "kind": {
+                        "Expression": {
+                          "kind": {
+                            "Assign": {
+                              "target": {
+                                "kind": {
+                                  "PropertyAccess": {
+                                    "object": {
+                                      "kind": {
+                                        "Variable": "this"
+                                      },
+                                      "span": {
+                                        "start": 313,
+                                        "end": 318
+                                      }
+                                    },
+                                    "property": {
+                                      "kind": {
+                                        "Identifier": "name"
+                                      },
+                                      "span": {
+                                        "start": 320,
+                                        "end": 324
+                                      }
+                                    }
+                                  }
+                                },
+                                "span": {
+                                  "start": 313,
+                                  "end": 324
+                                }
+                              },
+                              "op": "Assign",
+                              "value": {
+                                "kind": {
+                                  "Variable": "name"
+                                },
+                                "span": {
+                                  "start": 327,
+                                  "end": 332
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 313,
+                            "end": 332
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 313,
+                        "end": 338
+                      }
+                    }
+                  ],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 233,
+                "end": 345
+              }
+            },
+            {
+              "kind": {
+                "Method": {
+                  "name": "create",
+                  "visibility": "Public",
+                  "is_static": true,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "self"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 378,
+                          "end": 382
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 378,
+                      "end": 382
+                    }
+                  },
+                  "body": [
+                    {
+                      "kind": {
+                        "Return": {
+                          "kind": {
+                            "New": {
+                              "class": {
+                                "kind": {
+                                  "Identifier": "self"
+                                },
+                                "span": {
+                                  "start": 404,
+                                  "end": 408
+                                }
+                              },
+                              "args": [
+                                {
+                                  "name": null,
+                                  "value": {
+                                    "kind": {
+                                      "String": "default"
+                                    },
+                                    "span": {
+                                      "start": 409,
+                                      "end": 418
+                                    }
+                                  },
+                                  "unpack": false,
+                                  "span": {
+                                    "start": 409,
+                                    "end": 418
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          "span": {
+                            "start": 400,
+                            "end": 419
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 393,
+                        "end": 425
+                      }
+                    }
+                  ],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 345,
+                "end": 432
+              }
+            },
+            {
+              "kind": {
+                "Method": {
+                  "name": "validate",
+                  "visibility": "Protected",
+                  "is_static": false,
+                  "is_abstract": true,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "bool"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 472,
+                          "end": 476
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 472,
+                      "end": 476
+                    }
+                  },
+                  "body": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 432,
+                "end": 483
+              }
+            },
+            {
+              "kind": {
+                "Method": {
+                  "name": "getId",
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": true,
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "string"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 514,
+                          "end": 520
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 514,
+                      "end": 520
+                    }
+                  },
+                  "body": [
+                    {
+                      "kind": {
+                        "Return": {
+                          "kind": {
+                            "PropertyAccess": {
+                              "object": {
+                                "kind": {
+                                  "Variable": "this"
+                                },
+                                "span": {
+                                  "start": 538,
+                                  "end": 543
+                                }
+                              },
+                              "property": {
+                                "kind": {
+                                  "Identifier": "id"
+                                },
+                                "span": {
+                                  "start": 545,
+                                  "end": 547
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 538,
+                            "end": 547
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 531,
+                        "end": 553
+                      }
+                    }
+                  ],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 483,
+                "end": 555
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 556
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 556
+  }
+}

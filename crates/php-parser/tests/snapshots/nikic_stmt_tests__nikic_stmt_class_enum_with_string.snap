@@ -1,0 +1,113 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Enum": {
+          "name": "Suit",
+          "scalar_type": {
+            "parts": [
+              "string"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 18,
+              "end": 25
+            }
+          },
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Case": {
+                  "name": "Hearts",
+                  "value": {
+                    "kind": {
+                      "String": "H"
+                    },
+                    "span": {
+                      "start": 45,
+                      "end": 48
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 31,
+                "end": 54
+              }
+            },
+            {
+              "kind": {
+                "Case": {
+                  "name": "Diamonds",
+                  "value": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 54,
+                "end": 73
+              }
+            },
+            {
+              "kind": {
+                "Case": {
+                  "name": "Clubs",
+                  "value": {
+                    "kind": {
+                      "String": "C"
+                    },
+                    "span": {
+                      "start": 86,
+                      "end": 89
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 73,
+                "end": 95
+              }
+            },
+            {
+              "kind": {
+                "Case": {
+                  "name": "Spades",
+                  "value": {
+                    "kind": {
+                      "String": "S"
+                    },
+                    "span": {
+                      "start": 109,
+                      "end": 112
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 95,
+                "end": 114
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 115
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 115
+  }
+}

@@ -1,0 +1,68 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Interface": {
+          "name": "A",
+          "extends": [
+            {
+              "parts": [
+                "C"
+              ],
+              "kind": "Unqualified",
+              "span": {
+                "start": 27,
+                "end": 28
+              }
+            },
+            {
+              "parts": [
+                "D"
+              ],
+              "kind": "Unqualified",
+              "span": {
+                "start": 30,
+                "end": 32
+              }
+            }
+          ],
+          "members": [
+            {
+              "kind": {
+                "Method": {
+                  "name": "a",
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": null,
+                  "body": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 38,
+                "end": 59
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 60
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 60
+  }
+}

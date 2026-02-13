@@ -1,62 +1,104 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      While:
-        condition:
-          kind:
-            Bool: true
-          span:
-            start: 13
-            end: 17
-        body:
-          kind:
-            Block:
-              - kind:
-                  While:
-                    condition:
-                      kind:
-                        Bool: true
-                      span:
-                        start: 32
-                        end: 36
-                    body:
-                      kind:
-                        Block:
-                          - kind:
-                              Break:
-                                kind:
-                                  Int: 2
-                                span:
-                                  start: 54
-                                  end: 55
-                            span:
-                              start: 48
-                              end: 65
-                          - kind:
-                              Continue:
-                                kind:
-                                  Int: 2
-                                span:
-                                  start: 74
-                                  end: 75
-                            span:
-                              start: 65
-                              end: 81
-                      span:
-                        start: 38
-                        end: 82
-                span:
-                  start: 25
-                  end: 82
-          span:
-            start: 19
-            end: 84
-    span:
-      start: 6
-      end: 84
-span:
-  start: 0
-  end: 84
+{
+  "stmts": [
+    {
+      "kind": {
+        "While": {
+          "condition": {
+            "kind": {
+              "Bool": true
+            },
+            "span": {
+              "start": 13,
+              "end": 17
+            }
+          },
+          "body": {
+            "kind": {
+              "Block": [
+                {
+                  "kind": {
+                    "While": {
+                      "condition": {
+                        "kind": {
+                          "Bool": true
+                        },
+                        "span": {
+                          "start": 32,
+                          "end": 36
+                        }
+                      },
+                      "body": {
+                        "kind": {
+                          "Block": [
+                            {
+                              "kind": {
+                                "Break": {
+                                  "kind": {
+                                    "Int": 2
+                                  },
+                                  "span": {
+                                    "start": 54,
+                                    "end": 55
+                                  }
+                                }
+                              },
+                              "span": {
+                                "start": 48,
+                                "end": 65
+                              }
+                            },
+                            {
+                              "kind": {
+                                "Continue": {
+                                  "kind": {
+                                    "Int": 2
+                                  },
+                                  "span": {
+                                    "start": 74,
+                                    "end": 75
+                                  }
+                                }
+                              },
+                              "span": {
+                                "start": 65,
+                                "end": 81
+                              }
+                            }
+                          ]
+                        },
+                        "span": {
+                          "start": 38,
+                          "end": 82
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 25,
+                    "end": 82
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 19,
+              "end": 84
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 84
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 84
+  }
+}

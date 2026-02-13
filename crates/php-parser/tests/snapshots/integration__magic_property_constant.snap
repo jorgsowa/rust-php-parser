@@ -1,18 +1,29 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Expression:
-        kind:
-          MagicConst: Property
-        span:
-          start: 6
-          end: 18
-    span:
-      start: 6
-      end: 19
-span:
-  start: 0
-  end: 19
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MagicConst": "Property"
+          },
+          "span": {
+            "start": 6,
+            "end": 18
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 19
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 19
+  }
+}

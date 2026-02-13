@@ -1,208 +1,331 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(& result.program)
 ---
-stmts:
-  - kind:
-      Function:
-        name: add
-        params:
-          - name: a
-            type_hint: ~
-            default: ~
-            by_ref: false
-            variadic: false
-            visibility: ~
-            attributes: []
-            span:
-              start: 19
-              end: 21
-          - name: b
-            type_hint: ~
-            default: ~
-            by_ref: false
-            variadic: false
-            visibility: ~
-            attributes: []
-            span:
-              start: 23
-              end: 25
-        body:
-          - kind:
-              Return:
-                kind:
-                  Binary:
-                    left:
-                      kind:
-                        Variable: a
-                      span:
-                        start: 40
-                        end: 42
-                    op: Add
-                    right:
-                      kind:
-                        Variable: b
-                      span:
-                        start: 45
-                        end: 47
-                span:
-                  start: 40
-                  end: 47
-            span:
-              start: 33
-              end: 49
-        return_type: ~
-        by_ref: false
-        attributes: []
-    span:
-      start: 6
-      end: 50
-  - kind:
-      Function:
-        name: greet
-        params:
-          - name: name
-            type_hint: ~
-            default:
-              kind:
-                String: World
-              span:
-                start: 75
-                end: 82
-            by_ref: false
-            variadic: false
-            visibility: ~
-            attributes: []
-            span:
-              start: 67
-              end: 82
-        body:
-          - kind:
-              Echo:
-                - kind:
-                    Binary:
-                      left:
-                        kind:
-                          String: "Hello, "
-                        span:
-                          start: 95
-                          end: 104
-                      op: Concat
-                      right:
-                        kind:
-                          Variable: name
-                        span:
-                          start: 107
-                          end: 112
-                  span:
-                    start: 95
-                    end: 112
-            span:
-              start: 90
-              end: 114
-        return_type: ~
-        by_ref: false
-        attributes: []
-    span:
-      start: 52
-      end: 115
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: result
-              span:
-                start: 117
-                end: 124
-            op: Assign
-            value:
-              kind:
-                FunctionCall:
-                  name:
-                    kind:
-                      Identifier: add
-                    span:
-                      start: 127
-                      end: 130
-                  args:
-                    - name: ~
-                      value:
-                        kind:
-                          Int: 1
-                        span:
-                          start: 131
-                          end: 132
-                      unpack: false
-                      span:
-                        start: 131
-                        end: 132
-                    - name: ~
-                      value:
-                        kind:
-                          Int: 2
-                        span:
-                          start: 134
-                          end: 135
-                      unpack: false
-                      span:
-                        start: 134
-                        end: 135
-              span:
-                start: 127
-                end: 136
-        span:
-          start: 117
-          end: 136
-    span:
-      start: 117
-      end: 138
-  - kind:
-      Expression:
-        kind:
-          FunctionCall:
-            name:
-              kind:
-                Identifier: greet
-              span:
-                start: 138
-                end: 143
-            args: []
-        span:
-          start: 138
-          end: 145
-    span:
-      start: 138
-      end: 147
-  - kind:
-      Expression:
-        kind:
-          FunctionCall:
-            name:
-              kind:
-                Identifier: greet
-              span:
-                start: 147
-                end: 152
-            args:
-              - name: ~
-                value:
-                  kind:
-                    String: PHP
-                  span:
-                    start: 153
-                    end: 158
-                unpack: false
-                span:
-                  start: 153
-                  end: 158
-        span:
-          start: 147
-          end: 159
-    span:
-      start: 147
-      end: 161
-span:
-  start: 0
-  end: 161
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "add",
+          "params": [
+            {
+              "name": "a",
+              "type_hint": null,
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 19,
+                "end": 21
+              }
+            },
+            {
+              "name": "b",
+              "type_hint": null,
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 23,
+                "end": 25
+              }
+            }
+          ],
+          "body": [
+            {
+              "kind": {
+                "Return": {
+                  "kind": {
+                    "Binary": {
+                      "left": {
+                        "kind": {
+                          "Variable": "a"
+                        },
+                        "span": {
+                          "start": 40,
+                          "end": 42
+                        }
+                      },
+                      "op": "Add",
+                      "right": {
+                        "kind": {
+                          "Variable": "b"
+                        },
+                        "span": {
+                          "start": 45,
+                          "end": 47
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 40,
+                    "end": 47
+                  }
+                }
+              },
+              "span": {
+                "start": 33,
+                "end": 49
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 50
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": "greet",
+          "params": [
+            {
+              "name": "name",
+              "type_hint": null,
+              "default": {
+                "kind": {
+                  "String": "World"
+                },
+                "span": {
+                  "start": 75,
+                  "end": 82
+                }
+              },
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 67,
+                "end": 82
+              }
+            }
+          ],
+          "body": [
+            {
+              "kind": {
+                "Echo": [
+                  {
+                    "kind": {
+                      "Binary": {
+                        "left": {
+                          "kind": {
+                            "String": "Hello, "
+                          },
+                          "span": {
+                            "start": 95,
+                            "end": 104
+                          }
+                        },
+                        "op": "Concat",
+                        "right": {
+                          "kind": {
+                            "Variable": "name"
+                          },
+                          "span": {
+                            "start": 107,
+                            "end": 112
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 95,
+                      "end": 112
+                    }
+                  }
+                ]
+              },
+              "span": {
+                "start": 90,
+                "end": 114
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 52,
+        "end": 115
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "result"
+                },
+                "span": {
+                  "start": 117,
+                  "end": 124
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "FunctionCall": {
+                    "name": {
+                      "kind": {
+                        "Identifier": "add"
+                      },
+                      "span": {
+                        "start": 127,
+                        "end": 130
+                      }
+                    },
+                    "args": [
+                      {
+                        "name": null,
+                        "value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 131,
+                            "end": 132
+                          }
+                        },
+                        "unpack": false,
+                        "span": {
+                          "start": 131,
+                          "end": 132
+                        }
+                      },
+                      {
+                        "name": null,
+                        "value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 134,
+                            "end": 135
+                          }
+                        },
+                        "unpack": false,
+                        "span": {
+                          "start": 134,
+                          "end": 135
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 127,
+                  "end": 136
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 117,
+            "end": 136
+          }
+        }
+      },
+      "span": {
+        "start": 117,
+        "end": 138
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "greet"
+                },
+                "span": {
+                  "start": 138,
+                  "end": 143
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 138,
+            "end": 145
+          }
+        }
+      },
+      "span": {
+        "start": 138,
+        "end": 147
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "greet"
+                },
+                "span": {
+                  "start": 147,
+                  "end": 152
+                }
+              },
+              "args": [
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "String": "PHP"
+                    },
+                    "span": {
+                      "start": 153,
+                      "end": 158
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 153,
+                    "end": 158
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 147,
+            "end": 159
+          }
+        }
+      },
+      "span": {
+        "start": 147,
+        "end": 161
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 161
+  }
+}

@@ -19,6 +19,10 @@ fn assert_no_errors(result: &php_parser::ParseResult) {
     }
 }
 
+fn to_json(program: &php_ast::Program) -> String {
+    serde_json::to_string_pretty(program).unwrap()
+}
+
 // =============================================================================
 // Fixture file tests
 // =============================================================================
@@ -30,7 +34,7 @@ macro_rules! fixture_test {
             let source = include_str!(concat!("fixtures/", $file));
             let result = parse_php(source);
             assert_no_errors(&result);
-            insta::assert_yaml_snapshot!(result.program);
+            insta::assert_snapshot!(to_json(&result.program));
         }
     };
 }
@@ -63,7 +67,7 @@ fn test_error_recovery_partial_parse() {
     );
 
     // The valid statements after the error should be parsed
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -74,84 +78,84 @@ fn test_error_recovery_partial_parse() {
 fn test_precedence_mul_over_add() {
     let result = parse_php("<?php 1 + 2 * 3;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_precedence_pow_right_assoc() {
     let result = parse_php("<?php 2 ** 3 ** 2;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_precedence_parens() {
     let result = parse_php("<?php (1 + 2) * 3;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_ternary_expr() {
     let result = parse_php("<?php $x > 0 ? 'yes' : 'no';");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_short_ternary() {
     let result = parse_php("<?php $x ?: 'default';");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_null_coalesce() {
     let result = parse_php("<?php $x ?? $y ?? 'fallback';");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_function_call_chain() {
     let result = parse_php("<?php foo(bar(1), 2);");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_array_access_chain() {
     let result = parse_php("<?php $arr[0][1];");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_unary_prefix() {
     let result = parse_php("<?php -$x; !$y; ~$z; ++$a; --$b;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_unary_postfix() {
     let result = parse_php("<?php $x++; $y--;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_print_expr() {
     let result = parse_php("<?php print 'hello';");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_logical_keyword_ops() {
     let result = parse_php("<?php $a and $b or $c xor $d;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -162,42 +166,42 @@ fn test_logical_keyword_ops() {
 fn test_empty_return() {
     let result = parse_php("<?php return;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_echo_multiple() {
     let result = parse_php("<?php echo 1, 2, 3;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_for_loop() {
     let result = parse_php("<?php for ($i = 0; $i < 10; $i++) { echo $i; }");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_foreach_with_key() {
     let result = parse_php("<?php foreach ($items as $k => $v) { echo $k; }");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_nested_if() {
     let result = parse_php("<?php if ($a) { if ($b) { echo 1; } }");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_function_with_defaults() {
     let result = parse_php("<?php function foo($a, $b = 10, $c = 'x') { return $a + $b; }");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -208,21 +212,21 @@ fn test_function_with_defaults() {
 fn test_numeric_literals() {
     let result = parse_php("<?php 42; 0xFF; 0b1010; 077; 3.14; 1e10; 2.5e-3;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_string_literals() {
     let result = parse_php(r#"<?php 'single'; "double";"#);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_bool_null_literals() {
     let result = parse_php("<?php true; false; null; TRUE; FALSE; NULL;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -244,7 +248,7 @@ echo $result;
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -262,7 +266,7 @@ echo $val;
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -273,7 +277,7 @@ echo $val;
 fn test_do_while() {
     let result = parse_php("<?php do { echo $i; $i++; } while ($i < 10);");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -293,7 +297,7 @@ switch ($x) {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -308,7 +312,7 @@ while (true) {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -324,7 +328,7 @@ try {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -340,14 +344,14 @@ try {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_throw_statement() {
     let result = parse_php("<?php throw new Exception('Something went wrong');");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -360,7 +364,7 @@ echo 'done';
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -393,7 +397,7 @@ endswitch;
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -418,7 +422,7 @@ class User {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -439,7 +443,7 @@ readonly class Value {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -460,7 +464,7 @@ class User extends Model implements Loggable, Serializable {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -475,7 +479,7 @@ interface HasName extends HasId {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -493,7 +497,7 @@ class Post {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -510,7 +514,7 @@ class Config {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -527,7 +531,7 @@ class Point {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -538,21 +542,21 @@ class Point {
 fn test_property_access() {
     let result = parse_php("<?php $obj->name; $a->b->c;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_method_call() {
     let result = parse_php("<?php $obj->getName(); $builder->setName('foo')->build();");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_nullsafe_operator() {
     let result = parse_php("<?php $obj?->address?->city; $obj?->getAddress()?->getCity();");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -567,28 +571,28 @@ static::factory();
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_new_expression() {
     let result = parse_php("<?php new Foo(); new $className(); new self();");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_clone_expression() {
     let result = parse_php("<?php $copy = clone $obj;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_instanceof() {
     let result = parse_php("<?php $obj instanceof Foo; $x instanceof Bar || $x instanceof Baz;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -599,35 +603,35 @@ fn test_instanceof() {
 fn test_closure_basic() {
     let result = parse_php("<?php $f = function(int $x, string $y): int { return $x; };");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_closure_use() {
     let result = parse_php("<?php $f = function() use ($a, &$b) { return $a + $b; };");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_static_closure() {
     let result = parse_php("<?php $f = static function() { return 42; };");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_arrow_function() {
     let result = parse_php("<?php $f = fn(int $x): int => $x * 2;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_static_arrow_function() {
     let result = parse_php("<?php $f = static fn($x) => $x + 1;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -638,7 +642,7 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -650,7 +654,7 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -665,14 +669,14 @@ function byref(&$ref): void {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_named_arguments() {
     let result = parse_php("<?php htmlspecialchars(string: $str, flags: ENT_QUOTES, encoding: 'UTF-8');");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -683,7 +687,7 @@ $merged = [...$a, ...$b, 1, 2];
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -701,7 +705,7 @@ $result = match ($x) {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -715,7 +719,7 @@ $result = match (true) {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -729,7 +733,7 @@ $result = match ($status) {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -743,7 +747,7 @@ enum Color {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -757,7 +761,7 @@ enum Status: string {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -781,7 +785,7 @@ enum Suit: string implements HasColor {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -796,7 +800,7 @@ class User {}
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -811,7 +815,7 @@ namespace App\Models {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -824,21 +828,21 @@ use const App\Config\VERSION;
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_const_declaration() {
     let result = parse_php("<?php const PI = 3.14; const APP_NAME = 'MyApp';");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_declare_strict_types() {
     let result = parse_php("<?php declare(strict_types=1);");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -853,7 +857,7 @@ function counter() {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -864,14 +868,14 @@ function counter() {
 fn test_cast_expressions() {
     let result = parse_php("<?php (int)$x; (float)$y; (string)$z; (bool)$a; (array)$b; (object)$c;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_isset_empty() {
     let result = parse_php("<?php isset($a, $b); empty($x);");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -884,35 +888,35 @@ require_once 'autoload.php';
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_eval_exit() {
     let result = parse_php("<?php eval('echo 1;'); exit; exit(1); die('fatal');");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_error_suppress() {
     let result = parse_php("<?php @file_get_contents('missing.txt');");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_unset() {
     let result = parse_php("<?php unset($a, $b, $c);");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_magic_constants() {
     let result = parse_php("<?php __LINE__; __FILE__; __DIR__; __CLASS__; __FUNCTION__; __METHOD__; __NAMESPACE__; __TRAIT__;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -930,7 +934,7 @@ function generate() {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -943,7 +947,7 @@ function indexedGen() {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -956,7 +960,7 @@ function combined() {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 fixture_test!(test_realistic_controller, "realistic_controller.php");
@@ -975,7 +979,7 @@ $x = \strlen('hello');
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -986,14 +990,14 @@ App\Helpers\format($data);
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_class_name_resolution() {
     let result = parse_php("<?php Foo::class; self::class; static::class;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -1008,7 +1012,7 @@ list($x, , $z) = $array;
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1019,7 +1023,7 @@ fn test_array_destructuring() {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -1030,21 +1034,21 @@ fn test_array_destructuring() {
 fn test_array_old_syntax() {
     let result = parse_php("<?php array(1, 2, 3); array('a' => 1, 'b' => 2);");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_empty_array() {
     let result = parse_php("<?php []; array();");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_nested_arrays() {
     let result = parse_php("<?php [[1, 2], [3, 4]]; ['a' => ['x' => 1], 'b' => ['y' => 2]];");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1056,14 +1060,14 @@ function bar($x, $y,) {}
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_array_push_syntax() {
     let result = parse_php("<?php $arr[] = 'new'; $matrix[][] = 1;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -1074,14 +1078,14 @@ fn test_array_push_syntax() {
 fn test_dynamic_property_access() {
     let result = parse_php("<?php $obj->$prop; $obj->{$name . 'Suffix'};");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_dynamic_method_call() {
     let result = parse_php("<?php $obj->$method(); $obj->{'get' . $field}();");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1095,7 +1099,7 @@ ${$a . $b} = 4;
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1108,28 +1112,28 @@ $fn = $obj?->method(...);
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_chained_method_array_access() {
     let result = parse_php("<?php $obj->getItems()[0]->name; $a->b()['key']->c();");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_nullsafe_chain() {
     let result = parse_php("<?php $a?->b?->c()?->d?->e;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_new_without_parens() {
     let result = parse_php("<?php $obj = new Foo; $bar = new Bar\\Baz;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -1140,21 +1144,21 @@ fn test_new_without_parens() {
 fn test_for_empty_parts() {
     let result = parse_php("<?php for (;;) { break; }");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_for_multiple_expressions() {
     let result = parse_php("<?php for ($i = 0, $j = 10; $i < $j; $i++, $j--) { echo $i; }");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_foreach_by_reference() {
     let result = parse_php("<?php foreach ($items as &$item) { $item *= 2; }");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1173,14 +1177,14 @@ try {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_nop_statement() {
     let result = parse_php("<?php ;;;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1192,7 +1196,7 @@ declare(ticks=1) {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1212,7 +1216,7 @@ if ($x === 1) {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1228,7 +1232,7 @@ do $A; while ($a);
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1255,7 +1259,7 @@ $g = fn($x = new Foo()) => $x;
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -1266,63 +1270,63 @@ $g = fn($x = new Foo()) => $x;
 fn test_assignment_chain() {
     let result = parse_php("<?php $a = $b = $c = 42;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_by_reference_assign() {
     let result = parse_php("<?php $a = &$b;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_compound_assign_targets() {
     let result = parse_php("<?php $arr[0] += 5; $obj->count -= 1; $data['key'] .= 'suffix';");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_nested_function_calls() {
     let result = parse_php("<?php implode(', ', array_map('strtoupper', explode(' ', $str)));");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_nested_ternary() {
     let result = parse_php("<?php $x > 0 ? 'pos' : ($x < 0 ? 'neg' : 'zero');");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_complex_precedence() {
     let result = parse_php("<?php $a + $b * $c ** $d > $e && $f || $g & $h << 2;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_negative_array_index() {
     let result = parse_php("<?php $arr[-1]; $arr[-2] = 'last';");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_print_returns_value() {
     let result = parse_php("<?php $x = print 'hello'; if (print 'check') {}");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_parenthesized_assign() {
     let result = parse_php("<?php ($x = getValue())->process();");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -1339,7 +1343,7 @@ function &getRef() {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1354,35 +1358,35 @@ $outer = function($x) {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_closure_by_ref_return() {
     let result = parse_php("<?php $f = function &() { static $x = 0; return $x; };");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_immediately_invoked_closure() {
     let result = parse_php("<?php (function() { echo 'hi'; })();");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_arrow_function_complex_body() {
     let result = parse_php("<?php $f = fn($x, $y) => $x > $y ? $x - $y : $y - $x;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_mixed_named_positional_args() {
     let result = parse_php("<?php foo(1, 'bar', name: $val, count: 5);");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -1401,7 +1405,7 @@ final readonly class Money {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1416,7 +1420,7 @@ abstract class Base {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1429,7 +1433,7 @@ class Service {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1464,7 +1468,7 @@ class Complete {
     // abstract method in non-abstract class is semantically wrong but syntactically valid
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1476,7 +1480,7 @@ interface ReadWrite extends Readable, Writable {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1492,7 +1496,7 @@ enum Direction implements HasLabel {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1507,7 +1511,7 @@ class Foo {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -1523,21 +1527,21 @@ namespace {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_multiple_use_items() {
     let result = parse_php("<?php use App\\Models\\User, App\\Models\\Post, App\\Models\\Comment;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_multiple_const_items() {
     let result = parse_php("<?php const A = 1, B = 2, C = 3;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1549,7 +1553,7 @@ function foo() {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1561,7 +1565,7 @@ function foo() {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -1583,14 +1587,14 @@ $result = match ($type) {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_match_single_default() {
     let result = parse_php("<?php $x = match (true) { default => 'always' };");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1604,7 +1608,7 @@ $label = match (getStatus()) {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -1615,35 +1619,35 @@ $label = match (getStatus()) {
 fn test_cast_unset() {
     let result = parse_php("<?php (unset)$x;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_magic_property_constant() {
     let result = parse_php("<?php __PROPERTY__;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_exit_variants() {
     let result = parse_php("<?php exit; exit(); exit(0); die; die(); die('error');");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_error_suppress_nested() {
     let result = parse_php("<?php @$obj->riskyMethod(@$nested);");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_isset_complex() {
     let result = parse_php("<?php isset($a['key'], $b->prop, $c::$static);");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -1659,7 +1663,7 @@ function gen() {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1672,7 +1676,7 @@ function gen() {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -1683,14 +1687,14 @@ function gen() {
 fn test_void_return_type() {
     let result = parse_php("<?php function noop(): void {}");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_mixed_type() {
     let result = parse_php("<?php function anything(mixed $x): mixed { return $x; }");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1702,14 +1706,14 @@ function process(?string $name, ?int $count, ?array $items): ?bool {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_union_type_with_null() {
     let result = parse_php("<?php function foo(int|string|null $x): string|false { return ''; }");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1722,7 +1726,7 @@ class Builder {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1737,7 +1741,7 @@ function bar((A&B)|(C&D) $y): (E&F)|null {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -1749,21 +1753,21 @@ fn test_error_recovery_missing_semicolon() {
     let result = parse_php("<?php $x = 1 $y = 2;");
     // Should have errors but still parse something
     assert!(!result.errors.is_empty());
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_error_recovery_missing_closing_paren() {
     let result = parse_php("<?php foo(1, 2; $x = 3;");
     assert!(!result.errors.is_empty());
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_error_recovery_invalid_expression() {
     let result = parse_php("<?php + ; $x = 1;");
     assert!(!result.errors.is_empty());
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -1783,28 +1787,28 @@ fixture_test!(test_string_interpolation, "string_interpolation.php");
 fn test_simple_interpolation() {
     let result = parse_php(r#"<?php echo "Hello $name";"#);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_complex_interpolation() {
     let result = parse_php(r#"<?php echo "Value: {$obj->getName()}";"#);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_escaped_dollar_no_interpolation() {
     let result = parse_php(r#"<?php echo "Price: \$100";"#);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_double_quoted_escape_sequences() {
     let result = parse_php(r#"<?php echo "line1\nline2\ttab";"#);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -1817,21 +1821,21 @@ fixture_test!(test_heredoc_nowdoc, "heredoc_nowdoc.php");
 fn test_basic_heredoc() {
     let result = parse_php("<?php $x = <<<EOT\nHello World\nEOT;\n");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_heredoc_with_interpolation() {
     let result = parse_php("<?php $x = <<<EOT\nHello $name!\nEOT;\n");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_nowdoc() {
     let result = parse_php("<?php $x = <<<'EOT'\nHello $name!\nEOT;\n");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -1844,42 +1848,42 @@ fixture_test!(test_attributes, "attributes.php");
 fn test_single_attribute() {
     let result = parse_php("<?php #[Pure] function foo() {}");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_attribute_with_args() {
     let result = parse_php(r#"<?php #[Route("/api")] function foo() {}"#);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_grouped_attributes() {
     let result = parse_php("<?php #[A, B] class Foo {}");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_stacked_attributes() {
     let result = parse_php("<?php #[A] #[B] class Foo {}");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_attribute_on_param() {
     let result = parse_php("<?php function f(#[FromQuery] string $name) {}");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_hash_comment_still_works() {
     let result = parse_php("<?php # This is a comment\n$x = 1;");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -1937,7 +1941,7 @@ class MyClass {
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -1956,7 +1960,7 @@ $f = 1_0e1_0;
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -2125,7 +2129,7 @@ foo(class: 'MyClass', static: true, match: 'yes');
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -2238,7 +2242,7 @@ use App\{Models\User as U, Services\Auth as A};
 "#;
     let result = parse_php(source);
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!(result.program);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -2249,11 +2253,11 @@ use App\{Models\User as U, Services\Auth as A};
 fn test_close_tag_semicolon() {
     let result = parse_php("<?= $value ?>");
     assert_no_errors(&result);
-    insta::assert_yaml_snapshot!("short_echo", result.program);
+    insta::assert_snapshot!("short_echo", to_json(&result.program));
 
     let result2 = parse_php("<?php echo 1 ?><html><?php echo 2 ?>");
     assert_no_errors(&result2);
-    insta::assert_yaml_snapshot!("close_tag_terminates", result2.program);
+    insta::assert_snapshot!("close_tag_terminates", to_json(&result2.program));
 }
 
 #[test]
@@ -2271,4 +2275,144 @@ fn test_builtin_constructs() {
     assert_parses_ok("eval", "<?php eval('echo 1;');");
     assert_parses_ok("require once", "<?php require_once 'autoload.php';");
     assert_parses_ok("include expr", "<?php include $dir . '/file.php';");
+}
+
+// =============================================================================
+// Keyword-as-identifier tests
+// =============================================================================
+
+#[test]
+fn test_keyword_as_function_name() {
+    // Keywords can be used as function names
+    assert_parses_ok("function readonly", "<?php function readonly() {}");
+    assert_parses_ok("function exit", "<?php function exit(string|int $status = 0): never {}");
+    assert_parses_ok("function die", "<?php function die(string|int $status = 0): never {}");
+    assert_parses_ok("function clone", "<?php function clone(object $object): object {}");
+    assert_parses_ok("function match", "<?php function match() {}");
+    assert_parses_ok("function fn", "<?php function fn() {}");
+}
+
+#[test]
+fn test_keyword_as_enum_case() {
+    // Keywords can be used as enum case names
+    let result = parse_php("<?php enum Suit { case class; case function; case match; }");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// var property modifier (PHP4 style)
+// =============================================================================
+
+#[test]
+fn test_var_property_modifier() {
+    let result = parse_php("<?php class A { var $foo; var $bar = 42; }");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// Multi-property declarations
+// =============================================================================
+
+#[test]
+fn test_multi_property_declaration() {
+    let result = parse_php("<?php class A { public $a = 1, $b = 2, $c; }");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// Typed class constants
+// =============================================================================
+
+#[test]
+fn test_typed_class_constants() {
+    let result = parse_php("<?php class A { const int X = 1; private const string Y = 'a'; const Foo|Bar|null Z = null; }");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// readonly expressions and anonymous class
+// =============================================================================
+
+#[test]
+fn test_readonly_as_function_call() {
+    let result = parse_php("<?php function readonly() {} readonly();");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_new_readonly_anonymous_class() {
+    let result = parse_php("<?php new readonly class {};");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// Error validation tests
+// =============================================================================
+
+fn assert_has_errors(source: &str) {
+    let result = parse_php(source);
+    assert!(
+        !result.errors.is_empty(),
+        "Expected parse errors for: {source}"
+    );
+}
+
+#[test]
+fn test_abstract_final_conflict() {
+    assert_has_errors("<?php class A { abstract final function a(); }");
+}
+
+#[test]
+fn test_static_const_error() {
+    assert_has_errors("<?php class A { static const X = 1; }");
+}
+
+#[test]
+fn test_abstract_const_error() {
+    assert_has_errors("<?php class A { abstract const X = 1; }");
+}
+
+#[test]
+fn test_readonly_const_error() {
+    assert_has_errors("<?php class A { readonly const X = 1; }");
+}
+
+#[test]
+fn test_reserved_class_names() {
+    assert_has_errors("<?php class self {}");
+    assert_has_errors("<?php class parent {}");
+    assert_has_errors("<?php class static {}");
+    assert_has_errors("<?php class readonly {}");
+}
+
+#[test]
+fn test_reserved_names_in_extends() {
+    assert_has_errors("<?php class A extends self {}");
+    assert_has_errors("<?php class A extends parent {}");
+    assert_has_errors("<?php class A extends static {}");
+}
+
+#[test]
+fn test_reserved_names_in_implements() {
+    assert_has_errors("<?php class A implements self {}");
+    assert_has_errors("<?php class A implements parent {}");
+    assert_has_errors("<?php class A implements static {}");
+}
+
+#[test]
+fn test_halt_compiler_close_tag() {
+    let result = parse_php("<?php __halt_compiler() ?> raw data");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_halt_compiler_nested_error() {
+    assert_has_errors("<?php if (true) { __halt_compiler(); }");
 }

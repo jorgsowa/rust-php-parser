@@ -1,68 +1,108 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: obj
-              span:
-                start: 6
-                end: 10
-            op: Assign
-            value:
-              kind:
-                New:
-                  class:
-                    kind:
-                      Identifier: Foo
-                    span:
-                      start: 17
-                      end: 20
-                  args: []
-              span:
-                start: 13
-                end: 20
-        span:
-          start: 6
-          end: 20
-    span:
-      start: 6
-      end: 22
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: bar
-              span:
-                start: 22
-                end: 26
-            op: Assign
-            value:
-              kind:
-                New:
-                  class:
-                    kind:
-                      Identifier: "Bar\\Baz"
-                    span:
-                      start: 33
-                      end: 40
-                  args: []
-              span:
-                start: 29
-                end: 40
-        span:
-          start: 22
-          end: 40
-    span:
-      start: 22
-      end: 41
-span:
-  start: 0
-  end: 41
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "obj"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 10
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "Foo"
+                      },
+                      "span": {
+                        "start": 17,
+                        "end": 20
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 13,
+                  "end": 20
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 20
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 22
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "bar"
+                },
+                "span": {
+                  "start": 22,
+                  "end": 26
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "Bar\\Baz"
+                      },
+                      "span": {
+                        "start": 33,
+                        "end": 40
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 29,
+                  "end": 40
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 22,
+            "end": 40
+          }
+        }
+      },
+      "span": {
+        "start": 22,
+        "end": 41
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 41
+  }
+}

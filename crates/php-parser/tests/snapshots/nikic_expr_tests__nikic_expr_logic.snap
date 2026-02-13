@@ -1,0 +1,540 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 22,
+                  "end": 24
+                }
+              },
+              "op": "BooleanAnd",
+              "right": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 28,
+                  "end": 30
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 22,
+            "end": 30
+          }
+        }
+      },
+      "span": {
+        "start": 22,
+        "end": 32
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 32,
+                  "end": 34
+                }
+              },
+              "op": "BooleanOr",
+              "right": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 38,
+                  "end": 40
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 32,
+            "end": 40
+          }
+        }
+      },
+      "span": {
+        "start": 32,
+        "end": 42
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "UnaryPrefix": {
+              "op": "BooleanNot",
+              "operand": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 43,
+                  "end": 45
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 42,
+            "end": 45
+          }
+        }
+      },
+      "span": {
+        "start": 42,
+        "end": 47
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "UnaryPrefix": {
+              "op": "BooleanNot",
+              "operand": {
+                "kind": {
+                  "UnaryPrefix": {
+                    "op": "BooleanNot",
+                    "operand": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 49,
+                        "end": 51
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 48,
+                  "end": 51
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 47,
+            "end": 51
+          }
+        }
+      },
+      "span": {
+        "start": 47,
+        "end": 69
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 69,
+                  "end": 71
+                }
+              },
+              "op": "LogicalAnd",
+              "right": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 76,
+                  "end": 78
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 69,
+            "end": 78
+          }
+        }
+      },
+      "span": {
+        "start": 69,
+        "end": 80
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 80,
+                  "end": 82
+                }
+              },
+              "op": "LogicalOr",
+              "right": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 86,
+                  "end": 88
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 80,
+            "end": 88
+          }
+        }
+      },
+      "span": {
+        "start": 80,
+        "end": 90
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 90,
+                  "end": 92
+                }
+              },
+              "op": "LogicalXor",
+              "right": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 97,
+                  "end": 99
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 90,
+            "end": 99
+          }
+        }
+      },
+      "span": {
+        "start": 90,
+        "end": 116
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 116,
+                        "end": 118
+                      }
+                    },
+                    "op": "BooleanAnd",
+                    "right": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 122,
+                        "end": 124
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 116,
+                  "end": 124
+                }
+              },
+              "op": "BooleanOr",
+              "right": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 128,
+                        "end": 130
+                      }
+                    },
+                    "op": "BooleanAnd",
+                    "right": {
+                      "kind": {
+                        "Variable": "d"
+                      },
+                      "span": {
+                        "start": 134,
+                        "end": 136
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 128,
+                  "end": 136
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 116,
+            "end": 136
+          }
+        }
+      },
+      "span": {
+        "start": 116,
+        "end": 138
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 138,
+                        "end": 140
+                      }
+                    },
+                    "op": "BooleanAnd",
+                    "right": {
+                      "kind": {
+                        "Parenthesized": {
+                          "kind": {
+                            "Binary": {
+                              "left": {
+                                "kind": {
+                                  "Variable": "b"
+                                },
+                                "span": {
+                                  "start": 145,
+                                  "end": 147
+                                }
+                              },
+                              "op": "BooleanOr",
+                              "right": {
+                                "kind": {
+                                  "Variable": "c"
+                                },
+                                "span": {
+                                  "start": 151,
+                                  "end": 153
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 145,
+                            "end": 153
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 144,
+                        "end": 155
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 138,
+                  "end": 155
+                }
+              },
+              "op": "BooleanAnd",
+              "right": {
+                "kind": {
+                  "Variable": "d"
+                },
+                "span": {
+                  "start": 158,
+                  "end": 160
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 138,
+            "end": 160
+          }
+        }
+      },
+      "span": {
+        "start": 138,
+        "end": 163
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 163,
+                  "end": 165
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 168,
+                        "end": 170
+                      }
+                    },
+                    "op": "BooleanOr",
+                    "right": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 174,
+                        "end": 176
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 168,
+                  "end": 176
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 163,
+            "end": 176
+          }
+        }
+      },
+      "span": {
+        "start": 163,
+        "end": 178
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Assign": {
+                    "target": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 178,
+                        "end": 180
+                      }
+                    },
+                    "op": "Assign",
+                    "value": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 183,
+                        "end": 185
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 178,
+                  "end": 185
+                }
+              },
+              "op": "LogicalOr",
+              "right": {
+                "kind": {
+                  "Variable": "c"
+                },
+                "span": {
+                  "start": 189,
+                  "end": 191
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 178,
+            "end": 191
+          }
+        }
+      },
+      "span": {
+        "start": 178,
+        "end": 192
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 192
+  }
+}

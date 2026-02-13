@@ -1,104 +1,169 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: result
-              span:
-                start: 6
-                end: 13
-            op: Assign
-            value:
-              kind:
-                Match:
-                  subject:
-                    kind:
-                      Bool: true
-                    span:
-                      start: 23
-                      end: 27
-                  arms:
-                    - conditions:
-                        - kind:
-                            Binary:
-                              left:
-                                kind:
-                                  Variable: x
-                                span:
-                                  start: 35
-                                  end: 37
-                              op: Greater
-                              right:
-                                kind:
-                                  Int: 0
-                                span:
-                                  start: 40
-                                  end: 41
-                          span:
-                            start: 35
-                            end: 41
-                      body:
-                        kind:
-                          String: positive
-                        span:
-                          start: 45
-                          end: 55
-                      span:
-                        start: 35
-                        end: 55
-                    - conditions:
-                        - kind:
-                            Binary:
-                              left:
-                                kind:
-                                  Variable: x
-                                span:
-                                  start: 61
-                                  end: 63
-                              op: Less
-                              right:
-                                kind:
-                                  Int: 0
-                                span:
-                                  start: 66
-                                  end: 67
-                          span:
-                            start: 61
-                            end: 67
-                      body:
-                        kind:
-                          String: negative
-                        span:
-                          start: 71
-                          end: 81
-                      span:
-                        start: 61
-                        end: 81
-                    - conditions: ~
-                      body:
-                        kind:
-                          String: zero
-                        span:
-                          start: 98
-                          end: 104
-                      span:
-                        start: 87
-                        end: 104
-              span:
-                start: 16
-                end: 107
-        span:
-          start: 6
-          end: 107
-    span:
-      start: 6
-      end: 109
-span:
-  start: 0
-  end: 109
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "result"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 13
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Match": {
+                    "subject": {
+                      "kind": {
+                        "Bool": true
+                      },
+                      "span": {
+                        "start": 23,
+                        "end": 27
+                      }
+                    },
+                    "arms": [
+                      {
+                        "conditions": [
+                          {
+                            "kind": {
+                              "Binary": {
+                                "left": {
+                                  "kind": {
+                                    "Variable": "x"
+                                  },
+                                  "span": {
+                                    "start": 35,
+                                    "end": 37
+                                  }
+                                },
+                                "op": "Greater",
+                                "right": {
+                                  "kind": {
+                                    "Int": 0
+                                  },
+                                  "span": {
+                                    "start": 40,
+                                    "end": 41
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 35,
+                              "end": 41
+                            }
+                          }
+                        ],
+                        "body": {
+                          "kind": {
+                            "String": "positive"
+                          },
+                          "span": {
+                            "start": 45,
+                            "end": 55
+                          }
+                        },
+                        "span": {
+                          "start": 35,
+                          "end": 55
+                        }
+                      },
+                      {
+                        "conditions": [
+                          {
+                            "kind": {
+                              "Binary": {
+                                "left": {
+                                  "kind": {
+                                    "Variable": "x"
+                                  },
+                                  "span": {
+                                    "start": 61,
+                                    "end": 63
+                                  }
+                                },
+                                "op": "Less",
+                                "right": {
+                                  "kind": {
+                                    "Int": 0
+                                  },
+                                  "span": {
+                                    "start": 66,
+                                    "end": 67
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 61,
+                              "end": 67
+                            }
+                          }
+                        ],
+                        "body": {
+                          "kind": {
+                            "String": "negative"
+                          },
+                          "span": {
+                            "start": 71,
+                            "end": 81
+                          }
+                        },
+                        "span": {
+                          "start": 61,
+                          "end": 81
+                        }
+                      },
+                      {
+                        "conditions": null,
+                        "body": {
+                          "kind": {
+                            "String": "zero"
+                          },
+                          "span": {
+                            "start": 98,
+                            "end": 104
+                          }
+                        },
+                        "span": {
+                          "start": 87,
+                          "end": 104
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 16,
+                  "end": 107
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 107
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 109
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 109
+  }
+}

@@ -237,6 +237,8 @@ pub struct Param {
     pub visibility: Option<Visibility>,
     pub set_visibility: Option<Visibility>,
     pub attributes: Vec<Attribute>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub hooks: Vec<PropertyHook>,
     pub span: Span,
 }
 
@@ -320,6 +322,32 @@ pub struct PropertyDecl {
     pub type_hint: Option<TypeHint>,
     pub default: Option<Expr>,
     pub attributes: Vec<Attribute>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub hooks: Vec<PropertyHook>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+pub enum PropertyHookKind {
+    Get,
+    Set,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub enum PropertyHookBody {
+    Block(Vec<Stmt>),
+    Expression(Expr),
+    Abstract,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct PropertyHook {
+    pub kind: PropertyHookKind,
+    pub body: PropertyHookBody,
+    pub is_final: bool,
+    pub by_ref: bool,
+    pub params: Vec<Param>,
+    pub attributes: Vec<Attribute>,
+    pub span: Span,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -340,6 +368,8 @@ pub struct MethodDecl {
 pub struct ClassConstDecl {
     pub name: String,
     pub visibility: Option<Visibility>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_hint: Option<TypeHint>,
     pub value: Expr,
     pub attributes: Vec<Attribute>,
 }
@@ -451,6 +481,8 @@ pub enum UseKind {
 pub struct UseItem {
     pub name: Name,
     pub alias: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kind: Option<UseKind>,
     pub span: Span,
 }
 
@@ -600,6 +632,12 @@ pub enum ExprKind {
     /// Class constant access: `Class::CONST`
     ClassConstAccess(StaticAccessExpr),
 
+    /// Dynamic class constant access: `Foo::{expr}`
+    ClassConstAccessDynamic { class: Box<Expr>, member: Box<Expr> },
+
+    /// Dynamic static property access: `A::$$b`, `A::${'b'}`
+    StaticPropertyAccessDynamic { class: Box<Expr>, member: Box<Expr> },
+
     /// Closure: `function($x) use($y) { }`
     Closure(ClosureExpr),
 
@@ -634,6 +672,7 @@ pub enum CastKind {
     Array,
     Object,
     Unset,
+    Void,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]

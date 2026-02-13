@@ -1,80 +1,126 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Expression:
-        kind:
-          Binary:
-            left:
-              kind:
-                Variable: obj
-              span:
-                start: 6
-                end: 10
-            op: Instanceof
-            right:
-              kind:
-                Identifier: Foo
-              span:
-                start: 22
-                end: 25
-        span:
-          start: 6
-          end: 25
-    span:
-      start: 6
-      end: 27
-  - kind:
-      Expression:
-        kind:
-          Binary:
-            left:
-              kind:
-                Binary:
-                  left:
-                    kind:
-                      Variable: x
-                    span:
-                      start: 27
-                      end: 29
-                  op: Instanceof
-                  right:
-                    kind:
-                      Identifier: Bar
-                    span:
-                      start: 41
-                      end: 44
-              span:
-                start: 27
-                end: 44
-            op: BooleanOr
-            right:
-              kind:
-                Binary:
-                  left:
-                    kind:
-                      Variable: x
-                    span:
-                      start: 48
-                      end: 50
-                  op: Instanceof
-                  right:
-                    kind:
-                      Identifier: Baz
-                    span:
-                      start: 62
-                      end: 65
-              span:
-                start: 48
-                end: 65
-        span:
-          start: 27
-          end: 65
-    span:
-      start: 27
-      end: 66
-span:
-  start: 0
-  end: 66
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Variable": "obj"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 10
+                }
+              },
+              "op": "Instanceof",
+              "right": {
+                "kind": {
+                  "Identifier": "Foo"
+                },
+                "span": {
+                  "start": 22,
+                  "end": 25
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 25
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 27
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 27,
+                        "end": 29
+                      }
+                    },
+                    "op": "Instanceof",
+                    "right": {
+                      "kind": {
+                        "Identifier": "Bar"
+                      },
+                      "span": {
+                        "start": 41,
+                        "end": 44
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 27,
+                  "end": 44
+                }
+              },
+              "op": "BooleanOr",
+              "right": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 48,
+                        "end": 50
+                      }
+                    },
+                    "op": "Instanceof",
+                    "right": {
+                      "kind": {
+                        "Identifier": "Baz"
+                      },
+                      "span": {
+                        "start": 62,
+                        "end": 65
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 48,
+                  "end": 65
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 27,
+            "end": 65
+          }
+        }
+      },
+      "span": {
+        "start": 27,
+        "end": 66
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 66
+  }
+}

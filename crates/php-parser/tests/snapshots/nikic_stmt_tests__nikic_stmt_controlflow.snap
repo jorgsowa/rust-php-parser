@@ -1,0 +1,125 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Break": null
+      },
+      "span": {
+        "start": 7,
+        "end": 14
+      }
+    },
+    {
+      "kind": {
+        "Break": {
+          "kind": {
+            "Int": 2
+          },
+          "span": {
+            "start": 20,
+            "end": 21
+          }
+        }
+      },
+      "span": {
+        "start": 14,
+        "end": 24
+      }
+    },
+    {
+      "kind": {
+        "Continue": null
+      },
+      "span": {
+        "start": 24,
+        "end": 34
+      }
+    },
+    {
+      "kind": {
+        "Continue": {
+          "kind": {
+            "Int": 2
+          },
+          "span": {
+            "start": 43,
+            "end": 44
+          }
+        }
+      },
+      "span": {
+        "start": 34,
+        "end": 47
+      }
+    },
+    {
+      "kind": {
+        "Return": null
+      },
+      "span": {
+        "start": 47,
+        "end": 55
+      }
+    },
+    {
+      "kind": {
+        "Return": {
+          "kind": {
+            "Variable": "a"
+          },
+          "span": {
+            "start": 62,
+            "end": 64
+          }
+        }
+      },
+      "span": {
+        "start": 55,
+        "end": 67
+      }
+    },
+    {
+      "kind": {
+        "Throw": {
+          "kind": {
+            "Variable": "e"
+          },
+          "span": {
+            "start": 73,
+            "end": 75
+          }
+        }
+      },
+      "span": {
+        "start": 67,
+        "end": 78
+      }
+    },
+    {
+      "kind": {
+        "Label": "label"
+      },
+      "span": {
+        "start": 78,
+        "end": 85
+      }
+    },
+    {
+      "kind": {
+        "Goto": "label"
+      },
+      "span": {
+        "start": 85,
+        "end": 96
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 96
+  }
+}

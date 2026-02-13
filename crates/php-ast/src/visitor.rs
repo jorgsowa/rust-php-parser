@@ -31,6 +31,10 @@ pub trait Visitor {
     fn visit_enum_member(&mut self, member: &EnumMember) {
         walk_enum_member(self, member);
     }
+
+    fn visit_property_hook(&mut self, hook: &PropertyHook) {
+        walk_property_hook(self, hook);
+    }
 }
 
 pub fn walk_program<V: Visitor + ?Sized>(visitor: &mut V, program: &Program) {
@@ -300,6 +304,11 @@ pub fn walk_expr<V: Visitor + ?Sized>(visitor: &mut V, expr: &Expr) {
         ExprKind::StaticPropertyAccess(access) | ExprKind::ClassConstAccess(access) => {
             visitor.visit_expr(&access.class);
         }
+        ExprKind::ClassConstAccessDynamic { class, member }
+        | ExprKind::StaticPropertyAccessDynamic { class, member } => {
+            visitor.visit_expr(class);
+            visitor.visit_expr(member);
+        }
         ExprKind::StaticMethodCall(call) => {
             visitor.visit_expr(&call.class);
             for arg in &call.args {
@@ -387,6 +396,9 @@ pub fn walk_param<V: Visitor + ?Sized>(visitor: &mut V, param: &Param) {
     if let Some(default) = &param.default {
         visitor.visit_expr(default);
     }
+    for hook in &param.hooks {
+        visitor.visit_property_hook(hook);
+    }
 }
 
 pub fn walk_arg<V: Visitor + ?Sized>(visitor: &mut V, arg: &Arg) {
@@ -398,6 +410,9 @@ pub fn walk_class_member<V: Visitor + ?Sized>(visitor: &mut V, member: &ClassMem
         ClassMemberKind::Property(prop) => {
             if let Some(default) = &prop.default {
                 visitor.visit_expr(default);
+            }
+            for hook in &prop.hooks {
+                visitor.visit_property_hook(hook);
             }
         }
         ClassMemberKind::Method(method) => {
@@ -414,6 +429,23 @@ pub fn walk_class_member<V: Visitor + ?Sized>(visitor: &mut V, member: &ClassMem
             visitor.visit_expr(&cc.value);
         }
         ClassMemberKind::TraitUse(_) => {}
+    }
+}
+
+pub fn walk_property_hook<V: Visitor + ?Sized>(visitor: &mut V, hook: &PropertyHook) {
+    for param in &hook.params {
+        visitor.visit_param(param);
+    }
+    match &hook.body {
+        PropertyHookBody::Block(stmts) => {
+            for stmt in stmts {
+                visitor.visit_stmt(stmt);
+            }
+        }
+        PropertyHookBody::Expression(expr) => {
+            visitor.visit_expr(expr);
+        }
+        PropertyHookBody::Abstract => {}
     }
 }
 

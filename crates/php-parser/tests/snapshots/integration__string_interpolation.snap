@@ -1,417 +1,704 @@
 ---
 source: crates/php-parser/tests/integration.rs
-assertion_line: 1689
-expression: result.program
+expression: to_json(& result.program)
 ---
-stmts:
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: greeting
-              span:
-                start: 39
-                end: 48
-            op: Assign
-            value:
-              kind:
-                InterpolatedString:
-                  - Literal: "Hello "
-                  - Expr:
-                      kind:
-                        Variable: name
-                      span:
-                        start: 58
-                        end: 63
-              span:
-                start: 51
-                end: 64
-        span:
-          start: 39
-          end: 64
-    span:
-      start: 39
-      end: 100
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: msg
-              span:
-                start: 100
-                end: 104
-            op: Assign
-            value:
-              kind:
-                InterpolatedString:
-                  - Literal: "Name: "
-                  - Expr:
-                      kind:
-                        PropertyAccess:
-                          object:
-                            kind:
-                              Variable: obj
-                            span:
-                              start: 114
-                              end: 118
-                          property:
-                            kind:
-                              Identifier: name
-                            span:
-                              start: 120
-                              end: 124
-                      span:
-                        start: 114
-                        end: 124
-              span:
-                start: 107
-                end: 125
-        span:
-          start: 100
-          end: 125
-    span:
-      start: 100
-      end: 174
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: item
-              span:
-                start: 174
-                end: 179
-            op: Assign
-            value:
-              kind:
-                InterpolatedString:
-                  - Literal: "Item: "
-                  - Expr:
-                      kind:
-                        ArrayAccess:
-                          array:
-                            kind:
-                              Variable: arr
-                            span:
-                              start: 189
-                              end: 193
-                          index:
-                            kind:
-                              Int: 0
-                            span:
-                              start: 194
-                              end: 195
-                      span:
-                        start: 189
-                        end: 196
-              span:
-                start: 182
-                end: 197
-        span:
-          start: 174
-          end: 197
-    span:
-      start: 174
-      end: 241
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: val
-              span:
-                start: 241
-                end: 245
-            op: Assign
-            value:
-              kind:
-                InterpolatedString:
-                  - Literal: "Value: "
-                  - Expr:
-                      kind:
-                        ArrayAccess:
-                          array:
-                            kind:
-                              Variable: arr
-                            span:
-                              start: 256
-                              end: 260
-                          index:
-                            kind:
-                              String: key
-                            span:
-                              start: 261
-                              end: 264
-                      span:
-                        start: 256
-                        end: 265
-              span:
-                start: 248
-                end: 266
-        span:
-          start: 241
-          end: 266
-    span:
-      start: 241
-      end: 309
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: full
-              span:
-                start: 309
-                end: 314
-            op: Assign
-            value:
-              kind:
-                InterpolatedString:
-                  - Literal: "Full: "
-                  - Expr:
-                      kind:
-                        MethodCall:
-                          object:
-                            kind:
-                              Variable: user
-                            span:
-                              start: 325
-                              end: 330
-                          method:
-                            kind:
-                              Identifier: getName
-                            span:
-                              start: 332
-                              end: 339
-                          args: []
-                      span:
-                        start: 325
-                        end: 341
-              span:
-                start: 317
-                end: 343
-        span:
-          start: 309
-          end: 343
-    span:
-      start: 309
-      end: 376
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: mixed
-              span:
-                start: 376
-                end: 382
-            op: Assign
-            value:
-              kind:
-                InterpolatedString:
-                  - Literal: "Start "
-                  - Expr:
-                      kind:
-                        Variable: x
-                      span:
-                        start: 392
-                        end: 394
-                  - Literal: " middle "
-                  - Expr:
-                      kind:
-                        Variable: y
-                      span:
-                        start: 402
-                        end: 404
-                  - Literal: " end"
-              span:
-                start: 385
-                end: 409
-        span:
-          start: 376
-          end: 409
-    span:
-      start: 376
-      end: 449
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: escaped
-              span:
-                start: 449
-                end: 457
-            op: Assign
-            value:
-              kind:
-                String: "Price: \\$100"
-              span:
-                start: 460
-                end: 474
-        span:
-          start: 449
-          end: 474
-    span:
-      start: 449
-      end: 507
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: nested
-              span:
-                start: 507
-                end: 514
-            op: Assign
-            value:
-              kind:
-                InterpolatedString:
-                  - Literal: "Key: "
-                  - Expr:
-                      kind:
-                        ArrayAccess:
-                          array:
-                            kind:
-                              Variable: arr
-                            span:
-                              start: 524
-                              end: 528
-                          index:
-                            kind:
-                              String: key
-                            span:
-                              start: 529
-                              end: 534
-                      span:
-                        start: 524
-                        end: 535
-              span:
-                start: 517
-                end: 537
-        span:
-          start: 507
-          end: 537
-    span:
-      start: 507
-      end: 565
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: start
-              span:
-                start: 565
-                end: 571
-            op: Assign
-            value:
-              kind:
-                InterpolatedString:
-                  - Expr:
-                      kind:
-                        Variable: name
-                      span:
-                        start: 575
-                        end: 580
-                  - Literal: " is great"
-              span:
-                start: 574
-                end: 590
-        span:
-          start: 565
-          end: 590
-    span:
-      start: 565
-      end: 616
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: end
-              span:
-                start: 616
-                end: 620
-            op: Assign
-            value:
-              kind:
-                InterpolatedString:
-                  - Literal: "Hello "
-                  - Expr:
-                      kind:
-                        Variable: name
-                      span:
-                        start: 630
-                        end: 635
-              span:
-                start: 623
-                end: 636
-        span:
-          start: 616
-          end: 636
-    span:
-      start: 616
-      end: 683
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: plain
-              span:
-                start: 683
-                end: 689
-            op: Assign
-            value:
-              kind:
-                String: just a plain string
-              span:
-                start: 692
-                end: 713
-        span:
-          start: 683
-          end: 713
-    span:
-      start: 683
-      end: 736
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: escapes
-              span:
-                start: 736
-                end: 744
-            op: Assign
-            value:
-              kind:
-                String: "line1\\nline2\\ttab"
-              span:
-                start: 747
-                end: 766
-        span:
-          start: 736
-          end: 766
-    span:
-      start: 736
-      end: 768
-span:
-  start: 0
-  end: 768
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "greeting"
+                },
+                "span": {
+                  "start": 39,
+                  "end": 48
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "InterpolatedString": [
+                    {
+                      "Literal": "Hello "
+                    },
+                    {
+                      "Expr": {
+                        "kind": {
+                          "Variable": "name"
+                        },
+                        "span": {
+                          "start": 58,
+                          "end": 63
+                        }
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 51,
+                  "end": 64
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 39,
+            "end": 64
+          }
+        }
+      },
+      "span": {
+        "start": 39,
+        "end": 100
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "msg"
+                },
+                "span": {
+                  "start": 100,
+                  "end": 104
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "InterpolatedString": [
+                    {
+                      "Literal": "Name: "
+                    },
+                    {
+                      "Expr": {
+                        "kind": {
+                          "PropertyAccess": {
+                            "object": {
+                              "kind": {
+                                "Variable": "obj"
+                              },
+                              "span": {
+                                "start": 114,
+                                "end": 118
+                              }
+                            },
+                            "property": {
+                              "kind": {
+                                "Identifier": "name"
+                              },
+                              "span": {
+                                "start": 120,
+                                "end": 124
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 114,
+                          "end": 124
+                        }
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 107,
+                  "end": 125
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 100,
+            "end": 125
+          }
+        }
+      },
+      "span": {
+        "start": 100,
+        "end": 174
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "item"
+                },
+                "span": {
+                  "start": 174,
+                  "end": 179
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "InterpolatedString": [
+                    {
+                      "Literal": "Item: "
+                    },
+                    {
+                      "Expr": {
+                        "kind": {
+                          "ArrayAccess": {
+                            "array": {
+                              "kind": {
+                                "Variable": "arr"
+                              },
+                              "span": {
+                                "start": 189,
+                                "end": 193
+                              }
+                            },
+                            "index": {
+                              "kind": {
+                                "Int": 0
+                              },
+                              "span": {
+                                "start": 194,
+                                "end": 195
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 189,
+                          "end": 196
+                        }
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 182,
+                  "end": 197
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 174,
+            "end": 197
+          }
+        }
+      },
+      "span": {
+        "start": 174,
+        "end": 241
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "val"
+                },
+                "span": {
+                  "start": 241,
+                  "end": 245
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "InterpolatedString": [
+                    {
+                      "Literal": "Value: "
+                    },
+                    {
+                      "Expr": {
+                        "kind": {
+                          "ArrayAccess": {
+                            "array": {
+                              "kind": {
+                                "Variable": "arr"
+                              },
+                              "span": {
+                                "start": 256,
+                                "end": 260
+                              }
+                            },
+                            "index": {
+                              "kind": {
+                                "String": "key"
+                              },
+                              "span": {
+                                "start": 261,
+                                "end": 264
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 256,
+                          "end": 265
+                        }
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 248,
+                  "end": 266
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 241,
+            "end": 266
+          }
+        }
+      },
+      "span": {
+        "start": 241,
+        "end": 309
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "full"
+                },
+                "span": {
+                  "start": 309,
+                  "end": 314
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "InterpolatedString": [
+                    {
+                      "Literal": "Full: "
+                    },
+                    {
+                      "Expr": {
+                        "kind": {
+                          "MethodCall": {
+                            "object": {
+                              "kind": {
+                                "Variable": "user"
+                              },
+                              "span": {
+                                "start": 325,
+                                "end": 330
+                              }
+                            },
+                            "method": {
+                              "kind": {
+                                "Identifier": "getName"
+                              },
+                              "span": {
+                                "start": 332,
+                                "end": 339
+                              }
+                            },
+                            "args": []
+                          }
+                        },
+                        "span": {
+                          "start": 325,
+                          "end": 341
+                        }
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 317,
+                  "end": 343
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 309,
+            "end": 343
+          }
+        }
+      },
+      "span": {
+        "start": 309,
+        "end": 376
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "mixed"
+                },
+                "span": {
+                  "start": 376,
+                  "end": 382
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "InterpolatedString": [
+                    {
+                      "Literal": "Start "
+                    },
+                    {
+                      "Expr": {
+                        "kind": {
+                          "Variable": "x"
+                        },
+                        "span": {
+                          "start": 392,
+                          "end": 394
+                        }
+                      }
+                    },
+                    {
+                      "Literal": " middle "
+                    },
+                    {
+                      "Expr": {
+                        "kind": {
+                          "Variable": "y"
+                        },
+                        "span": {
+                          "start": 402,
+                          "end": 404
+                        }
+                      }
+                    },
+                    {
+                      "Literal": " end"
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 385,
+                  "end": 409
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 376,
+            "end": 409
+          }
+        }
+      },
+      "span": {
+        "start": 376,
+        "end": 449
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "escaped"
+                },
+                "span": {
+                  "start": 449,
+                  "end": 457
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "String": "Price: \\$100"
+                },
+                "span": {
+                  "start": 460,
+                  "end": 474
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 449,
+            "end": 474
+          }
+        }
+      },
+      "span": {
+        "start": 449,
+        "end": 507
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "nested"
+                },
+                "span": {
+                  "start": 507,
+                  "end": 514
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "InterpolatedString": [
+                    {
+                      "Literal": "Key: "
+                    },
+                    {
+                      "Expr": {
+                        "kind": {
+                          "ArrayAccess": {
+                            "array": {
+                              "kind": {
+                                "Variable": "arr"
+                              },
+                              "span": {
+                                "start": 524,
+                                "end": 528
+                              }
+                            },
+                            "index": {
+                              "kind": {
+                                "String": "key"
+                              },
+                              "span": {
+                                "start": 529,
+                                "end": 534
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 524,
+                          "end": 535
+                        }
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 517,
+                  "end": 537
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 507,
+            "end": 537
+          }
+        }
+      },
+      "span": {
+        "start": 507,
+        "end": 565
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "start"
+                },
+                "span": {
+                  "start": 565,
+                  "end": 571
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "InterpolatedString": [
+                    {
+                      "Expr": {
+                        "kind": {
+                          "Variable": "name"
+                        },
+                        "span": {
+                          "start": 575,
+                          "end": 580
+                        }
+                      }
+                    },
+                    {
+                      "Literal": " is great"
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 574,
+                  "end": 590
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 565,
+            "end": 590
+          }
+        }
+      },
+      "span": {
+        "start": 565,
+        "end": 616
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "end"
+                },
+                "span": {
+                  "start": 616,
+                  "end": 620
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "InterpolatedString": [
+                    {
+                      "Literal": "Hello "
+                    },
+                    {
+                      "Expr": {
+                        "kind": {
+                          "Variable": "name"
+                        },
+                        "span": {
+                          "start": 630,
+                          "end": 635
+                        }
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 623,
+                  "end": 636
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 616,
+            "end": 636
+          }
+        }
+      },
+      "span": {
+        "start": 616,
+        "end": 683
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "plain"
+                },
+                "span": {
+                  "start": 683,
+                  "end": 689
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "String": "just a plain string"
+                },
+                "span": {
+                  "start": 692,
+                  "end": 713
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 683,
+            "end": 713
+          }
+        }
+      },
+      "span": {
+        "start": 683,
+        "end": 736
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "escapes"
+                },
+                "span": {
+                  "start": 736,
+                  "end": 744
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "String": "line1\\nline2\\ttab"
+                },
+                "span": {
+                  "start": 747,
+                  "end": 766
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 736,
+            "end": 766
+          }
+        }
+      },
+      "span": {
+        "start": 736,
+        "end": 768
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 768
+  }
+}

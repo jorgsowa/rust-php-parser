@@ -1,0 +1,113 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "Test",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Property": {
+                  "name": "prop",
+                  "visibility": "Public",
+                  "set_visibility": null,
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": null,
+                  "default": null,
+                  "attributes": [],
+                  "hooks": [
+                    {
+                      "kind": "Get",
+                      "body": "Abstract",
+                      "is_final": false,
+                      "by_ref": false,
+                      "params": [],
+                      "attributes": [],
+                      "span": {
+                        "start": 46,
+                        "end": 73
+                      }
+                    },
+                    {
+                      "kind": "Get",
+                      "body": "Abstract",
+                      "is_final": false,
+                      "by_ref": false,
+                      "params": [],
+                      "attributes": [],
+                      "span": {
+                        "start": 73,
+                        "end": 96
+                      }
+                    },
+                    {
+                      "kind": "Get",
+                      "body": "Abstract",
+                      "is_final": false,
+                      "by_ref": false,
+                      "params": [],
+                      "attributes": [],
+                      "span": {
+                        "start": 96,
+                        "end": 117
+                      }
+                    },
+                    {
+                      "kind": "Get",
+                      "body": "Abstract",
+                      "is_final": false,
+                      "by_ref": false,
+                      "params": [],
+                      "attributes": [],
+                      "span": {
+                        "start": 117,
+                        "end": 146
+                      }
+                    },
+                    {
+                      "kind": "Get",
+                      "body": "Abstract",
+                      "is_final": false,
+                      "by_ref": false,
+                      "params": [],
+                      "attributes": [],
+                      "span": {
+                        "start": 146,
+                        "end": 164
+                      }
+                    }
+                  ]
+                }
+              },
+              "span": {
+                "start": 23,
+                "end": 166
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 167
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 167
+  }
+}

@@ -10,6 +10,8 @@ pub struct Parser<'src> {
     current: Token,
     source: &'src str,
     errors: Vec<ParseError>,
+    /// Nesting depth (0 = top-level scope)
+    pub depth: u32,
 }
 
 impl<'src> Parser<'src> {
@@ -21,6 +23,7 @@ impl<'src> Parser<'src> {
             current,
             source,
             errors: Vec::new(),
+            depth: 0,
         }
     }
 
@@ -150,6 +153,11 @@ impl<'src> Parser<'src> {
     /// Peek at the next token's kind (one token ahead of current).
     pub fn peek_kind(&mut self) -> Option<TokenKind> {
         Some(self.lexer.peek().kind)
+    }
+
+    /// Peek two tokens ahead of current.
+    pub fn peek2_kind(&mut self) -> Option<TokenKind> {
+        Some(self.lexer.peek2().kind)
     }
 
     /// Get the text of the peeked token (one token ahead of current).
@@ -293,6 +301,15 @@ impl<'src> Parser<'src> {
                 | TokenKind::And
                 | TokenKind::Or
                 | TokenKind::Xor
+                | TokenKind::MagicClass
+                | TokenKind::MagicDir
+                | TokenKind::MagicFile
+                | TokenKind::MagicFunction
+                | TokenKind::MagicLine
+                | TokenKind::MagicMethod
+                | TokenKind::MagicNamespace
+                | TokenKind::MagicTrait
+                | TokenKind::MagicProperty
         )
     }
 

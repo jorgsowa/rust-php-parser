@@ -1,0 +1,120 @@
+---
+source: crates/php-parser/tests/nikic_error_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Foreach": {
+          "expr": {
+            "kind": {
+              "Variable": "foo"
+            },
+            "span": {
+              "start": 16,
+              "end": 20
+            }
+          },
+          "key": null,
+          "value": {
+            "kind": "Error",
+            "span": {
+              "start": 20,
+              "end": 21
+            }
+          },
+          "body": {
+            "kind": {
+              "Block": [
+                {
+                  "kind": {
+                    "Expression": {
+                      "kind": {
+                        "Variable": "bar"
+                      },
+                      "span": {
+                        "start": 24,
+                        "end": 28
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 24,
+                    "end": 30
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 22,
+              "end": 31
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 31
+      }
+    },
+    {
+      "kind": {
+        "Foreach": {
+          "expr": {
+            "kind": {
+              "Variable": "foo"
+            },
+            "span": {
+              "start": 41,
+              "end": 45
+            }
+          },
+          "key": null,
+          "value": {
+            "kind": "Error",
+            "span": {
+              "start": 49,
+              "end": 50
+            }
+          },
+          "body": {
+            "kind": {
+              "Block": [
+                {
+                  "kind": {
+                    "Expression": {
+                      "kind": {
+                        "Variable": "bar"
+                      },
+                      "span": {
+                        "start": 53,
+                        "end": 57
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 53,
+                    "end": 59
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 51,
+              "end": 60
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 32,
+        "end": 60
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 60
+  }
+}

@@ -1,0 +1,128 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ShellExec": [
+              {
+                "Literal": ""
+              }
+            ]
+          },
+          "span": {
+            "start": 6,
+            "end": 8
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 10
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ShellExec": [
+              {
+                "Literal": "test"
+              }
+            ]
+          },
+          "span": {
+            "start": 10,
+            "end": 16
+          }
+        }
+      },
+      "span": {
+        "start": 10,
+        "end": 18
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ShellExec": [
+              {
+                "Literal": "test "
+              },
+              {
+                "Expr": {
+                  "kind": {
+                    "Variable": "A"
+                  },
+                  "span": {
+                    "start": 24,
+                    "end": 26
+                  }
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 18,
+            "end": 27
+          }
+        }
+      },
+      "span": {
+        "start": 18,
+        "end": 29
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ShellExec": [
+              {
+                "Literal": "test \\`"
+              }
+            ]
+          },
+          "span": {
+            "start": 29,
+            "end": 38
+          }
+        }
+      },
+      "span": {
+        "start": 29,
+        "end": 40
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ShellExec": [
+              {
+                "Literal": "test \\\""
+              }
+            ]
+          },
+          "span": {
+            "start": 40,
+            "end": 49
+          }
+        }
+      },
+      "span": {
+        "start": 40,
+        "end": 50
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 50
+  }
+}

@@ -1,0 +1,118 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "result"
+                },
+                "span": {
+                  "start": 7,
+                  "end": 14
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Match": {
+                    "subject": {
+                      "kind": {
+                        "Variable": "operator"
+                      },
+                      "span": {
+                        "start": 24,
+                        "end": 33
+                      }
+                    },
+                    "arms": [
+                      {
+                        "conditions": [
+                          {
+                            "kind": {
+                              "ClassConstAccess": {
+                                "class": {
+                                  "kind": {
+                                    "Identifier": "BinaryOperator"
+                                  },
+                                  "span": {
+                                    "start": 41,
+                                    "end": 55
+                                  }
+                                },
+                                "member": "ADD"
+                              }
+                            },
+                            "span": {
+                              "start": 41,
+                              "end": 61
+                            }
+                          }
+                        ],
+                        "body": {
+                          "kind": {
+                            "Binary": {
+                              "left": {
+                                "kind": {
+                                  "Variable": "lhs"
+                                },
+                                "span": {
+                                  "start": 64,
+                                  "end": 68
+                                }
+                              },
+                              "op": "Add",
+                              "right": {
+                                "kind": {
+                                  "Variable": "rhs"
+                                },
+                                "span": {
+                                  "start": 71,
+                                  "end": 75
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 64,
+                            "end": 75
+                          }
+                        },
+                        "span": {
+                          "start": 41,
+                          "end": 75
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 17,
+                  "end": 78
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 7,
+            "end": 78
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 79
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 79
+  }
+}

@@ -1,0 +1,289 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "New": {
+              "class": {
+                "kind": {
+                  "Variable": "className"
+                },
+                "span": {
+                  "start": 10,
+                  "end": 20
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 20
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 22
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ArrayAccess": {
+              "array": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "Variable": "array"
+                      },
+                      "span": {
+                        "start": 26,
+                        "end": 32
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 22,
+                  "end": 32
+                }
+              },
+              "index": {
+                "kind": {
+                  "String": "className"
+                },
+                "span": {
+                  "start": 33,
+                  "end": 44
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 22,
+            "end": 45
+          }
+        }
+      },
+      "span": {
+        "start": 22,
+        "end": 47
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "PropertyAccess": {
+              "object": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "Variable": "obj"
+                      },
+                      "span": {
+                        "start": 51,
+                        "end": 55
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 47,
+                  "end": 55
+                }
+              },
+              "property": {
+                "kind": {
+                  "Identifier": "className"
+                },
+                "span": {
+                  "start": 57,
+                  "end": 66
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 47,
+            "end": 66
+          }
+        }
+      },
+      "span": {
+        "start": 47,
+        "end": 68
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "StaticPropertyAccess": {
+              "class": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "Test"
+                      },
+                      "span": {
+                        "start": 72,
+                        "end": 76
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 68,
+                  "end": 76
+                }
+              },
+              "member": "className"
+            }
+          },
+          "span": {
+            "start": 68,
+            "end": 88
+          }
+        }
+      },
+      "span": {
+        "start": 68,
+        "end": 90
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "StaticPropertyAccess": {
+              "class": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "Variable": "test"
+                      },
+                      "span": {
+                        "start": 94,
+                        "end": 99
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 90,
+                  "end": 99
+                }
+              },
+              "member": "className"
+            }
+          },
+          "span": {
+            "start": 90,
+            "end": 111
+          }
+        }
+      },
+      "span": {
+        "start": 90,
+        "end": 113
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "StaticPropertyAccess": {
+              "class": {
+                "kind": {
+                  "PropertyAccess": {
+                    "object": {
+                      "kind": {
+                        "ArrayAccess": {
+                          "array": {
+                            "kind": {
+                              "New": {
+                                "class": {
+                                  "kind": {
+                                    "Variable": "weird"
+                                  },
+                                  "span": {
+                                    "start": 117,
+                                    "end": 123
+                                  }
+                                },
+                                "args": []
+                              }
+                            },
+                            "span": {
+                              "start": 113,
+                              "end": 123
+                            }
+                          },
+                          "index": {
+                            "kind": {
+                              "Int": 0
+                            },
+                            "span": {
+                              "start": 124,
+                              "end": 125
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 113,
+                        "end": 126
+                      }
+                    },
+                    "property": {
+                      "kind": {
+                        "Identifier": "foo"
+                      },
+                      "span": {
+                        "start": 128,
+                        "end": 131
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 113,
+                  "end": 131
+                }
+              },
+              "member": "className"
+            }
+          },
+          "span": {
+            "start": 113,
+            "end": 143
+          }
+        }
+      },
+      "span": {
+        "start": 113,
+        "end": 144
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 144
+  }
+}

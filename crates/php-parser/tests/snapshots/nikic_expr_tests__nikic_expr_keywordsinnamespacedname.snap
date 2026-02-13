@@ -1,0 +1,230 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Namespace": {
+          "name": {
+            "parts": [
+              "fn"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 16,
+              "end": 18
+            }
+          },
+          "body": "Simple"
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 20
+      }
+    },
+    {
+      "kind": {
+        "Namespace": {
+          "name": {
+            "parts": [
+              "fn",
+              "use"
+            ],
+            "kind": "Qualified",
+            "span": {
+              "start": 30,
+              "end": 36
+            }
+          },
+          "body": "Simple"
+        }
+      },
+      "span": {
+        "start": 20,
+        "end": 38
+      }
+    },
+    {
+      "kind": {
+        "Namespace": {
+          "name": {
+            "parts": [
+              "self"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 48,
+              "end": 52
+            }
+          },
+          "body": "Simple"
+        }
+      },
+      "span": {
+        "start": 38,
+        "end": 54
+      }
+    },
+    {
+      "kind": {
+        "Namespace": {
+          "name": {
+            "parts": [
+              "parent"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 64,
+              "end": 70
+            }
+          },
+          "body": "Simple"
+        }
+      },
+      "span": {
+        "start": 54,
+        "end": 72
+      }
+    },
+    {
+      "kind": {
+        "Namespace": {
+          "name": {
+            "parts": [
+              "static"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 82,
+              "end": 88
+            }
+          },
+          "body": "Simple"
+        }
+      },
+      "span": {
+        "start": 72,
+        "end": 90
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "fn\\use"
+                },
+                "span": {
+                  "start": 90,
+                  "end": 96
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 90,
+            "end": 98
+          }
+        }
+      },
+      "span": {
+        "start": 90,
+        "end": 100
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "\\fn\\use"
+                },
+                "span": {
+                  "start": 100,
+                  "end": 107
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 100,
+            "end": 109
+          }
+        }
+      },
+      "span": {
+        "start": 100,
+        "end": 111
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "namespace\\fn\\use"
+                },
+                "span": {
+                  "start": 111,
+                  "end": 127
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 111,
+            "end": 129
+          }
+        }
+      },
+      "span": {
+        "start": 111,
+        "end": 131
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "private\\protected\\public\\static\\abstract\\final"
+                },
+                "span": {
+                  "start": 131,
+                  "end": 177
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 131,
+            "end": 179
+          }
+        }
+      },
+      "span": {
+        "start": 131,
+        "end": 180
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 180
+  }
+}

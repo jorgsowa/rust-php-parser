@@ -1,330 +1,530 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(& result.program)
 ---
-stmts:
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: x
-              span:
-                start: 6
-                end: 8
-            op: Assign
-            value:
-              kind:
-                Int: 10
-              span:
-                start: 11
-                end: 13
-        span:
-          start: 6
-          end: 13
-    span:
-      start: 6
-      end: 15
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: x
-              span:
-                start: 15
-                end: 17
-            op: Plus
-            value:
-              kind:
-                Int: 5
-              span:
-                start: 21
-                end: 22
-        span:
-          start: 15
-          end: 22
-    span:
-      start: 15
-      end: 24
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: x
-              span:
-                start: 24
-                end: 26
-            op: Minus
-            value:
-              kind:
-                Int: 3
-              span:
-                start: 30
-                end: 31
-        span:
-          start: 24
-          end: 31
-    span:
-      start: 24
-      end: 33
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: x
-              span:
-                start: 33
-                end: 35
-            op: Mul
-            value:
-              kind:
-                Int: 2
-              span:
-                start: 39
-                end: 40
-        span:
-          start: 33
-          end: 40
-    span:
-      start: 33
-      end: 42
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: x
-              span:
-                start: 42
-                end: 44
-            op: Div
-            value:
-              kind:
-                Int: 4
-              span:
-                start: 48
-                end: 49
-        span:
-          start: 42
-          end: 49
-    span:
-      start: 42
-      end: 51
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: x
-              span:
-                start: 51
-                end: 53
-            op: Mod
-            value:
-              kind:
-                Int: 3
-              span:
-                start: 57
-                end: 58
-        span:
-          start: 51
-          end: 58
-    span:
-      start: 51
-      end: 60
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: x
-              span:
-                start: 60
-                end: 62
-            op: Pow
-            value:
-              kind:
-                Int: 2
-              span:
-                start: 67
-                end: 68
-        span:
-          start: 60
-          end: 68
-    span:
-      start: 60
-      end: 70
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: x
-              span:
-                start: 70
-                end: 72
-            op: Concat
-            value:
-              kind:
-                String: suffix
-              span:
-                start: 76
-                end: 84
-        span:
-          start: 70
-          end: 84
-    span:
-      start: 70
-      end: 86
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: x
-              span:
-                start: 86
-                end: 88
-            op: BitwiseAnd
-            value:
-              kind:
-                Int: 255
-              span:
-                start: 92
-                end: 96
-        span:
-          start: 86
-          end: 96
-    span:
-      start: 86
-      end: 98
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: x
-              span:
-                start: 98
-                end: 100
-            op: BitwiseOr
-            value:
-              kind:
-                Int: 16
-              span:
-                start: 104
-                end: 108
-        span:
-          start: 98
-          end: 108
-    span:
-      start: 98
-      end: 110
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: x
-              span:
-                start: 110
-                end: 112
-            op: BitwiseXor
-            value:
-              kind:
-                Int: 1
-              span:
-                start: 116
-                end: 120
-        span:
-          start: 110
-          end: 120
-    span:
-      start: 110
-      end: 122
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: x
-              span:
-                start: 122
-                end: 124
-            op: ShiftLeft
-            value:
-              kind:
-                Int: 2
-              span:
-                start: 129
-                end: 130
-        span:
-          start: 122
-          end: 130
-    span:
-      start: 122
-      end: 132
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: x
-              span:
-                start: 132
-                end: 134
-            op: ShiftRight
-            value:
-              kind:
-                Int: 1
-              span:
-                start: 139
-                end: 140
-        span:
-          start: 132
-          end: 140
-    span:
-      start: 132
-      end: 142
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: x
-              span:
-                start: 142
-                end: 144
-            op: Coalesce
-            value:
-              kind:
-                String: default
-              span:
-                start: 149
-                end: 158
-        span:
-          start: 142
-          end: 158
-    span:
-      start: 142
-      end: 160
-span:
-  start: 0
-  end: 160
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Int": 10
+                },
+                "span": {
+                  "start": 11,
+                  "end": 13
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 13
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 15
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 15,
+                  "end": 17
+                }
+              },
+              "op": "Plus",
+              "value": {
+                "kind": {
+                  "Int": 5
+                },
+                "span": {
+                  "start": 21,
+                  "end": 22
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 15,
+            "end": 22
+          }
+        }
+      },
+      "span": {
+        "start": 15,
+        "end": 24
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 24,
+                  "end": 26
+                }
+              },
+              "op": "Minus",
+              "value": {
+                "kind": {
+                  "Int": 3
+                },
+                "span": {
+                  "start": 30,
+                  "end": 31
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 24,
+            "end": 31
+          }
+        }
+      },
+      "span": {
+        "start": 24,
+        "end": 33
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 33,
+                  "end": 35
+                }
+              },
+              "op": "Mul",
+              "value": {
+                "kind": {
+                  "Int": 2
+                },
+                "span": {
+                  "start": 39,
+                  "end": 40
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 33,
+            "end": 40
+          }
+        }
+      },
+      "span": {
+        "start": 33,
+        "end": 42
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 42,
+                  "end": 44
+                }
+              },
+              "op": "Div",
+              "value": {
+                "kind": {
+                  "Int": 4
+                },
+                "span": {
+                  "start": 48,
+                  "end": 49
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 42,
+            "end": 49
+          }
+        }
+      },
+      "span": {
+        "start": 42,
+        "end": 51
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 51,
+                  "end": 53
+                }
+              },
+              "op": "Mod",
+              "value": {
+                "kind": {
+                  "Int": 3
+                },
+                "span": {
+                  "start": 57,
+                  "end": 58
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 51,
+            "end": 58
+          }
+        }
+      },
+      "span": {
+        "start": 51,
+        "end": 60
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 60,
+                  "end": 62
+                }
+              },
+              "op": "Pow",
+              "value": {
+                "kind": {
+                  "Int": 2
+                },
+                "span": {
+                  "start": 67,
+                  "end": 68
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 60,
+            "end": 68
+          }
+        }
+      },
+      "span": {
+        "start": 60,
+        "end": 70
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 70,
+                  "end": 72
+                }
+              },
+              "op": "Concat",
+              "value": {
+                "kind": {
+                  "String": "suffix"
+                },
+                "span": {
+                  "start": 76,
+                  "end": 84
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 70,
+            "end": 84
+          }
+        }
+      },
+      "span": {
+        "start": 70,
+        "end": 86
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 86,
+                  "end": 88
+                }
+              },
+              "op": "BitwiseAnd",
+              "value": {
+                "kind": {
+                  "Int": 255
+                },
+                "span": {
+                  "start": 92,
+                  "end": 96
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 86,
+            "end": 96
+          }
+        }
+      },
+      "span": {
+        "start": 86,
+        "end": 98
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 98,
+                  "end": 100
+                }
+              },
+              "op": "BitwiseOr",
+              "value": {
+                "kind": {
+                  "Int": 16
+                },
+                "span": {
+                  "start": 104,
+                  "end": 108
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 98,
+            "end": 108
+          }
+        }
+      },
+      "span": {
+        "start": 98,
+        "end": 110
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 110,
+                  "end": 112
+                }
+              },
+              "op": "BitwiseXor",
+              "value": {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 116,
+                  "end": 120
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 110,
+            "end": 120
+          }
+        }
+      },
+      "span": {
+        "start": 110,
+        "end": 122
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 122,
+                  "end": 124
+                }
+              },
+              "op": "ShiftLeft",
+              "value": {
+                "kind": {
+                  "Int": 2
+                },
+                "span": {
+                  "start": 129,
+                  "end": 130
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 122,
+            "end": 130
+          }
+        }
+      },
+      "span": {
+        "start": 122,
+        "end": 132
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 132,
+                  "end": 134
+                }
+              },
+              "op": "ShiftRight",
+              "value": {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 139,
+                  "end": 140
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 132,
+            "end": 140
+          }
+        }
+      },
+      "span": {
+        "start": 132,
+        "end": 142
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 142,
+                  "end": 144
+                }
+              },
+              "op": "Coalesce",
+              "value": {
+                "kind": {
+                  "String": "default"
+                },
+                "span": {
+                  "start": 149,
+                  "end": 158
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 142,
+            "end": 158
+          }
+        }
+      },
+      "span": {
+        "start": 142,
+        "end": 160
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 160
+  }
+}

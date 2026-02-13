@@ -1,0 +1,288 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "If": {
+          "condition": {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 11,
+              "end": 13
+            }
+          },
+          "then_branch": {
+            "kind": {
+              "Expression": {
+                "kind": {
+                  "Variable": "A"
+                },
+                "span": {
+                  "start": 15,
+                  "end": 17
+                }
+              }
+            },
+            "span": {
+              "start": 15,
+              "end": 19
+            }
+          },
+          "elseif_branches": [
+            {
+              "condition": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 27,
+                  "end": 29
+                }
+              },
+              "body": {
+                "kind": {
+                  "Expression": {
+                    "kind": {
+                      "Variable": "B"
+                    },
+                    "span": {
+                      "start": 31,
+                      "end": 33
+                    }
+                  }
+                },
+                "span": {
+                  "start": 31,
+                  "end": 35
+                }
+              },
+              "span": {
+                "start": 26,
+                "end": 35
+              }
+            }
+          ],
+          "else_branch": {
+            "kind": {
+              "Expression": {
+                "kind": {
+                  "Variable": "C"
+                },
+                "span": {
+                  "start": 40,
+                  "end": 42
+                }
+              }
+            },
+            "span": {
+              "start": 40,
+              "end": 45
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 45
+      }
+    },
+    {
+      "kind": {
+        "For": {
+          "init": [],
+          "condition": [],
+          "update": [],
+          "body": {
+            "kind": {
+              "Expression": {
+                "kind": {
+                  "Variable": "foo"
+                },
+                "span": {
+                  "start": 54,
+                  "end": 58
+                }
+              }
+            },
+            "span": {
+              "start": 54,
+              "end": 61
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 45,
+        "end": 61
+      }
+    },
+    {
+      "kind": {
+        "Foreach": {
+          "expr": {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 70,
+              "end": 72
+            }
+          },
+          "key": null,
+          "value": {
+            "kind": {
+              "Variable": "b"
+            },
+            "span": {
+              "start": 76,
+              "end": 78
+            }
+          },
+          "body": {
+            "kind": {
+              "Expression": {
+                "kind": {
+                  "Variable": "AB"
+                },
+                "span": {
+                  "start": 80,
+                  "end": 83
+                }
+              }
+            },
+            "span": {
+              "start": 80,
+              "end": 86
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 61,
+        "end": 86
+      }
+    },
+    {
+      "kind": {
+        "While": {
+          "condition": {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 93,
+              "end": 95
+            }
+          },
+          "body": {
+            "kind": {
+              "Expression": {
+                "kind": {
+                  "Variable": "A"
+                },
+                "span": {
+                  "start": 97,
+                  "end": 99
+                }
+              }
+            },
+            "span": {
+              "start": 97,
+              "end": 102
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 86,
+        "end": 102
+      }
+    },
+    {
+      "kind": {
+        "DoWhile": {
+          "body": {
+            "kind": {
+              "Expression": {
+                "kind": {
+                  "Variable": "A"
+                },
+                "span": {
+                  "start": 105,
+                  "end": 107
+                }
+              }
+            },
+            "span": {
+              "start": 105,
+              "end": 109
+            }
+          },
+          "condition": {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 116,
+              "end": 118
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 102,
+        "end": 122
+      }
+    },
+    {
+      "kind": {
+        "Declare": [
+          [
+            [
+              "a",
+              {
+                "kind": {
+                  "String": "b"
+                },
+                "span": {
+                  "start": 133,
+                  "end": 136
+                }
+              }
+            ]
+          ],
+          {
+            "kind": {
+              "Expression": {
+                "kind": {
+                  "Variable": "C"
+                },
+                "span": {
+                  "start": 138,
+                  "end": 140
+                }
+              }
+            },
+            "span": {
+              "start": 138,
+              "end": 141
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 122,
+        "end": 141
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 141
+  }
+}

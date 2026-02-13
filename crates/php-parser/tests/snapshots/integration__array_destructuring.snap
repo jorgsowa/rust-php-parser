@@ -1,108 +1,171 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Array:
-                  - key: ~
-                    value:
-                      kind:
-                        Variable: a
-                      span:
-                        start: 7
-                        end: 9
-                    unpack: false
-                    span:
-                      start: 7
-                      end: 9
-                  - key: ~
-                    value:
-                      kind:
-                        Variable: b
-                      span:
-                        start: 11
-                        end: 13
-                    unpack: false
-                    span:
-                      start: 11
-                      end: 13
-              span:
-                start: 6
-                end: 14
-            op: Assign
-            value:
-              kind:
-                Variable: pair
-              span:
-                start: 17
-                end: 22
-        span:
-          start: 6
-          end: 22
-    span:
-      start: 6
-      end: 24
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Array:
-                  - key: ~
-                    value:
-                      kind:
-                        Variable: first
-                      span:
-                        start: 25
-                        end: 31
-                    unpack: false
-                    span:
-                      start: 25
-                      end: 31
-                  - key: ~
-                    value:
-                      kind: "Null"
-                      span:
-                        start: 33
-                        end: 34
-                    unpack: false
-                    span:
-                      start: 33
-                      end: 34
-                  - key: ~
-                    value:
-                      kind:
-                        Variable: third
-                      span:
-                        start: 35
-                        end: 41
-                    unpack: false
-                    span:
-                      start: 35
-                      end: 41
-              span:
-                start: 24
-                end: 42
-            op: Assign
-            value:
-              kind:
-                Variable: arr
-              span:
-                start: 45
-                end: 49
-        span:
-          start: 24
-          end: 49
-    span:
-      start: 24
-      end: 51
-span:
-  start: 0
-  end: 51
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Array": [
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "a"
+                        },
+                        "span": {
+                          "start": 7,
+                          "end": 9
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 7,
+                        "end": 9
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "b"
+                        },
+                        "span": {
+                          "start": 11,
+                          "end": 13
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 11,
+                        "end": 13
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 6,
+                  "end": 14
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Variable": "pair"
+                },
+                "span": {
+                  "start": 17,
+                  "end": 22
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 22
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 24
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Array": [
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "first"
+                        },
+                        "span": {
+                          "start": 25,
+                          "end": 31
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 25,
+                        "end": 31
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": "Null",
+                        "span": {
+                          "start": 33,
+                          "end": 34
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 33,
+                        "end": 34
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "third"
+                        },
+                        "span": {
+                          "start": 35,
+                          "end": 41
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 35,
+                        "end": 41
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 24,
+                  "end": 42
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Variable": "arr"
+                },
+                "span": {
+                  "start": 45,
+                  "end": 49
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 24,
+            "end": 49
+          }
+        }
+      },
+      "span": {
+        "start": 24,
+        "end": 51
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 51
+  }
+}

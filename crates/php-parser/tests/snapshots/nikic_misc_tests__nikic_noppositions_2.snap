@@ -1,0 +1,21 @@
+---
+source: crates/php-parser/tests/nikic_misc_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Block": []
+      },
+      "span": {
+        "start": 6,
+        "end": 27
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 27
+  }
+}

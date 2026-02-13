@@ -1,103 +1,163 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Expression:
-        kind:
-          PropertyAccess:
-            object:
-              kind:
-                ArrayAccess:
-                  array:
-                    kind:
-                      MethodCall:
-                        object:
-                          kind:
-                            Variable: obj
-                          span:
-                            start: 6
-                            end: 10
-                        method:
-                          kind:
-                            Identifier: getItems
-                          span:
-                            start: 12
-                            end: 20
-                        args: []
-                    span:
-                      start: 6
-                      end: 22
-                  index:
-                    kind:
-                      Int: 0
-                    span:
-                      start: 23
-                      end: 24
-              span:
-                start: 6
-                end: 25
-            property:
-              kind:
-                Identifier: name
-              span:
-                start: 27
-                end: 31
-        span:
-          start: 6
-          end: 31
-    span:
-      start: 6
-      end: 33
-  - kind:
-      Expression:
-        kind:
-          MethodCall:
-            object:
-              kind:
-                ArrayAccess:
-                  array:
-                    kind:
-                      MethodCall:
-                        object:
-                          kind:
-                            Variable: a
-                          span:
-                            start: 33
-                            end: 35
-                        method:
-                          kind:
-                            Identifier: b
-                          span:
-                            start: 37
-                            end: 38
-                        args: []
-                    span:
-                      start: 33
-                      end: 40
-                  index:
-                    kind:
-                      String: key
-                    span:
-                      start: 41
-                      end: 46
-              span:
-                start: 33
-                end: 47
-            method:
-              kind:
-                Identifier: c
-              span:
-                start: 49
-                end: 50
-            args: []
-        span:
-          start: 33
-          end: 52
-    span:
-      start: 33
-      end: 53
-span:
-  start: 0
-  end: 53
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "PropertyAccess": {
+              "object": {
+                "kind": {
+                  "ArrayAccess": {
+                    "array": {
+                      "kind": {
+                        "MethodCall": {
+                          "object": {
+                            "kind": {
+                              "Variable": "obj"
+                            },
+                            "span": {
+                              "start": 6,
+                              "end": 10
+                            }
+                          },
+                          "method": {
+                            "kind": {
+                              "Identifier": "getItems"
+                            },
+                            "span": {
+                              "start": 12,
+                              "end": 20
+                            }
+                          },
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 6,
+                        "end": 22
+                      }
+                    },
+                    "index": {
+                      "kind": {
+                        "Int": 0
+                      },
+                      "span": {
+                        "start": 23,
+                        "end": 24
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 6,
+                  "end": 25
+                }
+              },
+              "property": {
+                "kind": {
+                  "Identifier": "name"
+                },
+                "span": {
+                  "start": 27,
+                  "end": 31
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 31
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 33
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MethodCall": {
+              "object": {
+                "kind": {
+                  "ArrayAccess": {
+                    "array": {
+                      "kind": {
+                        "MethodCall": {
+                          "object": {
+                            "kind": {
+                              "Variable": "a"
+                            },
+                            "span": {
+                              "start": 33,
+                              "end": 35
+                            }
+                          },
+                          "method": {
+                            "kind": {
+                              "Identifier": "b"
+                            },
+                            "span": {
+                              "start": 37,
+                              "end": 38
+                            }
+                          },
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 33,
+                        "end": 40
+                      }
+                    },
+                    "index": {
+                      "kind": {
+                        "String": "key"
+                      },
+                      "span": {
+                        "start": 41,
+                        "end": 46
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 33,
+                  "end": 47
+                }
+              },
+              "method": {
+                "kind": {
+                  "Identifier": "c"
+                },
+                "span": {
+                  "start": 49,
+                  "end": 50
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 33,
+            "end": 52
+          }
+        }
+      },
+      "span": {
+        "start": 33,
+        "end": 53
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 53
+  }
+}

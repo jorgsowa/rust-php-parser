@@ -1,0 +1,772 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "gen",
+          "params": [],
+          "body": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Yield": {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Binary": {
+                            "left": {
+                              "kind": {
+                                "String": "a"
+                              },
+                              "span": {
+                                "start": 34,
+                                "end": 37
+                              }
+                            },
+                            "op": "Concat",
+                            "right": {
+                              "kind": {
+                                "String": "b"
+                              },
+                              "span": {
+                                "start": 40,
+                                "end": 43
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 34,
+                          "end": 43
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 28,
+                    "end": 43
+                  }
+                }
+              },
+              "span": {
+                "start": 28,
+                "end": 49
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Yield": {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Binary": {
+                            "left": {
+                              "kind": {
+                                "String": "a"
+                              },
+                              "span": {
+                                "start": 55,
+                                "end": 58
+                              }
+                            },
+                            "op": "LogicalOr",
+                            "right": {
+                              "kind": {
+                                "Exit": null
+                              },
+                              "span": {
+                                "start": 62,
+                                "end": 65
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 55,
+                          "end": 65
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 49,
+                    "end": 65
+                  }
+                }
+              },
+              "span": {
+                "start": 49,
+                "end": 71
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Yield": {
+                      "key": {
+                        "kind": {
+                          "String": "k"
+                        },
+                        "span": {
+                          "start": 77,
+                          "end": 80
+                        }
+                      },
+                      "value": {
+                        "kind": {
+                          "Binary": {
+                            "left": {
+                              "kind": {
+                                "String": "a"
+                              },
+                              "span": {
+                                "start": 84,
+                                "end": 87
+                              }
+                            },
+                            "op": "Concat",
+                            "right": {
+                              "kind": {
+                                "String": "b"
+                              },
+                              "span": {
+                                "start": 90,
+                                "end": 93
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 84,
+                          "end": 93
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 71,
+                    "end": 93
+                  }
+                }
+              },
+              "span": {
+                "start": 71,
+                "end": 99
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Yield": {
+                      "key": {
+                        "kind": {
+                          "String": "k"
+                        },
+                        "span": {
+                          "start": 105,
+                          "end": 108
+                        }
+                      },
+                      "value": {
+                        "kind": {
+                          "Binary": {
+                            "left": {
+                              "kind": {
+                                "String": "a"
+                              },
+                              "span": {
+                                "start": 112,
+                                "end": 115
+                              }
+                            },
+                            "op": "LogicalOr",
+                            "right": {
+                              "kind": {
+                                "Exit": null
+                              },
+                              "span": {
+                                "start": 119,
+                                "end": 122
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 112,
+                          "end": 122
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 99,
+                    "end": 122
+                  }
+                }
+              },
+              "span": {
+                "start": 99,
+                "end": 128
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "FunctionCall": {
+                      "name": {
+                        "kind": {
+                          "Identifier": "var_dump"
+                        },
+                        "span": {
+                          "start": 128,
+                          "end": 136
+                        }
+                      },
+                      "args": [
+                        {
+                          "name": null,
+                          "value": {
+                            "kind": {
+                              "Array": [
+                                {
+                                  "key": null,
+                                  "value": {
+                                    "kind": {
+                                      "Yield": {
+                                        "key": {
+                                          "kind": {
+                                            "String": "k"
+                                          },
+                                          "span": {
+                                            "start": 144,
+                                            "end": 147
+                                          }
+                                        },
+                                        "value": {
+                                          "kind": {
+                                            "Binary": {
+                                              "left": {
+                                                "kind": {
+                                                  "String": "a"
+                                                },
+                                                "span": {
+                                                  "start": 151,
+                                                  "end": 154
+                                                }
+                                              },
+                                              "op": "Concat",
+                                              "right": {
+                                                "kind": {
+                                                  "String": "b"
+                                                },
+                                                "span": {
+                                                  "start": 157,
+                                                  "end": 160
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 151,
+                                            "end": 160
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 138,
+                                      "end": 160
+                                    }
+                                  },
+                                  "unpack": false,
+                                  "span": {
+                                    "start": 138,
+                                    "end": 160
+                                  }
+                                }
+                              ]
+                            },
+                            "span": {
+                              "start": 137,
+                              "end": 161
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 137,
+                            "end": 161
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "span": {
+                    "start": 128,
+                    "end": 162
+                  }
+                }
+              },
+              "span": {
+                "start": 128,
+                "end": 168
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Yield": {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Yield": {
+                            "key": {
+                              "kind": {
+                                "String": "k1"
+                              },
+                              "span": {
+                                "start": 180,
+                                "end": 184
+                              }
+                            },
+                            "value": {
+                              "kind": {
+                                "Yield": {
+                                  "key": {
+                                    "kind": {
+                                      "String": "k2"
+                                    },
+                                    "span": {
+                                      "start": 194,
+                                      "end": 198
+                                    }
+                                  },
+                                  "value": {
+                                    "kind": {
+                                      "Binary": {
+                                        "left": {
+                                          "kind": {
+                                            "String": "a"
+                                          },
+                                          "span": {
+                                            "start": 202,
+                                            "end": 205
+                                          }
+                                        },
+                                        "op": "Concat",
+                                        "right": {
+                                          "kind": {
+                                            "String": "b"
+                                          },
+                                          "span": {
+                                            "start": 208,
+                                            "end": 211
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 202,
+                                      "end": 211
+                                    }
+                                  }
+                                }
+                              },
+                              "span": {
+                                "start": 188,
+                                "end": 211
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 174,
+                          "end": 211
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 168,
+                    "end": 211
+                  }
+                }
+              },
+              "span": {
+                "start": 168,
+                "end": 217
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Yield": {
+                      "key": {
+                        "kind": {
+                          "Yield": {
+                            "key": {
+                              "kind": {
+                                "String": "k1"
+                              },
+                              "span": {
+                                "start": 229,
+                                "end": 233
+                              }
+                            },
+                            "value": {
+                              "kind": {
+                                "Parenthesized": {
+                                  "kind": {
+                                    "Yield": {
+                                      "key": null,
+                                      "value": {
+                                        "kind": {
+                                          "String": "k2"
+                                        },
+                                        "span": {
+                                          "start": 244,
+                                          "end": 248
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 238,
+                                    "end": 248
+                                  }
+                                }
+                              },
+                              "span": {
+                                "start": 237,
+                                "end": 250
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 223,
+                          "end": 250
+                        }
+                      },
+                      "value": {
+                        "kind": {
+                          "Binary": {
+                            "left": {
+                              "kind": {
+                                "String": "a"
+                              },
+                              "span": {
+                                "start": 253,
+                                "end": 256
+                              }
+                            },
+                            "op": "Concat",
+                            "right": {
+                              "kind": {
+                                "String": "b"
+                              },
+                              "span": {
+                                "start": 259,
+                                "end": 262
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 253,
+                          "end": 262
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 217,
+                    "end": 262
+                  }
+                }
+              },
+              "span": {
+                "start": 217,
+                "end": 268
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "FunctionCall": {
+                      "name": {
+                        "kind": {
+                          "Identifier": "var_dump"
+                        },
+                        "span": {
+                          "start": 268,
+                          "end": 276
+                        }
+                      },
+                      "args": [
+                        {
+                          "name": null,
+                          "value": {
+                            "kind": {
+                              "Array": [
+                                {
+                                  "key": null,
+                                  "value": {
+                                    "kind": {
+                                      "Yield": {
+                                        "key": {
+                                          "kind": {
+                                            "String": "k1"
+                                          },
+                                          "span": {
+                                            "start": 284,
+                                            "end": 288
+                                          }
+                                        },
+                                        "value": {
+                                          "kind": {
+                                            "Yield": {
+                                              "key": {
+                                                "kind": {
+                                                  "String": "k2"
+                                                },
+                                                "span": {
+                                                  "start": 298,
+                                                  "end": 302
+                                                }
+                                              },
+                                              "value": {
+                                                "kind": {
+                                                  "Binary": {
+                                                    "left": {
+                                                      "kind": {
+                                                        "String": "a"
+                                                      },
+                                                      "span": {
+                                                        "start": 306,
+                                                        "end": 309
+                                                      }
+                                                    },
+                                                    "op": "Concat",
+                                                    "right": {
+                                                      "kind": {
+                                                        "String": "b"
+                                                      },
+                                                      "span": {
+                                                        "start": 312,
+                                                        "end": 315
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "span": {
+                                                  "start": 306,
+                                                  "end": 315
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 292,
+                                            "end": 315
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 278,
+                                      "end": 315
+                                    }
+                                  },
+                                  "unpack": false,
+                                  "span": {
+                                    "start": 278,
+                                    "end": 315
+                                  }
+                                }
+                              ]
+                            },
+                            "span": {
+                              "start": 277,
+                              "end": 316
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 277,
+                            "end": 316
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "span": {
+                    "start": 268,
+                    "end": 317
+                  }
+                }
+              },
+              "span": {
+                "start": 268,
+                "end": 323
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "FunctionCall": {
+                      "name": {
+                        "kind": {
+                          "Identifier": "var_dump"
+                        },
+                        "span": {
+                          "start": 323,
+                          "end": 331
+                        }
+                      },
+                      "args": [
+                        {
+                          "name": null,
+                          "value": {
+                            "kind": {
+                              "Array": [
+                                {
+                                  "key": {
+                                    "kind": {
+                                      "Yield": {
+                                        "key": {
+                                          "kind": {
+                                            "String": "k1"
+                                          },
+                                          "span": {
+                                            "start": 339,
+                                            "end": 343
+                                          }
+                                        },
+                                        "value": {
+                                          "kind": {
+                                            "Parenthesized": {
+                                              "kind": {
+                                                "Yield": {
+                                                  "key": null,
+                                                  "value": {
+                                                    "kind": {
+                                                      "String": "k2"
+                                                    },
+                                                    "span": {
+                                                      "start": 354,
+                                                      "end": 358
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "span": {
+                                                "start": 348,
+                                                "end": 358
+                                              }
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 347,
+                                            "end": 360
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 333,
+                                      "end": 360
+                                    }
+                                  },
+                                  "value": {
+                                    "kind": {
+                                      "Binary": {
+                                        "left": {
+                                          "kind": {
+                                            "String": "a"
+                                          },
+                                          "span": {
+                                            "start": 363,
+                                            "end": 366
+                                          }
+                                        },
+                                        "op": "Concat",
+                                        "right": {
+                                          "kind": {
+                                            "String": "b"
+                                          },
+                                          "span": {
+                                            "start": 369,
+                                            "end": 372
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 363,
+                                      "end": 372
+                                    }
+                                  },
+                                  "unpack": false,
+                                  "span": {
+                                    "start": 333,
+                                    "end": 372
+                                  }
+                                }
+                              ]
+                            },
+                            "span": {
+                              "start": 332,
+                              "end": 373
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 332,
+                            "end": 373
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "span": {
+                    "start": 323,
+                    "end": 374
+                  }
+                }
+              },
+              "span": {
+                "start": 323,
+                "end": 376
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 377
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 377
+  }
+}

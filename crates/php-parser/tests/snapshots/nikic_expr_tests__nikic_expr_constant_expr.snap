@@ -1,0 +1,1816 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_1",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 19,
+                      "end": 20
+                    }
+                  },
+                  "op": "ShiftLeft",
+                  "right": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 24,
+                      "end": 25
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 19,
+                "end": 25
+              }
+            },
+            "span": {
+              "start": 13,
+              "end": 25
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 7,
+        "end": 27
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_2",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 39,
+                      "end": 40
+                    }
+                  },
+                  "op": "Div",
+                  "right": {
+                    "kind": {
+                      "Int": 2
+                    },
+                    "span": {
+                      "start": 43,
+                      "end": 44
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 39,
+                "end": 44
+              }
+            },
+            "span": {
+              "start": 33,
+              "end": 44
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 27,
+        "end": 46
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_3",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Float": 1.5
+                    },
+                    "span": {
+                      "start": 58,
+                      "end": 61
+                    }
+                  },
+                  "op": "Add",
+                  "right": {
+                    "kind": {
+                      "Float": 1.5
+                    },
+                    "span": {
+                      "start": 64,
+                      "end": 67
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 58,
+                "end": 67
+              }
+            },
+            "span": {
+              "start": 52,
+              "end": 67
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 46,
+        "end": 69
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_4",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "String": "foo"
+                    },
+                    "span": {
+                      "start": 81,
+                      "end": 86
+                    }
+                  },
+                  "op": "Concat",
+                  "right": {
+                    "kind": {
+                      "String": "bar"
+                    },
+                    "span": {
+                      "start": 89,
+                      "end": 94
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 81,
+                "end": 94
+              }
+            },
+            "span": {
+              "start": 75,
+              "end": 94
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 69,
+        "end": 96
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_5",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Parenthesized": {
+                        "kind": {
+                          "Binary": {
+                            "left": {
+                              "kind": {
+                                "Float": 1.5
+                              },
+                              "span": {
+                                "start": 109,
+                                "end": 112
+                              }
+                            },
+                            "op": "Add",
+                            "right": {
+                              "kind": {
+                                "Float": 1.5
+                              },
+                              "span": {
+                                "start": 115,
+                                "end": 118
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 109,
+                          "end": 118
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 108,
+                      "end": 120
+                    }
+                  },
+                  "op": "Mul",
+                  "right": {
+                    "kind": {
+                      "Int": 2
+                    },
+                    "span": {
+                      "start": 122,
+                      "end": 123
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 108,
+                "end": 123
+              }
+            },
+            "span": {
+              "start": 102,
+              "end": 123
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 96,
+        "end": 125
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_6",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Binary": {
+                        "left": {
+                          "kind": {
+                            "Binary": {
+                              "left": {
+                                "kind": {
+                                  "String": "foo"
+                                },
+                                "span": {
+                                  "start": 137,
+                                  "end": 142
+                                }
+                              },
+                              "op": "Concat",
+                              "right": {
+                                "kind": {
+                                  "Int": 2
+                                },
+                                "span": {
+                                  "start": 145,
+                                  "end": 146
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 137,
+                            "end": 146
+                          }
+                        },
+                        "op": "Concat",
+                        "right": {
+                          "kind": {
+                            "Int": 3
+                          },
+                          "span": {
+                            "start": 149,
+                            "end": 150
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 137,
+                      "end": 150
+                    }
+                  },
+                  "op": "Concat",
+                  "right": {
+                    "kind": {
+                      "Float": 4.0
+                    },
+                    "span": {
+                      "start": 153,
+                      "end": 156
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 137,
+                "end": 156
+              }
+            },
+            "span": {
+              "start": 131,
+              "end": 156
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 125,
+        "end": 158
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_7",
+            "value": {
+              "kind": {
+                "MagicConst": "Line"
+              },
+              "span": {
+                "start": 170,
+                "end": 178
+              }
+            },
+            "span": {
+              "start": 164,
+              "end": 178
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 158,
+        "end": 180
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_8",
+            "value": {
+              "kind": {
+                "Heredoc": {
+                  "label": "ENDOFSTRING",
+                  "parts": [
+                    {
+                      "Literal": "This is a test string"
+                    }
+                  ]
+                }
+              },
+              "span": {
+                "start": 192,
+                "end": 240
+              }
+            },
+            "span": {
+              "start": 186,
+              "end": 240
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 180,
+        "end": 242
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_9",
+            "value": {
+              "kind": {
+                "UnaryPrefix": {
+                  "op": "BitwiseNot",
+                  "operand": {
+                    "kind": {
+                      "UnaryPrefix": {
+                        "op": "Negate",
+                        "operand": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 256,
+                            "end": 257
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 255,
+                      "end": 257
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 254,
+                "end": 257
+              }
+            },
+            "span": {
+              "start": 248,
+              "end": 257
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 242,
+        "end": 259
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_10",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Parenthesized": {
+                        "kind": {
+                          "Ternary": {
+                            "condition": {
+                              "kind": {
+                                "UnaryPrefix": {
+                                  "op": "Negate",
+                                  "operand": {
+                                    "kind": {
+                                      "Int": 1
+                                    },
+                                    "span": {
+                                      "start": 274,
+                                      "end": 275
+                                    }
+                                  }
+                                }
+                              },
+                              "span": {
+                                "start": 273,
+                                "end": 275
+                              }
+                            },
+                            "then_expr": null,
+                            "else_expr": {
+                              "kind": {
+                                "Int": 1
+                              },
+                              "span": {
+                                "start": 277,
+                                "end": 278
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 273,
+                          "end": 278
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 272,
+                      "end": 280
+                    }
+                  },
+                  "op": "Add",
+                  "right": {
+                    "kind": {
+                      "Parenthesized": {
+                        "kind": {
+                          "Ternary": {
+                            "condition": {
+                              "kind": {
+                                "Int": 0
+                              },
+                              "span": {
+                                "start": 283,
+                                "end": 284
+                              }
+                            },
+                            "then_expr": {
+                              "kind": {
+                                "Int": 2
+                              },
+                              "span": {
+                                "start": 285,
+                                "end": 286
+                              }
+                            },
+                            "else_expr": {
+                              "kind": {
+                                "Int": 3
+                              },
+                              "span": {
+                                "start": 287,
+                                "end": 288
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 283,
+                          "end": 288
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 282,
+                      "end": 289
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 272,
+                "end": 289
+              }
+            },
+            "span": {
+              "start": 265,
+              "end": 289
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 259,
+        "end": 291
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_11",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 304,
+                      "end": 305
+                    }
+                  },
+                  "op": "BooleanAnd",
+                  "right": {
+                    "kind": {
+                      "Int": 0
+                    },
+                    "span": {
+                      "start": 309,
+                      "end": 310
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 304,
+                "end": 310
+              }
+            },
+            "span": {
+              "start": 297,
+              "end": 310
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 291,
+        "end": 312
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_12",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 325,
+                      "end": 326
+                    }
+                  },
+                  "op": "LogicalAnd",
+                  "right": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 331,
+                      "end": 332
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 325,
+                "end": 332
+              }
+            },
+            "span": {
+              "start": 318,
+              "end": 332
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 312,
+        "end": 334
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_13",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 0
+                    },
+                    "span": {
+                      "start": 347,
+                      "end": 348
+                    }
+                  },
+                  "op": "BooleanOr",
+                  "right": {
+                    "kind": {
+                      "Int": 0
+                    },
+                    "span": {
+                      "start": 352,
+                      "end": 353
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 347,
+                "end": 353
+              }
+            },
+            "span": {
+              "start": 340,
+              "end": 353
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 334,
+        "end": 355
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_14",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 368,
+                      "end": 369
+                    }
+                  },
+                  "op": "LogicalOr",
+                  "right": {
+                    "kind": {
+                      "Int": 0
+                    },
+                    "span": {
+                      "start": 373,
+                      "end": 374
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 368,
+                "end": 374
+              }
+            },
+            "span": {
+              "start": 361,
+              "end": 374
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 355,
+        "end": 376
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_15",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 389,
+                      "end": 390
+                    }
+                  },
+                  "op": "LogicalXor",
+                  "right": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 395,
+                      "end": 396
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 389,
+                "end": 396
+              }
+            },
+            "span": {
+              "start": 382,
+              "end": 396
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 376,
+        "end": 398
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_16",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 411,
+                      "end": 412
+                    }
+                  },
+                  "op": "LogicalXor",
+                  "right": {
+                    "kind": {
+                      "Int": 0
+                    },
+                    "span": {
+                      "start": 417,
+                      "end": 418
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 411,
+                "end": 418
+              }
+            },
+            "span": {
+              "start": 404,
+              "end": 418
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 398,
+        "end": 420
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_17",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 433,
+                      "end": 434
+                    }
+                  },
+                  "op": "Less",
+                  "right": {
+                    "kind": {
+                      "Int": 0
+                    },
+                    "span": {
+                      "start": 437,
+                      "end": 438
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 433,
+                "end": 438
+              }
+            },
+            "span": {
+              "start": 426,
+              "end": 438
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 420,
+        "end": 440
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_18",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 0
+                    },
+                    "span": {
+                      "start": 453,
+                      "end": 454
+                    }
+                  },
+                  "op": "LessOrEqual",
+                  "right": {
+                    "kind": {
+                      "Int": 0
+                    },
+                    "span": {
+                      "start": 458,
+                      "end": 459
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 453,
+                "end": 459
+              }
+            },
+            "span": {
+              "start": 446,
+              "end": 459
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 440,
+        "end": 461
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_19",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 474,
+                      "end": 475
+                    }
+                  },
+                  "op": "Greater",
+                  "right": {
+                    "kind": {
+                      "Int": 0
+                    },
+                    "span": {
+                      "start": 478,
+                      "end": 479
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 474,
+                "end": 479
+              }
+            },
+            "span": {
+              "start": 467,
+              "end": 479
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 461,
+        "end": 481
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_20",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 494,
+                      "end": 495
+                    }
+                  },
+                  "op": "GreaterOrEqual",
+                  "right": {
+                    "kind": {
+                      "Int": 0
+                    },
+                    "span": {
+                      "start": 499,
+                      "end": 500
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 494,
+                "end": 500
+              }
+            },
+            "span": {
+              "start": 487,
+              "end": 500
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 481,
+        "end": 502
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_21",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 515,
+                      "end": 516
+                    }
+                  },
+                  "op": "Identical",
+                  "right": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 521,
+                      "end": 522
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 515,
+                "end": 522
+              }
+            },
+            "span": {
+              "start": 508,
+              "end": 522
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 502,
+        "end": 524
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_22",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 537,
+                      "end": 538
+                    }
+                  },
+                  "op": "NotIdentical",
+                  "right": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 543,
+                      "end": 544
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 537,
+                "end": 544
+              }
+            },
+            "span": {
+              "start": 530,
+              "end": 544
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 524,
+        "end": 546
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_23",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 0
+                    },
+                    "span": {
+                      "start": 559,
+                      "end": 560
+                    }
+                  },
+                  "op": "NotEqual",
+                  "right": {
+                    "kind": {
+                      "String": "0"
+                    },
+                    "span": {
+                      "start": 564,
+                      "end": 567
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 559,
+                "end": 567
+              }
+            },
+            "span": {
+              "start": 552,
+              "end": 567
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 546,
+        "end": 569
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_24",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 582,
+                      "end": 583
+                    }
+                  },
+                  "op": "Equal",
+                  "right": {
+                    "kind": {
+                      "String": "1"
+                    },
+                    "span": {
+                      "start": 587,
+                      "end": 590
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 582,
+                "end": 590
+              }
+            },
+            "span": {
+              "start": 575,
+              "end": 590
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 569,
+        "end": 592
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_25",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 605,
+                      "end": 606
+                    }
+                  },
+                  "op": "Add",
+                  "right": {
+                    "kind": {
+                      "Binary": {
+                        "left": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 609,
+                            "end": 610
+                          }
+                        },
+                        "op": "Mul",
+                        "right": {
+                          "kind": {
+                            "Int": 3
+                          },
+                          "span": {
+                            "start": 613,
+                            "end": 614
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 609,
+                      "end": 614
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 605,
+                "end": 614
+              }
+            },
+            "span": {
+              "start": 598,
+              "end": 614
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 592,
+        "end": 616
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_26",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Binary": {
+                        "left": {
+                          "kind": {
+                            "String": "1"
+                          },
+                          "span": {
+                            "start": 629,
+                            "end": 632
+                          }
+                        },
+                        "op": "Add",
+                        "right": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 635,
+                            "end": 636
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 629,
+                      "end": 636
+                    }
+                  },
+                  "op": "Add",
+                  "right": {
+                    "kind": {
+                      "String": "3"
+                    },
+                    "span": {
+                      "start": 639,
+                      "end": 642
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 629,
+                "end": 642
+              }
+            },
+            "span": {
+              "start": 622,
+              "end": 642
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 616,
+        "end": 644
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_27",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 2
+                    },
+                    "span": {
+                      "start": 657,
+                      "end": 658
+                    }
+                  },
+                  "op": "Pow",
+                  "right": {
+                    "kind": {
+                      "Int": 3
+                    },
+                    "span": {
+                      "start": 662,
+                      "end": 663
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 657,
+                "end": 663
+              }
+            },
+            "span": {
+              "start": 650,
+              "end": 663
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 644,
+        "end": 665
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_28",
+            "value": {
+              "kind": {
+                "ArrayAccess": {
+                  "array": {
+                    "kind": {
+                      "Array": [
+                        {
+                          "key": null,
+                          "value": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 679,
+                              "end": 680
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 679,
+                            "end": 680
+                          }
+                        },
+                        {
+                          "key": null,
+                          "value": {
+                            "kind": {
+                              "Int": 2
+                            },
+                            "span": {
+                              "start": 682,
+                              "end": 683
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 682,
+                            "end": 683
+                          }
+                        },
+                        {
+                          "key": null,
+                          "value": {
+                            "kind": {
+                              "Int": 3
+                            },
+                            "span": {
+                              "start": 685,
+                              "end": 686
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 685,
+                            "end": 686
+                          }
+                        }
+                      ]
+                    },
+                    "span": {
+                      "start": 678,
+                      "end": 687
+                    }
+                  },
+                  "index": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 688,
+                      "end": 689
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 678,
+                "end": 690
+              }
+            },
+            "span": {
+              "start": 671,
+              "end": 690
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 665,
+        "end": 692
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_29",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 12
+                    },
+                    "span": {
+                      "start": 705,
+                      "end": 707
+                    }
+                  },
+                  "op": "Sub",
+                  "right": {
+                    "kind": {
+                      "Int": 13
+                    },
+                    "span": {
+                      "start": 710,
+                      "end": 712
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 705,
+                "end": 712
+              }
+            },
+            "span": {
+              "start": 698,
+              "end": 712
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 692,
+        "end": 714
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_30",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 12
+                    },
+                    "span": {
+                      "start": 727,
+                      "end": 729
+                    }
+                  },
+                  "op": "BitwiseXor",
+                  "right": {
+                    "kind": {
+                      "Int": 13
+                    },
+                    "span": {
+                      "start": 732,
+                      "end": 734
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 727,
+                "end": 734
+              }
+            },
+            "span": {
+              "start": 720,
+              "end": 734
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 714,
+        "end": 736
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_31",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 12
+                    },
+                    "span": {
+                      "start": 749,
+                      "end": 751
+                    }
+                  },
+                  "op": "BitwiseAnd",
+                  "right": {
+                    "kind": {
+                      "Int": 13
+                    },
+                    "span": {
+                      "start": 754,
+                      "end": 756
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 749,
+                "end": 756
+              }
+            },
+            "span": {
+              "start": 742,
+              "end": 756
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 736,
+        "end": 758
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_32",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 12
+                    },
+                    "span": {
+                      "start": 771,
+                      "end": 773
+                    }
+                  },
+                  "op": "BitwiseOr",
+                  "right": {
+                    "kind": {
+                      "Int": 13
+                    },
+                    "span": {
+                      "start": 776,
+                      "end": 778
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 771,
+                "end": 778
+              }
+            },
+            "span": {
+              "start": 764,
+              "end": 778
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 758,
+        "end": 780
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_33",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 12
+                    },
+                    "span": {
+                      "start": 793,
+                      "end": 795
+                    }
+                  },
+                  "op": "Mod",
+                  "right": {
+                    "kind": {
+                      "Int": 3
+                    },
+                    "span": {
+                      "start": 798,
+                      "end": 799
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 793,
+                "end": 799
+              }
+            },
+            "span": {
+              "start": 786,
+              "end": 799
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 780,
+        "end": 801
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_34",
+            "value": {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Int": 100
+                    },
+                    "span": {
+                      "start": 814,
+                      "end": 817
+                    }
+                  },
+                  "op": "ShiftRight",
+                  "right": {
+                    "kind": {
+                      "Int": 4
+                    },
+                    "span": {
+                      "start": 821,
+                      "end": 822
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 814,
+                "end": 822
+              }
+            },
+            "span": {
+              "start": 807,
+              "end": 822
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 801,
+        "end": 824
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "T_35",
+            "value": {
+              "kind": {
+                "UnaryPrefix": {
+                  "op": "BooleanNot",
+                  "operand": {
+                    "kind": {
+                      "Bool": false
+                    },
+                    "span": {
+                      "start": 838,
+                      "end": 843
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 837,
+                "end": 843
+              }
+            },
+            "span": {
+              "start": 830,
+              "end": 843
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 824,
+        "end": 844
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 844
+  }
+}

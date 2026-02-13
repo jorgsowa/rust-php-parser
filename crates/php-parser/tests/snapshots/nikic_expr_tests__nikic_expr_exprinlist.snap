@@ -1,0 +1,191 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Array": [
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Parenthesized": {
+                            "kind": {
+                              "Variable": "a"
+                            },
+                            "span": {
+                              "start": 31,
+                              "end": 33
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 30,
+                          "end": 34
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 30,
+                        "end": 34
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Parenthesized": {
+                            "kind": {
+                              "Parenthesized": {
+                                "kind": {
+                                  "Parenthesized": {
+                                    "kind": {
+                                      "Variable": "b"
+                                    },
+                                    "span": {
+                                      "start": 39,
+                                      "end": 41
+                                    }
+                                  }
+                                },
+                                "span": {
+                                  "start": 38,
+                                  "end": 42
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 37,
+                              "end": 43
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 36,
+                          "end": 44
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 36,
+                        "end": 44
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 25,
+                  "end": 45
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 48,
+                  "end": 50
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 25,
+            "end": 50
+          }
+        }
+      },
+      "span": {
+        "start": 25,
+        "end": 96
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Array": [
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Binary": {
+                            "left": {
+                              "kind": {
+                                "Int": 1
+                              },
+                              "span": {
+                                "start": 101,
+                                "end": 102
+                              }
+                            },
+                            "op": "Add",
+                            "right": {
+                              "kind": {
+                                "Int": 1
+                              },
+                              "span": {
+                                "start": 105,
+                                "end": 106
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 101,
+                          "end": 106
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 101,
+                        "end": 106
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 96,
+                  "end": 107
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 110,
+                  "end": 112
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 96,
+            "end": 112
+          }
+        }
+      },
+      "span": {
+        "start": 96,
+        "end": 113
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 113
+  }
+}

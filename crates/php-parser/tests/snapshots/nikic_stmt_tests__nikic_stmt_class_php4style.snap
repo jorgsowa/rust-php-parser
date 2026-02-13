@@ -1,0 +1,91 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "A",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Property": {
+                  "name": "foo",
+                  "visibility": "Public",
+                  "set_visibility": null,
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": null,
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 21,
+                "end": 29
+              }
+            },
+            {
+              "kind": {
+                "Method": {
+                  "name": "bar",
+                  "visibility": null,
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": null,
+                  "body": [],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 35,
+                "end": 57
+              }
+            },
+            {
+              "kind": {
+                "Method": {
+                  "name": "baz",
+                  "visibility": null,
+                  "is_static": true,
+                  "is_abstract": true,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": null,
+                  "body": [],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 57,
+                "end": 91
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 92
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 92
+  }
+}

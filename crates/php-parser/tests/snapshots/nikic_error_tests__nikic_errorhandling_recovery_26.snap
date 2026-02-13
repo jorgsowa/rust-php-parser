@@ -1,0 +1,203 @@
+---
+source: crates/php-parser/tests/nikic_error_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "A",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Property": {
+                  "name": "foo",
+                  "visibility": "Private",
+                  "set_visibility": null,
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": null,
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 44,
+                "end": 62
+              }
+            },
+            {
+              "kind": {
+                "Method": {
+                  "name": "__construct",
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [
+                    {
+                      "name": "s",
+                      "type_hint": {
+                        "kind": {
+                          "Named": {
+                            "parts": [
+                              "string"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 90,
+                              "end": 96
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 90,
+                          "end": 96
+                        }
+                      },
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "visibility": null,
+                      "set_visibility": null,
+                      "attributes": [],
+                      "span": {
+                        "start": 90,
+                        "end": 99
+                      }
+                    }
+                  ],
+                  "return_type": null,
+                  "body": [
+                    {
+                      "kind": {
+                        "Expression": {
+                          "kind": {
+                            "Assign": {
+                              "target": {
+                                "kind": {
+                                  "PropertyAccess": {
+                                    "object": {
+                                      "kind": {
+                                        "Variable": "this"
+                                      },
+                                      "span": {
+                                        "start": 111,
+                                        "end": 116
+                                      }
+                                    },
+                                    "property": {
+                                      "kind": {
+                                        "Identifier": "foo"
+                                      },
+                                      "span": {
+                                        "start": 118,
+                                        "end": 121
+                                      }
+                                    }
+                                  }
+                                },
+                                "span": {
+                                  "start": 111,
+                                  "end": 121
+                                }
+                              },
+                              "op": "Assign",
+                              "value": {
+                                "kind": {
+                                  "Variable": "s"
+                                },
+                                "span": {
+                                  "start": 124,
+                                  "end": 126
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 111,
+                            "end": 126
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 111,
+                        "end": 132
+                      }
+                    }
+                  ],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 62,
+                "end": 134
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 135
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": "B",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "ClassConst": {
+                  "name": "X",
+                  "visibility": null,
+                  "value": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 160,
+                      "end": 161
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 150,
+                "end": 162
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 136,
+        "end": 163
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 163
+  }
+}

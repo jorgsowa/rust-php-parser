@@ -1,0 +1,59 @@
+---
+source: crates/php-parser/tests/nikic_misc_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Variable": "var"
+          },
+          "span": {
+            "start": 53,
+            "end": 57
+          }
+        }
+      },
+      "span": {
+        "start": 53,
+        "end": 60
+      }
+    },
+    {
+      "kind": {
+        "If": {
+          "condition": {
+            "kind": {
+              "Variable": "cond"
+            },
+            "span": {
+              "start": 64,
+              "end": 69
+            }
+          },
+          "then_branch": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 71,
+              "end": 136
+            }
+          },
+          "elseif_branches": [],
+          "else_branch": null
+        }
+      },
+      "span": {
+        "start": 60,
+        "end": 136
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 136
+  }
+}

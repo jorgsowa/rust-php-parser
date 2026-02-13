@@ -1,129 +1,217 @@
 ---
 source: crates/php-parser/tests/integration.rs
-assertion_line: 1723
-expression: result.program
+expression: to_json(& result.program)
 ---
-stmts:
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: text
-              span:
-                start: 23
-                end: 28
-            op: Assign
-            value:
-              kind:
-                Heredoc:
-                  label: EOT
-                  parts:
-                    - Literal: Hello World
-              span:
-                start: 31
-                end: 53
-        span:
-          start: 23
-          end: 53
-    span:
-      start: 23
-      end: 86
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: name
-              span:
-                start: 86
-                end: 91
-            op: Assign
-            value:
-              kind:
-                String: PHP
-              span:
-                start: 94
-                end: 99
-        span:
-          start: 86
-          end: 99
-    span:
-      start: 86
-      end: 101
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: msg
-              span:
-                start: 101
-                end: 105
-            op: Assign
-            value:
-              kind:
-                Heredoc:
-                  label: EOT
-                  parts:
-                    - Literal: "Hello "
-                    - Expr:
-                        kind:
-                          Variable: name
-                        span:
-                          start: 121
-                          end: 126
-                    - Literal: "!"
-              span:
-                start: 108
-                end: 131
-        span:
-          start: 101
-          end: 131
-    span:
-      start: 101
-      end: 163
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: raw
-              span:
-                start: 163
-                end: 167
-            op: Assign
-            value:
-              kind:
-                Nowdoc:
-                  label: EOT
-                  value: Hello $name!
-              span:
-                start: 170
-                end: 195
-        span:
-          start: 163
-          end: 195
-    span:
-      start: 163
-      end: 231
-  - kind:
-      Echo:
-        - kind:
-            Heredoc:
-              label: EOT
-              parts:
-                - Literal: output
-          span:
-            start: 236
-            end: 253
-    span:
-      start: 231
-      end: 255
-span:
-  start: 0
-  end: 255
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "text"
+                },
+                "span": {
+                  "start": 23,
+                  "end": 28
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Heredoc": {
+                    "label": "EOT",
+                    "parts": [
+                      {
+                        "Literal": "Hello World"
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 31,
+                  "end": 53
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 23,
+            "end": 53
+          }
+        }
+      },
+      "span": {
+        "start": 23,
+        "end": 86
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "name"
+                },
+                "span": {
+                  "start": 86,
+                  "end": 91
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "String": "PHP"
+                },
+                "span": {
+                  "start": 94,
+                  "end": 99
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 86,
+            "end": 99
+          }
+        }
+      },
+      "span": {
+        "start": 86,
+        "end": 101
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "msg"
+                },
+                "span": {
+                  "start": 101,
+                  "end": 105
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Heredoc": {
+                    "label": "EOT",
+                    "parts": [
+                      {
+                        "Literal": "Hello "
+                      },
+                      {
+                        "Expr": {
+                          "kind": {
+                            "Variable": "name"
+                          },
+                          "span": {
+                            "start": 121,
+                            "end": 126
+                          }
+                        }
+                      },
+                      {
+                        "Literal": "!"
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 108,
+                  "end": 131
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 101,
+            "end": 131
+          }
+        }
+      },
+      "span": {
+        "start": 101,
+        "end": 163
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "raw"
+                },
+                "span": {
+                  "start": 163,
+                  "end": 167
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Nowdoc": {
+                    "label": "EOT",
+                    "value": "Hello $name!"
+                  }
+                },
+                "span": {
+                  "start": 170,
+                  "end": 195
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 163,
+            "end": 195
+          }
+        }
+      },
+      "span": {
+        "start": 163,
+        "end": 231
+      }
+    },
+    {
+      "kind": {
+        "Echo": [
+          {
+            "kind": {
+              "Heredoc": {
+                "label": "EOT",
+                "parts": [
+                  {
+                    "Literal": "output"
+                  }
+                ]
+              }
+            },
+            "span": {
+              "start": 236,
+              "end": 253
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 231,
+        "end": 255
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 255
+  }
+}

@@ -1,0 +1,649 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "PropertyAccess": {
+              "object": {
+                "kind": {
+                  "Identifier": "A"
+                },
+                "span": {
+                  "start": 7,
+                  "end": 8
+                }
+              },
+              "property": {
+                "kind": {
+                  "Identifier": "length"
+                },
+                "span": {
+                  "start": 10,
+                  "end": 16
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 7,
+            "end": 16
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 18
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MethodCall": {
+              "object": {
+                "kind": {
+                  "Identifier": "A"
+                },
+                "span": {
+                  "start": 18,
+                  "end": 19
+                }
+              },
+              "method": {
+                "kind": {
+                  "Identifier": "length"
+                },
+                "span": {
+                  "start": 21,
+                  "end": 27
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 18,
+            "end": 29
+          }
+        }
+      },
+      "span": {
+        "start": 18,
+        "end": 31
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ArrayAccess": {
+              "array": {
+                "kind": {
+                  "Identifier": "A"
+                },
+                "span": {
+                  "start": 31,
+                  "end": 32
+                }
+              },
+              "index": {
+                "kind": {
+                  "Int": 0
+                },
+                "span": {
+                  "start": 33,
+                  "end": 34
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 31,
+            "end": 35
+          }
+        }
+      },
+      "span": {
+        "start": 31,
+        "end": 37
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ArrayAccess": {
+              "array": {
+                "kind": {
+                  "ArrayAccess": {
+                    "array": {
+                      "kind": {
+                        "ArrayAccess": {
+                          "array": {
+                            "kind": {
+                              "Identifier": "A"
+                            },
+                            "span": {
+                              "start": 37,
+                              "end": 38
+                            }
+                          },
+                          "index": {
+                            "kind": {
+                              "Int": 0
+                            },
+                            "span": {
+                              "start": 39,
+                              "end": 40
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 37,
+                        "end": 41
+                      }
+                    },
+                    "index": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 42,
+                        "end": 43
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 37,
+                  "end": 44
+                }
+              },
+              "index": {
+                "kind": {
+                  "Int": 2
+                },
+                "span": {
+                  "start": 45,
+                  "end": 46
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 37,
+            "end": 47
+          }
+        }
+      },
+      "span": {
+        "start": 37,
+        "end": 50
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ArrayAccess": {
+              "array": {
+                "kind": {
+                  "ClassConstAccess": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "A"
+                      },
+                      "span": {
+                        "start": 50,
+                        "end": 51
+                      }
+                    },
+                    "member": "B"
+                  }
+                },
+                "span": {
+                  "start": 50,
+                  "end": 54
+                }
+              },
+              "index": {
+                "kind": {
+                  "Int": 0
+                },
+                "span": {
+                  "start": 55,
+                  "end": 56
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 50,
+            "end": 57
+          }
+        }
+      },
+      "span": {
+        "start": 50,
+        "end": 59
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ArrayAccess": {
+              "array": {
+                "kind": {
+                  "ArrayAccess": {
+                    "array": {
+                      "kind": {
+                        "ArrayAccess": {
+                          "array": {
+                            "kind": {
+                              "ClassConstAccess": {
+                                "class": {
+                                  "kind": {
+                                    "Identifier": "A"
+                                  },
+                                  "span": {
+                                    "start": 59,
+                                    "end": 60
+                                  }
+                                },
+                                "member": "B"
+                              }
+                            },
+                            "span": {
+                              "start": 59,
+                              "end": 63
+                            }
+                          },
+                          "index": {
+                            "kind": {
+                              "Int": 0
+                            },
+                            "span": {
+                              "start": 64,
+                              "end": 65
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 59,
+                        "end": 66
+                      }
+                    },
+                    "index": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 67,
+                        "end": 68
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 59,
+                  "end": 69
+                }
+              },
+              "index": {
+                "kind": {
+                  "Int": 2
+                },
+                "span": {
+                  "start": 70,
+                  "end": 71
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 59,
+            "end": 72
+          }
+        }
+      },
+      "span": {
+        "start": 59,
+        "end": 74
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "PropertyAccess": {
+              "object": {
+                "kind": {
+                  "ClassConstAccess": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "A"
+                      },
+                      "span": {
+                        "start": 74,
+                        "end": 75
+                      }
+                    },
+                    "member": "B"
+                  }
+                },
+                "span": {
+                  "start": 74,
+                  "end": 78
+                }
+              },
+              "property": {
+                "kind": {
+                  "Identifier": "length"
+                },
+                "span": {
+                  "start": 80,
+                  "end": 86
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 74,
+            "end": 86
+          }
+        }
+      },
+      "span": {
+        "start": 74,
+        "end": 88
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MethodCall": {
+              "object": {
+                "kind": {
+                  "ClassConstAccess": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "A"
+                      },
+                      "span": {
+                        "start": 88,
+                        "end": 89
+                      }
+                    },
+                    "member": "B"
+                  }
+                },
+                "span": {
+                  "start": 88,
+                  "end": 92
+                }
+              },
+              "method": {
+                "kind": {
+                  "Identifier": "length"
+                },
+                "span": {
+                  "start": 94,
+                  "end": 100
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 88,
+            "end": 102
+          }
+        }
+      },
+      "span": {
+        "start": 88,
+        "end": 104
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ClassConstAccess": {
+              "class": {
+                "kind": {
+                  "ClassConstAccess": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "A"
+                      },
+                      "span": {
+                        "start": 104,
+                        "end": 105
+                      }
+                    },
+                    "member": "B"
+                  }
+                },
+                "span": {
+                  "start": 104,
+                  "end": 108
+                }
+              },
+              "member": "C"
+            }
+          },
+          "span": {
+            "start": 104,
+            "end": 111
+          }
+        }
+      },
+      "span": {
+        "start": 104,
+        "end": 113
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "StaticPropertyAccess": {
+              "class": {
+                "kind": {
+                  "ClassConstAccess": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "A"
+                      },
+                      "span": {
+                        "start": 113,
+                        "end": 114
+                      }
+                    },
+                    "member": "B"
+                  }
+                },
+                "span": {
+                  "start": 113,
+                  "end": 117
+                }
+              },
+              "member": "c"
+            }
+          },
+          "span": {
+            "start": 113,
+            "end": 121
+          }
+        }
+      },
+      "span": {
+        "start": 113,
+        "end": 123
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "StaticMethodCall": {
+              "class": {
+                "kind": {
+                  "ClassConstAccess": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "A"
+                      },
+                      "span": {
+                        "start": 123,
+                        "end": 124
+                      }
+                    },
+                    "member": "B"
+                  }
+                },
+                "span": {
+                  "start": 123,
+                  "end": 127
+                }
+              },
+              "method": "c",
+              "args": []
+            }
+          },
+          "span": {
+            "start": 123,
+            "end": 132
+          }
+        }
+      },
+      "span": {
+        "start": 123,
+        "end": 135
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ArrayAccess": {
+              "array": {
+                "kind": {
+                  "MagicConst": "Function"
+                },
+                "span": {
+                  "start": 135,
+                  "end": 147
+                }
+              },
+              "index": {
+                "kind": {
+                  "Int": 0
+                },
+                "span": {
+                  "start": 148,
+                  "end": 149
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 135,
+            "end": 150
+          }
+        }
+      },
+      "span": {
+        "start": 135,
+        "end": 152
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "PropertyAccess": {
+              "object": {
+                "kind": {
+                  "MagicConst": "Function"
+                },
+                "span": {
+                  "start": 152,
+                  "end": 164
+                }
+              },
+              "property": {
+                "kind": {
+                  "Identifier": "length"
+                },
+                "span": {
+                  "start": 166,
+                  "end": 172
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 152,
+            "end": 172
+          }
+        }
+      },
+      "span": {
+        "start": 152,
+        "end": 174
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MethodCall": {
+              "object": {
+                "kind": {
+                  "Identifier": "__FUNCIONT__"
+                },
+                "span": {
+                  "start": 174,
+                  "end": 186
+                }
+              },
+              "method": {
+                "kind": {
+                  "Identifier": "length"
+                },
+                "span": {
+                  "start": 188,
+                  "end": 194
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 174,
+            "end": 196
+          }
+        }
+      },
+      "span": {
+        "start": 174,
+        "end": 197
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 197
+  }
+}

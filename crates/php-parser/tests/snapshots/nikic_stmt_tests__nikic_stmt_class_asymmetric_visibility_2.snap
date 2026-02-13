@@ -1,0 +1,123 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "Test",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Property": {
+                  "name": "x",
+                  "visibility": null,
+                  "set_visibility": null,
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": {
+                    "kind": {
+                      "Intersection": [
+                        {
+                          "kind": {
+                            "Named": {
+                              "parts": [
+                                "set"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 44,
+                                "end": 47
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 44,
+                            "end": 47
+                          }
+                        }
+                      ]
+                    },
+                    "span": {
+                      "start": 43,
+                      "end": 48
+                    }
+                  },
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 43,
+                "end": 51
+              }
+            },
+            {
+              "kind": {
+                "Property": {
+                  "name": "x",
+                  "visibility": null,
+                  "set_visibility": null,
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": {
+                    "kind": {
+                      "Intersection": [
+                        {
+                          "kind": {
+                            "Named": {
+                              "parts": [
+                                "set"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 77,
+                                "end": 80
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 77,
+                            "end": 80
+                          }
+                        }
+                      ]
+                    },
+                    "span": {
+                      "start": 76,
+                      "end": 81
+                    }
+                  },
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 76,
+                "end": 84
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 87
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 87
+  }
+}
