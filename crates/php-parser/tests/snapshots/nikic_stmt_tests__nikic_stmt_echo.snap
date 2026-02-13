@@ -1,0 +1,77 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Echo": [
+          {
+            "kind": {
+              "String": "Hallo World!"
+            },
+            "span": {
+              "start": 12,
+              "end": 26
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 7,
+        "end": 28
+      }
+    },
+    {
+      "kind": {
+        "Echo": [
+          {
+            "kind": {
+              "String": "Hallo"
+            },
+            "span": {
+              "start": 33,
+              "end": 40
+            }
+          },
+          {
+            "kind": {
+              "String": " "
+            },
+            "span": {
+              "start": 42,
+              "end": 45
+            }
+          },
+          {
+            "kind": {
+              "String": "World"
+            },
+            "span": {
+              "start": 47,
+              "end": 54
+            }
+          },
+          {
+            "kind": {
+              "String": "!"
+            },
+            "span": {
+              "start": 56,
+              "end": 59
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 28,
+        "end": 60
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 60
+  }
+}

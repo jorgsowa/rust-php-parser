@@ -1,0 +1,260 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 6,
+                        "end": 8
+                      }
+                    },
+                    "op": "Pipe",
+                    "right": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 12,
+                        "end": 14
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 6,
+                  "end": 14
+                }
+              },
+              "op": "Pipe",
+              "right": {
+                "kind": {
+                  "Variable": "c"
+                },
+                "span": {
+                  "start": 18,
+                  "end": 20
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 20
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 22
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 22,
+                        "end": 24
+                      }
+                    },
+                    "op": "Concat",
+                    "right": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 27,
+                        "end": 29
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 22,
+                  "end": 29
+                }
+              },
+              "op": "Pipe",
+              "right": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 33,
+                        "end": 35
+                      }
+                    },
+                    "op": "Concat",
+                    "right": {
+                      "kind": {
+                        "Variable": "d"
+                      },
+                      "span": {
+                        "start": 38,
+                        "end": 40
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 33,
+                  "end": 40
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 22,
+            "end": 40
+          }
+        }
+      },
+      "span": {
+        "start": 22,
+        "end": 42
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 42,
+                        "end": 44
+                      }
+                    },
+                    "op": "Pipe",
+                    "right": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 48,
+                        "end": 50
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 42,
+                  "end": 50
+                }
+              },
+              "op": "Equal",
+              "right": {
+                "kind": {
+                  "Variable": "c"
+                },
+                "span": {
+                  "start": 54,
+                  "end": 56
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 42,
+            "end": 56
+          }
+        }
+      },
+      "span": {
+        "start": 42,
+        "end": 58
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Variable": "c"
+                },
+                "span": {
+                  "start": 58,
+                  "end": 60
+                }
+              },
+              "op": "Equal",
+              "right": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 64,
+                        "end": 66
+                      }
+                    },
+                    "op": "Pipe",
+                    "right": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 70,
+                        "end": 72
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 64,
+                  "end": 72
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 58,
+            "end": 72
+          }
+        }
+      },
+      "span": {
+        "start": 58,
+        "end": 73
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 73
+  }
+}

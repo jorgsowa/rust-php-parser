@@ -1,0 +1,246 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "If": {
+          "condition": {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 16,
+              "end": 18
+            }
+          },
+          "then_branch": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 20,
+              "end": 22
+            }
+          },
+          "elseif_branches": [
+            {
+              "condition": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 32,
+                  "end": 34
+                }
+              },
+              "body": {
+                "kind": {
+                  "Block": []
+                },
+                "span": {
+                  "start": 36,
+                  "end": 38
+                }
+              },
+              "span": {
+                "start": 31,
+                "end": 38
+              }
+            },
+            {
+              "condition": {
+                "kind": {
+                  "Variable": "c"
+                },
+                "span": {
+                  "start": 48,
+                  "end": 50
+                }
+              },
+              "body": {
+                "kind": {
+                  "Block": []
+                },
+                "span": {
+                  "start": 52,
+                  "end": 54
+                }
+              },
+              "span": {
+                "start": 47,
+                "end": 54
+              }
+            }
+          ],
+          "else_branch": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 68,
+              "end": 70
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 70
+      }
+    },
+    {
+      "kind": {
+        "If": {
+          "condition": {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 76,
+              "end": 78
+            }
+          },
+          "then_branch": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 80,
+              "end": 82
+            }
+          },
+          "elseif_branches": [],
+          "else_branch": null
+        }
+      },
+      "span": {
+        "start": 72,
+        "end": 82
+      }
+    },
+    {
+      "kind": {
+        "If": {
+          "condition": {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 109,
+              "end": 111
+            }
+          },
+          "then_branch": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 100,
+              "end": 114
+            }
+          },
+          "elseif_branches": [
+            {
+              "condition": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 123,
+                  "end": 125
+                }
+              },
+              "body": {
+                "kind": {
+                  "Block": []
+                },
+                "span": {
+                  "start": 122,
+                  "end": 128
+                }
+              },
+              "span": {
+                "start": 122,
+                "end": 128
+              }
+            },
+            {
+              "condition": {
+                "kind": {
+                  "Variable": "c"
+                },
+                "span": {
+                  "start": 137,
+                  "end": 139
+                }
+              },
+              "body": {
+                "kind": {
+                  "Block": []
+                },
+                "span": {
+                  "start": 136,
+                  "end": 142
+                }
+              },
+              "span": {
+                "start": 136,
+                "end": 142
+              }
+            }
+          ],
+          "else_branch": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 100,
+              "end": 156
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 100,
+        "end": 164
+      }
+    },
+    {
+      "kind": {
+        "If": {
+          "condition": {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 168,
+              "end": 170
+            }
+          },
+          "then_branch": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 164,
+              "end": 173
+            }
+          },
+          "elseif_branches": [],
+          "else_branch": null
+        }
+      },
+      "span": {
+        "start": 164,
+        "end": 195
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 195
+  }
+}

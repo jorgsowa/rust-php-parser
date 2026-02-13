@@ -1,0 +1,147 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Declare": [
+          [
+            [
+              "X",
+              {
+                "kind": {
+                  "String": "Y"
+                },
+                "span": {
+                  "start": 18,
+                  "end": 21
+                }
+              }
+            ]
+          ],
+          null
+        ]
+      },
+      "span": {
+        "start": 7,
+        "end": 25
+      }
+    },
+    {
+      "kind": {
+        "Declare": [
+          [
+            [
+              "A",
+              {
+                "kind": {
+                  "String": "B"
+                },
+                "span": {
+                  "start": 36,
+                  "end": 39
+                }
+              }
+            ],
+            [
+              "C",
+              {
+                "kind": {
+                  "String": "D"
+                },
+                "span": {
+                  "start": 43,
+                  "end": 46
+                }
+              }
+            ]
+          ],
+          {
+            "kind": {
+              "Block": [
+                {
+                  "kind": {
+                    "Echo": [
+                      {
+                        "kind": {
+                          "String": "foo"
+                        },
+                        "span": {
+                          "start": 59,
+                          "end": 64
+                        }
+                      }
+                    ]
+                  },
+                  "span": {
+                    "start": 54,
+                    "end": 66
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 48,
+              "end": 67
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 25,
+        "end": 69
+      }
+    },
+    {
+      "kind": {
+        "Declare": [
+          [
+            [
+              "A",
+              {
+                "kind": {
+                  "String": "B"
+                },
+                "span": {
+                  "start": 80,
+                  "end": 83
+                }
+              }
+            ],
+            [
+              "C",
+              {
+                "kind": {
+                  "String": "D"
+                },
+                "span": {
+                  "start": 87,
+                  "end": 90
+                }
+              }
+            ]
+          ],
+          {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 69,
+              "end": 104
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 69,
+        "end": 104
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 104
+  }
+}

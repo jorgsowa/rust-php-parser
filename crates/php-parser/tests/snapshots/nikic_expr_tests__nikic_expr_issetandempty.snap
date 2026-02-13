@@ -1,0 +1,222 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Isset": [
+              {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 12,
+                  "end": 14
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 6,
+            "end": 15
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 17
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Isset": [
+              {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 23,
+                  "end": 25
+                }
+              },
+              {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 27,
+                  "end": 29
+                }
+              },
+              {
+                "kind": {
+                  "Variable": "c"
+                },
+                "span": {
+                  "start": 31,
+                  "end": 33
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 17,
+            "end": 34
+          }
+        }
+      },
+      "span": {
+        "start": 17,
+        "end": 37
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Empty": {
+              "kind": {
+                "Variable": "a"
+              },
+              "span": {
+                "start": 43,
+                "end": 45
+              }
+            }
+          },
+          "span": {
+            "start": 37,
+            "end": 46
+          }
+        }
+      },
+      "span": {
+        "start": 37,
+        "end": 48
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Empty": {
+              "kind": {
+                "FunctionCall": {
+                  "name": {
+                    "kind": {
+                      "Identifier": "foo"
+                    },
+                    "span": {
+                      "start": 54,
+                      "end": 57
+                    }
+                  },
+                  "args": []
+                }
+              },
+              "span": {
+                "start": 54,
+                "end": 59
+              }
+            }
+          },
+          "span": {
+            "start": 48,
+            "end": 60
+          }
+        }
+      },
+      "span": {
+        "start": 48,
+        "end": 62
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Empty": {
+              "kind": {
+                "Array": [
+                  {
+                    "key": null,
+                    "value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 74,
+                        "end": 75
+                      }
+                    },
+                    "unpack": false,
+                    "span": {
+                      "start": 74,
+                      "end": 75
+                    }
+                  },
+                  {
+                    "key": null,
+                    "value": {
+                      "kind": {
+                        "Int": 2
+                      },
+                      "span": {
+                        "start": 77,
+                        "end": 78
+                      }
+                    },
+                    "unpack": false,
+                    "span": {
+                      "start": 77,
+                      "end": 78
+                    }
+                  },
+                  {
+                    "key": null,
+                    "value": {
+                      "kind": {
+                        "Int": 3
+                      },
+                      "span": {
+                        "start": 80,
+                        "end": 81
+                      }
+                    },
+                    "unpack": false,
+                    "span": {
+                      "start": 80,
+                      "end": 81
+                    }
+                  }
+                ]
+              },
+              "span": {
+                "start": 68,
+                "end": 82
+              }
+            }
+          },
+          "span": {
+            "start": 62,
+            "end": 83
+          }
+        }
+      },
+      "span": {
+        "start": 62,
+        "end": 84
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 84
+  }
+}

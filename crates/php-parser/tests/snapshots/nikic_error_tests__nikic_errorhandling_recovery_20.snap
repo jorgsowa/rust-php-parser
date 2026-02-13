@@ -1,0 +1,104 @@
+---
+source: crates/php-parser/tests/nikic_error_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "Foo",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Property": {
+                  "name": "bar1",
+                  "visibility": "Public",
+                  "set_visibility": null,
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": null,
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 23,
+                "end": 35
+              }
+            },
+            {
+              "kind": {
+                "Property": {
+                  "name": "foo",
+                  "visibility": null,
+                  "set_visibility": null,
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "publi"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 41,
+                          "end": 47
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 41,
+                      "end": 47
+                    }
+                  },
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 41,
+                "end": 51
+              }
+            },
+            {
+              "kind": {
+                "Property": {
+                  "name": "bar",
+                  "visibility": "Public",
+                  "set_visibility": null,
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": null,
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 57,
+                "end": 68
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 71
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 71
+  }
+}

@@ -1,0 +1,146 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Array": [
+              {
+                "key": null,
+                "value": {
+                  "kind": {
+                    "Int": 1
+                  },
+                  "span": {
+                    "start": 8,
+                    "end": 9
+                  }
+                },
+                "unpack": false,
+                "span": {
+                  "start": 8,
+                  "end": 9
+                }
+              },
+              {
+                "key": null,
+                "value": {
+                  "kind": "Null",
+                  "span": {
+                    "start": 11,
+                    "end": 12
+                  }
+                },
+                "unpack": false,
+                "span": {
+                  "start": 11,
+                  "end": 12
+                }
+              },
+              {
+                "key": null,
+                "value": {
+                  "kind": {
+                    "Int": 2
+                  },
+                  "span": {
+                    "start": 13,
+                    "end": 14
+                  }
+                },
+                "unpack": false,
+                "span": {
+                  "start": 13,
+                  "end": 14
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 7,
+            "end": 15
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 17
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Array": [
+              {
+                "key": null,
+                "value": {
+                  "kind": {
+                    "Int": 1
+                  },
+                  "span": {
+                    "start": 23,
+                    "end": 24
+                  }
+                },
+                "unpack": false,
+                "span": {
+                  "start": 23,
+                  "end": 24
+                }
+              },
+              {
+                "key": null,
+                "value": {
+                  "kind": "Error",
+                  "span": {
+                    "start": 26,
+                    "end": 27
+                  }
+                },
+                "unpack": false,
+                "span": {
+                  "start": 26,
+                  "end": 27
+                }
+              },
+              {
+                "key": null,
+                "value": {
+                  "kind": {
+                    "Int": 2
+                  },
+                  "span": {
+                    "start": 28,
+                    "end": 29
+                  }
+                },
+                "unpack": false,
+                "span": {
+                  "start": 28,
+                  "end": 29
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 17,
+            "end": 30
+          }
+        }
+      },
+      "span": {
+        "start": 17,
+        "end": 31
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 31
+  }
+}

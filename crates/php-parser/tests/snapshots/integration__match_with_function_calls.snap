@@ -1,122 +1,199 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                Variable: label
-              span:
-                start: 6
-                end: 12
-            op: Assign
-            value:
-              kind:
-                Match:
-                  subject:
-                    kind:
-                      FunctionCall:
-                        name:
-                          kind:
-                            Identifier: getStatus
-                          span:
-                            start: 22
-                            end: 31
-                        args: []
-                    span:
-                      start: 22
-                      end: 33
-                  arms:
-                    - conditions:
-                        - kind:
-                            FunctionCall:
-                              name:
-                                kind:
-                                  Identifier: isActive
-                                span:
-                                  start: 41
-                                  end: 49
-                              args: []
-                          span:
-                            start: 41
-                            end: 52
-                      body:
-                        kind:
-                          String: active
-                        span:
-                          start: 55
-                          end: 63
-                      span:
-                        start: 41
-                        end: 63
-                    - conditions:
-                        - kind:
-                            FunctionCall:
-                              name:
-                                kind:
-                                  Identifier: isPending
-                                span:
-                                  start: 69
-                                  end: 78
-                              args: []
-                          span:
-                            start: 69
-                            end: 81
-                      body:
-                        kind:
-                          String: pending
-                        span:
-                          start: 84
-                          end: 93
-                      span:
-                        start: 69
-                        end: 93
-                    - conditions: ~
-                      body:
-                        kind:
-                          ThrowExpr:
-                            kind:
-                              New:
-                                class:
-                                  kind:
-                                    Identifier: LogicException
-                                  span:
-                                    start: 120
-                                    end: 134
-                                args:
-                                  - name: ~
-                                    value:
-                                      kind:
-                                        String: Unknown
-                                      span:
-                                        start: 135
-                                        end: 144
-                                    unpack: false
-                                    span:
-                                      start: 135
-                                      end: 144
-                            span:
-                              start: 116
-                              end: 145
-                        span:
-                          start: 110
-                          end: 145
-                      span:
-                        start: 99
-                        end: 145
-              span:
-                start: 15
-                end: 148
-        span:
-          start: 6
-          end: 148
-    span:
-      start: 6
-      end: 150
-span:
-  start: 0
-  end: 150
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "label"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 12
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Match": {
+                    "subject": {
+                      "kind": {
+                        "FunctionCall": {
+                          "name": {
+                            "kind": {
+                              "Identifier": "getStatus"
+                            },
+                            "span": {
+                              "start": 22,
+                              "end": 31
+                            }
+                          },
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 22,
+                        "end": 33
+                      }
+                    },
+                    "arms": [
+                      {
+                        "conditions": [
+                          {
+                            "kind": {
+                              "FunctionCall": {
+                                "name": {
+                                  "kind": {
+                                    "Identifier": "isActive"
+                                  },
+                                  "span": {
+                                    "start": 41,
+                                    "end": 49
+                                  }
+                                },
+                                "args": []
+                              }
+                            },
+                            "span": {
+                              "start": 41,
+                              "end": 52
+                            }
+                          }
+                        ],
+                        "body": {
+                          "kind": {
+                            "String": "active"
+                          },
+                          "span": {
+                            "start": 55,
+                            "end": 63
+                          }
+                        },
+                        "span": {
+                          "start": 41,
+                          "end": 63
+                        }
+                      },
+                      {
+                        "conditions": [
+                          {
+                            "kind": {
+                              "FunctionCall": {
+                                "name": {
+                                  "kind": {
+                                    "Identifier": "isPending"
+                                  },
+                                  "span": {
+                                    "start": 69,
+                                    "end": 78
+                                  }
+                                },
+                                "args": []
+                              }
+                            },
+                            "span": {
+                              "start": 69,
+                              "end": 81
+                            }
+                          }
+                        ],
+                        "body": {
+                          "kind": {
+                            "String": "pending"
+                          },
+                          "span": {
+                            "start": 84,
+                            "end": 93
+                          }
+                        },
+                        "span": {
+                          "start": 69,
+                          "end": 93
+                        }
+                      },
+                      {
+                        "conditions": null,
+                        "body": {
+                          "kind": {
+                            "ThrowExpr": {
+                              "kind": {
+                                "New": {
+                                  "class": {
+                                    "kind": {
+                                      "Identifier": "LogicException"
+                                    },
+                                    "span": {
+                                      "start": 120,
+                                      "end": 134
+                                    }
+                                  },
+                                  "args": [
+                                    {
+                                      "name": null,
+                                      "value": {
+                                        "kind": {
+                                          "String": "Unknown"
+                                        },
+                                        "span": {
+                                          "start": 135,
+                                          "end": 144
+                                        }
+                                      },
+                                      "unpack": false,
+                                      "span": {
+                                        "start": 135,
+                                        "end": 144
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              "span": {
+                                "start": 116,
+                                "end": 145
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 110,
+                            "end": 145
+                          }
+                        },
+                        "span": {
+                          "start": 99,
+                          "end": 145
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 15,
+                  "end": 148
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 148
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 150
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 150
+  }
+}

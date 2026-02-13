@@ -1,0 +1,306 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Use": {
+          "kind": "Normal",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "A",
+                  "B"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 11,
+                  "end": 14
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 11,
+                "end": 14
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 16
+      }
+    },
+    {
+      "kind": {
+        "Use": {
+          "kind": "Normal",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "C",
+                  "D"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 20,
+                  "end": 24
+                }
+              },
+              "alias": "E",
+              "span": {
+                "start": 20,
+                "end": 28
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 16,
+        "end": 30
+      }
+    },
+    {
+      "kind": {
+        "Use": {
+          "kind": "Normal",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "F",
+                  "G"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 34,
+                  "end": 38
+                }
+              },
+              "alias": "H",
+              "span": {
+                "start": 34,
+                "end": 42
+              }
+            },
+            {
+              "name": {
+                "parts": [
+                  "J"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 44,
+                  "end": 45
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 44,
+                "end": 45
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 30,
+        "end": 85
+      }
+    },
+    {
+      "kind": {
+        "Use": {
+          "kind": "Normal",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "A"
+                ],
+                "kind": "FullyQualified",
+                "span": {
+                  "start": 89,
+                  "end": 91
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 89,
+                "end": 91
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 85,
+        "end": 93
+      }
+    },
+    {
+      "kind": {
+        "Use": {
+          "kind": "Normal",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "A"
+                ],
+                "kind": "FullyQualified",
+                "span": {
+                  "start": 97,
+                  "end": 100
+                }
+              },
+              "alias": "B",
+              "span": {
+                "start": 97,
+                "end": 104
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 93,
+        "end": 140
+      }
+    },
+    {
+      "kind": {
+        "Use": {
+          "kind": "Function",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "foo",
+                  "bar"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 153,
+                  "end": 160
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 153,
+                "end": 160
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 140,
+        "end": 162
+      }
+    },
+    {
+      "kind": {
+        "Use": {
+          "kind": "Function",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "foo",
+                  "bar"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 175,
+                  "end": 183
+                }
+              },
+              "alias": "baz",
+              "span": {
+                "start": 175,
+                "end": 189
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 162,
+        "end": 191
+      }
+    },
+    {
+      "kind": {
+        "Use": {
+          "kind": "Const",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "foo",
+                  "BAR"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 201,
+                  "end": 208
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 201,
+                "end": 208
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 191,
+        "end": 210
+      }
+    },
+    {
+      "kind": {
+        "Use": {
+          "kind": "Const",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "foo",
+                  "BAR"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 220,
+                  "end": 228
+                }
+              },
+              "alias": "BAZ",
+              "span": {
+                "start": 220,
+                "end": 234
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 210,
+        "end": 235
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 235
+  }
+}

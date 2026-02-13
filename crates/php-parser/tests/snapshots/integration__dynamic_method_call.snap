@@ -1,67 +1,106 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Expression:
-        kind:
-          MethodCall:
-            object:
-              kind:
-                Variable: obj
-              span:
-                start: 6
-                end: 10
-            method:
-              kind:
-                Variable: method
-              span:
-                start: 12
-                end: 19
-            args: []
-        span:
-          start: 6
-          end: 21
-    span:
-      start: 6
-      end: 23
-  - kind:
-      Expression:
-        kind:
-          MethodCall:
-            object:
-              kind:
-                Variable: obj
-              span:
-                start: 23
-                end: 27
-            method:
-              kind:
-                Binary:
-                  left:
-                    kind:
-                      String: get
-                    span:
-                      start: 30
-                      end: 35
-                  op: Concat
-                  right:
-                    kind:
-                      Variable: field
-                    span:
-                      start: 38
-                      end: 44
-              span:
-                start: 30
-                end: 44
-            args: []
-        span:
-          start: 23
-          end: 47
-    span:
-      start: 23
-      end: 48
-span:
-  start: 0
-  end: 48
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MethodCall": {
+              "object": {
+                "kind": {
+                  "Variable": "obj"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 10
+                }
+              },
+              "method": {
+                "kind": {
+                  "Variable": "method"
+                },
+                "span": {
+                  "start": 12,
+                  "end": 19
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 21
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 23
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MethodCall": {
+              "object": {
+                "kind": {
+                  "Variable": "obj"
+                },
+                "span": {
+                  "start": 23,
+                  "end": 27
+                }
+              },
+              "method": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "String": "get"
+                      },
+                      "span": {
+                        "start": 30,
+                        "end": 35
+                      }
+                    },
+                    "op": "Concat",
+                    "right": {
+                      "kind": {
+                        "Variable": "field"
+                      },
+                      "span": {
+                        "start": 38,
+                        "end": 44
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 30,
+                  "end": 44
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 23,
+            "end": 47
+          }
+        }
+      },
+      "span": {
+        "start": 23,
+        "end": 48
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 48
+  }
+}

@@ -1,0 +1,71 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "C",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "TraitUse": {
+                  "traits": [
+                    {
+                      "parts": [
+                        "T"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 24,
+                        "end": 26
+                      }
+                    }
+                  ],
+                  "adaptations": [
+                    {
+                      "kind": {
+                        "Alias": {
+                          "trait_name": null,
+                          "method": "x",
+                          "new_modifier": null,
+                          "new_name": "y"
+                        }
+                      },
+                      "span": {
+                        "start": 36,
+                        "end": 42
+                      }
+                    }
+                  ]
+                }
+              },
+              "span": {
+                "start": 20,
+                "end": 66
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 67
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 67
+  }
+}

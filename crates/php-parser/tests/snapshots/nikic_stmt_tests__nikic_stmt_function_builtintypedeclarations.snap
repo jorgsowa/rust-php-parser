@@ -1,0 +1,263 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "test",
+          "params": [
+            {
+              "name": "a",
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "bool"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 20,
+                      "end": 24
+                    }
+                  }
+                },
+                "span": {
+                  "start": 20,
+                  "end": 24
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 20,
+                "end": 27
+              }
+            },
+            {
+              "name": "b",
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "Int"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 29,
+                      "end": 32
+                    }
+                  }
+                },
+                "span": {
+                  "start": 29,
+                  "end": 32
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 29,
+                "end": 35
+              }
+            },
+            {
+              "name": "c",
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "FLOAT"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 37,
+                      "end": 42
+                    }
+                  }
+                },
+                "span": {
+                  "start": 37,
+                  "end": 42
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 37,
+                "end": 45
+              }
+            },
+            {
+              "name": "d",
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "StRiNg"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 47,
+                      "end": 53
+                    }
+                  }
+                },
+                "span": {
+                  "start": 47,
+                  "end": 53
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 47,
+                "end": 56
+              }
+            },
+            {
+              "name": "e",
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "iterable"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 58,
+                      "end": 66
+                    }
+                  }
+                },
+                "span": {
+                  "start": 58,
+                  "end": 66
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 58,
+                "end": 69
+              }
+            },
+            {
+              "name": "f",
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "object"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 71,
+                      "end": 77
+                    }
+                  }
+                },
+                "span": {
+                  "start": 71,
+                  "end": 77
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 71,
+                "end": 80
+              }
+            },
+            {
+              "name": "g",
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "mixed"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 82,
+                      "end": 87
+                    }
+                  }
+                },
+                "span": {
+                  "start": 82,
+                  "end": 87
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 82,
+                "end": 90
+              }
+            }
+          ],
+          "body": [],
+          "return_type": {
+            "kind": {
+              "Named": {
+                "parts": [
+                  "void"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 94,
+                  "end": 98
+                }
+              }
+            },
+            "span": {
+              "start": 94,
+              "end": 98
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 101
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 101
+  }
+}

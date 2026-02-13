@@ -1,113 +1,180 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                ArrayAccess:
-                  array:
-                    kind:
-                      Variable: arr
-                    span:
-                      start: 6
-                      end: 10
-                  index:
-                    kind:
-                      Int: 0
-                    span:
-                      start: 11
-                      end: 12
-              span:
-                start: 6
-                end: 14
-            op: Plus
-            value:
-              kind:
-                Int: 5
-              span:
-                start: 17
-                end: 18
-        span:
-          start: 6
-          end: 18
-    span:
-      start: 6
-      end: 20
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                PropertyAccess:
-                  object:
-                    kind:
-                      Variable: obj
-                    span:
-                      start: 20
-                      end: 24
-                  property:
-                    kind:
-                      Identifier: count
-                    span:
-                      start: 26
-                      end: 31
-              span:
-                start: 20
-                end: 31
-            op: Minus
-            value:
-              kind:
-                Int: 1
-              span:
-                start: 35
-                end: 36
-        span:
-          start: 20
-          end: 36
-    span:
-      start: 20
-      end: 38
-  - kind:
-      Expression:
-        kind:
-          Assign:
-            target:
-              kind:
-                ArrayAccess:
-                  array:
-                    kind:
-                      Variable: data
-                    span:
-                      start: 38
-                      end: 43
-                  index:
-                    kind:
-                      String: key
-                    span:
-                      start: 44
-                      end: 49
-              span:
-                start: 38
-                end: 51
-            op: Concat
-            value:
-              kind:
-                String: suffix
-              span:
-                start: 54
-                end: 62
-        span:
-          start: 38
-          end: 62
-    span:
-      start: 38
-      end: 63
-span:
-  start: 0
-  end: 63
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "ArrayAccess": {
+                    "array": {
+                      "kind": {
+                        "Variable": "arr"
+                      },
+                      "span": {
+                        "start": 6,
+                        "end": 10
+                      }
+                    },
+                    "index": {
+                      "kind": {
+                        "Int": 0
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 12
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 6,
+                  "end": 14
+                }
+              },
+              "op": "Plus",
+              "value": {
+                "kind": {
+                  "Int": 5
+                },
+                "span": {
+                  "start": 17,
+                  "end": 18
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 18
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 20
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "PropertyAccess": {
+                    "object": {
+                      "kind": {
+                        "Variable": "obj"
+                      },
+                      "span": {
+                        "start": 20,
+                        "end": 24
+                      }
+                    },
+                    "property": {
+                      "kind": {
+                        "Identifier": "count"
+                      },
+                      "span": {
+                        "start": 26,
+                        "end": 31
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 20,
+                  "end": 31
+                }
+              },
+              "op": "Minus",
+              "value": {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 35,
+                  "end": 36
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 20,
+            "end": 36
+          }
+        }
+      },
+      "span": {
+        "start": 20,
+        "end": 38
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "ArrayAccess": {
+                    "array": {
+                      "kind": {
+                        "Variable": "data"
+                      },
+                      "span": {
+                        "start": 38,
+                        "end": 43
+                      }
+                    },
+                    "index": {
+                      "kind": {
+                        "String": "key"
+                      },
+                      "span": {
+                        "start": 44,
+                        "end": 49
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 38,
+                  "end": 51
+                }
+              },
+              "op": "Concat",
+              "value": {
+                "kind": {
+                  "String": "suffix"
+                },
+                "span": {
+                  "start": 54,
+                  "end": 62
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 38,
+            "end": 62
+          }
+        }
+      },
+      "span": {
+        "start": 38,
+        "end": 63
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 63
+  }
+}

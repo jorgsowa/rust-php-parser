@@ -1,31 +1,49 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Function:
-        name: gen
-        params: []
-        body:
-          - kind:
-              Expression:
-                kind:
-                  Yield:
-                    key: ~
-                    value: ~
-                span:
-                  start: 27
-                  end: 32
-            span:
-              start: 27
-              end: 34
-        return_type: ~
-        by_ref: false
-        attributes: []
-    span:
-      start: 6
-      end: 35
-span:
-  start: 0
-  end: 35
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "gen",
+          "params": [],
+          "body": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Yield": {
+                      "key": null,
+                      "value": null
+                    }
+                  },
+                  "span": {
+                    "start": 27,
+                    "end": 32
+                  }
+                }
+              },
+              "span": {
+                "start": 27,
+                "end": 34
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 35
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 35
+  }
+}

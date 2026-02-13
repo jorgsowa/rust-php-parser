@@ -1,0 +1,460 @@
+---
+source: crates/php-parser/tests/nikic_error_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "foo",
+          "params": [
+            {
+              "name": "<error>",
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "Type"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 20,
+                      "end": 24
+                    }
+                  }
+                },
+                "span": {
+                  "start": 20,
+                  "end": 24
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 20,
+                "end": 24
+              }
+            }
+          ],
+          "body": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Variable": "foo"
+                  },
+                  "span": {
+                    "start": 32,
+                    "end": 36
+                  }
+                }
+              },
+              "span": {
+                "start": 32,
+                "end": 38
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 39
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": "foo",
+          "params": [
+            {
+              "name": "foo",
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "Type1"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 54,
+                      "end": 60
+                    }
+                  }
+                },
+                "span": {
+                  "start": 54,
+                  "end": 60
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 54,
+                "end": 64
+              }
+            },
+            {
+              "name": "<error>",
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "Type2"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 66,
+                      "end": 71
+                    }
+                  }
+                },
+                "span": {
+                  "start": 66,
+                  "end": 71
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 66,
+                "end": 71
+              }
+            }
+          ],
+          "body": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Variable": "bar"
+                  },
+                  "span": {
+                    "start": 79,
+                    "end": 83
+                  }
+                }
+              },
+              "span": {
+                "start": 79,
+                "end": 85
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 41,
+        "end": 86
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": "foo",
+          "params": [
+            {
+              "name": "<error>",
+              "type_hint": null,
+              "default": null,
+              "by_ref": false,
+              "variadic": true,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 101,
+                "end": 104
+              }
+            }
+          ],
+          "body": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Variable": "baz"
+                  },
+                  "span": {
+                    "start": 112,
+                    "end": 116
+                  }
+                }
+              },
+              "span": {
+                "start": 112,
+                "end": 118
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 88,
+        "end": 119
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": "foo",
+          "params": [
+            {
+              "name": "<error>",
+              "type_hint": null,
+              "default": null,
+              "by_ref": true,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 134,
+                "end": 135
+              }
+            }
+          ],
+          "body": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Variable": "qux"
+                  },
+                  "span": {
+                    "start": 143,
+                    "end": 147
+                  }
+                }
+              },
+              "span": {
+                "start": 143,
+                "end": 149
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 121,
+        "end": 150
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": "foo",
+          "params": [
+            {
+              "name": "<error>",
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "Bar"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 165,
+                      "end": 168
+                    }
+                  }
+                },
+                "span": {
+                  "start": 165,
+                  "end": 168
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 165,
+                "end": 168
+              }
+            }
+          ],
+          "body": [
+            {
+              "kind": {
+                "Class": {
+                  "name": "Bar",
+                  "modifiers": {
+                    "is_abstract": false,
+                    "is_final": false,
+                    "is_readonly": false
+                  },
+                  "extends": null,
+                  "implements": [],
+                  "members": [
+                    {
+                      "kind": {
+                        "Method": {
+                          "name": "foo",
+                          "visibility": null,
+                          "is_static": false,
+                          "is_abstract": false,
+                          "is_final": false,
+                          "by_ref": false,
+                          "params": [
+                            {
+                              "name": "<error>",
+                              "type_hint": {
+                                "kind": {
+                                  "Named": {
+                                    "parts": [
+                                      "Baz"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 200,
+                                      "end": 203
+                                    }
+                                  }
+                                },
+                                "span": {
+                                  "start": 200,
+                                  "end": 203
+                                }
+                              },
+                              "default": null,
+                              "by_ref": false,
+                              "variadic": false,
+                              "visibility": null,
+                              "set_visibility": null,
+                              "attributes": [],
+                              "span": {
+                                "start": 200,
+                                "end": 203
+                              }
+                            }
+                          ],
+                          "return_type": null,
+                          "body": null,
+                          "attributes": []
+                        }
+                      },
+                      "span": {
+                        "start": 187,
+                        "end": 205
+                      }
+                    }
+                  ],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 171,
+                "end": 206
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Closure": {
+                      "is_static": false,
+                      "by_ref": false,
+                      "params": [
+                        {
+                          "name": "<error>",
+                          "type_hint": {
+                            "kind": {
+                              "Named": {
+                                "parts": [
+                                  "Foo"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 217,
+                                  "end": 220
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 217,
+                              "end": 220
+                            }
+                          },
+                          "default": null,
+                          "by_ref": false,
+                          "variadic": false,
+                          "visibility": null,
+                          "set_visibility": null,
+                          "attributes": [],
+                          "span": {
+                            "start": 217,
+                            "end": 220
+                          }
+                        }
+                      ],
+                      "use_vars": [],
+                      "return_type": null,
+                      "body": [
+                        {
+                          "kind": "Nop",
+                          "span": {
+                            "start": 221,
+                            "end": 222
+                          }
+                        }
+                      ],
+                      "attributes": []
+                    }
+                  },
+                  "span": {
+                    "start": 208,
+                    "end": 222
+                  }
+                }
+              },
+              "span": {
+                "start": 208,
+                "end": 222
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 152,
+        "end": 222
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 222
+  }
+}

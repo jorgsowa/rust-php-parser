@@ -1,0 +1,93 @@
+---
+source: crates/php-parser/tests/nikic_scalar_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": "\\u{0}"
+          },
+          "span": {
+            "start": 7,
+            "end": 14
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 16
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "InterpolatedString": [
+              {
+                "Literal": "\\u{114}"
+              },
+              {
+                "Expr": {
+                  "kind": {
+                    "Variable": "foo"
+                  },
+                  "span": {
+                    "start": 24,
+                    "end": 28
+                  }
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 16,
+            "end": 29
+          }
+        }
+      },
+      "span": {
+        "start": 16,
+        "end": 31
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ShellExec": [
+              {
+                "Literal": "\\u{1F602}"
+              },
+              {
+                "Expr": {
+                  "kind": {
+                    "Variable": "bar"
+                  },
+                  "span": {
+                    "start": 41,
+                    "end": 45
+                  }
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 31,
+            "end": 46
+          }
+        }
+      },
+      "span": {
+        "start": 31,
+        "end": 47
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 47
+  }
+}

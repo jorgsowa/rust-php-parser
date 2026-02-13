@@ -1,78 +1,124 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Expression:
-        kind:
-          MethodCall:
-            object:
-              kind:
-                Variable: obj
-              span:
-                start: 6
-                end: 10
-            method:
-              kind:
-                Identifier: getName
-              span:
-                start: 12
-                end: 19
-            args: []
-        span:
-          start: 6
-          end: 21
-    span:
-      start: 6
-      end: 23
-  - kind:
-      Expression:
-        kind:
-          MethodCall:
-            object:
-              kind:
-                MethodCall:
-                  object:
-                    kind:
-                      Variable: builder
-                    span:
-                      start: 23
-                      end: 31
-                  method:
-                    kind:
-                      Identifier: setName
-                    span:
-                      start: 33
-                      end: 40
-                  args:
-                    - name: ~
-                      value:
-                        kind:
-                          String: foo
-                        span:
-                          start: 41
-                          end: 46
-                      unpack: false
-                      span:
-                        start: 41
-                        end: 46
-              span:
-                start: 23
-                end: 47
-            method:
-              kind:
-                Identifier: build
-              span:
-                start: 49
-                end: 54
-            args: []
-        span:
-          start: 23
-          end: 56
-    span:
-      start: 23
-      end: 57
-span:
-  start: 0
-  end: 57
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MethodCall": {
+              "object": {
+                "kind": {
+                  "Variable": "obj"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 10
+                }
+              },
+              "method": {
+                "kind": {
+                  "Identifier": "getName"
+                },
+                "span": {
+                  "start": 12,
+                  "end": 19
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 21
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 23
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MethodCall": {
+              "object": {
+                "kind": {
+                  "MethodCall": {
+                    "object": {
+                      "kind": {
+                        "Variable": "builder"
+                      },
+                      "span": {
+                        "start": 23,
+                        "end": 31
+                      }
+                    },
+                    "method": {
+                      "kind": {
+                        "Identifier": "setName"
+                      },
+                      "span": {
+                        "start": 33,
+                        "end": 40
+                      }
+                    },
+                    "args": [
+                      {
+                        "name": null,
+                        "value": {
+                          "kind": {
+                            "String": "foo"
+                          },
+                          "span": {
+                            "start": 41,
+                            "end": 46
+                          }
+                        },
+                        "unpack": false,
+                        "span": {
+                          "start": 41,
+                          "end": 46
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 23,
+                  "end": 47
+                }
+              },
+              "method": {
+                "kind": {
+                  "Identifier": "build"
+                },
+                "span": {
+                  "start": 49,
+                  "end": 54
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 23,
+            "end": 56
+          }
+        }
+      },
+      "span": {
+        "start": 23,
+        "end": 57
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 57
+  }
+}

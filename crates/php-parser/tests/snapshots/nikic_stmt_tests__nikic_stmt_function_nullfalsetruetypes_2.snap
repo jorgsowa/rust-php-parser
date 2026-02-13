@@ -1,0 +1,111 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "test",
+          "params": [],
+          "body": [],
+          "return_type": {
+            "kind": {
+              "Named": {
+                "parts": [
+                  "null"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 24,
+                  "end": 28
+                }
+              }
+            },
+            "span": {
+              "start": 24,
+              "end": 28
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 31
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": "test",
+          "params": [],
+          "body": [],
+          "return_type": {
+            "kind": {
+              "Named": {
+                "parts": [
+                  "false"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 49,
+                  "end": 54
+                }
+              }
+            },
+            "span": {
+              "start": 49,
+              "end": 54
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 32,
+        "end": 57
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": "test",
+          "params": [],
+          "body": [],
+          "return_type": {
+            "kind": {
+              "Named": {
+                "parts": [
+                  "true"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 75,
+                  "end": 79
+                }
+              }
+            },
+            "span": {
+              "start": 75,
+              "end": 79
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 58,
+        "end": 82
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 82
+  }
+}

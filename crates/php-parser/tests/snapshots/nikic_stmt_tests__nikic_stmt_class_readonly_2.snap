@@ -1,0 +1,32 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "A",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": true,
+            "is_readonly": true
+          },
+          "extends": null,
+          "implements": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 22,
+        "end": 33
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 33
+  }
+}

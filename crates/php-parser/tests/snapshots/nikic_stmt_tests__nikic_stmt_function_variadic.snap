@@ -1,0 +1,226 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "test",
+          "params": [
+            {
+              "name": "a",
+              "type_hint": null,
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 20,
+                "end": 22
+              }
+            },
+            {
+              "name": "b",
+              "type_hint": null,
+              "default": null,
+              "by_ref": false,
+              "variadic": true,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 24,
+                "end": 30
+              }
+            }
+          ],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 34
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": "test",
+          "params": [
+            {
+              "name": "a",
+              "type_hint": null,
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 49,
+                "end": 51
+              }
+            },
+            {
+              "name": "b",
+              "type_hint": null,
+              "default": null,
+              "by_ref": true,
+              "variadic": true,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 53,
+                "end": 60
+              }
+            }
+          ],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 35,
+        "end": 64
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": "test",
+          "params": [
+            {
+              "name": "a",
+              "type_hint": null,
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 79,
+                "end": 81
+              }
+            },
+            {
+              "name": "b",
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "Type"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 83,
+                      "end": 88
+                    }
+                  }
+                },
+                "span": {
+                  "start": 83,
+                  "end": 88
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": true,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 83,
+                "end": 94
+              }
+            }
+          ],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 65,
+        "end": 98
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": "test",
+          "params": [
+            {
+              "name": "a",
+              "type_hint": null,
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 113,
+                "end": 115
+              }
+            },
+            {
+              "name": "b",
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "Type"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 117,
+                      "end": 122
+                    }
+                  }
+                },
+                "span": {
+                  "start": 117,
+                  "end": 122
+                }
+              },
+              "default": null,
+              "by_ref": true,
+              "variadic": true,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 117,
+                "end": 129
+              }
+            }
+          ],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 99,
+        "end": 133
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 133
+  }
+}

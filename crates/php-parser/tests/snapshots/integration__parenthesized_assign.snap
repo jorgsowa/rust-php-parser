@@ -1,56 +1,88 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Expression:
-        kind:
-          MethodCall:
-            object:
-              kind:
-                Parenthesized:
-                  kind:
-                    Assign:
-                      target:
-                        kind:
-                          Variable: x
-                        span:
-                          start: 7
-                          end: 9
-                      op: Assign
-                      value:
-                        kind:
-                          FunctionCall:
-                            name:
-                              kind:
-                                Identifier: getValue
-                              span:
-                                start: 12
-                                end: 20
-                            args: []
-                        span:
-                          start: 12
-                          end: 22
-                  span:
-                    start: 7
-                    end: 22
-              span:
-                start: 6
-                end: 23
-            method:
-              kind:
-                Identifier: process
-              span:
-                start: 25
-                end: 32
-            args: []
-        span:
-          start: 6
-          end: 34
-    span:
-      start: 6
-      end: 35
-span:
-  start: 0
-  end: 35
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MethodCall": {
+              "object": {
+                "kind": {
+                  "Parenthesized": {
+                    "kind": {
+                      "Assign": {
+                        "target": {
+                          "kind": {
+                            "Variable": "x"
+                          },
+                          "span": {
+                            "start": 7,
+                            "end": 9
+                          }
+                        },
+                        "op": "Assign",
+                        "value": {
+                          "kind": {
+                            "FunctionCall": {
+                              "name": {
+                                "kind": {
+                                  "Identifier": "getValue"
+                                },
+                                "span": {
+                                  "start": 12,
+                                  "end": 20
+                                }
+                              },
+                              "args": []
+                            }
+                          },
+                          "span": {
+                            "start": 12,
+                            "end": 22
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 7,
+                      "end": 22
+                    }
+                  }
+                },
+                "span": {
+                  "start": 6,
+                  "end": 23
+                }
+              },
+              "method": {
+                "kind": {
+                  "Identifier": "process"
+                },
+                "span": {
+                  "start": 25,
+                  "end": 32
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 34
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 35
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 35
+  }
+}

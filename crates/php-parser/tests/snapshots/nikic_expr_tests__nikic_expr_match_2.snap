@@ -1,0 +1,96 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "value"
+                },
+                "span": {
+                  "start": 7,
+                  "end": 13
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Match": {
+                    "subject": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 23,
+                        "end": 24
+                      }
+                    },
+                    "arms": [
+                      {
+                        "conditions": [
+                          {
+                            "kind": {
+                              "Int": 0
+                            },
+                            "span": {
+                              "start": 58,
+                              "end": 59
+                            }
+                          },
+                          {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 61,
+                              "end": 62
+                            }
+                          }
+                        ],
+                        "body": {
+                          "kind": {
+                            "String": "Foo"
+                          },
+                          "span": {
+                            "start": 66,
+                            "end": 71
+                          }
+                        },
+                        "span": {
+                          "start": 58,
+                          "end": 71
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 16,
+                  "end": 74
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 7,
+            "end": 74
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 75
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 75
+  }
+}

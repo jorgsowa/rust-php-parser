@@ -1,0 +1,1020 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 23,
+                  "end": 25
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 28,
+                  "end": 30
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 23,
+            "end": 30
+          }
+        }
+      },
+      "span": {
+        "start": 23,
+        "end": 52
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 52,
+                  "end": 54
+                }
+              },
+              "op": "BitwiseAnd",
+              "value": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 58,
+                  "end": 60
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 52,
+            "end": 60
+          }
+        }
+      },
+      "span": {
+        "start": 52,
+        "end": 62
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 62,
+                  "end": 64
+                }
+              },
+              "op": "BitwiseOr",
+              "value": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 68,
+                  "end": 70
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 62,
+            "end": 70
+          }
+        }
+      },
+      "span": {
+        "start": 62,
+        "end": 72
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 72,
+                  "end": 74
+                }
+              },
+              "op": "BitwiseXor",
+              "value": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 78,
+                  "end": 80
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 72,
+            "end": 80
+          }
+        }
+      },
+      "span": {
+        "start": 72,
+        "end": 82
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 82,
+                  "end": 84
+                }
+              },
+              "op": "Concat",
+              "value": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 88,
+                  "end": 90
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 82,
+            "end": 90
+          }
+        }
+      },
+      "span": {
+        "start": 82,
+        "end": 92
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 92,
+                  "end": 94
+                }
+              },
+              "op": "Div",
+              "value": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 98,
+                  "end": 100
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 92,
+            "end": 100
+          }
+        }
+      },
+      "span": {
+        "start": 92,
+        "end": 102
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 102,
+                  "end": 104
+                }
+              },
+              "op": "Minus",
+              "value": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 108,
+                  "end": 110
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 102,
+            "end": 110
+          }
+        }
+      },
+      "span": {
+        "start": 102,
+        "end": 112
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 112,
+                  "end": 114
+                }
+              },
+              "op": "Mod",
+              "value": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 118,
+                  "end": 120
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 112,
+            "end": 120
+          }
+        }
+      },
+      "span": {
+        "start": 112,
+        "end": 122
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 122,
+                  "end": 124
+                }
+              },
+              "op": "Mul",
+              "value": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 128,
+                  "end": 130
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 122,
+            "end": 130
+          }
+        }
+      },
+      "span": {
+        "start": 122,
+        "end": 132
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 132,
+                  "end": 134
+                }
+              },
+              "op": "Plus",
+              "value": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 138,
+                  "end": 140
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 132,
+            "end": 140
+          }
+        }
+      },
+      "span": {
+        "start": 132,
+        "end": 142
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 142,
+                  "end": 144
+                }
+              },
+              "op": "ShiftLeft",
+              "value": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 149,
+                  "end": 151
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 142,
+            "end": 151
+          }
+        }
+      },
+      "span": {
+        "start": 142,
+        "end": 153
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 153,
+                  "end": 155
+                }
+              },
+              "op": "ShiftRight",
+              "value": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 160,
+                  "end": 162
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 153,
+            "end": 162
+          }
+        }
+      },
+      "span": {
+        "start": 153,
+        "end": 164
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 164,
+                  "end": 166
+                }
+              },
+              "op": "Pow",
+              "value": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 171,
+                  "end": 173
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 164,
+            "end": 173
+          }
+        }
+      },
+      "span": {
+        "start": 164,
+        "end": 175
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 175,
+                  "end": 177
+                }
+              },
+              "op": "Coalesce",
+              "value": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 182,
+                  "end": 184
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 175,
+            "end": 184
+          }
+        }
+      },
+      "span": {
+        "start": 175,
+        "end": 205
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 205,
+                  "end": 207
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Assign": {
+                    "target": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 210,
+                        "end": 212
+                      }
+                    },
+                    "op": "Mul",
+                    "value": {
+                      "kind": {
+                        "Assign": {
+                          "target": {
+                            "kind": {
+                              "Variable": "c"
+                            },
+                            "span": {
+                              "start": 216,
+                              "end": 218
+                            }
+                          },
+                          "op": "Pow",
+                          "value": {
+                            "kind": {
+                              "Variable": "d"
+                            },
+                            "span": {
+                              "start": 223,
+                              "end": 225
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 216,
+                        "end": 225
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 210,
+                  "end": 225
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 205,
+            "end": 225
+          }
+        }
+      },
+      "span": {
+        "start": 205,
+        "end": 245
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 245,
+                  "end": 247
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 251,
+                  "end": 253
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 245,
+            "end": 253
+          }
+        }
+      },
+      "span": {
+        "start": 245,
+        "end": 273
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Array": [
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "a"
+                        },
+                        "span": {
+                          "start": 278,
+                          "end": 280
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 278,
+                        "end": 280
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 273,
+                  "end": 281
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 284,
+                  "end": 286
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 273,
+            "end": 286
+          }
+        }
+      },
+      "span": {
+        "start": 273,
+        "end": 288
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Array": [
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "a"
+                        },
+                        "span": {
+                          "start": 293,
+                          "end": 295
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 293,
+                        "end": 295
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": "Null",
+                        "span": {
+                          "start": 297,
+                          "end": 298
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 297,
+                        "end": 298
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "b"
+                        },
+                        "span": {
+                          "start": 299,
+                          "end": 301
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 299,
+                        "end": 301
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 288,
+                  "end": 302
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Variable": "c"
+                },
+                "span": {
+                  "start": 305,
+                  "end": 307
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 288,
+            "end": 307
+          }
+        }
+      },
+      "span": {
+        "start": 288,
+        "end": 309
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Array": [
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "a"
+                        },
+                        "span": {
+                          "start": 314,
+                          "end": 316
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 314,
+                        "end": 316
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Array": [
+                            {
+                              "key": null,
+                              "value": {
+                                "kind": "Null",
+                                "span": {
+                                  "start": 323,
+                                  "end": 324
+                                }
+                              },
+                              "unpack": false,
+                              "span": {
+                                "start": 323,
+                                "end": 324
+                              }
+                            },
+                            {
+                              "key": null,
+                              "value": {
+                                "kind": {
+                                  "Variable": "c"
+                                },
+                                "span": {
+                                  "start": 325,
+                                  "end": 327
+                                }
+                              },
+                              "unpack": false,
+                              "span": {
+                                "start": 325,
+                                "end": 327
+                              }
+                            }
+                          ]
+                        },
+                        "span": {
+                          "start": 318,
+                          "end": 328
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 318,
+                        "end": 328
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "d"
+                        },
+                        "span": {
+                          "start": 330,
+                          "end": 332
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 330,
+                        "end": 332
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 309,
+                  "end": 333
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Variable": "e"
+                },
+                "span": {
+                  "start": 336,
+                  "end": 338
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 309,
+            "end": 338
+          }
+        }
+      },
+      "span": {
+        "start": 309,
+        "end": 352
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "UnaryPrefix": {
+              "op": "PreIncrement",
+              "operand": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 354,
+                  "end": 356
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 352,
+            "end": 356
+          }
+        }
+      },
+      "span": {
+        "start": 352,
+        "end": 358
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "UnaryPostfix": {
+              "operand": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 358,
+                  "end": 360
+                }
+              },
+              "op": "PostIncrement"
+            }
+          },
+          "span": {
+            "start": 358,
+            "end": 362
+          }
+        }
+      },
+      "span": {
+        "start": 358,
+        "end": 364
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "UnaryPrefix": {
+              "op": "PreDecrement",
+              "operand": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 366,
+                  "end": 368
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 364,
+            "end": 368
+          }
+        }
+      },
+      "span": {
+        "start": 364,
+        "end": 370
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "UnaryPostfix": {
+              "operand": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 370,
+                  "end": 372
+                }
+              },
+              "op": "PostDecrement"
+            }
+          },
+          "span": {
+            "start": 370,
+            "end": 374
+          }
+        }
+      },
+      "span": {
+        "start": 370,
+        "end": 375
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 375
+  }
+}

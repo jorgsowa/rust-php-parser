@@ -1,0 +1,312 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Trait": {
+          "name": "A",
+          "members": [
+            {
+              "kind": {
+                "Method": {
+                  "name": "a",
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": null,
+                  "body": [],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 21,
+                "end": 44
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 45
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": "B",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "TraitUse": {
+                  "traits": [
+                    {
+                      "parts": [
+                        "C"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 65,
+                        "end": 66
+                      }
+                    }
+                  ],
+                  "adaptations": []
+                }
+              },
+              "span": {
+                "start": 61,
+                "end": 72
+              }
+            },
+            {
+              "kind": {
+                "TraitUse": {
+                  "traits": [
+                    {
+                      "parts": [
+                        "D"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 76,
+                        "end": 78
+                      }
+                    }
+                  ],
+                  "adaptations": [
+                    {
+                      "kind": {
+                        "Alias": {
+                          "trait_name": null,
+                          "method": "a",
+                          "new_modifier": "Protected",
+                          "new_name": "b"
+                        }
+                      },
+                      "span": {
+                        "start": 88,
+                        "end": 114
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Alias": {
+                          "trait_name": null,
+                          "method": "c",
+                          "new_modifier": null,
+                          "new_name": "d"
+                        }
+                      },
+                      "span": {
+                        "start": 114,
+                        "end": 130
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Alias": {
+                          "trait_name": null,
+                          "method": "e",
+                          "new_modifier": "Private",
+                          "new_name": null
+                        }
+                      },
+                      "span": {
+                        "start": 130,
+                        "end": 148
+                      }
+                    }
+                  ]
+                }
+              },
+              "span": {
+                "start": 72,
+                "end": 154
+              }
+            },
+            {
+              "kind": {
+                "TraitUse": {
+                  "traits": [
+                    {
+                      "parts": [
+                        "E"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 158,
+                        "end": 159
+                      }
+                    },
+                    {
+                      "parts": [
+                        "F"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 161,
+                        "end": 162
+                      }
+                    },
+                    {
+                      "parts": [
+                        "G"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 164,
+                        "end": 166
+                      }
+                    }
+                  ],
+                  "adaptations": [
+                    {
+                      "kind": {
+                        "Precedence": {
+                          "trait_name": {
+                            "parts": [
+                              "E"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 176,
+                              "end": 177
+                            }
+                          },
+                          "method": "a",
+                          "insteadof": [
+                            {
+                              "parts": [
+                                "F"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 191,
+                                "end": 192
+                              }
+                            },
+                            {
+                              "parts": [
+                                "G"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 194,
+                                "end": 195
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "span": {
+                        "start": 176,
+                        "end": 205
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Alias": {
+                          "trait_name": {
+                            "parts": [
+                              "E"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 205,
+                              "end": 206
+                            }
+                          },
+                          "method": "b",
+                          "new_modifier": "Protected",
+                          "new_name": "c"
+                        }
+                      },
+                      "span": {
+                        "start": 205,
+                        "end": 234
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Alias": {
+                          "trait_name": {
+                            "parts": [
+                              "E"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 234,
+                              "end": 235
+                            }
+                          },
+                          "method": "d",
+                          "new_modifier": null,
+                          "new_name": "e"
+                        }
+                      },
+                      "span": {
+                        "start": 234,
+                        "end": 253
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Alias": {
+                          "trait_name": {
+                            "parts": [
+                              "E"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 253,
+                              "end": 254
+                            }
+                          },
+                          "method": "f",
+                          "new_modifier": "Private",
+                          "new_name": null
+                        }
+                      },
+                      "span": {
+                        "start": 253,
+                        "end": 274
+                      }
+                    }
+                  ]
+                }
+              },
+              "span": {
+                "start": 154,
+                "end": 276
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 47,
+        "end": 277
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 277
+  }
+}

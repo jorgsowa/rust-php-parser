@@ -1,88 +1,148 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Expression:
-        kind:
-          MagicConst: Line
-        span:
-          start: 6
-          end: 14
-    span:
-      start: 6
-      end: 16
-  - kind:
-      Expression:
-        kind:
-          MagicConst: File
-        span:
-          start: 16
-          end: 24
-    span:
-      start: 16
-      end: 26
-  - kind:
-      Expression:
-        kind:
-          MagicConst: Dir
-        span:
-          start: 26
-          end: 33
-    span:
-      start: 26
-      end: 35
-  - kind:
-      Expression:
-        kind:
-          MagicConst: Class
-        span:
-          start: 35
-          end: 44
-    span:
-      start: 35
-      end: 46
-  - kind:
-      Expression:
-        kind:
-          MagicConst: Function
-        span:
-          start: 46
-          end: 58
-    span:
-      start: 46
-      end: 60
-  - kind:
-      Expression:
-        kind:
-          MagicConst: Method
-        span:
-          start: 60
-          end: 70
-    span:
-      start: 60
-      end: 72
-  - kind:
-      Expression:
-        kind:
-          MagicConst: Namespace
-        span:
-          start: 72
-          end: 85
-    span:
-      start: 72
-      end: 87
-  - kind:
-      Expression:
-        kind:
-          MagicConst: Trait
-        span:
-          start: 87
-          end: 96
-    span:
-      start: 87
-      end: 97
-span:
-  start: 0
-  end: 97
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MagicConst": "Line"
+          },
+          "span": {
+            "start": 6,
+            "end": 14
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 16
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MagicConst": "File"
+          },
+          "span": {
+            "start": 16,
+            "end": 24
+          }
+        }
+      },
+      "span": {
+        "start": 16,
+        "end": 26
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MagicConst": "Dir"
+          },
+          "span": {
+            "start": 26,
+            "end": 33
+          }
+        }
+      },
+      "span": {
+        "start": 26,
+        "end": 35
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MagicConst": "Class"
+          },
+          "span": {
+            "start": 35,
+            "end": 44
+          }
+        }
+      },
+      "span": {
+        "start": 35,
+        "end": 46
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MagicConst": "Function"
+          },
+          "span": {
+            "start": 46,
+            "end": 58
+          }
+        }
+      },
+      "span": {
+        "start": 46,
+        "end": 60
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MagicConst": "Method"
+          },
+          "span": {
+            "start": 60,
+            "end": 70
+          }
+        }
+      },
+      "span": {
+        "start": 60,
+        "end": 72
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MagicConst": "Namespace"
+          },
+          "span": {
+            "start": 72,
+            "end": 85
+          }
+        }
+      },
+      "span": {
+        "start": 72,
+        "end": 87
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MagicConst": "Trait"
+          },
+          "span": {
+            "start": 87,
+            "end": 96
+          }
+        }
+      },
+      "span": {
+        "start": 87,
+        "end": 97
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 97
+  }
+}

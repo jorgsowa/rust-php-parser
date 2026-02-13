@@ -1,43 +1,70 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Const:
-        - name: A
-          value:
-            kind:
-              Int: 1
-            span:
-              start: 16
-              end: 17
-          span:
-            start: 12
-            end: 17
-        - name: B
-          value:
-            kind:
-              Int: 2
-            span:
-              start: 23
-              end: 24
-          span:
-            start: 19
-            end: 24
-        - name: C
-          value:
-            kind:
-              Int: 3
-            span:
-              start: 30
-              end: 31
-          span:
-            start: 26
-            end: 31
-    span:
-      start: 6
-      end: 32
-span:
-  start: 0
-  end: 32
+{
+  "stmts": [
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "A",
+            "value": {
+              "kind": {
+                "Int": 1
+              },
+              "span": {
+                "start": 16,
+                "end": 17
+              }
+            },
+            "span": {
+              "start": 12,
+              "end": 17
+            }
+          },
+          {
+            "name": "B",
+            "value": {
+              "kind": {
+                "Int": 2
+              },
+              "span": {
+                "start": 23,
+                "end": 24
+              }
+            },
+            "span": {
+              "start": 19,
+              "end": 24
+            }
+          },
+          {
+            "name": "C",
+            "value": {
+              "kind": {
+                "Int": 3
+              },
+              "span": {
+                "start": 30,
+                "end": 31
+              }
+            },
+            "span": {
+              "start": 26,
+              "end": 31
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 6,
+        "end": 32
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 32
+  }
+}

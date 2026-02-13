@@ -1,38 +1,68 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Goto: end
-    span:
-      start: 6
-      end: 16
-  - kind:
-      Echo:
-        - kind:
-            String: this is skipped
-          span:
-            start: 21
-            end: 38
-    span:
-      start: 16
-      end: 40
-  - kind:
-      Label: end
-    span:
-      start: 40
-      end: 45
-  - kind:
-      Echo:
-        - kind:
-            String: done
-          span:
-            start: 50
-            end: 56
-    span:
-      start: 45
-      end: 58
-span:
-  start: 0
-  end: 58
+{
+  "stmts": [
+    {
+      "kind": {
+        "Goto": "end"
+      },
+      "span": {
+        "start": 6,
+        "end": 16
+      }
+    },
+    {
+      "kind": {
+        "Echo": [
+          {
+            "kind": {
+              "String": "this is skipped"
+            },
+            "span": {
+              "start": 21,
+              "end": 38
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 16,
+        "end": 40
+      }
+    },
+    {
+      "kind": {
+        "Label": "end"
+      },
+      "span": {
+        "start": 40,
+        "end": 45
+      }
+    },
+    {
+      "kind": {
+        "Echo": [
+          {
+            "kind": {
+              "String": "done"
+            },
+            "span": {
+              "start": 50,
+              "end": 56
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 45,
+        "end": 58
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 58
+  }
+}

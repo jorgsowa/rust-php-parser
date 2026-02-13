@@ -26,7 +26,20 @@ pub fn parse_stmt(parser: &mut Parser) -> Stmt {
         TokenKind::Do => parse_do_while(parser),
         TokenKind::For => parse_for(parser),
         TokenKind::Foreach => parse_foreach(parser),
-        TokenKind::Function => parse_function(parser),
+        TokenKind::Function => {
+            // Check if this is a closure (unnamed function) used as expression statement
+            // function( → closure, function &( → by-ref closure
+            // function name( → function declaration, function &name( → by-ref function
+            let next = parser.peek_kind();
+            if next == Some(TokenKind::LeftParen)
+                || (next == Some(TokenKind::Ampersand)
+                    && parser.peek2_kind() == Some(TokenKind::LeftParen))
+            {
+                parse_expression_stmt(parser)
+            } else {
+                parse_function(parser)
+            }
+        }
         TokenKind::Break => parse_break(parser),
         TokenKind::Continue => parse_continue(parser),
         TokenKind::Switch => parse_switch(parser),
@@ -86,25 +99,25 @@ pub fn parse_stmt(parser: &mut Parser) -> Stmt {
             }
         }
         TokenKind::Readonly => {
-            let start = parser.start_span();
-            parser.advance();
-            if parser.check(TokenKind::Class) {
+            if parser.peek_kind() == Some(TokenKind::Class) {
+                parser.advance(); // consume 'readonly'
                 parse_class(parser, ClassModifiers { is_readonly: true, ..Default::default() })
             } else {
-                let span = Span::new(start, parser.current_span().start);
-                parser.error(ParseError::Expected {
-                    expected: "'class'".to_string(),
-                    found: parser.current_kind(),
-                    span,
-                });
-                parser.synchronize();
-                Stmt { kind: StmtKind::Error, span }
+                // readonly used as function name/expression (e.g., readonly())
+                parse_expression_stmt(parser)
             }
         }
         TokenKind::Interface => parse_interface(parser),
         TokenKind::Trait => parse_trait(parser),
         TokenKind::Enum_ => parse_enum(parser),
-        TokenKind::Namespace => parse_namespace(parser),
+        TokenKind::Namespace => {
+            // namespace\ is a relative name (expression), not a namespace declaration
+            if parser.peek_kind() == Some(TokenKind::Backslash) {
+                parse_expression_stmt(parser)
+            } else {
+                parse_namespace(parser)
+            }
+        }
         TokenKind::Use => parse_use(parser),
         TokenKind::Const => parse_const(parser),
         TokenKind::HaltCompiler => parse_halt_compiler(parser),
@@ -225,10 +238,12 @@ pub fn parse_block(parser: &mut Parser) -> Stmt {
     let open = parser.expect(TokenKind::LeftBrace);
     let open_span = open.map(|t| t.span).unwrap_or(parser.current_span());
 
+    parser.depth += 1;
     let mut stmts = Vec::new();
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         stmts.push(parse_stmt(parser));
     }
+    parser.depth -= 1;
 
     let close = parser.expect_closing(TokenKind::RightBrace, open_span);
     let end = close.map(|t| t.span.end).unwrap_or(parser.current_span().start);
@@ -270,6 +285,7 @@ fn parse_echo(parser: &mut Parser) -> Stmt {
     exprs.push(expr::parse_expr(parser));
 
     while parser.eat(TokenKind::Comma).is_some() {
+        if parser.check(TokenKind::Semicolon) { break; } // trailing comma
         exprs.push(expr::parse_expr(parser));
     }
 
@@ -491,6 +507,7 @@ fn parse_expr_list_until(parser: &mut Parser, stop: TokenKind) -> Vec<Expr> {
     if parser.check(stop) { return exprs; }
     exprs.push(expr::parse_expr(parser));
     while parser.eat(TokenKind::Comma).is_some() {
+        if parser.check(stop) { break; } // trailing comma
         exprs.push(expr::parse_expr(parser));
     }
     exprs
@@ -541,10 +558,16 @@ fn parse_function(parser: &mut Parser) -> Stmt {
 
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
 
-    let name_token = parser.expect(TokenKind::Identifier);
-    let name = name_token
-        .map(|t| parser.source()[t.span.start as usize..t.span.end as usize].to_string())
-        .unwrap_or_else(|| "<error>".to_string());
+    let name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
+        text
+    } else {
+        parser.error(ParseError::Expected {
+            expected: "function name".to_string(),
+            found: parser.current_kind(),
+            span: parser.current_span(),
+        });
+        "<error>".to_string()
+    };
 
     let open_paren = parser.expect(TokenKind::LeftParen);
     let open_paren_span = open_paren.map(|t| t.span).unwrap_or(parser.current_span());
@@ -649,6 +672,19 @@ pub fn parse_param_list(parser: &mut Parser) -> Vec<Param> {
             .or(name_span_end)
             .unwrap_or(parser.current_span().start);
 
+        // Constructor promotion hooks: if this param has visibility and next token is {
+        let hooks = if visibility.is_some() && parser.check(TokenKind::LeftBrace) {
+            parse_property_hooks(parser)
+        } else {
+            Vec::new()
+        };
+
+        let param_end = if !hooks.is_empty() {
+            parser.current_span().start
+        } else {
+            param_end
+        };
+
         params.push(Param {
             name,
             type_hint,
@@ -658,6 +694,7 @@ pub fn parse_param_list(parser: &mut Parser) -> Vec<Param> {
             visibility,
             set_visibility,
             attributes: param_attrs,
+            hooks,
             span: Span::new(param_start, param_end),
         });
 
@@ -812,6 +849,14 @@ fn parse_try_catch(parser: &mut Parser) -> Stmt {
         Some(finally_body)
     } else { None };
 
+    if catches.is_empty() && finally.is_none() {
+        parser.error(ParseError::Expected {
+            expected: "catch or finally clause".to_string(),
+            found: parser.current_kind(),
+            span: Span::new(start, parser.current_span().start),
+        });
+    }
+
     let span = Span::new(start, parser.current_span().start);
     Stmt { kind: StmtKind::TryCatch(TryCatchStmt { body, catches, finally }), span }
 }
@@ -838,6 +883,7 @@ fn parse_declare(parser: &mut Parser) -> Stmt {
     parser.expect(TokenKind::LeftParen);
     let mut directives = Vec::new();
     loop {
+        if parser.check(TokenKind::RightParen) { break; } // trailing comma
         if let Some(t) = parser.eat(TokenKind::Identifier) {
             let name = parser.source()[t.span.start as usize..t.span.end as usize].to_string();
             parser.expect(TokenKind::Equals);
@@ -883,34 +929,96 @@ fn parse_global(parser: &mut Parser) -> Stmt {
     let start = parser.start_span();
     parser.advance();
     let mut exprs = Vec::new();
-    exprs.push(expr::parse_expr(parser));
+    let e = expr::parse_expr(parser);
+    if !is_simple_variable(&e) {
+        parser.error(ParseError::Expected {
+            expected: "variable".to_string(),
+            found: parser.current_kind(),
+            span: e.span,
+        });
+    }
+    exprs.push(e);
     while parser.eat(TokenKind::Comma).is_some() {
-        exprs.push(expr::parse_expr(parser));
+        if parser.check(TokenKind::Semicolon) { break; } // trailing comma
+        let e = expr::parse_expr(parser);
+        if !is_simple_variable(&e) {
+            parser.error(ParseError::Expected {
+                expected: "variable".to_string(),
+                found: parser.current_kind(),
+                span: e.span,
+            });
+        }
+        exprs.push(e);
     }
     parser.expect(TokenKind::Semicolon);
     let span = Span::new(start, parser.current_span().start);
     Stmt { kind: StmtKind::Global(exprs), span }
 }
 
+fn is_simple_variable(expr: &Expr) -> bool {
+    match &expr.kind {
+        ExprKind::Variable(_) => true,
+        ExprKind::VariableVariable(_) => true,
+        _ => false,
+    }
+}
+
 // =============================================================================
 // Class declaration
 // =============================================================================
+
+/// Check if a name is a reserved special class name (self, parent, static, readonly)
+fn is_reserved_class_name(name: &str) -> bool {
+    let lower = name.to_ascii_lowercase();
+    matches!(lower.as_str(), "self" | "parent" | "static" | "readonly")
+}
+
+/// Validate a name used in extends/implements is not self/parent/static
+fn validate_class_ref(parser: &mut Parser, name: &Name) {
+    if name.parts.len() == 1 && name.kind == php_ast::NameKind::Unqualified {
+        if is_reserved_class_name(&name.parts[0]) {
+            parser.error(ParseError::Expected {
+                expected: format!("cannot use '{}' as class name", name.parts[0]),
+                found: parser.current_kind(),
+                span: name.span,
+            });
+        }
+    }
+}
 
 fn parse_class(parser: &mut Parser, modifiers: ClassModifiers) -> Stmt {
     let start = parser.start_span();
     parser.advance(); // consume 'class'
 
-    let name_token = parser.expect(TokenKind::Identifier);
-    let name = name_token
-        .map(|t| parser.source()[t.span.start as usize..t.span.end as usize].to_string())
-        .unwrap_or_else(|| "<error>".to_string());
+    let (name, name_span) = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
+        (text, span)
+    } else {
+        parser.error(ParseError::Expected {
+            expected: "class name".to_string(),
+            found: parser.current_kind(),
+            span: parser.current_span(),
+        });
+        ("<error>".to_string(), parser.current_span())
+    };
+
+    if is_reserved_class_name(&name) {
+        parser.error(ParseError::Expected {
+            expected: format!("cannot use '{}' as class name", name),
+            found: parser.current_kind(),
+            span: name_span,
+        });
+    }
 
     let extends = if parser.eat(TokenKind::Extends).is_some() {
-        Some(parser.parse_name())
+        let n = parser.parse_name();
+        validate_class_ref(parser, &n);
+        Some(n)
     } else { None };
 
     let implements = if parser.eat(TokenKind::Implements).is_some() {
-        parse_name_list(parser)
+        let names = parse_name_list(parser);
+        for n in &names { validate_class_ref(parser, n); }
+        names
     } else { Vec::new() };
 
     parser.expect(TokenKind::LeftBrace);
@@ -928,6 +1036,7 @@ pub fn parse_name_list(parser: &mut Parser) -> Vec<Name> {
     let mut names = Vec::new();
     names.push(parser.parse_name());
     while parser.eat(TokenKind::Comma).is_some() {
+        if parser.check(TokenKind::LeftBrace) || parser.check(TokenKind::Semicolon) { break; } // trailing comma
         names.push(parser.parse_name());
     }
     names
@@ -963,6 +1072,7 @@ fn parse_trait_adaptations(parser: &mut Parser) -> Vec<TraitAdaptation> {
                 parser.advance(); // consume `insteadof`
                 let mut insteadof = vec![parser.parse_name()];
                 while parser.eat(TokenKind::Comma).is_some() {
+                    if parser.check(TokenKind::Semicolon) { break; } // trailing comma
                     insteadof.push(parser.parse_name());
                 }
                 parser.expect(TokenKind::Semicolon);
@@ -1047,6 +1157,136 @@ fn parse_alias_rhs(parser: &mut Parser) -> (Option<Visibility>, Option<String>) 
     (new_modifier, new_name)
 }
 
+/// Parse property hooks: `{ get { ... } set(Type $value) { ... } }`
+fn parse_property_hooks(parser: &mut Parser) -> Vec<PropertyHook> {
+    let open = parser.expect(TokenKind::LeftBrace);
+    let open_span = open.map(|t| t.span).unwrap_or(parser.current_span());
+
+    let mut hooks = Vec::new();
+
+    while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
+        let hook_start = parser.start_span();
+
+        // Parse optional attributes
+        let hook_attrs = parser.parse_attributes();
+
+        // Parse optional modifiers
+        let mut is_final = false;
+        let mut by_ref = false;
+
+        loop {
+            match parser.current_kind() {
+                TokenKind::Final => { parser.advance(); is_final = true; }
+                TokenKind::Ampersand => { parser.advance(); by_ref = true; break; }
+                // Error: invalid modifiers on hooks
+                TokenKind::Public | TokenKind::Protected | TokenKind::Private
+                | TokenKind::Abstract | TokenKind::Static | TokenKind::Readonly => {
+                    let span = parser.current_span();
+                    parser.error(ParseError::Expected {
+                        expected: "'get' or 'set'".to_string(),
+                        found: parser.current_kind(),
+                        span,
+                    });
+                    parser.advance();
+                }
+                _ => break,
+            }
+        }
+
+        // Expect "get" or "set" identifier (contextual keywords)
+        let kind = if parser.check(TokenKind::Identifier) {
+            match parser.current_text() {
+                "get" => {
+                    parser.advance();
+                    PropertyHookKind::Get
+                }
+                "set" => {
+                    parser.advance();
+                    PropertyHookKind::Set
+                }
+                _ => {
+                    // Invalid hook name - error recovery
+                    let span = parser.current_span();
+                    parser.error(ParseError::Expected {
+                        expected: "'get' or 'set'".to_string(),
+                        found: parser.current_kind(),
+                        span,
+                    });
+                    // Skip until ; or } for recovery
+                    while !parser.check(TokenKind::Semicolon)
+                        && !parser.check(TokenKind::RightBrace)
+                        && !parser.check(TokenKind::Eof)
+                    {
+                        parser.advance();
+                    }
+                    parser.eat(TokenKind::Semicolon);
+                    continue;
+                }
+            }
+        } else {
+            // Not an identifier at all - error recovery
+            let span = parser.current_span();
+            parser.error(ParseError::Expected {
+                expected: "'get' or 'set'".to_string(),
+                found: parser.current_kind(),
+                span,
+            });
+            // Skip until ; or } for recovery
+            while !parser.check(TokenKind::Semicolon)
+                && !parser.check(TokenKind::RightBrace)
+                && !parser.check(TokenKind::Eof)
+            {
+                parser.advance();
+            }
+            parser.eat(TokenKind::Semicolon);
+            continue;
+        };
+
+        // Parse optional (params) for set hooks
+        let params = if parser.check(TokenKind::LeftParen) {
+            parser.advance();
+            let p = parse_param_list(parser);
+            parser.expect(TokenKind::RightParen);
+            p
+        } else {
+            Vec::new()
+        };
+
+        // Parse body: { stmts } | => expr; | ;
+        let body = if parser.check(TokenKind::LeftBrace) {
+            let open_brace = parser.expect(TokenKind::LeftBrace);
+            let brace_span = open_brace.map(|t| t.span).unwrap_or(parser.current_span());
+            let mut stmts = Vec::new();
+            while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
+                stmts.push(parse_stmt(parser));
+            }
+            parser.expect_closing(TokenKind::RightBrace, brace_span);
+            PropertyHookBody::Block(stmts)
+        } else if parser.eat(TokenKind::FatArrow).is_some() {
+            let e = expr::parse_expr(parser);
+            parser.expect(TokenKind::Semicolon);
+            PropertyHookBody::Expression(e)
+        } else {
+            parser.expect(TokenKind::Semicolon);
+            PropertyHookBody::Abstract
+        };
+
+        let hook_span = Span::new(hook_start, parser.current_span().start);
+        hooks.push(PropertyHook {
+            kind,
+            body,
+            is_final,
+            by_ref,
+            params,
+            attributes: hook_attrs,
+            span: hook_span,
+        });
+    }
+
+    parser.expect_closing(TokenKind::RightBrace, open_span);
+    hooks
+}
+
 pub fn parse_class_members(parser: &mut Parser) -> Vec<ClassMember> {
     let mut members = Vec::new();
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
@@ -1064,6 +1304,7 @@ pub fn parse_class_members(parser: &mut Parser) -> Vec<ClassMember> {
             let mut traits = Vec::new();
             traits.push(parser.parse_name());
             while parser.eat(TokenKind::Comma).is_some() {
+                if parser.check(TokenKind::Semicolon) || parser.check(TokenKind::LeftBrace) { break; } // trailing comma
                 traits.push(parser.parse_name());
             }
             let adaptations = if parser.check(TokenKind::LeftBrace) {
@@ -1085,6 +1326,12 @@ pub fn parse_class_members(parser: &mut Parser) -> Vec<ClassMember> {
         let mut is_abstract = false;
         let mut is_final = false;
         let mut is_readonly = false;
+
+        // Handle `var` keyword (PHP4 style, equivalent to public)
+        if parser.check(TokenKind::Identifier) && parser.current_text() == "var" {
+            parser.advance();
+            visibility = Some(Visibility::Public);
+        }
 
         loop {
             match parser.current_kind() {
@@ -1137,20 +1384,101 @@ pub fn parse_class_members(parser: &mut Parser) -> Vec<ClassMember> {
             }
         }
 
-        // Const
-        if parser.check(TokenKind::Const) {
-            parser.advance();
-            let const_name = parser.expect(TokenKind::Identifier)
-                .map(|t| parser.source()[t.span.start as usize..t.span.end as usize].to_string())
-                .unwrap_or_else(|| "<error>".to_string());
-            parser.expect(TokenKind::Equals);
-            let value = expr::parse_expr(parser);
-            parser.expect(TokenKind::Semicolon);
-            let span = Span::new(member_start, parser.current_span().start);
-            members.push(ClassMember {
-                kind: ClassMemberKind::ClassConst(ClassConstDecl { name: const_name, visibility, value, attributes: member_attrs }),
+        // Validate modifier conflicts
+        if is_abstract && is_final {
+            parser.error(ParseError::Expected {
+                expected: "cannot use 'abstract' and 'final' together".to_string(),
+                found: parser.current_kind(),
+                span: Span::new(member_start, parser.current_span().start),
+            });
+        }
+
+        // Detect unknown modifier: bare identifier followed by $variable with no modifiers
+        if visibility.is_none() && !is_static && !is_abstract && !is_final && !is_readonly
+            && parser.check(TokenKind::Identifier)
+            && parser.peek_kind() == Some(TokenKind::Variable)
+        {
+            let span = parser.current_span();
+            parser.error(ParseError::Expected {
+                expected: "modifier".to_string(),
+                found: parser.current_kind(),
                 span,
             });
+        }
+
+        // Const (may have multiple items: const A = 1, B = 2;)
+        // May have type hint: const int A = 1;
+        if parser.check(TokenKind::Const) {
+            // Validate: static/abstract/readonly are not valid on constants
+            if is_static {
+                parser.error(ParseError::Expected {
+                    expected: "cannot use 'static' as constant modifier".to_string(),
+                    found: TokenKind::Const,
+                    span: parser.current_span(),
+                });
+            }
+            if is_abstract {
+                parser.error(ParseError::Expected {
+                    expected: "cannot use 'abstract' as constant modifier".to_string(),
+                    found: TokenKind::Const,
+                    span: parser.current_span(),
+                });
+            }
+            if is_readonly {
+                parser.error(ParseError::Expected {
+                    expected: "cannot use 'readonly' as constant modifier".to_string(),
+                    found: TokenKind::Const,
+                    span: parser.current_span(),
+                });
+            }
+            parser.advance();
+
+            // Check for typed constant: if what follows looks like a type hint
+            // and is NOT immediately followed by `=`, it's a typed constant
+            let const_type = if parser.could_be_type_hint()
+                && !parser.check(TokenKind::Variable)
+                && parser.peek_kind() != Some(TokenKind::Equals)
+                && parser.peek_kind() != Some(TokenKind::Comma)
+            {
+                Some(parser.parse_type_hint())
+            } else {
+                None
+            };
+
+            let mut const_items = Vec::new();
+            loop {
+                let const_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
+                    text
+                } else {
+                    let span = parser.current_span();
+                    parser.error(ParseError::Expected {
+                        expected: "constant name".to_string(),
+                        found: parser.current_kind(),
+                        span,
+                    });
+                    "<error>".to_string()
+                };
+                parser.expect(TokenKind::Equals);
+                let value = expr::parse_expr(parser);
+                const_items.push((const_name, value));
+                if parser.eat(TokenKind::Comma).is_none() {
+                    break;
+                }
+                if parser.check(TokenKind::Semicolon) {
+                    break; // trailing comma
+                }
+            }
+            parser.expect(TokenKind::Semicolon);
+            let span = Span::new(member_start, parser.current_span().start);
+            for (const_name, value) in const_items {
+                members.push(ClassMember {
+                    kind: ClassMemberKind::ClassConst(ClassConstDecl {
+                        name: const_name, visibility, type_hint: const_type.clone(),
+                        value, attributes: member_attrs.clone(),
+                    }),
+                    span,
+                });
+            }
             continue;
         }
 
@@ -1217,15 +1545,68 @@ pub fn parse_class_members(parser: &mut Parser) -> Vec<ClassMember> {
                 Some(expr::parse_expr(parser))
             } else { None };
 
-            parser.expect(TokenKind::Semicolon);
+            // Property hooks: { get { ... } set { ... } }
+            let had_hooks_block = parser.check(TokenKind::LeftBrace);
+            let hooks = if had_hooks_block {
+                parse_property_hooks(parser)
+            } else {
+                Vec::new()
+            };
             let span = Span::new(member_start, parser.current_span().start);
             members.push(ClassMember {
                 kind: ClassMemberKind::Property(PropertyDecl {
                     name: prop_name, visibility, set_visibility, is_static, is_readonly,
-                    type_hint, default, attributes: member_attrs,
+                    type_hint: type_hint.clone(), default, attributes: member_attrs.clone(), hooks,
                 }),
                 span,
             });
+
+            // Comma-separated additional properties
+            if had_hooks_block {
+                // Property with hooks block — no comma separation or semicolon needed
+            } else if parser.eat(TokenKind::Comma).is_some() {
+                // Parse remaining comma-separated properties
+                while parser.check(TokenKind::Variable) {
+                    let var_token = parser.advance();
+                    let text = &parser.source()[var_token.span.start as usize..var_token.span.end as usize];
+                    let pname = text[1..].to_string();
+
+                    let pdefault = if parser.eat(TokenKind::Equals).is_some() {
+                        Some(expr::parse_expr(parser))
+                    } else { None };
+
+                    // Property hooks on comma-separated properties → error
+                    let phooks = if parser.check(TokenKind::LeftBrace) {
+                        parser.error(ParseError::Expected {
+                            expected: "cannot have hooks on comma-separated property".to_string(),
+                            found: TokenKind::LeftBrace,
+                            span: parser.current_span(),
+                        });
+                        parse_property_hooks(parser)
+                    } else {
+                        Vec::new()
+                    };
+                    let pspan = Span::new(member_start, parser.current_span().start);
+                    members.push(ClassMember {
+                        kind: ClassMemberKind::Property(PropertyDecl {
+                            name: pname, visibility: None, set_visibility: None,
+                            is_static, is_readonly,
+                            type_hint: type_hint.clone(), default: pdefault,
+                            attributes: member_attrs.clone(), hooks: phooks,
+                        }),
+                        span: pspan,
+                    });
+
+                    if parser.eat(TokenKind::Comma).is_none() {
+                        break;
+                    }
+                }
+                if !parser.check(TokenKind::RightBrace) {
+                    parser.expect(TokenKind::Semicolon);
+                }
+            } else {
+                parser.expect(TokenKind::Semicolon);
+            }
             continue;
         }
 
@@ -1242,13 +1623,29 @@ pub fn parse_class_members(parser: &mut Parser) -> Vec<ClassMember> {
 fn parse_interface(parser: &mut Parser) -> Stmt {
     let start = parser.start_span();
     parser.advance();
-    let name_token = parser.expect(TokenKind::Identifier);
-    let name = name_token
-        .map(|t| parser.source()[t.span.start as usize..t.span.end as usize].to_string())
-        .unwrap_or_else(|| "<error>".to_string());
+    let (name, name_span) = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
+        (text, span)
+    } else {
+        parser.error(ParseError::Expected {
+            expected: "interface name".to_string(),
+            found: parser.current_kind(),
+            span: parser.current_span(),
+        });
+        ("<error>".to_string(), parser.current_span())
+    };
+
+    if is_reserved_class_name(&name) {
+        parser.error(ParseError::Expected {
+            expected: format!("cannot use '{}' as interface name", name),
+            found: parser.current_kind(),
+            span: name_span,
+        });
+    }
 
     let extends = if parser.eat(TokenKind::Extends).is_some() {
-        parse_name_list(parser)
+        let names = parse_name_list(parser);
+        for n in &names { validate_class_ref(parser, n); }
+        names
     } else { Vec::new() };
 
     parser.expect(TokenKind::LeftBrace);
@@ -1265,10 +1662,16 @@ fn parse_interface(parser: &mut Parser) -> Stmt {
 fn parse_trait(parser: &mut Parser) -> Stmt {
     let start = parser.start_span();
     parser.advance();
-    let name_token = parser.expect(TokenKind::Identifier);
-    let name = name_token
-        .map(|t| parser.source()[t.span.start as usize..t.span.end as usize].to_string())
-        .unwrap_or_else(|| "<error>".to_string());
+    let name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
+        text
+    } else {
+        parser.error(ParseError::Expected {
+            expected: "trait name".to_string(),
+            found: parser.current_kind(),
+            span: parser.current_span(),
+        });
+        "<error>".to_string()
+    };
 
     parser.expect(TokenKind::LeftBrace);
     let members = parse_class_members(parser);
@@ -1285,10 +1688,16 @@ fn parse_enum(parser: &mut Parser) -> Stmt {
     let start = parser.start_span();
     parser.advance(); // consume 'enum'
 
-    let name_token = parser.expect(TokenKind::Identifier);
-    let name = name_token
-        .map(|t| parser.source()[t.span.start as usize..t.span.end as usize].to_string())
-        .unwrap_or_else(|| "<error>".to_string());
+    let name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
+        text
+    } else {
+        parser.error(ParseError::Expected {
+            expected: "enum name".to_string(),
+            found: parser.current_kind(),
+            span: parser.current_span(),
+        });
+        "<error>".to_string()
+    };
 
     // Backed enum: enum Foo: string
     let scalar_type = if parser.eat(TokenKind::Colon).is_some() {
@@ -1330,9 +1739,16 @@ fn parse_enum(parser: &mut Parser) -> Stmt {
         // Enum case
         if parser.check(TokenKind::Case) {
             parser.advance();
-            let case_name = parser.expect(TokenKind::Identifier)
-                .map(|t| parser.source()[t.span.start as usize..t.span.end as usize].to_string())
-                .unwrap_or_else(|| "<error>".to_string());
+            let case_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
+                text
+            } else {
+                parser.error(ParseError::Expected {
+                    expected: "case name".to_string(),
+                    found: parser.current_kind(),
+                    span: parser.current_span(),
+                });
+                "<error>".to_string()
+            };
             let value = if parser.eat(TokenKind::Equals).is_some() {
                 Some(expr::parse_expr(parser))
             } else { None };
@@ -1366,15 +1782,22 @@ fn parse_enum(parser: &mut Parser) -> Stmt {
         // Const
         if parser.check(TokenKind::Const) {
             parser.advance();
-            let const_name = parser.expect(TokenKind::Identifier)
-                .map(|t| parser.source()[t.span.start as usize..t.span.end as usize].to_string())
-                .unwrap_or_else(|| "<error>".to_string());
+            let const_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
+                text
+            } else {
+                parser.error(ParseError::Expected {
+                    expected: "constant name".to_string(),
+                    found: parser.current_kind(),
+                    span: parser.current_span(),
+                });
+                "<error>".to_string()
+            };
             parser.expect(TokenKind::Equals);
             let value = expr::parse_expr(parser);
             parser.expect(TokenKind::Semicolon);
             let span = Span::new(member_start, parser.current_span().start);
             members.push(EnumMember {
-                kind: EnumMemberKind::ClassConst(ClassConstDecl { name: const_name, visibility, value, attributes: member_attrs }),
+                kind: EnumMemberKind::ClassConst(ClassConstDecl { name: const_name, visibility, type_hint: None, value, attributes: member_attrs }),
                 span,
             });
             continue;
@@ -1514,11 +1937,44 @@ fn parse_use(parser: &mut Parser) -> Stmt {
 
     // Group use: use App\{Models\User, Services\Auth};
     if parser.check(TokenKind::LeftBrace) {
+        // Validate: prefix must have trailing \ (i.e., parse_name consumed a trailing \)
+        // If the name is Unqualified with 1 part, and the char before { is not \, error
+        if first_name.kind == NameKind::Unqualified {
+            // Check if the source char before the current position is not '\'
+            let brace_pos = parser.current_span().start as usize;
+            let has_trailing_sep = brace_pos > 0 && parser.source().as_bytes()[brace_pos - 1] == b'\\';
+            if !has_trailing_sep {
+                parser.error(ParseError::Expected {
+                    expected: "namespace separator before '{'".to_string(),
+                    found: parser.current_kind(),
+                    span: first_name.span,
+                });
+            }
+        }
         parser.advance(); // consume {
         let prefix_parts = &first_name.parts;
         loop {
+            if parser.check(TokenKind::RightBrace) { break; } // trailing comma
             let sub_start = parser.start_span();
+            let item_kind = if parser.check(TokenKind::Function) {
+                parser.advance();
+                Some(UseKind::Function)
+            } else if parser.check(TokenKind::Const) {
+                parser.advance();
+                Some(UseKind::Const)
+            } else {
+                None
+            };
             let sub_name = parser.parse_name();
+
+            // Validate: sub-names must not have leading backslash
+            if sub_name.kind == NameKind::FullyQualified {
+                parser.error(ParseError::Expected {
+                    expected: "non-fully-qualified name in group use".to_string(),
+                    found: parser.current_kind(),
+                    span: sub_name.span,
+                });
+            }
 
             // Combine prefix with sub-name
             let mut combined_parts = prefix_parts.clone();
@@ -1542,7 +1998,7 @@ fn parse_use(parser: &mut Parser) -> Stmt {
             };
 
             let use_span = Span::new(sub_start, parser.current_span().start);
-            uses.push(UseItem { name: combined_name, alias, span: use_span });
+            uses.push(UseItem { name: combined_name, alias, kind: item_kind, span: use_span });
 
             if parser.eat(TokenKind::Comma).is_none() { break; }
         }
@@ -1555,9 +2011,10 @@ fn parse_use(parser: &mut Parser) -> Stmt {
         } else { None };
 
         let item_span = Span::new(item_start, parser.current_span().start);
-        uses.push(UseItem { name: first_name, alias, span: item_span });
+        uses.push(UseItem { name: first_name, alias, kind: None, span: item_span });
 
         while parser.eat(TokenKind::Comma).is_some() {
+            if parser.check(TokenKind::Semicolon) { break; } // trailing comma
             let next_start = parser.start_span();
             let name = parser.parse_name();
 
@@ -1567,7 +2024,7 @@ fn parse_use(parser: &mut Parser) -> Stmt {
             } else { None };
 
             let next_span = Span::new(next_start, parser.current_span().start);
-            uses.push(UseItem { name, alias, span: next_span });
+            uses.push(UseItem { name, alias, kind: None, span: next_span });
         }
     }
 
@@ -1599,6 +2056,7 @@ fn parse_const(parser: &mut Parser) -> Stmt {
         items.push(ConstItem { name: const_name, value, span: item_span });
 
         if parser.eat(TokenKind::Comma).is_none() { break; }
+        if parser.check(TokenKind::Semicolon) { break; } // trailing comma
     }
 
     parser.expect(TokenKind::Semicolon);
@@ -1608,10 +2066,31 @@ fn parse_const(parser: &mut Parser) -> Stmt {
 
 fn parse_halt_compiler(parser: &mut Parser) -> Stmt {
     let start = parser.start_span();
+
+    // __halt_compiler must be at the outermost scope
+    if parser.depth > 0 {
+        parser.error(ParseError::Expected {
+            expected: "__halt_compiler() can only be used at the outermost scope".to_string(),
+            found: TokenKind::HaltCompiler,
+            span: parser.current_span(),
+        });
+    }
+
     parser.advance(); // consume '__halt_compiler'
     parser.expect(TokenKind::LeftParen);
     parser.expect(TokenKind::RightParen);
-    parser.expect(TokenKind::Semicolon);
+    // Accept either ; or ?> as terminator
+    if parser.check(TokenKind::Semicolon) {
+        parser.advance();
+    } else if parser.check(TokenKind::CloseTag) {
+        parser.advance(); // consume ?> — everything after is raw data
+    } else {
+        parser.error(ParseError::ExpectedAfter {
+            expected: "';' or '?>'".to_string(),
+            after: "__halt_compiler()".to_string(),
+            span: parser.current_span(),
+        });
+    }
 
     // Everything after __halt_compiler(); is raw data
     let current_pos = parser.current_span().start as usize;
@@ -1649,6 +2128,7 @@ fn parse_static_var(parser: &mut Parser) -> Stmt {
         vars.push(StaticVar { name, default, span: var_span });
 
         if parser.eat(TokenKind::Comma).is_none() { break; }
+        if parser.check(TokenKind::Semicolon) { break; } // trailing comma
     }
 
     parser.expect(TokenKind::Semicolon);

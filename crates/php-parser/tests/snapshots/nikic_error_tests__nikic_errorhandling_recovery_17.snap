@@ -1,0 +1,310 @@
+---
+source: crates/php-parser/tests/nikic_error_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Namespace": {
+          "name": {
+            "parts": [
+              "Foo"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 16,
+              "end": 20
+            }
+          },
+          "body": "Simple"
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 20
+      }
+    },
+    {
+      "kind": {
+        "Use": {
+          "kind": "Normal",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "A"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 24,
+                  "end": 26
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 24,
+                "end": 26
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 20,
+        "end": 26
+      }
+    },
+    {
+      "kind": {
+        "Use": {
+          "kind": "Function",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "a"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 39,
+                  "end": 41
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 39,
+                "end": 41
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 26,
+        "end": 41
+      }
+    },
+    {
+      "kind": {
+        "Use": {
+          "kind": "Normal",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "A",
+                  "B"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 45,
+                  "end": 49
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 48,
+                "end": 49
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 41,
+        "end": 51
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "A",
+            "value": {
+              "kind": {
+                "Int": 1
+              },
+              "span": {
+                "start": 61,
+                "end": 62
+              }
+            },
+            "span": {
+              "start": 57,
+              "end": 62
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 51,
+        "end": 63
+      }
+    },
+    {
+      "kind": {
+        "Break": {
+          "kind": "Error",
+          "span": {
+            "start": 69,
+            "end": 74
+          }
+        }
+      },
+      "span": {
+        "start": 63,
+        "end": 69
+      }
+    },
+    {
+      "kind": {
+        "Break": {
+          "kind": {
+            "Int": 2
+          },
+          "span": {
+            "start": 75,
+            "end": 76
+          }
+        }
+      },
+      "span": {
+        "start": 69,
+        "end": 77
+      }
+    },
+    {
+      "kind": {
+        "Continue": {
+          "kind": "Error",
+          "span": {
+            "start": 86,
+            "end": 94
+          }
+        }
+      },
+      "span": {
+        "start": 77,
+        "end": 86
+      }
+    },
+    {
+      "kind": {
+        "Continue": {
+          "kind": {
+            "Int": 2
+          },
+          "span": {
+            "start": 95,
+            "end": 96
+          }
+        }
+      },
+      "span": {
+        "start": 86,
+        "end": 97
+      }
+    },
+    {
+      "kind": {
+        "Return": {
+          "kind": "Error",
+          "span": {
+            "start": 104,
+            "end": 110
+          }
+        }
+      },
+      "span": {
+        "start": 97,
+        "end": 104
+      }
+    },
+    {
+      "kind": {
+        "Return": {
+          "kind": {
+            "Int": 2
+          },
+          "span": {
+            "start": 111,
+            "end": 112
+          }
+        }
+      },
+      "span": {
+        "start": 104,
+        "end": 113
+      }
+    },
+    {
+      "kind": {
+        "Echo": [
+          {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 118,
+              "end": 120
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 113,
+        "end": 121
+      }
+    },
+    {
+      "kind": {
+        "Unset": [
+          {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 127,
+              "end": 129
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 121,
+        "end": 131
+      }
+    },
+    {
+      "kind": {
+        "Throw": {
+          "kind": {
+            "Variable": "x"
+          },
+          "span": {
+            "start": 137,
+            "end": 139
+          }
+        }
+      },
+      "span": {
+        "start": 131,
+        "end": 140
+      }
+    },
+    {
+      "kind": {
+        "Goto": "label"
+      },
+      "span": {
+        "start": 140,
+        "end": 150
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 150
+  }
+}

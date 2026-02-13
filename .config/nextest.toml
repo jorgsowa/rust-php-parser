@@ -1,0 +1,15 @@
+[store]
+dir = "target/nextest"
+
+[profile.default]
+# Each test runs in its own process, preventing OOM from shared memory
+test-threads = "num-cpus"
+# Fail fast on first failure
+fail-fast = true
+# Reasonable timeout per test
+slow-timeout = { period = "30s", terminate-after = 2 }
+
+[profile.ci]
+test-threads = "num-cpus"
+fail-fast = false
+slow-timeout = { period = "60s", terminate-after = 2 }

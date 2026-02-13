@@ -1,0 +1,114 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Namespace": {
+          "name": {
+            "parts": [
+              "A"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 16,
+              "end": 18
+            }
+          },
+          "body": {
+            "Braced": [
+              {
+                "kind": {
+                  "Echo": [
+                    {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 29,
+                        "end": 30
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 24,
+                  "end": 32
+                }
+              }
+            ]
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 33
+      }
+    },
+    {
+      "kind": {
+        "Echo": [
+          {
+            "kind": {
+              "Int": 2
+            },
+            "span": {
+              "start": 39,
+              "end": 40
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 34,
+        "end": 42
+      }
+    },
+    {
+      "kind": {
+        "Namespace": {
+          "name": {
+            "parts": [
+              "B"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 52,
+              "end": 53
+            }
+          },
+          "body": "Simple"
+        }
+      },
+      "span": {
+        "start": 42,
+        "end": 55
+      }
+    },
+    {
+      "kind": {
+        "Echo": [
+          {
+            "kind": {
+              "Int": 3
+            },
+            "span": {
+              "start": 60,
+              "end": 61
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 55,
+        "end": 62
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 62
+  }
+}

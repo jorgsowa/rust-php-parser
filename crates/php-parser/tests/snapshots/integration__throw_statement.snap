@@ -1,36 +1,58 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Throw:
-        kind:
-          New:
-            class:
-              kind:
-                Identifier: Exception
-              span:
-                start: 16
-                end: 25
-            args:
-              - name: ~
-                value:
-                  kind:
-                    String: Something went wrong
-                  span:
-                    start: 26
-                    end: 48
-                unpack: false
-                span:
-                  start: 26
-                  end: 48
-        span:
-          start: 12
-          end: 49
-    span:
-      start: 6
-      end: 50
-span:
-  start: 0
-  end: 50
+{
+  "stmts": [
+    {
+      "kind": {
+        "Throw": {
+          "kind": {
+            "New": {
+              "class": {
+                "kind": {
+                  "Identifier": "Exception"
+                },
+                "span": {
+                  "start": 16,
+                  "end": 25
+                }
+              },
+              "args": [
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "String": "Something went wrong"
+                    },
+                    "span": {
+                      "start": 26,
+                      "end": 48
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 26,
+                    "end": 48
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 12,
+            "end": 49
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 50
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 50
+  }
+}

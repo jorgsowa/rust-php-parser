@@ -1,0 +1,29 @@
+---
+source: crates/php-parser/tests/nikic_scalar_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": "\\u{FFFFFFFFFFFFFFFF}"
+          },
+          "span": {
+            "start": 6,
+            "end": 28
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 29
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 29
+  }
+}

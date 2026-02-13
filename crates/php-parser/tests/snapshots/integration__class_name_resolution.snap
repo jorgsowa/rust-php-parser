@@ -1,59 +1,96 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Expression:
-        kind:
-          ClassConstAccess:
-            class:
-              kind:
-                Identifier: Foo
-              span:
-                start: 6
-                end: 9
-            member: class
-        span:
-          start: 6
-          end: 16
-    span:
-      start: 6
-      end: 18
-  - kind:
-      Expression:
-        kind:
-          ClassConstAccess:
-            class:
-              kind:
-                Identifier: self
-              span:
-                start: 18
-                end: 22
-            member: class
-        span:
-          start: 18
-          end: 29
-    span:
-      start: 18
-      end: 31
-  - kind:
-      Expression:
-        kind:
-          ClassConstAccess:
-            class:
-              kind:
-                Identifier: static
-              span:
-                start: 31
-                end: 37
-            member: class
-        span:
-          start: 31
-          end: 44
-    span:
-      start: 31
-      end: 45
-span:
-  start: 0
-  end: 45
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ClassConstAccess": {
+              "class": {
+                "kind": {
+                  "Identifier": "Foo"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 9
+                }
+              },
+              "member": "class"
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 16
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 18
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ClassConstAccess": {
+              "class": {
+                "kind": {
+                  "Identifier": "self"
+                },
+                "span": {
+                  "start": 18,
+                  "end": 22
+                }
+              },
+              "member": "class"
+            }
+          },
+          "span": {
+            "start": 18,
+            "end": 29
+          }
+        }
+      },
+      "span": {
+        "start": 18,
+        "end": 31
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ClassConstAccess": {
+              "class": {
+                "kind": {
+                  "Identifier": "static"
+                },
+                "span": {
+                  "start": 31,
+                  "end": 37
+                }
+              },
+              "member": "class"
+            }
+          },
+          "span": {
+            "start": 31,
+            "end": 44
+          }
+        }
+      },
+      "span": {
+        "start": 31,
+        "end": 45
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 45
+  }
+}

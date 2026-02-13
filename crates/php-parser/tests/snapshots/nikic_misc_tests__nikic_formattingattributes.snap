@@ -1,0 +1,763 @@
+---
+source: crates/php-parser/tests/nikic_misc_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Int": 12
+          },
+          "span": {
+            "start": 7,
+            "end": 13
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 15
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Int": 12
+          },
+          "span": {
+            "start": 15,
+            "end": 19
+          }
+        }
+      },
+      "span": {
+        "start": 15,
+        "end": 21
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Int": 12
+          },
+          "span": {
+            "start": 21,
+            "end": 23
+          }
+        }
+      },
+      "span": {
+        "start": 21,
+        "end": 25
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Int": 12
+          },
+          "span": {
+            "start": 25,
+            "end": 28
+          }
+        }
+      },
+      "span": {
+        "start": 25,
+        "end": 30
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Int": 123456
+          },
+          "span": {
+            "start": 30,
+            "end": 41
+          }
+        }
+      },
+      "span": {
+        "start": 30,
+        "end": 43
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Float": 3.141592653
+          },
+          "span": {
+            "start": 43,
+            "end": 56
+          }
+        }
+      },
+      "span": {
+        "start": 43,
+        "end": 59
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": "foo"
+          },
+          "span": {
+            "start": 59,
+            "end": 64
+          }
+        }
+      },
+      "span": {
+        "start": 59,
+        "end": 66
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": "bar"
+          },
+          "span": {
+            "start": 66,
+            "end": 71
+          }
+        }
+      },
+      "span": {
+        "start": 66,
+        "end": 73
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": "foo\nbar"
+          },
+          "span": {
+            "start": 73,
+            "end": 82
+          }
+        }
+      },
+      "span": {
+        "start": 73,
+        "end": 84
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": "foo\\nbar"
+          },
+          "span": {
+            "start": 84,
+            "end": 94
+          }
+        }
+      },
+      "span": {
+        "start": 84,
+        "end": 96
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "InterpolatedString": [
+              {
+                "Literal": "foo\nbar"
+              },
+              {
+                "Expr": {
+                  "kind": {
+                    "Variable": "x"
+                  },
+                  "span": {
+                    "start": 106,
+                    "end": 108
+                  }
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 96,
+            "end": 110
+          }
+        }
+      },
+      "span": {
+        "start": 96,
+        "end": 112
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ShellExec": [
+              {
+                "Literal": "foo\\nbar"
+              }
+            ]
+          },
+          "span": {
+            "start": 112,
+            "end": 122
+          }
+        }
+      },
+      "span": {
+        "start": 112,
+        "end": 124
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ShellExec": [
+              {
+                "Literal": "foo\nbar"
+              },
+              {
+                "Expr": {
+                  "kind": {
+                    "Variable": "x"
+                  },
+                  "span": {
+                    "start": 134,
+                    "end": 136
+                  }
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 124,
+            "end": 138
+          }
+        }
+      },
+      "span": {
+        "start": 124,
+        "end": 141
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Nowdoc": {
+              "label": "ABC",
+              "value": ""
+            }
+          },
+          "span": {
+            "start": 141,
+            "end": 153
+          }
+        }
+      },
+      "span": {
+        "start": 141,
+        "end": 155
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Nowdoc": {
+              "label": "ABC",
+              "value": "foo bar"
+            }
+          },
+          "span": {
+            "start": 155,
+            "end": 175
+          }
+        }
+      },
+      "span": {
+        "start": 155,
+        "end": 177
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Nowdoc": {
+              "label": "ABC",
+              "value": "    foo bar\n    "
+            }
+          },
+          "span": {
+            "start": 177,
+            "end": 205
+          }
+        }
+      },
+      "span": {
+        "start": 177,
+        "end": 207
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Heredoc": {
+              "label": "ABC",
+              "parts": [
+                {
+                  "Literal": "foo\\nbar"
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 207,
+            "end": 226
+          }
+        }
+      },
+      "span": {
+        "start": 207,
+        "end": 228
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Heredoc": {
+              "label": "ABC",
+              "parts": [
+                {
+                  "Literal": "    foo\\nbar\n    "
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 228,
+            "end": 255
+          }
+        }
+      },
+      "span": {
+        "start": 228,
+        "end": 257
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Heredoc": {
+              "label": "ABC",
+              "parts": [
+                {
+                  "Literal": "foo\nbar"
+                },
+                {
+                  "Expr": {
+                    "kind": {
+                      "Variable": "x"
+                    },
+                    "span": {
+                      "start": 273,
+                      "end": 275
+                    }
+                  }
+                },
+                {
+                  "Literal": "baz"
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 257,
+            "end": 283
+          }
+        }
+      },
+      "span": {
+        "start": 257,
+        "end": 285
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Heredoc": {
+              "label": "ABC",
+              "parts": [
+                {
+                  "Literal": "    foo\nbar"
+                },
+                {
+                  "Expr": {
+                    "kind": {
+                      "Variable": "x"
+                    },
+                    "span": {
+                      "start": 305,
+                      "end": 307
+                    }
+                  }
+                },
+                {
+                  "Literal": "baz\n    "
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 285,
+            "end": 319
+          }
+        }
+      },
+      "span": {
+        "start": 285,
+        "end": 322
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Array": []
+          },
+          "span": {
+            "start": 322,
+            "end": 329
+          }
+        }
+      },
+      "span": {
+        "start": 322,
+        "end": 331
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Array": []
+          },
+          "span": {
+            "start": 331,
+            "end": 333
+          }
+        }
+      },
+      "span": {
+        "start": 331,
+        "end": 335
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Array": [
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "x"
+                        },
+                        "span": {
+                          "start": 340,
+                          "end": 342
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 340,
+                        "end": 342
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 335,
+                  "end": 343
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Variable": "y"
+                },
+                "span": {
+                  "start": 346,
+                  "end": 348
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 335,
+            "end": 348
+          }
+        }
+      },
+      "span": {
+        "start": 335,
+        "end": 350
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Array": [
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "x"
+                        },
+                        "span": {
+                          "start": 351,
+                          "end": 353
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 351,
+                        "end": 353
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 350,
+                  "end": 354
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Variable": "y"
+                },
+                "span": {
+                  "start": 357,
+                  "end": 359
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 350,
+            "end": 359
+          }
+        }
+      },
+      "span": {
+        "start": 350,
+        "end": 361
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Cast": [
+              "Int",
+              {
+                "kind": {
+                  "Variable": "int"
+                },
+                "span": {
+                  "start": 367,
+                  "end": 371
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 361,
+            "end": 371
+          }
+        }
+      },
+      "span": {
+        "start": 361,
+        "end": 373
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Cast": [
+              "Int",
+              {
+                "kind": {
+                  "Variable": "integer"
+                },
+                "span": {
+                  "start": 383,
+                  "end": 391
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 373,
+            "end": 391
+          }
+        }
+      },
+      "span": {
+        "start": 373,
+        "end": 393
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Cast": [
+              "Bool",
+              {
+                "kind": {
+                  "Variable": "bool"
+                },
+                "span": {
+                  "start": 400,
+                  "end": 405
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 393,
+            "end": 405
+          }
+        }
+      },
+      "span": {
+        "start": 393,
+        "end": 407
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Cast": [
+              "Bool",
+              {
+                "kind": {
+                  "Variable": "boolean"
+                },
+                "span": {
+                  "start": 417,
+                  "end": 425
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 407,
+            "end": 425
+          }
+        }
+      },
+      "span": {
+        "start": 407,
+        "end": 427
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Cast": [
+              "String",
+              {
+                "kind": {
+                  "Variable": "string"
+                },
+                "span": {
+                  "start": 436,
+                  "end": 443
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 427,
+            "end": 443
+          }
+        }
+      },
+      "span": {
+        "start": 427,
+        "end": 445
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Cast": [
+              "String",
+              {
+                "kind": {
+                  "Variable": "binary"
+                },
+                "span": {
+                  "start": 454,
+                  "end": 461
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 445,
+            "end": 461
+          }
+        }
+      },
+      "span": {
+        "start": 445,
+        "end": 462
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 462
+  }
+}

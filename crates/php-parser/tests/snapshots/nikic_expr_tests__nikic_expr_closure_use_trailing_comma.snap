@@ -1,0 +1,46 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Closure": {
+              "is_static": false,
+              "by_ref": false,
+              "params": [],
+              "use_vars": [
+                {
+                  "name": "a",
+                  "by_ref": false,
+                  "span": {
+                    "start": 21,
+                    "end": 23
+                  }
+                }
+              ],
+              "return_type": null,
+              "body": [],
+              "attributes": []
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 28
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 29
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 29
+  }
+}

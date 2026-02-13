@@ -1,0 +1,141 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Identifier": "A"
+          },
+          "span": {
+            "start": 7,
+            "end": 8
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 10
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ClassConstAccess": {
+              "class": {
+                "kind": {
+                  "Identifier": "A"
+                },
+                "span": {
+                  "start": 10,
+                  "end": 11
+                }
+              },
+              "member": "B"
+            }
+          },
+          "span": {
+            "start": 10,
+            "end": 14
+          }
+        }
+      },
+      "span": {
+        "start": 10,
+        "end": 16
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ClassConstAccess": {
+              "class": {
+                "kind": {
+                  "Identifier": "A"
+                },
+                "span": {
+                  "start": 16,
+                  "end": 17
+                }
+              },
+              "member": "class"
+            }
+          },
+          "span": {
+            "start": 16,
+            "end": 24
+          }
+        }
+      },
+      "span": {
+        "start": 16,
+        "end": 26
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ClassConstAccess": {
+              "class": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 26,
+                  "end": 28
+                }
+              },
+              "member": "B"
+            }
+          },
+          "span": {
+            "start": 26,
+            "end": 31
+          }
+        }
+      },
+      "span": {
+        "start": 26,
+        "end": 33
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ClassConstAccess": {
+              "class": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 33,
+                  "end": 35
+                }
+              },
+              "member": "class"
+            }
+          },
+          "span": {
+            "start": 33,
+            "end": 42
+          }
+        }
+      },
+      "span": {
+        "start": 33,
+        "end": 43
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 43
+  }
+}

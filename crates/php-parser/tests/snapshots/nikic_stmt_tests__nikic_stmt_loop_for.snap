@@ -1,0 +1,238 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "For": {
+          "init": [
+            {
+              "kind": {
+                "Assign": {
+                  "target": {
+                    "kind": {
+                      "Variable": "i"
+                    },
+                    "span": {
+                      "start": 32,
+                      "end": 34
+                    }
+                  },
+                  "op": "Assign",
+                  "value": {
+                    "kind": {
+                      "Int": 0
+                    },
+                    "span": {
+                      "start": 37,
+                      "end": 38
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 32,
+                "end": 38
+              }
+            }
+          ],
+          "condition": [
+            {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Variable": "i"
+                    },
+                    "span": {
+                      "start": 40,
+                      "end": 42
+                    }
+                  },
+                  "op": "Less",
+                  "right": {
+                    "kind": {
+                      "Variable": "c"
+                    },
+                    "span": {
+                      "start": 45,
+                      "end": 47
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 40,
+                "end": 47
+              }
+            }
+          ],
+          "update": [
+            {
+              "kind": {
+                "UnaryPrefix": {
+                  "op": "PreIncrement",
+                  "operand": {
+                    "kind": {
+                      "Variable": "i"
+                    },
+                    "span": {
+                      "start": 51,
+                      "end": 53
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 49,
+                "end": 53
+              }
+            }
+          ],
+          "body": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 55,
+              "end": 57
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 27,
+        "end": 57
+      }
+    },
+    {
+      "kind": {
+        "For": {
+          "init": [
+            {
+              "kind": {
+                "Variable": "a"
+              },
+              "span": {
+                "start": 88,
+                "end": 90
+              }
+            },
+            {
+              "kind": {
+                "Variable": "b"
+              },
+              "span": {
+                "start": 92,
+                "end": 94
+              }
+            }
+          ],
+          "condition": [
+            {
+              "kind": {
+                "Variable": "c"
+              },
+              "span": {
+                "start": 96,
+                "end": 98
+              }
+            },
+            {
+              "kind": {
+                "Variable": "d"
+              },
+              "span": {
+                "start": 100,
+                "end": 102
+              }
+            }
+          ],
+          "update": [
+            {
+              "kind": {
+                "Variable": "e"
+              },
+              "span": {
+                "start": 104,
+                "end": 106
+              }
+            },
+            {
+              "kind": {
+                "Variable": "f"
+              },
+              "span": {
+                "start": 108,
+                "end": 110
+              }
+            }
+          ],
+          "body": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 112,
+              "end": 114
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 83,
+        "end": 114
+      }
+    },
+    {
+      "kind": {
+        "For": {
+          "init": [],
+          "condition": [],
+          "update": [],
+          "body": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 142,
+              "end": 144
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 133,
+        "end": 144
+      }
+    },
+    {
+      "kind": {
+        "For": {
+          "init": [],
+          "condition": [],
+          "update": [],
+          "body": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 168,
+              "end": 185
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 168,
+        "end": 185
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 185
+  }
+}

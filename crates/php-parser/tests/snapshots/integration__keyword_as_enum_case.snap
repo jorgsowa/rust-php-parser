@@ -1,0 +1,67 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Enum": {
+          "name": "Suit",
+          "scalar_type": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Case": {
+                  "name": "class",
+                  "value": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 18,
+                "end": 30
+              }
+            },
+            {
+              "kind": {
+                "Case": {
+                  "name": "function",
+                  "value": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 30,
+                "end": 45
+              }
+            },
+            {
+              "kind": {
+                "Case": {
+                  "name": "match",
+                  "value": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 45,
+                "end": 57
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 58
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 58
+  }
+}

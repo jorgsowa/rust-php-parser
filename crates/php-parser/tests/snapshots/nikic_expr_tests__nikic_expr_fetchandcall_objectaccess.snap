@@ -1,0 +1,336 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "PropertyAccess": {
+              "object": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 36,
+                  "end": 38
+                }
+              },
+              "property": {
+                "kind": {
+                  "Identifier": "b"
+                },
+                "span": {
+                  "start": 40,
+                  "end": 41
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 36,
+            "end": 41
+          }
+        }
+      },
+      "span": {
+        "start": 36,
+        "end": 43
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ArrayAccess": {
+              "array": {
+                "kind": {
+                  "PropertyAccess": {
+                    "object": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 43,
+                        "end": 45
+                      }
+                    },
+                    "property": {
+                      "kind": {
+                        "Identifier": "b"
+                      },
+                      "span": {
+                        "start": 47,
+                        "end": 48
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 43,
+                  "end": 48
+                }
+              },
+              "index": {
+                "kind": {
+                  "String": "c"
+                },
+                "span": {
+                  "start": 49,
+                  "end": 52
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 43,
+            "end": 53
+          }
+        }
+      },
+      "span": {
+        "start": 43,
+        "end": 82
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MethodCall": {
+              "object": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 82,
+                  "end": 84
+                }
+              },
+              "method": {
+                "kind": {
+                  "Identifier": "b"
+                },
+                "span": {
+                  "start": 86,
+                  "end": 87
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 82,
+            "end": 89
+          }
+        }
+      },
+      "span": {
+        "start": 82,
+        "end": 91
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MethodCall": {
+              "object": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 91,
+                  "end": 93
+                }
+              },
+              "method": {
+                "kind": {
+                  "String": "b"
+                },
+                "span": {
+                  "start": 96,
+                  "end": 99
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 91,
+            "end": 102
+          }
+        }
+      },
+      "span": {
+        "start": 91,
+        "end": 104
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MethodCall": {
+              "object": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 104,
+                  "end": 106
+                }
+              },
+              "method": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 108,
+                  "end": 110
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 104,
+            "end": 112
+          }
+        }
+      },
+      "span": {
+        "start": 104,
+        "end": 114
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "ArrayAccess": {
+                    "array": {
+                      "kind": {
+                        "PropertyAccess": {
+                          "object": {
+                            "kind": {
+                              "Variable": "a"
+                            },
+                            "span": {
+                              "start": 114,
+                              "end": 116
+                            }
+                          },
+                          "property": {
+                            "kind": {
+                              "Variable": "b"
+                            },
+                            "span": {
+                              "start": 118,
+                              "end": 120
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 114,
+                        "end": 120
+                      }
+                    },
+                    "index": {
+                      "kind": {
+                        "String": "c"
+                      },
+                      "span": {
+                        "start": 121,
+                        "end": 124
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 114,
+                  "end": 125
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 114,
+            "end": 127
+          }
+        }
+      },
+      "span": {
+        "start": 114,
+        "end": 153
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ArrayAccess": {
+              "array": {
+                "kind": {
+                  "MethodCall": {
+                    "object": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 153,
+                        "end": 155
+                      }
+                    },
+                    "method": {
+                      "kind": {
+                        "Identifier": "b"
+                      },
+                      "span": {
+                        "start": 157,
+                        "end": 158
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 153,
+                  "end": 160
+                }
+              },
+              "index": {
+                "kind": {
+                  "String": "c"
+                },
+                "span": {
+                  "start": 161,
+                  "end": 164
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 153,
+            "end": 165
+          }
+        }
+      },
+      "span": {
+        "start": 153,
+        "end": 166
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 166
+  }
+}

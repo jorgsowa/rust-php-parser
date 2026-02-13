@@ -1,0 +1,143 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Switch": {
+          "expr": {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 15,
+              "end": 17
+            }
+          },
+          "cases": [
+            {
+              "value": {
+                "kind": {
+                  "Int": 0
+                },
+                "span": {
+                  "start": 30,
+                  "end": 31
+                }
+              },
+              "body": [
+                {
+                  "kind": {
+                    "Break": null
+                  },
+                  "span": {
+                    "start": 41,
+                    "end": 67
+                  }
+                }
+              ],
+              "span": {
+                "start": 25,
+                "end": 67
+              }
+            },
+            {
+              "value": {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 72,
+                  "end": 73
+                }
+              },
+              "body": [],
+              "span": {
+                "start": 67,
+                "end": 79
+              }
+            },
+            {
+              "value": null,
+              "body": [],
+              "span": {
+                "start": 79,
+                "end": 88
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 113
+      }
+    },
+    {
+      "kind": {
+        "Switch": {
+          "expr": {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 121,
+              "end": 123
+            }
+          },
+          "cases": []
+        }
+      },
+      "span": {
+        "start": 113,
+        "end": 159
+      }
+    },
+    {
+      "kind": {
+        "Switch": {
+          "expr": {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 167,
+              "end": 169
+            }
+          },
+          "cases": []
+        }
+      },
+      "span": {
+        "start": 159,
+        "end": 177
+      }
+    },
+    {
+      "kind": {
+        "Switch": {
+          "expr": {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 185,
+              "end": 187
+            }
+          },
+          "cases": []
+        }
+      },
+      "span": {
+        "start": 177,
+        "end": 202
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 202
+  }
+}

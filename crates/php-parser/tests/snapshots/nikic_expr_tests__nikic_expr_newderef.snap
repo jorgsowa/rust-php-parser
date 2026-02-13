@@ -1,0 +1,687 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "PropertyAccess": {
+              "object": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "A"
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 12
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 7,
+                  "end": 14
+                }
+              },
+              "property": {
+                "kind": {
+                  "Identifier": "foo"
+                },
+                "span": {
+                  "start": 16,
+                  "end": 19
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 7,
+            "end": 19
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 21
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MethodCall": {
+              "object": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "A"
+                      },
+                      "span": {
+                        "start": 25,
+                        "end": 26
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 21,
+                  "end": 28
+                }
+              },
+              "method": {
+                "kind": {
+                  "Identifier": "foo"
+                },
+                "span": {
+                  "start": 30,
+                  "end": 33
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 21,
+            "end": 35
+          }
+        }
+      },
+      "span": {
+        "start": 21,
+        "end": 37
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ClassConstAccess": {
+              "class": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "A"
+                      },
+                      "span": {
+                        "start": 41,
+                        "end": 42
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 37,
+                  "end": 44
+                }
+              },
+              "member": "FOO"
+            }
+          },
+          "span": {
+            "start": 37,
+            "end": 49
+          }
+        }
+      },
+      "span": {
+        "start": 37,
+        "end": 51
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "StaticMethodCall": {
+              "class": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "A"
+                      },
+                      "span": {
+                        "start": 55,
+                        "end": 56
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 51,
+                  "end": 58
+                }
+              },
+              "method": "foo",
+              "args": []
+            }
+          },
+          "span": {
+            "start": 51,
+            "end": 65
+          }
+        }
+      },
+      "span": {
+        "start": 51,
+        "end": 67
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "StaticPropertyAccess": {
+              "class": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "A"
+                      },
+                      "span": {
+                        "start": 71,
+                        "end": 72
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 67,
+                  "end": 74
+                }
+              },
+              "member": "foo"
+            }
+          },
+          "span": {
+            "start": 67,
+            "end": 80
+          }
+        }
+      },
+      "span": {
+        "start": 67,
+        "end": 82
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ArrayAccess": {
+              "array": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "A"
+                      },
+                      "span": {
+                        "start": 86,
+                        "end": 87
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 82,
+                  "end": 89
+                }
+              },
+              "index": {
+                "kind": {
+                  "Int": 0
+                },
+                "span": {
+                  "start": 90,
+                  "end": 91
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 82,
+            "end": 92
+          }
+        }
+      },
+      "span": {
+        "start": 82,
+        "end": 94
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "A"
+                      },
+                      "span": {
+                        "start": 98,
+                        "end": 99
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 94,
+                  "end": 101
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 94,
+            "end": 103
+          }
+        }
+      },
+      "span": {
+        "start": 94,
+        "end": 106
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "PropertyAccess": {
+              "object": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "AnonymousClass": {
+                          "name": null,
+                          "modifiers": {
+                            "is_abstract": false,
+                            "is_final": false,
+                            "is_readonly": false
+                          },
+                          "extends": null,
+                          "implements": [],
+                          "members": [],
+                          "attributes": []
+                        }
+                      },
+                      "span": {
+                        "start": 106,
+                        "end": 118
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 106,
+                  "end": 118
+                }
+              },
+              "property": {
+                "kind": {
+                  "Identifier": "foo"
+                },
+                "span": {
+                  "start": 120,
+                  "end": 123
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 106,
+            "end": 123
+          }
+        }
+      },
+      "span": {
+        "start": 106,
+        "end": 125
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MethodCall": {
+              "object": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "AnonymousClass": {
+                          "name": null,
+                          "modifiers": {
+                            "is_abstract": false,
+                            "is_final": false,
+                            "is_readonly": false
+                          },
+                          "extends": null,
+                          "implements": [],
+                          "members": [],
+                          "attributes": []
+                        }
+                      },
+                      "span": {
+                        "start": 125,
+                        "end": 137
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 125,
+                  "end": 137
+                }
+              },
+              "method": {
+                "kind": {
+                  "Identifier": "foo"
+                },
+                "span": {
+                  "start": 139,
+                  "end": 142
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 125,
+            "end": 144
+          }
+        }
+      },
+      "span": {
+        "start": 125,
+        "end": 146
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ClassConstAccess": {
+              "class": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "AnonymousClass": {
+                          "name": null,
+                          "modifiers": {
+                            "is_abstract": false,
+                            "is_final": false,
+                            "is_readonly": false
+                          },
+                          "extends": null,
+                          "implements": [],
+                          "members": [],
+                          "attributes": []
+                        }
+                      },
+                      "span": {
+                        "start": 146,
+                        "end": 158
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 146,
+                  "end": 158
+                }
+              },
+              "member": "FOO"
+            }
+          },
+          "span": {
+            "start": 146,
+            "end": 163
+          }
+        }
+      },
+      "span": {
+        "start": 146,
+        "end": 165
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "StaticMethodCall": {
+              "class": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "AnonymousClass": {
+                          "name": null,
+                          "modifiers": {
+                            "is_abstract": false,
+                            "is_final": false,
+                            "is_readonly": false
+                          },
+                          "extends": null,
+                          "implements": [],
+                          "members": [],
+                          "attributes": []
+                        }
+                      },
+                      "span": {
+                        "start": 165,
+                        "end": 177
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 165,
+                  "end": 177
+                }
+              },
+              "method": "foo",
+              "args": []
+            }
+          },
+          "span": {
+            "start": 165,
+            "end": 184
+          }
+        }
+      },
+      "span": {
+        "start": 165,
+        "end": 186
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "StaticPropertyAccess": {
+              "class": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "AnonymousClass": {
+                          "name": null,
+                          "modifiers": {
+                            "is_abstract": false,
+                            "is_final": false,
+                            "is_readonly": false
+                          },
+                          "extends": null,
+                          "implements": [],
+                          "members": [],
+                          "attributes": []
+                        }
+                      },
+                      "span": {
+                        "start": 186,
+                        "end": 198
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 186,
+                  "end": 198
+                }
+              },
+              "member": "foo"
+            }
+          },
+          "span": {
+            "start": 186,
+            "end": 204
+          }
+        }
+      },
+      "span": {
+        "start": 186,
+        "end": 206
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ArrayAccess": {
+              "array": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "AnonymousClass": {
+                          "name": null,
+                          "modifiers": {
+                            "is_abstract": false,
+                            "is_final": false,
+                            "is_readonly": false
+                          },
+                          "extends": null,
+                          "implements": [],
+                          "members": [],
+                          "attributes": []
+                        }
+                      },
+                      "span": {
+                        "start": 206,
+                        "end": 218
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 206,
+                  "end": 218
+                }
+              },
+              "index": {
+                "kind": {
+                  "Int": 0
+                },
+                "span": {
+                  "start": 219,
+                  "end": 220
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 206,
+            "end": 221
+          }
+        }
+      },
+      "span": {
+        "start": 206,
+        "end": 223
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "AnonymousClass": {
+                          "name": null,
+                          "modifiers": {
+                            "is_abstract": false,
+                            "is_final": false,
+                            "is_readonly": false
+                          },
+                          "extends": null,
+                          "implements": [],
+                          "members": [],
+                          "attributes": []
+                        }
+                      },
+                      "span": {
+                        "start": 223,
+                        "end": 235
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 223,
+                  "end": 235
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 223,
+            "end": 237
+          }
+        }
+      },
+      "span": {
+        "start": 223,
+        "end": 238
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 238
+  }
+}

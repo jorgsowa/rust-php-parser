@@ -1,0 +1,74 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "a",
+          "params": [
+            {
+              "name": "b",
+              "type_hint": null,
+              "default": null,
+              "by_ref": true,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 18,
+                "end": 21
+              }
+            }
+          ],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 25
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": "a",
+          "params": [
+            {
+              "name": "b",
+              "type_hint": null,
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 38,
+                "end": 40
+              }
+            }
+          ],
+          "body": [],
+          "return_type": null,
+          "by_ref": true,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 26,
+        "end": 44
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 44
+  }
+}

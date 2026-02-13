@@ -1,0 +1,275 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": "C",
+            "value": {
+              "kind": {
+                "New": {
+                  "class": {
+                    "kind": {
+                      "Identifier": "Foo"
+                    },
+                    "span": {
+                      "start": 21,
+                      "end": 24
+                    }
+                  },
+                  "args": []
+                }
+              },
+              "span": {
+                "start": 17,
+                "end": 24
+              }
+            },
+            "span": {
+              "start": 13,
+              "end": 24
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 7,
+        "end": 27
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": "a",
+          "params": [
+            {
+              "name": "x",
+              "type_hint": null,
+              "default": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "Foo"
+                      },
+                      "span": {
+                        "start": 47,
+                        "end": 50
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 43,
+                  "end": 50
+                }
+              },
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 38,
+                "end": 50
+              }
+            }
+          ],
+          "body": [
+            {
+              "kind": {
+                "StaticVar": [
+                  {
+                    "name": "y",
+                    "default": {
+                      "kind": {
+                        "New": {
+                          "class": {
+                            "kind": {
+                              "Identifier": "Foo"
+                            },
+                            "span": {
+                              "start": 74,
+                              "end": 77
+                            }
+                          },
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 70,
+                        "end": 77
+                      }
+                    },
+                    "span": {
+                      "start": 65,
+                      "end": 77
+                    }
+                  }
+                ]
+              },
+              "span": {
+                "start": 58,
+                "end": 79
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 27,
+        "end": 80
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": "Bar",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "ClassConst": {
+                  "name": "C",
+                  "visibility": null,
+                  "value": {
+                    "kind": {
+                      "New": {
+                        "class": {
+                          "kind": {
+                            "Identifier": "Foo"
+                          },
+                          "span": {
+                            "start": 129,
+                            "end": 132
+                          }
+                        },
+                        "args": []
+                      }
+                    },
+                    "span": {
+                      "start": 125,
+                      "end": 132
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 115,
+                "end": 138
+              }
+            },
+            {
+              "kind": {
+                "Property": {
+                  "name": "prop",
+                  "visibility": "Public",
+                  "set_visibility": null,
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": null,
+                  "default": {
+                    "kind": {
+                      "New": {
+                        "class": {
+                          "kind": {
+                            "Identifier": "Foo"
+                          },
+                          "span": {
+                            "start": 157,
+                            "end": 160
+                          }
+                        },
+                        "args": []
+                      }
+                    },
+                    "span": {
+                      "start": 153,
+                      "end": 160
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 138,
+                "end": 160
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": {
+                "parts": [
+                  "Attr"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 84,
+                  "end": 88
+                }
+              },
+              "args": [
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "New": {
+                        "class": {
+                          "kind": {
+                            "Identifier": "Foo"
+                          },
+                          "span": {
+                            "start": 93,
+                            "end": 96
+                          }
+                        },
+                        "args": []
+                      }
+                    },
+                    "span": {
+                      "start": 89,
+                      "end": 96
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 89,
+                    "end": 96
+                  }
+                }
+              ],
+              "span": {
+                "start": 84,
+                "end": 97
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 99,
+        "end": 163
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 163
+  }
+}

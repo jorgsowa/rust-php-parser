@@ -1,20 +1,37 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Declare:
-        - - - strict_types
-            - kind:
-                Int: 1
-              span:
-                start: 27
-                end: 28
-        - ~
-    span:
-      start: 6
-      end: 30
-span:
-  start: 0
-  end: 30
+{
+  "stmts": [
+    {
+      "kind": {
+        "Declare": [
+          [
+            [
+              "strict_types",
+              {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 27,
+                  "end": 28
+                }
+              }
+            ]
+          ],
+          null
+        ]
+      },
+      "span": {
+        "start": 6,
+        "end": 30
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 30
+  }
+}

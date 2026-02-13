@@ -1,0 +1,343 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MethodCall": {
+              "object": {
+                "kind": {
+                  "String": "string"
+                },
+                "span": {
+                  "start": 7,
+                  "end": 15
+                }
+              },
+              "method": {
+                "kind": {
+                  "Identifier": "length"
+                },
+                "span": {
+                  "start": 17,
+                  "end": 23
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 7,
+            "end": 25
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 27
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ArrayAccess": {
+              "array": {
+                "kind": {
+                  "InterpolatedString": [
+                    {
+                      "Literal": "foo"
+                    },
+                    {
+                      "Expr": {
+                        "kind": {
+                          "Variable": "bar"
+                        },
+                        "span": {
+                          "start": 31,
+                          "end": 35
+                        }
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 27,
+                  "end": 36
+                }
+              },
+              "index": {
+                "kind": {
+                  "Int": 0
+                },
+                "span": {
+                  "start": 37,
+                  "end": 38
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 27,
+            "end": 39
+          }
+        }
+      },
+      "span": {
+        "start": 27,
+        "end": 41
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "MethodCall": {
+              "object": {
+                "kind": {
+                  "InterpolatedString": [
+                    {
+                      "Literal": "foo"
+                    },
+                    {
+                      "Expr": {
+                        "kind": {
+                          "Variable": "bar"
+                        },
+                        "span": {
+                          "start": 45,
+                          "end": 49
+                        }
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 41,
+                  "end": 50
+                }
+              },
+              "method": {
+                "kind": {
+                  "Identifier": "length"
+                },
+                "span": {
+                  "start": 52,
+                  "end": 58
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 41,
+            "end": 60
+          }
+        }
+      },
+      "span": {
+        "start": 41,
+        "end": 62
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "ArrayAccess": {
+                    "array": {
+                      "kind": {
+                        "PropertyAccess": {
+                          "object": {
+                            "kind": {
+                              "Parenthesized": {
+                                "kind": {
+                                  "Clone": {
+                                    "kind": {
+                                      "Variable": "obj"
+                                    },
+                                    "span": {
+                                      "start": 69,
+                                      "end": 73
+                                    }
+                                  }
+                                },
+                                "span": {
+                                  "start": 63,
+                                  "end": 73
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 62,
+                              "end": 74
+                            }
+                          },
+                          "property": {
+                            "kind": {
+                              "Identifier": "b"
+                            },
+                            "span": {
+                              "start": 76,
+                              "end": 77
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 62,
+                        "end": 77
+                      }
+                    },
+                    "index": {
+                      "kind": {
+                        "Int": 0
+                      },
+                      "span": {
+                        "start": 78,
+                        "end": 79
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 62,
+                  "end": 80
+                }
+              },
+              "args": [
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 81,
+                      "end": 82
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 81,
+                    "end": 82
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 62,
+            "end": 83
+          }
+        }
+      },
+      "span": {
+        "start": 62,
+        "end": 85
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "ArrayAccess": {
+                    "array": {
+                      "kind": {
+                        "Array": [
+                          {
+                            "key": null,
+                            "value": {
+                              "kind": {
+                                "Int": 0
+                              },
+                              "span": {
+                                "start": 86,
+                                "end": 87
+                              }
+                            },
+                            "unpack": false,
+                            "span": {
+                              "start": 86,
+                              "end": 87
+                            }
+                          },
+                          {
+                            "key": null,
+                            "value": {
+                              "kind": {
+                                "Int": 1
+                              },
+                              "span": {
+                                "start": 89,
+                                "end": 90
+                              }
+                            },
+                            "unpack": false,
+                            "span": {
+                              "start": 89,
+                              "end": 90
+                            }
+                          }
+                        ]
+                      },
+                      "span": {
+                        "start": 85,
+                        "end": 91
+                      }
+                    },
+                    "index": {
+                      "kind": {
+                        "Int": 0
+                      },
+                      "span": {
+                        "start": 92,
+                        "end": 93
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 85,
+                  "end": 95
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 97,
+                  "end": 98
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 85,
+            "end": 98
+          }
+        }
+      },
+      "span": {
+        "start": 85,
+        "end": 99
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 99
+  }
+}

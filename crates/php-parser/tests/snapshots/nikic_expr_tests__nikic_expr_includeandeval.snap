@@ -1,0 +1,149 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Include": [
+              "Include",
+              {
+                "kind": {
+                  "String": "A.php"
+                },
+                "span": {
+                  "start": 14,
+                  "end": 21
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 6,
+            "end": 21
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 23
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Include": [
+              "IncludeOnce",
+              {
+                "kind": {
+                  "String": "A.php"
+                },
+                "span": {
+                  "start": 36,
+                  "end": 43
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 23,
+            "end": 43
+          }
+        }
+      },
+      "span": {
+        "start": 23,
+        "end": 45
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Include": [
+              "Require",
+              {
+                "kind": {
+                  "String": "A.php"
+                },
+                "span": {
+                  "start": 53,
+                  "end": 60
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 45,
+            "end": 60
+          }
+        }
+      },
+      "span": {
+        "start": 45,
+        "end": 62
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Include": [
+              "RequireOnce",
+              {
+                "kind": {
+                  "String": "A.php"
+                },
+                "span": {
+                  "start": 75,
+                  "end": 82
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 62,
+            "end": 82
+          }
+        }
+      },
+      "span": {
+        "start": 62,
+        "end": 84
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Eval": {
+              "kind": {
+                "String": "A"
+              },
+              "span": {
+                "start": 89,
+                "end": 92
+              }
+            }
+          },
+          "span": {
+            "start": 84,
+            "end": 93
+          }
+        }
+      },
+      "span": {
+        "start": 84,
+        "end": 94
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 94
+  }
+}

@@ -1,66 +1,110 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result.program
+expression: to_json(&result.program)
 ---
-stmts:
-  - kind:
-      Expression:
-        kind:
-          Bool: true
-        span:
-          start: 6
-          end: 10
-    span:
-      start: 6
-      end: 12
-  - kind:
-      Expression:
-        kind:
-          Bool: false
-        span:
-          start: 12
-          end: 17
-    span:
-      start: 12
-      end: 19
-  - kind:
-      Expression:
-        kind: "Null"
-        span:
-          start: 19
-          end: 23
-    span:
-      start: 19
-      end: 25
-  - kind:
-      Expression:
-        kind:
-          Bool: true
-        span:
-          start: 25
-          end: 29
-    span:
-      start: 25
-      end: 31
-  - kind:
-      Expression:
-        kind:
-          Bool: false
-        span:
-          start: 31
-          end: 36
-    span:
-      start: 31
-      end: 38
-  - kind:
-      Expression:
-        kind: "Null"
-        span:
-          start: 38
-          end: 42
-    span:
-      start: 38
-      end: 43
-span:
-  start: 0
-  end: 43
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Bool": true
+          },
+          "span": {
+            "start": 6,
+            "end": 10
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 12
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Bool": false
+          },
+          "span": {
+            "start": 12,
+            "end": 17
+          }
+        }
+      },
+      "span": {
+        "start": 12,
+        "end": 19
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": "Null",
+          "span": {
+            "start": 19,
+            "end": 23
+          }
+        }
+      },
+      "span": {
+        "start": 19,
+        "end": 25
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Bool": true
+          },
+          "span": {
+            "start": 25,
+            "end": 29
+          }
+        }
+      },
+      "span": {
+        "start": 25,
+        "end": 31
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Bool": false
+          },
+          "span": {
+            "start": 31,
+            "end": 36
+          }
+        }
+      },
+      "span": {
+        "start": 31,
+        "end": 38
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": "Null",
+          "span": {
+            "start": 38,
+            "end": 42
+          }
+        }
+      },
+      "span": {
+        "start": 38,
+        "end": 43
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 43
+  }
+}

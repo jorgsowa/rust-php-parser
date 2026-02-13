@@ -33,6 +33,7 @@ pub struct Lexer<'src> {
     mode: LexerMode,
     pos: usize,
     peeked: Option<Token>,
+    peeked2: Option<Token>,
 }
 
 impl<'src> Lexer<'src> {
@@ -57,6 +58,7 @@ impl<'src> Lexer<'src> {
             mode,
             pos,
             peeked: None,
+            peeked2: None,
         }
     }
 
@@ -71,8 +73,21 @@ impl<'src> Lexer<'src> {
         self.peeked.as_ref().unwrap()
     }
 
+    /// Peek two tokens ahead (past the next token).
+    pub fn peek2(&mut self) -> &Token {
+        // Ensure peeked is filled
+        if self.peeked.is_none() {
+            self.peeked = Some(self.read_next_token());
+        }
+        if self.peeked2.is_none() {
+            self.peeked2 = Some(self.read_next_token());
+        }
+        self.peeked2.as_ref().unwrap()
+    }
+
     pub fn next_token(&mut self) -> Token {
         if let Some(token) = self.peeked.take() {
+            self.peeked = self.peeked2.take();
             return token;
         }
         self.read_next_token()
@@ -125,6 +140,17 @@ impl<'src> Lexer<'src> {
             return token;
         }
 
+        // Check for unclosed block comment: /* without closing */
+        // Logos skip pattern only matches closed comments, so we handle this here.
+        if remaining.starts_with("/*") {
+            // Check if there's a closing */
+            if remaining[2..].find("*/").is_none() {
+                // Unclosed comment — consume rest of file as comment (matches PHP behavior)
+                self.pos = self.source.len();
+                return Token::eof(self.source.len() as u32);
+            }
+        }
+
         let mut inner = TokenKind::lexer(remaining);
 
         match inner.next() {
@@ -132,6 +158,17 @@ impl<'src> Lexer<'src> {
                 let logos_span = inner.span();
                 let start = self.pos + logos_span.start;
                 let end = self.pos + logos_span.end;
+
+                // Check if << is actually the start of <<<HEREDOC (Logos skips comments
+                // before it, so try_lex_heredoc at the top of lex_php may have missed it)
+                if kind == TokenKind::ShiftLeft && self.source.as_bytes().get(end) == Some(&b'<') {
+                    let heredoc_remaining = &self.source[start..];
+                    self.pos = start;
+                    if let Some(token) = self.try_lex_heredoc(heredoc_remaining) {
+                        return token;
+                    }
+                }
+
                 self.pos = end;
 
                 let span = Span::new(start as u32, end as u32);
@@ -164,18 +201,26 @@ impl<'src> Lexer<'src> {
     /// `remaining` is the source from `self.pos` onward.
     /// Returns Some(Token) if a heredoc/nowdoc was found, None otherwise.
     fn try_lex_heredoc(&mut self, remaining: &str) -> Option<Token> {
-        // Skip leading whitespace (and newlines) to find <<<
+        // Skip leading whitespace (and newlines) to find <<< (or b<<<)
         let trimmed = remaining.trim_start_matches(|c: char| c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\x0C');
         let ws_len = remaining.len() - trimmed.len();
-        if !trimmed.starts_with("<<<") {
+
+        // Handle optional binary prefix: b<<< or B<<<
+        let (after_prefix, prefix_len) = if (trimmed.starts_with("b<<<") || trimmed.starts_with("B<<<")) && !trimmed[1..].starts_with("<<<>") {
+            (&trimmed[1..], 1)
+        } else {
+            (trimmed, 0)
+        };
+
+        if !after_prefix.starts_with("<<<") {
             return None;
         }
 
         let base_pos = self.pos; // position of start of remaining
-        let start = base_pos + ws_len; // position of <<<
-        let after_arrows = &trimmed[3..];
+        let start = base_pos + ws_len; // position of b<<< or <<<
+        let after_arrows = &after_prefix[3..];
         let after_arrows_trimmed = after_arrows.trim_start_matches(|c: char| c == ' ' || c == '\t');
-        let arrows_offset = ws_len + 3 + (after_arrows.len() - after_arrows_trimmed.len());
+        let arrows_offset = ws_len + prefix_len + 3 + (after_arrows.len() - after_arrows_trimmed.len());
 
         // Determine if nowdoc (quoted) or heredoc
         let (label, is_nowdoc, label_line_end);

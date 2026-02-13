@@ -1,0 +1,459 @@
+---
+source: crates/php-parser/tests/nikic_expr_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Ternary": {
+              "condition": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 18,
+                  "end": 20
+                }
+              },
+              "then_expr": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 23,
+                  "end": 25
+                }
+              },
+              "else_expr": {
+                "kind": {
+                  "Variable": "c"
+                },
+                "span": {
+                  "start": 28,
+                  "end": 30
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 18,
+            "end": 30
+          }
+        }
+      },
+      "span": {
+        "start": 18,
+        "end": 32
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Ternary": {
+              "condition": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 32,
+                  "end": 34
+                }
+              },
+              "then_expr": null,
+              "else_expr": {
+                "kind": {
+                  "Variable": "c"
+                },
+                "span": {
+                  "start": 38,
+                  "end": 40
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 32,
+            "end": 40
+          }
+        }
+      },
+      "span": {
+        "start": 32,
+        "end": 57
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Ternary": {
+              "condition": {
+                "kind": {
+                  "Ternary": {
+                    "condition": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 57,
+                        "end": 59
+                      }
+                    },
+                    "then_expr": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 62,
+                        "end": 64
+                      }
+                    },
+                    "else_expr": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 67,
+                        "end": 69
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 57,
+                  "end": 69
+                }
+              },
+              "then_expr": {
+                "kind": {
+                  "Variable": "d"
+                },
+                "span": {
+                  "start": 72,
+                  "end": 74
+                }
+              },
+              "else_expr": {
+                "kind": {
+                  "Variable": "e"
+                },
+                "span": {
+                  "start": 77,
+                  "end": 79
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 57,
+            "end": 79
+          }
+        }
+      },
+      "span": {
+        "start": 57,
+        "end": 81
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Ternary": {
+              "condition": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 81,
+                  "end": 83
+                }
+              },
+              "then_expr": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 86,
+                  "end": 88
+                }
+              },
+              "else_expr": {
+                "kind": {
+                  "Parenthesized": {
+                    "kind": {
+                      "Ternary": {
+                        "condition": {
+                          "kind": {
+                            "Variable": "c"
+                          },
+                          "span": {
+                            "start": 92,
+                            "end": 94
+                          }
+                        },
+                        "then_expr": {
+                          "kind": {
+                            "Variable": "d"
+                          },
+                          "span": {
+                            "start": 97,
+                            "end": 99
+                          }
+                        },
+                        "else_expr": {
+                          "kind": {
+                            "Variable": "e"
+                          },
+                          "span": {
+                            "start": 102,
+                            "end": 104
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 92,
+                      "end": 104
+                    }
+                  }
+                },
+                "span": {
+                  "start": 91,
+                  "end": 105
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 81,
+            "end": 105
+          }
+        }
+      },
+      "span": {
+        "start": 81,
+        "end": 125
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "NullCoalesce": {
+              "left": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 125,
+                  "end": 127
+                }
+              },
+              "right": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 131,
+                  "end": 133
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 125,
+            "end": 133
+          }
+        }
+      },
+      "span": {
+        "start": 125,
+        "end": 135
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "NullCoalesce": {
+              "left": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 135,
+                  "end": 137
+                }
+              },
+              "right": {
+                "kind": {
+                  "NullCoalesce": {
+                    "left": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 141,
+                        "end": 143
+                      }
+                    },
+                    "right": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 147,
+                        "end": 149
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 141,
+                  "end": 149
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 135,
+            "end": 149
+          }
+        }
+      },
+      "span": {
+        "start": 135,
+        "end": 151
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Ternary": {
+              "condition": {
+                "kind": {
+                  "NullCoalesce": {
+                    "left": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 151,
+                        "end": 153
+                      }
+                    },
+                    "right": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 157,
+                        "end": 159
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 151,
+                  "end": 159
+                }
+              },
+              "then_expr": {
+                "kind": {
+                  "Variable": "c"
+                },
+                "span": {
+                  "start": 162,
+                  "end": 164
+                }
+              },
+              "else_expr": {
+                "kind": {
+                  "Variable": "d"
+                },
+                "span": {
+                  "start": 167,
+                  "end": 169
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 151,
+            "end": 169
+          }
+        }
+      },
+      "span": {
+        "start": 151,
+        "end": 171
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "NullCoalesce": {
+              "left": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 171,
+                        "end": 173
+                      }
+                    },
+                    "op": "BooleanAnd",
+                    "right": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 177,
+                        "end": 179
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 171,
+                  "end": 179
+                }
+              },
+              "right": {
+                "kind": {
+                  "Variable": "c"
+                },
+                "span": {
+                  "start": 183,
+                  "end": 185
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 171,
+            "end": 185
+          }
+        }
+      },
+      "span": {
+        "start": 171,
+        "end": 186
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 186
+  }
+}

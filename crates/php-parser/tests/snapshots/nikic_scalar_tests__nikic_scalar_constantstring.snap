@@ -1,0 +1,233 @@
+---
+source: crates/php-parser/tests/nikic_scalar_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": ""
+          },
+          "span": {
+            "start": 7,
+            "end": 9
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 11
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": ""
+          },
+          "span": {
+            "start": 11,
+            "end": 13
+          }
+        }
+      },
+      "span": {
+        "start": 11,
+        "end": 15
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": ""
+          },
+          "span": {
+            "start": 15,
+            "end": 18
+          }
+        }
+      },
+      "span": {
+        "start": 15,
+        "end": 20
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": ""
+          },
+          "span": {
+            "start": 20,
+            "end": 23
+          }
+        }
+      },
+      "span": {
+        "start": 20,
+        "end": 25
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": "Hi"
+          },
+          "span": {
+            "start": 25,
+            "end": 29
+          }
+        }
+      },
+      "span": {
+        "start": 25,
+        "end": 31
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": "Hi"
+          },
+          "span": {
+            "start": 31,
+            "end": 36
+          }
+        }
+      },
+      "span": {
+        "start": 31,
+        "end": 38
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": "Hi"
+          },
+          "span": {
+            "start": 38,
+            "end": 43
+          }
+        }
+      },
+      "span": {
+        "start": 38,
+        "end": 45
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": "Hi"
+          },
+          "span": {
+            "start": 45,
+            "end": 49
+          }
+        }
+      },
+      "span": {
+        "start": 45,
+        "end": 51
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": "Hi"
+          },
+          "span": {
+            "start": 51,
+            "end": 56
+          }
+        }
+      },
+      "span": {
+        "start": 51,
+        "end": 58
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": "Hi"
+          },
+          "span": {
+            "start": 58,
+            "end": 63
+          }
+        }
+      },
+      "span": {
+        "start": 58,
+        "end": 65
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": "!\\'!\\\\!\\a!"
+          },
+          "span": {
+            "start": 65,
+            "end": 77
+          }
+        }
+      },
+      "span": {
+        "start": 65,
+        "end": 79
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": "!\\\"!\\\\!\\$!\\n!\\r!\\t!\\f!\\v!\\e!\\a"
+          },
+          "span": {
+            "start": 79,
+            "end": 111
+          }
+        }
+      },
+      "span": {
+        "start": 79,
+        "end": 113
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": "!\\xFF!\\377!\\400!\\0!"
+          },
+          "span": {
+            "start": 113,
+            "end": 134
+          }
+        }
+      },
+      "span": {
+        "start": 113,
+        "end": 135
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 135
+  }
+}

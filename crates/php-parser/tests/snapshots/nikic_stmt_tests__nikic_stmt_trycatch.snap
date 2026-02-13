@@ -1,0 +1,229 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "TryCatch": {
+          "body": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "FunctionCall": {
+                      "name": {
+                        "kind": {
+                          "Identifier": "doTry"
+                        },
+                        "span": {
+                          "start": 17,
+                          "end": 22
+                        }
+                      },
+                      "args": []
+                    }
+                  },
+                  "span": {
+                    "start": 17,
+                    "end": 24
+                  }
+                }
+              },
+              "span": {
+                "start": 17,
+                "end": 26
+              }
+            }
+          ],
+          "catches": [
+            {
+              "types": [
+                {
+                  "parts": [
+                    "A"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 35,
+                    "end": 37
+                  }
+                }
+              ],
+              "var": "b",
+              "body": [
+                {
+                  "kind": {
+                    "Expression": {
+                      "kind": {
+                        "FunctionCall": {
+                          "name": {
+                            "kind": {
+                              "Identifier": "doCatchA"
+                            },
+                            "span": {
+                              "start": 47,
+                              "end": 55
+                            }
+                          },
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 47,
+                        "end": 57
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 47,
+                    "end": 59
+                  }
+                }
+              ],
+              "span": {
+                "start": 34,
+                "end": 61
+              }
+            },
+            {
+              "types": [
+                {
+                  "parts": [
+                    "B"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 68,
+                    "end": 70
+                  }
+                }
+              ],
+              "var": "c",
+              "body": [
+                {
+                  "kind": {
+                    "Expression": {
+                      "kind": {
+                        "FunctionCall": {
+                          "name": {
+                            "kind": {
+                              "Identifier": "doCatchB"
+                            },
+                            "span": {
+                              "start": 80,
+                              "end": 88
+                            }
+                          },
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 80,
+                        "end": 90
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 80,
+                    "end": 92
+                  }
+                }
+              ],
+              "span": {
+                "start": 67,
+                "end": 94
+              }
+            }
+          ],
+          "finally": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "FunctionCall": {
+                      "name": {
+                        "kind": {
+                          "Identifier": "doFinally"
+                        },
+                        "span": {
+                          "start": 108,
+                          "end": 117
+                        }
+                      },
+                      "args": []
+                    }
+                  },
+                  "span": {
+                    "start": 108,
+                    "end": 119
+                  }
+                }
+              },
+              "span": {
+                "start": 108,
+                "end": 121
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 138
+      }
+    },
+    {
+      "kind": {
+        "TryCatch": {
+          "body": [],
+          "catches": [
+            {
+              "types": [
+                {
+                  "parts": [
+                    "A"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 153,
+                    "end": 155
+                  }
+                }
+              ],
+              "var": "b",
+              "body": [],
+              "span": {
+                "start": 152,
+                "end": 176
+              }
+            }
+          ],
+          "finally": null
+        }
+      },
+      "span": {
+        "start": 138,
+        "end": 176
+      }
+    },
+    {
+      "kind": {
+        "TryCatch": {
+          "body": [],
+          "catches": [],
+          "finally": []
+        }
+      },
+      "span": {
+        "start": 176,
+        "end": 196
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 196
+  }
+}

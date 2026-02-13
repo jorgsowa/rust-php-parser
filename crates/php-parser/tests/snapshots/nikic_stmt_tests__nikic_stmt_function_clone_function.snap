@@ -1,0 +1,1072 @@
+---
+source: crates/php-parser/tests/nikic_stmt_tests.rs
+expression: json
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "clone",
+          "params": [
+            {
+              "name": "object",
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "object"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 22,
+                      "end": 28
+                    }
+                  }
+                },
+                "span": {
+                  "start": 22,
+                  "end": 28
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 22,
+                "end": 36
+              }
+            },
+            {
+              "name": "withProperties",
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "array"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 38,
+                      "end": 43
+                    }
+                  }
+                },
+                "span": {
+                  "start": 38,
+                  "end": 43
+                }
+              },
+              "default": {
+                "kind": {
+                  "Array": []
+                },
+                "span": {
+                  "start": 62,
+                  "end": 64
+                }
+              },
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 38,
+                "end": 64
+              }
+            }
+          ],
+          "body": [],
+          "return_type": {
+            "kind": {
+              "Named": {
+                "parts": [
+                  "object"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 67,
+                  "end": 73
+                }
+              }
+            },
+            "span": {
+              "start": 67,
+              "end": 73
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 76
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Clone": {
+              "kind": {
+                "Variable": "x"
+              },
+              "span": {
+                "start": 83,
+                "end": 85
+              }
+            }
+          },
+          "span": {
+            "start": 77,
+            "end": 85
+          }
+        }
+      },
+      "span": {
+        "start": 77,
+        "end": 87
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "clone"
+                },
+                "span": {
+                  "start": 87,
+                  "end": 92
+                }
+              },
+              "args": [
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Variable": "x"
+                    },
+                    "span": {
+                      "start": 93,
+                      "end": 95
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 93,
+                    "end": 95
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 87,
+            "end": 96
+          }
+        }
+      },
+      "span": {
+        "start": 87,
+        "end": 98
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "clone"
+                },
+                "span": {
+                  "start": 98,
+                  "end": 103
+                }
+              },
+              "args": [
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Variable": "x"
+                    },
+                    "span": {
+                      "start": 104,
+                      "end": 106
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 104,
+                    "end": 106
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 98,
+            "end": 109
+          }
+        }
+      },
+      "span": {
+        "start": 98,
+        "end": 111
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "clone"
+                },
+                "span": {
+                  "start": 111,
+                  "end": 116
+                }
+              },
+              "args": [
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Variable": "x"
+                    },
+                    "span": {
+                      "start": 117,
+                      "end": 119
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 117,
+                    "end": 119
+                  }
+                },
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Array": [
+                        {
+                          "key": {
+                            "kind": {
+                              "String": "foo"
+                            },
+                            "span": {
+                              "start": 123,
+                              "end": 128
+                            }
+                          },
+                          "value": {
+                            "kind": {
+                              "Variable": "foo"
+                            },
+                            "span": {
+                              "start": 132,
+                              "end": 136
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 123,
+                            "end": 136
+                          }
+                        },
+                        {
+                          "key": {
+                            "kind": {
+                              "String": "bar"
+                            },
+                            "span": {
+                              "start": 138,
+                              "end": 143
+                            }
+                          },
+                          "value": {
+                            "kind": {
+                              "Variable": "bar"
+                            },
+                            "span": {
+                              "start": 147,
+                              "end": 151
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 138,
+                            "end": 151
+                          }
+                        }
+                      ]
+                    },
+                    "span": {
+                      "start": 121,
+                      "end": 153
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 121,
+                    "end": 153
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 111,
+            "end": 154
+          }
+        }
+      },
+      "span": {
+        "start": 111,
+        "end": 156
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "clone"
+                },
+                "span": {
+                  "start": 156,
+                  "end": 161
+                }
+              },
+              "args": [
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Variable": "x"
+                    },
+                    "span": {
+                      "start": 162,
+                      "end": 164
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 162,
+                    "end": 164
+                  }
+                },
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Variable": "array"
+                    },
+                    "span": {
+                      "start": 166,
+                      "end": 172
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 166,
+                    "end": 172
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 156,
+            "end": 173
+          }
+        }
+      },
+      "span": {
+        "start": 156,
+        "end": 175
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "clone"
+                },
+                "span": {
+                  "start": 175,
+                  "end": 180
+                }
+              },
+              "args": [
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Variable": "x"
+                    },
+                    "span": {
+                      "start": 181,
+                      "end": 183
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 181,
+                    "end": 183
+                  }
+                },
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Variable": "array"
+                    },
+                    "span": {
+                      "start": 185,
+                      "end": 191
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 185,
+                    "end": 191
+                  }
+                },
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Variable": "extraParameter"
+                    },
+                    "span": {
+                      "start": 193,
+                      "end": 208
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 193,
+                    "end": 208
+                  }
+                },
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Variable": "trailingComma"
+                    },
+                    "span": {
+                      "start": 210,
+                      "end": 224
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 210,
+                    "end": 224
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 175,
+            "end": 227
+          }
+        }
+      },
+      "span": {
+        "start": 175,
+        "end": 229
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "clone"
+                },
+                "span": {
+                  "start": 229,
+                  "end": 234
+                }
+              },
+              "args": [
+                {
+                  "name": "object",
+                  "value": {
+                    "kind": {
+                      "Variable": "x"
+                    },
+                    "span": {
+                      "start": 243,
+                      "end": 245
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 235,
+                    "end": 245
+                  }
+                },
+                {
+                  "name": "withProperties",
+                  "value": {
+                    "kind": {
+                      "Array": [
+                        {
+                          "key": {
+                            "kind": {
+                              "String": "foo"
+                            },
+                            "span": {
+                              "start": 265,
+                              "end": 270
+                            }
+                          },
+                          "value": {
+                            "kind": {
+                              "Variable": "foo"
+                            },
+                            "span": {
+                              "start": 274,
+                              "end": 278
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 265,
+                            "end": 278
+                          }
+                        },
+                        {
+                          "key": {
+                            "kind": {
+                              "String": "bar"
+                            },
+                            "span": {
+                              "start": 280,
+                              "end": 285
+                            }
+                          },
+                          "value": {
+                            "kind": {
+                              "Variable": "bar"
+                            },
+                            "span": {
+                              "start": 289,
+                              "end": 293
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 280,
+                            "end": 293
+                          }
+                        }
+                      ]
+                    },
+                    "span": {
+                      "start": 263,
+                      "end": 295
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 247,
+                    "end": 295
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 229,
+            "end": 296
+          }
+        }
+      },
+      "span": {
+        "start": 229,
+        "end": 298
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "clone"
+                },
+                "span": {
+                  "start": 298,
+                  "end": 303
+                }
+              },
+              "args": [
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Variable": "x"
+                    },
+                    "span": {
+                      "start": 304,
+                      "end": 306
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 304,
+                    "end": 306
+                  }
+                },
+                {
+                  "name": "withProperties",
+                  "value": {
+                    "kind": {
+                      "Array": [
+                        {
+                          "key": {
+                            "kind": {
+                              "String": "foo"
+                            },
+                            "span": {
+                              "start": 326,
+                              "end": 331
+                            }
+                          },
+                          "value": {
+                            "kind": {
+                              "Variable": "foo"
+                            },
+                            "span": {
+                              "start": 335,
+                              "end": 339
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 326,
+                            "end": 339
+                          }
+                        },
+                        {
+                          "key": {
+                            "kind": {
+                              "String": "bar"
+                            },
+                            "span": {
+                              "start": 341,
+                              "end": 346
+                            }
+                          },
+                          "value": {
+                            "kind": {
+                              "Variable": "bar"
+                            },
+                            "span": {
+                              "start": 350,
+                              "end": 354
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 341,
+                            "end": 354
+                          }
+                        }
+                      ]
+                    },
+                    "span": {
+                      "start": 324,
+                      "end": 356
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 308,
+                    "end": 356
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 298,
+            "end": 357
+          }
+        }
+      },
+      "span": {
+        "start": 298,
+        "end": 359
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "clone"
+                },
+                "span": {
+                  "start": 359,
+                  "end": 364
+                }
+              },
+              "args": [
+                {
+                  "name": "object",
+                  "value": {
+                    "kind": {
+                      "Variable": "x"
+                    },
+                    "span": {
+                      "start": 373,
+                      "end": 375
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 365,
+                    "end": 375
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 359,
+            "end": 376
+          }
+        }
+      },
+      "span": {
+        "start": 359,
+        "end": 378
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "clone"
+                },
+                "span": {
+                  "start": 378,
+                  "end": 383
+                }
+              },
+              "args": [
+                {
+                  "name": "object",
+                  "value": {
+                    "kind": {
+                      "Variable": "x"
+                    },
+                    "span": {
+                      "start": 392,
+                      "end": 394
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 384,
+                    "end": 394
+                  }
+                },
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Array": [
+                        {
+                          "key": {
+                            "kind": {
+                              "String": "foo"
+                            },
+                            "span": {
+                              "start": 398,
+                              "end": 403
+                            }
+                          },
+                          "value": {
+                            "kind": {
+                              "Variable": "foo"
+                            },
+                            "span": {
+                              "start": 407,
+                              "end": 411
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 398,
+                            "end": 411
+                          }
+                        },
+                        {
+                          "key": {
+                            "kind": {
+                              "String": "bar"
+                            },
+                            "span": {
+                              "start": 413,
+                              "end": 418
+                            }
+                          },
+                          "value": {
+                            "kind": {
+                              "Variable": "bar"
+                            },
+                            "span": {
+                              "start": 422,
+                              "end": 426
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 413,
+                            "end": 426
+                          }
+                        }
+                      ]
+                    },
+                    "span": {
+                      "start": 396,
+                      "end": 428
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 396,
+                    "end": 428
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 378,
+            "end": 429
+          }
+        }
+      },
+      "span": {
+        "start": 378,
+        "end": 431
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "clone"
+                },
+                "span": {
+                  "start": 431,
+                  "end": 436
+                }
+              },
+              "args": [
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Array": [
+                        {
+                          "key": {
+                            "kind": {
+                              "String": "object"
+                            },
+                            "span": {
+                              "start": 441,
+                              "end": 449
+                            }
+                          },
+                          "value": {
+                            "kind": {
+                              "Variable": "x"
+                            },
+                            "span": {
+                              "start": 453,
+                              "end": 455
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 441,
+                            "end": 455
+                          }
+                        },
+                        {
+                          "key": {
+                            "kind": {
+                              "String": "withProperties"
+                            },
+                            "span": {
+                              "start": 457,
+                              "end": 473
+                            }
+                          },
+                          "value": {
+                            "kind": {
+                              "Array": [
+                                {
+                                  "key": {
+                                    "kind": {
+                                      "String": "foo"
+                                    },
+                                    "span": {
+                                      "start": 479,
+                                      "end": 484
+                                    }
+                                  },
+                                  "value": {
+                                    "kind": {
+                                      "Variable": "foo"
+                                    },
+                                    "span": {
+                                      "start": 488,
+                                      "end": 492
+                                    }
+                                  },
+                                  "unpack": false,
+                                  "span": {
+                                    "start": 479,
+                                    "end": 492
+                                  }
+                                },
+                                {
+                                  "key": {
+                                    "kind": {
+                                      "String": "bar"
+                                    },
+                                    "span": {
+                                      "start": 494,
+                                      "end": 499
+                                    }
+                                  },
+                                  "value": {
+                                    "kind": {
+                                      "Variable": "bar"
+                                    },
+                                    "span": {
+                                      "start": 503,
+                                      "end": 507
+                                    }
+                                  },
+                                  "unpack": false,
+                                  "span": {
+                                    "start": 494,
+                                    "end": 507
+                                  }
+                                }
+                              ]
+                            },
+                            "span": {
+                              "start": 477,
+                              "end": 509
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 457,
+                            "end": 509
+                          }
+                        }
+                      ]
+                    },
+                    "span": {
+                      "start": 440,
+                      "end": 510
+                    }
+                  },
+                  "unpack": true,
+                  "span": {
+                    "start": 437,
+                    "end": 510
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 431,
+            "end": 511
+          }
+        }
+      },
+      "span": {
+        "start": 431,
+        "end": 513
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "CallableCreate": {
+              "kind": {
+                "Function": {
+                  "kind": {
+                    "Identifier": "clone"
+                  },
+                  "span": {
+                    "start": 513,
+                    "end": 518
+                  }
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 513,
+            "end": 523
+          }
+        }
+      },
+      "span": {
+        "start": 513,
+        "end": 524
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 524
+  }
+}
