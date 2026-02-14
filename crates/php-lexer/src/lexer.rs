@@ -4,6 +4,12 @@ use php_ast::Span;
 use crate::token::{resolve_keyword, TokenKind};
 
 #[derive(Debug, Clone, PartialEq)]
+pub struct LexerError {
+    pub message: String,
+    pub span: Span,
+}
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct Token {
     pub kind: TokenKind,
     pub span: Span,
@@ -34,6 +40,7 @@ pub struct Lexer<'src> {
     pos: usize,
     peeked: Option<Token>,
     peeked2: Option<Token>,
+    pub errors: Vec<LexerError>,
 }
 
 impl<'src> Lexer<'src> {
@@ -59,6 +66,7 @@ impl<'src> Lexer<'src> {
             pos,
             peeked: None,
             peeked2: None,
+            errors: Vec::new(),
         }
     }
 
@@ -171,6 +179,45 @@ impl<'src> Lexer<'src> {
 
                 self.pos = end;
 
+                // Detect invalid numeric separator: a numeric token followed by `_`
+                let is_numeric = matches!(
+                    kind,
+                    TokenKind::IntLiteral
+                        | TokenKind::HexIntLiteral
+                        | TokenKind::BinIntLiteral
+                        | TokenKind::OctIntLiteral
+                        | TokenKind::OctIntLiteralNew
+                        | TokenKind::FloatLiteral
+                        | TokenKind::FloatLiteralSimple
+                        | TokenKind::FloatLiteralLeadingDot
+                );
+                if is_numeric {
+                    if let Some(invalid_token) = self.try_consume_invalid_numeric(start) {
+                        return invalid_token;
+                    }
+                }
+
+                // Also handle: `0` followed by `x/X/b/B/o/O` then `_` (e.g. `0x_1`)
+                if kind == TokenKind::IntLiteral && (end - start) == 1 && self.source.as_bytes()[start] == b'0' {
+                    let bytes = self.source.as_bytes();
+                    if let Some(&next_byte) = bytes.get(end) {
+                        if matches!(next_byte, b'x' | b'X' | b'b' | b'B' | b'o' | b'O') {
+                            if bytes.get(end + 1) == Some(&b'_') {
+                                // Consume the prefix char + invalid rest
+                                self.pos = end + 1; // past the x/b/o
+                                self.consume_invalid_numeric_rest();
+                                let final_end = self.pos;
+                                let span = Span::new(start as u32, final_end as u32);
+                                self.errors.push(LexerError {
+                                    message: "Invalid numeric literal".to_string(),
+                                    span,
+                                });
+                                return Token::new(TokenKind::InvalidNumericLiteral, span);
+                            }
+                        }
+                    }
+                }
+
                 let span = Span::new(start as u32, end as u32);
 
                 match kind {
@@ -194,6 +241,44 @@ impl<'src> Lexer<'src> {
             None => {
                 Token::eof(self.source.len() as u32)
             }
+        }
+    }
+
+    /// Consume characters that form an invalid numeric literal rest (digits, underscores, dots, hex chars, exponent markers).
+    fn consume_invalid_numeric_rest(&mut self) {
+        let bytes = self.source.as_bytes();
+        while self.pos < bytes.len() {
+            let b = bytes[self.pos];
+            if b.is_ascii_alphanumeric() || b == b'_' || b == b'.' || b == b'+' || b == b'-' {
+                // Only consume +/- after e/E
+                if (b == b'+' || b == b'-') && self.pos > 0 {
+                    let prev = bytes[self.pos - 1];
+                    if prev != b'e' && prev != b'E' {
+                        break;
+                    }
+                }
+                self.pos += 1;
+            } else {
+                break;
+            }
+        }
+    }
+
+    /// Check if the current position starts an invalid numeric literal (next byte is `_` after a numeric token).
+    /// If so, greedily consume the invalid literal and return the token.
+    fn try_consume_invalid_numeric(&mut self, start: usize) -> Option<Token> {
+        let bytes = self.source.as_bytes();
+        if bytes.get(self.pos) == Some(&b'_') {
+            self.consume_invalid_numeric_rest();
+            let final_end = self.pos;
+            let span = Span::new(start as u32, final_end as u32);
+            self.errors.push(LexerError {
+                message: "Invalid numeric literal".to_string(),
+                span,
+            });
+            Some(Token::new(TokenKind::InvalidNumericLiteral, span))
+        } else {
+            None
         }
     }
 

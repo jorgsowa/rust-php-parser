@@ -50,6 +50,12 @@ pub enum ParseError {
         opened_at: Span,
         span: Span,
     },
+
+    #[error("{message}")]
+    Forbidden {
+        message: String,
+        span: Span,
+    },
 }
 
 impl ParseError {
@@ -62,7 +68,8 @@ impl ParseError {
             | ParseError::ExpectedOpenTag { span }
             | ParseError::UnterminatedString { span }
             | ParseError::ExpectedAfter { span, .. }
-            | ParseError::UnclosedDelimiter { span, .. } => *span,
+            | ParseError::UnclosedDelimiter { span, .. }
+            | ParseError::Forbidden { span, .. } => *span,
         }
     }
 }
