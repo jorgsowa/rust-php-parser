@@ -354,6 +354,9 @@ pub enum TokenKind {
     Heredoc,
     Nowdoc,
 
+    // Invalid numeric literal (e.g. 1_0_0_ with trailing underscore)
+    InvalidNumericLiteral,
+
     // End of file
     Eof,
 }
@@ -634,6 +637,7 @@ impl std::fmt::Display for TokenKind {
             TokenKind::InlineHtml => write!(f, "inline HTML"),
             TokenKind::Heredoc => write!(f, "heredoc"),
             TokenKind::Nowdoc => write!(f, "nowdoc"),
+            TokenKind::InvalidNumericLiteral => write!(f, "invalid numeric literal"),
             TokenKind::Eof => write!(f, "end of file"),
         }
     }
