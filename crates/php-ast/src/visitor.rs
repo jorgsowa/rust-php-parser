@@ -356,7 +356,9 @@ pub fn walk_expr<V: Visitor + ?Sized>(visitor: &mut V, expr: &Expr) {
                 visitor.visit_class_member(member);
             }
         }
-        ExprKind::InterpolatedString(parts) | ExprKind::Heredoc { parts, .. } | ExprKind::ShellExec(parts) => {
+        ExprKind::InterpolatedString(parts)
+        | ExprKind::Heredoc { parts, .. }
+        | ExprKind::ShellExec(parts) => {
             for part in parts {
                 if let StringPart::Expr(e) = part {
                     visitor.visit_expr(e);
@@ -366,19 +368,17 @@ pub fn walk_expr<V: Visitor + ?Sized>(visitor: &mut V, expr: &Expr) {
         ExprKind::VariableVariable(inner) => {
             visitor.visit_expr(inner);
         }
-        ExprKind::CallableCreate(cc) => {
-            match &cc.kind {
-                CallableCreateKind::Function(name) => visitor.visit_expr(name),
-                CallableCreateKind::Method { object, method }
-                | CallableCreateKind::NullsafeMethod { object, method } => {
-                    visitor.visit_expr(object);
-                    visitor.visit_expr(method);
-                }
-                CallableCreateKind::StaticMethod { class, .. } => {
-                    visitor.visit_expr(class);
-                }
+        ExprKind::CallableCreate(cc) => match &cc.kind {
+            CallableCreateKind::Function(name) => visitor.visit_expr(name),
+            CallableCreateKind::Method { object, method }
+            | CallableCreateKind::NullsafeMethod { object, method } => {
+                visitor.visit_expr(object);
+                visitor.visit_expr(method);
             }
-        }
+            CallableCreateKind::StaticMethod { class, .. } => {
+                visitor.visit_expr(class);
+            }
+        },
         ExprKind::Int(_)
         | ExprKind::Float(_)
         | ExprKind::String(_)
@@ -495,35 +495,33 @@ mod tests {
     #[test]
     fn test_visitor_counts_variables() {
         let program = Program {
-            stmts: vec![
-                Stmt {
-                    kind: StmtKind::Expression(Expr {
-                        kind: ExprKind::Assign(AssignExpr {
-                            target: Box::new(Expr {
-                                kind: ExprKind::Variable("x".into()),
-                                span: Span::DUMMY,
-                            }),
-                            op: AssignOp::Assign,
-                            value: Box::new(Expr {
-                                kind: ExprKind::Binary(BinaryExpr {
-                                    left: Box::new(Expr {
-                                        kind: ExprKind::Variable("y".into()),
-                                        span: Span::DUMMY,
-                                    }),
-                                    op: BinaryOp::Add,
-                                    right: Box::new(Expr {
-                                        kind: ExprKind::Variable("z".into()),
-                                        span: Span::DUMMY,
-                                    }),
-                                }),
-                                span: Span::DUMMY,
-                            }),
+            stmts: vec![Stmt {
+                kind: StmtKind::Expression(Expr {
+                    kind: ExprKind::Assign(AssignExpr {
+                        target: Box::new(Expr {
+                            kind: ExprKind::Variable("x".into()),
+                            span: Span::DUMMY,
                         }),
-                        span: Span::DUMMY,
+                        op: AssignOp::Assign,
+                        value: Box::new(Expr {
+                            kind: ExprKind::Binary(BinaryExpr {
+                                left: Box::new(Expr {
+                                    kind: ExprKind::Variable("y".into()),
+                                    span: Span::DUMMY,
+                                }),
+                                op: BinaryOp::Add,
+                                right: Box::new(Expr {
+                                    kind: ExprKind::Variable("z".into()),
+                                    span: Span::DUMMY,
+                                }),
+                            }),
+                            span: Span::DUMMY,
+                        }),
                     }),
                     span: Span::DUMMY,
-                },
-            ],
+                }),
+                span: Span::DUMMY,
+            }],
             span: Span::DUMMY,
         };
 

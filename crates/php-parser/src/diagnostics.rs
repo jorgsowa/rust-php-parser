@@ -12,30 +12,19 @@ pub enum ParseError {
     },
 
     #[error("unexpected token {found}")]
-    Unexpected {
-        found: TokenKind,
-        span: Span,
-    },
+    Unexpected { found: TokenKind, span: Span },
 
     #[error("expected expression")]
-    ExpectedExpression {
-        span: Span,
-    },
+    ExpectedExpression { span: Span },
 
     #[error("expected statement")]
-    ExpectedStatement {
-        span: Span,
-    },
+    ExpectedStatement { span: Span },
 
     #[error("expected opening PHP tag")]
-    ExpectedOpenTag {
-        span: Span,
-    },
+    ExpectedOpenTag { span: Span },
 
     #[error("unterminated string literal")]
-    UnterminatedString {
-        span: Span,
-    },
+    UnterminatedString { span: Span },
 
     #[error("expected {expected} after {after}")]
     ExpectedAfter {
@@ -52,10 +41,7 @@ pub enum ParseError {
     },
 
     #[error("{message}")]
-    Forbidden {
-        message: String,
-        span: Span,
-    },
+    Forbidden { message: String, span: Span },
 }
 
 impl ParseError {
