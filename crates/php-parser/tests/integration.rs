@@ -2790,3 +2790,69 @@ fn test_duplicate_modifier_errors() {
     assert_has_errors("<?php class A { public public const X = 1; }");
 }
 
+// =============================================================================
+// No-hang regression tests
+// =============================================================================
+// Ensure the parser always terminates on malformed input. Each test exercises
+// the progress guard in a different parse_stmt loop.
+
+#[test]
+fn test_no_hang_constructor_final_param() {
+    let _ = parse_php("<?php class P { public function __construct(final $i) {} }");
+}
+
+#[test]
+fn test_no_hang_block() {
+    let _ = parse_php("<?php if (true) { ?> <?php }");
+}
+
+#[test]
+fn test_no_hang_function_body() {
+    let _ = parse_php("<?php function f() { ?> <?php }");
+}
+
+#[test]
+fn test_no_hang_method_body() {
+    let _ = parse_php("<?php class A { function f() { ?> <?php } }");
+}
+
+#[test]
+fn test_no_hang_try_body() {
+    let _ = parse_php("<?php try { ?> <?php } catch (Exception $e) {}");
+}
+
+#[test]
+fn test_no_hang_catch_body() {
+    let _ = parse_php("<?php try {} catch (Exception $e) { ?> <?php }");
+}
+
+#[test]
+fn test_no_hang_finally_body() {
+    let _ = parse_php("<?php try {} finally { ?> <?php }");
+}
+
+#[test]
+fn test_no_hang_closure_body() {
+    let _ = parse_php("<?php $f = function() { ?> <?php };");
+}
+
+#[test]
+fn test_no_hang_namespace_braced() {
+    let _ = parse_php("<?php namespace Foo { ?> <?php }");
+}
+
+#[test]
+fn test_no_hang_namespace_global_braced() {
+    let _ = parse_php("<?php namespace { ?> <?php }");
+}
+
+#[test]
+fn test_no_hang_enum_method_body() {
+    let _ = parse_php("<?php enum E { case A; public function f() { ?> <?php } }");
+}
+
+#[test]
+fn test_no_hang_property_hook_body() {
+    let _ = parse_php("<?php class A { public string $x { get { ?> <?php } } }");
+}
+

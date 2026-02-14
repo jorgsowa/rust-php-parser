@@ -1267,7 +1267,9 @@ fn parse_closure(parser: &mut Parser, is_static: bool, start: u32, attributes: V
     parser.expect(TokenKind::LeftBrace);
     let mut body = Vec::new();
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
+        let span_before = parser.current_span();
         body.push(stmt::parse_stmt(parser));
+        if parser.current_span() == span_before { parser.advance(); }
     }
     let close = parser.expect(TokenKind::RightBrace);
     let end = close.map(|t| t.span.end).unwrap_or(parser.current_span().start);
