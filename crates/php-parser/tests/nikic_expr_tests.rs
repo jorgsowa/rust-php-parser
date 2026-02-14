@@ -10,7 +10,7 @@ nikic_test!(nikic_expr_arrow_function, "expr/arrow_function.php");
 nikic_test!(nikic_expr_assign, "expr/assign.php");
 nikic_test!(nikic_expr_assignnewbyref_1, "expr/assignNewByRef_1.php");
 nikic_test!(nikic_expr_assignnewbyref_2, "expr/assignNewByRef_2.php");
-nikic_test!(nikic_expr_cast, "expr/cast.php");
+nikic_test!(nikic_expr_cast, "expr/cast.php", errors);
 nikic_test!(nikic_expr_clone, "expr/clone.php");
 nikic_test!(nikic_expr_closure, "expr/closure.php");
 nikic_test!(nikic_expr_closure_use_trailing_comma, "expr/closure_use_trailing_comma.php");
