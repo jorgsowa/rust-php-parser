@@ -630,6 +630,15 @@ fn parse_atom(parser: &mut Parser) -> Expr {
             }
         }
 
+        // Invalid numeric literal (recovery: treat as int 0)
+        TokenKind::InvalidNumericLiteral => {
+            let token = parser.advance();
+            Expr {
+                kind: ExprKind::Int(0),
+                span: token.span,
+            }
+        }
+
         // Float literals
         TokenKind::FloatLiteral | TokenKind::FloatLiteralSimple | TokenKind::FloatLiteralLeadingDot => {
             let token = parser.advance();
@@ -1807,9 +1816,8 @@ fn try_parse_cast(parser: &mut Parser) -> Option<Expr> {
     }
 
     if cast_kind == CastKind::Unset {
-        parser.error(ParseError::Expected {
-            expected: "the (unset) cast is no longer supported".to_string(),
-            found: TokenKind::Unset,
+        parser.error(ParseError::Forbidden {
+            message: "the (unset) cast is no longer supported".to_string(),
             span: kw_span,
         });
     }

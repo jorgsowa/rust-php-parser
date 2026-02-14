@@ -110,33 +110,16 @@ expression: json
       "kind": {
         "Expression": {
           "kind": {
-            "Int": 100
+            "Int": 0
           },
           "span": {
             "start": 129,
-            "end": 132
-          }
-        }
-      },
-      "span": {
-        "start": 129,
-        "end": 132
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Identifier": "_"
-          },
-          "span": {
-            "start": 132,
             "end": 133
           }
         }
       },
       "span": {
-        "start": 132,
+        "start": 129,
         "end": 135
       }
     },
@@ -144,33 +127,16 @@ expression: json
       "kind": {
         "Expression": {
           "kind": {
-            "Int": 1
+            "Int": 0
           },
           "span": {
             "start": 135,
-            "end": 136
-          }
-        }
-      },
-      "span": {
-        "start": 135,
-        "end": 136
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Identifier": "__1"
-          },
-          "span": {
-            "start": 136,
             "end": 139
           }
         }
       },
       "span": {
-        "start": 136,
+        "start": 135,
         "end": 141
       }
     },
@@ -178,50 +144,16 @@ expression: json
       "kind": {
         "Expression": {
           "kind": {
-            "Int": 1
+            "Int": 0
           },
           "span": {
             "start": 141,
-            "end": 142
-          }
-        }
-      },
-      "span": {
-        "start": 141,
-        "end": 142
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Identifier": "_"
-          },
-          "span": {
-            "start": 142,
-            "end": 143
-          }
-        }
-      },
-      "span": {
-        "start": 142,
-        "end": 143
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Float": 0.0
-          },
-          "span": {
-            "start": 143,
             "end": 145
           }
         }
       },
       "span": {
-        "start": 143,
+        "start": 141,
         "end": 147
       }
     },
@@ -233,29 +165,12 @@ expression: json
           },
           "span": {
             "start": 147,
-            "end": 149
-          }
-        }
-      },
-      "span": {
-        "start": 147,
-        "end": 149
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Identifier": "_0"
-          },
-          "span": {
-            "start": 149,
             "end": 151
           }
         }
       },
       "span": {
-        "start": 149,
+        "start": 147,
         "end": 153
       }
     },
@@ -267,29 +182,12 @@ expression: json
           },
           "span": {
             "start": 153,
-            "end": 155
-          }
-        }
-      },
-      "span": {
-        "start": 153,
-        "end": 155
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Identifier": "_123"
-          },
-          "span": {
-            "start": 155,
             "end": 159
           }
         }
       },
       "span": {
-        "start": 155,
+        "start": 153,
         "end": 161
       }
     },
@@ -301,29 +199,12 @@ expression: json
           },
           "span": {
             "start": 161,
-            "end": 163
-          }
-        }
-      },
-      "span": {
-        "start": 161,
-        "end": 163
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Identifier": "_101"
-          },
-          "span": {
-            "start": 163,
             "end": 167
           }
         }
       },
       "span": {
-        "start": 163,
+        "start": 161,
         "end": 169
       }
     },
@@ -331,33 +212,16 @@ expression: json
       "kind": {
         "Expression": {
           "kind": {
-            "Int": 1
+            "Int": 0
           },
           "span": {
             "start": 169,
-            "end": 170
-          }
-        }
-      },
-      "span": {
-        "start": 169,
-        "end": 170
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Identifier": "_e2"
-          },
-          "span": {
-            "start": 170,
             "end": 173
           }
         }
       },
       "span": {
-        "start": 170,
+        "start": 169,
         "end": 175
       }
     },
@@ -369,29 +233,12 @@ expression: json
           },
           "span": {
             "start": 175,
-            "end": 177
-          }
-        }
-      },
-      "span": {
-        "start": 175,
-        "end": 177
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Identifier": "_2"
-          },
-          "span": {
-            "start": 177,
             "end": 179
           }
         }
       },
       "span": {
-        "start": 177,
+        "start": 175,
         "end": 180
       }
     }
