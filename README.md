@@ -190,6 +190,8 @@ A few errors straddle the parse/compile boundary — the parser reports them ear
 
 ## Future Plans
 
+See **[ROADMAP.md](ROADMAP.md)** for a comprehensive breakdown with phases, dependencies, blockers, and difficulty analysis.
+
 - **Comment preservation** — attach comments to AST nodes for use in formatters and linters
 - **Semantic analysis** — scope tracking, type checking, symbol resolution as a separate pass
 - **PHP version selection** — configure target PHP version to control which syntax is accepted and which errors are emitted
