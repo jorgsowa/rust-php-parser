@@ -1798,10 +1798,20 @@ fn try_parse_cast(parser: &mut Parser) -> Option<Expr> {
 
     let start = parser.start_span();
     parser.advance(); // consume (
+    let kw_span = parser.current_span();
     parser.advance(); // consume the cast keyword
     if parser.eat(TokenKind::RightParen).is_none() {
         return None;
     }
+
+    if cast_kind == CastKind::Unset {
+        parser.error(ParseError::Expected {
+            expected: "the (unset) cast is no longer supported".to_string(),
+            found: TokenKind::Unset,
+            span: kw_span,
+        });
+    }
+
     let operand = parse_expr_bp(parser, 41);
     let span = Span::new(start, operand.span.end);
     Some(Expr {

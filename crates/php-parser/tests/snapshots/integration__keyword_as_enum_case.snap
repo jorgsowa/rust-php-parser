@@ -14,14 +14,14 @@ expression: to_json(&result.program)
             {
               "kind": {
                 "Case": {
-                  "name": "class",
+                  "name": "for",
                   "value": null,
                   "attributes": []
                 }
               },
               "span": {
                 "start": 18,
-                "end": 30
+                "end": 28
               }
             },
             {
@@ -33,8 +33,8 @@ expression: to_json(&result.program)
                 }
               },
               "span": {
-                "start": 30,
-                "end": 45
+                "start": 28,
+                "end": 43
               }
             },
             {
@@ -46,8 +46,8 @@ expression: to_json(&result.program)
                 }
               },
               "span": {
-                "start": 45,
-                "end": 57
+                "start": 43,
+                "end": 55
               }
             }
           ],
@@ -56,12 +56,12 @@ expression: to_json(&result.program)
       },
       "span": {
         "start": 6,
-        "end": 58
+        "end": 56
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 58
+    "end": 56
   }
 }
