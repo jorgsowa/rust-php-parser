@@ -1789,6 +1789,14 @@ fn parse_enum(parser: &mut Parser) -> Stmt {
         // Enum case
         if parser.check(TokenKind::Case) {
             parser.advance();
+            if parser.check(TokenKind::Class) {
+                let span = parser.current_span();
+                parser.error(ParseError::Expected {
+                    expected: "'class' cannot be used as an enum case name".to_string(),
+                    found: TokenKind::Class,
+                    span,
+                });
+            }
             let case_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
                 text
             } else {
@@ -2002,6 +2010,13 @@ fn parse_use(parser: &mut Parser) -> Stmt {
             }
         }
         parser.advance(); // consume {
+        if parser.check(TokenKind::RightBrace) {
+            parser.error(ParseError::Expected {
+                expected: "at least one import in group use".to_string(),
+                found: TokenKind::RightBrace,
+                span: parser.current_span(),
+            });
+        }
         let prefix_parts = &first_name.parts;
         loop {
             if parser.check(TokenKind::RightBrace) { break; } // trailing comma

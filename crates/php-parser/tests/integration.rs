@@ -1617,9 +1617,8 @@ $label = match (getStatus()) {
 
 #[test]
 fn test_cast_unset() {
-    let result = parse_php("<?php (unset)$x;");
-    assert_no_errors(&result);
-    insta::assert_snapshot!(to_json(&result.program));
+    // (unset) cast was removed in PHP 8.0
+    assert_has_errors("<?php (unset)$x;");
 }
 
 #[test]
@@ -2591,8 +2590,13 @@ use A\B\{C as D, function e as f, const G as H};
 
 #[test]
 fn test_empty_group_use() {
-    // Empty group use is syntactically valid but useless
-    let result = parse_php("<?php use A\\B\\{};");
+    // Empty group use is invalid PHP
+    assert_has_errors("<?php use A\\B\\{};");
+}
+
+#[test]
+fn test_group_use_single() {
+    let result = parse_php("<?php use A\\B\\{C};");
     assert_no_errors(&result);
     insta::assert_snapshot!(to_json(&result.program));
 }
@@ -2646,10 +2650,16 @@ fn test_keyword_as_function_name() {
 
 #[test]
 fn test_keyword_as_enum_case() {
-    // Keywords can be used as enum case names
-    let result = parse_php("<?php enum Suit { case class; case function; case match; }");
+    // Keywords can be used as enum case names (except `class` which is reserved)
+    let result = parse_php("<?php enum Suit { case for; case function; case match; }");
     assert_no_errors(&result);
     insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_enum_case_class_reserved() {
+    // `class` cannot be used as enum case name
+    assert_has_errors("<?php enum Suit { case class; }");
 }
 
 // =============================================================================
