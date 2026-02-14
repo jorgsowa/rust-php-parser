@@ -1,0 +1,52 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Nowdoc": {
+                    "label": "EOT",
+                    "value": "No $interpolation\nJust literal text\nWith 'quotes' and \"doubles\""
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 87
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 87
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 89
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 89
+  }
+}
