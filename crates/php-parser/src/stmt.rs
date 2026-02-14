@@ -241,7 +241,9 @@ pub fn parse_block(parser: &mut Parser) -> Stmt {
     parser.depth += 1;
     let mut stmts = Vec::new();
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
+        let span_before = parser.current_span();
         stmts.push(parse_stmt(parser));
+        if parser.current_span() == span_before { parser.advance(); }
     }
     parser.depth -= 1;
 
@@ -584,7 +586,9 @@ fn parse_function(parser: &mut Parser) -> Stmt {
     let open_brace_span = open_brace.map(|t| t.span).unwrap_or(parser.current_span());
     let mut body = Vec::new();
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
+        let span_before = parser.current_span();
         body.push(parse_stmt(parser));
+        if parser.current_span() == span_before { parser.advance(); }
     }
     let close = parser.expect_closing(TokenKind::RightBrace, open_brace_span);
     let end = close.map(|t| t.span.end).unwrap_or(parser.current_span().start);
@@ -631,6 +635,9 @@ pub fn parse_param_list(parser: &mut Parser) -> Vec<Param> {
             None
         };
 
+        // Optional final (PHP 8.4+ promoted property modifier)
+        let _final = parser.eat(TokenKind::Final).is_some();
+
         // Optional readonly
         let _readonly = parser.eat(TokenKind::Readonly).is_some();
 
@@ -661,7 +668,14 @@ pub fn parse_param_list(parser: &mut Parser) -> Vec<Param> {
             .unwrap_or_else(|| "<error>".to_string());
 
         let default = if parser.eat(TokenKind::Equals).is_some() {
-            Some(expr::parse_expr(parser))
+            // Use restricted binding power for promoted properties with potential hooks.
+            // BP 45 prevents `{` from being parsed as curly-brace array access (BP 44),
+            // so the hook block `{ get => ...; }` isn't consumed as part of the default.
+            if visibility.is_some() {
+                Some(expr::parse_expr_bp(parser, 45))
+            } else {
+                Some(expr::parse_expr(parser))
+            }
         } else {
             None
         };
@@ -804,7 +818,9 @@ fn parse_try_catch(parser: &mut Parser) -> Stmt {
     parser.expect(TokenKind::LeftBrace);
     let mut body = Vec::new();
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
+        let span_before = parser.current_span();
         body.push(parse_stmt(parser));
+        if parser.current_span() == span_before { parser.advance(); }
     }
     parser.expect(TokenKind::RightBrace);
 
@@ -829,7 +845,9 @@ fn parse_try_catch(parser: &mut Parser) -> Stmt {
         parser.expect(TokenKind::LeftBrace);
         let mut catch_body = Vec::new();
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
+            let span_before = parser.current_span();
             catch_body.push(parse_stmt(parser));
+            if parser.current_span() == span_before { parser.advance(); }
         }
         parser.expect(TokenKind::RightBrace);
 
@@ -843,7 +861,9 @@ fn parse_try_catch(parser: &mut Parser) -> Stmt {
         parser.expect(TokenKind::LeftBrace);
         let mut finally_body = Vec::new();
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
+            let span_before = parser.current_span();
             finally_body.push(parse_stmt(parser));
+            if parser.current_span() == span_before { parser.advance(); }
         }
         parser.expect(TokenKind::RightBrace);
         Some(finally_body)
@@ -1258,7 +1278,9 @@ fn parse_property_hooks(parser: &mut Parser) -> Vec<PropertyHook> {
             let brace_span = open_brace.map(|t| t.span).unwrap_or(parser.current_span());
             let mut stmts = Vec::new();
             while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
+                let span_before = parser.current_span();
                 stmts.push(parse_stmt(parser));
+                if parser.current_span() == span_before { parser.advance(); }
             }
             parser.expect_closing(TokenKind::RightBrace, brace_span);
             PropertyHookBody::Block(stmts)
@@ -1559,7 +1581,9 @@ pub fn parse_class_members(parser: &mut Parser) -> Vec<ClassMember> {
                 parser.expect(TokenKind::LeftBrace);
                 let mut stmts = Vec::new();
                 while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
+                    let span_before = parser.current_span();
                     stmts.push(parse_stmt(parser));
+                    if parser.current_span() == span_before { parser.advance(); }
                 }
                 parser.expect(TokenKind::RightBrace);
                 Some(stmts)
@@ -1873,7 +1897,9 @@ fn parse_enum(parser: &mut Parser) -> Stmt {
                 parser.expect(TokenKind::LeftBrace);
                 let mut stmts = Vec::new();
                 while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
+                    let span_before = parser.current_span();
                     stmts.push(parse_stmt(parser));
+                    if parser.current_span() == span_before { parser.advance(); }
                 }
                 parser.expect(TokenKind::RightBrace);
                 Some(stmts)
@@ -1919,7 +1945,9 @@ fn parse_namespace(parser: &mut Parser) -> Stmt {
         parser.expect(TokenKind::LeftBrace);
         let mut stmts = Vec::new();
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
+            let span_before = parser.current_span();
             stmts.push(parse_stmt(parser));
+            if parser.current_span() == span_before { parser.advance(); }
         }
         let close = parser.expect(TokenKind::RightBrace);
         let end = close.map(|t| t.span.end).unwrap_or(parser.current_span().start);
@@ -1939,7 +1967,9 @@ fn parse_namespace(parser: &mut Parser) -> Stmt {
         parser.expect(TokenKind::LeftBrace);
         let mut stmts = Vec::new();
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
+            let span_before = parser.current_span();
             stmts.push(parse_stmt(parser));
+            if parser.current_span() == span_before { parser.advance(); }
         }
         let close = parser.expect(TokenKind::RightBrace);
         let end = close.map(|t| t.span.end).unwrap_or(parser.current_span().start);

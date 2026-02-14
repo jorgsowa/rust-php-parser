@@ -709,8 +709,13 @@ impl<'src> Parser<'src> {
                 continue;
             }
 
+            let span_before = self.current_span();
             let stmt = stmt::parse_stmt(self);
             stmts.push(stmt);
+            // Safety: if parsing made no progress, skip the token to avoid infinite loop
+            if self.current_span() == span_before {
+                self.advance();
+            }
         }
 
         let span = if stmts.is_empty() {
