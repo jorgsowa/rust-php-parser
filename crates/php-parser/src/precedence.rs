@@ -22,10 +22,10 @@ use php_lexer::TokenKind;
 /// 16. `+ -`                           (left)
 /// 17. `* / %`                         (left)
 /// 18. `**`                            (right)
-
-/// Returns the infix binding power for a token, or None if it's not an infix operator.
-/// Returns (left_bp, right_bp). For left-associative ops, right_bp = left_bp + 1.
-/// For right-associative ops, left_bp = right_bp - 1 (i.e., right_bp = left_bp).
+///
+///     Returns the infix binding power for a token, or None if it's not an infix operator.
+///     Returns (left_bp, right_bp). For left-associative ops, right_bp = left_bp + 1.
+///     For right-associative ops, left_bp = right_bp - 1 (i.e., right_bp = left_bp).
 pub fn infix_binding_power(kind: &TokenKind) -> Option<(u8, u8)> {
     match kind {
         // Logical keyword operators (lowest precedence)

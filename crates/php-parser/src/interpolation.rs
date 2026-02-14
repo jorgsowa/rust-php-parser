@@ -125,10 +125,8 @@ pub fn parse_interpolated_parts(inner: &str, base_offset: u32) -> Vec<StringPart
                                 i += 1;
                             }
                             let prop_name = inner[pname_start..i].to_string();
-                            let prop_span = Span::new(
-                                base_offset + pname_start as u32,
-                                base_offset + i as u32,
-                            );
+                            let prop_span =
+                                Span::new(base_offset + pname_start as u32, base_offset + i as u32);
                             let span = Span::new(var_offset, base_offset + i as u32);
                             expr = Expr {
                                 kind: ExprKind::PropertyAccess(PropertyAccessExpr {
@@ -147,7 +145,7 @@ pub fn parse_interpolated_parts(inner: &str, base_offset: u32) -> Vec<StringPart
                     if i < len && bytes[i] == b'[' {
                         let bracket_start = i;
                         i += 1; // skip [
-                        // Find the matching ]
+                                // Find the matching ]
                         let idx_start = i;
                         while i < len && bytes[i] != b']' {
                             i += 1;
@@ -178,10 +176,7 @@ pub fn parse_interpolated_parts(inner: &str, base_offset: u32) -> Vec<StringPart
                                 }
                             };
 
-                            let span = Span::new(
-                                var_offset,
-                                base_offset + i as u32,
-                            );
+                            let span = Span::new(var_offset, base_offset + i as u32);
                             let _ = bracket_start; // used implicitly
                             expr = Expr {
                                 kind: ExprKind::ArrayAccess(ArrayAccessExpr {
@@ -206,7 +201,7 @@ pub fn parse_interpolated_parts(inner: &str, base_offset: u32) -> Vec<StringPart
                 }
 
                 i += 1; // skip {
-                // Find matching }
+                        // Find matching }
                 let expr_start = i;
                 let mut depth = 1;
                 while i < len && depth > 0 {
@@ -313,8 +308,14 @@ fn parse_complex_interpolation(content: &str, offset: u32) -> Expr {
 fn reoffset_expr(mut expr: Expr, target_offset: u32, parser_offset: u32) -> Expr {
     reoffset_span(&mut expr.span, target_offset, parser_offset);
     match &mut expr.kind {
-        ExprKind::Variable(_) | ExprKind::Int(_) | ExprKind::Float(_) | ExprKind::String(_)
-        | ExprKind::Bool(_) | ExprKind::Null | ExprKind::Identifier(_) | ExprKind::Error
+        ExprKind::Variable(_)
+        | ExprKind::Int(_)
+        | ExprKind::Float(_)
+        | ExprKind::String(_)
+        | ExprKind::Bool(_)
+        | ExprKind::Null
+        | ExprKind::Identifier(_)
+        | ExprKind::Error
         | ExprKind::MagicConst(_) => {}
         ExprKind::ArrayAccess(ref mut aa) => {
             *aa.array = reoffset_expr(*aa.array.clone(), target_offset, parser_offset);

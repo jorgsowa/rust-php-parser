@@ -4,30 +4,102 @@ nikic_test!(nikic_stmt_attributes, "stmt/attributes.php");
 nikic_test!(nikic_stmt_blocklessstatement, "stmt/blocklessStatement.php");
 nikic_test!(nikic_stmt_class_abstract, "stmt/class/abstract.php");
 nikic_test!(nikic_stmt_class_anonymous, "stmt/class/anonymous.php");
-nikic_test!(nikic_stmt_class_asymmetric_visibility_1, "stmt/class/asymmetric_visibility_1.php");
-nikic_test!(nikic_stmt_class_asymmetric_visibility_2, "stmt/class/asymmetric_visibility_2.php");
-nikic_test!(nikic_stmt_class_class_position_1, "stmt/class/class_position_1.php");
-nikic_test!(nikic_stmt_class_class_position_2, "stmt/class/class_position_2.php");
-nikic_test!(nikic_stmt_class_class_position_3, "stmt/class/class_position_3.php");
+nikic_test!(
+    nikic_stmt_class_asymmetric_visibility_1,
+    "stmt/class/asymmetric_visibility_1.php"
+);
+nikic_test!(
+    nikic_stmt_class_asymmetric_visibility_2,
+    "stmt/class/asymmetric_visibility_2.php"
+);
+nikic_test!(
+    nikic_stmt_class_class_position_1,
+    "stmt/class/class_position_1.php"
+);
+nikic_test!(
+    nikic_stmt_class_class_position_2,
+    "stmt/class/class_position_2.php"
+);
+nikic_test!(
+    nikic_stmt_class_class_position_3,
+    "stmt/class/class_position_3.php"
+);
 nikic_test!(nikic_stmt_class_conditional, "stmt/class/conditional.php");
-nikic_test!(nikic_stmt_class_constmodifiererrors_1, "stmt/class/constModifierErrors_1.php", errors);
-nikic_test!(nikic_stmt_class_constmodifiererrors_2, "stmt/class/constModifierErrors_2.php", errors);
-nikic_test!(nikic_stmt_class_constmodifiererrors_3, "stmt/class/constModifierErrors_3.php", errors);
-nikic_test!(nikic_stmt_class_constmodifiererrors_4, "stmt/class/constModifierErrors_4.php", errors);
-nikic_test!(nikic_stmt_class_constmodifiers, "stmt/class/constModifiers.php");
+nikic_test!(
+    nikic_stmt_class_constmodifiererrors_1,
+    "stmt/class/constModifierErrors_1.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_class_constmodifiererrors_2,
+    "stmt/class/constModifierErrors_2.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_class_constmodifiererrors_3,
+    "stmt/class/constModifierErrors_3.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_class_constmodifiererrors_4,
+    "stmt/class/constModifierErrors_4.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_class_constmodifiers,
+    "stmt/class/constModifiers.php"
+);
 nikic_test!(nikic_stmt_class_enum, "stmt/class/enum.php", errors);
-nikic_test!(nikic_stmt_class_enum_with_string, "stmt/class/enum_with_string.php");
+nikic_test!(
+    nikic_stmt_class_enum_with_string,
+    "stmt/class/enum_with_string.php"
+);
 nikic_test!(nikic_stmt_class_final, "stmt/class/final.php");
-nikic_test!(nikic_stmt_class_implicitpublic, "stmt/class/implicitPublic.php");
+nikic_test!(
+    nikic_stmt_class_implicitpublic,
+    "stmt/class/implicitPublic.php"
+);
 nikic_test!(nikic_stmt_class_interface, "stmt/class/interface.php");
-nikic_test!(nikic_stmt_class_modifier_error_1, "stmt/class/modifier_error_1.php", errors);
-nikic_test!(nikic_stmt_class_modifier_error_2, "stmt/class/modifier_error_2.php", errors);
-nikic_test!(nikic_stmt_class_modifier_error_3, "stmt/class/modifier_error_3.php", errors);
-nikic_test!(nikic_stmt_class_modifier_error_4, "stmt/class/modifier_error_4.php", errors);
-nikic_test!(nikic_stmt_class_modifier_error_5, "stmt/class/modifier_error_5.php", errors);
-nikic_test!(nikic_stmt_class_modifier_error_6, "stmt/class/modifier_error_6.php", errors);
-nikic_test!(nikic_stmt_class_modifier_error_7, "stmt/class/modifier_error_7.php", errors);
-nikic_test!(nikic_stmt_class_modifier_error_8, "stmt/class/modifier_error_8.php", errors);
+nikic_test!(
+    nikic_stmt_class_modifier_error_1,
+    "stmt/class/modifier_error_1.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_class_modifier_error_2,
+    "stmt/class/modifier_error_2.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_class_modifier_error_3,
+    "stmt/class/modifier_error_3.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_class_modifier_error_4,
+    "stmt/class/modifier_error_4.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_class_modifier_error_5,
+    "stmt/class/modifier_error_5.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_class_modifier_error_6,
+    "stmt/class/modifier_error_6.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_class_modifier_error_7,
+    "stmt/class/modifier_error_7.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_class_modifier_error_8,
+    "stmt/class/modifier_error_8.php",
+    errors
+);
 nikic_test!(nikic_stmt_class_name_1, "stmt/class/name_1.php", errors);
 nikic_test!(nikic_stmt_class_name_2, "stmt/class/name_2.php", errors);
 nikic_test!(nikic_stmt_class_name_3, "stmt/class/name_3.php", errors);
@@ -44,74 +116,236 @@ nikic_test!(nikic_stmt_class_name_13, "stmt/class/name_13.php", errors);
 nikic_test!(nikic_stmt_class_name_14, "stmt/class/name_14.php", errors);
 nikic_test!(nikic_stmt_class_name_15, "stmt/class/name_15.php", errors);
 nikic_test!(nikic_stmt_class_php4style, "stmt/class/php4Style.php");
-nikic_test!(nikic_stmt_class_propertytypes, "stmt/class/propertyTypes.php");
-nikic_test!(nikic_stmt_class_property_hooks_1, "stmt/class/property_hooks_1.php");
-nikic_test!(nikic_stmt_class_property_hooks_2, "stmt/class/property_hooks_2.php");
-nikic_test!(nikic_stmt_class_property_hooks_3, "stmt/class/property_hooks_3.php");
-nikic_test!(nikic_stmt_class_property_hooks_4, "stmt/class/property_hooks_4.php", errors);
-nikic_test!(nikic_stmt_class_property_hooks_5, "stmt/class/property_hooks_5.php", errors);
-nikic_test!(nikic_stmt_class_property_hooks_6, "stmt/class/property_hooks_6.php", errors);
-nikic_test!(nikic_stmt_class_property_hooks_7, "stmt/class/property_hooks_7.php", errors);
-nikic_test!(nikic_stmt_class_property_modifiers, "stmt/class/property_modifiers.php");
-nikic_test!(nikic_stmt_class_property_promotion, "stmt/class/property_promotion.php");
+nikic_test!(
+    nikic_stmt_class_propertytypes,
+    "stmt/class/propertyTypes.php"
+);
+nikic_test!(
+    nikic_stmt_class_property_hooks_1,
+    "stmt/class/property_hooks_1.php"
+);
+nikic_test!(
+    nikic_stmt_class_property_hooks_2,
+    "stmt/class/property_hooks_2.php"
+);
+nikic_test!(
+    nikic_stmt_class_property_hooks_3,
+    "stmt/class/property_hooks_3.php"
+);
+nikic_test!(
+    nikic_stmt_class_property_hooks_4,
+    "stmt/class/property_hooks_4.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_class_property_hooks_5,
+    "stmt/class/property_hooks_5.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_class_property_hooks_6,
+    "stmt/class/property_hooks_6.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_class_property_hooks_7,
+    "stmt/class/property_hooks_7.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_class_property_modifiers,
+    "stmt/class/property_modifiers.php"
+);
+nikic_test!(
+    nikic_stmt_class_property_promotion,
+    "stmt/class/property_promotion.php"
+);
 nikic_test!(nikic_stmt_class_readonly_1, "stmt/class/readonly_1.php");
 nikic_test!(nikic_stmt_class_readonly_2, "stmt/class/readonly_2.php");
-nikic_test!(nikic_stmt_class_readonlyanonyous, "stmt/class/readonlyAnonyous.php");
-nikic_test!(nikic_stmt_class_readonlyasclassname_1, "stmt/class/readonlyAsClassName_1.php", errors);
-nikic_test!(nikic_stmt_class_readonlyasclassname_2, "stmt/class/readonlyAsClassName_2.php", errors);
-nikic_test!(nikic_stmt_class_readonlymethod, "stmt/class/readonlyMethod.php");
-nikic_test!(nikic_stmt_class_shortechoasidentifier, "stmt/class/shortEchoAsIdentifier.php", errors);
+nikic_test!(
+    nikic_stmt_class_readonlyanonyous,
+    "stmt/class/readonlyAnonyous.php"
+);
+nikic_test!(
+    nikic_stmt_class_readonlyasclassname_1,
+    "stmt/class/readonlyAsClassName_1.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_class_readonlyasclassname_2,
+    "stmt/class/readonlyAsClassName_2.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_class_readonlymethod,
+    "stmt/class/readonlyMethod.php"
+);
+nikic_test!(
+    nikic_stmt_class_shortechoasidentifier,
+    "stmt/class/shortEchoAsIdentifier.php",
+    errors
+);
 nikic_test!(nikic_stmt_class_simple, "stmt/class/simple.php");
-nikic_test!(nikic_stmt_class_staticmethod_1, "stmt/class/staticMethod_1.php");
-nikic_test!(nikic_stmt_class_staticmethod_2, "stmt/class/staticMethod_2.php");
-nikic_test!(nikic_stmt_class_staticmethod_3, "stmt/class/staticMethod_3.php");
-nikic_test!(nikic_stmt_class_staticmethod_4, "stmt/class/staticMethod_4.php");
-nikic_test!(nikic_stmt_class_staticmethod_5, "stmt/class/staticMethod_5.php");
-nikic_test!(nikic_stmt_class_staticmethod_6, "stmt/class/staticMethod_6.php");
+nikic_test!(
+    nikic_stmt_class_staticmethod_1,
+    "stmt/class/staticMethod_1.php"
+);
+nikic_test!(
+    nikic_stmt_class_staticmethod_2,
+    "stmt/class/staticMethod_2.php"
+);
+nikic_test!(
+    nikic_stmt_class_staticmethod_3,
+    "stmt/class/staticMethod_3.php"
+);
+nikic_test!(
+    nikic_stmt_class_staticmethod_4,
+    "stmt/class/staticMethod_4.php"
+);
+nikic_test!(
+    nikic_stmt_class_staticmethod_5,
+    "stmt/class/staticMethod_5.php"
+);
+nikic_test!(
+    nikic_stmt_class_staticmethod_6,
+    "stmt/class/staticMethod_6.php"
+);
 nikic_test!(nikic_stmt_class_statictype, "stmt/class/staticType.php");
 nikic_test!(nikic_stmt_class_trait, "stmt/class/trait.php");
-nikic_test!(nikic_stmt_class_typedconstants, "stmt/class/typedConstants.php");
+nikic_test!(
+    nikic_stmt_class_typedconstants,
+    "stmt/class/typedConstants.php"
+);
 nikic_test!(nikic_stmt_const, "stmt/const.php", errors);
 nikic_test!(nikic_stmt_controlflow, "stmt/controlFlow.php");
 nikic_test!(nikic_stmt_declare, "stmt/declare.php");
 nikic_test!(nikic_stmt_echo, "stmt/echo.php");
-nikic_test!(nikic_stmt_function_builtintypedeclarations, "stmt/function/builtinTypeDeclarations.php");
+nikic_test!(
+    nikic_stmt_function_builtintypedeclarations,
+    "stmt/function/builtinTypeDeclarations.php"
+);
 nikic_test!(nikic_stmt_function_byref, "stmt/function/byRef.php");
-nikic_test!(nikic_stmt_function_clone_function, "stmt/function/clone_function.php");
-nikic_test!(nikic_stmt_function_conditional, "stmt/function/conditional.php");
-nikic_test!(nikic_stmt_function_defaultvalues, "stmt/function/defaultValues.php");
-nikic_test!(nikic_stmt_function_disjointnormalformtypes, "stmt/function/disjointNormalFormTypes.php");
-nikic_test!(nikic_stmt_function_exit_die_function, "stmt/function/exit_die_function.php");
-nikic_test!(nikic_stmt_function_intersectiontypes, "stmt/function/intersectionTypes.php");
+nikic_test!(
+    nikic_stmt_function_clone_function,
+    "stmt/function/clone_function.php"
+);
+nikic_test!(
+    nikic_stmt_function_conditional,
+    "stmt/function/conditional.php"
+);
+nikic_test!(
+    nikic_stmt_function_defaultvalues,
+    "stmt/function/defaultValues.php"
+);
+nikic_test!(
+    nikic_stmt_function_disjointnormalformtypes,
+    "stmt/function/disjointNormalFormTypes.php"
+);
+nikic_test!(
+    nikic_stmt_function_exit_die_function,
+    "stmt/function/exit_die_function.php"
+);
+nikic_test!(
+    nikic_stmt_function_intersectiontypes,
+    "stmt/function/intersectionTypes.php"
+);
 nikic_test!(nikic_stmt_function_nevertype, "stmt/function/neverType.php");
-nikic_test!(nikic_stmt_function_nullfalsetruetypes_1, "stmt/function/nullFalseTrueTypes_1.php");
-nikic_test!(nikic_stmt_function_nullfalsetruetypes_2, "stmt/function/nullFalseTrueTypes_2.php");
-nikic_test!(nikic_stmt_function_nullabletypes, "stmt/function/nullableTypes.php");
-nikic_test!(nikic_stmt_function_parameters_trailing_comma_1, "stmt/function/parameters_trailing_comma_1.php");
-nikic_test!(nikic_stmt_function_parameters_trailing_comma_2, "stmt/function/parameters_trailing_comma_2.php");
-nikic_test!(nikic_stmt_function_parameters_trailing_comma_3, "stmt/function/parameters_trailing_comma_3.php");
-nikic_test!(nikic_stmt_function_readonlyfunction, "stmt/function/readonlyFunction.php");
-nikic_test!(nikic_stmt_function_returntypes, "stmt/function/returnTypes.php");
-nikic_test!(nikic_stmt_function_specialvars, "stmt/function/specialVars.php");
-nikic_test!(nikic_stmt_function_typedeclarations, "stmt/function/typeDeclarations.php");
-nikic_test!(nikic_stmt_function_typeversions_1, "stmt/function/typeVersions_1.php");
-nikic_test!(nikic_stmt_function_typeversions_2, "stmt/function/typeVersions_2.php");
-nikic_test!(nikic_stmt_function_typeversions_3, "stmt/function/typeVersions_3.php");
-nikic_test!(nikic_stmt_function_typeversions_4, "stmt/function/typeVersions_4.php");
-nikic_test!(nikic_stmt_function_typeversions_5, "stmt/function/typeVersions_5.php");
-nikic_test!(nikic_stmt_function_typeversions_6, "stmt/function/typeVersions_6.php");
-nikic_test!(nikic_stmt_function_uniontypes, "stmt/function/unionTypes.php");
+nikic_test!(
+    nikic_stmt_function_nullfalsetruetypes_1,
+    "stmt/function/nullFalseTrueTypes_1.php"
+);
+nikic_test!(
+    nikic_stmt_function_nullfalsetruetypes_2,
+    "stmt/function/nullFalseTrueTypes_2.php"
+);
+nikic_test!(
+    nikic_stmt_function_nullabletypes,
+    "stmt/function/nullableTypes.php"
+);
+nikic_test!(
+    nikic_stmt_function_parameters_trailing_comma_1,
+    "stmt/function/parameters_trailing_comma_1.php"
+);
+nikic_test!(
+    nikic_stmt_function_parameters_trailing_comma_2,
+    "stmt/function/parameters_trailing_comma_2.php"
+);
+nikic_test!(
+    nikic_stmt_function_parameters_trailing_comma_3,
+    "stmt/function/parameters_trailing_comma_3.php"
+);
+nikic_test!(
+    nikic_stmt_function_readonlyfunction,
+    "stmt/function/readonlyFunction.php"
+);
+nikic_test!(
+    nikic_stmt_function_returntypes,
+    "stmt/function/returnTypes.php"
+);
+nikic_test!(
+    nikic_stmt_function_specialvars,
+    "stmt/function/specialVars.php"
+);
+nikic_test!(
+    nikic_stmt_function_typedeclarations,
+    "stmt/function/typeDeclarations.php"
+);
+nikic_test!(
+    nikic_stmt_function_typeversions_1,
+    "stmt/function/typeVersions_1.php"
+);
+nikic_test!(
+    nikic_stmt_function_typeversions_2,
+    "stmt/function/typeVersions_2.php"
+);
+nikic_test!(
+    nikic_stmt_function_typeversions_3,
+    "stmt/function/typeVersions_3.php"
+);
+nikic_test!(
+    nikic_stmt_function_typeversions_4,
+    "stmt/function/typeVersions_4.php"
+);
+nikic_test!(
+    nikic_stmt_function_typeversions_5,
+    "stmt/function/typeVersions_5.php"
+);
+nikic_test!(
+    nikic_stmt_function_typeversions_6,
+    "stmt/function/typeVersions_6.php"
+);
+nikic_test!(
+    nikic_stmt_function_uniontypes,
+    "stmt/function/unionTypes.php"
+);
 nikic_test!(nikic_stmt_function_variadic, "stmt/function/variadic.php");
-nikic_test!(nikic_stmt_function_variadicdefaultvalue, "stmt/function/variadicDefaultValue.php");
+nikic_test!(
+    nikic_stmt_function_variadicdefaultvalue,
+    "stmt/function/variadicDefaultValue.php"
+);
 nikic_test!(nikic_stmt_generator_basic, "stmt/generator/basic.php");
-nikic_test!(nikic_stmt_generator_yieldprecedence, "stmt/generator/yieldPrecedence.php");
-nikic_test!(nikic_stmt_generator_yieldunaryprecedence, "stmt/generator/yieldUnaryPrecedence.php");
+nikic_test!(
+    nikic_stmt_generator_yieldprecedence,
+    "stmt/generator/yieldPrecedence.php"
+);
+nikic_test!(
+    nikic_stmt_generator_yieldunaryprecedence,
+    "stmt/generator/yieldUnaryPrecedence.php"
+);
 nikic_test!(nikic_stmt_haltcompiler_1, "stmt/haltCompiler_1.php");
 nikic_test!(nikic_stmt_haltcompiler_2, "stmt/haltCompiler_2.php");
 nikic_test!(nikic_stmt_haltcompiler_3, "stmt/haltCompiler_3.php");
-nikic_test!(nikic_stmt_haltcompilerinvalidsyntax, "stmt/haltCompilerInvalidSyntax.php", errors);
+nikic_test!(
+    nikic_stmt_haltcompilerinvalidsyntax,
+    "stmt/haltCompilerInvalidSyntax.php",
+    errors
+);
 nikic_test!(nikic_stmt_haltcompileroffset, "stmt/haltCompilerOffset.php");
-nikic_test!(nikic_stmt_haltcompileroutermostscope, "stmt/haltCompilerOutermostScope.php", errors);
+nikic_test!(
+    nikic_stmt_haltcompileroutermostscope,
+    "stmt/haltCompilerOutermostScope.php",
+    errors
+);
 nikic_test!(nikic_stmt_hashbang, "stmt/hashbang.php");
 nikic_test!(nikic_stmt_if, "stmt/if.php");
 nikic_test!(nikic_stmt_inlinehtml, "stmt/inlineHTML.php");
@@ -122,31 +356,92 @@ nikic_test!(nikic_stmt_loop_while, "stmt/loop/while.php");
 nikic_test!(nikic_stmt_multicatch, "stmt/multiCatch.php");
 nikic_test!(nikic_stmt_namespace_alias, "stmt/namespace/alias.php");
 nikic_test!(nikic_stmt_namespace_braced, "stmt/namespace/braced.php");
-nikic_test!(nikic_stmt_namespace_commentafternamespace, "stmt/namespace/commentAfterNamespace.php");
+nikic_test!(
+    nikic_stmt_namespace_commentafternamespace,
+    "stmt/namespace/commentAfterNamespace.php"
+);
 nikic_test!(nikic_stmt_namespace_groupuse, "stmt/namespace/groupUse.php");
-nikic_test!(nikic_stmt_namespace_groupuseerrors_1, "stmt/namespace/groupUseErrors_1.php", errors);
-nikic_test!(nikic_stmt_namespace_groupuseerrors_2, "stmt/namespace/groupUseErrors_2.php", errors);
-nikic_test!(nikic_stmt_namespace_groupuseerrors_3, "stmt/namespace/groupUseErrors_3.php", errors);
-nikic_test!(nikic_stmt_namespace_groupusepositions, "stmt/namespace/groupUsePositions.php");
-nikic_test!(nikic_stmt_namespace_groupusetrailingcomma, "stmt/namespace/groupUseTrailingComma.php");
-nikic_test!(nikic_stmt_namespace_invalidname_1, "stmt/namespace/invalidName_1.php", errors);
-nikic_test!(nikic_stmt_namespace_invalidname_2, "stmt/namespace/invalidName_2.php", errors);
-nikic_test!(nikic_stmt_namespace_invalidname_3, "stmt/namespace/invalidName_3.php", errors);
+nikic_test!(
+    nikic_stmt_namespace_groupuseerrors_1,
+    "stmt/namespace/groupUseErrors_1.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_namespace_groupuseerrors_2,
+    "stmt/namespace/groupUseErrors_2.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_namespace_groupuseerrors_3,
+    "stmt/namespace/groupUseErrors_3.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_namespace_groupusepositions,
+    "stmt/namespace/groupUsePositions.php"
+);
+nikic_test!(
+    nikic_stmt_namespace_groupusetrailingcomma,
+    "stmt/namespace/groupUseTrailingComma.php"
+);
+nikic_test!(
+    nikic_stmt_namespace_invalidname_1,
+    "stmt/namespace/invalidName_1.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_namespace_invalidname_2,
+    "stmt/namespace/invalidName_2.php",
+    errors
+);
+nikic_test!(
+    nikic_stmt_namespace_invalidname_3,
+    "stmt/namespace/invalidName_3.php",
+    errors
+);
 nikic_test!(nikic_stmt_namespace_mix_1, "stmt/namespace/mix_1.php");
 nikic_test!(nikic_stmt_namespace_mix_2, "stmt/namespace/mix_2.php");
 nikic_test!(nikic_stmt_namespace_name, "stmt/namespace/name.php");
 nikic_test!(nikic_stmt_namespace_nested, "stmt/namespace/nested.php");
-nikic_test!(nikic_stmt_namespace_notbraced, "stmt/namespace/notBraced.php");
-nikic_test!(nikic_stmt_namespace_nsafterhashbang, "stmt/namespace/nsAfterHashbang.php");
-nikic_test!(nikic_stmt_namespace_outsidestmt_1, "stmt/namespace/outsideStmt_1.php");
-nikic_test!(nikic_stmt_namespace_outsidestmt_2, "stmt/namespace/outsideStmt_2.php");
-nikic_test!(nikic_stmt_namespace_outsidestmtinvalid_1, "stmt/namespace/outsideStmtInvalid_1.php");
-nikic_test!(nikic_stmt_namespace_outsidestmtinvalid_2, "stmt/namespace/outsideStmtInvalid_2.php");
-nikic_test!(nikic_stmt_namespace_outsidestmtinvalid_3, "stmt/namespace/outsideStmtInvalid_3.php");
+nikic_test!(
+    nikic_stmt_namespace_notbraced,
+    "stmt/namespace/notBraced.php"
+);
+nikic_test!(
+    nikic_stmt_namespace_nsafterhashbang,
+    "stmt/namespace/nsAfterHashbang.php"
+);
+nikic_test!(
+    nikic_stmt_namespace_outsidestmt_1,
+    "stmt/namespace/outsideStmt_1.php"
+);
+nikic_test!(
+    nikic_stmt_namespace_outsidestmt_2,
+    "stmt/namespace/outsideStmt_2.php"
+);
+nikic_test!(
+    nikic_stmt_namespace_outsidestmtinvalid_1,
+    "stmt/namespace/outsideStmtInvalid_1.php"
+);
+nikic_test!(
+    nikic_stmt_namespace_outsidestmtinvalid_2,
+    "stmt/namespace/outsideStmtInvalid_2.php"
+);
+nikic_test!(
+    nikic_stmt_namespace_outsidestmtinvalid_3,
+    "stmt/namespace/outsideStmtInvalid_3.php"
+);
 nikic_test!(nikic_stmt_newininitializer, "stmt/newInInitializer.php");
 nikic_test!(nikic_stmt_switch, "stmt/switch.php");
 nikic_test!(nikic_stmt_trycatch, "stmt/tryCatch.php");
-nikic_test!(nikic_stmt_trycatch_without_variable, "stmt/tryCatch_without_variable.php");
-nikic_test!(nikic_stmt_trywithoutcatch, "stmt/tryWithoutCatch.php", errors);
+nikic_test!(
+    nikic_stmt_trycatch_without_variable,
+    "stmt/tryCatch_without_variable.php"
+);
+nikic_test!(
+    nikic_stmt_trywithoutcatch,
+    "stmt/tryWithoutCatch.php",
+    errors
+);
 nikic_test!(nikic_stmt_unset, "stmt/unset.php");
 nikic_test!(nikic_stmt_voidcast, "stmt/voidCast.php");

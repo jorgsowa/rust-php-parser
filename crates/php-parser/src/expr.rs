@@ -157,7 +157,9 @@ pub fn parse_expr_bp(parser: &mut Parser, min_bp: u8) -> Expr {
                             }
                         };
                         lhs = Expr {
-                            kind: ExprKind::CallableCreate(CallableCreateExpr { kind: callable_kind }),
+                            kind: ExprKind::CallableCreate(CallableCreateExpr {
+                                kind: callable_kind,
+                            }),
                             span,
                         };
                     }
@@ -176,7 +178,10 @@ pub fn parse_expr_bp(parser: &mut Parser, min_bp: u8) -> Expr {
                                 args,
                             })
                         };
-                        lhs = Expr { kind: expr_kind, span };
+                        lhs = Expr {
+                            kind: expr_kind,
+                            span,
+                        };
                     }
                 }
             } else {
@@ -192,7 +197,10 @@ pub fn parse_expr_bp(parser: &mut Parser, min_bp: u8) -> Expr {
                         property: Box::new(member),
                     })
                 };
-                lhs = Expr { kind: expr_kind, span };
+                lhs = Expr {
+                    kind: expr_kind,
+                    span,
+                };
             }
             continue;
         }
@@ -291,17 +299,18 @@ pub fn parse_expr_bp(parser: &mut Parser, min_bp: u8) -> Expr {
                 };
             } else {
                 // Static method call or class constant
-                let (member_name, _member_span) = if let Some(result) = parser.eat_identifier_or_keyword() {
-                    result
-                } else {
-                    let span = parser.current_span();
-                    parser.error(ParseError::Expected {
-                        expected: "identifier".to_string(),
-                        found: parser.current_kind(),
-                        span,
-                    });
-                    ("<error>".to_string(), span)
-                };
+                let (member_name, _member_span) =
+                    if let Some(result) = parser.eat_identifier_or_keyword() {
+                        result
+                    } else {
+                        let span = parser.current_span();
+                        parser.error(ParseError::Expected {
+                            expected: "identifier".to_string(),
+                            found: parser.current_kind(),
+                            span,
+                        });
+                        ("<error>".to_string(), span)
+                    };
 
                 if parser.check(TokenKind::LeftParen) {
                     match parse_arg_list_or_callable(parser) {
@@ -478,7 +487,10 @@ fn parse_member_name(parser: &mut Parser) -> Expr {
         found: parser.current_kind(),
         span,
     });
-    Expr { kind: ExprKind::Error, span }
+    Expr {
+        kind: ExprKind::Error,
+        span,
+    }
 }
 
 /// Parse an atomic expression (prefix unaries, literals, variables, etc.)
@@ -488,7 +500,10 @@ fn parse_atom(parser: &mut Parser) -> Expr {
     // Keywords followed by backslash are namespace-qualified names (e.g., fn\use(), private\protected\...)
     // Exclude keywords that have their own parse_atom handlers and can precede `\ClassName` expressions
     if parser.is_semi_reserved_keyword()
-        && !matches!(kind, TokenKind::New | TokenKind::Throw | TokenKind::Yield_ | TokenKind::Instanceof)
+        && !matches!(
+            kind,
+            TokenKind::New | TokenKind::Throw | TokenKind::Yield_ | TokenKind::Instanceof
+        )
         && parser.peek_kind() == Some(TokenKind::Backslash)
     {
         let token = parser.advance();
@@ -526,7 +541,10 @@ fn parse_atom(parser: &mut Parser) -> Expr {
                 found: parser.current_kind(),
                 span,
             });
-            return Expr { kind: ExprKind::Error, span: Span::new(start, span.end) };
+            return Expr {
+                kind: ExprKind::Error,
+                span: Span::new(start, span.end),
+            };
         }
         if parser.check(TokenKind::Function) {
             return parse_closure(parser, false, start, attributes);
@@ -541,7 +559,10 @@ fn parse_atom(parser: &mut Parser) -> Expr {
             found: parser.current_kind(),
             span,
         });
-        return Expr { kind: ExprKind::Error, span: Span::new(start, span.end) };
+        return Expr {
+            kind: ExprKind::Error,
+            span: Span::new(start, span.end),
+        };
     }
 
     // @ error suppression (prefix, high precedence)
@@ -640,7 +661,9 @@ fn parse_atom(parser: &mut Parser) -> Expr {
         }
 
         // Float literals
-        TokenKind::FloatLiteral | TokenKind::FloatLiteralSimple | TokenKind::FloatLiteralLeadingDot => {
+        TokenKind::FloatLiteral
+        | TokenKind::FloatLiteralSimple
+        | TokenKind::FloatLiteralLeadingDot => {
             let token = parser.advance();
             let text = &parser.source()[token.span.start as usize..token.span.end as usize];
             let clean: String = text.chars().filter(|c| *c != '_').collect();
@@ -655,7 +678,10 @@ fn parse_atom(parser: &mut Parser) -> Expr {
         TokenKind::SingleQuotedString => {
             let token = parser.advance();
             let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-            let text = text.strip_prefix('b').or_else(|| text.strip_prefix('B')).unwrap_or(text);
+            let text = text
+                .strip_prefix('b')
+                .or_else(|| text.strip_prefix('B'))
+                .unwrap_or(text);
             let inner = &text[1..text.len() - 1];
             Expr {
                 kind: ExprKind::String(inner.to_string()),
@@ -665,7 +691,10 @@ fn parse_atom(parser: &mut Parser) -> Expr {
         TokenKind::DoubleQuotedString => {
             let token = parser.advance();
             let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-            let stripped = text.strip_prefix('b').or_else(|| text.strip_prefix('B')).unwrap_or(text);
+            let stripped = text
+                .strip_prefix('b')
+                .or_else(|| text.strip_prefix('B'))
+                .unwrap_or(text);
             let inner = &stripped[1..stripped.len() - 1];
 
             if crate::interpolation::has_interpolation(inner) {
@@ -826,7 +855,11 @@ fn parse_atom(parser: &mut Parser) -> Expr {
             let start = parser.start_span();
             let name = parser.parse_name();
             let text = name.parts.join("\\");
-            let prefix = if name.kind == NameKind::FullyQualified { "\\" } else { "" };
+            let prefix = if name.kind == NameKind::FullyQualified {
+                "\\"
+            } else {
+                ""
+            };
             Expr {
                 kind: ExprKind::Identifier(format!("{}{}", prefix, text)),
                 span: Span::new(start, name.span.end),
@@ -876,14 +909,12 @@ fn parse_atom(parser: &mut Parser) -> Expr {
         }
 
         // New expression: new ClassName(args)
-        TokenKind::New => {
-            parse_new_expr(parser)
-        }
+        TokenKind::New => parse_new_expr(parser),
 
         // Function keyword — closure expression (when used as expression)
         TokenKind::Function => {
             let start = parser.start_span();
-            return parse_closure(parser, false, start, Vec::new());
+            parse_closure(parser, false, start, Vec::new())
         }
 
         // Fn keyword — arrow function: fn($x) => expr
@@ -893,9 +924,7 @@ fn parse_atom(parser: &mut Parser) -> Expr {
         }
 
         // Match expression
-        TokenKind::Match_ => {
-            parse_match_expr(parser)
-        }
+        TokenKind::Match_ => parse_match_expr(parser),
 
         // Throw as expression (PHP 8)
         TokenKind::Throw => {
@@ -909,9 +938,7 @@ fn parse_atom(parser: &mut Parser) -> Expr {
         }
 
         // Yield expression
-        TokenKind::Yield_ => {
-            parse_yield_expr(parser)
-        }
+        TokenKind::Yield_ => parse_yield_expr(parser),
 
         // Parenthesized expression or cast
         TokenKind::LeftParen => {
@@ -947,12 +974,19 @@ fn parse_atom(parser: &mut Parser) -> Expr {
             let mut exprs = Vec::new();
             exprs.push(parse_expr(parser));
             while parser.eat(TokenKind::Comma).is_some() {
-                if parser.check(TokenKind::RightParen) { break; }
+                if parser.check(TokenKind::RightParen) {
+                    break;
+                }
                 exprs.push(parse_expr(parser));
             }
             let close = parser.expect(TokenKind::RightParen);
-            let end = close.map(|t| t.span.end).unwrap_or(parser.current_span().start);
-            Expr { kind: ExprKind::Isset(exprs), span: Span::new(start, end) }
+            let end = close
+                .map(|t| t.span.end)
+                .unwrap_or(parser.current_span().start);
+            Expr {
+                kind: ExprKind::Isset(exprs),
+                span: Span::new(start, end),
+            }
         }
 
         // empty(expr)
@@ -962,8 +996,13 @@ fn parse_atom(parser: &mut Parser) -> Expr {
             parser.expect(TokenKind::LeftParen);
             let inner = parse_expr(parser);
             let close = parser.expect(TokenKind::RightParen);
-            let end = close.map(|t| t.span.end).unwrap_or(parser.current_span().start);
-            Expr { kind: ExprKind::Empty(Box::new(inner)), span: Span::new(start, end) }
+            let end = close
+                .map(|t| t.span.end)
+                .unwrap_or(parser.current_span().start);
+            Expr {
+                kind: ExprKind::Empty(Box::new(inner)),
+                span: Span::new(start, end),
+            }
         }
 
         // eval('code')
@@ -973,8 +1012,13 @@ fn parse_atom(parser: &mut Parser) -> Expr {
             parser.expect(TokenKind::LeftParen);
             let inner = parse_expr(parser);
             let close = parser.expect(TokenKind::RightParen);
-            let end = close.map(|t| t.span.end).unwrap_or(parser.current_span().start);
-            Expr { kind: ExprKind::Eval(Box::new(inner)), span: Span::new(start, end) }
+            let end = close
+                .map(|t| t.span.end)
+                .unwrap_or(parser.current_span().start);
+            Expr {
+                kind: ExprKind::Eval(Box::new(inner)),
+                span: Span::new(start, end),
+            }
         }
 
         // include / include_once / require / require_once
@@ -982,36 +1026,52 @@ fn parse_atom(parser: &mut Parser) -> Expr {
             let token = parser.advance();
             let inner = parse_expr_bp(parser, ASSIGNMENT_BP);
             let span = token.span.merge(inner.span);
-            Expr { kind: ExprKind::Include(IncludeKind::Include, Box::new(inner)), span }
+            Expr {
+                kind: ExprKind::Include(IncludeKind::Include, Box::new(inner)),
+                span,
+            }
         }
         TokenKind::IncludeOnce => {
             let token = parser.advance();
             let inner = parse_expr_bp(parser, ASSIGNMENT_BP);
             let span = token.span.merge(inner.span);
-            Expr { kind: ExprKind::Include(IncludeKind::IncludeOnce, Box::new(inner)), span }
+            Expr {
+                kind: ExprKind::Include(IncludeKind::IncludeOnce, Box::new(inner)),
+                span,
+            }
         }
         TokenKind::Require => {
             let token = parser.advance();
             let inner = parse_expr_bp(parser, ASSIGNMENT_BP);
             let span = token.span.merge(inner.span);
-            Expr { kind: ExprKind::Include(IncludeKind::Require, Box::new(inner)), span }
+            Expr {
+                kind: ExprKind::Include(IncludeKind::Require, Box::new(inner)),
+                span,
+            }
         }
         TokenKind::RequireOnce => {
             let token = parser.advance();
             let inner = parse_expr_bp(parser, ASSIGNMENT_BP);
             let span = token.span.merge(inner.span);
-            Expr { kind: ExprKind::Include(IncludeKind::RequireOnce, Box::new(inner)), span }
+            Expr {
+                kind: ExprKind::Include(IncludeKind::RequireOnce, Box::new(inner)),
+                span,
+            }
         }
 
         // exit / die
         TokenKind::Exit | TokenKind::Die => {
             let token = parser.advance();
-            let name_text = parser.source()[token.span.start as usize..token.span.end as usize].to_string();
+            let name_text =
+                parser.source()[token.span.start as usize..token.span.end as usize].to_string();
             if parser.check(TokenKind::LeftParen) {
                 match parse_arg_list_or_callable(parser) {
                     ArgListResult::CallableMarker => {
                         // exit(...) - first class callable
-                        let callee = Expr { kind: ExprKind::Identifier(name_text), span: token.span };
+                        let callee = Expr {
+                            kind: ExprKind::Identifier(name_text),
+                            span: token.span,
+                        };
                         let span = Span::new(token.span.start, parser.current_span().start);
                         Expr {
                             kind: ExprKind::CallableCreate(CallableCreateExpr {
@@ -1024,14 +1084,23 @@ fn parse_atom(parser: &mut Parser) -> Expr {
                         let span = Span::new(token.span.start, parser.current_span().start);
                         if args.is_empty() {
                             // exit()
-                            Expr { kind: ExprKind::Exit(None), span }
+                            Expr {
+                                kind: ExprKind::Exit(None),
+                                span,
+                            }
                         } else if args.len() == 1 && args[0].name.is_none() && !args[0].unpack {
                             // exit(expr)
                             let value = args.into_iter().next().unwrap().value;
-                            Expr { kind: ExprKind::Exit(Some(Box::new(value))), span }
+                            Expr {
+                                kind: ExprKind::Exit(Some(Box::new(value))),
+                                span,
+                            }
                         } else {
                             // exit(status: 42), exit(...$args), exit($a, $b) - function call form
-                            let callee = Expr { kind: ExprKind::Identifier(name_text), span: token.span };
+                            let callee = Expr {
+                                kind: ExprKind::Identifier(name_text),
+                                span: token.span,
+                            };
                             Expr {
                                 kind: ExprKind::FunctionCall(FunctionCallExpr {
                                     name: Box::new(callee),
@@ -1044,7 +1113,10 @@ fn parse_atom(parser: &mut Parser) -> Expr {
                 }
             } else {
                 // bare exit/die
-                Expr { kind: ExprKind::Exit(None), span: token.span }
+                Expr {
+                    kind: ExprKind::Exit(None),
+                    span: token.span,
+                }
             }
         }
 
@@ -1061,20 +1133,77 @@ fn parse_atom(parser: &mut Parser) -> Expr {
             } else {
                 let operand = parse_expr_bp(parser, 41);
                 let span = token.span.merge(operand.span);
-                Expr { kind: ExprKind::Clone(Box::new(operand)), span }
+                Expr {
+                    kind: ExprKind::Clone(Box::new(operand)),
+                    span,
+                }
             }
         }
 
         // Magic constants
-        TokenKind::MagicClass => { let t = parser.advance(); Expr { kind: ExprKind::MagicConst(MagicConstKind::Class), span: t.span } }
-        TokenKind::MagicDir => { let t = parser.advance(); Expr { kind: ExprKind::MagicConst(MagicConstKind::Dir), span: t.span } }
-        TokenKind::MagicFile => { let t = parser.advance(); Expr { kind: ExprKind::MagicConst(MagicConstKind::File), span: t.span } }
-        TokenKind::MagicFunction => { let t = parser.advance(); Expr { kind: ExprKind::MagicConst(MagicConstKind::Function), span: t.span } }
-        TokenKind::MagicLine => { let t = parser.advance(); Expr { kind: ExprKind::MagicConst(MagicConstKind::Line), span: t.span } }
-        TokenKind::MagicMethod => { let t = parser.advance(); Expr { kind: ExprKind::MagicConst(MagicConstKind::Method), span: t.span } }
-        TokenKind::MagicNamespace => { let t = parser.advance(); Expr { kind: ExprKind::MagicConst(MagicConstKind::Namespace), span: t.span } }
-        TokenKind::MagicTrait => { let t = parser.advance(); Expr { kind: ExprKind::MagicConst(MagicConstKind::Trait), span: t.span } }
-        TokenKind::MagicProperty => { let t = parser.advance(); Expr { kind: ExprKind::MagicConst(MagicConstKind::Property), span: t.span } }
+        TokenKind::MagicClass => {
+            let t = parser.advance();
+            Expr {
+                kind: ExprKind::MagicConst(MagicConstKind::Class),
+                span: t.span,
+            }
+        }
+        TokenKind::MagicDir => {
+            let t = parser.advance();
+            Expr {
+                kind: ExprKind::MagicConst(MagicConstKind::Dir),
+                span: t.span,
+            }
+        }
+        TokenKind::MagicFile => {
+            let t = parser.advance();
+            Expr {
+                kind: ExprKind::MagicConst(MagicConstKind::File),
+                span: t.span,
+            }
+        }
+        TokenKind::MagicFunction => {
+            let t = parser.advance();
+            Expr {
+                kind: ExprKind::MagicConst(MagicConstKind::Function),
+                span: t.span,
+            }
+        }
+        TokenKind::MagicLine => {
+            let t = parser.advance();
+            Expr {
+                kind: ExprKind::MagicConst(MagicConstKind::Line),
+                span: t.span,
+            }
+        }
+        TokenKind::MagicMethod => {
+            let t = parser.advance();
+            Expr {
+                kind: ExprKind::MagicConst(MagicConstKind::Method),
+                span: t.span,
+            }
+        }
+        TokenKind::MagicNamespace => {
+            let t = parser.advance();
+            Expr {
+                kind: ExprKind::MagicConst(MagicConstKind::Namespace),
+                span: t.span,
+            }
+        }
+        TokenKind::MagicTrait => {
+            let t = parser.advance();
+            Expr {
+                kind: ExprKind::MagicConst(MagicConstKind::Trait),
+                span: t.span,
+            }
+        }
+        TokenKind::MagicProperty => {
+            let t = parser.advance();
+            Expr {
+                kind: ExprKind::MagicConst(MagicConstKind::Property),
+                span: t.span,
+            }
+        }
 
         // namespace\Foo\Bar — relative name in expression context
         TokenKind::Namespace => {
@@ -1089,7 +1218,10 @@ fn parse_atom(parser: &mut Parser) -> Expr {
             } else {
                 let span = parser.current_span();
                 parser.error(ParseError::ExpectedExpression { span });
-                Expr { kind: ExprKind::Error, span }
+                Expr {
+                    kind: ExprKind::Error,
+                    span,
+                }
             }
         }
 
@@ -1123,7 +1255,8 @@ fn parse_new_expr(parser: &mut Parser) -> Expr {
     parser.advance(); // consume 'new'
 
     // Anonymous class: new class(...) or new readonly class(...)
-    let anon_readonly = parser.check(TokenKind::Readonly) && parser.peek_kind() == Some(TokenKind::Class);
+    let anon_readonly =
+        parser.check(TokenKind::Readonly) && parser.peek_kind() == Some(TokenKind::Class);
     if parser.check(TokenKind::Class) || anon_readonly {
         if anon_readonly {
             parser.advance(); // consume 'readonly'
@@ -1152,11 +1285,16 @@ fn parse_new_expr(parser: &mut Parser) -> Expr {
         parser.expect(TokenKind::LeftBrace);
         let members = stmt::parse_class_members(parser);
         let close = parser.expect(TokenKind::RightBrace);
-        let end = close.map(|t| t.span.end).unwrap_or(parser.current_span().start);
+        let end = close
+            .map(|t| t.span.end)
+            .unwrap_or(parser.current_span().start);
 
         let class_decl = ClassDecl {
             name: None,
-            modifiers: ClassModifiers { is_readonly: anon_readonly, ..Default::default() },
+            modifiers: ClassModifiers {
+                is_readonly: anon_readonly,
+                ..Default::default()
+            },
             extends,
             implements,
             members,
@@ -1181,21 +1319,33 @@ fn parse_new_expr(parser: &mut Parser) -> Expr {
     let class = match parser.current_kind() {
         TokenKind::Self_ => {
             let t = parser.advance();
-            Expr { kind: ExprKind::Identifier("self".to_string()), span: t.span }
+            Expr {
+                kind: ExprKind::Identifier("self".to_string()),
+                span: t.span,
+            }
         }
         TokenKind::Parent_ => {
             let t = parser.advance();
-            Expr { kind: ExprKind::Identifier("parent".to_string()), span: t.span }
+            Expr {
+                kind: ExprKind::Identifier("parent".to_string()),
+                span: t.span,
+            }
         }
         TokenKind::Static => {
             let t = parser.advance();
-            Expr { kind: ExprKind::Identifier("static".to_string()), span: t.span }
+            Expr {
+                kind: ExprKind::Identifier("static".to_string()),
+                span: t.span,
+            }
         }
         TokenKind::Variable => {
             // new $className()
             let t = parser.advance();
             let text = &parser.source()[t.span.start as usize..t.span.end as usize];
-            Expr { kind: ExprKind::Variable(text[1..].to_string()), span: t.span }
+            Expr {
+                kind: ExprKind::Variable(text[1..].to_string()),
+                span: t.span,
+            }
         }
         TokenKind::LeftParen => {
             // new (expr)() - dynamic class name from expression (PHP 8.1+)
@@ -1217,7 +1367,10 @@ fn parse_new_expr(parser: &mut Parser) -> Expr {
             } else {
                 name.parts.join("\\")
             };
-            Expr { kind: ExprKind::Identifier(text), span: name.span }
+            Expr {
+                kind: ExprKind::Identifier(text),
+                span: name.span,
+            }
         }
     };
 
@@ -1242,7 +1395,12 @@ fn parse_new_expr(parser: &mut Parser) -> Expr {
 // Closure expression: function($x) use($y) { }
 // =============================================================================
 
-fn parse_closure(parser: &mut Parser, is_static: bool, start: u32, attributes: Vec<Attribute>) -> Expr {
+fn parse_closure(
+    parser: &mut Parser,
+    is_static: bool,
+    start: u32,
+    attributes: Vec<Attribute>,
+) -> Expr {
     if !is_static {
         parser.advance(); // consume 'function'
     } else {
@@ -1278,10 +1436,14 @@ fn parse_closure(parser: &mut Parser, is_static: bool, start: u32, attributes: V
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
         body.push(stmt::parse_stmt(parser));
-        if parser.current_span() == span_before { parser.advance(); }
+        if parser.current_span() == span_before {
+            parser.advance();
+        }
     }
     let close = parser.expect(TokenKind::RightBrace);
-    let end = close.map(|t| t.span.end).unwrap_or(parser.current_span().start);
+    let end = close
+        .map(|t| t.span.end)
+        .unwrap_or(parser.current_span().start);
 
     Expr {
         kind: ExprKind::Closure(ClosureExpr {
@@ -1322,7 +1484,12 @@ fn parse_closure_use_list(parser: &mut Parser) -> Vec<ClosureUseVar> {
 // Arrow function: fn($x) => expr
 // =============================================================================
 
-fn parse_arrow_function(parser: &mut Parser, is_static: bool, start: u32, attributes: Vec<Attribute>) -> Expr {
+fn parse_arrow_function(
+    parser: &mut Parser,
+    is_static: bool,
+    start: u32,
+    attributes: Vec<Attribute>,
+) -> Expr {
     parser.advance(); // consume 'fn'
 
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
@@ -1381,7 +1548,9 @@ fn parse_match_expr(parser: &mut Parser) -> Expr {
             let mut conds = Vec::new();
             conds.push(parse_expr(parser));
             while parser.eat(TokenKind::Comma).is_some() {
-                if parser.check(TokenKind::FatArrow) { break; }
+                if parser.check(TokenKind::FatArrow) {
+                    break;
+                }
                 conds.push(parse_expr(parser));
             }
             Some(conds)
@@ -1391,7 +1560,11 @@ fn parse_match_expr(parser: &mut Parser) -> Expr {
         let body = parse_expr(parser);
         let arm_span = Span::new(arm_start, body.span.end);
 
-        arms.push(MatchArm { conditions, body, span: arm_span });
+        arms.push(MatchArm {
+            conditions,
+            body,
+            span: arm_span,
+        });
 
         // Match arms separated by commas
         if parser.eat(TokenKind::Comma).is_none() {
@@ -1400,7 +1573,9 @@ fn parse_match_expr(parser: &mut Parser) -> Expr {
     }
 
     let close = parser.expect(TokenKind::RightBrace);
-    let end = close.map(|t| t.span.end).unwrap_or(parser.current_span().start);
+    let end = close
+        .map(|t| t.span.end)
+        .unwrap_or(parser.current_span().start);
 
     Expr {
         kind: ExprKind::Match(MatchExpr {
@@ -1496,12 +1671,10 @@ fn parse_arg_list_or_callable(parser: &mut Parser) -> ArgListResult {
     parser.advance(); // consume (
 
     // Detect first-class callable: (...)
-    if parser.check(TokenKind::Ellipsis) {
-        if parser.peek_kind() == Some(TokenKind::RightParen) {
-            parser.advance(); // consume ...
-            parser.advance(); // consume )
-            return ArgListResult::CallableMarker;
-        }
+    if parser.check(TokenKind::Ellipsis) && parser.peek_kind() == Some(TokenKind::RightParen) {
+        parser.advance(); // consume ...
+        parser.advance(); // consume )
+        return ArgListResult::CallableMarker;
     }
 
     let mut args = Vec::new();
@@ -1535,20 +1708,44 @@ fn parse_arg(parser: &mut Parser) -> Arg {
     // Check for named argument: name: (PHP allows any keyword as a named arg label)
     let name = if parser.peek_kind() == Some(TokenKind::Colon) {
         let kind = parser.current_kind();
-        if kind == TokenKind::Identifier || parser.is_semi_reserved_keyword()
-            || matches!(kind, TokenKind::Array | TokenKind::List
-                | TokenKind::Match_ | TokenKind::Fn_ | TokenKind::Static
-                | TokenKind::Abstract | TokenKind::Final | TokenKind::Readonly
-                | TokenKind::Class | TokenKind::Interface | TokenKind::Trait
-                | TokenKind::Enum_ | TokenKind::Extends | TokenKind::Implements
-                | TokenKind::Const | TokenKind::Use | TokenKind::Namespace
-                | TokenKind::New | TokenKind::Try | TokenKind::Catch | TokenKind::Finally
-                | TokenKind::Throw | TokenKind::Instanceof | TokenKind::Yield_
-                | TokenKind::Switch | TokenKind::Public | TokenKind::Protected | TokenKind::Private)
+        if kind == TokenKind::Identifier
+            || parser.is_semi_reserved_keyword()
+            || matches!(
+                kind,
+                TokenKind::Array
+                    | TokenKind::List
+                    | TokenKind::Match_
+                    | TokenKind::Fn_
+                    | TokenKind::Static
+                    | TokenKind::Abstract
+                    | TokenKind::Final
+                    | TokenKind::Readonly
+                    | TokenKind::Class
+                    | TokenKind::Interface
+                    | TokenKind::Trait
+                    | TokenKind::Enum_
+                    | TokenKind::Extends
+                    | TokenKind::Implements
+                    | TokenKind::Const
+                    | TokenKind::Use
+                    | TokenKind::Namespace
+                    | TokenKind::New
+                    | TokenKind::Try
+                    | TokenKind::Catch
+                    | TokenKind::Finally
+                    | TokenKind::Throw
+                    | TokenKind::Instanceof
+                    | TokenKind::Yield_
+                    | TokenKind::Switch
+                    | TokenKind::Public
+                    | TokenKind::Protected
+                    | TokenKind::Private
+            )
         {
             let name_token = parser.advance();
             parser.advance(); // consume :
-            let text = &parser.source()[name_token.span.start as usize..name_token.span.end as usize];
+            let text =
+                &parser.source()[name_token.span.start as usize..name_token.span.end as usize];
             Some(text.to_string())
         } else {
             None
@@ -1566,7 +1763,12 @@ fn parse_arg(parser: &mut Parser) -> Arg {
     let value = parse_expr(parser);
     let span = Span::new(start, value.span.end);
 
-    Arg { name, value, unpack, span }
+    Arg {
+        name,
+        value,
+        unpack,
+        span,
+    }
 }
 
 fn parse_function_call(parser: &mut Parser, callee: Expr) -> Expr {
@@ -1615,7 +1817,10 @@ fn parse_array_literal(parser: &mut Parser) -> Expr {
                 let span = parser.current_span();
                 elements.push(ArrayElement {
                     key: None,
-                    value: Expr { kind: ExprKind::Null, span },
+                    value: Expr {
+                        kind: ExprKind::Null,
+                        span,
+                    },
                     unpack: false,
                     span,
                 });
@@ -1629,7 +1834,9 @@ fn parse_array_literal(parser: &mut Parser) -> Expr {
     }
 
     let close = parser.expect(TokenKind::RightBracket);
-    let end = close.map(|t| t.span.end).unwrap_or(parser.current_span().start);
+    let end = close
+        .map(|t| t.span.end)
+        .unwrap_or(parser.current_span().start);
     let span = Span::new(start, end);
 
     Expr {
@@ -1658,7 +1865,9 @@ fn parse_array_call(parser: &mut Parser) -> Expr {
     }
 
     let close = parser.expect(TokenKind::RightParen);
-    let end = close.map(|t| t.span.end).unwrap_or(parser.current_span().start);
+    let end = close
+        .map(|t| t.span.end)
+        .unwrap_or(parser.current_span().start);
     let span = Span::new(start, end);
 
     Expr {
@@ -1721,7 +1930,10 @@ fn parse_list_expr(parser: &mut Parser) -> Expr {
                 let span = parser.current_span();
                 elements.push(ArrayElement {
                     key: None,
-                    value: Expr { kind: ExprKind::Null, span },
+                    value: Expr {
+                        kind: ExprKind::Null,
+                        span,
+                    },
                     unpack: false,
                     span,
                 });
@@ -1736,7 +1948,9 @@ fn parse_list_expr(parser: &mut Parser) -> Expr {
     }
 
     let close = parser.expect(TokenKind::RightParen);
-    let end = close.map(|t| t.span.end).unwrap_or(parser.current_span().start);
+    let end = close
+        .map(|t| t.span.end)
+        .unwrap_or(parser.current_span().start);
     let span = Span::new(start, end);
 
     Expr {
@@ -1798,7 +2012,10 @@ fn try_parse_cast(parser: &mut Parser) -> Option<Expr> {
         Some(TokenKind::Identifier) => {
             let peek_text = parser.peek_text()?;
             let lower = peek_text.to_ascii_lowercase();
-            CAST_KEYWORDS.iter().find(|(kw, _)| *kw == lower).map(|(_, ck)| *ck)
+            CAST_KEYWORDS
+                .iter()
+                .find(|(kw, _)| *kw == lower)
+                .map(|(_, ck)| *ck)
         }
         Some(TokenKind::Array) => Some(CastKind::Array),
         Some(TokenKind::Unset) => Some(CastKind::Unset),
@@ -1811,9 +2028,7 @@ fn try_parse_cast(parser: &mut Parser) -> Option<Expr> {
     parser.advance(); // consume (
     let kw_span = parser.current_span();
     parser.advance(); // consume the cast keyword
-    if parser.eat(TokenKind::RightParen).is_none() {
-        return None;
-    }
+    parser.eat(TokenKind::RightParen)?;
 
     if cast_kind == CastKind::Unset {
         parser.error(ParseError::Forbidden {
@@ -1870,18 +2085,18 @@ fn token_to_binary_op(kind: TokenKind) -> BinaryOp {
 fn parse_heredoc_content(text: &str) -> (String, String) {
     // Skip <<<
     let after = text.strip_prefix("<<<").unwrap_or(text);
-    let after = after.trim_start_matches(|c: char| c == ' ' || c == '\t');
+    let after = after.trim_start_matches([' ', '\t']);
 
     // Extract label
-    let (label, rest) = if after.starts_with('\'') {
-        let end = after[1..].find('\'').unwrap_or(after.len() - 1);
-        let label = after[1..1 + end].to_string();
-        let rest = &after[2 + end..];
+    let (label, rest) = if let Some(stripped) = after.strip_prefix('\'') {
+        let end = stripped.find('\'').unwrap_or(after.len() - 1);
+        let label = stripped[..end].to_string();
+        let rest = &stripped[end + 1..];
         (label, rest)
-    } else if after.starts_with('"') {
-        let end = after[1..].find('"').unwrap_or(after.len() - 1);
-        let label = after[1..1 + end].to_string();
-        let rest = &after[2 + end..];
+    } else if let Some(stripped) = after.strip_prefix('"') {
+        let end = stripped.find('"').unwrap_or(after.len() - 1);
+        let label = stripped[..end].to_string();
+        let rest = &stripped[end + 1..];
         (label, rest)
     } else {
         let end = after
@@ -1908,15 +2123,16 @@ fn parse_heredoc_content(text: &str) -> (String, String) {
     // Check if end marker line starts from beginning of line
     let last_newline = before_label.rfind('\n');
     let indent = if let Some(nl_pos) = last_newline {
-        let line_before_marker = &body[nl_pos + 1..end_marker_pos];
-        if line_before_marker.chars().all(|c| c == ' ' || c == '\t') {
-            ""
+        let _line_before_marker = &body[nl_pos + 1..end_marker_pos];
+        ""
+    } else {
+        let indent_end =
+            end_marker_line.len() - end_marker_line.trim_start_matches([' ', '\t']).len();
+        if indent_end > 0 {
+            &end_marker_line[..indent_end]
         } else {
             ""
         }
-    } else {
-        let indent_end = end_marker_line.len() - end_marker_line.trim_start_matches(|c: char| c == ' ' || c == '\t').len();
-        if indent_end > 0 { &end_marker_line[..indent_end] } else { "" }
     };
 
     let final_content = if !indent.is_empty() {

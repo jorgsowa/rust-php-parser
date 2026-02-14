@@ -121,7 +121,10 @@ impl<'src> Lexer<'src> {
         let start = self.pos;
 
         // Search for <?php or <?=
-        if let Some(tag_pos) = self.source[self.pos..].find("<?php").or_else(|| self.source[self.pos..].find("<?=")) {
+        if let Some(tag_pos) = self.source[self.pos..]
+            .find("<?php")
+            .or_else(|| self.source[self.pos..].find("<?="))
+        {
             if tag_pos == 0 {
                 // We're right at the open tag, switch to PHP mode
                 self.mode = LexerMode::Php;
@@ -150,9 +153,9 @@ impl<'src> Lexer<'src> {
 
         // Check for unclosed block comment: /* without closing */
         // Logos skip pattern only matches closed comments, so we handle this here.
-        if remaining.starts_with("/*") {
+        if let Some(after_open) = remaining.strip_prefix("/*") {
             // Check if there's a closing */
-            if remaining[2..].find("*/").is_none() {
+            if !after_open.contains("*/") {
                 // Unclosed comment — consume rest of file as comment (matches PHP behavior)
                 self.pos = self.source.len();
                 return Token::eof(self.source.len() as u32);
@@ -198,22 +201,25 @@ impl<'src> Lexer<'src> {
                 }
 
                 // Also handle: `0` followed by `x/X/b/B/o/O` then `_` (e.g. `0x_1`)
-                if kind == TokenKind::IntLiteral && (end - start) == 1 && self.source.as_bytes()[start] == b'0' {
+                if kind == TokenKind::IntLiteral
+                    && (end - start) == 1
+                    && self.source.as_bytes()[start] == b'0'
+                {
                     let bytes = self.source.as_bytes();
                     if let Some(&next_byte) = bytes.get(end) {
-                        if matches!(next_byte, b'x' | b'X' | b'b' | b'B' | b'o' | b'O') {
-                            if bytes.get(end + 1) == Some(&b'_') {
-                                // Consume the prefix char + invalid rest
-                                self.pos = end + 1; // past the x/b/o
-                                self.consume_invalid_numeric_rest();
-                                let final_end = self.pos;
-                                let span = Span::new(start as u32, final_end as u32);
-                                self.errors.push(LexerError {
-                                    message: "Invalid numeric literal".to_string(),
-                                    span,
-                                });
-                                return Token::new(TokenKind::InvalidNumericLiteral, span);
-                            }
+                        if matches!(next_byte, b'x' | b'X' | b'b' | b'B' | b'o' | b'O')
+                            && bytes.get(end + 1) == Some(&b'_')
+                        {
+                            // Consume the prefix char + invalid rest
+                            self.pos = end + 1; // past the x/b/o
+                            self.consume_invalid_numeric_rest();
+                            let final_end = self.pos;
+                            let span = Span::new(start as u32, final_end as u32);
+                            self.errors.push(LexerError {
+                                message: "Invalid numeric literal".to_string(),
+                                span,
+                            });
+                            return Token::new(TokenKind::InvalidNumericLiteral, span);
                         }
                     }
                 }
@@ -238,9 +244,7 @@ impl<'src> Lexer<'src> {
                 self.pos += 1;
                 self.read_next_token()
             }
-            None => {
-                Token::eof(self.source.len() as u32)
-            }
+            None => Token::eof(self.source.len() as u32),
         }
     }
 
@@ -287,11 +291,16 @@ impl<'src> Lexer<'src> {
     /// Returns Some(Token) if a heredoc/nowdoc was found, None otherwise.
     fn try_lex_heredoc(&mut self, remaining: &str) -> Option<Token> {
         // Skip leading whitespace (and newlines) to find <<< (or b<<<)
-        let trimmed = remaining.trim_start_matches(|c: char| c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\x0C');
+        let trimmed = remaining.trim_start_matches(|c: char| {
+            c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\x0C'
+        });
         let ws_len = remaining.len() - trimmed.len();
 
         // Handle optional binary prefix: b<<< or B<<<
-        let (after_prefix, prefix_len) = if (trimmed.starts_with("b<<<") || trimmed.starts_with("B<<<")) && !trimmed[1..].starts_with("<<<>") {
+        let (after_prefix, prefix_len) = if (trimmed.starts_with("b<<<")
+            || trimmed.starts_with("B<<<"))
+            && !trimmed[1..].starts_with("<<<>")
+        {
             (&trimmed[1..], 1)
         } else {
             (trimmed, 0)
@@ -304,15 +313,16 @@ impl<'src> Lexer<'src> {
         let base_pos = self.pos; // position of start of remaining
         let start = base_pos + ws_len; // position of b<<< or <<<
         let after_arrows = &after_prefix[3..];
-        let after_arrows_trimmed = after_arrows.trim_start_matches(|c: char| c == ' ' || c == '\t');
-        let arrows_offset = ws_len + prefix_len + 3 + (after_arrows.len() - after_arrows_trimmed.len());
+        let after_arrows_trimmed = after_arrows.trim_start_matches([' ', '\t']);
+        let arrows_offset =
+            ws_len + prefix_len + 3 + (after_arrows.len() - after_arrows_trimmed.len());
 
         // Determine if nowdoc (quoted) or heredoc
         let (label, is_nowdoc, label_line_end);
-        if after_arrows_trimmed.starts_with('\'') {
+        if let Some(after_quote) = after_arrows_trimmed.strip_prefix('\'') {
             // Nowdoc: <<<'LABEL'
-            let closing = after_arrows_trimmed[1..].find('\'')?;
-            label = after_arrows_trimmed[1..1 + closing].to_string();
+            let closing = after_quote.find('\'')?;
+            label = after_quote[..closing].to_string();
             is_nowdoc = true;
             let after_label = &after_arrows_trimmed[2 + closing..];
             // Find end of line
@@ -323,10 +333,10 @@ impl<'src> Lexer<'src> {
             }
         } else {
             // Heredoc: <<<LABEL or <<<"LABEL"
-            let s = if after_arrows_trimmed.starts_with('"') {
-                let closing = after_arrows_trimmed[1..].find('"')?;
-                label = after_arrows_trimmed[1..1 + closing].to_string();
-                &after_arrows_trimmed[2 + closing..]
+            let s = if let Some(after_dquote) = after_arrows_trimmed.strip_prefix('"') {
+                let closing = after_dquote.find('"')?;
+                label = after_dquote[..closing].to_string();
+                &after_dquote[1 + closing..]
             } else {
                 // Bare identifier
                 let end = after_arrows_trimmed
@@ -364,9 +374,12 @@ impl<'src> Lexer<'src> {
                 return None; // unterminated
             }
             let line_start = search_pos;
-            let line_end = body[line_start..].find('\n').map(|p| line_start + p).unwrap_or(body.len());
+            let line_end = body[line_start..]
+                .find('\n')
+                .map(|p| line_start + p)
+                .unwrap_or(body.len());
             let line = &body[line_start..line_end];
-            let trimmed_line = line.trim_start_matches(|c: char| c == ' ' || c == '\t');
+            let trimmed_line = line.trim_start_matches([' ', '\t']);
 
             // Check if this line is just the label (optionally followed by ; or whitespace)
             if trimmed_line == label
@@ -380,14 +393,19 @@ impl<'src> Lexer<'src> {
                 break;
             }
 
-            search_pos = if line_end < body.len() { line_end + 1 } else { body.len() };
+            search_pos = if line_end < body.len() {
+                line_end + 1
+            } else {
+                body.len()
+            };
         }
 
         // Position after the end marker label (not including ; or newline)
         let end_marker_line = &body[end_marker_pos..];
-        let trimmed = end_marker_line.trim_start_matches(|c: char| c == ' ' || c == '\t');
+        let trimmed = end_marker_line.trim_start_matches([' ', '\t']);
         let indent_len = end_marker_line.len() - trimmed.len();
-        let token_end_in_remaining = body_start_in_remaining + end_marker_pos + indent_len + label.len();
+        let token_end_in_remaining =
+            body_start_in_remaining + end_marker_pos + indent_len + label.len();
         self.pos = base_pos + token_end_in_remaining;
 
         let span = Span::new(start as u32, self.pos as u32);

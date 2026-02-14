@@ -1,32 +1,150 @@
 mod common;
 
-nikic_test!(nikic_errorhandling_eoferror_1, "errorHandling/eofError_1.php", errors);
-nikic_test!(nikic_errorhandling_eoferror_2, "errorHandling/eofError_2.php", errors);
-nikic_test!(nikic_errorhandling_lexererrors_1, "errorHandling/lexerErrors_1.php");
-nikic_test!(nikic_errorhandling_lexererrors_5, "errorHandling/lexerErrors_5.php", errors);
-nikic_test!(nikic_errorhandling_recovery_1, "errorHandling/recovery_1.php", errors);
-nikic_test!(nikic_errorhandling_recovery_2, "errorHandling/recovery_2.php", errors);
-nikic_test!(nikic_errorhandling_recovery_3, "errorHandling/recovery_3.php", errors);
-nikic_test!(nikic_errorhandling_recovery_4, "errorHandling/recovery_4.php", errors);
-nikic_test!(nikic_errorhandling_recovery_5, "errorHandling/recovery_5.php", errors);
-nikic_test!(nikic_errorhandling_recovery_6, "errorHandling/recovery_6.php", errors);
-nikic_test!(nikic_errorhandling_recovery_7, "errorHandling/recovery_7.php", errors);
-nikic_test!(nikic_errorhandling_recovery_8, "errorHandling/recovery_8.php", errors);
-nikic_test!(nikic_errorhandling_recovery_9, "errorHandling/recovery_9.php", errors);
-nikic_test!(nikic_errorhandling_recovery_10, "errorHandling/recovery_10.php", errors);
-nikic_test!(nikic_errorhandling_recovery_11, "errorHandling/recovery_11.php", errors);
-nikic_test!(nikic_errorhandling_recovery_12, "errorHandling/recovery_12.php", errors);
-nikic_test!(nikic_errorhandling_recovery_13, "errorHandling/recovery_13.php", errors);
-nikic_test!(nikic_errorhandling_recovery_14, "errorHandling/recovery_14.php", errors);
-nikic_test!(nikic_errorhandling_recovery_15, "errorHandling/recovery_15.php", errors);
-nikic_test!(nikic_errorhandling_recovery_16, "errorHandling/recovery_16.php", errors);
-nikic_test!(nikic_errorhandling_recovery_17, "errorHandling/recovery_17.php", errors);
-nikic_test!(nikic_errorhandling_recovery_18, "errorHandling/recovery_18.php");
-nikic_test!(nikic_errorhandling_recovery_19, "errorHandling/recovery_19.php", errors);
-nikic_test!(nikic_errorhandling_recovery_20, "errorHandling/recovery_20.php", errors);
-nikic_test!(nikic_errorhandling_recovery_21, "errorHandling/recovery_21.php", errors);
-nikic_test!(nikic_errorhandling_recovery_22, "errorHandling/recovery_22.php", errors);
-nikic_test!(nikic_errorhandling_recovery_23, "errorHandling/recovery_23.php", errors);
-nikic_test!(nikic_errorhandling_recovery_24, "errorHandling/recovery_24.php", errors);
-nikic_test!(nikic_errorhandling_recovery_25, "errorHandling/recovery_25.php", errors);
-nikic_test!(nikic_errorhandling_recovery_26, "errorHandling/recovery_26.php", errors);
+nikic_test!(
+    nikic_errorhandling_eoferror_1,
+    "errorHandling/eofError_1.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_eoferror_2,
+    "errorHandling/eofError_2.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_lexererrors_1,
+    "errorHandling/lexerErrors_1.php"
+);
+nikic_test!(
+    nikic_errorhandling_lexererrors_5,
+    "errorHandling/lexerErrors_5.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_1,
+    "errorHandling/recovery_1.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_2,
+    "errorHandling/recovery_2.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_3,
+    "errorHandling/recovery_3.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_4,
+    "errorHandling/recovery_4.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_5,
+    "errorHandling/recovery_5.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_6,
+    "errorHandling/recovery_6.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_7,
+    "errorHandling/recovery_7.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_8,
+    "errorHandling/recovery_8.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_9,
+    "errorHandling/recovery_9.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_10,
+    "errorHandling/recovery_10.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_11,
+    "errorHandling/recovery_11.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_12,
+    "errorHandling/recovery_12.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_13,
+    "errorHandling/recovery_13.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_14,
+    "errorHandling/recovery_14.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_15,
+    "errorHandling/recovery_15.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_16,
+    "errorHandling/recovery_16.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_17,
+    "errorHandling/recovery_17.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_18,
+    "errorHandling/recovery_18.php"
+);
+nikic_test!(
+    nikic_errorhandling_recovery_19,
+    "errorHandling/recovery_19.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_20,
+    "errorHandling/recovery_20.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_21,
+    "errorHandling/recovery_21.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_22,
+    "errorHandling/recovery_22.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_23,
+    "errorHandling/recovery_23.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_24,
+    "errorHandling/recovery_24.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_25,
+    "errorHandling/recovery_25.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_26,
+    "errorHandling/recovery_26.php",
+    errors
+);
