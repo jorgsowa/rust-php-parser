@@ -1,0 +1,96 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "If": {
+          "condition": {
+            "kind": {
+              "Binary": {
+                "left": {
+                  "kind": {
+                    "Variable": "x"
+                  },
+                  "span": {
+                    "start": 10,
+                    "end": 12
+                  }
+                },
+                "op": "Greater",
+                "right": {
+                  "kind": {
+                    "ArrayAccess": {
+                      "array": {
+                        "kind": {
+                          "Int": 1
+                        },
+                        "span": {
+                          "start": 15,
+                          "end": 16
+                        }
+                      },
+                      "index": {
+                        "kind": "Error",
+                        "span": {
+                          "start": 23,
+                          "end": 27
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 15,
+                    "end": 23
+                  }
+                }
+              }
+            },
+            "span": {
+              "start": 10,
+              "end": 23
+            }
+          },
+          "then_branch": {
+            "kind": {
+              "Echo": [
+                {
+                  "kind": {
+                    "String": "hello"
+                  },
+                  "span": {
+                    "start": 28,
+                    "end": 35
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 23,
+              "end": 37
+            }
+          },
+          "elseif_branches": [],
+          "else_branch": null
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 37
+      }
+    },
+    {
+      "kind": "Error",
+      "span": {
+        "start": 37,
+        "end": 37
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 37
+  }
+}

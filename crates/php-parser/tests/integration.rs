@@ -2991,3 +2991,91 @@ fn test_no_hang_property_hook_body() {
     let _ = parse_php("<?php class A { public string $x { get { ?> <?php } } }");
 }
 
+// =============================================================================
+// Invalid syntax / error recovery tests
+// =============================================================================
+
+#[test]
+fn test_invalid_missing_semicolons() {
+    let result = parse_php("<?php\necho \"hello\"\necho \"world\";\n$x = 1 + 2");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_invalid_missing_closing_paren_if() {
+    let result = parse_php("<?php\nif ($x > 1 {\n    echo \"hello\";\n}");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_invalid_missing_closing_paren_function() {
+    let result = parse_php("<?php\nfunction foo(int $a, $b {\n    return $a + $b;\n}");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_invalid_unclosed_array() {
+    let result = parse_php("<?php\n$x = [1, 2, 3;\n$y = 4;");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_invalid_double_operator() {
+    let result = parse_php("<?php\n$a = 1 + * 2;\n$b = 3;");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_invalid_unclosed_try() {
+    let result = parse_php("<?php\ntry {\n    foo();\n\ncatch (Exception $e) {\n    bar();\n}");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_invalid_foreach_missing_as() {
+    let result = parse_php("<?php\nforeach ($items $item) {\n    echo $item;\n}");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_invalid_eof_unclosed_class() {
+    let result = parse_php("<?php\nclass Foo {\n    public function bar() {");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_invalid_eof_unclosed_array_call() {
+    let result = parse_php("<?php\n$x = array(1, 2,");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_invalid_eof_unclosed_if() {
+    let result = parse_php("<?php\nif ($x > 1) {\n    echo \"hello\";");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_invalid_switch_missing_colon() {
+    let result = parse_php("<?php\nswitch ($x) {\n    case 1\n        echo \"one\";\n        break;\n    case 2:\n        echo \"two\";\n}");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_invalid_missing_closing_brace_method() {
+    let result = parse_php("<?php\nclass Foo {\n    public function bar()\n    {\n        return 1;\n\n    public function baz()\n    {\n        return 2;\n    }\n}");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(to_json(&result.program));
+}
+

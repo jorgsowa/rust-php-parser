@@ -1,0 +1,138 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Array": [
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Int": 1
+                        },
+                        "span": {
+                          "start": 12,
+                          "end": 13
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 12,
+                        "end": 13
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Int": 2
+                        },
+                        "span": {
+                          "start": 15,
+                          "end": 16
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 15,
+                        "end": 16
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Int": 3
+                        },
+                        "span": {
+                          "start": 18,
+                          "end": 19
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 18,
+                        "end": 19
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 11,
+                  "end": 19
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 19
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 21
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "y"
+                },
+                "span": {
+                  "start": 21,
+                  "end": 23
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Int": 4
+                },
+                "span": {
+                  "start": 26,
+                  "end": 27
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 21,
+            "end": 27
+          }
+        }
+      },
+      "span": {
+        "start": 21,
+        "end": 28
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 28
+  }
+}
