@@ -15,7 +15,7 @@ nikic_test!(nikic_stmt_class_constmodifiererrors_2, "stmt/class/constModifierErr
 nikic_test!(nikic_stmt_class_constmodifiererrors_3, "stmt/class/constModifierErrors_3.php", errors);
 nikic_test!(nikic_stmt_class_constmodifiererrors_4, "stmt/class/constModifierErrors_4.php", errors);
 nikic_test!(nikic_stmt_class_constmodifiers, "stmt/class/constModifiers.php");
-nikic_test!(nikic_stmt_class_enum, "stmt/class/enum.php");
+nikic_test!(nikic_stmt_class_enum, "stmt/class/enum.php", errors);
 nikic_test!(nikic_stmt_class_enum_with_string, "stmt/class/enum_with_string.php");
 nikic_test!(nikic_stmt_class_final, "stmt/class/final.php");
 nikic_test!(nikic_stmt_class_implicitpublic, "stmt/class/implicitPublic.php");
