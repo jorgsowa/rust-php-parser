@@ -18,5 +18,23 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
 
-      - name: Run all tests
+      - name: Build all tests
+        run: cargo test --workspace --no-run
+        env:
+          CARGO_BUILD_JOBS: 1
+
+      - name: Run tests
         run: cargo test --workspace
+
+  php-syntax:
+    name: Validate PHP in tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+
+      - name: Check PHP syntax in tests
+        run: bash scripts/check-php-syntax.sh
