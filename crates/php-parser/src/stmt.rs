@@ -206,6 +206,21 @@ fn parse_attributed_stmt(parser: &mut Parser) -> Stmt {
         TokenKind::Interface => parse_interface(parser),
         TokenKind::Trait => parse_trait(parser),
         TokenKind::Enum_ => parse_enum(parser),
+        TokenKind::Const => {
+            let stmt = parse_const(parser);
+            // Check if multi-const declaration with attributes
+            if let StmtKind::Const(ref items) = stmt.kind {
+                if items.len() > 1 {
+                    parser.error(ParseError::Forbidden {
+                        message: "cannot use attributes on multi-constant declaration".to_string(),
+                        span: stmt.span,
+                    });
+                }
+            }
+            // Attributes are noted but ConstItem has no attributes field for top-level const,
+            // so we just report the error above and return the stmt as-is.
+            return stmt;
+        }
         _ => {
             // Attributes before something unexpected
             let span = parser.current_span();
@@ -997,9 +1012,8 @@ fn is_reserved_class_name(name: &str) -> bool {
 fn validate_class_ref(parser: &mut Parser, name: &Name) {
     if name.parts.len() == 1 && name.kind == php_ast::NameKind::Unqualified {
         if is_reserved_class_name(&name.parts[0]) {
-            parser.error(ParseError::Expected {
-                expected: format!("cannot use '{}' as class name", name.parts[0]),
-                found: parser.current_kind(),
+            parser.error(ParseError::Forbidden {
+                message: format!("cannot use '{}' as class name", name.parts[0]),
                 span: name.span,
             });
         }
@@ -1022,9 +1036,8 @@ fn parse_class(parser: &mut Parser, modifiers: ClassModifiers) -> Stmt {
     };
 
     if is_reserved_class_name(&name) {
-        parser.error(ParseError::Expected {
-            expected: format!("cannot use '{}' as class name", name),
-            found: parser.current_kind(),
+        parser.error(ParseError::Forbidden {
+            message: format!("cannot use '{}' as class name", name),
             span: name_span,
         });
     }
@@ -1397,9 +1410,8 @@ pub fn parse_class_members(parser: &mut Parser) -> Vec<ClassMember> {
                             set_visibility = Some(vis);
                         } else {
                             // Duplicate or conflicting visibility
-                            parser.error(ParseError::Expected {
-                                expected: "cannot use multiple visibility modifiers".to_string(),
-                                found: parser.current_kind(),
+                            parser.error(ParseError::Forbidden {
+                                message: "cannot use multiple visibility modifiers".to_string(),
                                 span: Span::new(member_start, parser.current_span().start),
                             });
                         }
@@ -1407,9 +1419,8 @@ pub fn parse_class_members(parser: &mut Parser) -> Vec<ClassMember> {
                 }
                 TokenKind::Static => {
                     if is_static {
-                        parser.error(ParseError::Expected {
-                            expected: "duplicate modifier 'static'".to_string(),
-                            found: parser.current_kind(),
+                        parser.error(ParseError::Forbidden {
+                            message: "duplicate modifier 'static'".to_string(),
                             span: Span::new(member_start, parser.current_span().start),
                         });
                     }
@@ -1417,9 +1428,8 @@ pub fn parse_class_members(parser: &mut Parser) -> Vec<ClassMember> {
                 }
                 TokenKind::Abstract => {
                     if is_abstract {
-                        parser.error(ParseError::Expected {
-                            expected: "duplicate modifier 'abstract'".to_string(),
-                            found: parser.current_kind(),
+                        parser.error(ParseError::Forbidden {
+                            message: "duplicate modifier 'abstract'".to_string(),
                             span: Span::new(member_start, parser.current_span().start),
                         });
                     }
@@ -1427,9 +1437,8 @@ pub fn parse_class_members(parser: &mut Parser) -> Vec<ClassMember> {
                 }
                 TokenKind::Final => {
                     if is_final {
-                        parser.error(ParseError::Expected {
-                            expected: "duplicate modifier 'final'".to_string(),
-                            found: parser.current_kind(),
+                        parser.error(ParseError::Forbidden {
+                            message: "duplicate modifier 'final'".to_string(),
                             span: Span::new(member_start, parser.current_span().start),
                         });
                     }
@@ -1437,9 +1446,8 @@ pub fn parse_class_members(parser: &mut Parser) -> Vec<ClassMember> {
                 }
                 TokenKind::Readonly => {
                     if is_readonly {
-                        parser.error(ParseError::Expected {
-                            expected: "duplicate modifier 'readonly'".to_string(),
-                            found: parser.current_kind(),
+                        parser.error(ParseError::Forbidden {
+                            message: "duplicate modifier 'readonly'".to_string(),
                             span: Span::new(member_start, parser.current_span().start),
                         });
                     }
@@ -1451,9 +1459,8 @@ pub fn parse_class_members(parser: &mut Parser) -> Vec<ClassMember> {
 
         // Validate modifier conflicts
         if is_abstract && is_final {
-            parser.error(ParseError::Expected {
-                expected: "cannot use 'abstract' and 'final' together".to_string(),
-                found: parser.current_kind(),
+            parser.error(ParseError::Forbidden {
+                message: "cannot use 'abstract' and 'final' together".to_string(),
                 span: Span::new(member_start, parser.current_span().start),
             });
         }
@@ -1476,23 +1483,20 @@ pub fn parse_class_members(parser: &mut Parser) -> Vec<ClassMember> {
         if parser.check(TokenKind::Const) {
             // Validate: static/abstract/readonly are not valid on constants
             if is_static {
-                parser.error(ParseError::Expected {
-                    expected: "cannot use 'static' as constant modifier".to_string(),
-                    found: TokenKind::Const,
+                parser.error(ParseError::Forbidden {
+                    message: "cannot use 'static' as constant modifier".to_string(),
                     span: parser.current_span(),
                 });
             }
             if is_abstract {
-                parser.error(ParseError::Expected {
-                    expected: "cannot use 'abstract' as constant modifier".to_string(),
-                    found: TokenKind::Const,
+                parser.error(ParseError::Forbidden {
+                    message: "cannot use 'abstract' as constant modifier".to_string(),
                     span: parser.current_span(),
                 });
             }
             if is_readonly {
-                parser.error(ParseError::Expected {
-                    expected: "cannot use 'readonly' as constant modifier".to_string(),
-                    found: TokenKind::Const,
+                parser.error(ParseError::Forbidden {
+                    message: "cannot use 'readonly' as constant modifier".to_string(),
                     span: parser.current_span(),
                 });
             }
@@ -1536,9 +1540,8 @@ pub fn parse_class_members(parser: &mut Parser) -> Vec<ClassMember> {
             parser.expect(TokenKind::Semicolon);
             let span = Span::new(member_start, parser.current_span().start);
             if !member_attrs.is_empty() && const_items.len() > 1 {
-                parser.error(ParseError::Expected {
-                    expected: "cannot use attributes on multi-constant declaration".to_string(),
-                    found: parser.current_kind(),
+                parser.error(ParseError::Forbidden {
+                    message: "cannot use attributes on multi-constant declaration".to_string(),
                     span,
                 });
             }
@@ -1651,9 +1654,8 @@ pub fn parse_class_members(parser: &mut Parser) -> Vec<ClassMember> {
 
                     // Property hooks on comma-separated properties → error
                     let phooks = if parser.check(TokenKind::LeftBrace) {
-                        parser.error(ParseError::Expected {
-                            expected: "cannot have hooks on comma-separated property".to_string(),
-                            found: TokenKind::LeftBrace,
+                        parser.error(ParseError::Forbidden {
+                            message: "cannot have hooks on comma-separated property".to_string(),
                             span: parser.current_span(),
                         });
                         parse_property_hooks(parser)
@@ -1709,9 +1711,8 @@ fn parse_interface(parser: &mut Parser) -> Stmt {
     };
 
     if is_reserved_class_name(&name) {
-        parser.error(ParseError::Expected {
-            expected: format!("cannot use '{}' as interface name", name),
-            found: parser.current_kind(),
+        parser.error(ParseError::Forbidden {
+            message: format!("cannot use '{}' as interface name", name),
             span: name_span,
         });
     }
@@ -1815,9 +1816,8 @@ fn parse_enum(parser: &mut Parser) -> Stmt {
             parser.advance();
             if parser.check(TokenKind::Class) {
                 let span = parser.current_span();
-                parser.error(ParseError::Expected {
-                    expected: "'class' cannot be used as an enum case name".to_string(),
-                    found: TokenKind::Class,
+                parser.error(ParseError::Forbidden {
+                    message: "'class' cannot be used as an enum case name".to_string(),
                     span,
                 });
             }
@@ -2164,9 +2164,8 @@ fn parse_halt_compiler(parser: &mut Parser) -> Stmt {
 
     // __halt_compiler must be at the outermost scope
     if parser.depth > 0 {
-        parser.error(ParseError::Expected {
-            expected: "__halt_compiler() can only be used at the outermost scope".to_string(),
-            found: TokenKind::HaltCompiler,
+        parser.error(ParseError::Forbidden {
+            message: "__halt_compiler() can only be used at the outermost scope".to_string(),
             span: parser.current_span(),
         });
     }

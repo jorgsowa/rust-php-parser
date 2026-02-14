@@ -18,11 +18,16 @@ impl<'src> Parser<'src> {
     pub fn new(source: &'src str) -> Self {
         let mut lexer = Lexer::new(source);
         let current = lexer.next_token();
+        // Drain any lexer errors produced during first token read
+        let errors = lexer.errors.drain(..).map(|e| ParseError::Forbidden {
+            message: e.message,
+            span: e.span,
+        }).collect();
         Self {
             lexer,
             current,
             source,
-            errors: Vec::new(),
+            errors,
             depth: 0,
         }
     }
@@ -53,6 +58,13 @@ impl<'src> Parser<'src> {
     /// Advance to the next token, returning the consumed token.
     pub fn advance(&mut self) -> Token {
         let prev = std::mem::replace(&mut self.current, self.lexer.next_token());
+        // Drain any lexer errors produced during token read
+        for e in self.lexer.errors.drain(..) {
+            self.errors.push(ParseError::Forbidden {
+                message: e.message,
+                span: e.span,
+            });
+        }
         prev
     }
 
