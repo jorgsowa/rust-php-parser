@@ -1,0 +1,123 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "String": "binary string"
+                },
+                "span": {
+                  "start": 11,
+                  "end": 27
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 27
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 29
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 29,
+                  "end": 31
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "String": "binary single"
+                },
+                "span": {
+                  "start": 34,
+                  "end": 50
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 29,
+            "end": 50
+          }
+        }
+      },
+      "span": {
+        "start": 29,
+        "end": 52
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "c"
+                },
+                "span": {
+                  "start": 52,
+                  "end": 54
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "String": "case insensitive"
+                },
+                "span": {
+                  "start": 57,
+                  "end": 76
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 52,
+            "end": 76
+          }
+        }
+      },
+      "span": {
+        "start": 52,
+        "end": 78
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 78
+  }
+}
