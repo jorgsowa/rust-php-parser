@@ -1,12 +1,12 @@
-pub mod parser;
-pub mod stmt;
-pub mod expr;
-pub mod precedence;
 pub mod diagnostics;
+pub mod expr;
 pub mod interpolation;
+pub mod parser;
+pub mod precedence;
+pub mod stmt;
 
-use php_ast::Program;
 use diagnostics::ParseError;
+use php_ast::Program;
 
 pub struct ParseResult {
     pub program: Program,

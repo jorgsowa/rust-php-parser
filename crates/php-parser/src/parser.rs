@@ -19,10 +19,14 @@ impl<'src> Parser<'src> {
         let mut lexer = Lexer::new(source);
         let current = lexer.next_token();
         // Drain any lexer errors produced during first token read
-        let errors = lexer.errors.drain(..).map(|e| ParseError::Forbidden {
-            message: e.message,
-            span: e.span,
-        }).collect();
+        let errors = lexer
+            .errors
+            .drain(..)
+            .map(|e| ParseError::Forbidden {
+                message: e.message,
+                span: e.span,
+            })
+            .collect();
         Self {
             lexer,
             current,
@@ -432,7 +436,15 @@ impl<'src> Parser<'src> {
             let peek = self.peek_kind();
             let looks_like_type = matches!(
                 peek,
-                Some(TokenKind::Identifier | TokenKind::Backslash | TokenKind::Self_ | TokenKind::Parent_ | TokenKind::Static | TokenKind::Namespace | TokenKind::Array)
+                Some(
+                    TokenKind::Identifier
+                        | TokenKind::Backslash
+                        | TokenKind::Self_
+                        | TokenKind::Parent_
+                        | TokenKind::Static
+                        | TokenKind::Namespace
+                        | TokenKind::Array
+                )
             );
             if looks_like_type {
                 let mut types = vec![first];
@@ -460,7 +472,9 @@ impl<'src> Parser<'src> {
                 types.push(self.parse_simple_type());
             }
             let close = self.expect(TokenKind::RightParen);
-            let end = close.map(|t| t.span.end).unwrap_or(self.current_span().start);
+            let end = close
+                .map(|t| t.span.end)
+                .unwrap_or(self.current_span().start);
             let span = Span::new(start, end);
             TypeHint {
                 kind: TypeHintKind::Intersection(types),
@@ -479,11 +493,12 @@ impl<'src> Parser<'src> {
         if self.check(TokenKind::Identifier) {
             let text = self.current_text().to_ascii_lowercase();
             match text.as_str() {
-                "int" | "integer" | "float" | "double" | "string" | "bool" | "boolean"
-                | "void" | "never" | "null" | "mixed" | "object" | "iterable" | "callable"
-                | "true" | "false" => {
+                "int" | "integer" | "float" | "double" | "string" | "bool" | "boolean" | "void"
+                | "never" | "null" | "mixed" | "object" | "iterable" | "callable" | "true"
+                | "false" => {
                     let token = self.advance();
-                    let name_text = self.source[token.span.start as usize..token.span.end as usize].to_string();
+                    let name_text =
+                        self.source[token.span.start as usize..token.span.end as usize].to_string();
                     let name = Name {
                         parts: vec![name_text],
                         kind: NameKind::Unqualified,
@@ -599,9 +614,15 @@ impl<'src> Parser<'src> {
     /// Check if the current token could start a type hint.
     pub fn could_be_type_hint(&mut self) -> bool {
         match self.current_kind() {
-            TokenKind::Question | TokenKind::Backslash | TokenKind::Self_
-            | TokenKind::Parent_ | TokenKind::Static | TokenKind::Array
-            | TokenKind::Null | TokenKind::True | TokenKind::False
+            TokenKind::Question
+            | TokenKind::Backslash
+            | TokenKind::Self_
+            | TokenKind::Parent_
+            | TokenKind::Static
+            | TokenKind::Array
+            | TokenKind::Null
+            | TokenKind::True
+            | TokenKind::False
             | TokenKind::LeftParen => true,
             TokenKind::Identifier => true,
             TokenKind::Namespace => {
@@ -659,7 +680,10 @@ impl<'src> Parser<'src> {
         let expr = expr::parse_expr(self);
         self.expect_semicolon("short echo tag");
         let span = Span::new(start, self.current_span().start);
-        Some(Stmt { kind: StmtKind::Echo(vec![expr]), span })
+        Some(Stmt {
+            kind: StmtKind::Echo(vec![expr]),
+            span,
+        })
     }
 
     // =========================================================================

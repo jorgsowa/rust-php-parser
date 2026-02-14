@@ -687,7 +687,8 @@ function byref(&$ref): void {
 
 #[test]
 fn test_named_arguments() {
-    let result = parse_php("<?php htmlspecialchars(string: $str, flags: ENT_QUOTES, encoding: 'UTF-8');");
+    let result =
+        parse_php("<?php htmlspecialchars(string: $str, flags: ENT_QUOTES, encoding: 'UTF-8');");
     assert_no_errors(&result);
     insta::assert_snapshot!(to_json(&result.program));
 }
@@ -879,7 +880,8 @@ function counter() {
 
 #[test]
 fn test_cast_expressions() {
-    let result = parse_php("<?php (int)$x; (float)$y; (string)$z; (bool)$a; (array)$b; (object)$c;");
+    let result =
+        parse_php("<?php (int)$x; (float)$y; (string)$z; (bool)$a; (array)$b; (object)$c;");
     assert_no_errors(&result);
     insta::assert_snapshot!(to_json(&result.program));
 }
@@ -1228,7 +1230,10 @@ declare(ticks=1) {
 #[test]
 fn test_declare_encoding() {
     assert_parses_ok("declare encoding", "<?php declare(encoding='UTF-8');");
-    assert_parses_ok("declare ticks inline", "<?php declare(ticks=1) echo 'tick';");
+    assert_parses_ok(
+        "declare ticks inline",
+        "<?php declare(ticks=1) echo 'tick';",
+    );
 }
 
 #[test]
@@ -1967,7 +1972,11 @@ fn test_error_unclosed_brace() {
         let msg = format!("{}", e);
         msg.contains("unclosed") || msg.contains("Unclosed")
     });
-    assert!(has_unclosed, "Expected unclosed delimiter error, got: {:?}", result.errors);
+    assert!(
+        has_unclosed,
+        "Expected unclosed delimiter error, got: {:?}",
+        result.errors
+    );
 }
 
 #[test]
@@ -2020,17 +2029,26 @@ fn test_magic_constants_in_echo() {
 #[test]
 fn test_string_interpolation_patterns() {
     assert_parses_ok("nested curly", r#"<?php $x = "Value: {$arr['key']}"; "#);
-    assert_parses_ok("method in string", r#"<?php $x = "Name: {$obj->getName()}"; "#);
+    assert_parses_ok(
+        "method in string",
+        r#"<?php $x = "Name: {$obj->getName()}"; "#,
+    );
     assert_parses_ok("complex curly", r#"<?php $x = "{$a[$b][$c]}"; "#);
     assert_parses_ok("dollar brace", r#"<?php $x = "${name}s"; "#);
     assert_parses_ok("adjacent vars", r#"<?php $x = "$a$b$c"; "#);
     assert_parses_ok("var at end", r#"<?php $x = "hello $name"; "#);
     assert_parses_ok("escaped dollar", r#"<?php $x = "cost is \$5"; "#);
     assert_parses_ok("heredoc interp", "<?php $x = <<<EOT\nHello $name\nEOT;\n");
-    assert_parses_ok("chained in string", r#"<?php $x = "{$obj->items[0]->name}"; "#);
+    assert_parses_ok(
+        "chained in string",
+        r#"<?php $x = "{$obj->items[0]->name}"; "#,
+    );
     assert_parses_ok("dynamic prop in string", r#"<?php $x = "{$obj->$prop}"; "#);
     assert_parses_ok("array var in string", r#"<?php $x = "item $arr[0] here"; "#);
-    assert_parses_ok("prop var in string", r#"<?php $x = "name $obj->name here"; "#);
+    assert_parses_ok(
+        "prop var in string",
+        r#"<?php $x = "name $obj->name here"; "#,
+    );
 }
 
 #[test]
@@ -2064,7 +2082,10 @@ fn test_nowdoc_multiline() {
 #[test]
 fn test_heredoc_nowdoc_variants() {
     assert_parses_ok("nowdoc basic", "<?php $x = <<<'EOT'\nhello world\nEOT;\n");
-    assert_parses_ok("heredoc indented close", "<?php $x = <<<EOT\n    hello\n    EOT;\n");
+    assert_parses_ok(
+        "heredoc indented close",
+        "<?php $x = <<<EOT\n    hello\n    EOT;\n",
+    );
     // Known limitation: heredoc in expression context (concat, array, function args)
     // requires PHP 7.3+ flexible heredoc syntax which is not yet fully supported
 }
@@ -2078,7 +2099,10 @@ fn test_operator_precedence_combinations() {
     assert_parses_ok("nested ternary", "<?php $a ? $b : ($c ? $d : $e);");
     assert_parses_ok("null coalesce chain", "<?php $a ?? $b ?? $c ?? 'default';");
     assert_parses_ok("mixed bitwise logical", "<?php $a & $b && $c | $d;");
-    assert_parses_ok("instanceof chain", "<?php $a instanceof Foo && $b instanceof Bar;");
+    assert_parses_ok(
+        "instanceof chain",
+        "<?php $a instanceof Foo && $b instanceof Bar;",
+    );
     assert_parses_ok("chained assignment", "<?php $a = $b = $c = 1;");
     assert_parses_ok("assignment in ternary", "<?php $a = $b ? $c : $d;");
     assert_parses_ok("comparison chain", "<?php $a == $b && $b == $c;");
@@ -2099,7 +2123,10 @@ fn test_assignment_patterns() {
     assert_parses_ok("ref assign", "<?php $a = &$b;");
     assert_parses_ok("array push", "<?php $arr[] = 'new';");
     assert_parses_ok("nested array push", "<?php $arr[][] = 'deep';");
-    assert_parses_ok("list with keys", "<?php ['x' => $x, 'y' => $y] = getPoint();");
+    assert_parses_ok(
+        "list with keys",
+        "<?php ['x' => $x, 'y' => $y] = getPoint();",
+    );
 }
 
 #[test]
@@ -2214,10 +2241,19 @@ use App\{A, B,};
 
 #[test]
 fn test_nested_destructuring() {
-    assert_parses_ok("nested array destruct", "<?php [[$a, $b], [$c, $d]] = $arr;");
+    assert_parses_ok(
+        "nested array destruct",
+        "<?php [[$a, $b], [$c, $d]] = $arr;",
+    );
     assert_parses_ok("deep nesting", "<?php [$a, [$b, [$c, [$d]]]] = $arr;");
-    assert_parses_ok("keyed destruct", "<?php ['name' => $name, 'age' => $age] = $person;");
-    assert_parses_ok("mixed keyed/positional", "<?php [0 => $first, 'key' => $val] = $arr;");
+    assert_parses_ok(
+        "keyed destruct",
+        "<?php ['name' => $name, 'age' => $age] = $person;",
+    );
+    assert_parses_ok(
+        "mixed keyed/positional",
+        "<?php [0 => $first, 'key' => $val] = $arr;",
+    );
     assert_parses_ok("list nested", "<?php list($a, list($b, $c)) = $arr;");
 }
 
@@ -2240,32 +2276,74 @@ fn test_complex_destructuring() {
 
 #[test]
 fn test_alternative_syntax_variants() {
-    assert_parses_ok("if endif", "<?php if ($x): echo 1; elseif ($y): echo 2; else: echo 3; endif;");
+    assert_parses_ok(
+        "if endif",
+        "<?php if ($x): echo 1; elseif ($y): echo 2; else: echo 3; endif;",
+    );
     assert_parses_ok("while endwhile", "<?php while ($x): doStuff(); endwhile;");
-    assert_parses_ok("for endfor", "<?php for ($i = 0; $i < 10; $i++): echo $i; endfor;");
-    assert_parses_ok("foreach endforeach", "<?php foreach ($arr as $v): echo $v; endforeach;");
-    assert_parses_ok("switch endswitch", "<?php switch ($x): case 1: echo 'one'; break; default: echo 'other'; endswitch;");
+    assert_parses_ok(
+        "for endfor",
+        "<?php for ($i = 0; $i < 10; $i++): echo $i; endfor;",
+    );
+    assert_parses_ok(
+        "foreach endforeach",
+        "<?php foreach ($arr as $v): echo $v; endforeach;",
+    );
+    assert_parses_ok(
+        "switch endswitch",
+        "<?php switch ($x): case 1: echo 'one'; break; default: echo 'other'; endswitch;",
+    );
 }
 
 #[test]
 fn test_control_flow_variants() {
-    assert_parses_ok("foreach destructure", "<?php foreach ($arr as [$key, $value]) { echo $key; }");
-    assert_parses_ok("foreach keyed destruct", "<?php foreach ($arr as $k => [$a, $b]) {}");
-    assert_parses_ok("switch default middle", "<?php switch ($x) { case 1: break; default: break; case 2: break; }");
+    assert_parses_ok(
+        "foreach destructure",
+        "<?php foreach ($arr as [$key, $value]) { echo $key; }",
+    );
+    assert_parses_ok(
+        "foreach keyed destruct",
+        "<?php foreach ($arr as $k => [$a, $b]) {}",
+    );
+    assert_parses_ok(
+        "switch default middle",
+        "<?php switch ($x) { case 1: break; default: break; case 2: break; }",
+    );
     assert_parses_ok("empty switch", "<?php switch ($x) {}");
-    assert_parses_ok("multiple braced ns", "<?php namespace A { function foo() {} } namespace B { function bar() {} }");
+    assert_parses_ok(
+        "multiple braced ns",
+        "<?php namespace A { function foo() {} } namespace B { function bar() {} }",
+    );
     assert_parses_ok("empty braced ns", "<?php namespace A { }");
     assert_parses_ok("global ns block", "<?php namespace { function main() {} }");
 }
 
 #[test]
 fn test_try_catch_variants() {
-    assert_parses_ok("multi catch types", "<?php try { foo(); } catch (TypeError | ValueError $e) { echo $e; }");
-    assert_parses_ok("catch no var", "<?php try { foo(); } catch (Exception) { echo 'error'; }");
-    assert_parses_ok("multi catch blocks", "<?php try { foo(); } catch (A $a) { } catch (B $b) { } catch (C $c) { }");
-    assert_parses_ok("try finally no catch", "<?php try { foo(); } finally { cleanup(); }");
-    assert_parses_ok("catch rethrow", "<?php try { foo(); } catch (Exception $e) { throw $e; }");
-    assert_parses_ok("multi catch no var", "<?php try { foo(); } catch (TypeError | ValueError) { log(); }");
+    assert_parses_ok(
+        "multi catch types",
+        "<?php try { foo(); } catch (TypeError | ValueError $e) { echo $e; }",
+    );
+    assert_parses_ok(
+        "catch no var",
+        "<?php try { foo(); } catch (Exception) { echo 'error'; }",
+    );
+    assert_parses_ok(
+        "multi catch blocks",
+        "<?php try { foo(); } catch (A $a) { } catch (B $b) { } catch (C $c) { }",
+    );
+    assert_parses_ok(
+        "try finally no catch",
+        "<?php try { foo(); } finally { cleanup(); }",
+    );
+    assert_parses_ok(
+        "catch rethrow",
+        "<?php try { foo(); } catch (Exception $e) { throw $e; }",
+    );
+    assert_parses_ok(
+        "multi catch no var",
+        "<?php try { foo(); } catch (TypeError | ValueError) { log(); }",
+    );
 }
 
 #[test]
@@ -2286,12 +2364,30 @@ try {
 
 #[test]
 fn test_match_variants() {
-    assert_parses_ok("match multi conditions", "<?php $r = match($x) { 1, 2, 3 => 'low', 4, 5 => 'high' };");
-    assert_parses_ok("match with default", "<?php $r = match(true) { $a > 0 => 'pos', default => 'other' };");
-    assert_parses_ok("match in assignment", "<?php $y = match($x) { 'a' => 1, 'b' => 2, default => 0 };");
-    assert_parses_ok("match nested", "<?php $r = match($a) { 1 => match($b) { 1 => 'aa', default => 'ab' }, default => 'x' };");
-    assert_parses_ok("match throw", "<?php $r = match($x) { 1 => 'ok', default => throw new Exception() };");
-    assert_parses_ok("match no default", "<?php $r = match($x) { 1 => 'one', 2 => 'two' };");
+    assert_parses_ok(
+        "match multi conditions",
+        "<?php $r = match($x) { 1, 2, 3 => 'low', 4, 5 => 'high' };",
+    );
+    assert_parses_ok(
+        "match with default",
+        "<?php $r = match(true) { $a > 0 => 'pos', default => 'other' };",
+    );
+    assert_parses_ok(
+        "match in assignment",
+        "<?php $y = match($x) { 'a' => 1, 'b' => 2, default => 0 };",
+    );
+    assert_parses_ok(
+        "match nested",
+        "<?php $r = match($a) { 1 => match($b) { 1 => 'aa', default => 'ab' }, default => 'x' };",
+    );
+    assert_parses_ok(
+        "match throw",
+        "<?php $r = match($x) { 1 => 'ok', default => throw new Exception() };",
+    );
+    assert_parses_ok(
+        "match no default",
+        "<?php $r = match($x) { 1 => 'one', 2 => 'two' };",
+    );
 }
 
 #[test]
@@ -2333,10 +2429,22 @@ $result = match ($type) {
 #[test]
 fn test_function_variants() {
     assert_parses_ok("variadic typed", "<?php function foo(int ...$nums) {}");
-    assert_parses_ok("nullable return", "<?php function foo(): ?int { return null; }");
-    assert_parses_ok("union return", "<?php function foo(): int|string { return 1; }");
-    assert_parses_ok("intersection param", "<?php function foo(Countable&Traversable $x) {}");
-    assert_parses_ok("by ref return", "<?php function &getRef() { global $x; return $x; }");
+    assert_parses_ok(
+        "nullable return",
+        "<?php function foo(): ?int { return null; }",
+    );
+    assert_parses_ok(
+        "union return",
+        "<?php function foo(): int|string { return 1; }",
+    );
+    assert_parses_ok(
+        "intersection param",
+        "<?php function foo(Countable&Traversable $x) {}",
+    );
+    assert_parses_ok(
+        "by ref return",
+        "<?php function &getRef() { global $x; return $x; }",
+    );
 }
 
 #[test]
@@ -2352,7 +2460,10 @@ foo(class: 'MyClass', static: true, match: 'yes');
 
 #[test]
 fn test_named_args_variants() {
-    assert_parses_ok("mixed named args", "<?php foo(1, 2, name: 'test', other: true);");
+    assert_parses_ok(
+        "mixed named args",
+        "<?php foo(1, 2, name: 'test', other: true);",
+    );
     assert_parses_ok("named with spread", "<?php foo(name: 'test', ...$extra);");
     assert_parses_ok("named in new", "<?php new Foo(x: 1, y: 2);");
     assert_parses_ok("named in method", "<?php $obj->method(key: 'val');");
@@ -2361,17 +2472,44 @@ fn test_named_args_variants() {
 #[test]
 fn test_closure_variants() {
     assert_parses_ok("static arrow", "<?php $fn = static fn($x) => $x * 2;");
-    assert_parses_ok("arrow returns arrow", "<?php $fn = fn($x) => fn($y) => $x + $y;");
-    assert_parses_ok("closure use by ref", "<?php $fn = function() use (&$a, &$b) { return $a + $b; };");
-    assert_parses_ok("closure with return type", "<?php $fn = function(int $x): string { return (string)$x; };");
+    assert_parses_ok(
+        "arrow returns arrow",
+        "<?php $fn = fn($x) => fn($y) => $x + $y;",
+    );
+    assert_parses_ok(
+        "closure use by ref",
+        "<?php $fn = function() use (&$a, &$b) { return $a + $b; };",
+    );
+    assert_parses_ok(
+        "closure with return type",
+        "<?php $fn = function(int $x): string { return (string)$x; };",
+    );
     assert_parses_ok("arrow with array", "<?php $fn = fn($x) => [$x, $x * 2];");
     assert_parses_ok("arrow typed", "<?php $fn = fn(int $x): int => $x * 2;");
-    assert_parses_ok("arrow in array_map", "<?php array_map(fn($x) => $x * 2, $arr);");
-    assert_parses_ok("arrow with null coalesce", "<?php $fn = fn($x) => $x ?? 'default';");
-    assert_parses_ok("closure static typed", "<?php $fn = static function(int $x): int { return $x; };");
-    assert_parses_ok("arrow in ternary", "<?php $fn = $flag ? fn($x) => $x + 1 : fn($x) => $x - 1;");
-    assert_parses_ok("arrow in call", "<?php array_filter($arr, fn($x) => $x > 0);");
-    assert_parses_ok("closure immediately invoked", "<?php (function() { echo 'hi'; })();");
+    assert_parses_ok(
+        "arrow in array_map",
+        "<?php array_map(fn($x) => $x * 2, $arr);",
+    );
+    assert_parses_ok(
+        "arrow with null coalesce",
+        "<?php $fn = fn($x) => $x ?? 'default';",
+    );
+    assert_parses_ok(
+        "closure static typed",
+        "<?php $fn = static function(int $x): int { return $x; };",
+    );
+    assert_parses_ok(
+        "arrow in ternary",
+        "<?php $fn = $flag ? fn($x) => $x + 1 : fn($x) => $x - 1;",
+    );
+    assert_parses_ok(
+        "arrow in call",
+        "<?php array_filter($arr, fn($x) => $x > 0);",
+    );
+    assert_parses_ok(
+        "closure immediately invoked",
+        "<?php (function() { echo 'hi'; })();",
+    );
 }
 
 #[test]
@@ -2387,7 +2525,10 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
 
 #[test]
 fn test_arrow_function_in_array() {
-    assert_parses_ok("arrow fn value", "<?php $a = ['map' => fn($x) => $x * 2, 'filter' => fn($x) => $x > 0];");
+    assert_parses_ok(
+        "arrow fn value",
+        "<?php $a = ['map' => fn($x) => $x * 2, 'filter' => fn($x) => $x > 0];",
+    );
 }
 
 #[test]
@@ -2420,10 +2561,22 @@ $e = $obj->$dynamic(...);
 #[test]
 fn test_generator_variants() {
     assert_parses_ok("yield value", "<?php function gen() { yield 1; yield 2; }");
-    assert_parses_ok("yield key value", "<?php function gen() { yield 'a' => 1; yield 'b' => 2; }");
-    assert_parses_ok("yield from", "<?php function gen() { yield from [1, 2, 3]; }");
-    assert_parses_ok("yield from call", "<?php function gen() { yield from otherGen(); }");
-    assert_parses_ok("yield in assign", "<?php function gen() { $val = yield 'key' => 'value'; }");
+    assert_parses_ok(
+        "yield key value",
+        "<?php function gen() { yield 'a' => 1; yield 'b' => 2; }",
+    );
+    assert_parses_ok(
+        "yield from",
+        "<?php function gen() { yield from [1, 2, 3]; }",
+    );
+    assert_parses_ok(
+        "yield from call",
+        "<?php function gen() { yield from otherGen(); }",
+    );
+    assert_parses_ok(
+        "yield in assign",
+        "<?php function gen() { $val = yield 'key' => 'value'; }",
+    );
     assert_parses_ok("yield null", "<?php function gen() { yield; }");
 }
 
@@ -2450,19 +2603,37 @@ function gen() {
 #[test]
 fn test_class_variants() {
     assert_parses_ok("readonly class", "<?php readonly class Point { public function __construct(public int $x, public int $y) {} }");
-    assert_parses_ok("abstract with interface", "<?php abstract class Foo implements Bar, Baz { abstract public function run(): void; }");
-    assert_parses_ok("const visibility", "<?php class Foo { public const A = 1; protected const B = 2; private const C = 3; }");
+    assert_parses_ok(
+        "abstract with interface",
+        "<?php abstract class Foo implements Bar, Baz { abstract public function run(): void; }",
+    );
+    assert_parses_ok(
+        "const visibility",
+        "<?php class Foo { public const A = 1; protected const B = 2; private const C = 3; }",
+    );
     assert_parses_ok("promoted with defaults", "<?php class Foo { public function __construct(public readonly int $x, private string $y = 'default') {} }");
     assert_parses_ok("anon class full", "<?php $obj = new class(1) extends Base implements Iface1, Iface2 { public function run() {} };");
-    assert_parses_ok("interface extends multi", "<?php interface Foo extends Bar, Baz { public function run(): void; }");
-    assert_parses_ok("abstract method", "<?php abstract class Foo { abstract protected function bar(int $x): string; }");
+    assert_parses_ok(
+        "interface extends multi",
+        "<?php interface Foo extends Bar, Baz { public function run(): void; }",
+    );
+    assert_parses_ok(
+        "abstract method",
+        "<?php abstract class Foo { abstract protected function bar(int $x): string; }",
+    );
 }
 
 #[test]
 fn test_enum_variants() {
     assert_parses_ok("enum implements", "<?php enum Color implements HasLabel { case Red; public function label(): string { return 'red'; } }");
-    assert_parses_ok("enum const", "<?php enum Suit: string { const TOTAL = 4; case Hearts = 'H'; }");
-    assert_parses_ok("enum with use", "<?php enum Suit { use SuitTrait; case Hearts; }");
+    assert_parses_ok(
+        "enum const",
+        "<?php enum Suit: string { const TOTAL = 4; case Hearts = 'H'; }",
+    );
+    assert_parses_ok(
+        "enum with use",
+        "<?php enum Suit { use SuitTrait; case Hearts; }",
+    );
 }
 
 #[test]
@@ -2636,14 +2807,35 @@ $f = self::$prop;
 
 #[test]
 fn test_scope_resolution() {
-    assert_parses_ok("self const", "<?php class Foo { const X = 1; public function f() { return self::X; } }");
-    assert_parses_ok("parent method", "<?php class Foo extends Bar { public function f() { parent::f(); } }");
-    assert_parses_ok("static late", "<?php class Foo { public static function create() { return new static(); } }");
+    assert_parses_ok(
+        "self const",
+        "<?php class Foo { const X = 1; public function f() { return self::X; } }",
+    );
+    assert_parses_ok(
+        "parent method",
+        "<?php class Foo extends Bar { public function f() { parent::f(); } }",
+    );
+    assert_parses_ok(
+        "static late",
+        "<?php class Foo { public static function create() { return new static(); } }",
+    );
     assert_parses_ok("class const on name", "<?php echo Foo::class;");
-    assert_parses_ok("static prop", "<?php class Foo { public static int $count = 0; }");
-    assert_parses_ok("parent const", "<?php class Foo extends Bar { public function f() { return parent::VERSION; } }");
-    assert_parses_ok("static const", "<?php class Foo { public function f() { return static::DEFAULT; } }");
-    assert_parses_ok("self static prop", "<?php class Foo { public static $x = 1; public function f() { return self::$x; } }");
+    assert_parses_ok(
+        "static prop",
+        "<?php class Foo { public static int $count = 0; }",
+    );
+    assert_parses_ok(
+        "parent const",
+        "<?php class Foo extends Bar { public function f() { return parent::VERSION; } }",
+    );
+    assert_parses_ok(
+        "static const",
+        "<?php class Foo { public function f() { return static::DEFAULT; } }",
+    );
+    assert_parses_ok(
+        "self static prop",
+        "<?php class Foo { public static $x = 1; public function f() { return self::$x; } }",
+    );
 }
 
 // =============================================================================
@@ -2655,13 +2847,28 @@ fn test_type_hint_variants() {
     assert_parses_ok("dnf complex", "<?php function f((A&B)|C $x) {}");
     assert_parses_ok("dnf multi groups", "<?php function f((A&B)|(C&D) $x) {}");
     assert_parses_ok("union with null", "<?php function f(int|string|null $x) {}");
-    assert_parses_ok("self return", "<?php class Foo { public function bar(): self {} }");
-    assert_parses_ok("static return", "<?php class Foo { public function bar(): static {} }");
-    assert_parses_ok("parent type", "<?php class Foo extends Bar { public function bar(): parent {} }");
+    assert_parses_ok(
+        "self return",
+        "<?php class Foo { public function bar(): self {} }",
+    );
+    assert_parses_ok(
+        "static return",
+        "<?php class Foo { public function bar(): static {} }",
+    );
+    assert_parses_ok(
+        "parent type",
+        "<?php class Foo extends Bar { public function bar(): parent {} }",
+    );
     assert_parses_ok("mixed type", "<?php function f(mixed $x): mixed {}");
-    assert_parses_ok("never return", "<?php function abort(): never { throw new Exception(); }");
+    assert_parses_ok(
+        "never return",
+        "<?php function abort(): never { throw new Exception(); }",
+    );
     assert_parses_ok("void return", "<?php function f(): void {}");
-    assert_parses_ok("iterable type", "<?php function f(iterable $x): iterable {}");
+    assert_parses_ok(
+        "iterable type",
+        "<?php function f(iterable $x): iterable {}",
+    );
     assert_parses_ok("callable type", "<?php function f(callable $x) {}");
 }
 
@@ -2687,11 +2894,20 @@ class Foo {
 
 #[test]
 fn test_attribute_variants() {
-    assert_parses_ok("attr qualified name", "<?php #[\\App\\Attr] function foo() {}");
+    assert_parses_ok(
+        "attr qualified name",
+        "<?php #[\\App\\Attr] function foo() {}",
+    );
     assert_parses_ok("attr on param", "<?php function foo(#[Validate] int $x) {}");
     // Known limitation: attributes on closure expressions (#[Pure] function() {}) not yet supported
-    assert_parses_ok("attr complex args", "<?php #[Route('/api', methods: ['GET', 'POST'])] function handler() {}");
-    assert_parses_ok("attr on enum case", "<?php enum Suit { #[Description('Hearts')] case Hearts; }");
+    assert_parses_ok(
+        "attr complex args",
+        "<?php #[Route('/api', methods: ['GET', 'POST'])] function handler() {}",
+    );
+    assert_parses_ok(
+        "attr on enum case",
+        "<?php enum Suit { #[Description('Hearts')] case Hearts; }",
+    );
     assert_parses_ok("stacked attrs", "<?php #[A] #[B] #[C] class Foo {}");
     assert_parses_ok("grouped attrs", "<?php #[A, B, C] class Foo {}");
 }
@@ -2761,7 +2977,10 @@ fn test_builtin_constructs() {
     assert_parses_ok("isset multi", "<?php if (isset($a, $b, $c)) {}");
     assert_parses_ok("unset multi", "<?php unset($a, $b);");
     assert_parses_ok("global multi", "<?php global $a, $b, $c;");
-    assert_parses_ok("static var multi", "<?php function f() { static $a = 1, $b = 2; }");
+    assert_parses_ok(
+        "static var multi",
+        "<?php function f() { static $a = 1, $b = 2; }",
+    );
     assert_parses_ok("declare strict", "<?php declare(strict_types=1);");
     assert_parses_ok("eval", "<?php eval('echo 1;');");
     assert_parses_ok("require once", "<?php require_once 'autoload.php';");
@@ -2776,9 +2995,18 @@ fn test_builtin_constructs() {
 fn test_keyword_as_function_name() {
     // Keywords can be used as function names
     assert_parses_ok("function readonly", "<?php function readonly() {}");
-    assert_parses_ok("function exit", "<?php function exit(string|int $status = 0): never {}");
-    assert_parses_ok("function die", "<?php function die(string|int $status = 0): never {}");
-    assert_parses_ok("function clone", "<?php function clone(object $object): object {}");
+    assert_parses_ok(
+        "function exit",
+        "<?php function exit(string|int $status = 0): never {}",
+    );
+    assert_parses_ok(
+        "function die",
+        "<?php function die(string|int $status = 0): never {}",
+    );
+    assert_parses_ok(
+        "function clone",
+        "<?php function clone(object $object): object {}",
+    );
     assert_parses_ok("function match", "<?php function match() {}");
     assert_parses_ok("function fn", "<?php function fn() {}");
 }
@@ -3078,4 +3306,3 @@ fn test_invalid_missing_closing_brace_method() {
     assert!(!result.errors.is_empty(), "Expected parse errors");
     insta::assert_snapshot!(to_json(&result.program));
 }
-

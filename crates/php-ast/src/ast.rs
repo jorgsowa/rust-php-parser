@@ -76,6 +76,7 @@ pub struct Stmt {
 }
 
 #[derive(Debug, Clone, Serialize)]
+#[allow(clippy::large_enum_variant)]
 pub enum StmtKind {
     /// Expression statement (e.g. `foo();`)
     Expression(Expr),
@@ -525,7 +526,10 @@ pub enum ExprKind {
     InterpolatedString(Vec<StringPart>),
 
     /// Heredoc: `<<<EOT ... EOT`
-    Heredoc { label: String, parts: Vec<StringPart> },
+    Heredoc {
+        label: String,
+        parts: Vec<StringPart>,
+    },
 
     /// Nowdoc: `<<<'EOT' ... EOT`
     Nowdoc { label: String, value: String },
@@ -918,9 +922,15 @@ pub enum CallableCreateKind {
     /// `foo(...)`, `$var(...)`, `\Ns\func(...)`
     Function(Box<Expr>),
     /// `$obj->method(...)`
-    Method { object: Box<Expr>, method: Box<Expr> },
+    Method {
+        object: Box<Expr>,
+        method: Box<Expr>,
+    },
     /// `$obj?->method(...)`
-    NullsafeMethod { object: Box<Expr>, method: Box<Expr> },
+    NullsafeMethod {
+        object: Box<Expr>,
+        method: Box<Expr>,
+    },
     /// `Foo::bar(...)`
     StaticMethod { class: Box<Expr>, method: String },
 }

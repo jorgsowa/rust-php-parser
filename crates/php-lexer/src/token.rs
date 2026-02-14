@@ -65,7 +65,10 @@ fn lex_backtick_string(lex: &mut logos::Lexer<TokenKind>) -> bool {
 pub enum TokenKind {
     // --- Literals ---
     // Float: scientific notation (with or without decimal)
-    #[regex(r"[0-9](_?[0-9])*(\.[0-9](_?[0-9])*)?[eE][+-]?[0-9](_?[0-9])*", priority = 5)]
+    #[regex(
+        r"[0-9](_?[0-9])*(\.[0-9](_?[0-9])*)?[eE][+-]?[0-9](_?[0-9])*",
+        priority = 5
+    )]
     FloatLiteral,
 
     // Float: decimal with digits on both sides
@@ -482,7 +485,9 @@ impl std::fmt::Display for TokenKind {
             TokenKind::HexIntLiteral => write!(f, "hex integer"),
             TokenKind::BinIntLiteral => write!(f, "binary integer"),
             TokenKind::OctIntLiteral | TokenKind::OctIntLiteralNew => write!(f, "octal integer"),
-            TokenKind::FloatLiteral | TokenKind::FloatLiteralSimple | TokenKind::FloatLiteralLeadingDot => write!(f, "float"),
+            TokenKind::FloatLiteral
+            | TokenKind::FloatLiteralSimple
+            | TokenKind::FloatLiteralLeadingDot => write!(f, "float"),
             TokenKind::SingleQuotedString | TokenKind::DoubleQuotedString => write!(f, "string"),
             TokenKind::BacktickString => write!(f, "backtick string"),
             TokenKind::Variable => write!(f, "variable"),
