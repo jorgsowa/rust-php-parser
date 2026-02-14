@@ -1,0 +1,201 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Enum": {
+          "name": "Status",
+          "scalar_type": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Case": {
+                  "name": "Active",
+                  "value": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 24,
+                "end": 41
+              }
+            },
+            {
+              "kind": {
+                "Case": {
+                  "name": "Inactive",
+                  "value": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 41,
+                "end": 61
+              }
+            },
+            {
+              "kind": {
+                "Method": {
+                  "name": "list",
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "array"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 85,
+                          "end": 90
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 85,
+                      "end": 90
+                    }
+                  },
+                  "body": [
+                    {
+                      "kind": {
+                        "Return": {
+                          "kind": {
+                            "Array": []
+                          },
+                          "span": {
+                            "start": 100,
+                            "end": 102
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 93,
+                        "end": 104
+                      }
+                    }
+                  ],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 61,
+                "end": 110
+              }
+            },
+            {
+              "kind": {
+                "Method": {
+                  "name": "match",
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "string"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 135,
+                          "end": 141
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 135,
+                      "end": 141
+                    }
+                  },
+                  "body": [
+                    {
+                      "kind": {
+                        "Return": {
+                          "kind": {
+                            "String": ""
+                          },
+                          "span": {
+                            "start": 151,
+                            "end": 153
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 144,
+                        "end": 155
+                      }
+                    }
+                  ],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 110,
+                "end": 161
+              }
+            },
+            {
+              "kind": {
+                "Method": {
+                  "name": "switch",
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "void"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 187,
+                          "end": 191
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 187,
+                      "end": 191
+                    }
+                  },
+                  "body": [],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 161,
+                "end": 195
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 196
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 196
+  }
+}

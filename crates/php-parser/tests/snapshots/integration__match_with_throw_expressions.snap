@@ -1,0 +1,185 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Match": {
+                    "subject": {
+                      "kind": {
+                        "Variable": "status"
+                      },
+                      "span": {
+                        "start": 18,
+                        "end": 25
+                      }
+                    },
+                    "arms": [
+                      {
+                        "conditions": [
+                          {
+                            "kind": {
+                              "Int": 200
+                            },
+                            "span": {
+                              "start": 33,
+                              "end": 36
+                            }
+                          }
+                        ],
+                        "body": {
+                          "kind": {
+                            "String": "ok"
+                          },
+                          "span": {
+                            "start": 40,
+                            "end": 44
+                          }
+                        },
+                        "span": {
+                          "start": 33,
+                          "end": 44
+                        }
+                      },
+                      {
+                        "conditions": [
+                          {
+                            "kind": {
+                              "Int": 404
+                            },
+                            "span": {
+                              "start": 50,
+                              "end": 53
+                            }
+                          }
+                        ],
+                        "body": {
+                          "kind": {
+                            "ThrowExpr": {
+                              "kind": {
+                                "New": {
+                                  "class": {
+                                    "kind": {
+                                      "Identifier": "NotFoundException"
+                                    },
+                                    "span": {
+                                      "start": 67,
+                                      "end": 84
+                                    }
+                                  },
+                                  "args": []
+                                }
+                              },
+                              "span": {
+                                "start": 63,
+                                "end": 86
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 57,
+                            "end": 86
+                          }
+                        },
+                        "span": {
+                          "start": 50,
+                          "end": 86
+                        }
+                      },
+                      {
+                        "conditions": null,
+                        "body": {
+                          "kind": {
+                            "ThrowExpr": {
+                              "kind": {
+                                "New": {
+                                  "class": {
+                                    "kind": {
+                                      "Identifier": "RuntimeException"
+                                    },
+                                    "span": {
+                                      "start": 113,
+                                      "end": 129
+                                    }
+                                  },
+                                  "args": [
+                                    {
+                                      "name": null,
+                                      "value": {
+                                        "kind": {
+                                          "String": "Unexpected"
+                                        },
+                                        "span": {
+                                          "start": 130,
+                                          "end": 142
+                                        }
+                                      },
+                                      "unpack": false,
+                                      "span": {
+                                        "start": 130,
+                                        "end": 142
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              "span": {
+                                "start": 109,
+                                "end": 143
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 103,
+                            "end": 143
+                          }
+                        },
+                        "span": {
+                          "start": 92,
+                          "end": 143
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 146
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 146
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 148
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 148
+  }
+}

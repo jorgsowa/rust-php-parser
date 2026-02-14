@@ -1,0 +1,331 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "NullsafePropertyAccess": {
+                    "object": {
+                      "kind": {
+                        "NullsafePropertyAccess": {
+                          "object": {
+                            "kind": {
+                              "NullsafePropertyAccess": {
+                                "object": {
+                                  "kind": {
+                                    "Variable": "a"
+                                  },
+                                  "span": {
+                                    "start": 11,
+                                    "end": 13
+                                  }
+                                },
+                                "property": {
+                                  "kind": {
+                                    "Identifier": "b"
+                                  },
+                                  "span": {
+                                    "start": 16,
+                                    "end": 17
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 11,
+                              "end": 17
+                            }
+                          },
+                          "property": {
+                            "kind": {
+                              "Identifier": "c"
+                            },
+                            "span": {
+                              "start": 20,
+                              "end": 21
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 21
+                      }
+                    },
+                    "property": {
+                      "kind": {
+                        "Identifier": "d"
+                      },
+                      "span": {
+                        "start": 24,
+                        "end": 25
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 25
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 25
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 27
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "y"
+                },
+                "span": {
+                  "start": 27,
+                  "end": 29
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "NullsafePropertyAccess": {
+                    "object": {
+                      "kind": {
+                        "NullsafeMethodCall": {
+                          "object": {
+                            "kind": {
+                              "NullsafeMethodCall": {
+                                "object": {
+                                  "kind": {
+                                    "Variable": "a"
+                                  },
+                                  "span": {
+                                    "start": 32,
+                                    "end": 34
+                                  }
+                                },
+                                "method": {
+                                  "kind": {
+                                    "Identifier": "getB"
+                                  },
+                                  "span": {
+                                    "start": 37,
+                                    "end": 41
+                                  }
+                                },
+                                "args": []
+                              }
+                            },
+                            "span": {
+                              "start": 32,
+                              "end": 43
+                            }
+                          },
+                          "method": {
+                            "kind": {
+                              "Identifier": "getC"
+                            },
+                            "span": {
+                              "start": 46,
+                              "end": 50
+                            }
+                          },
+                          "args": [
+                            {
+                              "name": null,
+                              "value": {
+                                "kind": {
+                                  "Int": 1
+                                },
+                                "span": {
+                                  "start": 51,
+                                  "end": 52
+                                }
+                              },
+                              "unpack": false,
+                              "span": {
+                                "start": 51,
+                                "end": 52
+                              }
+                            },
+                            {
+                              "name": null,
+                              "value": {
+                                "kind": {
+                                  "Int": 2
+                                },
+                                "span": {
+                                  "start": 54,
+                                  "end": 55
+                                }
+                              },
+                              "unpack": false,
+                              "span": {
+                                "start": 54,
+                                "end": 55
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "span": {
+                        "start": 32,
+                        "end": 56
+                      }
+                    },
+                    "property": {
+                      "kind": {
+                        "Identifier": "value"
+                      },
+                      "span": {
+                        "start": 59,
+                        "end": 64
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 32,
+                  "end": 64
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 27,
+            "end": 64
+          }
+        }
+      },
+      "span": {
+        "start": 27,
+        "end": 66
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "z"
+                },
+                "span": {
+                  "start": 66,
+                  "end": 68
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "NullsafePropertyAccess": {
+                    "object": {
+                      "kind": {
+                        "ArrayAccess": {
+                          "array": {
+                            "kind": {
+                              "NullsafePropertyAccess": {
+                                "object": {
+                                  "kind": {
+                                    "Variable": "a"
+                                  },
+                                  "span": {
+                                    "start": 71,
+                                    "end": 73
+                                  }
+                                },
+                                "property": {
+                                  "kind": {
+                                    "Identifier": "items"
+                                  },
+                                  "span": {
+                                    "start": 76,
+                                    "end": 81
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 71,
+                              "end": 81
+                            }
+                          },
+                          "index": {
+                            "kind": {
+                              "Int": 0
+                            },
+                            "span": {
+                              "start": 82,
+                              "end": 83
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 71,
+                        "end": 84
+                      }
+                    },
+                    "property": {
+                      "kind": {
+                        "Identifier": "name"
+                      },
+                      "span": {
+                        "start": 87,
+                        "end": 91
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 71,
+                  "end": 91
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 66,
+            "end": 91
+          }
+        }
+      },
+      "span": {
+        "start": 66,
+        "end": 93
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 93
+  }
+}

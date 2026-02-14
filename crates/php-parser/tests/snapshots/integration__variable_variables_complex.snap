@@ -1,0 +1,221 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "VariableVariable": {
+                    "kind": {
+                      "Variable": "var"
+                    },
+                    "span": {
+                      "start": 7,
+                      "end": 11
+                    }
+                  }
+                },
+                "span": {
+                  "start": 6,
+                  "end": 11
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 14,
+                  "end": 15
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 15
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 17
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "VariableVariable": {
+                    "kind": {
+                      "VariableVariable": {
+                        "kind": {
+                          "Variable": "var"
+                        },
+                        "span": {
+                          "start": 19,
+                          "end": 23
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 18,
+                      "end": 23
+                    }
+                  }
+                },
+                "span": {
+                  "start": 17,
+                  "end": 23
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Int": 2
+                },
+                "span": {
+                  "start": 26,
+                  "end": 27
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 17,
+            "end": 27
+          }
+        }
+      },
+      "span": {
+        "start": 17,
+        "end": 29
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "VariableVariable": {
+                    "kind": {
+                      "Binary": {
+                        "left": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 31,
+                            "end": 33
+                          }
+                        },
+                        "op": "Concat",
+                        "right": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 36,
+                            "end": 38
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 31,
+                      "end": 38
+                    }
+                  }
+                },
+                "span": {
+                  "start": 29,
+                  "end": 38
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Int": 3
+                },
+                "span": {
+                  "start": 42,
+                  "end": 43
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 29,
+            "end": 43
+          }
+        }
+      },
+      "span": {
+        "start": 29,
+        "end": 45
+      }
+    },
+    {
+      "kind": {
+        "Echo": [
+          {
+            "kind": {
+              "PropertyAccess": {
+                "object": {
+                  "kind": {
+                    "VariableVariable": {
+                      "kind": {
+                        "Variable": "obj"
+                      },
+                      "span": {
+                        "start": 51,
+                        "end": 55
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 50,
+                    "end": 55
+                  }
+                },
+                "property": {
+                  "kind": {
+                    "Identifier": "prop"
+                  },
+                  "span": {
+                    "start": 57,
+                    "end": 61
+                  }
+                }
+              }
+            },
+            "span": {
+              "start": 50,
+              "end": 61
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 45,
+        "end": 63
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 63
+  }
+}

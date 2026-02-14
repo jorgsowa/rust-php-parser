@@ -1,0 +1,190 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "obj"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 10
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "AnonymousClass": {
+                          "name": null,
+                          "modifiers": {
+                            "is_abstract": false,
+                            "is_final": false,
+                            "is_readonly": true
+                          },
+                          "extends": null,
+                          "implements": [],
+                          "members": [
+                            {
+                              "kind": {
+                                "Method": {
+                                  "name": "__construct",
+                                  "visibility": "Public",
+                                  "is_static": false,
+                                  "is_abstract": false,
+                                  "is_final": false,
+                                  "by_ref": false,
+                                  "params": [
+                                    {
+                                      "name": "x",
+                                      "type_hint": {
+                                        "kind": {
+                                          "Named": {
+                                            "parts": [
+                                              "int"
+                                            ],
+                                            "kind": "Unqualified",
+                                            "span": {
+                                              "start": 88,
+                                              "end": 91
+                                            }
+                                          }
+                                        },
+                                        "span": {
+                                          "start": 88,
+                                          "end": 91
+                                        }
+                                      },
+                                      "default": null,
+                                      "by_ref": false,
+                                      "variadic": false,
+                                      "visibility": "Public",
+                                      "set_visibility": null,
+                                      "attributes": [],
+                                      "span": {
+                                        "start": 81,
+                                        "end": 94
+                                      }
+                                    },
+                                    {
+                                      "name": "y",
+                                      "type_hint": {
+                                        "kind": {
+                                          "Named": {
+                                            "parts": [
+                                              "int"
+                                            ],
+                                            "kind": "Unqualified",
+                                            "span": {
+                                              "start": 111,
+                                              "end": 114
+                                            }
+                                          }
+                                        },
+                                        "span": {
+                                          "start": 111,
+                                          "end": 114
+                                        }
+                                      },
+                                      "default": null,
+                                      "by_ref": false,
+                                      "variadic": false,
+                                      "visibility": "Public",
+                                      "set_visibility": null,
+                                      "attributes": [],
+                                      "span": {
+                                        "start": 104,
+                                        "end": 117
+                                      }
+                                    }
+                                  ],
+                                  "return_type": null,
+                                  "body": [],
+                                  "attributes": []
+                                }
+                              },
+                              "span": {
+                                "start": 44,
+                                "end": 128
+                              }
+                            }
+                          ],
+                          "attributes": []
+                        }
+                      },
+                      "span": {
+                        "start": 13,
+                        "end": 129
+                      }
+                    },
+                    "args": [
+                      {
+                        "name": null,
+                        "value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 32,
+                            "end": 33
+                          }
+                        },
+                        "unpack": false,
+                        "span": {
+                          "start": 32,
+                          "end": 33
+                        }
+                      },
+                      {
+                        "name": null,
+                        "value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 35,
+                            "end": 36
+                          }
+                        },
+                        "unpack": false,
+                        "span": {
+                          "start": 35,
+                          "end": 36
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 13,
+                  "end": 129
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 129
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 131
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 131
+  }
+}

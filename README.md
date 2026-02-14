@@ -166,15 +166,7 @@ for err in &result.errors {
 - Contextual error messages: "expected ';' after expression", "unclosed '(' opened at ..."
 - Partial AST output even with syntax errors
 
-## Not Yet Implemented
-
-### Semantic Validation
-The parser accepts but does not report errors for these invalid constructs:
-- Duplicate modifiers: `public public $a;`
-- Attributes on multi-const declarations
-
-### Known Limitations
-- Fibers (runtime feature, no syntax impact)
+## Known Limitations
 - Comment preservation in the AST
 - Semantic analysis (scope tracking, type checking, symbol resolution)
 
