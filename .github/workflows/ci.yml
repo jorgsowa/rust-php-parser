@@ -18,5 +18,10 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
 
-      - name: Run all tests
+      - name: Build all tests
+        run: cargo test --workspace --no-run
+        env:
+          CARGO_BUILD_JOBS: 1
+
+      - name: Run tests
         run: cargo test --workspace
