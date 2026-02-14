@@ -595,6 +595,19 @@ fn test_instanceof() {
     insta::assert_snapshot!(to_json(&result.program));
 }
 
+#[test]
+fn test_instanceof_dynamic() {
+    let source = r#"<?php
+$a = $obj instanceof $className;
+$b = $obj instanceof self;
+$c = $obj instanceof parent;
+$d = $obj instanceof static;
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
 // =============================================================================
 // Phase 4: Closures, Arrow Functions, Advanced Params
 // =============================================================================
@@ -1000,6 +1013,19 @@ fn test_class_name_resolution() {
     insta::assert_snapshot!(to_json(&result.program));
 }
 
+#[test]
+fn test_relative_namespace_names() {
+    let source = r#"<?php
+namespace App\Services;
+$obj = new namespace\MyClass();
+namespace\helper_func();
+echo namespace\SOME_CONST;
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
 // =============================================================================
 // Phase 10: Destructuring & List Assignment
 // =============================================================================
@@ -1197,6 +1223,12 @@ declare(ticks=1) {
     let result = parse_php(source);
     assert_no_errors(&result);
     insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_declare_encoding() {
+    assert_parses_ok("declare encoding", "<?php declare(encoding='UTF-8');");
+    assert_parses_ok("declare ticks inline", "<?php declare(ticks=1) echo 'tick';");
 }
 
 #[test]
@@ -1622,6 +1654,12 @@ fn test_cast_unset() {
 }
 
 #[test]
+fn test_cast_void() {
+    assert_parses_ok("void cast", "<?php (void)$x;");
+    assert_parses_ok("void cast call", "<?php (void)foo();");
+}
+
+#[test]
 fn test_magic_property_constant() {
     let result = parse_php("<?php __PROPERTY__;");
     assert_no_errors(&result);
@@ -1640,6 +1678,14 @@ fn test_error_suppress_nested() {
     let result = parse_php("<?php @$obj->riskyMethod(@$nested);");
     assert_no_errors(&result);
     insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_error_suppress_complex() {
+    assert_parses_ok("suppress chain", "<?php @$a->b()->c;");
+    assert_parses_ok("suppress new", "<?php @(new Foo())->init();");
+    assert_parses_ok("suppress include", "<?php @include 'optional.php';");
+    assert_parses_ok("suppress array access", "<?php @$arr[$key];");
 }
 
 #[test]
@@ -1981,6 +2027,38 @@ fn test_string_interpolation_patterns() {
     assert_parses_ok("var at end", r#"<?php $x = "hello $name"; "#);
     assert_parses_ok("escaped dollar", r#"<?php $x = "cost is \$5"; "#);
     assert_parses_ok("heredoc interp", "<?php $x = <<<EOT\nHello $name\nEOT;\n");
+    assert_parses_ok("chained in string", r#"<?php $x = "{$obj->items[0]->name}"; "#);
+    assert_parses_ok("dynamic prop in string", r#"<?php $x = "{$obj->$prop}"; "#);
+    assert_parses_ok("array var in string", r#"<?php $x = "item $arr[0] here"; "#);
+    assert_parses_ok("prop var in string", r#"<?php $x = "name $obj->name here"; "#);
+}
+
+#[test]
+fn test_binary_string_prefix() {
+    let source = r#"<?php
+$a = b"binary string";
+$b = b'binary single';
+$c = B"case insensitive";
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_heredoc_complex_interpolation() {
+    let source = "<?php\n$x = <<<EOT\nHello {$obj->getName()}\nItem: {$arr[0]['key']}\nCalc: {$a + $b}\nEOT;\n";
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_nowdoc_multiline() {
+    let source = "<?php\n$x = <<<'EOT'\nNo $interpolation\nJust literal text\nWith 'quotes' and \"doubles\"\nEOT;\n";
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -2049,6 +2127,31 @@ fn test_dynamic_access() {
     assert_parses_ok("dynamic static method", "<?php $class::$method();");
     assert_parses_ok("variable class new", "<?php new $className();");
     assert_parses_ok("variable class static", "<?php $class::CONST_NAME;");
+}
+
+#[test]
+fn test_shell_exec() {
+    let source = r#"<?php
+$out = `ls -la`;
+$cmd = `echo $var`;
+$complex = `{$obj->getCmd()} --flag`;
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_dynamic_class_constant_access() {
+    let source = r#"<?php
+$a = Foo::{$name};
+$b = Foo::{'CONST_' . $suffix};
+$c = $class::$$dynamic;
+$d = $class::${'prop_' . $name};
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -2162,6 +2265,7 @@ fn test_try_catch_variants() {
     assert_parses_ok("multi catch blocks", "<?php try { foo(); } catch (A $a) { } catch (B $b) { } catch (C $c) { }");
     assert_parses_ok("try finally no catch", "<?php try { foo(); } finally { cleanup(); }");
     assert_parses_ok("catch rethrow", "<?php try { foo(); } catch (Exception $e) { throw $e; }");
+    assert_parses_ok("multi catch no var", "<?php try { foo(); } catch (TypeError | ValueError) { log(); }");
 }
 
 #[test]
@@ -2265,6 +2369,9 @@ fn test_closure_variants() {
     assert_parses_ok("arrow in array_map", "<?php array_map(fn($x) => $x * 2, $arr);");
     assert_parses_ok("arrow with null coalesce", "<?php $fn = fn($x) => $x ?? 'default';");
     assert_parses_ok("closure static typed", "<?php $fn = static function(int $x): int { return $x; };");
+    assert_parses_ok("arrow in ternary", "<?php $fn = $flag ? fn($x) => $x + 1 : fn($x) => $x - 1;");
+    assert_parses_ok("arrow in call", "<?php array_filter($arr, fn($x) => $x > 0);");
+    assert_parses_ok("closure immediately invoked", "<?php (function() { echo 'hi'; })();");
 }
 
 #[test]
@@ -2398,6 +2505,31 @@ class Foo {
 }
 
 #[test]
+fn test_property_hooks_modifiers_and_attributes() {
+    let source = r#"<?php
+abstract class Foo {
+    abstract public int $abstract_prop {
+        get;
+        set;
+    }
+    public int $final_prop {
+        final get { return 42; }
+        final set(int $value) { $this->final_prop = $value; }
+    }
+    public int $attr_prop {
+        #[Cache]
+        get { return $this->compute(); }
+        #[Validate]
+        set(int $value) { $this->attr_prop = $value; }
+    }
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
 fn test_constructor_promotion_with_hooks() {
     let source = r#"<?php
 class Point {
@@ -2509,6 +2641,9 @@ fn test_scope_resolution() {
     assert_parses_ok("static late", "<?php class Foo { public static function create() { return new static(); } }");
     assert_parses_ok("class const on name", "<?php echo Foo::class;");
     assert_parses_ok("static prop", "<?php class Foo { public static int $count = 0; }");
+    assert_parses_ok("parent const", "<?php class Foo extends Bar { public function f() { return parent::VERSION; } }");
+    assert_parses_ok("static const", "<?php class Foo { public function f() { return static::DEFAULT; } }");
+    assert_parses_ok("self static prop", "<?php class Foo { public static $x = 1; public function f() { return self::$x; } }");
 }
 
 // =============================================================================
