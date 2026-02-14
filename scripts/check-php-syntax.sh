@@ -14,13 +14,13 @@ with open("crates/php-parser/tests/integration.rs") as f:
 ERROR_TESTS = set()
 lines = content.split('\n')
 for i, line in enumerate(lines):
-    if 'assert_has_errors' in line:
+    if 'assert_has_errors' in line or 'errors.is_empty()' in line:
         for j in range(i, max(i - 10, -1), -1):
             m = re.search(r'fn (test_\w+)', lines[j])
             if m:
                 ERROR_TESTS.add(m.group(1))
                 break
-    m = re.search(r'fn (test_\w*error\w*)\b', line, re.IGNORECASE)
+    m = re.search(r'fn (test_\w*(?:error|invalid)\w*)\b', line, re.IGNORECASE)
     if m:
         ERROR_TESTS.add(m.group(1))
 
