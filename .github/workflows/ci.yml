@@ -1,6 +1,8 @@
 name: CI
 
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
 
@@ -8,9 +10,37 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  test:
-    name: Test
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+
+      - name: Clippy
+        run: cargo clippy --workspace -- -D warnings
+
+  test:
+    name: Test (${{ matrix.test-binary }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        test-binary:
+          - integration
+          - nikic_stmt_tests
+          - nikic_expr_tests
+          - nikic_error_tests
+          - nikic_scalar_tests
+          - nikic_misc_tests
     steps:
       - uses: actions/checkout@v4
 
@@ -18,23 +48,27 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
 
-      - name: Build all tests
-        run: cargo test --workspace --no-run
+      - name: Build test binary
+        run: cargo test --test ${{ matrix.test-binary }} --no-run
         env:
           CARGO_BUILD_JOBS: 1
 
       - name: Run tests
-        run: cargo test --workspace
+        run: cargo test --test ${{ matrix.test-binary }}
 
   php-syntax:
-    name: Validate PHP in tests
+    name: PHP Syntax (${{ matrix.php-version }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.2', '8.3', '8.4', '8.5']
     steps:
       - uses: actions/checkout@v4
 
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.5'
+          php-version: ${{ matrix.php-version }}
 
       - name: Check PHP syntax in tests
         run: bash scripts/check-php-syntax.sh
