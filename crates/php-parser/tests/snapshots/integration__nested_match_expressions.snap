@@ -1,0 +1,209 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "result"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 13
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Match": {
+                    "subject": {
+                      "kind": {
+                        "Variable": "type"
+                      },
+                      "span": {
+                        "start": 23,
+                        "end": 28
+                      }
+                    },
+                    "arms": [
+                      {
+                        "conditions": [
+                          {
+                            "kind": {
+                              "String": "a"
+                            },
+                            "span": {
+                              "start": 36,
+                              "end": 39
+                            }
+                          }
+                        ],
+                        "body": {
+                          "kind": {
+                            "Match": {
+                              "subject": {
+                                "kind": {
+                                  "Variable": "subtype"
+                                },
+                                "span": {
+                                  "start": 50,
+                                  "end": 58
+                                }
+                              },
+                              "arms": [
+                                {
+                                  "conditions": [
+                                    {
+                                      "kind": {
+                                        "Int": 1
+                                      },
+                                      "span": {
+                                        "start": 70,
+                                        "end": 71
+                                      }
+                                    }
+                                  ],
+                                  "body": {
+                                    "kind": {
+                                      "String": "a1"
+                                    },
+                                    "span": {
+                                      "start": 75,
+                                      "end": 79
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 70,
+                                    "end": 79
+                                  }
+                                },
+                                {
+                                  "conditions": [
+                                    {
+                                      "kind": {
+                                        "Int": 2
+                                      },
+                                      "span": {
+                                        "start": 89,
+                                        "end": 90
+                                      }
+                                    }
+                                  ],
+                                  "body": {
+                                    "kind": {
+                                      "String": "a2"
+                                    },
+                                    "span": {
+                                      "start": 94,
+                                      "end": 98
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 89,
+                                    "end": 98
+                                  }
+                                },
+                                {
+                                  "conditions": null,
+                                  "body": {
+                                    "kind": {
+                                      "String": "a_other"
+                                    },
+                                    "span": {
+                                      "start": 119,
+                                      "end": 128
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 108,
+                                    "end": 128
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          "span": {
+                            "start": 43,
+                            "end": 135
+                          }
+                        },
+                        "span": {
+                          "start": 36,
+                          "end": 135
+                        }
+                      },
+                      {
+                        "conditions": [
+                          {
+                            "kind": {
+                              "String": "b"
+                            },
+                            "span": {
+                              "start": 141,
+                              "end": 144
+                            }
+                          }
+                        ],
+                        "body": {
+                          "kind": {
+                            "String": "b"
+                          },
+                          "span": {
+                            "start": 148,
+                            "end": 151
+                          }
+                        },
+                        "span": {
+                          "start": 141,
+                          "end": 151
+                        }
+                      },
+                      {
+                        "conditions": null,
+                        "body": {
+                          "kind": {
+                            "String": "other"
+                          },
+                          "span": {
+                            "start": 168,
+                            "end": 175
+                          }
+                        },
+                        "span": {
+                          "start": 157,
+                          "end": 175
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 16,
+                  "end": 178
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 178
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 180
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 180
+  }
+}

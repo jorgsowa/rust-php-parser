@@ -1373,13 +1373,56 @@ pub fn parse_class_members(parser: &mut Parser) -> Vec<ClassMember> {
                             }
                             parser.expect(TokenKind::RightParen);
                             set_visibility = Some(vis);
+                        } else {
+                            // Duplicate or conflicting visibility
+                            parser.error(ParseError::Expected {
+                                expected: "cannot use multiple visibility modifiers".to_string(),
+                                found: parser.current_kind(),
+                                span: Span::new(member_start, parser.current_span().start),
+                            });
                         }
                     }
                 }
-                TokenKind::Static => { parser.advance(); is_static = true; }
-                TokenKind::Abstract => { parser.advance(); is_abstract = true; }
-                TokenKind::Final => { parser.advance(); is_final = true; }
-                TokenKind::Readonly => { parser.advance(); is_readonly = true; }
+                TokenKind::Static => {
+                    if is_static {
+                        parser.error(ParseError::Expected {
+                            expected: "duplicate modifier 'static'".to_string(),
+                            found: parser.current_kind(),
+                            span: Span::new(member_start, parser.current_span().start),
+                        });
+                    }
+                    parser.advance(); is_static = true;
+                }
+                TokenKind::Abstract => {
+                    if is_abstract {
+                        parser.error(ParseError::Expected {
+                            expected: "duplicate modifier 'abstract'".to_string(),
+                            found: parser.current_kind(),
+                            span: Span::new(member_start, parser.current_span().start),
+                        });
+                    }
+                    parser.advance(); is_abstract = true;
+                }
+                TokenKind::Final => {
+                    if is_final {
+                        parser.error(ParseError::Expected {
+                            expected: "duplicate modifier 'final'".to_string(),
+                            found: parser.current_kind(),
+                            span: Span::new(member_start, parser.current_span().start),
+                        });
+                    }
+                    parser.advance(); is_final = true;
+                }
+                TokenKind::Readonly => {
+                    if is_readonly {
+                        parser.error(ParseError::Expected {
+                            expected: "duplicate modifier 'readonly'".to_string(),
+                            found: parser.current_kind(),
+                            span: Span::new(member_start, parser.current_span().start),
+                        });
+                    }
+                    parser.advance(); is_readonly = true;
+                }
                 _ => break,
             }
         }
@@ -1470,6 +1513,13 @@ pub fn parse_class_members(parser: &mut Parser) -> Vec<ClassMember> {
             }
             parser.expect(TokenKind::Semicolon);
             let span = Span::new(member_start, parser.current_span().start);
+            if !member_attrs.is_empty() && const_items.len() > 1 {
+                parser.error(ParseError::Expected {
+                    expected: "cannot use attributes on multi-constant declaration".to_string(),
+                    found: parser.current_kind(),
+                    span,
+                });
+            }
             for (const_name, value) in const_items {
                 members.push(ClassMember {
                     kind: ClassMemberKind::ClassConst(ClassConstDecl {

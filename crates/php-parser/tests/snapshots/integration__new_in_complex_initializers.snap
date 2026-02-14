@@ -1,0 +1,253 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "foo",
+          "params": [
+            {
+              "name": "a",
+              "type_hint": null,
+              "default": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "Foo"
+                      },
+                      "span": {
+                        "start": 33,
+                        "end": 36
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 29,
+                  "end": 38
+                }
+              },
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 24,
+                "end": 38
+              }
+            },
+            {
+              "name": "b",
+              "type_hint": null,
+              "default": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "Bar"
+                      },
+                      "span": {
+                        "start": 53,
+                        "end": 56
+                      }
+                    },
+                    "args": [
+                      {
+                        "name": null,
+                        "value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 57,
+                            "end": 58
+                          }
+                        },
+                        "unpack": false,
+                        "span": {
+                          "start": 57,
+                          "end": 58
+                        }
+                      },
+                      {
+                        "name": null,
+                        "value": {
+                          "kind": {
+                            "String": "test"
+                          },
+                          "span": {
+                            "start": 60,
+                            "end": 66
+                          }
+                        },
+                        "unpack": false,
+                        "span": {
+                          "start": 60,
+                          "end": 66
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 49,
+                  "end": 67
+                }
+              },
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 44,
+                "end": 67
+              }
+            },
+            {
+              "name": "c",
+              "type_hint": null,
+              "default": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "Baz"
+                      },
+                      "span": {
+                        "start": 82,
+                        "end": 85
+                      }
+                    },
+                    "args": [
+                      {
+                        "name": "name",
+                        "value": {
+                          "kind": {
+                            "String": "x"
+                          },
+                          "span": {
+                            "start": 92,
+                            "end": 95
+                          }
+                        },
+                        "unpack": false,
+                        "span": {
+                          "start": 86,
+                          "end": 95
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 78,
+                  "end": 96
+                }
+              },
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 73,
+                "end": 96
+              }
+            }
+          ],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 102
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": "Config",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "ClassConst": {
+                  "name": "DEFAULT",
+                  "visibility": null,
+                  "value": {
+                    "kind": {
+                      "New": {
+                        "class": {
+                          "kind": {
+                            "Identifier": "Settings"
+                          },
+                          "span": {
+                            "start": 142,
+                            "end": 150
+                          }
+                        },
+                        "args": [
+                          {
+                            "name": "debug",
+                            "value": {
+                              "kind": {
+                                "Bool": false
+                              },
+                              "span": {
+                                "start": 158,
+                                "end": 163
+                              }
+                            },
+                            "unpack": false,
+                            "span": {
+                              "start": 151,
+                              "end": 163
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "span": {
+                      "start": 138,
+                      "end": 164
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 122,
+                "end": 166
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 103,
+        "end": 167
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 167
+  }
+}

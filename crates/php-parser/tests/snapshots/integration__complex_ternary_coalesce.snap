@@ -1,0 +1,404 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Ternary": {
+                    "condition": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 13
+                      }
+                    },
+                    "then_expr": null,
+                    "else_expr": {
+                      "kind": {
+                        "NullCoalesce": {
+                          "left": {
+                            "kind": {
+                              "Variable": "y"
+                            },
+                            "span": {
+                              "start": 17,
+                              "end": 19
+                            }
+                          },
+                          "right": {
+                            "kind": {
+                              "Variable": "z"
+                            },
+                            "span": {
+                              "start": 23,
+                              "end": 25
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 17,
+                        "end": 25
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 25
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 25
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 27
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 27,
+                  "end": 29
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Ternary": {
+                    "condition": {
+                      "kind": {
+                        "NullCoalesce": {
+                          "left": {
+                            "kind": {
+                              "Variable": "x"
+                            },
+                            "span": {
+                              "start": 32,
+                              "end": 34
+                            }
+                          },
+                          "right": {
+                            "kind": {
+                              "Variable": "y"
+                            },
+                            "span": {
+                              "start": 38,
+                              "end": 40
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 32,
+                        "end": 40
+                      }
+                    },
+                    "then_expr": null,
+                    "else_expr": {
+                      "kind": {
+                        "Variable": "z"
+                      },
+                      "span": {
+                        "start": 44,
+                        "end": 46
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 32,
+                  "end": 46
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 27,
+            "end": 46
+          }
+        }
+      },
+      "span": {
+        "start": 27,
+        "end": 48
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "c"
+                },
+                "span": {
+                  "start": 48,
+                  "end": 50
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Ternary": {
+                    "condition": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 53,
+                        "end": 55
+                      }
+                    },
+                    "then_expr": {
+                      "kind": {
+                        "Ternary": {
+                          "condition": {
+                            "kind": {
+                              "Variable": "b"
+                            },
+                            "span": {
+                              "start": 58,
+                              "end": 60
+                            }
+                          },
+                          "then_expr": {
+                            "kind": {
+                              "Variable": "c"
+                            },
+                            "span": {
+                              "start": 63,
+                              "end": 65
+                            }
+                          },
+                          "else_expr": {
+                            "kind": {
+                              "Variable": "d"
+                            },
+                            "span": {
+                              "start": 68,
+                              "end": 70
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 58,
+                        "end": 70
+                      }
+                    },
+                    "else_expr": {
+                      "kind": {
+                        "Variable": "e"
+                      },
+                      "span": {
+                        "start": 73,
+                        "end": 75
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 53,
+                  "end": 75
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 48,
+            "end": 75
+          }
+        }
+      },
+      "span": {
+        "start": 48,
+        "end": 77
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "d"
+                },
+                "span": {
+                  "start": 77,
+                  "end": 79
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Ternary": {
+                    "condition": {
+                      "kind": {
+                        "Parenthesized": {
+                          "kind": {
+                            "NullCoalesce": {
+                              "left": {
+                                "kind": {
+                                  "Variable": "a"
+                                },
+                                "span": {
+                                  "start": 83,
+                                  "end": 85
+                                }
+                              },
+                              "right": {
+                                "kind": {
+                                  "Variable": "b"
+                                },
+                                "span": {
+                                  "start": 89,
+                                  "end": 91
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 83,
+                            "end": 91
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 82,
+                        "end": 93
+                      }
+                    },
+                    "then_expr": {
+                      "kind": {
+                        "Parenthesized": {
+                          "kind": {
+                            "Ternary": {
+                              "condition": {
+                                "kind": {
+                                  "Variable": "c"
+                                },
+                                "span": {
+                                  "start": 96,
+                                  "end": 98
+                                }
+                              },
+                              "then_expr": null,
+                              "else_expr": {
+                                "kind": {
+                                  "Variable": "d"
+                                },
+                                "span": {
+                                  "start": 102,
+                                  "end": 104
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 96,
+                            "end": 104
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 95,
+                        "end": 106
+                      }
+                    },
+                    "else_expr": {
+                      "kind": {
+                        "Parenthesized": {
+                          "kind": {
+                            "NullCoalesce": {
+                              "left": {
+                                "kind": {
+                                  "Variable": "e"
+                                },
+                                "span": {
+                                  "start": 109,
+                                  "end": 111
+                                }
+                              },
+                              "right": {
+                                "kind": {
+                                  "Variable": "f"
+                                },
+                                "span": {
+                                  "start": 115,
+                                  "end": 117
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 109,
+                            "end": 117
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 108,
+                        "end": 118
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 82,
+                  "end": 118
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 77,
+            "end": 118
+          }
+        }
+      },
+      "span": {
+        "start": 77,
+        "end": 120
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 120
+  }
+}

@@ -2052,6 +2052,60 @@ fn test_dynamic_access() {
     assert_parses_ok("variable class static", "<?php $class::CONST_NAME;");
 }
 
+#[test]
+fn test_pipe_operator_precedence() {
+    let source = r#"<?php
+$x = $a |> $b |> $c;
+$y = $a + $b |> $c;
+$z = $a |> $b + $c;
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_complex_ternary_coalesce() {
+    let source = r#"<?php
+$a = $x ?: $y ?? $z;
+$b = $x ?? $y ?: $z;
+$c = $a ? $b ? $c : $d : $e;
+$d = ($a ?? $b) ? ($c ?: $d) : ($e ?? $f);
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_variable_variables_complex() {
+    let source = r#"<?php
+$$var = 1;
+$$$var = 2;
+${$a . $b} = 3;
+echo $$obj->prop;
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_trailing_commas_everywhere() {
+    let source = r#"<?php
+function foo($a, $b,) {}
+foo(1, 2,);
+$f = function($x,) use ($y,) {};
+$g = fn($x,) => $x;
+[$a, $b,] = $arr;
+match ($x) { 1 => 'a', 2 => 'b', };
+use App\{A, B,};
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
 // =============================================================================
 // Destructuring
 // =============================================================================
@@ -2063,6 +2117,19 @@ fn test_nested_destructuring() {
     assert_parses_ok("keyed destruct", "<?php ['name' => $name, 'age' => $age] = $person;");
     assert_parses_ok("mixed keyed/positional", "<?php [0 => $first, 'key' => $val] = $arr;");
     assert_parses_ok("list nested", "<?php list($a, list($b, $c)) = $arr;");
+}
+
+#[test]
+fn test_complex_destructuring() {
+    let source = r#"<?php
+[, , $third] = $arr;
+[[$a, $b], [$c, $d]] = $matrix;
+['name' => $name, 'address' => ['city' => $city]] = $data;
+[1 => $second, 0 => $first] = $arr;
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -2099,6 +2166,22 @@ fn test_try_catch_variants() {
 }
 
 #[test]
+fn test_multiple_catch_types() {
+    let source = r#"<?php
+try {
+    foo();
+} catch (TypeError | ValueError | RuntimeException $e) {
+    handle($e);
+} catch (LogicException $e) {
+    other($e);
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
 fn test_match_variants() {
     assert_parses_ok("match multi conditions", "<?php $r = match($x) { 1, 2, 3 => 'low', 4, 5 => 'high' };");
     assert_parses_ok("match with default", "<?php $r = match(true) { $a > 0 => 'pos', default => 'other' };");
@@ -2106,6 +2189,38 @@ fn test_match_variants() {
     assert_parses_ok("match nested", "<?php $r = match($a) { 1 => match($b) { 1 => 'aa', default => 'ab' }, default => 'x' };");
     assert_parses_ok("match throw", "<?php $r = match($x) { 1 => 'ok', default => throw new Exception() };");
     assert_parses_ok("match no default", "<?php $r = match($x) { 1 => 'one', 2 => 'two' };");
+}
+
+#[test]
+fn test_match_with_throw_expressions() {
+    let source = r#"<?php
+$x = match ($status) {
+    200 => 'ok',
+    404 => throw new NotFoundException(),
+    default => throw new RuntimeException('Unexpected'),
+};
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_nested_match_expressions() {
+    let source = r#"<?php
+$result = match ($type) {
+    'a' => match ($subtype) {
+        1 => 'a1',
+        2 => 'a2',
+        default => 'a_other',
+    },
+    'b' => 'b',
+    default => 'other',
+};
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -2154,6 +2269,49 @@ fn test_closure_variants() {
 }
 
 #[test]
+fn test_nested_arrow_functions() {
+    let source = r#"<?php
+$f = fn($x) => fn($y) => fn($z) => $x + $y + $z;
+$g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_arrow_function_in_array() {
+    assert_parses_ok("arrow fn value", "<?php $a = ['map' => fn($x) => $x * 2, 'filter' => fn($x) => $x > 0];");
+}
+
+#[test]
+fn test_named_args_edge_cases() {
+    let source = r#"<?php
+foo(a: 1, b: 2, c: 3);
+bar(...$args, extra: true);
+baz(1, 2, name: 'test');
+array_map(callback: fn($x) => $x * 2, array: $arr);
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_first_class_callable_variants() {
+    let source = r#"<?php
+$a = strlen(...);
+$b = $obj->method(...);
+$c = $obj?->method(...);
+$d = Foo::bar(...);
+$e = $obj->$dynamic(...);
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
 fn test_generator_variants() {
     assert_parses_ok("yield value", "<?php function gen() { yield 1; yield 2; }");
     assert_parses_ok("yield key value", "<?php function gen() { yield 'a' => 1; yield 'b' => 2; }");
@@ -2161,6 +2319,22 @@ fn test_generator_variants() {
     assert_parses_ok("yield from call", "<?php function gen() { yield from otherGen(); }");
     assert_parses_ok("yield in assign", "<?php function gen() { $val = yield 'key' => 'value'; }");
     assert_parses_ok("yield null", "<?php function gen() { yield; }");
+}
+
+#[test]
+fn test_yield_complex() {
+    let source = r#"<?php
+function gen() {
+    $a = yield;
+    $b = yield 'value';
+    $c = yield 'key' => 'value';
+    yield from otherGen();
+    $d = (yield 'x') + 1;
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -2183,6 +2357,150 @@ fn test_enum_variants() {
     assert_parses_ok("enum implements", "<?php enum Color implements HasLabel { case Red; public function label(): string { return 'red'; } }");
     assert_parses_ok("enum const", "<?php enum Suit: string { const TOTAL = 4; case Hearts = 'H'; }");
     assert_parses_ok("enum with use", "<?php enum Suit { use SuitTrait; case Hearts; }");
+}
+
+#[test]
+fn test_enum_with_keyword_methods() {
+    let source = r#"<?php
+enum Status {
+    case Active;
+    case Inactive;
+
+    public function list(): array { return []; }
+    public function match(): string { return ''; }
+    public function switch(): void {}
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_property_hooks_complex() {
+    let source = r#"<?php
+class Foo {
+    public string $name {
+        get => strtoupper($this->name);
+        set(string $value) => strtolower($value);
+    }
+    public int $count {
+        get { return $this->count; }
+        set { $this->count = max(0, $value); }
+    }
+    public int $id {
+        &get { return $this->id; }
+    }
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_constructor_promotion_with_hooks() {
+    let source = r#"<?php
+class Point {
+    public function __construct(
+        public readonly int $x,
+        public private(set) int $y,
+        protected int $z = 0,
+    ) {}
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_asymmetric_visibility() {
+    let source = r#"<?php
+class User {
+    public protected(set) string $name;
+    public private(set) int $age;
+    protected private(set) string $email = '';
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_readonly_promoted_properties() {
+    let source = r#"<?php
+readonly class Point {
+    public function __construct(
+        public int $x,
+        public int $y,
+        public int $z = 0,
+    ) {}
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_readonly_anonymous_class_with_promotion() {
+    let source = r#"<?php
+$obj = new readonly class(1, 2) {
+    public function __construct(
+        public int $x,
+        public int $y,
+    ) {}
+};
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_new_in_complex_initializers() {
+    let source = r#"<?php
+function foo(
+    $a = new Foo(),
+    $b = new Bar(1, 'test'),
+    $c = new Baz(name: 'x'),
+) {}
+class Config {
+    const DEFAULT = new Settings(debug: false);
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_chained_nullsafe_with_calls() {
+    let source = r#"<?php
+$x = $a?->b?->c?->d;
+$y = $a?->getB()?->getC(1, 2)?->value;
+$z = $a?->items[0]?->name;
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_static_method_callable_and_access() {
+    let source = r#"<?php
+$a = Foo::bar(...);
+$b = Foo::$prop;
+$c = Foo::CONST;
+$d = static::method();
+$e = parent::method();
+$f = self::$prop;
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -2213,6 +2531,22 @@ fn test_type_hint_variants() {
     assert_parses_ok("callable type", "<?php function f(callable $x) {}");
 }
 
+#[test]
+fn test_dnf_types_complex() {
+    let source = r#"<?php
+function f((A&B)|C|null $x): (X&Y)|(P&Q)|null {
+    return $x;
+}
+class Foo {
+    public (A&B)|C $prop;
+    public function bar((A&B)|(C&D) $a, E|null $b): (F&G)|null {}
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
 // =============================================================================
 // Attributes
 // =============================================================================
@@ -2241,6 +2575,24 @@ use const App\Config\{DB_HOST, DB_PORT};
 use App\{Models\User as U, Services\Auth as A};
 "#;
     let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_mixed_group_use_with_aliases() {
+    let source = r#"<?php
+use A\B\{C as D, function e as f, const G as H};
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_empty_group_use() {
+    // Empty group use is syntactically valid but useless
+    let result = parse_php("<?php use A\\B\\{};");
     assert_no_errors(&result);
     insta::assert_snapshot!(to_json(&result.program));
 }
@@ -2416,3 +2768,15 @@ fn test_halt_compiler_close_tag() {
 fn test_halt_compiler_nested_error() {
     assert_has_errors("<?php if (true) { __halt_compiler(); }");
 }
+
+#[test]
+fn test_duplicate_modifier_errors() {
+    assert_has_errors("<?php class A { public public $x; }");
+    assert_has_errors("<?php class A { public protected $x; }");
+    assert_has_errors("<?php class A { static static $x; }");
+    assert_has_errors("<?php class A { abstract abstract function f(); }");
+    assert_has_errors("<?php class A { final final function f() {} }");
+    assert_has_errors("<?php class A { readonly readonly $x; }");
+    assert_has_errors("<?php class A { public public const X = 1; }");
+}
+

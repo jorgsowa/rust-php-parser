@@ -1,0 +1,306 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "CallableCreate": {
+                    "kind": {
+                      "StaticMethod": {
+                        "class": {
+                          "kind": {
+                            "Identifier": "Foo"
+                          },
+                          "span": {
+                            "start": 11,
+                            "end": 14
+                          }
+                        },
+                        "method": "bar"
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 24
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 24
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 26
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 26,
+                  "end": 28
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "StaticPropertyAccess": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "Foo"
+                      },
+                      "span": {
+                        "start": 31,
+                        "end": 34
+                      }
+                    },
+                    "member": "prop"
+                  }
+                },
+                "span": {
+                  "start": 31,
+                  "end": 41
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 26,
+            "end": 41
+          }
+        }
+      },
+      "span": {
+        "start": 26,
+        "end": 43
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "c"
+                },
+                "span": {
+                  "start": 43,
+                  "end": 45
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "ClassConstAccess": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "Foo"
+                      },
+                      "span": {
+                        "start": 48,
+                        "end": 51
+                      }
+                    },
+                    "member": "CONST"
+                  }
+                },
+                "span": {
+                  "start": 48,
+                  "end": 58
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 43,
+            "end": 58
+          }
+        }
+      },
+      "span": {
+        "start": 43,
+        "end": 60
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "d"
+                },
+                "span": {
+                  "start": 60,
+                  "end": 62
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "StaticMethodCall": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "static"
+                      },
+                      "span": {
+                        "start": 65,
+                        "end": 71
+                      }
+                    },
+                    "method": "method",
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 65,
+                  "end": 81
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 60,
+            "end": 81
+          }
+        }
+      },
+      "span": {
+        "start": 60,
+        "end": 83
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "e"
+                },
+                "span": {
+                  "start": 83,
+                  "end": 85
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "StaticMethodCall": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "parent"
+                      },
+                      "span": {
+                        "start": 88,
+                        "end": 94
+                      }
+                    },
+                    "method": "method",
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 88,
+                  "end": 104
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 83,
+            "end": 104
+          }
+        }
+      },
+      "span": {
+        "start": 83,
+        "end": 106
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "f"
+                },
+                "span": {
+                  "start": 106,
+                  "end": 108
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "StaticPropertyAccess": {
+                    "class": {
+                      "kind": {
+                        "Identifier": "self"
+                      },
+                      "span": {
+                        "start": 111,
+                        "end": 115
+                      }
+                    },
+                    "member": "prop"
+                  }
+                },
+                "span": {
+                  "start": 111,
+                  "end": 122
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 106,
+            "end": 122
+          }
+        }
+      },
+      "span": {
+        "start": 106,
+        "end": 124
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 124
+  }
+}

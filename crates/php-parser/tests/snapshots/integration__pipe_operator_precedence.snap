@@ -1,0 +1,243 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Binary": {
+                          "left": {
+                            "kind": {
+                              "Variable": "a"
+                            },
+                            "span": {
+                              "start": 11,
+                              "end": 13
+                            }
+                          },
+                          "op": "Pipe",
+                          "right": {
+                            "kind": {
+                              "Variable": "b"
+                            },
+                            "span": {
+                              "start": 17,
+                              "end": 19
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 19
+                      }
+                    },
+                    "op": "Pipe",
+                    "right": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 23,
+                        "end": 25
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 25
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 25
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 27
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "y"
+                },
+                "span": {
+                  "start": 27,
+                  "end": 29
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Binary": {
+                          "left": {
+                            "kind": {
+                              "Variable": "a"
+                            },
+                            "span": {
+                              "start": 32,
+                              "end": 34
+                            }
+                          },
+                          "op": "Add",
+                          "right": {
+                            "kind": {
+                              "Variable": "b"
+                            },
+                            "span": {
+                              "start": 37,
+                              "end": 39
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 32,
+                        "end": 39
+                      }
+                    },
+                    "op": "Pipe",
+                    "right": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 43,
+                        "end": 45
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 32,
+                  "end": 45
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 27,
+            "end": 45
+          }
+        }
+      },
+      "span": {
+        "start": 27,
+        "end": 47
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "z"
+                },
+                "span": {
+                  "start": 47,
+                  "end": 49
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 52,
+                        "end": 54
+                      }
+                    },
+                    "op": "Pipe",
+                    "right": {
+                      "kind": {
+                        "Binary": {
+                          "left": {
+                            "kind": {
+                              "Variable": "b"
+                            },
+                            "span": {
+                              "start": 58,
+                              "end": 60
+                            }
+                          },
+                          "op": "Add",
+                          "right": {
+                            "kind": {
+                              "Variable": "c"
+                            },
+                            "span": {
+                              "start": 63,
+                              "end": 65
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 58,
+                        "end": 65
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 52,
+                  "end": 65
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 47,
+            "end": 65
+          }
+        }
+      },
+      "span": {
+        "start": 47,
+        "end": 67
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 67
+  }
+}

@@ -1,0 +1,651 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "f",
+          "params": [
+            {
+              "name": "x",
+              "type_hint": {
+                "kind": {
+                  "Union": [
+                    {
+                      "kind": {
+                        "Intersection": [
+                          {
+                            "kind": {
+                              "Named": {
+                                "parts": [
+                                  "A"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 18,
+                                  "end": 19
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 18,
+                              "end": 19
+                            }
+                          },
+                          {
+                            "kind": {
+                              "Named": {
+                                "parts": [
+                                  "B"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 20,
+                                  "end": 21
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 20,
+                              "end": 21
+                            }
+                          }
+                        ]
+                      },
+                      "span": {
+                        "start": 17,
+                        "end": 22
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "C"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 23,
+                            "end": 24
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 23,
+                        "end": 24
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "null"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 25,
+                            "end": 29
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 25,
+                        "end": 29
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 17,
+                  "end": 29
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 17,
+                "end": 32
+              }
+            }
+          ],
+          "body": [
+            {
+              "kind": {
+                "Return": {
+                  "kind": {
+                    "Variable": "x"
+                  },
+                  "span": {
+                    "start": 65,
+                    "end": 67
+                  }
+                }
+              },
+              "span": {
+                "start": 58,
+                "end": 69
+              }
+            }
+          ],
+          "return_type": {
+            "kind": {
+              "Union": [
+                {
+                  "kind": {
+                    "Intersection": [
+                      {
+                        "kind": {
+                          "Named": {
+                            "parts": [
+                              "X"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 36,
+                              "end": 37
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 36,
+                          "end": 37
+                        }
+                      },
+                      {
+                        "kind": {
+                          "Named": {
+                            "parts": [
+                              "Y"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 38,
+                              "end": 39
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 38,
+                          "end": 39
+                        }
+                      }
+                    ]
+                  },
+                  "span": {
+                    "start": 35,
+                    "end": 40
+                  }
+                },
+                {
+                  "kind": {
+                    "Intersection": [
+                      {
+                        "kind": {
+                          "Named": {
+                            "parts": [
+                              "P"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 42,
+                              "end": 43
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 42,
+                          "end": 43
+                        }
+                      },
+                      {
+                        "kind": {
+                          "Named": {
+                            "parts": [
+                              "Q"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 44,
+                              "end": 45
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 44,
+                          "end": 45
+                        }
+                      }
+                    ]
+                  },
+                  "span": {
+                    "start": 41,
+                    "end": 46
+                  }
+                },
+                {
+                  "kind": {
+                    "Named": {
+                      "parts": [
+                        "null"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 47,
+                        "end": 51
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 47,
+                    "end": 51
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 35,
+              "end": 51
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 70
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": "Foo",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Property": {
+                  "name": "prop",
+                  "visibility": "Public",
+                  "set_visibility": null,
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": {
+                    "kind": {
+                      "Union": [
+                        {
+                          "kind": {
+                            "Intersection": [
+                              {
+                                "kind": {
+                                  "Named": {
+                                    "parts": [
+                                      "A"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 95,
+                                      "end": 96
+                                    }
+                                  }
+                                },
+                                "span": {
+                                  "start": 95,
+                                  "end": 96
+                                }
+                              },
+                              {
+                                "kind": {
+                                  "Named": {
+                                    "parts": [
+                                      "B"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 97,
+                                      "end": 98
+                                    }
+                                  }
+                                },
+                                "span": {
+                                  "start": 97,
+                                  "end": 98
+                                }
+                              }
+                            ]
+                          },
+                          "span": {
+                            "start": 94,
+                            "end": 99
+                          }
+                        },
+                        {
+                          "kind": {
+                            "Named": {
+                              "parts": [
+                                "C"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 100,
+                                "end": 102
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 100,
+                            "end": 102
+                          }
+                        }
+                      ]
+                    },
+                    "span": {
+                      "start": 94,
+                      "end": 102
+                    }
+                  },
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 87,
+                "end": 107
+              }
+            },
+            {
+              "kind": {
+                "Method": {
+                  "name": "bar",
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [
+                    {
+                      "name": "a",
+                      "type_hint": {
+                        "kind": {
+                          "Union": [
+                            {
+                              "kind": {
+                                "Intersection": [
+                                  {
+                                    "kind": {
+                                      "Named": {
+                                        "parts": [
+                                          "A"
+                                        ],
+                                        "kind": "Unqualified",
+                                        "span": {
+                                          "start": 134,
+                                          "end": 135
+                                        }
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 134,
+                                      "end": 135
+                                    }
+                                  },
+                                  {
+                                    "kind": {
+                                      "Named": {
+                                        "parts": [
+                                          "B"
+                                        ],
+                                        "kind": "Unqualified",
+                                        "span": {
+                                          "start": 136,
+                                          "end": 137
+                                        }
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 136,
+                                      "end": 137
+                                    }
+                                  }
+                                ]
+                              },
+                              "span": {
+                                "start": 133,
+                                "end": 138
+                              }
+                            },
+                            {
+                              "kind": {
+                                "Intersection": [
+                                  {
+                                    "kind": {
+                                      "Named": {
+                                        "parts": [
+                                          "C"
+                                        ],
+                                        "kind": "Unqualified",
+                                        "span": {
+                                          "start": 140,
+                                          "end": 141
+                                        }
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 140,
+                                      "end": 141
+                                    }
+                                  },
+                                  {
+                                    "kind": {
+                                      "Named": {
+                                        "parts": [
+                                          "D"
+                                        ],
+                                        "kind": "Unqualified",
+                                        "span": {
+                                          "start": 142,
+                                          "end": 143
+                                        }
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 142,
+                                      "end": 143
+                                    }
+                                  }
+                                ]
+                              },
+                              "span": {
+                                "start": 139,
+                                "end": 144
+                              }
+                            }
+                          ]
+                        },
+                        "span": {
+                          "start": 133,
+                          "end": 144
+                        }
+                      },
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "visibility": null,
+                      "set_visibility": null,
+                      "attributes": [],
+                      "span": {
+                        "start": 133,
+                        "end": 147
+                      }
+                    },
+                    {
+                      "name": "b",
+                      "type_hint": {
+                        "kind": {
+                          "Union": [
+                            {
+                              "kind": {
+                                "Named": {
+                                  "parts": [
+                                    "E"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 149,
+                                    "end": 150
+                                  }
+                                }
+                              },
+                              "span": {
+                                "start": 149,
+                                "end": 150
+                              }
+                            },
+                            {
+                              "kind": {
+                                "Named": {
+                                  "parts": [
+                                    "null"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 151,
+                                    "end": 155
+                                  }
+                                }
+                              },
+                              "span": {
+                                "start": 151,
+                                "end": 155
+                              }
+                            }
+                          ]
+                        },
+                        "span": {
+                          "start": 149,
+                          "end": 155
+                        }
+                      },
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "visibility": null,
+                      "set_visibility": null,
+                      "attributes": [],
+                      "span": {
+                        "start": 149,
+                        "end": 158
+                      }
+                    }
+                  ],
+                  "return_type": {
+                    "kind": {
+                      "Union": [
+                        {
+                          "kind": {
+                            "Intersection": [
+                              {
+                                "kind": {
+                                  "Named": {
+                                    "parts": [
+                                      "F"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 162,
+                                      "end": 163
+                                    }
+                                  }
+                                },
+                                "span": {
+                                  "start": 162,
+                                  "end": 163
+                                }
+                              },
+                              {
+                                "kind": {
+                                  "Named": {
+                                    "parts": [
+                                      "G"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 164,
+                                      "end": 165
+                                    }
+                                  }
+                                },
+                                "span": {
+                                  "start": 164,
+                                  "end": 165
+                                }
+                              }
+                            ]
+                          },
+                          "span": {
+                            "start": 161,
+                            "end": 166
+                          }
+                        },
+                        {
+                          "kind": {
+                            "Named": {
+                              "parts": [
+                                "null"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 167,
+                                "end": 171
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 167,
+                            "end": 171
+                          }
+                        }
+                      ]
+                    },
+                    "span": {
+                      "start": 161,
+                      "end": 171
+                    }
+                  },
+                  "body": [],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 113,
+                "end": 175
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 71,
+        "end": 176
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 176
+  }
+}
