@@ -1,0 +1,173 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Heredoc": {
+                    "label": "EOT",
+                    "parts": [
+                      {
+                        "Literal": "Hello "
+                      },
+                      {
+                        "Expr": {
+                          "kind": {
+                            "MethodCall": {
+                              "object": {
+                                "kind": {
+                                  "Variable": "obj"
+                                },
+                                "span": {
+                                  "start": 25,
+                                  "end": 29
+                                }
+                              },
+                              "method": {
+                                "kind": {
+                                  "Identifier": "getName"
+                                },
+                                "span": {
+                                  "start": 31,
+                                  "end": 38
+                                }
+                              },
+                              "args": []
+                            }
+                          },
+                          "span": {
+                            "start": 25,
+                            "end": 40
+                          }
+                        }
+                      },
+                      {
+                        "Literal": "\nItem: "
+                      },
+                      {
+                        "Expr": {
+                          "kind": {
+                            "ArrayAccess": {
+                              "array": {
+                                "kind": {
+                                  "ArrayAccess": {
+                                    "array": {
+                                      "kind": {
+                                        "Variable": "arr"
+                                      },
+                                      "span": {
+                                        "start": 49,
+                                        "end": 53
+                                      }
+                                    },
+                                    "index": {
+                                      "kind": {
+                                        "Int": 0
+                                      },
+                                      "span": {
+                                        "start": 54,
+                                        "end": 55
+                                      }
+                                    }
+                                  }
+                                },
+                                "span": {
+                                  "start": 49,
+                                  "end": 56
+                                }
+                              },
+                              "index": {
+                                "kind": {
+                                  "String": "key"
+                                },
+                                "span": {
+                                  "start": 57,
+                                  "end": 62
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 49,
+                            "end": 63
+                          }
+                        }
+                      },
+                      {
+                        "Literal": "\nCalc: "
+                      },
+                      {
+                        "Expr": {
+                          "kind": {
+                            "Binary": {
+                              "left": {
+                                "kind": {
+                                  "Variable": "a"
+                                },
+                                "span": {
+                                  "start": 72,
+                                  "end": 74
+                                }
+                              },
+                              "op": "Add",
+                              "right": {
+                                "kind": {
+                                  "Variable": "b"
+                                },
+                                "span": {
+                                  "start": 77,
+                                  "end": 79
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 72,
+                            "end": 79
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 84
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 84
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 86
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 86
+  }
+}
