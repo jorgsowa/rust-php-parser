@@ -1,261 +1,120 @@
-use logos::Logos;
-
-fn lex_single_quoted_string(lex: &mut logos::Lexer<TokenKind>) -> bool {
-    let remainder = lex.remainder();
-    let mut chars = remainder.chars();
-    loop {
-        match chars.next() {
-            Some('\\') => {
-                chars.next(); // skip escaped char
-            }
-            Some('\'') => {
-                let consumed = remainder.len() - chars.as_str().len();
-                lex.bump(consumed);
-                return true;
-            }
-            Some(_) => {}
-            None => return false,
-        }
-    }
-}
-
-fn lex_double_quoted_string(lex: &mut logos::Lexer<TokenKind>) -> bool {
-    let remainder = lex.remainder();
-    let mut chars = remainder.chars();
-    loop {
-        match chars.next() {
-            Some('\\') => {
-                chars.next(); // skip escaped char
-            }
-            Some('"') => {
-                let consumed = remainder.len() - chars.as_str().len();
-                lex.bump(consumed);
-                return true;
-            }
-            Some(_) => {}
-            None => return false,
-        }
-    }
-}
-
-fn lex_backtick_string(lex: &mut logos::Lexer<TokenKind>) -> bool {
-    let remainder = lex.remainder();
-    let mut chars = remainder.chars();
-    loop {
-        match chars.next() {
-            Some('\\') => {
-                chars.next(); // skip escaped char
-            }
-            Some('`') => {
-                let consumed = remainder.len() - chars.as_str().len();
-                lex.bump(consumed);
-                return true;
-            }
-            Some(_) => {}
-            None => return false,
-        }
-    }
-}
-
-#[derive(Logos, Debug, Clone, Copy, PartialEq, Eq, Hash)]
-#[logos(skip r"[ \t\r\n\f]+")]
-#[logos(skip r"//[^\n]*")]
-#[logos(skip r"#([^\[\n][^\n]*)?(\n)?")]
-#[logos(skip r"/\*[^*]*\*+(?:[^/*][^*]*\*+)*/")]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum TokenKind {
     // --- Literals ---
     // Float: scientific notation (with or without decimal)
-    #[regex(
-        r"[0-9](_?[0-9])*(\.[0-9](_?[0-9])*)?[eE][+-]?[0-9](_?[0-9])*",
-        priority = 5
-    )]
     FloatLiteral,
 
     // Float: decimal with digits on both sides
-    #[regex(r"[0-9](_?[0-9])*\.[0-9](_?[0-9])*", priority = 4)]
     FloatLiteralSimple,
 
     // Float: decimal starting with dot (.0)
-    #[regex(r"\.[0-9](_?[0-9])*([eE][+-]?[0-9](_?[0-9])*)?", priority = 4)]
     FloatLiteralLeadingDot,
 
-    #[regex(r"0[xX][0-9a-fA-F](_?[0-9a-fA-F])*")]
     HexIntLiteral,
 
-    #[regex(r"0[bB][01](_?[01])*")]
     BinIntLiteral,
 
-    #[regex(r"0[oO][0-7](_?[0-7])*", priority = 4)]
     OctIntLiteralNew,
 
-    #[regex(r"0[0-7]+", priority = 3)]
     OctIntLiteral,
 
-    #[regex(r"[0-9](_?[0-9])*", priority = 1)]
     IntLiteral,
 
     // String literals (with optional binary prefix b/B)
-    #[regex(r"[bB]?'", lex_single_quoted_string)]
     SingleQuotedString,
 
-    #[regex(r#"[bB]?""#, lex_double_quoted_string)]
     DoubleQuotedString,
 
-    #[token("`", lex_backtick_string)]
     BacktickString,
 
     // --- Variables ---
-    #[regex(r"\$[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*")]
     Variable,
-    #[token("$")]
     Dollar,
 
     // --- Identifiers (keywords resolved from these) ---
-    #[regex(r"[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*")]
     Identifier,
 
     // --- Operators ---
-    #[token("+")]
     Plus,
-    #[token("-")]
     Minus,
-    #[token("*")]
     Star,
-    #[token("/")]
     Slash,
-    #[token("%")]
     Percent,
-    #[token("**")]
     StarStar,
-    #[token(".")]
     Dot,
 
-    #[token("=")]
     Equals,
-    #[token("+=")]
     PlusEquals,
-    #[token("-=")]
     MinusEquals,
-    #[token("*=")]
     StarEquals,
-    #[token("/=")]
     SlashEquals,
-    #[token("%=")]
     PercentEquals,
-    #[token("**=")]
     StarStarEquals,
-    #[token(".=")]
     DotEquals,
-    #[token("&=")]
     AmpersandEquals,
-    #[token("|=")]
     PipeEquals,
-    #[token("^=")]
     CaretEquals,
-    #[token("<<=")]
     ShiftLeftEquals,
-    #[token(">>=")]
     ShiftRightEquals,
-    #[token("??=")]
     CoalesceEquals,
 
-    #[token("==")]
     EqualsEquals,
-    #[token("!=")]
     BangEquals,
-    #[token("===")]
     EqualsEqualsEquals,
-    #[token("!==")]
     BangEqualsEquals,
-    #[token("<")]
     LessThan,
-    #[token(">")]
     GreaterThan,
-    #[token("<=")]
     LessThanEquals,
-    #[token(">=")]
     GreaterThanEquals,
-    #[token("<=>")]
     Spaceship,
 
-    #[token("&&")]
     AmpersandAmpersand,
-    #[token("||")]
     PipePipe,
-    #[token("!")]
     Bang,
 
-    #[token("&")]
     Ampersand,
-    #[token("|")]
     Pipe,
-    #[token("^")]
     Caret,
-    #[token("~")]
     Tilde,
-    #[token("<<")]
     ShiftLeft,
-    #[token(">>")]
     ShiftRight,
 
-    #[token("++")]
     PlusPlus,
-    #[token("--")]
     MinusMinus,
 
-    #[token("?")]
     Question,
-    #[token("??")]
     QuestionQuestion,
-    #[token(":")]
     Colon,
 
-    #[token("=>")]
     FatArrow,
 
-    #[token("|>")]
     PipeArrow,
 
     // --- Delimiters ---
-    #[token("(")]
     LeftParen,
-    #[token(")")]
     RightParen,
-    #[token("[")]
     LeftBracket,
-    #[token("]")]
     RightBracket,
-    #[token("{")]
     LeftBrace,
-    #[token("}")]
     RightBrace,
-    #[token(";")]
     Semicolon,
-    #[token(",")]
     Comma,
 
-    #[token("::")]
     DoubleColon,
 
-    #[token("->")]
     Arrow,
 
-    #[token("?->")]
     NullsafeArrow,
 
-    #[token("\\")]
     Backslash,
 
-    #[token("@")]
     At,
 
-    #[token("#[")]
     HashBracket,
 
-    #[token("...")]
     Ellipsis,
 
-    // --- Keywords (not matched by Logos directly, resolved from Identifier) ---
+    // --- Keywords (resolved from Identifier) ---
     If,
     Else,
     ElseIf,
@@ -343,17 +202,14 @@ pub enum TokenKind {
     HaltCompiler,
 
     // --- PHP tags ---
-    #[token("<?php")]
-    #[token("<?=")]
     OpenTag,
 
-    #[token("?>")]
     CloseTag,
 
-    // Inline HTML (not matched by Logos, produced by Lexer wrapper)
+    // Inline HTML (produced by Lexer wrapper)
     InlineHtml,
 
-    // Heredoc/Nowdoc (produced by Lexer wrapper, not by Logos)
+    // Heredoc/Nowdoc (produced by Lexer wrapper)
     Heredoc,
     Nowdoc,
 
@@ -671,75 +527,5 @@ mod tests {
         assert!(TokenKind::DotEquals.is_assignment_op());
         assert!(!TokenKind::Plus.is_assignment_op());
         assert!(!TokenKind::EqualsEquals.is_assignment_op());
-    }
-
-    #[test]
-    fn test_logos_basic_tokens() {
-        let mut lex = TokenKind::lexer("+ - * / % ** .");
-        assert_eq!(lex.next(), Some(Ok(TokenKind::Plus)));
-        assert_eq!(lex.next(), Some(Ok(TokenKind::Minus)));
-        assert_eq!(lex.next(), Some(Ok(TokenKind::Star)));
-        assert_eq!(lex.next(), Some(Ok(TokenKind::Slash)));
-        assert_eq!(lex.next(), Some(Ok(TokenKind::Percent)));
-        assert_eq!(lex.next(), Some(Ok(TokenKind::StarStar)));
-        assert_eq!(lex.next(), Some(Ok(TokenKind::Dot)));
-        assert_eq!(lex.next(), None);
-    }
-
-    #[test]
-    fn test_logos_integers() {
-        let mut lex = TokenKind::lexer("42 0xFF 0b1010 077");
-        assert_eq!(lex.next(), Some(Ok(TokenKind::IntLiteral)));
-        assert_eq!(lex.slice(), "42");
-        assert_eq!(lex.next(), Some(Ok(TokenKind::HexIntLiteral)));
-        assert_eq!(lex.slice(), "0xFF");
-        assert_eq!(lex.next(), Some(Ok(TokenKind::BinIntLiteral)));
-        assert_eq!(lex.slice(), "0b1010");
-        assert_eq!(lex.next(), Some(Ok(TokenKind::OctIntLiteral)));
-        assert_eq!(lex.slice(), "077");
-    }
-
-    #[test]
-    fn test_logos_floats() {
-        let mut lex = TokenKind::lexer("3.14 1e10 2.5e-3");
-        assert_eq!(lex.next(), Some(Ok(TokenKind::FloatLiteralSimple)));
-        assert_eq!(lex.slice(), "3.14");
-        assert_eq!(lex.next(), Some(Ok(TokenKind::FloatLiteral)));
-        assert_eq!(lex.slice(), "1e10");
-        assert_eq!(lex.next(), Some(Ok(TokenKind::FloatLiteral)));
-        assert_eq!(lex.slice(), "2.5e-3");
-    }
-
-    #[test]
-    fn test_logos_strings() {
-        let mut lex = TokenKind::lexer(r#"'hello' "world" 'it\'s' "say \"hi\"""#);
-        assert_eq!(lex.next(), Some(Ok(TokenKind::SingleQuotedString)));
-        assert_eq!(lex.next(), Some(Ok(TokenKind::DoubleQuotedString)));
-        assert_eq!(lex.next(), Some(Ok(TokenKind::SingleQuotedString)));
-        assert_eq!(lex.next(), Some(Ok(TokenKind::DoubleQuotedString)));
-    }
-
-    #[test]
-    fn test_logos_variable() {
-        let mut lex = TokenKind::lexer("$x $myVar $_foo");
-        assert_eq!(lex.next(), Some(Ok(TokenKind::Variable)));
-        assert_eq!(lex.slice(), "$x");
-        assert_eq!(lex.next(), Some(Ok(TokenKind::Variable)));
-        assert_eq!(lex.slice(), "$myVar");
-        assert_eq!(lex.next(), Some(Ok(TokenKind::Variable)));
-        assert_eq!(lex.slice(), "$_foo");
-    }
-
-    #[test]
-    fn test_logos_comments_skipped() {
-        let mut lex = TokenKind::lexer("42 // line comment\n43 /* block */ 44 # hash comment\n45");
-        assert_eq!(lex.next(), Some(Ok(TokenKind::IntLiteral)));
-        assert_eq!(lex.slice(), "42");
-        assert_eq!(lex.next(), Some(Ok(TokenKind::IntLiteral)));
-        assert_eq!(lex.slice(), "43");
-        assert_eq!(lex.next(), Some(Ok(TokenKind::IntLiteral)));
-        assert_eq!(lex.slice(), "44");
-        assert_eq!(lex.next(), Some(Ok(TokenKind::IntLiteral)));
-        assert_eq!(lex.slice(), "45");
     }
 }
