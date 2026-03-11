@@ -1,4 +1,3 @@
-use logos::Logos;
 use php_ast::Span;
 
 use crate::token::{resolve_keyword, TokenKind};
@@ -41,6 +40,16 @@ pub struct Lexer<'src> {
     peeked: Option<Token>,
     peeked2: Option<Token>,
     pub errors: Vec<LexerError>,
+}
+
+#[inline]
+fn is_ident_start(b: u8) -> bool {
+    b.is_ascii_alphabetic() || b == b'_' || b >= 0x80
+}
+
+#[inline]
+fn is_ident_continue(b: u8) -> bool {
+    b.is_ascii_alphanumeric() || b == b'_' || b >= 0x80
 }
 
 impl<'src> Lexer<'src> {
@@ -146,106 +155,733 @@ impl<'src> Lexer<'src> {
     fn lex_php(&mut self) -> Token {
         let remaining = &self.source[self.pos..];
 
-        // Check for heredoc/nowdoc: <<<
+        // Try heredoc/nowdoc before skipping whitespace (heredoc does its own whitespace handling)
         if let Some(token) = self.try_lex_heredoc(remaining) {
             return token;
         }
 
-        // Check for unclosed block comment: /* without closing */
-        // Logos skip pattern only matches closed comments, so we handle this here.
-        if let Some(after_open) = remaining.strip_prefix("/*") {
-            // Check if there's a closing */
-            if !after_open.contains("*/") {
-                // Unclosed comment — consume rest of file as comment (matches PHP behavior)
-                self.pos = self.source.len();
-                return Token::eof(self.source.len() as u32);
-            }
+        // Skip whitespace and comments
+        self.skip_whitespace_and_comments();
+
+        if self.pos >= self.source.len() {
+            return Token::eof(self.source.len() as u32);
         }
 
-        let mut inner = TokenKind::lexer(remaining);
+        self.scan_token()
+    }
 
-        match inner.next() {
-            Some(Ok(kind)) => {
-                let logos_span = inner.span();
-                let start = self.pos + logos_span.start;
-                let end = self.pos + logos_span.end;
+    /// Skip whitespace, line comments (//), block comments (/* */), and hash comments (#).
+    fn skip_whitespace_and_comments(&mut self) {
+        let bytes = self.source.as_bytes();
+        loop {
+            // Skip whitespace
+            while self.pos < bytes.len()
+                && matches!(bytes[self.pos], b' ' | b'\t' | b'\r' | b'\n' | b'\x0C')
+            {
+                self.pos += 1;
+            }
 
-                // Check if << is actually the start of <<<HEREDOC (Logos skips comments
-                // before it, so try_lex_heredoc at the top of lex_php may have missed it)
-                if kind == TokenKind::ShiftLeft && self.source.as_bytes().get(end) == Some(&b'<') {
-                    let heredoc_remaining = &self.source[start..];
-                    self.pos = start;
-                    if let Some(token) = self.try_lex_heredoc(heredoc_remaining) {
-                        return token;
-                    }
+            if self.pos >= bytes.len() {
+                break;
+            }
+
+            // Skip // line comments
+            if bytes[self.pos] == b'/' && self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'/'
+            {
+                self.pos += 2;
+                while self.pos < bytes.len() && bytes[self.pos] != b'\n' {
+                    self.pos += 1;
                 }
+                continue;
+            }
 
-                self.pos = end;
-
-                // Detect invalid numeric separator: a numeric token followed by `_`
-                let is_numeric = matches!(
-                    kind,
-                    TokenKind::IntLiteral
-                        | TokenKind::HexIntLiteral
-                        | TokenKind::BinIntLiteral
-                        | TokenKind::OctIntLiteral
-                        | TokenKind::OctIntLiteralNew
-                        | TokenKind::FloatLiteral
-                        | TokenKind::FloatLiteralSimple
-                        | TokenKind::FloatLiteralLeadingDot
-                );
-                if is_numeric {
-                    if let Some(invalid_token) = self.try_consume_invalid_numeric(start) {
-                        return invalid_token;
+            // Skip /* */ block comments
+            if bytes[self.pos] == b'/' && self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'*'
+            {
+                self.pos += 2;
+                loop {
+                    if self.pos + 1 >= bytes.len() {
+                        // Unclosed comment - consume rest of file
+                        self.pos = bytes.len();
+                        break;
                     }
+                    if bytes[self.pos] == b'*' && bytes[self.pos + 1] == b'/' {
+                        self.pos += 2;
+                        break;
+                    }
+                    self.pos += 1;
                 }
+                continue;
+            }
 
-                // Also handle: `0` followed by `x/X/b/B/o/O` then `_` (e.g. `0x_1`)
-                if kind == TokenKind::IntLiteral
-                    && (end - start) == 1
-                    && self.source.as_bytes()[start] == b'0'
-                {
-                    let bytes = self.source.as_bytes();
-                    if let Some(&next_byte) = bytes.get(end) {
-                        if matches!(next_byte, b'x' | b'X' | b'b' | b'B' | b'o' | b'O')
-                            && bytes.get(end + 1) == Some(&b'_')
-                        {
-                            // Consume the prefix char + invalid rest
-                            self.pos = end + 1; // past the x/b/o
-                            self.consume_invalid_numeric_rest();
-                            let final_end = self.pos;
-                            let span = Span::new(start as u32, final_end as u32);
-                            self.errors.push(LexerError {
-                                message: "Invalid numeric literal".to_string(),
-                                span,
-                            });
-                            return Token::new(TokenKind::InvalidNumericLiteral, span);
+            // Skip # comments (but not #[)
+            if bytes[self.pos] == b'#'
+                && !(self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'[')
+            {
+                self.pos += 1;
+                while self.pos < bytes.len() && bytes[self.pos] != b'\n' {
+                    self.pos += 1;
+                }
+                continue;
+            }
+
+            break;
+        }
+    }
+
+    /// Scan a single PHP token starting at the current position.
+    fn scan_token(&mut self) -> Token {
+        let start = self.pos;
+        let bytes = self.source.as_bytes();
+        let b = bytes[start];
+
+        match b {
+            // --- Operators ---
+            b'+' => {
+                if self.check_at(1, b'+') {
+                    self.pos = start + 2;
+                    self.tok(TokenKind::PlusPlus, start)
+                } else if self.check_at(1, b'=') {
+                    self.pos = start + 2;
+                    self.tok(TokenKind::PlusEquals, start)
+                } else {
+                    self.pos = start + 1;
+                    self.tok(TokenKind::Plus, start)
+                }
+            }
+            b'-' => {
+                if self.check_at(1, b'-') {
+                    self.pos = start + 2;
+                    self.tok(TokenKind::MinusMinus, start)
+                } else if self.check_at(1, b'=') {
+                    self.pos = start + 2;
+                    self.tok(TokenKind::MinusEquals, start)
+                } else if self.check_at(1, b'>') {
+                    self.pos = start + 2;
+                    self.tok(TokenKind::Arrow, start)
+                } else {
+                    self.pos = start + 1;
+                    self.tok(TokenKind::Minus, start)
+                }
+            }
+            b'*' => {
+                if self.check_at(1, b'*') {
+                    if self.check_at(2, b'=') {
+                        self.pos = start + 3;
+                        self.tok(TokenKind::StarStarEquals, start)
+                    } else {
+                        self.pos = start + 2;
+                        self.tok(TokenKind::StarStar, start)
+                    }
+                } else if self.check_at(1, b'=') {
+                    self.pos = start + 2;
+                    self.tok(TokenKind::StarEquals, start)
+                } else {
+                    self.pos = start + 1;
+                    self.tok(TokenKind::Star, start)
+                }
+            }
+            b'/' => {
+                // Comments already handled by skip_whitespace_and_comments
+                if self.check_at(1, b'=') {
+                    self.pos = start + 2;
+                    self.tok(TokenKind::SlashEquals, start)
+                } else {
+                    self.pos = start + 1;
+                    self.tok(TokenKind::Slash, start)
+                }
+            }
+            b'%' => {
+                if self.check_at(1, b'=') {
+                    self.pos = start + 2;
+                    self.tok(TokenKind::PercentEquals, start)
+                } else {
+                    self.pos = start + 1;
+                    self.tok(TokenKind::Percent, start)
+                }
+            }
+            b'.' => {
+                // FloatLiteralLeadingDot: .5, .5e3, etc.
+                if start + 1 < bytes.len() && bytes[start + 1].is_ascii_digit() {
+                    self.pos = start + 1;
+                    self.scan_digits(u8::is_ascii_digit);
+                    // Check for exponent
+                    if self.pos < bytes.len() && matches!(bytes[self.pos], b'e' | b'E') {
+                        self.try_scan_exponent();
+                    }
+                    // Check for trailing underscore
+                    if self.pos < bytes.len() && bytes[self.pos] == b'_' {
+                        self.consume_invalid_numeric_rest();
+                        return self.invalid_numeric(start);
+                    }
+                    return self.tok(TokenKind::FloatLiteralLeadingDot, start);
+                }
+                if self.check_at(1, b'.') && self.check_at(2, b'.') {
+                    self.pos = start + 3;
+                    self.tok(TokenKind::Ellipsis, start)
+                } else if self.check_at(1, b'=') {
+                    self.pos = start + 2;
+                    self.tok(TokenKind::DotEquals, start)
+                } else {
+                    self.pos = start + 1;
+                    self.tok(TokenKind::Dot, start)
+                }
+            }
+            b'=' => {
+                if self.check_at(1, b'=') {
+                    if self.check_at(2, b'=') {
+                        self.pos = start + 3;
+                        self.tok(TokenKind::EqualsEqualsEquals, start)
+                    } else {
+                        self.pos = start + 2;
+                        self.tok(TokenKind::EqualsEquals, start)
+                    }
+                } else if self.check_at(1, b'>') {
+                    self.pos = start + 2;
+                    self.tok(TokenKind::FatArrow, start)
+                } else {
+                    self.pos = start + 1;
+                    self.tok(TokenKind::Equals, start)
+                }
+            }
+            b'!' => {
+                if self.check_at(1, b'=') {
+                    if self.check_at(2, b'=') {
+                        self.pos = start + 3;
+                        self.tok(TokenKind::BangEqualsEquals, start)
+                    } else {
+                        self.pos = start + 2;
+                        self.tok(TokenKind::BangEquals, start)
+                    }
+                } else {
+                    self.pos = start + 1;
+                    self.tok(TokenKind::Bang, start)
+                }
+            }
+            b'<' => self.scan_less_than(start),
+            b'>' => {
+                if self.check_at(1, b'>') {
+                    if self.check_at(2, b'=') {
+                        self.pos = start + 3;
+                        self.tok(TokenKind::ShiftRightEquals, start)
+                    } else {
+                        self.pos = start + 2;
+                        self.tok(TokenKind::ShiftRight, start)
+                    }
+                } else if self.check_at(1, b'=') {
+                    self.pos = start + 2;
+                    self.tok(TokenKind::GreaterThanEquals, start)
+                } else {
+                    self.pos = start + 1;
+                    self.tok(TokenKind::GreaterThan, start)
+                }
+            }
+            b'&' => {
+                if self.check_at(1, b'&') {
+                    self.pos = start + 2;
+                    self.tok(TokenKind::AmpersandAmpersand, start)
+                } else if self.check_at(1, b'=') {
+                    self.pos = start + 2;
+                    self.tok(TokenKind::AmpersandEquals, start)
+                } else {
+                    self.pos = start + 1;
+                    self.tok(TokenKind::Ampersand, start)
+                }
+            }
+            b'|' => {
+                if self.check_at(1, b'|') {
+                    self.pos = start + 2;
+                    self.tok(TokenKind::PipePipe, start)
+                } else if self.check_at(1, b'=') {
+                    self.pos = start + 2;
+                    self.tok(TokenKind::PipeEquals, start)
+                } else if self.check_at(1, b'>') {
+                    self.pos = start + 2;
+                    self.tok(TokenKind::PipeArrow, start)
+                } else {
+                    self.pos = start + 1;
+                    self.tok(TokenKind::Pipe, start)
+                }
+            }
+            b'^' => {
+                if self.check_at(1, b'=') {
+                    self.pos = start + 2;
+                    self.tok(TokenKind::CaretEquals, start)
+                } else {
+                    self.pos = start + 1;
+                    self.tok(TokenKind::Caret, start)
+                }
+            }
+            b'~' => {
+                self.pos = start + 1;
+                self.tok(TokenKind::Tilde, start)
+            }
+            b'?' => {
+                if self.check_at(1, b'>') {
+                    self.pos = start + 2;
+                    self.mode = LexerMode::InlineHtml;
+                    self.tok(TokenKind::CloseTag, start)
+                } else if self.check_at(1, b'?') {
+                    if self.check_at(2, b'=') {
+                        self.pos = start + 3;
+                        self.tok(TokenKind::CoalesceEquals, start)
+                    } else {
+                        self.pos = start + 2;
+                        self.tok(TokenKind::QuestionQuestion, start)
+                    }
+                } else if self.check_at(1, b'-') && self.check_at(2, b'>') {
+                    self.pos = start + 3;
+                    self.tok(TokenKind::NullsafeArrow, start)
+                } else {
+                    self.pos = start + 1;
+                    self.tok(TokenKind::Question, start)
+                }
+            }
+            b':' => {
+                if self.check_at(1, b':') {
+                    self.pos = start + 2;
+                    self.tok(TokenKind::DoubleColon, start)
+                } else {
+                    self.pos = start + 1;
+                    self.tok(TokenKind::Colon, start)
+                }
+            }
+            b'@' => {
+                self.pos = start + 1;
+                self.tok(TokenKind::At, start)
+            }
+            b'\\' => {
+                self.pos = start + 1;
+                self.tok(TokenKind::Backslash, start)
+            }
+            b'#' => {
+                // # comments are handled by skip_whitespace_and_comments.
+                // If we get here with #, it must be #[
+                if self.check_at(1, b'[') {
+                    self.pos = start + 2;
+                    self.tok(TokenKind::HashBracket, start)
+                } else {
+                    // Shouldn't normally happen, but skip and retry
+                    self.pos = start + 1;
+                    self.read_next_token()
+                }
+            }
+
+            // --- Delimiters ---
+            b'(' => {
+                self.pos = start + 1;
+                self.tok(TokenKind::LeftParen, start)
+            }
+            b')' => {
+                self.pos = start + 1;
+                self.tok(TokenKind::RightParen, start)
+            }
+            b'[' => {
+                self.pos = start + 1;
+                self.tok(TokenKind::LeftBracket, start)
+            }
+            b']' => {
+                self.pos = start + 1;
+                self.tok(TokenKind::RightBracket, start)
+            }
+            b'{' => {
+                self.pos = start + 1;
+                self.tok(TokenKind::LeftBrace, start)
+            }
+            b'}' => {
+                self.pos = start + 1;
+                self.tok(TokenKind::RightBrace, start)
+            }
+            b';' => {
+                self.pos = start + 1;
+                self.tok(TokenKind::Semicolon, start)
+            }
+            b',' => {
+                self.pos = start + 1;
+                self.tok(TokenKind::Comma, start)
+            }
+
+            // --- Strings ---
+            b'\'' => self.scan_single_quoted_string(),
+            b'"' => self.scan_double_quoted_string(),
+            b'`' => self.scan_backtick_string(),
+
+            // --- Variables ---
+            b'$' => {
+                if start + 1 < bytes.len() && is_ident_start(bytes[start + 1]) {
+                    self.pos = start + 2;
+                    while self.pos < bytes.len() && is_ident_continue(bytes[self.pos]) {
+                        self.pos += 1;
+                    }
+                    self.tok(TokenKind::Variable, start)
+                } else {
+                    self.pos = start + 1;
+                    self.tok(TokenKind::Dollar, start)
+                }
+            }
+
+            // --- Numbers ---
+            b'0'..=b'9' => self.scan_number(),
+
+            // --- Identifiers and keywords ---
+            _ if is_ident_start(b) => {
+                // Check for binary-prefixed strings and heredocs
+                if b == b'b' || b == b'B' {
+                    if self.check_at(1, b'\'') {
+                        return self.scan_single_quoted_string();
+                    }
+                    if self.check_at(1, b'"') {
+                        return self.scan_double_quoted_string();
+                    }
+                    if self.check_at(1, b'<') && self.check_at(2, b'<') && self.check_at(3, b'<') {
+                        let remaining = &self.source[self.pos..];
+                        if let Some(token) = self.try_lex_heredoc(remaining) {
+                            return token;
                         }
                     }
                 }
-
-                let span = Span::new(start as u32, end as u32);
-
-                match kind {
-                    TokenKind::CloseTag => {
-                        self.mode = LexerMode::InlineHtml;
-                        Token::new(TokenKind::CloseTag, span)
-                    }
-                    TokenKind::Identifier => {
-                        let text = &self.source[start..end];
-                        let resolved = resolve_keyword(text).unwrap_or(TokenKind::Identifier);
-                        Token::new(resolved, span)
-                    }
-                    _ => Token::new(kind, span),
-                }
+                self.scan_identifier()
             }
-            Some(Err(())) => {
-                // Skip one byte and try again on unrecognized input
-                self.pos += 1;
+
+            // Unknown byte - skip and retry
+            _ => {
+                self.pos = start + 1;
                 self.read_next_token()
             }
-            None => Token::eof(self.source.len() as u32),
         }
+    }
+
+    /// Handle the `<` family of tokens, including heredoc.
+    fn scan_less_than(&mut self, start: usize) -> Token {
+        if self.check_at(1, b'<') {
+            if self.check_at(2, b'<') {
+                // <<< - try heredoc
+                let remaining = &self.source[self.pos..];
+                if let Some(token) = self.try_lex_heredoc(remaining) {
+                    return token;
+                }
+                // Not heredoc, fall through to <<
+            }
+            if self.check_at(2, b'=') {
+                self.pos = start + 3;
+                return self.tok(TokenKind::ShiftLeftEquals, start);
+            }
+            self.pos = start + 2;
+            return self.tok(TokenKind::ShiftLeft, start);
+        }
+        if self.check_at(1, b'=') {
+            if self.check_at(2, b'>') {
+                self.pos = start + 3;
+                return self.tok(TokenKind::Spaceship, start);
+            }
+            self.pos = start + 2;
+            return self.tok(TokenKind::LessThanEquals, start);
+        }
+        if self.check_at(1, b'?') {
+            if self.source[self.pos..].starts_with("<?php") {
+                self.pos = start + 5;
+                return self.tok(TokenKind::OpenTag, start);
+            }
+            if self.source[self.pos..].starts_with("<?=") {
+                self.pos = start + 3;
+                return self.tok(TokenKind::OpenTag, start);
+            }
+        }
+        self.pos = start + 1;
+        self.tok(TokenKind::LessThan, start)
+    }
+
+    // --- String scanning ---
+
+    fn scan_single_quoted_string(&mut self) -> Token {
+        let start = self.pos;
+        let bytes = self.source.as_bytes();
+        let mut p = self.pos;
+        // Skip optional binary prefix
+        if bytes[p] == b'b' || bytes[p] == b'B' {
+            p += 1;
+        }
+        p += 1; // skip opening '
+        loop {
+            if p >= bytes.len() {
+                // Unclosed string — skip opening quote and retry
+                self.pos = start + 1;
+                return self.read_next_token();
+            }
+            match bytes[p] {
+                b'\\' => {
+                    p += 1;
+                    if p < bytes.len() {
+                        p += 1;
+                    }
+                }
+                b'\'' => {
+                    p += 1;
+                    break;
+                }
+                _ => p += 1,
+            }
+        }
+        self.pos = p;
+        self.tok(TokenKind::SingleQuotedString, start)
+    }
+
+    fn scan_double_quoted_string(&mut self) -> Token {
+        let start = self.pos;
+        let bytes = self.source.as_bytes();
+        let mut p = self.pos;
+        // Skip optional binary prefix
+        if bytes[p] == b'b' || bytes[p] == b'B' {
+            p += 1;
+        }
+        p += 1; // skip opening "
+        loop {
+            if p >= bytes.len() {
+                // Unclosed string — skip just the opening quote and retry
+                // (matches logos behavior: unclosed string callback returns false → skip byte)
+                self.pos = start + 1;
+                return self.read_next_token();
+            }
+            match bytes[p] {
+                b'\\' => {
+                    p += 1;
+                    if p < bytes.len() {
+                        p += 1;
+                    }
+                }
+                b'"' => {
+                    p += 1;
+                    break;
+                }
+                _ => p += 1,
+            }
+        }
+        self.pos = p;
+        self.tok(TokenKind::DoubleQuotedString, start)
+    }
+
+    fn scan_backtick_string(&mut self) -> Token {
+        let start = self.pos;
+        let bytes = self.source.as_bytes();
+        let mut p = self.pos;
+        p += 1; // skip opening `
+        loop {
+            if p >= bytes.len() {
+                // Unclosed string — skip opening backtick and retry
+                self.pos = start + 1;
+                return self.read_next_token();
+            }
+            match bytes[p] {
+                b'\\' => {
+                    p += 1;
+                    if p < bytes.len() {
+                        p += 1;
+                    }
+                }
+                b'`' => {
+                    p += 1;
+                    break;
+                }
+                _ => p += 1,
+            }
+        }
+        self.pos = p;
+        self.tok(TokenKind::BacktickString, start)
+    }
+
+    // --- Number scanning ---
+
+    fn scan_number(&mut self) -> Token {
+        let start = self.pos;
+        let bytes = self.source.as_bytes();
+
+        // Check for 0x, 0b, 0o prefixes
+        if bytes[start] == b'0' && start + 1 < bytes.len() {
+            match bytes[start + 1] {
+                b'x' | b'X' => {
+                    self.pos = start + 2;
+                    if self.pos < bytes.len() && bytes[self.pos] == b'_' {
+                        self.consume_invalid_numeric_rest();
+                        return self.invalid_numeric(start);
+                    }
+                    if self.scan_digits(u8::is_ascii_hexdigit) {
+                        if self.pos < bytes.len() && bytes[self.pos] == b'_' {
+                            self.consume_invalid_numeric_rest();
+                            return self.invalid_numeric(start);
+                        }
+                        return self.tok(TokenKind::HexIntLiteral, start);
+                    }
+                    // No hex digits after 0x - backtrack to decimal
+                    self.pos = start;
+                }
+                b'b' | b'B' => {
+                    self.pos = start + 2;
+                    if self.pos < bytes.len() && bytes[self.pos] == b'_' {
+                        self.consume_invalid_numeric_rest();
+                        return self.invalid_numeric(start);
+                    }
+                    if self.scan_digits(|b| b == &b'0' || b == &b'1') {
+                        if self.pos < bytes.len() && bytes[self.pos] == b'_' {
+                            self.consume_invalid_numeric_rest();
+                            return self.invalid_numeric(start);
+                        }
+                        return self.tok(TokenKind::BinIntLiteral, start);
+                    }
+                    // No binary digits - backtrack
+                    self.pos = start;
+                }
+                b'o' | b'O' => {
+                    self.pos = start + 2;
+                    if self.pos < bytes.len() && bytes[self.pos] == b'_' {
+                        self.consume_invalid_numeric_rest();
+                        return self.invalid_numeric(start);
+                    }
+                    if self.scan_digits(|b| (b'0'..=b'7').contains(b)) {
+                        if self.pos < bytes.len() && bytes[self.pos] == b'_' {
+                            self.consume_invalid_numeric_rest();
+                            return self.invalid_numeric(start);
+                        }
+                        return self.tok(TokenKind::OctIntLiteralNew, start);
+                    }
+                    // No octal digits - backtrack
+                    self.pos = start;
+                }
+                _ => {}
+            }
+        }
+
+        // Scan decimal integer portion: [0-9](_?[0-9])*
+        self.pos = start;
+        self.scan_digits(u8::is_ascii_digit);
+        let integer_end = self.pos;
+        let mut kind = TokenKind::IntLiteral;
+
+        // Check for legacy octal: 0[0-7]+, no underscores
+        if bytes[start] == b'0' && integer_end > start + 1 {
+            let slice = &bytes[start..integer_end];
+            if slice.iter().all(|&b| (b'0'..=b'7').contains(&b)) {
+                kind = TokenKind::OctIntLiteral;
+            }
+        }
+
+        // Check for decimal point
+        if self.pos < bytes.len() && bytes[self.pos] == b'.' {
+            if self.pos + 1 < bytes.len() && bytes[self.pos + 1].is_ascii_digit() {
+                // Decimal point followed by digit: 1.5, 0.0, etc.
+                self.pos += 1; // consume '.'
+                self.scan_digits(u8::is_ascii_digit);
+                kind = TokenKind::FloatLiteralSimple;
+            } else if self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'_' {
+                // Invalid separator after decimal: 1._0
+                self.consume_invalid_numeric_rest();
+                return self.invalid_numeric(start);
+            } else if self.pos + 1 >= bytes.len() || bytes[self.pos + 1] != b'.' {
+                // Trailing dot without digit: 0. (not followed by another dot for .. or ...)
+                self.pos += 1; // consume '.'
+                kind = TokenKind::IntLiteral; // match legacy behavior: "0." parses as int
+            }
+        }
+
+        // Check for exponent
+        if self.pos < bytes.len() && matches!(bytes[self.pos], b'e' | b'E') {
+            if self.try_scan_exponent() {
+                kind = TokenKind::FloatLiteral;
+            } else if self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'_' {
+                // Invalid separator after exponent: 1e_2
+                self.consume_invalid_numeric_rest();
+                return self.invalid_numeric(start);
+            }
+        }
+
+        // Check for invalid trailing underscore
+        if self.pos < bytes.len() && bytes[self.pos] == b'_' {
+            self.consume_invalid_numeric_rest();
+            return self.invalid_numeric(start);
+        }
+
+        self.tok(kind, start)
+    }
+
+    /// Scan digits with optional underscores: digit (_? digit)*
+    /// Returns true if at least one digit was consumed.
+    fn scan_digits(&mut self, is_valid: fn(&u8) -> bool) -> bool {
+        let bytes = self.source.as_bytes();
+        if self.pos >= bytes.len() || !is_valid(&bytes[self.pos]) {
+            return false;
+        }
+        self.pos += 1;
+        loop {
+            if self.pos >= bytes.len() {
+                break;
+            }
+            if is_valid(&bytes[self.pos]) {
+                self.pos += 1;
+            } else if bytes[self.pos] == b'_'
+                && self.pos + 1 < bytes.len()
+                && is_valid(&bytes[self.pos + 1])
+            {
+                self.pos += 2;
+            } else {
+                break;
+            }
+        }
+        true
+    }
+
+    /// Try to scan an exponent part: [eE][+-]?[0-9](_?[0-9])*
+    /// Returns true if successful, false (with backtrack) if not.
+    fn try_scan_exponent(&mut self) -> bool {
+        let bytes = self.source.as_bytes();
+        let saved = self.pos;
+        self.pos += 1; // consume 'e'/'E'
+
+        // Optional sign
+        if self.pos < bytes.len() && matches!(bytes[self.pos], b'+' | b'-') {
+            self.pos += 1;
+        }
+
+        // Must have at least one digit
+        if self.scan_digits(u8::is_ascii_digit) {
+            true
+        } else {
+            self.pos = saved;
+            false
+        }
+    }
+
+    // --- Identifier scanning ---
+
+    fn scan_identifier(&mut self) -> Token {
+        let start = self.pos;
+        let bytes = self.source.as_bytes();
+        self.pos += 1; // consume first ident char
+        while self.pos < bytes.len() && is_ident_continue(bytes[self.pos]) {
+            self.pos += 1;
+        }
+        let text = &self.source[start..self.pos];
+        let kind = resolve_keyword(text).unwrap_or(TokenKind::Identifier);
+        self.tok(kind, start)
+    }
+
+    // --- Helpers ---
+
+    #[inline]
+    fn check_at(&self, offset: usize, expected: u8) -> bool {
+        self.source.as_bytes().get(self.pos + offset) == Some(&expected)
+    }
+
+    #[inline]
+    fn tok(&self, kind: TokenKind, start: usize) -> Token {
+        Token::new(kind, Span::new(start as u32, self.pos as u32))
+    }
+
+    fn invalid_numeric(&mut self, start: usize) -> Token {
+        let span = Span::new(start as u32, self.pos as u32);
+        self.errors.push(LexerError {
+            message: "Invalid numeric literal".to_string(),
+            span,
+        });
+        Token::new(TokenKind::InvalidNumericLiteral, span)
     }
 
     /// Consume characters that form an invalid numeric literal rest (digits, underscores, dots, hex chars, exponent markers).
@@ -265,24 +901,6 @@ impl<'src> Lexer<'src> {
             } else {
                 break;
             }
-        }
-    }
-
-    /// Check if the current position starts an invalid numeric literal (next byte is `_` after a numeric token).
-    /// If so, greedily consume the invalid literal and return the token.
-    fn try_consume_invalid_numeric(&mut self, start: usize) -> Option<Token> {
-        let bytes = self.source.as_bytes();
-        if bytes.get(self.pos) == Some(&b'_') {
-            self.consume_invalid_numeric_rest();
-            let final_end = self.pos;
-            let span = Span::new(start as u32, final_end as u32);
-            self.errors.push(LexerError {
-                message: "Invalid numeric literal".to_string(),
-                span,
-            });
-            Some(Token::new(TokenKind::InvalidNumericLiteral, span))
-        } else {
-            None
         }
     }
 
@@ -410,10 +1028,6 @@ impl<'src> Lexer<'src> {
 
         let span = Span::new(start as u32, self.pos as u32);
 
-        // Store the content in the token. The parser will extract it from the source span.
-        // We encode: the source span covers <<<LABEL\ncontent\nLABEL
-        // The parser needs to know the label and content, which it can reconstruct.
-
         if is_nowdoc {
             Some(Token::new(TokenKind::Nowdoc, span))
         } else {
@@ -442,6 +1056,34 @@ mod tests {
 
     fn collect_kinds(source: &str) -> Vec<TokenKind> {
         collect_tokens(source).into_iter().map(|t| t.kind).collect()
+    }
+
+    /// Collect token kinds from PHP code (auto-prefixes with <?php)
+    fn php_kinds(code: &str) -> Vec<TokenKind> {
+        let full = format!("<?php {}", code);
+        collect_kinds(&full)
+            .into_iter()
+            .filter(|k| *k != TokenKind::OpenTag && *k != TokenKind::Eof)
+            .collect()
+    }
+
+    /// Collect (kind, text) pairs from PHP code
+    fn php_tokens(code: &str) -> Vec<(TokenKind, String)> {
+        let full = format!("<?php {}", code);
+        let mut lexer = Lexer::new(&full);
+        let mut result = Vec::new();
+        loop {
+            let token = lexer.next_token();
+            if token.kind == TokenKind::Eof {
+                break;
+            }
+            if token.kind == TokenKind::OpenTag {
+                continue;
+            }
+            let text = lexer.token_text(&token).to_string();
+            result.push((token.kind, text));
+        }
+        result
     }
 
     #[test]
@@ -638,5 +1280,153 @@ mod tests {
     fn test_only_inline_html() {
         let tokens = collect_kinds("<html><body>Hello</body></html>");
         assert_eq!(tokens, vec![TokenKind::InlineHtml, TokenKind::Eof]);
+    }
+
+    // --- Tests ported from logos-specific token tests ---
+
+    #[test]
+    fn test_basic_operators() {
+        assert_eq!(
+            php_kinds("+ - * / % ** ."),
+            vec![
+                TokenKind::Plus,
+                TokenKind::Minus,
+                TokenKind::Star,
+                TokenKind::Slash,
+                TokenKind::Percent,
+                TokenKind::StarStar,
+                TokenKind::Dot,
+            ]
+        );
+    }
+
+    #[test]
+    fn test_integers() {
+        let toks = php_tokens("42 0xFF 0b1010 077");
+        assert_eq!(toks[0], (TokenKind::IntLiteral, "42".to_string()));
+        assert_eq!(toks[1], (TokenKind::HexIntLiteral, "0xFF".to_string()));
+        assert_eq!(toks[2], (TokenKind::BinIntLiteral, "0b1010".to_string()));
+        assert_eq!(toks[3], (TokenKind::OctIntLiteral, "077".to_string()));
+    }
+
+    #[test]
+    fn test_floats() {
+        let toks = php_tokens("3.14 1e10 2.5e-3");
+        assert_eq!(toks[0], (TokenKind::FloatLiteralSimple, "3.14".to_string()));
+        assert_eq!(toks[1], (TokenKind::FloatLiteral, "1e10".to_string()));
+        assert_eq!(toks[2], (TokenKind::FloatLiteral, "2.5e-3".to_string()));
+    }
+
+    #[test]
+    fn test_strings() {
+        let kinds = php_kinds(r#"'hello' "world" 'it\'s' "say \"hi\"""#);
+        assert_eq!(
+            kinds,
+            vec![
+                TokenKind::SingleQuotedString,
+                TokenKind::DoubleQuotedString,
+                TokenKind::SingleQuotedString,
+                TokenKind::DoubleQuotedString,
+            ]
+        );
+    }
+
+    #[test]
+    fn test_variables() {
+        let toks = php_tokens("$x $myVar $_foo");
+        assert_eq!(toks[0], (TokenKind::Variable, "$x".to_string()));
+        assert_eq!(toks[1], (TokenKind::Variable, "$myVar".to_string()));
+        assert_eq!(toks[2], (TokenKind::Variable, "$_foo".to_string()));
+    }
+
+    #[test]
+    fn test_comments_skipped() {
+        let toks = php_tokens("42 // line comment\n43 /* block */ 44 # hash comment\n45");
+        assert_eq!(toks[0], (TokenKind::IntLiteral, "42".to_string()));
+        assert_eq!(toks[1], (TokenKind::IntLiteral, "43".to_string()));
+        assert_eq!(toks[2], (TokenKind::IntLiteral, "44".to_string()));
+        assert_eq!(toks[3], (TokenKind::IntLiteral, "45".to_string()));
+    }
+
+    #[test]
+    fn test_float_leading_dot() {
+        let toks = php_tokens(".5 .123e4");
+        assert_eq!(
+            toks[0],
+            (TokenKind::FloatLiteralLeadingDot, ".5".to_string())
+        );
+        assert_eq!(
+            toks[1],
+            (TokenKind::FloatLiteralLeadingDot, ".123e4".to_string())
+        );
+    }
+
+    #[test]
+    fn test_new_octal_syntax() {
+        let toks = php_tokens("0o77 0O755");
+        assert_eq!(toks[0], (TokenKind::OctIntLiteralNew, "0o77".to_string()));
+        assert_eq!(toks[1], (TokenKind::OctIntLiteralNew, "0O755".to_string()));
+    }
+
+    #[test]
+    fn test_numeric_underscores() {
+        let toks = php_tokens("1_000 0xFF_FF 0b1010_0101");
+        assert_eq!(toks[0], (TokenKind::IntLiteral, "1_000".to_string()));
+        assert_eq!(toks[1], (TokenKind::HexIntLiteral, "0xFF_FF".to_string()));
+        assert_eq!(
+            toks[2],
+            (TokenKind::BinIntLiteral, "0b1010_0101".to_string())
+        );
+    }
+
+    #[test]
+    fn test_binary_prefix_strings() {
+        let kinds = php_kinds(r#"b'hello' B"world""#);
+        assert_eq!(
+            kinds,
+            vec![TokenKind::SingleQuotedString, TokenKind::DoubleQuotedString,]
+        );
+    }
+
+    #[test]
+    fn test_hash_bracket_not_comment() {
+        let kinds = php_kinds("#[Attribute]");
+        assert_eq!(
+            kinds,
+            vec![
+                TokenKind::HashBracket,
+                TokenKind::Identifier,
+                TokenKind::RightBracket,
+            ]
+        );
+    }
+
+    #[test]
+    fn test_nullsafe_arrow() {
+        let kinds = php_kinds("$x?->y");
+        assert_eq!(
+            kinds,
+            vec![
+                TokenKind::Variable,
+                TokenKind::NullsafeArrow,
+                TokenKind::Identifier,
+            ]
+        );
+    }
+
+    #[test]
+    fn test_pipe_arrow() {
+        let kinds = php_kinds("$x |> foo(...)");
+        assert_eq!(
+            kinds,
+            vec![
+                TokenKind::Variable,
+                TokenKind::PipeArrow,
+                TokenKind::Identifier,
+                TokenKind::LeftParen,
+                TokenKind::Ellipsis,
+                TokenKind::RightParen,
+            ]
+        );
     }
 }
