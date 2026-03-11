@@ -70,5 +70,9 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
 
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+
       - name: Check PHP syntax in tests
-        run: bash scripts/check-php-syntax.sh
+        run: cargo test --test php_syntax
