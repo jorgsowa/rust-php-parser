@@ -211,24 +211,9 @@ See **[ROADMAP.md](ROADMAP.md)** for a comprehensive breakdown with phases, depe
 The test suite uses [insta](https://insta.rs/) snapshot testing with JSON output. Run individual test files to avoid excessive memory usage:
 
 ```sh
-cargo test --test integration          # 264 hand-written integration tests
-cargo test --test nikic_expr_tests     # 66 expression tests (nikic/PHP-Parser fixtures)
-cargo test --test nikic_stmt_tests     # 150 statement tests
-cargo test --test nikic_scalar_tests   # 12 scalar/literal tests
-cargo test --test nikic_misc_tests     # 10 misc tests
-cargo test --test nikic_error_tests    # 30 error handling tests
+cargo test --test integration               # 264 hand-written integration tests
+cargo test --test nikic_integration_tests   # 268 nikic/PHP-Parser fixture tests
 ```
-
-### Test Suite Status
-
-| Suite | Passing | Total |
-|-------|---------|-------|
-| integration | 264 | 264 |
-| nikic_expr_tests | 66 | 66 |
-| nikic_stmt_tests | 150 | 150 |
-| nikic_scalar_tests | 12 | 12 |
-| nikic_misc_tests | 10 | 10 |
-| nikic_error_tests | 30 | 30 |
 
 All 532 tests pass. Fixture files live in `crates/php-parser/tests/fixtures/`.
 

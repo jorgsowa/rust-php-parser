@@ -1,5 +1,311 @@
 mod common;
 
+// error handling
+nikic_test!(
+    nikic_errorhandling_eoferror_1,
+    "errorHandling/eofError_1.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_eoferror_2,
+    "errorHandling/eofError_2.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_lexererrors_1,
+    "errorHandling/lexerErrors_1.php"
+);
+nikic_test!(
+    nikic_errorhandling_lexererrors_5,
+    "errorHandling/lexerErrors_5.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_1,
+    "errorHandling/recovery_1.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_2,
+    "errorHandling/recovery_2.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_3,
+    "errorHandling/recovery_3.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_4,
+    "errorHandling/recovery_4.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_5,
+    "errorHandling/recovery_5.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_6,
+    "errorHandling/recovery_6.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_7,
+    "errorHandling/recovery_7.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_8,
+    "errorHandling/recovery_8.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_9,
+    "errorHandling/recovery_9.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_10,
+    "errorHandling/recovery_10.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_11,
+    "errorHandling/recovery_11.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_12,
+    "errorHandling/recovery_12.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_13,
+    "errorHandling/recovery_13.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_14,
+    "errorHandling/recovery_14.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_15,
+    "errorHandling/recovery_15.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_16,
+    "errorHandling/recovery_16.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_17,
+    "errorHandling/recovery_17.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_18,
+    "errorHandling/recovery_18.php"
+);
+nikic_test!(
+    nikic_errorhandling_recovery_19,
+    "errorHandling/recovery_19.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_20,
+    "errorHandling/recovery_20.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_21,
+    "errorHandling/recovery_21.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_22,
+    "errorHandling/recovery_22.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_23,
+    "errorHandling/recovery_23.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_24,
+    "errorHandling/recovery_24.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_25,
+    "errorHandling/recovery_25.php",
+    errors
+);
+nikic_test!(
+    nikic_errorhandling_recovery_26,
+    "errorHandling/recovery_26.php",
+    errors
+);
+
+// expr
+nikic_test!(
+    nikic_expr_alternative_array_syntax_1,
+    "expr/alternative_array_syntax_1.php"
+);
+nikic_test!(
+    nikic_expr_alternative_array_syntax_2,
+    "expr/alternative_array_syntax_2.php"
+);
+nikic_test!(nikic_expr_arraydef, "expr/arrayDef.php");
+nikic_test!(nikic_expr_arraydestructuring, "expr/arrayDestructuring.php");
+nikic_test!(
+    nikic_expr_arrayemptyelemens,
+    "expr/arrayEmptyElemens.php",
+    errors
+);
+nikic_test!(nikic_expr_arrayspread, "expr/arraySpread.php");
+nikic_test!(nikic_expr_arrow_function, "expr/arrow_function.php");
+nikic_test!(nikic_expr_assign, "expr/assign.php");
+nikic_test!(nikic_expr_assignnewbyref_1, "expr/assignNewByRef_1.php");
+nikic_test!(nikic_expr_assignnewbyref_2, "expr/assignNewByRef_2.php");
+nikic_test!(nikic_expr_cast, "expr/cast.php", errors);
+nikic_test!(nikic_expr_clone, "expr/clone.php");
+nikic_test!(nikic_expr_closure, "expr/closure.php");
+nikic_test!(
+    nikic_expr_closure_use_trailing_comma,
+    "expr/closure_use_trailing_comma.php"
+);
+nikic_test!(nikic_expr_comparison, "expr/comparison.php");
+nikic_test!(nikic_expr_concatprecedence_1, "expr/concatPrecedence_1.php");
+nikic_test!(nikic_expr_concatprecedence_2, "expr/concatPrecedence_2.php");
+nikic_test!(nikic_expr_constant_expr, "expr/constant_expr.php");
+nikic_test!(nikic_expr_dynamicclassconst, "expr/dynamicClassConst.php");
+nikic_test!(nikic_expr_errorsuppress, "expr/errorSuppress.php");
+nikic_test!(nikic_expr_exit, "expr/exit.php");
+nikic_test!(nikic_expr_exprinisset, "expr/exprInIsset.php");
+nikic_test!(nikic_expr_exprinlist, "expr/exprInList.php");
+nikic_test!(nikic_expr_fetchandcall_args, "expr/fetchAndCall/args.php");
+nikic_test!(
+    nikic_expr_fetchandcall_constfetch,
+    "expr/fetchAndCall/constFetch.php"
+);
+nikic_test!(
+    nikic_expr_fetchandcall_constantderef,
+    "expr/fetchAndCall/constantDeref.php"
+);
+nikic_test!(
+    nikic_expr_fetchandcall_funccall,
+    "expr/fetchAndCall/funcCall.php"
+);
+nikic_test!(
+    nikic_expr_fetchandcall_namedargs,
+    "expr/fetchAndCall/namedArgs.php"
+);
+nikic_test!(
+    nikic_expr_fetchandcall_newderef,
+    "expr/fetchAndCall/newDeref.php"
+);
+nikic_test!(
+    nikic_expr_fetchandcall_objectaccess,
+    "expr/fetchAndCall/objectAccess.php"
+);
+nikic_test!(
+    nikic_expr_fetchandcall_simplearrayaccess,
+    "expr/fetchAndCall/simpleArrayAccess.php"
+);
+nikic_test!(
+    nikic_expr_fetchandcall_staticcall,
+    "expr/fetchAndCall/staticCall.php"
+);
+nikic_test!(
+    nikic_expr_fetchandcall_staticpropertyfetch,
+    "expr/fetchAndCall/staticPropertyFetch.php"
+);
+nikic_test!(
+    nikic_expr_firstclasscallables,
+    "expr/firstClassCallables.php"
+);
+nikic_test!(nikic_expr_includeandeval, "expr/includeAndEval.php");
+nikic_test!(nikic_expr_issetandempty, "expr/issetAndEmpty.php");
+nikic_test!(
+    nikic_expr_keywordsinnamespacedname,
+    "expr/keywordsInNamespacedName.php"
+);
+nikic_test!(nikic_expr_listreferences, "expr/listReferences.php");
+nikic_test!(nikic_expr_listwithkeys, "expr/listWithKeys.php");
+nikic_test!(nikic_expr_logic, "expr/logic.php");
+nikic_test!(nikic_expr_match_1, "expr/match_1.php");
+nikic_test!(nikic_expr_match_2, "expr/match_2.php");
+nikic_test!(nikic_expr_match_3, "expr/match_3.php");
+nikic_test!(nikic_expr_match_4, "expr/match_4.php");
+nikic_test!(nikic_expr_match_5, "expr/match_5.php");
+nikic_test!(nikic_expr_math, "expr/math.php");
+nikic_test!(nikic_expr_new, "expr/new.php");
+nikic_test!(nikic_expr_newderef, "expr/newDeref.php");
+nikic_test!(
+    nikic_expr_newwithoutclass,
+    "expr/newWithoutClass.php",
+    errors
+);
+nikic_test!(nikic_expr_nullsafe, "expr/nullsafe.php");
+nikic_test!(nikic_expr_pipe, "expr/pipe.php");
+nikic_test!(nikic_expr_print, "expr/print.php");
+nikic_test!(nikic_expr_shellexec, "expr/shellExec.php");
+nikic_test!(nikic_expr_ternaryandcoalesce, "expr/ternaryAndCoalesce.php");
+nikic_test!(nikic_expr_throw, "expr/throw.php");
+nikic_test!(nikic_expr_trailingcommas, "expr/trailingCommas.php");
+nikic_test!(nikic_expr_uvs_constderef, "expr/uvs/constDeref.php");
+nikic_test!(
+    nikic_expr_uvs_globalnonsimplevarerror,
+    "expr/uvs/globalNonSimpleVarError.php",
+    errors
+);
+nikic_test!(nikic_expr_uvs_indirectcall, "expr/uvs/indirectCall.php");
+nikic_test!(nikic_expr_uvs_isset, "expr/uvs/isset.php");
+nikic_test!(nikic_expr_uvs_misc, "expr/uvs/misc.php");
+nikic_test!(nikic_expr_uvs_new, "expr/uvs/new.php");
+nikic_test!(
+    nikic_expr_uvs_newinstanceofexpr,
+    "expr/uvs/newInstanceofExpr.php"
+);
+nikic_test!(nikic_expr_uvs_staticproperty, "expr/uvs/staticProperty.php");
+nikic_test!(nikic_expr_varvarpos, "expr/varVarPos.php");
+nikic_test!(nikic_expr_variable, "expr/variable.php");
+
+// misc
+nikic_test!(nikic_blockcomments, "blockComments.php");
+nikic_test!(nikic_commentatendofclass, "commentAtEndOfClass.php");
+nikic_test!(nikic_comments_1, "comments_1.php");
+nikic_test!(nikic_comments_2, "comments_2.php");
+nikic_test!(nikic_comments_3, "comments_3.php");
+nikic_test!(nikic_emptyfile, "emptyFile.php");
+nikic_test!(nikic_formattingattributes, "formattingAttributes.php");
+nikic_test!(nikic_noppositions_1, "nopPositions_1.php");
+nikic_test!(nikic_noppositions_2, "nopPositions_2.php");
+nikic_test!(nikic_semireserved, "semiReserved.php");
+
+// scalar
+nikic_test!(nikic_scalar_constantstring, "scalar/constantString.php");
+nikic_test!(nikic_scalar_docstring, "scalar/docString.php");
+nikic_test!(nikic_scalar_encapsedstring, "scalar/encapsedString.php");
+nikic_test!(nikic_scalar_explicitoctal, "scalar/explicitOctal.php");
+nikic_test!(nikic_scalar_float, "scalar/float.php");
+nikic_test!(nikic_scalar_invalidoctal_1, "scalar/invalidOctal_1.php");
+nikic_test!(nikic_scalar_invalidoctal_2, "scalar/invalidOctal_2.php");
+nikic_test!(nikic_scalar_magicconst, "scalar/magicConst.php");
+nikic_test!(
+    nikic_scalar_numberseparators,
+    "scalar/numberSeparators.php",
+    errors
+);
+nikic_test!(nikic_scalar_unicodeescape_1, "scalar/unicodeEscape_1.php");
+nikic_test!(nikic_scalar_unicodeescape_2, "scalar/unicodeEscape_2.php");
+nikic_test!(nikic_scalar_unicodeescape_3, "scalar/unicodeEscape_3.php");
+
+// stmt
 nikic_test!(nikic_stmt_attributes, "stmt/attributes.php");
 nikic_test!(nikic_stmt_blocklessstatement, "stmt/blocklessStatement.php");
 nikic_test!(nikic_stmt_class_abstract, "stmt/class/abstract.php");
