@@ -6,12 +6,8 @@
 
 Always run tests for a specific test file:
 ```bash
-cargo test --test integration          # integration tests
-cargo test --test nikic_stmt_tests     # nikic statement tests
-cargo test --test nikic_expr_tests     # nikic expression tests
-cargo test --test nikic_error_tests    # nikic error handling tests
-cargo test --test nikic_scalar_tests   # nikic scalar tests
-cargo test --test nikic_misc_tests     # nikic misc tests
+cargo test --test integration               # integration tests
+cargo test --test nikic_integration_tests   # all nikic tests
 ```
 
 Or filter to a specific test:

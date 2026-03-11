@@ -29,32 +29,29 @@ jobs:
         run: cargo clippy --workspace -- -D warnings
 
   test:
-    name: Test (${{ matrix.test-binary }})
+    name: Test (PHP ${{ matrix.php-version }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        test-binary:
-          - integration
-          - nikic_stmt_tests
-          - nikic_expr_tests
-          - nikic_error_tests
-          - nikic_scalar_tests
-          - nikic_misc_tests
+        php-version: ['8.2', '8.3', '8.4', '8.5']
     steps:
       - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
 
       - uses: dtolnay/rust-toolchain@stable
 
       - uses: Swatinem/rust-cache@v2
-
-      - name: Build test binary
-        run: cargo test --test ${{ matrix.test-binary }} --no-run
-        env:
-          CARGO_BUILD_JOBS: 1
+        with:
+          key: ${{ matrix.php-version }}
 
       - name: Run tests
-        run: cargo test --test ${{ matrix.test-binary }}
+        run: |
+          cargo test --test integration
+          cargo test --test nikic_integration_tests
 
   php-syntax:
     name: PHP Syntax (${{ matrix.php-version }})
@@ -73,6 +70,8 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
 
       - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.php-version }}
 
       - name: Check PHP syntax in tests
         run: cargo test --test php_syntax
