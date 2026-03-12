@@ -245,93 +245,286 @@ impl TokenKind {
 /// Resolve a keyword from an identifier string. Returns the keyword TokenKind
 /// if the string is a keyword, or None if it's a plain identifier.
 pub fn resolve_keyword(text: &str) -> Option<TokenKind> {
-    // PHP keywords are case-insensitive
-    match text.to_ascii_lowercase().as_str() {
-        "if" => Some(TokenKind::If),
-        "else" => Some(TokenKind::Else),
-        "elseif" => Some(TokenKind::ElseIf),
-        "while" => Some(TokenKind::While),
-        "do" => Some(TokenKind::Do),
-        "for" => Some(TokenKind::For),
-        "foreach" => Some(TokenKind::Foreach),
-        "as" => Some(TokenKind::As),
-        "function" => Some(TokenKind::Function),
-        "return" => Some(TokenKind::Return),
-        "echo" => Some(TokenKind::Echo),
-        "print" => Some(TokenKind::Print),
-        "true" => Some(TokenKind::True),
-        "false" => Some(TokenKind::False),
-        "null" => Some(TokenKind::Null),
-        "and" => Some(TokenKind::And),
-        "or" => Some(TokenKind::Or),
-        "xor" => Some(TokenKind::Xor),
-        "break" => Some(TokenKind::Break),
-        "continue" => Some(TokenKind::Continue),
-        "switch" => Some(TokenKind::Switch),
-        "case" => Some(TokenKind::Case),
-        "default" => Some(TokenKind::Default),
-        "endif" => Some(TokenKind::EndIf),
-        "endwhile" => Some(TokenKind::EndWhile),
-        "endfor" => Some(TokenKind::EndFor),
-        "endforeach" => Some(TokenKind::EndForeach),
-        "throw" => Some(TokenKind::Throw),
-        "try" => Some(TokenKind::Try),
-        "catch" => Some(TokenKind::Catch),
-        "finally" => Some(TokenKind::Finally),
-        "instanceof" => Some(TokenKind::Instanceof),
-        "array" => Some(TokenKind::Array),
-        "list" => Some(TokenKind::List),
-        "goto" => Some(TokenKind::Goto),
-        "declare" => Some(TokenKind::Declare),
-        "unset" => Some(TokenKind::Unset),
-        "global" => Some(TokenKind::Global),
-        "enddeclare" => Some(TokenKind::EndDeclare),
-        "endswitch" => Some(TokenKind::EndSwitch),
-        "isset" => Some(TokenKind::Isset),
-        "empty" => Some(TokenKind::Empty),
-        "include" => Some(TokenKind::Include),
-        "include_once" => Some(TokenKind::IncludeOnce),
-        "require" => Some(TokenKind::Require),
-        "require_once" => Some(TokenKind::RequireOnce),
-        "eval" => Some(TokenKind::Eval),
-        "exit" => Some(TokenKind::Exit),
-        "die" => Some(TokenKind::Die),
-        "clone" => Some(TokenKind::Clone),
-        "new" => Some(TokenKind::New),
-        "class" => Some(TokenKind::Class),
-        "abstract" => Some(TokenKind::Abstract),
-        "final" => Some(TokenKind::Final),
-        "interface" => Some(TokenKind::Interface),
-        "trait" => Some(TokenKind::Trait),
-        "extends" => Some(TokenKind::Extends),
-        "implements" => Some(TokenKind::Implements),
-        "public" => Some(TokenKind::Public),
-        "protected" => Some(TokenKind::Protected),
-        "private" => Some(TokenKind::Private),
-        "static" => Some(TokenKind::Static),
-        "const" => Some(TokenKind::Const),
-        "fn" => Some(TokenKind::Fn_),
-        "match" => Some(TokenKind::Match_),
-        "namespace" => Some(TokenKind::Namespace),
-        "use" => Some(TokenKind::Use),
-        "readonly" => Some(TokenKind::Readonly),
-        "enum" => Some(TokenKind::Enum_),
-        "yield" => Some(TokenKind::Yield_),
-        "from" => Some(TokenKind::From),
-        "self" => Some(TokenKind::Self_),
-        "parent" => Some(TokenKind::Parent_),
-        "__class__" => Some(TokenKind::MagicClass),
-        "__dir__" => Some(TokenKind::MagicDir),
-        "__file__" => Some(TokenKind::MagicFile),
-        "__function__" => Some(TokenKind::MagicFunction),
-        "__line__" => Some(TokenKind::MagicLine),
-        "__method__" => Some(TokenKind::MagicMethod),
-        "__namespace__" => Some(TokenKind::MagicNamespace),
-        "__trait__" => Some(TokenKind::MagicTrait),
-        "__property__" => Some(TokenKind::MagicProperty),
-        "__halt_compiler" => Some(TokenKind::HaltCompiler),
-        _ => None,
+    // PHP keywords are case-insensitive; use eq_ignore_ascii_case to avoid allocation.
+    // Dispatch on length first to reduce comparisons.
+    let t = text;
+    match text.len() {
+        2 => {
+            if t.eq_ignore_ascii_case("if") {
+                return Some(TokenKind::If);
+            }
+            if t.eq_ignore_ascii_case("do") {
+                return Some(TokenKind::Do);
+            }
+            if t.eq_ignore_ascii_case("or") {
+                return Some(TokenKind::Or);
+            }
+            if t.eq_ignore_ascii_case("as") {
+                return Some(TokenKind::As);
+            }
+            if t.eq_ignore_ascii_case("fn") {
+                return Some(TokenKind::Fn_);
+            }
+        }
+        3 => {
+            if t.eq_ignore_ascii_case("for") {
+                return Some(TokenKind::For);
+            }
+            if t.eq_ignore_ascii_case("xor") {
+                return Some(TokenKind::Xor);
+            }
+            if t.eq_ignore_ascii_case("and") {
+                return Some(TokenKind::And);
+            }
+            if t.eq_ignore_ascii_case("new") {
+                return Some(TokenKind::New);
+            }
+            if t.eq_ignore_ascii_case("use") {
+                return Some(TokenKind::Use);
+            }
+            if t.eq_ignore_ascii_case("try") {
+                return Some(TokenKind::Try);
+            }
+            if t.eq_ignore_ascii_case("die") {
+                return Some(TokenKind::Die);
+            }
+        }
+        4 => {
+            if t.eq_ignore_ascii_case("else") {
+                return Some(TokenKind::Else);
+            }
+            if t.eq_ignore_ascii_case("echo") {
+                return Some(TokenKind::Echo);
+            }
+            if t.eq_ignore_ascii_case("true") {
+                return Some(TokenKind::True);
+            }
+            if t.eq_ignore_ascii_case("null") {
+                return Some(TokenKind::Null);
+            }
+            if t.eq_ignore_ascii_case("list") {
+                return Some(TokenKind::List);
+            }
+            if t.eq_ignore_ascii_case("goto") {
+                return Some(TokenKind::Goto);
+            }
+            if t.eq_ignore_ascii_case("case") {
+                return Some(TokenKind::Case);
+            }
+            if t.eq_ignore_ascii_case("self") {
+                return Some(TokenKind::Self_);
+            }
+            if t.eq_ignore_ascii_case("from") {
+                return Some(TokenKind::From);
+            }
+            if t.eq_ignore_ascii_case("enum") {
+                return Some(TokenKind::Enum_);
+            }
+            if t.eq_ignore_ascii_case("eval") {
+                return Some(TokenKind::Eval);
+            }
+            if t.eq_ignore_ascii_case("exit") {
+                return Some(TokenKind::Exit);
+            }
+        }
+        5 => {
+            if t.eq_ignore_ascii_case("while") {
+                return Some(TokenKind::While);
+            }
+            if t.eq_ignore_ascii_case("false") {
+                return Some(TokenKind::False);
+            }
+            if t.eq_ignore_ascii_case("array") {
+                return Some(TokenKind::Array);
+            }
+            if t.eq_ignore_ascii_case("unset") {
+                return Some(TokenKind::Unset);
+            }
+            if t.eq_ignore_ascii_case("isset") {
+                return Some(TokenKind::Isset);
+            }
+            if t.eq_ignore_ascii_case("empty") {
+                return Some(TokenKind::Empty);
+            }
+            if t.eq_ignore_ascii_case("print") {
+                return Some(TokenKind::Print);
+            }
+            if t.eq_ignore_ascii_case("throw") {
+                return Some(TokenKind::Throw);
+            }
+            if t.eq_ignore_ascii_case("catch") {
+                return Some(TokenKind::Catch);
+            }
+            if t.eq_ignore_ascii_case("break") {
+                return Some(TokenKind::Break);
+            }
+            if t.eq_ignore_ascii_case("yield") {
+                return Some(TokenKind::Yield_);
+            }
+            if t.eq_ignore_ascii_case("class") {
+                return Some(TokenKind::Class);
+            }
+            if t.eq_ignore_ascii_case("const") {
+                return Some(TokenKind::Const);
+            }
+            if t.eq_ignore_ascii_case("final") {
+                return Some(TokenKind::Final);
+            }
+            if t.eq_ignore_ascii_case("match") {
+                return Some(TokenKind::Match_);
+            }
+            if t.eq_ignore_ascii_case("trait") {
+                return Some(TokenKind::Trait);
+            }
+            if t.eq_ignore_ascii_case("clone") {
+                return Some(TokenKind::Clone);
+            }
+            if t.eq_ignore_ascii_case("endif") {
+                return Some(TokenKind::EndIf);
+            }
+        }
+        6 => {
+            if t.eq_ignore_ascii_case("elseif") {
+                return Some(TokenKind::ElseIf);
+            }
+            if t.eq_ignore_ascii_case("return") {
+                return Some(TokenKind::Return);
+            }
+            if t.eq_ignore_ascii_case("switch") {
+                return Some(TokenKind::Switch);
+            }
+            if t.eq_ignore_ascii_case("global") {
+                return Some(TokenKind::Global);
+            }
+            if t.eq_ignore_ascii_case("static") {
+                return Some(TokenKind::Static);
+            }
+            if t.eq_ignore_ascii_case("public") {
+                return Some(TokenKind::Public);
+            }
+            if t.eq_ignore_ascii_case("parent") {
+                return Some(TokenKind::Parent_);
+            }
+            if t.eq_ignore_ascii_case("endfor") {
+                return Some(TokenKind::EndFor);
+            }
+        }
+        7 => {
+            if t.eq_ignore_ascii_case("foreach") {
+                return Some(TokenKind::Foreach);
+            }
+            if t.eq_ignore_ascii_case("default") {
+                return Some(TokenKind::Default);
+            }
+            if t.eq_ignore_ascii_case("finally") {
+                return Some(TokenKind::Finally);
+            }
+            if t.eq_ignore_ascii_case("include") {
+                return Some(TokenKind::Include);
+            }
+            if t.eq_ignore_ascii_case("declare") {
+                return Some(TokenKind::Declare);
+            }
+            if t.eq_ignore_ascii_case("extends") {
+                return Some(TokenKind::Extends);
+            }
+            if t.eq_ignore_ascii_case("require") {
+                return Some(TokenKind::Require);
+            }
+            if t.eq_ignore_ascii_case("private") {
+                return Some(TokenKind::Private);
+            }
+            if t.eq_ignore_ascii_case("__dir__") {
+                return Some(TokenKind::MagicDir);
+            }
+        }
+        8 => {
+            if t.eq_ignore_ascii_case("function") {
+                return Some(TokenKind::Function);
+            }
+            if t.eq_ignore_ascii_case("abstract") {
+                return Some(TokenKind::Abstract);
+            }
+            if t.eq_ignore_ascii_case("readonly") {
+                return Some(TokenKind::Readonly);
+            }
+            if t.eq_ignore_ascii_case("continue") {
+                return Some(TokenKind::Continue);
+            }
+            if t.eq_ignore_ascii_case("endwhile") {
+                return Some(TokenKind::EndWhile);
+            }
+            if t.eq_ignore_ascii_case("__file__") {
+                return Some(TokenKind::MagicFile);
+            }
+            if t.eq_ignore_ascii_case("__line__") {
+                return Some(TokenKind::MagicLine);
+            }
+        }
+        9 => {
+            if t.eq_ignore_ascii_case("namespace") {
+                return Some(TokenKind::Namespace);
+            }
+            if t.eq_ignore_ascii_case("interface") {
+                return Some(TokenKind::Interface);
+            }
+            if t.eq_ignore_ascii_case("protected") {
+                return Some(TokenKind::Protected);
+            }
+            if t.eq_ignore_ascii_case("endswitch") {
+                return Some(TokenKind::EndSwitch);
+            }
+            if t.eq_ignore_ascii_case("__class__") {
+                return Some(TokenKind::MagicClass);
+            }
+            if t.eq_ignore_ascii_case("__trait__") {
+                return Some(TokenKind::MagicTrait);
+            }
+        }
+        10 => {
+            if t.eq_ignore_ascii_case("implements") {
+                return Some(TokenKind::Implements);
+            }
+            if t.eq_ignore_ascii_case("instanceof") {
+                return Some(TokenKind::Instanceof);
+            }
+            if t.eq_ignore_ascii_case("endforeach") {
+                return Some(TokenKind::EndForeach);
+            }
+            if t.eq_ignore_ascii_case("enddeclare") {
+                return Some(TokenKind::EndDeclare);
+            }
+            if t.eq_ignore_ascii_case("__method__") {
+                return Some(TokenKind::MagicMethod);
+            }
+        }
+        12 => {
+            if t.eq_ignore_ascii_case("include_once") {
+                return Some(TokenKind::IncludeOnce);
+            }
+            if t.eq_ignore_ascii_case("require_once") {
+                return Some(TokenKind::RequireOnce);
+            }
+            if t.eq_ignore_ascii_case("__function__") {
+                return Some(TokenKind::MagicFunction);
+            }
+            if t.eq_ignore_ascii_case("__property__") {
+                return Some(TokenKind::MagicProperty);
+            }
+        }
+        13 => {
+            if t.eq_ignore_ascii_case("__namespace__") {
+                return Some(TokenKind::MagicNamespace);
+            }
+        }
+        15 => {
+            if t.eq_ignore_ascii_case("__halt_compiler") {
+                return Some(TokenKind::HaltCompiler);
+            }
+        }
+        _ => {}
     }
+    None
 }
 
 impl std::fmt::Display for TokenKind {
