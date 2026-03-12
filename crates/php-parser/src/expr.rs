@@ -709,7 +709,11 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             if crate::interpolation::has_interpolation(inner) {
                 // Offset of first char of inner content in source
                 let inner_offset = token.span.end - 1 - inner.len() as u32;
-                let parts = crate::interpolation::parse_interpolated_parts(inner, inner_offset);
+                let parts = crate::interpolation::parse_interpolated_parts(
+                    parser.source(),
+                    inner,
+                    inner_offset,
+                );
                 Expr {
                     kind: ExprKind::InterpolatedString(parts),
                     span: token.span,
@@ -731,7 +735,11 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
 
             if crate::interpolation::has_interpolation(inner) {
                 let inner_offset = token.span.start + 1;
-                let parts = crate::interpolation::parse_interpolated_parts(inner, inner_offset);
+                let parts = crate::interpolation::parse_interpolated_parts(
+                    parser.source(),
+                    inner,
+                    inner_offset,
+                );
                 Expr {
                     kind: ExprKind::ShellExec(parts),
                     span: token.span,
@@ -752,7 +760,8 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             let (label, body) = parse_heredoc_content(text);
             if crate::interpolation::has_interpolation(&body) {
                 let body_offset = find_body_offset(text, token.span.start);
-                let parts = crate::interpolation::parse_interpolated_parts(&body, body_offset);
+                let parts =
+                    crate::interpolation::parse_interpolated_parts_heredoc(&body, body_offset);
                 Expr {
                     kind: ExprKind::Heredoc { label, parts },
                     span: token.span,

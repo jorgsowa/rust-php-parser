@@ -766,8 +766,8 @@ expression: json
                         "Variable": "A"
                       },
                       "span": {
-                        "start": 7,
-                        "end": 9
+                        "start": 218,
+                        "end": 220
                       }
                     }
                   },
