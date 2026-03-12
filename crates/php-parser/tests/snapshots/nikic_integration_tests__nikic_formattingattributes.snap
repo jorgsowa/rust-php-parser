@@ -212,7 +212,7 @@ expression: json
           "kind": {
             "ShellExec": [
               {
-                "Literal": "foo\\nbar"
+                "Literal": "foo\nbar"
               }
             ]
           },
