@@ -522,7 +522,7 @@ pub enum ExprKind<'src> {
     Float(f64),
 
     /// String literal
-    String(String),
+    String(Cow<'src, str>),
 
     /// Interpolated string: `"Hello $name, you are {$age} years old"`
     InterpolatedString(Vec<StringPart<'src>>),
@@ -950,6 +950,6 @@ pub enum CallableCreateKind<'src> {
 
 #[derive(Debug, Clone, Serialize)]
 pub enum StringPart<'src> {
-    Literal(String),
+    Literal(Cow<'src, str>),
     Expr(Expr<'src>),
 }

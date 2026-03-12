@@ -12,7 +12,7 @@ pub fn parse_interpolated_parts<'src>(
     inner: &'src str,
     base_offset: u32,
 ) -> Vec<StringPart<'src>> {
-    let mut parts = Vec::new();
+    let mut parts = Vec::with_capacity(4);
     let mut literal = String::new();
     let bytes = inner.as_bytes();
     let len = bytes.len();
@@ -105,7 +105,9 @@ pub fn parse_interpolated_parts<'src>(
                 if i + 1 < len && is_var_start(bytes[i + 1]) {
                     // Flush literal
                     if !literal.is_empty() {
-                        parts.push(StringPart::Literal(std::mem::take(&mut literal)));
+                        parts.push(StringPart::Literal(Cow::Owned(std::mem::take(
+                            &mut literal,
+                        ))));
                     }
 
                     // Parse variable name
@@ -184,7 +186,10 @@ pub fn parse_interpolated_parts<'src>(
                             } else {
                                 // Bare string key (e.g. $arr[key])
                                 Expr {
-                                    kind: ExprKind::String(idx_str.to_string()),
+                                    kind: ExprKind::String(Cow::Borrowed(
+                                        &source[base_offset as usize + idx_start
+                                            ..base_offset as usize + (i - 1)],
+                                    )),
                                     span: Span::new(idx_offset, idx_end),
                                 }
                             };
@@ -210,7 +215,9 @@ pub fn parse_interpolated_parts<'src>(
             b'{' if i + 1 < len && bytes[i + 1] == b'$' => {
                 // Complex syntax: {$expr}
                 if !literal.is_empty() {
-                    parts.push(StringPart::Literal(std::mem::take(&mut literal)));
+                    parts.push(StringPart::Literal(Cow::Owned(std::mem::take(
+                        &mut literal,
+                    ))));
                 }
 
                 i += 1; // skip {
@@ -262,7 +269,7 @@ pub fn parse_interpolated_parts<'src>(
     }
 
     if !literal.is_empty() {
-        parts.push(StringPart::Literal(literal));
+        parts.push(StringPart::Literal(Cow::Owned(literal)));
     }
 
     parts
@@ -273,7 +280,7 @@ pub fn parse_interpolated_parts<'src>(
 /// a verbatim subslice of the original source, so complex interpolations are parsed
 /// via the old wrapping approach.
 pub fn parse_interpolated_parts_heredoc(inner: &str, base_offset: u32) -> Vec<StringPart<'static>> {
-    let mut parts: Vec<StringPart<'static>> = Vec::new();
+    let mut parts: Vec<StringPart<'static>> = Vec::with_capacity(4);
     let mut literal = String::new();
     let bytes = inner.as_bytes();
     let len = bytes.len();
@@ -360,7 +367,9 @@ pub fn parse_interpolated_parts_heredoc(inner: &str, base_offset: u32) -> Vec<St
             b'$' => {
                 if i + 1 < len && is_var_start(bytes[i + 1]) {
                     if !literal.is_empty() {
-                        parts.push(StringPart::Literal(std::mem::take(&mut literal)));
+                        parts.push(StringPart::Literal(Cow::Owned(std::mem::take(
+                            &mut literal,
+                        ))));
                     }
                     let var_start = i;
                     i += 1;
@@ -425,7 +434,7 @@ pub fn parse_interpolated_parts_heredoc(inner: &str, base_offset: u32) -> Vec<St
                                 }
                             } else {
                                 Expr {
-                                    kind: ExprKind::String(idx_str.to_string()),
+                                    kind: ExprKind::String(Cow::Owned(idx_str.to_string())),
                                     span: Span::new(idx_offset, idx_end),
                                 }
                             };
@@ -448,7 +457,9 @@ pub fn parse_interpolated_parts_heredoc(inner: &str, base_offset: u32) -> Vec<St
             }
             b'{' if i + 1 < len && bytes[i + 1] == b'$' => {
                 if !literal.is_empty() {
-                    parts.push(StringPart::Literal(std::mem::take(&mut literal)));
+                    parts.push(StringPart::Literal(Cow::Owned(std::mem::take(
+                        &mut literal,
+                    ))));
                 }
                 i += 1; // skip {
                 let expr_start = i;
@@ -493,7 +504,7 @@ pub fn parse_interpolated_parts_heredoc(inner: &str, base_offset: u32) -> Vec<St
     }
 
     if !literal.is_empty() {
-        parts.push(StringPart::Literal(literal));
+        parts.push(StringPart::Literal(Cow::Owned(literal)));
     }
 
     parts
@@ -573,7 +584,7 @@ fn to_static_expr(expr: Expr<'_>) -> Expr<'static> {
         ExprKind::Identifier(s) => ExprKind::Identifier(Cow::Owned(s.into_owned())),
         ExprKind::Int(v) => ExprKind::Int(v),
         ExprKind::Float(v) => ExprKind::Float(v),
-        ExprKind::String(s) => ExprKind::String(s),
+        ExprKind::String(s) => ExprKind::String(Cow::Owned(s.into_owned())),
         ExprKind::Bool(v) => ExprKind::Bool(v),
         ExprKind::Null => ExprKind::Null,
         ExprKind::Error => ExprKind::Error,
