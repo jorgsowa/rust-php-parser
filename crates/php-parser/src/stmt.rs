@@ -328,7 +328,7 @@ pub fn parse_block<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     let open_span = open.map(|t| t.span).unwrap_or(parser.current_span());
 
     parser.depth += 1;
-    let mut stmts = Vec::new();
+    let mut stmts = Vec::with_capacity(16);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
         stmts.push(parse_stmt(parser));
@@ -364,7 +364,7 @@ fn parse_stmts_until_end<'src>(
     parser: &'_ mut Parser<'src>,
     ends: &[TokenKind],
 ) -> Vec<Stmt<'src>> {
-    let mut stmts = Vec::new();
+    let mut stmts = Vec::with_capacity(8);
     while !ends.contains(&parser.current_kind()) && !parser.check(TokenKind::Eof) {
         stmts.push(parse_stmt(parser));
     }
@@ -497,7 +497,7 @@ fn parse_if<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     // Normal syntax
     let then_branch = Box::new(parse_stmt_or_block(parser));
 
-    let mut elseif_branches = Vec::new();
+    let mut elseif_branches = Vec::with_capacity(2);
     while parser.eat(TokenKind::ElseIf).is_some() {
         let elseif_start = parser.start_span();
         parser.expect(TokenKind::LeftParen);
@@ -740,7 +740,7 @@ fn parse_function<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 
     let open_brace = parser.expect(TokenKind::LeftBrace);
     let open_brace_span = open_brace.map(|t| t.span).unwrap_or(parser.current_span());
-    let mut body = Vec::new();
+    let mut body = Vec::with_capacity(16);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
         body.push(parse_stmt(parser));
@@ -768,7 +768,7 @@ fn parse_function<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 }
 
 pub fn parse_param_list<'src>(parser: &'_ mut Parser<'src>) -> Vec<Param<'src>> {
-    let mut params = Vec::new();
+    let mut params = Vec::with_capacity(4);
     if parser.check(TokenKind::RightParen) {
         return params;
     }
@@ -972,7 +972,7 @@ fn parse_switch<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     } else {
         &[TokenKind::RightBrace]
     };
-    let mut cases = Vec::new();
+    let mut cases = Vec::with_capacity(8);
 
     while !end_tokens.contains(&parser.current_kind()) && !parser.check(TokenKind::Eof) {
         let case_start = parser.start_span();
@@ -1044,7 +1044,7 @@ fn parse_try_catch<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     let start = parser.start_span();
     parser.advance();
     parser.expect(TokenKind::LeftBrace);
-    let mut body = Vec::new();
+    let mut body = Vec::with_capacity(16);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
         body.push(parse_stmt(parser));
@@ -1054,7 +1054,7 @@ fn parse_try_catch<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     }
     parser.expect(TokenKind::RightBrace);
 
-    let mut catches = Vec::new();
+    let mut catches = Vec::with_capacity(2);
     while parser.eat(TokenKind::Catch).is_some() {
         let catch_start = parser.start_span();
         parser.expect(TokenKind::LeftParen);
@@ -1075,7 +1075,7 @@ fn parse_try_catch<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 
         parser.expect(TokenKind::RightParen);
         parser.expect(TokenKind::LeftBrace);
-        let mut catch_body = Vec::new();
+        let mut catch_body = Vec::with_capacity(8);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
             catch_body.push(parse_stmt(parser));
@@ -1598,7 +1598,7 @@ fn parse_property_hooks<'src>(parser: &'_ mut Parser<'src>) -> Vec<PropertyHook<
         let body = if parser.check(TokenKind::LeftBrace) {
             let open_brace = parser.expect(TokenKind::LeftBrace);
             let brace_span = open_brace.map(|t| t.span).unwrap_or(parser.current_span());
-            let mut stmts = Vec::new();
+            let mut stmts = Vec::with_capacity(8);
             while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
                 let span_before = parser.current_span();
                 stmts.push(parse_stmt(parser));
@@ -1634,7 +1634,7 @@ fn parse_property_hooks<'src>(parser: &'_ mut Parser<'src>) -> Vec<PropertyHook<
 }
 
 pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMember<'src>> {
-    let mut members = Vec::new();
+    let mut members = Vec::with_capacity(8);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         // Skip empty statements
         if parser.check(TokenKind::Semicolon) {
@@ -1650,7 +1650,7 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
         // Trait use: use TraitName;  or  use A, B { ... }
         if parser.check(TokenKind::Use) {
             parser.advance();
-            let mut traits = Vec::new();
+            let mut traits = Vec::with_capacity(2);
             traits.push(parser.parse_name());
             while parser.eat(TokenKind::Comma).is_some() {
                 if parser.check(TokenKind::Semicolon) || parser.check(TokenKind::LeftBrace) {
@@ -1919,7 +1919,7 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
 
             let body = if parser.check(TokenKind::LeftBrace) {
                 parser.expect(TokenKind::LeftBrace);
-                let mut stmts = Vec::new();
+                let mut stmts = Vec::with_capacity(16);
                 while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
                     let span_before = parser.current_span();
                     stmts.push(parse_stmt(parser));
@@ -2170,7 +2170,7 @@ fn parse_enum<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 
     parser.expect(TokenKind::LeftBrace);
 
-    let mut members = Vec::new();
+    let mut members = Vec::with_capacity(4);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         if parser.check(TokenKind::Semicolon) {
             parser.advance();
@@ -2331,7 +2331,7 @@ fn parse_enum<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 
             let body = if parser.check(TokenKind::LeftBrace) {
                 parser.expect(TokenKind::LeftBrace);
-                let mut stmts = Vec::new();
+                let mut stmts = Vec::with_capacity(16);
                 while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
                     let span_before = parser.current_span();
                     stmts.push(parse_stmt(parser));
@@ -2397,7 +2397,7 @@ fn parse_namespace<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     if parser.check(TokenKind::LeftBrace) {
         // Global namespace block
         parser.expect(TokenKind::LeftBrace);
-        let mut stmts = Vec::new();
+        let mut stmts = Vec::with_capacity(16);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
             stmts.push(parse_stmt(parser));
@@ -2423,7 +2423,7 @@ fn parse_namespace<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     if parser.check(TokenKind::LeftBrace) {
         // Braced namespace: namespace Foo\Bar { ... }
         parser.expect(TokenKind::LeftBrace);
-        let mut stmts = Vec::new();
+        let mut stmts = Vec::with_capacity(16);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
             stmts.push(parse_stmt(parser));
@@ -2471,7 +2471,7 @@ fn parse_use<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         UseKind::Normal
     };
 
-    let mut uses = Vec::new();
+    let mut uses = Vec::with_capacity(4);
 
     // Parse first name to check for group use
     let item_start = parser.start_span();

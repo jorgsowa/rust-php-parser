@@ -161,7 +161,7 @@ expression: json
       "kind": {
         "Expression": {
           "kind": {
-            "String": "foo\\nbar"
+            "String": "foo\nbar"
           },
           "span": {
             "start": 84,
