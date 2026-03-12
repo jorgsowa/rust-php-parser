@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 use php_ast::*;
 use php_lexer::TokenKind;
 
@@ -24,12 +26,12 @@ const CAST_KEYWORDS: &[(&str, CastKind)] = &[
 ];
 
 /// Parse an expression.
-pub fn parse_expr(parser: &mut Parser) -> Expr {
+pub fn parse_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
     parse_expr_bp(parser, 0)
 }
 
 /// Pratt expression parser. Parses expressions with binding power >= min_bp.
-pub fn parse_expr_bp(parser: &mut Parser, min_bp: u8) -> Expr {
+pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'src> {
     let mut lhs = parse_atom(parser);
 
     loop {
@@ -216,8 +218,9 @@ pub fn parse_expr_bp(parser: &mut Parser, min_bp: u8) -> Expr {
             if parser.check(TokenKind::Variable) {
                 // Static property: Class::$prop
                 let token = parser.advance();
-                let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-                let member = text[1..].to_string();
+                let src = parser.source;
+                let member =
+                    Cow::Borrowed(&src[token.span.start as usize + 1..token.span.end as usize]);
                 let span = Span::new(lhs.span.start, token.span.end);
                 lhs = Expr {
                     kind: ExprKind::StaticPropertyAccess(StaticAccessExpr {
@@ -251,7 +254,7 @@ pub fn parse_expr_bp(parser: &mut Parser, min_bp: u8) -> Expr {
                                 kind: ExprKind::CallableCreate(CallableCreateExpr {
                                     kind: CallableCreateKind::StaticMethod {
                                         class: Box::new(lhs),
-                                        method: format!("{{{}}}", "dynamic"),
+                                        method: Cow::Borrowed("{dynamic}"),
                                     },
                                 }),
                                 span,
@@ -293,7 +296,7 @@ pub fn parse_expr_bp(parser: &mut Parser, min_bp: u8) -> Expr {
                 lhs = Expr {
                     kind: ExprKind::ClassConstAccess(StaticAccessExpr {
                         class: Box::new(lhs),
-                        member: "class".to_string(),
+                        member: Cow::Borrowed("class"),
                     }),
                     span,
                 };
@@ -309,7 +312,7 @@ pub fn parse_expr_bp(parser: &mut Parser, min_bp: u8) -> Expr {
                             found: parser.current_kind(),
                             span,
                         });
-                        ("<error>".to_string(), span)
+                        ("<error>", span)
                     };
 
                 if parser.check(TokenKind::LeftParen) {
@@ -320,7 +323,7 @@ pub fn parse_expr_bp(parser: &mut Parser, min_bp: u8) -> Expr {
                                 kind: ExprKind::CallableCreate(CallableCreateExpr {
                                     kind: CallableCreateKind::StaticMethod {
                                         class: Box::new(lhs),
-                                        method: member_name,
+                                        method: Cow::Borrowed(member_name),
                                     },
                                 }),
                                 span,
@@ -331,7 +334,7 @@ pub fn parse_expr_bp(parser: &mut Parser, min_bp: u8) -> Expr {
                             lhs = Expr {
                                 kind: ExprKind::StaticMethodCall(StaticMethodCallExpr {
                                     class: Box::new(lhs),
-                                    method: member_name,
+                                    method: Cow::Borrowed(member_name),
                                     args,
                                 }),
                                 span,
@@ -344,7 +347,7 @@ pub fn parse_expr_bp(parser: &mut Parser, min_bp: u8) -> Expr {
                     lhs = Expr {
                         kind: ExprKind::ClassConstAccess(StaticAccessExpr {
                             class: Box::new(lhs),
-                            member: member_name,
+                            member: Cow::Borrowed(member_name),
                         }),
                         span,
                     };
@@ -456,14 +459,14 @@ pub fn parse_expr_bp(parser: &mut Parser, min_bp: u8) -> Expr {
 }
 
 /// Parse a member name after -> or ?->. Accepts identifiers and semi-reserved keywords.
-fn parse_member_name(parser: &mut Parser) -> Expr {
+fn parse_member_name<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
     if parser.check(TokenKind::Variable) {
         // Dynamic property: $obj->{$var} or $obj->$var
         let token = parser.advance();
-        let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-        let name = text[1..].to_string();
+        let src = parser.source;
+        let name = &src[token.span.start as usize + 1..token.span.end as usize];
         return Expr {
-            kind: ExprKind::Variable(name),
+            kind: ExprKind::Variable(Cow::Borrowed(name)),
             span: token.span,
         };
     }
@@ -476,7 +479,7 @@ fn parse_member_name(parser: &mut Parser) -> Expr {
     }
     if let Some((text, span)) = parser.eat_identifier_or_keyword() {
         return Expr {
-            kind: ExprKind::Identifier(text),
+            kind: ExprKind::Identifier(Cow::Borrowed(text)),
             span,
         };
     }
@@ -494,7 +497,7 @@ fn parse_member_name(parser: &mut Parser) -> Expr {
 }
 
 /// Parse an atomic expression (prefix unaries, literals, variables, etc.)
-fn parse_atom(parser: &mut Parser) -> Expr {
+fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
     let kind = parser.current_kind();
 
     // Keywords followed by backslash are namespace-qualified names (e.g., fn\use(), private\protected\...)
@@ -507,16 +510,22 @@ fn parse_atom(parser: &mut Parser) -> Expr {
         && parser.peek_kind() == Some(TokenKind::Backslash)
     {
         let token = parser.advance();
-        let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-        let mut parts = vec![text.to_string()];
+        let src = parser.source;
+        let first = &src[token.span.start as usize..token.span.end as usize];
+        let mut parts: Vec<&str> = vec![first];
         while parser.eat(TokenKind::Backslash).is_some() {
             if let Some((part, _)) = parser.eat_identifier_or_keyword() {
                 parts.push(part);
             }
         }
         let span = Span::new(token.span.start, parser.current_span().start);
+        let ident = if parts.len() == 1 {
+            Cow::Borrowed(parts[0])
+        } else {
+            Cow::Owned(parts.join("\\"))
+        };
         return Expr {
-            kind: ExprKind::Identifier(parts.join("\\")),
+            kind: ExprKind::Identifier(ident),
             span,
         };
     }
@@ -794,11 +803,11 @@ fn parse_atom(parser: &mut Parser) -> Expr {
         // Variables
         TokenKind::Variable => {
             let token = parser.advance();
-            let text = &parser.source()[token.span.start as usize..token.span.end as usize];
+            let src = parser.source;
             // Strip the $ prefix
-            let name = text[1..].to_string();
+            let name = &src[token.span.start as usize + 1..token.span.end as usize];
             Expr {
-                kind: ExprKind::Variable(name),
+                kind: ExprKind::Variable(Cow::Borrowed(name)),
                 span: token.span,
             }
         }
@@ -827,11 +836,12 @@ fn parse_atom(parser: &mut Parser) -> Expr {
         // Also handles qualified names: App\Models\User
         TokenKind::Identifier => {
             let token = parser.advance();
-            let text = &parser.source()[token.span.start as usize..token.span.end as usize];
+            let src = parser.source;
+            let text = &src[token.span.start as usize..token.span.end as usize];
 
             // Check if this is a qualified name: Foo\Bar\Baz
             if parser.check(TokenKind::Backslash) {
-                let mut parts = vec![text.to_string()];
+                let mut parts: Vec<&str> = vec![text];
                 while parser.eat(TokenKind::Backslash).is_some() {
                     if let Some((part, _)) = parser.eat_identifier_or_keyword() {
                         parts.push(part);
@@ -839,12 +849,12 @@ fn parse_atom(parser: &mut Parser) -> Expr {
                 }
                 let span = Span::new(token.span.start, parser.current_span().start);
                 Expr {
-                    kind: ExprKind::Identifier(parts.join("\\")),
+                    kind: ExprKind::Identifier(Cow::Owned(parts.join("\\"))),
                     span,
                 }
             } else {
                 Expr {
-                    kind: ExprKind::Identifier(text.to_string()),
+                    kind: ExprKind::Identifier(Cow::Borrowed(text)),
                     span: token.span,
                 }
             }
@@ -854,14 +864,14 @@ fn parse_atom(parser: &mut Parser) -> Expr {
         TokenKind::Backslash => {
             let start = parser.start_span();
             let name = parser.parse_name();
-            let text = name.parts.join("\\");
-            let prefix = if name.kind == NameKind::FullyQualified {
-                "\\"
+            let joined = name.parts.join("\\");
+            let text = if name.kind == NameKind::FullyQualified {
+                format!("\\{}", joined)
             } else {
-                ""
+                joined
             };
             Expr {
-                kind: ExprKind::Identifier(format!("{}{}", prefix, text)),
+                kind: ExprKind::Identifier(Cow::Owned(text)),
                 span: Span::new(start, name.span.end),
             }
         }
@@ -870,14 +880,14 @@ fn parse_atom(parser: &mut Parser) -> Expr {
         TokenKind::Self_ => {
             let token = parser.advance();
             Expr {
-                kind: ExprKind::Identifier("self".to_string()),
+                kind: ExprKind::Identifier(Cow::Borrowed("self")),
                 span: token.span,
             }
         }
         TokenKind::Parent_ => {
             let token = parser.advance();
             Expr {
-                kind: ExprKind::Identifier("parent".to_string()),
+                kind: ExprKind::Identifier(Cow::Borrowed("parent")),
                 span: token.span,
             }
         }
@@ -892,7 +902,7 @@ fn parse_atom(parser: &mut Parser) -> Expr {
                 return parse_arrow_function(parser, true, token.span.start, Vec::new());
             }
             Expr {
-                kind: ExprKind::Identifier("static".to_string()),
+                kind: ExprKind::Identifier(Cow::Borrowed("static")),
                 span: token.span,
             }
         }
@@ -1062,8 +1072,8 @@ fn parse_atom(parser: &mut Parser) -> Expr {
         // exit / die
         TokenKind::Exit | TokenKind::Die => {
             let token = parser.advance();
-            let name_text =
-                parser.source()[token.span.start as usize..token.span.end as usize].to_string();
+            let src = parser.source;
+            let name_text = Cow::Borrowed(&src[token.span.start as usize..token.span.end as usize]);
             if parser.check(TokenKind::LeftParen) {
                 match parse_arg_list_or_callable(parser) {
                     ArgListResult::CallableMarker => {
@@ -1126,7 +1136,7 @@ fn parse_atom(parser: &mut Parser) -> Expr {
             if parser.check(TokenKind::LeftParen) {
                 // PHP 8.4: clone() function call syntax
                 let callee = Expr {
-                    kind: ExprKind::Identifier("clone".to_string()),
+                    kind: ExprKind::Identifier(Cow::Borrowed("clone")),
                     span: token.span,
                 };
                 parse_function_call(parser, callee)
@@ -1210,7 +1220,7 @@ fn parse_atom(parser: &mut Parser) -> Expr {
             if parser.peek_kind() == Some(TokenKind::Backslash) {
                 let start = parser.start_span();
                 let name = parser.parse_name();
-                let text = format!("namespace\\{}", name.parts.join("\\"));
+                let text = Cow::Owned(format!("namespace\\{}", name.parts.join("\\")));
                 Expr {
                     kind: ExprKind::Identifier(text),
                     span: Span::new(start, name.span.end),
@@ -1229,7 +1239,7 @@ fn parse_atom(parser: &mut Parser) -> Expr {
         TokenKind::Readonly => {
             let token = parser.advance();
             Expr {
-                kind: ExprKind::Identifier("readonly".to_string()),
+                kind: ExprKind::Identifier(Cow::Borrowed("readonly")),
                 span: token.span,
             }
         }
@@ -1250,7 +1260,7 @@ fn parse_atom(parser: &mut Parser) -> Expr {
 // New expression: new ClassName(args)
 // =============================================================================
 
-fn parse_new_expr(parser: &mut Parser) -> Expr {
+fn parse_new_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'new'
 
@@ -1320,30 +1330,32 @@ fn parse_new_expr(parser: &mut Parser) -> Expr {
         TokenKind::Self_ => {
             let t = parser.advance();
             Expr {
-                kind: ExprKind::Identifier("self".to_string()),
+                kind: ExprKind::Identifier(Cow::Borrowed("self")),
                 span: t.span,
             }
         }
         TokenKind::Parent_ => {
             let t = parser.advance();
             Expr {
-                kind: ExprKind::Identifier("parent".to_string()),
+                kind: ExprKind::Identifier(Cow::Borrowed("parent")),
                 span: t.span,
             }
         }
         TokenKind::Static => {
             let t = parser.advance();
             Expr {
-                kind: ExprKind::Identifier("static".to_string()),
+                kind: ExprKind::Identifier(Cow::Borrowed("static")),
                 span: t.span,
             }
         }
         TokenKind::Variable => {
             // new $className()
             let t = parser.advance();
-            let text = &parser.source()[t.span.start as usize..t.span.end as usize];
+            let src = parser.source;
             Expr {
-                kind: ExprKind::Variable(text[1..].to_string()),
+                kind: ExprKind::Variable(Cow::Borrowed(
+                    &src[t.span.start as usize + 1..t.span.end as usize],
+                )),
                 span: t.span,
             }
         }
@@ -1363,9 +1375,9 @@ fn parse_new_expr(parser: &mut Parser) -> Expr {
             // Parse as a name (possibly qualified)
             let name = parser.parse_name();
             let text = if name.kind == NameKind::FullyQualified {
-                format!("\\{}", name.parts.join("\\"))
+                Cow::Owned(format!("\\{}", name.parts.join("\\")))
             } else {
-                name.parts.join("\\")
+                Cow::Owned(name.parts.join("\\"))
             };
             Expr {
                 kind: ExprKind::Identifier(text),
@@ -1395,12 +1407,12 @@ fn parse_new_expr(parser: &mut Parser) -> Expr {
 // Closure expression: function($x) use($y) { }
 // =============================================================================
 
-fn parse_closure(
-    parser: &mut Parser,
+fn parse_closure<'src>(
+    parser: &mut Parser<'src>,
     is_static: bool,
     start: u32,
-    attributes: Vec<Attribute>,
-) -> Expr {
+    attributes: Vec<Attribute<'src>>,
+) -> Expr<'src> {
     if !is_static {
         parser.advance(); // consume 'function'
     } else {
@@ -1459,7 +1471,7 @@ fn parse_closure(
     }
 }
 
-fn parse_closure_use_list(parser: &mut Parser) -> Vec<ClosureUseVar> {
+fn parse_closure_use_list<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClosureUseVar<'src>> {
     let mut vars = Vec::new();
     loop {
         if parser.check(TokenKind::RightParen) {
@@ -1468,8 +1480,8 @@ fn parse_closure_use_list(parser: &mut Parser) -> Vec<ClosureUseVar> {
         let var_start = parser.start_span();
         let by_ref = parser.eat(TokenKind::Ampersand).is_some();
         if let Some(token) = parser.eat(TokenKind::Variable) {
-            let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-            let name = text[1..].to_string();
+            let src = parser.source;
+            let name = &src[token.span.start as usize + 1..token.span.end as usize];
             let span = Span::new(var_start, token.span.end);
             vars.push(ClosureUseVar { name, by_ref, span });
         }
@@ -1484,12 +1496,12 @@ fn parse_closure_use_list(parser: &mut Parser) -> Vec<ClosureUseVar> {
 // Arrow function: fn($x) => expr
 // =============================================================================
 
-fn parse_arrow_function(
-    parser: &mut Parser,
+fn parse_arrow_function<'src>(
+    parser: &mut Parser<'src>,
     is_static: bool,
     start: u32,
-    attributes: Vec<Attribute>,
-) -> Expr {
+    attributes: Vec<Attribute<'src>>,
+) -> Expr<'src> {
     parser.advance(); // consume 'fn'
 
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
@@ -1526,7 +1538,7 @@ fn parse_arrow_function(
 // Match expression
 // =============================================================================
 
-fn parse_match_expr(parser: &mut Parser) -> Expr {
+fn parse_match_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'match'
 
@@ -1590,7 +1602,7 @@ fn parse_match_expr(parser: &mut Parser) -> Expr {
 // Yield expression
 // =============================================================================
 
-fn parse_yield_expr(parser: &mut Parser) -> Expr {
+fn parse_yield_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'yield'
 
@@ -1661,13 +1673,13 @@ fn parse_yield_expr(parser: &mut Parser) -> Expr {
 // =============================================================================
 
 /// Result of parsing an argument list — either regular args or a `(...)` callable marker.
-enum ArgListResult {
-    Args(Vec<Arg>),
+enum ArgListResult<'src> {
+    Args(Vec<Arg<'src>>),
     CallableMarker,
 }
 
 /// Parse an argument list `(arg, arg, ...)` or detect `(...)` first-class callable syntax.
-fn parse_arg_list_or_callable(parser: &mut Parser) -> ArgListResult {
+fn parse_arg_list_or_callable<'src>(parser: &'_ mut Parser<'src>) -> ArgListResult<'src> {
     parser.advance(); // consume (
 
     // Detect first-class callable: (...)
@@ -1695,14 +1707,14 @@ fn parse_arg_list_or_callable(parser: &mut Parser) -> ArgListResult {
 }
 
 /// Parse an argument list: `(arg, arg, ...)`
-pub fn parse_arg_list(parser: &mut Parser) -> Vec<Arg> {
+pub fn parse_arg_list<'src>(parser: &'_ mut Parser<'src>) -> Vec<Arg<'src>> {
     match parse_arg_list_or_callable(parser) {
         ArgListResult::Args(args) => args,
         ArgListResult::CallableMarker => Vec::new(), // fallback — shouldn't reach here in normal use
     }
 }
 
-fn parse_arg(parser: &mut Parser) -> Arg {
+fn parse_arg<'src>(parser: &'_ mut Parser<'src>) -> Arg<'src> {
     let start = parser.start_span();
 
     // Check for named argument: name: (PHP allows any keyword as a named arg label)
@@ -1744,9 +1756,8 @@ fn parse_arg(parser: &mut Parser) -> Arg {
         {
             let name_token = parser.advance();
             parser.advance(); // consume :
-            let text =
-                &parser.source()[name_token.span.start as usize..name_token.span.end as usize];
-            Some(text.to_string())
+            let src = parser.source;
+            Some(&src[name_token.span.start as usize..name_token.span.end as usize])
         } else {
             None
         }
@@ -1771,7 +1782,7 @@ fn parse_arg(parser: &mut Parser) -> Arg {
     }
 }
 
-fn parse_function_call(parser: &mut Parser, callee: Expr) -> Expr {
+fn parse_function_call<'src>(parser: &'_ mut Parser<'src>, callee: Expr<'src>) -> Expr<'src> {
     let start = callee.span.start;
 
     match parse_arg_list_or_callable(parser) {
@@ -1801,7 +1812,7 @@ fn parse_function_call(parser: &mut Parser, callee: Expr) -> Expr {
 // Array parsing
 // =============================================================================
 
-fn parse_array_literal(parser: &mut Parser) -> Expr {
+fn parse_array_literal<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
     let start = parser.start_span();
     parser.advance(); // consume [
 
@@ -1845,7 +1856,7 @@ fn parse_array_literal(parser: &mut Parser) -> Expr {
     }
 }
 
-fn parse_array_call(parser: &mut Parser) -> Expr {
+fn parse_array_call<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'array'
     parser.expect(TokenKind::LeftParen);
@@ -1876,7 +1887,7 @@ fn parse_array_call(parser: &mut Parser) -> Expr {
     }
 }
 
-fn parse_array_element(parser: &mut Parser) -> ArrayElement {
+fn parse_array_element<'src>(parser: &'_ mut Parser<'src>) -> ArrayElement<'src> {
     let elem_start = parser.start_span();
 
     // Handle unpack: ...$arr
@@ -1913,7 +1924,7 @@ fn parse_array_element(parser: &mut Parser) -> ArrayElement {
     }
 }
 
-fn parse_list_expr(parser: &mut Parser) -> Expr {
+fn parse_list_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'list'
     parser.expect(TokenKind::LeftParen);
@@ -1961,7 +1972,7 @@ fn parse_list_expr(parser: &mut Parser) -> Expr {
 
 /// Parse a single element in a list() or short list destructuring.
 /// Handles: `$var`, `&$var`, `'key' => $var`, `'key' => &$var`, `list($a, $b)`, etc.
-fn parse_list_element(parser: &mut Parser) -> ArrayElement {
+fn parse_list_element<'src>(parser: &'_ mut Parser<'src>) -> ArrayElement<'src> {
     let elem_start = parser.start_span();
 
     // Handle &$var (by-reference)
@@ -2005,7 +2016,7 @@ fn parse_list_element(parser: &mut Parser) -> ArrayElement {
 
 /// Try to parse a cast expression like `(int)$x`. Returns Some(Expr) if successful,
 /// or None if this is not a cast (just a parenthesized expression).
-fn try_parse_cast(parser: &mut Parser) -> Option<Expr> {
+fn try_parse_cast<'src>(parser: &'_ mut Parser<'src>) -> Option<Expr<'src>> {
     let peeked = parser.peek_kind();
 
     let cast_kind = match peeked {

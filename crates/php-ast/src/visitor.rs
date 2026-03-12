@@ -3,47 +3,47 @@ use crate::ast::*;
 /// Visitor trait for AST traversal. All methods have default implementations
 /// that recursively walk child nodes, so implementors only need to override
 /// the node types they care about.
-pub trait Visitor {
-    fn visit_program(&mut self, program: &Program) {
+pub trait Visitor<'src> {
+    fn visit_program(&mut self, program: &Program<'src>) {
         walk_program(self, program);
     }
 
-    fn visit_stmt(&mut self, stmt: &Stmt) {
+    fn visit_stmt(&mut self, stmt: &Stmt<'src>) {
         walk_stmt(self, stmt);
     }
 
-    fn visit_expr(&mut self, expr: &Expr) {
+    fn visit_expr(&mut self, expr: &Expr<'src>) {
         walk_expr(self, expr);
     }
 
-    fn visit_param(&mut self, param: &Param) {
+    fn visit_param(&mut self, param: &Param<'src>) {
         walk_param(self, param);
     }
 
-    fn visit_arg(&mut self, arg: &Arg) {
+    fn visit_arg(&mut self, arg: &Arg<'src>) {
         walk_arg(self, arg);
     }
 
-    fn visit_class_member(&mut self, member: &ClassMember) {
+    fn visit_class_member(&mut self, member: &ClassMember<'src>) {
         walk_class_member(self, member);
     }
 
-    fn visit_enum_member(&mut self, member: &EnumMember) {
+    fn visit_enum_member(&mut self, member: &EnumMember<'src>) {
         walk_enum_member(self, member);
     }
 
-    fn visit_property_hook(&mut self, hook: &PropertyHook) {
+    fn visit_property_hook(&mut self, hook: &PropertyHook<'src>) {
         walk_property_hook(self, hook);
     }
 }
 
-pub fn walk_program<V: Visitor + ?Sized>(visitor: &mut V, program: &Program) {
+pub fn walk_program<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, program: &Program<'src>) {
     for stmt in &program.stmts {
         visitor.visit_stmt(stmt);
     }
 }
 
-pub fn walk_stmt<V: Visitor + ?Sized>(visitor: &mut V, stmt: &Stmt) {
+pub fn walk_stmt<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, stmt: &Stmt<'src>) {
     match &stmt.kind {
         StmtKind::Expression(expr) => {
             visitor.visit_expr(expr);
@@ -203,7 +203,7 @@ pub fn walk_stmt<V: Visitor + ?Sized>(visitor: &mut V, stmt: &Stmt) {
     }
 }
 
-pub fn walk_expr<V: Visitor + ?Sized>(visitor: &mut V, expr: &Expr) {
+pub fn walk_expr<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, expr: &Expr<'src>) {
     match &expr.kind {
         ExprKind::Assign(assign) => {
             visitor.visit_expr(&assign.target);
@@ -392,7 +392,7 @@ pub fn walk_expr<V: Visitor + ?Sized>(visitor: &mut V, expr: &Expr) {
     }
 }
 
-pub fn walk_param<V: Visitor + ?Sized>(visitor: &mut V, param: &Param) {
+pub fn walk_param<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, param: &Param<'src>) {
     if let Some(default) = &param.default {
         visitor.visit_expr(default);
     }
@@ -401,11 +401,14 @@ pub fn walk_param<V: Visitor + ?Sized>(visitor: &mut V, param: &Param) {
     }
 }
 
-pub fn walk_arg<V: Visitor + ?Sized>(visitor: &mut V, arg: &Arg) {
+pub fn walk_arg<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, arg: &Arg<'src>) {
     visitor.visit_expr(&arg.value);
 }
 
-pub fn walk_class_member<V: Visitor + ?Sized>(visitor: &mut V, member: &ClassMember) {
+pub fn walk_class_member<'src, V: Visitor<'src> + ?Sized>(
+    visitor: &mut V,
+    member: &ClassMember<'src>,
+) {
     match &member.kind {
         ClassMemberKind::Property(prop) => {
             if let Some(default) = &prop.default {
@@ -432,7 +435,10 @@ pub fn walk_class_member<V: Visitor + ?Sized>(visitor: &mut V, member: &ClassMem
     }
 }
 
-pub fn walk_property_hook<V: Visitor + ?Sized>(visitor: &mut V, hook: &PropertyHook) {
+pub fn walk_property_hook<'src, V: Visitor<'src> + ?Sized>(
+    visitor: &mut V,
+    hook: &PropertyHook<'src>,
+) {
     for param in &hook.params {
         visitor.visit_param(param);
     }
@@ -449,7 +455,10 @@ pub fn walk_property_hook<V: Visitor + ?Sized>(visitor: &mut V, hook: &PropertyH
     }
 }
 
-pub fn walk_enum_member<V: Visitor + ?Sized>(visitor: &mut V, member: &EnumMember) {
+pub fn walk_enum_member<'src, V: Visitor<'src> + ?Sized>(
+    visitor: &mut V,
+    member: &EnumMember<'src>,
+) {
     match &member.kind {
         EnumMemberKind::Case(case) => {
             if let Some(value) = &case.value {
@@ -483,8 +492,8 @@ mod tests {
         count: usize,
     }
 
-    impl Visitor for VarCounter {
-        fn visit_expr(&mut self, expr: &Expr) {
+    impl<'src> Visitor<'src> for VarCounter {
+        fn visit_expr(&mut self, expr: &Expr<'src>) {
             if matches!(&expr.kind, ExprKind::Variable(_)) {
                 self.count += 1;
             }
@@ -499,19 +508,19 @@ mod tests {
                 kind: StmtKind::Expression(Expr {
                     kind: ExprKind::Assign(AssignExpr {
                         target: Box::new(Expr {
-                            kind: ExprKind::Variable("x".into()),
+                            kind: ExprKind::Variable("x"),
                             span: Span::DUMMY,
                         }),
                         op: AssignOp::Assign,
                         value: Box::new(Expr {
                             kind: ExprKind::Binary(BinaryExpr {
                                 left: Box::new(Expr {
-                                    kind: ExprKind::Variable("y".into()),
+                                    kind: ExprKind::Variable("y"),
                                     span: Span::DUMMY,
                                 }),
                                 op: BinaryOp::Add,
                                 right: Box::new(Expr {
-                                    kind: ExprKind::Variable("z".into()),
+                                    kind: ExprKind::Variable("z"),
                                     span: Span::DUMMY,
                                 }),
                             }),
