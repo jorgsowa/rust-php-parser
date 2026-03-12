@@ -79,6 +79,21 @@ impl<'src> Lexer<'src> {
         }
     }
 
+    /// Create a lexer starting in PHP mode at a given byte offset within `source`.
+    /// The caller guarantees that `source[offset..]` contains valid PHP expression
+    /// content (no `<?php` tag needed — the lexer is pre-set to PHP mode).
+    /// Spans produced will be correct absolute offsets into `source`.
+    pub fn new_at(source: &'src str, offset: usize) -> Self {
+        Self {
+            source,
+            mode: LexerMode::Php,
+            pos: offset,
+            peeked: None,
+            peeked2: None,
+            errors: Vec::new(),
+        }
+    }
+
     pub fn source(&self) -> &'src str {
         self.source
     }

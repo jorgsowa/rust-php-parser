@@ -2,10 +2,16 @@ use std::borrow::Cow;
 
 use php_ast::*;
 
-/// Parse the inner content of a double-quoted string into parts.
-/// `inner` is the string content without surrounding quotes.
+/// Parse the inner content of a double-quoted or backtick string into parts.
+/// `source` is the full original source string.
+/// `inner` is the string content without surrounding quotes — must be a verbatim
+/// subslice of `source` so that sub-parser offsets are correct absolute positions.
 /// `base_offset` is the byte offset of the first character of `inner` in the source.
-pub fn parse_interpolated_parts(inner: &str, base_offset: u32) -> Vec<StringPart<'static>> {
+pub fn parse_interpolated_parts<'src>(
+    source: &'src str,
+    inner: &'src str,
+    base_offset: u32,
+) -> Vec<StringPart<'src>> {
     let mut parts = Vec::new();
     let mut literal = String::new();
     let bytes = inner.as_bytes();
@@ -109,7 +115,9 @@ pub fn parse_interpolated_parts(inner: &str, base_offset: u32) -> Vec<StringPart
                     while i < len && is_var_char(bytes[i]) {
                         i += 1;
                     }
-                    let var_name = Cow::Owned(inner[name_start..i].to_string());
+                    let var_name: Cow<'src, str> = Cow::Borrowed(
+                        &source[base_offset as usize + name_start..base_offset as usize + i],
+                    );
                     let var_offset = base_offset + var_start as u32;
 
                     let mut expr = Expr {
@@ -126,7 +134,10 @@ pub fn parse_interpolated_parts(inner: &str, base_offset: u32) -> Vec<StringPart
                             while i < len && is_var_char(bytes[i]) {
                                 i += 1;
                             }
-                            let prop_name = Cow::Owned(inner[pname_start..i].to_string());
+                            let prop_name: Cow<'src, str> = Cow::Borrowed(
+                                &source
+                                    [base_offset as usize + pname_start..base_offset as usize + i],
+                            );
                             let prop_span =
                                 Span::new(base_offset + pname_start as u32, base_offset + i as u32);
                             let span = Span::new(var_offset, base_offset + i as u32);
@@ -232,14 +243,246 @@ pub fn parse_interpolated_parts(inner: &str, base_offset: u32) -> Vec<StringPart
                     }
                 }
 
-                let expr_content = &inner[expr_start..i];
+                let expr_end = i; // position of } or end of string
                 if depth == 0 {
                     i += 1; // skip }
                 }
 
-                // Parse the expression content as PHP
+                // Parse the expression using a sub-parser starting at the absolute offset
                 let expr_offset = base_offset + expr_start as u32;
-                let expr = parse_complex_interpolation(expr_content, expr_offset);
+                let end_offset = base_offset + expr_end as u32;
+                let expr = parse_complex_interpolation(source, expr_offset, end_offset);
+                parts.push(StringPart::Expr(expr));
+            }
+            _ => {
+                literal.push(bytes[i] as char);
+                i += 1;
+            }
+        }
+    }
+
+    if !literal.is_empty() {
+        parts.push(StringPart::Literal(literal));
+    }
+
+    parts
+}
+
+/// Parse the inner content of a heredoc body into parts.
+/// Unlike `parse_interpolated_parts`, `inner` may be a de-indented copy that is NOT
+/// a verbatim subslice of the original source, so complex interpolations are parsed
+/// via the old wrapping approach.
+pub fn parse_interpolated_parts_heredoc(inner: &str, base_offset: u32) -> Vec<StringPart<'static>> {
+    let mut parts: Vec<StringPart<'static>> = Vec::new();
+    let mut literal = String::new();
+    let bytes = inner.as_bytes();
+    let len = bytes.len();
+    let mut i = 0;
+
+    while i < len {
+        match bytes[i] {
+            b'\\' => {
+                if i + 1 < len {
+                    let next = bytes[i + 1];
+                    match next {
+                        b'$' => {
+                            literal.push('$');
+                            i += 2;
+                        }
+                        b'\\' => {
+                            literal.push('\\');
+                            i += 2;
+                        }
+                        b'n' => {
+                            literal.push('\n');
+                            i += 2;
+                        }
+                        b'r' => {
+                            literal.push('\r');
+                            i += 2;
+                        }
+                        b't' => {
+                            literal.push('\t');
+                            i += 2;
+                        }
+                        b'v' => {
+                            literal.push('\x0B');
+                            i += 2;
+                        }
+                        b'e' => {
+                            literal.push('\x1B');
+                            i += 2;
+                        }
+                        b'f' => {
+                            literal.push('\x0C');
+                            i += 2;
+                        }
+                        b'"' => {
+                            literal.push('"');
+                            i += 2;
+                        }
+                        b'x' | b'X' => {
+                            i += 2;
+                            let start = i;
+                            while i < len && i - start < 2 && bytes[i].is_ascii_hexdigit() {
+                                i += 1;
+                            }
+                            if i > start {
+                                if let Ok(val) = u8::from_str_radix(&inner[start..i], 16) {
+                                    literal.push(val as char);
+                                }
+                            } else {
+                                literal.push('\\');
+                                literal.push('x');
+                            }
+                        }
+                        b'0'..=b'7' => {
+                            let start = i + 1;
+                            i += 1;
+                            while i < len && i - start < 3 && bytes[i] >= b'0' && bytes[i] <= b'7' {
+                                i += 1;
+                            }
+                            if let Ok(val) = u8::from_str_radix(&inner[start..i], 8) {
+                                literal.push(val as char);
+                            }
+                        }
+                        _ => {
+                            literal.push('\\');
+                            literal.push(next as char);
+                            i += 2;
+                        }
+                    }
+                } else {
+                    literal.push('\\');
+                    i += 1;
+                }
+            }
+            b'$' => {
+                if i + 1 < len && is_var_start(bytes[i + 1]) {
+                    if !literal.is_empty() {
+                        parts.push(StringPart::Literal(std::mem::take(&mut literal)));
+                    }
+                    let var_start = i;
+                    i += 1;
+                    let name_start = i;
+                    while i < len && is_var_char(bytes[i]) {
+                        i += 1;
+                    }
+                    let var_name = Cow::Owned(inner[name_start..i].to_string());
+                    let var_offset = base_offset + var_start as u32;
+
+                    let mut expr: Expr<'static> = Expr {
+                        kind: ExprKind::Variable(var_name),
+                        span: Span::new(var_offset, base_offset + i as u32),
+                    };
+
+                    if i + 2 < len && bytes[i] == b'-' && bytes[i + 1] == b'>' {
+                        let prop_start = i + 2;
+                        if prop_start < len && is_var_start(bytes[prop_start]) {
+                            i = prop_start;
+                            let pname_start = i;
+                            while i < len && is_var_char(bytes[i]) {
+                                i += 1;
+                            }
+                            let prop_name = Cow::Owned(inner[pname_start..i].to_string());
+                            let prop_span =
+                                Span::new(base_offset + pname_start as u32, base_offset + i as u32);
+                            let span = Span::new(var_offset, base_offset + i as u32);
+                            expr = Expr {
+                                kind: ExprKind::PropertyAccess(PropertyAccessExpr {
+                                    object: Box::new(expr),
+                                    property: Box::new(Expr {
+                                        kind: ExprKind::Identifier(prop_name),
+                                        span: prop_span,
+                                    }),
+                                }),
+                                span,
+                            };
+                        }
+                    }
+
+                    if i < len && bytes[i] == b'[' {
+                        let bracket_start = i;
+                        i += 1;
+                        let idx_start = i;
+                        while i < len && bytes[i] != b']' {
+                            i += 1;
+                        }
+                        if i < len && bytes[i] == b']' {
+                            let idx_str = &inner[idx_start..i];
+                            i += 1;
+                            let idx_offset = base_offset + idx_start as u32;
+                            let idx_end = base_offset + (i - 1) as u32;
+                            let index_expr = if let Ok(num) = idx_str.parse::<i64>() {
+                                Expr {
+                                    kind: ExprKind::Int(num),
+                                    span: Span::new(idx_offset, idx_end),
+                                }
+                            } else if idx_str.starts_with('$') && idx_str.len() > 1 {
+                                Expr {
+                                    kind: ExprKind::Variable(Cow::Owned(idx_str[1..].to_string())),
+                                    span: Span::new(idx_offset, idx_end),
+                                }
+                            } else {
+                                Expr {
+                                    kind: ExprKind::String(idx_str.to_string()),
+                                    span: Span::new(idx_offset, idx_end),
+                                }
+                            };
+                            let span = Span::new(var_offset, base_offset + i as u32);
+                            let _ = bracket_start;
+                            expr = Expr {
+                                kind: ExprKind::ArrayAccess(ArrayAccessExpr {
+                                    array: Box::new(expr),
+                                    index: Some(Box::new(index_expr)),
+                                }),
+                                span,
+                            };
+                        }
+                    }
+                    parts.push(StringPart::Expr(expr));
+                } else {
+                    literal.push('$');
+                    i += 1;
+                }
+            }
+            b'{' if i + 1 < len && bytes[i + 1] == b'$' => {
+                if !literal.is_empty() {
+                    parts.push(StringPart::Literal(std::mem::take(&mut literal)));
+                }
+                i += 1; // skip {
+                let expr_start = i;
+                let mut depth = 1;
+                while i < len && depth > 0 {
+                    match bytes[i] {
+                        b'{' => depth += 1,
+                        b'}' => depth -= 1,
+                        b'\'' | b'"' => {
+                            let quote = bytes[i];
+                            i += 1;
+                            while i < len && bytes[i] != quote {
+                                if bytes[i] == b'\\' {
+                                    i += 1;
+                                }
+                                i += 1;
+                            }
+                            if i < len {
+                                i += 1;
+                            }
+                            continue;
+                        }
+                        _ => {}
+                    }
+                    if depth > 0 {
+                        i += 1;
+                    }
+                }
+                let expr_content = &inner[expr_start..i];
+                if depth == 0 {
+                    i += 1;
+                }
+                let expr_offset = base_offset + expr_start as u32;
+                let expr = parse_complex_interpolation_owned(expr_content, expr_offset);
                 parts.push(StringPart::Expr(expr));
             }
             _ => {
@@ -285,6 +528,42 @@ fn is_var_start(b: u8) -> bool {
 
 fn is_var_char(b: u8) -> bool {
     b.is_ascii_alphanumeric() || b == b'_' || b >= 0x80
+}
+
+/// Parse a complex interpolation expression using a sub-parser that starts directly
+/// in the original source at the given offset, avoiding string allocation and span reoffset.
+fn parse_complex_interpolation<'src>(source: &'src str, offset: u32, end: u32) -> Expr<'src> {
+    let mut sub = crate::parser::Parser::new_at(source, offset as usize);
+    let expr = crate::expr::parse_expr(&mut sub);
+    if matches!(expr.kind, ExprKind::Error) {
+        Expr {
+            kind: ExprKind::Error,
+            span: Span::new(offset, end),
+        }
+    } else {
+        expr
+    }
+}
+
+/// Parse a complex interpolation from a non-verbatim string (e.g. heredoc body that
+/// may be de-indented). Uses the old wrapping approach since `content` is not a
+/// slice of any single source string.
+fn parse_complex_interpolation_owned(content: &str, offset: u32) -> Expr<'static> {
+    // Wrap in a minimal PHP context for parsing
+    let wrapped = format!("<?php {};", content);
+    let result = crate::parse(&wrapped);
+    if let Some(stmt) = result.program.stmts.first() {
+        if let StmtKind::Expression(expr) = stmt.kind.clone() {
+            // Convert to static (owned) expr then reoffset
+            let static_expr = to_static_expr(expr);
+            return reoffset_expr(static_expr, offset, 6); // "<?php " is 6 bytes
+        }
+    }
+    // Fallback: return error expression
+    Expr {
+        kind: ExprKind::Error,
+        span: Span::new(offset, offset + content.len() as u32),
+    }
 }
 
 /// Convert an Expr with any lifetime to Expr<'static> by making all string data owned.
@@ -405,26 +684,6 @@ fn to_static_arg(arg: Arg<'_>) -> Arg<'static> {
         value: to_static_expr(arg.value),
         unpack: arg.unpack,
         span: arg.span,
-    }
-}
-
-/// Parse a complex interpolation expression like `$obj->method()` or `$arr['key']`.
-/// This creates a minimal sub-parser to handle the expression.
-fn parse_complex_interpolation(content: &str, offset: u32) -> Expr<'static> {
-    // Wrap in a minimal PHP context for parsing
-    let wrapped = format!("<?php {};", content);
-    let result = crate::parse(&wrapped);
-    if let Some(stmt) = result.program.stmts.first() {
-        if let StmtKind::Expression(expr) = stmt.kind.clone() {
-            // Convert to static (owned) expr then reoffset
-            let static_expr = to_static_expr(expr);
-            return reoffset_expr(static_expr, offset, 6); // "<?php " is 6 bytes
-        }
-    }
-    // Fallback: return error expression
-    Expr {
-        kind: ExprKind::Error,
-        span: Span::new(offset, offset + content.len() as u32),
     }
 }
 
