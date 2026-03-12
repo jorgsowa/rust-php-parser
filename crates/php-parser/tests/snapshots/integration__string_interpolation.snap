@@ -427,7 +427,7 @@ expression: to_json(& result.program)
               "op": "Assign",
               "value": {
                 "kind": {
-                  "String": "Price: \\$100"
+                  "String": "Price: $100"
                 },
                 "span": {
                   "start": 460,
@@ -676,7 +676,7 @@ expression: to_json(& result.program)
               "op": "Assign",
               "value": {
                 "kind": {
-                  "String": "line1\\nline2\\ttab"
+                  "String": "line1\nline2\ttab"
                 },
                 "span": {
                   "start": 747,
