@@ -1,9 +1,11 @@
+use std::borrow::Cow;
+
 use php_ast::*;
 
 /// Parse the inner content of a double-quoted string into parts.
 /// `inner` is the string content without surrounding quotes.
 /// `base_offset` is the byte offset of the first character of `inner` in the source.
-pub fn parse_interpolated_parts(inner: &str, base_offset: u32) -> Vec<StringPart> {
+pub fn parse_interpolated_parts(inner: &str, base_offset: u32) -> Vec<StringPart<'static>> {
     let mut parts = Vec::new();
     let mut literal = String::new();
     let bytes = inner.as_bytes();
@@ -107,7 +109,7 @@ pub fn parse_interpolated_parts(inner: &str, base_offset: u32) -> Vec<StringPart
                     while i < len && is_var_char(bytes[i]) {
                         i += 1;
                     }
-                    let var_name = inner[name_start..i].to_string();
+                    let var_name = Cow::Owned(inner[name_start..i].to_string());
                     let var_offset = base_offset + var_start as u32;
 
                     let mut expr = Expr {
@@ -124,7 +126,7 @@ pub fn parse_interpolated_parts(inner: &str, base_offset: u32) -> Vec<StringPart
                             while i < len && is_var_char(bytes[i]) {
                                 i += 1;
                             }
-                            let prop_name = inner[pname_start..i].to_string();
+                            let prop_name = Cow::Owned(inner[pname_start..i].to_string());
                             let prop_span =
                                 Span::new(base_offset + pname_start as u32, base_offset + i as u32);
                             let span = Span::new(var_offset, base_offset + i as u32);
@@ -165,7 +167,7 @@ pub fn parse_interpolated_parts(inner: &str, base_offset: u32) -> Vec<StringPart
                                 }
                             } else if idx_str.starts_with('$') && idx_str.len() > 1 {
                                 Expr {
-                                    kind: ExprKind::Variable(idx_str[1..].to_string()),
+                                    kind: ExprKind::Variable(Cow::Owned(idx_str[1..].to_string())),
                                     span: Span::new(idx_offset, idx_end),
                                 }
                             } else {
@@ -285,16 +287,138 @@ fn is_var_char(b: u8) -> bool {
     b.is_ascii_alphanumeric() || b == b'_' || b >= 0x80
 }
 
+/// Convert an Expr with any lifetime to Expr<'static> by making all string data owned.
+fn to_static_expr(expr: Expr<'_>) -> Expr<'static> {
+    let kind = match expr.kind {
+        ExprKind::Variable(s) => ExprKind::Variable(Cow::Owned(s.into_owned())),
+        ExprKind::Identifier(s) => ExprKind::Identifier(Cow::Owned(s.into_owned())),
+        ExprKind::Int(v) => ExprKind::Int(v),
+        ExprKind::Float(v) => ExprKind::Float(v),
+        ExprKind::String(s) => ExprKind::String(s),
+        ExprKind::Bool(v) => ExprKind::Bool(v),
+        ExprKind::Null => ExprKind::Null,
+        ExprKind::Error => ExprKind::Error,
+        ExprKind::MagicConst(k) => ExprKind::MagicConst(k),
+        ExprKind::ArrayAccess(aa) => ExprKind::ArrayAccess(ArrayAccessExpr {
+            array: Box::new(to_static_expr(*aa.array)),
+            index: aa.index.map(|i| Box::new(to_static_expr(*i))),
+        }),
+        ExprKind::PropertyAccess(pa) => ExprKind::PropertyAccess(PropertyAccessExpr {
+            object: Box::new(to_static_expr(*pa.object)),
+            property: Box::new(to_static_expr(*pa.property)),
+        }),
+        ExprKind::MethodCall(mc) => ExprKind::MethodCall(MethodCallExpr {
+            object: Box::new(to_static_expr(*mc.object)),
+            method: Box::new(to_static_expr(*mc.method)),
+            args: mc.args.into_iter().map(to_static_arg).collect(),
+        }),
+        ExprKind::FunctionCall(fc) => ExprKind::FunctionCall(FunctionCallExpr {
+            name: Box::new(to_static_expr(*fc.name)),
+            args: fc.args.into_iter().map(to_static_arg).collect(),
+        }),
+        ExprKind::NullsafePropertyAccess(pa) => {
+            ExprKind::NullsafePropertyAccess(PropertyAccessExpr {
+                object: Box::new(to_static_expr(*pa.object)),
+                property: Box::new(to_static_expr(*pa.property)),
+            })
+        }
+        ExprKind::NullsafeMethodCall(mc) => ExprKind::NullsafeMethodCall(MethodCallExpr {
+            object: Box::new(to_static_expr(*mc.object)),
+            method: Box::new(to_static_expr(*mc.method)),
+            args: mc.args.into_iter().map(to_static_arg).collect(),
+        }),
+        ExprKind::StaticPropertyAccess(sa) => ExprKind::StaticPropertyAccess(StaticAccessExpr {
+            class: Box::new(to_static_expr(*sa.class)),
+            member: Cow::Owned(sa.member.into_owned()),
+        }),
+        ExprKind::StaticMethodCall(smc) => ExprKind::StaticMethodCall(StaticMethodCallExpr {
+            class: Box::new(to_static_expr(*smc.class)),
+            method: Cow::Owned(smc.method.into_owned()),
+            args: smc.args.into_iter().map(to_static_arg).collect(),
+        }),
+        ExprKind::ClassConstAccess(ca) => ExprKind::ClassConstAccess(StaticAccessExpr {
+            class: Box::new(to_static_expr(*ca.class)),
+            member: Cow::Owned(ca.member.into_owned()),
+        }),
+        ExprKind::Binary(be) => ExprKind::Binary(BinaryExpr {
+            left: Box::new(to_static_expr(*be.left)),
+            op: be.op,
+            right: Box::new(to_static_expr(*be.right)),
+        }),
+        ExprKind::Assign(ae) => ExprKind::Assign(AssignExpr {
+            target: Box::new(to_static_expr(*ae.target)),
+            op: ae.op,
+            value: Box::new(to_static_expr(*ae.value)),
+        }),
+        ExprKind::Ternary(te) => ExprKind::Ternary(TernaryExpr {
+            condition: Box::new(to_static_expr(*te.condition)),
+            then_expr: te.then_expr.map(|t| Box::new(to_static_expr(*t))),
+            else_expr: Box::new(to_static_expr(*te.else_expr)),
+        }),
+        ExprKind::Parenthesized(inner) => ExprKind::Parenthesized(Box::new(to_static_expr(*inner))),
+        ExprKind::VariableVariable(inner) => {
+            ExprKind::VariableVariable(Box::new(to_static_expr(*inner)))
+        }
+        ExprKind::UnaryPrefix(ue) => ExprKind::UnaryPrefix(UnaryPrefixExpr {
+            op: ue.op,
+            operand: Box::new(to_static_expr(*ue.operand)),
+        }),
+        ExprKind::UnaryPostfix(ue) => ExprKind::UnaryPostfix(UnaryPostfixExpr {
+            op: ue.op,
+            operand: Box::new(to_static_expr(*ue.operand)),
+        }),
+        ExprKind::Cast(kind, expr) => ExprKind::Cast(kind, Box::new(to_static_expr(*expr))),
+        ExprKind::NullCoalesce(nc) => ExprKind::NullCoalesce(NullCoalesceExpr {
+            left: Box::new(to_static_expr(*nc.left)),
+            right: Box::new(to_static_expr(*nc.right)),
+        }),
+        ExprKind::ErrorSuppress(inner) => ExprKind::ErrorSuppress(Box::new(to_static_expr(*inner))),
+        ExprKind::Print(inner) => ExprKind::Print(Box::new(to_static_expr(*inner))),
+        ExprKind::Clone(inner) => ExprKind::Clone(Box::new(to_static_expr(*inner))),
+        ExprKind::Exit(opt) => ExprKind::Exit(opt.map(|e| Box::new(to_static_expr(*e)))),
+        ExprKind::ClassConstAccessDynamic { class, member } => ExprKind::ClassConstAccessDynamic {
+            class: Box::new(to_static_expr(*class)),
+            member: Box::new(to_static_expr(*member)),
+        },
+        ExprKind::StaticPropertyAccessDynamic { class, member } => {
+            ExprKind::StaticPropertyAccessDynamic {
+                class: Box::new(to_static_expr(*class)),
+                member: Box::new(to_static_expr(*member)),
+            }
+        }
+        // For any other expression kinds (complex ones not commonly in interpolation), convert to error
+        _ => ExprKind::Error,
+    };
+    Expr {
+        kind,
+        span: expr.span,
+    }
+}
+
+fn to_static_arg(arg: Arg<'_>) -> Arg<'static> {
+    Arg {
+        // Named args in interpolated expressions are rare; leak if necessary
+        name: arg.name.map(|n| -> &'static str {
+            let owned: Box<str> = n.into();
+            Box::leak(owned)
+        }),
+        value: to_static_expr(arg.value),
+        unpack: arg.unpack,
+        span: arg.span,
+    }
+}
+
 /// Parse a complex interpolation expression like `$obj->method()` or `$arr['key']`.
 /// This creates a minimal sub-parser to handle the expression.
-fn parse_complex_interpolation(content: &str, offset: u32) -> Expr {
+fn parse_complex_interpolation(content: &str, offset: u32) -> Expr<'static> {
     // Wrap in a minimal PHP context for parsing
     let wrapped = format!("<?php {};", content);
     let result = crate::parse(&wrapped);
     if let Some(stmt) = result.program.stmts.first() {
-        if let StmtKind::Expression(ref expr) = stmt.kind {
-            // Reoffset the expression spans
-            return reoffset_expr(expr.clone(), offset, 6); // "<?php " is 6 bytes
+        if let StmtKind::Expression(expr) = stmt.kind.clone() {
+            // Convert to static (owned) expr then reoffset
+            let static_expr = to_static_expr(expr);
+            return reoffset_expr(static_expr, offset, 6); // "<?php " is 6 bytes
         }
     }
     // Fallback: return error expression
@@ -305,7 +429,7 @@ fn parse_complex_interpolation(content: &str, offset: u32) -> Expr {
 }
 
 /// Adjust spans in an expression: subtract `parser_offset` and add `target_offset`
-fn reoffset_expr(mut expr: Expr, target_offset: u32, parser_offset: u32) -> Expr {
+fn reoffset_expr(mut expr: Expr<'static>, target_offset: u32, parser_offset: u32) -> Expr<'static> {
     reoffset_span(&mut expr.span, target_offset, parser_offset);
     match &mut expr.kind {
         ExprKind::Variable(_)

@@ -1,11 +1,13 @@
+use std::borrow::Cow;
+
 use serde::Serialize;
 
 use crate::Span;
 
 /// The root AST node representing a complete PHP file.
 #[derive(Debug, Clone, Serialize)]
-pub struct Program {
-    pub stmts: Vec<Stmt>,
+pub struct Program<'src> {
+    pub stmts: Vec<Stmt<'src>>,
     pub span: Span,
 }
 
@@ -14,8 +16,8 @@ pub struct Program {
 // =============================================================================
 
 #[derive(Debug, Clone, Serialize)]
-pub struct Name {
-    pub parts: Vec<String>,
+pub struct Name<'src> {
+    pub parts: Vec<Cow<'src, str>>,
     pub kind: NameKind,
     pub span: Span,
 }
@@ -29,17 +31,17 @@ pub enum NameKind {
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct TypeHint {
-    pub kind: TypeHintKind,
+pub struct TypeHint<'src> {
+    pub kind: TypeHintKind<'src>,
     pub span: Span,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub enum TypeHintKind {
-    Named(Name),
-    Nullable(Box<TypeHint>),
-    Union(Vec<TypeHint>),
-    Intersection(Vec<TypeHint>),
+pub enum TypeHintKind<'src> {
+    Named(Name<'src>),
+    Nullable(Box<TypeHint<'src>>),
+    Union(Vec<TypeHint<'src>>),
+    Intersection(Vec<TypeHint<'src>>),
 }
 
 // =============================================================================
@@ -47,9 +49,9 @@ pub enum TypeHintKind {
 // =============================================================================
 
 #[derive(Debug, Clone, Serialize)]
-pub struct Arg {
-    pub name: Option<String>,
-    pub value: Expr,
+pub struct Arg<'src> {
+    pub name: Option<&'src str>,
+    pub value: Expr<'src>,
     pub unpack: bool,
     pub span: Span,
 }
@@ -59,9 +61,9 @@ pub struct Arg {
 // =============================================================================
 
 #[derive(Debug, Clone, Serialize)]
-pub struct Attribute {
-    pub name: Name,
-    pub args: Vec<Arg>,
+pub struct Attribute<'src> {
+    pub name: Name<'src>,
+    pub args: Vec<Arg<'src>>,
     pub span: Span,
 }
 
@@ -70,204 +72,204 @@ pub struct Attribute {
 // =============================================================================
 
 #[derive(Debug, Clone, Serialize)]
-pub struct Stmt {
-    pub kind: StmtKind,
+pub struct Stmt<'src> {
+    pub kind: StmtKind<'src>,
     pub span: Span,
 }
 
 #[derive(Debug, Clone, Serialize)]
 #[allow(clippy::large_enum_variant)]
-pub enum StmtKind {
+pub enum StmtKind<'src> {
     /// Expression statement (e.g. `foo();`)
-    Expression(Expr),
+    Expression(Expr<'src>),
 
     /// Echo statement: `echo expr1, expr2;`
-    Echo(Vec<Expr>),
+    Echo(Vec<Expr<'src>>),
 
     /// Return statement: `return expr;`
-    Return(Option<Expr>),
+    Return(Option<Expr<'src>>),
 
     /// Block statement: `{ stmts }`
-    Block(Vec<Stmt>),
+    Block(Vec<Stmt<'src>>),
 
     /// If statement
-    If(IfStmt),
+    If(IfStmt<'src>),
 
     /// While loop
-    While(WhileStmt),
+    While(WhileStmt<'src>),
 
     /// For loop
-    For(ForStmt),
+    For(ForStmt<'src>),
 
     /// Foreach loop
-    Foreach(ForeachStmt),
+    Foreach(ForeachStmt<'src>),
 
     /// Do-while loop
-    DoWhile(DoWhileStmt),
+    DoWhile(DoWhileStmt<'src>),
 
     /// Function declaration
-    Function(FunctionDecl),
+    Function(FunctionDecl<'src>),
 
     /// Break statement
-    Break(Option<Expr>),
+    Break(Option<Expr<'src>>),
 
     /// Continue statement
-    Continue(Option<Expr>),
+    Continue(Option<Expr<'src>>),
 
     /// Switch statement
-    Switch(SwitchStmt),
+    Switch(SwitchStmt<'src>),
 
     /// Goto statement
-    Goto(String),
+    Goto(&'src str),
 
     /// Label statement
-    Label(String),
+    Label(&'src str),
 
     /// Declare statement
-    Declare(Vec<(String, Expr)>, Option<Box<Stmt>>),
+    Declare(Vec<(&'src str, Expr<'src>)>, Option<Box<Stmt<'src>>>),
 
     /// Unset statement
-    Unset(Vec<Expr>),
+    Unset(Vec<Expr<'src>>),
 
     /// Throw statement (also can be expression in PHP 8)
-    Throw(Expr),
+    Throw(Expr<'src>),
 
     /// Try/catch/finally
-    TryCatch(TryCatchStmt),
+    TryCatch(TryCatchStmt<'src>),
 
     /// Global declaration
-    Global(Vec<Expr>),
+    Global(Vec<Expr<'src>>),
 
     /// Class declaration
-    Class(ClassDecl),
+    Class(ClassDecl<'src>),
 
     /// Interface declaration
-    Interface(InterfaceDecl),
+    Interface(InterfaceDecl<'src>),
 
     /// Trait declaration
-    Trait(TraitDecl),
+    Trait(TraitDecl<'src>),
 
     /// Enum declaration
-    Enum(EnumDecl),
+    Enum(EnumDecl<'src>),
 
     /// Namespace declaration
-    Namespace(NamespaceDecl),
+    Namespace(NamespaceDecl<'src>),
 
     /// Use declaration
-    Use(UseDecl),
+    Use(UseDecl<'src>),
 
     /// Top-level constant: `const FOO = expr;`
-    Const(Vec<ConstItem>),
+    Const(Vec<ConstItem<'src>>),
 
     /// Static variable declaration: `static $x = 1;`
-    StaticVar(Vec<StaticVar>),
+    StaticVar(Vec<StaticVar<'src>>),
 
     /// __halt_compiler(); with remaining data
-    HaltCompiler(String),
+    HaltCompiler(&'src str),
 
     /// Nop (empty statement `;`)
     Nop,
 
     /// Inline HTML
-    InlineHtml(String),
+    InlineHtml(&'src str),
 
     /// Error placeholder — parser always produces a tree
     Error,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct IfStmt {
-    pub condition: Expr,
-    pub then_branch: Box<Stmt>,
-    pub elseif_branches: Vec<ElseIfBranch>,
-    pub else_branch: Option<Box<Stmt>>,
+pub struct IfStmt<'src> {
+    pub condition: Expr<'src>,
+    pub then_branch: Box<Stmt<'src>>,
+    pub elseif_branches: Vec<ElseIfBranch<'src>>,
+    pub else_branch: Option<Box<Stmt<'src>>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct ElseIfBranch {
-    pub condition: Expr,
-    pub body: Stmt,
+pub struct ElseIfBranch<'src> {
+    pub condition: Expr<'src>,
+    pub body: Stmt<'src>,
     pub span: Span,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct WhileStmt {
-    pub condition: Expr,
-    pub body: Box<Stmt>,
+pub struct WhileStmt<'src> {
+    pub condition: Expr<'src>,
+    pub body: Box<Stmt<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct ForStmt {
-    pub init: Vec<Expr>,
-    pub condition: Vec<Expr>,
-    pub update: Vec<Expr>,
-    pub body: Box<Stmt>,
+pub struct ForStmt<'src> {
+    pub init: Vec<Expr<'src>>,
+    pub condition: Vec<Expr<'src>>,
+    pub update: Vec<Expr<'src>>,
+    pub body: Box<Stmt<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct ForeachStmt {
-    pub expr: Expr,
-    pub key: Option<Expr>,
-    pub value: Expr,
-    pub body: Box<Stmt>,
+pub struct ForeachStmt<'src> {
+    pub expr: Expr<'src>,
+    pub key: Option<Expr<'src>>,
+    pub value: Expr<'src>,
+    pub body: Box<Stmt<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct DoWhileStmt {
-    pub body: Box<Stmt>,
-    pub condition: Expr,
+pub struct DoWhileStmt<'src> {
+    pub body: Box<Stmt<'src>>,
+    pub condition: Expr<'src>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct FunctionDecl {
-    pub name: String,
-    pub params: Vec<Param>,
-    pub body: Vec<Stmt>,
-    pub return_type: Option<TypeHint>,
+pub struct FunctionDecl<'src> {
+    pub name: &'src str,
+    pub params: Vec<Param<'src>>,
+    pub body: Vec<Stmt<'src>>,
+    pub return_type: Option<TypeHint<'src>>,
     pub by_ref: bool,
-    pub attributes: Vec<Attribute>,
+    pub attributes: Vec<Attribute<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct Param {
-    pub name: String,
-    pub type_hint: Option<TypeHint>,
-    pub default: Option<Expr>,
+pub struct Param<'src> {
+    pub name: &'src str,
+    pub type_hint: Option<TypeHint<'src>>,
+    pub default: Option<Expr<'src>>,
     pub by_ref: bool,
     pub variadic: bool,
     pub visibility: Option<Visibility>,
     pub set_visibility: Option<Visibility>,
-    pub attributes: Vec<Attribute>,
+    pub attributes: Vec<Attribute<'src>>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub hooks: Vec<PropertyHook>,
+    pub hooks: Vec<PropertyHook<'src>>,
     pub span: Span,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct SwitchStmt {
-    pub expr: Expr,
-    pub cases: Vec<SwitchCase>,
+pub struct SwitchStmt<'src> {
+    pub expr: Expr<'src>,
+    pub cases: Vec<SwitchCase<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct SwitchCase {
-    pub value: Option<Expr>,
-    pub body: Vec<Stmt>,
+pub struct SwitchCase<'src> {
+    pub value: Option<Expr<'src>>,
+    pub body: Vec<Stmt<'src>>,
     pub span: Span,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct TryCatchStmt {
-    pub body: Vec<Stmt>,
-    pub catches: Vec<CatchClause>,
-    pub finally: Option<Vec<Stmt>>,
+pub struct TryCatchStmt<'src> {
+    pub body: Vec<Stmt<'src>>,
+    pub catches: Vec<CatchClause<'src>>,
+    pub finally: Option<Vec<Stmt<'src>>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct CatchClause {
-    pub types: Vec<Name>,
-    pub var: Option<String>,
-    pub body: Vec<Stmt>,
+pub struct CatchClause<'src> {
+    pub types: Vec<Name<'src>>,
+    pub var: Option<&'src str>,
+    pub body: Vec<Stmt<'src>>,
     pub span: Span,
 }
 
@@ -283,13 +285,13 @@ pub enum Visibility {
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct ClassDecl {
-    pub name: Option<String>,
+pub struct ClassDecl<'src> {
+    pub name: Option<&'src str>,
     pub modifiers: ClassModifiers,
-    pub extends: Option<Name>,
-    pub implements: Vec<Name>,
-    pub members: Vec<ClassMember>,
-    pub attributes: Vec<Attribute>,
+    pub extends: Option<Name<'src>>,
+    pub implements: Vec<Name<'src>>,
+    pub members: Vec<ClassMember<'src>>,
+    pub attributes: Vec<Attribute<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize, Default)]
@@ -300,31 +302,31 @@ pub struct ClassModifiers {
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct ClassMember {
-    pub kind: ClassMemberKind,
+pub struct ClassMember<'src> {
+    pub kind: ClassMemberKind<'src>,
     pub span: Span,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub enum ClassMemberKind {
-    Property(PropertyDecl),
-    Method(MethodDecl),
-    ClassConst(ClassConstDecl),
-    TraitUse(TraitUseDecl),
+pub enum ClassMemberKind<'src> {
+    Property(PropertyDecl<'src>),
+    Method(MethodDecl<'src>),
+    ClassConst(ClassConstDecl<'src>),
+    TraitUse(TraitUseDecl<'src>),
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct PropertyDecl {
-    pub name: String,
+pub struct PropertyDecl<'src> {
+    pub name: &'src str,
     pub visibility: Option<Visibility>,
     pub set_visibility: Option<Visibility>,
     pub is_static: bool,
     pub is_readonly: bool,
-    pub type_hint: Option<TypeHint>,
-    pub default: Option<Expr>,
-    pub attributes: Vec<Attribute>,
+    pub type_hint: Option<TypeHint<'src>>,
+    pub default: Option<Expr<'src>>,
+    pub attributes: Vec<Attribute<'src>>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub hooks: Vec<PropertyHook>,
+    pub hooks: Vec<PropertyHook<'src>>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
@@ -334,119 +336,119 @@ pub enum PropertyHookKind {
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub enum PropertyHookBody {
-    Block(Vec<Stmt>),
-    Expression(Expr),
+pub enum PropertyHookBody<'src> {
+    Block(Vec<Stmt<'src>>),
+    Expression(Expr<'src>),
     Abstract,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct PropertyHook {
+pub struct PropertyHook<'src> {
     pub kind: PropertyHookKind,
-    pub body: PropertyHookBody,
+    pub body: PropertyHookBody<'src>,
     pub is_final: bool,
     pub by_ref: bool,
-    pub params: Vec<Param>,
-    pub attributes: Vec<Attribute>,
+    pub params: Vec<Param<'src>>,
+    pub attributes: Vec<Attribute<'src>>,
     pub span: Span,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct MethodDecl {
-    pub name: String,
+pub struct MethodDecl<'src> {
+    pub name: &'src str,
     pub visibility: Option<Visibility>,
     pub is_static: bool,
     pub is_abstract: bool,
     pub is_final: bool,
     pub by_ref: bool,
-    pub params: Vec<Param>,
-    pub return_type: Option<TypeHint>,
-    pub body: Option<Vec<Stmt>>,
-    pub attributes: Vec<Attribute>,
+    pub params: Vec<Param<'src>>,
+    pub return_type: Option<TypeHint<'src>>,
+    pub body: Option<Vec<Stmt<'src>>>,
+    pub attributes: Vec<Attribute<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct ClassConstDecl {
-    pub name: String,
+pub struct ClassConstDecl<'src> {
+    pub name: &'src str,
     pub visibility: Option<Visibility>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_hint: Option<TypeHint>,
-    pub value: Expr,
-    pub attributes: Vec<Attribute>,
+    pub type_hint: Option<TypeHint<'src>>,
+    pub value: Expr<'src>,
+    pub attributes: Vec<Attribute<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct TraitUseDecl {
-    pub traits: Vec<Name>,
-    pub adaptations: Vec<TraitAdaptation>,
+pub struct TraitUseDecl<'src> {
+    pub traits: Vec<Name<'src>>,
+    pub adaptations: Vec<TraitAdaptation<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct TraitAdaptation {
-    pub kind: TraitAdaptationKind,
+pub struct TraitAdaptation<'src> {
+    pub kind: TraitAdaptationKind<'src>,
     pub span: Span,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub enum TraitAdaptationKind {
+pub enum TraitAdaptationKind<'src> {
     /// `A::foo insteadof B, C;`
     Precedence {
-        trait_name: Name,
-        method: String,
-        insteadof: Vec<Name>,
+        trait_name: Name<'src>,
+        method: &'src str,
+        insteadof: Vec<Name<'src>>,
     },
     /// `foo as bar;` or `A::foo as protected bar;` or `foo as protected;`
     Alias {
-        trait_name: Option<Name>,
-        method: String,
+        trait_name: Option<Name<'src>>,
+        method: Cow<'src, str>,
         new_modifier: Option<Visibility>,
-        new_name: Option<String>,
+        new_name: Option<&'src str>,
     },
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct InterfaceDecl {
-    pub name: String,
-    pub extends: Vec<Name>,
-    pub members: Vec<ClassMember>,
-    pub attributes: Vec<Attribute>,
+pub struct InterfaceDecl<'src> {
+    pub name: &'src str,
+    pub extends: Vec<Name<'src>>,
+    pub members: Vec<ClassMember<'src>>,
+    pub attributes: Vec<Attribute<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct TraitDecl {
-    pub name: String,
-    pub members: Vec<ClassMember>,
-    pub attributes: Vec<Attribute>,
+pub struct TraitDecl<'src> {
+    pub name: &'src str,
+    pub members: Vec<ClassMember<'src>>,
+    pub attributes: Vec<Attribute<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct EnumDecl {
-    pub name: String,
-    pub scalar_type: Option<Name>,
-    pub implements: Vec<Name>,
-    pub members: Vec<EnumMember>,
-    pub attributes: Vec<Attribute>,
+pub struct EnumDecl<'src> {
+    pub name: &'src str,
+    pub scalar_type: Option<Name<'src>>,
+    pub implements: Vec<Name<'src>>,
+    pub members: Vec<EnumMember<'src>>,
+    pub attributes: Vec<Attribute<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct EnumMember {
-    pub kind: EnumMemberKind,
+pub struct EnumMember<'src> {
+    pub kind: EnumMemberKind<'src>,
     pub span: Span,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub enum EnumMemberKind {
-    Case(EnumCase),
-    Method(MethodDecl),
-    ClassConst(ClassConstDecl),
-    TraitUse(TraitUseDecl),
+pub enum EnumMemberKind<'src> {
+    Case(EnumCase<'src>),
+    Method(MethodDecl<'src>),
+    ClassConst(ClassConstDecl<'src>),
+    TraitUse(TraitUseDecl<'src>),
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct EnumCase {
-    pub name: String,
-    pub value: Option<Expr>,
-    pub attributes: Vec<Attribute>,
+pub struct EnumCase<'src> {
+    pub name: &'src str,
+    pub value: Option<Expr<'src>>,
+    pub attributes: Vec<Attribute<'src>>,
 }
 
 // =============================================================================
@@ -454,21 +456,21 @@ pub struct EnumCase {
 // =============================================================================
 
 #[derive(Debug, Clone, Serialize)]
-pub struct NamespaceDecl {
-    pub name: Option<Name>,
-    pub body: NamespaceBody,
+pub struct NamespaceDecl<'src> {
+    pub name: Option<Name<'src>>,
+    pub body: NamespaceBody<'src>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub enum NamespaceBody {
-    Braced(Vec<Stmt>),
+pub enum NamespaceBody<'src> {
+    Braced(Vec<Stmt<'src>>),
     Simple,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct UseDecl {
+pub struct UseDecl<'src> {
     pub kind: UseKind,
-    pub uses: Vec<UseItem>,
+    pub uses: Vec<UseItem<'src>>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
@@ -479,25 +481,25 @@ pub enum UseKind {
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct UseItem {
-    pub name: Name,
-    pub alias: Option<String>,
+pub struct UseItem<'src> {
+    pub name: Name<'src>,
+    pub alias: Option<&'src str>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kind: Option<UseKind>,
     pub span: Span,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct ConstItem {
-    pub name: String,
-    pub value: Expr,
+pub struct ConstItem<'src> {
+    pub name: &'src str,
+    pub value: Expr<'src>,
     pub span: Span,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct StaticVar {
-    pub name: String,
-    pub default: Option<Expr>,
+pub struct StaticVar<'src> {
+    pub name: &'src str,
+    pub default: Option<Expr<'src>>,
     pub span: Span,
 }
 
@@ -506,13 +508,13 @@ pub struct StaticVar {
 // =============================================================================
 
 #[derive(Debug, Clone, Serialize)]
-pub struct Expr {
-    pub kind: ExprKind,
+pub struct Expr<'src> {
+    pub kind: ExprKind<'src>,
     pub span: Span,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub enum ExprKind {
+pub enum ExprKind<'src> {
     /// Integer literal
     Int(i64),
 
@@ -523,19 +525,19 @@ pub enum ExprKind {
     String(String),
 
     /// Interpolated string: `"Hello $name, you are {$age} years old"`
-    InterpolatedString(Vec<StringPart>),
+    InterpolatedString(Vec<StringPart<'src>>),
 
     /// Heredoc: `<<<EOT ... EOT`
     Heredoc {
         label: String,
-        parts: Vec<StringPart>,
+        parts: Vec<StringPart<'src>>,
     },
 
     /// Nowdoc: `<<<'EOT' ... EOT`
     Nowdoc { label: String, value: String },
 
     /// Shell execution: `` `command $var` ``
-    ShellExec(Vec<StringPart>),
+    ShellExec(Vec<StringPart<'src>>),
 
     /// Boolean literal
     Bool(bool),
@@ -544,124 +546,130 @@ pub enum ExprKind {
     Null,
 
     /// Variable: `$name`
-    Variable(String),
+    Variable(Cow<'src, str>),
 
     /// Variable variable: `$$var`, `$$$var`, `${expr}`
-    VariableVariable(Box<Expr>),
+    VariableVariable(Box<Expr<'src>>),
 
     /// Identifier (bare name, e.g. function name in a call)
-    Identifier(String),
+    Identifier(Cow<'src, str>),
 
     /// Assignment: `$x = expr` or `$x += expr`
-    Assign(AssignExpr),
+    Assign(AssignExpr<'src>),
 
     /// Binary operation: `expr op expr`
-    Binary(BinaryExpr),
+    Binary(BinaryExpr<'src>),
 
     /// Unary prefix: `-expr`, `!expr`, `~expr`, `++$x`, `--$x`
-    UnaryPrefix(UnaryPrefixExpr),
+    UnaryPrefix(UnaryPrefixExpr<'src>),
 
     /// Unary postfix: `$x++`, `$x--`
-    UnaryPostfix(UnaryPostfixExpr),
+    UnaryPostfix(UnaryPostfixExpr<'src>),
 
     /// Ternary: `cond ? then : else` or short `cond ?: else`
-    Ternary(TernaryExpr),
+    Ternary(TernaryExpr<'src>),
 
     /// Null coalescing: `expr ?? fallback`
-    NullCoalesce(NullCoalesceExpr),
+    NullCoalesce(NullCoalesceExpr<'src>),
 
     /// Function call: `name(args)`
-    FunctionCall(FunctionCallExpr),
+    FunctionCall(FunctionCallExpr<'src>),
 
     /// Array literal: `[1, 2, 3]` or `['a' => 1]`
-    Array(Vec<ArrayElement>),
+    Array(Vec<ArrayElement<'src>>),
 
     /// Array access: `$arr[index]`
-    ArrayAccess(ArrayAccessExpr),
+    ArrayAccess(ArrayAccessExpr<'src>),
 
     /// Print expression: `print expr`
-    Print(Box<Expr>),
+    Print(Box<Expr<'src>>),
 
     /// Parenthesized expression: `(expr)`
-    Parenthesized(Box<Expr>),
+    Parenthesized(Box<Expr<'src>>),
 
     /// Cast expression: `(int)$x`, `(string)$x`, etc.
-    Cast(CastKind, Box<Expr>),
+    Cast(CastKind, Box<Expr<'src>>),
 
     /// Error suppression: `@expr`
-    ErrorSuppress(Box<Expr>),
+    ErrorSuppress(Box<Expr<'src>>),
 
     /// Isset: `isset($a, $b)`
-    Isset(Vec<Expr>),
+    Isset(Vec<Expr<'src>>),
 
     /// Empty: `empty($a)`
-    Empty(Box<Expr>),
+    Empty(Box<Expr<'src>>),
 
     /// Include/require: `include 'file.php'`
-    Include(IncludeKind, Box<Expr>),
+    Include(IncludeKind, Box<Expr<'src>>),
 
     /// Eval: `eval('code')`
-    Eval(Box<Expr>),
+    Eval(Box<Expr<'src>>),
 
     /// Exit/die: `exit`, `exit(1)`, `die('msg')`
-    Exit(Option<Box<Expr>>),
+    Exit(Option<Box<Expr<'src>>>),
 
     /// Magic constant: `__LINE__`, `__FILE__`, etc.
     MagicConst(MagicConstKind),
 
     /// Clone: `clone $obj`
-    Clone(Box<Expr>),
+    Clone(Box<Expr<'src>>),
 
     /// New: `new Class(args)`
-    New(NewExpr),
+    New(NewExpr<'src>),
 
     /// Property access: `$obj->prop`
-    PropertyAccess(PropertyAccessExpr),
+    PropertyAccess(PropertyAccessExpr<'src>),
 
     /// Nullsafe property access: `$obj?->prop`
-    NullsafePropertyAccess(PropertyAccessExpr),
+    NullsafePropertyAccess(PropertyAccessExpr<'src>),
 
     /// Method call: `$obj->method(args)`
-    MethodCall(MethodCallExpr),
+    MethodCall(MethodCallExpr<'src>),
 
     /// Nullsafe method call: `$obj?->method(args)`
-    NullsafeMethodCall(MethodCallExpr),
+    NullsafeMethodCall(MethodCallExpr<'src>),
 
     /// Static property access: `Class::$prop`
-    StaticPropertyAccess(StaticAccessExpr),
+    StaticPropertyAccess(StaticAccessExpr<'src>),
 
     /// Static method call: `Class::method(args)`
-    StaticMethodCall(StaticMethodCallExpr),
+    StaticMethodCall(StaticMethodCallExpr<'src>),
 
     /// Class constant access: `Class::CONST`
-    ClassConstAccess(StaticAccessExpr),
+    ClassConstAccess(StaticAccessExpr<'src>),
 
     /// Dynamic class constant access: `Foo::{expr}`
-    ClassConstAccessDynamic { class: Box<Expr>, member: Box<Expr> },
+    ClassConstAccessDynamic {
+        class: Box<Expr<'src>>,
+        member: Box<Expr<'src>>,
+    },
 
     /// Dynamic static property access: `A::$$b`, `A::${'b'}`
-    StaticPropertyAccessDynamic { class: Box<Expr>, member: Box<Expr> },
+    StaticPropertyAccessDynamic {
+        class: Box<Expr<'src>>,
+        member: Box<Expr<'src>>,
+    },
 
     /// Closure: `function($x) use($y) { }`
-    Closure(ClosureExpr),
+    Closure(ClosureExpr<'src>),
 
     /// Arrow function: `fn($x) => expr`
-    ArrowFunction(ArrowFunctionExpr),
+    ArrowFunction(ArrowFunctionExpr<'src>),
 
     /// Match: `match(expr) { ... }`
-    Match(MatchExpr),
+    Match(MatchExpr<'src>),
 
     /// Throw as expression (PHP 8)
-    ThrowExpr(Box<Expr>),
+    ThrowExpr(Box<Expr<'src>>),
 
     /// Yield: `yield` / `yield $val` / `yield $key => $val`
-    Yield(YieldExpr),
+    Yield(YieldExpr<'src>),
 
     /// Anonymous class: `new class(args) extends Foo implements Bar { ... }`
-    AnonymousClass(ClassDecl),
+    AnonymousClass(ClassDecl<'src>),
 
     /// First-class callable: `strlen(...)`, `$obj->method(...)`, `Foo::bar(...)`
-    CallableCreate(CallableCreateExpr),
+    CallableCreate(CallableCreateExpr<'src>),
 
     /// Error placeholder
     Error,
@@ -703,10 +711,10 @@ pub enum MagicConstKind {
 // --- Expression sub-types ---
 
 #[derive(Debug, Clone, Serialize)]
-pub struct AssignExpr {
-    pub target: Box<Expr>,
+pub struct AssignExpr<'src> {
+    pub target: Box<Expr<'src>>,
     pub op: AssignOp,
-    pub value: Box<Expr>,
+    pub value: Box<Expr<'src>>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
@@ -728,10 +736,10 @@ pub enum AssignOp {
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct BinaryExpr {
-    pub left: Box<Expr>,
+pub struct BinaryExpr<'src> {
+    pub left: Box<Expr<'src>>,
     pub op: BinaryOp,
-    pub right: Box<Expr>,
+    pub right: Box<Expr<'src>>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
@@ -767,9 +775,9 @@ pub enum BinaryOp {
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct UnaryPrefixExpr {
+pub struct UnaryPrefixExpr<'src> {
     pub op: UnaryPrefixOp,
-    pub operand: Box<Expr>,
+    pub operand: Box<Expr<'src>>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
@@ -783,8 +791,8 @@ pub enum UnaryPrefixOp {
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct UnaryPostfixExpr {
-    pub operand: Box<Expr>,
+pub struct UnaryPostfixExpr<'src> {
+    pub operand: Box<Expr<'src>>,
     pub op: UnaryPostfixOp,
 }
 
@@ -795,150 +803,153 @@ pub enum UnaryPostfixOp {
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct TernaryExpr {
-    pub condition: Box<Expr>,
+pub struct TernaryExpr<'src> {
+    pub condition: Box<Expr<'src>>,
     /// None for short ternary `$x ?: $y`
-    pub then_expr: Option<Box<Expr>>,
-    pub else_expr: Box<Expr>,
+    pub then_expr: Option<Box<Expr<'src>>>,
+    pub else_expr: Box<Expr<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct NullCoalesceExpr {
-    pub left: Box<Expr>,
-    pub right: Box<Expr>,
+pub struct NullCoalesceExpr<'src> {
+    pub left: Box<Expr<'src>>,
+    pub right: Box<Expr<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct FunctionCallExpr {
-    pub name: Box<Expr>,
-    pub args: Vec<Arg>,
+pub struct FunctionCallExpr<'src> {
+    pub name: Box<Expr<'src>>,
+    pub args: Vec<Arg<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct ArrayElement {
-    pub key: Option<Expr>,
-    pub value: Expr,
+pub struct ArrayElement<'src> {
+    pub key: Option<Expr<'src>>,
+    pub value: Expr<'src>,
     pub unpack: bool,
     pub span: Span,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct ArrayAccessExpr {
-    pub array: Box<Expr>,
-    pub index: Option<Box<Expr>>,
+pub struct ArrayAccessExpr<'src> {
+    pub array: Box<Expr<'src>>,
+    pub index: Option<Box<Expr<'src>>>,
 }
 
 // --- OOP Expression sub-types ---
 
 #[derive(Debug, Clone, Serialize)]
-pub struct NewExpr {
-    pub class: Box<Expr>,
-    pub args: Vec<Arg>,
+pub struct NewExpr<'src> {
+    pub class: Box<Expr<'src>>,
+    pub args: Vec<Arg<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct PropertyAccessExpr {
-    pub object: Box<Expr>,
-    pub property: Box<Expr>,
+pub struct PropertyAccessExpr<'src> {
+    pub object: Box<Expr<'src>>,
+    pub property: Box<Expr<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct MethodCallExpr {
-    pub object: Box<Expr>,
-    pub method: Box<Expr>,
-    pub args: Vec<Arg>,
+pub struct MethodCallExpr<'src> {
+    pub object: Box<Expr<'src>>,
+    pub method: Box<Expr<'src>>,
+    pub args: Vec<Arg<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct StaticAccessExpr {
-    pub class: Box<Expr>,
-    pub member: String,
+pub struct StaticAccessExpr<'src> {
+    pub class: Box<Expr<'src>>,
+    pub member: Cow<'src, str>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct StaticMethodCallExpr {
-    pub class: Box<Expr>,
-    pub method: String,
-    pub args: Vec<Arg>,
+pub struct StaticMethodCallExpr<'src> {
+    pub class: Box<Expr<'src>>,
+    pub method: Cow<'src, str>,
+    pub args: Vec<Arg<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct ClosureExpr {
+pub struct ClosureExpr<'src> {
     pub is_static: bool,
     pub by_ref: bool,
-    pub params: Vec<Param>,
-    pub use_vars: Vec<ClosureUseVar>,
-    pub return_type: Option<TypeHint>,
-    pub body: Vec<Stmt>,
-    pub attributes: Vec<Attribute>,
+    pub params: Vec<Param<'src>>,
+    pub use_vars: Vec<ClosureUseVar<'src>>,
+    pub return_type: Option<TypeHint<'src>>,
+    pub body: Vec<Stmt<'src>>,
+    pub attributes: Vec<Attribute<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct ClosureUseVar {
-    pub name: String,
+pub struct ClosureUseVar<'src> {
+    pub name: &'src str,
     pub by_ref: bool,
     pub span: Span,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct ArrowFunctionExpr {
+pub struct ArrowFunctionExpr<'src> {
     pub is_static: bool,
     pub by_ref: bool,
-    pub params: Vec<Param>,
-    pub return_type: Option<TypeHint>,
-    pub body: Box<Expr>,
-    pub attributes: Vec<Attribute>,
+    pub params: Vec<Param<'src>>,
+    pub return_type: Option<TypeHint<'src>>,
+    pub body: Box<Expr<'src>>,
+    pub attributes: Vec<Attribute<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct MatchExpr {
-    pub subject: Box<Expr>,
-    pub arms: Vec<MatchArm>,
+pub struct MatchExpr<'src> {
+    pub subject: Box<Expr<'src>>,
+    pub arms: Vec<MatchArm<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct MatchArm {
+pub struct MatchArm<'src> {
     /// None for `default`
-    pub conditions: Option<Vec<Expr>>,
-    pub body: Expr,
+    pub conditions: Option<Vec<Expr<'src>>>,
+    pub body: Expr<'src>,
     pub span: Span,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct YieldExpr {
-    pub key: Option<Box<Expr>>,
-    pub value: Option<Box<Expr>>,
+pub struct YieldExpr<'src> {
+    pub key: Option<Box<Expr<'src>>>,
+    pub value: Option<Box<Expr<'src>>>,
 }
 
 // --- First-class callable ---
 
 #[derive(Debug, Clone, Serialize)]
-pub struct CallableCreateExpr {
-    pub kind: CallableCreateKind,
+pub struct CallableCreateExpr<'src> {
+    pub kind: CallableCreateKind<'src>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub enum CallableCreateKind {
+pub enum CallableCreateKind<'src> {
     /// `foo(...)`, `$var(...)`, `\Ns\func(...)`
-    Function(Box<Expr>),
+    Function(Box<Expr<'src>>),
     /// `$obj->method(...)`
     Method {
-        object: Box<Expr>,
-        method: Box<Expr>,
+        object: Box<Expr<'src>>,
+        method: Box<Expr<'src>>,
     },
     /// `$obj?->method(...)`
     NullsafeMethod {
-        object: Box<Expr>,
-        method: Box<Expr>,
+        object: Box<Expr<'src>>,
+        method: Box<Expr<'src>>,
     },
     /// `Foo::bar(...)`
-    StaticMethod { class: Box<Expr>, method: String },
+    StaticMethod {
+        class: Box<Expr<'src>>,
+        method: Cow<'src, str>,
+    },
 }
 
 // --- String interpolation ---
 
 #[derive(Debug, Clone, Serialize)]
-pub enum StringPart {
+pub enum StringPart<'src> {
     Literal(String),
-    Expr(Expr),
+    Expr(Expr<'src>),
 }

@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 use php_ast::*;
 use php_lexer::{Lexer, Token, TokenKind};
 
@@ -8,7 +10,7 @@ use crate::stmt;
 pub struct Parser<'src> {
     lexer: Lexer<'src>,
     current: Token,
-    source: &'src str,
+    pub source: &'src str,
     errors: Vec<ParseError>,
     /// Nesting depth (0 = top-level scope)
     pub depth: u32,
@@ -329,12 +331,17 @@ impl<'src> Parser<'src> {
         )
     }
 
+    /// Get the source text slice for a given span.
+    pub fn text(&self, span: Span) -> &'src str {
+        &self.source[span.start as usize..span.end as usize]
+    }
+
     /// Consume the current token as an identifier string, accepting both
     /// Identifier tokens and semi-reserved keywords.
-    pub fn eat_identifier_or_keyword(&mut self) -> Option<(String, Span)> {
+    pub fn eat_identifier_or_keyword(&mut self) -> Option<(&'src str, Span)> {
         if self.check(TokenKind::Identifier) || self.is_semi_reserved_keyword() {
             let token = self.advance();
-            let text = self.source[token.span.start as usize..token.span.end as usize].to_string();
+            let text = &self.source[token.span.start as usize..token.span.end as usize];
             Some((text, token.span))
         } else {
             None
@@ -347,7 +354,7 @@ impl<'src> Parser<'src> {
 
     /// Parse a name: qualified, fully-qualified, relative, or unqualified.
     /// e.g., `Foo`, `Foo\Bar`, `\Foo\Bar`, `namespace\Foo\Bar`
-    pub fn parse_name(&mut self) -> Name {
+    pub fn parse_name(&mut self) -> Name<'src> {
         let start = self.start_span();
 
         // Check for fully qualified: \Foo\Bar
@@ -364,20 +371,20 @@ impl<'src> Parser<'src> {
 
         // First part
         if let Some((text, _)) = self.eat_identifier_or_keyword() {
-            parts.push(text);
+            parts.push(Cow::Borrowed(text));
         } else {
             self.error(ParseError::Expected {
                 expected: "identifier".to_string(),
                 found: self.current_kind(),
                 span: self.current_span(),
             });
-            parts.push("<error>".to_string());
+            parts.push(Cow::Borrowed("<error>"));
         }
 
         // Subsequent parts: \Ident
         while self.eat(TokenKind::Backslash).is_some() {
             if let Some((text, _)) = self.eat_identifier_or_keyword() {
-                parts.push(text);
+                parts.push(Cow::Borrowed(text));
             }
         }
 
@@ -401,7 +408,7 @@ impl<'src> Parser<'src> {
     // =========================================================================
 
     /// Parse a type hint: `?T`, `A|B`, `A&B`, `(A&B)|C` (DNF), or simple type.
-    pub fn parse_type_hint(&mut self) -> TypeHint {
+    pub fn parse_type_hint(&mut self) -> TypeHint<'src> {
         let start = self.start_span();
 
         // Nullable: ?Type
@@ -463,7 +470,7 @@ impl<'src> Parser<'src> {
     }
 
     /// Parse a type element: either a simple type or a parenthesized intersection `(A&B)`.
-    fn parse_type_element(&mut self) -> TypeHint {
+    fn parse_type_element(&mut self) -> TypeHint<'src> {
         if self.check(TokenKind::LeftParen) {
             let start = self.start_span();
             self.advance(); // consume (
@@ -486,7 +493,7 @@ impl<'src> Parser<'src> {
     }
 
     /// Parse a simple (non-composite) type: named type from Name or builtin keyword.
-    pub fn parse_simple_type(&mut self) -> TypeHint {
+    pub fn parse_simple_type(&mut self) -> TypeHint<'src> {
         let start = self.start_span();
 
         // Handle builtin type names that are contextual keywords (identifiers)
@@ -511,7 +518,7 @@ impl<'src> Parser<'src> {
             if is_builtin {
                 let token = self.advance();
                 let name_text =
-                    self.source[token.span.start as usize..token.span.end as usize].to_string();
+                    Cow::Borrowed(&self.source[token.span.start as usize..token.span.end as usize]);
                 let name = Name {
                     parts: vec![name_text],
                     kind: NameKind::Unqualified,
@@ -529,7 +536,7 @@ impl<'src> Parser<'src> {
             TokenKind::Array => {
                 let token = self.advance();
                 let name = Name {
-                    parts: vec!["array".to_string()],
+                    parts: vec![Cow::Borrowed("array")],
                     kind: NameKind::Unqualified,
                     span: token.span,
                 };
@@ -541,7 +548,7 @@ impl<'src> Parser<'src> {
             TokenKind::Self_ => {
                 let token = self.advance();
                 let name = Name {
-                    parts: vec!["self".to_string()],
+                    parts: vec![Cow::Borrowed("self")],
                     kind: NameKind::Unqualified,
                     span: token.span,
                 };
@@ -553,7 +560,7 @@ impl<'src> Parser<'src> {
             TokenKind::Parent_ => {
                 let token = self.advance();
                 let name = Name {
-                    parts: vec!["parent".to_string()],
+                    parts: vec![Cow::Borrowed("parent")],
                     kind: NameKind::Unqualified,
                     span: token.span,
                 };
@@ -565,7 +572,7 @@ impl<'src> Parser<'src> {
             TokenKind::Static => {
                 let token = self.advance();
                 let name = Name {
-                    parts: vec!["static".to_string()],
+                    parts: vec![Cow::Borrowed("static")],
                     kind: NameKind::Unqualified,
                     span: token.span,
                 };
@@ -577,7 +584,7 @@ impl<'src> Parser<'src> {
             TokenKind::Null => {
                 let token = self.advance();
                 let name = Name {
-                    parts: vec!["null".to_string()],
+                    parts: vec![Cow::Borrowed("null")],
                     kind: NameKind::Unqualified,
                     span: token.span,
                 };
@@ -589,7 +596,7 @@ impl<'src> Parser<'src> {
             TokenKind::True => {
                 let token = self.advance();
                 let name = Name {
-                    parts: vec!["true".to_string()],
+                    parts: vec![Cow::Borrowed("true")],
                     kind: NameKind::Unqualified,
                     span: token.span,
                 };
@@ -601,7 +608,7 @@ impl<'src> Parser<'src> {
             TokenKind::False => {
                 let token = self.advance();
                 let name = Name {
-                    parts: vec!["false".to_string()],
+                    parts: vec![Cow::Borrowed("false")],
                     kind: NameKind::Unqualified,
                     span: token.span,
                 };
@@ -649,7 +656,7 @@ impl<'src> Parser<'src> {
     // =========================================================================
 
     /// Parse PHP 8 attributes: `#[Attr]`, `#[Attr(args)]`, `#[A, B]`, stacked `#[A] #[B]`
-    pub fn parse_attributes(&mut self) -> Vec<Attribute> {
+    pub fn parse_attributes(&mut self) -> Vec<Attribute<'src>> {
         let mut attributes = Vec::new();
         while self.check(TokenKind::HashBracket) {
             self.advance(); // consume #[
@@ -683,7 +690,7 @@ impl<'src> Parser<'src> {
     }
 
     /// Parse `<?= expr ?>` — the short echo tag produces an implicit echo statement.
-    fn parse_short_echo(&mut self) -> Option<Stmt> {
+    fn parse_short_echo(&mut self) -> Option<Stmt<'src>> {
         if self.check(TokenKind::Eof) || self.check(TokenKind::CloseTag) {
             return None;
         }
@@ -701,14 +708,14 @@ impl<'src> Parser<'src> {
     // Top-level parsing
     // =========================================================================
 
-    pub fn parse_program(&mut self) -> Program {
+    pub fn parse_program(&mut self) -> Program<'src> {
         let start = self.start_span();
         let mut stmts = Vec::new();
 
         // Handle optional inline HTML before PHP tag
         if self.check(TokenKind::InlineHtml) {
             let token = self.advance();
-            let text = self.source[token.span.start as usize..token.span.end as usize].to_string();
+            let text = &self.source[token.span.start as usize..token.span.end as usize];
             stmts.push(Stmt {
                 kind: StmtKind::InlineHtml(text),
                 span: token.span,
@@ -737,8 +744,7 @@ impl<'src> Parser<'src> {
                 self.advance();
                 if self.check(TokenKind::InlineHtml) {
                     let token = self.advance();
-                    let text =
-                        self.source[token.span.start as usize..token.span.end as usize].to_string();
+                    let text = &self.source[token.span.start as usize..token.span.end as usize];
                     stmts.push(Stmt {
                         kind: StmtKind::InlineHtml(text),
                         span: token.span,

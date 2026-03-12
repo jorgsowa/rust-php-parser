@@ -8,12 +8,12 @@ pub mod stmt;
 use diagnostics::ParseError;
 use php_ast::Program;
 
-pub struct ParseResult {
-    pub program: Program,
+pub struct ParseResult<'src> {
+    pub program: Program<'src>,
     pub errors: Vec<ParseError>,
 }
 
-pub fn parse(source: &str) -> ParseResult {
+pub fn parse(source: &str) -> ParseResult<'_> {
     let mut parser = parser::Parser::new(source);
     let program = parser.parse_program();
     ParseResult {
