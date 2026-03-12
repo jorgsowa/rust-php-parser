@@ -613,8 +613,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         TokenKind::IntLiteral => {
             let token = parser.advance();
             let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-            let clean: String = text.chars().filter(|c| *c != '_').collect();
-            let value = clean.parse::<i64>().unwrap_or(0);
+            let value = parse_int_no_alloc(text.as_bytes(), 10, 0);
             Expr {
                 kind: ExprKind::Int(value),
                 span: token.span,
@@ -623,8 +622,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         TokenKind::HexIntLiteral => {
             let token = parser.advance();
             let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-            let clean: String = text[2..].chars().filter(|c| *c != '_').collect();
-            let value = i64::from_str_radix(&clean, 16).unwrap_or(0);
+            let value = parse_int_no_alloc(&text.as_bytes()[2..], 16, 0);
             Expr {
                 kind: ExprKind::Int(value),
                 span: token.span,
@@ -633,8 +631,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         TokenKind::BinIntLiteral => {
             let token = parser.advance();
             let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-            let clean: String = text[2..].chars().filter(|c| *c != '_').collect();
-            let value = i64::from_str_radix(&clean, 2).unwrap_or(0);
+            let value = parse_int_no_alloc(&text.as_bytes()[2..], 2, 0);
             Expr {
                 kind: ExprKind::Int(value),
                 span: token.span,
@@ -643,7 +640,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         TokenKind::OctIntLiteral => {
             let token = parser.advance();
             let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-            let value = i64::from_str_radix(&text[1..], 8).unwrap_or(0);
+            let value = parse_int_no_alloc(&text.as_bytes()[1..], 8, 0);
             Expr {
                 kind: ExprKind::Int(value),
                 span: token.span,
@@ -652,8 +649,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         TokenKind::OctIntLiteralNew => {
             let token = parser.advance();
             let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-            let clean: String = text[2..].chars().filter(|c| *c != '_').collect();
-            let value = i64::from_str_radix(&clean, 8).unwrap_or(0);
+            let value = parse_int_no_alloc(&text.as_bytes()[2..], 8, 0);
             Expr {
                 kind: ExprKind::Int(value),
                 span: token.span,
@@ -675,8 +671,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         | TokenKind::FloatLiteralLeadingDot => {
             let token = parser.advance();
             let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-            let clean: String = text.chars().filter(|c| *c != '_').collect();
-            let value = clean.parse::<f64>().unwrap_or(0.0);
+            let value = parse_float_no_alloc(text);
             Expr {
                 kind: ExprKind::Float(value),
                 span: token.span,
@@ -810,7 +805,10 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
                     span: token.span,
                 }
             } else {
-                let parts = vec![StringPart::Literal(Cow::Owned(inner.to_string()))];
+                // Has escape sequences — decode via interpolated parts
+                let inner_offset = token.span.start + 1;
+                let parts =
+                    crate::interpolation::parse_interpolated_parts(src, inner, inner_offset);
                 Expr {
                     kind: ExprKind::ShellExec(parts),
                     span: token.span,
@@ -1849,7 +1847,9 @@ fn parse_arg<'src>(parser: &'_ mut Parser<'src>) -> Arg<'src> {
             let name_token = parser.advance();
             parser.advance(); // consume :
             let src = parser.source;
-            Some(&src[name_token.span.start as usize..name_token.span.end as usize])
+            Some(Cow::Borrowed(
+                &src[name_token.span.start as usize..name_token.span.end as usize],
+            ))
         } else {
             None
         }
@@ -2254,4 +2254,58 @@ fn parse_heredoc_content(text: &str) -> (String, String, bool) {
 fn find_body_offset(text: &str, token_start: u32) -> u32 {
     let first_newline = text.find('\n').unwrap_or(text.len());
     token_start + first_newline as u32 + 1
+}
+
+/// Parse an integer literal from raw bytes, skipping underscores, without heap allocation.
+/// Returns 0 on overflow (matching the behaviour of the original `str::parse::<i64>().unwrap_or(0)`).
+/// `base` is 2, 8, 10, or 16.
+fn parse_int_no_alloc(bytes: &[u8], base: i64, _skip: usize) -> i64 {
+    let mut value: i64 = 0;
+    for &b in bytes {
+        if b == b'_' {
+            continue;
+        }
+        let digit = match base {
+            16 => match b {
+                b'0'..=b'9' => (b - b'0') as i64,
+                b'a'..=b'f' => (b - b'a') as i64 + 10,
+                b'A'..=b'F' => (b - b'A') as i64 + 10,
+                _ => continue,
+            },
+            2 => match b {
+                b'0'..=b'1' => (b - b'0') as i64,
+                _ => continue,
+            },
+            8 => match b {
+                b'0'..=b'7' => (b - b'0') as i64,
+                _ => continue,
+            },
+            _ => match b {
+                b'0'..=b'9' => (b - b'0') as i64,
+                _ => continue,
+            },
+        };
+        value = match value.checked_mul(base).and_then(|v| v.checked_add(digit)) {
+            Some(v) => v,
+            None => return 0,
+        };
+    }
+    value
+}
+
+/// Parse a float literal, skipping underscores, using a fixed-size stack buffer.
+fn parse_float_no_alloc(text: &str) -> f64 {
+    // Float literals are bounded in length; 128 bytes is more than sufficient.
+    let mut buf = [0u8; 128];
+    let mut len = 0;
+    for &b in text.as_bytes() {
+        if b != b'_' && len < buf.len() {
+            buf[len] = b;
+            len += 1;
+        }
+    }
+    std::str::from_utf8(&buf[..len])
+        .ok()
+        .and_then(|s| s.parse::<f64>().ok())
+        .unwrap_or(0.0)
 }
