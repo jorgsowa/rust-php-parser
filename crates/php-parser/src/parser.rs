@@ -491,25 +491,36 @@ impl<'src> Parser<'src> {
 
         // Handle builtin type names that are contextual keywords (identifiers)
         if self.check(TokenKind::Identifier) {
-            let text = self.current_text().to_ascii_lowercase();
-            match text.as_str() {
-                "int" | "integer" | "float" | "double" | "string" | "bool" | "boolean" | "void"
-                | "never" | "null" | "mixed" | "object" | "iterable" | "callable" | "true"
-                | "false" => {
-                    let token = self.advance();
-                    let name_text =
-                        self.source[token.span.start as usize..token.span.end as usize].to_string();
-                    let name = Name {
-                        parts: vec![name_text],
-                        kind: NameKind::Unqualified,
-                        span: token.span,
-                    };
-                    return TypeHint {
-                        kind: TypeHintKind::Named(name),
-                        span: token.span,
-                    };
-                }
-                _ => {}
+            let text = self.current_text();
+            let is_builtin = text.eq_ignore_ascii_case("int")
+                || text.eq_ignore_ascii_case("integer")
+                || text.eq_ignore_ascii_case("float")
+                || text.eq_ignore_ascii_case("double")
+                || text.eq_ignore_ascii_case("string")
+                || text.eq_ignore_ascii_case("bool")
+                || text.eq_ignore_ascii_case("boolean")
+                || text.eq_ignore_ascii_case("void")
+                || text.eq_ignore_ascii_case("never")
+                || text.eq_ignore_ascii_case("null")
+                || text.eq_ignore_ascii_case("mixed")
+                || text.eq_ignore_ascii_case("object")
+                || text.eq_ignore_ascii_case("iterable")
+                || text.eq_ignore_ascii_case("callable")
+                || text.eq_ignore_ascii_case("true")
+                || text.eq_ignore_ascii_case("false");
+            if is_builtin {
+                let token = self.advance();
+                let name_text =
+                    self.source[token.span.start as usize..token.span.end as usize].to_string();
+                let name = Name {
+                    parts: vec![name_text],
+                    kind: NameKind::Unqualified,
+                    span: token.span,
+                };
+                return TypeHint {
+                    kind: TypeHintKind::Named(name),
+                    span: token.span,
+                };
             }
         }
 

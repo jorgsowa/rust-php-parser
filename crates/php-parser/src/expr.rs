@@ -2011,10 +2011,9 @@ fn try_parse_cast(parser: &mut Parser) -> Option<Expr> {
     let cast_kind = match peeked {
         Some(TokenKind::Identifier) => {
             let peek_text = parser.peek_text()?;
-            let lower = peek_text.to_ascii_lowercase();
             CAST_KEYWORDS
                 .iter()
-                .find(|(kw, _)| *kw == lower)
+                .find(|(kw, _)| kw.eq_ignore_ascii_case(peek_text))
                 .map(|(_, ck)| *ck)
         }
         Some(TokenKind::Array) => Some(CastKind::Array),
