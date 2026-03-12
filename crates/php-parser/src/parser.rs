@@ -38,6 +38,29 @@ impl<'src> Parser<'src> {
         }
     }
 
+    /// Create a parser starting in PHP mode at `offset` within `source`.
+    /// Used for parsing interpolation expressions directly in the original source.
+    pub fn new_at(source: &'src str, offset: usize) -> Self {
+        let mut lexer = Lexer::new_at(source, offset);
+        let current = lexer.next_token();
+        // collect any initial lex errors
+        let errors = lexer
+            .errors
+            .drain(..)
+            .map(|e| ParseError::Forbidden {
+                message: e.message,
+                span: e.span,
+            })
+            .collect::<Vec<_>>();
+        Self {
+            lexer,
+            current,
+            source,
+            errors,
+            depth: 0,
+        }
+    }
+
     pub fn source(&self) -> &'src str {
         self.source
     }
