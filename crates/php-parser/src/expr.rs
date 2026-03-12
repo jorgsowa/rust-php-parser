@@ -686,20 +686,55 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         // String literals
         TokenKind::SingleQuotedString => {
             let token = parser.advance();
-            let text = &parser.source()[token.span.start as usize..token.span.end as usize];
+            let src = parser.source();
+            let text = &src[token.span.start as usize..token.span.end as usize];
             let text = text
                 .strip_prefix('b')
                 .or_else(|| text.strip_prefix('B'))
                 .unwrap_or(text);
             let inner = &text[1..text.len() - 1];
+            // Fast path: if no backslash, inner is a verbatim source slice
+            let value: Cow<'src, str> = if !inner.contains('\\') {
+                // inner is a subslice of `src` which has lifetime 'src
+                let offset = inner.as_ptr() as usize - src.as_ptr() as usize;
+                Cow::Borrowed(&src[offset..offset + inner.len()])
+            } else {
+                // Decode single-quote escape sequences: \' → ' and \\ → \
+                let mut decoded = String::with_capacity(inner.len());
+                let bytes = inner.as_bytes();
+                let mut i = 0;
+                while i < bytes.len() {
+                    if bytes[i] == b'\\' && i + 1 < bytes.len() {
+                        match bytes[i + 1] {
+                            b'\'' => {
+                                decoded.push('\'');
+                                i += 2;
+                            }
+                            b'\\' => {
+                                decoded.push('\\');
+                                i += 2;
+                            }
+                            _ => {
+                                decoded.push('\\');
+                                i += 1;
+                            }
+                        }
+                    } else {
+                        decoded.push(bytes[i] as char);
+                        i += 1;
+                    }
+                }
+                Cow::Owned(decoded)
+            };
             Expr {
-                kind: ExprKind::String(inner.to_string()),
+                kind: ExprKind::String(value),
                 span: token.span,
             }
         }
         TokenKind::DoubleQuotedString => {
             let token = parser.advance();
-            let text = &parser.source()[token.span.start as usize..token.span.end as usize];
+            let src = parser.source();
+            let text = &src[token.span.start as usize..token.span.end as usize];
             let stripped = text
                 .strip_prefix('b')
                 .or_else(|| text.strip_prefix('B'))
@@ -709,20 +744,42 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             if crate::interpolation::has_interpolation(inner) {
                 // Offset of first char of inner content in source
                 let inner_offset = token.span.end - 1 - inner.len() as u32;
-                let parts = crate::interpolation::parse_interpolated_parts(
-                    parser.source(),
-                    inner,
-                    inner_offset,
-                );
+                let parts =
+                    crate::interpolation::parse_interpolated_parts(src, inner, inner_offset);
                 Expr {
                     kind: ExprKind::InterpolatedString(parts),
                     span: token.span,
                 }
-            } else {
-                // No interpolation — keep raw content like before
+            } else if !inner.contains('\\') {
+                // No interpolation and no escapes — verbatim source slice
+                let offset = inner.as_ptr() as usize - src.as_ptr() as usize;
                 Expr {
-                    kind: ExprKind::String(inner.to_string()),
+                    kind: ExprKind::String(Cow::Borrowed(&src[offset..offset + inner.len()])),
                     span: token.span,
+                }
+            } else {
+                // Has escape sequences but no interpolation — decode via interpolated parts
+                let inner_offset = token.span.end - 1 - inner.len() as u32;
+                let parts =
+                    crate::interpolation::parse_interpolated_parts(src, inner, inner_offset);
+                // Collapse single literal part into String, or use InterpolatedString
+                if parts.len() == 1 {
+                    if let StringPart::Literal(s) = parts.into_iter().next().unwrap() {
+                        Expr {
+                            kind: ExprKind::String(s),
+                            span: token.span,
+                        }
+                    } else {
+                        Expr {
+                            kind: ExprKind::InterpolatedString(Vec::new()),
+                            span: token.span,
+                        }
+                    }
+                } else {
+                    Expr {
+                        kind: ExprKind::InterpolatedString(parts),
+                        span: token.span,
+                    }
                 }
             }
         }
@@ -730,22 +787,30 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         // Backtick string (shell execution)
         TokenKind::BacktickString => {
             let token = parser.advance();
-            let text = &parser.source()[token.span.start as usize..token.span.end as usize];
+            let src = parser.source();
+            let text = &src[token.span.start as usize..token.span.end as usize];
             let inner = &text[1..text.len() - 1]; // strip backticks
 
             if crate::interpolation::has_interpolation(inner) {
                 let inner_offset = token.span.start + 1;
-                let parts = crate::interpolation::parse_interpolated_parts(
-                    parser.source(),
-                    inner,
-                    inner_offset,
-                );
+                let parts =
+                    crate::interpolation::parse_interpolated_parts(src, inner, inner_offset);
+                Expr {
+                    kind: ExprKind::ShellExec(parts),
+                    span: token.span,
+                }
+            } else if !inner.contains('\\') {
+                // No escapes — verbatim source slice
+                let offset = inner.as_ptr() as usize - src.as_ptr() as usize;
+                let parts = vec![StringPart::Literal(Cow::Borrowed(
+                    &src[offset..offset + inner.len()],
+                ))];
                 Expr {
                     kind: ExprKind::ShellExec(parts),
                     span: token.span,
                 }
             } else {
-                let parts = vec![StringPart::Literal(inner.to_string())];
+                let parts = vec![StringPart::Literal(Cow::Owned(inner.to_string()))];
                 Expr {
                     kind: ExprKind::ShellExec(parts),
                     span: token.span,
@@ -756,18 +821,36 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         // Heredoc
         TokenKind::Heredoc => {
             let token = parser.advance();
-            let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-            let (label, body) = parse_heredoc_content(text);
+            let src = parser.source();
+            let text = &src[token.span.start as usize..token.span.end as usize];
+            let (label, body, stripped) = parse_heredoc_content(text);
             if crate::interpolation::has_interpolation(&body) {
-                let body_offset = find_body_offset(text, token.span.start);
-                let parts =
-                    crate::interpolation::parse_interpolated_parts_heredoc(&body, body_offset);
-                Expr {
-                    kind: ExprKind::Heredoc { label, parts },
-                    span: token.span,
+                if stripped {
+                    // Indentation was stripped — body is not a verbatim source slice;
+                    // use old path that handles de-indented content
+                    let body_offset = find_body_offset(text, token.span.start);
+                    let parts =
+                        crate::interpolation::parse_interpolated_parts_heredoc(&body, body_offset);
+                    Expr {
+                        kind: ExprKind::Heredoc { label, parts },
+                        span: token.span,
+                    }
+                } else {
+                    // Body is a verbatim source slice — use sub-parser path for correct spans
+                    let body_offset = find_body_offset(text, token.span.start);
+                    // Find the inner slice in the source directly
+                    let body_start = body_offset as usize;
+                    let body_end = body_start + body.len();
+                    let inner = &src[body_start..body_end];
+                    let parts =
+                        crate::interpolation::parse_interpolated_parts(src, inner, body_offset);
+                    Expr {
+                        kind: ExprKind::Heredoc { label, parts },
+                        span: token.span,
+                    }
                 }
             } else {
-                let parts = vec![StringPart::Literal(body)];
+                let parts = vec![StringPart::Literal(Cow::Owned(body))];
                 Expr {
                     kind: ExprKind::Heredoc { label, parts },
                     span: token.span,
@@ -779,7 +862,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         TokenKind::Nowdoc => {
             let token = parser.advance();
             let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-            let (label, body) = parse_heredoc_content(text);
+            let (label, body, _stripped) = parse_heredoc_content(text);
             Expr {
                 kind: ExprKind::Nowdoc { label, value: body },
                 span: token.span,
@@ -1453,7 +1536,7 @@ fn parse_closure<'src>(
 
     // body
     parser.expect(TokenKind::LeftBrace);
-    let mut body = Vec::new();
+    let mut body = Vec::with_capacity(16);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
         body.push(stmt::parse_stmt(parser));
@@ -1481,7 +1564,7 @@ fn parse_closure<'src>(
 }
 
 fn parse_closure_use_list<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClosureUseVar<'src>> {
-    let mut vars = Vec::new();
+    let mut vars = Vec::with_capacity(2);
     loop {
         if parser.check(TokenKind::RightParen) {
             break;
@@ -1557,7 +1640,7 @@ fn parse_match_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
 
     parser.expect(TokenKind::LeftBrace);
 
-    let mut arms = Vec::new();
+    let mut arms = Vec::with_capacity(4);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let arm_start = parser.start_span();
 
@@ -1566,7 +1649,7 @@ fn parse_match_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             parser.eat(TokenKind::Comma);
             None
         } else {
-            let mut conds = Vec::new();
+            let mut conds = Vec::with_capacity(2);
             conds.push(parse_expr(parser));
             while parser.eat(TokenKind::Comma).is_some() {
                 if parser.check(TokenKind::FatArrow) {
@@ -1698,7 +1781,7 @@ fn parse_arg_list_or_callable<'src>(parser: &'_ mut Parser<'src>) -> ArgListResu
         return ArgListResult::CallableMarker;
     }
 
-    let mut args = Vec::new();
+    let mut args = Vec::with_capacity(4);
     if !parser.check(TokenKind::RightParen) {
         loop {
             if parser.check(TokenKind::RightParen) {
@@ -1825,7 +1908,7 @@ fn parse_array_literal<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
     let start = parser.start_span();
     parser.advance(); // consume [
 
-    let mut elements = Vec::new();
+    let mut elements = Vec::with_capacity(8);
 
     if !parser.check(TokenKind::RightBracket) {
         loop {
@@ -1870,7 +1953,7 @@ fn parse_array_call<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
     parser.advance(); // consume 'array'
     parser.expect(TokenKind::LeftParen);
 
-    let mut elements = Vec::new();
+    let mut elements = Vec::with_capacity(8);
 
     if !parser.check(TokenKind::RightParen) {
         loop {
@@ -1938,7 +2021,7 @@ fn parse_list_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
     parser.advance(); // consume 'list'
     parser.expect(TokenKind::LeftParen);
 
-    let mut elements = Vec::new();
+    let mut elements = Vec::with_capacity(4);
 
     if !parser.check(TokenKind::RightParen) {
         loop {
@@ -2101,7 +2184,8 @@ fn token_to_binary_op(kind: TokenKind) -> BinaryOp {
 
 /// Extract label and body from heredoc/nowdoc raw token text.
 /// Input: `<<<LABEL\nbody\nLABEL` or `<<<'LABEL'\nbody\nLABEL`
-fn parse_heredoc_content(text: &str) -> (String, String) {
+/// Returns `(label, body, stripped)` where `stripped` is true if indentation was removed.
+fn parse_heredoc_content(text: &str) -> (String, String, bool) {
     // Skip <<<
     let after = text.strip_prefix("<<<").unwrap_or(text);
     let after = after.trim_start_matches([' ', '\t']);
@@ -2154,17 +2238,16 @@ fn parse_heredoc_content(text: &str) -> (String, String) {
         }
     };
 
-    let final_content = if !indent.is_empty() {
-        content
+    if !indent.is_empty() {
+        let final_content = content
             .lines()
             .map(|line| line.strip_prefix(indent).unwrap_or(line))
             .collect::<Vec<_>>()
-            .join("\n")
+            .join("\n");
+        (label, final_content, true)
     } else {
-        content.to_string()
-    };
-
-    (label, final_content)
+        (label, content.to_string(), false)
+    }
 }
 
 /// Find the byte offset of the body content within a heredoc token.

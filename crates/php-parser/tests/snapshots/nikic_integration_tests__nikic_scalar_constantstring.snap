@@ -178,7 +178,7 @@ expression: json
       "kind": {
         "Expression": {
           "kind": {
-            "String": "!\\'!\\\\!\\a!"
+            "String": "!'!\\!\\a!"
           },
           "span": {
             "start": 65,
@@ -195,7 +195,7 @@ expression: json
       "kind": {
         "Expression": {
           "kind": {
-            "String": "!\\\"!\\\\!\\$!\\n!\\r!\\t!\\f!\\v!\\e!\\a"
+            "String": "!\"!\\!$!\n!\r!\t!\f!\u000b!\u001b!\\a"
           },
           "span": {
             "start": 79,
@@ -212,7 +212,7 @@ expression: json
       "kind": {
         "Expression": {
           "kind": {
-            "String": "!\\xFF!\\377!\\400!\\0!"
+            "String": "!ÿ!ÿ!!\u0000!"
           },
           "span": {
             "start": 113,

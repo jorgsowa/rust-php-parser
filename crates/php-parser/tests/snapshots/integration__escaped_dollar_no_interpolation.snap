@@ -9,7 +9,7 @@ expression: to_json(&result.program)
         "Echo": [
           {
             "kind": {
-              "String": "Price: \\$100"
+              "String": "Price: $100"
             },
             "span": {
               "start": 11,

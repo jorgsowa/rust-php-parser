@@ -203,7 +203,7 @@ impl<'src> Parser<'src> {
 
     /// Get the text of the peeked token (one token ahead of current).
     pub fn peek_text(&mut self) -> Option<&'src str> {
-        let token = self.lexer.peek().clone();
+        let token = self.lexer.peek();
         Some(&self.source[token.span.start as usize..token.span.end as usize])
     }
 
@@ -390,7 +390,7 @@ impl<'src> Parser<'src> {
             self.expect(TokenKind::Backslash);
         }
 
-        let mut parts = Vec::new();
+        let mut parts = Vec::with_capacity(1);
 
         // First part
         if let Some((text, _)) = self.eat_identifier_or_keyword() {
@@ -680,7 +680,7 @@ impl<'src> Parser<'src> {
 
     /// Parse PHP 8 attributes: `#[Attr]`, `#[Attr(args)]`, `#[A, B]`, stacked `#[A] #[B]`
     pub fn parse_attributes(&mut self) -> Vec<Attribute<'src>> {
-        let mut attributes = Vec::new();
+        let mut attributes = Vec::with_capacity(1);
         while self.check(TokenKind::HashBracket) {
             self.advance(); // consume #[
 
@@ -733,7 +733,7 @@ impl<'src> Parser<'src> {
 
     pub fn parse_program(&mut self) -> Program<'src> {
         let start = self.start_span();
-        let mut stmts = Vec::new();
+        let mut stmts = Vec::with_capacity(16);
 
         // Handle optional inline HTML before PHP tag
         if self.check(TokenKind::InlineHtml) {

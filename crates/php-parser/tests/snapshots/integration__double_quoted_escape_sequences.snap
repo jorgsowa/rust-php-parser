@@ -9,7 +9,7 @@ expression: to_json(&result.program)
         "Echo": [
           {
             "kind": {
-              "String": "line1\\nline2\\ttab"
+              "String": "line1\nline2\ttab"
             },
             "span": {
               "start": 11,
