@@ -565,9 +565,9 @@ fn parse_complex_interpolation_owned(content: &str, offset: u32) -> Expr<'static
     let result = crate::parse(&wrapped);
     if let Some(stmt) = result.program.stmts.first() {
         if let StmtKind::Expression(expr) = stmt.kind.clone() {
-            // Convert to static (owned) expr then reoffset
-            let static_expr = to_static_expr(expr);
-            return reoffset_expr(static_expr, offset, 6); // "<?php " is 6 bytes
+            let mut static_expr = to_static_expr(expr);
+            reoffset_expr(&mut static_expr, offset, 6); // "<?php " is 6 bytes
+            return static_expr;
         }
     }
     // Fallback: return error expression
@@ -687,19 +687,15 @@ fn to_static_expr(expr: Expr<'_>) -> Expr<'static> {
 
 fn to_static_arg(arg: Arg<'_>) -> Arg<'static> {
     Arg {
-        // Named args in interpolated expressions are rare; leak if necessary
-        name: arg.name.map(|n| -> &'static str {
-            let owned: Box<str> = n.into();
-            Box::leak(owned)
-        }),
+        name: arg.name.map(|n| Cow::Owned(n.into_owned())),
         value: to_static_expr(arg.value),
         unpack: arg.unpack,
         span: arg.span,
     }
 }
 
-/// Adjust spans in an expression: subtract `parser_offset` and add `target_offset`
-fn reoffset_expr(mut expr: Expr<'static>, target_offset: u32, parser_offset: u32) -> Expr<'static> {
+/// Adjust spans in an expression in-place: subtract `parser_offset` and add `target_offset`.
+fn reoffset_expr(expr: &mut Expr<'static>, target_offset: u32, parser_offset: u32) {
     reoffset_span(&mut expr.span, target_offset, parser_offset);
     match &mut expr.kind {
         ExprKind::Variable(_)
@@ -711,78 +707,76 @@ fn reoffset_expr(mut expr: Expr<'static>, target_offset: u32, parser_offset: u32
         | ExprKind::Identifier(_)
         | ExprKind::Error
         | ExprKind::MagicConst(_) => {}
-        ExprKind::ArrayAccess(ref mut aa) => {
-            *aa.array = reoffset_expr(*aa.array.clone(), target_offset, parser_offset);
-            if let Some(ref mut idx) = aa.index {
-                **idx = reoffset_expr(*idx.clone(), target_offset, parser_offset);
+        ExprKind::ArrayAccess(aa) => {
+            reoffset_expr(&mut aa.array, target_offset, parser_offset);
+            if let Some(idx) = &mut aa.index {
+                reoffset_expr(idx, target_offset, parser_offset);
             }
         }
-        ExprKind::PropertyAccess(ref mut pa) => {
-            *pa.object = reoffset_expr(*pa.object.clone(), target_offset, parser_offset);
-            *pa.property = reoffset_expr(*pa.property.clone(), target_offset, parser_offset);
+        ExprKind::PropertyAccess(pa) => {
+            reoffset_expr(&mut pa.object, target_offset, parser_offset);
+            reoffset_expr(&mut pa.property, target_offset, parser_offset);
         }
-        ExprKind::MethodCall(ref mut mc) => {
-            *mc.object = reoffset_expr(*mc.object.clone(), target_offset, parser_offset);
-            *mc.method = reoffset_expr(*mc.method.clone(), target_offset, parser_offset);
+        ExprKind::MethodCall(mc) => {
+            reoffset_expr(&mut mc.object, target_offset, parser_offset);
+            reoffset_expr(&mut mc.method, target_offset, parser_offset);
             for arg in &mut mc.args {
                 reoffset_span(&mut arg.span, target_offset, parser_offset);
-                arg.value = reoffset_expr(arg.value.clone(), target_offset, parser_offset);
+                reoffset_expr(&mut arg.value, target_offset, parser_offset);
             }
         }
-        ExprKind::FunctionCall(ref mut fc) => {
-            *fc.name = reoffset_expr(*fc.name.clone(), target_offset, parser_offset);
+        ExprKind::FunctionCall(fc) => {
+            reoffset_expr(&mut fc.name, target_offset, parser_offset);
             for arg in &mut fc.args {
                 reoffset_span(&mut arg.span, target_offset, parser_offset);
-                arg.value = reoffset_expr(arg.value.clone(), target_offset, parser_offset);
+                reoffset_expr(&mut arg.value, target_offset, parser_offset);
             }
         }
-        ExprKind::NullsafePropertyAccess(ref mut pa) => {
-            *pa.object = reoffset_expr(*pa.object.clone(), target_offset, parser_offset);
-            *pa.property = reoffset_expr(*pa.property.clone(), target_offset, parser_offset);
+        ExprKind::NullsafePropertyAccess(pa) => {
+            reoffset_expr(&mut pa.object, target_offset, parser_offset);
+            reoffset_expr(&mut pa.property, target_offset, parser_offset);
         }
-        ExprKind::NullsafeMethodCall(ref mut mc) => {
-            *mc.object = reoffset_expr(*mc.object.clone(), target_offset, parser_offset);
-            *mc.method = reoffset_expr(*mc.method.clone(), target_offset, parser_offset);
+        ExprKind::NullsafeMethodCall(mc) => {
+            reoffset_expr(&mut mc.object, target_offset, parser_offset);
+            reoffset_expr(&mut mc.method, target_offset, parser_offset);
             for arg in &mut mc.args {
                 reoffset_span(&mut arg.span, target_offset, parser_offset);
-                arg.value = reoffset_expr(arg.value.clone(), target_offset, parser_offset);
+                reoffset_expr(&mut arg.value, target_offset, parser_offset);
             }
         }
-        ExprKind::StaticPropertyAccess(ref mut sa) => {
-            *sa.class = reoffset_expr(*sa.class.clone(), target_offset, parser_offset);
+        ExprKind::StaticPropertyAccess(sa) => {
+            reoffset_expr(&mut sa.class, target_offset, parser_offset);
         }
-        ExprKind::StaticMethodCall(ref mut smc) => {
-            *smc.class = reoffset_expr(*smc.class.clone(), target_offset, parser_offset);
+        ExprKind::StaticMethodCall(smc) => {
+            reoffset_expr(&mut smc.class, target_offset, parser_offset);
             for arg in &mut smc.args {
                 reoffset_span(&mut arg.span, target_offset, parser_offset);
-                arg.value = reoffset_expr(arg.value.clone(), target_offset, parser_offset);
+                reoffset_expr(&mut arg.value, target_offset, parser_offset);
             }
         }
-        ExprKind::ClassConstAccess(ref mut ca) => {
-            *ca.class = reoffset_expr(*ca.class.clone(), target_offset, parser_offset);
+        ExprKind::ClassConstAccess(ca) => {
+            reoffset_expr(&mut ca.class, target_offset, parser_offset);
         }
-        ExprKind::Binary(ref mut be) => {
-            *be.left = reoffset_expr(*be.left.clone(), target_offset, parser_offset);
-            *be.right = reoffset_expr(*be.right.clone(), target_offset, parser_offset);
+        ExprKind::Binary(be) => {
+            reoffset_expr(&mut be.left, target_offset, parser_offset);
+            reoffset_expr(&mut be.right, target_offset, parser_offset);
         }
-        ExprKind::Assign(ref mut ae) => {
-            *ae.target = reoffset_expr(*ae.target.clone(), target_offset, parser_offset);
-            *ae.value = reoffset_expr(*ae.value.clone(), target_offset, parser_offset);
+        ExprKind::Assign(ae) => {
+            reoffset_expr(&mut ae.target, target_offset, parser_offset);
+            reoffset_expr(&mut ae.value, target_offset, parser_offset);
         }
-        ExprKind::Ternary(ref mut te) => {
-            *te.condition = reoffset_expr(*te.condition.clone(), target_offset, parser_offset);
-            if let Some(ref mut t) = te.then_expr {
-                **t = reoffset_expr(*t.clone(), target_offset, parser_offset);
+        ExprKind::Ternary(te) => {
+            reoffset_expr(&mut te.condition, target_offset, parser_offset);
+            if let Some(t) = &mut te.then_expr {
+                reoffset_expr(t, target_offset, parser_offset);
             }
-            *te.else_expr = reoffset_expr(*te.else_expr.clone(), target_offset, parser_offset);
+            reoffset_expr(&mut te.else_expr, target_offset, parser_offset);
         }
-        ExprKind::Parenthesized(ref mut inner) => {
-            **inner = reoffset_expr(*inner.clone(), target_offset, parser_offset);
+        ExprKind::Parenthesized(inner) => {
+            reoffset_expr(inner, target_offset, parser_offset);
         }
-        // For other expression kinds, just adjust the top-level span (already done above)
         _ => {}
     }
-    expr
 }
 
 fn reoffset_span(span: &mut Span, target_offset: u32, parser_offset: u32) {

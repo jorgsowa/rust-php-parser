@@ -50,7 +50,7 @@ pub enum TypeHintKind<'src> {
 
 #[derive(Debug, Clone, Serialize)]
 pub struct Arg<'src> {
-    pub name: Option<&'src str>,
+    pub name: Option<Cow<'src, str>>,
     pub value: Expr<'src>,
     pub unpack: bool,
     pub span: Span,
