@@ -1,6 +1,6 @@
 use php_parser::parse;
 
-fn parse_php(source: &str) -> php_parser::ParseResult {
+fn parse_php(source: &str) -> php_parser::ParseResult<'_> {
     parse(source)
 }
 
@@ -93,6 +93,42 @@ fn test_alt_while_unexpected_rbrace_terminates() {
 fn test_alt_foreach_unexpected_rbrace_terminates() {
     let result = parse_php("<?php foreach ($a as $b): } endforeach;");
     assert!(!result.errors.is_empty(), "Expected parse errors");
+}
+
+// Regression: synchronize() was advancing through InlineHtml/OpenTag/EndWhile etc.
+// (all fell to the `_` arm). In WordPress-style templates the sequence
+// `CloseTag → InlineHtml → OpenTag → EndWhile` caused synchronize() to consume
+// the endwhile terminator that parse_stmts_until_end was waiting for, running
+// until EOF. The fix adds those tokens to synchronize()'s break list.
+#[test]
+fn test_alt_while_inline_html_terminates() {
+    // Simulates: while (true): ?> HTML <?php endwhile;
+    let result = parse_php("<?php while (true): ?> HTML <?php endwhile; ?>");
+    assert!(
+        result.errors.is_empty(),
+        "Unexpected parse errors: {:?}",
+        result.errors
+    );
+}
+
+#[test]
+fn test_alt_if_inline_html_terminates() {
+    let result = parse_php("<?php if (true): ?> HTML <?php endif; ?>");
+    assert!(
+        result.errors.is_empty(),
+        "Unexpected parse errors: {:?}",
+        result.errors
+    );
+}
+
+#[test]
+fn test_alt_foreach_inline_html_terminates() {
+    let result = parse_php("<?php foreach ($a as $b): ?> HTML <?php endforeach; ?>");
+    assert!(
+        result.errors.is_empty(),
+        "Unexpected parse errors: {:?}",
+        result.errors
+    );
 }
 
 // =============================================================================
@@ -3331,4 +3367,3 @@ fn test_invalid_missing_closing_brace_method() {
     assert!(!result.errors.is_empty(), "Expected parse errors");
     insta::assert_snapshot!(to_json(&result.program));
 }
-
