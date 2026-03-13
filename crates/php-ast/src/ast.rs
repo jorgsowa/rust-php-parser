@@ -78,7 +78,6 @@ pub struct Stmt<'src> {
 }
 
 #[derive(Debug, Clone, Serialize)]
-#[allow(clippy::large_enum_variant)]
 pub enum StmtKind<'src> {
     /// Expression statement (e.g. `foo();`)
     Expression(Expr<'src>),
@@ -93,22 +92,22 @@ pub enum StmtKind<'src> {
     Block(Vec<Stmt<'src>>),
 
     /// If statement
-    If(IfStmt<'src>),
+    If(Box<IfStmt<'src>>),
 
     /// While loop
-    While(WhileStmt<'src>),
+    While(Box<WhileStmt<'src>>),
 
     /// For loop
-    For(ForStmt<'src>),
+    For(Box<ForStmt<'src>>),
 
     /// Foreach loop
-    Foreach(ForeachStmt<'src>),
+    Foreach(Box<ForeachStmt<'src>>),
 
     /// Do-while loop
-    DoWhile(DoWhileStmt<'src>),
+    DoWhile(Box<DoWhileStmt<'src>>),
 
     /// Function declaration
-    Function(FunctionDecl<'src>),
+    Function(Box<FunctionDecl<'src>>),
 
     /// Break statement
     Break(Option<Expr<'src>>),
@@ -117,7 +116,7 @@ pub enum StmtKind<'src> {
     Continue(Option<Expr<'src>>),
 
     /// Switch statement
-    Switch(SwitchStmt<'src>),
+    Switch(Box<SwitchStmt<'src>>),
 
     /// Goto statement
     Goto(&'src str),
@@ -135,25 +134,25 @@ pub enum StmtKind<'src> {
     Throw(Expr<'src>),
 
     /// Try/catch/finally
-    TryCatch(TryCatchStmt<'src>),
+    TryCatch(Box<TryCatchStmt<'src>>),
 
     /// Global declaration
     Global(Vec<Expr<'src>>),
 
     /// Class declaration
-    Class(ClassDecl<'src>),
+    Class(Box<ClassDecl<'src>>),
 
     /// Interface declaration
-    Interface(InterfaceDecl<'src>),
+    Interface(Box<InterfaceDecl<'src>>),
 
     /// Trait declaration
-    Trait(TraitDecl<'src>),
+    Trait(Box<TraitDecl<'src>>),
 
     /// Enum declaration
-    Enum(EnumDecl<'src>),
+    Enum(Box<EnumDecl<'src>>),
 
     /// Namespace declaration
-    Namespace(NamespaceDecl<'src>),
+    Namespace(Box<NamespaceDecl<'src>>),
 
     /// Use declaration
     Use(UseDecl<'src>),
@@ -651,10 +650,10 @@ pub enum ExprKind<'src> {
     },
 
     /// Closure: `function($x) use($y) { }`
-    Closure(ClosureExpr<'src>),
+    Closure(Box<ClosureExpr<'src>>),
 
     /// Arrow function: `fn($x) => expr`
-    ArrowFunction(ArrowFunctionExpr<'src>),
+    ArrowFunction(Box<ArrowFunctionExpr<'src>>),
 
     /// Match: `match(expr) { ... }`
     Match(MatchExpr<'src>),
@@ -666,7 +665,7 @@ pub enum ExprKind<'src> {
     Yield(YieldExpr<'src>),
 
     /// Anonymous class: `new class(args) extends Foo implements Bar { ... }`
-    AnonymousClass(ClassDecl<'src>),
+    AnonymousClass(Box<ClassDecl<'src>>),
 
     /// First-class callable: `strlen(...)`, `$obj->method(...)`, `Foo::bar(...)`
     CallableCreate(CallableCreateExpr<'src>),
