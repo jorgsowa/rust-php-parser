@@ -1,4 +1,5 @@
 use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
+use std::time::Duration;
 use std::path::{Path, PathBuf};
 
 #[global_allocator]
@@ -38,6 +39,7 @@ fn bench_corpus(c: &mut Criterion, name: &str, dir: &Path) {
     let mut group = c.benchmark_group("corpus");
     group.throughput(Throughput::Bytes(total_bytes));
     group.sample_size(10);
+    group.measurement_time(Duration::from_secs(15));
 
     group.bench_function(
         BenchmarkId::new(name, format!("{} files", paths.len())),
