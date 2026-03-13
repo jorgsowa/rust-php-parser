@@ -71,6 +71,31 @@ fn test_error_recovery_partial_parse() {
 }
 
 // =============================================================================
+// Regression: parse_stmts_until_end infinite loop
+// =============================================================================
+
+// A `}` inside alternative syntax is not in `ends` ([ElseIf, Else, EndIf])
+// and causes `synchronize()` to stop WITHOUT advancing, so the old loop spun
+// forever. The fix (span-progress guard) must force-advance past such tokens.
+#[test]
+fn test_alt_if_unexpected_rbrace_terminates() {
+    let result = parse_php("<?php if (true): } endif;");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+}
+
+#[test]
+fn test_alt_while_unexpected_rbrace_terminates() {
+    let result = parse_php("<?php while (true): } endwhile;");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+}
+
+#[test]
+fn test_alt_foreach_unexpected_rbrace_terminates() {
+    let result = parse_php("<?php foreach ($a as $b): } endforeach;");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+}
+
+// =============================================================================
 // Expression precedence tests
 // =============================================================================
 
