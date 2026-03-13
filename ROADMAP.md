@@ -15,6 +15,7 @@ This roadmap covers both performance work (completed and planned) and feature de
 | Zero-copy AST | `perf/zero-copy-ast` | AST fields changed from `String` to `&'src str` / `Cow<'src, str>` — eliminates alloc for every name, variable, param, method, class, and type identifier |
 | Interpolation sub-parser | `perf/interpolation-sub-parser` | `{$expr}` in double-quoted/backtick strings uses `Parser::new_at` instead of wrapping in `<?php ;` and re-running the full parser — eliminates string alloc, AST clone, and span rewrite per interpolation |
 | String/Vec optimizations | `perf/string-and-vec-optimizations` | `Vec::with_capacity` across all hot parse loops; `ExprKind::String` and `StringPart::Literal` use `Cow::Borrowed` for escape-free strings; heredoc sub-parser path for non-indented heredocs; remove unnecessary `Token::clone` in `peek_text` |
+| Benchmarking suite | — | Criterion.rs harness with Laravel, Symfony, and WordPress corpora (15K PHP files) as git submodules; CI workflow runs a full bench on PRs (saves `pr` baseline) and on main (saves `main` baseline); critcmp regression table posted to PR summary; HTML report uploaded as artifact on main |
 
 ### Remaining
 
@@ -23,6 +24,9 @@ This roadmap covers both performance work (completed and planned) and feature de
 | Heredoc sub-parser (indented) | `parse_complex_interpolation_owned` still runs for PHP 7.3+ indented heredocs. `parse_heredoc_content` would need to return raw source span metadata alongside the de-indented body so the sub-parser path can be used even when stripping occurred. | Medium |
 | `StringPart::Literal` escape fast path | Pre-scan for `\` before allocating in interpolated string literal segments — most have no escapes and could use `Cow::Borrowed` into the source. | Low |
 | `parse_heredoc_content` single pass | Currently scans heredoc content twice to find the label then the body start. Merge into one pass. | Low |
+| Error message string interning | `expected()` and similar error helpers call `.to_string()` on every parse error (e.g. `"identifier".to_string()`, `"member name".to_string()`). Change the expected-token argument to `&'static str` or `Cow<'static, str>` so errors in correct code paths allocate nothing. | Low |
+| `StmtKind` enum size reduction | `StmtKind` carries `#[allow(clippy::large_enum_variant)]` because every variant is padded to the size of the largest one. Box the two or three heaviest variants (e.g. `Class`, `Function`, `Interface`) so the enum fits in a cache line and stack-allocated statement arrays stay compact. | Medium |
+| Interpolated string `Vec` capacity | `parse_interpolated_string` starts with `Vec::with_capacity(4)`. Real PHP strings average more parts; increase the hint to 8 or profile and pick a percentile-optimal value. | Low |
 
 ---
 
