@@ -37,7 +37,10 @@ pub fn parse_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                 }
             }
             let span = parser.current_span();
-            return Stmt { kind: StmtKind::Nop, span };
+            Stmt {
+                kind: StmtKind::Nop,
+                span,
+            }
         }
         // <?= after an inline HTML section (OpenTag left in stream by CloseTag handler above)
         TokenKind::OpenTag => {
@@ -48,7 +51,10 @@ pub fn parse_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                 }
             }
             let span = parser.current_span();
-            return Stmt { kind: StmtKind::Nop, span };
+            Stmt {
+                kind: StmtKind::Nop,
+                span,
+            }
         }
         TokenKind::Semicolon => {
             let span = parser.current_span();

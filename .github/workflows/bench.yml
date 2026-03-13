@@ -1,0 +1,92 @@
+name: Bench
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  bench:
+    name: Benchmark
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      # Shallow-clone each corpus — no git history needed, only the working
+      # tree.  Full clones of laravel/symfony/wordpress would be several GB.
+      - name: Clone corpora (shallow)
+        run: |
+          git clone --depth 1 --quiet https://github.com/laravel/framework   crates/php-parser/benches/corpus/laravel
+          git clone --depth 1 --quiet https://github.com/symfony/symfony     crates/php-parser/benches/corpus/symfony
+          git clone --depth 1 --quiet https://github.com/WordPress/WordPress crates/php-parser/benches/corpus/wordpress
+
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+
+      # critcmp compares two named criterion baselines and prints a regression
+      # table.  The binary is cached by rust-cache after the first install.
+      - name: Install critcmp
+        run: which critcmp || cargo install critcmp --locked
+
+      # ── Pull Requests ────────────────────────────────────────────────────────
+      # Restore the criterion baseline saved by the most recent main-branch run.
+      # The exact key will never match (different SHA), so restore-keys provides
+      # a prefix match that picks up the latest saved entry.
+      - name: Restore criterion baseline
+        id: restore-baseline
+        if: github.event_name == 'pull_request'
+        uses: actions/cache/restore@v4
+        with:
+          path: target/criterion
+          key: criterion-baseline-${{ runner.os }}-main-${{ github.sha }}
+          restore-keys: criterion-baseline-${{ runner.os }}-main-
+
+      # Full bench run on PRs — the whole corpus completes in ~30 s so there is
+      # no need to use --test here.  Results are saved under the "pr" baseline
+      # so critcmp can diff them against the restored "main" baseline.
+      - name: Benchmark (PR)
+        if: github.event_name == 'pull_request'
+        run: cargo bench --bench parse -- --save-baseline pr
+
+      # Print a regression table when a baseline is available.  GitHub-runner
+      # variance is typically ±5 %, so we display all changes but do not fail
+      # the job automatically — humans review the table and decide.
+      - name: Compare against main baseline
+        if: github.event_name == 'pull_request'
+        run: |
+          if find target/criterion -name estimates.json -path '*/main/*' -quit 2>/dev/null | grep -q .; then
+            echo "### Benchmark comparison (PR vs main)" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            critcmp main pr --threshold 3 >> "$GITHUB_STEP_SUMMARY" 2>&1 || true
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No main baseline found in cache — skipping comparison." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      # ── Main branch ──────────────────────────────────────────────────────────
+      # Full bench with a named baseline so future PR runs can compare against it.
+      - name: Benchmark (main)
+        if: github.event_name == 'push'
+        run: cargo bench --bench parse -- --save-baseline main
+
+      # Persist the baseline for PR comparisons.  Each push to main overwrites
+      # the previous entry via the restore-keys prefix on the PR restore step.
+      - name: Save criterion baseline
+        if: github.event_name == 'push'
+        uses: actions/cache/save@v4
+        with:
+          path: target/criterion
+          key: criterion-baseline-${{ runner.os }}-main-${{ github.sha }}
+
+      # Keep the full HTML report (graphs, distributions) as a downloadable
+      # artifact for manual inspection.
+      - name: Upload benchmark report
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: criterion-report-${{ github.sha }}
+          path: target/criterion
+          retention-days: 90

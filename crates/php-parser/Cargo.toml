@@ -14,3 +14,10 @@ thiserror = { workspace = true }
 insta = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
+criterion = { workspace = true }
+walkdir = { workspace = true }
+mimalloc = { workspace = true }
+
+[[bench]]
+name = "parse"
+harness = false
