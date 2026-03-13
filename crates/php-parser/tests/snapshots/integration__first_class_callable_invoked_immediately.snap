@@ -1,0 +1,98 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "r"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "FunctionCall": {
+                    "name": {
+                      "kind": {
+                        "Parenthesized": {
+                          "kind": {
+                            "CallableCreate": {
+                              "kind": {
+                                "Function": {
+                                  "kind": {
+                                    "Identifier": "strlen"
+                                  },
+                                  "span": {
+                                    "start": 12,
+                                    "end": 18
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 12,
+                            "end": 23
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 24
+                      }
+                    },
+                    "args": [
+                      {
+                        "name": null,
+                        "value": {
+                          "kind": {
+                            "String": "hello"
+                          },
+                          "span": {
+                            "start": 25,
+                            "end": 32
+                          }
+                        },
+                        "unpack": false,
+                        "span": {
+                          "start": 25,
+                          "end": 32
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 33
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 33
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 34
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 34
+  }
+}

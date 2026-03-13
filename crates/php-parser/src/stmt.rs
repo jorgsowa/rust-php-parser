@@ -122,6 +122,24 @@ pub fn parse_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                         ..Default::default()
                     },
                 )
+            } else if parser.check(TokenKind::Readonly)
+                && parser.peek_kind() == Some(TokenKind::Class)
+            {
+                // `abstract readonly class` — invalid combo; emit error but recover with both
+                // modifiers set so the class node accurately reflects what was written.
+                parser.error(ParseError::Forbidden {
+                    message: "cannot use 'abstract' and 'readonly' together".into(),
+                    span: Span::new(start, parser.current_span().start),
+                });
+                parser.advance(); // consume 'readonly'
+                parse_class(
+                    parser,
+                    ClassModifiers {
+                        is_abstract: true,
+                        is_readonly: true,
+                        ..Default::default()
+                    },
+                )
             } else {
                 // abstract without class - error recovery
                 class_modifier_error(parser, start)
@@ -157,11 +175,31 @@ pub fn parse_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             }
         }
         TokenKind::Readonly => {
+            let start = parser.start_span();
             if parser.peek_kind() == Some(TokenKind::Class) {
                 parser.advance(); // consume 'readonly'
                 parse_class(
                     parser,
                     ClassModifiers {
+                        is_readonly: true,
+                        ..Default::default()
+                    },
+                )
+            } else if parser.peek_kind() == Some(TokenKind::Abstract)
+                && parser.peek2_kind() == Some(TokenKind::Class)
+            {
+                // `readonly abstract class` — invalid combo; emit error but recover with both
+                // modifiers set.
+                parser.advance(); // consume 'readonly'
+                parser.error(ParseError::Forbidden {
+                    message: "cannot use 'abstract' and 'readonly' together".into(),
+                    span: Span::new(start, parser.current_span().start),
+                });
+                parser.advance(); // consume 'abstract'
+                parse_class(
+                    parser,
+                    ClassModifiers {
+                        is_abstract: true,
                         is_readonly: true,
                         ..Default::default()
                     },
@@ -227,6 +265,22 @@ fn parse_attributed_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                         ..Default::default()
                     },
                 )
+            } else if parser.check(TokenKind::Readonly)
+                && parser.peek_kind() == Some(TokenKind::Class)
+            {
+                parser.error(ParseError::Forbidden {
+                    message: "cannot use 'abstract' and 'readonly' together".into(),
+                    span: Span::new(start, parser.current_span().start),
+                });
+                parser.advance(); // consume 'readonly'
+                parse_class(
+                    parser,
+                    ClassModifiers {
+                        is_abstract: true,
+                        is_readonly: true,
+                        ..Default::default()
+                    },
+                )
             } else {
                 class_modifier_error(parser, start)
             }
@@ -266,11 +320,28 @@ fn parse_attributed_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             }
         }
         TokenKind::Readonly => {
+            let start = parser.start_span();
             parser.advance();
             if parser.check(TokenKind::Class) {
                 parse_class(
                     parser,
                     ClassModifiers {
+                        is_readonly: true,
+                        ..Default::default()
+                    },
+                )
+            } else if parser.check(TokenKind::Abstract)
+                && parser.peek_kind() == Some(TokenKind::Class)
+            {
+                parser.error(ParseError::Forbidden {
+                    message: "cannot use 'abstract' and 'readonly' together".into(),
+                    span: Span::new(start, parser.current_span().start),
+                });
+                parser.advance(); // consume 'abstract'
+                parse_class(
+                    parser,
+                    ClassModifiers {
+                        is_abstract: true,
                         is_readonly: true,
                         ..Default::default()
                     },
