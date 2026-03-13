@@ -1,0 +1,67 @@
+use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
+use std::path::{Path, PathBuf};
+
+#[global_allocator]
+static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
+
+/// Collect paths of all `.php` files under `dir` and their total byte count.
+/// Only paths are kept in memory — sources are read inside the benchmark loop.
+fn collect_corpus(dir: &Path) -> (u64, Vec<PathBuf>) {
+    let mut paths: Vec<PathBuf> = Vec::new();
+    let mut total_bytes: u64 = 0;
+
+    for entry in walkdir::WalkDir::new(dir)
+        .follow_links(false)
+        .into_iter()
+        .filter_map(|e| e.ok())
+    {
+        if entry.file_type().is_file()
+            && entry.path().extension().and_then(|s| s.to_str()) == Some("php")
+        {
+            if let Ok(meta) = entry.metadata() {
+                total_bytes += meta.len();
+                paths.push(entry.path().to_owned());
+            }
+        }
+    }
+
+    (total_bytes, paths)
+}
+
+fn bench_corpus(c: &mut Criterion, name: &str, dir: &Path) {
+    let (total_bytes, paths) = collect_corpus(dir);
+    if paths.is_empty() {
+        eprintln!("corpus '{name}' not found at {dir:?} — skipping");
+        return;
+    }
+
+    let mut group = c.benchmark_group("corpus");
+    group.throughput(Throughput::Bytes(total_bytes));
+    group.sample_size(10);
+
+    group.bench_function(
+        BenchmarkId::new(name, format!("{} files", paths.len())),
+        |b| {
+            b.iter(|| {
+                for path in &paths {
+                    if let Ok(src) = std::fs::read_to_string(path) {
+                        std::hint::black_box(php_parser::parse(&src));
+                    }
+                }
+            });
+        },
+    );
+
+    group.finish();
+}
+
+fn bench_corpora(c: &mut Criterion) {
+    let base = Path::new(env!("CARGO_MANIFEST_DIR")).join("benches/corpus");
+
+    bench_corpus(c, "laravel", &base.join("laravel"));
+    bench_corpus(c, "symfony", &base.join("symfony"));
+    bench_corpus(c, "wordpress", &base.join("wordpress"));
+}
+
+criterion_group!(benches, bench_corpora);
+criterion_main!(benches);
