@@ -256,7 +256,15 @@ impl<'src> Parser<'src> {
                 | TokenKind::HaltCompiler
                 | TokenKind::HashBracket
                 | TokenKind::RightBrace
-                | TokenKind::CloseTag => break,
+                | TokenKind::CloseTag
+                | TokenKind::InlineHtml
+                | TokenKind::OpenTag
+                | TokenKind::EndIf
+                | TokenKind::EndWhile
+                | TokenKind::EndFor
+                | TokenKind::EndForeach
+                | TokenKind::EndSwitch
+                | TokenKind::EndDeclare => break,
                 _ => {
                     self.advance();
                 }
