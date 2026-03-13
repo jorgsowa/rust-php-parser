@@ -6,3 +6,4 @@ license.workspace = true
 
 [dependencies]
 php-ast = { workspace = true }
+memchr = { workspace = true }

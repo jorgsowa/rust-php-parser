@@ -23,15 +23,14 @@ impl<'src> Parser<'src> {
         let mut lexer = Lexer::new(source);
         let current = lexer.next_token();
         // Drain any lexer errors produced during first token read
-        let mut errors: Vec<ParseError> = lexer
-            .errors
-            .drain(..)
-            .map(|e| ParseError::Forbidden {
+        let mut errors: Vec<ParseError> = Vec::new();
+        if !lexer.errors.is_empty() {
+            errors.extend(lexer.errors.drain(..).map(|e| ParseError::Forbidden {
                 message: e.message.into(),
                 span: e.span,
-            })
-            .collect();
-        errors.truncate(MAX_ERRORS);
+            }));
+            errors.truncate(MAX_ERRORS);
+        }
         Self {
             lexer,
             current,
@@ -46,16 +45,15 @@ impl<'src> Parser<'src> {
     pub fn new_at(source: &'src str, offset: usize) -> Self {
         let mut lexer = Lexer::new_at(source, offset);
         let current = lexer.next_token();
-        // collect any initial lex errors
-        let mut errors: Vec<ParseError> = lexer
-            .errors
-            .drain(..)
-            .map(|e| ParseError::Forbidden {
+        // Drain any lexer errors produced during first token read
+        let mut errors: Vec<ParseError> = Vec::new();
+        if !lexer.errors.is_empty() {
+            errors.extend(lexer.errors.drain(..).map(|e| ParseError::Forbidden {
                 message: e.message.into(),
                 span: e.span,
-            })
-            .collect();
-        errors.truncate(MAX_ERRORS);
+            }));
+            errors.truncate(MAX_ERRORS);
+        }
         Self {
             lexer,
             current,
@@ -74,40 +72,49 @@ impl<'src> Parser<'src> {
     // =========================================================================
 
     /// Get the current token kind without consuming it.
+    #[inline]
     pub fn current_kind(&self) -> TokenKind {
         self.current.kind
     }
 
     /// Get the current token's span.
+    #[inline]
     pub fn current_span(&self) -> Span {
         self.current.span
     }
 
     /// Get the text of the current token.
+    #[inline]
     pub fn current_text(&self) -> &'src str {
         &self.source[self.current.span.start as usize..self.current.span.end as usize]
     }
 
     /// Advance to the next token, returning the consumed token.
+    #[inline]
     pub fn advance(&mut self) -> Token {
         let prev = std::mem::replace(&mut self.current, self.lexer.next_token());
-        // Drain any lexer errors produced during token read (capped via self.error)
-        let lex_errs: Vec<_> = self.lexer.errors.drain(..).collect();
-        for e in lex_errs {
-            self.error(ParseError::Forbidden {
-                message: e.message.into(),
-                span: e.span,
-            });
+        // Drain any lexer errors produced during token read.
+        // Guard with is_empty() so the hot path (no errors) skips all overhead.
+        if !self.lexer.errors.is_empty() {
+            let lex_errs: Vec<_> = self.lexer.errors.drain(..).collect();
+            for e in lex_errs {
+                self.error(ParseError::Forbidden {
+                    message: e.message.into(),
+                    span: e.span,
+                });
+            }
         }
         prev
     }
 
     /// Check if the current token matches the given kind.
+    #[inline]
     pub fn check(&self, kind: TokenKind) -> bool {
         self.current.kind == kind
     }
 
     /// If the current token matches `kind`, consume and return it. Otherwise return None.
+    #[inline]
     pub fn eat(&mut self, kind: TokenKind) -> Option<Token> {
         if self.check(kind) {
             Some(self.advance())

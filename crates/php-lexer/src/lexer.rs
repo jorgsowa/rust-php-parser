@@ -1,6 +1,54 @@
+use memchr::{memchr2, memmem};
 use php_ast::Span;
 
 use crate::token::{resolve_keyword, TokenKind};
+
+// ---------------------------------------------------------------------------
+// Byte-classification lookup tables
+//
+// Replacing multi-comparison chains with a single indexed load per byte.
+// The tables are computed at compile time and fit in a single cache line (256 bytes).
+// ---------------------------------------------------------------------------
+
+const fn make_whitespace_table() -> [bool; 256] {
+    let mut t = [false; 256];
+    t[b' ' as usize] = true;
+    t[b'\t' as usize] = true;
+    t[b'\r' as usize] = true;
+    t[b'\n' as usize] = true;
+    t[0x0C] = true; // form feed (\f)
+    t
+}
+
+const fn make_ident_start_table() -> [bool; 256] {
+    let mut t = [false; 256];
+    let mut i = 0usize;
+    while i < 256 {
+        let b = i as u8;
+        t[i] = (b >= b'a' && b <= b'z') || (b >= b'A' && b <= b'Z') || b == b'_' || b >= 0x80;
+        i += 1;
+    }
+    t
+}
+
+const fn make_ident_continue_table() -> [bool; 256] {
+    let mut t = [false; 256];
+    let mut i = 0usize;
+    while i < 256 {
+        let b = i as u8;
+        t[i] = (b >= b'a' && b <= b'z')
+            || (b >= b'A' && b <= b'Z')
+            || (b >= b'0' && b <= b'9')
+            || b == b'_'
+            || b >= 0x80;
+        i += 1;
+    }
+    t
+}
+
+static IS_PHP_WHITESPACE: [bool; 256] = make_whitespace_table();
+static IS_IDENT_START: [bool; 256] = make_ident_start_table();
+static IS_IDENT_CONTINUE: [bool; 256] = make_ident_continue_table();
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct LexerError {
@@ -42,14 +90,14 @@ pub struct Lexer<'src> {
     pub errors: Vec<LexerError>,
 }
 
-#[inline]
+#[inline(always)]
 fn is_ident_start(b: u8) -> bool {
-    b.is_ascii_alphabetic() || b == b'_' || b >= 0x80
+    IS_IDENT_START[b as usize]
 }
 
-#[inline]
+#[inline(always)]
 fn is_ident_continue(b: u8) -> bool {
-    b.is_ascii_alphanumeric() || b == b'_' || b >= 0x80
+    IS_IDENT_CONTINUE[b as usize]
 }
 
 impl<'src> Lexer<'src> {
@@ -143,12 +191,27 @@ impl<'src> Lexer<'src> {
 
     fn lex_inline_html(&mut self) -> Token {
         let start = self.pos;
+        let bytes = self.source.as_bytes();
 
-        // Search for <?php or <?=
-        if let Some(tag_pos) = self.source[self.pos..]
-            .find("<?php")
-            .or_else(|| self.source[self.pos..].find("<?="))
-        {
+        // Search for <?php or <?= with a single SIMD-accelerated scan:
+        // find the first '<', then check if it's followed by ?php or ?=.
+        // This avoids the two independent full-string scans of the original approach.
+        let mut search = self.pos;
+        let tag_pos = loop {
+            match memchr::memchr(b'<', &bytes[search..]) {
+                None => break None,
+                Some(offset) => {
+                    let p = search + offset;
+                    let rest = &bytes[p..];
+                    if rest.starts_with(b"<?php") || rest.starts_with(b"<?=") {
+                        break Some(p - self.pos);
+                    }
+                    search = p + 1;
+                }
+            }
+        };
+
+        if let Some(tag_pos) = tag_pos {
             if tag_pos == 0 {
                 // We're right at the open tag, switch to PHP mode
                 self.mode = LexerMode::Php;
@@ -190,9 +253,7 @@ impl<'src> Lexer<'src> {
         let bytes = self.source.as_bytes();
         loop {
             // Skip whitespace
-            while self.pos < bytes.len()
-                && matches!(bytes[self.pos], b' ' | b'\t' | b'\r' | b'\n' | b'\x0C')
-            {
+            while self.pos < bytes.len() && IS_PHP_WHITESPACE[bytes[self.pos] as usize] {
                 self.pos += 1;
             }
 
@@ -205,15 +266,7 @@ impl<'src> Lexer<'src> {
             if bytes[self.pos] == b'/' && self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'/'
             {
                 self.pos += 2;
-                while self.pos < bytes.len() && bytes[self.pos] != b'\n' {
-                    if bytes[self.pos] == b'?'
-                        && self.pos + 1 < bytes.len()
-                        && bytes[self.pos + 1] == b'>'
-                    {
-                        break; // leave ?> for scan_token to produce CloseTag
-                    }
-                    self.pos += 1;
-                }
+                Self::skip_line_comment_body(bytes, &mut self.pos);
                 continue;
             }
 
@@ -221,17 +274,9 @@ impl<'src> Lexer<'src> {
             if bytes[self.pos] == b'/' && self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'*'
             {
                 self.pos += 2;
-                loop {
-                    if self.pos + 1 >= bytes.len() {
-                        // Unclosed comment - consume rest of file
-                        self.pos = bytes.len();
-                        break;
-                    }
-                    if bytes[self.pos] == b'*' && bytes[self.pos + 1] == b'/' {
-                        self.pos += 2;
-                        break;
-                    }
-                    self.pos += 1;
+                match memmem::find(&bytes[self.pos..], b"*/") {
+                    Some(end) => self.pos += end + 2,
+                    None => self.pos = bytes.len(), // Unclosed comment - consume rest of file
                 }
                 continue;
             }
@@ -242,15 +287,7 @@ impl<'src> Lexer<'src> {
                 && !(self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'[')
             {
                 self.pos += 1;
-                while self.pos < bytes.len() && bytes[self.pos] != b'\n' {
-                    if bytes[self.pos] == b'?'
-                        && self.pos + 1 < bytes.len()
-                        && bytes[self.pos + 1] == b'>'
-                    {
-                        break; // leave ?> for scan_token to produce CloseTag
-                    }
-                    self.pos += 1;
-                }
+                Self::skip_line_comment_body(bytes, &mut self.pos);
                 continue;
             }
 
@@ -632,23 +669,28 @@ impl<'src> Lexer<'src> {
         }
         p += 1; // skip opening '
         loop {
-            if p >= bytes.len() {
-                // Unclosed string — skip opening quote and retry
-                self.pos = start + 1;
-                return self.read_next_token();
-            }
-            match bytes[p] {
-                b'\\' => {
-                    p += 1;
-                    if p < bytes.len() {
-                        p += 1;
+            match memchr2(b'\\', b'\'', &bytes[p..]) {
+                None => {
+                    // Unclosed string — skip opening quote and retry
+                    self.pos = start + 1;
+                    return self.read_next_token();
+                }
+                Some(offset) => {
+                    p += offset;
+                    match bytes[p] {
+                        b'\\' => {
+                            p += 1;
+                            if p < bytes.len() {
+                                p += 1;
+                            }
+                        }
+                        _ => {
+                            // b'\''
+                            p += 1;
+                            break;
+                        }
                     }
                 }
-                b'\'' => {
-                    p += 1;
-                    break;
-                }
-                _ => p += 1,
             }
         }
         self.pos = p;
@@ -665,24 +707,28 @@ impl<'src> Lexer<'src> {
         }
         p += 1; // skip opening "
         loop {
-            if p >= bytes.len() {
-                // Unclosed string — skip just the opening quote and retry
-                // (matches logos behavior: unclosed string callback returns false → skip byte)
-                self.pos = start + 1;
-                return self.read_next_token();
-            }
-            match bytes[p] {
-                b'\\' => {
-                    p += 1;
-                    if p < bytes.len() {
-                        p += 1;
+            match memchr2(b'\\', b'"', &bytes[p..]) {
+                None => {
+                    // Unclosed string — skip just the opening quote and retry
+                    self.pos = start + 1;
+                    return self.read_next_token();
+                }
+                Some(offset) => {
+                    p += offset;
+                    match bytes[p] {
+                        b'\\' => {
+                            p += 1;
+                            if p < bytes.len() {
+                                p += 1;
+                            }
+                        }
+                        _ => {
+                            // b'"'
+                            p += 1;
+                            break;
+                        }
                     }
                 }
-                b'"' => {
-                    p += 1;
-                    break;
-                }
-                _ => p += 1,
             }
         }
         self.pos = p;
@@ -695,23 +741,28 @@ impl<'src> Lexer<'src> {
         let mut p = self.pos;
         p += 1; // skip opening `
         loop {
-            if p >= bytes.len() {
-                // Unclosed string — skip opening backtick and retry
-                self.pos = start + 1;
-                return self.read_next_token();
-            }
-            match bytes[p] {
-                b'\\' => {
-                    p += 1;
-                    if p < bytes.len() {
-                        p += 1;
+            match memchr2(b'\\', b'`', &bytes[p..]) {
+                None => {
+                    // Unclosed string — skip opening backtick and retry
+                    self.pos = start + 1;
+                    return self.read_next_token();
+                }
+                Some(offset) => {
+                    p += offset;
+                    match bytes[p] {
+                        b'\\' => {
+                            p += 1;
+                            if p < bytes.len() {
+                                p += 1;
+                            }
+                        }
+                        _ => {
+                            // b'`'
+                            p += 1;
+                            break;
+                        }
                     }
                 }
-                b'`' => {
-                    p += 1;
-                    break;
-                }
-                _ => p += 1,
             }
         }
         self.pos = p;
@@ -893,6 +944,35 @@ impl<'src> Lexer<'src> {
     }
 
     // --- Helpers ---
+
+    /// Skip a line comment body (`//` or `#` already consumed).
+    /// Advances `pos` to the newline (inclusive stop) or `?>` or end of file.
+    /// Leaves `pos` at `\n` / `?` so the surrounding loops consume them correctly.
+    #[inline]
+    fn skip_line_comment_body(bytes: &[u8], pos: &mut usize) {
+        loop {
+            match memchr2(b'\n', b'?', &bytes[*pos..]) {
+                None => {
+                    *pos = bytes.len();
+                    return;
+                }
+                Some(offset) => {
+                    let p = *pos + offset;
+                    if bytes[p] == b'\n' {
+                        *pos = p; // stop at newline; outer whitespace loop will consume it
+                        return;
+                    }
+                    // b'?': check for ?>
+                    if p + 1 < bytes.len() && bytes[p + 1] == b'>' {
+                        *pos = p; // leave ?> for scan_token to produce CloseTag
+                        return;
+                    }
+                    // Lone '?' — keep searching
+                    *pos = p + 1;
+                }
+            }
+        }
+    }
 
     #[inline]
     fn check_at(&self, offset: usize, expected: u8) -> bool {
