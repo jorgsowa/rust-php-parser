@@ -366,6 +366,27 @@ fn parse_stmts_until_end<'src>(
 ) -> Vec<Stmt<'src>> {
     let mut stmts = Vec::with_capacity(8);
     while !ends.contains(&parser.current_kind()) && !parser.check(TokenKind::Eof) {
+        // Handle close tag -> inline HTML -> open tag sequences
+        if parser.check(TokenKind::CloseTag) {
+            parser.advance();
+            if parser.check(TokenKind::InlineHtml) {
+                let token = parser.advance();
+                let text = &parser.source[token.span.start as usize..token.span.end as usize];
+                stmts.push(Stmt {
+                    kind: StmtKind::InlineHtml(text),
+                    span: token.span,
+                });
+            }
+            if parser.check(TokenKind::OpenTag) {
+                let tag = parser.advance();
+                if parser.source[tag.span.start as usize..tag.span.end as usize] == *"<?=" {
+                    if let Some(echo_stmt) = parser.parse_short_echo() {
+                        stmts.push(echo_stmt);
+                    }
+                }
+            }
+            continue;
+        }
         let span_before = parser.current_span();
         stmts.push(parse_stmt(parser));
         if parser.current_span() == span_before {

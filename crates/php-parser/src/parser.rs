@@ -721,7 +721,7 @@ impl<'src> Parser<'src> {
     }
 
     /// Parse `<?= expr ?>` — the short echo tag produces an implicit echo statement.
-    fn parse_short_echo(&mut self) -> Option<Stmt<'src>> {
+    pub(crate) fn parse_short_echo(&mut self) -> Option<Stmt<'src>> {
         if self.check(TokenKind::Eof) || self.check(TokenKind::CloseTag) {
             return None;
         }
