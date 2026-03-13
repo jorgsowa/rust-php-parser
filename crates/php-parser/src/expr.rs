@@ -1402,7 +1402,7 @@ fn parse_new_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         };
 
         let anon_class_expr = Expr {
-            kind: ExprKind::AnonymousClass(class_decl),
+            kind: ExprKind::AnonymousClass(Box::new(class_decl)),
             span: Span::new(start, end),
         };
 
@@ -1548,7 +1548,7 @@ fn parse_closure<'src>(
         .unwrap_or(parser.current_span().start);
 
     Expr {
-        kind: ExprKind::Closure(ClosureExpr {
+        kind: ExprKind::Closure(Box::new(ClosureExpr {
             is_static,
             by_ref,
             params,
@@ -1556,7 +1556,7 @@ fn parse_closure<'src>(
             return_type,
             body,
             attributes,
-        }),
+        })),
         span: Span::new(start, end),
     }
 }
@@ -1612,14 +1612,14 @@ fn parse_arrow_function<'src>(
     let span = Span::new(start, body.span.end);
 
     Expr {
-        kind: ExprKind::ArrowFunction(ArrowFunctionExpr {
+        kind: ExprKind::ArrowFunction(Box::new(ArrowFunctionExpr {
             is_static,
             by_ref,
             params,
             return_type,
             body: Box::new(body),
             attributes,
-        }),
+        })),
         span,
     }
 }
