@@ -505,7 +505,7 @@ mod tests {
     fn test_visitor_counts_variables() {
         let program = Program {
             stmts: vec![Stmt {
-                kind: StmtKind::Expression(Expr {
+                kind: StmtKind::Expression(Box::new(Expr {
                     kind: ExprKind::Assign(AssignExpr {
                         target: Box::new(Expr {
                             kind: ExprKind::Variable("x"),
@@ -528,7 +528,7 @@ mod tests {
                         }),
                     }),
                     span: Span::DUMMY,
-                }),
+                })),
                 span: Span::DUMMY,
             }],
             span: Span::DUMMY,
