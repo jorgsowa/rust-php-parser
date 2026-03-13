@@ -71,67 +71,6 @@ fn test_error_recovery_partial_parse() {
 }
 
 // =============================================================================
-// Regression: parse_stmts_until_end infinite loop
-// =============================================================================
-
-// A `}` inside alternative syntax is not in `ends` ([ElseIf, Else, EndIf])
-// and causes `synchronize()` to stop WITHOUT advancing, so the old loop spun
-// forever. The fix (span-progress guard) must force-advance past such tokens.
-#[test]
-fn test_alt_if_unexpected_rbrace_terminates() {
-    let result = parse_php("<?php if (true): } endif;");
-    assert!(!result.errors.is_empty(), "Expected parse errors");
-}
-
-#[test]
-fn test_alt_while_unexpected_rbrace_terminates() {
-    let result = parse_php("<?php while (true): } endwhile;");
-    assert!(!result.errors.is_empty(), "Expected parse errors");
-}
-
-#[test]
-fn test_alt_foreach_unexpected_rbrace_terminates() {
-    let result = parse_php("<?php foreach ($a as $b): } endforeach;");
-    assert!(!result.errors.is_empty(), "Expected parse errors");
-}
-
-// Regression: synchronize() was advancing through InlineHtml/OpenTag/EndWhile etc.
-// (all fell to the `_` arm). In WordPress-style templates the sequence
-// `CloseTag → InlineHtml → OpenTag → EndWhile` caused synchronize() to consume
-// the endwhile terminator that parse_stmts_until_end was waiting for, running
-// until EOF. The fix adds those tokens to synchronize()'s break list.
-#[test]
-fn test_alt_while_inline_html_terminates() {
-    // Simulates: while (true): ?> HTML <?php endwhile;
-    let result = parse_php("<?php while (true): ?> HTML <?php endwhile; ?>");
-    assert!(
-        result.errors.is_empty(),
-        "Unexpected parse errors: {:?}",
-        result.errors
-    );
-}
-
-#[test]
-fn test_alt_if_inline_html_terminates() {
-    let result = parse_php("<?php if (true): ?> HTML <?php endif; ?>");
-    assert!(
-        result.errors.is_empty(),
-        "Unexpected parse errors: {:?}",
-        result.errors
-    );
-}
-
-#[test]
-fn test_alt_foreach_inline_html_terminates() {
-    let result = parse_php("<?php foreach ($a as $b): ?> HTML <?php endforeach; ?>");
-    assert!(
-        result.errors.is_empty(),
-        "Unexpected parse errors: {:?}",
-        result.errors
-    );
-}
-
-// =============================================================================
 // Expression precedence tests
 // =============================================================================
 
@@ -459,6 +398,27 @@ endswitch;
     let result = parse_php(source);
     assert_no_errors(&result);
     insta::assert_snapshot!(to_json(&result.program));
+}
+
+// A `}` inside alternative syntax is not in `ends` so synchronize() stops
+// WITHOUT advancing, causing an infinite loop. The span-progress guard in
+// parse_stmts_until_end must force-advance past such tokens.
+#[test]
+fn test_alt_if_unexpected_rbrace_terminates() {
+    let result = parse_php("<?php if (true): } endif;");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+}
+
+#[test]
+fn test_alt_while_unexpected_rbrace_terminates() {
+    let result = parse_php("<?php while (true): } endwhile;");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+}
+
+#[test]
+fn test_alt_foreach_unexpected_rbrace_terminates() {
+    let result = parse_php("<?php foreach ($a as $b): } endforeach;");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
 }
 
 // =============================================================================
@@ -948,6 +908,40 @@ fn test_cast_expressions() {
 }
 
 #[test]
+fn test_array_call_not_confused_with_cast() {
+    // `array() === $arr` was failing with ExpectedExpression because the parser
+    // consumed `(array` as the start of an `(array)` cast, then couldn't find `)`.
+    let result = parse_php("<?php $x = array() === $arr;");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_array_call_in_condition() {
+    // The exact pattern from WordPress's compat.php `array_is_list()`.
+    let result = parse_php(
+        "<?php\nfunction array_is_list($arr) {\n    if ((array() === $arr) || (array_values($arr) === $arr)) {\n        return true;\n    }\n    return false;\n}",
+    );
+    assert_no_errors(&result);
+}
+
+#[test]
+fn test_array_cast_still_works() {
+    // After the fix, `(array)$x` must still parse as a cast.
+    let result = parse_php("<?php $y = (array) $x;");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_array_cast_not_confused_with_array_call() {
+    // Both forms in the same file.
+    let result = parse_php("<?php $a = (array) $x;\n$b = array() === [];");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
 fn test_isset_empty() {
     let result = parse_php("<?php isset($a, $b); empty($x);");
     assert_no_errors(&result);
@@ -1032,6 +1026,31 @@ fn test_yield_from() {
 function combined() {
     yield from [1, 2, 3];
     yield from otherGenerator();
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_yield_bare() {
+    let source = r#"<?php
+function gen() {
+    yield;
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_yield_as_expression() {
+    let source = r#"<?php
+function gen() {
+    $received = yield 'value';
+    $received = yield $key => $value;
 }
 "#;
     let result = parse_php(source);
@@ -1757,35 +1776,6 @@ fn test_error_suppress_complex() {
 #[test]
 fn test_isset_complex() {
     let result = parse_php("<?php isset($a['key'], $b->prop, $c::$static);");
-    assert_no_errors(&result);
-    insta::assert_snapshot!(to_json(&result.program));
-}
-
-// =============================================================================
-// Phase 20: Yield Edge Cases
-// =============================================================================
-
-#[test]
-fn test_yield_bare() {
-    let source = r#"<?php
-function gen() {
-    yield;
-}
-"#;
-    let result = parse_php(source);
-    assert_no_errors(&result);
-    insta::assert_snapshot!(to_json(&result.program));
-}
-
-#[test]
-fn test_yield_as_expression() {
-    let source = r#"<?php
-function gen() {
-    $received = yield 'value';
-    $received = yield $key => $value;
-}
-"#;
-    let result = parse_php(source);
     assert_no_errors(&result);
     insta::assert_snapshot!(to_json(&result.program));
 }
@@ -3014,7 +3004,7 @@ fn test_group_use_single() {
 }
 
 // =============================================================================
-// PHP Tags & Built-in Constructs
+// Close Tags, Inline HTML and Comments
 // =============================================================================
 
 #[test]
@@ -3046,6 +3036,96 @@ fn test_builtin_constructs() {
     assert_parses_ok("eval", "<?php eval('echo 1;');");
     assert_parses_ok("require once", "<?php require_once 'autoload.php';");
     assert_parses_ok("include expr", "<?php include $dir . '/file.php';");
+}
+
+#[test]
+fn test_slash_comment_terminated_by_close_tag() {
+    // `// comment ?>` must produce a CloseTag so the HTML is InlineHtml, not garbage.
+    let result = parse_php("<?php // comment ?>\n<div>html</div>\n<?php $x = 1;");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_hash_comment_terminated_by_close_tag() {
+    // `# comment ?>` must produce a CloseTag.
+    let result = parse_php("<?php # comment ?>\n<span>html</span>\n<?php $x = 1;");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_slash_comment_newline_termination_still_works() {
+    // Ensure `//` still stops at `\n` in the normal case.
+    let result = parse_php("<?php // comment\n$x = 1;");
+    assert_no_errors(&result);
+}
+
+#[test]
+fn test_alt_while_inline_html_terminates() {
+    // synchronize() must not consume endwhile when InlineHtml/OpenTag tokens
+    // appear in a `while (true):` block before the terminator.
+    let result = parse_php("<?php while (true): ?> HTML <?php endwhile; ?>");
+    assert!(
+        result.errors.is_empty(),
+        "Unexpected parse errors: {:?}",
+        result.errors
+    );
+}
+
+#[test]
+fn test_alt_if_inline_html_terminates() {
+    let result = parse_php("<?php if (true): ?> HTML <?php endif; ?>");
+    assert!(
+        result.errors.is_empty(),
+        "Unexpected parse errors: {:?}",
+        result.errors
+    );
+}
+
+#[test]
+fn test_alt_foreach_inline_html_terminates() {
+    let result = parse_php("<?php foreach ($a as $b): ?> HTML <?php endforeach; ?>");
+    assert!(
+        result.errors.is_empty(),
+        "Unexpected parse errors: {:?}",
+        result.errors
+    );
+}
+
+#[test]
+fn test_inline_html_in_function_body() {
+    let result = parse_php(
+        "<?php\nfunction tmpl() {\n    $x = foo();\n    ?>\n<div>html</div>\n<?php\n    bar();\n}",
+    );
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_inline_html_in_if_block() {
+    let result = parse_php("<?php\nif ($cond) {\n    ?><p>html</p><?php\n    $x = 1;\n}");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_inline_html_comment_in_function_body() {
+    // The WordPress pattern: `?>` inside a `//` comment was swallowed by the
+    // lexer, and the HTML that followed produced ExpectedExpression errors.
+    let result = parse_php(
+        "<?php\nfunction tmpl() {\n    foo();\n    ?>\n<div>\n<?php // comment ?>\n    <p>text</p>\n<?php\n    bar();\n}",
+    );
+    assert_no_errors(&result);
+}
+
+#[test]
+fn test_inline_html_multiple_segments_in_function() {
+    // Multiple inline-HTML segments inside a single function body.
+    let result = parse_php(
+        "<?php\nfunction page() {\n    header();\n    ?><header><?php\n    nav();\n    ?></header><?php\n    body();\n}",
+    );
+    assert_no_errors(&result);
 }
 
 // =============================================================================
@@ -3365,122 +3445,5 @@ fn test_invalid_switch_missing_colon() {
 fn test_invalid_missing_closing_brace_method() {
     let result = parse_php("<?php\nclass Foo {\n    public function bar()\n    {\n        return 1;\n\n    public function baz()\n    {\n        return 2;\n    }\n}");
     assert!(!result.errors.is_empty(), "Expected parse errors");
-    insta::assert_snapshot!(to_json(&result.program));
-}
-
-// =============================================================================
-// Regression: `//` and `#` comments must stop at `?>`
-//
-// PHP spec: single-line comments (`//` and `#`) are terminated by either `\n`
-// or the close-tag `?>`. Before the fix, the lexer skipped past `?>` inside
-// comments, leaving the lexer in PHP mode for what should be InlineHtml,
-// causing `ExpectedExpression` errors on the following HTML.
-// =============================================================================
-
-#[test]
-fn test_slash_comment_terminated_by_close_tag() {
-    // `// comment ?>` must produce a CloseTag so the HTML is InlineHtml, not garbage.
-    let result = parse_php("<?php // comment ?>\n<div>html</div>\n<?php $x = 1;");
-    assert_no_errors(&result);
-    insta::assert_snapshot!(to_json(&result.program));
-}
-
-#[test]
-fn test_hash_comment_terminated_by_close_tag() {
-    // `# comment ?>` must produce a CloseTag.
-    let result = parse_php("<?php # comment ?>\n<span>html</span>\n<?php $x = 1;");
-    assert_no_errors(&result);
-    insta::assert_snapshot!(to_json(&result.program));
-}
-
-#[test]
-fn test_slash_comment_newline_termination_still_works() {
-    // Ensure `//` still stops at `\n` in the normal case.
-    let result = parse_php("<?php // comment\n$x = 1;");
-    assert_no_errors(&result);
-}
-
-// =============================================================================
-// Regression: inline HTML inside `{...}` blocks and function bodies
-//
-// `parse_block` (and all loops that call `parse_stmt`) must handle the
-// `CloseTag → InlineHtml → OpenTag` transition so that WordPress-style
-// template functions parse without errors.
-// =============================================================================
-
-#[test]
-fn test_inline_html_in_function_body() {
-    let result = parse_php(
-        "<?php\nfunction tmpl() {\n    $x = foo();\n    ?>\n<div>html</div>\n<?php\n    bar();\n}",
-    );
-    assert_no_errors(&result);
-    insta::assert_snapshot!(to_json(&result.program));
-}
-
-#[test]
-fn test_inline_html_in_if_block() {
-    let result = parse_php("<?php\nif ($cond) {\n    ?><p>html</p><?php\n    $x = 1;\n}");
-    assert_no_errors(&result);
-    insta::assert_snapshot!(to_json(&result.program));
-}
-
-#[test]
-fn test_inline_html_comment_in_function_body() {
-    // The WordPress pattern: `?>` inside a `//` comment was swallowed by the
-    // lexer, and the HTML that followed produced ExpectedExpression errors.
-    let result = parse_php(
-        "<?php\nfunction tmpl() {\n    foo();\n    ?>\n<div>\n<?php // comment ?>\n    <p>text</p>\n<?php\n    bar();\n}",
-    );
-    assert_no_errors(&result);
-}
-
-#[test]
-fn test_inline_html_multiple_segments_in_function() {
-    // Multiple inline-HTML segments inside a single function body.
-    let result = parse_php(
-        "<?php\nfunction page() {\n    header();\n    ?><header><?php\n    nav();\n    ?></header><?php\n    body();\n}",
-    );
-    assert_no_errors(&result);
-}
-
-// =============================================================================
-// Regression: `(array)` cast vs `array()` function call
-//
-// `try_parse_cast` was consuming `(` and `array` before checking if `)` followed,
-// leaving the parser in a corrupted state when the token after `array` was `(`
-// (i.e., a function call) rather than `)` (i.e., a cast).
-// =============================================================================
-
-#[test]
-fn test_array_call_not_confused_with_cast() {
-    // `array() === $arr` was failing with ExpectedExpression because the parser
-    // consumed `(array` as the start of an `(array)` cast, then couldn't find `)`.
-    let result = parse_php("<?php $x = array() === $arr;");
-    assert_no_errors(&result);
-    insta::assert_snapshot!(to_json(&result.program));
-}
-
-#[test]
-fn test_array_call_in_condition() {
-    // The exact pattern from WordPress's compat.php `array_is_list()`.
-    let result = parse_php(
-        "<?php\nfunction array_is_list($arr) {\n    if ((array() === $arr) || (array_values($arr) === $arr)) {\n        return true;\n    }\n    return false;\n}",
-    );
-    assert_no_errors(&result);
-}
-
-#[test]
-fn test_array_cast_still_works() {
-    // After the fix, `(array)$x` must still parse as a cast.
-    let result = parse_php("<?php $y = (array) $x;");
-    assert_no_errors(&result);
-    insta::assert_snapshot!(to_json(&result.program));
-}
-
-#[test]
-fn test_array_cast_not_confused_with_array_call() {
-    // Both forms in the same file.
-    let result = parse_php("<?php $a = (array) $x;\n$b = array() === [];");
-    assert_no_errors(&result);
     insta::assert_snapshot!(to_json(&result.program));
 }
