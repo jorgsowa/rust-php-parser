@@ -15,6 +15,41 @@ pub fn parse_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     }
 
     match parser.current_kind() {
+        // ?> ... <?php  /  ?> ... <?=  transitions — valid anywhere a statement is expected
+        TokenKind::CloseTag => {
+            parser.advance(); // consume ?>
+            if parser.check(TokenKind::InlineHtml) {
+                let token = parser.advance();
+                let text = &parser.source[token.span.start as usize..token.span.end as usize];
+                // Leave the following OpenTag (if any) for the next parse_stmt call
+                return Stmt {
+                    kind: StmtKind::InlineHtml(text),
+                    span: token.span,
+                };
+            }
+            // No inline HTML; fall through to consume any following OpenTag
+            if parser.check(TokenKind::OpenTag) {
+                let tag = parser.advance();
+                if parser.source[tag.span.start as usize..tag.span.end as usize] == *"<?=" {
+                    if let Some(echo_stmt) = parser.parse_short_echo() {
+                        return echo_stmt;
+                    }
+                }
+            }
+            let span = parser.current_span();
+            return Stmt { kind: StmtKind::Nop, span };
+        }
+        // <?= after an inline HTML section (OpenTag left in stream by CloseTag handler above)
+        TokenKind::OpenTag => {
+            let tag = parser.advance();
+            if parser.source[tag.span.start as usize..tag.span.end as usize] == *"<?=" {
+                if let Some(echo_stmt) = parser.parse_short_echo() {
+                    return echo_stmt;
+                }
+            }
+            let span = parser.current_span();
+            return Stmt { kind: StmtKind::Nop, span };
+        }
         TokenKind::Semicolon => {
             let span = parser.current_span();
             parser.advance();
@@ -330,6 +365,27 @@ pub fn parse_block<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     parser.depth += 1;
     let mut stmts = Vec::with_capacity(16);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
+        // Handle close tag -> inline HTML -> open tag sequences inside blocks
+        if parser.check(TokenKind::CloseTag) {
+            parser.advance();
+            if parser.check(TokenKind::InlineHtml) {
+                let token = parser.advance();
+                let text = &parser.source[token.span.start as usize..token.span.end as usize];
+                stmts.push(Stmt {
+                    kind: StmtKind::InlineHtml(text),
+                    span: token.span,
+                });
+            }
+            if parser.check(TokenKind::OpenTag) {
+                let tag = parser.advance();
+                if parser.source[tag.span.start as usize..tag.span.end as usize] == *"<?=" {
+                    if let Some(echo_stmt) = parser.parse_short_echo() {
+                        stmts.push(echo_stmt);
+                    }
+                }
+            }
+            continue;
+        }
         let span_before = parser.current_span();
         stmts.push(parse_stmt(parser));
         if parser.current_span() == span_before {
