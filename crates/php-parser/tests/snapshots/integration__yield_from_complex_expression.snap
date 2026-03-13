@@ -1,0 +1,205 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "gen",
+          "params": [],
+          "body": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "Yield": {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "FunctionCall": {
+                            "name": {
+                              "kind": {
+                                "Identifier": "array_map"
+                              },
+                              "span": {
+                                "start": 38,
+                                "end": 47
+                              }
+                            },
+                            "args": [
+                              {
+                                "name": null,
+                                "value": {
+                                  "kind": {
+                                    "ArrowFunction": {
+                                      "is_static": false,
+                                      "by_ref": false,
+                                      "params": [
+                                        {
+                                          "name": "x",
+                                          "type_hint": null,
+                                          "default": null,
+                                          "by_ref": false,
+                                          "variadic": false,
+                                          "visibility": null,
+                                          "set_visibility": null,
+                                          "attributes": [],
+                                          "span": {
+                                            "start": 51,
+                                            "end": 53
+                                          }
+                                        }
+                                      ],
+                                      "return_type": null,
+                                      "body": {
+                                        "kind": {
+                                          "Binary": {
+                                            "left": {
+                                              "kind": {
+                                                "Variable": "x"
+                                              },
+                                              "span": {
+                                                "start": 58,
+                                                "end": 60
+                                              }
+                                            },
+                                            "op": "Mul",
+                                            "right": {
+                                              "kind": {
+                                                "Int": 2
+                                              },
+                                              "span": {
+                                                "start": 63,
+                                                "end": 64
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "span": {
+                                          "start": 58,
+                                          "end": 64
+                                        }
+                                      },
+                                      "attributes": []
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 48,
+                                    "end": 64
+                                  }
+                                },
+                                "unpack": false,
+                                "span": {
+                                  "start": 48,
+                                  "end": 64
+                                }
+                              },
+                              {
+                                "name": null,
+                                "value": {
+                                  "kind": {
+                                    "Array": [
+                                      {
+                                        "key": null,
+                                        "value": {
+                                          "kind": {
+                                            "Int": 1
+                                          },
+                                          "span": {
+                                            "start": 67,
+                                            "end": 68
+                                          }
+                                        },
+                                        "unpack": false,
+                                        "span": {
+                                          "start": 67,
+                                          "end": 68
+                                        }
+                                      },
+                                      {
+                                        "key": null,
+                                        "value": {
+                                          "kind": {
+                                            "Int": 2
+                                          },
+                                          "span": {
+                                            "start": 70,
+                                            "end": 71
+                                          }
+                                        },
+                                        "unpack": false,
+                                        "span": {
+                                          "start": 70,
+                                          "end": 71
+                                        }
+                                      },
+                                      {
+                                        "key": null,
+                                        "value": {
+                                          "kind": {
+                                            "Int": 3
+                                          },
+                                          "span": {
+                                            "start": 73,
+                                            "end": 74
+                                          }
+                                        },
+                                        "unpack": false,
+                                        "span": {
+                                          "start": 73,
+                                          "end": 74
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "span": {
+                                    "start": 66,
+                                    "end": 75
+                                  }
+                                },
+                                "unpack": false,
+                                "span": {
+                                  "start": 66,
+                                  "end": 75
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "span": {
+                          "start": 38,
+                          "end": 76
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 27,
+                    "end": 76
+                  }
+                }
+              },
+              "span": {
+                "start": 27,
+                "end": 78
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 79
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 79
+  }
+}

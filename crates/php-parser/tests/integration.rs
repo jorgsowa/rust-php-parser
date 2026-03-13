@@ -3447,3 +3447,486 @@ fn test_invalid_missing_closing_brace_method() {
     assert!(!result.errors.is_empty(), "Expected parse errors");
     insta::assert_snapshot!(to_json(&result.program));
 }
+
+// =============================================================================
+// Closures, Arrow Functions & Callables: Edge Cases
+// =============================================================================
+
+// By-reference closure with return type
+#[test]
+fn test_byref_closure_with_return_type() {
+    let result = parse_php("<?php $f = function &(): int { return 0; };");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_byref_closure_with_use_and_return_type() {
+    let result = parse_php("<?php $f = function &($x) use (&$ref): string { return $ref; };");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// Arrow functions returning arrow functions (right-associative `=>`)
+#[test]
+fn test_chained_arrow_functions() {
+    let result = parse_php("<?php $fn = fn($x) => fn($y) => $x + $y;");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_chained_arrow_functions_with_type_hints() {
+    let result = parse_php("<?php $fn = fn($x): Closure => fn($y): int => $x + $y;");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// Attributes on closure/arrow-fn expressions
+#[test]
+fn test_attribute_on_closure_expression() {
+    let result = parse_php("<?php $x = #[Attr] function() { return 1; };");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_attribute_on_static_arrow_fn() {
+    let result = parse_php("<?php $y = #[Attr] static fn($a) => $a;");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// First-class callables in complex positions
+#[test]
+fn test_first_class_callable_invoked_immediately() {
+    // (strlen(...))('hello') — callable result called in same expression
+    let result = parse_php("<?php $r = (strlen(...))('hello');");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_first_class_callable_as_argument() {
+    let result = parse_php("<?php array_map(strlen(...), array_filter($arr, is_string(...)));");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// Named arguments mixed with spread
+#[test]
+fn test_named_args_mixed_with_spread() {
+    let result = parse_php("<?php func(a: 1, ...['b' => 2]);");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_spread_then_named_arg() {
+    let result = parse_php("<?php func(...$args, last: 'end');");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// Static Keyword Disambiguation
+// =============================================================================
+
+#[test]
+fn test_static_double_colon_as_stmt() {
+    // static:: access used as a standalone statement
+    let source = r#"<?php
+static::$prop;
+static::method();
+static::class;
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_static_semicolon_as_stmt() {
+    // `static;` — no variable follows, falls into parse_expression_stmt;
+    // parser accepts it and treats `static` as a bare name expression
+    let result = parse_php("<?php static;");
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// Generators: Edge Cases
+// =============================================================================
+
+#[test]
+fn test_yield_in_match_arm() {
+    let source = r#"<?php
+function gen($x) {
+    $v = match(true) {
+        $x > 0 => yield $x,
+        default => yield 0,
+    };
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_yield_from_complex_expression() {
+    let source = r#"<?php
+function gen() {
+    yield from array_map(fn($x) => $x * 2, [1, 2, 3]);
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// Destructuring: Edge Cases
+// =============================================================================
+
+#[test]
+fn test_deeply_nested_array_destructuring() {
+    let source = r#"<?php
+[[$a, [$b, $c]], $d] = $data;
+[[[$e, $f], $g], [$h, $i]] = $matrix;
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_deeply_nested_list_destructuring() {
+    let source = r#"<?php
+list(list($a, $b), list($c, $d)) = $pairs;
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// Type System: DNF & Intersection Types
+// =============================================================================
+
+// Intersection with built-in type names
+#[test]
+fn test_intersection_type_with_object() {
+    let result = parse_php("<?php function foo(object&Countable $x): void {}");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_return_type_self_intersection() {
+    let result = parse_php("<?php function foo(): (self&Stringable) {}");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// DNF (disjunctive normal form) types
+#[test]
+fn test_dnf_type_with_null() {
+    let result = parse_php("<?php function foo((Countable&Traversable)|null $x): (A&B)|null {}");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_dnf_type_union_of_intersections() {
+    let result = parse_php(
+        "<?php function foo((Countable&Traversable)|(ArrayAccess&Stringable) $x): void {}",
+    );
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_complex_dnf_type() {
+    let source = r#"<?php
+function foo(
+    (Countable&Traversable)|(ArrayAccess&Stringable)|null $x
+): (A&B)|(C&D) {}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// Readonly property with intersection type
+#[test]
+fn test_readonly_intersection_type_property() {
+    let source = r#"<?php
+class Foo {
+    public readonly Countable&Traversable $prop;
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// Control Flow: Edge Cases
+// =============================================================================
+
+// Switch with multiple consecutive fall-through cases
+#[test]
+fn test_switch_many_fallthroughs() {
+    let source = r#"<?php
+switch ($x) {
+    case 1:
+    case 2:
+    case 3:
+        echo "1-3";
+        break;
+    case 4:
+    case 5:
+        echo "4-5";
+        break;
+    default:
+        echo "other";
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// Catch clauses with 3+ types in a union
+#[test]
+fn test_catch_three_type_union() {
+    let source = r#"<?php
+try {
+    risky();
+} catch (A|B|C $e) {
+    handle($e);
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_catch_four_type_union() {
+    let source = r#"<?php
+try {
+    risky();
+} catch (TypeError|ValueError|RuntimeException|LogicException $e) {
+    handle($e);
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// Match & Enum: Edge Cases
+// =============================================================================
+
+// Empty match body — parser must not panic (zero arms, snapshot documents behavior)
+#[test]
+fn test_match_empty_body() {
+    let result = parse_php("<?php $x = match($y) {};");
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// Deeply nested match expressions
+#[test]
+fn test_deeply_nested_match() {
+    let source = r#"<?php
+$r = match(1) {
+    1 => match(2) {
+        2 => match(3) {
+            3 => 'deep',
+            default => 'x'
+        },
+        default => 'y'
+    },
+    default => 'z'
+};
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// Enum with multiple interfaces, a constant, and methods
+#[test]
+fn test_enum_multiple_interfaces_const_method() {
+    let source = r#"<?php
+enum Status: string implements Loggable, Serializable {
+    case Active = 'active';
+    case Inactive = 'inactive';
+
+    const DEFAULT = self::Active;
+
+    public function label(): string {
+        return $this->value;
+    }
+
+    public function isActive(): bool {
+        return $this === self::Active;
+    }
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// Heredoc & Nowdoc: Edge Cases
+// =============================================================================
+
+// PHP 7.3+: closing marker may be indented; the indentation is stripped from
+// each content line. A 4-space indent on `    END;` yields `"content line"`.
+#[test]
+fn test_heredoc_indented_closing_marker() {
+    let source = "<?php\n$x = <<<END\n    content line\n    END;\n";
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_nowdoc_indented_closing_marker() {
+    let source = "<?php\n$y = <<<'NOW'\n    nowdoc content\n    NOW;\n";
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// Empty heredoc body
+#[test]
+fn test_heredoc_empty() {
+    let source = "<?php\n$x = <<<END\nEND;\n";
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// Heredoc with complex interpolation (curly syntax + array subscript)
+#[test]
+fn test_heredoc_with_complex_interpolation() {
+    let source = r#"<?php
+$x = <<<EOT
+Hello {$obj->name}!
+$arr[0] items
+EOT;
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// OOP: Class Modifier Combos & Attributes
+// =============================================================================
+
+// readonly class with constructor promotion
+#[test]
+fn test_readonly_class_with_constructor_promotion() {
+    let source = r#"<?php
+readonly class Point {
+    public function __construct(
+        public float $x,
+        public float $y,
+        public float $z = 0.0,
+    ) {}
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_final_readonly_class_coordinate() {
+    let source = r#"<?php
+final readonly class Coordinate {
+    public function __construct(
+        public float $lat,
+        public float $lng,
+    ) {}
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// PHP 8.0: attributes on anonymous classes via `new #[Attr] class() {}`
+#[test]
+fn test_anonymous_class_with_attribute() {
+    let result = parse_php("<?php $x = new #[Attr] class() {};");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// Multiple stacked attributes + per-parameter attributes
+#[test]
+fn test_attribute_explosion() {
+    let source = r#"<?php
+#[A] #[B] #[C]
+function f(
+    #[Attr1] #[Attr2] int $x,
+    #[Attr3] string $y
+): void {}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// Invalid Class Modifier Combinations
+// =============================================================================
+
+#[test]
+fn test_invalid_double_readonly_anonymous_class() {
+    let result = parse_php("<?php new readonly readonly class {};");
+    assert!(
+        !result.errors.is_empty(),
+        "Expected parse errors for double readonly"
+    );
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_invalid_abstract_readonly_class() {
+    // Emits a Forbidden error; recovered class has both is_abstract and is_readonly set.
+    let result = parse_php("<?php abstract readonly class Foo {}");
+    assert!(
+        !result.errors.is_empty(),
+        "Expected parse errors for abstract readonly class"
+    );
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_invalid_readonly_abstract_class() {
+    // Emits a Forbidden error; recovered class has both is_abstract and is_readonly set.
+    let result = parse_php("<?php readonly abstract class Foo {}");
+    assert!(
+        !result.errors.is_empty(),
+        "Expected parse errors for readonly abstract class"
+    );
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_invalid_abstract_final_class() {
+    let result = parse_php("<?php abstract final class Foo {}");
+    assert!(
+        !result.errors.is_empty(),
+        "Expected parse errors for abstract final class"
+    );
+    insta::assert_snapshot!(to_json(&result.program));
+}

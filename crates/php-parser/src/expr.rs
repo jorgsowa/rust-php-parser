@@ -1354,7 +1354,13 @@ fn parse_new_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'new'
 
-    // Anonymous class: new class(...) or new readonly class(...)
+    // Anonymous class: new class(...) or new readonly class(...) or new #[Attr] class(...)
+    // Collect any attributes that appear between `new` and `class`/`readonly`.
+    let anon_attributes = if parser.check(TokenKind::HashBracket) {
+        parser.parse_attributes()
+    } else {
+        Vec::new()
+    };
     let anon_readonly =
         parser.check(TokenKind::Readonly) && parser.peek_kind() == Some(TokenKind::Class);
     if parser.check(TokenKind::Class) || anon_readonly {
@@ -1398,7 +1404,7 @@ fn parse_new_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             extends,
             implements,
             members,
-            attributes: Vec::new(),
+            attributes: anon_attributes,
         };
 
         let anon_class_expr = Expr {
@@ -2221,34 +2227,50 @@ fn parse_heredoc_content(text: &str) -> (String, String, bool) {
     let body_start = rest.find('\n').map(|p| p + 1).unwrap_or(rest.len());
     let body = &rest[body_start..];
 
-    // Remove end marker line
-    let end_marker_pos = body.rfind(&label).unwrap_or(body.len());
-    let content = &body[..end_marker_pos];
+    // Find the end-marker line by scanning line-by-line (PHP 7.3+: marker may be indented).
+    // We record the start of that line so we can use it as the content cut point, and
+    // we record the leading whitespace as the indentation to strip from each content line.
+    let mut line_start = 0;
+    let mut end_line_start = body.len();
+    let mut indent = String::new();
+    loop {
+        if line_start >= body.len() {
+            break;
+        }
+        let line_end = body[line_start..]
+            .find('\n')
+            .map(|p| line_start + p)
+            .unwrap_or(body.len());
+        let line = &body[line_start..line_end];
+        let trimmed = line.trim_start_matches([' ', '\t']);
+        if trimmed == label
+            || (trimmed.starts_with(&*label)
+                && trimmed[label.len()..]
+                    .trim_start_matches(';')
+                    .trim()
+                    .is_empty())
+        {
+            end_line_start = line_start;
+            let indent_len = line.len() - trimmed.len();
+            indent = line[..indent_len].to_string();
+            break;
+        }
+        line_start = if line_end < body.len() {
+            line_end + 1
+        } else {
+            body.len()
+        };
+    }
+
+    // Content is everything before the end-marker line.
+    let content = &body[..end_line_start];
     let content = content.strip_suffix('\n').unwrap_or(content);
     let content = content.strip_suffix('\r').unwrap_or(content);
-
-    // Handle indented end marker (PHP 7.3+)
-    let end_marker_line = &body[end_marker_pos..];
-    let before_label = &body[..end_marker_pos];
-    // Check if end marker line starts from beginning of line
-    let last_newline = before_label.rfind('\n');
-    let indent = if let Some(nl_pos) = last_newline {
-        let _line_before_marker = &body[nl_pos + 1..end_marker_pos];
-        ""
-    } else {
-        let indent_end =
-            end_marker_line.len() - end_marker_line.trim_start_matches([' ', '\t']).len();
-        if indent_end > 0 {
-            &end_marker_line[..indent_end]
-        } else {
-            ""
-        }
-    };
 
     if !indent.is_empty() {
         let final_content = content
             .lines()
-            .map(|line| line.strip_prefix(indent).unwrap_or(line))
+            .map(|line| line.strip_prefix(&indent).unwrap_or(line))
             .collect::<Vec<_>>()
             .join("\n");
         (label, final_content, true)

@@ -305,7 +305,7 @@ expression: json
           "kind": {
             "Nowdoc": {
               "label": "ABC",
-              "value": "    foo bar\n    "
+              "value": "foo bar"
             }
           },
           "span": {
@@ -351,7 +351,7 @@ expression: json
               "label": "ABC",
               "parts": [
                 {
-                  "Literal": "    foo\\nbar\n    "
+                  "Literal": "foo\\nbar"
                 }
               ]
             }
@@ -413,7 +413,7 @@ expression: json
               "label": "ABC",
               "parts": [
                 {
-                  "Literal": "    foo\nbar"
+                  "Literal": "foo\nbar"
                 },
                 {
                   "Expr": {
@@ -421,13 +421,13 @@ expression: json
                       "Variable": "x"
                     },
                     "span": {
-                      "start": 305,
-                      "end": 307
+                      "start": 301,
+                      "end": 303
                     }
                   }
                 },
                 {
-                  "Literal": "baz\n    "
+                  "Literal": "baz"
                 }
               ]
             }
