@@ -46,7 +46,7 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
             let op = match op_token.kind {
                 TokenKind::PlusPlus => UnaryPostfixOp::PostIncrement,
                 TokenKind::MinusMinus => UnaryPostfixOp::PostDecrement,
-                _ => unreachable!(),
+                _ => unreachable!(), // postfix_binding_power only returns Some for ++ and --
             };
             let span = lhs.span.merge(op_token.span);
             lhs = Expr {
@@ -86,7 +86,7 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
                 TokenKind::ShiftLeftEquals => AssignOp::ShiftLeft,
                 TokenKind::ShiftRightEquals => AssignOp::ShiftRight,
                 TokenKind::CoalesceEquals => AssignOp::Coalesce,
-                _ => unreachable!(),
+                _ => unreachable!(), // is_assignment_op() guarantees one of the listed variants
             };
             // Right-associative: parse RHS with same bp
             let rhs = parse_expr_bp(parser, ASSIGNMENT_BP);
@@ -308,7 +308,7 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
                     } else {
                         let span = parser.current_span();
                         parser.error(ParseError::Expected {
-                            expected: "identifier".to_string(),
+                            expected: "identifier".into(),
                             found: parser.current_kind(),
                             span,
                         });
@@ -486,7 +486,7 @@ fn parse_member_name<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
     // Error
     let span = parser.current_span();
     parser.error(ParseError::Expected {
-        expected: "member name".to_string(),
+        expected: "member name".into(),
         found: parser.current_kind(),
         span,
     });
@@ -546,7 +546,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             // Error: attributes followed by static without function/fn
             let span = parser.current_span();
             parser.error(ParseError::Expected {
-                expected: "'function' or 'fn'".to_string(),
+                expected: "'function' or 'fn'".into(),
                 found: parser.current_kind(),
                 span,
             });
@@ -564,7 +564,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         // Error: attributes in expression context without closure/arrow function
         let span = parser.current_span();
         parser.error(ParseError::Expected {
-            expected: "'function', 'fn', or 'static'".to_string(),
+            expected: "'function', 'fn', or 'static'".into(),
             found: parser.current_kind(),
             span,
         });
@@ -596,7 +596,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             TokenKind::Tilde => UnaryPrefixOp::BitwiseNot,
             TokenKind::PlusPlus => UnaryPrefixOp::PreIncrement,
             TokenKind::MinusMinus => UnaryPrefixOp::PreDecrement,
-            _ => unreachable!(),
+            _ => unreachable!(), // prefix_binding_power only returns Some for -, +, !, ~, ++, --
         };
         let span = op_token.span.merge(operand.span);
         return Expr {
@@ -2141,7 +2141,7 @@ fn try_parse_cast<'src>(parser: &'_ mut Parser<'src>) -> Option<Expr<'src>> {
 
     if cast_kind == CastKind::Unset {
         parser.error(ParseError::Forbidden {
-            message: "the (unset) cast is no longer supported".to_string(),
+            message: "the (unset) cast is no longer supported".into(),
             span: kw_span,
         });
     }

@@ -1,9 +1,9 @@
 pub mod diagnostics;
-pub mod expr;
-pub mod interpolation;
-pub mod parser;
-pub mod precedence;
-pub mod stmt;
+pub(crate) mod expr;
+pub(crate) mod interpolation;
+pub(crate) mod parser;
+pub(crate) mod precedence;
+pub(crate) mod stmt;
 
 use diagnostics::ParseError;
 use php_ast::Program;

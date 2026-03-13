@@ -102,7 +102,7 @@ impl<'src> Lexer<'src> {
         if self.peeked.is_none() {
             self.peeked = Some(self.read_next_token());
         }
-        self.peeked.as_ref().unwrap()
+        self.peeked.as_ref().expect("peeked is Some: set above")
     }
 
     /// Peek two tokens ahead (past the next token).
@@ -114,7 +114,7 @@ impl<'src> Lexer<'src> {
         if self.peeked2.is_none() {
             self.peeked2 = Some(self.read_next_token());
         }
-        self.peeked2.as_ref().unwrap()
+        self.peeked2.as_ref().expect("peeked2 is Some: set above")
     }
 
     pub fn next_token(&mut self) -> Token {

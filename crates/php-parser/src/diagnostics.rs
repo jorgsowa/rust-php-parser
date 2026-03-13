@@ -1,12 +1,13 @@
 use php_ast::Span;
 use php_lexer::TokenKind;
+use std::borrow::Cow;
 use thiserror::Error;
 
 #[derive(Debug, Clone, Error)]
 pub enum ParseError {
     #[error("expected {expected}, found {found}")]
     Expected {
-        expected: String,
+        expected: Cow<'static, str>,
         found: TokenKind,
         span: Span,
     },
@@ -28,20 +29,23 @@ pub enum ParseError {
 
     #[error("expected {expected} after {after}")]
     ExpectedAfter {
-        expected: String,
-        after: String,
+        expected: Cow<'static, str>,
+        after: Cow<'static, str>,
         span: Span,
     },
 
     #[error("unclosed {delimiter} opened at {opened_at:?}")]
     UnclosedDelimiter {
-        delimiter: String,
+        delimiter: Cow<'static, str>,
         opened_at: Span,
         span: Span,
     },
 
     #[error("{message}")]
-    Forbidden { message: String, span: Span },
+    Forbidden {
+        message: Cow<'static, str>,
+        span: Span,
+    },
 }
 
 impl ParseError {
