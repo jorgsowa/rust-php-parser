@@ -488,12 +488,12 @@ fn parse_if<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         let span = Span::new(start, parser.current_span().start);
 
         return Stmt {
-            kind: StmtKind::If(IfStmt {
+            kind: StmtKind::If(Box::new(IfStmt {
                 condition,
                 then_branch,
                 elseif_branches,
                 else_branch,
-            }),
+            })),
             span,
         };
     }
@@ -530,12 +530,12 @@ fn parse_if<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     let span = Span::new(start, end);
 
     Stmt {
-        kind: StmtKind::If(IfStmt {
+        kind: StmtKind::If(Box::new(IfStmt {
             condition,
             then_branch,
             elseif_branches,
             else_branch,
-        }),
+        })),
         span,
     }
 }
@@ -562,7 +562,7 @@ fn parse_while<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             span,
         });
         return Stmt {
-            kind: StmtKind::While(WhileStmt { condition, body }),
+            kind: StmtKind::While(Box::new(WhileStmt { condition, body })),
             span,
         };
     }
@@ -570,7 +570,7 @@ fn parse_while<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     let body = Box::new(parse_stmt_or_block(parser));
     let span = Span::new(start, body.span.end);
     Stmt {
-        kind: StmtKind::While(WhileStmt { condition, body }),
+        kind: StmtKind::While(Box::new(WhileStmt { condition, body })),
         span,
     }
 }
@@ -587,7 +587,7 @@ fn parse_do_while<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     parser.expect_semicolon("do-while statement");
     let span = Span::new(start, parser.current_span().start);
     Stmt {
-        kind: StmtKind::DoWhile(DoWhileStmt { body, condition }),
+        kind: StmtKind::DoWhile(Box::new(DoWhileStmt { body, condition })),
         span,
     }
 }
@@ -614,12 +614,12 @@ fn parse_for<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             span,
         });
         return Stmt {
-            kind: StmtKind::For(ForStmt {
+            kind: StmtKind::For(Box::new(ForStmt {
                 init,
                 condition,
                 update,
                 body,
-            }),
+            })),
             span,
         };
     }
@@ -627,12 +627,12 @@ fn parse_for<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     let body = Box::new(parse_stmt_or_block(parser));
     let span = Span::new(start, body.span.end);
     Stmt {
-        kind: StmtKind::For(ForStmt {
+        kind: StmtKind::For(Box::new(ForStmt {
             init,
             condition,
             update,
             body,
-        }),
+        })),
         span,
     }
 }
@@ -687,12 +687,12 @@ fn parse_foreach<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             span,
         });
         return Stmt {
-            kind: StmtKind::Foreach(ForeachStmt {
+            kind: StmtKind::Foreach(Box::new(ForeachStmt {
                 expr: collection,
                 key,
                 value,
                 body,
-            }),
+            })),
             span,
         };
     }
@@ -700,12 +700,12 @@ fn parse_foreach<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     let body = Box::new(parse_stmt_or_block(parser));
     let span = Span::new(start, body.span.end);
     Stmt {
-        kind: StmtKind::Foreach(ForeachStmt {
+        kind: StmtKind::Foreach(Box::new(ForeachStmt {
             expr: collection,
             key,
             value,
             body,
-        }),
+        })),
         span,
     }
 }
@@ -759,14 +759,14 @@ fn parse_function<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     let span = Span::new(start, end);
 
     Stmt {
-        kind: StmtKind::Function(FunctionDecl {
+        kind: StmtKind::Function(Box::new(FunctionDecl {
             name,
             params,
             body,
             return_type,
             by_ref,
             attributes: Vec::new(),
-        }),
+        })),
         span,
     }
 }
@@ -1020,10 +1020,10 @@ fn parse_switch<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 
     let span = Span::new(start, parser.current_span().start);
     Stmt {
-        kind: StmtKind::Switch(SwitchStmt {
+        kind: StmtKind::Switch(Box::new(SwitchStmt {
             expr: switch_expr,
             cases,
-        }),
+        })),
         span,
     }
 }
@@ -1123,11 +1123,11 @@ fn parse_try_catch<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 
     let span = Span::new(start, parser.current_span().start);
     Stmt {
-        kind: StmtKind::TryCatch(TryCatchStmt {
+        kind: StmtKind::TryCatch(Box::new(TryCatchStmt {
             body,
             catches,
             finally,
-        }),
+        })),
         span,
     }
 }
@@ -1330,14 +1330,14 @@ fn parse_class<'src>(parser: &'_ mut Parser<'src>, modifiers: ClassModifiers) ->
         .unwrap_or(parser.current_span().start);
 
     Stmt {
-        kind: StmtKind::Class(ClassDecl {
+        kind: StmtKind::Class(Box::new(ClassDecl {
             name: Some(name),
             modifiers,
             extends,
             implements,
             members,
             attributes: Vec::new(),
-        }),
+        })),
         span: Span::new(start, end),
     }
 }
@@ -2103,12 +2103,12 @@ fn parse_interface<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         .unwrap_or(parser.current_span().start);
 
     Stmt {
-        kind: StmtKind::Interface(InterfaceDecl {
+        kind: StmtKind::Interface(Box::new(InterfaceDecl {
             name,
             extends,
             members,
             attributes: Vec::new(),
-        }),
+        })),
         span: Span::new(start, end),
     }
 }
@@ -2135,11 +2135,11 @@ fn parse_trait<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         .unwrap_or(parser.current_span().start);
 
     Stmt {
-        kind: StmtKind::Trait(TraitDecl {
+        kind: StmtKind::Trait(Box::new(TraitDecl {
             name,
             members,
             attributes: Vec::new(),
-        }),
+        })),
         span: Span::new(start, end),
     }
 }
@@ -2378,13 +2378,13 @@ fn parse_enum<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         .map(|t| t.span.end)
         .unwrap_or(parser.current_span().start);
     Stmt {
-        kind: StmtKind::Enum(EnumDecl {
+        kind: StmtKind::Enum(Box::new(EnumDecl {
             name,
             scalar_type,
             implements,
             members,
             attributes: Vec::new(),
-        }),
+        })),
         span: Span::new(start, end),
     }
 }
@@ -2414,10 +2414,10 @@ fn parse_namespace<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             .map(|t| t.span.end)
             .unwrap_or(parser.current_span().start);
         return Stmt {
-            kind: StmtKind::Namespace(NamespaceDecl {
+            kind: StmtKind::Namespace(Box::new(NamespaceDecl {
                 name: None,
                 body: NamespaceBody::Braced(stmts),
-            }),
+            })),
             span: Span::new(start, end),
         };
     }
@@ -2440,10 +2440,10 @@ fn parse_namespace<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             .map(|t| t.span.end)
             .unwrap_or(parser.current_span().start);
         Stmt {
-            kind: StmtKind::Namespace(NamespaceDecl {
+            kind: StmtKind::Namespace(Box::new(NamespaceDecl {
                 name: Some(name),
                 body: NamespaceBody::Braced(stmts),
-            }),
+            })),
             span: Span::new(start, end),
         }
     } else {
@@ -2451,10 +2451,10 @@ fn parse_namespace<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         parser.expect(TokenKind::Semicolon);
         let span = Span::new(start, parser.current_span().start);
         Stmt {
-            kind: StmtKind::Namespace(NamespaceDecl {
+            kind: StmtKind::Namespace(Box::new(NamespaceDecl {
                 name: Some(name),
                 body: NamespaceBody::Simple,
-            }),
+            })),
             span,
         }
     }

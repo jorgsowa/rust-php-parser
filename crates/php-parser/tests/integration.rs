@@ -3331,3 +3331,4 @@ fn test_invalid_missing_closing_brace_method() {
     assert!(!result.errors.is_empty(), "Expected parse errors");
     insta::assert_snapshot!(to_json(&result.program));
 }
+
