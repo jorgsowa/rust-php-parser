@@ -565,7 +565,7 @@ fn parse_complex_interpolation_owned(content: &str, offset: u32) -> Expr<'static
     let result = crate::parse(&wrapped);
     if let Some(stmt) = result.program.stmts.first() {
         if let StmtKind::Expression(expr) = stmt.kind.clone() {
-            let mut static_expr = to_static_expr(expr);
+            let mut static_expr = to_static_expr(*expr);
             reoffset_expr(&mut static_expr, offset, 6); // "<?php " is 6 bytes
             return static_expr;
         }

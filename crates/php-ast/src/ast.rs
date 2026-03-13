@@ -80,13 +80,13 @@ pub struct Stmt<'src> {
 #[derive(Debug, Clone, Serialize)]
 pub enum StmtKind<'src> {
     /// Expression statement (e.g. `foo();`)
-    Expression(Expr<'src>),
+    Expression(Box<Expr<'src>>),
 
     /// Echo statement: `echo expr1, expr2;`
     Echo(Vec<Expr<'src>>),
 
     /// Return statement: `return expr;`
-    Return(Option<Expr<'src>>),
+    Return(Option<Box<Expr<'src>>>),
 
     /// Block statement: `{ stmts }`
     Block(Vec<Stmt<'src>>),
@@ -110,10 +110,10 @@ pub enum StmtKind<'src> {
     Function(Box<FunctionDecl<'src>>),
 
     /// Break statement
-    Break(Option<Expr<'src>>),
+    Break(Option<Box<Expr<'src>>>),
 
     /// Continue statement
-    Continue(Option<Expr<'src>>),
+    Continue(Option<Box<Expr<'src>>>),
 
     /// Switch statement
     Switch(Box<SwitchStmt<'src>>),
@@ -131,7 +131,7 @@ pub enum StmtKind<'src> {
     Unset(Vec<Expr<'src>>),
 
     /// Throw statement (also can be expression in PHP 8)
-    Throw(Expr<'src>),
+    Throw(Box<Expr<'src>>),
 
     /// Try/catch/finally
     TryCatch(Box<TryCatchStmt<'src>>),

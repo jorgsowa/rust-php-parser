@@ -503,7 +503,7 @@ fn parse_return<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     let span = Span::new(start, parser.current_span().start);
 
     Stmt {
-        kind: StmtKind::Return(expr),
+        kind: StmtKind::Return(expr.map(Box::new)),
         span,
     }
 }
@@ -1013,7 +1013,7 @@ fn parse_break<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     parser.expect_semicolon("break statement");
     let span = Span::new(start, parser.current_span().start);
     Stmt {
-        kind: StmtKind::Break(expr),
+        kind: StmtKind::Break(expr.map(Box::new)),
         span,
     }
 }
@@ -1029,7 +1029,7 @@ fn parse_continue<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     parser.expect_semicolon("continue statement");
     let span = Span::new(start, parser.current_span().start);
     Stmt {
-        kind: StmtKind::Continue(expr),
+        kind: StmtKind::Continue(expr.map(Box::new)),
         span,
     }
 }
@@ -1122,7 +1122,7 @@ fn parse_throw_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     parser.expect_semicolon("throw statement");
     let span = Span::new(start, parser.current_span().start);
     Stmt {
-        kind: StmtKind::Throw(expr),
+        kind: StmtKind::Throw(Box::new(expr)),
         span,
     }
 }
@@ -2873,7 +2873,7 @@ fn parse_expression_stmt_or_label<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'s
     parser.expect_semicolon("expression");
     let span = Span::new(start, parser.current_span().start);
     Stmt {
-        kind: StmtKind::Expression(expr),
+        kind: StmtKind::Expression(Box::new(expr)),
         span,
     }
 }
@@ -2893,7 +2893,7 @@ fn parse_expression_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     parser.expect_semicolon("expression");
     let span = Span::new(start, parser.current_span().start);
     Stmt {
-        kind: StmtKind::Expression(expr),
+        kind: StmtKind::Expression(Box::new(expr)),
         span,
     }
 }
