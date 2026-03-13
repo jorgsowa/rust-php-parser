@@ -7,6 +7,8 @@ use crate::diagnostics::ParseError;
 use crate::expr;
 use crate::stmt;
 
+const MAX_ERRORS: usize = 100;
+
 pub struct Parser<'src> {
     lexer: Lexer<'src>,
     current: Token,
@@ -21,7 +23,7 @@ impl<'src> Parser<'src> {
         let mut lexer = Lexer::new(source);
         let current = lexer.next_token();
         // Drain any lexer errors produced during first token read
-        let errors = lexer
+        let mut errors: Vec<ParseError> = lexer
             .errors
             .drain(..)
             .map(|e| ParseError::Forbidden {
@@ -29,6 +31,7 @@ impl<'src> Parser<'src> {
                 span: e.span,
             })
             .collect();
+        errors.truncate(MAX_ERRORS);
         Self {
             lexer,
             current,
@@ -44,14 +47,15 @@ impl<'src> Parser<'src> {
         let mut lexer = Lexer::new_at(source, offset);
         let current = lexer.next_token();
         // collect any initial lex errors
-        let errors = lexer
+        let mut errors: Vec<ParseError> = lexer
             .errors
             .drain(..)
             .map(|e| ParseError::Forbidden {
                 message: e.message,
                 span: e.span,
             })
-            .collect::<Vec<_>>();
+            .collect();
+        errors.truncate(MAX_ERRORS);
         Self {
             lexer,
             current,
@@ -87,9 +91,10 @@ impl<'src> Parser<'src> {
     /// Advance to the next token, returning the consumed token.
     pub fn advance(&mut self) -> Token {
         let prev = std::mem::replace(&mut self.current, self.lexer.next_token());
-        // Drain any lexer errors produced during token read
-        for e in self.lexer.errors.drain(..) {
-            self.errors.push(ParseError::Forbidden {
+        // Drain any lexer errors produced during token read (capped via self.error)
+        let lex_errs: Vec<_> = self.lexer.errors.drain(..).collect();
+        for e in lex_errs {
+            self.error(ParseError::Forbidden {
                 message: e.message,
                 span: e.span,
             });
@@ -212,7 +217,9 @@ impl<'src> Parser<'src> {
     // =========================================================================
 
     pub fn error(&mut self, err: ParseError) {
-        self.errors.push(err);
+        if self.errors.len() < MAX_ERRORS {
+            self.errors.push(err);
+        }
     }
 
     pub fn into_errors(self) -> Vec<ParseError> {

@@ -3367,3 +3367,120 @@ fn test_invalid_missing_closing_brace_method() {
     assert!(!result.errors.is_empty(), "Expected parse errors");
     insta::assert_snapshot!(to_json(&result.program));
 }
+
+// =============================================================================
+// Regression: `//` and `#` comments must stop at `?>`
+//
+// PHP spec: single-line comments (`//` and `#`) are terminated by either `\n`
+// or the close-tag `?>`. Before the fix, the lexer skipped past `?>` inside
+// comments, leaving the lexer in PHP mode for what should be InlineHtml,
+// causing `ExpectedExpression` errors on the following HTML.
+// =============================================================================
+
+#[test]
+fn test_slash_comment_terminated_by_close_tag() {
+    // `// comment ?>` must produce a CloseTag so the HTML is InlineHtml, not garbage.
+    let result = parse_php("<?php // comment ?>\n<div>html</div>\n<?php $x = 1;");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_hash_comment_terminated_by_close_tag() {
+    // `# comment ?>` must produce a CloseTag.
+    let result = parse_php("<?php # comment ?>\n<span>html</span>\n<?php $x = 1;");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_slash_comment_newline_termination_still_works() {
+    // Ensure `//` still stops at `\n` in the normal case.
+    let result = parse_php("<?php // comment\n$x = 1;");
+    assert_no_errors(&result);
+}
+
+// =============================================================================
+// Regression: inline HTML inside `{...}` blocks and function bodies
+//
+// `parse_block` (and all loops that call `parse_stmt`) must handle the
+// `CloseTag → InlineHtml → OpenTag` transition so that WordPress-style
+// template functions parse without errors.
+// =============================================================================
+
+#[test]
+fn test_inline_html_in_function_body() {
+    let result = parse_php(
+        "<?php\nfunction tmpl() {\n    $x = foo();\n    ?>\n<div>html</div>\n<?php\n    bar();\n}",
+    );
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_inline_html_in_if_block() {
+    let result = parse_php("<?php\nif ($cond) {\n    ?><p>html</p><?php\n    $x = 1;\n}");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_inline_html_comment_in_function_body() {
+    // The WordPress pattern: `?>` inside a `//` comment was swallowed by the
+    // lexer, and the HTML that followed produced ExpectedExpression errors.
+    let result = parse_php(
+        "<?php\nfunction tmpl() {\n    foo();\n    ?>\n<div>\n<?php // comment ?>\n    <p>text</p>\n<?php\n    bar();\n}",
+    );
+    assert_no_errors(&result);
+}
+
+#[test]
+fn test_inline_html_multiple_segments_in_function() {
+    // Multiple inline-HTML segments inside a single function body.
+    let result = parse_php(
+        "<?php\nfunction page() {\n    header();\n    ?><header><?php\n    nav();\n    ?></header><?php\n    body();\n}",
+    );
+    assert_no_errors(&result);
+}
+
+// =============================================================================
+// Regression: `(array)` cast vs `array()` function call
+//
+// `try_parse_cast` was consuming `(` and `array` before checking if `)` followed,
+// leaving the parser in a corrupted state when the token after `array` was `(`
+// (i.e., a function call) rather than `)` (i.e., a cast).
+// =============================================================================
+
+#[test]
+fn test_array_call_not_confused_with_cast() {
+    // `array() === $arr` was failing with ExpectedExpression because the parser
+    // consumed `(array` as the start of an `(array)` cast, then couldn't find `)`.
+    let result = parse_php("<?php $x = array() === $arr;");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_array_call_in_condition() {
+    // The exact pattern from WordPress's compat.php `array_is_list()`.
+    let result = parse_php(
+        "<?php\nfunction array_is_list($arr) {\n    if ((array() === $arr) || (array_values($arr) === $arr)) {\n        return true;\n    }\n    return false;\n}",
+    );
+    assert_no_errors(&result);
+}
+
+#[test]
+fn test_array_cast_still_works() {
+    // After the fix, `(array)$x` must still parse as a cast.
+    let result = parse_php("<?php $y = (array) $x;");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_array_cast_not_confused_with_array_call() {
+    // Both forms in the same file.
+    let result = parse_php("<?php $a = (array) $x;\n$b = array() === [];");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
