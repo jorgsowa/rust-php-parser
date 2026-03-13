@@ -201,10 +201,14 @@ impl<'src> Lexer<'src> {
             }
 
             // Skip // line comments
+            // Note: in PHP, ?> terminates a line comment just like \n does.
             if bytes[self.pos] == b'/' && self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'/'
             {
                 self.pos += 2;
                 while self.pos < bytes.len() && bytes[self.pos] != b'\n' {
+                    if bytes[self.pos] == b'?' && self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'>' {
+                        break; // leave ?> for scan_token to produce CloseTag
+                    }
                     self.pos += 1;
                 }
                 continue;
@@ -230,11 +234,15 @@ impl<'src> Lexer<'src> {
             }
 
             // Skip # comments (but not #[)
+            // Note: in PHP, ?> terminates a hash comment just like \n does.
             if bytes[self.pos] == b'#'
                 && !(self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'[')
             {
                 self.pos += 1;
                 while self.pos < bytes.len() && bytes[self.pos] != b'\n' {
+                    if bytes[self.pos] == b'?' && self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'>' {
+                        break; // leave ?> for scan_token to produce CloseTag
+                    }
                     self.pos += 1;
                 }
                 continue;

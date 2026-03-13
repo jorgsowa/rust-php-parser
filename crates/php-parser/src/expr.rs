@@ -2126,6 +2126,13 @@ fn try_parse_cast<'src>(parser: &'_ mut Parser<'src>) -> Option<Expr<'src>> {
 
     let cast_kind = cast_kind?;
 
+    // Verify `)` follows the cast keyword before consuming anything.
+    // Without this check, `( array() ... )` would be misidentified as `(array)` cast,
+    // consuming `(` and `array` and leaving the parser in a corrupted state.
+    if parser.peek2_kind() != Some(TokenKind::RightParen) {
+        return None;
+    }
+
     let start = parser.start_span();
     parser.advance(); // consume (
     let kw_span = parser.current_span();
