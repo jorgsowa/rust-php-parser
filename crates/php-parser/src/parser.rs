@@ -27,7 +27,7 @@ impl<'src> Parser<'src> {
             .errors
             .drain(..)
             .map(|e| ParseError::Forbidden {
-                message: e.message,
+                message: e.message.into(),
                 span: e.span,
             })
             .collect();
@@ -51,7 +51,7 @@ impl<'src> Parser<'src> {
             .errors
             .drain(..)
             .map(|e| ParseError::Forbidden {
-                message: e.message,
+                message: e.message.into(),
                 span: e.span,
             })
             .collect();
@@ -95,7 +95,7 @@ impl<'src> Parser<'src> {
         let lex_errs: Vec<_> = self.lexer.errors.drain(..).collect();
         for e in lex_errs {
             self.error(ParseError::Forbidden {
-                message: e.message,
+                message: e.message.into(),
                 span: e.span,
             });
         }
@@ -123,7 +123,7 @@ impl<'src> Parser<'src> {
             Some(self.advance())
         } else {
             self.error(ParseError::Expected {
-                expected: format!("{}", kind),
+                expected: format!("{}", kind).into(),
                 found: self.current_kind(),
                 span: self.current_span(),
             });
@@ -133,7 +133,7 @@ impl<'src> Parser<'src> {
 
     /// Expect a semicolon or `?>` close tag (which acts as an implicit semicolon in PHP).
     /// Does NOT consume `?>` — it stays in the stream for the main loop to handle.
-    pub fn expect_semicolon(&mut self, after: &str) -> Option<Token> {
+    pub fn expect_semicolon(&mut self, after: &'static str) -> Option<Token> {
         if self.check(TokenKind::Semicolon) {
             Some(self.advance())
         } else if self.check(TokenKind::CloseTag) {
@@ -141,23 +141,8 @@ impl<'src> Parser<'src> {
             None
         } else {
             self.error(ParseError::ExpectedAfter {
-                expected: "';'".to_string(),
-                after: after.to_string(),
-                span: self.current_span(),
-            });
-            None
-        }
-    }
-
-    /// Expect `kind` after a context described by `after`.
-    /// Produces a more descriptive error than plain `expect`.
-    pub fn expect_after(&mut self, kind: TokenKind, after: &str) -> Option<Token> {
-        if self.check(kind) {
-            Some(self.advance())
-        } else {
-            self.error(ParseError::ExpectedAfter {
-                expected: format!("'{}'", kind),
-                after: after.to_string(),
+                expected: "';'".into(),
+                after: after.into(),
                 span: self.current_span(),
             });
             None
@@ -170,7 +155,7 @@ impl<'src> Parser<'src> {
             Some(self.advance())
         } else {
             self.error(ParseError::UnclosedDelimiter {
-                delimiter: format!("'{}'", kind),
+                delimiter: format!("'{}'", kind).into(),
                 opened_at,
                 span: self.current_span(),
             });
@@ -181,19 +166,6 @@ impl<'src> Parser<'src> {
     /// Start a span at the current token position.
     pub fn start_span(&self) -> u32 {
         self.current.span.start
-    }
-
-    /// End a span from a start position to the end of the most recently consumed token.
-    pub fn end_span(&self, start: u32) -> Span {
-        // The "previous token" end is approximated. We use current span start as end
-        // since we've already advanced past the last consumed token.
-        // A more precise approach would store last token's end, but for now this works.
-        Span::new(start, self.current.span.start)
-    }
-
-    /// End a span from a start position using an explicit end position.
-    pub fn end_span_at(&self, start: u32, end: u32) -> Span {
-        Span::new(start, end)
     }
 
     /// Peek at the next token's kind (one token ahead of current).
@@ -369,11 +341,6 @@ impl<'src> Parser<'src> {
         )
     }
 
-    /// Get the source text slice for a given span.
-    pub fn text(&self, span: Span) -> &'src str {
-        &self.source[span.start as usize..span.end as usize]
-    }
-
     /// Consume the current token as an identifier string, accepting both
     /// Identifier tokens and semi-reserved keywords.
     pub fn eat_identifier_or_keyword(&mut self) -> Option<(&'src str, Span)> {
@@ -412,7 +379,7 @@ impl<'src> Parser<'src> {
             parts.push(Cow::Borrowed(text));
         } else {
             self.error(ParseError::Expected {
-                expected: "identifier".to_string(),
+                expected: "identifier".into(),
                 found: self.current_kind(),
                 span: self.current_span(),
             });

@@ -7,6 +7,20 @@ use crate::diagnostics::ParseError;
 use crate::expr;
 use crate::parser::Parser;
 
+fn class_modifier_error<'src>(parser: &mut Parser<'src>, start: u32) -> Stmt<'src> {
+    let span = Span::new(start, parser.current_span().start);
+    parser.error(ParseError::Expected {
+        expected: "'class'".into(),
+        found: parser.current_kind(),
+        span,
+    });
+    parser.synchronize();
+    Stmt {
+        kind: StmtKind::Error,
+        span,
+    }
+}
+
 /// Parse a single statement.
 pub fn parse_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     // Handle attributes: #[...] before declarations
@@ -110,17 +124,7 @@ pub fn parse_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                 )
             } else {
                 // abstract without class - error recovery
-                let span = Span::new(start, parser.current_span().start);
-                parser.error(ParseError::Expected {
-                    expected: "'class'".to_string(),
-                    found: parser.current_kind(),
-                    span,
-                });
-                parser.synchronize();
-                Stmt {
-                    kind: StmtKind::Error,
-                    span,
-                }
+                class_modifier_error(parser, start)
             }
         }
         TokenKind::Final => {
@@ -146,30 +150,10 @@ pub fn parse_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                         },
                     )
                 } else {
-                    let span = Span::new(start, parser.current_span().start);
-                    parser.error(ParseError::Expected {
-                        expected: "'class'".to_string(),
-                        found: parser.current_kind(),
-                        span,
-                    });
-                    parser.synchronize();
-                    Stmt {
-                        kind: StmtKind::Error,
-                        span,
-                    }
+                    class_modifier_error(parser, start)
                 }
             } else {
-                let span = Span::new(start, parser.current_span().start);
-                parser.error(ParseError::Expected {
-                    expected: "'class'".to_string(),
-                    found: parser.current_kind(),
-                    span,
-                });
-                parser.synchronize();
-                Stmt {
-                    kind: StmtKind::Error,
-                    span,
-                }
+                class_modifier_error(parser, start)
             }
         }
         TokenKind::Readonly => {
@@ -244,17 +228,7 @@ fn parse_attributed_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                     },
                 )
             } else {
-                let span = Span::new(start, parser.current_span().start);
-                parser.error(ParseError::Expected {
-                    expected: "'class'".to_string(),
-                    found: parser.current_kind(),
-                    span,
-                });
-                parser.synchronize();
-                Stmt {
-                    kind: StmtKind::Error,
-                    span,
-                }
+                class_modifier_error(parser, start)
             }
         }
         TokenKind::Final => {
@@ -280,7 +254,7 @@ fn parse_attributed_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             } else {
                 let span = parser.current_span();
                 parser.error(ParseError::Expected {
-                    expected: "'class'".to_string(),
+                    expected: "'class'".into(),
                     found: parser.current_kind(),
                     span,
                 });
@@ -304,7 +278,7 @@ fn parse_attributed_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             } else {
                 let span = parser.current_span();
                 parser.error(ParseError::Expected {
-                    expected: "'class'".to_string(),
+                    expected: "'class'".into(),
                     found: parser.current_kind(),
                     span,
                 });
@@ -324,7 +298,7 @@ fn parse_attributed_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             if let StmtKind::Const(ref items) = stmt.kind {
                 if items.len() > 1 {
                     parser.error(ParseError::Forbidden {
-                        message: "cannot use attributes on multi-constant declaration".to_string(),
+                        message: "cannot use attributes on multi-constant declaration".into(),
                         span: stmt.span,
                     });
                 }
@@ -337,7 +311,7 @@ fn parse_attributed_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             // Attributes before something unexpected
             let span = parser.current_span();
             parser.error(ParseError::Expected {
-                expected: "declaration after attributes".to_string(),
+                expected: "declaration after attributes".into(),
                 found: parser.current_kind(),
                 span,
             });
@@ -807,7 +781,7 @@ fn parse_function<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         text
     } else {
         parser.error(ParseError::Expected {
-            expected: "function name".to_string(),
+            expected: "function name".into(),
             found: parser.current_kind(),
             span: parser.current_span(),
         });
@@ -1198,7 +1172,7 @@ fn parse_try_catch<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 
     if catches.is_empty() && finally.is_none() {
         parser.error(ParseError::Expected {
-            expected: "catch or finally clause".to_string(),
+            expected: "catch or finally clause".into(),
             found: parser.current_kind(),
             span: Span::new(start, parser.current_span().start),
         });
@@ -1307,7 +1281,7 @@ fn parse_global<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     let e = expr::parse_expr(parser);
     if !is_simple_variable(&e) {
         parser.error(ParseError::Expected {
-            expected: "variable".to_string(),
+            expected: "variable".into(),
             found: parser.current_kind(),
             span: e.span,
         });
@@ -1320,7 +1294,7 @@ fn parse_global<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         let e = expr::parse_expr(parser);
         if !is_simple_variable(&e) {
             parser.error(ParseError::Expected {
-                expected: "variable".to_string(),
+                expected: "variable".into(),
                 found: parser.current_kind(),
                 span: e.span,
             });
@@ -1359,7 +1333,7 @@ fn validate_class_ref<'src>(parser: &'_ mut Parser<'src>, name: &Name<'src>) {
         && is_reserved_class_name(&name.parts[0])
     {
         parser.error(ParseError::Forbidden {
-            message: format!("cannot use '{}' as class name", name.parts[0]),
+            message: format!("cannot use '{}' as class name", name.parts[0]).into(),
             span: name.span,
         });
     }
@@ -1373,7 +1347,7 @@ fn parse_class<'src>(parser: &'_ mut Parser<'src>, modifiers: ClassModifiers) ->
         (text, span)
     } else {
         parser.error(ParseError::Expected {
-            expected: "class name".to_string(),
+            expected: "class name".into(),
             found: parser.current_kind(),
             span: parser.current_span(),
         });
@@ -1382,7 +1356,7 @@ fn parse_class<'src>(parser: &'_ mut Parser<'src>, modifiers: ClassModifiers) ->
 
     if is_reserved_class_name(name) {
         parser.error(ParseError::Forbidden {
-            message: format!("cannot use '{}' as class name", name),
+            message: format!("cannot use '{}' as class name", name).into(),
             span: name_span,
         });
     }
@@ -1455,7 +1429,7 @@ fn parse_trait_adaptations<'src>(parser: &'_ mut Parser<'src>) -> Vec<TraitAdapt
             } else {
                 let span = parser.current_span();
                 parser.error(ParseError::Expected {
-                    expected: "method name".to_string(),
+                    expected: "method name".into(),
                     found: parser.current_kind(),
                     span,
                 });
@@ -1499,7 +1473,7 @@ fn parse_trait_adaptations<'src>(parser: &'_ mut Parser<'src>) -> Vec<TraitAdapt
             } else {
                 let span = parser.current_span();
                 parser.error(ParseError::Expected {
-                    expected: "'insteadof' or 'as'".to_string(),
+                    expected: "'insteadof' or 'as'".into(),
                     found: parser.current_kind(),
                     span,
                 });
@@ -1535,7 +1509,7 @@ fn parse_trait_adaptations<'src>(parser: &'_ mut Parser<'src>) -> Vec<TraitAdapt
         } else {
             let span = parser.current_span();
             parser.error(ParseError::Expected {
-                expected: "'::' or 'as'".to_string(),
+                expected: "'::' or 'as'".into(),
                 found: parser.current_kind(),
                 span,
             });
@@ -1612,7 +1586,7 @@ fn parse_property_hooks<'src>(parser: &'_ mut Parser<'src>) -> Vec<PropertyHook<
                 | TokenKind::Readonly => {
                     let span = parser.current_span();
                     parser.error(ParseError::Expected {
-                        expected: "'get' or 'set'".to_string(),
+                        expected: "'get' or 'set'".into(),
                         found: parser.current_kind(),
                         span,
                     });
@@ -1637,7 +1611,7 @@ fn parse_property_hooks<'src>(parser: &'_ mut Parser<'src>) -> Vec<PropertyHook<
                     // Invalid hook name - error recovery
                     let span = parser.current_span();
                     parser.error(ParseError::Expected {
-                        expected: "'get' or 'set'".to_string(),
+                        expected: "'get' or 'set'".into(),
                         found: parser.current_kind(),
                         span,
                     });
@@ -1656,7 +1630,7 @@ fn parse_property_hooks<'src>(parser: &'_ mut Parser<'src>) -> Vec<PropertyHook<
             // Not an identifier at all - error recovery
             let span = parser.current_span();
             parser.error(ParseError::Expected {
-                expected: "'get' or 'set'".to_string(),
+                expected: "'get' or 'set'".into(),
                 found: parser.current_kind(),
                 span,
             });
@@ -1822,7 +1796,7 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
                         } else {
                             // Duplicate or conflicting visibility
                             parser.error(ParseError::Forbidden {
-                                message: "cannot use multiple visibility modifiers".to_string(),
+                                message: "cannot use multiple visibility modifiers".into(),
                                 span: Span::new(member_start, parser.current_span().start),
                             });
                         }
@@ -1831,7 +1805,7 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
                 TokenKind::Static => {
                     if is_static {
                         parser.error(ParseError::Forbidden {
-                            message: "duplicate modifier 'static'".to_string(),
+                            message: "duplicate modifier 'static'".into(),
                             span: Span::new(member_start, parser.current_span().start),
                         });
                     }
@@ -1841,7 +1815,7 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
                 TokenKind::Abstract => {
                     if is_abstract {
                         parser.error(ParseError::Forbidden {
-                            message: "duplicate modifier 'abstract'".to_string(),
+                            message: "duplicate modifier 'abstract'".into(),
                             span: Span::new(member_start, parser.current_span().start),
                         });
                     }
@@ -1851,7 +1825,7 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
                 TokenKind::Final => {
                     if is_final {
                         parser.error(ParseError::Forbidden {
-                            message: "duplicate modifier 'final'".to_string(),
+                            message: "duplicate modifier 'final'".into(),
                             span: Span::new(member_start, parser.current_span().start),
                         });
                     }
@@ -1861,7 +1835,7 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
                 TokenKind::Readonly => {
                     if is_readonly {
                         parser.error(ParseError::Forbidden {
-                            message: "duplicate modifier 'readonly'".to_string(),
+                            message: "duplicate modifier 'readonly'".into(),
                             span: Span::new(member_start, parser.current_span().start),
                         });
                     }
@@ -1875,7 +1849,7 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
         // Validate modifier conflicts
         if is_abstract && is_final {
             parser.error(ParseError::Forbidden {
-                message: "cannot use 'abstract' and 'final' together".to_string(),
+                message: "cannot use 'abstract' and 'final' together".into(),
                 span: Span::new(member_start, parser.current_span().start),
             });
         }
@@ -1891,7 +1865,7 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
         {
             let span = parser.current_span();
             parser.error(ParseError::Expected {
-                expected: "modifier".to_string(),
+                expected: "modifier".into(),
                 found: parser.current_kind(),
                 span,
             });
@@ -1903,19 +1877,19 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
             // Validate: static/abstract/readonly are not valid on constants
             if is_static {
                 parser.error(ParseError::Forbidden {
-                    message: "cannot use 'static' as constant modifier".to_string(),
+                    message: "cannot use 'static' as constant modifier".into(),
                     span: parser.current_span(),
                 });
             }
             if is_abstract {
                 parser.error(ParseError::Forbidden {
-                    message: "cannot use 'abstract' as constant modifier".to_string(),
+                    message: "cannot use 'abstract' as constant modifier".into(),
                     span: parser.current_span(),
                 });
             }
             if is_readonly {
                 parser.error(ParseError::Forbidden {
-                    message: "cannot use 'readonly' as constant modifier".to_string(),
+                    message: "cannot use 'readonly' as constant modifier".into(),
                     span: parser.current_span(),
                 });
             }
@@ -1940,7 +1914,7 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
                 } else {
                     let span = parser.current_span();
                     parser.error(ParseError::Expected {
-                        expected: "constant name".to_string(),
+                        expected: "constant name".into(),
                         found: parser.current_kind(),
                         span,
                     });
@@ -1960,7 +1934,7 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
             let span = Span::new(member_start, parser.current_span().start);
             if !member_attrs.is_empty() && const_items.len() > 1 {
                 parser.error(ParseError::Forbidden {
-                    message: "cannot use attributes on multi-constant declaration".to_string(),
+                    message: "cannot use attributes on multi-constant declaration".into(),
                     span,
                 });
             }
@@ -1987,7 +1961,7 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
                 text
             } else {
                 parser.error(ParseError::Expected {
-                    expected: "method name".to_string(),
+                    expected: "method name".into(),
                     found: parser.current_kind(),
                     span: parser.current_span(),
                 });
@@ -2101,7 +2075,7 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
                     // Property hooks on comma-separated properties → error
                     let phooks = if parser.check(TokenKind::LeftBrace) {
                         parser.error(ParseError::Forbidden {
-                            message: "cannot have hooks on comma-separated property".to_string(),
+                            message: "cannot have hooks on comma-separated property".into(),
                             span: parser.current_span(),
                         });
                         parse_property_hooks(parser)
@@ -2154,7 +2128,7 @@ fn parse_interface<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         (text, span)
     } else {
         parser.error(ParseError::Expected {
-            expected: "interface name".to_string(),
+            expected: "interface name".into(),
             found: parser.current_kind(),
             span: parser.current_span(),
         });
@@ -2163,7 +2137,7 @@ fn parse_interface<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 
     if is_reserved_class_name(name) {
         parser.error(ParseError::Forbidden {
-            message: format!("cannot use '{}' as interface name", name),
+            message: format!("cannot use '{}' as interface name", name).into(),
             span: name_span,
         });
     }
@@ -2203,7 +2177,7 @@ fn parse_trait<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         text
     } else {
         parser.error(ParseError::Expected {
-            expected: "trait name".to_string(),
+            expected: "trait name".into(),
             found: parser.current_kind(),
             span: parser.current_span(),
         });
@@ -2235,7 +2209,7 @@ fn parse_enum<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         text
     } else {
         parser.error(ParseError::Expected {
-            expected: "enum name".to_string(),
+            expected: "enum name".into(),
             found: parser.current_kind(),
             span: parser.current_span(),
         });
@@ -2298,7 +2272,7 @@ fn parse_enum<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             if parser.check(TokenKind::Class) {
                 let span = parser.current_span();
                 parser.error(ParseError::Forbidden {
-                    message: "'class' cannot be used as an enum case name".to_string(),
+                    message: "'class' cannot be used as an enum case name".into(),
                     span,
                 });
             }
@@ -2306,7 +2280,7 @@ fn parse_enum<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                 text
             } else {
                 parser.error(ParseError::Expected {
-                    expected: "case name".to_string(),
+                    expected: "case name".into(),
                     found: parser.current_kind(),
                     span: parser.current_span(),
                 });
@@ -2373,7 +2347,7 @@ fn parse_enum<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                 text
             } else {
                 parser.error(ParseError::Expected {
-                    expected: "constant name".to_string(),
+                    expected: "constant name".into(),
                     found: parser.current_kind(),
                     span: parser.current_span(),
                 });
@@ -2575,7 +2549,7 @@ fn parse_use<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                 brace_pos > 0 && parser.source().as_bytes()[brace_pos - 1] == b'\\';
             if !has_trailing_sep {
                 parser.error(ParseError::Expected {
-                    expected: "namespace separator before '{'".to_string(),
+                    expected: "namespace separator before '{'".into(),
                     found: parser.current_kind(),
                     span: first_name.span,
                 });
@@ -2584,7 +2558,7 @@ fn parse_use<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         parser.advance(); // consume {
         if parser.check(TokenKind::RightBrace) {
             parser.error(ParseError::Expected {
-                expected: "at least one import in group use".to_string(),
+                expected: "at least one import in group use".into(),
                 found: TokenKind::RightBrace,
                 span: parser.current_span(),
             });
@@ -2609,15 +2583,15 @@ fn parse_use<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             // Validate: sub-names must not have leading backslash
             if sub_name.kind == NameKind::FullyQualified {
                 parser.error(ParseError::Expected {
-                    expected: "non-fully-qualified name in group use".to_string(),
+                    expected: "non-fully-qualified name in group use".into(),
                     found: parser.current_kind(),
                     span: sub_name.span,
                 });
             }
 
             // Combine prefix with sub-name
-            let mut combined_parts = prefix_parts.clone();
-            combined_parts.extend(sub_name.parts);
+            let combined_parts: Vec<_> =
+                prefix_parts.iter().cloned().chain(sub_name.parts).collect();
             let sub_span = Span::new(item_start, parser.current_span().start);
             let combined_name = Name {
                 parts: combined_parts,
@@ -2712,7 +2686,7 @@ fn parse_const<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             text
         } else {
             parser.error(ParseError::Expected {
-                expected: "constant name".to_string(),
+                expected: "constant name".into(),
                 found: parser.current_kind(),
                 span: parser.current_span(),
             });
@@ -2749,7 +2723,7 @@ fn parse_halt_compiler<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     // __halt_compiler must be at the outermost scope
     if parser.depth > 0 {
         parser.error(ParseError::Forbidden {
-            message: "__halt_compiler() can only be used at the outermost scope".to_string(),
+            message: "__halt_compiler() can only be used at the outermost scope".into(),
             span: parser.current_span(),
         });
     }
@@ -2764,8 +2738,8 @@ fn parse_halt_compiler<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         parser.advance(); // consume ?> — everything after is raw data
     } else {
         parser.error(ParseError::ExpectedAfter {
-            expected: "';' or '?>'".to_string(),
-            after: "__halt_compiler()".to_string(),
+            expected: "';' or '?>'".into(),
+            after: "__halt_compiler()".into(),
             span: parser.current_span(),
         });
     }
