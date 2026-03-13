@@ -366,7 +366,11 @@ fn parse_stmts_until_end<'src>(
 ) -> Vec<Stmt<'src>> {
     let mut stmts = Vec::with_capacity(8);
     while !ends.contains(&parser.current_kind()) && !parser.check(TokenKind::Eof) {
+        let span_before = parser.current_span();
         stmts.push(parse_stmt(parser));
+        if parser.current_span() == span_before {
+            parser.advance();
+        }
     }
     stmts
 }
