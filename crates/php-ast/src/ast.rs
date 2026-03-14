@@ -81,11 +81,119 @@ pub struct Program<'arena, 'src> {
 // Names and Types
 // =============================================================================
 
-#[derive(Debug, Serialize)]
-pub struct Name<'arena, 'src> {
-    pub parts: ArenaVec<'arena, Cow<'src, str>>,
-    pub kind: NameKind,
-    pub span: Span,
+/// A PHP name (identifier, qualified name, fully-qualified name, or relative name).
+///
+/// The `Simple` variant is the fast path for the common case (~95%) of single
+/// unqualified identifiers like `strlen`, `Foo`, `MyClass`. It avoids allocating
+/// an `ArenaVec` entirely.
+///
+/// The `Complex` variant handles qualified (`Foo\Bar`), fully-qualified (`\Foo\Bar`),
+/// and relative (`namespace\Foo`) names.
+pub enum Name<'arena, 'src> {
+    /// Single unqualified identifier — no `ArenaVec` allocation.
+    Simple {
+        value: Cow<'src, str>,
+        span: Span,
+    },
+    /// Multi-part or prefixed name (`Foo\Bar`, `\Foo`, `namespace\Foo`).
+    Complex {
+        parts: ArenaVec<'arena, Cow<'src, str>>,
+        kind: NameKind,
+        span: Span,
+    },
+}
+
+impl<'arena, 'src> Name<'arena, 'src> {
+    #[inline]
+    pub fn span(&self) -> Span {
+        match self {
+            Self::Simple { span, .. } | Self::Complex { span, .. } => *span,
+        }
+    }
+
+    #[inline]
+    pub fn kind(&self) -> NameKind {
+        match self {
+            Self::Simple { .. } => NameKind::Unqualified,
+            Self::Complex { kind, .. } => *kind,
+        }
+    }
+
+    /// Joins all parts with `\` and prepends `\` if fully qualified.
+    /// Returns `Cow::Borrowed` for simple names (zero allocation).
+    #[inline]
+    pub fn to_string_repr(&self) -> Cow<'src, str> {
+        match self {
+            Self::Simple { value, .. } => value.clone(),
+            Self::Complex { parts, kind, .. } => {
+                let joined = parts.join("\\");
+                if *kind == NameKind::FullyQualified {
+                    Cow::Owned(format!("\\{}", joined))
+                } else {
+                    Cow::Owned(joined)
+                }
+            }
+        }
+    }
+
+    /// Joins all parts with `\` without any leading backslash.
+    /// Returns `Cow::Borrowed` for simple names (zero allocation).
+    #[inline]
+    pub fn join_parts(&self) -> Cow<'src, str> {
+        match self {
+            Self::Simple { value, .. } => value.clone(),
+            Self::Complex { parts, .. } => Cow::Owned(parts.join("\\")),
+        }
+    }
+
+    /// Returns the parts as a slice.
+    /// For `Simple`, returns a single-element slice of the value.
+    #[inline]
+    pub fn parts_slice(&self) -> &[Cow<'src, str>] {
+        match self {
+            Self::Simple { value, .. } => std::slice::from_ref(value),
+            Self::Complex { parts, .. } => parts,
+        }
+    }
+}
+
+impl<'arena, 'src> std::fmt::Debug for Name<'arena, 'src> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Simple { value, span } => f
+                .debug_struct("Name")
+                .field("parts", &std::slice::from_ref(value))
+                .field("kind", &NameKind::Unqualified)
+                .field("span", span)
+                .finish(),
+            Self::Complex { parts, kind, span } => f
+                .debug_struct("Name")
+                .field("parts", parts)
+                .field("kind", kind)
+                .field("span", span)
+                .finish(),
+        }
+    }
+}
+
+impl<'arena, 'src> serde::Serialize for Name<'arena, 'src> {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+        use serde::ser::SerializeStruct;
+        let mut st = s.serialize_struct("Name", 3)?;
+        match self {
+            Self::Simple { value, span } => {
+                st.serialize_field("parts", &[value] as &[_])?;
+                st.serialize_field("kind", &NameKind::Unqualified)?;
+                st.serialize_field("span", span)?;
+            }
+            Self::Complex { parts, kind, span } => {
+                st.serialize_field("parts", parts)?;
+                st.serialize_field("kind", kind)?;
+                st.serialize_field("span", span)?;
+            }
+        }
+        st.end()
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]

@@ -1426,14 +1426,13 @@ fn validate_class_ref<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     name: &Name<'arena, 'src>,
 ) {
-    if name.parts.len() == 1
-        && name.kind == php_ast::NameKind::Unqualified
-        && is_reserved_class_name(&name.parts[0])
-    {
-        parser.error(ParseError::Forbidden {
-            message: format!("cannot use '{}' as class name", name.parts[0]).into(),
-            span: name.span,
-        });
+    if let Name::Simple { value, span } = name {
+        if is_reserved_class_name(value) {
+            parser.error(ParseError::Forbidden {
+                message: format!("cannot use '{}' as class name", value).into(),
+                span: *span,
+            });
+        }
     }
 }
 
@@ -1591,19 +1590,7 @@ fn parse_trait_adaptations<'arena, 'src>(
             }
         } else if parser.eat(TokenKind::As).is_some() {
             // Unqualified alias: method as [visibility] [newName];
-            let method = if first_name.parts.len() == 1 {
-                // Move the single part out of the vec - preserves Borrowed vs Owned
-                first_name.parts.into_iter().next().unwrap()
-            } else {
-                Cow::Owned(
-                    first_name
-                        .parts
-                        .iter()
-                        .map(|s| s.as_ref())
-                        .collect::<Vec<&str>>()
-                        .join("\\"),
-                )
-            };
+            let method = first_name.join_parts();
             let (new_modifier, new_name) = parse_alias_rhs(parser);
             parser.expect(TokenKind::Semicolon);
             let span = Span::new(start, parser.current_span().start);
@@ -2684,7 +2671,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
     if parser.check(TokenKind::LeftBrace) {
         // Validate: prefix must have trailing \ (i.e., parse_name consumed a trailing \)
         // If the name is Unqualified with 1 part, and the char before { is not \, error
-        if first_name.kind == NameKind::Unqualified {
+        if first_name.kind() == NameKind::Unqualified {
             // Check if the source char before the current position is not '\'
             let brace_pos = parser.current_span().start as usize;
             let has_trailing_sep =
@@ -2693,7 +2680,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                 parser.error(ParseError::Expected {
                     expected: "namespace separator before '{'".into(),
                     found: parser.current_kind(),
-                    span: first_name.span,
+                    span: first_name.span(),
                 });
             }
         }
@@ -2705,7 +2692,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                 span: parser.current_span(),
             });
         }
-        let prefix_parts = &first_name.parts;
+        let prefix_parts = first_name.parts_slice();
         loop {
             if parser.check(TokenKind::RightBrace) {
                 break;
@@ -2723,30 +2710,36 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             let sub_name = parser.parse_name();
 
             // Validate: sub-names must not have leading backslash
-            if sub_name.kind == NameKind::FullyQualified {
+            if sub_name.kind() == NameKind::FullyQualified {
                 parser.error(ParseError::Expected {
                     expected: "non-fully-qualified name in group use".into(),
                     found: parser.current_kind(),
-                    span: sub_name.span,
+                    span: sub_name.span(),
                 });
             }
 
             // Combine prefix with sub-name
             let combined_parts = {
+                let sub_slice = sub_name.parts_slice();
                 let mut cp =
-                    parser.alloc_vec_with_capacity(prefix_parts.len() + sub_name.parts.len());
+                    parser.alloc_vec_with_capacity(prefix_parts.len() + sub_slice.len());
                 for p in prefix_parts.iter() {
                     cp.push(p.clone());
                 }
-                for p in sub_name.parts.into_iter() {
-                    cp.push(p);
+                match sub_name {
+                    Name::Simple { value, .. } => cp.push(value),
+                    Name::Complex { parts, .. } => {
+                        for p in parts.into_iter() {
+                            cp.push(p);
+                        }
+                    }
                 }
                 cp
             };
             let sub_span = Span::new(item_start, parser.current_span().start);
-            let combined_name = Name {
+            let combined_name = Name::Complex {
                 parts: combined_parts,
-                kind: if first_name.kind == NameKind::FullyQualified {
+                kind: if first_name.kind() == NameKind::FullyQualified {
                     NameKind::FullyQualified
                 } else {
                     NameKind::Qualified

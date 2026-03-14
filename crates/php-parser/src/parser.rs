@@ -404,19 +404,28 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             self.expect(TokenKind::Backslash);
         }
 
-        let mut parts = self.alloc_vec_with_capacity(1);
-
         // First part
-        if let Some((text, _)) = self.eat_identifier_or_keyword() {
-            parts.push(Cow::Borrowed(text));
+        let first = if let Some((text, _)) = self.eat_identifier_or_keyword() {
+            Cow::Borrowed(text)
         } else {
             self.error(ParseError::Expected {
                 expected: "identifier".into(),
                 found: self.current_kind(),
                 span: self.current_span(),
             });
-            parts.push(Cow::Borrowed("<error>"));
+            Cow::Borrowed("<error>")
+        };
+
+        // Fast path: single unqualified identifier (the common case, ~95% of names).
+        // Avoids allocating an ArenaVec entirely.
+        if !fully_qualified && !relative && !self.check(TokenKind::Backslash) {
+            let span = Span::new(start, self.current_span().start);
+            return Name::Simple { value: first, span };
         }
+
+        // Slow path: qualified, fully-qualified, or relative name.
+        let mut parts = self.alloc_vec_with_capacity(2);
+        parts.push(first);
 
         // Subsequent parts: \Ident
         while self.eat(TokenKind::Backslash).is_some() {
@@ -431,13 +440,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             NameKind::FullyQualified
         } else if relative {
             NameKind::Relative
-        } else if parts.len() > 1 {
-            NameKind::Qualified
         } else {
-            NameKind::Unqualified
+            NameKind::Qualified
         };
 
-        Name { parts, kind, span }
+        Name::Complex { parts, kind, span }
     }
 
     // =========================================================================
@@ -554,11 +561,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 let token = self.advance();
                 let name_text =
                     Cow::Borrowed(&self.source[token.span.start as usize..token.span.end as usize]);
-                let name = Name {
-                    parts: self.alloc_vec_one(name_text),
-                    kind: NameKind::Unqualified,
-                    span: token.span,
-                };
+                let name = Name::Simple { value: name_text, span: token.span };
                 return TypeHint {
                     kind: TypeHintKind::Named(name),
                     span: token.span,
@@ -570,92 +573,78 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         match self.current_kind() {
             TokenKind::Array => {
                 let token = self.advance();
-                let name = Name {
-                    parts: self.alloc_vec_one(Cow::Borrowed("array")),
-                    kind: NameKind::Unqualified,
-                    span: token.span,
-                };
                 TypeHint {
-                    kind: TypeHintKind::Named(name),
+                    kind: TypeHintKind::Named(Name::Simple {
+                        value: Cow::Borrowed("array"),
+                        span: token.span,
+                    }),
                     span: token.span,
                 }
             }
             TokenKind::Self_ => {
                 let token = self.advance();
-                let name = Name {
-                    parts: self.alloc_vec_one(Cow::Borrowed("self")),
-                    kind: NameKind::Unqualified,
-                    span: token.span,
-                };
                 TypeHint {
-                    kind: TypeHintKind::Named(name),
+                    kind: TypeHintKind::Named(Name::Simple {
+                        value: Cow::Borrowed("self"),
+                        span: token.span,
+                    }),
                     span: token.span,
                 }
             }
             TokenKind::Parent_ => {
                 let token = self.advance();
-                let name = Name {
-                    parts: self.alloc_vec_one(Cow::Borrowed("parent")),
-                    kind: NameKind::Unqualified,
-                    span: token.span,
-                };
                 TypeHint {
-                    kind: TypeHintKind::Named(name),
+                    kind: TypeHintKind::Named(Name::Simple {
+                        value: Cow::Borrowed("parent"),
+                        span: token.span,
+                    }),
                     span: token.span,
                 }
             }
             TokenKind::Static => {
                 let token = self.advance();
-                let name = Name {
-                    parts: self.alloc_vec_one(Cow::Borrowed("static")),
-                    kind: NameKind::Unqualified,
-                    span: token.span,
-                };
                 TypeHint {
-                    kind: TypeHintKind::Named(name),
+                    kind: TypeHintKind::Named(Name::Simple {
+                        value: Cow::Borrowed("static"),
+                        span: token.span,
+                    }),
                     span: token.span,
                 }
             }
             TokenKind::Null => {
                 let token = self.advance();
-                let name = Name {
-                    parts: self.alloc_vec_one(Cow::Borrowed("null")),
-                    kind: NameKind::Unqualified,
-                    span: token.span,
-                };
                 TypeHint {
-                    kind: TypeHintKind::Named(name),
+                    kind: TypeHintKind::Named(Name::Simple {
+                        value: Cow::Borrowed("null"),
+                        span: token.span,
+                    }),
                     span: token.span,
                 }
             }
             TokenKind::True => {
                 let token = self.advance();
-                let name = Name {
-                    parts: self.alloc_vec_one(Cow::Borrowed("true")),
-                    kind: NameKind::Unqualified,
-                    span: token.span,
-                };
                 TypeHint {
-                    kind: TypeHintKind::Named(name),
+                    kind: TypeHintKind::Named(Name::Simple {
+                        value: Cow::Borrowed("true"),
+                        span: token.span,
+                    }),
                     span: token.span,
                 }
             }
             TokenKind::False => {
                 let token = self.advance();
-                let name = Name {
-                    parts: self.alloc_vec_one(Cow::Borrowed("false")),
-                    kind: NameKind::Unqualified,
-                    span: token.span,
-                };
                 TypeHint {
-                    kind: TypeHintKind::Named(name),
+                    kind: TypeHintKind::Named(Name::Simple {
+                        value: Cow::Borrowed("false"),
+                        span: token.span,
+                    }),
                     span: token.span,
                 }
             }
             _ => {
                 // Named type from qualified/unqualified name
                 let name = self.parse_name();
-                let span = Span::new(start, name.span.end);
+                let span = Span::new(start, name.span().end);
                 TypeHint {
                     kind: TypeHintKind::Named(name),
                     span,
