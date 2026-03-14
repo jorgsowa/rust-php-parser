@@ -1,7 +1,7 @@
 use memchr::{memchr2, memmem};
 use php_ast::Span;
 
-use crate::token::{resolve_keyword, TokenKind};
+use crate::token::{resolve_keyword_lower, TokenKind};
 
 // ---------------------------------------------------------------------------
 // Byte-classification lookup tables
@@ -934,12 +934,31 @@ impl<'src> Lexer<'src> {
     fn scan_identifier(&mut self) -> Token {
         let start = self.pos;
         let bytes = self.source.as_bytes();
-        self.pos += 1; // consume first ident char
+
+        // Simultaneously scan and ASCII-lowercase into a stack buffer.
+        // Max keyword length is 15 (`__halt_compiler`); once we exceed that the
+        // identifier cannot be a keyword so we stop filling the buffer.
+        let mut lower = [0u8; 15];
+        lower[0] = bytes[start].to_ascii_lowercase();
+        let mut lower_len: usize = 1;
+
+        self.pos = start + 1;
         while self.pos < bytes.len() && is_ident_continue(bytes[self.pos]) {
+            if lower_len < 15 {
+                lower[lower_len] = bytes[self.pos].to_ascii_lowercase();
+                lower_len += 1;
+            }
             self.pos += 1;
         }
-        let text = &self.source[start..self.pos];
-        let kind = resolve_keyword(text).unwrap_or(TokenKind::Identifier);
+
+        let total_len = self.pos - start;
+        let kind = if total_len == lower_len {
+            // total_len <= 15; compare pre-lowercased bytes directly
+            resolve_keyword_lower(&lower[..lower_len]).unwrap_or(TokenKind::Identifier)
+        } else {
+            // Longer than any keyword
+            TokenKind::Identifier
+        };
         self.tok(kind, start)
     }
 
