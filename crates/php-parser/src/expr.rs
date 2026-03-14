@@ -1007,15 +1007,9 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
         TokenKind::Backslash => {
             let start = parser.start_span();
             let name = parser.parse_name();
-            let joined = name.parts.join("\\");
-            let text = if name.kind == NameKind::FullyQualified {
-                format!("\\{}", joined)
-            } else {
-                joined
-            };
             Expr {
-                kind: ExprKind::Identifier(Cow::Owned(text)),
-                span: Span::new(start, name.span.end),
+                kind: ExprKind::Identifier(name.to_string_repr()),
+                span: Span::new(start, name.span().end),
             }
         }
 
@@ -1363,10 +1357,10 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             if parser.peek_kind() == Some(TokenKind::Backslash) {
                 let start = parser.start_span();
                 let name = parser.parse_name();
-                let text = Cow::Owned(format!("namespace\\{}", name.parts.join("\\")));
+                let text = Cow::Owned(format!("namespace\\{}", name.join_parts()));
                 Expr {
                     kind: ExprKind::Identifier(text),
-                    span: Span::new(start, name.span.end),
+                    span: Span::new(start, name.span().end),
                 }
             } else {
                 let span = parser.current_span();
@@ -1523,14 +1517,9 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         _ => {
             // Parse as a name (possibly qualified)
             let name = parser.parse_name();
-            let text = if name.kind == NameKind::FullyQualified {
-                Cow::Owned(format!("\\{}", name.parts.join("\\")))
-            } else {
-                Cow::Owned(name.parts.join("\\"))
-            };
             Expr {
-                kind: ExprKind::Identifier(text),
-                span: name.span,
+                kind: ExprKind::Identifier(name.to_string_repr()),
+                span: name.span(),
             }
         }
     };
