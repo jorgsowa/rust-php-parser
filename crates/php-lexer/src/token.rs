@@ -1,3 +1,4 @@
+#[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum TokenKind {
     // --- Literals ---
@@ -221,24 +222,12 @@ pub enum TokenKind {
 }
 
 impl TokenKind {
-    pub fn is_assignment_op(&self) -> bool {
-        matches!(
-            self,
-            TokenKind::Equals
-                | TokenKind::PlusEquals
-                | TokenKind::MinusEquals
-                | TokenKind::StarEquals
-                | TokenKind::SlashEquals
-                | TokenKind::PercentEquals
-                | TokenKind::StarStarEquals
-                | TokenKind::DotEquals
-                | TokenKind::AmpersandEquals
-                | TokenKind::PipeEquals
-                | TokenKind::CaretEquals
-                | TokenKind::ShiftLeftEquals
-                | TokenKind::ShiftRightEquals
-                | TokenKind::CoalesceEquals
-        )
+    #[inline(always)]
+    pub fn is_assignment_op(self) -> bool {
+        // The assignment operators are contiguous in the enum definition:
+        // Equals..=CoalesceEquals. With #[repr(u8)], a single range check suffices.
+        (self as u8).wrapping_sub(TokenKind::Equals as u8)
+            <= (TokenKind::CoalesceEquals as u8 - TokenKind::Equals as u8)
     }
 }
 
