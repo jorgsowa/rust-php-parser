@@ -122,8 +122,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         // Drain any lexer errors produced during token read.
         // Guard with is_empty() so the hot path (no errors) skips all overhead.
         if !self.lexer.errors.is_empty() {
-            let lex_errs: Vec<_> = self.lexer.errors.drain(..).collect();
-            for e in lex_errs {
+            for e in std::mem::take(&mut self.lexer.errors) {
                 self.error(ParseError::Forbidden {
                     message: e.message.into(),
                     span: e.span,
@@ -547,13 +546,10 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 || text.eq_ignore_ascii_case("boolean")
                 || text.eq_ignore_ascii_case("void")
                 || text.eq_ignore_ascii_case("never")
-                || text.eq_ignore_ascii_case("null")
                 || text.eq_ignore_ascii_case("mixed")
                 || text.eq_ignore_ascii_case("object")
                 || text.eq_ignore_ascii_case("iterable")
-                || text.eq_ignore_ascii_case("callable")
-                || text.eq_ignore_ascii_case("true")
-                || text.eq_ignore_ascii_case("false");
+                || text.eq_ignore_ascii_case("callable");
             if is_builtin {
                 let token = self.advance();
                 let name_text =

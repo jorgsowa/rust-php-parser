@@ -41,7 +41,7 @@ pub fn parse_expr_bp<'arena, 'src>(
         let kind = parser.current_kind();
 
         // Check for postfix operators first (++, --)
-        if let Some(left_bp) = precedence::postfix_binding_power(&kind) {
+        if let Some(left_bp) = precedence::postfix_binding_power(kind) {
             if left_bp < min_bp {
                 break;
             }
@@ -419,7 +419,7 @@ pub fn parse_expr_bp<'arena, 'src>(
 
         // Null coalescing operator (produces NullCoalesce node, not Binary)
         if kind == TokenKind::QuestionQuestion {
-            if let Some((left_bp, right_bp)) = precedence::infix_binding_power(&kind) {
+            if let Some((left_bp, right_bp)) = precedence::infix_binding_power(kind) {
                 if left_bp < min_bp {
                     break;
                 }
@@ -438,7 +438,7 @@ pub fn parse_expr_bp<'arena, 'src>(
         }
 
         // Infix binary operators
-        if let Some((left_bp, right_bp)) = precedence::infix_binding_power(&kind) {
+        if let Some((left_bp, right_bp)) = precedence::infix_binding_power(kind) {
             if left_bp < min_bp {
                 break;
             }
@@ -592,7 +592,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
     }
 
     // Prefix unary operators
-    if let Some(right_bp) = precedence::prefix_binding_power(&kind) {
+    if let Some(right_bp) = precedence::prefix_binding_power(kind) {
         let op_token = parser.advance();
         let operand = parse_expr_bp(parser, right_bp);
         let op = match op_token.kind {
@@ -1775,8 +1775,8 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     // Bare yield (no value) — also bare when next token is a binary-only operator
     // e.g. `yield * -1` → `(yield) * (-1)`, but `yield +1` → `yield (+1)`
     let kind = parser.current_kind();
-    let is_binary_only = precedence::infix_binding_power(&kind).is_some()
-        && precedence::prefix_binding_power(&kind).is_none();
+    let is_binary_only = precedence::infix_binding_power(kind).is_some()
+        && precedence::prefix_binding_power(kind).is_none();
     if parser.check(TokenKind::Semicolon)
         || parser.check(TokenKind::RightParen)
         || parser.check(TokenKind::RightBracket)

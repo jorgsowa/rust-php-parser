@@ -26,7 +26,8 @@ use php_lexer::TokenKind;
 ///     Returns the infix binding power for a token, or None if it's not an infix operator.
 ///     Returns (left_bp, right_bp). For left-associative ops, right_bp = left_bp + 1.
 ///     For right-associative ops, left_bp = right_bp - 1 (i.e., right_bp = left_bp).
-pub fn infix_binding_power(kind: &TokenKind) -> Option<(u8, u8)> {
+#[inline(always)]
+pub fn infix_binding_power(kind: TokenKind) -> Option<(u8, u8)> {
     match kind {
         // Logical keyword operators (lowest precedence)
         TokenKind::Or => Some((1, 2)),
@@ -89,7 +90,8 @@ pub fn infix_binding_power(kind: &TokenKind) -> Option<(u8, u8)> {
 
 /// Returns the prefix binding power for a token, or None if it's not a prefix operator.
 /// Returns ((), right_bp).
-pub fn prefix_binding_power(kind: &TokenKind) -> Option<u8> {
+#[inline(always)]
+pub fn prefix_binding_power(kind: TokenKind) -> Option<u8> {
     match kind {
         TokenKind::Minus | TokenKind::Plus => Some(41),
         TokenKind::Bang => Some(41),
@@ -101,7 +103,8 @@ pub fn prefix_binding_power(kind: &TokenKind) -> Option<u8> {
 
 /// Returns the postfix binding power for a token, or None if it's not a postfix operator.
 /// Returns (left_bp, ()).
-pub fn postfix_binding_power(kind: &TokenKind) -> Option<u8> {
+#[inline(always)]
+pub fn postfix_binding_power(kind: TokenKind) -> Option<u8> {
     match kind {
         TokenKind::PlusPlus | TokenKind::MinusMinus => Some(43),
         _ => None,
@@ -121,47 +124,47 @@ mod tests {
 
     #[test]
     fn test_additive_lower_than_multiplicative() {
-        let (_, add_right) = infix_binding_power(&TokenKind::Plus).unwrap();
-        let (mul_left, _) = infix_binding_power(&TokenKind::Star).unwrap();
+        let (_, add_right) = infix_binding_power(TokenKind::Plus).unwrap();
+        let (mul_left, _) = infix_binding_power(TokenKind::Star).unwrap();
         assert!(mul_left > add_right);
     }
 
     #[test]
     fn test_mul_lower_than_pow() {
-        let (_, mul_right) = infix_binding_power(&TokenKind::Star).unwrap();
-        let (pow_left, _) = infix_binding_power(&TokenKind::StarStar).unwrap();
+        let (_, mul_right) = infix_binding_power(TokenKind::Star).unwrap();
+        let (pow_left, _) = infix_binding_power(TokenKind::StarStar).unwrap();
         assert!(pow_left > mul_right);
     }
 
     #[test]
     fn test_pow_is_right_associative() {
-        let (left, right) = infix_binding_power(&TokenKind::StarStar).unwrap();
+        let (left, right) = infix_binding_power(TokenKind::StarStar).unwrap();
         assert!(left > right);
     }
 
     #[test]
     fn test_add_is_left_associative() {
-        let (left, right) = infix_binding_power(&TokenKind::Plus).unwrap();
+        let (left, right) = infix_binding_power(TokenKind::Plus).unwrap();
         assert!(left < right);
     }
 
     #[test]
     fn test_boolean_and_lower_than_bitwise_or() {
-        let (_, and_right) = infix_binding_power(&TokenKind::AmpersandAmpersand).unwrap();
-        let (bitor_left, _) = infix_binding_power(&TokenKind::Pipe).unwrap();
+        let (_, and_right) = infix_binding_power(TokenKind::AmpersandAmpersand).unwrap();
+        let (bitor_left, _) = infix_binding_power(TokenKind::Pipe).unwrap();
         assert!(bitor_left > and_right);
     }
 
     #[test]
     fn test_null_coalesce_right_associative() {
-        let (left, right) = infix_binding_power(&TokenKind::QuestionQuestion).unwrap();
+        let (left, right) = infix_binding_power(TokenKind::QuestionQuestion).unwrap();
         assert!(left > right);
     }
 
     #[test]
     fn test_comparison_lower_than_concat() {
-        let (_, cmp_right) = infix_binding_power(&TokenKind::LessThan).unwrap();
-        let (concat_left, _) = infix_binding_power(&TokenKind::Dot).unwrap();
+        let (_, cmp_right) = infix_binding_power(TokenKind::LessThan).unwrap();
+        let (concat_left, _) = infix_binding_power(TokenKind::Dot).unwrap();
         assert!(concat_left > cmp_right);
     }
 }

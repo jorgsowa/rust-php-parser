@@ -13,12 +13,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
     inner: &'src str,
     base_offset: u32,
 ) -> ArenaVec<'arena, StringPart<'arena, 'src>> {
-<<<<<<< Updated upstream
-    let mut parts = ArenaVec::with_capacity_in(4, arena);
-    let mut literal = String::new();
-=======
     let mut parts = ArenaVec::with_capacity_in(8, arena);
->>>>>>> Stashed changes
     let bytes = inner.as_bytes();
     let len = bytes.len();
     let mut i = 0;
