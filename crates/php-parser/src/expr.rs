@@ -171,18 +171,15 @@ pub fn parse_expr_bp<'arena, 'src>(
                     }
                     ArgListResult::Args(args) => {
                         let span = Span::new(lhs.span.start, parser.current_span().start);
+                        let call = parser.alloc(MethodCallExpr {
+                            object: parser.alloc(lhs),
+                            method: parser.alloc(member),
+                            args,
+                        });
                         let expr_kind = if is_nullsafe {
-                            ExprKind::NullsafeMethodCall(MethodCallExpr {
-                                object: parser.alloc(lhs),
-                                method: parser.alloc(member),
-                                args,
-                            })
+                            ExprKind::NullsafeMethodCall(call)
                         } else {
-                            ExprKind::MethodCall(MethodCallExpr {
-                                object: parser.alloc(lhs),
-                                method: parser.alloc(member),
-                                args,
-                            })
+                            ExprKind::MethodCall(call)
                         };
                         lhs = Expr {
                             kind: expr_kind,
@@ -336,11 +333,13 @@ pub fn parse_expr_bp<'arena, 'src>(
                         ArgListResult::Args(args) => {
                             let span = Span::new(lhs.span.start, parser.current_span().start);
                             lhs = Expr {
-                                kind: ExprKind::StaticMethodCall(StaticMethodCallExpr {
-                                    class: parser.alloc(lhs),
-                                    method: Cow::Borrowed(member_name),
-                                    args,
-                                }),
+                                kind: ExprKind::StaticMethodCall(parser.alloc(
+                                    StaticMethodCallExpr {
+                                        class: parser.alloc(lhs),
+                                        method: Cow::Borrowed(member_name),
+                                        args,
+                                    },
+                                )),
                                 span,
                             };
                         }
