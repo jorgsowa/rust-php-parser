@@ -1,5 +1,3 @@
-use std::borrow::Cow;
-
 use php_ast::*;
 use php_lexer::{Lexer, Token, TokenKind};
 
@@ -405,15 +403,15 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
 
         // First part
-        let first = if let Some((text, _)) = self.eat_identifier_or_keyword() {
-            Cow::Borrowed(text)
+        let first: &'src str = if let Some((text, _)) = self.eat_identifier_or_keyword() {
+            text
         } else {
             self.error(ParseError::Expected {
                 expected: "identifier".into(),
                 found: self.current_kind(),
                 span: self.current_span(),
             });
-            Cow::Borrowed("<error>")
+            "<error>"
         };
 
         // Fast path: single unqualified identifier (the common case, ~95% of names).
@@ -430,7 +428,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         // Subsequent parts: \Ident
         while self.eat(TokenKind::Backslash).is_some() {
             if let Some((text, _)) = self.eat_identifier_or_keyword() {
-                parts.push(Cow::Borrowed(text));
+                parts.push(text);
             }
         }
 

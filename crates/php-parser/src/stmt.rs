@@ -2723,7 +2723,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                 let sub_slice = sub_name.parts_slice();
                 let mut cp = parser.alloc_vec_with_capacity(prefix_parts.len() + sub_slice.len());
                 for p in prefix_parts.iter() {
-                    cp.push(p.clone());
+                    cp.push(*p);
                 }
                 match sub_name {
                     Name::Simple { value, .. } => cp.push(value),

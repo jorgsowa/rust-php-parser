@@ -91,10 +91,11 @@ pub struct Program<'arena, 'src> {
 /// and relative (`namespace\Foo`) names.
 pub enum Name<'arena, 'src> {
     /// Single unqualified identifier — no `ArenaVec` allocation.
-    Simple { value: Cow<'src, str>, span: Span },
+    /// `&'src str` instead of `Cow` since this is always a borrowed slice of the source.
+    Simple { value: &'src str, span: Span },
     /// Multi-part or prefixed name (`Foo\Bar`, `\Foo`, `namespace\Foo`).
     Complex {
-        parts: ArenaVec<'arena, Cow<'src, str>>,
+        parts: ArenaVec<'arena, &'src str>,
         kind: NameKind,
         span: Span,
     },
@@ -121,7 +122,7 @@ impl<'arena, 'src> Name<'arena, 'src> {
     #[inline]
     pub fn to_string_repr(&self) -> Cow<'src, str> {
         match self {
-            Self::Simple { value, .. } => value.clone(),
+            Self::Simple { value, .. } => Cow::Borrowed(value),
             Self::Complex { parts, kind, .. } => {
                 let joined = parts.join("\\");
                 if *kind == NameKind::FullyQualified {
@@ -138,7 +139,7 @@ impl<'arena, 'src> Name<'arena, 'src> {
     #[inline]
     pub fn join_parts(&self) -> Cow<'src, str> {
         match self {
-            Self::Simple { value, .. } => value.clone(),
+            Self::Simple { value, .. } => Cow::Borrowed(value),
             Self::Complex { parts, .. } => Cow::Owned(parts.join("\\")),
         }
     }
@@ -146,7 +147,7 @@ impl<'arena, 'src> Name<'arena, 'src> {
     /// Returns the parts as a slice.
     /// For `Simple`, returns a single-element slice of the value.
     #[inline]
-    pub fn parts_slice(&self) -> &[Cow<'src, str>] {
+    pub fn parts_slice(&self) -> &[&'src str] {
         match self {
             Self::Simple { value, .. } => std::slice::from_ref(value),
             Self::Complex { parts, .. } => parts,
@@ -179,7 +180,7 @@ impl<'arena, 'src> serde::Serialize for Name<'arena, 'src> {
         let mut st = s.serialize_struct("Name", 3)?;
         match self {
             Self::Simple { value, span } => {
-                st.serialize_field("parts", &[value] as &[_])?;
+                st.serialize_field("parts", std::slice::from_ref(value))?;
                 st.serialize_field("kind", &NameKind::Unqualified)?;
                 st.serialize_field("span", span)?;
             }
