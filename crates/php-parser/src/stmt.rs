@@ -2721,8 +2721,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             // Combine prefix with sub-name
             let combined_parts = {
                 let sub_slice = sub_name.parts_slice();
-                let mut cp =
-                    parser.alloc_vec_with_capacity(prefix_parts.len() + sub_slice.len());
+                let mut cp = parser.alloc_vec_with_capacity(prefix_parts.len() + sub_slice.len());
                 for p in prefix_parts.iter() {
                     cp.push(p.clone());
                 }
