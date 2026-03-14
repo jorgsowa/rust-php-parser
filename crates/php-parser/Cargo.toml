@@ -1,8 +1,15 @@
 [package]
-name = "php-parser"
+name = "php-rs-parser"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "Fast PHP parser producing a typed AST"
+keywords = ["php", "parser", "ast", "syntax"]
+categories = ["parsing", "development-tools", "compilers"]
+readme = "../../README.md"
 
 [dependencies]
 php-ast = { workspace = true }
