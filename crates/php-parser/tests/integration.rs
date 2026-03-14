@@ -1,7 +1,7 @@
-fn parse_php(source: &'static str) -> php_parser::ParseResult<'static, 'static> {
+fn parse_php(source: &'static str) -> php_rs_parser::ParseResult<'static, 'static> {
     // Leak arena and source for test simplicity — process exits after test run anyway
     let arena: &'static bumpalo::Bump = Box::leak(Box::new(bumpalo::Bump::new()));
-    php_parser::parse(arena, source)
+    php_rs_parser::parse(arena, source)
 }
 
 fn assert_parses_ok(_label: &str, source: &'static str) {
@@ -9,7 +9,7 @@ fn assert_parses_ok(_label: &str, source: &'static str) {
     assert_no_errors(&result);
 }
 
-fn assert_no_errors(result: &php_parser::ParseResult) {
+fn assert_no_errors(result: &php_rs_parser::ParseResult) {
     if !result.errors.is_empty() {
         panic!(
             "Expected no parse errors, got {} error(s):\n{:#?}",

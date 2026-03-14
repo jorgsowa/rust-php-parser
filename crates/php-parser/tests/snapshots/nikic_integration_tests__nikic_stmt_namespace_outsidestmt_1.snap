@@ -6,8 +6,8 @@ expression: json
   "stmts": [
     {
       "kind": {
-        "Declare": [
-          [
+        "Declare": {
+          "directives": [
             [
               "A",
               {
@@ -21,8 +21,8 @@ expression: json
               }
             ]
           ],
-          null
-        ]
+          "body": null
+        }
       },
       "span": {
         "start": 6,

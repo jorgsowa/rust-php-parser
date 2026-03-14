@@ -844,32 +844,32 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             let token = parser.advance();
             let src = parser.source();
             let text = &src[token.span.start as usize..token.span.end as usize];
-            let (label, body, stripped) = parse_heredoc_content(text);
-            if crate::interpolation::has_interpolation(&body) {
-                if stripped {
-                    // Indentation was stripped — body is not a verbatim source slice;
-                    // use old path that handles de-indented content
-                    let body_offset = find_body_offset(text, token.span.start);
-                    let parts = crate::interpolation::parse_interpolated_parts_heredoc(
+            let (label, body_start_in_text, body_end_in_text, indent) = parse_heredoc_content(text);
+            let body_offset = token.span.start + body_start_in_text as u32;
+            let raw_body = &src[body_offset as usize..token.span.start as usize + body_end_in_text];
+            if crate::interpolation::has_interpolation(raw_body) {
+                if !indent.is_empty() {
+                    // Indented heredoc — raw_body is a verbatim source slice but each line
+                    // is prefixed with `indent`. The indented sub-parser works directly on
+                    // the source, skipping the indent at each line start, so we can use
+                    // parse_complex_interpolation without wrapping.
+                    let parts = crate::interpolation::parse_interpolated_parts_indented(
                         parser.arena,
-                        &body,
+                        src,
+                        raw_body,
                         body_offset,
+                        &indent,
                     );
                     Expr {
                         kind: ExprKind::Heredoc { label, parts },
                         span: token.span,
                     }
                 } else {
-                    // Body is a verbatim source slice — use sub-parser path for correct spans
-                    let body_offset = find_body_offset(text, token.span.start);
-                    // Find the inner slice in the source directly
-                    let body_start = body_offset as usize;
-                    let body_end = body_start + body.len();
-                    let inner = &src[body_start..body_end];
+                    // Non-indented — body is verbatim source, use the fast sub-parser path
                     let parts = crate::interpolation::parse_interpolated_parts(
                         parser.arena,
                         src,
-                        inner,
+                        raw_body,
                         body_offset,
                     );
                     Expr {
@@ -878,8 +878,18 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                     }
                 }
             } else {
+                // No interpolation — build the (possibly de-indented) literal body string
+                let body_str = if !indent.is_empty() {
+                    raw_body
+                        .lines()
+                        .map(|line| line.strip_prefix(&indent).unwrap_or(line))
+                        .collect::<Vec<_>>()
+                        .join("\n")
+                } else {
+                    raw_body.to_string()
+                };
                 let mut parts = parser.alloc_vec_with_capacity(1);
-                parts.push(StringPart::Literal(Cow::Owned(body)));
+                parts.push(StringPart::Literal(Cow::Owned(body_str)));
                 Expr {
                     kind: ExprKind::Heredoc { label, parts },
                     span: token.span,
@@ -890,10 +900,21 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
         // Nowdoc
         TokenKind::Nowdoc => {
             let token = parser.advance();
-            let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-            let (label, body, _stripped) = parse_heredoc_content(text);
+            let src = parser.source();
+            let text = &src[token.span.start as usize..token.span.end as usize];
+            let (label, body_start_in_text, body_end_in_text, indent) = parse_heredoc_content(text);
+            let raw_body = &text[body_start_in_text..body_end_in_text];
+            let value = if !indent.is_empty() {
+                raw_body
+                    .lines()
+                    .map(|line| line.strip_prefix(&indent).unwrap_or(line))
+                    .collect::<Vec<_>>()
+                    .join("\n")
+            } else {
+                raw_body.to_string()
+            };
             Expr {
-                kind: ExprKind::Nowdoc { label, value: body },
+                kind: ExprKind::Nowdoc { label, value },
                 span: token.span,
             }
         }
@@ -2244,38 +2265,43 @@ fn token_to_binary_op(kind: TokenKind) -> BinaryOp {
 /// Extract label and body from heredoc/nowdoc raw token text.
 /// Input: `<<<LABEL\nbody\nLABEL` or `<<<'LABEL'\nbody\nLABEL`
 /// Returns `(label, body, stripped)` where `stripped` is true if indentation was removed.
-fn parse_heredoc_content(text: &str) -> (String, String, bool) {
-    // Skip <<<
-    let after = text.strip_prefix("<<<").unwrap_or(text);
-    let after = after.trim_start_matches([' ', '\t']);
+/// Returns `(label, body_start_in_text, body_end_in_text, indent)`.
+/// `body_start_in_text` and `body_end_in_text` are byte offsets within `text` bounding
+/// the verbatim heredoc content (with indentation intact, trailing newline stripped).
+/// `indent` is empty for non-indented heredocs.
+fn parse_heredoc_content(text: &str) -> (String, usize, usize, String) {
+    // Skip optional `b` binary prefix, then <<<
+    let b_prefix = if text.starts_with('b') { 1 } else { 0 };
+    let prefix_len = b_prefix + 3; // optional 'b' + "<<<".len()
+    let after_prefix = &text[prefix_len..];
+    let trim_len = after_prefix.len() - after_prefix.trim_start_matches([' ', '\t']).len();
+    let after = &after_prefix[trim_len..];
+    // `after` starts at offset `prefix_len + trim_len` within `text`
+    let after_start = prefix_len + trim_len;
 
     // Extract label
-    let (label, rest) = if let Some(stripped) = after.strip_prefix('\'') {
-        let end = stripped.find('\'').unwrap_or(after.len() - 1);
-        let label = stripped[..end].to_string();
-        let rest = &stripped[end + 1..];
-        (label, rest)
+    let (label, label_consumed) = if let Some(stripped) = after.strip_prefix('\'') {
+        let end = stripped.find('\'').unwrap_or(stripped.len());
+        (stripped[..end].to_string(), 1 + end + 1)
     } else if let Some(stripped) = after.strip_prefix('"') {
-        let end = stripped.find('"').unwrap_or(after.len() - 1);
-        let label = stripped[..end].to_string();
-        let rest = &stripped[end + 1..];
-        (label, rest)
+        let end = stripped.find('"').unwrap_or(stripped.len());
+        (stripped[..end].to_string(), 1 + end + 1)
     } else {
         let end = after
             .find(|c: char| !c.is_ascii_alphanumeric() && c != '_')
             .unwrap_or(after.len());
-        let label = after[..end].to_string();
-        let rest = &after[end..];
-        (label, rest)
+        (after[..end].to_string(), end)
     };
 
+    let rest = &after[label_consumed..];
+    let rest_start = after_start + label_consumed;
+
     // Skip to first newline (end of label line)
-    let body_start = rest.find('\n').map(|p| p + 1).unwrap_or(rest.len());
-    let body = &rest[body_start..];
+    let newline_pos = rest.find('\n').unwrap_or(rest.len());
+    let body_start_in_text = rest_start + newline_pos + 1;
+    let body = &text[body_start_in_text..];
 
     // Find the end-marker line by scanning line-by-line (PHP 7.3+: marker may be indented).
-    // We record the start of that line so we can use it as the content cut point, and
-    // we record the leading whitespace as the indentation to strip from each content line.
     let mut line_start = 0;
     let mut end_line_start = body.len();
     let mut indent = String::new();
@@ -2308,27 +2334,13 @@ fn parse_heredoc_content(text: &str) -> (String, String, bool) {
         };
     }
 
-    // Content is everything before the end-marker line.
+    // Content ends just before the end-marker line, with trailing \r\n stripped.
     let content = &body[..end_line_start];
     let content = content.strip_suffix('\n').unwrap_or(content);
     let content = content.strip_suffix('\r').unwrap_or(content);
+    let body_end_in_text = body_start_in_text + content.len();
 
-    if !indent.is_empty() {
-        let final_content = content
-            .lines()
-            .map(|line| line.strip_prefix(&indent).unwrap_or(line))
-            .collect::<Vec<_>>()
-            .join("\n");
-        (label, final_content, true)
-    } else {
-        (label, content.to_string(), false)
-    }
-}
-
-/// Find the byte offset of the body content within a heredoc token.
-fn find_body_offset(text: &str, token_start: u32) -> u32 {
-    let first_newline = text.find('\n').unwrap_or(text.len());
-    token_start + first_newline as u32 + 1
+    (label, body_start_in_text, body_end_in_text, indent)
 }
 
 /// Parse an integer literal from raw bytes, skipping underscores, without heap allocation.

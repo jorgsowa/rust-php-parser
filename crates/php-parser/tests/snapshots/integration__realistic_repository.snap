@@ -6,8 +6,8 @@ expression: to_json(& result.program)
   "stmts": [
     {
       "kind": {
-        "Declare": [
-          [
+        "Declare": {
+          "directives": [
             [
               "strict_types",
               {
@@ -21,8 +21,8 @@ expression: to_json(& result.program)
               }
             ]
           ],
-          null
-        ]
+          "body": null
+        }
       },
       "span": {
         "start": 6,

@@ -6,8 +6,8 @@ expression: json
   "stmts": [
     {
       "kind": {
-        "Declare": [
-          [
+        "Declare": {
+          "directives": [
             [
               "X",
               {
@@ -21,8 +21,8 @@ expression: json
               }
             ]
           ],
-          null
-        ]
+          "body": null
+        }
       },
       "span": {
         "start": 7,
@@ -31,8 +31,8 @@ expression: json
     },
     {
       "kind": {
-        "Declare": [
-          [
+        "Declare": {
+          "directives": [
             [
               "A",
               {
@@ -58,7 +58,7 @@ expression: json
               }
             ]
           ],
-          {
+          "body": {
             "kind": {
               "Block": [
                 {
@@ -87,7 +87,7 @@ expression: json
               "end": 67
             }
           }
-        ]
+        }
       },
       "span": {
         "start": 25,
@@ -96,8 +96,8 @@ expression: json
     },
     {
       "kind": {
-        "Declare": [
-          [
+        "Declare": {
+          "directives": [
             [
               "A",
               {
@@ -123,7 +123,7 @@ expression: json
               }
             ]
           ],
-          {
+          "body": {
             "kind": {
               "Block": []
             },
@@ -132,7 +132,7 @@ expression: json
               "end": 104
             }
           }
-        ]
+        }
       },
       "span": {
         "start": 69,

@@ -29,8 +29,8 @@ expression: json
     },
     {
       "kind": {
-        "Declare": [
-          [
+        "Declare": {
+          "directives": [
             [
               "ticks",
               {
@@ -44,8 +44,8 @@ expression: json
               }
             ]
           ],
-          null
-        ]
+          "body": null
+        }
       },
       "span": {
         "start": 21,

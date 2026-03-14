@@ -3,7 +3,7 @@ pub fn parse_fixture(file: &str, expect_errors: bool) -> String {
     let source = std::fs::read_to_string(base.join(file))
         .unwrap_or_else(|e| panic!("Failed to read {file}: {e}"));
     let arena = bumpalo::Bump::new();
-    let result = php_parser::parse(&arena, &source);
+    let result = php_rs_parser::parse(&arena, &source);
     if expect_errors {
         assert!(!result.errors.is_empty(), "Expected errors but got none");
     } else {

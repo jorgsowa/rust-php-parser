@@ -203,10 +203,10 @@ expression: json
         "Expression": {
           "kind": {
             "Heredoc": {
-              "label": "b",
+              "label": "EOS",
               "parts": [
                 {
-                  "Literal": "Binary\nEOS"
+                  "Literal": "Binary"
                 }
               ]
             }
