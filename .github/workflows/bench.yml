@@ -25,6 +25,8 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
+        with:
+          save-if: "false"  # bench jobs only restore; CI workflow owns the rust cache
 
       # critcmp compares two named criterion baselines and prints a regression
       # table.  The binary is cached by rust-cache after the first install.
