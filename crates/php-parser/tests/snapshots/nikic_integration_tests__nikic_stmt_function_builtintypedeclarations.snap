@@ -46,7 +46,7 @@ expression: json
                 "kind": {
                   "Named": {
                     "parts": [
-                      "Int"
+                      "int"
                     ],
                     "kind": "Unqualified",
                     "span": {
@@ -77,7 +77,7 @@ expression: json
                 "kind": {
                   "Named": {
                     "parts": [
-                      "FLOAT"
+                      "float"
                     ],
                     "kind": "Unqualified",
                     "span": {
@@ -108,7 +108,7 @@ expression: json
                 "kind": {
                   "Named": {
                     "parts": [
-                      "StRiNg"
+                      "string"
                     ],
                     "kind": "Unqualified",
                     "span": {

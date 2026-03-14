@@ -541,103 +541,96 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     pub fn parse_simple_type(&mut self) -> TypeHint<'arena, 'src> {
         let start = self.start_span();
 
-        // Handle builtin type names that are contextual keywords (identifiers)
+        // Handle builtin type names that are contextual keywords (identifiers).
+        // Use TypeHintKind::Keyword — 1-byte enum discriminant instead of Cow<str>.
         if self.check(TokenKind::Identifier) {
             let text = self.current_text();
-            let is_builtin = text.eq_ignore_ascii_case("int")
-                || text.eq_ignore_ascii_case("integer")
-                || text.eq_ignore_ascii_case("float")
-                || text.eq_ignore_ascii_case("double")
-                || text.eq_ignore_ascii_case("string")
-                || text.eq_ignore_ascii_case("bool")
-                || text.eq_ignore_ascii_case("boolean")
-                || text.eq_ignore_ascii_case("void")
-                || text.eq_ignore_ascii_case("never")
-                || text.eq_ignore_ascii_case("mixed")
-                || text.eq_ignore_ascii_case("object")
-                || text.eq_ignore_ascii_case("iterable")
-                || text.eq_ignore_ascii_case("callable");
-            if is_builtin {
+            let builtin = if text.eq_ignore_ascii_case("int") {
+                Some(BuiltinType::Int)
+            } else if text.eq_ignore_ascii_case("integer") {
+                Some(BuiltinType::Integer)
+            } else if text.eq_ignore_ascii_case("float") {
+                Some(BuiltinType::Float)
+            } else if text.eq_ignore_ascii_case("double") {
+                Some(BuiltinType::Double)
+            } else if text.eq_ignore_ascii_case("string") {
+                Some(BuiltinType::String)
+            } else if text.eq_ignore_ascii_case("bool") {
+                Some(BuiltinType::Bool)
+            } else if text.eq_ignore_ascii_case("boolean") {
+                Some(BuiltinType::Boolean)
+            } else if text.eq_ignore_ascii_case("void") {
+                Some(BuiltinType::Void)
+            } else if text.eq_ignore_ascii_case("never") {
+                Some(BuiltinType::Never)
+            } else if text.eq_ignore_ascii_case("mixed") {
+                Some(BuiltinType::Mixed)
+            } else if text.eq_ignore_ascii_case("object") {
+                Some(BuiltinType::Object)
+            } else if text.eq_ignore_ascii_case("iterable") {
+                Some(BuiltinType::Iterable)
+            } else if text.eq_ignore_ascii_case("callable") {
+                Some(BuiltinType::Callable)
+            } else {
+                None
+            };
+            if let Some(builtin) = builtin {
                 let token = self.advance();
-                let name_text =
-                    Cow::Borrowed(&self.source[token.span.start as usize..token.span.end as usize]);
-                let name = Name::Simple { value: name_text, span: token.span };
                 return TypeHint {
-                    kind: TypeHintKind::Named(name),
+                    kind: TypeHintKind::Keyword(builtin, token.span),
                     span: token.span,
                 };
             }
         }
 
-        // Handle keyword-based types
+        // Handle keyword-token-based types (tokens that are never identifiers).
         match self.current_kind() {
             TokenKind::Array => {
                 let token = self.advance();
                 TypeHint {
-                    kind: TypeHintKind::Named(Name::Simple {
-                        value: Cow::Borrowed("array"),
-                        span: token.span,
-                    }),
+                    kind: TypeHintKind::Keyword(BuiltinType::Array, token.span),
                     span: token.span,
                 }
             }
             TokenKind::Self_ => {
                 let token = self.advance();
                 TypeHint {
-                    kind: TypeHintKind::Named(Name::Simple {
-                        value: Cow::Borrowed("self"),
-                        span: token.span,
-                    }),
+                    kind: TypeHintKind::Keyword(BuiltinType::Self_, token.span),
                     span: token.span,
                 }
             }
             TokenKind::Parent_ => {
                 let token = self.advance();
                 TypeHint {
-                    kind: TypeHintKind::Named(Name::Simple {
-                        value: Cow::Borrowed("parent"),
-                        span: token.span,
-                    }),
+                    kind: TypeHintKind::Keyword(BuiltinType::Parent_, token.span),
                     span: token.span,
                 }
             }
             TokenKind::Static => {
                 let token = self.advance();
                 TypeHint {
-                    kind: TypeHintKind::Named(Name::Simple {
-                        value: Cow::Borrowed("static"),
-                        span: token.span,
-                    }),
+                    kind: TypeHintKind::Keyword(BuiltinType::Static, token.span),
                     span: token.span,
                 }
             }
             TokenKind::Null => {
                 let token = self.advance();
                 TypeHint {
-                    kind: TypeHintKind::Named(Name::Simple {
-                        value: Cow::Borrowed("null"),
-                        span: token.span,
-                    }),
+                    kind: TypeHintKind::Keyword(BuiltinType::Null, token.span),
                     span: token.span,
                 }
             }
             TokenKind::True => {
                 let token = self.advance();
                 TypeHint {
-                    kind: TypeHintKind::Named(Name::Simple {
-                        value: Cow::Borrowed("true"),
-                        span: token.span,
-                    }),
+                    kind: TypeHintKind::Keyword(BuiltinType::True, token.span),
                     span: token.span,
                 }
             }
             TokenKind::False => {
                 let token = self.advance();
                 TypeHint {
-                    kind: TypeHintKind::Named(Name::Simple {
-                        value: Cow::Borrowed("false"),
-                        span: token.span,
-                    }),
+                    kind: TypeHintKind::Keyword(BuiltinType::False, token.span),
                     span: token.span,
                 }
             }

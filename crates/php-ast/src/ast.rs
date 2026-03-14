@@ -91,10 +91,7 @@ pub struct Program<'arena, 'src> {
 /// and relative (`namespace\Foo`) names.
 pub enum Name<'arena, 'src> {
     /// Single unqualified identifier — no `ArenaVec` allocation.
-    Simple {
-        value: Cow<'src, str>,
-        span: Span,
-    },
+    Simple { value: Cow<'src, str>, span: Span },
     /// Multi-part or prefixed name (`Foo\Bar`, `\Foo`, `namespace\Foo`).
     Complex {
         parts: ArenaVec<'arena, Cow<'src, str>>,
@@ -204,18 +201,120 @@ pub enum NameKind {
     Relative,
 }
 
+/// PHP built-in type keyword — zero-cost alternative to `Name::Simple` for the
+/// 20 reserved type names. One byte instead of a `Cow<str>` + `Span` in the AST.
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+pub enum BuiltinType {
+    Int,
+    Integer,
+    Float,
+    Double,
+    String,
+    Bool,
+    Boolean,
+    Void,
+    Never,
+    Mixed,
+    Object,
+    Iterable,
+    Callable,
+    Array,
+    Self_,
+    Parent_,
+    Static,
+    Null,
+    True,
+    False,
+}
+
+impl BuiltinType {
+    /// Returns the canonical lowercase spelling used in PHP and in serialized output.
+    #[inline]
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::Int => "int",
+            Self::Integer => "integer",
+            Self::Float => "float",
+            Self::Double => "double",
+            Self::String => "string",
+            Self::Bool => "bool",
+            Self::Boolean => "boolean",
+            Self::Void => "void",
+            Self::Never => "never",
+            Self::Mixed => "mixed",
+            Self::Object => "object",
+            Self::Iterable => "iterable",
+            Self::Callable => "callable",
+            Self::Array => "array",
+            Self::Self_ => "self",
+            Self::Parent_ => "parent",
+            Self::Static => "static",
+            Self::Null => "null",
+            Self::True => "true",
+            Self::False => "false",
+        }
+    }
+}
+
 #[derive(Debug, Serialize)]
 pub struct TypeHint<'arena, 'src> {
     pub kind: TypeHintKind<'arena, 'src>,
     pub span: Span,
 }
 
-#[derive(Debug, Serialize)]
+/// A PHP type hint.
+///
+/// `Keyword` is the fast path for the 20 built-in type names (`int`, `string`,
+/// `bool`, `self`, `array`, etc.). It stores only a 1-byte discriminant and a
+/// `Span`, avoiding the `Cow<str>` that `Named(Name::Simple)` would require.
+///
+/// Serialises identically to `Named` so all existing snapshots remain unchanged.
+#[derive(Debug)]
 pub enum TypeHintKind<'arena, 'src> {
     Named(Name<'arena, 'src>),
+    /// Built-in type keyword — serialises as `Named` for snapshot compatibility.
+    Keyword(BuiltinType, Span),
     Nullable(&'arena TypeHint<'arena, 'src>),
     Union(ArenaVec<'arena, TypeHint<'arena, 'src>>),
     Intersection(ArenaVec<'arena, TypeHint<'arena, 'src>>),
+}
+
+impl<'arena, 'src> serde::Serialize for TypeHintKind<'arena, 'src> {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+        match self {
+            // Standard variants — match what #[derive(Serialize)] would produce.
+            Self::Named(name) => s.serialize_newtype_variant("TypeHintKind", 0, "Named", name),
+            Self::Nullable(inner) => {
+                s.serialize_newtype_variant("TypeHintKind", 2, "Nullable", inner)
+            }
+            Self::Union(types) => s.serialize_newtype_variant("TypeHintKind", 3, "Union", types),
+            Self::Intersection(types) => {
+                s.serialize_newtype_variant("TypeHintKind", 4, "Intersection", types)
+            }
+            // Keyword — serialise as if it were Named(Name::Simple { value: kw.as_str(), span }).
+            // This preserves all existing snapshot output.
+            Self::Keyword(builtin, span) => {
+                struct BuiltinNameRepr<'a>(&'a BuiltinType, &'a Span);
+                impl serde::Serialize for BuiltinNameRepr<'_> {
+                    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+                        use serde::ser::SerializeStruct;
+                        let mut st = s.serialize_struct("Name", 3)?;
+                        st.serialize_field("parts", &[self.0.as_str()])?;
+                        st.serialize_field("kind", &NameKind::Unqualified)?;
+                        st.serialize_field("span", self.1)?;
+                        st.end()
+                    }
+                }
+                s.serialize_newtype_variant(
+                    "TypeHintKind",
+                    0,
+                    "Named",
+                    &BuiltinNameRepr(builtin, span),
+                )
+            }
+        }
+    }
 }
 
 // =============================================================================
