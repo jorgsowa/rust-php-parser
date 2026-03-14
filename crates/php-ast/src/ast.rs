@@ -698,16 +698,16 @@ pub enum ExprKind<'arena, 'src> {
     NullsafePropertyAccess(PropertyAccessExpr<'arena, 'src>),
 
     /// Method call: `$obj->method(args)`
-    MethodCall(MethodCallExpr<'arena, 'src>),
+    MethodCall(&'arena MethodCallExpr<'arena, 'src>),
 
     /// Nullsafe method call: `$obj?->method(args)`
-    NullsafeMethodCall(MethodCallExpr<'arena, 'src>),
+    NullsafeMethodCall(&'arena MethodCallExpr<'arena, 'src>),
 
     /// Static property access: `Class::$prop`
     StaticPropertyAccess(StaticAccessExpr<'arena, 'src>),
 
     /// Static method call: `Class::method(args)`
-    StaticMethodCall(StaticMethodCallExpr<'arena, 'src>),
+    StaticMethodCall(&'arena StaticMethodCallExpr<'arena, 'src>),
 
     /// Class constant access: `Class::CONST`
     ClassConstAccess(StaticAccessExpr<'arena, 'src>),
