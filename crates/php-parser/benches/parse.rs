@@ -47,7 +47,8 @@ fn bench_corpus(c: &mut Criterion, name: &str, dir: &Path) {
             b.iter(|| {
                 for path in &paths {
                     if let Ok(src) = std::fs::read_to_string(path) {
-                        std::hint::black_box(php_parser::parse(&src));
+                        let arena = bumpalo::Bump::new();
+                        std::hint::black_box(php_parser::parse(&arena, &src));
                     }
                 }
             });

@@ -7,12 +7,13 @@ use php_ast::*;
 /// `inner` is the string content without surrounding quotes — must be a verbatim
 /// subslice of `source` so that sub-parser offsets are correct absolute positions.
 /// `base_offset` is the byte offset of the first character of `inner` in the source.
-pub fn parse_interpolated_parts<'src>(
+pub fn parse_interpolated_parts<'arena, 'src>(
+    arena: &'arena bumpalo::Bump,
     source: &'src str,
     inner: &'src str,
     base_offset: u32,
-) -> Vec<StringPart<'src>> {
-    let mut parts = Vec::with_capacity(4);
+) -> ArenaVec<'arena, StringPart<'arena, 'src>> {
+    let mut parts = ArenaVec::with_capacity_in(4, arena);
     let mut literal = String::new();
     let bytes = inner.as_bytes();
     let len = bytes.len();
@@ -145,8 +146,8 @@ pub fn parse_interpolated_parts<'src>(
                             let span = Span::new(var_offset, base_offset + i as u32);
                             expr = Expr {
                                 kind: ExprKind::PropertyAccess(PropertyAccessExpr {
-                                    object: Box::new(expr),
-                                    property: Box::new(Expr {
+                                    object: arena.alloc(expr),
+                                    property: arena.alloc(Expr {
                                         kind: ExprKind::Identifier(prop_name),
                                         span: prop_span,
                                     }),
@@ -198,8 +199,8 @@ pub fn parse_interpolated_parts<'src>(
                             let _ = bracket_start; // used implicitly
                             expr = Expr {
                                 kind: ExprKind::ArrayAccess(ArrayAccessExpr {
-                                    array: Box::new(expr),
-                                    index: Some(Box::new(index_expr)),
+                                    array: arena.alloc(expr),
+                                    index: Some(arena.alloc(index_expr)),
                                 }),
                                 span,
                             };
@@ -258,7 +259,7 @@ pub fn parse_interpolated_parts<'src>(
                 // Parse the expression using a sub-parser starting at the absolute offset
                 let expr_offset = base_offset + expr_start as u32;
                 let end_offset = base_offset + expr_end as u32;
-                let expr = parse_complex_interpolation(source, expr_offset, end_offset);
+                let expr = parse_complex_interpolation(arena, source, expr_offset, end_offset);
                 parts.push(StringPart::Expr(expr));
             }
             _ => {
@@ -279,8 +280,13 @@ pub fn parse_interpolated_parts<'src>(
 /// Unlike `parse_interpolated_parts`, `inner` may be a de-indented copy that is NOT
 /// a verbatim subslice of the original source, so complex interpolations are parsed
 /// via the old wrapping approach.
-pub fn parse_interpolated_parts_heredoc(inner: &str, base_offset: u32) -> Vec<StringPart<'static>> {
-    let mut parts: Vec<StringPart<'static>> = Vec::with_capacity(4);
+pub fn parse_interpolated_parts_heredoc<'arena>(
+    arena: &'arena bumpalo::Bump,
+    inner: &str,
+    base_offset: u32,
+) -> ArenaVec<'arena, StringPart<'arena, 'static>> {
+    let mut parts: ArenaVec<'arena, StringPart<'arena, 'static>> =
+        ArenaVec::with_capacity_in(4, arena);
     let mut literal = String::new();
     let bytes = inner.as_bytes();
     let len = bytes.len();
@@ -380,7 +386,7 @@ pub fn parse_interpolated_parts_heredoc(inner: &str, base_offset: u32) -> Vec<St
                     let var_name = Cow::Owned(inner[name_start..i].to_string());
                     let var_offset = base_offset + var_start as u32;
 
-                    let mut expr: Expr<'static> = Expr {
+                    let mut expr: Expr<'arena, 'static> = Expr {
                         kind: ExprKind::Variable(var_name),
                         span: Span::new(var_offset, base_offset + i as u32),
                     };
@@ -399,8 +405,8 @@ pub fn parse_interpolated_parts_heredoc(inner: &str, base_offset: u32) -> Vec<St
                             let span = Span::new(var_offset, base_offset + i as u32);
                             expr = Expr {
                                 kind: ExprKind::PropertyAccess(PropertyAccessExpr {
-                                    object: Box::new(expr),
-                                    property: Box::new(Expr {
+                                    object: arena.alloc(expr),
+                                    property: arena.alloc(Expr {
                                         kind: ExprKind::Identifier(prop_name),
                                         span: prop_span,
                                     }),
@@ -442,8 +448,8 @@ pub fn parse_interpolated_parts_heredoc(inner: &str, base_offset: u32) -> Vec<St
                             let _ = bracket_start;
                             expr = Expr {
                                 kind: ExprKind::ArrayAccess(ArrayAccessExpr {
-                                    array: Box::new(expr),
-                                    index: Some(Box::new(index_expr)),
+                                    array: arena.alloc(expr),
+                                    index: Some(arena.alloc(index_expr)),
                                 }),
                                 span,
                             };
@@ -493,7 +499,7 @@ pub fn parse_interpolated_parts_heredoc(inner: &str, base_offset: u32) -> Vec<St
                     i += 1;
                 }
                 let expr_offset = base_offset + expr_start as u32;
-                let expr = parse_complex_interpolation_owned(expr_content, expr_offset);
+                let expr = parse_complex_interpolation_owned(arena, expr_content, expr_offset);
                 parts.push(StringPart::Expr(expr));
             }
             _ => {
@@ -543,8 +549,13 @@ fn is_var_char(b: u8) -> bool {
 
 /// Parse a complex interpolation expression using a sub-parser that starts directly
 /// in the original source at the given offset, avoiding string allocation and span reoffset.
-fn parse_complex_interpolation<'src>(source: &'src str, offset: u32, end: u32) -> Expr<'src> {
-    let mut sub = crate::parser::Parser::new_at(source, offset as usize);
+fn parse_complex_interpolation<'arena, 'src>(
+    arena: &'arena bumpalo::Bump,
+    source: &'src str,
+    offset: u32,
+    end: u32,
+) -> Expr<'arena, 'src> {
+    let mut sub = crate::parser::Parser::new_at(arena, source, offset as usize);
     let expr = crate::expr::parse_expr(&mut sub);
     if matches!(expr.kind, ExprKind::Error) {
         Expr {
@@ -559,15 +570,20 @@ fn parse_complex_interpolation<'src>(source: &'src str, offset: u32, end: u32) -
 /// Parse a complex interpolation from a non-verbatim string (e.g. heredoc body that
 /// may be de-indented). Uses the old wrapping approach since `content` is not a
 /// slice of any single source string.
-fn parse_complex_interpolation_owned(content: &str, offset: u32) -> Expr<'static> {
+fn parse_complex_interpolation_owned<'arena>(
+    arena: &'arena bumpalo::Bump,
+    content: &str,
+    offset: u32,
+) -> Expr<'arena, 'static> {
     // Wrap in a minimal PHP context for parsing
     let wrapped = format!("<?php {};", content);
-    let result = crate::parse(&wrapped);
+    let inner_arena = bumpalo::Bump::new();
+    let result = crate::parse(&inner_arena, &wrapped);
     if let Some(stmt) = result.program.stmts.into_iter().next() {
         if let StmtKind::Expression(expr) = stmt.kind {
-            let mut static_expr = to_static_expr(*expr);
-            reoffset_expr(&mut static_expr, offset, 6); // "<?php " is 6 bytes
-            return static_expr;
+            // Convert to arena-allocated expr and reoffset spans simultaneously.
+            // "<?php " is 6 bytes, so parser_offset=6.
+            return to_arena_expr_reoffset(arena, expr, offset, 6);
         }
     }
     // Fallback: return error expression
@@ -577,103 +593,139 @@ fn parse_complex_interpolation_owned(content: &str, offset: u32) -> Expr<'static
     }
 }
 
-/// Convert an Expr with any lifetime to Expr<'static> by making all string data owned.
-fn to_static_expr(expr: Expr<'_>) -> Expr<'static> {
-    let kind = match expr.kind {
-        ExprKind::Variable(s) => ExprKind::Variable(Cow::Owned(s.into_owned())),
-        ExprKind::Identifier(s) => ExprKind::Identifier(Cow::Owned(s.into_owned())),
-        ExprKind::Int(v) => ExprKind::Int(v),
-        ExprKind::Float(v) => ExprKind::Float(v),
-        ExprKind::String(s) => ExprKind::String(Cow::Owned(s.into_owned())),
-        ExprKind::Bool(v) => ExprKind::Bool(v),
+/// Convert and simultaneously reoffset spans: subtract parser_offset, add target_offset.
+fn to_arena_expr_reoffset<'arena>(
+    arena: &'arena bumpalo::Bump,
+    expr: &Expr<'_, '_>,
+    target_offset: u32,
+    parser_offset: u32,
+) -> Expr<'arena, 'static> {
+    macro_rules! rec {
+        ($e:expr) => {
+            arena.alloc(to_arena_expr_reoffset(
+                arena,
+                $e,
+                target_offset,
+                parser_offset,
+            ))
+        };
+    }
+    macro_rules! rec_args {
+        ($args:expr) => {{
+            let mut args = ArenaVec::with_capacity_in($args.len(), arena);
+            for arg in $args.iter() {
+                args.push(to_arena_arg_reoffset(
+                    arena,
+                    arg,
+                    target_offset,
+                    parser_offset,
+                ));
+            }
+            args
+        }};
+    }
+    let kind = match &expr.kind {
+        ExprKind::Variable(s) => ExprKind::Variable(Cow::Owned(s.as_ref().to_owned())),
+        ExprKind::Identifier(s) => ExprKind::Identifier(Cow::Owned(s.as_ref().to_owned())),
+        ExprKind::Int(v) => ExprKind::Int(*v),
+        ExprKind::Float(v) => ExprKind::Float(*v),
+        ExprKind::String(s) => ExprKind::String(Cow::Owned(s.as_ref().to_owned())),
+        ExprKind::Bool(v) => ExprKind::Bool(*v),
         ExprKind::Null => ExprKind::Null,
         ExprKind::Error => ExprKind::Error,
-        ExprKind::MagicConst(k) => ExprKind::MagicConst(k),
+        ExprKind::MagicConst(k) => ExprKind::MagicConst(*k),
         ExprKind::ArrayAccess(aa) => ExprKind::ArrayAccess(ArrayAccessExpr {
-            array: Box::new(to_static_expr(*aa.array)),
-            index: aa.index.map(|i| Box::new(to_static_expr(*i))),
+            array: rec!(aa.array),
+            index: aa.index.map(|i| {
+                let r: &_ = rec!(i);
+                r
+            }),
         }),
         ExprKind::PropertyAccess(pa) => ExprKind::PropertyAccess(PropertyAccessExpr {
-            object: Box::new(to_static_expr(*pa.object)),
-            property: Box::new(to_static_expr(*pa.property)),
+            object: rec!(pa.object),
+            property: rec!(pa.property),
         }),
         ExprKind::MethodCall(mc) => ExprKind::MethodCall(MethodCallExpr {
-            object: Box::new(to_static_expr(*mc.object)),
-            method: Box::new(to_static_expr(*mc.method)),
-            args: mc.args.into_iter().map(to_static_arg).collect(),
+            object: rec!(mc.object),
+            method: rec!(mc.method),
+            args: rec_args!(mc.args),
         }),
         ExprKind::FunctionCall(fc) => ExprKind::FunctionCall(FunctionCallExpr {
-            name: Box::new(to_static_expr(*fc.name)),
-            args: fc.args.into_iter().map(to_static_arg).collect(),
+            name: rec!(fc.name),
+            args: rec_args!(fc.args),
         }),
         ExprKind::NullsafePropertyAccess(pa) => {
             ExprKind::NullsafePropertyAccess(PropertyAccessExpr {
-                object: Box::new(to_static_expr(*pa.object)),
-                property: Box::new(to_static_expr(*pa.property)),
+                object: rec!(pa.object),
+                property: rec!(pa.property),
             })
         }
         ExprKind::NullsafeMethodCall(mc) => ExprKind::NullsafeMethodCall(MethodCallExpr {
-            object: Box::new(to_static_expr(*mc.object)),
-            method: Box::new(to_static_expr(*mc.method)),
-            args: mc.args.into_iter().map(to_static_arg).collect(),
+            object: rec!(mc.object),
+            method: rec!(mc.method),
+            args: rec_args!(mc.args),
         }),
         ExprKind::StaticPropertyAccess(sa) => ExprKind::StaticPropertyAccess(StaticAccessExpr {
-            class: Box::new(to_static_expr(*sa.class)),
-            member: Cow::Owned(sa.member.into_owned()),
+            class: rec!(sa.class),
+            member: Cow::Owned(sa.member.as_ref().to_owned()),
         }),
         ExprKind::StaticMethodCall(smc) => ExprKind::StaticMethodCall(StaticMethodCallExpr {
-            class: Box::new(to_static_expr(*smc.class)),
-            method: Cow::Owned(smc.method.into_owned()),
-            args: smc.args.into_iter().map(to_static_arg).collect(),
+            class: rec!(smc.class),
+            method: Cow::Owned(smc.method.as_ref().to_owned()),
+            args: rec_args!(smc.args),
         }),
         ExprKind::ClassConstAccess(ca) => ExprKind::ClassConstAccess(StaticAccessExpr {
-            class: Box::new(to_static_expr(*ca.class)),
-            member: Cow::Owned(ca.member.into_owned()),
+            class: rec!(ca.class),
+            member: Cow::Owned(ca.member.as_ref().to_owned()),
         }),
         ExprKind::Binary(be) => ExprKind::Binary(BinaryExpr {
-            left: Box::new(to_static_expr(*be.left)),
+            left: rec!(be.left),
             op: be.op,
-            right: Box::new(to_static_expr(*be.right)),
+            right: rec!(be.right),
         }),
         ExprKind::Assign(ae) => ExprKind::Assign(AssignExpr {
-            target: Box::new(to_static_expr(*ae.target)),
+            target: rec!(ae.target),
             op: ae.op,
-            value: Box::new(to_static_expr(*ae.value)),
+            value: rec!(ae.value),
         }),
         ExprKind::Ternary(te) => ExprKind::Ternary(TernaryExpr {
-            condition: Box::new(to_static_expr(*te.condition)),
-            then_expr: te.then_expr.map(|t| Box::new(to_static_expr(*t))),
-            else_expr: Box::new(to_static_expr(*te.else_expr)),
+            condition: rec!(te.condition),
+            then_expr: te.then_expr.map(|t| {
+                let r: &_ = rec!(t);
+                r
+            }),
+            else_expr: rec!(te.else_expr),
         }),
-        ExprKind::Parenthesized(inner) => ExprKind::Parenthesized(Box::new(to_static_expr(*inner))),
-        ExprKind::VariableVariable(inner) => {
-            ExprKind::VariableVariable(Box::new(to_static_expr(*inner)))
-        }
+        ExprKind::Parenthesized(inner) => ExprKind::Parenthesized(rec!(inner)),
+        ExprKind::VariableVariable(inner) => ExprKind::VariableVariable(rec!(inner)),
         ExprKind::UnaryPrefix(ue) => ExprKind::UnaryPrefix(UnaryPrefixExpr {
             op: ue.op,
-            operand: Box::new(to_static_expr(*ue.operand)),
+            operand: rec!(ue.operand),
         }),
         ExprKind::UnaryPostfix(ue) => ExprKind::UnaryPostfix(UnaryPostfixExpr {
             op: ue.op,
-            operand: Box::new(to_static_expr(*ue.operand)),
+            operand: rec!(ue.operand),
         }),
-        ExprKind::Cast(kind, expr) => ExprKind::Cast(kind, Box::new(to_static_expr(*expr))),
+        ExprKind::Cast(kind, e) => ExprKind::Cast(*kind, rec!(e)),
         ExprKind::NullCoalesce(nc) => ExprKind::NullCoalesce(NullCoalesceExpr {
-            left: Box::new(to_static_expr(*nc.left)),
-            right: Box::new(to_static_expr(*nc.right)),
+            left: rec!(nc.left),
+            right: rec!(nc.right),
         }),
-        ExprKind::ErrorSuppress(inner) => ExprKind::ErrorSuppress(Box::new(to_static_expr(*inner))),
-        ExprKind::Print(inner) => ExprKind::Print(Box::new(to_static_expr(*inner))),
-        ExprKind::Clone(inner) => ExprKind::Clone(Box::new(to_static_expr(*inner))),
-        ExprKind::Exit(opt) => ExprKind::Exit(opt.map(|e| Box::new(to_static_expr(*e)))),
+        ExprKind::ErrorSuppress(inner) => ExprKind::ErrorSuppress(rec!(inner)),
+        ExprKind::Print(inner) => ExprKind::Print(rec!(inner)),
+        ExprKind::Clone(inner) => ExprKind::Clone(rec!(inner)),
+        ExprKind::Exit(opt) => ExprKind::Exit(opt.map(|e| {
+            let r: &_ = rec!(e);
+            r
+        })),
         ExprKind::ClassConstAccessDynamic { class, member } => ExprKind::ClassConstAccessDynamic {
-            class: Box::new(to_static_expr(*class)),
-            member: Box::new(to_static_expr(*member)),
+            class: rec!(class),
+            member: rec!(member),
         },
         ExprKind::StaticPropertyAccessDynamic { class, member } => {
             ExprKind::StaticPropertyAccessDynamic {
-                class: Box::new(to_static_expr(*class)),
-                member: Box::new(to_static_expr(*member)),
+                class: rec!(class),
+                member: rec!(member),
             }
         }
         // For any other expression kinds (complex ones not commonly in interpolation), convert to error
@@ -681,107 +733,29 @@ fn to_static_expr(expr: Expr<'_>) -> Expr<'static> {
     };
     Expr {
         kind,
-        span: expr.span,
+        span: compute_reoffset_span(expr.span, target_offset, parser_offset),
     }
 }
 
-fn to_static_arg(arg: Arg<'_>) -> Arg<'static> {
+fn to_arena_arg_reoffset<'arena>(
+    arena: &'arena bumpalo::Bump,
+    arg: &Arg<'_, '_>,
+    target_offset: u32,
+    parser_offset: u32,
+) -> Arg<'arena, 'static> {
     Arg {
-        name: arg.name.map(|n| Cow::Owned(n.into_owned())),
-        value: to_static_expr(arg.value),
+        name: arg.name.as_ref().map(|n| Cow::Owned(n.as_ref().to_owned())),
+        value: to_arena_expr_reoffset(arena, &arg.value, target_offset, parser_offset),
         unpack: arg.unpack,
-        span: arg.span,
+        span: compute_reoffset_span(arg.span, target_offset, parser_offset),
     }
 }
 
-/// Adjust spans in an expression in-place: subtract `parser_offset` and add `target_offset`.
-fn reoffset_expr(expr: &mut Expr<'static>, target_offset: u32, parser_offset: u32) {
-    reoffset_span(&mut expr.span, target_offset, parser_offset);
-    match &mut expr.kind {
-        ExprKind::Variable(_)
-        | ExprKind::Int(_)
-        | ExprKind::Float(_)
-        | ExprKind::String(_)
-        | ExprKind::Bool(_)
-        | ExprKind::Null
-        | ExprKind::Identifier(_)
-        | ExprKind::Error
-        | ExprKind::MagicConst(_) => {}
-        ExprKind::ArrayAccess(aa) => {
-            reoffset_expr(&mut aa.array, target_offset, parser_offset);
-            if let Some(idx) = &mut aa.index {
-                reoffset_expr(idx, target_offset, parser_offset);
-            }
-        }
-        ExprKind::PropertyAccess(pa) => {
-            reoffset_expr(&mut pa.object, target_offset, parser_offset);
-            reoffset_expr(&mut pa.property, target_offset, parser_offset);
-        }
-        ExprKind::MethodCall(mc) => {
-            reoffset_expr(&mut mc.object, target_offset, parser_offset);
-            reoffset_expr(&mut mc.method, target_offset, parser_offset);
-            for arg in &mut mc.args {
-                reoffset_span(&mut arg.span, target_offset, parser_offset);
-                reoffset_expr(&mut arg.value, target_offset, parser_offset);
-            }
-        }
-        ExprKind::FunctionCall(fc) => {
-            reoffset_expr(&mut fc.name, target_offset, parser_offset);
-            for arg in &mut fc.args {
-                reoffset_span(&mut arg.span, target_offset, parser_offset);
-                reoffset_expr(&mut arg.value, target_offset, parser_offset);
-            }
-        }
-        ExprKind::NullsafePropertyAccess(pa) => {
-            reoffset_expr(&mut pa.object, target_offset, parser_offset);
-            reoffset_expr(&mut pa.property, target_offset, parser_offset);
-        }
-        ExprKind::NullsafeMethodCall(mc) => {
-            reoffset_expr(&mut mc.object, target_offset, parser_offset);
-            reoffset_expr(&mut mc.method, target_offset, parser_offset);
-            for arg in &mut mc.args {
-                reoffset_span(&mut arg.span, target_offset, parser_offset);
-                reoffset_expr(&mut arg.value, target_offset, parser_offset);
-            }
-        }
-        ExprKind::StaticPropertyAccess(sa) => {
-            reoffset_expr(&mut sa.class, target_offset, parser_offset);
-        }
-        ExprKind::StaticMethodCall(smc) => {
-            reoffset_expr(&mut smc.class, target_offset, parser_offset);
-            for arg in &mut smc.args {
-                reoffset_span(&mut arg.span, target_offset, parser_offset);
-                reoffset_expr(&mut arg.value, target_offset, parser_offset);
-            }
-        }
-        ExprKind::ClassConstAccess(ca) => {
-            reoffset_expr(&mut ca.class, target_offset, parser_offset);
-        }
-        ExprKind::Binary(be) => {
-            reoffset_expr(&mut be.left, target_offset, parser_offset);
-            reoffset_expr(&mut be.right, target_offset, parser_offset);
-        }
-        ExprKind::Assign(ae) => {
-            reoffset_expr(&mut ae.target, target_offset, parser_offset);
-            reoffset_expr(&mut ae.value, target_offset, parser_offset);
-        }
-        ExprKind::Ternary(te) => {
-            reoffset_expr(&mut te.condition, target_offset, parser_offset);
-            if let Some(t) = &mut te.then_expr {
-                reoffset_expr(t, target_offset, parser_offset);
-            }
-            reoffset_expr(&mut te.else_expr, target_offset, parser_offset);
-        }
-        ExprKind::Parenthesized(inner) => {
-            reoffset_expr(inner, target_offset, parser_offset);
-        }
-        _ => {}
+fn compute_reoffset_span(span: Span, target_offset: u32, parser_offset: u32) -> Span {
+    if target_offset == 0 && parser_offset == 0 {
+        return span;
     }
-}
-
-fn reoffset_span(span: &mut Span, target_offset: u32, parser_offset: u32) {
     let relative_start = span.start.saturating_sub(parser_offset);
     let relative_end = span.end.saturating_sub(parser_offset);
-    span.start = target_offset + relative_start;
-    span.end = target_offset + relative_end;
+    Span::new(target_offset + relative_start, target_offset + relative_end)
 }

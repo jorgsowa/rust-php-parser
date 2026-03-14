@@ -2,7 +2,8 @@ pub fn parse_fixture(file: &str, expect_errors: bool) -> String {
     let base = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/nikic");
     let source = std::fs::read_to_string(base.join(file))
         .unwrap_or_else(|e| panic!("Failed to read {file}: {e}"));
-    let result = php_parser::parse(&source);
+    let arena = bumpalo::Bump::new();
+    let result = php_parser::parse(&arena, &source);
     if expect_errors {
         assert!(!result.errors.is_empty(), "Expected errors but got none");
     } else {

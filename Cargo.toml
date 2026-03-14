@@ -32,3 +32,4 @@ criterion = { version = "0.5", features = ["html_reports"] }
 walkdir = "2"
 mimalloc = { version = "0.1", default-features = false }
 memchr = "2"
+bumpalo = { version = "3", features = ["collections"] }

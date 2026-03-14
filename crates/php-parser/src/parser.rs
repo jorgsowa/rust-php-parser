@@ -9,7 +9,8 @@ use crate::stmt;
 
 const MAX_ERRORS: usize = 100;
 
-pub struct Parser<'src> {
+pub struct Parser<'arena, 'src> {
+    pub arena: &'arena bumpalo::Bump,
     lexer: Lexer<'src>,
     current: Token,
     pub source: &'src str,
@@ -18,8 +19,8 @@ pub struct Parser<'src> {
     pub depth: u32,
 }
 
-impl<'src> Parser<'src> {
-    pub fn new(source: &'src str) -> Self {
+impl<'arena, 'src> Parser<'arena, 'src> {
+    pub fn new(arena: &'arena bumpalo::Bump, source: &'src str) -> Self {
         let mut lexer = Lexer::new(source);
         let current = lexer.next_token();
         // Drain any lexer errors produced during first token read
@@ -32,6 +33,7 @@ impl<'src> Parser<'src> {
             errors.truncate(MAX_ERRORS);
         }
         Self {
+            arena,
             lexer,
             current,
             source,
@@ -42,7 +44,7 @@ impl<'src> Parser<'src> {
 
     /// Create a parser starting in PHP mode at `offset` within `source`.
     /// Used for parsing interpolation expressions directly in the original source.
-    pub fn new_at(source: &'src str, offset: usize) -> Self {
+    pub fn new_at(arena: &'arena bumpalo::Bump, source: &'src str, offset: usize) -> Self {
         let mut lexer = Lexer::new_at(source, offset);
         let current = lexer.next_token();
         // Drain any lexer errors produced during first token read
@@ -55,6 +57,7 @@ impl<'src> Parser<'src> {
             errors.truncate(MAX_ERRORS);
         }
         Self {
+            arena,
             lexer,
             current,
             source,
@@ -65,6 +68,29 @@ impl<'src> Parser<'src> {
 
     pub fn source(&self) -> &'src str {
         self.source
+    }
+
+    // =========================================================================
+    // Arena helpers
+    // =========================================================================
+
+    #[inline]
+    pub fn alloc<T>(&self, val: T) -> &'arena T {
+        self.arena.alloc(val)
+    }
+    #[inline]
+    pub fn alloc_vec<T>(&self) -> ArenaVec<'arena, T> {
+        ArenaVec::new_in(self.arena)
+    }
+    #[inline]
+    pub fn alloc_vec_with_capacity<T>(&self, cap: usize) -> ArenaVec<'arena, T> {
+        ArenaVec::with_capacity_in(cap, self.arena)
+    }
+    #[inline]
+    pub fn alloc_vec_one<T>(&self, val: T) -> ArenaVec<'arena, T> {
+        let mut v = ArenaVec::with_capacity_in(1, self.arena);
+        v.push(val);
+        v
     }
 
     // =========================================================================
@@ -366,7 +392,7 @@ impl<'src> Parser<'src> {
 
     /// Parse a name: qualified, fully-qualified, relative, or unqualified.
     /// e.g., `Foo`, `Foo\Bar`, `\Foo\Bar`, `namespace\Foo\Bar`
-    pub fn parse_name(&mut self) -> Name<'src> {
+    pub fn parse_name(&mut self) -> Name<'arena, 'src> {
         let start = self.start_span();
 
         // Check for fully qualified: \Foo\Bar
@@ -379,7 +405,7 @@ impl<'src> Parser<'src> {
             self.expect(TokenKind::Backslash);
         }
 
-        let mut parts = Vec::with_capacity(1);
+        let mut parts = self.alloc_vec_with_capacity(1);
 
         // First part
         if let Some((text, _)) = self.eat_identifier_or_keyword() {
@@ -420,7 +446,7 @@ impl<'src> Parser<'src> {
     // =========================================================================
 
     /// Parse a type hint: `?T`, `A|B`, `A&B`, `(A&B)|C` (DNF), or simple type.
-    pub fn parse_type_hint(&mut self) -> TypeHint<'src> {
+    pub fn parse_type_hint(&mut self) -> TypeHint<'arena, 'src> {
         let start = self.start_span();
 
         // Nullable: ?Type
@@ -428,7 +454,7 @@ impl<'src> Parser<'src> {
             let inner = self.parse_simple_type();
             let span = Span::new(start, inner.span.end);
             return TypeHint {
-                kind: TypeHintKind::Nullable(Box::new(inner)),
+                kind: TypeHintKind::Nullable(self.alloc(inner)),
                 span,
             };
         }
@@ -437,7 +463,7 @@ impl<'src> Parser<'src> {
 
         // Union: A|B|C or (A&B)|C (DNF)
         if self.check(TokenKind::Pipe) {
-            let mut types = vec![first];
+            let mut types = self.alloc_vec_one(first);
             while self.eat(TokenKind::Pipe).is_some() {
                 types.push(self.parse_type_element());
             }
@@ -466,7 +492,7 @@ impl<'src> Parser<'src> {
                 )
             );
             if looks_like_type {
-                let mut types = vec![first];
+                let mut types = self.alloc_vec_one(first);
                 while self.eat(TokenKind::Ampersand).is_some() {
                     types.push(self.parse_simple_type());
                 }
@@ -482,11 +508,12 @@ impl<'src> Parser<'src> {
     }
 
     /// Parse a type element: either a simple type or a parenthesized intersection `(A&B)`.
-    fn parse_type_element(&mut self) -> TypeHint<'src> {
+    fn parse_type_element(&mut self) -> TypeHint<'arena, 'src> {
         if self.check(TokenKind::LeftParen) {
             let start = self.start_span();
             self.advance(); // consume (
-            let mut types = vec![self.parse_simple_type()];
+            let first_type = self.parse_simple_type();
+            let mut types = self.alloc_vec_one(first_type);
             while self.eat(TokenKind::Ampersand).is_some() {
                 types.push(self.parse_simple_type());
             }
@@ -505,7 +532,7 @@ impl<'src> Parser<'src> {
     }
 
     /// Parse a simple (non-composite) type: named type from Name or builtin keyword.
-    pub fn parse_simple_type(&mut self) -> TypeHint<'src> {
+    pub fn parse_simple_type(&mut self) -> TypeHint<'arena, 'src> {
         let start = self.start_span();
 
         // Handle builtin type names that are contextual keywords (identifiers)
@@ -532,7 +559,7 @@ impl<'src> Parser<'src> {
                 let name_text =
                     Cow::Borrowed(&self.source[token.span.start as usize..token.span.end as usize]);
                 let name = Name {
-                    parts: vec![name_text],
+                    parts: self.alloc_vec_one(name_text),
                     kind: NameKind::Unqualified,
                     span: token.span,
                 };
@@ -548,7 +575,7 @@ impl<'src> Parser<'src> {
             TokenKind::Array => {
                 let token = self.advance();
                 let name = Name {
-                    parts: vec![Cow::Borrowed("array")],
+                    parts: self.alloc_vec_one(Cow::Borrowed("array")),
                     kind: NameKind::Unqualified,
                     span: token.span,
                 };
@@ -560,7 +587,7 @@ impl<'src> Parser<'src> {
             TokenKind::Self_ => {
                 let token = self.advance();
                 let name = Name {
-                    parts: vec![Cow::Borrowed("self")],
+                    parts: self.alloc_vec_one(Cow::Borrowed("self")),
                     kind: NameKind::Unqualified,
                     span: token.span,
                 };
@@ -572,7 +599,7 @@ impl<'src> Parser<'src> {
             TokenKind::Parent_ => {
                 let token = self.advance();
                 let name = Name {
-                    parts: vec![Cow::Borrowed("parent")],
+                    parts: self.alloc_vec_one(Cow::Borrowed("parent")),
                     kind: NameKind::Unqualified,
                     span: token.span,
                 };
@@ -584,7 +611,7 @@ impl<'src> Parser<'src> {
             TokenKind::Static => {
                 let token = self.advance();
                 let name = Name {
-                    parts: vec![Cow::Borrowed("static")],
+                    parts: self.alloc_vec_one(Cow::Borrowed("static")),
                     kind: NameKind::Unqualified,
                     span: token.span,
                 };
@@ -596,7 +623,7 @@ impl<'src> Parser<'src> {
             TokenKind::Null => {
                 let token = self.advance();
                 let name = Name {
-                    parts: vec![Cow::Borrowed("null")],
+                    parts: self.alloc_vec_one(Cow::Borrowed("null")),
                     kind: NameKind::Unqualified,
                     span: token.span,
                 };
@@ -608,7 +635,7 @@ impl<'src> Parser<'src> {
             TokenKind::True => {
                 let token = self.advance();
                 let name = Name {
-                    parts: vec![Cow::Borrowed("true")],
+                    parts: self.alloc_vec_one(Cow::Borrowed("true")),
                     kind: NameKind::Unqualified,
                     span: token.span,
                 };
@@ -620,7 +647,7 @@ impl<'src> Parser<'src> {
             TokenKind::False => {
                 let token = self.advance();
                 let name = Name {
-                    parts: vec![Cow::Borrowed("false")],
+                    parts: self.alloc_vec_one(Cow::Borrowed("false")),
                     kind: NameKind::Unqualified,
                     span: token.span,
                 };
@@ -668,8 +695,8 @@ impl<'src> Parser<'src> {
     // =========================================================================
 
     /// Parse PHP 8 attributes: `#[Attr]`, `#[Attr(args)]`, `#[A, B]`, stacked `#[A] #[B]`
-    pub fn parse_attributes(&mut self) -> Vec<Attribute<'src>> {
-        let mut attributes = Vec::with_capacity(1);
+    pub fn parse_attributes(&mut self) -> ArenaVec<'arena, Attribute<'arena, 'src>> {
+        let mut attributes = self.alloc_vec_with_capacity(1);
         while self.check(TokenKind::HashBracket) {
             self.advance(); // consume #[
 
@@ -685,7 +712,7 @@ impl<'src> Parser<'src> {
                 let args = if self.check(TokenKind::LeftParen) {
                     crate::expr::parse_arg_list(self)
                 } else {
-                    Vec::new()
+                    self.alloc_vec()
                 };
 
                 let span = Span::new(attr_start, self.current_span().start);
@@ -702,7 +729,7 @@ impl<'src> Parser<'src> {
     }
 
     /// Parse `<?= expr ?>` — the short echo tag produces an implicit echo statement.
-    pub(crate) fn parse_short_echo(&mut self) -> Option<Stmt<'src>> {
+    pub(crate) fn parse_short_echo(&mut self) -> Option<Stmt<'arena, 'src>> {
         if self.check(TokenKind::Eof) || self.check(TokenKind::CloseTag) {
             return None;
         }
@@ -711,7 +738,7 @@ impl<'src> Parser<'src> {
         self.expect_semicolon("short echo tag");
         let span = Span::new(start, self.current_span().start);
         Some(Stmt {
-            kind: StmtKind::Echo(vec![expr]),
+            kind: StmtKind::Echo(self.alloc_vec_one(expr)),
             span,
         })
     }
@@ -720,9 +747,9 @@ impl<'src> Parser<'src> {
     // Top-level parsing
     // =========================================================================
 
-    pub fn parse_program(&mut self) -> Program<'src> {
+    pub fn parse_program(&mut self) -> Program<'arena, 'src> {
         let start = self.start_span();
-        let mut stmts = Vec::with_capacity(16);
+        let mut stmts = self.alloc_vec_with_capacity(16);
 
         // Handle optional inline HTML before PHP tag
         if self.check(TokenKind::InlineHtml) {

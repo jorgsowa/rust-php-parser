@@ -9,6 +9,7 @@ php-ast = { workspace = true }
 php-lexer = { workspace = true }
 miette = { workspace = true }
 thiserror = { workspace = true }
+bumpalo = { workspace = true }
 
 [dev-dependencies]
 insta = { workspace = true }
@@ -17,6 +18,7 @@ serde_json = { workspace = true }
 criterion = { workspace = true }
 walkdir = { workspace = true }
 mimalloc = { workspace = true }
+bumpalo = { workspace = true }
 
 [[bench]]
 name = "parse"
