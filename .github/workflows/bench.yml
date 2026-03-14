@@ -54,16 +54,18 @@ jobs:
         if: github.event_name == 'pull_request'
         run: cargo bench --bench parse -- --save-baseline pr
 
-      # Print a regression table.  Run critcmp unconditionally so the summary
-      # always has output; it exits 0 even when no main baseline is available.
+      # Print a regression table.  always() ensures this runs even when the bench
+      # step above fails, so the summary always has output.
       - name: Compare against main baseline
-        if: github.event_name == 'pull_request'
+        if: always() && github.event_name == 'pull_request'
         run: |
-          echo "### Benchmark comparison (PR vs main)" >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
-          critcmp main pr 2>&1 >> "$GITHUB_STEP_SUMMARY" || \
-            echo "No main baseline available — push to main first to seed the cache." >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "### Benchmark comparison (PR vs main)"
+            echo '```'
+            critcmp main pr 2>&1 || \
+              echo "No main baseline available — push to main first to seed the cache."
+            echo '```'
+          } | tee -a "$GITHUB_STEP_SUMMARY"
 
       # ── Main branch ──────────────────────────────────────────────────────────
       # Full bench with a named baseline so future PR runs can compare against it.
@@ -74,16 +76,18 @@ jobs:
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         run: cargo bench --bench parse -- --save-baseline main 2>&1 | tee /tmp/bench-output.txt
 
-      # Write results to the job summary.  Always runs so the summary is
-      # populated even when the bench step itself fails.
+      # Write results to the job summary.  always() ensures this runs even when
+      # the bench step itself fails.
       - name: Publish benchmark results
-        if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && always()
+        if: always() && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         run: |
-          echo "### Benchmark results (main)" >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
-          cat /tmp/bench-output.txt 2>/dev/null >> "$GITHUB_STEP_SUMMARY" || \
-            echo "(benchmark did not produce output)" >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "### Benchmark results (main)"
+            echo '```'
+            cat /tmp/bench-output.txt 2>/dev/null || \
+              echo "(benchmark did not produce output)"
+            echo '```'
+          } | tee -a "$GITHUB_STEP_SUMMARY"
 
       # Persist the baseline for PR comparisons only when the bench succeeded.
       # Each push to main creates a new entry; the restore-keys prefix on the
