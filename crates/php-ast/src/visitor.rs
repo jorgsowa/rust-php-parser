@@ -150,8 +150,8 @@ pub fn walk_stmt<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
                 }
             }
         }
-        StmtKind::Declare(_, body) => {
-            if let Some(body) = body {
+        StmtKind::Declare(decl) => {
+            if let Some(body) = decl.body {
                 visitor.visit_stmt(body);
             }
         }

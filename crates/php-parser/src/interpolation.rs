@@ -276,25 +276,40 @@ pub fn parse_interpolated_parts<'arena, 'src>(
     parts
 }
 
-/// Parse the inner content of a heredoc body into parts.
-/// Unlike `parse_interpolated_parts`, `inner` may be a de-indented copy that is NOT
-/// a verbatim subslice of the original source, so complex interpolations are parsed
-/// via the old wrapping approach.
-pub fn parse_interpolated_parts_heredoc<'arena>(
+/// Parse the inner content of an indented heredoc body into parts.
+/// `raw_body` must be a verbatim subslice of `source` (with indentation intact).
+/// `body_offset` is the byte offset of `raw_body[0]` within `source`.
+/// `indent` is the indentation prefix stripped from each line (e.g. `"    "`).
+///
+/// At the start and after every newline, `indent.len()` bytes are skipped so that
+/// all source offsets remain accurate. Complex `{$expr}` interpolations are parsed
+/// with a direct sub-parser on `source`, eliminating the wrapping/reoffset overhead
+/// of the old `parse_interpolated_parts_heredoc` path.
+pub fn parse_interpolated_parts_indented<'arena, 'src>(
     arena: &'arena bumpalo::Bump,
-    inner: &str,
-    base_offset: u32,
-) -> ArenaVec<'arena, StringPart<'arena, 'static>> {
-    let mut parts: ArenaVec<'arena, StringPart<'arena, 'static>> =
+    source: &'src str,
+    raw_body: &'src str,
+    body_offset: u32,
+    indent: &str,
+) -> ArenaVec<'arena, StringPart<'arena, 'src>> {
+    let indent_len = indent.len();
+    let mut parts: ArenaVec<'arena, StringPart<'arena, 'src>> =
         ArenaVec::with_capacity_in(4, arena);
     let mut literal = String::new();
-    let bytes = inner.as_bytes();
+    let bytes = raw_body.as_bytes();
     let len = bytes.len();
-    let mut i = 0;
+
+    // Skip leading indent on the first line
+    let mut i = if indent_len > 0 && len >= indent_len && raw_body[..indent_len] == *indent {
+        indent_len
+    } else {
+        0
+    };
 
     while i < len {
         match bytes[i] {
             b'\\' => {
+                // Escape sequences
                 if i + 1 < len {
                     let next = bytes[i + 1];
                     match next {
@@ -341,7 +356,7 @@ pub fn parse_interpolated_parts_heredoc<'arena>(
                                 i += 1;
                             }
                             if i > start {
-                                if let Ok(val) = u8::from_str_radix(&inner[start..i], 16) {
+                                if let Ok(val) = u8::from_str_radix(&raw_body[start..i], 16) {
                                     literal.push(val as char);
                                 }
                             } else {
@@ -355,7 +370,7 @@ pub fn parse_interpolated_parts_heredoc<'arena>(
                             while i < len && i - start < 3 && bytes[i] >= b'0' && bytes[i] <= b'7' {
                                 i += 1;
                             }
-                            if let Ok(val) = u8::from_str_radix(&inner[start..i], 8) {
+                            if let Ok(val) = u8::from_str_radix(&raw_body[start..i], 8) {
                                 literal.push(val as char);
                             }
                         }
@@ -370,6 +385,15 @@ pub fn parse_interpolated_parts_heredoc<'arena>(
                     i += 1;
                 }
             }
+            b'\n' => {
+                // Preserve the newline in the literal, then skip the indent on the next line
+                literal.push('\n');
+                i += 1;
+                if indent_len > 0 && i + indent_len <= len && raw_body[i..i + indent_len] == *indent
+                {
+                    i += indent_len;
+                }
+            }
             b'$' => {
                 if i + 1 < len && is_var_start(bytes[i + 1]) {
                     if !literal.is_empty() {
@@ -378,17 +402,18 @@ pub fn parse_interpolated_parts_heredoc<'arena>(
                         ))));
                     }
                     let var_start = i;
-                    i += 1;
+                    i += 1; // skip $
                     let name_start = i;
                     while i < len && is_var_char(bytes[i]) {
                         i += 1;
                     }
-                    let var_name = Cow::Owned(inner[name_start..i].to_string());
-                    let var_offset = base_offset + var_start as u32;
+                    // raw_body is &'src str so we can borrow directly
+                    let var_name: Cow<'src, str> = Cow::Borrowed(&raw_body[name_start..i]);
+                    let var_offset = body_offset + var_start as u32;
 
-                    let mut expr: Expr<'arena, 'static> = Expr {
+                    let mut expr = Expr {
                         kind: ExprKind::Variable(var_name),
-                        span: Span::new(var_offset, base_offset + i as u32),
+                        span: Span::new(var_offset, body_offset + i as u32),
                     };
 
                     if i + 2 < len && bytes[i] == b'-' && bytes[i + 1] == b'>' {
@@ -399,10 +424,11 @@ pub fn parse_interpolated_parts_heredoc<'arena>(
                             while i < len && is_var_char(bytes[i]) {
                                 i += 1;
                             }
-                            let prop_name = Cow::Owned(inner[pname_start..i].to_string());
+                            let prop_name: Cow<'src, str> =
+                                Cow::Borrowed(&raw_body[pname_start..i]);
                             let prop_span =
-                                Span::new(base_offset + pname_start as u32, base_offset + i as u32);
-                            let span = Span::new(var_offset, base_offset + i as u32);
+                                Span::new(body_offset + pname_start as u32, body_offset + i as u32);
+                            let span = Span::new(var_offset, body_offset + i as u32);
                             expr = Expr {
                                 kind: ExprKind::PropertyAccess(PropertyAccessExpr {
                                     object: arena.alloc(expr),
@@ -417,17 +443,16 @@ pub fn parse_interpolated_parts_heredoc<'arena>(
                     }
 
                     if i < len && bytes[i] == b'[' {
-                        let bracket_start = i;
-                        i += 1;
+                        i += 1; // skip [
                         let idx_start = i;
                         while i < len && bytes[i] != b']' {
                             i += 1;
                         }
                         if i < len && bytes[i] == b']' {
-                            let idx_str = &inner[idx_start..i];
-                            i += 1;
-                            let idx_offset = base_offset + idx_start as u32;
-                            let idx_end = base_offset + (i - 1) as u32;
+                            let idx_str = &raw_body[idx_start..i];
+                            i += 1; // skip ]
+                            let idx_offset = body_offset + idx_start as u32;
+                            let idx_end = body_offset + (i - 1) as u32;
                             let index_expr = if let Ok(num) = idx_str.parse::<i64>() {
                                 Expr {
                                     kind: ExprKind::Int(num),
@@ -435,17 +460,20 @@ pub fn parse_interpolated_parts_heredoc<'arena>(
                                 }
                             } else if idx_str.starts_with('$') && idx_str.len() > 1 {
                                 Expr {
-                                    kind: ExprKind::Variable(Cow::Owned(idx_str[1..].to_string())),
+                                    kind: ExprKind::Variable(Cow::Borrowed(
+                                        &raw_body[idx_start + 1..i - 1],
+                                    )),
                                     span: Span::new(idx_offset, idx_end),
                                 }
                             } else {
                                 Expr {
-                                    kind: ExprKind::String(Cow::Owned(idx_str.to_string())),
+                                    kind: ExprKind::String(Cow::Borrowed(
+                                        &raw_body[idx_start..i - 1],
+                                    )),
                                     span: Span::new(idx_offset, idx_end),
                                 }
                             };
-                            let span = Span::new(var_offset, base_offset + i as u32);
-                            let _ = bracket_start;
+                            let span = Span::new(var_offset, body_offset + i as u32);
                             expr = Expr {
                                 kind: ExprKind::ArrayAccess(ArrayAccessExpr {
                                     array: arena.alloc(expr),
@@ -494,12 +522,15 @@ pub fn parse_interpolated_parts_heredoc<'arena>(
                         i += 1;
                     }
                 }
-                let expr_content = &inner[expr_start..i];
+                let expr_end = i;
                 if depth == 0 {
-                    i += 1;
+                    i += 1; // skip }
                 }
-                let expr_offset = base_offset + expr_start as u32;
-                let expr = parse_complex_interpolation_owned(arena, expr_content, expr_offset);
+                // raw_body is a verbatim source slice, so body_offset + expr_start is the
+                // correct absolute position — use the fast sub-parser path directly.
+                let expr_offset = body_offset + expr_start as u32;
+                let end_offset = body_offset + expr_end as u32;
+                let expr = parse_complex_interpolation(arena, source, expr_offset, end_offset);
                 parts.push(StringPart::Expr(expr));
             }
             _ => {
@@ -515,7 +546,6 @@ pub fn parse_interpolated_parts_heredoc<'arena>(
 
     parts
 }
-
 /// Check if a string inner content contains interpolation (unescaped $)
 pub fn has_interpolation(inner: &str) -> bool {
     let bytes = inner.as_bytes();
@@ -567,195 +597,37 @@ fn parse_complex_interpolation<'arena, 'src>(
     }
 }
 
-/// Parse a complex interpolation from a non-verbatim string (e.g. heredoc body that
-/// may be de-indented). Uses the old wrapping approach since `content` is not a
-/// slice of any single source string.
-fn parse_complex_interpolation_owned<'arena>(
-    arena: &'arena bumpalo::Bump,
-    content: &str,
-    offset: u32,
-) -> Expr<'arena, 'static> {
-    // Wrap in a minimal PHP context for parsing
-    let wrapped = format!("<?php {};", content);
-    let inner_arena = bumpalo::Bump::new();
-    let result = crate::parse(&inner_arena, &wrapped);
-    if let Some(stmt) = result.program.stmts.into_iter().next() {
-        if let StmtKind::Expression(expr) = stmt.kind {
-            // Convert to arena-allocated expr and reoffset spans simultaneously.
-            // "<?php " is 6 bytes, so parser_offset=6.
-            return to_arena_expr_reoffset(arena, expr, offset, 6);
-        }
-    }
-    // Fallback: return error expression
-    Expr {
-        kind: ExprKind::Error,
-        span: Span::new(offset, offset + content.len() as u32),
-    }
-}
+#[cfg(test)]
+mod tests {
+    #[allow(unused_imports)]
+    use super::*;
 
-/// Convert and simultaneously reoffset spans: subtract parser_offset, add target_offset.
-fn to_arena_expr_reoffset<'arena>(
-    arena: &'arena bumpalo::Bump,
-    expr: &Expr<'_, '_>,
-    target_offset: u32,
-    parser_offset: u32,
-) -> Expr<'arena, 'static> {
-    macro_rules! rec {
-        ($e:expr) => {
-            arena.alloc(to_arena_expr_reoffset(
-                arena,
-                $e,
-                target_offset,
-                parser_offset,
-            ))
-        };
+    fn parse_src(src: &'static str) -> crate::ParseResult<'static, 'static> {
+        let arena: &'static bumpalo::Bump = Box::leak(Box::new(bumpalo::Bump::new()));
+        crate::parse(arena, src)
     }
-    macro_rules! rec_args {
-        ($args:expr) => {{
-            let mut args = ArenaVec::with_capacity_in($args.len(), arena);
-            for arg in $args.iter() {
-                args.push(to_arena_arg_reoffset(
-                    arena,
-                    arg,
-                    target_offset,
-                    parser_offset,
-                ));
-            }
-            args
-        }};
-    }
-    let kind = match &expr.kind {
-        ExprKind::Variable(s) => ExprKind::Variable(Cow::Owned(s.as_ref().to_owned())),
-        ExprKind::Identifier(s) => ExprKind::Identifier(Cow::Owned(s.as_ref().to_owned())),
-        ExprKind::Int(v) => ExprKind::Int(*v),
-        ExprKind::Float(v) => ExprKind::Float(*v),
-        ExprKind::String(s) => ExprKind::String(Cow::Owned(s.as_ref().to_owned())),
-        ExprKind::Bool(v) => ExprKind::Bool(*v),
-        ExprKind::Null => ExprKind::Null,
-        ExprKind::Error => ExprKind::Error,
-        ExprKind::MagicConst(k) => ExprKind::MagicConst(*k),
-        ExprKind::ArrayAccess(aa) => ExprKind::ArrayAccess(ArrayAccessExpr {
-            array: rec!(aa.array),
-            index: aa.index.map(|i| {
-                let r: &_ = rec!(i);
-                r
-            }),
-        }),
-        ExprKind::PropertyAccess(pa) => ExprKind::PropertyAccess(PropertyAccessExpr {
-            object: rec!(pa.object),
-            property: rec!(pa.property),
-        }),
-        ExprKind::MethodCall(mc) => ExprKind::MethodCall(MethodCallExpr {
-            object: rec!(mc.object),
-            method: rec!(mc.method),
-            args: rec_args!(mc.args),
-        }),
-        ExprKind::FunctionCall(fc) => ExprKind::FunctionCall(FunctionCallExpr {
-            name: rec!(fc.name),
-            args: rec_args!(fc.args),
-        }),
-        ExprKind::NullsafePropertyAccess(pa) => {
-            ExprKind::NullsafePropertyAccess(PropertyAccessExpr {
-                object: rec!(pa.object),
-                property: rec!(pa.property),
-            })
-        }
-        ExprKind::NullsafeMethodCall(mc) => ExprKind::NullsafeMethodCall(MethodCallExpr {
-            object: rec!(mc.object),
-            method: rec!(mc.method),
-            args: rec_args!(mc.args),
-        }),
-        ExprKind::StaticPropertyAccess(sa) => ExprKind::StaticPropertyAccess(StaticAccessExpr {
-            class: rec!(sa.class),
-            member: Cow::Owned(sa.member.as_ref().to_owned()),
-        }),
-        ExprKind::StaticMethodCall(smc) => ExprKind::StaticMethodCall(StaticMethodCallExpr {
-            class: rec!(smc.class),
-            method: Cow::Owned(smc.method.as_ref().to_owned()),
-            args: rec_args!(smc.args),
-        }),
-        ExprKind::ClassConstAccess(ca) => ExprKind::ClassConstAccess(StaticAccessExpr {
-            class: rec!(ca.class),
-            member: Cow::Owned(ca.member.as_ref().to_owned()),
-        }),
-        ExprKind::Binary(be) => ExprKind::Binary(BinaryExpr {
-            left: rec!(be.left),
-            op: be.op,
-            right: rec!(be.right),
-        }),
-        ExprKind::Assign(ae) => ExprKind::Assign(AssignExpr {
-            target: rec!(ae.target),
-            op: ae.op,
-            value: rec!(ae.value),
-        }),
-        ExprKind::Ternary(te) => ExprKind::Ternary(TernaryExpr {
-            condition: rec!(te.condition),
-            then_expr: te.then_expr.map(|t| {
-                let r: &_ = rec!(t);
-                r
-            }),
-            else_expr: rec!(te.else_expr),
-        }),
-        ExprKind::Parenthesized(inner) => ExprKind::Parenthesized(rec!(inner)),
-        ExprKind::VariableVariable(inner) => ExprKind::VariableVariable(rec!(inner)),
-        ExprKind::UnaryPrefix(ue) => ExprKind::UnaryPrefix(UnaryPrefixExpr {
-            op: ue.op,
-            operand: rec!(ue.operand),
-        }),
-        ExprKind::UnaryPostfix(ue) => ExprKind::UnaryPostfix(UnaryPostfixExpr {
-            op: ue.op,
-            operand: rec!(ue.operand),
-        }),
-        ExprKind::Cast(kind, e) => ExprKind::Cast(*kind, rec!(e)),
-        ExprKind::NullCoalesce(nc) => ExprKind::NullCoalesce(NullCoalesceExpr {
-            left: rec!(nc.left),
-            right: rec!(nc.right),
-        }),
-        ExprKind::ErrorSuppress(inner) => ExprKind::ErrorSuppress(rec!(inner)),
-        ExprKind::Print(inner) => ExprKind::Print(rec!(inner)),
-        ExprKind::Clone(inner) => ExprKind::Clone(rec!(inner)),
-        ExprKind::Exit(opt) => ExprKind::Exit(opt.map(|e| {
-            let r: &_ = rec!(e);
-            r
-        })),
-        ExprKind::ClassConstAccessDynamic { class, member } => ExprKind::ClassConstAccessDynamic {
-            class: rec!(class),
-            member: rec!(member),
-        },
-        ExprKind::StaticPropertyAccessDynamic { class, member } => {
-            ExprKind::StaticPropertyAccessDynamic {
-                class: rec!(class),
-                member: rec!(member),
-            }
-        }
-        // For any other expression kinds (complex ones not commonly in interpolation), convert to error
-        _ => ExprKind::Error,
-    };
-    Expr {
-        kind,
-        span: compute_reoffset_span(expr.span, target_offset, parser_offset),
-    }
-}
 
-fn to_arena_arg_reoffset<'arena>(
-    arena: &'arena bumpalo::Bump,
-    arg: &Arg<'_, '_>,
-    target_offset: u32,
-    parser_offset: u32,
-) -> Arg<'arena, 'static> {
-    Arg {
-        name: arg.name.as_ref().map(|n| Cow::Owned(n.as_ref().to_owned())),
-        value: to_arena_expr_reoffset(arena, &arg.value, target_offset, parser_offset),
-        unpack: arg.unpack,
-        span: compute_reoffset_span(arg.span, target_offset, parser_offset),
+    #[test]
+    fn indented_heredoc_simple_var() {
+        let result = parse_src("<?php\n$x = <<<END\n    Hello $name!\n    END;\n");
+        assert!(result.errors.is_empty(), "{:?}", result.errors);
     }
-}
 
-fn compute_reoffset_span(span: Span, target_offset: u32, parser_offset: u32) -> Span {
-    if target_offset == 0 && parser_offset == 0 {
-        return span;
+    #[test]
+    fn indented_heredoc_complex_interpolation() {
+        let result = parse_src("<?php\n$x = <<<END\n    Hello {$obj->name}!\n    END;\n");
+        assert!(result.errors.is_empty(), "{:?}", result.errors);
     }
-    let relative_start = span.start.saturating_sub(parser_offset);
-    let relative_end = span.end.saturating_sub(parser_offset);
-    Span::new(target_offset + relative_start, target_offset + relative_end)
+
+    #[test]
+    fn indented_heredoc_multiline_interpolation() {
+        let result = parse_src("<?php\n$x = <<<END\n    Line 1 {$a}\n    Line 2 {$b}\n    END;\n");
+        assert!(result.errors.is_empty(), "{:?}", result.errors);
+    }
+
+    #[test]
+    fn indented_nowdoc() {
+        let result = parse_src("<?php\n$x = <<<'END'\n    Hello world!\n    END;\n");
+        assert!(result.errors.is_empty(), "{:?}", result.errors);
+    }
 }

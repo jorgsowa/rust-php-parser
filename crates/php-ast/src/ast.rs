@@ -191,10 +191,7 @@ pub enum StmtKind<'arena, 'src> {
     Label(&'src str),
 
     /// Declare statement
-    Declare(
-        ArenaVec<'arena, (&'src str, Expr<'arena, 'src>)>,
-        Option<&'arena Stmt<'arena, 'src>>,
-    ),
+    Declare(&'arena DeclareStmt<'arena, 'src>),
 
     /// Unset statement
     Unset(ArenaVec<'arena, Expr<'arena, 'src>>),
@@ -224,7 +221,7 @@ pub enum StmtKind<'arena, 'src> {
     Namespace(&'arena NamespaceDecl<'arena, 'src>),
 
     /// Use declaration
-    Use(UseDecl<'arena, 'src>),
+    Use(&'arena UseDecl<'arena, 'src>),
 
     /// Top-level constant: `const FOO = expr;`
     Const(ArenaVec<'arena, ConstItem<'arena, 'src>>),
@@ -533,6 +530,12 @@ pub struct NamespaceDecl<'arena, 'src> {
 pub enum NamespaceBody<'arena, 'src> {
     Braced(ArenaVec<'arena, Stmt<'arena, 'src>>),
     Simple,
+}
+
+#[derive(Debug, Serialize)]
+pub struct DeclareStmt<'arena, 'src> {
+    pub directives: ArenaVec<'arena, (&'src str, Expr<'arena, 'src>)>,
+    pub body: Option<&'arena Stmt<'arena, 'src>>,
 }
 
 #[derive(Debug, Serialize)]

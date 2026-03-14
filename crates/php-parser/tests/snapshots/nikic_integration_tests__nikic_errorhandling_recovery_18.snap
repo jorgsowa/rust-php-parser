@@ -347,8 +347,8 @@ expression: json
     },
     {
       "kind": {
-        "Declare": [
-          [
+        "Declare": {
+          "directives": [
             [
               "a",
               {
@@ -362,8 +362,8 @@ expression: json
               }
             ]
           ],
-          null
-        ]
+          "body": null
+        }
       },
       "span": {
         "start": 245,

@@ -10,16 +10,16 @@ Inspired by and tested against the [nikic/PHP-Parser](https://github.com/nikic/P
 
 Cargo workspace with three crates:
 
-| Crate | Purpose |
-|-------|---------|
-| **php-lexer** | Hand-written tokenizer with handling for strings, heredoc/nowdoc, and inline HTML |
-| **php-ast** | AST type definitions, serializable via Serde |
-| **php-parser** | Pratt-based recursive descent parser with panic-mode error recovery |
+| Crate | crates.io | Purpose |
+|-------|-----------|---------|
+| **php-lexer** | [![crates.io](https://img.shields.io/crates/v/php-lexer)](https://crates.io/crates/php-lexer) | Hand-written tokenizer with handling for strings, heredoc/nowdoc, and inline HTML |
+| **php-ast** | [![crates.io](https://img.shields.io/crates/v/php-ast)](https://crates.io/crates/php-ast) | AST type definitions, serializable via Serde |
+| **php-rs-parser** | [![crates.io](https://img.shields.io/crates/v/php-rs-parser)](https://crates.io/crates/php-rs-parser) | Pratt-based recursive descent parser with panic-mode error recovery |
 
 ## Usage
 
 ```rust
-use php_parser::parse;
+use php_rs_parser::parse;
 
 let result = parse("<?php echo 'Hello, world!';");
 

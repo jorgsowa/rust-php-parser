@@ -6,8 +6,8 @@ expression: to_json(&result.program)
   "stmts": [
     {
       "kind": {
-        "Declare": [
-          [
+        "Declare": {
+          "directives": [
             [
               "ticks",
               {
@@ -21,7 +21,7 @@ expression: to_json(&result.program)
               }
             ]
           ],
-          {
+          "body": {
             "kind": {
               "Block": [
                 {
@@ -50,7 +50,7 @@ expression: to_json(&result.program)
               "end": 43
             }
           }
-        ]
+        }
       },
       "span": {
         "start": 6,

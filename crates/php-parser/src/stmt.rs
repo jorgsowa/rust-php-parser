@@ -1343,7 +1343,7 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
 
     let span = Span::new(start, parser.current_span().start);
     Stmt {
-        kind: StmtKind::Declare(directives, body),
+        kind: StmtKind::Declare(parser.alloc(DeclareStmt { directives, body })),
         span,
     }
 }
@@ -2821,7 +2821,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
     parser.expect(TokenKind::Semicolon);
     let span = Span::new(start, parser.current_span().start);
     Stmt {
-        kind: StmtKind::Use(UseDecl { kind, uses }),
+        kind: StmtKind::Use(parser.alloc(UseDecl { kind, uses })),
         span,
     }
 }
