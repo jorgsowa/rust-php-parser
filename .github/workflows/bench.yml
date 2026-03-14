@@ -5,6 +5,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   bench:
@@ -25,6 +26,8 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
+        with:
+          save-if: "false"  # bench jobs only restore; CI workflow owns the rust cache
 
       # critcmp compares two named criterion baselines and prints a regression
       # table.  The binary is cached by rust-cache after the first install.
@@ -51,36 +54,42 @@ jobs:
         if: github.event_name == 'pull_request'
         run: cargo bench --bench parse -- --save-baseline pr
 
-      # Print a regression table when a baseline is available.  GitHub-runner
-      # variance is typically ±5 %, so we display all changes but do not fail
-      # the job automatically — humans review the table and decide.
+      # Print a regression table.  Run critcmp unconditionally so the summary
+      # always has output; it exits 0 even when no main baseline is available.
       - name: Compare against main baseline
         if: github.event_name == 'pull_request'
         run: |
-          if find target/criterion -name estimates.json -path '*/main/*' -quit 2>/dev/null | grep -q .; then
-            echo "### Benchmark comparison (PR vs main)" >> "$GITHUB_STEP_SUMMARY"
-            echo '```' >> "$GITHUB_STEP_SUMMARY"
-            critcmp main pr --threshold 3 >> "$GITHUB_STEP_SUMMARY" 2>&1 || true
-            echo '```' >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "No main baseline found in cache — skipping comparison." >> "$GITHUB_STEP_SUMMARY"
-          fi
+          echo "### Benchmark comparison (PR vs main)" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          critcmp main pr 2>&1 >> "$GITHUB_STEP_SUMMARY" || \
+            echo "No main baseline available — push to main first to seed the cache." >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
 
       # ── Main branch ──────────────────────────────────────────────────────────
       # Full bench with a named baseline so future PR runs can compare against it.
+      # The bench run is its own step so that the publish step can use if: always()
+      # to write the summary even when cargo bench fails.
       - name: Benchmark (main)
-        if: github.event_name == 'push'
+        id: bench-main
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        run: cargo bench --bench parse -- --save-baseline main 2>&1 | tee /tmp/bench-output.txt
+
+      # Write results to the job summary.  Always runs so the summary is
+      # populated even when the bench step itself fails.
+      - name: Publish benchmark results
+        if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && always()
         run: |
-          cargo bench --bench parse -- --save-baseline main 2>&1 | tee /tmp/bench-output.txt
           echo "### Benchmark results (main)" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
-          cat /tmp/bench-output.txt >> "$GITHUB_STEP_SUMMARY"
+          cat /tmp/bench-output.txt 2>/dev/null >> "$GITHUB_STEP_SUMMARY" || \
+            echo "(benchmark did not produce output)" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
-      # Persist the baseline for PR comparisons.  Each push to main overwrites
-      # the previous entry via the restore-keys prefix on the PR restore step.
+      # Persist the baseline for PR comparisons only when the bench succeeded.
+      # Each push to main creates a new entry; the restore-keys prefix on the
+      # PR restore step picks up the latest one.
       - name: Save criterion baseline
-        if: github.event_name == 'push'
+        if: steps.bench-main.outcome == 'success'
         uses: actions/cache/save@v4
         with:
           path: target/criterion
@@ -89,7 +98,7 @@ jobs:
       # Keep the full HTML report (graphs, distributions) as a downloadable
       # artifact for manual inspection.
       - name: Upload benchmark report
-        if: github.event_name == 'push'
+        if: steps.bench-main.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: criterion-report-${{ github.sha }}
