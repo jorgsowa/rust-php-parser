@@ -3,53 +3,59 @@ use crate::ast::*;
 /// Visitor trait for AST traversal. All methods have default implementations
 /// that recursively walk child nodes, so implementors only need to override
 /// the node types they care about.
-pub trait Visitor<'src> {
-    fn visit_program(&mut self, program: &Program<'src>) {
+pub trait Visitor<'arena, 'src> {
+    fn visit_program(&mut self, program: &Program<'arena, 'src>) {
         walk_program(self, program);
     }
 
-    fn visit_stmt(&mut self, stmt: &Stmt<'src>) {
+    fn visit_stmt(&mut self, stmt: &Stmt<'arena, 'src>) {
         walk_stmt(self, stmt);
     }
 
-    fn visit_expr(&mut self, expr: &Expr<'src>) {
+    fn visit_expr(&mut self, expr: &Expr<'arena, 'src>) {
         walk_expr(self, expr);
     }
 
-    fn visit_param(&mut self, param: &Param<'src>) {
+    fn visit_param(&mut self, param: &Param<'arena, 'src>) {
         walk_param(self, param);
     }
 
-    fn visit_arg(&mut self, arg: &Arg<'src>) {
+    fn visit_arg(&mut self, arg: &Arg<'arena, 'src>) {
         walk_arg(self, arg);
     }
 
-    fn visit_class_member(&mut self, member: &ClassMember<'src>) {
+    fn visit_class_member(&mut self, member: &ClassMember<'arena, 'src>) {
         walk_class_member(self, member);
     }
 
-    fn visit_enum_member(&mut self, member: &EnumMember<'src>) {
+    fn visit_enum_member(&mut self, member: &EnumMember<'arena, 'src>) {
         walk_enum_member(self, member);
     }
 
-    fn visit_property_hook(&mut self, hook: &PropertyHook<'src>) {
+    fn visit_property_hook(&mut self, hook: &PropertyHook<'arena, 'src>) {
         walk_property_hook(self, hook);
     }
 }
 
-pub fn walk_program<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, program: &Program<'src>) {
-    for stmt in &program.stmts {
+pub fn walk_program<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
+    visitor: &mut V,
+    program: &Program<'arena, 'src>,
+) {
+    for stmt in program.stmts.iter() {
         visitor.visit_stmt(stmt);
     }
 }
 
-pub fn walk_stmt<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, stmt: &Stmt<'src>) {
+pub fn walk_stmt<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
+    visitor: &mut V,
+    stmt: &Stmt<'arena, 'src>,
+) {
     match &stmt.kind {
         StmtKind::Expression(expr) => {
             visitor.visit_expr(expr);
         }
         StmtKind::Echo(exprs) => {
-            for expr in exprs {
+            for expr in exprs.iter() {
                 visitor.visit_expr(expr);
             }
         }
@@ -59,14 +65,14 @@ pub fn walk_stmt<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, stmt: &Stmt<'
             }
         }
         StmtKind::Block(stmts) => {
-            for stmt in stmts {
+            for stmt in stmts.iter() {
                 visitor.visit_stmt(stmt);
             }
         }
         StmtKind::If(if_stmt) => {
             visitor.visit_expr(&if_stmt.condition);
-            visitor.visit_stmt(&if_stmt.then_branch);
-            for elseif in &if_stmt.elseif_branches {
+            visitor.visit_stmt(if_stmt.then_branch);
+            for elseif in if_stmt.elseif_branches.iter() {
                 visitor.visit_expr(&elseif.condition);
                 visitor.visit_stmt(&elseif.body);
             }
@@ -76,19 +82,19 @@ pub fn walk_stmt<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, stmt: &Stmt<'
         }
         StmtKind::While(while_stmt) => {
             visitor.visit_expr(&while_stmt.condition);
-            visitor.visit_stmt(&while_stmt.body);
+            visitor.visit_stmt(while_stmt.body);
         }
         StmtKind::For(for_stmt) => {
-            for expr in &for_stmt.init {
+            for expr in for_stmt.init.iter() {
                 visitor.visit_expr(expr);
             }
-            for expr in &for_stmt.condition {
+            for expr in for_stmt.condition.iter() {
                 visitor.visit_expr(expr);
             }
-            for expr in &for_stmt.update {
+            for expr in for_stmt.update.iter() {
                 visitor.visit_expr(expr);
             }
-            visitor.visit_stmt(&for_stmt.body);
+            visitor.visit_stmt(for_stmt.body);
         }
         StmtKind::Foreach(foreach_stmt) => {
             visitor.visit_expr(&foreach_stmt.expr);
@@ -96,17 +102,17 @@ pub fn walk_stmt<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, stmt: &Stmt<'
                 visitor.visit_expr(key);
             }
             visitor.visit_expr(&foreach_stmt.value);
-            visitor.visit_stmt(&foreach_stmt.body);
+            visitor.visit_stmt(foreach_stmt.body);
         }
         StmtKind::DoWhile(do_while) => {
-            visitor.visit_stmt(&do_while.body);
+            visitor.visit_stmt(do_while.body);
             visitor.visit_expr(&do_while.condition);
         }
         StmtKind::Function(func) => {
-            for param in &func.params {
+            for param in func.params.iter() {
                 visitor.visit_param(param);
             }
-            for stmt in &func.body {
+            for stmt in func.body.iter() {
                 visitor.visit_stmt(stmt);
             }
         }
@@ -117,11 +123,11 @@ pub fn walk_stmt<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, stmt: &Stmt<'
         }
         StmtKind::Switch(switch_stmt) => {
             visitor.visit_expr(&switch_stmt.expr);
-            for case in &switch_stmt.cases {
+            for case in switch_stmt.cases.iter() {
                 if let Some(value) = &case.value {
                     visitor.visit_expr(value);
                 }
-                for stmt in &case.body {
+                for stmt in case.body.iter() {
                     visitor.visit_stmt(stmt);
                 }
             }
@@ -130,16 +136,16 @@ pub fn walk_stmt<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, stmt: &Stmt<'
             visitor.visit_expr(expr);
         }
         StmtKind::TryCatch(tc) => {
-            for stmt in &tc.body {
+            for stmt in tc.body.iter() {
                 visitor.visit_stmt(stmt);
             }
-            for catch in &tc.catches {
-                for stmt in &catch.body {
+            for catch in tc.catches.iter() {
+                for stmt in catch.body.iter() {
                     visitor.visit_stmt(stmt);
                 }
             }
             if let Some(finally) = &tc.finally {
-                for stmt in finally {
+                for stmt in finally.iter() {
                     visitor.visit_stmt(stmt);
                 }
             }
@@ -150,44 +156,44 @@ pub fn walk_stmt<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, stmt: &Stmt<'
             }
         }
         StmtKind::Unset(exprs) | StmtKind::Global(exprs) => {
-            for expr in exprs {
+            for expr in exprs.iter() {
                 visitor.visit_expr(expr);
             }
         }
         StmtKind::Class(class) => {
-            for member in &class.members {
+            for member in class.members.iter() {
                 visitor.visit_class_member(member);
             }
         }
         StmtKind::Interface(iface) => {
-            for member in &iface.members {
+            for member in iface.members.iter() {
                 visitor.visit_class_member(member);
             }
         }
         StmtKind::Trait(trait_decl) => {
-            for member in &trait_decl.members {
+            for member in trait_decl.members.iter() {
                 visitor.visit_class_member(member);
             }
         }
         StmtKind::Enum(enum_decl) => {
-            for member in &enum_decl.members {
+            for member in enum_decl.members.iter() {
                 visitor.visit_enum_member(member);
             }
         }
         StmtKind::Namespace(ns) => {
             if let NamespaceBody::Braced(stmts) = &ns.body {
-                for stmt in stmts {
+                for stmt in stmts.iter() {
                     visitor.visit_stmt(stmt);
                 }
             }
         }
         StmtKind::Const(items) => {
-            for item in items {
+            for item in items.iter() {
                 visitor.visit_expr(&item.value);
             }
         }
         StmtKind::StaticVar(vars) => {
-            for var in vars {
+            for var in vars.iter() {
                 if let Some(default) = &var.default {
                     visitor.visit_expr(default);
                 }
@@ -203,41 +209,44 @@ pub fn walk_stmt<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, stmt: &Stmt<'
     }
 }
 
-pub fn walk_expr<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, expr: &Expr<'src>) {
+pub fn walk_expr<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
+    visitor: &mut V,
+    expr: &Expr<'arena, 'src>,
+) {
     match &expr.kind {
         ExprKind::Assign(assign) => {
-            visitor.visit_expr(&assign.target);
-            visitor.visit_expr(&assign.value);
+            visitor.visit_expr(assign.target);
+            visitor.visit_expr(assign.value);
         }
         ExprKind::Binary(binary) => {
-            visitor.visit_expr(&binary.left);
-            visitor.visit_expr(&binary.right);
+            visitor.visit_expr(binary.left);
+            visitor.visit_expr(binary.right);
         }
         ExprKind::UnaryPrefix(unary) => {
-            visitor.visit_expr(&unary.operand);
+            visitor.visit_expr(unary.operand);
         }
         ExprKind::UnaryPostfix(unary) => {
-            visitor.visit_expr(&unary.operand);
+            visitor.visit_expr(unary.operand);
         }
         ExprKind::Ternary(ternary) => {
-            visitor.visit_expr(&ternary.condition);
+            visitor.visit_expr(ternary.condition);
             if let Some(then_expr) = &ternary.then_expr {
                 visitor.visit_expr(then_expr);
             }
-            visitor.visit_expr(&ternary.else_expr);
+            visitor.visit_expr(ternary.else_expr);
         }
         ExprKind::NullCoalesce(nc) => {
-            visitor.visit_expr(&nc.left);
-            visitor.visit_expr(&nc.right);
+            visitor.visit_expr(nc.left);
+            visitor.visit_expr(nc.right);
         }
         ExprKind::FunctionCall(call) => {
-            visitor.visit_expr(&call.name);
-            for arg in &call.args {
+            visitor.visit_expr(call.name);
+            for arg in call.args.iter() {
                 visitor.visit_arg(arg);
             }
         }
         ExprKind::Array(elements) => {
-            for elem in elements {
+            for elem in elements.iter() {
                 if let Some(key) = &elem.key {
                     visitor.visit_expr(key);
                 }
@@ -245,7 +254,7 @@ pub fn walk_expr<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, expr: &Expr<'
             }
         }
         ExprKind::ArrayAccess(access) => {
-            visitor.visit_expr(&access.array);
+            visitor.visit_expr(access.array);
             if let Some(index) = &access.index {
                 visitor.visit_expr(index);
             }
@@ -263,7 +272,7 @@ pub fn walk_expr<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, expr: &Expr<'
             visitor.visit_expr(expr);
         }
         ExprKind::Isset(exprs) => {
-            for expr in exprs {
+            for expr in exprs.iter() {
                 visitor.visit_expr(expr);
             }
         }
@@ -285,24 +294,24 @@ pub fn walk_expr<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, expr: &Expr<'
             visitor.visit_expr(expr);
         }
         ExprKind::New(new_expr) => {
-            visitor.visit_expr(&new_expr.class);
-            for arg in &new_expr.args {
+            visitor.visit_expr(new_expr.class);
+            for arg in new_expr.args.iter() {
                 visitor.visit_arg(arg);
             }
         }
         ExprKind::PropertyAccess(access) | ExprKind::NullsafePropertyAccess(access) => {
-            visitor.visit_expr(&access.object);
-            visitor.visit_expr(&access.property);
+            visitor.visit_expr(access.object);
+            visitor.visit_expr(access.property);
         }
         ExprKind::MethodCall(call) | ExprKind::NullsafeMethodCall(call) => {
-            visitor.visit_expr(&call.object);
-            visitor.visit_expr(&call.method);
-            for arg in &call.args {
+            visitor.visit_expr(call.object);
+            visitor.visit_expr(call.method);
+            for arg in call.args.iter() {
                 visitor.visit_arg(arg);
             }
         }
         ExprKind::StaticPropertyAccess(access) | ExprKind::ClassConstAccess(access) => {
-            visitor.visit_expr(&access.class);
+            visitor.visit_expr(access.class);
         }
         ExprKind::ClassConstAccessDynamic { class, member }
         | ExprKind::StaticPropertyAccessDynamic { class, member } => {
@@ -310,30 +319,30 @@ pub fn walk_expr<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, expr: &Expr<'
             visitor.visit_expr(member);
         }
         ExprKind::StaticMethodCall(call) => {
-            visitor.visit_expr(&call.class);
-            for arg in &call.args {
+            visitor.visit_expr(call.class);
+            for arg in call.args.iter() {
                 visitor.visit_arg(arg);
             }
         }
         ExprKind::Closure(closure) => {
-            for param in &closure.params {
+            for param in closure.params.iter() {
                 visitor.visit_param(param);
             }
-            for stmt in &closure.body {
+            for stmt in closure.body.iter() {
                 visitor.visit_stmt(stmt);
             }
         }
         ExprKind::ArrowFunction(arrow) => {
-            for param in &arrow.params {
+            for param in arrow.params.iter() {
                 visitor.visit_param(param);
             }
-            visitor.visit_expr(&arrow.body);
+            visitor.visit_expr(arrow.body);
         }
         ExprKind::Match(match_expr) => {
-            visitor.visit_expr(&match_expr.subject);
-            for arm in &match_expr.arms {
+            visitor.visit_expr(match_expr.subject);
+            for arm in match_expr.arms.iter() {
                 if let Some(conditions) = &arm.conditions {
-                    for cond in conditions {
+                    for cond in conditions.iter() {
                         visitor.visit_expr(cond);
                     }
                 }
@@ -352,14 +361,14 @@ pub fn walk_expr<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, expr: &Expr<'
             }
         }
         ExprKind::AnonymousClass(class) => {
-            for member in &class.members {
+            for member in class.members.iter() {
                 visitor.visit_class_member(member);
             }
         }
         ExprKind::InterpolatedString(parts)
         | ExprKind::Heredoc { parts, .. }
         | ExprKind::ShellExec(parts) => {
-            for part in parts {
+            for part in parts.iter() {
                 if let StringPart::Expr(e) = part {
                     visitor.visit_expr(e);
                 }
@@ -392,38 +401,44 @@ pub fn walk_expr<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, expr: &Expr<'
     }
 }
 
-pub fn walk_param<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, param: &Param<'src>) {
+pub fn walk_param<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
+    visitor: &mut V,
+    param: &Param<'arena, 'src>,
+) {
     if let Some(default) = &param.default {
         visitor.visit_expr(default);
     }
-    for hook in &param.hooks {
+    for hook in param.hooks.iter() {
         visitor.visit_property_hook(hook);
     }
 }
 
-pub fn walk_arg<'src, V: Visitor<'src> + ?Sized>(visitor: &mut V, arg: &Arg<'src>) {
+pub fn walk_arg<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
+    visitor: &mut V,
+    arg: &Arg<'arena, 'src>,
+) {
     visitor.visit_expr(&arg.value);
 }
 
-pub fn walk_class_member<'src, V: Visitor<'src> + ?Sized>(
+pub fn walk_class_member<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
-    member: &ClassMember<'src>,
+    member: &ClassMember<'arena, 'src>,
 ) {
     match &member.kind {
         ClassMemberKind::Property(prop) => {
             if let Some(default) = &prop.default {
                 visitor.visit_expr(default);
             }
-            for hook in &prop.hooks {
+            for hook in prop.hooks.iter() {
                 visitor.visit_property_hook(hook);
             }
         }
         ClassMemberKind::Method(method) => {
-            for param in &method.params {
+            for param in method.params.iter() {
                 visitor.visit_param(param);
             }
             if let Some(body) = &method.body {
-                for stmt in body {
+                for stmt in body.iter() {
                     visitor.visit_stmt(stmt);
                 }
             }
@@ -435,16 +450,16 @@ pub fn walk_class_member<'src, V: Visitor<'src> + ?Sized>(
     }
 }
 
-pub fn walk_property_hook<'src, V: Visitor<'src> + ?Sized>(
+pub fn walk_property_hook<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
-    hook: &PropertyHook<'src>,
+    hook: &PropertyHook<'arena, 'src>,
 ) {
-    for param in &hook.params {
+    for param in hook.params.iter() {
         visitor.visit_param(param);
     }
     match &hook.body {
         PropertyHookBody::Block(stmts) => {
-            for stmt in stmts {
+            for stmt in stmts.iter() {
                 visitor.visit_stmt(stmt);
             }
         }
@@ -455,9 +470,9 @@ pub fn walk_property_hook<'src, V: Visitor<'src> + ?Sized>(
     }
 }
 
-pub fn walk_enum_member<'src, V: Visitor<'src> + ?Sized>(
+pub fn walk_enum_member<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
-    member: &EnumMember<'src>,
+    member: &EnumMember<'arena, 'src>,
 ) {
     match &member.kind {
         EnumMemberKind::Case(case) => {
@@ -466,11 +481,11 @@ pub fn walk_enum_member<'src, V: Visitor<'src> + ?Sized>(
             }
         }
         EnumMemberKind::Method(method) => {
-            for param in &method.params {
+            for param in method.params.iter() {
                 visitor.visit_param(param);
             }
             if let Some(body) = &method.body {
-                for stmt in body {
+                for stmt in body.iter() {
                     visitor.visit_stmt(stmt);
                 }
             }
@@ -492,8 +507,8 @@ mod tests {
         count: usize,
     }
 
-    impl<'src> Visitor<'src> for VarCounter {
-        fn visit_expr(&mut self, expr: &Expr<'src>) {
+    impl<'arena, 'src> Visitor<'arena, 'src> for VarCounter {
+        fn visit_expr(&mut self, expr: &Expr<'arena, 'src>) {
             if matches!(&expr.kind, ExprKind::Variable(_)) {
                 self.count += 1;
             }
@@ -503,34 +518,47 @@ mod tests {
 
     #[test]
     fn test_visitor_counts_variables() {
+        let arena = bumpalo::Bump::new();
+
+        let var_x = arena.alloc(Expr {
+            kind: ExprKind::Variable(std::borrow::Cow::Borrowed("x")),
+            span: Span::DUMMY,
+        });
+        let var_y = arena.alloc(Expr {
+            kind: ExprKind::Variable(std::borrow::Cow::Borrowed("y")),
+            span: Span::DUMMY,
+        });
+        let var_z = arena.alloc(Expr {
+            kind: ExprKind::Variable(std::borrow::Cow::Borrowed("z")),
+            span: Span::DUMMY,
+        });
+
+        let binary = arena.alloc(Expr {
+            kind: ExprKind::Binary(BinaryExpr {
+                left: var_y,
+                op: BinaryOp::Add,
+                right: var_z,
+            }),
+            span: Span::DUMMY,
+        });
+
+        let assign_expr = arena.alloc(Expr {
+            kind: ExprKind::Assign(AssignExpr {
+                target: var_x,
+                op: AssignOp::Assign,
+                value: binary,
+            }),
+            span: Span::DUMMY,
+        });
+
+        let mut stmts = ArenaVec::new_in(&arena);
+        stmts.push(Stmt {
+            kind: StmtKind::Expression(assign_expr),
+            span: Span::DUMMY,
+        });
+
         let program = Program {
-            stmts: vec![Stmt {
-                kind: StmtKind::Expression(Box::new(Expr {
-                    kind: ExprKind::Assign(AssignExpr {
-                        target: Box::new(Expr {
-                            kind: ExprKind::Variable("x"),
-                            span: Span::DUMMY,
-                        }),
-                        op: AssignOp::Assign,
-                        value: Box::new(Expr {
-                            kind: ExprKind::Binary(BinaryExpr {
-                                left: Box::new(Expr {
-                                    kind: ExprKind::Variable("y"),
-                                    span: Span::DUMMY,
-                                }),
-                                op: BinaryOp::Add,
-                                right: Box::new(Expr {
-                                    kind: ExprKind::Variable("z"),
-                                    span: Span::DUMMY,
-                                }),
-                            }),
-                            span: Span::DUMMY,
-                        }),
-                    }),
-                    span: Span::DUMMY,
-                })),
-                span: Span::DUMMY,
-            }],
+            stmts,
             span: Span::DUMMY,
         };
 

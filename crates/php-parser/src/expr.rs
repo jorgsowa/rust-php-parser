@@ -26,12 +26,15 @@ const CAST_KEYWORDS: &[(&str, CastKind)] = &[
 ];
 
 /// Parse an expression.
-pub fn parse_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
+pub fn parse_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
     parse_expr_bp(parser, 0)
 }
 
 /// Pratt expression parser. Parses expressions with binding power >= min_bp.
-pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'src> {
+pub fn parse_expr_bp<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    min_bp: u8,
+) -> Expr<'arena, 'src> {
     let mut lhs = parse_atom(parser);
 
     loop {
@@ -51,7 +54,7 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
             let span = lhs.span.merge(op_token.span);
             lhs = Expr {
                 kind: ExprKind::UnaryPostfix(UnaryPostfixExpr {
-                    operand: Box::new(lhs),
+                    operand: parser.alloc(lhs),
                     op,
                 }),
                 span,
@@ -93,9 +96,9 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
             let span = lhs.span.merge(rhs.span);
             lhs = Expr {
                 kind: ExprKind::Assign(AssignExpr {
-                    target: Box::new(lhs),
+                    target: parser.alloc(lhs),
                     op,
-                    value: Box::new(rhs),
+                    value: parser.alloc(rhs),
                 }),
                 span,
             };
@@ -113,7 +116,8 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
             let then_expr = if parser.check(TokenKind::Colon) {
                 None
             } else {
-                Some(Box::new(parse_expr_bp(parser, 0)))
+                let e = parse_expr_bp(parser, 0);
+                Some(parser.alloc(e))
             };
 
             parser.expect(TokenKind::Colon);
@@ -122,9 +126,9 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
             let span = lhs.span.merge(else_expr.span);
             lhs = Expr {
                 kind: ExprKind::Ternary(TernaryExpr {
-                    condition: Box::new(lhs),
+                    condition: parser.alloc(lhs),
                     then_expr,
-                    else_expr: Box::new(else_expr),
+                    else_expr: parser.alloc(else_expr),
                 }),
                 span,
             };
@@ -149,13 +153,13 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
                         let span = Span::new(lhs.span.start, parser.current_span().start);
                         let callable_kind = if is_nullsafe {
                             CallableCreateKind::NullsafeMethod {
-                                object: Box::new(lhs),
-                                method: Box::new(member),
+                                object: parser.alloc(lhs),
+                                method: parser.alloc(member),
                             }
                         } else {
                             CallableCreateKind::Method {
-                                object: Box::new(lhs),
-                                method: Box::new(member),
+                                object: parser.alloc(lhs),
+                                method: parser.alloc(member),
                             }
                         };
                         lhs = Expr {
@@ -169,14 +173,14 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
                         let span = Span::new(lhs.span.start, parser.current_span().start);
                         let expr_kind = if is_nullsafe {
                             ExprKind::NullsafeMethodCall(MethodCallExpr {
-                                object: Box::new(lhs),
-                                method: Box::new(member),
+                                object: parser.alloc(lhs),
+                                method: parser.alloc(member),
                                 args,
                             })
                         } else {
                             ExprKind::MethodCall(MethodCallExpr {
-                                object: Box::new(lhs),
-                                method: Box::new(member),
+                                object: parser.alloc(lhs),
+                                method: parser.alloc(member),
                                 args,
                             })
                         };
@@ -190,13 +194,13 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
                 let span = Span::new(lhs.span.start, member.span.end);
                 let expr_kind = if is_nullsafe {
                     ExprKind::NullsafePropertyAccess(PropertyAccessExpr {
-                        object: Box::new(lhs),
-                        property: Box::new(member),
+                        object: parser.alloc(lhs),
+                        property: parser.alloc(member),
                     })
                 } else {
                     ExprKind::PropertyAccess(PropertyAccessExpr {
-                        object: Box::new(lhs),
-                        property: Box::new(member),
+                        object: parser.alloc(lhs),
+                        property: parser.alloc(member),
                     })
                 };
                 lhs = Expr {
@@ -224,7 +228,7 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
                 let span = Span::new(lhs.span.start, token.span.end);
                 lhs = Expr {
                     kind: ExprKind::StaticPropertyAccess(StaticAccessExpr {
-                        class: Box::new(lhs),
+                        class: parser.alloc(lhs),
                         member,
                     }),
                     span,
@@ -235,8 +239,8 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
                 let span = Span::new(lhs.span.start, member.span.end);
                 lhs = Expr {
                     kind: ExprKind::StaticPropertyAccessDynamic {
-                        class: Box::new(lhs),
-                        member: Box::new(member),
+                        class: parser.alloc(lhs),
+                        member: parser.alloc(member),
                     },
                     span,
                 };
@@ -253,7 +257,7 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
                             lhs = Expr {
                                 kind: ExprKind::CallableCreate(CallableCreateExpr {
                                     kind: CallableCreateKind::StaticMethod {
-                                        class: Box::new(lhs),
+                                        class: parser.alloc(lhs),
                                         method: Cow::Borrowed("{dynamic}"),
                                     },
                                 }),
@@ -263,15 +267,15 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
                         ArgListResult::Args(args) => {
                             let callee = Expr {
                                 kind: ExprKind::ClassConstAccessDynamic {
-                                    class: Box::new(lhs),
-                                    member: Box::new(member),
+                                    class: parser.alloc(lhs),
+                                    member: parser.alloc(member),
                                 },
                                 span: Span::new(0, 0), // placeholder, will be wrapped
                             };
                             let span = Span::new(callee.span.start, parser.current_span().start);
                             lhs = Expr {
                                 kind: ExprKind::FunctionCall(FunctionCallExpr {
-                                    name: Box::new(callee),
+                                    name: parser.alloc(callee),
                                     args,
                                 }),
                                 span,
@@ -283,8 +287,8 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
                     let span = Span::new(lhs.span.start, parser.current_span().start);
                     lhs = Expr {
                         kind: ExprKind::ClassConstAccessDynamic {
-                            class: Box::new(lhs),
-                            member: Box::new(member),
+                            class: parser.alloc(lhs),
+                            member: parser.alloc(member),
                         },
                         span,
                     };
@@ -295,7 +299,7 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
                 let span = Span::new(lhs.span.start, token.span.end);
                 lhs = Expr {
                     kind: ExprKind::ClassConstAccess(StaticAccessExpr {
-                        class: Box::new(lhs),
+                        class: parser.alloc(lhs),
                         member: Cow::Borrowed("class"),
                     }),
                     span,
@@ -322,7 +326,7 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
                             lhs = Expr {
                                 kind: ExprKind::CallableCreate(CallableCreateExpr {
                                     kind: CallableCreateKind::StaticMethod {
-                                        class: Box::new(lhs),
+                                        class: parser.alloc(lhs),
                                         method: Cow::Borrowed(member_name),
                                     },
                                 }),
@@ -333,7 +337,7 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
                             let span = Span::new(lhs.span.start, parser.current_span().start);
                             lhs = Expr {
                                 kind: ExprKind::StaticMethodCall(StaticMethodCallExpr {
-                                    class: Box::new(lhs),
+                                    class: parser.alloc(lhs),
                                     method: Cow::Borrowed(member_name),
                                     args,
                                 }),
@@ -346,7 +350,7 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
                     let span = Span::new(lhs.span.start, parser.current_span().start);
                     lhs = Expr {
                         kind: ExprKind::ClassConstAccess(StaticAccessExpr {
-                            class: Box::new(lhs),
+                            class: parser.alloc(lhs),
                             member: Cow::Borrowed(member_name),
                         }),
                         span,
@@ -365,13 +369,14 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
             let index = if parser.check(TokenKind::RightBracket) {
                 None
             } else {
-                Some(Box::new(parse_expr(parser)))
+                let e = parse_expr(parser);
+                Some(parser.alloc(e))
             };
             parser.expect(TokenKind::RightBracket);
             let span = Span::new(lhs.span.start, parser.current_span().start);
             lhs = Expr {
                 kind: ExprKind::ArrayAccess(ArrayAccessExpr {
-                    array: Box::new(lhs),
+                    array: parser.alloc(lhs),
                     index,
                 }),
                 span,
@@ -388,13 +393,14 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
             let index = if parser.check(TokenKind::RightBrace) {
                 None
             } else {
-                Some(Box::new(parse_expr(parser)))
+                let e = parse_expr(parser);
+                Some(parser.alloc(e))
             };
             parser.expect(TokenKind::RightBrace);
             let span = Span::new(lhs.span.start, parser.current_span().start);
             lhs = Expr {
                 kind: ExprKind::ArrayAccess(ArrayAccessExpr {
-                    array: Box::new(lhs),
+                    array: parser.alloc(lhs),
                     index,
                 }),
                 span,
@@ -422,8 +428,8 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
                 let span = lhs.span.merge(rhs.span);
                 lhs = Expr {
                     kind: ExprKind::NullCoalesce(NullCoalesceExpr {
-                        left: Box::new(lhs),
-                        right: Box::new(rhs),
+                        left: parser.alloc(lhs),
+                        right: parser.alloc(rhs),
                     }),
                     span,
                 };
@@ -442,9 +448,9 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
             let span = lhs.span.merge(rhs.span);
             lhs = Expr {
                 kind: ExprKind::Binary(BinaryExpr {
-                    left: Box::new(lhs),
+                    left: parser.alloc(lhs),
                     op,
-                    right: Box::new(rhs),
+                    right: parser.alloc(rhs),
                 }),
                 span,
             };
@@ -459,7 +465,7 @@ pub fn parse_expr_bp<'src>(parser: &'_ mut Parser<'src>, min_bp: u8) -> Expr<'sr
 }
 
 /// Parse a member name after -> or ?->. Accepts identifiers and semi-reserved keywords.
-fn parse_member_name<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
+fn parse_member_name<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
     if parser.check(TokenKind::Variable) {
         // Dynamic property: $obj->{$var} or $obj->$var
         let token = parser.advance();
@@ -497,7 +503,7 @@ fn parse_member_name<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
 }
 
 /// Parse an atomic expression (prefix unaries, literals, variables, etc.)
-fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
+fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
     let kind = parser.current_kind();
 
     // Keywords followed by backslash are namespace-qualified names (e.g., fn\use(), private\protected\...)
@@ -580,7 +586,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         let operand = parse_expr_bp(parser, 41); // same as other prefix unary
         let span = token.span.merge(operand.span);
         return Expr {
-            kind: ExprKind::ErrorSuppress(Box::new(operand)),
+            kind: ExprKind::ErrorSuppress(parser.alloc(operand)),
             span,
         };
     }
@@ -602,7 +608,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         return Expr {
             kind: ExprKind::UnaryPrefix(UnaryPrefixExpr {
                 op,
-                operand: Box::new(operand),
+                operand: parser.alloc(operand),
             }),
             span,
         };
@@ -739,8 +745,12 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             if crate::interpolation::has_interpolation(inner) {
                 // Offset of first char of inner content in source
                 let inner_offset = token.span.end - 1 - inner.len() as u32;
-                let parts =
-                    crate::interpolation::parse_interpolated_parts(src, inner, inner_offset);
+                let parts = crate::interpolation::parse_interpolated_parts(
+                    parser.arena,
+                    src,
+                    inner,
+                    inner_offset,
+                );
                 Expr {
                     kind: ExprKind::InterpolatedString(parts),
                     span: token.span,
@@ -755,8 +765,12 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             } else {
                 // Has escape sequences but no interpolation — decode via interpolated parts
                 let inner_offset = token.span.end - 1 - inner.len() as u32;
-                let parts =
-                    crate::interpolation::parse_interpolated_parts(src, inner, inner_offset);
+                let parts = crate::interpolation::parse_interpolated_parts(
+                    parser.arena,
+                    src,
+                    inner,
+                    inner_offset,
+                );
                 // Collapse single literal part into String, or use InterpolatedString
                 if parts.len() == 1 {
                     if let StringPart::Literal(s) = parts.into_iter().next().unwrap() {
@@ -766,7 +780,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
                         }
                     } else {
                         Expr {
-                            kind: ExprKind::InterpolatedString(Vec::new()),
+                            kind: ExprKind::InterpolatedString(parser.alloc_vec()),
                             span: token.span,
                         }
                     }
@@ -788,8 +802,12 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
 
             if crate::interpolation::has_interpolation(inner) {
                 let inner_offset = token.span.start + 1;
-                let parts =
-                    crate::interpolation::parse_interpolated_parts(src, inner, inner_offset);
+                let parts = crate::interpolation::parse_interpolated_parts(
+                    parser.arena,
+                    src,
+                    inner,
+                    inner_offset,
+                );
                 Expr {
                     kind: ExprKind::ShellExec(parts),
                     span: token.span,
@@ -797,9 +815,10 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             } else if !inner.contains('\\') {
                 // No escapes — verbatim source slice
                 let offset = inner.as_ptr() as usize - src.as_ptr() as usize;
-                let parts = vec![StringPart::Literal(Cow::Borrowed(
+                let mut parts = parser.alloc_vec_with_capacity(1);
+                parts.push(StringPart::Literal(Cow::Borrowed(
                     &src[offset..offset + inner.len()],
-                ))];
+                )));
                 Expr {
                     kind: ExprKind::ShellExec(parts),
                     span: token.span,
@@ -807,8 +826,12 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             } else {
                 // Has escape sequences — decode via interpolated parts
                 let inner_offset = token.span.start + 1;
-                let parts =
-                    crate::interpolation::parse_interpolated_parts(src, inner, inner_offset);
+                let parts = crate::interpolation::parse_interpolated_parts(
+                    parser.arena,
+                    src,
+                    inner,
+                    inner_offset,
+                );
                 Expr {
                     kind: ExprKind::ShellExec(parts),
                     span: token.span,
@@ -827,8 +850,11 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
                     // Indentation was stripped — body is not a verbatim source slice;
                     // use old path that handles de-indented content
                     let body_offset = find_body_offset(text, token.span.start);
-                    let parts =
-                        crate::interpolation::parse_interpolated_parts_heredoc(&body, body_offset);
+                    let parts = crate::interpolation::parse_interpolated_parts_heredoc(
+                        parser.arena,
+                        &body,
+                        body_offset,
+                    );
                     Expr {
                         kind: ExprKind::Heredoc { label, parts },
                         span: token.span,
@@ -840,15 +866,20 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
                     let body_start = body_offset as usize;
                     let body_end = body_start + body.len();
                     let inner = &src[body_start..body_end];
-                    let parts =
-                        crate::interpolation::parse_interpolated_parts(src, inner, body_offset);
+                    let parts = crate::interpolation::parse_interpolated_parts(
+                        parser.arena,
+                        src,
+                        inner,
+                        body_offset,
+                    );
                     Expr {
                         kind: ExprKind::Heredoc { label, parts },
                         span: token.span,
                     }
                 }
             } else {
-                let parts = vec![StringPart::Literal(Cow::Owned(body))];
+                let mut parts = parser.alloc_vec_with_capacity(1);
+                parts.push(StringPart::Literal(Cow::Owned(body)));
                 Expr {
                     kind: ExprKind::Heredoc { label, parts },
                     span: token.span,
@@ -917,7 +948,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             };
             let span = Span::new(token.span.start, inner.span.end);
             Expr {
-                kind: ExprKind::VariableVariable(Box::new(inner)),
+                kind: ExprKind::VariableVariable(parser.alloc(inner)),
                 span,
             }
         }
@@ -985,11 +1016,11 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             let token = parser.advance();
             // Check if this is `static function` (static closure)
             if parser.check(TokenKind::Function) {
-                return parse_closure(parser, true, token.span.start, Vec::new());
+                return parse_closure(parser, true, token.span.start, parser.alloc_vec());
             }
             // Check if `static fn` (static arrow function)
             if parser.check(TokenKind::Fn_) {
-                return parse_arrow_function(parser, true, token.span.start, Vec::new());
+                return parse_arrow_function(parser, true, token.span.start, parser.alloc_vec());
             }
             Expr {
                 kind: ExprKind::Identifier(Cow::Borrowed("static")),
@@ -1003,7 +1034,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             let expr = parse_expr_bp(parser, ASSIGNMENT_BP);
             let span = token.span.merge(expr.span);
             Expr {
-                kind: ExprKind::Print(Box::new(expr)),
+                kind: ExprKind::Print(parser.alloc(expr)),
                 span,
             }
         }
@@ -1014,13 +1045,13 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         // Function keyword — closure expression (when used as expression)
         TokenKind::Function => {
             let start = parser.start_span();
-            parse_closure(parser, false, start, Vec::new())
+            parse_closure(parser, false, start, parser.alloc_vec())
         }
 
         // Fn keyword — arrow function: fn($x) => expr
         TokenKind::Fn_ => {
             let start = parser.start_span();
-            parse_arrow_function(parser, false, start, Vec::new())
+            parse_arrow_function(parser, false, start, parser.alloc_vec())
         }
 
         // Match expression
@@ -1032,7 +1063,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             let expr = parse_expr_bp(parser, ASSIGNMENT_BP);
             let span = token.span.merge(expr.span);
             Expr {
-                kind: ExprKind::ThrowExpr(Box::new(expr)),
+                kind: ExprKind::ThrowExpr(parser.alloc(expr)),
                 span,
             }
         }
@@ -1052,7 +1083,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             parser.expect_closing(TokenKind::RightParen, open.span);
             let span = Span::new(start, parser.current_span().start);
             Expr {
-                kind: ExprKind::Parenthesized(Box::new(inner)),
+                kind: ExprKind::Parenthesized(parser.alloc(inner)),
                 span,
             }
         }
@@ -1071,7 +1102,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             let start = parser.start_span();
             parser.advance();
             parser.expect(TokenKind::LeftParen);
-            let mut exprs = Vec::new();
+            let mut exprs = parser.alloc_vec();
             exprs.push(parse_expr(parser));
             while parser.eat(TokenKind::Comma).is_some() {
                 if parser.check(TokenKind::RightParen) {
@@ -1100,7 +1131,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
                 .map(|t| t.span.end)
                 .unwrap_or(parser.current_span().start);
             Expr {
-                kind: ExprKind::Empty(Box::new(inner)),
+                kind: ExprKind::Empty(parser.alloc(inner)),
                 span: Span::new(start, end),
             }
         }
@@ -1116,7 +1147,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
                 .map(|t| t.span.end)
                 .unwrap_or(parser.current_span().start);
             Expr {
-                kind: ExprKind::Eval(Box::new(inner)),
+                kind: ExprKind::Eval(parser.alloc(inner)),
                 span: Span::new(start, end),
             }
         }
@@ -1127,7 +1158,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             let inner = parse_expr_bp(parser, ASSIGNMENT_BP);
             let span = token.span.merge(inner.span);
             Expr {
-                kind: ExprKind::Include(IncludeKind::Include, Box::new(inner)),
+                kind: ExprKind::Include(IncludeKind::Include, parser.alloc(inner)),
                 span,
             }
         }
@@ -1136,7 +1167,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             let inner = parse_expr_bp(parser, ASSIGNMENT_BP);
             let span = token.span.merge(inner.span);
             Expr {
-                kind: ExprKind::Include(IncludeKind::IncludeOnce, Box::new(inner)),
+                kind: ExprKind::Include(IncludeKind::IncludeOnce, parser.alloc(inner)),
                 span,
             }
         }
@@ -1145,7 +1176,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             let inner = parse_expr_bp(parser, ASSIGNMENT_BP);
             let span = token.span.merge(inner.span);
             Expr {
-                kind: ExprKind::Include(IncludeKind::Require, Box::new(inner)),
+                kind: ExprKind::Include(IncludeKind::Require, parser.alloc(inner)),
                 span,
             }
         }
@@ -1154,7 +1185,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             let inner = parse_expr_bp(parser, ASSIGNMENT_BP);
             let span = token.span.merge(inner.span);
             Expr {
-                kind: ExprKind::Include(IncludeKind::RequireOnce, Box::new(inner)),
+                kind: ExprKind::Include(IncludeKind::RequireOnce, parser.alloc(inner)),
                 span,
             }
         }
@@ -1175,7 +1206,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
                         let span = Span::new(token.span.start, parser.current_span().start);
                         Expr {
                             kind: ExprKind::CallableCreate(CallableCreateExpr {
-                                kind: CallableCreateKind::Function(Box::new(callee)),
+                                kind: CallableCreateKind::Function(parser.alloc(callee)),
                             }),
                             span,
                         }
@@ -1192,7 +1223,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
                             // exit(expr)
                             let value = args.into_iter().next().unwrap().value;
                             Expr {
-                                kind: ExprKind::Exit(Some(Box::new(value))),
+                                kind: ExprKind::Exit(Some(parser.alloc(value))),
                                 span,
                             }
                         } else {
@@ -1203,7 +1234,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
                             };
                             Expr {
                                 kind: ExprKind::FunctionCall(FunctionCallExpr {
-                                    name: Box::new(callee),
+                                    name: parser.alloc(callee),
                                     args,
                                 }),
                                 span,
@@ -1234,7 +1265,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
                 let operand = parse_expr_bp(parser, 41);
                 let span = token.span.merge(operand.span);
                 Expr {
-                    kind: ExprKind::Clone(Box::new(operand)),
+                    kind: ExprKind::Clone(parser.alloc(operand)),
                     span,
                 }
             }
@@ -1350,7 +1381,7 @@ fn parse_atom<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
 // New expression: new ClassName(args)
 // =============================================================================
 
-fn parse_new_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
+fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'new'
 
@@ -1359,7 +1390,7 @@ fn parse_new_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
     let anon_attributes = if parser.check(TokenKind::HashBracket) {
         parser.parse_attributes()
     } else {
-        Vec::new()
+        parser.alloc_vec()
     };
     let anon_readonly =
         parser.check(TokenKind::Readonly) && parser.peek_kind() == Some(TokenKind::Class);
@@ -1373,7 +1404,7 @@ fn parse_new_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         let args = if parser.check(TokenKind::LeftParen) {
             parse_arg_list(parser)
         } else {
-            Vec::new()
+            parser.alloc_vec()
         };
 
         let extends = if parser.eat(TokenKind::Extends).is_some() {
@@ -1385,7 +1416,7 @@ fn parse_new_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         let implements = if parser.eat(TokenKind::Implements).is_some() {
             stmt::parse_name_list(parser)
         } else {
-            Vec::new()
+            parser.alloc_vec()
         };
 
         parser.expect(TokenKind::LeftBrace);
@@ -1408,13 +1439,13 @@ fn parse_new_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         };
 
         let anon_class_expr = Expr {
-            kind: ExprKind::AnonymousClass(Box::new(class_decl)),
+            kind: ExprKind::AnonymousClass(parser.alloc(class_decl)),
             span: Span::new(start, end),
         };
 
         return Expr {
             kind: ExprKind::New(NewExpr {
-                class: Box::new(anon_class_expr),
+                class: parser.alloc(anon_class_expr),
                 args,
             }),
             span: Span::new(start, end),
@@ -1463,7 +1494,7 @@ fn parse_new_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             parser.expect_closing(TokenKind::RightParen, open.span);
             let paren_span = Span::new(paren_start, parser.current_span().start);
             Expr {
-                kind: ExprKind::Parenthesized(Box::new(inner)),
+                kind: ExprKind::Parenthesized(parser.alloc(inner)),
                 span: paren_span,
             }
         }
@@ -1486,13 +1517,13 @@ fn parse_new_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
     let args = if parser.check(TokenKind::LeftParen) {
         parse_arg_list(parser)
     } else {
-        Vec::new()
+        parser.alloc_vec()
     };
 
     let span = Span::new(start, parser.current_span().start);
     Expr {
         kind: ExprKind::New(NewExpr {
-            class: Box::new(class),
+            class: parser.alloc(class),
             args,
         }),
         span,
@@ -1503,12 +1534,12 @@ fn parse_new_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
 // Closure expression: function($x) use($y) { }
 // =============================================================================
 
-fn parse_closure<'src>(
-    parser: &mut Parser<'src>,
+fn parse_closure<'arena, 'src>(
+    parser: &mut Parser<'arena, 'src>,
     is_static: bool,
     start: u32,
-    attributes: Vec<Attribute<'src>>,
-) -> Expr<'src> {
+    attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+) -> Expr<'arena, 'src> {
     if !is_static {
         parser.advance(); // consume 'function'
     } else {
@@ -1528,7 +1559,7 @@ fn parse_closure<'src>(
         parser.expect(TokenKind::RightParen);
         vars
     } else {
-        Vec::new()
+        parser.alloc_vec()
     };
 
     // return type
@@ -1540,7 +1571,7 @@ fn parse_closure<'src>(
 
     // body
     parser.expect(TokenKind::LeftBrace);
-    let mut body = Vec::with_capacity(16);
+    let mut body = parser.alloc_vec_with_capacity(16);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
         body.push(stmt::parse_stmt(parser));
@@ -1554,7 +1585,7 @@ fn parse_closure<'src>(
         .unwrap_or(parser.current_span().start);
 
     Expr {
-        kind: ExprKind::Closure(Box::new(ClosureExpr {
+        kind: ExprKind::Closure(parser.alloc(ClosureExpr {
             is_static,
             by_ref,
             params,
@@ -1567,8 +1598,10 @@ fn parse_closure<'src>(
     }
 }
 
-fn parse_closure_use_list<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClosureUseVar<'src>> {
-    let mut vars = Vec::with_capacity(2);
+fn parse_closure_use_list<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+) -> ArenaVec<'arena, ClosureUseVar<'src>> {
+    let mut vars = parser.alloc_vec_with_capacity(2);
     loop {
         if parser.check(TokenKind::RightParen) {
             break;
@@ -1592,12 +1625,12 @@ fn parse_closure_use_list<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClosureUseV
 // Arrow function: fn($x) => expr
 // =============================================================================
 
-fn parse_arrow_function<'src>(
-    parser: &mut Parser<'src>,
+fn parse_arrow_function<'arena, 'src>(
+    parser: &mut Parser<'arena, 'src>,
     is_static: bool,
     start: u32,
-    attributes: Vec<Attribute<'src>>,
-) -> Expr<'src> {
+    attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+) -> Expr<'arena, 'src> {
     parser.advance(); // consume 'fn'
 
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
@@ -1618,12 +1651,12 @@ fn parse_arrow_function<'src>(
     let span = Span::new(start, body.span.end);
 
     Expr {
-        kind: ExprKind::ArrowFunction(Box::new(ArrowFunctionExpr {
+        kind: ExprKind::ArrowFunction(parser.alloc(ArrowFunctionExpr {
             is_static,
             by_ref,
             params,
             return_type,
-            body: Box::new(body),
+            body: parser.alloc(body),
             attributes,
         })),
         span,
@@ -1634,7 +1667,7 @@ fn parse_arrow_function<'src>(
 // Match expression
 // =============================================================================
 
-fn parse_match_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
+fn parse_match_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'match'
 
@@ -1644,7 +1677,7 @@ fn parse_match_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
 
     parser.expect(TokenKind::LeftBrace);
 
-    let mut arms = Vec::with_capacity(4);
+    let mut arms = parser.alloc_vec_with_capacity(4);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let arm_start = parser.start_span();
 
@@ -1653,7 +1686,7 @@ fn parse_match_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
             parser.eat(TokenKind::Comma);
             None
         } else {
-            let mut conds = Vec::with_capacity(2);
+            let mut conds = parser.alloc_vec_with_capacity(2);
             conds.push(parse_expr(parser));
             while parser.eat(TokenKind::Comma).is_some() {
                 if parser.check(TokenKind::FatArrow) {
@@ -1687,7 +1720,7 @@ fn parse_match_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
 
     Expr {
         kind: ExprKind::Match(MatchExpr {
-            subject: Box::new(subject),
+            subject: parser.alloc(subject),
             arms,
         }),
         span: Span::new(start, end),
@@ -1698,7 +1731,7 @@ fn parse_match_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
 // Yield expression
 // =============================================================================
 
-fn parse_yield_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
+fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'yield'
 
@@ -1710,7 +1743,7 @@ fn parse_yield_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         return Expr {
             kind: ExprKind::Yield(YieldExpr {
                 key: None,
-                value: Some(Box::new(value)),
+                value: Some(parser.alloc(value)),
             }),
             span,
         };
@@ -1746,8 +1779,8 @@ fn parse_yield_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
         let span = Span::new(start, value.span.end);
         return Expr {
             kind: ExprKind::Yield(YieldExpr {
-                key: Some(Box::new(first)),
-                value: Some(Box::new(value)),
+                key: Some(parser.alloc(first)),
+                value: Some(parser.alloc(value)),
             }),
             span,
         };
@@ -1758,7 +1791,7 @@ fn parse_yield_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
     Expr {
         kind: ExprKind::Yield(YieldExpr {
             key: None,
-            value: Some(Box::new(first)),
+            value: Some(parser.alloc(first)),
         }),
         span,
     }
@@ -1769,13 +1802,15 @@ fn parse_yield_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
 // =============================================================================
 
 /// Result of parsing an argument list — either regular args or a `(...)` callable marker.
-enum ArgListResult<'src> {
-    Args(Vec<Arg<'src>>),
+enum ArgListResult<'arena, 'src> {
+    Args(ArenaVec<'arena, Arg<'arena, 'src>>),
     CallableMarker,
 }
 
 /// Parse an argument list `(arg, arg, ...)` or detect `(...)` first-class callable syntax.
-fn parse_arg_list_or_callable<'src>(parser: &'_ mut Parser<'src>) -> ArgListResult<'src> {
+fn parse_arg_list_or_callable<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+) -> ArgListResult<'arena, 'src> {
     parser.advance(); // consume (
 
     // Detect first-class callable: (...)
@@ -1785,7 +1820,7 @@ fn parse_arg_list_or_callable<'src>(parser: &'_ mut Parser<'src>) -> ArgListResu
         return ArgListResult::CallableMarker;
     }
 
-    let mut args = Vec::with_capacity(4);
+    let mut args = parser.alloc_vec_with_capacity(4);
     if !parser.check(TokenKind::RightParen) {
         loop {
             if parser.check(TokenKind::RightParen) {
@@ -1803,14 +1838,16 @@ fn parse_arg_list_or_callable<'src>(parser: &'_ mut Parser<'src>) -> ArgListResu
 }
 
 /// Parse an argument list: `(arg, arg, ...)`
-pub fn parse_arg_list<'src>(parser: &'_ mut Parser<'src>) -> Vec<Arg<'src>> {
+pub fn parse_arg_list<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+) -> ArenaVec<'arena, Arg<'arena, 'src>> {
     match parse_arg_list_or_callable(parser) {
         ArgListResult::Args(args) => args,
-        ArgListResult::CallableMarker => Vec::new(), // fallback — shouldn't reach here in normal use
+        ArgListResult::CallableMarker => parser.alloc_vec(), // fallback — shouldn't reach here in normal use
     }
 }
 
-fn parse_arg<'src>(parser: &'_ mut Parser<'src>) -> Arg<'src> {
+fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 'src> {
     let start = parser.start_span();
 
     // Check for named argument: name: (PHP allows any keyword as a named arg label)
@@ -1880,7 +1917,10 @@ fn parse_arg<'src>(parser: &'_ mut Parser<'src>) -> Arg<'src> {
     }
 }
 
-fn parse_function_call<'src>(parser: &'_ mut Parser<'src>, callee: Expr<'src>) -> Expr<'src> {
+fn parse_function_call<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    callee: Expr<'arena, 'src>,
+) -> Expr<'arena, 'src> {
     let start = callee.span.start;
 
     match parse_arg_list_or_callable(parser) {
@@ -1888,7 +1928,7 @@ fn parse_function_call<'src>(parser: &'_ mut Parser<'src>, callee: Expr<'src>) -
             let span = Span::new(start, parser.current_span().start);
             Expr {
                 kind: ExprKind::CallableCreate(CallableCreateExpr {
-                    kind: CallableCreateKind::Function(Box::new(callee)),
+                    kind: CallableCreateKind::Function(parser.alloc(callee)),
                 }),
                 span,
             }
@@ -1897,7 +1937,7 @@ fn parse_function_call<'src>(parser: &'_ mut Parser<'src>, callee: Expr<'src>) -
             let span = Span::new(start, parser.current_span().start);
             Expr {
                 kind: ExprKind::FunctionCall(FunctionCallExpr {
-                    name: Box::new(callee),
+                    name: parser.alloc(callee),
                     args,
                 }),
                 span,
@@ -1910,11 +1950,11 @@ fn parse_function_call<'src>(parser: &'_ mut Parser<'src>, callee: Expr<'src>) -
 // Array parsing
 // =============================================================================
 
-fn parse_array_literal<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
+fn parse_array_literal<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume [
 
-    let mut elements = Vec::with_capacity(8);
+    let mut elements = parser.alloc_vec_with_capacity(8);
 
     if !parser.check(TokenKind::RightBracket) {
         loop {
@@ -1954,12 +1994,12 @@ fn parse_array_literal<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
     }
 }
 
-fn parse_array_call<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
+fn parse_array_call<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'array'
     parser.expect(TokenKind::LeftParen);
 
-    let mut elements = Vec::with_capacity(8);
+    let mut elements = parser.alloc_vec_with_capacity(8);
 
     if !parser.check(TokenKind::RightParen) {
         loop {
@@ -1985,7 +2025,9 @@ fn parse_array_call<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
     }
 }
 
-fn parse_array_element<'src>(parser: &'_ mut Parser<'src>) -> ArrayElement<'src> {
+fn parse_array_element<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+) -> ArrayElement<'arena, 'src> {
     let elem_start = parser.start_span();
 
     // Handle unpack: ...$arr
@@ -2022,12 +2064,12 @@ fn parse_array_element<'src>(parser: &'_ mut Parser<'src>) -> ArrayElement<'src>
     }
 }
 
-fn parse_list_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
+fn parse_list_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'list'
     parser.expect(TokenKind::LeftParen);
 
-    let mut elements = Vec::with_capacity(4);
+    let mut elements = parser.alloc_vec_with_capacity(4);
 
     if !parser.check(TokenKind::RightParen) {
         loop {
@@ -2070,7 +2112,9 @@ fn parse_list_expr<'src>(parser: &'_ mut Parser<'src>) -> Expr<'src> {
 
 /// Parse a single element in a list() or short list destructuring.
 /// Handles: `$var`, `&$var`, `'key' => $var`, `'key' => &$var`, `list($a, $b)`, etc.
-fn parse_list_element<'src>(parser: &'_ mut Parser<'src>) -> ArrayElement<'src> {
+fn parse_list_element<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+) -> ArrayElement<'arena, 'src> {
     let elem_start = parser.start_span();
 
     // Handle &$var (by-reference)
@@ -2114,7 +2158,9 @@ fn parse_list_element<'src>(parser: &'_ mut Parser<'src>) -> ArrayElement<'src> 
 
 /// Try to parse a cast expression like `(int)$x`. Returns Some(Expr) if successful,
 /// or None if this is not a cast (just a parenthesized expression).
-fn try_parse_cast<'src>(parser: &'_ mut Parser<'src>) -> Option<Expr<'src>> {
+fn try_parse_cast<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+) -> Option<Expr<'arena, 'src>> {
     let peeked = parser.peek_kind();
 
     let cast_kind = match peeked {
@@ -2155,7 +2201,7 @@ fn try_parse_cast<'src>(parser: &'_ mut Parser<'src>) -> Option<Expr<'src>> {
     let operand = parse_expr_bp(parser, 41);
     let span = Span::new(start, operand.span.end);
     Some(Expr {
-        kind: ExprKind::Cast(cast_kind, Box::new(operand)),
+        kind: ExprKind::Cast(cast_kind, parser.alloc(operand)),
         span,
     })
 }

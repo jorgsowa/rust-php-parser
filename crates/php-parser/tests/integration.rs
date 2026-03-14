@@ -1,10 +1,10 @@
-use php_parser::parse;
-
-fn parse_php(source: &str) -> php_parser::ParseResult<'_> {
-    parse(source)
+fn parse_php(source: &'static str) -> php_parser::ParseResult<'static, 'static> {
+    // Leak arena and source for test simplicity — process exits after test run anyway
+    let arena: &'static bumpalo::Bump = Box::leak(Box::new(bumpalo::Bump::new()));
+    php_parser::parse(arena, source)
 }
 
-fn assert_parses_ok(_label: &str, source: &str) {
+fn assert_parses_ok(_label: &str, source: &'static str) {
     let result = parse_php(source);
     assert_no_errors(&result);
 }
@@ -3221,7 +3221,7 @@ fn test_new_readonly_anonymous_class() {
 // Error validation tests
 // =============================================================================
 
-fn assert_has_errors(source: &str) {
+fn assert_has_errors(source: &'static str) {
     let result = parse_php(source);
     assert!(
         !result.errors.is_empty(),

@@ -7,7 +7,10 @@ use crate::diagnostics::ParseError;
 use crate::expr;
 use crate::parser::Parser;
 
-fn class_modifier_error<'src>(parser: &mut Parser<'src>, start: u32) -> Stmt<'src> {
+fn class_modifier_error<'arena, 'src>(
+    parser: &mut Parser<'arena, 'src>,
+    start: u32,
+) -> Stmt<'arena, 'src> {
     let span = Span::new(start, parser.current_span().start);
     parser.error(ParseError::Expected {
         expected: "'class'".into(),
@@ -22,7 +25,7 @@ fn class_modifier_error<'src>(parser: &mut Parser<'src>, start: u32) -> Stmt<'sr
 }
 
 /// Parse a single statement.
-pub fn parse_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     // Handle attributes: #[...] before declarations
     if parser.check(TokenKind::HashBracket) {
         return parse_attributed_stmt(parser);
@@ -97,7 +100,7 @@ pub fn parse_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             {
                 parse_expression_stmt(parser)
             } else {
-                parse_function(parser)
+                parse_function(parser, parser.alloc_vec())
             }
         }
         TokenKind::Break => parse_break(parser),
@@ -110,7 +113,7 @@ pub fn parse_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         TokenKind::Unset => parse_unset(parser),
         TokenKind::Global => parse_global(parser),
         // OOP keywords
-        TokenKind::Class => parse_class(parser, ClassModifiers::default()),
+        TokenKind::Class => parse_class(parser, ClassModifiers::default(), parser.alloc_vec()),
         TokenKind::Abstract => {
             let start = parser.start_span();
             parser.advance();
@@ -121,6 +124,7 @@ pub fn parse_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                         is_abstract: true,
                         ..Default::default()
                     },
+                    parser.alloc_vec(),
                 )
             } else if parser.check(TokenKind::Readonly)
                 && parser.peek_kind() == Some(TokenKind::Class)
@@ -139,6 +143,7 @@ pub fn parse_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                         is_readonly: true,
                         ..Default::default()
                     },
+                    parser.alloc_vec(),
                 )
             } else {
                 // abstract without class - error recovery
@@ -155,6 +160,7 @@ pub fn parse_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                         is_final: true,
                         ..Default::default()
                     },
+                    parser.alloc_vec(),
                 )
             } else if parser.check(TokenKind::Readonly) {
                 parser.advance();
@@ -166,6 +172,7 @@ pub fn parse_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                             is_readonly: true,
                             ..Default::default()
                         },
+                        parser.alloc_vec(),
                     )
                 } else {
                     class_modifier_error(parser, start)
@@ -184,6 +191,7 @@ pub fn parse_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                         is_readonly: true,
                         ..Default::default()
                     },
+                    parser.alloc_vec(),
                 )
             } else if parser.peek_kind() == Some(TokenKind::Abstract)
                 && parser.peek2_kind() == Some(TokenKind::Class)
@@ -203,15 +211,16 @@ pub fn parse_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                         is_readonly: true,
                         ..Default::default()
                     },
+                    parser.alloc_vec(),
                 )
             } else {
                 // readonly used as function name/expression (e.g., readonly())
                 parse_expression_stmt(parser)
             }
         }
-        TokenKind::Interface => parse_interface(parser),
-        TokenKind::Trait => parse_trait(parser),
-        TokenKind::Enum_ => parse_enum(parser),
+        TokenKind::Interface => parse_interface(parser, parser.alloc_vec()),
+        TokenKind::Trait => parse_trait(parser, parser.alloc_vec()),
+        TokenKind::Enum_ => parse_enum(parser, parser.alloc_vec()),
         TokenKind::Namespace => {
             // namespace\ is a relative name (expression), not a namespace declaration
             if parser.peek_kind() == Some(TokenKind::Backslash) {
@@ -247,24 +256,25 @@ pub fn parse_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 }
 
 /// Parse a statement preceded by attributes.
-fn parse_attributed_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let attributes = parser.parse_attributes();
 
     // Now dispatch based on what follows
-    let mut stmt = match parser.current_kind() {
-        TokenKind::Function => parse_function(parser),
-        TokenKind::Class => parse_class(parser, ClassModifiers::default()),
+    let stmt = match parser.current_kind() {
+        TokenKind::Function => return parse_function(parser, attributes),
+        TokenKind::Class => return parse_class(parser, ClassModifiers::default(), attributes),
         TokenKind::Abstract => {
             let start = parser.start_span();
             parser.advance();
             if parser.check(TokenKind::Class) {
-                parse_class(
+                return parse_class(
                     parser,
                     ClassModifiers {
                         is_abstract: true,
                         ..Default::default()
                     },
-                )
+                    attributes,
+                );
             } else if parser.check(TokenKind::Readonly)
                 && parser.peek_kind() == Some(TokenKind::Class)
             {
@@ -273,14 +283,15 @@ fn parse_attributed_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                     span: Span::new(start, parser.current_span().start),
                 });
                 parser.advance(); // consume 'readonly'
-                parse_class(
+                return parse_class(
                     parser,
                     ClassModifiers {
                         is_abstract: true,
                         is_readonly: true,
                         ..Default::default()
                     },
-                )
+                    attributes,
+                );
             } else {
                 class_modifier_error(parser, start)
             }
@@ -294,6 +305,7 @@ fn parse_attributed_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                         is_final: true,
                         ..Default::default()
                     },
+                    attributes,
                 )
             } else if parser.check(TokenKind::Readonly) {
                 parser.advance();
@@ -304,6 +316,7 @@ fn parse_attributed_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                         is_readonly: true,
                         ..Default::default()
                     },
+                    attributes,
                 )
             } else {
                 let span = parser.current_span();
@@ -329,6 +342,7 @@ fn parse_attributed_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                         is_readonly: true,
                         ..Default::default()
                     },
+                    attributes,
                 )
             } else if parser.check(TokenKind::Abstract)
                 && parser.peek_kind() == Some(TokenKind::Class)
@@ -338,14 +352,15 @@ fn parse_attributed_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                     span: Span::new(start, parser.current_span().start),
                 });
                 parser.advance(); // consume 'abstract'
-                parse_class(
+                return parse_class(
                     parser,
                     ClassModifiers {
                         is_abstract: true,
                         is_readonly: true,
                         ..Default::default()
                     },
-                )
+                    attributes,
+                );
             } else {
                 let span = parser.current_span();
                 parser.error(ParseError::Expected {
@@ -360,9 +375,9 @@ fn parse_attributed_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                 }
             }
         }
-        TokenKind::Interface => parse_interface(parser),
-        TokenKind::Trait => parse_trait(parser),
-        TokenKind::Enum_ => parse_enum(parser),
+        TokenKind::Interface => return parse_interface(parser, attributes),
+        TokenKind::Trait => return parse_trait(parser, attributes),
+        TokenKind::Enum_ => return parse_enum(parser, attributes),
         TokenKind::Const => {
             let stmt = parse_const(parser);
             // Check if multi-const declaration with attributes
@@ -394,27 +409,17 @@ fn parse_attributed_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         }
     };
 
-    // Attach attributes to the parsed statement
-    match &mut stmt.kind {
-        StmtKind::Function(decl) => decl.attributes = attributes,
-        StmtKind::Class(decl) => decl.attributes = attributes,
-        StmtKind::Interface(decl) => decl.attributes = attributes,
-        StmtKind::Trait(decl) => decl.attributes = attributes,
-        StmtKind::Enum(decl) => decl.attributes = attributes,
-        _ => {}
-    }
-
     stmt
 }
 
 /// Parse a block statement: `{ stmts }`
-pub fn parse_block<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+pub fn parse_block<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     let open = parser.expect(TokenKind::LeftBrace);
     let open_span = open.map(|t| t.span).unwrap_or(parser.current_span());
 
     parser.depth += 1;
-    let mut stmts = Vec::with_capacity(16);
+    let mut stmts = parser.alloc_vec_with_capacity(16);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         // Handle close tag -> inline HTML -> open tag sequences inside blocks
         if parser.check(TokenKind::CloseTag) {
@@ -458,7 +463,7 @@ pub fn parse_block<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 }
 
 /// Parse a statement or block (used as body of if/while/for/etc.)
-fn parse_stmt_or_block<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_stmt_or_block<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     if parser.check(TokenKind::LeftBrace) {
         parse_block(parser)
     } else {
@@ -467,11 +472,11 @@ fn parse_stmt_or_block<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 }
 
 /// Parse statements until an end keyword (for alternative syntax)
-fn parse_stmts_until_end<'src>(
-    parser: &'_ mut Parser<'src>,
+fn parse_stmts_until_end<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
     ends: &[TokenKind],
-) -> Vec<Stmt<'src>> {
-    let mut stmts = Vec::with_capacity(8);
+) -> ArenaVec<'arena, Stmt<'arena, 'src>> {
+    let mut stmts = parser.alloc_vec_with_capacity(8);
     while !ends.contains(&parser.current_kind()) && !parser.check(TokenKind::Eof) {
         // Handle close tag -> inline HTML -> open tag sequences
         if parser.check(TokenKind::CloseTag) {
@@ -507,11 +512,11 @@ fn parse_stmts_until_end<'src>(
 // Echo statement
 // =============================================================================
 
-fn parse_echo<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_echo<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'echo'
 
-    let mut exprs = Vec::new();
+    let mut exprs = parser.alloc_vec();
     exprs.push(expr::parse_expr(parser));
 
     while parser.eat(TokenKind::Comma).is_some() {
@@ -534,7 +539,7 @@ fn parse_echo<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 // Return statement
 // =============================================================================
 
-fn parse_return<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_return<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'return'
 
@@ -548,7 +553,7 @@ fn parse_return<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     let span = Span::new(start, parser.current_span().start);
 
     Stmt {
-        kind: StmtKind::Return(expr.map(Box::new)),
+        kind: StmtKind::Return(expr.map(|e| parser.alloc(e))),
         span,
     }
 }
@@ -557,7 +562,7 @@ fn parse_return<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 // If statement (with alternative syntax support)
 // =============================================================================
 
-fn parse_if<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'if'
 
@@ -572,12 +577,12 @@ fn parse_if<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             parser,
             &[TokenKind::ElseIf, TokenKind::Else, TokenKind::EndIf],
         );
-        let then_branch = Box::new(Stmt {
+        let then_branch = parser.alloc(Stmt {
             kind: StmtKind::Block(stmts),
             span: Span::new(start, parser.current_span().start),
         });
 
-        let mut elseif_branches = Vec::new();
+        let mut elseif_branches = parser.alloc_vec();
         while parser.eat(TokenKind::ElseIf).is_some() {
             let elseif_start = parser.start_span();
             parser.expect(TokenKind::LeftParen);
@@ -603,7 +608,7 @@ fn parse_if<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         let else_branch = if parser.eat(TokenKind::Else).is_some() {
             parser.expect(TokenKind::Colon);
             let else_stmts = parse_stmts_until_end(parser, &[TokenKind::EndIf]);
-            Some(Box::new(Stmt {
+            Some(parser.alloc(Stmt {
                 kind: StmtKind::Block(else_stmts),
                 span: Span::new(start, parser.current_span().start),
             }))
@@ -616,7 +621,7 @@ fn parse_if<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         let span = Span::new(start, parser.current_span().start);
 
         return Stmt {
-            kind: StmtKind::If(Box::new(IfStmt {
+            kind: StmtKind::If(parser.alloc(IfStmt {
                 condition,
                 then_branch,
                 elseif_branches,
@@ -627,9 +632,10 @@ fn parse_if<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     }
 
     // Normal syntax
-    let then_branch = Box::new(parse_stmt_or_block(parser));
+    let then_branch_stmt = parse_stmt_or_block(parser);
+    let then_branch = parser.alloc(then_branch_stmt);
 
-    let mut elseif_branches = Vec::with_capacity(2);
+    let mut elseif_branches = parser.alloc_vec_with_capacity(2);
     while parser.eat(TokenKind::ElseIf).is_some() {
         let elseif_start = parser.start_span();
         parser.expect(TokenKind::LeftParen);
@@ -645,7 +651,10 @@ fn parse_if<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     }
 
     let else_branch = if parser.eat(TokenKind::Else).is_some() {
-        Some(Box::new(parse_stmt_or_block(parser)))
+        {
+            let s = parse_stmt_or_block(parser);
+            Some(parser.alloc(s))
+        }
     } else {
         None
     };
@@ -658,7 +667,7 @@ fn parse_if<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     let span = Span::new(start, end);
 
     Stmt {
-        kind: StmtKind::If(Box::new(IfStmt {
+        kind: StmtKind::If(parser.alloc(IfStmt {
             condition,
             then_branch,
             elseif_branches,
@@ -672,7 +681,7 @@ fn parse_if<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 // While / Do-while / For / Foreach
 // =============================================================================
 
-fn parse_while<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance();
     let open = parser.expect(TokenKind::LeftParen);
@@ -685,28 +694,30 @@ fn parse_while<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         parser.expect(TokenKind::EndWhile);
         parser.expect(TokenKind::Semicolon);
         let span = Span::new(start, parser.current_span().start);
-        let body = Box::new(Stmt {
+        let body = parser.alloc(Stmt {
             kind: StmtKind::Block(stmts),
             span,
         });
         return Stmt {
-            kind: StmtKind::While(Box::new(WhileStmt { condition, body })),
+            kind: StmtKind::While(parser.alloc(WhileStmt { condition, body })),
             span,
         };
     }
 
-    let body = Box::new(parse_stmt_or_block(parser));
+    let body_stmt = parse_stmt_or_block(parser);
+    let body = parser.alloc(body_stmt);
     let span = Span::new(start, body.span.end);
     Stmt {
-        kind: StmtKind::While(Box::new(WhileStmt { condition, body })),
+        kind: StmtKind::While(parser.alloc(WhileStmt { condition, body })),
         span,
     }
 }
 
-fn parse_do_while<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_do_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance();
-    let body = Box::new(parse_stmt_or_block(parser));
+    let body_stmt = parse_stmt_or_block(parser);
+    let body = parser.alloc(body_stmt);
     parser.expect(TokenKind::While);
     let open = parser.expect(TokenKind::LeftParen);
     let open_span = open.map(|t| t.span).unwrap_or(parser.current_span());
@@ -715,12 +726,12 @@ fn parse_do_while<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     parser.expect_semicolon("do-while statement");
     let span = Span::new(start, parser.current_span().start);
     Stmt {
-        kind: StmtKind::DoWhile(Box::new(DoWhileStmt { body, condition })),
+        kind: StmtKind::DoWhile(parser.alloc(DoWhileStmt { body, condition })),
         span,
     }
 }
 
-fn parse_for<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_for<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance();
     let open = parser.expect(TokenKind::LeftParen);
@@ -737,12 +748,12 @@ fn parse_for<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         parser.expect(TokenKind::EndFor);
         parser.expect(TokenKind::Semicolon);
         let span = Span::new(start, parser.current_span().start);
-        let body = Box::new(Stmt {
+        let body = parser.alloc(Stmt {
             kind: StmtKind::Block(stmts),
             span,
         });
         return Stmt {
-            kind: StmtKind::For(Box::new(ForStmt {
+            kind: StmtKind::For(parser.alloc(ForStmt {
                 init,
                 condition,
                 update,
@@ -752,10 +763,11 @@ fn parse_for<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         };
     }
 
-    let body = Box::new(parse_stmt_or_block(parser));
+    let body_stmt = parse_stmt_or_block(parser);
+    let body = parser.alloc(body_stmt);
     let span = Span::new(start, body.span.end);
     Stmt {
-        kind: StmtKind::For(Box::new(ForStmt {
+        kind: StmtKind::For(parser.alloc(ForStmt {
             init,
             condition,
             update,
@@ -765,8 +777,11 @@ fn parse_for<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     }
 }
 
-fn parse_expr_list_until<'src>(parser: &'_ mut Parser<'src>, stop: TokenKind) -> Vec<Expr<'src>> {
-    let mut exprs = Vec::new();
+fn parse_expr_list_until<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    stop: TokenKind,
+) -> ArenaVec<'arena, Expr<'arena, 'src>> {
+    let mut exprs = parser.alloc_vec();
     if parser.check(stop) {
         return exprs;
     }
@@ -780,7 +795,7 @@ fn parse_expr_list_until<'src>(parser: &'_ mut Parser<'src>, stop: TokenKind) ->
     exprs
 }
 
-fn parse_foreach<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance();
     let open = parser.expect(TokenKind::LeftParen);
@@ -810,12 +825,12 @@ fn parse_foreach<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         parser.expect(TokenKind::EndForeach);
         parser.expect(TokenKind::Semicolon);
         let span = Span::new(start, parser.current_span().start);
-        let body = Box::new(Stmt {
+        let body = parser.alloc(Stmt {
             kind: StmtKind::Block(stmts),
             span,
         });
         return Stmt {
-            kind: StmtKind::Foreach(Box::new(ForeachStmt {
+            kind: StmtKind::Foreach(parser.alloc(ForeachStmt {
                 expr: collection,
                 key,
                 value,
@@ -825,10 +840,11 @@ fn parse_foreach<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         };
     }
 
-    let body = Box::new(parse_stmt_or_block(parser));
+    let body_stmt = parse_stmt_or_block(parser);
+    let body = parser.alloc(body_stmt);
     let span = Span::new(start, body.span.end);
     Stmt {
-        kind: StmtKind::Foreach(Box::new(ForeachStmt {
+        kind: StmtKind::Foreach(parser.alloc(ForeachStmt {
             expr: collection,
             key,
             value,
@@ -842,7 +858,10 @@ fn parse_foreach<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 // Function declaration (enhanced with types, by-ref, return types)
 // =============================================================================
 
-fn parse_function<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_function<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'function'
 
@@ -872,7 +891,7 @@ fn parse_function<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 
     let open_brace = parser.expect(TokenKind::LeftBrace);
     let open_brace_span = open_brace.map(|t| t.span).unwrap_or(parser.current_span());
-    let mut body = Vec::with_capacity(16);
+    let mut body = parser.alloc_vec_with_capacity(16);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
         body.push(parse_stmt(parser));
@@ -887,20 +906,22 @@ fn parse_function<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     let span = Span::new(start, end);
 
     Stmt {
-        kind: StmtKind::Function(Box::new(FunctionDecl {
+        kind: StmtKind::Function(parser.alloc(FunctionDecl {
             name,
             params,
             body,
             return_type,
             by_ref,
-            attributes: Vec::new(),
+            attributes,
         })),
         span,
     }
 }
 
-pub fn parse_param_list<'src>(parser: &'_ mut Parser<'src>) -> Vec<Param<'src>> {
-    let mut params = Vec::with_capacity(4);
+pub fn parse_param_list<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+) -> ArenaVec<'arena, Param<'arena, 'src>> {
+    let mut params = parser.alloc_vec_with_capacity(4);
     if parser.check(TokenKind::RightParen) {
         return params;
     }
@@ -995,7 +1016,7 @@ pub fn parse_param_list<'src>(parser: &'_ mut Parser<'src>) -> Vec<Param<'src>> 
         let hooks = if visibility.is_some() && parser.check(TokenKind::LeftBrace) {
             parse_property_hooks(parser)
         } else {
-            Vec::new()
+            parser.alloc_vec()
         };
 
         let param_end = if !hooks.is_empty() {
@@ -1047,7 +1068,7 @@ fn parse_optional_visibility(parser: &mut Parser) -> Option<Visibility> {
 // Break / Continue
 // =============================================================================
 
-fn parse_break<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_break<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance();
     let expr = if !parser.check(TokenKind::Semicolon) {
@@ -1058,12 +1079,12 @@ fn parse_break<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     parser.expect_semicolon("break statement");
     let span = Span::new(start, parser.current_span().start);
     Stmt {
-        kind: StmtKind::Break(expr.map(Box::new)),
+        kind: StmtKind::Break(expr.map(|e| parser.alloc(e))),
         span,
     }
 }
 
-fn parse_continue<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_continue<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance();
     let expr = if !parser.check(TokenKind::Semicolon) {
@@ -1074,7 +1095,7 @@ fn parse_continue<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     parser.expect_semicolon("continue statement");
     let span = Span::new(start, parser.current_span().start);
     Stmt {
-        kind: StmtKind::Continue(expr.map(Box::new)),
+        kind: StmtKind::Continue(expr.map(|e| parser.alloc(e))),
         span,
     }
 }
@@ -1083,7 +1104,7 @@ fn parse_continue<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 // Switch statement
 // =============================================================================
 
-fn parse_switch<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance();
     let open = parser.expect(TokenKind::LeftParen);
@@ -1104,7 +1125,7 @@ fn parse_switch<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     } else {
         &[TokenKind::RightBrace]
     };
-    let mut cases = Vec::with_capacity(8);
+    let mut cases = parser.alloc_vec_with_capacity(8);
 
     while !end_tokens.contains(&parser.current_kind()) && !parser.check(TokenKind::Eof) {
         let case_start = parser.start_span();
@@ -1123,7 +1144,7 @@ fn parse_switch<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             break;
         };
 
-        let mut body = Vec::new();
+        let mut body = parser.alloc_vec();
         while !parser.check(TokenKind::Case)
             && !parser.check(TokenKind::Default)
             && !end_tokens.contains(&parser.current_kind())
@@ -1148,7 +1169,7 @@ fn parse_switch<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 
     let span = Span::new(start, parser.current_span().start);
     Stmt {
-        kind: StmtKind::Switch(Box::new(SwitchStmt {
+        kind: StmtKind::Switch(parser.alloc(SwitchStmt {
             expr: switch_expr,
             cases,
         })),
@@ -1160,23 +1181,23 @@ fn parse_switch<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 // Throw / Try-Catch
 // =============================================================================
 
-fn parse_throw_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_throw_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance();
     let expr = expr::parse_expr(parser);
     parser.expect_semicolon("throw statement");
     let span = Span::new(start, parser.current_span().start);
     Stmt {
-        kind: StmtKind::Throw(Box::new(expr)),
+        kind: StmtKind::Throw(parser.alloc(expr)),
         span,
     }
 }
 
-fn parse_try_catch<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance();
     parser.expect(TokenKind::LeftBrace);
-    let mut body = Vec::with_capacity(16);
+    let mut body = parser.alloc_vec_with_capacity(16);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
         body.push(parse_stmt(parser));
@@ -1186,12 +1207,12 @@ fn parse_try_catch<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     }
     parser.expect(TokenKind::RightBrace);
 
-    let mut catches = Vec::with_capacity(2);
+    let mut catches = parser.alloc_vec_with_capacity(2);
     while parser.eat(TokenKind::Catch).is_some() {
         let catch_start = parser.start_span();
         parser.expect(TokenKind::LeftParen);
 
-        let mut types = Vec::new();
+        let mut types = parser.alloc_vec();
         types.push(parser.parse_name());
         while parser.eat(TokenKind::Pipe).is_some() {
             types.push(parser.parse_name());
@@ -1207,7 +1228,7 @@ fn parse_try_catch<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 
         parser.expect(TokenKind::RightParen);
         parser.expect(TokenKind::LeftBrace);
-        let mut catch_body = Vec::with_capacity(8);
+        let mut catch_body = parser.alloc_vec_with_capacity(8);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
             catch_body.push(parse_stmt(parser));
@@ -1227,7 +1248,7 @@ fn parse_try_catch<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 
     let finally = if parser.eat(TokenKind::Finally).is_some() {
         parser.expect(TokenKind::LeftBrace);
-        let mut finally_body = Vec::new();
+        let mut finally_body = parser.alloc_vec();
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
             finally_body.push(parse_stmt(parser));
@@ -1251,7 +1272,7 @@ fn parse_try_catch<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 
     let span = Span::new(start, parser.current_span().start);
     Stmt {
-        kind: StmtKind::TryCatch(Box::new(TryCatchStmt {
+        kind: StmtKind::TryCatch(parser.alloc(TryCatchStmt {
             body,
             catches,
             finally,
@@ -1264,7 +1285,7 @@ fn parse_try_catch<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 // Goto / Declare / Unset / Global
 // =============================================================================
 
-fn parse_goto<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_goto<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance();
     let name_token = parser.expect(TokenKind::Identifier);
@@ -1280,11 +1301,11 @@ fn parse_goto<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     }
 }
 
-fn parse_declare<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance();
     parser.expect(TokenKind::LeftParen);
-    let mut directives = Vec::new();
+    let mut directives = parser.alloc_vec();
     loop {
         if parser.check(TokenKind::RightParen) {
             break;
@@ -1309,12 +1330,15 @@ fn parse_declare<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         let stmts = parse_stmts_until_end(parser, &[TokenKind::EndDeclare]);
         parser.expect(TokenKind::EndDeclare);
         parser.expect(TokenKind::Semicolon);
-        Some(Box::new(Stmt {
+        Some(parser.alloc(Stmt {
             kind: StmtKind::Block(stmts),
             span: Span::new(start, parser.current_span().start),
         }))
     } else {
-        Some(Box::new(parse_stmt_or_block(parser)))
+        {
+            let s = parse_stmt_or_block(parser);
+            Some(parser.alloc(s))
+        }
     };
 
     let span = Span::new(start, parser.current_span().start);
@@ -1324,11 +1348,11 @@ fn parse_declare<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     }
 }
 
-fn parse_unset<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_unset<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance();
     parser.expect(TokenKind::LeftParen);
-    let mut exprs = Vec::new();
+    let mut exprs = parser.alloc_vec();
     exprs.push(expr::parse_expr(parser));
     while parser.eat(TokenKind::Comma).is_some() {
         if parser.check(TokenKind::RightParen) {
@@ -1345,10 +1369,10 @@ fn parse_unset<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     }
 }
 
-fn parse_global<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_global<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance();
-    let mut exprs = Vec::new();
+    let mut exprs = parser.alloc_vec();
     let e = expr::parse_expr(parser);
     if !is_simple_variable(&e) {
         parser.error(ParseError::Expected {
@@ -1380,7 +1404,7 @@ fn parse_global<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     }
 }
 
-fn is_simple_variable<'src>(expr: &Expr<'src>) -> bool {
+fn is_simple_variable<'arena, 'src>(expr: &Expr<'arena, 'src>) -> bool {
     matches!(
         &expr.kind,
         ExprKind::Variable(_) | ExprKind::VariableVariable(_)
@@ -1398,7 +1422,10 @@ fn is_reserved_class_name(name: &str) -> bool {
 }
 
 /// Validate a name used in extends/implements is not self/parent/static
-fn validate_class_ref<'src>(parser: &'_ mut Parser<'src>, name: &Name<'src>) {
+fn validate_class_ref<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    name: &Name<'arena, 'src>,
+) {
     if name.parts.len() == 1
         && name.kind == php_ast::NameKind::Unqualified
         && is_reserved_class_name(&name.parts[0])
@@ -1410,7 +1437,11 @@ fn validate_class_ref<'src>(parser: &'_ mut Parser<'src>, name: &Name<'src>) {
     }
 }
 
-fn parse_class<'src>(parser: &'_ mut Parser<'src>, modifiers: ClassModifiers) -> Stmt<'src> {
+fn parse_class<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    modifiers: ClassModifiers,
+    attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'class'
 
@@ -1442,12 +1473,12 @@ fn parse_class<'src>(parser: &'_ mut Parser<'src>, modifiers: ClassModifiers) ->
 
     let implements = if parser.eat(TokenKind::Implements).is_some() {
         let names = parse_name_list(parser);
-        for n in &names {
+        for n in names.iter() {
             validate_class_ref(parser, n);
         }
         names
     } else {
-        Vec::new()
+        parser.alloc_vec()
     };
 
     parser.expect(TokenKind::LeftBrace);
@@ -1458,20 +1489,22 @@ fn parse_class<'src>(parser: &'_ mut Parser<'src>, modifiers: ClassModifiers) ->
         .unwrap_or(parser.current_span().start);
 
     Stmt {
-        kind: StmtKind::Class(Box::new(ClassDecl {
+        kind: StmtKind::Class(parser.alloc(ClassDecl {
             name: Some(name),
             modifiers,
             extends,
             implements,
             members,
-            attributes: Vec::new(),
+            attributes,
         })),
         span: Span::new(start, end),
     }
 }
 
-pub fn parse_name_list<'src>(parser: &'_ mut Parser<'src>) -> Vec<Name<'src>> {
-    let mut names = Vec::new();
+pub fn parse_name_list<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+) -> ArenaVec<'arena, Name<'arena, 'src>> {
+    let mut names = parser.alloc_vec();
     names.push(parser.parse_name());
     while parser.eat(TokenKind::Comma).is_some() {
         if parser.check(TokenKind::LeftBrace) || parser.check(TokenKind::Semicolon) {
@@ -1484,8 +1517,10 @@ pub fn parse_name_list<'src>(parser: &'_ mut Parser<'src>) -> Vec<Name<'src>> {
 
 /// Parse trait adaptation block: `{ A::foo insteadof B; foo as bar; ... }`
 /// Called after consuming `{`.
-fn parse_trait_adaptations<'src>(parser: &'_ mut Parser<'src>) -> Vec<TraitAdaptation<'src>> {
-    let mut adaptations = Vec::new();
+fn parse_trait_adaptations<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+) -> ArenaVec<'arena, TraitAdaptation<'arena, 'src>> {
+    let mut adaptations = parser.alloc_vec();
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let start = parser.start_span();
 
@@ -1510,7 +1545,11 @@ fn parse_trait_adaptations<'src>(parser: &'_ mut Parser<'src>) -> Vec<TraitAdapt
             // Check for `insteadof` or `as`
             if parser.check(TokenKind::Identifier) && parser.current_text() == "insteadof" {
                 parser.advance(); // consume `insteadof`
-                let mut insteadof = vec![parser.parse_name()];
+                let mut insteadof = {
+                    let mut _v = parser.alloc_vec_with_capacity(1);
+                    _v.push(parser.parse_name());
+                    _v
+                };
                 while parser.eat(TokenKind::Comma).is_some() {
                     if parser.check(TokenKind::Semicolon) {
                         break;
@@ -1592,7 +1631,9 @@ fn parse_trait_adaptations<'src>(parser: &'_ mut Parser<'src>) -> Vec<TraitAdapt
 }
 
 /// Parse the right-hand side of an `as` alias: `[visibility] [newName]`
-fn parse_alias_rhs<'src>(parser: &'_ mut Parser<'src>) -> (Option<Visibility>, Option<&'src str>) {
+fn parse_alias_rhs<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+) -> (Option<Visibility>, Option<&'src str>) {
     let new_modifier = match parser.current_kind() {
         TokenKind::Public => {
             parser.advance();
@@ -1621,11 +1662,13 @@ fn parse_alias_rhs<'src>(parser: &'_ mut Parser<'src>) -> (Option<Visibility>, O
 }
 
 /// Parse property hooks: `{ get { ... } set(Type $value) { ... } }`
-fn parse_property_hooks<'src>(parser: &'_ mut Parser<'src>) -> Vec<PropertyHook<'src>> {
+fn parse_property_hooks<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+) -> ArenaVec<'arena, PropertyHook<'arena, 'src>> {
     let open = parser.expect(TokenKind::LeftBrace);
     let open_span = open.map(|t| t.span).unwrap_or(parser.current_span());
 
-    let mut hooks = Vec::new();
+    let mut hooks = parser.alloc_vec();
 
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let hook_start = parser.start_span();
@@ -1723,14 +1766,14 @@ fn parse_property_hooks<'src>(parser: &'_ mut Parser<'src>) -> Vec<PropertyHook<
             parser.expect(TokenKind::RightParen);
             p
         } else {
-            Vec::new()
+            parser.alloc_vec()
         };
 
         // Parse body: { stmts } | => expr; | ;
         let body = if parser.check(TokenKind::LeftBrace) {
             let open_brace = parser.expect(TokenKind::LeftBrace);
             let brace_span = open_brace.map(|t| t.span).unwrap_or(parser.current_span());
-            let mut stmts = Vec::with_capacity(8);
+            let mut stmts = parser.alloc_vec_with_capacity(8);
             while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
                 let span_before = parser.current_span();
                 stmts.push(parse_stmt(parser));
@@ -1765,8 +1808,10 @@ fn parse_property_hooks<'src>(parser: &'_ mut Parser<'src>) -> Vec<PropertyHook<
     hooks
 }
 
-pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMember<'src>> {
-    let mut members = Vec::with_capacity(8);
+pub fn parse_class_members<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+) -> ArenaVec<'arena, ClassMember<'arena, 'src>> {
+    let mut members = parser.alloc_vec_with_capacity(8);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         // Skip empty statements
         if parser.check(TokenKind::Semicolon) {
@@ -1782,7 +1827,7 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
         // Trait use: use TraitName;  or  use A, B { ... }
         if parser.check(TokenKind::Use) {
             parser.advance();
-            let mut traits = Vec::with_capacity(2);
+            let mut traits = parser.alloc_vec_with_capacity(2);
             traits.push(parser.parse_name());
             while parser.eat(TokenKind::Comma).is_some() {
                 if parser.check(TokenKind::Semicolon) || parser.check(TokenKind::LeftBrace) {
@@ -1795,7 +1840,7 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
                 parse_trait_adaptations(parser)
             } else {
                 parser.expect(TokenKind::Semicolon);
-                Vec::new()
+                parser.alloc_vec()
             };
             let span = Span::new(member_start, parser.current_span().start);
             members.push(ClassMember {
@@ -1978,7 +2023,7 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
                 None
             };
 
-            let mut const_items = Vec::new();
+            let mut const_items = parser.alloc_vec();
             loop {
                 let const_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
                     text
@@ -2009,17 +2054,34 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
                     span,
                 });
             }
-            for (const_name, value) in const_items {
-                members.push(ClassMember {
-                    kind: ClassMemberKind::ClassConst(ClassConstDecl {
-                        name: const_name,
-                        visibility,
-                        type_hint: const_type.clone(),
-                        value,
-                        attributes: member_attrs.clone(),
-                    }),
-                    span,
-                });
+            {
+                // Allocate the type hint into the arena so all items can share a reference
+                let shared_type_hint: Option<&'arena _> = const_type.map(|th| parser.alloc(th));
+                let mut const_iter = const_items.into_iter();
+                if let Some((first_name, first_value)) = const_iter.next() {
+                    members.push(ClassMember {
+                        kind: ClassMemberKind::ClassConst(ClassConstDecl {
+                            name: first_name,
+                            visibility,
+                            type_hint: shared_type_hint,
+                            value: first_value,
+                            attributes: member_attrs,
+                        }),
+                        span,
+                    });
+                    for (rest_name, rest_value) in const_iter {
+                        members.push(ClassMember {
+                            kind: ClassMemberKind::ClassConst(ClassConstDecl {
+                                name: rest_name,
+                                visibility,
+                                type_hint: shared_type_hint,
+                                value: rest_value,
+                                attributes: parser.alloc_vec(),
+                            }),
+                            span,
+                        });
+                    }
+                }
             }
             continue;
         }
@@ -2051,7 +2113,7 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
 
             let body = if parser.check(TokenKind::LeftBrace) {
                 parser.expect(TokenKind::LeftBrace);
-                let mut stmts = Vec::with_capacity(16);
+                let mut stmts = parser.alloc_vec_with_capacity(16);
                 while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
                     let span_before = parser.current_span();
                     stmts.push(parse_stmt(parser));
@@ -2108,7 +2170,7 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
             let hooks = if had_hooks_block {
                 parse_property_hooks(parser)
             } else {
-                Vec::new()
+                parser.alloc_vec()
             };
             let span = Span::new(member_start, parser.current_span().start);
             members.push(ClassMember {
@@ -2118,9 +2180,9 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
                     set_visibility,
                     is_static,
                     is_readonly,
-                    type_hint: type_hint.clone(),
+                    type_hint,
                     default,
-                    attributes: member_attrs.clone(),
+                    attributes: member_attrs,
                     hooks,
                 }),
                 span,
@@ -2151,7 +2213,7 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
                         });
                         parse_property_hooks(parser)
                     } else {
-                        Vec::new()
+                        parser.alloc_vec()
                     };
                     let pspan = Span::new(member_start, parser.current_span().start);
                     members.push(ClassMember {
@@ -2161,9 +2223,9 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
                             set_visibility: None,
                             is_static,
                             is_readonly,
-                            type_hint: type_hint.clone(),
+                            type_hint: None, // type applies to first decl only in arena model
                             default: pdefault,
-                            attributes: member_attrs.clone(),
+                            attributes: parser.alloc_vec(), // attrs apply to first decl only
                             hooks: phooks,
                         }),
                         span: pspan,
@@ -2192,7 +2254,10 @@ pub fn parse_class_members<'src>(parser: &'_ mut Parser<'src>) -> Vec<ClassMembe
 // Interface / Trait / Enum
 // =============================================================================
 
-fn parse_interface<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_interface<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance();
     let (name, name_span) = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
@@ -2215,12 +2280,12 @@ fn parse_interface<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 
     let extends = if parser.eat(TokenKind::Extends).is_some() {
         let names = parse_name_list(parser);
-        for n in &names {
+        for n in names.iter() {
             validate_class_ref(parser, n);
         }
         names
     } else {
-        Vec::new()
+        parser.alloc_vec()
     };
 
     parser.expect(TokenKind::LeftBrace);
@@ -2231,17 +2296,20 @@ fn parse_interface<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         .unwrap_or(parser.current_span().start);
 
     Stmt {
-        kind: StmtKind::Interface(Box::new(InterfaceDecl {
+        kind: StmtKind::Interface(parser.alloc(InterfaceDecl {
             name,
             extends,
             members,
-            attributes: Vec::new(),
+            attributes,
         })),
         span: Span::new(start, end),
     }
 }
 
-fn parse_trait<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_trait<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance();
     let name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
@@ -2263,16 +2331,19 @@ fn parse_trait<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         .unwrap_or(parser.current_span().start);
 
     Stmt {
-        kind: StmtKind::Trait(Box::new(TraitDecl {
+        kind: StmtKind::Trait(parser.alloc(TraitDecl {
             name,
             members,
-            attributes: Vec::new(),
+            attributes,
         })),
         span: Span::new(start, end),
     }
 }
 
-fn parse_enum<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_enum<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'enum'
 
@@ -2297,12 +2368,12 @@ fn parse_enum<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     let implements = if parser.eat(TokenKind::Implements).is_some() {
         parse_name_list(parser)
     } else {
-        Vec::new()
+        parser.alloc_vec()
     };
 
     parser.expect(TokenKind::LeftBrace);
 
-    let mut members = Vec::with_capacity(4);
+    let mut members = parser.alloc_vec_with_capacity(4);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         if parser.check(TokenKind::Semicolon) {
             parser.advance();
@@ -2314,7 +2385,7 @@ fn parse_enum<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         // Trait use
         if parser.check(TokenKind::Use) {
             parser.advance();
-            let mut traits = Vec::new();
+            let mut traits = parser.alloc_vec();
             traits.push(parser.parse_name());
             while parser.eat(TokenKind::Comma).is_some() {
                 traits.push(parser.parse_name());
@@ -2324,7 +2395,7 @@ fn parse_enum<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
                 parse_trait_adaptations(parser)
             } else {
                 parser.expect(TokenKind::Semicolon);
-                Vec::new()
+                parser.alloc_vec()
             };
             let span = Span::new(member_start, parser.current_span().start);
             members.push(EnumMember {
@@ -2463,7 +2534,7 @@ fn parse_enum<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 
             let body = if parser.check(TokenKind::LeftBrace) {
                 parser.expect(TokenKind::LeftBrace);
-                let mut stmts = Vec::with_capacity(16);
+                let mut stmts = parser.alloc_vec_with_capacity(16);
                 while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
                     let span_before = parser.current_span();
                     stmts.push(parse_stmt(parser));
@@ -2506,12 +2577,12 @@ fn parse_enum<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         .map(|t| t.span.end)
         .unwrap_or(parser.current_span().start);
     Stmt {
-        kind: StmtKind::Enum(Box::new(EnumDecl {
+        kind: StmtKind::Enum(parser.alloc(EnumDecl {
             name,
             scalar_type,
             implements,
             members,
-            attributes: Vec::new(),
+            attributes,
         })),
         span: Span::new(start, end),
     }
@@ -2521,7 +2592,7 @@ fn parse_enum<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 // Namespace / Use / Const
 // =============================================================================
 
-fn parse_namespace<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'namespace'
 
@@ -2529,7 +2600,7 @@ fn parse_namespace<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     if parser.check(TokenKind::LeftBrace) {
         // Global namespace block
         parser.expect(TokenKind::LeftBrace);
-        let mut stmts = Vec::with_capacity(16);
+        let mut stmts = parser.alloc_vec_with_capacity(16);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
             stmts.push(parse_stmt(parser));
@@ -2542,7 +2613,7 @@ fn parse_namespace<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             .map(|t| t.span.end)
             .unwrap_or(parser.current_span().start);
         return Stmt {
-            kind: StmtKind::Namespace(Box::new(NamespaceDecl {
+            kind: StmtKind::Namespace(parser.alloc(NamespaceDecl {
                 name: None,
                 body: NamespaceBody::Braced(stmts),
             })),
@@ -2555,7 +2626,7 @@ fn parse_namespace<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     if parser.check(TokenKind::LeftBrace) {
         // Braced namespace: namespace Foo\Bar { ... }
         parser.expect(TokenKind::LeftBrace);
-        let mut stmts = Vec::with_capacity(16);
+        let mut stmts = parser.alloc_vec_with_capacity(16);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
             stmts.push(parse_stmt(parser));
@@ -2568,7 +2639,7 @@ fn parse_namespace<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             .map(|t| t.span.end)
             .unwrap_or(parser.current_span().start);
         Stmt {
-            kind: StmtKind::Namespace(Box::new(NamespaceDecl {
+            kind: StmtKind::Namespace(parser.alloc(NamespaceDecl {
                 name: Some(name),
                 body: NamespaceBody::Braced(stmts),
             })),
@@ -2579,7 +2650,7 @@ fn parse_namespace<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         parser.expect(TokenKind::Semicolon);
         let span = Span::new(start, parser.current_span().start);
         Stmt {
-            kind: StmtKind::Namespace(Box::new(NamespaceDecl {
+            kind: StmtKind::Namespace(parser.alloc(NamespaceDecl {
                 name: Some(name),
                 body: NamespaceBody::Simple,
             })),
@@ -2588,7 +2659,7 @@ fn parse_namespace<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     }
 }
 
-fn parse_use<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'use'
 
@@ -2603,7 +2674,7 @@ fn parse_use<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
         UseKind::Normal
     };
 
-    let mut uses = Vec::with_capacity(4);
+    let mut uses = parser.alloc_vec_with_capacity(4);
 
     // Parse first name to check for group use
     let item_start = parser.start_span();
@@ -2661,8 +2732,17 @@ fn parse_use<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
             }
 
             // Combine prefix with sub-name
-            let combined_parts: Vec<_> =
-                prefix_parts.iter().cloned().chain(sub_name.parts).collect();
+            let combined_parts = {
+                let mut cp =
+                    parser.alloc_vec_with_capacity(prefix_parts.len() + sub_name.parts.len());
+                for p in prefix_parts.iter() {
+                    cp.push(p.clone());
+                }
+                for p in sub_name.parts.into_iter() {
+                    cp.push(p);
+                }
+                cp
+            };
             let sub_span = Span::new(item_start, parser.current_span().start);
             let combined_name = Name {
                 parts: combined_parts,
@@ -2746,11 +2826,11 @@ fn parse_use<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     }
 }
 
-fn parse_const<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_const<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'const'
 
-    let mut items = Vec::new();
+    let mut items = parser.alloc_vec();
     loop {
         let item_start = parser.start_span();
         let const_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
@@ -2788,7 +2868,7 @@ fn parse_const<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     }
 }
 
-fn parse_halt_compiler<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_halt_compiler<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
 
     // __halt_compiler must be at the outermost scope
@@ -2831,11 +2911,11 @@ fn parse_halt_compiler<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     }
 }
 
-fn parse_static_var<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'static'
 
-    let mut vars = Vec::new();
+    let mut vars = parser.alloc_vec();
     loop {
         let var_start = parser.start_span();
         let var_token = parser.expect(TokenKind::Variable);
@@ -2883,7 +2963,9 @@ fn parse_static_var<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
 // Expression statement (and label detection)
 // =============================================================================
 
-fn parse_expression_stmt_or_label<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_expression_stmt_or_label<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     let expr = expr::parse_expr(parser);
 
@@ -2918,12 +3000,12 @@ fn parse_expression_stmt_or_label<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'s
     parser.expect_semicolon("expression");
     let span = Span::new(start, parser.current_span().start);
     Stmt {
-        kind: StmtKind::Expression(Box::new(expr)),
+        kind: StmtKind::Expression(parser.alloc(expr)),
         span,
     }
 }
 
-fn parse_expression_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
+fn parse_expression_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     let expr = expr::parse_expr(parser);
 
@@ -2938,7 +3020,7 @@ fn parse_expression_stmt<'src>(parser: &'_ mut Parser<'src>) -> Stmt<'src> {
     parser.expect_semicolon("expression");
     let span = Span::new(start, parser.current_span().start);
     Stmt {
-        kind: StmtKind::Expression(Box::new(expr)),
+        kind: StmtKind::Expression(parser.alloc(expr)),
         span,
     }
 }
