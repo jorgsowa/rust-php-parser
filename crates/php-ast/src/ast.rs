@@ -600,12 +600,15 @@ pub enum ExprKind<'arena, 'src> {
 
     /// Heredoc: `<<<EOT ... EOT`
     Heredoc {
-        label: String,
+        label: &'src str,
         parts: ArenaVec<'arena, StringPart<'arena, 'src>>,
     },
 
     /// Nowdoc: `<<<'EOT' ... EOT`
-    Nowdoc { label: String, value: String },
+    Nowdoc {
+        label: &'src str,
+        value: Cow<'src, str>,
+    },
 
     /// Shell execution: `` `command $var` ``
     ShellExec(ArenaVec<'arena, StringPart<'arena, 'src>>),

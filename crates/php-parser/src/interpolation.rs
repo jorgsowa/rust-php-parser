@@ -13,53 +13,66 @@ pub fn parse_interpolated_parts<'arena, 'src>(
     inner: &'src str,
     base_offset: u32,
 ) -> ArenaVec<'arena, StringPart<'arena, 'src>> {
+<<<<<<< Updated upstream
     let mut parts = ArenaVec::with_capacity_in(4, arena);
     let mut literal = String::new();
+=======
+    let mut parts = ArenaVec::with_capacity_in(8, arena);
+>>>>>>> Stashed changes
     let bytes = inner.as_bytes();
     let len = bytes.len();
     let mut i = 0;
 
+    // Start of the current literal run within `inner`.
+    let mut literal_start = 0usize;
+    // Accumulated owned string; present only when the run contains escape sequences.
+    let mut owned: Option<String> = None;
+
     while i < len {
         match bytes[i] {
             b'\\' => {
-                // Escape sequences
+                // Materialise an owned buffer for this run if not already done.
+                if owned.is_none() {
+                    owned = Some(inner[literal_start..i].to_string());
+                }
+                let buf = owned.as_mut().unwrap();
                 if i + 1 < len {
                     let next = bytes[i + 1];
                     match next {
                         b'$' => {
-                            literal.push('$');
+                            buf.push('$');
                             i += 2;
                         }
                         b'\\' => {
-                            literal.push('\\');
+                            buf.push('\\');
                             i += 2;
                         }
                         b'n' => {
-                            literal.push('\n');
+                            buf.push('\n');
                             i += 2;
                         }
                         b'r' => {
-                            literal.push('\r');
+                            buf.push('\r');
                             i += 2;
                         }
                         b't' => {
-                            literal.push('\t');
+                            buf.push('\t');
                             i += 2;
                         }
                         b'v' => {
-                            literal.push('\x0B');
+                            buf.push('\x0B');
                             i += 2;
                         }
                         b'e' => {
-                            literal.push('\x1B');
+                            buf.push('\x1B');
                             i += 2;
                         }
                         b'f' => {
-                            literal.push('\x0C');
+                            buf.push('\x0C');
                             i += 2;
                         }
                         b'"' => {
-                            literal.push('"');
+                            buf.push('"');
                             i += 2;
                         }
                         b'x' | b'X' => {
@@ -71,11 +84,11 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                             }
                             if i > start {
                                 if let Ok(val) = u8::from_str_radix(&inner[start..i], 16) {
-                                    literal.push(val as char);
+                                    buf.push(val as char);
                                 }
                             } else {
-                                literal.push('\\');
-                                literal.push('x');
+                                buf.push('\\');
+                                buf.push('x');
                             }
                         }
                         b'0'..=b'7' => {
@@ -86,29 +99,31 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                                 i += 1;
                             }
                             if let Ok(val) = u8::from_str_radix(&inner[start..i], 8) {
-                                literal.push(val as char);
+                                buf.push(val as char);
                             }
                         }
                         _ => {
                             // Unknown escape: keep as-is
-                            literal.push('\\');
-                            literal.push(next as char);
+                            buf.push('\\');
+                            buf.push(next as char);
                             i += 2;
                         }
                     }
                 } else {
-                    literal.push('\\');
+                    buf.push('\\');
                     i += 1;
                 }
             }
             b'$' => {
                 // Check for {$ (complex syntax handled below) - this is simple $var
                 if i + 1 < len && is_var_start(bytes[i + 1]) {
-                    // Flush literal
-                    if !literal.is_empty() {
-                        parts.push(StringPart::Literal(Cow::Owned(std::mem::take(
-                            &mut literal,
-                        ))));
+                    // Flush literal run.
+                    if let Some(buf) = owned.take() {
+                        if !buf.is_empty() {
+                            parts.push(StringPart::Literal(Cow::Owned(buf)));
+                        }
+                    } else if i > literal_start {
+                        parts.push(StringPart::Literal(Cow::Borrowed(&inner[literal_start..i])));
                     }
 
                     // Parse variable name
@@ -208,17 +223,23 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                     }
 
                     parts.push(StringPart::Expr(expr));
+                    literal_start = i;
                 } else {
-                    literal.push('$');
+                    // Plain `$` not starting a variable — keep in literal run.
+                    if let Some(ref mut buf) = owned {
+                        buf.push('$');
+                    }
                     i += 1;
                 }
             }
             b'{' if i + 1 < len && bytes[i + 1] == b'$' => {
                 // Complex syntax: {$expr}
-                if !literal.is_empty() {
-                    parts.push(StringPart::Literal(Cow::Owned(std::mem::take(
-                        &mut literal,
-                    ))));
+                if let Some(buf) = owned.take() {
+                    if !buf.is_empty() {
+                        parts.push(StringPart::Literal(Cow::Owned(buf)));
+                    }
+                } else if i > literal_start {
+                    parts.push(StringPart::Literal(Cow::Borrowed(&inner[literal_start..i])));
                 }
 
                 i += 1; // skip {
@@ -261,16 +282,25 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                 let end_offset = base_offset + expr_end as u32;
                 let expr = parse_complex_interpolation(arena, source, expr_offset, end_offset);
                 parts.push(StringPart::Expr(expr));
+                literal_start = i;
             }
             _ => {
-                literal.push(bytes[i] as char);
+                // Regular character — push to owned buffer only if we're already materialised.
+                if let Some(ref mut buf) = owned {
+                    buf.push(bytes[i] as char);
+                }
                 i += 1;
             }
         }
     }
 
-    if !literal.is_empty() {
-        parts.push(StringPart::Literal(Cow::Owned(literal)));
+    // Flush remaining literal run.
+    if let Some(buf) = owned {
+        if !buf.is_empty() {
+            parts.push(StringPart::Literal(Cow::Owned(buf)));
+        }
+    } else if i > literal_start {
+        parts.push(StringPart::Literal(Cow::Borrowed(&inner[literal_start..i])));
     }
 
     parts

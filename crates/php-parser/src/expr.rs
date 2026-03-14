@@ -904,14 +904,16 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             let text = &src[token.span.start as usize..token.span.end as usize];
             let (label, body_start_in_text, body_end_in_text, indent) = parse_heredoc_content(text);
             let raw_body = &text[body_start_in_text..body_end_in_text];
-            let value = if !indent.is_empty() {
-                raw_body
-                    .lines()
-                    .map(|line| line.strip_prefix(&indent).unwrap_or(line))
-                    .collect::<Vec<_>>()
-                    .join("\n")
+            let value: Cow<'src, str> = if !indent.is_empty() {
+                Cow::Owned(
+                    raw_body
+                        .lines()
+                        .map(|line| line.strip_prefix(&indent).unwrap_or(line))
+                        .collect::<Vec<_>>()
+                        .join("\n"),
+                )
             } else {
-                raw_body.to_string()
+                Cow::Borrowed(raw_body)
             };
             Expr {
                 kind: ExprKind::Nowdoc { label, value },
@@ -2269,7 +2271,7 @@ fn token_to_binary_op(kind: TokenKind) -> BinaryOp {
 /// `body_start_in_text` and `body_end_in_text` are byte offsets within `text` bounding
 /// the verbatim heredoc content (with indentation intact, trailing newline stripped).
 /// `indent` is empty for non-indented heredocs.
-fn parse_heredoc_content(text: &str) -> (String, usize, usize, String) {
+fn parse_heredoc_content(text: &str) -> (&str, usize, usize, String) {
     // Skip optional `b` binary prefix, then <<<
     let b_prefix = if text.starts_with('b') { 1 } else { 0 };
     let prefix_len = b_prefix + 3; // optional 'b' + "<<<".len()
@@ -2279,18 +2281,18 @@ fn parse_heredoc_content(text: &str) -> (String, usize, usize, String) {
     // `after` starts at offset `prefix_len + trim_len` within `text`
     let after_start = prefix_len + trim_len;
 
-    // Extract label
+    // Extract label as a &'src str slice of `text`.
     let (label, label_consumed) = if let Some(stripped) = after.strip_prefix('\'') {
         let end = stripped.find('\'').unwrap_or(stripped.len());
-        (stripped[..end].to_string(), 1 + end + 1)
+        (&stripped[..end], 1 + end + 1)
     } else if let Some(stripped) = after.strip_prefix('"') {
         let end = stripped.find('"').unwrap_or(stripped.len());
-        (stripped[..end].to_string(), 1 + end + 1)
+        (&stripped[..end], 1 + end + 1)
     } else {
         let end = after
             .find(|c: char| !c.is_ascii_alphanumeric() && c != '_')
             .unwrap_or(after.len());
-        (after[..end].to_string(), end)
+        (&after[..end], end)
     };
 
     let rest = &after[label_consumed..];
@@ -2316,7 +2318,7 @@ fn parse_heredoc_content(text: &str) -> (String, usize, usize, String) {
         let line = &body[line_start..line_end];
         let trimmed = line.trim_start_matches([' ', '\t']);
         if trimmed == label
-            || (trimmed.starts_with(&*label)
+            || (trimmed.starts_with(label)
                 && trimmed[label.len()..]
                     .trim_start_matches(';')
                     .trim()
