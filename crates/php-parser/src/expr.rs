@@ -465,39 +465,124 @@ pub fn parse_expr_bp<'arena, 'src>(
 
 /// Parse a member name after -> or ?->. Accepts identifiers and semi-reserved keywords.
 fn parse_member_name<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
-    if parser.check(TokenKind::Variable) {
-        // Dynamic property: $obj->{$var} or $obj->$var
-        let token = parser.advance();
-        let src = parser.source;
-        let name = &src[token.span.start as usize + 1..token.span.end as usize];
-        return Expr {
-            kind: ExprKind::Variable(Cow::Borrowed(name)),
-            span: token.span,
-        };
-    }
-    if parser.check(TokenKind::LeftBrace) {
-        // Dynamic member: $obj->{expr}
-        parser.advance();
-        let inner = parse_expr(parser);
-        parser.expect(TokenKind::RightBrace);
-        return inner;
-    }
-    if let Some((text, span)) = parser.eat_identifier_or_keyword() {
-        return Expr {
-            kind: ExprKind::Identifier(Cow::Borrowed(text)),
-            span,
-        };
-    }
-    // Error
-    let span = parser.current_span();
-    parser.error(ParseError::Expected {
-        expected: "member name".into(),
-        found: parser.current_kind(),
-        span,
-    });
-    Expr {
-        kind: ExprKind::Error,
-        span,
+    // Single match dispatch: the compiler emits a jump table so the common
+    // case (plain Identifier) costs one load + one branch rather than the
+    // previous three sequential check() calls.
+    match parser.current_kind() {
+        // Most common: plain identifier or any keyword usable as a member name.
+        TokenKind::Identifier
+        | TokenKind::Class
+        | TokenKind::Abstract
+        | TokenKind::Final
+        | TokenKind::Interface
+        | TokenKind::Trait
+        | TokenKind::Extends
+        | TokenKind::Implements
+        | TokenKind::Public
+        | TokenKind::Protected
+        | TokenKind::Private
+        | TokenKind::Static
+        | TokenKind::Const
+        | TokenKind::Fn_
+        | TokenKind::Match_
+        | TokenKind::Namespace
+        | TokenKind::Use
+        | TokenKind::Readonly
+        | TokenKind::Enum_
+        | TokenKind::From
+        | TokenKind::Self_
+        | TokenKind::Parent_
+        | TokenKind::New
+        | TokenKind::Yield_
+        | TokenKind::Throw
+        | TokenKind::Try
+        | TokenKind::Catch
+        | TokenKind::Finally
+        | TokenKind::Instanceof
+        | TokenKind::Array
+        | TokenKind::List
+        | TokenKind::Switch
+        | TokenKind::Case
+        | TokenKind::Default
+        | TokenKind::If
+        | TokenKind::Else
+        | TokenKind::ElseIf
+        | TokenKind::While
+        | TokenKind::Do
+        | TokenKind::For
+        | TokenKind::Foreach
+        | TokenKind::As
+        | TokenKind::Function
+        | TokenKind::Return
+        | TokenKind::Echo
+        | TokenKind::Print
+        | TokenKind::Break
+        | TokenKind::Continue
+        | TokenKind::Goto
+        | TokenKind::Declare
+        | TokenKind::Unset
+        | TokenKind::Global
+        | TokenKind::Clone
+        | TokenKind::Isset
+        | TokenKind::Empty
+        | TokenKind::Include
+        | TokenKind::IncludeOnce
+        | TokenKind::Require
+        | TokenKind::RequireOnce
+        | TokenKind::Eval
+        | TokenKind::Exit
+        | TokenKind::Die
+        | TokenKind::True
+        | TokenKind::False
+        | TokenKind::Null
+        | TokenKind::And
+        | TokenKind::Or
+        | TokenKind::Xor
+        | TokenKind::MagicClass
+        | TokenKind::MagicDir
+        | TokenKind::MagicFile
+        | TokenKind::MagicFunction
+        | TokenKind::MagicLine
+        | TokenKind::MagicMethod
+        | TokenKind::MagicNamespace
+        | TokenKind::MagicTrait
+        | TokenKind::MagicProperty => {
+            let token = parser.advance();
+            let text = &parser.source[token.span.start as usize..token.span.end as usize];
+            Expr {
+                kind: ExprKind::Identifier(Cow::Borrowed(text)),
+                span: token.span,
+            }
+        }
+        // Dynamic: $obj->$var
+        TokenKind::Variable => {
+            let token = parser.advance();
+            let src = parser.source;
+            let name = &src[token.span.start as usize + 1..token.span.end as usize];
+            Expr {
+                kind: ExprKind::Variable(Cow::Borrowed(name)),
+                span: token.span,
+            }
+        }
+        // Dynamic: $obj->{expr}
+        TokenKind::LeftBrace => {
+            parser.advance();
+            let inner = parse_expr(parser);
+            parser.expect(TokenKind::RightBrace);
+            inner
+        }
+        _ => {
+            let span = parser.current_span();
+            parser.error(ParseError::Expected {
+                expected: "member name".into(),
+                found: parser.current_kind(),
+                span,
+            });
+            Expr {
+                kind: ExprKind::Error,
+                span,
+            }
+        }
     }
 }
 
