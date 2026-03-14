@@ -1811,7 +1811,7 @@ fn parse_property_hooks<'arena, 'src>(
 pub fn parse_class_members<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
 ) -> ArenaVec<'arena, ClassMember<'arena, 'src>> {
-    let mut members = parser.alloc_vec_with_capacity(8);
+    let mut members = parser.alloc_vec_with_capacity(16);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         // Skip empty statements
         if parser.check(TokenKind::Semicolon) {
