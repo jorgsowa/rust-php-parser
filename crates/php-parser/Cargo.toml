@@ -26,6 +26,7 @@ criterion = { workspace = true }
 walkdir = { workspace = true }
 mimalloc = { workspace = true }
 bumpalo = { workspace = true }
+pprof = { workspace = true }
 
 [[bench]]
 name = "parse"

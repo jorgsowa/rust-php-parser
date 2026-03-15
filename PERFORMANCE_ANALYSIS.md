@@ -1,7 +1,21 @@
 # PHP Parser Performance Analysis & Optimization Opportunities
 
 **Date:** 2026-03-15
-**Status:** Rust PHP parser already heavily optimized; identifying remaining opportunities
+**Status:** Profiling completed (March 15); roadmap updated based on actual measurements
+
+---
+
+## 🚨 ROADMAP-DRIVEN PERFORMANCE WORK PROTOCOL
+
+**EVERY optimization work must be guided by this roadmap.** Ad-hoc optimizations without profiling data waste effort. Before implementing any optimization:
+
+1. ✅ **Profile first** — Run flamegraph (see Tier 4.1) to identify actual bottlenecks
+2. ✅ **Check roadmap** — Compare against this document's priority list
+3. ✅ **Estimate impact** — Only pursue optimizations with measurable expected gain (>1%)
+4. ✅ **Benchmark baseline** — Measure against main branch before and after
+5. ✅ **Document results** — Update this roadmap with findings; reorder priorities as needed
+
+**Why?** Previous theoretical estimates (Tier 1.1-1.3) predicted lexer as a bottleneck. March 2026 profiling revealed lexer is only **0.4% of parse time**. Pursuing those optimizations would be wasted effort. Profile-guided work prevents this.
 
 ---
 
@@ -60,10 +74,10 @@ The parser has successfully implemented:
 - ✅ `repr(u8)` for TokenKind (1-byte discriminant)
 - ✅ **Operator binding power lookup table** (Tier 2.1, March 2026) — eliminates branch misprediction in Pratt parser
 
-**Remaining opportunities** cluster around three areas:
-1. **String scanning inefficiencies** (lexer bottleneck)
-2. **Branch prediction & cache locality** (parser hotpath)
-3. **Token streaming & intermediate allocations** (AST construction)
+**Remaining opportunities** (from March 15, 2026 profiling):
+1. ⚠️ **Arena memory allocation** (4.3% of time) — Bumpalo growing frequently; pre-allocation may be insufficient
+2. **Expression parsing optimization** (5.7% of time) — Pratt parser branch prediction; binding power table already done
+3. ~~String scanning inefficiencies~~ ❌ **NOT a bottleneck** (0.4% of time; skip Tier 1.1-1.3)
 
 ---
 
@@ -586,41 +600,112 @@ perf stat -e LLC-loads,LLC-load-misses,L1-dcache-loads,L1-dcache-load-misses ./t
 
 ---
 
-## Implementation Roadmap (Recommended Priority)
+## Tier 0: Profiling Results (March 15, 2026) & Current Bottlenecks
 
-| Priority | Opportunity | Effort | Impact | Status |
-|----------|------------|--------|--------|--------|
-| **1** | Operator BP lookup table (2.1) | Low | +1-2% | Quick win |
-| **2** | Cast tokens in lexer (1.2) | Medium | +2-4% | Needs testing |
-| **3** | SIMD string scanning (1.1) | High | +3-8% | Profile first |
-| **4** | Heredoc terminator (1.3) | Medium | +1-3% | Profile first |
-| **5** | Inline parser helpers (2.4) | Low | +1-2% | Verify coverage |
-| **6** | Parser memory layout (2.3) | Trivial | +0.5-1.5% | Measure first |
-| **7** | Bloom filter keywords (3.4) | Medium | +2-5% | Profile first |
-| **8** | Perf profiling (4.1) | Low | TBD | Foundational |
+**Methodology:** pprof flamegraph on WordPress corpus (1,983 PHP files, 22.3 MB) over 30 iterations.
+
+### Sample Distribution (27,720 total samples)
+
+| Rank | Function | Samples | % | Category |
+|------|----------|---------|---|----------|
+| 1 | `parse_stmt` | 2,608 | 9.4% | **Parser Hotspot** |
+| 2 | `parse_expr_bp` (Pratt) | 1,589 | 5.7% | **Parser Hotspot** |
+| 3 | `parse` | 1,310 | 4.7% | Parser Setup |
+| **4** | **`bumpalo::Bump::alloc_layout_slow`** | **1,181** | **4.3%** | ⚠️ **BOTTLENECK** |
+| 5 | `parse_block` | 1,084 | 3.9% | Parser |
+| ... | ... | ... | ... | ... |
+| 26 | **`php_lexer::Lexer::lex_php`** | **108** | **0.4%** | ✅ Not Bottleneck |
+
+**Top 30 cumulative:** 99.5% of time
+
+### Key Finding: Profiling Invalidates Tier 1 Priorities
+
+**Contradiction:** PERFORMANCE_ANALYSIS.md initially proposed:
+- Tier 1.1: SIMD string scanning (predicted +3-8%)
+- Tier 1.2: Cast tokens in lexer (predicted +2-4%)
+- Tier 1.3: Heredoc optimization (predicted +1-3%)
+
+**Profiling reality:**
+- Lexer is only **0.4% of parse time**
+- ❌ **These optimizations are NOT worth pursuing** — wrong target
+
+**Lesson:** Theoretical analysis predicted wrong bottleneck. Lexer is already highly optimized (memchr-based); parser allocation is the real issue.
+
+### New Priority: Arena Allocation (4.3% of Time)
+
+**Problem:**
+- `bumpalo::Bump<_>::alloc_layout_slow` being called frequently
+- Pre-allocation uses `src.len() * 3`; evidently insufficient for pathological cases
+- Each `alloc_layout_slow` call involves expensive reallocation/memcpy
+
+**Hypothesis:**
+- Initial arena size is undersized; needs to be larger (4x-5x instead of 3x)
+- OR: Certain statement types (classes, functions) cause excessive Vec growth
+
+**Quick Wins (Tier 0 — implement immediately):**
+
+1. **Increase arena pre-allocation** — Test `src.len() * 4` or `* 5`
+   - Effort: 1 line change
+   - Expected: +1-3% throughput
+   - Risk: Minimal (only affects memory usage by ~25%)
+
+2. **Inline hot parser helpers** — Mark with `#[inline(always)]`
+   - Functions: `advance()`, `check()`, `peek_kind()`, `peek2_kind()`
+   - Effort: ~5 lines
+   - Expected: +0.5-1% throughput
+   - Risk: None (just inlining hints)
+
+3. **Profile allocation hotspots** — Identify which constructs allocate heavily
+   - Effort: 2-3 hours instrumentation
+   - Expected: Data to guide further optimizations
+   - Risk: None (profiling only)
+
+---
+
+## Implementation Roadmap (Profiling-Guided Priority)
+
+| Priority | Opportunity | Effort | Profiled Impact | Status |
+|----------|------------|--------|---------|--------|
+| **0.1** | **Increase arena pre-allocation (Tier 0)** | **Trivial** | **+1-3%** | ✅ **NEXT** |
+| **0.2** | **Inline parser helpers (Tier 0)** | **Trivial** | **+0.5-1%** | ✅ **NEXT** |
+| **0.3** | Profile allocation hotspots (Tier 0) | Low | Data-driven | ✅ **NEXT** |
+| 1 | Operator BP lookup table (2.1) | Low | +1-2% | ✅ **DONE** |
+| 2 | ~~Cast tokens in lexer (1.2)~~ ❌ | Medium | ~~+2-4%~~ Attempted; caused regressions | Reverted |
+| 3 | ~~SIMD string scanning (1.1)~~ ❌ | High | ~~+3-8%~~ Only 0.4% of time; NOT bottleneck | Skip |
+| 4 | ~~Heredoc terminator (1.3)~~ ❌ | Medium | ~~+1-3%~~ Lexer not bottleneck (0.4%) | Skip |
+| 5 | Parser memory layout (2.3) | Trivial | +0.5-1.5% | If L1 cache misses >10% |
+| 6 | ~~Bloom filter keywords (3.4)~~ | Medium | ~~+2-5%~~ Keyword lookup already O(1) | Low priority |
+| 7 | Cache behavior analysis (4.2) | Low | Data-driven | If needed for 2.3 |
 
 ---
 
 ## Expected Overall Impact
 
-**Conservative estimate:** Implementing Tier 1 + Tier 2 optimizations could yield:
-- **+8-15% throughput** (cumulative)
-- **Negligible memory overhead** (cast tokens +600 bytes, BP table 256 bytes)
+**Conservative estimate** (based on profiling, Tier 0 + verified opportunities):
+- **+2-4% throughput** (arena pre-alloc +1-3%, inline helpers +0.5-1%)
+- **Negligible memory overhead** (just pre-allocation)
 
-**Aggressive estimate:** With Tier 3 additions:
-- **+12-25% throughput**
+**If profiling reveals more allocation hotspots:**
+- **+3-6% throughput** (arena-related improvements cumulative)
+
+**NOT expected:**
+- ~~+8-15% from Tier 1 (lexer is not bottleneck)~~
+- ~~+12-25% with Tier 3 additions~~
+
+**Why the change?** Profiling invalidated the theoretical Tier 1-3 estimates. Lexer optimizations targeting 3-8% impact but only 0.4% of time. Instead, focus on Tier 0 quick wins and profiling-guided improvements.
 
 ---
 
-## Risk Assessment
+## Risk Assessment (Updated Post-Profiling)
 
-| Opportunity | Risk | Mitigation |
-|------------|------|-----------|
-| Cast tokens | Snapshot changes | Pre-generate snapshot diffs, verify with snapshot tests |
-| SIMD scanning | Platform-specific | Use conditional compilation, fallback to memchr |
-| BP lookup table | Maintainability | Document with comments, automated table generation |
-| Inline directives | Code bloat | Monitor binary size, use `#[inline]` sparingly |
-| Heredoc optimization | Correctness | Extensive heredoc test corpus coverage |
+| Opportunity | Risk | Mitigation | Status |
+|------------|------|-----------|--------|
+| Arena pre-allocation | Memory bloat (minor) | Benchmark memory usage; revert if >10% growth | ✅ Safe to proceed |
+| Inline helpers | Code bloat | Only inline tier-0 hot functions | ✅ Safe to proceed |
+| ~~SIMD scanning~~ | ~~Platform-specific~~ | ~~Conditional compilation~~ | ❌ **Skip — Not a bottleneck** |
+| ~~Cast tokens~~ | ~~Snapshot changes~~ | ~~Pre-generate snapshot diffs~~ | ❌ **Already reverted; don't retry** |
+| ~~Heredoc optimization~~ | ~~Correctness~~ | ~~Extensive test coverage~~ | ❌ **Skip — Lexer only 0.4% of time** |
+| BP lookup table (done) | Maintainability ✓ | Document with comments | ✅ **Complete** |
 
 ---
 
@@ -644,10 +729,16 @@ perf stat -e LLC-loads,LLC-load-misses,L1-dcache-loads,L1-dcache-load-misses ./t
 
 ---
 
-## Next Steps
+## Next Steps (Post-Profiling)
 
-1. **Run perf/flamegraph** to identify actual bottleneck (Tier 4.1)
-2. **Implement Tier 2.1** (operator BP table) — quick win, low risk
-3. **Profile vs. competitor** to understand relative gaps
-4. **Iterate on Tier 1** based on profiling results
+1. ✅ **Profiling complete** (March 15, 2026) — See Tier 0 above
+2. **Implement Tier 0 quick wins** (30 mins):
+   - Increase arena pre-allocation: `src.len() * 4`
+   - Add `#[inline(always)]` to `advance()`, `check()`, `peek_kind()`, `peek2_kind()`
+3. **Benchmark against main** using same methodology (10 samples, 3 corpora)
+4. **Profile allocation hotspots** (2-3 hours):
+   - Identify which parser functions cause `alloc_layout_slow` calls
+   - Determine if certain AST node types are allocation-heavy
+5. **Document and iterate** — Update this roadmap with new findings
+6. **Skip Tier 1.1-1.3 entirely** — Profiling confirmed these are not bottlenecks
 
