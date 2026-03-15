@@ -1,37 +1,8 @@
 # Roadmap
 
-This roadmap covers both performance work (completed and planned) and feature development. Feature phases are ordered from most foundational to most ambitious — later phases build on earlier ones.
+This roadmap covers feature development and tracks ongoing performance optimization work.
 
----
-
-## Performance
-
-### Done
-
-| Change | Branch | What |
-|--------|--------|------|
-| Keyword resolution | `perf/resolve-keyword-no-alloc` | Replace `to_ascii_lowercase()` in `resolve_keyword` with length-dispatched `eq_ignore_ascii_case` — eliminates 1 heap alloc per identifier token |
-| Type/cast detection | `perf/type-cast-no-alloc` | Same pattern in type hint and cast detection |
-| Zero-copy AST | `perf/zero-copy-ast` | AST fields changed from `String` to `&'src str` / `Cow<'src, str>` — eliminates alloc for every name, variable, param, method, class, and type identifier |
-| Interpolation sub-parser | `perf/interpolation-sub-parser` | `{$expr}` in double-quoted/backtick strings uses `Parser::new_at` instead of wrapping in `<?php ;` and re-running the full parser — eliminates string alloc, AST clone, and span rewrite per interpolation |
-| String/Vec optimizations | `perf/string-and-vec-optimizations` | `Vec::with_capacity` across all hot parse loops; `ExprKind::String` and `StringPart::Literal` use `Cow::Borrowed` for escape-free strings; heredoc sub-parser path for non-indented heredocs; remove unnecessary `Token::clone` in `peek_text` |
-| Benchmarking suite | — | Criterion.rs harness with Laravel, Symfony, and WordPress corpora (15K PHP files) as git submodules; CI workflow runs a full bench on PRs (saves `pr` baseline) and on main (saves `main` baseline); critcmp regression table posted to PR summary; HTML report uploaded as artifact on main |
-| Arena bump allocation | `perf/arena-bump-allocation` | Replace all `Box<T>` and `Vec<T>` AST allocations with `bumpalo` arena; collections use `ArenaVec`; nodes use `&'arena T`. Eliminates per-node `malloc`/`free` overhead and reduces peak heap usage to a single arena chunk. |
-| `StmtKind` size + indented heredoc re-parse | `perf/stmt-kind-size-indented-heredoc-subparser` | Arena-indirect `Declare` and `Use` variants to shrink `StmtKind` enum, improving cache density. Eliminate the indented heredoc re-parse: de-indentation now happens in a single pass rather than scanning the body twice. |
-| Micro-optimisations | — | `advance()` uses `std::mem::take` instead of `drain().collect()` to move lexer errors without allocating; Pratt BP functions take `TokenKind` by value (it's `Copy`) and are marked `#[inline(always)]`; `parse_simple_type` drops dead `null`/`true`/`false` identifier checks (lexer resolves these to dedicated tokens); interpolated-string part vec pre-sized to 8 instead of 4. |
-| `Heredoc`/`Nowdoc` labels + Nowdoc value + zero-copy literals + arena pre-sizing | — | Heredoc/Nowdoc labels changed from `String` to `&'src str` (slice into source, zero allocation). `Nowdoc.value` changed to `Cow<'src, str>` — `Borrowed` for non-indented nowdocs, `Owned` for indented. `parse_interpolated_parts` rewritten to track a `literal_start` cursor: for escape-free runs (the common case) emits `Cow::Borrowed(&inner[start..end])` with no allocation; only materialises an owned `String` on the first escape encountered. Benchmark arena pre-sized to `src.len() * 3` to avoid chunk reallocations. |
-| `ExprKind` enum size reduction + class body capacity | — | Arena-indirect `MethodCall`, `NullsafeMethodCall`, and `StaticMethodCall` variants: `StaticMethodCallExpr` (56 B) and `MethodCallExpr` (40 B) inline → 8 B pointer, reducing `ExprKind` from ~64 B to ~40 B and `Expr { kind, span }` from ~72 B to ~48 B. Also increased `parse_class_members` `ArenaVec` initial capacity from 8 to 16 to avoid reallocation for typical PHP classes. |
-
-### Remaining
-
-| Change | What | Complexity |
-|--------|------|------------|
-| `parse_simple_type` keyword-type allocation | Keyword types (`self`, `parent`, `static`, `array`, etc.) construct a full `Name { parts: alloc_vec_one(...) }` when they could be dedicated `TypeHintKind` variants, eliminating the inner `ArenaVec` allocation for every typed parameter and return type. | Low |
-| `Name` single-part fast path | `parse_name()` always allocates a 1-element `ArenaVec` even for the overwhelmingly common unqualified single-part case (`strlen`, `Foo`, `$obj`). A flattened `Name::Simple { text: &'src str, span }` variant would bypass the Vec entirely for these cases. | Medium |
-| `parse_heredoc_content` single pass | Currently scans heredoc content twice to find the label then the body start. Merge into one pass. | Low |
-| Perfect hash for keyword resolution | Replace the length-bucketed `match` + `eq_ignore_ascii_case` dispatch in `resolve_keyword` with a compile-time perfect hash (`phf::Map<&[u8], TokenKind>`). Normalise to lowercase in one pass, then perform a guaranteed single-probe lookup — eliminates the length-dispatch branches and the per-keyword string comparisons. | Low |
-| Lexer `property` state after `->` | After `->` or `?->`, enter a dedicated lexer state where all identifiers are emitted as `Identifier` regardless of whether they match a keyword. This removes the parser-level special-casing needed to allow `$obj->class`, `$obj->list`, `$obj->fn`, etc., and mirrors the approach used by z7zmey/php-parser's Ragel-based lexer. | Medium |
-| Cast tokens in lexer | Emit `(int)`, `(string)`, `(array)`, `(object)`, `(bool)`, `(float)`, `(unset)` as dedicated cast tokens in the lexer (single pattern match consuming `(`, optional whitespace, type keyword, `)`). Eliminates the parser lookahead currently needed to distinguish `(int)$x` from `(int + $x)`. | Medium |
+**Performance work** (completed optimizations, remaining opportunities, and detailed analysis) is documented in [`PERFORMANCE_ANALYSIS.md`](./PERFORMANCE_ANALYSIS.md).
 
 ---
 
@@ -223,8 +194,6 @@ Compile to WebAssembly for browser-based PHP tooling.
 ### Dependency Graph
 
 ```
-Performance (independent, ongoing)
-
 1.1 Comment Preservation ──────────────┐
                                        ├──→ 2.2 Pretty Printer ──→ 3.1 LSP ──→ 3.2 Incremental
 1.2 Visitor / Walker API ──┬───────────┘                             ↑
@@ -233,6 +202,8 @@ Performance (independent, ongoing)
 
 3.3 WASM Target (independent, improves with 2.2)
 ```
+
+**Note:** Performance optimization is tracked separately in `PERFORMANCE_ANALYSIS.md` and is ongoing independent of feature phases.
 
 ### Complexity Estimates
 
