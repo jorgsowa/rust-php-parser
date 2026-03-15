@@ -125,7 +125,7 @@ fn main() {
     // Additional insights
     println!("\nALLOCATION INSIGHTS:");
     println!("- {} files successfully parsed", total_allocations);
-    println!("- Arena pre-allocation: src.len() * 4");
+    println!("- Arena pre-allocation: src.len() * 5");
     println!("\nNOTE: For detailed per-function allocation tracking, use flamegraph");
     println!("with memory profiling or add instrumentation to parser hotspots.");
 }

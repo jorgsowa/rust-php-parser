@@ -8,13 +8,13 @@ use crate::stmt;
 const MAX_ERRORS: usize = 100;
 
 pub struct Parser<'arena, 'src> {
-    pub arena: &'arena bumpalo::Bump,
-    lexer: Lexer<'src>,
     current: Token,
-    pub source: &'src str,
-    errors: Vec<ParseError>,
     /// Nesting depth (0 = top-level scope)
     pub depth: u32,
+    lexer: Lexer<'src>,
+    pub arena: &'arena bumpalo::Bump,
+    pub source: &'src str,
+    errors: Vec<ParseError>,
 }
 
 impl<'arena, 'src> Parser<'arena, 'src> {
