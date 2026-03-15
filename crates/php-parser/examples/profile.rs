@@ -23,9 +23,9 @@ fn collect_corpus(dir: &Path) -> (u64, Vec<String>) {
 }
 
 fn main() {
-    println!("Loading WordPress corpus...");
+    println!("Loading Symfony corpus...");
     let base = Path::new("crates/php-parser/benches/corpus");
-    let (total_bytes, sources) = collect_corpus(&base.join("wordpress"));
+    let (total_bytes, sources) = collect_corpus(&base.join("symfony"));
 
     println!(
         "Loaded {} files, {} bytes total",
@@ -57,25 +57,12 @@ fn main() {
 
     println!("\nGenerating profiling reports...");
     if let Ok(report) = guard.report().build() {
-        // Flamegraph
         match report.flamegraph(std::fs::File::create("flamegraph.svg").unwrap()) {
             Ok(_) => println!("✓ Flamegraph saved to flamegraph.svg"),
             Err(e) => eprintln!("Error writing flamegraph: {}", e),
         }
-
-        // Protobuf (Google's format, can be analyzed further)
-        match report.pprof() {
-            Ok(profile) => {
-                use std::io::Write;
-                if let Ok(mut f) = std::fs::File::create("profile.pb") {
-                    let _ = f.write_all(&profile);
-                    println!("✓ Profile protobuf saved to profile.pb");
-                }
-            }
-            Err(e) => eprintln!("Error creating pprof: {}", e),
-        }
     }
 
-    println!("\nTo analyze the flamegraph, open flamegraph.svg in a web browser.")
+    println!("\nTo analyze the flamegraph, open flamegraph.svg in a web browser.");
     println!("Most expensive functions should be clearly visible in the visualization.");
 }

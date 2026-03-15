@@ -805,6 +805,58 @@ perf stat -e LLC-loads,LLC-load-misses,L1-dcache-loads,L1-dcache-load-misses ./t
 
 ---
 
+## Profiling Update (March 16, 2026) — Symfony vs WordPress Corpus Analysis
+
+**Flamegraph profiling: SYMFONY corpus (primary focus, 30 iterations, 10,355 files, 86.2 MB):**
+
+| Rank | Function | Samples | % | Finding |
+|------|----------|---------|---|---------|
+| **1** | **parse_expr_bp** | **3,881** | **19.01%** | ⚠️ Largest bottleneck |
+| **2** | **alloc_layout_slow** | **2,810** | **13.76%** | ⚠️ 65% higher than WordPress! |
+| — | NOCANCEL (system) | 2,808 | 13.75% | System overhead |
+| **3** | **parse_array_literal** | **1,880** | **9.21%** | ⭐ **NEW HOTSPOT (WP: <1%)** |
+| **4** | **parse_array_element** | **1,531** | **7.50%** | ⭐ **NEW HOTSPOT (WP: 2.89%)** |
+| 5 | parse_arg_list_or_callable | 1,340 | 6.56% | Function arguments |
+| 6 | parse_stmt | 988 | 4.84% | Statement parsing (lower than WP) |
+| 7 | parse_block | 693 | 3.39% | Block parsing (much lower than WP) |
+
+**Comparison: WordPress vs Symfony hotspots:**
+
+| Function | WordPress | Symfony | Difference |
+|----------|-----------|---------|-----------|
+| parse_expr_bp | 15.77% | 19.01% | ↑ +3.24% |
+| alloc_layout_slow | 8.34% | 13.76% | ↑↑ **+65%** |
+| parse_array_literal | <1% | 9.21% | ⭐ **NEW** |
+| parse_array_element | 2.89% | 7.50% | ↑ +160% |
+| parse_class_members | 5.73% | absent | ❌ Not relevant |
+| parse_class | 5.62% | absent | ❌ Not relevant |
+| parse_stmt | 10.82% | 4.84% | ↓ -55% |
+
+**Key Findings:**
+
+1. **Array parsing is Symfony's #1 optimization opportunity (16.71% combined)**
+   - `parse_array_literal` (9.21%) + `parse_array_element` (7.50%)
+   - Symfony = configuration-heavy (arrays); WordPress = class-heavy (OOP)
+   - Expected impact: **+2-4% throughput**
+
+2. **Memory allocation crisis on Symfony (13.76% vs 8.34% on WordPress)**
+   - 5x pre-allocation insufficient for array-heavy code
+   - Allocation bottleneck is 65% worse on Symfony
+   - Expected impact of 6x-7x: **+1-2% throughput**
+
+3. **Class parsing optimization has low ROI (WordPress-specific)**
+   - WordPress: 11.35% combined (class parsing critical)
+   - Symfony: not in top 14 hotspots (irrelevant)
+   - Skip class parsing optimization; focus on arrays instead
+
+**Updated Priority Ranking (Symfony-focused):**
+1. **Array parsing optimization** (16.71%) — Symfony-specific; biggest opportunity
+2. **Memory allocation tuning** (13.76%) — Increase pre-allocation to 6x-7x
+3. **Expression parsing micro-optimization** (19.01%) — Still largest single function
+4. **Skip:** Class parsing (WordPress-specific, not a Symfony bottleneck)
+
+---
+
 ## Next Steps (Post-Tier 2 Implementation, March 15, 2026)
 
 ### Completed ✅
@@ -815,16 +867,36 @@ perf stat -e LLC-loads,LLC-load-misses,L1-dcache-loads,L1-dcache-load-misses ./t
 3. ✅ **Benchmarked against main** — All improvements confirmed with 10 samples per corpus
 4. ✅ **Attempted but reverted:** ArenaVec capacity hints (too aggressive for diverse corpora)
 
-### Planned ⏳
-1. **Profile expression parsing** (5.7% of time):
-   - Binding power table is already done; profile for additional opportunities
-   - May investigate prefetching or branch predictor hints if available
-2. **Memory allocation profiling** (if needed):
-   - Determine which AST node types allocate most heavily
-   - Consider targeted pre-allocation for specific hot loops (if universal hints fail)
-3. **Competitor benchmarking**:
-   - Compare against nikic/PHP-Parser, Zend Engine on same corpora
-   - Identify specific slow patterns (long strings, deep nesting, etc.)
+### Planned ⏳ (Symfony-Focused Optimizations)
+
+1. **Array parsing optimization** (16.71% combined on Symfony):
+   - `parse_array_literal` (9.21%) + `parse_array_element` (7.50%)
+   - Profile for: redundant element parsing, unnecessary lookahead, inefficient key/value handling
+   - Ideas: Pre-allocate ArenaVec for elements, cache parsing state, reduce branching
+   - Benchmark on all three corpora (Symfony highest impact, verify WordPress/Laravel no regression)
+   - Expected impact: **+2-4% throughput on Symfony**
+
+2. **Memory allocation tuning for array-heavy code** (13.76% on Symfony):
+   - Increase arena pre-allocation from 5x to 6x or 7x
+   - Symfony needs more space for array elements than WordPress needs for classes
+   - OR: Targeted pre-allocation just for array context
+   - Benchmark memory overhead; ensure no bloat on smaller files
+   - Expected impact: **+1-2% throughput on Symfony; measure all corpora**
+
+3. **Expression parsing micro-optimization** (19.01% on Symfony):
+   - parse_expr_bp is largest single function on both corpora (15.77% WP, 19.01% Symfony)
+   - Binding power table done; need call-tree analysis for further opportunities
+   - May drill down with perf/callgrind to see parse_atom/try_parse_cast overhead
+   - Expected impact: +1-2% if micro-inefficiencies found
+
+4. **Skip class parsing optimization**:
+   - WordPress-specific (11.35% combined vs <0.5% on Symfony)
+   - Low ROI on target corpus (Symfony)
+   - ❌ Not worth pursuing for general-purpose parser
+
+5. **Competitor benchmarking** (after above optimizations):
+   - Compare against nikic/PHP-Parser, Zend Engine on Symfony/WordPress
+   - Identify specific slow patterns unique to our implementation
 
 ### Deprioritized ❌
 - ~~Tier 1.1-1.3 (lexer optimizations)~~ — Profiling confirmed lexer is only 0.4% of time; not worth pursuing
