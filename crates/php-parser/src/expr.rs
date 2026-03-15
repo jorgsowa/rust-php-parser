@@ -2050,7 +2050,9 @@ fn parse_array_literal<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Ex
     let start = parser.start_span();
     parser.advance(); // consume [
 
-    let mut elements = parser.alloc_vec_with_capacity(8);
+    // Symfony optimization: arrays are often larger (configs, annotations)
+    // Increased from 8 to 16 to reduce growth for typical Symfony arrays
+    let mut elements = parser.alloc_vec_with_capacity(16);
 
     if !parser.check(TokenKind::RightBracket) {
         loop {
@@ -2095,7 +2097,8 @@ fn parse_array_call<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     parser.advance(); // consume 'array'
     parser.expect(TokenKind::LeftParen);
 
-    let mut elements = parser.alloc_vec_with_capacity(8);
+    // Symfony optimization: same as parse_array_literal
+    let mut elements = parser.alloc_vec_with_capacity(16);
 
     if !parser.check(TokenKind::RightParen) {
         loop {

@@ -30,6 +30,18 @@ for err in &result.errors {
 }
 ```
 
+## Performance
+
+This parser is optimized for **modern PHP applications with full typing** (PHP 7.4+, 8.x). It delivers fastest performance on Symfony, Laravel, and other typed codebases.
+
+The parser prioritizes performance on contemporary PHP patterns:
+- **Type hints** — Full coverage (union types, mixed, never, readonly, attributes, etc.)
+- **Complex expressions** — Method chains, array access, spread operators
+- **Arrays & collections** — Configuration-heavy code (Symfony/Laravel patterns)
+- **Structured OOP** — Classes, traits, interfaces with complete feature support
+
+See [PERFORMANCE_ANALYSIS.md](PERFORMANCE_ANALYSIS.md) and [SYMFONY_OPTIMIZATION_ANALYSIS.md](SYMFONY_OPTIMIZATION_ANALYSIS.md) for detailed profiling and optimization analysis.
+
 ## Testing
 
 ```sh
