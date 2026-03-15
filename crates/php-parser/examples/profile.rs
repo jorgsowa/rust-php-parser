@@ -5,10 +5,7 @@ fn collect_corpus(dir: &Path) -> (u64, Vec<String>) {
     let mut sources = Vec::new();
     let mut total_bytes = 0u64;
 
-    for entry in WalkDir::new(dir)
-        .into_iter()
-        .filter_map(|e| e.ok())
-    {
+    for entry in WalkDir::new(dir).into_iter().filter_map(|e| e.ok()) {
         if entry.file_type().is_file()
             && entry.path().extension().and_then(|s| s.to_str()) == Some("php")
         {

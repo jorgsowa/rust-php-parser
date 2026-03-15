@@ -13,10 +13,7 @@ struct FileStats {
 fn collect_corpus(dir: &Path) -> Result<Vec<(String, String)>, Box<dyn std::error::Error>> {
     let mut sources = Vec::new();
 
-    for entry in WalkDir::new(dir)
-        .into_iter()
-        .filter_map(|e| e.ok())
-    {
+    for entry in WalkDir::new(dir).into_iter().filter_map(|e| e.ok()) {
         if entry.file_type().is_file()
             && entry.path().extension().and_then(|s| s.to_str()) == Some("php")
         {
@@ -127,7 +124,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let min = *sorted.first().unwrap();
 
     println!("\nMultiplier statistics (arena_bytes / file_bytes):");
-    println!("  min: {:.2}x  p50: {:.2}x  p95: {:.2}x  p99: {:.2}x  max: {:.2}x", min, p50, p95, p99, max);
+    println!(
+        "  min: {:.2}x  p50: {:.2}x  p95: {:.2}x  p99: {:.2}x  max: {:.2}x",
+        min, p50, p95, p99, max
+    );
     println!("  mean: {:.2}x", mean);
 
     // Histogram: files per multiplier range
@@ -143,7 +143,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     ];
 
     for (min, max, label) in ranges {
-        let count = multipliers.iter().filter(|m| **m >= min && **m < max).count();
+        let count = multipliers
+            .iter()
+            .filter(|m| **m >= min && **m < max)
+            .count();
         let bar_width = (count as f64 / stats.len() as f64 * 40.0).ceil() as usize;
         let bar = "█".repeat(bar_width);
         println!("  {:10} [{:4} files] {}", label, count, bar);
@@ -160,10 +163,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!("✓ Current 5x pre-allocation is sufficient for this corpus.");
         println!("  Recommendation: Focus on expression parsing optimization.");
     } else if overflow_pct > 5.0 {
-        println!("⚠ {:.1}% of files overflow 5x pre-allocation.", overflow_pct);
+        println!(
+            "⚠ {:.1}% of files overflow 5x pre-allocation.",
+            overflow_pct
+        );
         println!("  Recommendation: Increase pre-allocation to 6x or 7x.");
     } else {
-        println!("✓ Only {:.1}% of files overflow 5x pre-allocation.", overflow_pct);
+        println!(
+            "✓ Only {:.1}% of files overflow 5x pre-allocation.",
+            overflow_pct
+        );
         println!("  Recommendation: 5x is acceptable; monitor specific hotspots.");
     }
     println!("{}", "=".repeat(80));
