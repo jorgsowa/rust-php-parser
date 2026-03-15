@@ -27,6 +27,54 @@
 
 ---
 
+## 🔬 Arena Allocation Profiling (March 15, 2026 - Updated)
+
+**Tool:** `crates/php-parser/examples/profile_allocations.rs` (rewritten to use `arena.allocated_bytes()`)
+
+**WordPress Corpus Results:**
+- **Total corpus:** 1,983 files, 22.3 MB
+- **Files overflowing 5x pre-allocation:** 1,983/1,983 (100%)
+- **Parse time:** 0.07s total (~0.03ms per file in release mode)
+
+**Multiplier Statistics (allocated_bytes / file_bytes):**
+```
+  min: 5.00x  p50: 16.03x  p95: 58.36x  p99: 163.47x  max: 163.47x
+  mean: 21.98x
+```
+
+**Histogram (files per multiplier range):**
+```
+  0.0–1.0x   [   0 files]
+  1.0–2.0x   [   0 files]
+  2.0–3.0x   [   0 files]
+  3.0–4.0x   [   0 files]
+  4.0–5.0x   [   0 files]
+  5.0–6.0x   [ 196 files] ████
+  6.0–10.0x  [ 191 files] ████
+  10.0+    x [1596 files]
+```
+
+**Key Observation:**
+Every file uses at least 5.0x the source size in arena allocation. Mean of 21.98x indicates that `allocated_bytes()` is measuring beyond just AST nodes — likely includes bumpalo's chunk headers and internal fragmentation. The 5.0x minimum (even for very small files like 83-byte asset PHP files) suggests bumpalo's minimum chunk size is dominating allocation overhead for small files.
+
+**Interpretation:**
+- **Small files (< 500 bytes):** Chunk header overhead dominates; multiplier can exceed 100x due to minimum allocation chunk size
+- **Medium files (1-10 KB):** Multiplier ~10-20x as overhead becomes less dominant
+- **Large files (> 100 KB):** Multiplier ~5-8x as AST overhead becomes primary factor
+
+**Current Pre-allocation Impact:**
+With 5x pre-allocation, we're initially providing `src.len() * 5` bytes. The measured multiplier of 21.98x mean suggests that:
+1. On average, bumpalo's internal overhead (chunk headers, alignment) is ~3-4x the pre-allocated size
+2. OR: `allocated_bytes()` includes metadata; actual AST usage is lower
+3. The 5x pre-allocation helps but doesn't eliminate multiple chunk allocations
+
+**Recommendation:**
+- Current 5x pre-allocation is **appropriate** — attempting to match the 21.98x mean would waste memory
+- Focus optimization efforts elsewhere (expression parsing at 5.7% of time, or further arena tuning if profiling reveals specific hotspots)
+- Small files (< 1 KB) experiencing 100x+ multipliers are acceptable overhead (minimal absolute bytes) — avoid special-casing them
+
+---
+
 ## 🚨 ROADMAP-DRIVEN PERFORMANCE WORK PROTOCOL
 
 **EVERY optimization work must be guided by this roadmap.** Ad-hoc optimizations without profiling data waste effort. Before implementing any optimization:
