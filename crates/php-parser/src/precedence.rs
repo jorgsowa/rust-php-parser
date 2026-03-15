@@ -26,66 +26,86 @@ use php_lexer::TokenKind;
 ///     Returns the infix binding power for a token, or None if it's not an infix operator.
 ///     Returns (left_bp, right_bp). For left-associative ops, right_bp = left_bp + 1.
 ///     For right-associative ops, left_bp = right_bp - 1 (i.e., right_bp = left_bp).
+///
+///     Optimized with a static lookup table indexed by TokenKind discriminant (u8)
+///     for O(1) access in hot path, avoiding branch misprediction.
 #[inline(always)]
 pub fn infix_binding_power(kind: TokenKind) -> Option<(u8, u8)> {
-    match kind {
-        // Logical keyword operators (lowest precedence)
-        TokenKind::Or => Some((1, 2)),
-        TokenKind::Xor => Some((3, 4)),
-        TokenKind::And => Some((5, 6)),
+    // Static lookup table indexed by TokenKind as u8.
+    // All unused entries are None. This is a 256-byte table that fits in L1 cache.
+    // Built once at compile-time; zero runtime cost except for a single indexed load.
+    const BP_TABLE: [Option<(u8, u8)>; 256] = build_bp_table();
+    BP_TABLE[kind as u8 as usize]
+}
 
-        // Null coalescing (right-associative)
-        TokenKind::QuestionQuestion => Some((14, 13)),
+/// Builds the infix binding power lookup table at compile time.
+/// This replaces the match statement with a direct table lookup.
+const fn build_bp_table() -> [Option<(u8, u8)>; 256] {
+    let mut table = [None; 256];
 
-        // Boolean or
-        TokenKind::PipePipe => Some((15, 16)),
+    // Manually initialize each token kind's binding power.
+    // Using the numeric discriminant from repr(u8) enum definition.
 
-        // Boolean and
-        TokenKind::AmpersandAmpersand => Some((17, 18)),
+    // Logical keyword operators (lowest precedence)
+    table[TokenKind::Or as u8 as usize] = Some((1, 2));
+    table[TokenKind::Xor as u8 as usize] = Some((3, 4));
+    table[TokenKind::And as u8 as usize] = Some((5, 6));
 
-        // Bitwise or
-        TokenKind::Pipe => Some((19, 20)),
+    // Null coalescing (right-associative)
+    table[TokenKind::QuestionQuestion as u8 as usize] = Some((14, 13));
 
-        // Bitwise xor
-        TokenKind::Caret => Some((21, 22)),
+    // Boolean or
+    table[TokenKind::PipePipe as u8 as usize] = Some((15, 16));
 
-        // Bitwise and
-        TokenKind::Ampersand => Some((23, 24)),
+    // Boolean and
+    table[TokenKind::AmpersandAmpersand as u8 as usize] = Some((17, 18));
 
-        // Equality (nonassoc — we treat as left with same bp)
-        TokenKind::EqualsEquals
-        | TokenKind::BangEquals
-        | TokenKind::EqualsEqualsEquals
-        | TokenKind::BangEqualsEquals
-        | TokenKind::Spaceship => Some((25, 26)),
+    // Bitwise or
+    table[TokenKind::Pipe as u8 as usize] = Some((19, 20));
 
-        // Comparison (nonassoc) + instanceof
-        TokenKind::LessThan
-        | TokenKind::GreaterThan
-        | TokenKind::LessThanEquals
-        | TokenKind::GreaterThanEquals
-        | TokenKind::Instanceof => Some((27, 28)),
+    // Bitwise xor
+    table[TokenKind::Caret as u8 as usize] = Some((21, 22));
 
-        // Pipe operator (left-associative)
-        TokenKind::PipeArrow => Some((29, 30)),
+    // Bitwise and
+    table[TokenKind::Ampersand as u8 as usize] = Some((23, 24));
 
-        // String concatenation
-        TokenKind::Dot => Some((31, 32)),
+    // Equality (nonassoc — we treat as left with same bp)
+    table[TokenKind::EqualsEquals as u8 as usize] = Some((25, 26));
+    table[TokenKind::BangEquals as u8 as usize] = Some((25, 26));
+    table[TokenKind::EqualsEqualsEquals as u8 as usize] = Some((25, 26));
+    table[TokenKind::BangEqualsEquals as u8 as usize] = Some((25, 26));
+    table[TokenKind::Spaceship as u8 as usize] = Some((25, 26));
 
-        // Shift
-        TokenKind::ShiftLeft | TokenKind::ShiftRight => Some((33, 34)),
+    // Comparison (nonassoc) + instanceof
+    table[TokenKind::LessThan as u8 as usize] = Some((27, 28));
+    table[TokenKind::GreaterThan as u8 as usize] = Some((27, 28));
+    table[TokenKind::LessThanEquals as u8 as usize] = Some((27, 28));
+    table[TokenKind::GreaterThanEquals as u8 as usize] = Some((27, 28));
+    table[TokenKind::Instanceof as u8 as usize] = Some((27, 28));
 
-        // Additive
-        TokenKind::Plus | TokenKind::Minus => Some((35, 36)),
+    // Pipe operator (left-associative)
+    table[TokenKind::PipeArrow as u8 as usize] = Some((29, 30));
 
-        // Multiplicative
-        TokenKind::Star | TokenKind::Slash | TokenKind::Percent => Some((37, 38)),
+    // String concatenation
+    table[TokenKind::Dot as u8 as usize] = Some((31, 32));
 
-        // Exponentiation (right-associative)
-        TokenKind::StarStar => Some((40, 39)),
+    // Shift
+    table[TokenKind::ShiftLeft as u8 as usize] = Some((33, 34));
+    table[TokenKind::ShiftRight as u8 as usize] = Some((33, 34));
 
-        _ => None,
-    }
+    // Additive
+    table[TokenKind::Plus as u8 as usize] = Some((35, 36));
+    table[TokenKind::Minus as u8 as usize] = Some((35, 36));
+
+    // Multiplicative
+    table[TokenKind::Star as u8 as usize] = Some((37, 38));
+    table[TokenKind::Slash as u8 as usize] = Some((37, 38));
+    table[TokenKind::Percent as u8 as usize] = Some((37, 38));
+
+    // Exponentiation (right-associative)
+    table[TokenKind::StarStar as u8 as usize] = Some((40, 39));
+
+    table
 }
 
 /// Returns the prefix binding power for a token, or None if it's not a prefix operator.
