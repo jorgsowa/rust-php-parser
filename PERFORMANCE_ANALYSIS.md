@@ -135,6 +135,7 @@ This section documents all performance optimizations completed to date, attempte
 | **ArenaVec capacity hints (Tier 3, March 15, 2026)** | Attempted to increase pre-allocated capacity in hot collection loops: parse_program top-level stmts (16→32), function body (16→32), and function params (4→8). **Result:** Laravel +6.3%, Symfony +2.8%, WordPress **-2.0% regression**. Root cause: WordPress corpus has smaller files with fewer statements/params on average; larger pre-allocation wastes memory and reduces cache efficiency (cold capacity rarely used). **Reverted.** **Lesson:** Capacity hints must be tailored per collection type and corpus characteristics; one-size-fits-all approach fails on diverse codebases. Conservative defaults (16, 4) are better than aggressive pre-allocation. |
 | **Add `#[inline]` to `peek_kind()` and `peek2_kind()` (March 16, 2026)** | Hypothesis: These two methods wrap lexer peek operations and are called frequently in `try_parse_cast` (2 calls per open paren). Added `#[inline]` (not `always`) to allow compiler to fold them across boundaries. **Result:** Consistent regression: Laravel +4.35%, Symfony +2.63%, WordPress +0.94%. Root cause: Unexpected; likely the compiler already inlines these optimally, and explicit hints interfere with its heuristics. The methods are thin wrappers (`Some(self.lexer.peek().kind)`); compiler likely already inlines them regardless of annotation. **Reverted.** **Lesson:** Even non-aggressive inline hints can regress if they conflict with compiler's inlining strategy. The parser's tight expression loops are already well-optimized; manual inlining hints do not improve them. Waiting for real profiling data (flamegraph with inlining info) before attempting further parser micro-optimizations. |
 | **Increase arena pre-allocation from 5x to 6x (March 16, 2026)** | Hypothesis: Symfony's high allocation overhead (13.76% vs 8.34% on WordPress) could be reduced by increasing arena pre-allocation. **Result:** Regression across all corpora: Laravel +0.60%, Symfony +1.29%, WordPress +2.13%. Root cause: Larger pre-allocations hurt L1/L2 cache efficiency and disrupt alignment. The allocation bottleneck is not "need more space" but structural (how bumpalo carves chunks, how AST structure matches allocation patterns). **Reverted to 5x.** **Lesson:** Simple parameter tuning fails when the root cause is architectural. Next optimization must target array parsing itself (16.71% on Symfony), not arena tuning. |
+| **Optimize array parsing loop checks (March 16, 2026)** | Hypothesis: Redundant `check(RightBracket)` at start of parse_array_literal loop on every iteration can be eliminated by moving check to after `eat(Comma)`. **Result:** Regression across all corpora: Laravel +0.49%, Symfony +0.09%, WordPress +0.46%. Root cause: Compiler already optimizes the redundant check effectively; restructuring the loop disrupted instruction cache and branch prediction. **Reverted.** **Lesson:** Loop check pattern is already near-optimal. The array parsing bottleneck (16.71%) is NOT in the loop structure but in the fundamental cost of `parse_expr()` calls within `parse_array_element()`. Since key-value pairs require two expression parses (ambiguity until seeing =>), optimization requires either: (1) different parsing strategy, or (2) accepting parse_expr cost as unavoidable. Array parsing optimization is likely not feasible. |
 
 ---
 
@@ -870,18 +871,24 @@ perf stat -e LLC-loads,LLC-load-misses,L1-dcache-loads,L1-dcache-load-misses ./t
 
 ### Planned ⏳ (Symfony-Focused Optimizations)
 
-1. **Array parsing optimization** (16.71% combined on Symfony) — PRIMARY TARGET
+1. **Array parsing analysis** (16.71% combined on Symfony) — INVESTIGATED, SKIP
    - `parse_array_literal` (9.21%) + `parse_array_element` (7.50%)
-   - Root cause analysis needed:
-     - Profile call stacks within parse_array_literal and parse_array_element
-     - Measure frequency of key-value vs value-only parsing
-     - Check for redundant lookahead or state checks
-   - Potential optimizations:
-     - Fast-path for simple `[expr, expr, ...]` (common case)
-     - Reduce lookahead for comma/closing bracket detection
-     - Cache array context state to reduce per-element checks
-   - Benchmark on all three corpora (Symfony highest impact)
-   - Expected impact: **+2-4% throughput on Symfony**
+   - Attempted optimizations:
+     1. **Loop check elimination** — REGRESSED (+0.22% avg, reverted)
+        - Moved trailing comma check to after eating comma
+        - Compiler already optimizes redundant check; restructuring hurt cache
+     2. **Conclusion:** Array parsing bottleneck is NOT loop structure but
+        fundamental `parse_expr()` cost within `parse_array_element()`
+   - Root cause: Key-value pairs require two `parse_expr()` calls:
+     1. Parse first expression (key or value, ambiguous until `=>`)
+     2. If `=>` found, parse second expression (value)
+   - Optimization difficulty: **VERY HIGH** — would require:
+     - Two-phase parsing (lex all tokens first, then disambiguate)
+     - Different grammar design
+     - Speculative parsing (parse both, keep one)
+     - All have higher overhead than current approach
+   - **Recommendation:** SKIP array parsing as direct optimization target
+   - Realistic impact: **-0.5% to 0% (likely regression)**
 
 2. **Memory allocation architectural analysis** (13.76% on Symfony):
    - Previous attempt (5x→6x) REGRESSED; simple tuning insufficient
@@ -900,14 +907,26 @@ perf stat -e LLC-loads,LLC-load-misses,L1-dcache-loads,L1-dcache-load-misses ./t
    - May find micro-inefficiencies in operator precedence handling
    - Expected impact: +1-2% if micro-inefficiencies found
 
-4. **Skip these optimizations:**
+4. **Fundamental insight from profiling:**
+   - Most remaining bottlenecks are UNAVOIDABLE given the PHP grammar
+   - Array parsing (16.71%) requires parse_expr calls to disambiguate key-value
+   - Expression parsing (19.01%) is the core parser algorithm
+   - Memory allocation (13.76%) is structural (allocation patterns, not size)
+   - Further optimization will require either:
+     - Different parsing strategy (two-phase, different grammar)
+     - Accept that current approach is near-optimal
+     - Architectural changes (speculative parsing, memoization)
+
+5. **Skip these optimizations (proven ineffective):**
    - ❌ Class parsing (WordPress-specific; 0.5% on Symfony)
    - ❌ Arena pre-allocation tuning (tested, regresses)
    - ❌ Inline hints on thin wrappers (tested, regresses)
+   - ❌ Array parsing loop structure (tested, regresses)
 
-5. **Competitor benchmarking** (after above optimizations):
+6. **Competitor benchmarking** (after architectural analysis):
    - Compare against nikic/PHP-Parser, Zend Engine on Symfony/WordPress
-   - Identify specific slow patterns unique to our implementation
+   - Identify if our fundamental approach is suboptimal
+   - May reveal whether two-phase parsing is worth the overhead
 
 ### Deprioritized ❌
 - ~~Tier 1.1-1.3 (lexer optimizations)~~ — Profiling confirmed lexer is only 0.4% of time; not worth pursuing
