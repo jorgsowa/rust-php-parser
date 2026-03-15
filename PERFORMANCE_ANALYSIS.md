@@ -59,6 +59,7 @@ This section documents all performance optimizations completed to date, attempte
 |--------|---------|
 | **Two-phase identifier scanning** | Refactored `scan_identifier` into branch-free lowercasing + continuation phases. **Result:** +3.4% Laravel, -3.5% WordPress, noise on Symfony. Original single-loop was already well-optimized by compiler; refactor added unnecessary overhead. **Reverted.** |
 | **Cast tokens in lexer (Tier 1.2)** | Attempted to emit `(int)`, `(float)`, `(string)`, etc. as atomic tokens from lexer to eliminate parser lookahead. **Result:** Consistent regression across all corpora: Laravel -2.99%, Symfony -1.05%, WordPress -0.53%. Root cause: Overhead of checking every `(` character for potential casts outweighs savings from eliminating parser lookahead. Even with fast-path filtering by first letter and no-alloc comparisons, false positives like `(for`, `(string var)` create cumulative overhead. **Reverted.** **Lesson:** Parser lookahead is already efficient; lexer per-token overhead is too high for this pattern. |
+| **Force inline hot parser helpers (Tier 0, March 2026)** | Changed `#[inline]` → `#[inline(always)]` on `advance()`, `check()`, `eat()`, `peek_kind()`, `peek2_kind()`, `current_kind()`, `current_span()`, `current_text()`. Expected +0.5-1%. **Result:** -2% regression across all corpora. Root cause: These functions are already inlined appropriately by compiler; forcing `always` bloats code size and hurts instruction cache behavior despite being "hot". Compiler heuristics for inlining are better than manual hints in this case. **Reverted.** **Lesson:** Profile-guided optimization means respecting compiler's inlining decisions. Small functions called often don't always benefit from always-inline. |
 
 ---
 
@@ -666,9 +667,9 @@ perf stat -e LLC-loads,LLC-load-misses,L1-dcache-loads,L1-dcache-load-misses ./t
 
 | Priority | Opportunity | Effort | Profiled Impact | Status |
 |----------|------------|--------|---------|--------|
-| **0.1** | **Increase arena pre-allocation (Tier 0)** | **Trivial** | **+1-3%** | ✅ **NEXT** |
-| **0.2** | **Inline parser helpers (Tier 0)** | **Trivial** | **+0.5-1%** | ✅ **NEXT** |
-| **0.3** | Profile allocation hotspots (Tier 0) | Low | Data-driven | ✅ **NEXT** |
+| **0.1** | **Increase arena pre-allocation (Tier 0)** | **Trivial** | **-0.7 to -1.0%** (faster) | ✅ **DONE** |
+| ~~0.2~~ | ~~Inline parser helpers (Tier 0)~~ ❌ | ~~Trivial~~ | ~~+0.5-1%~~ **-2% (regressed)** | Reverted — inlining hurt performance |
+| **0.3** | Profile allocation hotspots (Tier 0) | Low | Data-driven | ⏳ **NEXT** |
 | 1 | Operator BP lookup table (2.1) | Low | +1-2% | ✅ **DONE** |
 | 2 | ~~Cast tokens in lexer (1.2)~~ ❌ | Medium | ~~+2-4%~~ Attempted; caused regressions | Reverted |
 | 3 | ~~SIMD string scanning (1.1)~~ ❌ | High | ~~+3-8%~~ Only 0.4% of time; NOT bottleneck | Skip |
