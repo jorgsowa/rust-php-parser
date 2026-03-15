@@ -47,7 +47,7 @@ fn bench_corpus(c: &mut Criterion, name: &str, dir: &Path) {
         |b| {
             b.iter(|| {
                 for src in &sources {
-                    let arena = bumpalo::Bump::with_capacity(src.len() * 3);
+                    let arena = bumpalo::Bump::with_capacity(src.len() * 4);
                     std::hint::black_box(php_rs_parser::parse(&arena, src));
                 }
             });
