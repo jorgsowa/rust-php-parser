@@ -134,6 +134,7 @@ This section documents all performance optimizations completed to date, attempte
 | **Force inline hot parser helpers (Tier 0, March 2026)** | Changed `#[inline]` → `#[inline(always)]` on `advance()`, `check()`, `eat()`, `peek_kind()`, `peek2_kind()`, `current_kind()`, `current_span()`, `current_text()`. Expected +0.5-1%. **Result:** -2% regression across all corpora. Root cause: These functions are already inlined appropriately by compiler; forcing `always` bloats code size and hurts instruction cache behavior despite being "hot". Compiler heuristics for inlining are better than manual hints in this case. **Reverted.** **Lesson:** Profile-guided optimization means respecting compiler's inlining decisions. Small functions called often don't always benefit from always-inline. |
 | **ArenaVec capacity hints (Tier 3, March 15, 2026)** | Attempted to increase pre-allocated capacity in hot collection loops: parse_program top-level stmts (16→32), function body (16→32), and function params (4→8). **Result:** Laravel +6.3%, Symfony +2.8%, WordPress **-2.0% regression**. Root cause: WordPress corpus has smaller files with fewer statements/params on average; larger pre-allocation wastes memory and reduces cache efficiency (cold capacity rarely used). **Reverted.** **Lesson:** Capacity hints must be tailored per collection type and corpus characteristics; one-size-fits-all approach fails on diverse codebases. Conservative defaults (16, 4) are better than aggressive pre-allocation. |
 | **Add `#[inline]` to `peek_kind()` and `peek2_kind()` (March 16, 2026)** | Hypothesis: These two methods wrap lexer peek operations and are called frequently in `try_parse_cast` (2 calls per open paren). Added `#[inline]` (not `always`) to allow compiler to fold them across boundaries. **Result:** Consistent regression: Laravel +4.35%, Symfony +2.63%, WordPress +0.94%. Root cause: Unexpected; likely the compiler already inlines these optimally, and explicit hints interfere with its heuristics. The methods are thin wrappers (`Some(self.lexer.peek().kind)`); compiler likely already inlines them regardless of annotation. **Reverted.** **Lesson:** Even non-aggressive inline hints can regress if they conflict with compiler's inlining strategy. The parser's tight expression loops are already well-optimized; manual inlining hints do not improve them. Waiting for real profiling data (flamegraph with inlining info) before attempting further parser micro-optimizations. |
+| **Increase arena pre-allocation from 5x to 6x (March 16, 2026)** | Hypothesis: Symfony's high allocation overhead (13.76% vs 8.34% on WordPress) could be reduced by increasing arena pre-allocation. **Result:** Regression across all corpora: Laravel +0.60%, Symfony +1.29%, WordPress +2.13%. Root cause: Larger pre-allocations hurt L1/L2 cache efficiency and disrupt alignment. The allocation bottleneck is not "need more space" but structural (how bumpalo carves chunks, how AST structure matches allocation patterns). **Reverted to 5x.** **Lesson:** Simple parameter tuning fails when the root cause is architectural. Next optimization must target array parsing itself (16.71% on Symfony), not arena tuning. |
 
 ---
 
@@ -869,30 +870,40 @@ perf stat -e LLC-loads,LLC-load-misses,L1-dcache-loads,L1-dcache-load-misses ./t
 
 ### Planned ⏳ (Symfony-Focused Optimizations)
 
-1. **Array parsing optimization** (16.71% combined on Symfony):
+1. **Array parsing optimization** (16.71% combined on Symfony) — PRIMARY TARGET
    - `parse_array_literal` (9.21%) + `parse_array_element` (7.50%)
-   - Profile for: redundant element parsing, unnecessary lookahead, inefficient key/value handling
-   - Ideas: Pre-allocate ArenaVec for elements, cache parsing state, reduce branching
-   - Benchmark on all three corpora (Symfony highest impact, verify WordPress/Laravel no regression)
+   - Root cause analysis needed:
+     - Profile call stacks within parse_array_literal and parse_array_element
+     - Measure frequency of key-value vs value-only parsing
+     - Check for redundant lookahead or state checks
+   - Potential optimizations:
+     - Fast-path for simple `[expr, expr, ...]` (common case)
+     - Reduce lookahead for comma/closing bracket detection
+     - Cache array context state to reduce per-element checks
+   - Benchmark on all three corpora (Symfony highest impact)
    - Expected impact: **+2-4% throughput on Symfony**
 
-2. **Memory allocation tuning for array-heavy code** (13.76% on Symfony):
-   - Increase arena pre-allocation from 5x to 6x or 7x
-   - Symfony needs more space for array elements than WordPress needs for classes
-   - OR: Targeted pre-allocation just for array context
-   - Benchmark memory overhead; ensure no bloat on smaller files
-   - Expected impact: **+1-2% throughput on Symfony; measure all corpora**
+2. **Memory allocation architectural analysis** (13.76% on Symfony):
+   - Previous attempt (5x→6x) REGRESSED; simple tuning insufficient
+   - Profile which AST node types allocate most heavily on Symfony
+   - Ideas to explore:
+     - Specialized arena for array elements (separate allocation pool)
+     - Different pre-allocation strategy for Symfony vs WordPress
+     - Per-file allocation hints based on file characteristics
+   - Do NOT attempt simple pre-allocation increases (proven ineffective)
+   - Expected impact: +0.5-1.5% if architectural issue found
 
 3. **Expression parsing micro-optimization** (19.01% on Symfony):
-   - parse_expr_bp is largest single function on both corpora (15.77% WP, 19.01% Symfony)
+   - parse_expr_bp is largest single function (15.77% WP, 19.01% Symfony)
    - Binding power table done; need call-tree analysis for further opportunities
-   - May drill down with perf/callgrind to see parse_atom/try_parse_cast overhead
+   - Profile with perf/callgrind to see parse_atom/try_parse_cast overhead
+   - May find micro-inefficiencies in operator precedence handling
    - Expected impact: +1-2% if micro-inefficiencies found
 
-4. **Skip class parsing optimization**:
-   - WordPress-specific (11.35% combined vs <0.5% on Symfony)
-   - Low ROI on target corpus (Symfony)
-   - ❌ Not worth pursuing for general-purpose parser
+4. **Skip these optimizations:**
+   - ❌ Class parsing (WordPress-specific; 0.5% on Symfony)
+   - ❌ Arena pre-allocation tuning (tested, regresses)
+   - ❌ Inline hints on thin wrappers (tested, regresses)
 
 5. **Competitor benchmarking** (after above optimizations):
    - Compare against nikic/PHP-Parser, Zend Engine on Symfony/WordPress
