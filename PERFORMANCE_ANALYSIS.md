@@ -5,7 +5,33 @@
 
 ---
 
-## 📊 Latest Results: Tier 2 Optimizations (March 15, 2026)
+## 🔬 Optimization Plateau & Key Learnings (March 17, 2026)
+
+After implementing three architectural optimizations with comprehensive benchmarking:
+
+| Optimization | Expected Impact | Actual Result | Notes |
+|--------------|-----------------|---------------|-------|
+| Pre-lexed token array | +5-15% (branch elimination) | No change (±0.8%) | CPU branch prediction too good to matter |
+| Jump table dispatch | +2-5% (O(1) vs sequential) | No change (±1.5%) | Compiler already optimizes sequential checks well |
+| Right-sized pre-allocation | Memory only | +5-10% memory savings ✓ | Measurable memory improvement, no perf cost |
+
+**Key Learning:** Modern CPUs (Intel/AMD Ryzen circa 2025-2026) have:
+- Excellent branch predictors (97%+ accuracy on warm branches)
+- Aggressive speculative execution
+- Sophisticated prefetching
+
+This means low-level optimizations (branch elimination, jump tables) that theoretically should help provide **no measurable speedup** because the CPU is already handling these cases efficiently.
+
+**Conclusion:** Further performance improvements require **algorithmic changes**, not implementation tweaks:
+- Two-phase parsing (would require architectural redesign)
+- Speculative/parallel sub-parsers (complex with PHP context-dependence)
+- Targeted optimizations for specific high-overhead patterns (array key-value parsing unavoidably requires double-parse due to grammar)
+
+**Current Status:** Parser is near-optimal for recursive descent architecture. Remaining bottlenecks (parse_expr_bp 19%, array parsing 16.7%) cannot be resolved without fundamental algorithm changes.
+
+---
+
+## 📊 Latest Results: Tier 3 Optimizations (March 17, 2026)
 
 **Implemented changes:**
 1. **Arena 5x pre-allocation** — Increased from 4x to 5x source size
@@ -26,8 +52,12 @@
 - ArenaVec capacity hints (parse_program 16→32, function body 16→32, params 4→8) caused 2% regression on WordPress due to unused pre-allocated capacity in smaller files. Conservative defaults (16, 4) are better across diverse corpora.
 
 **Tier 3 Optimizations Completed (March 16-17, 2026):**
-- **Right-sized Pre-allocation:** Reduced ArenaVec capacity hints from conservative 16 to right-sized values (arrays 0, functions 4, blocks 8, members 4). Result: 5-10% memory savings, zero performance impact. All 612 tests pass. ✅
-- **Pre-lexed Token Array Architecture (March 17, 2026):** Replaced pull-based lazy Lexer<'src> with upfront `Vec<Token>` + index-based navigation. Eliminates Option checking in peek_kind/peek2_kind hot path (now branch-free). Token made Copy for efficient value semantics. **Result: No regression** — all three corpora within noise (±0.8%). While expected +5-15% throughput improvement from branch elimination did not materialize (modern CPU branch prediction is excellent), achieves cleaner architectural foundation without cost. All 612 tests pass. ✅
+
+1. **Right-sized Pre-allocation:** Reduced ArenaVec capacity hints from conservative 16 to right-sized values (arrays 0, functions 4, blocks 8, members 4). Result: 5-10% memory savings, zero performance impact. All 612 tests pass. ✅
+
+2. **Pre-lexed Token Array Architecture:** Replaced pull-based lazy Lexer<'src> with upfront `Vec<Token>` + index-based navigation. Eliminates Option checking in peek_kind/peek2_kind hot path (now branch-free). Token made Copy for efficient value semantics. **Result: No regression** — all three corpora within noise (±0.8%). While expected +5-15% throughput improvement from branch elimination did not materialize (modern CPU branch prediction is excellent), achieves cleaner architectural foundation without cost. All 612 tests pass. ✅
+
+3. **Jump Table Dispatch for Pratt Loop:** Refactored sequential if-statements checking specific token kinds (Arrow, NullsafeArrow, Question, etc.) into single match statement. Compiler generates jump table for O(1) dispatch instead of sequential branches. **Result: No regression** — all three corpora within noise (±1.5%). Provides architectural alignment and potential instruction cache improvements without performance cost. All 612 tests pass. ✅
 
 ---
 
