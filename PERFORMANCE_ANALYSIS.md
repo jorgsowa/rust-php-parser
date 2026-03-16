@@ -24,6 +24,7 @@
 
 **Attempted but reverted:**
 - ArenaVec capacity hints (parse_program 16→32, function body 16→32, params 4→8) caused 2% regression on WordPress due to unused pre-allocated capacity in smaller files. Conservative defaults (16, 4) are better across diverse corpora.
+- **Pre-lexed Token Array Architecture (March 16, 2026):** Replaced pull-based lazy lexing with upfront `Vec<Token>` and index-based navigation. Expected to reduce branching in the Pratt parser loop by eliminating `peeked.is_none()` checks. **Result: Major regressions across all corpora** — Laravel +52.4%, Symfony +13.5%, WordPress +123.9%. Root cause likely: copying 8-byte Token structs (now Copy) on every peek/advance operation, combined with memory layout changes from Vec allocation, outweighed the branch elimination benefit. The lazy lexer's efficient peeking slots are better than index-based array access for this codebase. **Decision:** Reverted. The architectural assumption that branch-free token access improves performance was incorrect; lazy lexing remains optimal.
 
 ---
 

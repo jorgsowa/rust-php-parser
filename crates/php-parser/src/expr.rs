@@ -7,6 +7,7 @@ use crate::diagnostics::ParseError;
 use crate::parser::Parser;
 use crate::precedence::{self, ASSIGNMENT_BP, TERNARY_BP};
 use crate::stmt;
+use crate::instrument;
 
 /// Cast keyword strings and their CastKind values
 const CAST_KEYWORDS: &[(&str, CastKind)] = &[
@@ -27,6 +28,7 @@ const CAST_KEYWORDS: &[(&str, CastKind)] = &[
 
 /// Parse an expression.
 pub fn parse_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
+    instrument::record_parse_expr();
     parse_expr_bp(parser, 0)
 }
 
@@ -35,6 +37,9 @@ pub fn parse_expr_bp<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     min_bp: u8,
 ) -> Expr<'arena, 'src> {
+    if min_bp != 0 {
+        instrument::record_parse_expr_bp_recursive();
+    }
     let mut lhs = parse_atom(parser);
 
     loop {
@@ -588,6 +593,7 @@ fn parse_member_name<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr
 
 /// Parse an atomic expression (prefix unaries, literals, variables, etc.)
 fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
+    instrument::record_parse_atom();
     let kind = parser.current_kind();
 
     // Keywords followed by backslash are namespace-qualified names (e.g., fn\use(), private\protected\...)
@@ -2047,6 +2053,7 @@ fn parse_function_call<'arena, 'src>(
 // =============================================================================
 
 fn parse_array_literal<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
+    instrument::record_parse_array();
     let start = parser.start_span();
     parser.advance(); // consume [
 
@@ -2080,6 +2087,7 @@ fn parse_array_literal<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Ex
         }
     }
 
+    instrument::record_parse_array_element_count(elements.len());
     let close = parser.expect(TokenKind::RightBracket);
     let end = close
         .map(|t| t.span.end)
@@ -2093,6 +2101,7 @@ fn parse_array_literal<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Ex
 }
 
 fn parse_array_call<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
+    instrument::record_parse_array();
     let start = parser.start_span();
     parser.advance(); // consume 'array'
     parser.expect(TokenKind::LeftParen);
@@ -2112,6 +2121,7 @@ fn parse_array_call<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
         }
     }
 
+    instrument::record_parse_array_element_count(elements.len());
     let close = parser.expect(TokenKind::RightParen);
     let end = close
         .map(|t| t.span.end)
@@ -2127,6 +2137,7 @@ fn parse_array_call<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
 fn parse_array_element<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
 ) -> ArrayElement<'arena, 'src> {
+    instrument::record_parse_array_element();
     let elem_start = parser.start_span();
 
     // Handle unpack: ...$arr
@@ -2136,13 +2147,17 @@ fn parse_array_element<'arena, 'src>(
     if parser.check(TokenKind::Ampersand) {
         parser.advance();
     }
+
+    instrument::record_parse_expr_array_first();
     let first_expr = parse_expr(parser);
 
     if !unpack && parser.eat(TokenKind::FatArrow).is_some() {
         // key => value
+        instrument::record_parse_array_element_with_arrow();
         if parser.check(TokenKind::Ampersand) {
             parser.advance();
         }
+        instrument::record_parse_expr_array_second();
         let value = parse_expr(parser);
         let elem_span = Span::new(elem_start, value.span.end);
         ArrayElement {
@@ -2153,6 +2168,7 @@ fn parse_array_element<'arena, 'src>(
         }
     } else {
         // value only (or unpack)
+        instrument::record_parse_array_simple_value();
         let elem_span = Span::new(elem_start, first_expr.span.end);
         ArrayElement {
             key: None,

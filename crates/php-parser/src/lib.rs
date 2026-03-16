@@ -4,6 +4,7 @@ pub(crate) mod interpolation;
 pub(crate) mod parser;
 pub(crate) mod precedence;
 pub(crate) mod stmt;
+pub mod instrument;
 
 use diagnostics::ParseError;
 use php_ast::Program;
