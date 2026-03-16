@@ -3,8 +3,8 @@ use php_lexer::{Lexer, Token, TokenKind};
 
 use crate::diagnostics::ParseError;
 use crate::expr;
-use crate::stmt;
 use crate::instrument;
+use crate::stmt;
 
 const MAX_ERRORS: usize = 100;
 
@@ -12,7 +12,9 @@ pub struct Parser<'arena, 'src> {
     current: Token,
     /// Nesting depth (0 = top-level scope)
     pub depth: u32,
-    lexer: Lexer<'src>,
+    tokens: Vec<Token>,
+    /// Index of NEXT token in the tokens array (current = tokens[pos - 1])
+    pos: usize,
     pub arena: &'arena bumpalo::Bump,
     pub source: &'src str,
     errors: Vec<ParseError>,
@@ -20,20 +22,25 @@ pub struct Parser<'arena, 'src> {
 
 impl<'arena, 'src> Parser<'arena, 'src> {
     pub fn new(arena: &'arena bumpalo::Bump, source: &'src str) -> Self {
-        let mut lexer = Lexer::new(source);
-        let current = lexer.next_token();
-        // Drain any lexer errors produced during first token read
+        let (tokens, lex_errors) = php_lexer::lex_all(source);
+
+        // Seed current with the first token and pos with 1
+        let current = tokens.first().copied().unwrap_or_else(|| Token::eof(0));
+
+        // Convert lexer errors to parser errors
         let mut errors: Vec<ParseError> = Vec::new();
-        if !lexer.errors.is_empty() {
-            errors.extend(lexer.errors.drain(..).map(|e| ParseError::Forbidden {
+        for e in lex_errors {
+            errors.push(ParseError::Forbidden {
                 message: e.message.into(),
                 span: e.span,
-            }));
-            errors.truncate(MAX_ERRORS);
+            });
         }
+        errors.truncate(MAX_ERRORS);
+
         Self {
             arena,
-            lexer,
+            tokens,
+            pos: 1,
             current,
             source,
             errors,
@@ -43,21 +50,49 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
     /// Create a parser starting in PHP mode at `offset` within `source`.
     /// Used for parsing interpolation expressions directly in the original source.
+    ///
+    /// This path creates a lazy Lexer at the offset, then pre-lexes all tokens into
+    /// a vector to match the new pre-lexed architecture, while preserving correct
+    /// absolute spans relative to the original source.
     pub fn new_at(arena: &'arena bumpalo::Bump, source: &'src str, offset: usize) -> Self {
         let mut lexer = Lexer::new_at(source, offset);
-        let current = lexer.next_token();
-        // Drain any lexer errors produced during first token read
+
+        // Lex all tokens from this position
+        let mut tokens = Vec::new();
         let mut errors: Vec<ParseError> = Vec::new();
-        if !lexer.errors.is_empty() {
-            errors.extend(lexer.errors.drain(..).map(|e| ParseError::Forbidden {
+
+        loop {
+            let tok = lexer.next_token();
+            let is_eof = tok.kind == TokenKind::Eof;
+            tokens.push(tok);
+            if is_eof {
+                break;
+            }
+        }
+
+        // Add a second Eof sentinel for safe peek2
+        let eof_span = tokens.last().unwrap().span;
+        tokens.push(Token::new(TokenKind::Eof, eof_span));
+
+        // Collect all lexer errors
+        for e in lexer.errors {
+            errors.push(ParseError::Forbidden {
                 message: e.message.into(),
                 span: e.span,
-            }));
-            errors.truncate(MAX_ERRORS);
+            });
         }
+        errors.truncate(MAX_ERRORS);
+
+        // Seed current with the first token
+        let current = tokens
+            .first()
+            .copied()
+            .unwrap_or_else(|| Token::eof(offset as u32));
+
         Self {
             arena,
-            lexer,
+            tokens,
+            pos: 1,
             current,
             source,
             errors,
@@ -117,17 +152,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     /// Advance to the next token, returning the consumed token.
     #[inline]
     pub fn advance(&mut self) -> Token {
-        let prev = std::mem::replace(&mut self.current, self.lexer.next_token());
-        // Drain any lexer errors produced during token read.
-        // Guard with is_empty() so the hot path (no errors) skips all overhead.
-        if !self.lexer.errors.is_empty() {
-            for e in std::mem::take(&mut self.lexer.errors) {
-                self.error(ParseError::Forbidden {
-                    message: e.message.into(),
-                    span: e.span,
-                });
-            }
-        }
+        let prev = self.current;
+        self.current = self.tokens[self.pos];
+        self.pos += 1;
         prev
     }
 
@@ -200,18 +227,23 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     }
 
     /// Peek at the next token's kind (one token ahead of current).
+    /// No branches: tokens array guaranteed to have Eof sentinels.
+    #[inline]
     pub fn peek_kind(&mut self) -> Option<TokenKind> {
-        Some(self.lexer.peek().kind)
+        Some(self.tokens[self.pos].kind)
     }
 
     /// Peek two tokens ahead of current.
+    /// No branches: tokens array guaranteed to have dual Eof sentinels.
+    #[inline]
     pub fn peek2_kind(&mut self) -> Option<TokenKind> {
-        Some(self.lexer.peek2().kind)
+        Some(self.tokens[self.pos + 1].kind)
     }
 
     /// Get the text of the peeked token (one token ahead of current).
+    #[inline]
     pub fn peek_text(&mut self) -> Option<&'src str> {
-        let token = self.lexer.peek();
+        let token = &self.tokens[self.pos];
         Some(&self.source[token.span.start as usize..token.span.end as usize])
     }
 

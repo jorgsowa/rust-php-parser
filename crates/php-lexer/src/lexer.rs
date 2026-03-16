@@ -56,7 +56,7 @@ pub struct LexerError {
     pub span: Span,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Token {
     pub kind: TokenKind,
     pub span: Span,
@@ -1143,6 +1143,35 @@ impl<'src> Lexer<'src> {
             Some(Token::new(TokenKind::Heredoc, span))
         }
     }
+}
+
+/// Lex an entire source file into a token vector upfront.
+///
+/// This is used by the parser to enable indexed token access instead of lazy lexing,
+/// which eliminates branching in the hot Pratt loop path.
+///
+/// Returns a tuple of (tokens, errors). The token vector is guaranteed to end with
+/// an Eof token, and includes a second Eof sentinel to make peek2 safe.
+pub fn lex_all(source: &str) -> (Vec<Token>, Vec<LexerError>) {
+    let mut lexer = Lexer::new(source);
+    let mut tokens = Vec::new();
+
+    loop {
+        let tok = lexer.next_token();
+        let is_eof = tok.kind == TokenKind::Eof;
+        tokens.push(tok);
+        if is_eof {
+            break;
+        }
+    }
+
+    // Push a second Eof sentinel so peek2 on the last real token is safe.
+    // This allows the parser to do `self.tokens[self.pos + 1].kind` without bounds checking.
+    let eof_span = tokens.last().unwrap().span;
+    tokens.push(Token::new(TokenKind::Eof, eof_span));
+
+    let errors = lexer.errors;
+    (tokens, errors)
 }
 
 #[cfg(test)]
