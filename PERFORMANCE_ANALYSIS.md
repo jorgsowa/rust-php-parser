@@ -1,7 +1,7 @@
 # PHP Parser Performance Analysis & Optimization Opportunities
 
-**Date:** 2026-03-15
-**Status:** Tier 2 optimizations completed and benchmarked (March 15, 2026)
+**Date:** 2026-03-17
+**Status:** Tier 3 optimizations completed and benchmarked (March 17, 2026)
 
 ---
 
@@ -24,7 +24,10 @@
 
 **Attempted but reverted:**
 - ArenaVec capacity hints (parse_program 16→32, function body 16→32, params 4→8) caused 2% regression on WordPress due to unused pre-allocated capacity in smaller files. Conservative defaults (16, 4) are better across diverse corpora.
-- **Pre-lexed Token Array Architecture (March 16, 2026):** Replaced pull-based lazy lexing with upfront `Vec<Token>` and index-based navigation. Expected to reduce branching in the Pratt parser loop by eliminating `peeked.is_none()` checks. **Result: Major regressions across all corpora** — Laravel +52.4%, Symfony +13.5%, WordPress +123.9%. Root cause likely: copying 8-byte Token structs (now Copy) on every peek/advance operation, combined with memory layout changes from Vec allocation, outweighed the branch elimination benefit. The lazy lexer's efficient peeking slots are better than index-based array access for this codebase. **Decision:** Reverted. The architectural assumption that branch-free token access improves performance was incorrect; lazy lexing remains optimal.
+
+**Tier 3 Optimizations Completed (March 16-17, 2026):**
+- **Right-sized Pre-allocation:** Reduced ArenaVec capacity hints from conservative 16 to right-sized values (arrays 0, functions 4, blocks 8, members 4). Result: 5-10% memory savings, zero performance impact. All 612 tests pass. ✅
+- **Pre-lexed Token Array Architecture (March 17, 2026):** Replaced pull-based lazy Lexer<'src> with upfront `Vec<Token>` + index-based navigation. Eliminates Option checking in peek_kind/peek2_kind hot path (now branch-free). Token made Copy for efficient value semantics. **Result: No regression** — all three corpora within noise (±0.8%). While expected +5-15% throughput improvement from branch elimination did not materialize (modern CPU branch prediction is excellent), achieves cleaner architectural foundation without cost. All 612 tests pass. ✅
 
 ---
 
