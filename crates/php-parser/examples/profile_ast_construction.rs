@@ -60,8 +60,14 @@ fn main() {
     println!("Total parse time:       {:.2}s", total_secs);
     println!("Files parsed:           {}", sources.len());
     println!("Total bytes:            {:.1} MB", total_mb);
-    println!("Avg time per file:      {:.2}µs", avg_parse_time_ns / 1000.0);
-    println!("Throughput:             {:.1} MB/s", bytes_per_sec / 1_000_000.0);
+    println!(
+        "Avg time per file:      {:.2}µs",
+        avg_parse_time_ns / 1000.0
+    );
+    println!(
+        "Throughput:             {:.1} MB/s",
+        bytes_per_sec / 1_000_000.0
+    );
     println!();
 
     // Estimate allocation characteristics
@@ -70,15 +76,24 @@ fn main() {
     println!("ESTIMATED CHARACTERISTICS:");
     println!("{}", "-".repeat(80));
     println!("Avg source bytes per file:  {:.0} B", bytes_per_file);
-    println!("Est. arena pre-alloc:       {:.0} B (5x)", bytes_per_file * 5.0);
-    println!("Est. AST size:              {:.0} B (2x source est.)", bytes_per_file * 2.0);
+    println!(
+        "Est. arena pre-alloc:       {:.0} B (5x)",
+        bytes_per_file * 5.0
+    );
+    println!(
+        "Est. AST size:              {:.0} B (2x source est.)",
+        bytes_per_file * 2.0
+    );
     println!("Estimated alloc overhead:   ~7x source size");
     println!();
 
     // Analysis
     println!("PERFORMANCE ANALYSIS:");
     println!("{}", "-".repeat(80));
-    println!("Current throughput:         {:.1} MB/s", bytes_per_sec / 1_000_000.0);
+    println!(
+        "Current throughput:         {:.1} MB/s",
+        bytes_per_sec / 1_000_000.0
+    );
     println!("Bottlenecks identified:");
     println!("  - Expression parsing:     19.01% (parse_expr_bp)");
     println!("  - Memory allocation:      13.76% (alloc_layout_slow)");

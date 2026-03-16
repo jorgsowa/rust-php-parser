@@ -34,7 +34,10 @@ fn analyze_corpus(base: &str, corpus_name: &str) {
     }
 
     println!("╔══════════════════════════════════════════════════════════════════╗");
-    println!("║ {:<64} ║", format!("Corpus: {}", corpus_name.to_uppercase()));
+    println!(
+        "║ {:<64} ║",
+        format!("Corpus: {}", corpus_name.to_uppercase())
+    );
     println!("╚══════════════════════════════════════════════════════════════════╝");
 
     instrument::reset_stats();
@@ -80,13 +83,22 @@ fn analyze_corpus(base: &str, corpus_name: &str) {
 
     // Report
     println!("Files analyzed:                     {:>20}", file_count);
-    println!("Total bytes:                        {:>20.1} MB", total_bytes as f64 / 1_000_000.0);
-    println!("Avg bytes/file:                     {:>20.0} B\n", avg_bytes_per_file);
+    println!(
+        "Total bytes:                        {:>20.1} MB",
+        total_bytes as f64 / 1_000_000.0
+    );
+    println!(
+        "Avg bytes/file:                     {:>20.0} B\n",
+        avg_bytes_per_file
+    );
 
     println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     println!("STATEMENT PARSING METRICS:");
     println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    println!("Total statements:                   {:>20}", stats.parse_stmt_calls);
+    println!(
+        "Total statements:                   {:>20}",
+        stats.parse_stmt_calls
+    );
 
     let stmt_breakdown = StmtBreakdown {
         functions: stats.parse_function_calls,
@@ -99,14 +111,38 @@ fn analyze_corpus(base: &str, corpus_name: &str) {
         attributes: stats.parse_attribute_calls,
     };
 
-    println!("  Functions/methods:                {:>20}", stmt_breakdown.functions);
-    println!("  Classes/traits/interfaces:       {:>20}", stmt_breakdown.classes);
-    println!("  If statements:                   {:>20}", stmt_breakdown.if_stmts);
-    println!("  Loops (for/while/do):            {:>20}", stmt_breakdown.loops);
-    println!("  Foreach:                         {:>20}", stmt_breakdown.foreach);
-    println!("  Switch:                          {:>20}", stmt_breakdown.switch);
-    println!("  Try/catch:                       {:>20}", stmt_breakdown.try_catch);
-    println!("  Attributes:                      {:>20}", stmt_breakdown.attributes);
+    println!(
+        "  Functions/methods:                {:>20}",
+        stmt_breakdown.functions
+    );
+    println!(
+        "  Classes/traits/interfaces:       {:>20}",
+        stmt_breakdown.classes
+    );
+    println!(
+        "  If statements:                   {:>20}",
+        stmt_breakdown.if_stmts
+    );
+    println!(
+        "  Loops (for/while/do):            {:>20}",
+        stmt_breakdown.loops
+    );
+    println!(
+        "  Foreach:                         {:>20}",
+        stmt_breakdown.foreach
+    );
+    println!(
+        "  Switch:                          {:>20}",
+        stmt_breakdown.switch
+    );
+    println!(
+        "  Try/catch:                       {:>20}",
+        stmt_breakdown.try_catch
+    );
+    println!(
+        "  Attributes:                      {:>20}",
+        stmt_breakdown.attributes
+    );
 
     // Calculate percentages
     let total = stats.parse_stmt_calls as f64;
@@ -149,13 +185,22 @@ fn analyze_corpus(base: &str, corpus_name: &str) {
     println!("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     println!("ARRAY & EXPRESSION PARSING METRICS (reference):");
     println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    println!("Total parse_expr() calls:           {:>20}", stats.parse_expr_calls);
-    println!("Array parsing overhead:            {:>20}", stats.parse_expr_array_second);
+    println!(
+        "Total parse_expr() calls:           {:>20}",
+        stats.parse_expr_calls
+    );
+    println!(
+        "Array parsing overhead:            {:>20}",
+        stats.parse_expr_array_second
+    );
 
     let total_expr = stats.parse_expr_calls as f64;
     if total_expr > 0.0 {
         let array_overhead_pct = (stats.parse_expr_array_second as f64 / total_expr) * 100.0;
-        println!("  Array overhead (%):              {:>19.1}%", array_overhead_pct);
+        println!(
+            "  Array overhead (%):              {:>19.1}%",
+            array_overhead_pct
+        );
     }
 
     println!("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -163,24 +208,21 @@ fn analyze_corpus(base: &str, corpus_name: &str) {
     println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
     let stmts_per_kb = (stats.parse_stmt_calls as f64) / (total_bytes as f64 / 1000.0);
-    println!(
-        "Statements per KB of source:        {:>20.2}",
-        stmts_per_kb
-    );
+    println!("Statements per KB of source:        {:>20.2}", stmts_per_kb);
 
     let avg_stmt_size = if stats.parse_stmt_calls > 0 {
         (total_bytes as f64) / (stats.parse_stmt_calls as f64)
     } else {
         0.0
     };
-    println!("Avg statement size:                 {:>20.0} bytes", avg_stmt_size);
+    println!(
+        "Avg statement size:                 {:>20.0} bytes",
+        avg_stmt_size
+    );
 
     // Identify which statement type dominates
     let dominant_type = stmt_breakdown.get_dominant();
-    println!(
-        "Dominant statement type:            {:>20}",
-        dominant_type
-    );
+    println!("Dominant statement type:            {:>20}", dominant_type);
 
     println!("\n");
 }

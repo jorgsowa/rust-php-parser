@@ -15,11 +15,21 @@ fn main() {
 
 fn analyze_patterns() {
     // Generate dynamic patterns with owned strings
-    let large_array = format!("<?php $arr = [{}];",
-        (0..100).map(|i| format!("'key{}' => {}", i, i)).collect::<Vec<_>>().join(", "));
+    let large_array = format!(
+        "<?php $arr = [{}];",
+        (0..100)
+            .map(|i| format!("'key{}' => {}", i, i))
+            .collect::<Vec<_>>()
+            .join(", ")
+    );
 
-    let many_statements = format!("<?php {}",
-        (0..50).map(|i| format!("$x{} = {};", i, i)).collect::<Vec<_>>().join(" "));
+    let many_statements = format!(
+        "<?php {}",
+        (0..50)
+            .map(|i| format!("$x{} = {};", i, i))
+            .collect::<Vec<_>>()
+            .join(" ")
+    );
 
     // Test different PHP code patterns to understand allocation behavior
     let patterns: Vec<(&str, &str)> = vec![
@@ -29,11 +39,26 @@ fn analyze_patterns() {
         ("Key-value array", "<?php $arr = ['a' => 1, 'b' => 2];"),
         ("Large array", &large_array),
         ("Function", "<?php function foo($a, $b) { return $a + $b; }"),
-        ("Class", "<?php class Foo { public $x = 1; public function bar() {} }"),
-        ("If statement", "<?php if ($x > 5) { echo 'yes'; } else { echo 'no'; }"),
-        ("Foreach", "<?php foreach ($arr as $k => $v) { echo $k . $v; }"),
-        ("Attributes", "<?php #[Route('/path')] public function index() {}"),
-        ("Complex nested", "<?php $data = ['config' => ['db' => ['host' => 'localhost', 'port' => 5432]]];"),
+        (
+            "Class",
+            "<?php class Foo { public $x = 1; public function bar() {} }",
+        ),
+        (
+            "If statement",
+            "<?php if ($x > 5) { echo 'yes'; } else { echo 'no'; }",
+        ),
+        (
+            "Foreach",
+            "<?php foreach ($arr as $k => $v) { echo $k . $v; }",
+        ),
+        (
+            "Attributes",
+            "<?php #[Route('/path')] public function index() {}",
+        ),
+        (
+            "Complex nested",
+            "<?php $data = ['config' => ['db' => ['host' => 'localhost', 'port' => 5432]]];",
+        ),
         ("Many statements", &many_statements),
     ];
 
@@ -73,9 +98,15 @@ fn analyze_patterns() {
     println!("╠══════════════════════════════════════════════════════════════════╣\n");
 
     let avg_ratio: f64 = results.iter().map(|(_, _, _, r)| r).sum::<f64>() / results.len() as f64;
-    let min_ratio = results.iter().map(|(_, _, _, r)| r).cloned()
+    let min_ratio = results
+        .iter()
+        .map(|(_, _, _, r)| r)
+        .cloned()
         .fold(f64::INFINITY, f64::min);
-    let max_ratio = results.iter().map(|(_, _, _, r)| r).cloned()
+    let max_ratio = results
+        .iter()
+        .map(|(_, _, _, r)| r)
+        .cloned()
         .fold(0.0, f64::max);
 
     println!("Average allocation ratio: {:.2}x source size", avg_ratio);
@@ -92,8 +123,10 @@ fn analyze_patterns() {
     sorted.sort_by(|a, b| b.3.partial_cmp(&a.3).unwrap());
 
     for (name, src_size, alloc, ratio) in sorted.iter().take(5) {
-        println!("{}: {:.2}x ({} bytes allocated for {} byte source)",
-            name, ratio, alloc, src_size);
+        println!(
+            "{}: {:.2}x ({} bytes allocated for {} byte source)",
+            name, ratio, alloc, src_size
+        );
     }
 
     println!("\n╠══════════════════════════════════════════════════════════════════╣");
@@ -104,8 +137,10 @@ fn analyze_patterns() {
     sorted.sort_by(|a, b| a.3.partial_cmp(&b.3).unwrap());
 
     for (name, src_size, alloc, ratio) in sorted.iter().take(5) {
-        println!("{}: {:.2}x ({} bytes allocated for {} byte source)",
-            name, ratio, alloc, src_size);
+        println!(
+            "{}: {:.2}x ({} bytes allocated for {} byte source)",
+            name, ratio, alloc, src_size
+        );
     }
 
     println!("\n╔══════════════════════════════════════════════════════════════════╗");

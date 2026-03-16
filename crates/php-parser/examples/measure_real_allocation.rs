@@ -32,7 +32,10 @@ fn analyze_corpus(base: &str, corpus_name: &str) {
     }
 
     println!("╔══════════════════════════════════════════════════════════════════╗");
-    println!("║ {:<64} ║", format!("Corpus: {}", corpus_name.to_uppercase()));
+    println!(
+        "║ {:<64} ║",
+        format!("Corpus: {}", corpus_name.to_uppercase())
+    );
     println!("╚══════════════════════════════════════════════════════════════════╝\n");
 
     let mut file_count = 0;
@@ -80,14 +83,21 @@ fn analyze_corpus(base: &str, corpus_name: &str) {
         0.0
     };
 
-    let min_ratio = allocation_ratios.iter().cloned()
+    let min_ratio = allocation_ratios
+        .iter()
+        .cloned()
         .fold(f64::INFINITY, f64::min);
-    let max_ratio = allocation_ratios.iter().cloned()
-        .fold(0.0, f64::max);
+    let max_ratio = allocation_ratios.iter().cloned().fold(0.0, f64::max);
 
     println!("Files analyzed:                      {:>20}", file_count);
-    println!("Total source size:                   {:>20.1} MB", total_source_bytes as f64 / 1_000_000.0);
-    println!("Total arena usage:                   {:>20.1} MB", total_arena_bytes as f64 / 1_000_000.0);
+    println!(
+        "Total source size:                   {:>20.1} MB",
+        total_source_bytes as f64 / 1_000_000.0
+    );
+    println!(
+        "Total arena usage:                   {:>20.1} MB",
+        total_arena_bytes as f64 / 1_000_000.0
+    );
     println!();
 
     println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -106,7 +116,10 @@ fn analyze_corpus(base: &str, corpus_name: &str) {
     println!("Percentile distribution:");
     for p in &percentiles {
         let idx = (sorted.len() * p / 100).min(sorted.len() - 1);
-        println!("  {}th percentile:                      {:>18.2}x", p, sorted[idx]);
+        println!(
+            "  {}th percentile:                      {:>18.2}x",
+            p, sorted[idx]
+        );
     }
 
     println!("\n");

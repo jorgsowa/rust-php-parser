@@ -356,59 +356,63 @@ pub fn record_arena_vec_empty() {
 pub fn get_stats() -> InstrumentStats {
     #[cfg(feature = "instrument")]
     {
-        STATS.lock().ok().map(|stats| InstrumentStats {
-            parse_expr_calls: stats.parse_expr_calls,
-            parse_expr_bp_recursive_calls: stats.parse_expr_bp_recursive_calls,
-            parse_array_element_calls: stats.parse_array_element_calls,
-            parse_array_element_with_arrow: stats.parse_array_element_with_arrow,
-            parse_expr_array_first: stats.parse_expr_array_first,
-            parse_expr_array_second: stats.parse_expr_array_second,
-            parse_array_count: stats.parse_array_count,
-            parse_array_element_count: stats.parse_array_element_count,
-            parse_atom_calls: stats.parse_atom_calls,
-            parse_array_simple_values: stats.parse_array_simple_values,
-            parse_stmt_calls: stats.parse_stmt_calls,
-            parse_function_calls: stats.parse_function_calls,
-            parse_class_calls: stats.parse_class_calls,
-            parse_foreach_calls: stats.parse_foreach_calls,
-            parse_loop_calls: stats.parse_loop_calls,
-            parse_if_calls: stats.parse_if_calls,
-            parse_switch_calls: stats.parse_switch_calls,
-            parse_try_calls: stats.parse_try_calls,
-            parse_attribute_calls: stats.parse_attribute_calls,
-            arena_vec_allocations: stats.arena_vec_allocations,
-            arena_vec_bytes: stats.arena_vec_bytes,
-            arena_alloc_calls: stats.arena_alloc_calls,
-            arena_vec_reallocations: stats.arena_vec_reallocations,
-            arena_vec_wasted_capacity: stats.arena_vec_wasted_capacity,
-            arena_vec_empty: stats.arena_vec_empty,
-        }).unwrap_or(InstrumentStats {
-            parse_expr_calls: 0,
-            parse_expr_bp_recursive_calls: 0,
-            parse_array_element_calls: 0,
-            parse_array_element_with_arrow: 0,
-            parse_expr_array_first: 0,
-            parse_expr_array_second: 0,
-            parse_array_count: 0,
-            parse_array_element_count: 0,
-            parse_atom_calls: 0,
-            parse_array_simple_values: 0,
-            parse_stmt_calls: 0,
-            parse_function_calls: 0,
-            parse_class_calls: 0,
-            parse_foreach_calls: 0,
-            parse_loop_calls: 0,
-            parse_if_calls: 0,
-            parse_switch_calls: 0,
-            parse_try_calls: 0,
-            parse_attribute_calls: 0,
-            arena_vec_allocations: 0,
-            arena_vec_bytes: 0,
-            arena_alloc_calls: 0,
-            arena_vec_reallocations: 0,
-            arena_vec_wasted_capacity: 0,
-            arena_vec_empty: 0,
-        })
+        STATS
+            .lock()
+            .ok()
+            .map(|stats| InstrumentStats {
+                parse_expr_calls: stats.parse_expr_calls,
+                parse_expr_bp_recursive_calls: stats.parse_expr_bp_recursive_calls,
+                parse_array_element_calls: stats.parse_array_element_calls,
+                parse_array_element_with_arrow: stats.parse_array_element_with_arrow,
+                parse_expr_array_first: stats.parse_expr_array_first,
+                parse_expr_array_second: stats.parse_expr_array_second,
+                parse_array_count: stats.parse_array_count,
+                parse_array_element_count: stats.parse_array_element_count,
+                parse_atom_calls: stats.parse_atom_calls,
+                parse_array_simple_values: stats.parse_array_simple_values,
+                parse_stmt_calls: stats.parse_stmt_calls,
+                parse_function_calls: stats.parse_function_calls,
+                parse_class_calls: stats.parse_class_calls,
+                parse_foreach_calls: stats.parse_foreach_calls,
+                parse_loop_calls: stats.parse_loop_calls,
+                parse_if_calls: stats.parse_if_calls,
+                parse_switch_calls: stats.parse_switch_calls,
+                parse_try_calls: stats.parse_try_calls,
+                parse_attribute_calls: stats.parse_attribute_calls,
+                arena_vec_allocations: stats.arena_vec_allocations,
+                arena_vec_bytes: stats.arena_vec_bytes,
+                arena_alloc_calls: stats.arena_alloc_calls,
+                arena_vec_reallocations: stats.arena_vec_reallocations,
+                arena_vec_wasted_capacity: stats.arena_vec_wasted_capacity,
+                arena_vec_empty: stats.arena_vec_empty,
+            })
+            .unwrap_or(InstrumentStats {
+                parse_expr_calls: 0,
+                parse_expr_bp_recursive_calls: 0,
+                parse_array_element_calls: 0,
+                parse_array_element_with_arrow: 0,
+                parse_expr_array_first: 0,
+                parse_expr_array_second: 0,
+                parse_array_count: 0,
+                parse_array_element_count: 0,
+                parse_atom_calls: 0,
+                parse_array_simple_values: 0,
+                parse_stmt_calls: 0,
+                parse_function_calls: 0,
+                parse_class_calls: 0,
+                parse_foreach_calls: 0,
+                parse_loop_calls: 0,
+                parse_if_calls: 0,
+                parse_switch_calls: 0,
+                parse_try_calls: 0,
+                parse_attribute_calls: 0,
+                arena_vec_allocations: 0,
+                arena_vec_bytes: 0,
+                arena_alloc_calls: 0,
+                arena_vec_reallocations: 0,
+                arena_vec_wasted_capacity: 0,
+                arena_vec_empty: 0,
+            })
     }
     #[cfg(not(feature = "instrument"))]
     {
@@ -452,33 +456,82 @@ pub fn report_stats() {
         println!("╠════════════════════════════════════════════════════════════╣");
 
         println!("║ STATEMENT PARSING:                                        ║");
-        println!("║ Total statements:                       {:18} ║", stats.parse_stmt_calls);
-        println!("║   - Functions:                          {:18} ║", stats.parse_function_calls);
-        println!("║   - Classes/Traits:                     {:18} ║", stats.parse_class_calls);
-        println!("║   - If statements:                      {:18} ║", stats.parse_if_calls);
-        println!("║   - Loops (for/while/do):               {:18} ║", stats.parse_loop_calls);
-        println!("║   - Foreach:                            {:18} ║", stats.parse_foreach_calls);
-        println!("║   - Switch:                             {:18} ║", stats.parse_switch_calls);
-        println!("║   - Try/Catch:                          {:18} ║", stats.parse_try_calls);
-        println!("║   - Attributes:                         {:18} ║", stats.parse_attribute_calls);
+        println!(
+            "║ Total statements:                       {:18} ║",
+            stats.parse_stmt_calls
+        );
+        println!(
+            "║   - Functions:                          {:18} ║",
+            stats.parse_function_calls
+        );
+        println!(
+            "║   - Classes/Traits:                     {:18} ║",
+            stats.parse_class_calls
+        );
+        println!(
+            "║   - If statements:                      {:18} ║",
+            stats.parse_if_calls
+        );
+        println!(
+            "║   - Loops (for/while/do):               {:18} ║",
+            stats.parse_loop_calls
+        );
+        println!(
+            "║   - Foreach:                            {:18} ║",
+            stats.parse_foreach_calls
+        );
+        println!(
+            "║   - Switch:                             {:18} ║",
+            stats.parse_switch_calls
+        );
+        println!(
+            "║   - Try/Catch:                          {:18} ║",
+            stats.parse_try_calls
+        );
+        println!(
+            "║   - Attributes:                         {:18} ║",
+            stats.parse_attribute_calls
+        );
 
         println!("╠════════════════════════════════════════════════════════════╣");
         println!("║ ARRAY & EXPRESSION PARSING:                               ║");
-        println!("║ Arrays Parsed:                          {:18} ║", stats.parse_array_count);
-        println!("║ Array Elements:                         {:18} ║", stats.parse_array_element_count);
-        println!("║ Array Elements with =>:                 {:18} ║", stats.parse_array_element_with_arrow);
+        println!(
+            "║ Arrays Parsed:                          {:18} ║",
+            stats.parse_array_count
+        );
+        println!(
+            "║ Array Elements:                         {:18} ║",
+            stats.parse_array_element_count
+        );
+        println!(
+            "║ Array Elements with =>:                 {:18} ║",
+            stats.parse_array_element_with_arrow
+        );
 
         let arrow_rate = if stats.parse_array_element_calls > 0 {
-            (stats.parse_array_element_with_arrow as f64 / stats.parse_array_element_calls as f64) * 100.0
+            (stats.parse_array_element_with_arrow as f64 / stats.parse_array_element_calls as f64)
+                * 100.0
         } else {
             0.0
         };
-        println!("║ => Rate:                                    {:15.1}% ║", arrow_rate);
+        println!(
+            "║ => Rate:                                    {:15.1}% ║",
+            arrow_rate
+        );
 
         println!("╠════════════════════════════════════════════════════════════╣");
-        println!("║ Total parse_expr calls:                 {:18} ║", stats.parse_expr_calls);
-        println!("║ parse_expr calls (array, first):        {:18} ║", stats.parse_expr_array_first);
-        println!("║ parse_expr calls (array, second =>):    {:18} ║", stats.parse_expr_array_second);
+        println!(
+            "║ Total parse_expr calls:                 {:18} ║",
+            stats.parse_expr_calls
+        );
+        println!(
+            "║ parse_expr calls (array, first):        {:18} ║",
+            stats.parse_expr_array_first
+        );
+        println!(
+            "║ parse_expr calls (array, second =>):    {:18} ║",
+            stats.parse_expr_array_second
+        );
 
         let second_expr_overhead = stats.parse_expr_array_second;
         let second_expr_pct = if stats.parse_expr_calls > 0 {
@@ -486,18 +539,31 @@ pub fn report_stats() {
         } else {
             0.0
         };
-        println!("║ Double-parse overhead (%):                  {:15.1}% ║", second_expr_pct);
+        println!(
+            "║ Double-parse overhead (%):                  {:15.1}% ║",
+            second_expr_pct
+        );
 
         println!("╠════════════════════════════════════════════════════════════╣");
-        println!("║ parse_atom calls:                       {:18} ║", stats.parse_atom_calls);
-        println!("║ Simple array values (no operators):     {:18} ║", stats.parse_array_simple_values);
+        println!(
+            "║ parse_atom calls:                       {:18} ║",
+            stats.parse_atom_calls
+        );
+        println!(
+            "║ Simple array values (no operators):     {:18} ║",
+            stats.parse_array_simple_values
+        );
 
         let simple_pct = if stats.parse_array_element_count > 0 {
-            (stats.parse_array_simple_values as f64 / stats.parse_array_element_count as f64) * 100.0
+            (stats.parse_array_simple_values as f64 / stats.parse_array_element_count as f64)
+                * 100.0
         } else {
             0.0
         };
-        println!("║ Simple value rate:                          {:15.1}% ║", simple_pct);
+        println!(
+            "║ Simple value rate:                          {:15.1}% ║",
+            simple_pct
+        );
 
         println!("╚════════════════════════════════════════════════════════════╝\n");
     }

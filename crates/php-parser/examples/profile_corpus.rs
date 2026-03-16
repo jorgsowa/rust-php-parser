@@ -34,7 +34,10 @@ fn analyze_corpus(base: &str, corpus_name: &str) {
     }
 
     println!("╔══════════════════════════════════════════════════════════════════╗");
-    println!("║ {:<64} ║", format!("Corpus: {}", corpus_name.to_uppercase()));
+    println!(
+        "║ {:<64} ║",
+        format!("Corpus: {}", corpus_name.to_uppercase())
+    );
     println!("╚══════════════════════════════════════════════════════════════════╝");
 
     instrument::reset_stats();
@@ -86,8 +89,7 @@ fn analyze_corpus(base: &str, corpus_name: &str) {
     };
 
     let simple_rate = if stats.parse_array_element_count > 0 {
-        (stats.parse_array_simple_values as f64 / stats.parse_array_element_count as f64)
-            * 100.0
+        (stats.parse_array_simple_values as f64 / stats.parse_array_element_count as f64) * 100.0
     } else {
         0.0
     };
@@ -106,13 +108,22 @@ fn analyze_corpus(base: &str, corpus_name: &str) {
 
     // Report
     println!("Files analyzed:                     {:>20}", file_count);
-    println!("Total bytes:                        {:>20.1} MB", total_bytes as f64 / 1_000_000.0);
-    println!("Avg bytes/file:                     {:>20.0} B\n", avg_bytes_per_file);
+    println!(
+        "Total bytes:                        {:>20.1} MB",
+        total_bytes as f64 / 1_000_000.0
+    );
+    println!(
+        "Avg bytes/file:                     {:>20.0} B\n",
+        avg_bytes_per_file
+    );
 
     println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     println!("ARRAY PARSING METRICS:");
     println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    println!("Total arrays parsed:                {:>20}", stats.parse_array_count);
+    println!(
+        "Total arrays parsed:                {:>20}",
+        stats.parse_array_count
+    );
     println!(
         "Total array elements:               {:>20}",
         stats.parse_array_element_count

@@ -5,8 +5,8 @@ use php_lexer::TokenKind;
 
 use crate::diagnostics::ParseError;
 use crate::expr;
-use crate::parser::Parser;
 use crate::instrument;
+use crate::parser::Parser;
 
 fn class_modifier_error<'arena, 'src>(
     parser: &mut Parser<'arena, 'src>,

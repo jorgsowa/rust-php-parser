@@ -15,7 +15,10 @@ fn main() {
     println!("Test 1: Simple indexed array [1, 2, 3, ..., 100]");
     instrument::reset_stats();
     let code1 = "<?php $a = [".to_string()
-        + &(1..=100).map(|i| i.to_string()).collect::<Vec<_>>().join(", ")
+        + &(1..=100)
+            .map(|i| i.to_string())
+            .collect::<Vec<_>>()
+            .join(", ")
         + "];";
     php_rs_parser::parse(&arena, &code1);
     instrument::report_stats();

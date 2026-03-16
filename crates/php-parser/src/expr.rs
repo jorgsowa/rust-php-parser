@@ -4,10 +4,10 @@ use php_ast::*;
 use php_lexer::TokenKind;
 
 use crate::diagnostics::ParseError;
+use crate::instrument;
 use crate::parser::Parser;
 use crate::precedence::{self, ASSIGNMENT_BP, TERNARY_BP};
 use crate::stmt;
-use crate::instrument;
 
 /// Cast keyword strings and their CastKind values
 const CAST_KEYWORDS: &[(&str, CastKind)] = &[
@@ -45,25 +45,143 @@ pub fn parse_expr_bp<'arena, 'src>(
     loop {
         let kind = parser.current_kind();
 
-        // Check for postfix operators first (++, --)
-        if let Some(left_bp) = precedence::postfix_binding_power(kind) {
-            if left_bp < min_bp {
-                break;
+        // Fast-path: Direct token kind dispatch for most-common operators.
+        // Compiler converts this to jump table (O(1)) instead of sequential branches.
+        // This groups direct token comparisons that were scattered across if-statements.
+        let should_continue = match kind {
+            // Postfix operators (++, --)
+            TokenKind::PlusPlus | TokenKind::MinusMinus => {
+                if let Some(left_bp) = precedence::postfix_binding_power(kind) {
+                    if left_bp < min_bp {
+                        break;
+                    }
+                    let op_token = parser.advance();
+                    let op = match op_token.kind {
+                        TokenKind::PlusPlus => UnaryPostfixOp::PostIncrement,
+                        TokenKind::MinusMinus => UnaryPostfixOp::PostDecrement,
+                        _ => unreachable!(),
+                    };
+                    let span = lhs.span.merge(op_token.span);
+                    lhs = Expr {
+                        kind: ExprKind::UnaryPostfix(UnaryPostfixExpr {
+                            operand: parser.alloc(lhs),
+                            op,
+                        }),
+                        span,
+                    };
+                    true
+                } else {
+                    false
+                }
             }
-            let op_token = parser.advance();
-            let op = match op_token.kind {
-                TokenKind::PlusPlus => UnaryPostfixOp::PostIncrement,
-                TokenKind::MinusMinus => UnaryPostfixOp::PostDecrement,
-                _ => unreachable!(), // postfix_binding_power only returns Some for ++ and --
-            };
-            let span = lhs.span.merge(op_token.span);
-            lhs = Expr {
-                kind: ExprKind::UnaryPostfix(UnaryPostfixExpr {
-                    operand: parser.alloc(lhs),
-                    op,
-                }),
-                span,
-            };
+
+            // Ternary operator (right-associative, special handling)
+            TokenKind::Question => {
+                if TERNARY_BP < min_bp {
+                    break;
+                }
+                parser.advance(); // consume ?
+
+                // Short ternary: `$x ?: $y`
+                let then_expr = if parser.check(TokenKind::Colon) {
+                    None
+                } else {
+                    let e = parse_expr_bp(parser, 0);
+                    Some(parser.alloc(e))
+                };
+
+                parser.expect(TokenKind::Colon);
+                // Ternary is LEFT-associative in PHP, so use TERNARY_BP + 1
+                let else_expr = parse_expr_bp(parser, TERNARY_BP + 1);
+                let span = lhs.span.merge(else_expr.span);
+                lhs = Expr {
+                    kind: ExprKind::Ternary(TernaryExpr {
+                        condition: parser.alloc(lhs),
+                        then_expr,
+                        else_expr: parser.alloc(else_expr),
+                    }),
+                    span,
+                };
+                true
+            }
+
+            // Arrow operators (property/method access)
+            TokenKind::Arrow | TokenKind::NullsafeArrow => {
+                if 44u8 < min_bp {
+                    break;
+                }
+                let is_nullsafe = kind == TokenKind::NullsafeArrow;
+                parser.advance(); // consume -> or ?->
+
+                // Parse member name (identifier or keyword or variable for dynamic)
+                let member = parse_member_name(parser);
+
+                // Check if it's a method call
+                if parser.check(TokenKind::LeftParen) {
+                    match parse_arg_list_or_callable(parser) {
+                        ArgListResult::CallableMarker => {
+                            let span = Span::new(lhs.span.start, parser.current_span().start);
+                            let callable_kind = if is_nullsafe {
+                                CallableCreateKind::NullsafeMethod {
+                                    object: parser.alloc(lhs),
+                                    method: parser.alloc(member),
+                                }
+                            } else {
+                                CallableCreateKind::Method {
+                                    object: parser.alloc(lhs),
+                                    method: parser.alloc(member),
+                                }
+                            };
+                            lhs = Expr {
+                                kind: ExprKind::CallableCreate(CallableCreateExpr {
+                                    kind: callable_kind,
+                                }),
+                                span,
+                            };
+                        }
+                        ArgListResult::Args(args) => {
+                            let span = Span::new(lhs.span.start, parser.current_span().start);
+                            let call = parser.alloc(MethodCallExpr {
+                                object: parser.alloc(lhs),
+                                method: parser.alloc(member),
+                                args,
+                            });
+                            let expr_kind = if is_nullsafe {
+                                ExprKind::NullsafeMethodCall(call)
+                            } else {
+                                ExprKind::MethodCall(call)
+                            };
+                            lhs = Expr {
+                                kind: expr_kind,
+                                span,
+                            };
+                        }
+                    }
+                } else {
+                    let span = Span::new(lhs.span.start, member.span.end);
+                    let expr_kind = if is_nullsafe {
+                        ExprKind::NullsafePropertyAccess(PropertyAccessExpr {
+                            object: parser.alloc(lhs),
+                            property: parser.alloc(member),
+                        })
+                    } else {
+                        ExprKind::PropertyAccess(PropertyAccessExpr {
+                            object: parser.alloc(lhs),
+                            property: parser.alloc(member),
+                        })
+                    };
+                    lhs = Expr {
+                        kind: expr_kind,
+                        span,
+                    };
+                }
+                true
+            }
+
+            _ => false,
+        };
+
+        if should_continue {
             continue;
         }
 
@@ -107,109 +225,6 @@ pub fn parse_expr_bp<'arena, 'src>(
                 }),
                 span,
             };
-            continue;
-        }
-
-        // Ternary operator (right-associative, special handling)
-        if kind == TokenKind::Question {
-            if TERNARY_BP < min_bp {
-                break;
-            }
-            parser.advance(); // consume ?
-
-            // Short ternary: `$x ?: $y`
-            let then_expr = if parser.check(TokenKind::Colon) {
-                None
-            } else {
-                let e = parse_expr_bp(parser, 0);
-                Some(parser.alloc(e))
-            };
-
-            parser.expect(TokenKind::Colon);
-            // Ternary is LEFT-associative in PHP, so use TERNARY_BP + 1
-            let else_expr = parse_expr_bp(parser, TERNARY_BP + 1);
-            let span = lhs.span.merge(else_expr.span);
-            lhs = Expr {
-                kind: ExprKind::Ternary(TernaryExpr {
-                    condition: parser.alloc(lhs),
-                    then_expr,
-                    else_expr: parser.alloc(else_expr),
-                }),
-                span,
-            };
-            continue;
-        }
-
-        // Arrow operator: $obj->prop or $obj->method()
-        if kind == TokenKind::Arrow || kind == TokenKind::NullsafeArrow {
-            if 44u8 < min_bp {
-                break;
-            }
-            let is_nullsafe = kind == TokenKind::NullsafeArrow;
-            parser.advance(); // consume -> or ?->
-
-            // Parse member name (identifier or keyword or variable for dynamic)
-            let member = parse_member_name(parser);
-
-            // Check if it's a method call
-            if parser.check(TokenKind::LeftParen) {
-                match parse_arg_list_or_callable(parser) {
-                    ArgListResult::CallableMarker => {
-                        let span = Span::new(lhs.span.start, parser.current_span().start);
-                        let callable_kind = if is_nullsafe {
-                            CallableCreateKind::NullsafeMethod {
-                                object: parser.alloc(lhs),
-                                method: parser.alloc(member),
-                            }
-                        } else {
-                            CallableCreateKind::Method {
-                                object: parser.alloc(lhs),
-                                method: parser.alloc(member),
-                            }
-                        };
-                        lhs = Expr {
-                            kind: ExprKind::CallableCreate(CallableCreateExpr {
-                                kind: callable_kind,
-                            }),
-                            span,
-                        };
-                    }
-                    ArgListResult::Args(args) => {
-                        let span = Span::new(lhs.span.start, parser.current_span().start);
-                        let call = parser.alloc(MethodCallExpr {
-                            object: parser.alloc(lhs),
-                            method: parser.alloc(member),
-                            args,
-                        });
-                        let expr_kind = if is_nullsafe {
-                            ExprKind::NullsafeMethodCall(call)
-                        } else {
-                            ExprKind::MethodCall(call)
-                        };
-                        lhs = Expr {
-                            kind: expr_kind,
-                            span,
-                        };
-                    }
-                }
-            } else {
-                let span = Span::new(lhs.span.start, member.span.end);
-                let expr_kind = if is_nullsafe {
-                    ExprKind::NullsafePropertyAccess(PropertyAccessExpr {
-                        object: parser.alloc(lhs),
-                        property: parser.alloc(member),
-                    })
-                } else {
-                    ExprKind::PropertyAccess(PropertyAccessExpr {
-                        object: parser.alloc(lhs),
-                        property: parser.alloc(member),
-                    })
-                };
-                lhs = Expr {
-                    kind: expr_kind,
-                    span,
-                };
-            }
             continue;
         }
 
