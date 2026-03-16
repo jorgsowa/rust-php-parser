@@ -422,7 +422,9 @@ pub fn parse_block<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
     let open_span = open.map(|t| t.span).unwrap_or(parser.current_span());
 
     parser.depth += 1;
-    let mut stmts = parser.alloc_vec_with_capacity(16);
+    // March 2026: reduce from 16 to 8 for statement blocks
+    // Most blocks have 4-12 statements; larger blocks grow efficiently
+    let mut stmts = parser.alloc_vec_with_capacity(8);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         // Handle close tag -> inline HTML -> open tag sequences inside blocks
         if parser.check(TokenKind::CloseTag) {
@@ -906,7 +908,9 @@ fn parse_function<'arena, 'src>(
 
     let open_brace = parser.expect(TokenKind::LeftBrace);
     let open_brace_span = open_brace.map(|t| t.span).unwrap_or(parser.current_span());
-    let mut body = parser.alloc_vec_with_capacity(16);
+    // March 2026: reduce from 16 to 4 for smaller initial allocation
+    // Most functions have 4-10 statements; large functions grow efficiently
+    let mut body = parser.alloc_vec_with_capacity(4);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
         body.push(parse_stmt(parser));
@@ -1819,7 +1823,9 @@ fn parse_property_hooks<'arena, 'src>(
 pub fn parse_class_members<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
 ) -> ArenaVec<'arena, ClassMember<'arena, 'src>> {
-    let mut members = parser.alloc_vec_with_capacity(16);
+    // March 2026: reduce from 16 to 4 for class members
+    // Most classes have 3-10 members; larger classes grow efficiently
+    let mut members = parser.alloc_vec_with_capacity(4);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         // Skip empty statements
         if parser.check(TokenKind::Semicolon) {
