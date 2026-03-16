@@ -6,6 +6,7 @@ use php_lexer::TokenKind;
 use crate::diagnostics::ParseError;
 use crate::expr;
 use crate::parser::Parser;
+use crate::instrument;
 
 fn class_modifier_error<'arena, 'src>(
     parser: &mut Parser<'arena, 'src>,
@@ -26,6 +27,8 @@ fn class_modifier_error<'arena, 'src>(
 
 /// Parse a single statement.
 pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
+    instrument::record_parse_stmt();
+
     // Handle attributes: #[...] before declarations
     if parser.check(TokenKind::HashBracket) {
         return parse_attributed_stmt(parser);
@@ -563,6 +566,8 @@ fn parse_return<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
 // =============================================================================
 
 fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
+    instrument::record_parse_if();
+
     let start = parser.start_span();
     parser.advance(); // consume 'if'
 
@@ -682,6 +687,8 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
 // =============================================================================
 
 fn parse_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
+    instrument::record_parse_loop();
+
     let start = parser.start_span();
     parser.advance();
     let open = parser.expect(TokenKind::LeftParen);
@@ -714,6 +721,8 @@ fn parse_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
 }
 
 fn parse_do_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
+    instrument::record_parse_loop();
+
     let start = parser.start_span();
     parser.advance();
     let body_stmt = parse_stmt_or_block(parser);
@@ -732,6 +741,8 @@ fn parse_do_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
 }
 
 fn parse_for<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
+    instrument::record_parse_loop();
+
     let start = parser.start_span();
     parser.advance();
     let open = parser.expect(TokenKind::LeftParen);
@@ -796,6 +807,8 @@ fn parse_expr_list_until<'arena, 'src>(
 }
 
 fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
+    instrument::record_parse_foreach();
+
     let start = parser.start_span();
     parser.advance();
     let open = parser.expect(TokenKind::LeftParen);
@@ -862,6 +875,8 @@ fn parse_function<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
 ) -> Stmt<'arena, 'src> {
+    instrument::record_parse_function();
+
     let start = parser.start_span();
     parser.advance(); // consume 'function'
 
@@ -1105,6 +1120,8 @@ fn parse_continue<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
 // =============================================================================
 
 fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
+    instrument::record_parse_switch();
+
     let start = parser.start_span();
     parser.advance();
     let open = parser.expect(TokenKind::LeftParen);
@@ -1194,6 +1211,8 @@ fn parse_throw_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
 }
 
 fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
+    instrument::record_parse_try();
+
     let start = parser.start_span();
     parser.advance();
     parser.expect(TokenKind::LeftBrace);
@@ -1441,6 +1460,8 @@ fn parse_class<'arena, 'src>(
     modifiers: ClassModifiers,
     attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
 ) -> Stmt<'arena, 'src> {
+    instrument::record_parse_class();
+
     let start = parser.start_span();
     parser.advance(); // consume 'class'
 
@@ -2245,6 +2266,8 @@ fn parse_interface<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
 ) -> Stmt<'arena, 'src> {
+    instrument::record_parse_class();
+
     let start = parser.start_span();
     parser.advance();
     let (name, name_span) = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
@@ -2297,6 +2320,8 @@ fn parse_trait<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
 ) -> Stmt<'arena, 'src> {
+    instrument::record_parse_class();
+
     let start = parser.start_span();
     parser.advance();
     let name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {

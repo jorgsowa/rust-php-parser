@@ -4,6 +4,7 @@ use php_lexer::{Lexer, Token, TokenKind};
 use crate::diagnostics::ParseError;
 use crate::expr;
 use crate::stmt;
+use crate::instrument;
 
 const MAX_ERRORS: usize = 100;
 
@@ -674,6 +675,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     pub fn parse_attributes(&mut self) -> ArenaVec<'arena, Attribute<'arena, 'src>> {
         let mut attributes = self.alloc_vec_with_capacity(1);
         while self.check(TokenKind::HashBracket) {
+            instrument::record_parse_attribute();
             self.advance(); // consume #[
 
             // Parse comma-separated attributes within this group

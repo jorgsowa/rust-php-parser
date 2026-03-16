@@ -1,4 +1,4 @@
-//! Lightweight instrumentation for profiling array parsing and expression parsing.
+//! Lightweight instrumentation for profiling array parsing, expression parsing, and statement parsing.
 //!
 //! This module provides zero-cost abstractions for profiling when the `instrument` feature
 //! is enabled. When disabled, all instrumentation macros and calls compile to nothing.
@@ -7,6 +7,7 @@ use std::sync::Mutex;
 
 /// Global instrumentation statistics
 pub struct InstrumentStats {
+    // Expression & Array Parsing
     /// Total calls to parse_expr
     pub parse_expr_calls: u64,
     /// Total calls to parse_expr_bp (with min_bp != 0)
@@ -27,6 +28,26 @@ pub struct InstrumentStats {
     pub parse_atom_calls: u64,
     /// Number of simple/atomic values in arrays (not followed by operators)
     pub parse_array_simple_values: u64,
+
+    // Statement Parsing
+    /// Total statements parsed
+    pub parse_stmt_calls: u64,
+    /// Total function/method declarations
+    pub parse_function_calls: u64,
+    /// Total class/trait/interface declarations
+    pub parse_class_calls: u64,
+    /// Total foreach statements
+    pub parse_foreach_calls: u64,
+    /// Total for/while/do-while statements
+    pub parse_loop_calls: u64,
+    /// Total if/elseif/else statements
+    pub parse_if_calls: u64,
+    /// Total switch statements
+    pub parse_switch_calls: u64,
+    /// Total try/catch/finally statements
+    pub parse_try_calls: u64,
+    /// Total attribute groups parsed (PHP 8.0+)
+    pub parse_attribute_calls: u64,
 }
 
 lazy_static::lazy_static! {
@@ -41,6 +62,15 @@ lazy_static::lazy_static! {
         parse_array_element_count: 0,
         parse_atom_calls: 0,
         parse_array_simple_values: 0,
+        parse_stmt_calls: 0,
+        parse_function_calls: 0,
+        parse_class_calls: 0,
+        parse_foreach_calls: 0,
+        parse_loop_calls: 0,
+        parse_if_calls: 0,
+        parse_switch_calls: 0,
+        parse_try_calls: 0,
+        parse_attribute_calls: 0,
     });
 }
 
@@ -123,11 +153,11 @@ pub fn record_parse_array_element_with_arrow() {
 
 /// Record total array elements parsed
 #[inline]
-pub fn record_parse_array_element_count(count: usize) {
+pub fn record_parse_array_element_count(_count: usize) {
     #[cfg(feature = "instrument")]
     {
         if let Ok(mut stats) = STATS.lock() {
-            stats.parse_array_element_count += count as u64;
+            stats.parse_array_element_count += _count as u64;
         }
     }
 }
@@ -154,6 +184,107 @@ pub fn record_parse_array_simple_value() {
     }
 }
 
+// ==================== STATEMENT PARSING METRICS ====================
+
+/// Record a statement parse call
+#[inline]
+pub fn record_parse_stmt() {
+    #[cfg(feature = "instrument")]
+    {
+        if let Ok(mut stats) = STATS.lock() {
+            stats.parse_stmt_calls += 1;
+        }
+    }
+}
+
+/// Record a function/method declaration
+#[inline]
+pub fn record_parse_function() {
+    #[cfg(feature = "instrument")]
+    {
+        if let Ok(mut stats) = STATS.lock() {
+            stats.parse_function_calls += 1;
+        }
+    }
+}
+
+/// Record a class/trait/interface declaration
+#[inline]
+pub fn record_parse_class() {
+    #[cfg(feature = "instrument")]
+    {
+        if let Ok(mut stats) = STATS.lock() {
+            stats.parse_class_calls += 1;
+        }
+    }
+}
+
+/// Record a foreach statement
+#[inline]
+pub fn record_parse_foreach() {
+    #[cfg(feature = "instrument")]
+    {
+        if let Ok(mut stats) = STATS.lock() {
+            stats.parse_foreach_calls += 1;
+        }
+    }
+}
+
+/// Record for/while/do-while statements
+#[inline]
+pub fn record_parse_loop() {
+    #[cfg(feature = "instrument")]
+    {
+        if let Ok(mut stats) = STATS.lock() {
+            stats.parse_loop_calls += 1;
+        }
+    }
+}
+
+/// Record if/elseif/else statements
+#[inline]
+pub fn record_parse_if() {
+    #[cfg(feature = "instrument")]
+    {
+        if let Ok(mut stats) = STATS.lock() {
+            stats.parse_if_calls += 1;
+        }
+    }
+}
+
+/// Record switch statements
+#[inline]
+pub fn record_parse_switch() {
+    #[cfg(feature = "instrument")]
+    {
+        if let Ok(mut stats) = STATS.lock() {
+            stats.parse_switch_calls += 1;
+        }
+    }
+}
+
+/// Record try/catch/finally statements
+#[inline]
+pub fn record_parse_try() {
+    #[cfg(feature = "instrument")]
+    {
+        if let Ok(mut stats) = STATS.lock() {
+            stats.parse_try_calls += 1;
+        }
+    }
+}
+
+/// Record attribute group parsing
+#[inline]
+pub fn record_parse_attribute() {
+    #[cfg(feature = "instrument")]
+    {
+        if let Ok(mut stats) = STATS.lock() {
+            stats.parse_attribute_calls += 1;
+        }
+    }
+}
+
 /// Get current statistics (snapshot)
 pub fn get_stats() -> InstrumentStats {
     #[cfg(feature = "instrument")]
@@ -169,6 +300,15 @@ pub fn get_stats() -> InstrumentStats {
             parse_array_element_count: stats.parse_array_element_count,
             parse_atom_calls: stats.parse_atom_calls,
             parse_array_simple_values: stats.parse_array_simple_values,
+            parse_stmt_calls: stats.parse_stmt_calls,
+            parse_function_calls: stats.parse_function_calls,
+            parse_class_calls: stats.parse_class_calls,
+            parse_foreach_calls: stats.parse_foreach_calls,
+            parse_loop_calls: stats.parse_loop_calls,
+            parse_if_calls: stats.parse_if_calls,
+            parse_switch_calls: stats.parse_switch_calls,
+            parse_try_calls: stats.parse_try_calls,
+            parse_attribute_calls: stats.parse_attribute_calls,
         }).unwrap_or(InstrumentStats {
             parse_expr_calls: 0,
             parse_expr_bp_recursive_calls: 0,
@@ -180,6 +320,15 @@ pub fn get_stats() -> InstrumentStats {
             parse_array_element_count: 0,
             parse_atom_calls: 0,
             parse_array_simple_values: 0,
+            parse_stmt_calls: 0,
+            parse_function_calls: 0,
+            parse_class_calls: 0,
+            parse_foreach_calls: 0,
+            parse_loop_calls: 0,
+            parse_if_calls: 0,
+            parse_switch_calls: 0,
+            parse_try_calls: 0,
+            parse_attribute_calls: 0,
         })
     }
     #[cfg(not(feature = "instrument"))]
@@ -195,6 +344,15 @@ pub fn get_stats() -> InstrumentStats {
             parse_array_element_count: 0,
             parse_atom_calls: 0,
             parse_array_simple_values: 0,
+            parse_stmt_calls: 0,
+            parse_function_calls: 0,
+            parse_class_calls: 0,
+            parse_foreach_calls: 0,
+            parse_loop_calls: 0,
+            parse_if_calls: 0,
+            parse_switch_calls: 0,
+            parse_try_calls: 0,
+            parse_attribute_calls: 0,
         }
     }
 }
@@ -205,10 +363,24 @@ pub fn report_stats() {
     {
         let stats = get_stats();
         println!("\n╔════════════════════════════════════════════════════════════╗");
-        println!("║         Array & Expression Parsing Instrumentation         ║");
+        println!("║      Parser Instrumentation Report (Full Analysis)        ║");
         println!("╠════════════════════════════════════════════════════════════╣");
+
+        println!("║ STATEMENT PARSING:                                        ║");
+        println!("║ Total statements:                       {:18} ║", stats.parse_stmt_calls);
+        println!("║   - Functions:                          {:18} ║", stats.parse_function_calls);
+        println!("║   - Classes/Traits:                     {:18} ║", stats.parse_class_calls);
+        println!("║   - If statements:                      {:18} ║", stats.parse_if_calls);
+        println!("║   - Loops (for/while/do):               {:18} ║", stats.parse_loop_calls);
+        println!("║   - Foreach:                            {:18} ║", stats.parse_foreach_calls);
+        println!("║   - Switch:                             {:18} ║", stats.parse_switch_calls);
+        println!("║   - Try/Catch:                          {:18} ║", stats.parse_try_calls);
+        println!("║   - Attributes:                         {:18} ║", stats.parse_attribute_calls);
+
+        println!("╠════════════════════════════════════════════════════════════╣");
+        println!("║ ARRAY & EXPRESSION PARSING:                               ║");
         println!("║ Arrays Parsed:                          {:18} ║", stats.parse_array_count);
-        println!("║ Array Elements Parsed:                  {:18} ║", stats.parse_array_element_count);
+        println!("║ Array Elements:                         {:18} ║", stats.parse_array_element_count);
         println!("║ Array Elements with =>:                 {:18} ║", stats.parse_array_element_with_arrow);
 
         let arrow_rate = if stats.parse_array_element_calls > 0 {
@@ -265,6 +437,15 @@ pub fn reset_stats() {
             stats.parse_array_element_count = 0;
             stats.parse_atom_calls = 0;
             stats.parse_array_simple_values = 0;
+            stats.parse_stmt_calls = 0;
+            stats.parse_function_calls = 0;
+            stats.parse_class_calls = 0;
+            stats.parse_foreach_calls = 0;
+            stats.parse_loop_calls = 0;
+            stats.parse_if_calls = 0;
+            stats.parse_switch_calls = 0;
+            stats.parse_try_calls = 0;
+            stats.parse_attribute_calls = 0;
         }
     }
 }
