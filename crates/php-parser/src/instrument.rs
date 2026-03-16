@@ -48,6 +48,20 @@ pub struct InstrumentStats {
     pub parse_try_calls: u64,
     /// Total attribute groups parsed (PHP 8.0+)
     pub parse_attribute_calls: u64,
+
+    // Memory Allocation Patterns
+    /// Total ArenaVec allocations
+    pub arena_vec_allocations: u64,
+    /// Total bytes allocated in ArenaVec
+    pub arena_vec_bytes: u64,
+    /// Total times arena.alloc was called
+    pub arena_alloc_calls: u64,
+    /// Total ArenaVec reallocations (growth)
+    pub arena_vec_reallocations: u64,
+    /// Total bytes wasted in pre-allocated but unused capacity
+    pub arena_vec_wasted_capacity: u64,
+    /// Number of empty ArenaVec allocations (capacity but no elements)
+    pub arena_vec_empty: u64,
 }
 
 lazy_static::lazy_static! {
@@ -71,6 +85,12 @@ lazy_static::lazy_static! {
         parse_switch_calls: 0,
         parse_try_calls: 0,
         parse_attribute_calls: 0,
+        arena_vec_allocations: 0,
+        arena_vec_bytes: 0,
+        arena_alloc_calls: 0,
+        arena_vec_reallocations: 0,
+        arena_vec_wasted_capacity: 0,
+        arena_vec_empty: 0,
     });
 }
 
@@ -285,6 +305,53 @@ pub fn record_parse_attribute() {
     }
 }
 
+// ==================== MEMORY ALLOCATION METRICS ====================
+
+/// Record an ArenaVec allocation with size info
+#[inline]
+pub fn record_arena_vec_allocation(_capacity: usize) {
+    #[cfg(feature = "instrument")]
+    {
+        if let Ok(mut stats) = STATS.lock() {
+            stats.arena_vec_allocations += 1;
+            stats.arena_vec_bytes += _capacity as u64;
+        }
+    }
+}
+
+/// Record an arena.alloc call
+#[inline]
+pub fn record_arena_alloc() {
+    #[cfg(feature = "instrument")]
+    {
+        if let Ok(mut stats) = STATS.lock() {
+            stats.arena_alloc_calls += 1;
+        }
+    }
+}
+
+/// Record wasted capacity in ArenaVec (allocated but not used)
+#[inline]
+pub fn record_arena_vec_waste(_wasted_bytes: usize) {
+    #[cfg(feature = "instrument")]
+    {
+        if let Ok(mut stats) = STATS.lock() {
+            stats.arena_vec_wasted_capacity += _wasted_bytes as u64;
+        }
+    }
+}
+
+/// Record an empty ArenaVec that was allocated
+#[inline]
+pub fn record_arena_vec_empty() {
+    #[cfg(feature = "instrument")]
+    {
+        if let Ok(mut stats) = STATS.lock() {
+            stats.arena_vec_empty += 1;
+        }
+    }
+}
+
 /// Get current statistics (snapshot)
 pub fn get_stats() -> InstrumentStats {
     #[cfg(feature = "instrument")]
@@ -309,6 +376,12 @@ pub fn get_stats() -> InstrumentStats {
             parse_switch_calls: stats.parse_switch_calls,
             parse_try_calls: stats.parse_try_calls,
             parse_attribute_calls: stats.parse_attribute_calls,
+            arena_vec_allocations: stats.arena_vec_allocations,
+            arena_vec_bytes: stats.arena_vec_bytes,
+            arena_alloc_calls: stats.arena_alloc_calls,
+            arena_vec_reallocations: stats.arena_vec_reallocations,
+            arena_vec_wasted_capacity: stats.arena_vec_wasted_capacity,
+            arena_vec_empty: stats.arena_vec_empty,
         }).unwrap_or(InstrumentStats {
             parse_expr_calls: 0,
             parse_expr_bp_recursive_calls: 0,
@@ -329,6 +402,12 @@ pub fn get_stats() -> InstrumentStats {
             parse_switch_calls: 0,
             parse_try_calls: 0,
             parse_attribute_calls: 0,
+            arena_vec_allocations: 0,
+            arena_vec_bytes: 0,
+            arena_alloc_calls: 0,
+            arena_vec_reallocations: 0,
+            arena_vec_wasted_capacity: 0,
+            arena_vec_empty: 0,
         })
     }
     #[cfg(not(feature = "instrument"))]
@@ -353,6 +432,12 @@ pub fn get_stats() -> InstrumentStats {
             parse_switch_calls: 0,
             parse_try_calls: 0,
             parse_attribute_calls: 0,
+            arena_vec_allocations: 0,
+            arena_vec_bytes: 0,
+            arena_alloc_calls: 0,
+            arena_vec_reallocations: 0,
+            arena_vec_wasted_capacity: 0,
+            arena_vec_empty: 0,
         }
     }
 }
@@ -446,6 +531,12 @@ pub fn reset_stats() {
             stats.parse_switch_calls = 0;
             stats.parse_try_calls = 0;
             stats.parse_attribute_calls = 0;
+            stats.arena_vec_allocations = 0;
+            stats.arena_vec_bytes = 0;
+            stats.arena_alloc_calls = 0;
+            stats.arena_vec_reallocations = 0;
+            stats.arena_vec_wasted_capacity = 0;
+            stats.arena_vec_empty = 0;
         }
     }
 }
