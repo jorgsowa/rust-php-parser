@@ -36,6 +36,10 @@
 ### Parsing Analysis
 - **[STATEMENT_PARSING_ANALYSIS_MARCH2026.md](performance/STATEMENT_PARSING_ANALYSIS_MARCH2026.md)** — Statement parsing performance analysis
 
+### Flamegraph Visualizations
+- **[flamegraph.svg](performance/flamegraph.svg)** — pprof flamegraph (full corpus baseline)
+- **[flamegraph_symfony.svg](performance/flamegraph_symfony.svg)** — pprof flamegraph (Symfony corpus, 5× bottleneck)
+
 ---
 
 ## Coverage & Testing
@@ -57,7 +61,9 @@
 
 ### Optimization Plateau (March 2026)
 The parser has reached diminishing returns on optimization. After comprehensive analysis:
-- **Profiling:** Identified bumpalo allocation (4.3%) as #1 bottleneck
+- **Profiling:** pprof flamegraphs (SVG) show bumpalo allocation (4.3%) as #1 bottleneck
+  - View: [flamegraph.svg](performance/flamegraph.svg) (full corpus)
+  - View: [flamegraph_symfony.svg](performance/flamegraph_symfony.svg) (Symfony 5× bottleneck)
 - **Tuning:** Reduced allocation to 3.5% via 5x pre-allocation
 - **Symfony Focus:** 83.8% key-value arrays = 34.5% of parse_expr() overhead
 - **Attempted Fast Path:** Failed (test regression); documented in OPTIMIZATION_ATTEMPT_MARCH2026.md
