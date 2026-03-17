@@ -1,0 +1,295 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "numbers"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 14
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Array": [
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Int": 1
+                        },
+                        "span": {
+                          "start": 18,
+                          "end": 19
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 18,
+                        "end": 19
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Int": 2
+                        },
+                        "span": {
+                          "start": 21,
+                          "end": 22
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 21,
+                        "end": 22
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Int": 3
+                        },
+                        "span": {
+                          "start": 24,
+                          "end": 25
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 24,
+                        "end": 25
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 17,
+                  "end": 26
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 26
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 28
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "expanded"
+                },
+                "span": {
+                  "start": 28,
+                  "end": 37
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Array": [
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "numbers"
+                        },
+                        "span": {
+                          "start": 44,
+                          "end": 52
+                        }
+                      },
+                      "unpack": true,
+                      "span": {
+                        "start": 41,
+                        "end": 52
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Int": 4
+                        },
+                        "span": {
+                          "start": 54,
+                          "end": 55
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 54,
+                        "end": 55
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Int": 5
+                        },
+                        "span": {
+                          "start": 57,
+                          "end": 58
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 57,
+                        "end": 58
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 40,
+                  "end": 59
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 28,
+            "end": 59
+          }
+        }
+      },
+      "span": {
+        "start": 28,
+        "end": 61
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "combined"
+                },
+                "span": {
+                  "start": 61,
+                  "end": 70
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Array": [
+                    {
+                      "key": {
+                        "kind": {
+                          "String": "a"
+                        },
+                        "span": {
+                          "start": 74,
+                          "end": 77
+                        }
+                      },
+                      "value": {
+                        "kind": {
+                          "Int": 1
+                        },
+                        "span": {
+                          "start": 81,
+                          "end": 82
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 74,
+                        "end": 82
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "other"
+                        },
+                        "span": {
+                          "start": 87,
+                          "end": 93
+                        }
+                      },
+                      "unpack": true,
+                      "span": {
+                        "start": 84,
+                        "end": 93
+                      }
+                    },
+                    {
+                      "key": {
+                        "kind": {
+                          "String": "b"
+                        },
+                        "span": {
+                          "start": 95,
+                          "end": 98
+                        }
+                      },
+                      "value": {
+                        "kind": {
+                          "Int": 2
+                        },
+                        "span": {
+                          "start": 102,
+                          "end": 103
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 95,
+                        "end": 103
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 73,
+                  "end": 104
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 61,
+            "end": 104
+          }
+        }
+      },
+      "span": {
+        "start": 61,
+        "end": 106
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 106
+  }
+}
