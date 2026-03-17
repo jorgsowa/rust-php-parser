@@ -10,6 +10,7 @@ description = "Fast PHP parser producing a typed AST"
 keywords = ["php", "parser", "ast", "syntax"]
 categories = ["parsing", "development-tools", "compilers"]
 readme = "../../README.md"
+exclude = ["benches/", "tests/", "examples/", ".gitmodules"]
 
 [dependencies]
 php-ast = { workspace = true }
