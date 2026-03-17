@@ -42,6 +42,8 @@ The parser prioritizes performance on contemporary PHP patterns:
 
 See [PERFORMANCE_ANALYSIS.md](PERFORMANCE_ANALYSIS.md) and [SYMFONY_OPTIMIZATION_ANALYSIS.md](SYMFONY_OPTIMIZATION_ANALYSIS.md) for detailed profiling and optimization analysis.
 
+**The fastest full-featured PHP parser.** For comparative benchmarks against other PHP parsers (nikic/PHP-Parser, alternative implementations), see [php-parser-benchmark](https://github.com/jorgsowa/php-parser-benchmark).
+
 ## Testing
 
 ```sh
