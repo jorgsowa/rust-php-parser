@@ -895,6 +895,38 @@ function counter() {
     insta::assert_snapshot!(to_json(&result.program));
 }
 
+#[test]
+fn test_declare_multiple_directives() {
+    let source = "<?php declare(encoding='UTF-8', strict_types=1, ticks=1);";
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_declare_in_conditional() {
+    let source = "<?php if (true) { declare(strict_types=1); }";
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_use_with_multiple_types() {
+    let source = "<?php use function A\\foo; use const SOME_CONST; use B\\C;";
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_deep_namespace_nesting() {
+    let source = "<?php namespace A\\B\\C\\D\\E\\F\\G { class X {} }";
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
 // =============================================================================
 // Phase 7: Built-in Expressions
 // =============================================================================
@@ -1134,6 +1166,27 @@ fn test_array_destructuring() {
     insta::assert_snapshot!(to_json(&result.program));
 }
 
+#[test]
+fn test_nested_list_destructuring() {
+    let source = r#"<?php
+list($a, [[$b, $c]]) = [[1, [2, 3]]];
+[$x, [$y, $z]] = $data;
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_list_with_string_keys() {
+    let source = r#"<?php
+list('name' => $name, 'age' => $age) = $person;
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
 // =============================================================================
 // Phase 11: Array Edge Cases
 // =============================================================================
@@ -1174,6 +1227,29 @@ function bar($x, $y,) {}
 #[test]
 fn test_array_push_syntax() {
     let result = parse_php("<?php $arr[] = 'new'; $matrix[][] = 1;");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_array_spread_with_keys() {
+    let source = r#"<?php
+$numbers = [1, 2, 3];
+$expanded = [...$numbers, 4, 5];
+$combined = ['a' => 1, ...$other, 'b' => 2];
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_nested_array_spread() {
+    let source = r#"<?php
+$arrays = [[1, 2], [3, 4]];
+$flat = [...$arrays[0], ...$arrays[1], 5];
+"#;
+    let result = parse_php(source);
     assert_no_errors(&result);
     insta::assert_snapshot!(to_json(&result.program));
 }
@@ -1631,6 +1707,42 @@ class Foo {
     insta::assert_snapshot!(to_json(&result.program));
 }
 
+#[test]
+fn test_trait_multiple_insteadof() {
+    let source = r#"<?php
+trait T1 { public function m() {} }
+trait T2 { public function m() {} }
+trait T3 { public function m() {} }
+class C {
+    use T1, T2, T3 {
+        T1::m insteadof T2, T3;
+        T2::m insteadof T3;
+    }
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_trait_multiple_alias_and_precedence() {
+    let source = r#"<?php
+trait A { public function foo() {} }
+trait B { public function foo() {} public function bar() {} }
+class C {
+    use A, B {
+        B::foo insteadof A;
+        A::foo as private afoo;
+        B::bar as public bbar;
+    }
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
 // =============================================================================
 // Phase 17: Namespace & Module Edge Cases
 // =============================================================================
@@ -1838,6 +1950,39 @@ function foo((A&B)|C $x): (X&Y)|Z {
 }
 function bar((A&B)|(C&D) $y): (E&F)|null {
     return $y;
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_complex_union_and_intersection_types() {
+    let source = r#"<?php
+function processData(Countable&ArrayAccess $data): array|null {
+    return null;
+}
+class Container {
+    public function __construct(
+        public readonly Countable&Iterator $items,
+        private string|int|float $value
+    ) {}
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_by_reference_return_type() {
+    let source = r#"<?php
+function &getValue(): string {
+    return $GLOBALS['value'];
+}
+function &getReference(array &$arr): mixed {
+    return $arr[0];
 }
 "#;
     let result = parse_php(source);
