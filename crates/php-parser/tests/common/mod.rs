@@ -16,6 +16,21 @@ pub fn parse_fixture(file: &str, expect_errors: bool) -> String {
     serde_json::to_string_pretty(&result.program).unwrap()
 }
 
+pub fn parse_code(source: &str, expect_errors: bool) -> String {
+    let arena = bumpalo::Bump::new();
+    let result = php_rs_parser::parse(&arena, source);
+    if expect_errors {
+        assert!(!result.errors.is_empty(), "Expected errors but got none");
+    } else {
+        assert!(
+            result.errors.is_empty(),
+            "Unexpected errors: {:?}",
+            result.errors
+        );
+    }
+    serde_json::to_string_pretty(&result.program).unwrap()
+}
+
 #[macro_export]
 macro_rules! nikic_test {
     ($name:ident, $file:expr, errors) => {
