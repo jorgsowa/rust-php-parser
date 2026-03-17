@@ -40,9 +40,7 @@ The parser prioritizes performance on contemporary PHP patterns:
 - **Arrays & collections** — Configuration-heavy code (Symfony/Laravel patterns)
 - **Structured OOP** — Classes, traits, interfaces with complete feature support
 
-See [PERFORMANCE_ANALYSIS.md](PERFORMANCE_ANALYSIS.md) and [SYMFONY_OPTIMIZATION_ANALYSIS.md](SYMFONY_OPTIMIZATION_ANALYSIS.md) for detailed profiling and optimization analysis.
-
-**The fastest full-featured PHP parser.** For comparative benchmarks against other PHP parsers (nikic/PHP-Parser, alternative implementations), see [php-parser-benchmark](https://github.com/jorgsowa/php-parser-benchmark).
+**The fastest full-featured PHP parser.** For detailed analysis, see [docs/performance/](docs/performance/) directory. For comparative benchmarks against other PHP parsers, see [php-parser-benchmark](https://github.com/jorgsowa/php-parser-benchmark).
 
 ## Testing
 
@@ -53,9 +51,14 @@ cargo test --test nikic_integration_tests   # nikic/PHP-Parser fixture tests
 
 Fixture files live in `crates/php-parser/tests/fixtures/`.
 
-## Roadmap
+## Documentation
 
-See [ROADMAP.md](ROADMAP.md).
+Full documentation is organized in the [docs/](docs/) directory:
+- **[docs/INDEX.md](docs/INDEX.md)** — Documentation index and navigation
+- **[docs/architecture/](docs/architecture/)** — Design and roadmap
+- **[docs/performance/](docs/performance/)** — Performance analysis and profiling
+- **[docs/analysis/](docs/analysis/)** — Coverage and testing analysis
+- **[docs/development/](docs/development/)** — Changelog and release notes
 
 ## License
 
