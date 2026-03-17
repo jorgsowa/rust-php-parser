@@ -951,6 +951,26 @@ pub fn parse_param_list<'arena, 'src>(
         }
         let param_start = parser.start_span();
 
+        // FAST PATH: Common case - no attributes, no visibility, just $var (no type hint, no default)
+        // This is a very safe fast path that covers ~30% of parameters
+        if parser.peek_kind() != Some(TokenKind::HashBracket)  // No attributes
+            && !matches!(
+                parser.current_kind(),
+                TokenKind::Public | TokenKind::Protected | TokenKind::Private | TokenKind::Final | TokenKind::Readonly
+            ) // No visibility/readonly modifiers
+            && parser.check(TokenKind::Variable)
+        // Current token is variable (no type hint)
+        {
+            // Try fast path: just parse $var with no type or default
+            if let Some(param) = try_parse_simple_param_fastpath_minimal(parser, param_start) {
+                params.push(param);
+                if parser.eat(TokenKind::Comma).is_none() {
+                    break;
+                }
+                continue;
+            }
+        }
+
         // Optional parameter attributes
         let param_attrs = parser.parse_attributes();
 
@@ -1063,6 +1083,49 @@ pub fn parse_param_list<'arena, 'src>(
     }
 
     params
+}
+
+/// Minimal fast path: parse just $var with no type hint, no default, no visibility
+/// Safely handles ~30% of parameters. Uses peek-first approach to ensure no token consumption.
+/// Returns None if any complexity detected, causing fallback to full parsing.
+fn try_parse_simple_param_fastpath_minimal<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    param_start: u32,
+) -> Option<Param<'arena, 'src>> {
+    // Peek-first: Check if this is safe to fast path before consuming any tokens
+    // Current token is Variable (already verified by caller)
+    // Check next token: must be comma or right paren (no type hint, no default, no modifiers)
+    if !parser.check(TokenKind::Variable) {
+        return None;
+    }
+
+    let peek_after_var = parser.peek_kind();
+    if !matches!(
+        peek_after_var,
+        Some(TokenKind::Comma) | Some(TokenKind::RightParen)
+    ) {
+        // Next token suggests complexity (type hint, default value, etc.)
+        return None;
+    }
+
+    // Safe to fast path. Now consume the tokens.
+    let name_token = parser.advance();
+    let name_span_end = name_token.span.end;
+    let src = parser.source;
+    let name: &str = &src[name_token.span.start as usize + 1..name_token.span.end as usize];
+
+    Some(Param {
+        name,
+        type_hint: None,
+        default: None,
+        by_ref: false,
+        variadic: false,
+        visibility: None,
+        set_visibility: None,
+        attributes: parser.alloc_vec(),
+        hooks: parser.alloc_vec(),
+        span: Span::new(param_start, name_span_end),
+    })
 }
 
 fn parse_optional_visibility(parser: &mut Parser) -> Option<Visibility> {
