@@ -578,7 +578,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     fn parse_type_element(&mut self) -> TypeHint<'arena, 'src> {
         if self.check(TokenKind::LeftParen) {
             let start = self.start_span();
-            self.require_version(PhpVersion::Php81, "intersection types", Span::new(start, start + 1));
+            self.require_version(
+                PhpVersion::Php81,
+                "intersection types",
+                Span::new(start, start + 1),
+            );
             self.advance(); // consume (
             let first_type = self.parse_simple_type();
             let mut types = self.alloc_vec_one(first_type);

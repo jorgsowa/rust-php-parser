@@ -4097,7 +4097,11 @@ fn test_version_php80_match_requires_80() {
         "<?php $x = match($y) { 1 => 'a', default => 'b' };",
         php_rs_parser::PhpVersion::Php80,
     );
-    assert!(result.errors.is_empty(), "match should be valid in PHP 8.0: {:?}", result.errors);
+    assert!(
+        result.errors.is_empty(),
+        "match should be valid in PHP 8.0: {:?}",
+        result.errors
+    );
 }
 
 #[test]
@@ -4106,7 +4110,11 @@ fn test_version_php81_enum_requires_81() {
         "<?php enum Status { case Active; case Inactive; }",
         php_rs_parser::PhpVersion::Php81,
     );
-    assert!(result_81.errors.is_empty(), "enum should be valid in PHP 8.1: {:?}", result_81.errors);
+    assert!(
+        result_81.errors.is_empty(),
+        "enum should be valid in PHP 8.1: {:?}",
+        result_81.errors
+    );
 
     let result_80 = parse_php_versioned(
         "<?php enum Status { case Active; case Inactive; }",
@@ -4129,7 +4137,11 @@ fn test_version_php82_readonly_class_requires_82() {
         "<?php readonly class Foo { public string $bar; }",
         php_rs_parser::PhpVersion::Php82,
     );
-    assert!(result_82.errors.is_empty(), "readonly class should be valid in PHP 8.2: {:?}", result_82.errors);
+    assert!(
+        result_82.errors.is_empty(),
+        "readonly class should be valid in PHP 8.2: {:?}",
+        result_82.errors
+    );
 
     let result_81 = parse_php_versioned(
         "<?php readonly class Foo { public string $bar; }",
@@ -4147,7 +4159,11 @@ fn test_version_php83_typed_constants_require_83() {
         "<?php class Foo { public const string NAME = 'foo'; }",
         php_rs_parser::PhpVersion::Php83,
     );
-    assert!(result_83.errors.is_empty(), "typed constants should be valid in PHP 8.3: {:?}", result_83.errors);
+    assert!(
+        result_83.errors.is_empty(),
+        "typed constants should be valid in PHP 8.3: {:?}",
+        result_83.errors
+    );
 
     let result_82 = parse_php_versioned(
         "<?php class Foo { public const string NAME = 'foo'; }",
@@ -4187,7 +4203,11 @@ fn test_version_php85_pipe_operator_requires_85() {
         "<?php $x = $value |> trim(...) |> strtolower(...);",
         php_rs_parser::PhpVersion::Php85,
     );
-    assert!(result_85.errors.is_empty(), "pipe operator should be valid in PHP 8.5: {:?}", result_85.errors);
+    assert!(
+        result_85.errors.is_empty(),
+        "pipe operator should be valid in PHP 8.5: {:?}",
+        result_85.errors
+    );
 
     let result_84 = parse_php_versioned(
         "<?php $x = $value |> trim(...) |> strtolower(...);",
@@ -4210,7 +4230,11 @@ fn test_version_php85_clone_with_requires_85() {
         "<?php $b = clone($a, ['alpha' => 128]);",
         php_rs_parser::PhpVersion::Php85,
     );
-    assert!(result_85.errors.is_empty(), "clone with should be valid in PHP 8.5: {:?}", result_85.errors);
+    assert!(
+        result_85.errors.is_empty(),
+        "clone with should be valid in PHP 8.5: {:?}",
+        result_85.errors
+    );
 
     let result_84 = parse_php_versioned(
         "<?php $b = clone($a, ['alpha' => 128]);",
@@ -4233,7 +4257,11 @@ fn test_version_php85_static_asymmetric_visibility_requires_85() {
         "<?php class Foo { public static private(set) string $bar = 'x'; }",
         php_rs_parser::PhpVersion::Php85,
     );
-    assert!(result_85.errors.is_empty(), "static asymmetric visibility should be valid in PHP 8.5: {:?}", result_85.errors);
+    assert!(
+        result_85.errors.is_empty(),
+        "static asymmetric visibility should be valid in PHP 8.5: {:?}",
+        result_85.errors
+    );
 
     let result_84 = parse_php_versioned(
         "<?php class Foo { public static private(set) string $bar = 'x'; }",
@@ -4251,7 +4279,11 @@ fn test_version_php85_final_promoted_property_requires_85() {
         "<?php class Foo { public function __construct(public final string $bar) {} }",
         php_rs_parser::PhpVersion::Php85,
     );
-    assert!(result_85.errors.is_empty(), "final promoted property should be valid in PHP 8.5: {:?}", result_85.errors);
+    assert!(
+        result_85.errors.is_empty(),
+        "final promoted property should be valid in PHP 8.5: {:?}",
+        result_85.errors
+    );
 
     let result_84 = parse_php_versioned(
         "<?php class Foo { public function __construct(public final string $bar) {} }",
@@ -4269,7 +4301,11 @@ fn test_version_php85_void_cast_requires_85() {
         "<?php (void) getVersion();",
         php_rs_parser::PhpVersion::Php85,
     );
-    assert!(result_85.errors.is_empty(), "void cast should be valid in PHP 8.5: {:?}", result_85.errors);
+    assert!(
+        result_85.errors.is_empty(),
+        "void cast should be valid in PHP 8.5: {:?}",
+        result_85.errors
+    );
 
     let result_84 = parse_php_versioned(
         "<?php (void) getVersion();",
@@ -4292,7 +4328,11 @@ fn test_version_php85_const_attributes_require_85() {
         "<?php #[MyAttr] const VERSION = '8.5';",
         php_rs_parser::PhpVersion::Php85,
     );
-    assert!(result_85.errors.is_empty(), "attributes on constants should be valid in PHP 8.5: {:?}", result_85.errors);
+    assert!(
+        result_85.errors.is_empty(),
+        "attributes on constants should be valid in PHP 8.5: {:?}",
+        result_85.errors
+    );
 
     let result_84 = parse_php_versioned(
         "<?php #[MyAttr] const VERSION = '8.5';",

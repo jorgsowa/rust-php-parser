@@ -1015,14 +1015,18 @@ pub fn parse_param_list<'arena, 'src>(
         };
 
         // Optional final (PHP 8.5+ promoted property modifier)
-        let final_token = parser.check(TokenKind::Final).then(|| parser.current_span());
+        let final_token = parser
+            .check(TokenKind::Final)
+            .then(|| parser.current_span());
         let _final = parser.eat(TokenKind::Final).is_some();
         if let Some(span) = final_token {
             parser.require_version(PhpVersion::Php85, "final promoted properties", span);
         }
 
         // Optional readonly — PHP 8.1+
-        let readonly_token = parser.check(TokenKind::Readonly).then(|| parser.current_span());
+        let readonly_token = parser
+            .check(TokenKind::Readonly)
+            .then(|| parser.current_span());
         let _readonly = parser.eat(TokenKind::Readonly).is_some();
         if let Some(span) = readonly_token {
             parser.require_version(PhpVersion::Php81, "readonly parameters", span);
@@ -1991,7 +1995,8 @@ pub fn parse_class_members<'arena, 'src>(
                                 _ => Visibility::Private,
                             };
                             // Save span; emit version check after loop when is_static is known.
-                            asym_vis_span = Some(Span::new(member_start, parser.current_span().start));
+                            asym_vis_span =
+                                Some(Span::new(member_start, parser.current_span().start));
                             parser.advance(); // consume second visibility
                             parser.advance(); // consume (
                                               // Expect "set"
@@ -2005,7 +2010,8 @@ pub fn parse_class_members<'arena, 'src>(
                         // Already have visibility; this might be set_visibility with (set)
                         if parser.check(TokenKind::LeftParen) {
                             // Save span for deferred version check after is_static is known.
-                            asym_vis_span = Some(Span::new(member_start, parser.current_span().start));
+                            asym_vis_span =
+                                Some(Span::new(member_start, parser.current_span().start));
                             parser.advance(); // consume (
                             if parser.current_text() == "set" {
                                 parser.advance(); // consume "set"
@@ -2079,7 +2085,11 @@ pub fn parse_class_members<'arena, 'src>(
         // Static asymmetric visibility requires PHP 8.5; instance requires PHP 8.4.
         if let Some(span) = asym_vis_span {
             if is_static {
-                parser.require_version(PhpVersion::Php85, "asymmetric visibility on static properties", span);
+                parser.require_version(
+                    PhpVersion::Php85,
+                    "asymmetric visibility on static properties",
+                    span,
+                );
             } else {
                 parser.require_version(PhpVersion::Php84, "asymmetric visibility", span);
             }

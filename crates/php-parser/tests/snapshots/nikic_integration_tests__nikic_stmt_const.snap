@@ -18,6 +18,7 @@ expression: json
                 "end": 18
               }
             },
+            "attributes": [],
             "span": {
               "start": 13,
               "end": 18
@@ -34,6 +35,7 @@ expression: json
                 "end": 27
               }
             },
+            "attributes": [],
             "span": {
               "start": 20,
               "end": 27
@@ -50,6 +52,7 @@ expression: json
                 "end": 36
               }
             },
+            "attributes": [],
             "span": {
               "start": 29,
               "end": 36
@@ -66,6 +69,7 @@ expression: json
                 "end": 43
               }
             },
+            "attributes": [],
             "span": {
               "start": 38,
               "end": 43
@@ -92,6 +96,25 @@ expression: json
                 "end": 83
               }
             },
+            "attributes": [
+              {
+                "name": {
+                  "parts": [
+                    "Example"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 48,
+                    "end": 55
+                  }
+                },
+                "args": [],
+                "span": {
+                  "start": 48,
+                  "end": 55
+                }
+              }
+            ],
             "span": {
               "start": 63,
               "end": 83
@@ -118,6 +141,42 @@ expression: json
                 "end": 137
               }
             },
+            "attributes": [
+              {
+                "name": {
+                  "parts": [
+                    "First"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 88,
+                    "end": 93
+                  }
+                },
+                "args": [],
+                "span": {
+                  "start": 88,
+                  "end": 93
+                }
+              },
+              {
+                "name": {
+                  "parts": [
+                    "Second"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 97,
+                    "end": 103
+                  }
+                },
+                "args": [],
+                "span": {
+                  "start": 97,
+                  "end": 103
+                }
+              }
+            ],
             "span": {
               "start": 111,
               "end": 137
@@ -144,6 +203,42 @@ expression: json
                 "end": 186
               }
             },
+            "attributes": [
+              {
+                "name": {
+                  "parts": [
+                    "First"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 142,
+                    "end": 147
+                  }
+                },
+                "args": [],
+                "span": {
+                  "start": 142,
+                  "end": 147
+                }
+              },
+              {
+                "name": {
+                  "parts": [
+                    "Second"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 149,
+                    "end": 155
+                  }
+                },
+                "args": [],
+                "span": {
+                  "start": 149,
+                  "end": 155
+                }
+              }
+            ],
             "span": {
               "start": 163,
               "end": 186
@@ -170,6 +265,25 @@ expression: json
                 "end": 223
               }
             },
+            "attributes": [
+              {
+                "name": {
+                  "parts": [
+                    "Example"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 191,
+                    "end": 198
+                  }
+                },
+                "args": [],
+                "span": {
+                  "start": 191,
+                  "end": 198
+                }
+              }
+            ],
             "span": {
               "start": 206,
               "end": 223
@@ -186,6 +300,7 @@ expression: json
                 "end": 262
               }
             },
+            "attributes": [],
             "span": {
               "start": 229,
               "end": 262

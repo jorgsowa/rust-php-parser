@@ -130,6 +130,7 @@ expression: json
                 "end": 62
               }
             },
+            "attributes": [],
             "span": {
               "start": 57,
               "end": 62

@@ -1389,33 +1389,75 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             }
         }
 
-        // clone — unary prefix, clone($obj), or clone($obj, [...]) (PHP 8.5)
+        // clone — unary prefix, clone($obj), clone($obj, [...]) (PHP 8.5), or user function
         TokenKind::Clone => {
             let token = parser.advance();
             if parser.check(TokenKind::LeftParen) {
-                let open = parser.advance(); // consume (
-                let object = parse_expr(parser);
-                if parser.eat(TokenKind::Comma).is_some()
-                    && !parser.check(TokenKind::RightParen)
-                {
-                    // PHP 8.5: clone with property overrides — clone($obj, [...])
-                    parser.require_version(PhpVersion::Php85, "clone with property overrides", token.span);
-                    let overrides = parse_expr(parser);
-                    parser.eat(TokenKind::Comma); // optional trailing comma
-                    parser.expect_closing(TokenKind::RightParen, open.span);
-                    let span = Span::new(token.span.start, parser.current_span().start);
-                    Expr {
-                        kind: ExprKind::CloneWith(parser.alloc(object), parser.alloc(overrides)),
-                        span,
+                let src = parser.source;
+                let name_text =
+                    Cow::Borrowed(&src[token.span.start as usize..token.span.end as usize]);
+                match parse_arg_list_or_callable(parser) {
+                    ArgListResult::CallableMarker => {
+                        // clone(...) — first-class callable
+                        let span = Span::new(token.span.start, parser.current_span().start);
+                        let callee = Expr {
+                            kind: ExprKind::Identifier(name_text),
+                            span: token.span,
+                        };
+                        Expr {
+                            kind: ExprKind::CallableCreate(CallableCreateExpr {
+                                kind: CallableCreateKind::Function(parser.alloc(callee)),
+                            }),
+                            span,
+                        }
                     }
-                } else {
-                    // clone($obj) — parenthesised but single-argument form
-                    parser.eat(TokenKind::Comma); // optional trailing comma
-                    parser.expect_closing(TokenKind::RightParen, open.span);
-                    let span = Span::new(token.span.start, parser.current_span().start);
-                    Expr {
-                        kind: ExprKind::Clone(parser.alloc(object)),
-                        span,
+                    ArgListResult::Args(args) => {
+                        let span = Span::new(token.span.start, parser.current_span().start);
+                        let is_simple =
+                            args.len() == 1 && args[0].name.is_none() && !args[0].unpack;
+                        let is_clone_with = args.len() == 2
+                            && args[0].name.is_none()
+                            && !args[0].unpack
+                            && args[1].name.is_none()
+                            && !args[1].unpack;
+                        if is_simple {
+                            // clone($obj) — parenthesised single-argument form
+                            let object = args.into_iter().next().unwrap().value;
+                            Expr {
+                                kind: ExprKind::Clone(parser.alloc(object)),
+                                span,
+                            }
+                        } else if is_clone_with {
+                            // clone($obj, [...]) — PHP 8.5 clone with property overrides
+                            parser.require_version(
+                                PhpVersion::Php85,
+                                "clone with property overrides",
+                                token.span,
+                            );
+                            let mut iter = args.into_iter();
+                            let object = iter.next().unwrap().value;
+                            let overrides = iter.next().unwrap().value;
+                            Expr {
+                                kind: ExprKind::CloneWith(
+                                    parser.alloc(object),
+                                    parser.alloc(overrides),
+                                ),
+                                span,
+                            }
+                        } else {
+                            // 3+ args, named args, or spread — user-defined function named "clone"
+                            let callee = Expr {
+                                kind: ExprKind::Identifier(name_text),
+                                span: token.span,
+                            };
+                            Expr {
+                                kind: ExprKind::FunctionCall(FunctionCallExpr {
+                                    name: parser.alloc(callee),
+                                    args,
+                                }),
+                                span,
+                            }
+                        }
                     }
                 }
             } else {
