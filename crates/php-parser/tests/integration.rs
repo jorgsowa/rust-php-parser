@@ -4180,3 +4180,85 @@ fn test_version_php84_abstract_readonly_class_requires_84() {
         "abstract readonly class should emit a version error when targeting PHP 8.3"
     );
 }
+
+#[test]
+fn test_version_php85_pipe_operator_requires_85() {
+    let result_85 = parse_php_versioned(
+        "<?php $x = $value |> trim(...) |> strtolower(...);",
+        php_rs_parser::PhpVersion::Php85,
+    );
+    assert!(result_85.errors.is_empty(), "pipe operator should be valid in PHP 8.5: {:?}", result_85.errors);
+
+    let result_84 = parse_php_versioned(
+        "<?php $x = $value |> trim(...) |> strtolower(...);",
+        php_rs_parser::PhpVersion::Php84,
+    );
+    assert!(
+        !result_84.errors.is_empty(),
+        "pipe operator should emit a version error when targeting PHP 8.4"
+    );
+    assert!(result_84.errors.iter().any(|e| matches!(
+        e,
+        php_rs_parser::diagnostics::ParseError::VersionTooLow { feature, .. }
+            if feature.contains("pipe")
+    )));
+}
+
+#[test]
+fn test_version_php85_clone_with_requires_85() {
+    let result_85 = parse_php_versioned(
+        "<?php $b = clone($a, ['alpha' => 128]);",
+        php_rs_parser::PhpVersion::Php85,
+    );
+    assert!(result_85.errors.is_empty(), "clone with should be valid in PHP 8.5: {:?}", result_85.errors);
+
+    let result_84 = parse_php_versioned(
+        "<?php $b = clone($a, ['alpha' => 128]);",
+        php_rs_parser::PhpVersion::Php84,
+    );
+    assert!(
+        !result_84.errors.is_empty(),
+        "clone with should emit a version error when targeting PHP 8.4"
+    );
+    assert!(result_84.errors.iter().any(|e| matches!(
+        e,
+        php_rs_parser::diagnostics::ParseError::VersionTooLow { feature, .. }
+            if feature.contains("clone")
+    )));
+}
+
+#[test]
+fn test_version_php85_static_asymmetric_visibility_requires_85() {
+    let result_85 = parse_php_versioned(
+        "<?php class Foo { public static private(set) string $bar = 'x'; }",
+        php_rs_parser::PhpVersion::Php85,
+    );
+    assert!(result_85.errors.is_empty(), "static asymmetric visibility should be valid in PHP 8.5: {:?}", result_85.errors);
+
+    let result_84 = parse_php_versioned(
+        "<?php class Foo { public static private(set) string $bar = 'x'; }",
+        php_rs_parser::PhpVersion::Php84,
+    );
+    assert!(
+        !result_84.errors.is_empty(),
+        "static asymmetric visibility should emit a version error when targeting PHP 8.4"
+    );
+}
+
+#[test]
+fn test_version_php85_final_promoted_property_requires_85() {
+    let result_85 = parse_php_versioned(
+        "<?php class Foo { public function __construct(public final string $bar) {} }",
+        php_rs_parser::PhpVersion::Php85,
+    );
+    assert!(result_85.errors.is_empty(), "final promoted property should be valid in PHP 8.5: {:?}", result_85.errors);
+
+    let result_84 = parse_php_versioned(
+        "<?php class Foo { public function __construct(public final string $bar) {} }",
+        php_rs_parser::PhpVersion::Php84,
+    );
+    assert!(
+        !result_84.errors.is_empty(),
+        "final promoted property should emit a version error when targeting PHP 8.4"
+    );
+}

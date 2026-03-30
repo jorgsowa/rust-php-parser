@@ -20,9 +20,12 @@ pub enum PhpVersion {
     Php82,
     /// PHP 8.3 — typed class/enum constants.
     Php83,
-    /// PHP 8.4 — `abstract readonly class`, property hooks, asymmetric visibility, `final` promoted properties.
-    #[default]
+    /// PHP 8.4 — `abstract readonly class`, property hooks, asymmetric visibility.
     Php84,
+    /// PHP 8.5 — pipe operator (`|>`), `clone` with property overrides, `final` promoted properties,
+    ///           asymmetric visibility on static properties.
+    #[default]
+    Php85,
 }
 
 impl fmt::Display for PhpVersion {
@@ -33,6 +36,7 @@ impl fmt::Display for PhpVersion {
             PhpVersion::Php82 => write!(f, "8.2"),
             PhpVersion::Php83 => write!(f, "8.3"),
             PhpVersion::Php84 => write!(f, "8.4"),
+            PhpVersion::Php85 => write!(f, "8.5"),
         }
     }
 }

@@ -469,6 +469,9 @@ pub fn parse_expr_bp<'arena, 'src>(
                 break;
             }
             let op_token = parser.advance();
+            if op_token.kind == TokenKind::PipeArrow {
+                parser.require_version(PhpVersion::Php85, "pipe operator (|>)", op_token.span);
+            }
             let op = token_to_binary_op(op_token.kind);
             let rhs = parse_expr_bp(parser, right_bp);
             let span = lhs.span.merge(rhs.span);
@@ -1386,16 +1389,35 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             }
         }
 
-        // clone — unary prefix or function call (PHP 8.4)
+        // clone — unary prefix, clone($obj), or clone($obj, [...]) (PHP 8.5)
         TokenKind::Clone => {
             let token = parser.advance();
             if parser.check(TokenKind::LeftParen) {
-                // PHP 8.4: clone() function call syntax
-                let callee = Expr {
-                    kind: ExprKind::Identifier(Cow::Borrowed("clone")),
-                    span: token.span,
-                };
-                parse_function_call(parser, callee)
+                let open = parser.advance(); // consume (
+                let object = parse_expr(parser);
+                if parser.eat(TokenKind::Comma).is_some()
+                    && !parser.check(TokenKind::RightParen)
+                {
+                    // PHP 8.5: clone with property overrides — clone($obj, [...])
+                    parser.require_version(PhpVersion::Php85, "clone with property overrides", token.span);
+                    let overrides = parse_expr(parser);
+                    parser.eat(TokenKind::Comma); // optional trailing comma
+                    parser.expect_closing(TokenKind::RightParen, open.span);
+                    let span = Span::new(token.span.start, parser.current_span().start);
+                    Expr {
+                        kind: ExprKind::CloneWith(parser.alloc(object), parser.alloc(overrides)),
+                        span,
+                    }
+                } else {
+                    // clone($obj) — parenthesised but single-argument form
+                    parser.eat(TokenKind::Comma); // optional trailing comma
+                    parser.expect_closing(TokenKind::RightParen, open.span);
+                    let span = Span::new(token.span.start, parser.current_span().start);
+                    Expr {
+                        kind: ExprKind::Clone(parser.alloc(object)),
+                        span,
+                    }
+                }
             } else {
                 let operand = parse_expr_bp(parser, 41);
                 let span = token.span.merge(operand.span);

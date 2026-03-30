@@ -1013,11 +1013,11 @@ pub fn parse_param_list<'arena, 'src>(
             None
         };
 
-        // Optional final (PHP 8.4+ promoted property modifier)
+        // Optional final (PHP 8.5+ promoted property modifier)
         let final_token = parser.check(TokenKind::Final).then(|| parser.current_span());
         let _final = parser.eat(TokenKind::Final).is_some();
         if let Some(span) = final_token {
-            parser.require_version(PhpVersion::Php84, "final promoted properties", span);
+            parser.require_version(PhpVersion::Php85, "final promoted properties", span);
         }
 
         // Optional readonly — PHP 8.1+
@@ -1953,6 +1953,7 @@ pub fn parse_class_members<'arena, 'src>(
         // Parse modifiers
         let mut visibility = None;
         let mut set_visibility = None;
+        let mut asym_vis_span: Option<Span> = None;
         let mut is_static = false;
         let mut is_abstract = false;
         let mut is_final = false;
@@ -1988,8 +1989,8 @@ pub fn parse_class_members<'arena, 'src>(
                                 TokenKind::Protected => Visibility::Protected,
                                 _ => Visibility::Private,
                             };
-                            let asym_span = Span::new(member_start, parser.current_span().start);
-                            parser.require_version(PhpVersion::Php84, "asymmetric visibility", asym_span);
+                            // Save span; emit version check after loop when is_static is known.
+                            asym_vis_span = Some(Span::new(member_start, parser.current_span().start));
                             parser.advance(); // consume second visibility
                             parser.advance(); // consume (
                                               // Expect "set"
@@ -2002,6 +2003,8 @@ pub fn parse_class_members<'arena, 'src>(
                     } else {
                         // Already have visibility; this might be set_visibility with (set)
                         if parser.check(TokenKind::LeftParen) {
+                            // Save span for deferred version check after is_static is known.
+                            asym_vis_span = Some(Span::new(member_start, parser.current_span().start));
                             parser.advance(); // consume (
                             if parser.current_text() == "set" {
                                 parser.advance(); // consume "set"
@@ -2069,6 +2072,16 @@ pub fn parse_class_members<'arena, 'src>(
                 message: "cannot use 'abstract' and 'final' together".into(),
                 span: Span::new(member_start, parser.current_span().start),
             });
+        }
+
+        // Emit version check for asymmetric visibility now that is_static is known.
+        // Static asymmetric visibility requires PHP 8.5; instance requires PHP 8.4.
+        if let Some(span) = asym_vis_span {
+            if is_static {
+                parser.require_version(PhpVersion::Php85, "asymmetric visibility on static properties", span);
+            } else {
+                parser.require_version(PhpVersion::Php84, "asymmetric visibility", span);
+            }
         }
 
         // Detect unknown modifier: bare identifier followed by $variable with no modifiers
