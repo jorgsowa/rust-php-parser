@@ -8,6 +8,7 @@ use crate::instrument;
 use crate::parser::Parser;
 use crate::precedence::{self, ASSIGNMENT_BP, TERNARY_BP};
 use crate::stmt;
+use crate::version::PhpVersion;
 
 /// Cast keyword strings and their CastKind values
 const CAST_KEYWORDS: &[(&str, CastKind)] = &[
@@ -111,6 +112,10 @@ pub fn parse_expr_bp<'arena, 'src>(
                     break;
                 }
                 let is_nullsafe = kind == TokenKind::NullsafeArrow;
+                if is_nullsafe {
+                    let span = parser.current_span();
+                    parser.require_version(PhpVersion::Php80, "nullsafe operator (?->)", span);
+                }
                 parser.advance(); // consume -> or ?->
 
                 // Parse member name (identifier or keyword or variable for dynamic)
@@ -229,8 +234,10 @@ pub fn parse_expr_bp<'arena, 'src>(
         }
 
         // Double colon: Class::$prop, Class::method(), Class::CONST
+        // bp=90: must parse through the bp=45 gate used by promoted-property defaults
+        // (which only intends to block `{}` curly-brace subscript access, bp=44).
         if kind == TokenKind::DoubleColon {
-            if 44u8 < min_bp {
+            if 90u8 < min_bp {
                 break;
             }
             parser.advance(); // consume ::
@@ -1176,17 +1183,23 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             parse_arrow_function(parser, false, start, parser.alloc_vec())
         }
 
-        // Match expression
-        TokenKind::Match_ => parse_match_expr(parser),
+        // Match expression — PHP 8.0+
+        TokenKind::Match_ => {
+            let span = parser.current_span();
+            parser.require_version(PhpVersion::Php80, "match expressions", span);
+            parse_match_expr(parser)
+        }
 
-        // Throw as expression (PHP 8)
+        // Throw as expression — PHP 8.0+
         TokenKind::Throw => {
             let token = parser.advance();
+            let span = token.span;
+            parser.require_version(PhpVersion::Php80, "throw expressions", span);
             let expr = parse_expr_bp(parser, ASSIGNMENT_BP);
-            let span = token.span.merge(expr.span);
+            let merged = span.merge(expr.span);
             Expr {
                 kind: ExprKind::ThrowExpr(parser.alloc(expr)),
-                span,
+                span: merged,
             }
         }
 
@@ -2005,6 +2018,8 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
             )
         {
             let name_token = parser.advance();
+            let span = name_token.span;
+            parser.require_version(PhpVersion::Php80, "named arguments", span);
             parser.advance(); // consume :
             let src = parser.source;
             Some(Cow::Borrowed(

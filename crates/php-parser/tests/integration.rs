@@ -4045,23 +4045,25 @@ fn test_invalid_double_readonly_anonymous_class() {
 }
 
 #[test]
-fn test_invalid_abstract_readonly_class() {
-    // Emits a Forbidden error; recovered class has both is_abstract and is_readonly set.
+fn test_abstract_readonly_class() {
+    // PHP 8.4: abstract readonly class is valid
     let result = parse_php("<?php abstract readonly class Foo {}");
     assert!(
-        !result.errors.is_empty(),
-        "Expected parse errors for abstract readonly class"
+        result.errors.is_empty(),
+        "abstract readonly class should be valid in PHP 8.4: {:?}",
+        result.errors
     );
     insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
-fn test_invalid_readonly_abstract_class() {
-    // Emits a Forbidden error; recovered class has both is_abstract and is_readonly set.
+fn test_readonly_abstract_class() {
+    // PHP 8.4: readonly abstract class is valid
     let result = parse_php("<?php readonly abstract class Foo {}");
     assert!(
-        !result.errors.is_empty(),
-        "Expected parse errors for readonly abstract class"
+        result.errors.is_empty(),
+        "readonly abstract class should be valid in PHP 8.4: {:?}",
+        result.errors
     );
     insta::assert_snapshot!(to_json(&result.program));
 }
@@ -4074,4 +4076,107 @@ fn test_invalid_abstract_final_class() {
         "Expected parse errors for abstract final class"
     );
     insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// PHP version-specific feature tests
+// =============================================================================
+
+fn parse_php_versioned(
+    source: &'static str,
+    version: php_rs_parser::PhpVersion,
+) -> php_rs_parser::ParseResult<'static, 'static> {
+    let arena: &'static bumpalo::Bump = Box::leak(Box::new(bumpalo::Bump::new()));
+    php_rs_parser::parse_versioned(arena, source, version)
+}
+
+#[test]
+fn test_version_php80_match_requires_80() {
+    // match is PHP 8.0 — must pass on 8.0+, fail on nothing below that
+    let result = parse_php_versioned(
+        "<?php $x = match($y) { 1 => 'a', default => 'b' };",
+        php_rs_parser::PhpVersion::Php80,
+    );
+    assert!(result.errors.is_empty(), "match should be valid in PHP 8.0: {:?}", result.errors);
+}
+
+#[test]
+fn test_version_php81_enum_requires_81() {
+    let result_81 = parse_php_versioned(
+        "<?php enum Status { case Active; case Inactive; }",
+        php_rs_parser::PhpVersion::Php81,
+    );
+    assert!(result_81.errors.is_empty(), "enum should be valid in PHP 8.1: {:?}", result_81.errors);
+
+    let result_80 = parse_php_versioned(
+        "<?php enum Status { case Active; case Inactive; }",
+        php_rs_parser::PhpVersion::Php80,
+    );
+    assert!(
+        !result_80.errors.is_empty(),
+        "enum should emit a version error when targeting PHP 8.0"
+    );
+    assert!(result_80.errors.iter().any(|e| matches!(
+        e,
+        php_rs_parser::diagnostics::ParseError::VersionTooLow { feature, .. }
+            if feature.contains("enum")
+    )));
+}
+
+#[test]
+fn test_version_php82_readonly_class_requires_82() {
+    let result_82 = parse_php_versioned(
+        "<?php readonly class Foo { public string $bar; }",
+        php_rs_parser::PhpVersion::Php82,
+    );
+    assert!(result_82.errors.is_empty(), "readonly class should be valid in PHP 8.2: {:?}", result_82.errors);
+
+    let result_81 = parse_php_versioned(
+        "<?php readonly class Foo { public string $bar; }",
+        php_rs_parser::PhpVersion::Php81,
+    );
+    assert!(
+        !result_81.errors.is_empty(),
+        "readonly class should emit a version error when targeting PHP 8.1"
+    );
+}
+
+#[test]
+fn test_version_php83_typed_constants_require_83() {
+    let result_83 = parse_php_versioned(
+        "<?php class Foo { public const string NAME = 'foo'; }",
+        php_rs_parser::PhpVersion::Php83,
+    );
+    assert!(result_83.errors.is_empty(), "typed constants should be valid in PHP 8.3: {:?}", result_83.errors);
+
+    let result_82 = parse_php_versioned(
+        "<?php class Foo { public const string NAME = 'foo'; }",
+        php_rs_parser::PhpVersion::Php82,
+    );
+    assert!(
+        !result_82.errors.is_empty(),
+        "typed constants should emit a version error when targeting PHP 8.2"
+    );
+}
+
+#[test]
+fn test_version_php84_abstract_readonly_class_requires_84() {
+    let result_84 = parse_php_versioned(
+        "<?php abstract readonly class Foo {}",
+        php_rs_parser::PhpVersion::Php84,
+    );
+    assert!(
+        result_84.errors.is_empty(),
+        "abstract readonly class should be valid in PHP 8.4: {:?}",
+        result_84.errors
+    );
+
+    let result_83 = parse_php_versioned(
+        "<?php abstract readonly class Foo {}",
+        php_rs_parser::PhpVersion::Php83,
+    );
+    assert!(
+        !result_83.errors.is_empty(),
+        "abstract readonly class should emit a version error when targeting PHP 8.3"
+    );
 }

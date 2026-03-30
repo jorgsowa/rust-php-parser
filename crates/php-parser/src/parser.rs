@@ -5,6 +5,7 @@ use crate::diagnostics::ParseError;
 use crate::expr;
 use crate::instrument;
 use crate::stmt;
+use crate::version::PhpVersion;
 
 const MAX_ERRORS: usize = 100;
 
@@ -18,10 +19,22 @@ pub struct Parser<'arena, 'src> {
     pub arena: &'arena bumpalo::Bump,
     pub source: &'src str,
     errors: Vec<ParseError>,
+    /// PHP version being targeted — used for version-specific error reporting.
+    pub version: PhpVersion,
 }
 
 impl<'arena, 'src> Parser<'arena, 'src> {
+    /// Create a parser targeting the latest supported PHP version (8.4).
     pub fn new(arena: &'arena bumpalo::Bump, source: &'src str) -> Self {
+        Self::with_version(arena, source, PhpVersion::default())
+    }
+
+    /// Create a parser targeting a specific PHP version.
+    pub fn with_version(
+        arena: &'arena bumpalo::Bump,
+        source: &'src str,
+        version: PhpVersion,
+    ) -> Self {
         let (tokens, lex_errors) = php_lexer::lex_all(source);
 
         // Seed current with the first token and pos with 1
@@ -45,6 +58,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             source,
             errors,
             depth: 0,
+            version,
         }
     }
 
@@ -97,6 +111,20 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             source,
             errors,
             depth: 0,
+            version: PhpVersion::default(),
+        }
+    }
+
+    /// Emit a `VersionTooLow` error if the targeted PHP version is less than `min`.
+    /// Parsing always continues — the error is non-fatal.
+    pub fn require_version(&mut self, min: PhpVersion, feature: &'static str, span: Span) {
+        if self.version < min {
+            self.error(ParseError::VersionTooLow {
+                feature: feature.into(),
+                required: min.to_string().into(),
+                used: self.version.to_string().into(),
+                span,
+            });
         }
     }
 
@@ -511,7 +539,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             };
         }
 
-        // Intersection: A&B&C (non-parenthesized)
+        // Intersection: A&B&C (non-parenthesized) — PHP 8.1+
         if self.check(TokenKind::Ampersand) {
             // Only parse as intersection if the next token after & looks like a type
             // (not a variable, which would be a by-ref param)
@@ -529,6 +557,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 )
             );
             if looks_like_type {
+                let span = self.current_span();
+                self.require_version(PhpVersion::Php81, "intersection types", span);
                 let mut types = self.alloc_vec_one(first);
                 while self.eat(TokenKind::Ampersand).is_some() {
                     types.push(self.parse_simple_type());
@@ -548,6 +578,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     fn parse_type_element(&mut self) -> TypeHint<'arena, 'src> {
         if self.check(TokenKind::LeftParen) {
             let start = self.start_span();
+            self.require_version(PhpVersion::Php81, "intersection types", Span::new(start, start + 1));
             self.advance(); // consume (
             let first_type = self.parse_simple_type();
             let mut types = self.alloc_vec_one(first_type);
