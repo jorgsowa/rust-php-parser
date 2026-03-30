@@ -610,6 +610,34 @@ fn test_clone_expression() {
 }
 
 #[test]
+fn test_clone_parenthesised() {
+    // clone($obj) — parenthesised single-arg form is equivalent to clone $obj
+    assert_parses_ok("clone parenthesised", "<?php $copy = clone($obj);");
+    assert_parses_ok(
+        "clone parenthesised trailing comma",
+        "<?php $copy = clone($obj, );",
+    );
+}
+
+#[test]
+fn test_clone_callable() {
+    // clone(...) — first-class callable syntax
+    assert_parses_ok("clone first-class callable", "<?php $fn = clone(...);");
+}
+
+#[test]
+fn test_clone_as_function_call() {
+    // clone() with named args or 3+ args is treated as a user function call
+    assert_parses_ok("clone named arg", "<?php clone(object: $x);");
+    assert_parses_ok(
+        "clone named args two",
+        "<?php clone(object: $x, withProperties: ['foo' => 1]);",
+    );
+    assert_parses_ok("clone three positional args", "<?php clone($x, $y, $z);");
+    assert_parses_ok("clone spread arg", "<?php clone(...$args);");
+}
+
+#[test]
 fn test_instanceof() {
     let result = parse_php("<?php $obj instanceof Foo; $x instanceof Bar || $x instanceof Baz;");
     assert_no_errors(&result);
