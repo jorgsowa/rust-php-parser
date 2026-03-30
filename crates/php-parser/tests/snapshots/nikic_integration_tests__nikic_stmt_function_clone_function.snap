@@ -137,35 +137,14 @@ expression: json
       "kind": {
         "Expression": {
           "kind": {
-            "FunctionCall": {
-              "name": {
-                "kind": {
-                  "Identifier": "clone"
-                },
-                "span": {
-                  "start": 87,
-                  "end": 92
-                }
+            "Clone": {
+              "kind": {
+                "Variable": "x"
               },
-              "args": [
-                {
-                  "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "x"
-                    },
-                    "span": {
-                      "start": 93,
-                      "end": 95
-                    }
-                  },
-                  "unpack": false,
-                  "span": {
-                    "start": 93,
-                    "end": 95
-                  }
-                }
-              ]
+              "span": {
+                "start": 93,
+                "end": 95
+              }
             }
           },
           "span": {
@@ -183,35 +162,14 @@ expression: json
       "kind": {
         "Expression": {
           "kind": {
-            "FunctionCall": {
-              "name": {
-                "kind": {
-                  "Identifier": "clone"
-                },
-                "span": {
-                  "start": 98,
-                  "end": 103
-                }
+            "Clone": {
+              "kind": {
+                "Variable": "x"
               },
-              "args": [
-                {
-                  "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "x"
-                    },
-                    "span": {
-                      "start": 104,
-                      "end": 106
-                    }
-                  },
-                  "unpack": false,
-                  "span": {
-                    "start": 104,
-                    "end": 106
-                  }
-                }
-              ]
+              "span": {
+                "start": 104,
+                "end": 106
+              }
             }
           },
           "span": {
@@ -229,104 +187,77 @@ expression: json
       "kind": {
         "Expression": {
           "kind": {
-            "FunctionCall": {
-              "name": {
+            "CloneWith": [
+              {
                 "kind": {
-                  "Identifier": "clone"
+                  "Variable": "x"
                 },
                 "span": {
-                  "start": 111,
-                  "end": 116
+                  "start": 117,
+                  "end": 119
                 }
               },
-              "args": [
-                {
-                  "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "x"
-                    },
-                    "span": {
-                      "start": 117,
-                      "end": 119
-                    }
-                  },
-                  "unpack": false,
-                  "span": {
-                    "start": 117,
-                    "end": 119
-                  }
-                },
-                {
-                  "name": null,
-                  "value": {
-                    "kind": {
-                      "Array": [
-                        {
-                          "key": {
-                            "kind": {
-                              "String": "foo"
-                            },
-                            "span": {
-                              "start": 123,
-                              "end": 128
-                            }
-                          },
-                          "value": {
-                            "kind": {
-                              "Variable": "foo"
-                            },
-                            "span": {
-                              "start": 132,
-                              "end": 136
-                            }
-                          },
-                          "unpack": false,
-                          "span": {
-                            "start": 123,
-                            "end": 136
-                          }
+              {
+                "kind": {
+                  "Array": [
+                    {
+                      "key": {
+                        "kind": {
+                          "String": "foo"
                         },
-                        {
-                          "key": {
-                            "kind": {
-                              "String": "bar"
-                            },
-                            "span": {
-                              "start": 138,
-                              "end": 143
-                            }
-                          },
-                          "value": {
-                            "kind": {
-                              "Variable": "bar"
-                            },
-                            "span": {
-                              "start": 147,
-                              "end": 151
-                            }
-                          },
-                          "unpack": false,
-                          "span": {
-                            "start": 138,
-                            "end": 151
-                          }
+                        "span": {
+                          "start": 123,
+                          "end": 128
                         }
-                      ]
+                      },
+                      "value": {
+                        "kind": {
+                          "Variable": "foo"
+                        },
+                        "span": {
+                          "start": 132,
+                          "end": 136
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 123,
+                        "end": 136
+                      }
                     },
-                    "span": {
-                      "start": 121,
-                      "end": 153
+                    {
+                      "key": {
+                        "kind": {
+                          "String": "bar"
+                        },
+                        "span": {
+                          "start": 138,
+                          "end": 143
+                        }
+                      },
+                      "value": {
+                        "kind": {
+                          "Variable": "bar"
+                        },
+                        "span": {
+                          "start": 147,
+                          "end": 151
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 138,
+                        "end": 151
+                      }
                     }
-                  },
-                  "unpack": false,
-                  "span": {
-                    "start": 121,
-                    "end": 153
-                  }
+                  ]
+                },
+                "span": {
+                  "start": 121,
+                  "end": 153
                 }
-              ]
-            }
+              }
+            ]
           },
           "span": {
             "start": 111,
@@ -343,53 +274,26 @@ expression: json
       "kind": {
         "Expression": {
           "kind": {
-            "FunctionCall": {
-              "name": {
+            "CloneWith": [
+              {
                 "kind": {
-                  "Identifier": "clone"
+                  "Variable": "x"
                 },
                 "span": {
-                  "start": 156,
-                  "end": 161
+                  "start": 162,
+                  "end": 164
                 }
               },
-              "args": [
-                {
-                  "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "x"
-                    },
-                    "span": {
-                      "start": 162,
-                      "end": 164
-                    }
-                  },
-                  "unpack": false,
-                  "span": {
-                    "start": 162,
-                    "end": 164
-                  }
+              {
+                "kind": {
+                  "Variable": "array"
                 },
-                {
-                  "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "array"
-                    },
-                    "span": {
-                      "start": 166,
-                      "end": 172
-                    }
-                  },
-                  "unpack": false,
-                  "span": {
-                    "start": 166,
-                    "end": 172
-                  }
+                "span": {
+                  "start": 166,
+                  "end": 172
                 }
-              ]
-            }
+              }
+            ]
           },
           "span": {
             "start": 156,

@@ -29,6 +29,7 @@ expression: json
                 "end": 24
               }
             },
+            "attributes": [],
             "span": {
               "start": 13,
               "end": 24

@@ -18,6 +18,7 @@ expression: to_json(&result.program)
                 "end": 21
               }
             },
+            "attributes": [],
             "span": {
               "start": 12,
               "end": 21
@@ -44,6 +45,7 @@ expression: to_json(&result.program)
                 "end": 47
               }
             },
+            "attributes": [],
             "span": {
               "start": 29,
               "end": 47

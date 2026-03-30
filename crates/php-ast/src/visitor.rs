@@ -293,6 +293,10 @@ pub fn walk_expr<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
         ExprKind::Clone(expr) => {
             visitor.visit_expr(expr);
         }
+        ExprKind::CloneWith(object, overrides) => {
+            visitor.visit_expr(object);
+            visitor.visit_expr(overrides);
+        }
         ExprKind::New(new_expr) => {
             visitor.visit_expr(new_expr.class);
             for arg in new_expr.args.iter() {

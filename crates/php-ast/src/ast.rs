@@ -772,6 +772,7 @@ pub struct UseItem<'arena, 'src> {
 pub struct ConstItem<'arena, 'src> {
     pub name: &'src str,
     pub value: Expr<'arena, 'src>,
+    pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     pub span: Span,
 }
 
@@ -895,6 +896,9 @@ pub enum ExprKind<'arena, 'src> {
 
     /// Clone: `clone $obj`
     Clone(&'arena Expr<'arena, 'src>),
+
+    /// Clone with property overrides: `clone($obj, ['prop' => $val])` — PHP 8.5+
+    CloneWith(&'arena Expr<'arena, 'src>, &'arena Expr<'arena, 'src>),
 
     /// New: `new Class(args)`
     New(NewExpr<'arena, 'src>),

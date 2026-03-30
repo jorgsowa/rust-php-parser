@@ -7,6 +7,7 @@ use crate::diagnostics::ParseError;
 use crate::expr;
 use crate::instrument;
 use crate::parser::Parser;
+use crate::version::PhpVersion;
 
 fn class_modifier_error<'arena, 'src>(
     parser: &mut Parser<'arena, 'src>,
@@ -132,12 +133,9 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
             } else if parser.check(TokenKind::Readonly)
                 && parser.peek_kind() == Some(TokenKind::Class)
             {
-                // `abstract readonly class` — invalid combo; emit error but recover with both
-                // modifiers set so the class node accurately reflects what was written.
-                parser.error(ParseError::Forbidden {
-                    message: "cannot use 'abstract' and 'readonly' together".into(),
-                    span: Span::new(start, parser.current_span().start),
-                });
+                // `abstract readonly class` — valid in PHP 8.4
+                let span = parser.current_span();
+                parser.require_version(PhpVersion::Php84, "abstract readonly class", span);
                 parser.advance(); // consume 'readonly'
                 parse_class(
                     parser,
@@ -166,6 +164,8 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
                     parser.alloc_vec(),
                 )
             } else if parser.check(TokenKind::Readonly) {
+                let span = parser.current_span();
+                parser.require_version(PhpVersion::Php82, "readonly class", span);
                 parser.advance();
                 if parser.check(TokenKind::Class) {
                     parse_class(
@@ -185,8 +185,9 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
             }
         }
         TokenKind::Readonly => {
-            let start = parser.start_span();
             if parser.peek_kind() == Some(TokenKind::Class) {
+                let span = parser.current_span();
+                parser.require_version(PhpVersion::Php82, "readonly class", span);
                 parser.advance(); // consume 'readonly'
                 parse_class(
                     parser,
@@ -199,13 +200,10 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
             } else if parser.peek_kind() == Some(TokenKind::Abstract)
                 && parser.peek2_kind() == Some(TokenKind::Class)
             {
-                // `readonly abstract class` — invalid combo; emit error but recover with both
-                // modifiers set.
+                // `readonly abstract class` — valid in PHP 8.4
+                let span = parser.current_span();
+                parser.require_version(PhpVersion::Php84, "abstract readonly class", span);
                 parser.advance(); // consume 'readonly'
-                parser.error(ParseError::Forbidden {
-                    message: "cannot use 'abstract' and 'readonly' together".into(),
-                    span: Span::new(start, parser.current_span().start),
-                });
                 parser.advance(); // consume 'abstract'
                 parse_class(
                     parser,
@@ -223,7 +221,11 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
         }
         TokenKind::Interface => parse_interface(parser, parser.alloc_vec()),
         TokenKind::Trait => parse_trait(parser, parser.alloc_vec()),
-        TokenKind::Enum_ => parse_enum(parser, parser.alloc_vec()),
+        TokenKind::Enum_ => {
+            let span = parser.current_span();
+            parser.require_version(PhpVersion::Php81, "enums", span);
+            parse_enum(parser, parser.alloc_vec())
+        }
         TokenKind::Namespace => {
             // namespace\ is a relative name (expression), not a namespace declaration
             if parser.peek_kind() == Some(TokenKind::Backslash) {
@@ -281,10 +283,9 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             } else if parser.check(TokenKind::Readonly)
                 && parser.peek_kind() == Some(TokenKind::Class)
             {
-                parser.error(ParseError::Forbidden {
-                    message: "cannot use 'abstract' and 'readonly' together".into(),
-                    span: Span::new(start, parser.current_span().start),
-                });
+                // `abstract readonly class` — valid in PHP 8.4
+                let span = parser.current_span();
+                parser.require_version(PhpVersion::Php84, "abstract readonly class", span);
                 parser.advance(); // consume 'readonly'
                 return parse_class(
                     parser,
@@ -311,6 +312,8 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     attributes,
                 )
             } else if parser.check(TokenKind::Readonly) {
+                let span = parser.current_span();
+                parser.require_version(PhpVersion::Php82, "readonly class", span);
                 parser.advance();
                 parse_class(
                     parser,
@@ -336,9 +339,10 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             }
         }
         TokenKind::Readonly => {
-            let start = parser.start_span();
+            let readonly_span = parser.current_span();
             parser.advance();
             if parser.check(TokenKind::Class) {
+                parser.require_version(PhpVersion::Php82, "readonly class", readonly_span);
                 parse_class(
                     parser,
                     ClassModifiers {
@@ -350,10 +354,8 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             } else if parser.check(TokenKind::Abstract)
                 && parser.peek_kind() == Some(TokenKind::Class)
             {
-                parser.error(ParseError::Forbidden {
-                    message: "cannot use 'abstract' and 'readonly' together".into(),
-                    span: Span::new(start, parser.current_span().start),
-                });
+                // `readonly abstract class` — valid in PHP 8.4
+                parser.require_version(PhpVersion::Php84, "abstract readonly class", readonly_span);
                 parser.advance(); // consume 'abstract'
                 return parse_class(
                     parser,
@@ -380,10 +382,17 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         }
         TokenKind::Interface => return parse_interface(parser, attributes),
         TokenKind::Trait => return parse_trait(parser, attributes),
-        TokenKind::Enum_ => return parse_enum(parser, attributes),
+        TokenKind::Enum_ => {
+            let span = parser.current_span();
+            parser.require_version(PhpVersion::Php81, "enums", span);
+            return parse_enum(parser, attributes);
+        }
         TokenKind::Const => {
-            let stmt = parse_const(parser);
-            // Check if multi-const declaration with attributes
+            // Attributes on top-level constants require PHP 8.5.
+            let attr_span = parser.current_span();
+            parser.require_version(PhpVersion::Php85, "attributes on constants", attr_span);
+            let stmt = parse_const_with_attrs(parser, attributes);
+            // Multi-const declarations cannot carry attributes.
             if let StmtKind::Const(ref items) = stmt.kind {
                 if items.len() > 1 {
                     parser.error(ParseError::Forbidden {
@@ -392,8 +401,6 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     });
                 }
             }
-            // Attributes are noted but ConstItem has no attributes field for top-level const,
-            // so we just report the error above and return the stmt as-is.
             return stmt;
         }
         _ => {
@@ -974,10 +981,14 @@ pub fn parse_param_list<'arena, 'src>(
         // Optional parameter attributes
         let param_attrs = parser.parse_attributes();
 
-        // Optional visibility (constructor promotion)
+        // Optional visibility (constructor promotion) — PHP 8.0+
         let visibility = parse_optional_visibility(parser);
+        if visibility.is_some() {
+            let span = Span::new(param_start, parser.current_span().start);
+            parser.require_version(PhpVersion::Php80, "constructor property promotion", span);
+        }
 
-        // Check for asymmetric visibility: public private(set) in promoted properties
+        // Check for asymmetric visibility: public private(set) in promoted properties — PHP 8.4+
         let set_visibility = if visibility.is_some()
             && matches!(
                 parser.current_kind(),
@@ -990,6 +1001,8 @@ pub fn parse_param_list<'arena, 'src>(
                 TokenKind::Protected => Visibility::Protected,
                 _ => Visibility::Private,
             };
+            let span = Span::new(param_start, parser.current_span().start);
+            parser.require_version(PhpVersion::Php84, "asymmetric visibility", span);
             parser.advance(); // consume second visibility
             parser.advance(); // consume (
             if parser.current_text() == "set" {
@@ -1001,11 +1014,23 @@ pub fn parse_param_list<'arena, 'src>(
             None
         };
 
-        // Optional final (PHP 8.4+ promoted property modifier)
+        // Optional final (PHP 8.5+ promoted property modifier)
+        let final_token = parser
+            .check(TokenKind::Final)
+            .then(|| parser.current_span());
         let _final = parser.eat(TokenKind::Final).is_some();
+        if let Some(span) = final_token {
+            parser.require_version(PhpVersion::Php85, "final promoted properties", span);
+        }
 
-        // Optional readonly
+        // Optional readonly — PHP 8.1+
+        let readonly_token = parser
+            .check(TokenKind::Readonly)
+            .then(|| parser.current_span());
         let _readonly = parser.eat(TokenKind::Readonly).is_some();
+        if let Some(span) = readonly_token {
+            parser.require_version(PhpVersion::Php81, "readonly parameters", span);
+        }
 
         // Optional type hint
         let type_hint = if !(!parser.could_be_type_hint()
@@ -1933,6 +1958,7 @@ pub fn parse_class_members<'arena, 'src>(
         // Parse modifiers
         let mut visibility = None;
         let mut set_visibility = None;
+        let mut asym_vis_span: Option<Span> = None;
         let mut is_static = false;
         let mut is_abstract = false;
         let mut is_final = false;
@@ -1968,6 +1994,9 @@ pub fn parse_class_members<'arena, 'src>(
                                 TokenKind::Protected => Visibility::Protected,
                                 _ => Visibility::Private,
                             };
+                            // Save span; emit version check after loop when is_static is known.
+                            asym_vis_span =
+                                Some(Span::new(member_start, parser.current_span().start));
                             parser.advance(); // consume second visibility
                             parser.advance(); // consume (
                                               // Expect "set"
@@ -1980,6 +2009,9 @@ pub fn parse_class_members<'arena, 'src>(
                     } else {
                         // Already have visibility; this might be set_visibility with (set)
                         if parser.check(TokenKind::LeftParen) {
+                            // Save span for deferred version check after is_static is known.
+                            asym_vis_span =
+                                Some(Span::new(member_start, parser.current_span().start));
                             parser.advance(); // consume (
                             if parser.current_text() == "set" {
                                 parser.advance(); // consume "set"
@@ -2032,6 +2064,8 @@ pub fn parse_class_members<'arena, 'src>(
                             span: Span::new(member_start, parser.current_span().start),
                         });
                     }
+                    let span = parser.current_span();
+                    parser.require_version(PhpVersion::Php81, "readonly properties", span);
                     parser.advance();
                     is_readonly = true;
                 }
@@ -2045,6 +2079,20 @@ pub fn parse_class_members<'arena, 'src>(
                 message: "cannot use 'abstract' and 'final' together".into(),
                 span: Span::new(member_start, parser.current_span().start),
             });
+        }
+
+        // Emit version check for asymmetric visibility now that is_static is known.
+        // Static asymmetric visibility requires PHP 8.5; instance requires PHP 8.4.
+        if let Some(span) = asym_vis_span {
+            if is_static {
+                parser.require_version(
+                    PhpVersion::Php85,
+                    "asymmetric visibility on static properties",
+                    span,
+                );
+            } else {
+                parser.require_version(PhpVersion::Php84, "asymmetric visibility", span);
+            }
         }
 
         // Detect unknown modifier: bare identifier followed by $variable with no modifiers
@@ -2089,12 +2137,14 @@ pub fn parse_class_members<'arena, 'src>(
             parser.advance();
 
             // Check for typed constant: if what follows looks like a type hint
-            // and is NOT immediately followed by `=`, it's a typed constant
+            // and is NOT immediately followed by `=`, it's a typed constant (PHP 8.3+)
             let const_type = if parser.could_be_type_hint()
                 && !parser.check(TokenKind::Variable)
                 && parser.peek_kind() != Some(TokenKind::Equals)
                 && parser.peek_kind() != Some(TokenKind::Comma)
             {
+                let span = parser.current_span();
+                parser.require_version(PhpVersion::Php83, "typed class constants", span);
                 Some(parser.parse_type_hint())
             } else {
                 None
@@ -2242,9 +2292,11 @@ pub fn parse_class_members<'arena, 'src>(
                 None
             };
 
-            // Property hooks: { get { ... } set { ... } }
+            // Property hooks: { get { ... } set { ... } } — PHP 8.4+
             let had_hooks_block = parser.check(TokenKind::LeftBrace);
             let hooks = if had_hooks_block {
+                let span = parser.current_span();
+                parser.require_version(PhpVersion::Php84, "property hooks", span);
                 parse_property_hooks(parser)
             } else {
                 parser.alloc_vec()
@@ -2566,6 +2618,21 @@ fn parse_enum<'arena, 'src>(
         // Const
         if parser.check(TokenKind::Const) {
             parser.advance();
+
+            // PHP 8.3: typed enum constants — e.g. `public const string MODE = 'fit'`
+            let const_type = if parser.could_be_type_hint()
+                && !parser.check(TokenKind::Variable)
+                && parser.peek_kind() != Some(TokenKind::Equals)
+                && parser.peek_kind() != Some(TokenKind::Comma)
+            {
+                let span = parser.current_span();
+                parser.require_version(PhpVersion::Php83, "typed enum constants", span);
+                let th = parser.parse_type_hint();
+                Some(parser.alloc(th))
+            } else {
+                None
+            };
+
             let const_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
                 text
             } else {
@@ -2584,7 +2651,7 @@ fn parse_enum<'arena, 'src>(
                 kind: EnumMemberKind::ClassConst(ClassConstDecl {
                     name: const_name,
                     visibility,
-                    type_hint: None,
+                    type_hint: const_type,
                     value,
                     attributes: member_attrs,
                 }),
@@ -2913,10 +2980,19 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
 }
 
 fn parse_const<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
+    parse_const_with_attrs(parser, parser.alloc_vec())
+}
+
+fn parse_const_with_attrs<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'const'
 
     let mut items = parser.alloc_vec();
+    // Attributes apply to the first item only.
+    let mut pending_attrs = Some(attributes);
     loop {
         let item_start = parser.start_span();
         let const_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
@@ -2932,9 +3008,11 @@ fn parse_const<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
         parser.expect(TokenKind::Equals);
         let value = expr::parse_expr(parser);
         let item_span = Span::new(item_start, value.span.end);
+        let item_attrs = pending_attrs.take().unwrap_or_else(|| parser.alloc_vec());
         items.push(ConstItem {
             name: const_name,
             value,
+            attributes: item_attrs,
             span: item_span,
         });
 

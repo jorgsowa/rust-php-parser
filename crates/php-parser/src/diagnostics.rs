@@ -46,6 +46,14 @@ pub enum ParseError {
         message: Cow<'static, str>,
         span: Span,
     },
+
+    #[error("'{feature}' requires PHP {required} or higher (targeting PHP {used})")]
+    VersionTooLow {
+        feature: Cow<'static, str>,
+        required: Cow<'static, str>,
+        used: Cow<'static, str>,
+        span: Span,
+    },
 }
 
 impl ParseError {
@@ -59,7 +67,8 @@ impl ParseError {
             | ParseError::UnterminatedString { span }
             | ParseError::ExpectedAfter { span, .. }
             | ParseError::UnclosedDelimiter { span, .. }
-            | ParseError::Forbidden { span, .. } => *span,
+            | ParseError::Forbidden { span, .. }
+            | ParseError::VersionTooLow { span, .. } => *span,
         }
     }
 }

@@ -8,6 +8,7 @@ use crate::instrument;
 use crate::parser::Parser;
 use crate::precedence::{self, ASSIGNMENT_BP, TERNARY_BP};
 use crate::stmt;
+use crate::version::PhpVersion;
 
 /// Cast keyword strings and their CastKind values
 const CAST_KEYWORDS: &[(&str, CastKind)] = &[
@@ -111,6 +112,10 @@ pub fn parse_expr_bp<'arena, 'src>(
                     break;
                 }
                 let is_nullsafe = kind == TokenKind::NullsafeArrow;
+                if is_nullsafe {
+                    let span = parser.current_span();
+                    parser.require_version(PhpVersion::Php80, "nullsafe operator (?->)", span);
+                }
                 parser.advance(); // consume -> or ?->
 
                 // Parse member name (identifier or keyword or variable for dynamic)
@@ -229,8 +234,10 @@ pub fn parse_expr_bp<'arena, 'src>(
         }
 
         // Double colon: Class::$prop, Class::method(), Class::CONST
+        // bp=90: must parse through the bp=45 gate used by promoted-property defaults
+        // (which only intends to block `{}` curly-brace subscript access, bp=44).
         if kind == TokenKind::DoubleColon {
-            if 44u8 < min_bp {
+            if 90u8 < min_bp {
                 break;
             }
             parser.advance(); // consume ::
@@ -462,6 +469,9 @@ pub fn parse_expr_bp<'arena, 'src>(
                 break;
             }
             let op_token = parser.advance();
+            if op_token.kind == TokenKind::PipeArrow {
+                parser.require_version(PhpVersion::Php85, "pipe operator (|>)", op_token.span);
+            }
             let op = token_to_binary_op(op_token.kind);
             let rhs = parse_expr_bp(parser, right_bp);
             let span = lhs.span.merge(rhs.span);
@@ -1176,17 +1186,23 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             parse_arrow_function(parser, false, start, parser.alloc_vec())
         }
 
-        // Match expression
-        TokenKind::Match_ => parse_match_expr(parser),
+        // Match expression — PHP 8.0+
+        TokenKind::Match_ => {
+            let span = parser.current_span();
+            parser.require_version(PhpVersion::Php80, "match expressions", span);
+            parse_match_expr(parser)
+        }
 
-        // Throw as expression (PHP 8)
+        // Throw as expression — PHP 8.0+
         TokenKind::Throw => {
             let token = parser.advance();
+            let span = token.span;
+            parser.require_version(PhpVersion::Php80, "throw expressions", span);
             let expr = parse_expr_bp(parser, ASSIGNMENT_BP);
-            let span = token.span.merge(expr.span);
+            let merged = span.merge(expr.span);
             Expr {
                 kind: ExprKind::ThrowExpr(parser.alloc(expr)),
-                span,
+                span: merged,
             }
         }
 
@@ -1373,16 +1389,77 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             }
         }
 
-        // clone — unary prefix or function call (PHP 8.4)
+        // clone — unary prefix, clone($obj), clone($obj, [...]) (PHP 8.5), or user function
         TokenKind::Clone => {
             let token = parser.advance();
             if parser.check(TokenKind::LeftParen) {
-                // PHP 8.4: clone() function call syntax
-                let callee = Expr {
-                    kind: ExprKind::Identifier(Cow::Borrowed("clone")),
-                    span: token.span,
-                };
-                parse_function_call(parser, callee)
+                let src = parser.source;
+                let name_text =
+                    Cow::Borrowed(&src[token.span.start as usize..token.span.end as usize]);
+                match parse_arg_list_or_callable(parser) {
+                    ArgListResult::CallableMarker => {
+                        // clone(...) — first-class callable
+                        let span = Span::new(token.span.start, parser.current_span().start);
+                        let callee = Expr {
+                            kind: ExprKind::Identifier(name_text),
+                            span: token.span,
+                        };
+                        Expr {
+                            kind: ExprKind::CallableCreate(CallableCreateExpr {
+                                kind: CallableCreateKind::Function(parser.alloc(callee)),
+                            }),
+                            span,
+                        }
+                    }
+                    ArgListResult::Args(args) => {
+                        let span = Span::new(token.span.start, parser.current_span().start);
+                        let is_simple =
+                            args.len() == 1 && args[0].name.is_none() && !args[0].unpack;
+                        let is_clone_with = args.len() == 2
+                            && args[0].name.is_none()
+                            && !args[0].unpack
+                            && args[1].name.is_none()
+                            && !args[1].unpack;
+                        if is_simple {
+                            // clone($obj) — parenthesised single-argument form
+                            let object = args.into_iter().next().unwrap().value;
+                            Expr {
+                                kind: ExprKind::Clone(parser.alloc(object)),
+                                span,
+                            }
+                        } else if is_clone_with {
+                            // clone($obj, [...]) — PHP 8.5 clone with property overrides
+                            parser.require_version(
+                                PhpVersion::Php85,
+                                "clone with property overrides",
+                                token.span,
+                            );
+                            let mut iter = args.into_iter();
+                            let object = iter.next().unwrap().value;
+                            let overrides = iter.next().unwrap().value;
+                            Expr {
+                                kind: ExprKind::CloneWith(
+                                    parser.alloc(object),
+                                    parser.alloc(overrides),
+                                ),
+                                span,
+                            }
+                        } else {
+                            // 3+ args, named args, or spread — user-defined function named "clone"
+                            let callee = Expr {
+                                kind: ExprKind::Identifier(name_text),
+                                span: token.span,
+                            };
+                            Expr {
+                                kind: ExprKind::FunctionCall(FunctionCallExpr {
+                                    name: parser.alloc(callee),
+                                    args,
+                                }),
+                                span,
+                            }
+                        }
+                    }
+                }
             } else {
                 let operand = parse_expr_bp(parser, 41);
                 let span = token.span.merge(operand.span);
@@ -2005,6 +2082,8 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
             )
         {
             let name_token = parser.advance();
+            let span = name_token.span;
+            parser.require_version(PhpVersion::Php80, "named arguments", span);
             parser.advance(); // consume :
             let src = parser.source;
             Some(Cow::Borrowed(
@@ -2328,6 +2407,9 @@ fn try_parse_cast<'arena, 'src>(
             message: "the (unset) cast is no longer supported".into(),
             span: kw_span,
         });
+    }
+    if cast_kind == CastKind::Void {
+        parser.require_version(PhpVersion::Php85, "void cast", kw_span);
     }
 
     let operand = parse_expr_bp(parser, 41);
