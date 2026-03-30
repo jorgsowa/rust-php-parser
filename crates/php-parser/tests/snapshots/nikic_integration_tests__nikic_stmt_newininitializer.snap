@@ -72,6 +72,8 @@ expression: json
               },
               "by_ref": false,
               "variadic": false,
+              "is_readonly": false,
+              "is_final": false,
               "visibility": null,
               "set_visibility": null,
               "attributes": [],
@@ -249,6 +251,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 89,
                     "end": 96

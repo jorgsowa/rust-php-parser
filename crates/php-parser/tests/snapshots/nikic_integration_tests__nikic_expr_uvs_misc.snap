@@ -225,6 +225,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 81,
                     "end": 82

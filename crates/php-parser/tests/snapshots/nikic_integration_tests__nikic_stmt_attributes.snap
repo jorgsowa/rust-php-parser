@@ -71,6 +71,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 35,
                     "end": 36
@@ -106,6 +107,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 46,
                     "end": 50
@@ -153,6 +155,8 @@ expression: json
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
                       "visibility": null,
                       "set_visibility": null,
                       "attributes": [

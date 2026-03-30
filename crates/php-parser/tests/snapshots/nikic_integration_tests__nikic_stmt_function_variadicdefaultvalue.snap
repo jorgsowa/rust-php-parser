@@ -23,6 +23,8 @@ expression: json
               },
               "by_ref": false,
               "variadic": true,
+              "is_readonly": false,
+              "is_final": false,
               "visibility": null,
               "set_visibility": null,
               "attributes": [],

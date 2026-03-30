@@ -39,6 +39,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 11,
                     "end": 19

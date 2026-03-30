@@ -76,6 +76,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 22,
                     "end": 24

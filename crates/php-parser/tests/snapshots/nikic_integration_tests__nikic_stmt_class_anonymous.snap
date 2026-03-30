@@ -262,6 +262,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 136,
                     "end": 138
@@ -279,6 +280,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 140,
                     "end": 142
@@ -392,6 +394,7 @@ expression: json
                                     }
                                   },
                                   "unpack": false,
+                                  "by_ref": false,
                                   "span": {
                                     "start": 235,
                                     "end": 240

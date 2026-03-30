@@ -2099,8 +2099,8 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
     // Check for unpack: ...expr
     let unpack = parser.eat(TokenKind::Ellipsis).is_some();
 
-    // Check for by-reference: &$var (deprecated call-time pass-by-ref)
-    let _by_ref = parser.eat(TokenKind::Ampersand).is_some();
+    // Check for by-reference: &$var (call-time pass-by-ref, removed in PHP 7.0)
+    let by_ref = parser.eat(TokenKind::Ampersand).is_some();
 
     let value = parse_expr(parser);
     let span = Span::new(start, value.span.end);
@@ -2109,6 +2109,7 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
         name,
         value,
         unpack,
+        by_ref,
         span,
     }
 }

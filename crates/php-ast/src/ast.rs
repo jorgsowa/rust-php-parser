@@ -327,6 +327,7 @@ pub struct Arg<'arena, 'src> {
     pub name: Option<Cow<'src, str>>,
     pub value: Expr<'arena, 'src>,
     pub unpack: bool,
+    pub by_ref: bool,
     pub span: Span,
 }
 
@@ -510,6 +511,8 @@ pub struct Param<'arena, 'src> {
     pub default: Option<Expr<'arena, 'src>>,
     pub by_ref: bool,
     pub variadic: bool,
+    pub is_readonly: bool,
+    pub is_final: bool,
     pub visibility: Option<Visibility>,
     pub set_visibility: Option<Visibility>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,

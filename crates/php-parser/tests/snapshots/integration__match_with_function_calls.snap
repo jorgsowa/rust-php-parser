@@ -146,6 +146,7 @@ expression: to_json(&result.program)
                                         }
                                       },
                                       "unpack": false,
+                                      "by_ref": false,
                                       "span": {
                                         "start": 135,
                                         "end": 144

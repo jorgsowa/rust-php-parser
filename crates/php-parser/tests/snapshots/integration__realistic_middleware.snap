@@ -187,6 +187,8 @@ expression: to_json(& result.program)
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
                       "visibility": null,
                       "set_visibility": null,
                       "attributes": [],
@@ -218,6 +220,8 @@ expression: to_json(& result.program)
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
                       "visibility": null,
                       "set_visibility": null,
                       "attributes": [],
@@ -397,6 +401,8 @@ expression: to_json(& result.program)
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
                       "visibility": null,
                       "set_visibility": null,
                       "attributes": [],
@@ -506,6 +512,8 @@ expression: to_json(& result.program)
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
                       "visibility": null,
                       "set_visibility": null,
                       "attributes": [],
@@ -537,6 +545,8 @@ expression: to_json(& result.program)
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
                       "visibility": null,
                       "set_visibility": null,
                       "attributes": [],
@@ -720,6 +730,7 @@ expression: to_json(& result.program)
                                                             }
                                                           },
                                                           "unpack": false,
+                                                          "by_ref": false,
                                                           "span": {
                                                             "start": 743,
                                                             "end": 751
@@ -821,6 +832,7 @@ expression: to_json(& result.program)
                                                 }
                                               },
                                               "unpack": false,
+                                              "by_ref": false,
                                               "span": {
                                                 "start": 816,
                                                 "end": 831
@@ -903,6 +915,7 @@ expression: to_json(& result.program)
                                           }
                                         },
                                         "unpack": false,
+                                        "by_ref": false,
                                         "span": {
                                           "start": 869,
                                           "end": 878
@@ -920,6 +933,7 @@ expression: to_json(& result.program)
                                           }
                                         },
                                         "unpack": false,
+                                        "by_ref": false,
                                         "span": {
                                           "start": 880,
                                           "end": 882
@@ -937,6 +951,7 @@ expression: to_json(& result.program)
                                           }
                                         },
                                         "unpack": false,
+                                        "by_ref": false,
                                         "span": {
                                           "start": 884,
                                           "end": 890
@@ -1013,6 +1028,7 @@ expression: to_json(& result.program)
                                                 }
                                               },
                                               "unpack": false,
+                                              "by_ref": false,
                                               "span": {
                                                 "start": 955,
                                                 "end": 958
@@ -1056,6 +1072,7 @@ expression: to_json(& result.program)
                                                 }
                                               },
                                               "unpack": false,
+                                              "by_ref": false,
                                               "span": {
                                                 "start": 960,
                                                 "end": 988
@@ -1163,6 +1180,7 @@ expression: to_json(& result.program)
                                                   }
                                                 },
                                                 "unpack": false,
+                                                "by_ref": false,
                                                 "span": {
                                                   "start": 1065,
                                                   "end": 1071
@@ -1225,6 +1243,7 @@ expression: to_json(& result.program)
                                             }
                                           },
                                           "unpack": false,
+                                          "by_ref": false,
                                           "span": {
                                             "start": 1109,
                                             "end": 1118
@@ -1272,6 +1291,7 @@ expression: to_json(& result.program)
                                             }
                                           },
                                           "unpack": false,
+                                          "by_ref": false,
                                           "span": {
                                             "start": 1120,
                                             "end": 1139
@@ -1327,6 +1347,7 @@ expression: to_json(& result.program)
                                             }
                                           },
                                           "unpack": false,
+                                          "by_ref": false,
                                           "span": {
                                             "start": 1177,
                                             "end": 1184
@@ -1382,6 +1403,7 @@ expression: to_json(& result.program)
                                             }
                                           },
                                           "unpack": false,
+                                          "by_ref": false,
                                           "span": {
                                             "start": 1186,
                                             "end": 1208
@@ -1445,6 +1467,7 @@ expression: to_json(& result.program)
                                                 }
                                               },
                                               "unpack": false,
+                                              "by_ref": false,
                                               "span": {
                                                 "start": 1292,
                                                 "end": 1295
@@ -1508,6 +1531,7 @@ expression: to_json(& result.program)
                                                 }
                                               },
                                               "unpack": false,
+                                              "by_ref": false,
                                               "span": {
                                                 "start": 1297,
                                                 "end": 1326
@@ -1627,6 +1651,7 @@ expression: to_json(& result.program)
                                                     }
                                                   },
                                                   "unpack": false,
+                                                  "by_ref": false,
                                                   "span": {
                                                     "start": 1411,
                                                     "end": 1444
@@ -1679,6 +1704,7 @@ expression: to_json(& result.program)
                                                 }
                                               },
                                               "unpack": false,
+                                              "by_ref": false,
                                               "span": {
                                                 "start": 1479,
                                                 "end": 1482
@@ -1722,6 +1748,7 @@ expression: to_json(& result.program)
                                                 }
                                               },
                                               "unpack": false,
+                                              "by_ref": false,
                                               "span": {
                                                 "start": 1484,
                                                 "end": 1513
@@ -1783,6 +1810,7 @@ expression: to_json(& result.program)
                                     }
                                   },
                                   "unpack": false,
+                                  "by_ref": false,
                                   "span": {
                                     "start": 1548,
                                     "end": 1556
@@ -1844,6 +1872,8 @@ expression: to_json(& result.program)
                       "default": null,
                       "by_ref": false,
                       "variadic": true,
+                      "is_readonly": false,
+                      "is_final": false,
                       "visibility": null,
                       "set_visibility": null,
                       "attributes": [],
@@ -2084,6 +2114,8 @@ expression: to_json(& result.program)
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
                       "visibility": null,
                       "set_visibility": null,
                       "attributes": [],
@@ -2115,6 +2147,8 @@ expression: to_json(& result.program)
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
                       "visibility": null,
                       "set_visibility": null,
                       "attributes": [],
@@ -2306,6 +2340,7 @@ expression: to_json(& result.program)
                                           }
                                         },
                                         "unpack": false,
+                                        "by_ref": false,
                                         "span": {
                                           "start": 2019,
                                           "end": 2023
@@ -2520,6 +2555,7 @@ expression: to_json(& result.program)
                                               }
                                             },
                                             "unpack": false,
+                                            "by_ref": false,
                                             "span": {
                                               "start": 2181,
                                               "end": 2184
@@ -2563,6 +2599,7 @@ expression: to_json(& result.program)
                                               }
                                             },
                                             "unpack": false,
+                                            "by_ref": false,
                                             "span": {
                                               "start": 2186,
                                               "end": 2218
@@ -2608,6 +2645,7 @@ expression: to_json(& result.program)
                                               }
                                             },
                                             "unpack": false,
+                                            "by_ref": false,
                                             "span": {
                                               "start": 2250,
                                               "end": 2258
@@ -2682,6 +2720,8 @@ expression: to_json(& result.program)
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
                       "visibility": null,
                       "set_visibility": null,
                       "attributes": [],

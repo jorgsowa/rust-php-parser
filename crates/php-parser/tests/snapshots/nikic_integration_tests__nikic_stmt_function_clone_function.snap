@@ -32,6 +32,8 @@ expression: json
               "default": null,
               "by_ref": false,
               "variadic": false,
+              "is_readonly": false,
+              "is_final": false,
               "visibility": null,
               "set_visibility": null,
               "attributes": [],
@@ -71,6 +73,8 @@ expression: json
               },
               "by_ref": false,
               "variadic": false,
+              "is_readonly": false,
+              "is_final": false,
               "visibility": null,
               "set_visibility": null,
               "attributes": [],
@@ -333,6 +337,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 181,
                     "end": 183
@@ -350,6 +355,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 185,
                     "end": 191
@@ -367,6 +373,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 193,
                     "end": 208
@@ -384,6 +391,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 210,
                     "end": 224
@@ -430,6 +438,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 235,
                     "end": 245
@@ -498,6 +507,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 247,
                     "end": 295
@@ -544,6 +554,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 304,
                     "end": 306
@@ -612,6 +623,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 308,
                     "end": 356
@@ -658,6 +670,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 365,
                     "end": 375
@@ -704,6 +717,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 384,
                     "end": 394
@@ -772,6 +786,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 396,
                     "end": 428
@@ -920,6 +935,7 @@ expression: json
                     }
                   },
                   "unpack": true,
+                  "by_ref": false,
                   "span": {
                     "start": 437,
                     "end": 510

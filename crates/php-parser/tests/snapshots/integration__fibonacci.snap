@@ -15,6 +15,8 @@ expression: to_json(&result.program)
               "default": null,
               "by_ref": false,
               "variadic": false,
+              "is_readonly": false,
+              "is_final": false,
               "visibility": null,
               "set_visibility": null,
               "attributes": [],
@@ -143,6 +145,7 @@ expression: to_json(&result.program)
                                   }
                                 },
                                 "unpack": false,
+                                "by_ref": false,
                                 "span": {
                                   "start": 84,
                                   "end": 90
@@ -202,6 +205,7 @@ expression: to_json(&result.program)
                                   }
                                 },
                                 "unpack": false,
+                                "by_ref": false,
                                 "span": {
                                   "start": 98,
                                   "end": 104
@@ -279,6 +283,7 @@ expression: to_json(&result.program)
                           }
                         },
                         "unpack": false,
+                        "by_ref": false,
                         "span": {
                           "start": 124,
                           "end": 126

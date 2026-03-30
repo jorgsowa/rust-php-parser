@@ -644,6 +644,7 @@ expression: json
                             }
                           },
                           "unpack": false,
+                          "by_ref": false,
                           "span": {
                             "start": 225,
                             "end": 240

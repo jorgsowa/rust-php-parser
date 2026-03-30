@@ -80,6 +80,7 @@ expression: to_json(&result.program)
                           }
                         },
                         "unpack": false,
+                        "by_ref": false,
                         "span": {
                           "start": 41,
                           "end": 46

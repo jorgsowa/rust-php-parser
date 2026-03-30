@@ -149,6 +149,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 66,
                     "end": 76
@@ -195,6 +196,7 @@ expression: json
                     }
                   },
                   "unpack": true,
+                  "by_ref": false,
                   "span": {
                     "start": 84,
                     "end": 92
@@ -241,6 +243,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 100,
                     "end": 102
@@ -258,6 +261,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 104,
                     "end": 106
@@ -304,6 +308,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 115,
                     "end": 117
@@ -379,6 +384,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 135,
                     "end": 137
@@ -396,6 +402,7 @@ expression: json
                     }
                   },
                   "unpack": false,
+                  "by_ref": false,
                   "span": {
                     "start": 139,
                     "end": 141

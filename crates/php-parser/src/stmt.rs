@@ -1018,7 +1018,7 @@ pub fn parse_param_list<'arena, 'src>(
         let final_token = parser
             .check(TokenKind::Final)
             .then(|| parser.current_span());
-        let _final = parser.eat(TokenKind::Final).is_some();
+        let is_final = parser.eat(TokenKind::Final).is_some();
         if let Some(span) = final_token {
             parser.require_version(PhpVersion::Php85, "final promoted properties", span);
         }
@@ -1027,7 +1027,7 @@ pub fn parse_param_list<'arena, 'src>(
         let readonly_token = parser
             .check(TokenKind::Readonly)
             .then(|| parser.current_span());
-        let _readonly = parser.eat(TokenKind::Readonly).is_some();
+        let is_readonly = parser.eat(TokenKind::Readonly).is_some();
         if let Some(span) = readonly_token {
             parser.require_version(PhpVersion::Php81, "readonly parameters", span);
         }
@@ -1095,6 +1095,8 @@ pub fn parse_param_list<'arena, 'src>(
             default,
             by_ref,
             variadic,
+            is_readonly,
+            is_final,
             visibility,
             set_visibility,
             attributes: param_attrs,
@@ -1145,6 +1147,8 @@ fn try_parse_simple_param_fastpath_minimal<'arena, 'src>(
         default: None,
         by_ref: false,
         variadic: false,
+        is_readonly: false,
+        is_final: false,
         visibility: None,
         set_visibility: None,
         attributes: parser.alloc_vec(),
