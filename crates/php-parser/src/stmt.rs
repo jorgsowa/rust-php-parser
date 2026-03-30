@@ -388,8 +388,11 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             return parse_enum(parser, attributes);
         }
         TokenKind::Const => {
-            let stmt = parse_const(parser);
-            // Check if multi-const declaration with attributes
+            // Attributes on top-level constants require PHP 8.5.
+            let attr_span = parser.current_span();
+            parser.require_version(PhpVersion::Php85, "attributes on constants", attr_span);
+            let stmt = parse_const_with_attrs(parser, attributes);
+            // Multi-const declarations cannot carry attributes.
             if let StmtKind::Const(ref items) = stmt.kind {
                 if items.len() > 1 {
                     parser.error(ParseError::Forbidden {
@@ -398,8 +401,6 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     });
                 }
             }
-            // Attributes are noted but ConstItem has no attributes field for top-level const,
-            // so we just report the error above and return the stmt as-is.
             return stmt;
         }
         _ => {
@@ -2969,10 +2970,19 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
 }
 
 fn parse_const<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
+    parse_const_with_attrs(parser, parser.alloc_vec())
+}
+
+fn parse_const_with_attrs<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'const'
 
     let mut items = parser.alloc_vec();
+    // Attributes apply to the first item only.
+    let mut pending_attrs = Some(attributes);
     loop {
         let item_start = parser.start_span();
         let const_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
@@ -2988,9 +2998,11 @@ fn parse_const<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
         parser.expect(TokenKind::Equals);
         let value = expr::parse_expr(parser);
         let item_span = Span::new(item_start, value.span.end);
+        let item_attrs = pending_attrs.take().unwrap_or_else(|| parser.alloc_vec());
         items.push(ConstItem {
             name: const_name,
             value,
+            attributes: item_attrs,
             span: item_span,
         });
 

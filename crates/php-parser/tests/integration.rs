@@ -4262,3 +4262,44 @@ fn test_version_php85_final_promoted_property_requires_85() {
         "final promoted property should emit a version error when targeting PHP 8.4"
     );
 }
+
+#[test]
+fn test_version_php85_void_cast_requires_85() {
+    let result_85 = parse_php_versioned(
+        "<?php (void) getVersion();",
+        php_rs_parser::PhpVersion::Php85,
+    );
+    assert!(result_85.errors.is_empty(), "void cast should be valid in PHP 8.5: {:?}", result_85.errors);
+
+    let result_84 = parse_php_versioned(
+        "<?php (void) getVersion();",
+        php_rs_parser::PhpVersion::Php84,
+    );
+    assert!(
+        !result_84.errors.is_empty(),
+        "void cast should emit a version error when targeting PHP 8.4"
+    );
+    assert!(result_84.errors.iter().any(|e| matches!(
+        e,
+        php_rs_parser::diagnostics::ParseError::VersionTooLow { feature, .. }
+            if feature.contains("void")
+    )));
+}
+
+#[test]
+fn test_version_php85_const_attributes_require_85() {
+    let result_85 = parse_php_versioned(
+        "<?php #[MyAttr] const VERSION = '8.5';",
+        php_rs_parser::PhpVersion::Php85,
+    );
+    assert!(result_85.errors.is_empty(), "attributes on constants should be valid in PHP 8.5: {:?}", result_85.errors);
+
+    let result_84 = parse_php_versioned(
+        "<?php #[MyAttr] const VERSION = '8.5';",
+        php_rs_parser::PhpVersion::Php84,
+    );
+    assert!(
+        !result_84.errors.is_empty(),
+        "attributes on constants should emit a version error when targeting PHP 8.4"
+    );
+}

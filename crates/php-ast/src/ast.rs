@@ -772,6 +772,7 @@ pub struct UseItem<'arena, 'src> {
 pub struct ConstItem<'arena, 'src> {
     pub name: &'src str,
     pub value: Expr<'arena, 'src>,
+    pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     pub span: Span,
 }
 

@@ -2366,6 +2366,9 @@ fn try_parse_cast<'arena, 'src>(
             span: kw_span,
         });
     }
+    if cast_kind == CastKind::Void {
+        parser.require_version(PhpVersion::Php85, "void cast", kw_span);
+    }
 
     let operand = parse_expr_bp(parser, 41);
     let span = Span::new(start, operand.span.end);
