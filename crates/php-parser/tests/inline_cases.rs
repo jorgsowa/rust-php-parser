@@ -350,10 +350,11 @@ pub const CASES: &[Case] = &[
     case!("type_hints", "void return", "<?php function f(): void {}"),
     case!("type_hints", "iterable type", "<?php function f(iterable $x): iterable {}"),
     case!("type_hints", "callable type", "<?php function f(callable $x) {}"),
-    case!("type_hints", "true false null union", "<?php function f(): true|false|null {}", min: MinPhp::Php82),
     case!("type_hints", "three intersection", "<?php function f(Countable&Traversable&ArrayAccess $x): void {}"),
     case!("type_hints", "standalone true", "<?php function f(): true { return true; }", min: MinPhp::Php82),
     case!("type_hints", "standalone false", "<?php function f(): false { return false; }", min: MinPhp::Php82),
+    case!("type_hints", "true null union", "<?php function f(): true|null { return null; }", min: MinPhp::Php82),
+    case!("type_hints", "false null union", "<?php function f(): false|null { return null; }", min: MinPhp::Php82),
 
     // attributes
     case!("attributes", "attr qualified name", "<?php #[\\App\\Attr] function foo() {}"),
