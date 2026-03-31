@@ -29,7 +29,7 @@ expression: json
               {
                 "key": null,
                 "value": {
-                  "kind": "Null",
+                  "kind": "Omit",
                   "span": {
                     "start": 11,
                     "end": 12

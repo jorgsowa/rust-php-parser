@@ -177,6 +177,7 @@ expression: json
                   }
                 },
                 "unpack": false,
+                "by_ref": true,
                 "span": {
                   "start": 70,
                   "end": 73
@@ -227,6 +228,7 @@ expression: json
                   }
                 },
                 "unpack": false,
+                "by_ref": true,
                 "span": {
                   "start": 87,
                   "end": 97

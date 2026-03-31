@@ -24,6 +24,7 @@ expression: to_json(&result.program)
                         }
                       },
                       "unpack": false,
+                      "by_ref": true,
                       "span": {
                         "start": 7,
                         "end": 10
@@ -41,6 +42,7 @@ expression: to_json(&result.program)
                         }
                       },
                       "unpack": false,
+                      "by_ref": true,
                       "span": {
                         "start": 12,
                         "end": 15
@@ -96,6 +98,7 @@ expression: to_json(&result.program)
                         }
                       },
                       "unpack": false,
+                      "by_ref": true,
                       "span": {
                         "start": 30,
                         "end": 33
@@ -113,6 +116,7 @@ expression: to_json(&result.program)
                         }
                       },
                       "unpack": false,
+                      "by_ref": true,
                       "span": {
                         "start": 35,
                         "end": 38
@@ -168,6 +172,7 @@ expression: to_json(&result.program)
                         }
                       },
                       "unpack": false,
+                      "by_ref": true,
                       "span": {
                         "start": 50,
                         "end": 57

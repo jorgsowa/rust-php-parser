@@ -27,7 +27,8 @@ expression: to_json(&result.program)
                   "start": 12,
                   "end": 14
                 }
-              }
+              },
+              "by_ref": true
             }
           },
           "span": {

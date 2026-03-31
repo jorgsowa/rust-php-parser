@@ -197,8 +197,8 @@ pub fn parse_expr_bp<'arena, 'src>(
             }
             let op_token = parser.advance();
 
-            // Handle =& (by-ref assign): treat as regular Assign for now
-            if op_token.kind == TokenKind::Equals && parser.check(TokenKind::Ampersand) {
+            let by_ref = op_token.kind == TokenKind::Equals && parser.check(TokenKind::Ampersand);
+            if by_ref {
                 parser.advance(); // consume &
             }
 
@@ -227,6 +227,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                     target: parser.alloc(lhs),
                     op,
                     value: parser.alloc(rhs),
+                    by_ref,
                 }),
                 span,
             };
@@ -888,15 +889,18 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                 );
                 // Collapse single literal part into String, or use InterpolatedString
                 if parts.len() == 1 {
-                    if let StringPart::Literal(s) = parts.into_iter().next().unwrap() {
-                        Expr {
+                    match parts.into_iter().next().unwrap() {
+                        StringPart::Literal(s) => Expr {
                             kind: ExprKind::String(s),
                             span: token.span,
-                        }
-                    } else {
-                        Expr {
-                            kind: ExprKind::InterpolatedString(parser.alloc_vec()),
-                            span: token.span,
+                        },
+                        part => {
+                            let mut v = parser.alloc_vec_with_capacity(1);
+                            v.push(part);
+                            Expr {
+                                kind: ExprKind::InterpolatedString(v),
+                                span: token.span,
+                            }
                         }
                     }
                 } else {
@@ -2173,10 +2177,11 @@ fn parse_array_literal<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Ex
                 elements.push(ArrayElement {
                     key: None,
                     value: Expr {
-                        kind: ExprKind::Null,
+                        kind: ExprKind::Omit,
                         span,
                     },
                     unpack: false,
+                    by_ref: false,
                     span,
                 });
             } else {
@@ -2244,20 +2249,22 @@ fn parse_array_element<'arena, 'src>(
     // Handle unpack: ...$arr
     let unpack = parser.eat(TokenKind::Ellipsis).is_some();
 
-    // Handle &$var (by-ref)
-    if parser.check(TokenKind::Ampersand) {
+    // Handle &$var (by-ref value, not unpack)
+    let by_ref_value = !unpack && parser.check(TokenKind::Ampersand) && {
         parser.advance();
-    }
+        true
+    };
 
     instrument::record_parse_expr_array_first();
     let first_expr = parse_expr(parser);
 
-    if !unpack && parser.eat(TokenKind::FatArrow).is_some() {
-        // key => value
+    if !unpack && !by_ref_value && parser.eat(TokenKind::FatArrow).is_some() {
+        // key => [&]value
         instrument::record_parse_array_element_with_arrow();
-        if parser.check(TokenKind::Ampersand) {
+        let by_ref = parser.check(TokenKind::Ampersand) && {
             parser.advance();
-        }
+            true
+        };
         instrument::record_parse_expr_array_second();
         let value = parse_expr(parser);
         let elem_span = Span::new(elem_start, value.span.end);
@@ -2265,16 +2272,18 @@ fn parse_array_element<'arena, 'src>(
             key: Some(first_expr),
             value,
             unpack: false,
+            by_ref,
             span: elem_span,
         }
     } else {
-        // value only (or unpack)
+        // value only (or unpack, or by-ref value)
         instrument::record_parse_array_simple_value();
         let elem_span = Span::new(elem_start, first_expr.span.end);
         ArrayElement {
             key: None,
             value: first_expr,
             unpack,
+            by_ref: by_ref_value,
             span: elem_span,
         }
     }
@@ -2293,15 +2302,16 @@ fn parse_list_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'
                 break;
             }
             if parser.check(TokenKind::Comma) {
-                // empty element — push nothing (skip)
+                // empty element — skipped destructuring position
                 let span = parser.current_span();
                 elements.push(ArrayElement {
                     key: None,
                     value: Expr {
-                        kind: ExprKind::Null,
+                        kind: ExprKind::Omit,
                         span,
                     },
                     unpack: false,
+                    by_ref: false,
                     span,
                 });
             } else {
@@ -2342,6 +2352,7 @@ fn parse_list_element<'arena, 'src>(
             key: None,
             value,
             unpack: false,
+            by_ref: true,
             span: elem_span,
         };
     }
@@ -2349,16 +2360,18 @@ fn parse_list_element<'arena, 'src>(
     let first = parse_expr(parser);
 
     if parser.eat(TokenKind::FatArrow).is_some() {
-        // key => value or key => &value
-        if parser.check(TokenKind::Ampersand) {
+        // key => [&]value
+        let by_ref = parser.check(TokenKind::Ampersand) && {
             parser.advance();
-        }
+            true
+        };
         let value = parse_expr(parser);
         let elem_span = Span::new(elem_start, value.span.end);
         ArrayElement {
             key: Some(first),
             value,
             unpack: false,
+            by_ref,
             span: elem_span,
         }
     } else {
@@ -2367,6 +2380,7 @@ fn parse_list_element<'arena, 'src>(
             key: None,
             value: first,
             unpack: false,
+            by_ref: false,
             span: elem_span,
         }
     }

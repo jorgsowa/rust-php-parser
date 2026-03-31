@@ -4,6 +4,10 @@ use serde::Serialize;
 
 use crate::Span;
 
+fn is_false(b: &bool) -> bool {
+    !*b
+}
+
 /// Arena-allocated Vec. Thin newtype over bumpalo::collections::Vec that implements Serialize and Debug.
 pub struct ArenaVec<'arena, T>(bumpalo::collections::Vec<'arena, T>);
 
@@ -960,6 +964,9 @@ pub enum ExprKind<'arena, 'src> {
     /// First-class callable: `strlen(...)`, `$obj->method(...)`, `Foo::bar(...)`
     CallableCreate(CallableCreateExpr<'arena, 'src>),
 
+    /// Omitted element in destructuring: `[$a, , $c]` or `list($a, , $c)`
+    Omit,
+
     /// Error placeholder
     Error,
 }
@@ -1004,6 +1011,8 @@ pub struct AssignExpr<'arena, 'src> {
     pub target: &'arena Expr<'arena, 'src>,
     pub op: AssignOp,
     pub value: &'arena Expr<'arena, 'src>,
+    #[serde(skip_serializing_if = "is_false")]
+    pub by_ref: bool,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
@@ -1116,6 +1125,8 @@ pub struct ArrayElement<'arena, 'src> {
     pub key: Option<Expr<'arena, 'src>>,
     pub value: Expr<'arena, 'src>,
     pub unpack: bool,
+    #[serde(skip_serializing_if = "is_false")]
+    pub by_ref: bool,
     pub span: Span,
 }
 

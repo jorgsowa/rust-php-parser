@@ -622,7 +622,8 @@ expression: json
                   "start": 251,
                   "end": 253
                 }
-              }
+              },
+              "by_ref": true
             }
           },
           "span": {
@@ -719,7 +720,7 @@ expression: json
                     {
                       "key": null,
                       "value": {
-                        "kind": "Null",
+                        "kind": "Omit",
                         "span": {
                           "start": 297,
                           "end": 298
@@ -811,7 +812,7 @@ expression: json
                             {
                               "key": null,
                               "value": {
-                                "kind": "Null",
+                                "kind": "Omit",
                                 "span": {
                                   "start": 323,
                                   "end": 324

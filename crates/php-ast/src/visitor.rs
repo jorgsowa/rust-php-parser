@@ -397,6 +397,7 @@ pub fn walk_expr<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
         | ExprKind::String(_)
         | ExprKind::Bool(_)
         | ExprKind::Null
+        | ExprKind::Omit
         | ExprKind::Variable(_)
         | ExprKind::Identifier(_)
         | ExprKind::MagicConst(_)

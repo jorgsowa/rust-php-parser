@@ -38,7 +38,8 @@ expression: json
                   "start": 12,
                   "end": 17
                 }
-              }
+              },
+              "by_ref": true
             }
           },
           "span": {

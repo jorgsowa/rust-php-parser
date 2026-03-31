@@ -15,7 +15,7 @@ expression: to_json(&result.program)
                     {
                       "key": null,
                       "value": {
-                        "kind": "Null",
+                        "kind": "Omit",
                         "span": {
                           "start": 7,
                           "end": 8
@@ -30,7 +30,7 @@ expression: to_json(&result.program)
                     {
                       "key": null,
                       "value": {
-                        "kind": "Null",
+                        "kind": "Omit",
                         "span": {
                           "start": 9,
                           "end": 10

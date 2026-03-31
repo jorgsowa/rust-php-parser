@@ -4465,3 +4465,142 @@ fn test_explicit_octal_valid_on_81() {
     );
     insta::assert_snapshot!(to_json(&result.program));
 }
+
+// =============================================================================
+// Bug fixes: invalid AST was previously generated
+// =============================================================================
+
+#[test]
+fn test_assign_by_ref_has_by_ref_true() {
+    // Bug fix: `$a =& $b` was previously indistinguishable from `$a = $b` in the AST.
+    let result = parse_php("<?php $a =& $b;");
+    assert_no_errors(&result);
+    let php_ast::StmtKind::Expression(expr) = &result.program.stmts[0].kind else {
+        panic!("expected expression stmt")
+    };
+    let php_ast::ExprKind::Assign(assign) = &expr.kind else {
+        panic!("expected assign expr")
+    };
+    assert!(assign.by_ref, "=& must set by_ref=true on AssignExpr");
+    assert_eq!(assign.op, php_ast::AssignOp::Assign);
+}
+
+#[test]
+fn test_regular_assign_has_by_ref_false() {
+    let result = parse_php("<?php $a = $b;");
+    assert_no_errors(&result);
+    let php_ast::StmtKind::Expression(expr) = &result.program.stmts[0].kind else {
+        panic!("expected expression stmt")
+    };
+    let php_ast::ExprKind::Assign(assign) = &expr.kind else {
+        panic!("expected assign expr")
+    };
+    assert!(!assign.by_ref, "= must set by_ref=false on AssignExpr");
+}
+
+#[test]
+fn test_assign_by_ref_distinct_from_regular_assign_in_ast() {
+    // `$a =& $b` and `$a = $b` must produce distinct AST nodes.
+    let ref_result = parse_php("<?php $a =& $b;");
+    let val_result = parse_php("<?php $a = $b;");
+    assert_no_errors(&ref_result);
+    assert_no_errors(&val_result);
+    let ref_json = to_json(&ref_result.program);
+    let val_json = to_json(&val_result.program);
+    assert_ne!(ref_json, val_json, "`$a =& $b` and `$a = $b` must have distinct AST");
+    assert!(ref_json.contains("\"by_ref\": true"));
+    assert!(!val_json.contains("\"by_ref\""));
+}
+
+#[test]
+fn test_array_element_by_ref_has_by_ref_true() {
+    // Bug fix: `[&$a]` element was previously indistinguishable from `[$a]`.
+    let result = parse_php("<?php [&$a, $b] = $arr;");
+    assert_no_errors(&result);
+    let php_ast::StmtKind::Expression(expr) = &result.program.stmts[0].kind else {
+        panic!("expected expression stmt")
+    };
+    let php_ast::ExprKind::Assign(assign) = &expr.kind else {
+        panic!("expected assign")
+    };
+    let php_ast::ExprKind::Array(elems) = &assign.target.kind else {
+        panic!("expected array destructuring target")
+    };
+    assert!(elems[0].by_ref, "first element &$a must have by_ref=true");
+    assert!(!elems[1].by_ref, "second element $b must have by_ref=false");
+}
+
+#[test]
+fn test_list_element_by_ref_has_by_ref_true() {
+    // Bug fix: `list(&$a, $b)` — the &$a element must record by_ref=true.
+    let result = parse_php("<?php list(&$a, $b) = $arr;");
+    assert_no_errors(&result);
+    let php_ast::StmtKind::Expression(expr) = &result.program.stmts[0].kind else {
+        panic!("expected expression stmt")
+    };
+    let php_ast::ExprKind::Assign(assign) = &expr.kind else {
+        panic!("expected assign")
+    };
+    let php_ast::ExprKind::Array(elems) = &assign.target.kind else {
+        panic!("expected list destructuring target")
+    };
+    assert!(elems[0].by_ref, "first element &$a must have by_ref=true");
+    assert!(!elems[1].by_ref, "second element $b must have by_ref=false");
+}
+
+#[test]
+fn test_empty_destructuring_slot_is_omit_not_null() {
+    // Bug fix: `[$a, , $c]` empty slot was previously `ExprKind::Null`,
+    // making it indistinguishable from `[$a, null, $c]`.
+    let result = parse_php("<?php [$a, , $c] = $arr;");
+    assert_no_errors(&result);
+    let php_ast::StmtKind::Expression(expr) = &result.program.stmts[0].kind else {
+        panic!("expected expression stmt")
+    };
+    let php_ast::ExprKind::Assign(assign) = &expr.kind else {
+        panic!("expected assign")
+    };
+    let php_ast::ExprKind::Array(elems) = &assign.target.kind else {
+        panic!("expected array destructuring target")
+    };
+    assert!(
+        matches!(elems[1].value.kind, php_ast::ExprKind::Omit),
+        "empty slot must be ExprKind::Omit, got {:?}",
+        elems[1].value.kind
+    );
+}
+
+#[test]
+fn test_list_empty_slot_is_omit_not_null() {
+    // Bug fix: `list($a, , $c)` empty slot was previously `ExprKind::Null`.
+    let result = parse_php("<?php list($a, , $c) = $arr;");
+    assert_no_errors(&result);
+    let php_ast::StmtKind::Expression(expr) = &result.program.stmts[0].kind else {
+        panic!("expected expression stmt")
+    };
+    let php_ast::ExprKind::Assign(assign) = &expr.kind else {
+        panic!("expected assign")
+    };
+    let php_ast::ExprKind::Array(elems) = &assign.target.kind else {
+        panic!("expected list destructuring target")
+    };
+    assert!(
+        matches!(elems[1].value.kind, php_ast::ExprKind::Omit),
+        "empty slot must be ExprKind::Omit, got {:?}",
+        elems[1].value.kind
+    );
+}
+
+#[test]
+fn test_null_literal_distinct_from_omit_in_array_destructuring() {
+    // `[$a, null, $c]` and `[$a, , $c]` must produce distinct AST nodes.
+    let omit_result = parse_php("<?php [$a, , $c] = $arr;");
+    let null_result = parse_php("<?php [$a, null, $c] = $arr;");
+    assert_no_errors(&omit_result);
+    assert_no_errors(&null_result);
+    let omit_json = to_json(&omit_result.program);
+    let null_json = to_json(&null_result.program);
+    assert_ne!(omit_json, null_json, "`[$a, , $c]` and `[$a, null, $c]` must have distinct AST");
+    assert!(omit_json.contains("\"Omit\""), "empty slot must serialize as \"Omit\"");
+    assert!(!omit_json.contains("\"Null\""), "empty slot must not serialize as \"Null\"");
+}
