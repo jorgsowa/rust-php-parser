@@ -1,0 +1,5 @@
+---
+source: crates/php-parser/tests/malformed_php.rs
+expression: msgs
+---
+expected catch or finally clause, found end of file

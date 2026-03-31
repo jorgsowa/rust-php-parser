@@ -1,0 +1,9 @@
+---
+source: crates/php-parser/tests/malformed_php.rs
+expression: msgs
+---
+expected '(', found '{'
+expected expression
+unclosed '')'' opened at Span { start: 13, end: 14 }
+expected '{', found end of file
+expected '}', found end of file
