@@ -3,7 +3,7 @@ use std::io::Write;
 #[path = "inline_cases.rs"]
 mod inline_cases;
 
-fn assert_php_syntax_labeled(label: &str, code: &str) {
+fn php_lint(code: &str) -> std::process::Output {
     let mut child = std::process::Command::new("php")
         .arg("-l")
         .stdin(std::process::Stdio::piped())
@@ -17,7 +17,11 @@ fn assert_php_syntax_labeled(label: &str, code: &str) {
         .unwrap()
         .write_all(code.as_bytes())
         .unwrap();
-    let out = child.wait_with_output().unwrap();
+    child.wait_with_output().unwrap()
+}
+
+fn assert_php_syntax_labeled(label: &str, code: &str) {
+    let out = php_lint(code);
     if !out.status.success() {
         panic!(
             "php -l failed ({label}):\n{}",
@@ -73,9 +77,7 @@ fn fixture_files_are_valid_php() {
         .filter(|e| {
             let p = e.path();
             // error_recovery.php is intentionally invalid PHP
-            p.extension()
-                .and_then(|x| x.to_str())
-                .map_or(false, |x| x == "php")
+            p.extension().and_then(|x| x.to_str()) == Some("php")
                 && p.file_name().and_then(|n| n.to_str()) != Some("error_recovery.php")
         })
         .collect();

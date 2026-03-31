@@ -7,7 +7,7 @@ expression: json
     {
       "kind": {
         "Function": {
-          "name": "test",
+          "name": "f_null",
           "params": [],
           "body": [],
           "return_type": {
@@ -18,14 +18,14 @@ expression: json
                 ],
                 "kind": "Unqualified",
                 "span": {
-                  "start": 24,
-                  "end": 28
+                  "start": 26,
+                  "end": 30
                 }
               }
             },
             "span": {
-              "start": 24,
-              "end": 28
+              "start": 26,
+              "end": 30
             }
           },
           "by_ref": false,
@@ -34,13 +34,13 @@ expression: json
       },
       "span": {
         "start": 7,
-        "end": 31
+        "end": 33
       }
     },
     {
       "kind": {
         "Function": {
-          "name": "test",
+          "name": "f_false",
           "params": [],
           "body": [],
           "return_type": {
@@ -51,14 +51,14 @@ expression: json
                 ],
                 "kind": "Unqualified",
                 "span": {
-                  "start": 49,
-                  "end": 54
+                  "start": 54,
+                  "end": 59
                 }
               }
             },
             "span": {
-              "start": 49,
-              "end": 54
+              "start": 54,
+              "end": 59
             }
           },
           "by_ref": false,
@@ -66,14 +66,14 @@ expression: json
         }
       },
       "span": {
-        "start": 32,
-        "end": 57
+        "start": 34,
+        "end": 62
       }
     },
     {
       "kind": {
         "Function": {
-          "name": "test",
+          "name": "f_true",
           "params": [],
           "body": [],
           "return_type": {
@@ -84,14 +84,14 @@ expression: json
                 ],
                 "kind": "Unqualified",
                 "span": {
-                  "start": 75,
-                  "end": 79
+                  "start": 82,
+                  "end": 86
                 }
               }
             },
             "span": {
-              "start": 75,
-              "end": 79
+              "start": 82,
+              "end": 86
             }
           },
           "by_ref": false,
@@ -99,13 +99,13 @@ expression: json
         }
       },
       "span": {
-        "start": 58,
-        "end": 82
+        "start": 63,
+        "end": 89
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 82
+    "end": 89
   }
 }
