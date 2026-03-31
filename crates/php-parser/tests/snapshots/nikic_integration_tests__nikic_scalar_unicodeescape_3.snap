@@ -8,7 +8,7 @@ expression: json
       "kind": {
         "Expression": {
           "kind": {
-            "String": "\\u{FFFFFFFFFFFFFFFF}"
+            "InterpolatedString": []
           },
           "span": {
             "start": 6,

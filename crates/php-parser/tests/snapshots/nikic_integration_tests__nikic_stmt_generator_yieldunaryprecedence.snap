@@ -35,7 +35,8 @@ expression: json
                           "start": 34,
                           "end": 36
                         }
-                      }
+                      },
+                      "is_from": false
                     }
                   },
                   "span": {
@@ -74,7 +75,8 @@ expression: json
                           "start": 48,
                           "end": 50
                         }
-                      }
+                      },
+                      "is_from": false
                     }
                   },
                   "span": {
@@ -97,7 +99,8 @@ expression: json
                         "kind": {
                           "Yield": {
                             "key": null,
-                            "value": null
+                            "value": null,
+                            "is_from": false
                           }
                         },
                         "span": {

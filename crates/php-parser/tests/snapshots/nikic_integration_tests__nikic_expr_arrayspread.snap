@@ -272,7 +272,8 @@ expression: json
                                       "start": 125,
                                       "end": 127
                                     }
-                                  }
+                                  },
+                                  "is_from": false
                                 }
                               },
                               "span": {

@@ -37,7 +37,8 @@ expression: to_json(&result.program)
                                 "start": 45,
                                 "end": 52
                               }
-                            }
+                            },
+                            "is_from": false
                           }
                         },
                         "span": {
@@ -93,7 +94,8 @@ expression: to_json(&result.program)
                                 "start": 84,
                                 "end": 90
                               }
-                            }
+                            },
+                            "is_from": false
                           }
                         },
                         "span": {

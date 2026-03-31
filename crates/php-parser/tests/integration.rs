@@ -1094,6 +1094,15 @@ function combined() {
 }
 
 #[test]
+fn test_yield_from_is_from_flag() {
+    // `yield from` must set is_from:true; plain `yield` must set is_from:false
+    assert_parses_ok("yield from array", "<?php function g() { yield from [1]; }");
+    assert_parses_ok("yield value", "<?php function g() { yield 1; }");
+    assert_parses_ok("yield bare", "<?php function g() { yield; }");
+    assert_parses_ok("yield key value", "<?php function g() { yield $k => $v; }");
+}
+
+#[test]
 fn test_yield_bare() {
     let source = r#"<?php
 function gen() {
@@ -2282,6 +2291,22 @@ fn test_string_interpolation_patterns() {
     assert_parses_ok(
         "prop var in string",
         r#"<?php $x = "name $obj->name here"; "#,
+    );
+    // Fix: negative integer array index in simple interpolation
+    assert_parses_ok("negative int index", r#"<?php $x = "item $arr[-1] here"; "#);
+    // Fix: ${varname} deprecated interpolation syntax
+    assert_parses_ok("dollar-brace simple", r#"<?php $x = "${foo}bar"; "#);
+    assert_parses_ok("dollar-brace array", r#"<?php $x = "${arr[0]}bar"; "#);
+    assert_parses_ok(
+        "dollar-brace var-var",
+        r#"<?php $name = 'x'; $x = "${$name}"; "#,
+    );
+    // Fix: \u{XXXX} unicode escape sequences (PHP 7.0+)
+    assert_parses_ok("unicode escape null", r#"<?php $x = "\u{0}"; "#);
+    assert_parses_ok("unicode escape emoji", r#"<?php $x = "\u{1F602}"; "#);
+    assert_parses_ok(
+        "unicode escape in heredoc",
+        "<?php $x = <<<EOT\n\\u{41}\nEOT;\n",
     );
 }
 

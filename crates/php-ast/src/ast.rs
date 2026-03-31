@@ -1205,6 +1205,8 @@ pub struct MatchArm<'arena, 'src> {
 pub struct YieldExpr<'arena, 'src> {
     pub key: Option<&'arena Expr<'arena, 'src>>,
     pub value: Option<&'arena Expr<'arena, 'src>>,
+    /// `true` for `yield from expr` (generator delegation), `false` for plain `yield`
+    pub is_from: bool,
 }
 
 // --- First-class callable ---
