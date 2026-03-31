@@ -1630,6 +1630,16 @@ final readonly class Money {
 }
 
 #[test]
+fn test_readonly_final_class() {
+    // `readonly final class` — modifier order reversed from `final readonly class`
+    assert_parses_ok("readonly final class", "<?php readonly final class Foo {}");
+    assert_parses_ok(
+        "readonly final class with body",
+        "<?php readonly final class Point { public function __construct(public int $x, public int $y) {} }",
+    );
+}
+
+#[test]
 fn test_abstract_and_final_methods() {
     let source = r#"<?php
 abstract class Base {
@@ -2310,8 +2320,27 @@ fn test_heredoc_nowdoc_variants() {
         "heredoc indented close",
         "<?php $x = <<<EOT\n    hello\n    EOT;\n",
     );
-    // Known limitation: heredoc in expression context (concat, array, function args)
-    // requires PHP 7.3+ flexible heredoc syntax which is not yet fully supported
+    // PHP 7.3+ flexible heredoc: closing marker may be followed by , or )
+    assert_parses_ok(
+        "heredoc in function arg",
+        "<?php foo(<<<EOT\nhello\nEOT\n);\n",
+    );
+    assert_parses_ok(
+        "heredoc closing marker followed by )",
+        "<?php foo(<<<EOT\nhello\nEOT);\n",
+    );
+    assert_parses_ok(
+        "heredoc closing marker followed by ,",
+        "<?php $a = [<<<EOT\nhello\nEOT,\n\"world\"];\n",
+    );
+    assert_parses_ok(
+        "named arg with heredoc value",
+        "<?php foo(bar: <<<EOT\nhello\nEOT\n);\n",
+    );
+    assert_parses_ok(
+        "named arg with heredoc closing marker followed by )",
+        "<?php foo(bar: <<<EOT\nhello\nEOT);\n",
+    );
 }
 
 // =============================================================================
@@ -4378,13 +4407,28 @@ fn test_param_is_final_preserved_in_ast() {
         "<?php class Foo { public function __construct(public final string $bar) {} }",
         php_rs_parser::PhpVersion::Php85,
     );
-    assert!(result.errors.is_empty(), "unexpected errors: {:?}", result.errors);
+    assert!(
+        result.errors.is_empty(),
+        "unexpected errors: {:?}",
+        result.errors
+    );
     let class = &result.program.stmts[0];
-    let php_ast::StmtKind::Class(class_decl) = &class.kind else { panic!("expected class") };
-    let member = class_decl.members.iter().find(|m| matches!(m.kind, php_ast::ClassMemberKind::Method(_))).unwrap();
-    let php_ast::ClassMemberKind::Method(method_decl) = &member.kind else { unreachable!() };
+    let php_ast::StmtKind::Class(class_decl) = &class.kind else {
+        panic!("expected class")
+    };
+    let member = class_decl
+        .members
+        .iter()
+        .find(|m| matches!(m.kind, php_ast::ClassMemberKind::Method(_)))
+        .unwrap();
+    let php_ast::ClassMemberKind::Method(method_decl) = &member.kind else {
+        unreachable!()
+    };
     let param = &method_decl.params[0];
-    assert!(param.is_final, "is_final should be true for 'final' promoted property");
+    assert!(
+        param.is_final,
+        "is_final should be true for 'final' promoted property"
+    );
     assert!(!param.is_readonly, "is_readonly should be false");
 }
 
@@ -4394,21 +4438,38 @@ fn test_param_is_readonly_preserved_in_ast() {
         "<?php function foo(readonly string $x) {}",
         php_rs_parser::PhpVersion::Php81,
     );
-    assert!(result.errors.is_empty(), "unexpected errors: {:?}", result.errors);
+    assert!(
+        result.errors.is_empty(),
+        "unexpected errors: {:?}",
+        result.errors
+    );
     let func = &result.program.stmts[0];
-    let php_ast::StmtKind::Function(func_decl) = &func.kind else { panic!("expected function") };
+    let php_ast::StmtKind::Function(func_decl) = &func.kind else {
+        panic!("expected function")
+    };
     let param = &func_decl.params[0];
-    assert!(param.is_readonly, "is_readonly should be true for 'readonly' parameter");
+    assert!(
+        param.is_readonly,
+        "is_readonly should be true for 'readonly' parameter"
+    );
     assert!(!param.is_final, "is_final should be false");
 }
 
 #[test]
 fn test_arg_by_ref_preserved_in_ast() {
     let result = parse_php("<?php f(&$a);");
-    assert!(result.errors.is_empty(), "unexpected errors: {:?}", result.errors);
+    assert!(
+        result.errors.is_empty(),
+        "unexpected errors: {:?}",
+        result.errors
+    );
     let expr_stmt = &result.program.stmts[0];
-    let php_ast::StmtKind::Expression(expr) = &expr_stmt.kind else { panic!("expected expression stmt") };
-    let php_ast::ExprKind::FunctionCall(call) = &expr.kind else { panic!("expected function call") };
+    let php_ast::StmtKind::Expression(expr) = &expr_stmt.kind else {
+        panic!("expected expression stmt")
+    };
+    let php_ast::ExprKind::FunctionCall(call) = &expr.kind else {
+        panic!("expected function call")
+    };
     let arg = &call.args[0];
     assert!(arg.by_ref, "by_ref should be true for &$a argument");
     assert!(!arg.unpack, "unpack should be false");
