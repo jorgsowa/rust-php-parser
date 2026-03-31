@@ -1,0 +1,7 @@
+---
+source: crates/php-parser/tests/malformed_php.rs
+expression: msgs
+---
+expected '::' or 'as', found identifier
+expected identifier, found ';'
+expected '::' or 'as', found ';'
