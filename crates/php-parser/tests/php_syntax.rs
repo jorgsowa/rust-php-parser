@@ -3,7 +3,7 @@ use std::io::Write;
 #[path = "inline_cases.rs"]
 mod inline_cases;
 
-fn assert_php_syntax_labeled(label: &str, code: &str) {
+fn php_lint(code: &str) -> std::process::Output {
     let mut child = std::process::Command::new("php")
         .arg("-l")
         .stdin(std::process::Stdio::piped())
@@ -17,13 +17,29 @@ fn assert_php_syntax_labeled(label: &str, code: &str) {
         .unwrap()
         .write_all(code.as_bytes())
         .unwrap();
-    let out = child.wait_with_output().unwrap();
+    child.wait_with_output().unwrap()
+}
+
+fn assert_php_syntax_labeled(label: &str, code: &str) {
+    let out = php_lint(code);
     if !out.status.success() {
         panic!(
             "php -l failed ({label}):\n{}",
             String::from_utf8_lossy(&out.stderr)
         );
     }
+}
+
+/// Asserts that `php -l` rejects `code`.  Used for fixture files that contain
+/// intentionally invalid PHP (semantic or syntactic), so that if a file ever
+/// stops being invalid the test fails loudly instead of silently passing.
+fn assert_php_syntax_invalid(label: &str, code: &str) {
+    let out = php_lint(code);
+    assert!(
+        !out.status.success(),
+        "Expected php -l to reject {label} but it passed — \
+         remove it from SHOULD_FAIL if it is now valid PHP"
+    );
 }
 
 fn assert_php_syntax(code: &str) {
@@ -114,22 +130,26 @@ fn collect_php_files(
     }
 }
 
-/// Validates every nikic fixture file that represents valid PHP through `php -l`.
+/// Runs `php -l` on every nikic fixture file, asserting each is either valid
+/// or invalid according to its classification.
 ///
 /// The nikic corpus is a parser test suite: many files intentionally contain
 /// PHP that is syntactically or semantically invalid (to test error recovery,
 /// deprecated constructs, removed syntax, or semantic rules PHP enforces at
-/// compile time). Those files are listed in `INVALID` below.
+/// compile time). Those are listed in `SHOULD_FAIL` and asserted to fail
+/// `php -l`, so if a file ever stops being invalid the test fails loudly.
 ///
 /// Files that use features introduced after PHP 8.2 (the minimum CI version)
-/// are version-gated via the `PHP_83` / `PHP_84` lists.
+/// are version-gated via the `PHP_83` / `PHP_84` / `PHP_85` lists.
 #[cfg_attr(not(php_available), ignore)]
 #[test]
 fn nikic_fixture_files_are_valid_php() {
-    // Files that fail `php -l`: either tagged `errors` in nikic_integration_tests.rs,
-    // or contain semantically invalid PHP that PHP's linter rejects (redeclared
-    // functions, break outside loop, removed syntax, etc.).
-    const INVALID: &[&str] = &[
+    // Files that must fail `php -l`.  Grouped by reason:
+    //   • Tagged `errors` in nikic_integration_tests.rs (intentional parse errors)
+    //   • Removed PHP ≤ 7.x syntax that PHP 8 rejects
+    //   • Semantic violations PHP enforces at lint time (modifier conflicts,
+    //     break outside loop, redeclared language constructs, etc.)
+    const SHOULD_FAIL: &[&str] = &[
         // errorHandling — all are error/recovery tests
         "errorHandling/eofError_1.php",
         "errorHandling/eofError_2.php",
@@ -168,9 +188,9 @@ fn nikic_fixture_files_are_valid_php() {
         "expr/assignNewByRef_1.php", // =& new removed in PHP 7.4
         "expr/assignNewByRef_2.php", // =& new removed in PHP 7.4
         "expr/cast.php",
-        "expr/exprInIsset.php", // isset() on expression result is invalid
-        "expr/exprInList.php",  // list() as value context
-        "expr/fetchAndCall/args.php", // pass-by-ref in call removed in PHP 8.0
+        "expr/exprInIsset.php",         // isset() on expression result
+        "expr/exprInList.php",          // list() as value context
+        "expr/fetchAndCall/args.php",   // pass-by-ref in call removed in PHP 8.0
         "expr/firstClassCallables.php", // new Foo(...) is not a valid callable
         "expr/newWithoutClass.php",
         "expr/ternaryAndCoalesce.php", // unparenthesized nested ternary removed PHP 8.0
@@ -239,17 +259,13 @@ fn nikic_fixture_files_are_valid_php() {
         "stmt/controlFlow.php", // break/continue outside loop
         "stmt/haltCompilerInvalidSyntax.php",
         "stmt/haltCompilerOutermostScope.php",
-        "stmt/newInInitializer.php", // new in some contexts not always valid
+        "stmt/newInInitializer.php",
         "stmt/tryWithoutCatch.php",
         "stmt/voidCast.php", // (void) cast removed in PHP 8.0
-        // stmt/function — redeclared functions / removed features
-        "stmt/function/byRef.php",
-        "stmt/function/clone_function.php",
-        "stmt/function/exit_die_function.php",
-        "stmt/function/nullFalseTrueTypes_1.php",
-        "stmt/function/nullFalseTrueTypes_2.php",
-        "stmt/function/variadic.php",
-        "stmt/function/variadicDefaultValue.php",
+        // stmt/function — language-construct redeclarations / removed features
+        "stmt/function/clone_function.php", // cannot redeclare clone()
+        "stmt/function/exit_die_function.php", // cannot redeclare exit()/die()
+        "stmt/function/variadicDefaultValue.php", // default value for variadic removed PHP 8.0
         // stmt/namespace — semantic import errors / invalid structure
         "stmt/namespace/alias.php",
         "stmt/namespace/groupUse.php",
@@ -267,24 +283,25 @@ fn nikic_fixture_files_are_valid_php() {
         "stmt/namespace/outsideStmtInvalid_3.php",
     ];
 
-    // Files using PHP 8.3+ features — skip when installed PHP is older.
+    // Files using PHP 8.3+ features — skip on older installs.
     const PHP_83: &[&str] = &[
         "expr/dynamicClassConst.php",
         "stmt/class/typedConstants.php",
     ];
 
-    // Files using PHP 8.4+ features — skip when installed PHP is older.
+    // Files using PHP 8.4+ features — skip on older installs.
     const PHP_84: &[&str] = &[
         "expr/exit.php", // exit(status: named-arg) and exit(...) require PHP 8.4
         "expr/newDeref.php",
     ];
 
-    // Files using PHP 8.5+ features — skip when installed PHP is older.
+    // Files using PHP 8.5+ features — skip on older installs.
     const PHP_85: &[&str] = &[
-        "expr/pipe.php", // |> pipe operator
+        "expr/pipe.php",                     // |> pipe operator
+        "stmt/class/property_promotion.php", // final constructor param + property hooks
     ];
 
-    let invalid: std::collections::HashSet<&str> = INVALID.iter().copied().collect();
+    let should_fail: std::collections::HashSet<&str> = SHOULD_FAIL.iter().copied().collect();
 
     let nikic_dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/nikic");
     let mut files = Vec::new();
@@ -292,20 +309,18 @@ fn nikic_fixture_files_are_valid_php() {
     files.sort_by(|a, b| a.0.cmp(&b.0));
 
     for (rel, path) in &files {
-        if invalid.contains(rel.as_str()) {
-            continue;
-        }
-        if PHP_83.contains(&rel.as_str()) && !cfg!(php_min_83) {
-            continue;
-        }
-        if PHP_84.contains(&rel.as_str()) && !cfg!(php_min_84) {
-            continue;
-        }
-        if PHP_85.contains(&rel.as_str()) && !cfg!(php_min_85) {
-            continue;
-        }
         let src = std::fs::read_to_string(path).unwrap();
-        assert_php_syntax_labeled(rel, &src);
+        if should_fail.contains(rel.as_str()) {
+            assert_php_syntax_invalid(rel, &src);
+        } else if PHP_83.contains(&rel.as_str()) && !cfg!(php_min_83) {
+            // skip: requires PHP 8.3+
+        } else if PHP_84.contains(&rel.as_str()) && !cfg!(php_min_84) {
+            // skip: requires PHP 8.4+
+        } else if PHP_85.contains(&rel.as_str()) && !cfg!(php_min_85) {
+            // skip: requires PHP 8.5+
+        } else {
+            assert_php_syntax_labeled(rel, &src);
+        }
     }
 }
 

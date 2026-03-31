@@ -40,7 +40,7 @@ expression: json
     {
       "kind": {
         "Function": {
-          "name": "a",
+          "name": "b",
           "params": [
             {
               "name": "b",

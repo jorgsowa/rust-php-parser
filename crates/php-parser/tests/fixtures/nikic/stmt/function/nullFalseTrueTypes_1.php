@@ -1,5 +1,5 @@
 <?php
 
-function test(): null {}
-function test(): false {}
-function test(): true {}
+function f_null(): null {}
+function f_false(): false {}
+function f_true(): true {}
