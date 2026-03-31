@@ -2926,6 +2926,27 @@ fn test_builtin_constructs() {
 }
 
 #[test]
+fn test_string_interp_edge_cases() {
+    for case in category("string_interp_edge") {
+        assert_parses_ok(case.label, case.source);
+    }
+}
+
+#[test]
+fn test_trait_use_adaptations() {
+    for case in category("trait_use") {
+        assert_parses_ok(case.label, case.source);
+    }
+}
+
+#[test]
+fn test_numeric_literals_variants() {
+    for case in category("numeric_literals") {
+        assert_parses_ok(case.label, case.source);
+    }
+}
+
+#[test]
 fn test_slash_comment_terminated_by_close_tag() {
     // `// comment ?>` must produce a CloseTag so the HTML is InlineHtml, not garbage.
     let result = parse_php("<?php // comment ?>\n<div>html</div>\n<?php $x = 1;");
@@ -4166,4 +4187,269 @@ fn test_arg_by_ref_preserved_in_ast() {
     let arg = &call.args[0];
     assert!(arg.by_ref, "by_ref should be true for &$a argument");
     assert!(!arg.unpack, "unpack should be false");
+}
+
+// =============================================================================
+// Shell Exec: Complex Interpolation
+// =============================================================================
+
+#[test]
+fn test_shell_exec_complex_interpolation() {
+    let source = r#"<?php
+$a = `ls {$dirs['home']}`;
+$b = `{$obj->getCommand()} --flag=$value`;
+$c = `echo $arr[0]`;
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_shell_exec_empty() {
+    let result = parse_php("<?php $x = ``;");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// Heredoc/Nowdoc: Edge Cases
+// =============================================================================
+
+#[test]
+fn test_indented_heredoc_with_interpolation() {
+    let source = "<?php\n$x = <<<END\n    Hello {$obj->name}!\n    $arr[0] items\n    END;\n";
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_heredoc_in_array_value() {
+    let source = "<?php\n$arr = [\n    'key' => <<<EOT\n    value\n    EOT,\n];\n";
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_nowdoc_in_match_arm() {
+    let source = "<?php\n$r = match(true) {\n    default => <<<'NOW'\n    literal\n    NOW,\n};\n";
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_heredoc_as_default_param() {
+    let source = "<?php\nfunction f($s = <<<'EOT'\nhello\nEOT\n) {}\n";
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// Goto: Multiple Labels and Backward Jumps
+// =============================================================================
+
+#[test]
+fn test_goto_backward_jump() {
+    let source = r#"<?php
+start:
+if ($count++ < 3) {
+    goto start;
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_goto_multiple_labels() {
+    let source = r#"<?php
+if ($a) goto labelA;
+if ($b) goto labelB;
+labelA:
+echo 'A';
+goto end;
+labelB:
+echo 'B';
+end:
+echo 'done';
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_goto_inside_switch() {
+    let source = r#"<?php
+switch ($x) {
+    case 1:
+        goto done;
+    case 2:
+        echo 'two';
+}
+done:
+echo 'done';
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// Variable Variables: Deep Nesting
+// =============================================================================
+
+#[test]
+fn test_variable_variable_as_dynamic_method() {
+    // curly-brace form is needed for var-var in method position
+    let result = parse_php("<?php $obj->{$$method}();");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// Constructor Promoted Parameters with Hooks
+// =============================================================================
+
+#[test]
+fn test_constructor_promoted_param_with_hooks() {
+    let source = r#"<?php
+class Foo {
+    public function __construct(
+        public string $name {
+            get => strtoupper($this->name);
+            set(string $value) { $this->name = trim($value); }
+        },
+    ) {}
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_interface_property_hooks() {
+    let source = r#"<?php
+interface HasName {
+    public string $name { get; }
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// __halt_compiler(): Data Capture Edge Cases
+// =============================================================================
+
+#[test]
+fn test_halt_compiler_empty_remainder() {
+    let result = parse_php("<?php __halt_compiler();");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_halt_compiler_with_statements_before() {
+    let result = parse_php("<?php echo 'before'; __halt_compiler(); raw data here");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// Attributes: Remaining Targets
+// =============================================================================
+
+#[test]
+fn test_attribute_on_class_constant() {
+    let result = parse_php("<?php class A { #[Deprecated] const FOO = 1; }");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_attribute_on_interface_method() {
+    let result = parse_php("<?php interface I { #[Pure] public function foo(): void; }");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_attribute_on_trait_property() {
+    let result = parse_php("<?php trait T { #[Inject] public string $dep; }");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_attribute_on_enum_method() {
+    let result = parse_php("<?php enum E { case A; #[Override] public function foo(): void {} }");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_attribute_with_new_expression_arg() {
+    let result = parse_php("<?php #[Attr(new Config(debug: false))] function f() {}");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// list() By-Reference Destructuring
+// =============================================================================
+
+#[test]
+fn test_list_by_reference_destructuring() {
+    let source = r#"<?php
+[&$a, &$b] = $arr;
+list(&$x, &$y) = $pair;
+[&$first, $second] = $mixed;
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// __PROPERTY__ in Hook Body
+// =============================================================================
+
+#[test]
+fn test_magic_property_in_hook_body() {
+    let source = r#"<?php
+class Foo {
+    public string $name {
+        get {
+            echo __PROPERTY__;
+            return $this->name;
+        }
+    }
+}
+"#;
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+// =============================================================================
+// Version Gate: Explicit Octal (PHP 8.1+)
+// =============================================================================
+
+#[test]
+fn test_explicit_octal_valid_on_81() {
+    let result = parse_php_versioned("<?php $x = 0o777;", php_rs_parser::PhpVersion::Php81);
+    assert!(
+        result.errors.is_empty(),
+        "explicit octal should be valid on PHP 8.1: {:?}",
+        result.errors
+    );
+    insta::assert_snapshot!(to_json(&result.program));
 }

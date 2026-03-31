@@ -35,6 +35,7 @@ fn assert_php_syntax(code: &str) {
 #[cfg_attr(not(php_available), ignore)]
 #[test]
 fn inline_cases_are_valid_php() {
+    const MIN_81: bool = cfg!(php_min_81);
     const MIN_82: bool = cfg!(php_min_82);
     const MIN_83: bool = cfg!(php_min_83);
     const MIN_84: bool = cfg!(php_min_84);
@@ -43,6 +44,7 @@ fn inline_cases_are_valid_php() {
     for case in inline_cases::CASES {
         let min_ok = match case.min_php {
             inline_cases::MinPhp::Any => true,
+            inline_cases::MinPhp::Php81 => MIN_81,
             inline_cases::MinPhp::Php82 => MIN_82,
             inline_cases::MinPhp::Php83 => MIN_83,
             inline_cases::MinPhp::Php84 => MIN_84,
