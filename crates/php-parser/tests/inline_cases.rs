@@ -11,7 +11,6 @@
 ///   • requires PHP X.Y+               → `case!(..., min: MinPhp::PhpXY)`
 ///   • valid only up to PHP X.Y        → `case!(..., max: MaxPhp::PhpXY)`
 ///   • both bounds                     → `case!(..., min: MinPhp::PhpXY, max: MaxPhp::PhpAB)`
-
 #[allow(dead_code)]
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum MinPhp {
