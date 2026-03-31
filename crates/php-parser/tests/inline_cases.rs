@@ -14,11 +14,22 @@
 
 #[allow(dead_code)]
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-pub enum MinPhp { Any, Php82, Php83, Php84, Php85 }
+pub enum MinPhp {
+    Any,
+    Php82,
+    Php83,
+    Php84,
+    Php85,
+}
 
 #[allow(dead_code)]
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-pub enum MaxPhp { Any, Php84, Php83, Php82 }
+pub enum MaxPhp {
+    Any,
+    Php84,
+    Php83,
+    Php82,
+}
 
 #[allow(dead_code)]
 pub struct Case {
@@ -31,16 +42,40 @@ pub struct Case {
 
 macro_rules! case {
     ($cat:expr, $label:expr, $src:expr) => {
-        Case { category: $cat, label: $label, source: $src, min_php: MinPhp::Any, max_php: MaxPhp::Any }
+        Case {
+            category: $cat,
+            label: $label,
+            source: $src,
+            min_php: MinPhp::Any,
+            max_php: MaxPhp::Any,
+        }
     };
     ($cat:expr, $label:expr, $src:expr, min: $min:expr) => {
-        Case { category: $cat, label: $label, source: $src, min_php: $min, max_php: MaxPhp::Any }
+        Case {
+            category: $cat,
+            label: $label,
+            source: $src,
+            min_php: $min,
+            max_php: MaxPhp::Any,
+        }
     };
     ($cat:expr, $label:expr, $src:expr, max: $max:expr) => {
-        Case { category: $cat, label: $label, source: $src, min_php: MinPhp::Any, max_php: $max }
+        Case {
+            category: $cat,
+            label: $label,
+            source: $src,
+            min_php: MinPhp::Any,
+            max_php: $max,
+        }
     };
     ($cat:expr, $label:expr, $src:expr, min: $min:expr, max: $max:expr) => {
-        Case { category: $cat, label: $label, source: $src, min_php: $min, max_php: $max }
+        Case {
+            category: $cat,
+            label: $label,
+            source: $src,
+            min_php: $min,
+            max_php: $max,
+        }
     };
 }
 

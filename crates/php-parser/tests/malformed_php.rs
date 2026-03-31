@@ -260,9 +260,7 @@ fn match_missing_comma() {
 #[test]
 fn switch_multiple_defaults() {
     // Duplicate default is a semantic error, not a parse error
-    assert_parses_clean!(
-        "<?php switch ($x) { default: break; case 1: break; default: break; }"
-    );
+    assert_parses_clean!("<?php switch ($x) { default: break; case 1: break; default: break; }");
 }
 
 #[test]

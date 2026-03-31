@@ -42,14 +42,14 @@ fn inline_cases_are_valid_php() {
 
     for case in inline_cases::CASES {
         let min_ok = match case.min_php {
-            inline_cases::MinPhp::Any   => true,
+            inline_cases::MinPhp::Any => true,
             inline_cases::MinPhp::Php82 => MIN_82,
             inline_cases::MinPhp::Php83 => MIN_83,
             inline_cases::MinPhp::Php84 => MIN_84,
             inline_cases::MinPhp::Php85 => MIN_85,
         };
         let max_ok = match case.max_php {
-            inline_cases::MaxPhp::Any   => true,
+            inline_cases::MaxPhp::Any => true,
             inline_cases::MaxPhp::Php84 => !MIN_85,
             inline_cases::MaxPhp::Php83 => !MIN_84,
             inline_cases::MaxPhp::Php82 => !MIN_83,
@@ -71,7 +71,9 @@ fn fixture_files_are_valid_php() {
         .filter(|e| {
             let p = e.path();
             // error_recovery.php is intentionally invalid PHP
-            p.extension().and_then(|x| x.to_str()).map_or(false, |x| x == "php")
+            p.extension()
+                .and_then(|x| x.to_str())
+                .map_or(false, |x| x == "php")
                 && p.file_name().and_then(|n| n.to_str()) != Some("error_recovery.php")
         })
         .collect();

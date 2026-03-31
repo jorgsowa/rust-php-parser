@@ -47,7 +47,10 @@ fixture_test!(test_arrays, "arrays.php");
 fixture_test!(test_inline_html, "inline_html.php");
 fixture_test!(test_assignment_ops, "assignment_ops.php");
 fixture_test!(test_anonymous_classes, "anonymous_classes.php");
-fixture_test!(test_string_interpolation_fixture, "string_interpolation.php");
+fixture_test!(
+    test_string_interpolation_fixture,
+    "string_interpolation.php"
+);
 fixture_test!(test_attributes_fixture, "attributes.php");
 
 // =============================================================================
@@ -1088,7 +1091,9 @@ function combined() {
 mod inline_cases;
 
 fn category(cat: &'static str) -> impl Iterator<Item = &'static inline_cases::Case> {
-    inline_cases::CASES.iter().filter(move |c| c.category == cat)
+    inline_cases::CASES
+        .iter()
+        .filter(move |c| c.category == cat)
 }
 
 #[test]
@@ -1097,15 +1102,6 @@ fn test_yield_from_is_from_flag() {
     for case in category("yield_from_flag") {
         assert_parses_ok(case.label, case.source);
     }
-}
-
-#[test]
-fn test_yield_from_is_from_flag() {
-    // `yield from` must set is_from:true; plain `yield` must set is_from:false
-    assert_parses_ok("yield from array", "<?php function g() { yield from [1]; }");
-    assert_parses_ok("yield value", "<?php function g() { yield 1; }");
-    assert_parses_ok("yield bare", "<?php function g() { yield; }");
-    assert_parses_ok("yield key value", "<?php function g() { yield $k => $v; }");
 }
 
 #[test]
