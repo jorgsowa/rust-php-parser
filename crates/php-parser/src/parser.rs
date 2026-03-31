@@ -533,6 +533,18 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 types.push(self.parse_type_element());
             }
             let span = Span::new(start, types.last().unwrap().span.end);
+            let has_true = types
+                .iter()
+                .any(|t| matches!(t.kind, TypeHintKind::Keyword(BuiltinType::True, _)));
+            let has_false = types
+                .iter()
+                .any(|t| matches!(t.kind, TypeHintKind::Keyword(BuiltinType::False, _)));
+            if has_true && has_false {
+                self.error(ParseError::Forbidden {
+                    message: "Type contains both true and false, bool must be used instead".into(),
+                    span,
+                });
+            }
             return TypeHint {
                 kind: TypeHintKind::Union(types),
                 span,

@@ -4440,6 +4440,18 @@ class Foo {
 }
 
 // =============================================================================
+// Type Validation: true|false in union
+// =============================================================================
+
+#[test]
+fn test_true_false_union_is_invalid() {
+    // PHP rejects true|false: "Type contains both true and false, bool must be used instead"
+    assert_has_errors("<?php function f(): true|false {}");
+    assert_has_errors("<?php function f(): true|false|null {}");
+    assert_has_errors("<?php function f(true|false $x): void {}");
+}
+
+// =============================================================================
 // Version Gate: Explicit Octal (PHP 8.1+)
 // =============================================================================
 
