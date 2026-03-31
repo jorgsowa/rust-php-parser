@@ -1108,11 +1108,13 @@ impl<'src> Lexer<'src> {
             let line = &body[line_start..line_end];
             let trimmed_line = line.trim_start_matches([' ', '\t']);
 
-            // Check if this line is just the label (optionally followed by ; or whitespace)
+            // Check if this line is just the label (optionally followed by ; , ) or whitespace).
+            // PHP 7.3+ flexible heredoc allows the closing marker to be followed by , or )
+            // so that heredoc can appear in function argument lists and array literals.
             if trimmed_line == label
                 || trimmed_line.starts_with(&label)
                     && trimmed_line[label.len()..]
-                        .trim_start_matches(';')
+                        .trim_start_matches([';', ',', ')'])
                         .trim()
                         .is_empty()
             {

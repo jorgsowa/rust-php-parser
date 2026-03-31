@@ -197,6 +197,23 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
                     },
                     parser.alloc_vec(),
                 )
+            } else if parser.peek_kind() == Some(TokenKind::Final)
+                && parser.peek2_kind() == Some(TokenKind::Class)
+            {
+                // `readonly final class` — same as `final readonly class`
+                let span = parser.current_span();
+                parser.require_version(PhpVersion::Php82, "readonly class", span);
+                parser.advance(); // consume 'readonly'
+                parser.advance(); // consume 'final'
+                parse_class(
+                    parser,
+                    ClassModifiers {
+                        is_final: true,
+                        is_readonly: true,
+                        ..Default::default()
+                    },
+                    parser.alloc_vec(),
+                )
             } else if parser.peek_kind() == Some(TokenKind::Abstract)
                 && parser.peek2_kind() == Some(TokenKind::Class)
             {
@@ -351,6 +368,20 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     },
                     attributes,
                 )
+            } else if parser.check(TokenKind::Final) && parser.peek_kind() == Some(TokenKind::Class)
+            {
+                // `readonly final class` — same as `final readonly class`
+                parser.require_version(PhpVersion::Php82, "readonly class", readonly_span);
+                parser.advance(); // consume 'final'
+                return parse_class(
+                    parser,
+                    ClassModifiers {
+                        is_final: true,
+                        is_readonly: true,
+                        ..Default::default()
+                    },
+                    attributes,
+                );
             } else if parser.check(TokenKind::Abstract)
                 && parser.peek_kind() == Some(TokenKind::Class)
             {

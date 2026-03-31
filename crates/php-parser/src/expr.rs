@@ -2512,7 +2512,7 @@ fn parse_heredoc_content(text: &str) -> (&str, usize, usize, String) {
         if trimmed == label
             || (trimmed.starts_with(label)
                 && trimmed[label.len()..]
-                    .trim_start_matches(';')
+                    .trim_start_matches([';', ',', ')'])
                     .trim()
                     .is_empty())
         {
