@@ -1938,6 +1938,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
             kind: ExprKind::Yield(YieldExpr {
                 key: None,
                 value: Some(parser.alloc(value)),
+                is_from: true,
             }),
             span,
         };
@@ -1960,6 +1961,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
             kind: ExprKind::Yield(YieldExpr {
                 key: None,
                 value: None,
+                is_from: false,
             }),
             span,
         };
@@ -1975,6 +1977,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
             kind: ExprKind::Yield(YieldExpr {
                 key: Some(parser.alloc(first)),
                 value: Some(parser.alloc(value)),
+                is_from: false,
             }),
             span,
         };
@@ -1986,6 +1989,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
         kind: ExprKind::Yield(YieldExpr {
             key: None,
             value: Some(parser.alloc(first)),
+            is_from: false,
         }),
         span,
     }

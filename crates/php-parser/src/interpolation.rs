@@ -86,6 +86,32 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                                 buf.push('x');
                             }
                         }
+                        b'u' => {
+                            // Unicode escape: \u{HHHH} — PHP 7.0+
+                            i += 2;
+                            if i < len && bytes[i] == b'{' {
+                                i += 1; // skip {
+                                let start = i;
+                                while i < len && bytes[i].is_ascii_hexdigit() {
+                                    i += 1;
+                                }
+                                if i < len && bytes[i] == b'}' {
+                                    let hex = &inner[start..i];
+                                    if let Ok(codepoint) = u32::from_str_radix(hex, 16) {
+                                        if let Some(c) = char::from_u32(codepoint) {
+                                            buf.push(c);
+                                        }
+                                    }
+                                    i += 1; // skip }
+                                } else {
+                                    // Malformed — keep as-is
+                                    buf.push_str(&inner[start - 2..i]);
+                                }
+                            } else {
+                                buf.push('\\');
+                                buf.push('u');
+                            }
+                        }
                         b'0'..=b'7' => {
                             // Octal escape: \NNN (up to 3 digits)
                             let start = i + 1;
@@ -110,8 +136,96 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                 }
             }
             b'$' => {
+                // Deprecated ${varname} syntax (PHP < 8.2): ${ ... }
+                if i + 1 < len && bytes[i + 1] == b'{' {
+                    if let Some(buf) = owned.take() {
+                        if !buf.is_empty() {
+                            parts.push(StringPart::Literal(Cow::Owned(buf)));
+                        }
+                    } else if i > literal_start {
+                        parts.push(StringPart::Literal(Cow::Borrowed(&inner[literal_start..i])));
+                    }
+                    i += 2; // skip ${
+                    let var_offset = base_offset + (i - 2) as u32;
+                    if i < len && bytes[i] == b'$' {
+                        // ${$foo} — variable variable; use sub-parser from the inner $
+                        let expr_start = i;
+                        let mut depth = 1usize;
+                        while i < len && depth > 0 {
+                            match bytes[i] {
+                                b'{' => depth += 1,
+                                b'}' => depth -= 1,
+                                _ => {}
+                            }
+                            if depth > 0 {
+                                i += 1;
+                            }
+                        }
+                        let inner_expr = parse_complex_interpolation(
+                            arena,
+                            source,
+                            base_offset + expr_start as u32,
+                            base_offset + i as u32,
+                        );
+                        if i < len {
+                            i += 1; // skip }
+                        }
+                        parts.push(StringPart::Expr(Expr {
+                            kind: ExprKind::VariableVariable(arena.alloc(inner_expr)),
+                            span: Span::new(var_offset, base_offset + i as u32),
+                        }));
+                    } else {
+                        // ${varname} or ${varname[index]} — identifier as variable name
+                        let name_start = i;
+                        while i < len && is_var_char(bytes[i]) {
+                            i += 1;
+                        }
+                        let var_name: Cow<'src, str> = Cow::Borrowed(
+                            &source[base_offset as usize + name_start..base_offset as usize + i],
+                        );
+                        let mut expr = Expr {
+                            kind: ExprKind::Variable(var_name),
+                            span: Span::new(
+                                base_offset + name_start as u32,
+                                base_offset + i as u32,
+                            ),
+                        };
+                        // Optional [index]
+                        if i < len && bytes[i] == b'[' {
+                            i += 1;
+                            let idx_start = i;
+                            while i < len && bytes[i] != b']' && bytes[i] != b'}' {
+                                i += 1;
+                            }
+                            if i < len && bytes[i] == b']' {
+                                let idx_str = &inner[idx_start..i];
+                                i += 1;
+                                let idx_offset = base_offset + idx_start as u32;
+                                let idx_end = base_offset + (i - 1) as u32;
+                                let index_expr =
+                                    parse_simple_index(arena, source, idx_str, idx_offset, idx_end);
+                                let span = Span::new(var_offset, base_offset + i as u32);
+                                expr = Expr {
+                                    kind: ExprKind::ArrayAccess(ArrayAccessExpr {
+                                        array: arena.alloc(expr),
+                                        index: Some(arena.alloc(index_expr)),
+                                    }),
+                                    span,
+                                };
+                            }
+                        }
+                        // Skip to closing }
+                        while i < len && bytes[i] != b'}' {
+                            i += 1;
+                        }
+                        if i < len {
+                            i += 1; // skip }
+                        }
+                        parts.push(StringPart::Expr(expr));
+                    }
+                    literal_start = i;
                 // Check for {$ (complex syntax handled below) - this is simple $var
-                if i + 1 < len && is_var_start(bytes[i + 1]) {
+                } else if i + 1 < len && is_var_start(bytes[i + 1]) {
                     // Flush literal run.
                     if let Some(buf) = owned.take() {
                         if !buf.is_empty() {
@@ -183,27 +297,8 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                             let idx_offset = base_offset + idx_start as u32;
                             let idx_end = base_offset + (i - 1) as u32;
 
-                            // Parse index: integer or bare string key
-                            let index_expr = if let Ok(num) = idx_str.parse::<i64>() {
-                                Expr {
-                                    kind: ExprKind::Int(num),
-                                    span: Span::new(idx_offset, idx_end),
-                                }
-                            } else if idx_str.starts_with('$') && idx_str.len() > 1 {
-                                Expr {
-                                    kind: ExprKind::Variable(Cow::Owned(idx_str[1..].to_string())),
-                                    span: Span::new(idx_offset, idx_end),
-                                }
-                            } else {
-                                // Bare string key (e.g. $arr[key])
-                                Expr {
-                                    kind: ExprKind::String(Cow::Borrowed(
-                                        &source[base_offset as usize + idx_start
-                                            ..base_offset as usize + (i - 1)],
-                                    )),
-                                    span: Span::new(idx_offset, idx_end),
-                                }
-                            };
+                            let index_expr =
+                                parse_simple_index(arena, source, idx_str, idx_offset, idx_end);
 
                             let span = Span::new(var_offset, base_offset + i as u32);
                             let _ = bracket_start; // used implicitly
@@ -389,6 +484,31 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                                 literal.push('x');
                             }
                         }
+                        b'u' => {
+                            // Unicode escape: \u{HHHH} — PHP 7.0+
+                            i += 2;
+                            if i < len && bytes[i] == b'{' {
+                                i += 1; // skip {
+                                let start = i;
+                                while i < len && bytes[i].is_ascii_hexdigit() {
+                                    i += 1;
+                                }
+                                if i < len && bytes[i] == b'}' {
+                                    let hex = &raw_body[start..i];
+                                    if let Ok(codepoint) = u32::from_str_radix(hex, 16) {
+                                        if let Some(c) = char::from_u32(codepoint) {
+                                            literal.push(c);
+                                        }
+                                    }
+                                    i += 1; // skip }
+                                } else {
+                                    literal.push_str(&raw_body[start - 2..i]);
+                                }
+                            } else {
+                                literal.push('\\');
+                                literal.push('u');
+                            }
+                        }
                         b'0'..=b'7' => {
                             let start = i + 1;
                             i += 1;
@@ -478,26 +598,8 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                             i += 1; // skip ]
                             let idx_offset = body_offset + idx_start as u32;
                             let idx_end = body_offset + (i - 1) as u32;
-                            let index_expr = if let Ok(num) = idx_str.parse::<i64>() {
-                                Expr {
-                                    kind: ExprKind::Int(num),
-                                    span: Span::new(idx_offset, idx_end),
-                                }
-                            } else if idx_str.starts_with('$') && idx_str.len() > 1 {
-                                Expr {
-                                    kind: ExprKind::Variable(Cow::Borrowed(
-                                        &raw_body[idx_start + 1..i - 1],
-                                    )),
-                                    span: Span::new(idx_offset, idx_end),
-                                }
-                            } else {
-                                Expr {
-                                    kind: ExprKind::String(Cow::Borrowed(
-                                        &raw_body[idx_start..i - 1],
-                                    )),
-                                    span: Span::new(idx_offset, idx_end),
-                                }
-                            };
+                            let index_expr =
+                                parse_simple_index(arena, source, idx_str, idx_offset, idx_end);
                             let span = Span::new(var_offset, body_offset + i as u32);
                             expr = Expr {
                                 kind: ExprKind::ArrayAccess(ArrayAccessExpr {
@@ -600,6 +702,51 @@ fn is_var_start(b: u8) -> bool {
 
 fn is_var_char(b: u8) -> bool {
     b.is_ascii_alphanumeric() || b == b'_' || b >= 0x80
+}
+
+/// Parse an array index from simple string interpolation: `$arr[expr]`.
+/// Handles integers (including negative like `-1`), `$variable` references,
+/// and bare string keys (e.g. `$arr[key]`).
+fn parse_simple_index<'arena, 'src>(
+    _arena: &'arena bumpalo::Bump,
+    source: &'src str,
+    idx_str: &str,
+    idx_offset: u32,
+    idx_end: u32,
+) -> Expr<'arena, 'src> {
+    let span = Span::new(idx_offset, idx_end);
+    // Integer index, including negative (e.g. -1)
+    if let Ok(num) = idx_str.parse::<i64>() {
+        return Expr {
+            kind: ExprKind::Int(num),
+            span,
+        };
+    }
+    // Negative integer written as `-N`
+    if let Some(digits) = idx_str.strip_prefix('-') {
+        if let Ok(num) = digits.parse::<i64>() {
+            return Expr {
+                kind: ExprKind::Int(-num),
+                span,
+            };
+        }
+    }
+    // Variable index: $var
+    if idx_str.starts_with('$') && idx_str.len() > 1 {
+        let name_start = idx_offset as usize + 1;
+        let name_end = idx_offset as usize + idx_str.len();
+        return Expr {
+            kind: ExprKind::Variable(std::borrow::Cow::Borrowed(&source[name_start..name_end])),
+            span,
+        };
+    }
+    // Bare string key (e.g. $arr[key])
+    let key_start = idx_offset as usize;
+    let key_end = idx_end as usize;
+    Expr {
+        kind: ExprKind::String(std::borrow::Cow::Borrowed(&source[key_start..key_end])),
+        span,
+    }
 }
 
 /// Parse a complex interpolation expression using a sub-parser that starts directly

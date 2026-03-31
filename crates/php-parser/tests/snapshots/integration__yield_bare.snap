@@ -16,7 +16,8 @@ expression: to_json(&result.program)
                   "kind": {
                     "Yield": {
                       "key": null,
-                      "value": null
+                      "value": null,
+                      "is_from": false
                     }
                   },
                   "span": {

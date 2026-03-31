@@ -8,7 +8,7 @@ expression: json
       "kind": {
         "Expression": {
           "kind": {
-            "String": "\\u{0}"
+            "String": "\u0000"
           },
           "span": {
             "start": 7,
@@ -27,7 +27,7 @@ expression: json
           "kind": {
             "InterpolatedString": [
               {
-                "Literal": "\\u{114}"
+                "Literal": "Ĕ"
               },
               {
                 "Expr": {
@@ -59,7 +59,7 @@ expression: json
           "kind": {
             "ShellExec": [
               {
-                "Literal": "\\u{1F602}"
+                "Literal": "😂"
               },
               {
                 "Expr": {

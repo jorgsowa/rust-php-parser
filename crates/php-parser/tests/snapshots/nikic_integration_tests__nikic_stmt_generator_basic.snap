@@ -16,7 +16,8 @@ expression: json
                   "kind": {
                     "Yield": {
                       "key": null,
-                      "value": null
+                      "value": null,
+                      "is_from": false
                     }
                   },
                   "span": {
@@ -44,7 +45,8 @@ expression: json
                           "start": 63,
                           "end": 69
                         }
-                      }
+                      },
+                      "is_from": false
                     }
                   },
                   "span": {
@@ -80,7 +82,8 @@ expression: json
                           "start": 89,
                           "end": 95
                         }
-                      }
+                      },
+                      "is_from": false
                     }
                   },
                   "span": {
@@ -113,7 +116,8 @@ expression: json
                         "kind": {
                           "Yield": {
                             "key": null,
-                            "value": null
+                            "value": null,
+                            "is_from": false
                           }
                         },
                         "span": {
@@ -163,7 +167,8 @@ expression: json
                                     "start": 155,
                                     "end": 161
                                   }
-                                }
+                                },
+                                "is_from": false
                               }
                             },
                             "span": {
@@ -227,7 +232,8 @@ expression: json
                                     "start": 191,
                                     "end": 197
                                   }
-                                }
+                                },
+                                "is_from": false
                               }
                             },
                             "span": {
@@ -269,7 +275,8 @@ expression: json
                             "start": 278,
                             "end": 282
                           }
-                        }
+                        },
+                        "is_from": false
                       }
                     },
                     "span": {
@@ -298,7 +305,8 @@ expression: json
                                 "start": 299,
                                 "end": 303
                               }
-                            }
+                            },
+                            "is_from": false
                           }
                         },
                         "span": {
@@ -342,7 +350,8 @@ expression: json
                             "start": 320,
                             "end": 324
                           }
-                        }
+                        },
+                        "is_from": false
                       }
                     },
                     "span": {
@@ -373,7 +382,8 @@ expression: json
                                 "start": 341,
                                 "end": 345
                               }
-                            }
+                            },
+                            "is_from": false
                           }
                         },
                         "span": {
@@ -419,7 +429,8 @@ expression: json
                             "start": 372,
                             "end": 376
                           }
-                        }
+                        },
+                        "is_from": false
                       }
                     },
                     "span": {
@@ -465,7 +476,8 @@ expression: json
                             "start": 402,
                             "end": 406
                           }
-                        }
+                        },
+                        "is_from": false
                       }
                     },
                     "span": {
@@ -495,7 +507,8 @@ expression: json
                             "start": 427,
                             "end": 431
                           }
-                        }
+                        },
+                        "is_from": false
                       }
                     },
                     "span": {
@@ -527,7 +540,8 @@ expression: json
                               "start": 450,
                               "end": 454
                             }
-                          }
+                          },
+                          "is_from": false
                         }
                       },
                       "span": {
@@ -576,7 +590,8 @@ expression: json
                                     "start": 504,
                                     "end": 508
                                   }
-                                }
+                                },
+                                "is_from": false
                               }
                             },
                             "span": {
@@ -643,7 +658,8 @@ expression: json
                                     "start": 532,
                                     "end": 536
                                   }
-                                }
+                                },
+                                "is_from": false
                               }
                             },
                             "span": {
@@ -701,7 +717,8 @@ expression: json
                                     "start": 557,
                                     "end": 561
                                   }
-                                }
+                                },
+                                "is_from": false
                               }
                             },
                             "span": {
@@ -744,7 +761,8 @@ expression: json
                           "start": 580,
                           "end": 584
                         }
-                      }
+                      },
+                      "is_from": true
                     }
                   },
                   "span": {
@@ -789,7 +807,8 @@ expression: json
                                       "start": 621,
                                       "end": 625
                                     }
-                                  }
+                                  },
+                                  "is_from": true
                                 }
                               },
                               "span": {
@@ -803,7 +822,8 @@ expression: json
                           "start": 601,
                           "end": 625
                         }
-                      }
+                      },
+                      "is_from": true
                     }
                   },
                   "span": {
@@ -851,7 +871,8 @@ expression: json
                           "start": 642,
                           "end": 653
                         }
-                      }
+                      },
+                      "is_from": true
                     }
                   },
                   "span": {

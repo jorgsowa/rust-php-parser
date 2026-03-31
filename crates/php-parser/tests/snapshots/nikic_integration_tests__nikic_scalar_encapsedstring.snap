@@ -548,7 +548,15 @@ expression: json
           "kind": {
             "InterpolatedString": [
               {
-                "Literal": "${A}"
+                "Expr": {
+                  "kind": {
+                    "Variable": "A"
+                  },
+                  "span": {
+                    "start": 146,
+                    "end": 147
+                  }
+                }
               }
             ]
           },
@@ -569,7 +577,34 @@ expression: json
           "kind": {
             "InterpolatedString": [
               {
-                "Literal": "${A['B']}"
+                "Expr": {
+                  "kind": {
+                    "ArrayAccess": {
+                      "array": {
+                        "kind": {
+                          "Variable": "A"
+                        },
+                        "span": {
+                          "start": 154,
+                          "end": 155
+                        }
+                      },
+                      "index": {
+                        "kind": {
+                          "String": "'B'"
+                        },
+                        "span": {
+                          "start": 156,
+                          "end": 159
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 152,
+                    "end": 160
+                  }
+                }
               }
             ]
           },
@@ -590,16 +625,21 @@ expression: json
           "kind": {
             "InterpolatedString": [
               {
-                "Literal": "$"
-              },
-              {
                 "Expr": {
                   "kind": {
-                    "Variable": "A"
+                    "VariableVariable": {
+                      "kind": {
+                        "Variable": "A"
+                      },
+                      "span": {
+                        "start": 167,
+                        "end": 169
+                      }
+                    }
                   },
                   "span": {
-                    "start": 167,
-                    "end": 169
+                    "start": 165,
+                    "end": 170
                   }
                 }
               }

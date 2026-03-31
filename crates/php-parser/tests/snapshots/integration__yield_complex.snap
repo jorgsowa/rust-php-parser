@@ -29,7 +29,8 @@ expression: to_json(&result.program)
                         "kind": {
                           "Yield": {
                             "key": null,
-                            "value": null
+                            "value": null,
+                            "is_from": false
                           }
                         },
                         "span": {
@@ -77,7 +78,8 @@ expression: to_json(&result.program)
                                 "start": 54,
                                 "end": 61
                               }
-                            }
+                            },
+                            "is_from": false
                           }
                         },
                         "span": {
@@ -133,7 +135,8 @@ expression: to_json(&result.program)
                                 "start": 87,
                                 "end": 94
                               }
-                            }
+                            },
+                            "is_from": false
                           }
                         },
                         "span": {
@@ -179,7 +182,8 @@ expression: to_json(&result.program)
                           "start": 111,
                           "end": 121
                         }
-                      }
+                      },
+                      "is_from": true
                     }
                   },
                   "span": {
@@ -225,7 +229,8 @@ expression: to_json(&result.program)
                                           "start": 139,
                                           "end": 142
                                         }
-                                      }
+                                      },
+                                      "is_from": false
                                     }
                                   },
                                   "span": {

@@ -176,7 +176,8 @@ expression: to_json(&result.program)
                           "start": 38,
                           "end": 76
                         }
-                      }
+                      },
+                      "is_from": true
                     }
                   },
                   "span": {
