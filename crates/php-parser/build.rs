@@ -1,5 +1,6 @@
 fn main() {
     println!("cargo::rustc-check-cfg=cfg(php_available)");
+    println!("cargo::rustc-check-cfg=cfg(php_min_81)");
     println!("cargo::rustc-check-cfg=cfg(php_min_82)");
     println!("cargo::rustc-check-cfg=cfg(php_min_83)");
     println!("cargo::rustc-check-cfg=cfg(php_min_84)");
@@ -19,6 +20,9 @@ fn main() {
     let Ok(maj) = maj.parse::<u32>() else { return };
     let Ok(min) = min.parse::<u32>() else { return };
     println!("cargo:rustc-cfg=php_available");
+    if (maj, min) >= (8, 1) {
+        println!("cargo:rustc-cfg=php_min_81");
+    }
     if (maj, min) >= (8, 2) {
         println!("cargo:rustc-cfg=php_min_82");
     }

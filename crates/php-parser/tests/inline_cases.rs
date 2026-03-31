@@ -16,6 +16,7 @@
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum MinPhp {
     Any,
+    Php81,
     Php82,
     Php83,
     Php84,
@@ -105,6 +106,8 @@ pub const CASES: &[Case] = &[
     case!("declare", "declare strict", "<?php declare(strict_types=1);"),
     case!("declare", "declare with block", "<?php declare(ticks=1) { foo(); bar(); }"),
     case!("declare", "declare ticks value 100", "<?php declare(ticks=100);"),
+    case!("declare", "declare alternative syntax", "<?php declare(ticks=1): echo 'tick'; enddeclare;"),
+    case!("declare", "declare nested", "<?php declare(ticks=1) { declare(ticks=2); }"),
 
     // magic_constants
     case!("magic_constants", "all magic consts", "<?php echo __LINE__, __FILE__, __DIR__, __FUNCTION__, __CLASS__, __TRAIT__, __METHOD__, __NAMESPACE__;"),
@@ -190,6 +193,11 @@ pub const CASES: &[Case] = &[
     case!("dynamic_access", "dynamic static method", "<?php $class::$method();"),
     case!("dynamic_access", "variable class new", "<?php new $className();"),
     case!("dynamic_access", "variable class static", "<?php $class::CONST_NAME;"),
+    case!("dynamic_access", "quadruple var-var", r#"<?php $$$$quad = 1;"#),
+    case!("dynamic_access", "var-var as array key", r#"<?php $arr[$$key] = 1;"#),
+    case!("dynamic_access", "obj prop as var-var expr", r#"<?php ${$obj->name} = 'x';"#),
+    case!("dynamic_access", "var-var in isset", r#"<?php isset($$name);"#),
+    case!("dynamic_access", "var-var in unset", r#"<?php unset($$name);"#),
 
     // destructuring
     case!("destructuring", "nested array destruct", "<?php [[$a, $b], [$c, $d]] = $arr;"),
@@ -213,6 +221,10 @@ pub const CASES: &[Case] = &[
     case!("control_flow", "multiple braced ns", "<?php namespace A { function foo() {} } namespace B { function bar() {} }"),
     case!("control_flow", "empty braced ns", "<?php namespace A { }"),
     case!("control_flow", "global ns block", "<?php namespace { function main() {} }"),
+    case!("control_flow", "for multi condition", "<?php for ($i=0; $a, $b; $i++) {}"),
+    case!("control_flow", "for three init exprs", "<?php for ($a=0, $b=1, $c=2; $a < 10; $a++) {}"),
+    case!("control_flow", "for complex update", "<?php for ($i=0; $i<10; $i++, $j--, $k+=2) {}"),
+    case!("control_flow", "for all empty", "<?php for (;;) { break; }"),
 
     // try_catch
     case!("try_catch", "multi catch types", "<?php try { foo(); } catch (TypeError | ValueError $e) { echo $e; }"),
@@ -242,6 +254,14 @@ pub const CASES: &[Case] = &[
     case!("named_args", "named with spread", "<?php foo(...$extra, name: 'test');"),
     case!("named_args", "named in new", "<?php new Foo(x: 1, y: 2);"),
     case!("named_args", "named in method", "<?php $obj->method(key: 'val');"),
+    case!("named_args", "keyword name fn", "<?php foo(fn: $x);"),
+    case!("named_args", "keyword name list", "<?php foo(list: $x);"),
+    case!("named_args", "keyword name null", "<?php foo(null: $x);"),
+    case!("named_args", "keyword name true", "<?php foo(true: $x);"),
+    case!("named_args", "keyword name false", "<?php foo(false: $x);"),
+    case!("named_args", "keyword name for", "<?php foo(for: $x);"),
+    case!("named_args", "keyword name while", "<?php foo(while: $x);"),
+    case!("named_args", "named only spread", r#"<?php foo(...['name' => $x]);"#),
 
     // closure
     case!("closure", "static arrow", "<?php $fn = static fn($x) => $x * 2;"),
@@ -330,6 +350,11 @@ pub const CASES: &[Case] = &[
     case!("type_hints", "void return", "<?php function f(): void {}"),
     case!("type_hints", "iterable type", "<?php function f(iterable $x): iterable {}"),
     case!("type_hints", "callable type", "<?php function f(callable $x) {}"),
+    case!("type_hints", "three intersection", "<?php function f(Countable&Traversable&ArrayAccess $x): void {}"),
+    case!("type_hints", "standalone true", "<?php function f(): true { return true; }", min: MinPhp::Php82),
+    case!("type_hints", "standalone false", "<?php function f(): false { return false; }", min: MinPhp::Php82),
+    case!("type_hints", "true null union", "<?php function f(): true|null { return null; }", min: MinPhp::Php82),
+    case!("type_hints", "false null union", "<?php function f(): false|null { return null; }", min: MinPhp::Php82),
 
     // attributes
     case!("attributes", "attr qualified name", "<?php #[\\App\\Attr] function foo() {}"),
@@ -338,6 +363,34 @@ pub const CASES: &[Case] = &[
     case!("attributes", "attr on enum case", "<?php enum Suit { #[Description('Hearts')] case Hearts; }"),
     case!("attributes", "stacked attrs", "<?php #[A] #[B] #[C] class Foo {}"),
     case!("attributes", "grouped attrs", "<?php #[A, B, C] class Foo {}"),
+
+    // string_interp_edge
+    case!("string_interp_edge", "array key identifier in string", r#"<?php $x = "$arr[foo] here";"#),
+    case!("string_interp_edge", "empty double-quoted", r#"<?php $x = "";"#),
+    case!("string_interp_edge", "empty heredoc", "<?php $x = <<<EOT\nEOT;\n"),
+    case!("string_interp_edge", "only escape sequences", r#"<?php $x = "\n\r\t\v\e\f\\\$\"";"#),
+    case!("string_interp_edge", "unicode max codepoint", r#"<?php $x = "\u{10FFFF}";"#),
+    case!("string_interp_edge", "var with bracket index in string", r#"<?php $x = "$arr[0] end";"#),
+    case!("string_interp_edge", "var then text then var", r#"<?php $x = "$a-$b";"#),
+
+    // trait_use
+    case!("trait_use", "alias visibility only", "<?php class C { use T { foo as protected; } }"),
+    case!("trait_use", "alias qualified method", "<?php class C { use T { T::foo as bar; } }"),
+    case!("trait_use", "alias qualified with visibility", "<?php class C { use T { T::foo as protected baz; } }"),
+    case!("trait_use", "multiple traits", "<?php class C { use A, B, C; }"),
+    case!("trait_use", "insteadof multi", "<?php class C { use A, B { A::m insteadof B; } }"),
+    case!("trait_use", "multiple adaptations", "<?php class C { use A, B { A::m insteadof B; B::n as public nAlias; } }"),
+
+    // numeric_literals
+    case!("numeric_literals", "explicit octal", "<?php $x = 0o777;", min: MinPhp::Php81),
+    case!("numeric_literals", "hex with underscores", "<?php $x = 0xFFFF_FFFF;"),
+    case!("numeric_literals", "leading zero float", "<?php $x = 0.001;"),
+    case!("numeric_literals", "negative exponent float", "<?php $x = 1.5e-10;"),
+    case!("numeric_literals", "int max", "<?php $x = 9223372036854775807;"),
+    case!("numeric_literals", "binary with underscores", "<?php $x = 0b1111_0000;"),
+    case!("numeric_literals", "float no leading zero", "<?php $x = .5;"),
+    case!("numeric_literals", "zero literal", "<?php $x = 0;"),
+    case!("numeric_literals", "positive exponent float", "<?php $x = 2.5e+3;"),
 
     // builtins
     case!("builtins", "list assign", "<?php list($a, $b) = $arr;"),
