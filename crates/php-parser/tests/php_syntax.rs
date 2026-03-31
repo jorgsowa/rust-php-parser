@@ -168,20 +168,20 @@ fn nikic_fixture_files_are_valid_php() {
         "expr/assignNewByRef_1.php", // =& new removed in PHP 7.4
         "expr/assignNewByRef_2.php", // =& new removed in PHP 7.4
         "expr/cast.php",
-        "expr/exprInIsset.php",           // isset() on expression result is invalid
-        "expr/exprInList.php",            // list() as value context
-        "expr/fetchAndCall/args.php",     // pass-by-ref in call removed in PHP 8.0
-        "expr/firstClassCallables.php",   // new Foo(...) is not a valid callable
+        "expr/exprInIsset.php", // isset() on expression result is invalid
+        "expr/exprInList.php",  // list() as value context
+        "expr/fetchAndCall/args.php", // pass-by-ref in call removed in PHP 8.0
+        "expr/firstClassCallables.php", // new Foo(...) is not a valid callable
         "expr/newWithoutClass.php",
-        "expr/ternaryAndCoalesce.php",    // unparenthesized nested ternary removed PHP 8.0
+        "expr/ternaryAndCoalesce.php", // unparenthesized nested ternary removed PHP 8.0
         "expr/uvs/globalNonSimpleVarError.php",
-        "expr/uvs/misc.php",              // temporary expression in write context
+        "expr/uvs/misc.php", // temporary expression in write context
         // scalar — invalid literals
-        "scalar/float.php",              // invalid numeric literal
+        "scalar/float.php", // invalid numeric literal
         "scalar/invalidOctal_1.php",
         "scalar/invalidOctal_2.php",
         "scalar/numberSeparators.php",
-        "scalar/unicodeEscape_3.php",    // codepoint > 0x10FFFF
+        "scalar/unicodeEscape_3.php", // codepoint > 0x10FFFF
         // stmt/class — modifier errors, invalid names, semantic violations
         "stmt/class/asymmetric_visibility_1.php", // property with asym visibility must have type
         "stmt/class/asymmetric_visibility_2.php",
@@ -190,7 +190,7 @@ fn nikic_fixture_files_are_valid_php() {
         "stmt/class/constModifierErrors_3.php",
         "stmt/class/constModifierErrors_4.php",
         "stmt/class/enum.php",
-        "stmt/class/enum_with_string.php",        // backed enum case missing value
+        "stmt/class/enum_with_string.php", // backed enum case missing value
         "stmt/class/modifier_error_1.php",
         "stmt/class/modifier_error_2.php",
         "stmt/class/modifier_error_3.php",
@@ -214,21 +214,21 @@ fn nikic_fixture_files_are_valid_php() {
         "stmt/class/name_13.php",
         "stmt/class/name_14.php",
         "stmt/class/name_15.php",
-        "stmt/class/php4Style.php",               // abstract method in non-abstract class
-        "stmt/class/property_hooks_1.php",         // set param type incompatible with property type
+        "stmt/class/php4Style.php", // abstract method in non-abstract class
+        "stmt/class/property_hooks_1.php", // set param type incompatible with property type
         "stmt/class/property_hooks_2.php",
         "stmt/class/property_hooks_3.php",
         "stmt/class/property_hooks_4.php",
         "stmt/class/property_hooks_5.php",
         "stmt/class/property_hooks_6.php",
         "stmt/class/property_hooks_7.php",
-        "stmt/class/property_modifiers.php",      // abstract property in non-abstract class
-        "stmt/class/propertyTypes.php",            // static readonly property invalid
+        "stmt/class/property_modifiers.php", // abstract property in non-abstract class
+        "stmt/class/propertyTypes.php",      // static readonly property invalid
         "stmt/class/readonlyAsClassName_1.php",
         "stmt/class/readonlyAsClassName_2.php",
-        "stmt/class/readonlyMethod.php",           // readonly on method invalid
+        "stmt/class/readonlyMethod.php", // readonly on method invalid
         "stmt/class/shortEchoAsIdentifier.php",
-        "stmt/class/staticMethod_1.php",           // static __construct invalid
+        "stmt/class/staticMethod_1.php", // static __construct invalid
         "stmt/class/staticMethod_2.php",
         "stmt/class/staticMethod_3.php",
         "stmt/class/staticMethod_4.php",
@@ -236,12 +236,12 @@ fn nikic_fixture_files_are_valid_php() {
         "stmt/class/staticMethod_6.php",
         // stmt
         "stmt/const.php",
-        "stmt/controlFlow.php",                    // break/continue outside loop
+        "stmt/controlFlow.php", // break/continue outside loop
         "stmt/haltCompilerInvalidSyntax.php",
         "stmt/haltCompilerOutermostScope.php",
-        "stmt/newInInitializer.php",               // new in some contexts not always valid
+        "stmt/newInInitializer.php", // new in some contexts not always valid
         "stmt/tryWithoutCatch.php",
-        "stmt/voidCast.php",                       // (void) cast removed in PHP 8.0
+        "stmt/voidCast.php", // (void) cast removed in PHP 8.0
         // stmt/function — redeclared functions / removed features
         "stmt/function/byRef.php",
         "stmt/function/clone_function.php",
@@ -259,9 +259,9 @@ fn nikic_fixture_files_are_valid_php() {
         "stmt/namespace/invalidName_1.php",
         "stmt/namespace/invalidName_2.php",
         "stmt/namespace/invalidName_3.php",
-        "stmt/namespace/mix_1.php",               // cannot mix bracketed/unbracketed namespaces
+        "stmt/namespace/mix_1.php", // cannot mix bracketed/unbracketed namespaces
         "stmt/namespace/mix_2.php",
-        "stmt/namespace/nested.php",               // nested namespace declarations invalid
+        "stmt/namespace/nested.php", // nested namespace declarations invalid
         "stmt/namespace/outsideStmtInvalid_1.php",
         "stmt/namespace/outsideStmtInvalid_2.php",
         "stmt/namespace/outsideStmtInvalid_3.php",
@@ -274,7 +274,15 @@ fn nikic_fixture_files_are_valid_php() {
     ];
 
     // Files using PHP 8.4+ features — skip when installed PHP is older.
-    const PHP_84: &[&str] = &["expr/newDeref.php"];
+    const PHP_84: &[&str] = &[
+        "expr/exit.php", // exit(status: named-arg) and exit(...) require PHP 8.4
+        "expr/newDeref.php",
+    ];
+
+    // Files using PHP 8.5+ features — skip when installed PHP is older.
+    const PHP_85: &[&str] = &[
+        "expr/pipe.php", // |> pipe operator
+    ];
 
     let invalid: std::collections::HashSet<&str> = INVALID.iter().copied().collect();
 
@@ -291,6 +299,9 @@ fn nikic_fixture_files_are_valid_php() {
             continue;
         }
         if PHP_84.contains(&rel.as_str()) && !cfg!(php_min_84) {
+            continue;
+        }
+        if PHP_85.contains(&rel.as_str()) && !cfg!(php_min_85) {
             continue;
         }
         let src = std::fs::read_to_string(path).unwrap();
