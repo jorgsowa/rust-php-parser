@@ -1,0 +1,11 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(& result.program)
+---
+{
+  "stmts": [],
+  "span": {
+    "start": 0,
+    "end": 19
+  }
+}
