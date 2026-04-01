@@ -13,19 +13,17 @@
 Prefer `cargo nextest` (configured in `.config/nextest.toml` — runs each test in its own process):
 ```bash
 cargo nextest run --test integration
-cargo nextest run --test nikic_integration_tests
 cargo nextest run --test integration -- test_class_basic
 ```
 
 Or with standard `cargo test`:
 ```bash
-cargo test --test integration               # snapshot-based parser tests
-cargo test --test nikic_integration_tests   # nikic/PHP-Parser corpus tests
+cargo test --test integration               # snapshot-based parser tests (includes nikic/PHP-Parser corpus)
 cargo test --test php_syntax                # validates test fixtures via `php -l` (requires PHP installed)
 cargo test --test integration test_class_basic  # single test by name
 ```
 
-Snapshots live in `crates/php-parser/tests/snapshots/` (~549 files).
+Snapshots live in `crates/php-parser/tests/snapshots/` (~817 files).
 To accept new snapshots: `cargo insta accept`
 
 ## Before Submitting Changes
@@ -36,7 +34,6 @@ Run these checks — they match what CI enforces:
 cargo fmt --all                              # format
 cargo clippy --workspace -- -D warnings     # lint (warnings are errors)
 cargo nextest run --test integration
-cargo nextest run --test nikic_integration_tests
 ```
 
 ## Benchmarks

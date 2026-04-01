@@ -49,9 +49,7 @@ jobs:
           key: ${{ matrix.php-version }}
 
       - name: Run tests
-        run: |
-          cargo test --test integration
-          cargo test --test nikic_integration_tests
+        run: cargo test --test integration
 
   php-syntax:
     name: PHP Syntax (${{ matrix.php-version }})
