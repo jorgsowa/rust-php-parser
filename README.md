@@ -45,8 +45,7 @@ The parser prioritizes performance on contemporary PHP patterns:
 ## Testing
 
 ```sh
-cargo test --test integration               # hand-written integration tests
-cargo test --test nikic_integration_tests   # nikic/PHP-Parser fixture tests
+cargo test --test integration   # integration tests (includes nikic/PHP-Parser corpus fixtures)
 ```
 
 Fixture files live in `crates/php-parser/tests/fixtures/`.
