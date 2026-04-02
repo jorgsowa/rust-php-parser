@@ -6,7 +6,7 @@
 //!
 //! Tests that expect clean parses call `assert_parses_clean!`, which asserts
 //! that the parser accepted the input without errors.
-fn parse(code: &str) -> php_rs_parser::ParseResult {
+fn parse(code: &str) -> php_rs_parser::ParseResult<'_, '_> {
     let arena = Box::leak(Box::new(bumpalo::Bump::new()));
     php_rs_parser::parse(arena, code)
 }

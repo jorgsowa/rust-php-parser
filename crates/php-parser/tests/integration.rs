@@ -4508,7 +4508,10 @@ fn test_assign_by_ref_distinct_from_regular_assign_in_ast() {
     assert_no_errors(&val_result);
     let ref_json = to_json(&ref_result.program);
     let val_json = to_json(&val_result.program);
-    assert_ne!(ref_json, val_json, "`$a =& $b` and `$a = $b` must have distinct AST");
+    assert_ne!(
+        ref_json, val_json,
+        "`$a =& $b` and `$a = $b` must have distinct AST"
+    );
     assert!(ref_json.contains("\"by_ref\": true"));
     assert!(!val_json.contains("\"by_ref\""));
 }
@@ -4601,8 +4604,16 @@ fn test_null_literal_distinct_from_omit_in_array_destructuring() {
     assert_no_errors(&null_result);
     let omit_json = to_json(&omit_result.program);
     let null_json = to_json(&null_result.program);
-    assert_ne!(omit_json, null_json, "`[$a, , $c]` and `[$a, null, $c]` must have distinct AST");
-    assert!(omit_json.contains("\"Omit\""), "empty slot must serialize as \"Omit\"");
-    assert!(!omit_json.contains("\"Null\""), "empty slot must not serialize as \"Null\"");
+    assert_ne!(
+        omit_json, null_json,
+        "`[$a, , $c]` and `[$a, null, $c]` must have distinct AST"
+    );
+    assert!(
+        omit_json.contains("\"Omit\""),
+        "empty slot must serialize as \"Omit\""
+    );
+    assert!(
+        !omit_json.contains("\"Null\""),
+        "empty slot must not serialize as \"Null\""
+    );
 }
-

@@ -50,7 +50,7 @@ fn analyze_corpus(base: &str, corpus_name: &str) {
     for entry in WalkDir::new(&corpus_path)
         .into_iter()
         .filter_map(|e| e.ok())
-        .filter(|e| e.path().extension().map_or(false, |ext| ext == "php"))
+        .filter(|e| e.path().extension().is_some_and(|ext| ext == "php"))
     {
         let path = entry.path();
         match std::fs::read_to_string(path) {

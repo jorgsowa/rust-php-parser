@@ -1352,7 +1352,7 @@ mod tests {
         #[test]
         fn test_peek_doesnt_consume() {
             let mut lexer = Lexer::new("<?php 42");
-            let peeked = lexer.peek().clone();
+            let peeked = *lexer.peek();
             assert_eq!(peeked.kind, TokenKind::OpenTag);
             let next = lexer.next_token();
             assert_eq!(next.kind, TokenKind::OpenTag);
@@ -1584,8 +1584,7 @@ mod tests {
 
         #[test]
         fn test_comments_skipped() {
-            let toks =
-                php_tokens("42 // line comment\n43 /* block */ 44 # hash comment\n45");
+            let toks = php_tokens("42 // line comment\n43 /* block */ 44 # hash comment\n45");
             assert_eq!(toks[0], (TokenKind::IntLiteral, "42".to_string()));
             assert_eq!(toks[1], (TokenKind::IntLiteral, "43".to_string()));
             assert_eq!(toks[2], (TokenKind::IntLiteral, "44".to_string()));
