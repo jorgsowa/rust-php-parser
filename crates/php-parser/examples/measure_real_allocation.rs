@@ -47,7 +47,7 @@ fn analyze_corpus(base: &str, corpus_name: &str) {
     for entry in WalkDir::new(&corpus_path)
         .into_iter()
         .filter_map(|e| e.ok())
-        .filter(|e| e.path().extension().map_or(false, |ext| ext == "php"))
+        .filter(|e| e.path().extension().is_some_and(|ext| ext == "php"))
     {
         let file_path = entry.path();
         if let Ok(contents) = std::fs::read_to_string(file_path) {
@@ -55,8 +55,6 @@ fn analyze_corpus(base: &str, corpus_name: &str) {
 
             // Allocate arena with 5x pre-allocation (our current setting)
             let arena = bumpalo::Bump::with_capacity((source_size as usize) * 5);
-            let before = arena.allocated_bytes() as u64;
-
             // Parse the file
             let _ = php_rs_parser::parse(&arena, &contents);
 

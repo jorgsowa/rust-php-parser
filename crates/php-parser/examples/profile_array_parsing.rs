@@ -63,7 +63,7 @@ fn main() {
         if i > 0 {
             code4.push_str(", ");
         }
-        code4.push_str(&format!("$a + $b * 2, 'k' => func($x) + 5"));
+        code4.push_str("$a + $b * 2, 'k' => func($x) + 5");
     }
     code4.push_str("];");
     php_rs_parser::parse(&arena, &code4);
@@ -75,7 +75,7 @@ fn main() {
     let code5 = "<?php $e = [[1, 2, 3], [4, 5, 6], [7, 8, 9], \
                            ['a' => 10, 'b' => 20], \
                            ['x' => [1, 2], 'y' => [3, 4]]];";
-    php_rs_parser::parse(&arena, &code5);
+    php_rs_parser::parse(&arena, code5);
     instrument::report_stats();
 
     // Test case 6: Large array (simulating real-world config)
