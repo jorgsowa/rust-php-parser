@@ -552,6 +552,7 @@ mod tests {
                 target: var_x,
                 op: AssignOp::Assign,
                 value: binary,
+                by_ref: false,
             }),
             span: Span::DUMMY,
         });
