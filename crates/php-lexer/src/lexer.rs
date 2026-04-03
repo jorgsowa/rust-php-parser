@@ -209,7 +209,12 @@ impl<'src> Lexer<'src> {
                 Some(offset) => {
                     let p = search + offset;
                     let rest = &bytes[p..];
-                    if rest.starts_with(b"<?php") || rest.starts_with(b"<?=") {
+                    if (rest.len() >= 5
+                        && rest[0] == b'<'
+                        && rest[1] == b'?'
+                        && rest[2..5].eq_ignore_ascii_case(b"php"))
+                        || rest.starts_with(b"<?=")
+                    {
                         break Some(p - self.pos);
                     }
                     search = p + 1;
@@ -1297,6 +1302,37 @@ mod tests {
         fn test_only_inline_html() {
             let tokens = collect_kinds("<html><body>Hello</body></html>");
             assert_eq!(tokens, vec![TokenKind::InlineHtml, TokenKind::Eof]);
+        }
+
+        #[test]
+        fn test_open_tag_uppercase() {
+            // PHP's Zend scanner accepts <?php case-insensitively
+            for tag in &["<?PHP", "<?Php", "<?PhP", "<?pHP", "<?phP"] {
+                let src = format!("{} $x = 1;", tag);
+                let tokens = collect_kinds(&src);
+                assert_eq!(
+                    tokens[0],
+                    TokenKind::OpenTag,
+                    "expected OpenTag for opening tag '{tag}'"
+                );
+            }
+        }
+
+        #[test]
+        fn test_open_tag_uppercase_mid_file() {
+            // <?PHP appearing after inline HTML must also be recognised
+            let tokens = collect_kinds("<html><?PHP echo 1;");
+            assert_eq!(
+                tokens,
+                vec![
+                    TokenKind::InlineHtml,
+                    TokenKind::OpenTag,
+                    TokenKind::Echo,
+                    TokenKind::IntLiteral,
+                    TokenKind::Semicolon,
+                    TokenKind::Eof,
+                ]
+            );
         }
     }
 
