@@ -238,6 +238,26 @@ fn test_trailing_dot_float_literals() {
 }
 
 #[test]
+fn test_legacy_octal_invalid_digits() {
+    // PHP silently ignores 8 and 9 in legacy octal: 0778 = int(63), 019 = int(1), 09 = int(0)
+    let result = parse_php("<?php 0778; 019; 09;");
+    assert_no_errors(&result);
+    let json = to_json(&result.program);
+    assert!(
+        json.contains("\"Int\": 63"),
+        "0778 must parse as Int(63); got:\n{json}"
+    );
+    assert!(
+        json.contains("\"Int\": 1"),
+        "019 must parse as Int(1); got:\n{json}"
+    );
+    assert!(
+        json.contains("\"Int\": 0"),
+        "09 must parse as Int(0); got:\n{json}"
+    );
+}
+
+#[test]
 fn test_string_literals() {
     let result = parse_php(r#"<?php 'single'; "double";"#);
     assert_no_errors(&result);

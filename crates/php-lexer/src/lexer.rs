@@ -1585,6 +1585,16 @@ mod tests {
         }
 
         #[test]
+        fn test_legacy_octal_with_invalid_digits() {
+            // PHP silently stops scanning at the first 8 or 9 in legacy octal;
+            // the lexer must still classify these as OctIntLiteral, not IntLiteral
+            let toks = php_tokens("0778 019 09");
+            assert_eq!(toks[0], (TokenKind::OctIntLiteral, "0778".to_string()));
+            assert_eq!(toks[1], (TokenKind::OctIntLiteral, "019".to_string()));
+            assert_eq!(toks[2], (TokenKind::OctIntLiteral, "09".to_string()));
+        }
+
+        #[test]
         fn test_numeric_underscores() {
             let toks = php_tokens("1_000 0xFF_FF 0b1010_0101");
             assert_eq!(toks[0], (TokenKind::IntLiteral, "1_000".to_string()));
