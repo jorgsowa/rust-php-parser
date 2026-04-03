@@ -1561,6 +1561,25 @@ mod tests {
         }
 
         #[test]
+        fn test_trailing_dot_float() {
+            // PHP: DNUM = LNUM "." — trailing-dot literals are floats, not ints
+            let toks = php_tokens("0. 1. 42.");
+            assert_eq!(toks[0], (TokenKind::FloatLiteralSimple, "0.".to_string()));
+            assert_eq!(toks[1], (TokenKind::FloatLiteralSimple, "1.".to_string()));
+            assert_eq!(toks[2], (TokenKind::FloatLiteralSimple, "42.".to_string()));
+        }
+
+        #[test]
+        fn test_trailing_dot_not_confused_with_dotdot() {
+            // "1.." must lex as IntLiteral("1") + Dot + Dot, not FloatLiteralSimple("1.") + Dot
+            // because the second dot prevents the trailing-dot branch from firing
+            let toks = php_tokens("1..");
+            assert_eq!(toks[0], (TokenKind::IntLiteral, "1".to_string()));
+            assert_eq!(toks[1], (TokenKind::Dot, ".".to_string()));
+            assert_eq!(toks[2], (TokenKind::Dot, ".".to_string()));
+        }
+
+        #[test]
         fn test_new_octal_syntax() {
             let toks = php_tokens("0o77 0O755");
             assert_eq!(toks[0], (TokenKind::OctIntLiteralNew, "0o77".to_string()));
