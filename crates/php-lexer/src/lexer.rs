@@ -850,12 +850,10 @@ impl<'src> Lexer<'src> {
         let integer_end = self.pos;
         let mut kind = TokenKind::IntLiteral;
 
-        // Check for legacy octal: 0[0-7]+, no underscores
+        // Check for legacy octal: 0[0-9]+ where PHP reads leading octal digits (0-7)
+        // and silently ignores invalid digits (8, 9).
         if bytes[start] == b'0' && integer_end > start + 1 {
-            let slice = &bytes[start..integer_end];
-            if slice.iter().all(|&b| (b'0'..=b'7').contains(&b)) {
-                kind = TokenKind::OctIntLiteral;
-            }
+            kind = TokenKind::OctIntLiteral;
         }
 
         // Check for decimal point
