@@ -825,10 +825,10 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                 .unwrap_or(text);
             let inner = &text[1..text.len() - 1];
             // Fast path: if no backslash, inner is a verbatim source slice
-            let value: Cow<'src, str> = if !inner.contains('\\') {
+            let value: &'arena str = if !inner.contains('\\') {
                 // inner is a subslice of `src` which has lifetime 'src
                 let offset = inner.as_ptr() as usize - src.as_ptr() as usize;
-                Cow::Borrowed(&src[offset..offset + inner.len()])
+                parser.arena.alloc_str(&src[offset..offset + inner.len()])
             } else {
                 // Decode single-quote escape sequences: \' → ' and \\ → \
                 let mut decoded = String::with_capacity(inner.len());
@@ -855,7 +855,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                         i += 1;
                     }
                 }
-                Cow::Owned(decoded)
+                parser.arena.alloc_str(&decoded)
             };
             Expr {
                 kind: ExprKind::String(value),
@@ -889,7 +889,9 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                 // No interpolation and no escapes — verbatim source slice
                 let offset = inner.as_ptr() as usize - src.as_ptr() as usize;
                 Expr {
-                    kind: ExprKind::String(Cow::Borrowed(&src[offset..offset + inner.len()])),
+                    kind: ExprKind::String(
+                        parser.arena.alloc_str(&src[offset..offset + inner.len()]),
+                    ),
                     span: token.span,
                 }
             } else {
@@ -949,9 +951,9 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                 // No escapes — verbatim source slice
                 let offset = inner.as_ptr() as usize - src.as_ptr() as usize;
                 let mut parts = parser.alloc_vec_with_capacity(1);
-                parts.push(StringPart::Literal(Cow::Borrowed(
-                    &src[offset..offset + inner.len()],
-                )));
+                parts.push(StringPart::Literal(
+                    parser.arena.alloc_str(&src[offset..offset + inner.len()]),
+                ));
                 Expr {
                     kind: ExprKind::ShellExec(parts),
                     span: token.span,
@@ -1022,7 +1024,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                     raw_body.to_string()
                 };
                 let mut parts = parser.alloc_vec_with_capacity(1);
-                parts.push(StringPart::Literal(Cow::Owned(body_str)));
+                parts.push(StringPart::Literal(parser.arena.alloc_str(&body_str)));
                 Expr {
                     kind: ExprKind::Heredoc { label, parts },
                     span: token.span,
@@ -1037,16 +1039,15 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             let text = &src[token.span.start as usize..token.span.end as usize];
             let (label, body_start_in_text, body_end_in_text, indent) = parse_heredoc_content(text);
             let raw_body = &text[body_start_in_text..body_end_in_text];
-            let value: Cow<'src, str> = if !indent.is_empty() {
-                Cow::Owned(
-                    raw_body
-                        .lines()
-                        .map(|line| line.strip_prefix(&indent).unwrap_or(line))
-                        .collect::<Vec<_>>()
-                        .join("\n"),
-                )
+            let value: &'arena str = if !indent.is_empty() {
+                let s = raw_body
+                    .lines()
+                    .map(|line| line.strip_prefix(&indent).unwrap_or(line))
+                    .collect::<Vec<_>>()
+                    .join("\n");
+                parser.arena.alloc_str(&s)
             } else {
-                Cow::Borrowed(raw_body)
+                parser.arena.alloc_str(raw_body)
             };
             Expr {
                 kind: ExprKind::Nowdoc { label, value },

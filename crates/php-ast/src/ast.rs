@@ -809,7 +809,7 @@ pub enum ExprKind<'arena, 'src> {
     Float(f64),
 
     /// String literal
-    String(Cow<'src, str>),
+    String(&'arena str),
 
     /// Interpolated string: `"Hello $name, you are {$age} years old"`
     InterpolatedString(ArenaVec<'arena, StringPart<'arena, 'src>>),
@@ -823,7 +823,7 @@ pub enum ExprKind<'arena, 'src> {
     /// Nowdoc: `<<<'EOT' ... EOT`
     Nowdoc {
         label: &'src str,
-        value: Cow<'src, str>,
+        value: &'arena str,
     },
 
     /// Shell execution: `` `command $var` ``
@@ -1252,6 +1252,6 @@ pub enum CallableCreateKind<'arena, 'src> {
 
 #[derive(Debug, Serialize)]
 pub enum StringPart<'arena, 'src> {
-    Literal(Cow<'src, str>),
+    Literal(&'arena str),
     Expr(Expr<'arena, 'src>),
 }
