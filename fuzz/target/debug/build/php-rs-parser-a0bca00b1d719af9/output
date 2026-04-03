@@ -1,0 +1,12 @@
+cargo::rustc-check-cfg=cfg(php_available)
+cargo::rustc-check-cfg=cfg(php_min_81)
+cargo::rustc-check-cfg=cfg(php_min_82)
+cargo::rustc-check-cfg=cfg(php_min_83)
+cargo::rustc-check-cfg=cfg(php_min_84)
+cargo::rustc-check-cfg=cfg(php_min_85)
+cargo:rustc-cfg=php_available
+cargo:rustc-cfg=php_min_81
+cargo:rustc-cfg=php_min_82
+cargo:rustc-cfg=php_min_83
+cargo:rustc-cfg=php_min_84
+cargo:rustc-cfg=php_min_85

@@ -73,3 +73,22 @@ jobs:
 
       - name: Check PHP syntax in tests
         run: cargo test --test php_syntax
+
+  fuzz-smoke:
+    name: Fuzz Smoke Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@nightly
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: fuzz
+
+      - name: Install cargo-fuzz
+        run: cargo install cargo-fuzz
+
+      - name: Fuzz smoke test (10s)
+        run: cargo fuzz run fuzz_parse -- -max_total_time=10
+        working-directory: fuzz
