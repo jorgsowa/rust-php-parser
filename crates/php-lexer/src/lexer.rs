@@ -870,9 +870,9 @@ impl<'src> Lexer<'src> {
                 self.consume_invalid_numeric_rest();
                 return self.invalid_numeric(start);
             } else if self.pos + 1 >= bytes.len() || bytes[self.pos + 1] != b'.' {
-                // Trailing dot without digit: 0. (not followed by another dot for .. or ...)
+                // Trailing dot without digit: 1. (not followed by another dot for .. or ...)
                 self.pos += 1; // consume '.'
-                kind = TokenKind::IntLiteral; // match legacy behavior: "0." parses as int
+                kind = TokenKind::FloatLiteralSimple;
             }
         }
 
