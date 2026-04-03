@@ -1,0 +1,9 @@
+---
+source: crates/php-parser/tests/malformed_php.rs
+expression: msgs
+---
+expected method name, found '}'
+expected '(', found '}'
+expected variable, found '}'
+expected ')', found '}'
+expected ';', found '}'

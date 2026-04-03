@@ -1,0 +1,8 @@
+---
+source: crates/php-parser/tests/malformed_php.rs
+expression: msgs
+---
+expected expression
+unclosed '')'' opened at Span { start: 10, end: 11 }
+expected expression
+expected expression

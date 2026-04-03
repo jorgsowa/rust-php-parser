@@ -340,3 +340,120 @@ fn deeply_nested_parens_hit_depth_limit() {
     let nested = format!("<?php {}{};", "(".repeat(75), ")".repeat(75));
     assert_errors_snapshot!(&nested);
 }
+
+// ============================================================================
+// ERROR + RECOVERY INTERACTION TESTS
+// ============================================================================
+//
+// These tests verify that parse errors in one construct do not prevent the
+// parser from recovering and correctly parsing subsequent valid constructs.
+// Each test has an error followed by at least one valid statement/declaration.
+
+#[test]
+fn class_missing_name_then_valid_function() {
+    assert_errors_snapshot!("<?php class {} function foo(): int { return 1; }");
+}
+
+#[test]
+fn function_missing_name_then_valid_class() {
+    assert_errors_snapshot!("<?php function () {} class Foo {}");
+}
+
+#[test]
+fn missing_semicolon_then_valid_assignment() {
+    assert_errors_snapshot!("<?php $x = 1 $y = 2;");
+}
+
+#[test]
+fn unclosed_string_then_valid_echo() {
+    assert_errors_snapshot!("<?php $x = 'unterminated\n echo 'hello';");
+}
+
+#[test]
+fn invalid_expression_then_valid_function() {
+    assert_errors_snapshot!("<?php $x = ; function foo() { return 42; }");
+}
+
+#[test]
+fn malformed_if_condition_then_valid_return() {
+    assert_errors_snapshot!("<?php function f() { if () { return 1; } return 2; }");
+}
+
+#[test]
+fn class_error_then_valid_class() {
+    assert_errors_snapshot!("<?php class Foo { public function } class Bar { public int $x = 1; }");
+}
+
+#[test]
+fn namespace_error_then_valid_namespace() {
+    assert_errors_snapshot!("<?php namespace ; namespace Foo\\Bar;");
+}
+
+#[test]
+fn try_missing_catch_then_valid_echo() {
+    assert_errors_snapshot!("<?php try { $x = 1; } echo 'after';");
+}
+
+#[test]
+fn interface_error_then_valid_class() {
+    // Interface constant with missing value (parse error) followed by valid class
+    assert_errors_snapshot!("<?php interface Foo { const X = ; } class Baz {}");
+}
+
+#[test]
+fn trait_error_then_valid_class() {
+    assert_errors_snapshot!("<?php trait T { public function } class C { use T; }");
+}
+
+#[test]
+fn enum_error_then_valid_function() {
+    // Malformed enum case (missing value after `=`) followed by a valid function
+    assert_errors_snapshot!(
+        "<?php enum Status { case Active = ; } function use_status() { return Status::Active; }"
+    );
+}
+
+#[test]
+fn for_loop_error_then_valid_while() {
+    assert_errors_snapshot!("<?php for (;;; ) {} while (true) { break; }");
+}
+
+#[test]
+fn match_error_then_valid_assignment() {
+    assert_errors_snapshot!("<?php $x = match ($y) { 1 => }; $z = 42;");
+}
+
+#[test]
+fn multiple_errors_recover_to_valid_function() {
+    assert_errors_snapshot!(
+        "<?php
+        $a = ;
+        $b = ;
+        function healthy(): string { return 'ok'; }"
+    );
+}
+
+#[test]
+fn array_destructure_error_then_valid_echo() {
+    assert_errors_snapshot!("<?php [$a, , ,] = ; echo $a;");
+}
+
+#[test]
+fn class_method_error_then_valid_method() {
+    assert_errors_snapshot!(
+        "<?php class Foo {
+            public function bad(int ) {}
+            public function good(): string { return 'ok'; }
+        }"
+    );
+}
+
+#[test]
+fn use_error_then_valid_class() {
+    assert_errors_snapshot!("<?php use ; class Foo {}");
+}
+
+#[test]
+fn switch_missing_expr_then_valid_if() {
+    assert_errors_snapshot!("<?php switch () { case 1: break; } if (true) { echo 'ok'; }");
+}
