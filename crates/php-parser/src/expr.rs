@@ -5,7 +5,7 @@ use php_lexer::TokenKind;
 
 use crate::diagnostics::ParseError;
 use crate::instrument;
-use crate::parser::Parser;
+use crate::parser::{Parser, MAX_DEPTH};
 use crate::precedence::{self, ASSIGNMENT_BP, TERNARY_BP};
 use crate::stmt;
 use crate::version::PhpVersion;
@@ -40,6 +40,19 @@ pub fn parse_expr_bp<'arena, 'src>(
 ) -> Expr<'arena, 'src> {
     if min_bp != 0 {
         instrument::record_parse_expr_bp_recursive();
+    }
+    parser.expr_depth += 1;
+    if parser.expr_depth > MAX_DEPTH {
+        parser.expr_depth -= 1;
+        let span = parser.current_span();
+        parser.error(ParseError::Forbidden {
+            message: "maximum expression nesting depth exceeded".into(),
+            span,
+        });
+        return Expr {
+            kind: ExprKind::Error,
+            span,
+        };
     }
     let mut lhs = parse_atom(parser);
 
@@ -491,6 +504,7 @@ pub fn parse_expr_bp<'arena, 'src>(
         break;
     }
 
+    parser.expr_depth -= 1;
     lhs
 }
 

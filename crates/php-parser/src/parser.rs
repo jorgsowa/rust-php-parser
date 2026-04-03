@@ -8,11 +8,14 @@ use crate::stmt;
 use crate::version::PhpVersion;
 
 const MAX_ERRORS: usize = 100;
+pub(crate) const MAX_DEPTH: u32 = 50;
 
 pub struct Parser<'arena, 'src> {
     current: Token,
-    /// Nesting depth (0 = top-level scope)
+    /// Block nesting depth (0 = top-level scope)
     pub depth: u32,
+    /// Expression nesting depth — guards against stack overflow on deeply nested input
+    pub(crate) expr_depth: u32,
     tokens: Vec<Token>,
     /// Index of NEXT token in the tokens array (current = tokens[pos - 1])
     pos: usize,
@@ -58,6 +61,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             source,
             errors,
             depth: 0,
+            expr_depth: 0,
             version,
         }
     }
@@ -111,6 +115,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             source,
             errors,
             depth: 0,
+            expr_depth: 0,
             version: PhpVersion::default(),
         }
     }

@@ -1,0 +1,56 @@
+---
+source: crates/php-parser/tests/malformed_php.rs
+expression: msgs
+---
+maximum expression nesting depth exceeded
+unclosed '')'' opened at Span { start: 55, end: 56 }
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+maximum expression nesting depth exceeded
+expected ')', found '('
+expected ';' after expression
+expected expression

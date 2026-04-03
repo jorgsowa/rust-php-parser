@@ -324,3 +324,19 @@ fn list_nested_destructuring() {
 fn list_with_string_keys() {
     assert_parses_clean!("<?php list('key' => $value) = $arr;");
 }
+
+// ============================================================================
+// NESTING DEPTH LIMIT
+// ============================================================================
+
+#[test]
+fn deeply_nested_arrays_hit_depth_limit() {
+    let nested = format!("<?php {}{};", "[".repeat(75), "]".repeat(75));
+    assert_errors_snapshot!(&nested);
+}
+
+#[test]
+fn deeply_nested_parens_hit_depth_limit() {
+    let nested = format!("<?php {}{};", "(".repeat(75), ")".repeat(75));
+    assert_errors_snapshot!(&nested);
+}
