@@ -91,6 +91,70 @@ fn fixture_files_are_valid_php() {
     }
 }
 
+/// Validates that all `assert_parses_clean!` cases in `malformed_php.rs` are also
+/// accepted by `php -l`. These are inputs the Rust parser intentionally accepts
+/// without errors; this test confirms PHP itself also accepts them.
+///
+/// If any case is rejected by PHP but accepted by the Rust parser, it should be
+/// documented with an explicit comment explaining the intentional divergence.
+#[cfg_attr(not(php_available), ignore)]
+#[test]
+fn malformed_clean_cases_are_valid_php() {
+    // NOTE: Intentional divergences from PHP's parser are documented here.
+    //
+    // switch_multiple_defaults: PHP rejects duplicate `default` at compile level (Fatal
+    // error). The Rust parser treats it as a semantic error and accepts at parse level.
+    //
+    // declare_in_conditional: `strict_types` inside a conditional block is a runtime
+    // Fatal error in PHP ("must be the very first statement"), but the Rust parser does
+    // not enforce this positional constraint at parse time.
+    //
+    // list_nested_destructuring: mixing `list()` and `[]` in a single destructuring
+    // expression ("Cannot mix [] and list()") is a Fatal error in PHP. The Rust parser
+    // accepts the syntax and leaves this constraint to a semantic analysis phase.
+
+    let cases: &[(&str, &str)] = &[
+        (
+            "array_unpack_with_string_keys",
+            "<?php $a = ['x' => 1]; $b = [...$a];",
+        ),
+        ("array_nested_unpack_syntax", "<?php [...[...[1, 2]], 3];"),
+        // Undefined label is a compile-time error, not a parse error
+        ("goto_undefined_label", "<?php goto undefined; undefined:"),
+        (
+            "declare_multiple_directives_mixed",
+            "<?php declare(encoding='UTF-8', strict_types=1, ticks=1);",
+        ),
+        // declare_in_conditional is intentionally excluded — see note above
+        (
+            "trait_multiple_insteadof",
+            "<?php
+            trait T1 { public function m() {} }
+            trait T2 { public function m() {} }
+            trait T3 { public function m() {} }
+            class C {
+                use T1, T2, T3 {
+                    T1::m insteadof T2, T3;
+                    T2::m insteadof T3;
+                }
+            }",
+        ),
+        (
+            "deep_namespace_nesting",
+            "<?php namespace A\\B\\C\\D\\E\\F\\G { class X {} }",
+        ),
+        // list_nested_destructuring is intentionally excluded — see note above
+        (
+            "list_with_string_keys",
+            "<?php list('key' => $value) = $arr;",
+        ),
+    ];
+
+    for (label, code) in cases {
+        assert_php_syntax_labeled(label, code);
+    }
+}
+
 // PHP 8.3+
 #[cfg_attr(not(php_min_83), ignore)]
 #[test]
