@@ -109,9 +109,15 @@ impl<'src> Lexer<'src> {
             0
         };
 
-        // Determine initial mode: if remaining source starts with `<?php` or `<?=`, start in PHP mode
+        // Determine initial mode: if remaining source starts with `<?php` (case-insensitive) or `<?=`, start in PHP mode
         let remaining = &source[pos..];
-        let mode = if remaining.starts_with("<?php") || remaining.starts_with("<?=") {
+        let rem_bytes = remaining.as_bytes();
+        let mode = if (rem_bytes.len() >= 5
+            && rem_bytes[0] == b'<'
+            && rem_bytes[1] == b'?'
+            && rem_bytes[2..5].eq_ignore_ascii_case(b"php"))
+            || remaining.starts_with("<?=")
+        {
             LexerMode::Php
         } else {
             LexerMode::InlineHtml
@@ -644,7 +650,10 @@ impl<'src> Lexer<'src> {
             return self.tok(TokenKind::LessThanEquals, start);
         }
         if self.check_at(1, b'?') {
-            if self.source[self.pos..].starts_with("<?php") {
+            let bytes = self.source.as_bytes();
+            if bytes.len() >= self.pos + 5
+                && bytes[self.pos + 2..self.pos + 5].eq_ignore_ascii_case(b"php")
+            {
                 self.pos = start + 5;
                 return self.tok(TokenKind::OpenTag, start);
             }
