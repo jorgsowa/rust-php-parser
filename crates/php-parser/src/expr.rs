@@ -94,6 +94,18 @@ pub fn parse_expr_bp<'arena, 'src>(
                 if TERNARY_BP < min_bp {
                     break;
                 }
+                // PHP 8.0+: unparenthesized ternary chaining is a fatal parse error.
+                // `a ? b : c ? d : e` must be parenthesized; detect by checking
+                // whether the current lhs is already a completed ternary.
+                if parser.version >= PhpVersion::Php80 && matches!(lhs.kind, ExprKind::Ternary(_)) {
+                    let span = parser.current_span();
+                    parser.error(ParseError::Forbidden {
+                        message: "Unparenthesized `a ? b : c ? d : e` is not supported. \
+                                  Use parentheses to make the order explicit."
+                            .into(),
+                        span,
+                    });
+                }
                 parser.advance(); // consume ?
 
                 // Short ternary: `$x ?: $y`

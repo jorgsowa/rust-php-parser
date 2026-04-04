@@ -1,5 +1,5 @@
 ---
-source: crates/php-parser/tests/integration.rs
+source: crates/php-parser/tests/corpus.rs
 expression: to_json(& result.program)
 ---
 {
@@ -93,39 +93,47 @@ expression: to_json(& result.program)
             "Ternary": {
               "condition": {
                 "kind": {
-                  "Ternary": {
-                    "condition": {
-                      "kind": {
-                        "Variable": "a"
-                      },
-                      "span": {
-                        "start": 57,
-                        "end": 59
+                  "Parenthesized": {
+                    "kind": {
+                      "Ternary": {
+                        "condition": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 58,
+                            "end": 60
+                          }
+                        },
+                        "then_expr": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 63,
+                            "end": 65
+                          }
+                        },
+                        "else_expr": {
+                          "kind": {
+                            "Variable": "c"
+                          },
+                          "span": {
+                            "start": 68,
+                            "end": 70
+                          }
+                        }
                       }
                     },
-                    "then_expr": {
-                      "kind": {
-                        "Variable": "b"
-                      },
-                      "span": {
-                        "start": 62,
-                        "end": 64
-                      }
-                    },
-                    "else_expr": {
-                      "kind": {
-                        "Variable": "c"
-                      },
-                      "span": {
-                        "start": 67,
-                        "end": 69
-                      }
+                    "span": {
+                      "start": 58,
+                      "end": 70
                     }
                   }
                 },
                 "span": {
                   "start": 57,
-                  "end": 69
+                  "end": 72
                 }
               },
               "then_expr": {
@@ -133,8 +141,8 @@ expression: to_json(& result.program)
                   "Variable": "d"
                 },
                 "span": {
-                  "start": 72,
-                  "end": 74
+                  "start": 74,
+                  "end": 76
                 }
               },
               "else_expr": {
@@ -142,21 +150,21 @@ expression: to_json(& result.program)
                   "Variable": "e"
                 },
                 "span": {
-                  "start": 77,
-                  "end": 79
+                  "start": 79,
+                  "end": 81
                 }
               }
             }
           },
           "span": {
             "start": 57,
-            "end": 79
+            "end": 81
           }
         }
       },
       "span": {
         "start": 57,
-        "end": 81
+        "end": 83
       }
     },
     {
@@ -169,8 +177,8 @@ expression: to_json(& result.program)
                   "Variable": "a"
                 },
                 "span": {
-                  "start": 81,
-                  "end": 83
+                  "start": 83,
+                  "end": 85
                 }
               },
               "then_expr": {
@@ -178,8 +186,8 @@ expression: to_json(& result.program)
                   "Variable": "b"
                 },
                 "span": {
-                  "start": 86,
-                  "end": 88
+                  "start": 88,
+                  "end": 90
                 }
               },
               "else_expr": {
@@ -192,8 +200,8 @@ expression: to_json(& result.program)
                             "Variable": "c"
                           },
                           "span": {
-                            "start": 92,
-                            "end": 94
+                            "start": 94,
+                            "end": 96
                           }
                         },
                         "then_expr": {
@@ -201,8 +209,8 @@ expression: to_json(& result.program)
                             "Variable": "d"
                           },
                           "span": {
-                            "start": 97,
-                            "end": 99
+                            "start": 99,
+                            "end": 101
                           }
                         },
                         "else_expr": {
@@ -210,34 +218,34 @@ expression: to_json(& result.program)
                             "Variable": "e"
                           },
                           "span": {
-                            "start": 102,
-                            "end": 104
+                            "start": 104,
+                            "end": 106
                           }
                         }
                       }
                     },
                     "span": {
-                      "start": 92,
-                      "end": 104
+                      "start": 94,
+                      "end": 106
                     }
                   }
                 },
                 "span": {
-                  "start": 91,
-                  "end": 105
+                  "start": 93,
+                  "end": 107
                 }
               }
             }
           },
           "span": {
-            "start": 81,
-            "end": 105
+            "start": 83,
+            "end": 107
           }
         }
       },
       "span": {
-        "start": 81,
-        "end": 125
+        "start": 83,
+        "end": 127
       }
     },
     {
@@ -250,8 +258,8 @@ expression: to_json(& result.program)
                   "Variable": "a"
                 },
                 "span": {
-                  "start": 125,
-                  "end": 127
+                  "start": 127,
+                  "end": 129
                 }
               },
               "right": {
@@ -259,21 +267,21 @@ expression: to_json(& result.program)
                   "Variable": "b"
                 },
                 "span": {
-                  "start": 131,
-                  "end": 133
+                  "start": 133,
+                  "end": 135
                 }
               }
             }
           },
           "span": {
-            "start": 125,
-            "end": 133
+            "start": 127,
+            "end": 135
           }
         }
       },
       "span": {
-        "start": 125,
-        "end": 135
+        "start": 127,
+        "end": 137
       }
     },
     {
@@ -286,8 +294,8 @@ expression: to_json(& result.program)
                   "Variable": "a"
                 },
                 "span": {
-                  "start": 135,
-                  "end": 137
+                  "start": 137,
+                  "end": 139
                 }
               },
               "right": {
@@ -298,8 +306,8 @@ expression: to_json(& result.program)
                         "Variable": "b"
                       },
                       "span": {
-                        "start": 141,
-                        "end": 143
+                        "start": 143,
+                        "end": 145
                       }
                     },
                     "right": {
@@ -307,28 +315,28 @@ expression: to_json(& result.program)
                         "Variable": "c"
                       },
                       "span": {
-                        "start": 147,
-                        "end": 149
+                        "start": 149,
+                        "end": 151
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 141,
-                  "end": 149
+                  "start": 143,
+                  "end": 151
                 }
               }
             }
           },
           "span": {
-            "start": 135,
-            "end": 149
+            "start": 137,
+            "end": 151
           }
         }
       },
       "span": {
-        "start": 135,
-        "end": 151
+        "start": 137,
+        "end": 153
       }
     },
     {
@@ -344,8 +352,8 @@ expression: to_json(& result.program)
                         "Variable": "a"
                       },
                       "span": {
-                        "start": 151,
-                        "end": 153
+                        "start": 153,
+                        "end": 155
                       }
                     },
                     "right": {
@@ -353,15 +361,15 @@ expression: to_json(& result.program)
                         "Variable": "b"
                       },
                       "span": {
-                        "start": 157,
-                        "end": 159
+                        "start": 159,
+                        "end": 161
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 151,
-                  "end": 159
+                  "start": 153,
+                  "end": 161
                 }
               },
               "then_expr": {
@@ -369,8 +377,8 @@ expression: to_json(& result.program)
                   "Variable": "c"
                 },
                 "span": {
-                  "start": 162,
-                  "end": 164
+                  "start": 164,
+                  "end": 166
                 }
               },
               "else_expr": {
@@ -378,21 +386,21 @@ expression: to_json(& result.program)
                   "Variable": "d"
                 },
                 "span": {
-                  "start": 167,
-                  "end": 169
+                  "start": 169,
+                  "end": 171
                 }
               }
             }
           },
           "span": {
-            "start": 151,
-            "end": 169
+            "start": 153,
+            "end": 171
           }
         }
       },
       "span": {
-        "start": 151,
-        "end": 171
+        "start": 153,
+        "end": 173
       }
     },
     {
@@ -408,8 +416,8 @@ expression: to_json(& result.program)
                         "Variable": "a"
                       },
                       "span": {
-                        "start": 171,
-                        "end": 173
+                        "start": 173,
+                        "end": 175
                       }
                     },
                     "op": "BooleanAnd",
@@ -418,15 +426,15 @@ expression: to_json(& result.program)
                         "Variable": "b"
                       },
                       "span": {
-                        "start": 177,
-                        "end": 179
+                        "start": 179,
+                        "end": 181
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 171,
-                  "end": 179
+                  "start": 173,
+                  "end": 181
                 }
               },
               "right": {
@@ -434,26 +442,26 @@ expression: to_json(& result.program)
                   "Variable": "c"
                 },
                 "span": {
-                  "start": 183,
-                  "end": 185
+                  "start": 185,
+                  "end": 187
                 }
               }
             }
           },
           "span": {
-            "start": 171,
-            "end": 185
+            "start": 173,
+            "end": 187
           }
         }
       },
       "span": {
-        "start": 171,
-        "end": 186
+        "start": 173,
+        "end": 188
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 186
+    "end": 188
   }
 }

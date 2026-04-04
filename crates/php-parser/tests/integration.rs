@@ -4801,3 +4801,46 @@ fn test_int_no_overflow_stays_int() {
         "PHP_INT_MAX must stay as Int; got:\n{json}"
     );
 }
+
+#[test]
+fn test_ternary_chain_without_parens_forbidden_in_php8() {
+    // PHP 8.0+: unparenthesized ternary chaining is a fatal parse error
+    let result = parse_php_versioned(
+        "<?php $x = true ? 1 : 2 ? 3 : 4;",
+        php_rs_parser::PhpVersion::Php80,
+    );
+    assert!(
+        !result.errors.is_empty(),
+        "unparenthesized ternary chain must be rejected in PHP 8.0"
+    );
+    assert!(result.errors.iter().any(|e| matches!(
+        e,
+        php_rs_parser::diagnostics::ParseError::Forbidden { message, .. }
+            if message.contains("Unparenthesized")
+    )));
+}
+
+#[test]
+fn test_ternary_chain_with_parens_allowed_in_php8() {
+    // Parenthesized ternary chaining is valid in PHP 8
+    let result = parse_php_versioned(
+        "<?php $x = (true ? 1 : 2) ? 3 : 4;",
+        php_rs_parser::PhpVersion::Php80,
+    );
+    assert!(
+        result.errors.is_empty(),
+        "parenthesized ternary chain must be valid in PHP 8.0: {:?}",
+        result.errors
+    );
+}
+
+#[test]
+fn test_ternary_simple_no_chain_allowed_in_php8() {
+    // Simple (non-chained) ternary is always valid
+    let result = parse_php_versioned("<?php $x = true ? 1 : 2;", php_rs_parser::PhpVersion::Php80);
+    assert!(
+        result.errors.is_empty(),
+        "simple ternary must be valid in PHP 8.0: {:?}",
+        result.errors
+    );
+}
