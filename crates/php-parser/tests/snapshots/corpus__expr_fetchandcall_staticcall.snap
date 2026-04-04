@@ -1,5 +1,5 @@
 ---
-source: crates/php-parser/tests/integration.rs
+source: crates/php-parser/tests/corpus.rs
 expression: to_json(& result.program)
 ---
 {
@@ -62,15 +62,15 @@ expression: to_json(& result.program)
                   }
                 },
                 "span": {
-                  "start": 0,
-                  "end": 0
+                  "start": 41,
+                  "end": 51
                 }
               },
               "args": []
             }
           },
           "span": {
-            "start": 0,
+            "start": 41,
             "end": 51
           }
         }
