@@ -251,6 +251,13 @@ fn match_missing_comma() {
     assert_errors_snapshot!("<?php match($x) { 1 => 'a' 2 => 'b' }");
 }
 
+#[test]
+fn match_duplicate_default() {
+    assert_errors_snapshot!(
+        "<?php $x = match ($v) { 1 => 'one', default => 'first', default => 'second' };"
+    );
+}
+
 // ============================================================================
 // VALID BUT UNUSUAL SYNTAX (parser must accept these cleanly)
 // ============================================================================

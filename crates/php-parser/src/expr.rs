@@ -1937,10 +1937,18 @@ fn parse_match_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     parser.expect(TokenKind::LeftBrace);
 
     let mut arms = parser.alloc_vec_with_capacity(4);
+    let mut seen_default = false;
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let arm_start = parser.start_span();
 
-        let conditions = if parser.eat(TokenKind::Default).is_some() {
+        let conditions = if let Some(tok) = parser.eat(TokenKind::Default) {
+            if seen_default {
+                parser.error(ParseError::Forbidden {
+                    message: "match expression may only contain one default arm".into(),
+                    span: tok.span,
+                });
+            }
+            seen_default = true;
             // Allow trailing comma after default: `default, => ...`
             parser.eat(TokenKind::Comma);
             None
