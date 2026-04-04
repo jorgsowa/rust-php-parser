@@ -852,8 +852,11 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                             }
                         }
                     } else {
-                        decoded.push(bytes[i] as char);
-                        i += 1;
+                        // Decode the next UTF-8 character from the remaining slice
+                        let rest = &inner[i..];
+                        let ch = rest.chars().next().unwrap();
+                        decoded.push(ch);
+                        i += ch.len_utf8();
                     }
                 }
                 parser.arena.alloc_str(&decoded)

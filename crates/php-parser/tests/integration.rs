@@ -4705,3 +4705,39 @@ fn test_null_literal_distinct_from_omit_in_array_destructuring() {
         "empty slot must not serialize as \"Null\""
     );
 }
+
+// =============================================================================
+// Single-quoted string with non-ASCII characters — regression for issue #68
+// =============================================================================
+
+fn extract_string_value(source: &'static str) -> &'static str {
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    let php_ast::StmtKind::Expression(expr) = &result.program.stmts[0].kind else {
+        panic!("expected expression stmt")
+    };
+    let php_ast::ExprKind::String(s) = &expr.kind else {
+        panic!("expected String expr, got {:?}", expr.kind)
+    };
+    s
+}
+
+#[test]
+fn test_single_quoted_non_ascii_with_escaped_quote() {
+    // 'hél\'lo' → hél'lo  (0xC3 0xA9 is é in UTF-8)
+    let val = extract_string_value("<?php 'hél\\'lo';");
+    assert_eq!(
+        val, "hél'lo",
+        "non-ASCII bytes must not be split into individual chars"
+    );
+}
+
+#[test]
+fn test_single_quoted_non_ascii_with_escaped_backslash() {
+    // 'naïve\\path' → naïve\path
+    let val = extract_string_value("<?php 'naïve\\\\path';");
+    assert_eq!(
+        val, "naïve\\path",
+        "non-ASCII before \\\\ must decode correctly"
+    );
+}
