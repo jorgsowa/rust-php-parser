@@ -469,3 +469,18 @@ fn use_error_then_valid_class() {
 fn switch_missing_expr_then_valid_if() {
     assert_errors_snapshot!("<?php switch () { case 1: break; } if (true) { echo 'ok'; }");
 }
+
+#[test]
+fn abstract_property_in_class() {
+    assert_errors_snapshot!("<?php class Foo { abstract public string $bar; }");
+}
+
+#[test]
+fn abstract_property_no_visibility() {
+    assert_errors_snapshot!("<?php class Foo { abstract string $bar; }");
+}
+
+#[test]
+fn abstract_method_in_enum() {
+    assert_errors_snapshot!("<?php enum Status { abstract public function label(): string; }");
+}

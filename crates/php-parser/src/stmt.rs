@@ -2329,6 +2329,13 @@ pub fn parse_class_members<'arena, 'src>(
 
             // Property hooks: { get { ... } set { ... } } — PHP 8.4+
             let had_hooks_block = parser.check(TokenKind::LeftBrace);
+            // abstract is only valid on properties with hooks (abstract property hooks, PHP 8.4+)
+            if is_abstract && !had_hooks_block {
+                parser.error(ParseError::Forbidden {
+                    message: "properties cannot be abstract".into(),
+                    span: Span::new(member_start, parser.current_span().start),
+                });
+            }
             let hooks = if had_hooks_block {
                 let span = parser.current_span();
                 parser.require_version(PhpVersion::Php84, "property hooks", span);
@@ -2697,6 +2704,13 @@ fn parse_enum<'arena, 'src>(
 
         // Method
         if parser.check(TokenKind::Function) {
+            if is_abstract {
+                parser.error(ParseError::Forbidden {
+                    message: "enum methods cannot be abstract".into(),
+                    span: Span::new(member_start, parser.current_span().start),
+                });
+            }
+
             parser.advance();
             let by_ref = parser.eat(TokenKind::Ampersand).is_some();
             let method_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {

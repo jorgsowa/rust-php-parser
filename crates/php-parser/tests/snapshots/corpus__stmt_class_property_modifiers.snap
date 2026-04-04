@@ -1,5 +1,5 @@
 ---
-source: crates/php-parser/tests/integration.rs
+source: crates/php-parser/tests/corpus.rs
 expression: to_json(& result.program)
 ---
 {
@@ -38,24 +38,6 @@ expression: to_json(& result.program)
               "kind": {
                 "Property": {
                   "name": "prop",
-                  "visibility": "Protected",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
-                  "type_hint": null,
-                  "default": null,
-                  "attributes": []
-                }
-              },
-              "span": {
-                "start": 47,
-                "end": 71
-              }
-            },
-            {
-              "kind": {
-                "Property": {
-                  "name": "prop",
                   "visibility": null,
                   "set_visibility": null,
                   "is_static": false,
@@ -66,8 +48,8 @@ expression: to_json(& result.program)
                 }
               },
               "span": {
-                "start": 77,
-                "end": 91
+                "start": 47,
+                "end": 61
               }
             },
             {
@@ -84,8 +66,8 @@ expression: to_json(& result.program)
                 }
               },
               "span": {
-                "start": 97,
-                "end": 117
+                "start": 67,
+                "end": 87
               }
             }
           ],
@@ -94,12 +76,12 @@ expression: to_json(& result.program)
       },
       "span": {
         "start": 6,
-        "end": 120
+        "end": 90
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 120
+    "end": 90
   }
 }
