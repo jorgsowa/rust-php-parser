@@ -1,0 +1,1463 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: "category_snapshot(\"closure\")"
+---
+=== static arrow ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "fn"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 9
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "ArrowFunction": {
+                    "is_static": true,
+                    "by_ref": false,
+                    "params": [
+                      {
+                        "name": "x",
+                        "type_hint": null,
+                        "default": null,
+                        "by_ref": false,
+                        "variadic": false,
+                        "is_readonly": false,
+                        "is_final": false,
+                        "visibility": null,
+                        "set_visibility": null,
+                        "attributes": [],
+                        "span": {
+                          "start": 22,
+                          "end": 24
+                        }
+                      }
+                    ],
+                    "return_type": null,
+                    "body": {
+                      "kind": {
+                        "Binary": {
+                          "left": {
+                            "kind": {
+                              "Variable": "x"
+                            },
+                            "span": {
+                              "start": 29,
+                              "end": 31
+                            }
+                          },
+                          "op": "Mul",
+                          "right": {
+                            "kind": {
+                              "Int": 2
+                            },
+                            "span": {
+                              "start": 34,
+                              "end": 35
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 29,
+                        "end": 35
+                      }
+                    },
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 12,
+                  "end": 35
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 35
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 36
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 36
+  }
+}
+=== arrow returns arrow ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "fn"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 9
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "ArrowFunction": {
+                    "is_static": false,
+                    "by_ref": false,
+                    "params": [
+                      {
+                        "name": "x",
+                        "type_hint": null,
+                        "default": null,
+                        "by_ref": false,
+                        "variadic": false,
+                        "is_readonly": false,
+                        "is_final": false,
+                        "visibility": null,
+                        "set_visibility": null,
+                        "attributes": [],
+                        "span": {
+                          "start": 15,
+                          "end": 17
+                        }
+                      }
+                    ],
+                    "return_type": null,
+                    "body": {
+                      "kind": {
+                        "ArrowFunction": {
+                          "is_static": false,
+                          "by_ref": false,
+                          "params": [
+                            {
+                              "name": "y",
+                              "type_hint": null,
+                              "default": null,
+                              "by_ref": false,
+                              "variadic": false,
+                              "is_readonly": false,
+                              "is_final": false,
+                              "visibility": null,
+                              "set_visibility": null,
+                              "attributes": [],
+                              "span": {
+                                "start": 25,
+                                "end": 27
+                              }
+                            }
+                          ],
+                          "return_type": null,
+                          "body": {
+                            "kind": {
+                              "Binary": {
+                                "left": {
+                                  "kind": {
+                                    "Variable": "x"
+                                  },
+                                  "span": {
+                                    "start": 32,
+                                    "end": 34
+                                  }
+                                },
+                                "op": "Add",
+                                "right": {
+                                  "kind": {
+                                    "Variable": "y"
+                                  },
+                                  "span": {
+                                    "start": 37,
+                                    "end": 39
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 32,
+                              "end": 39
+                            }
+                          },
+                          "attributes": []
+                        }
+                      },
+                      "span": {
+                        "start": 22,
+                        "end": 39
+                      }
+                    },
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 12,
+                  "end": 39
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 39
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 40
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 40
+  }
+}
+=== closure use by ref ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "fn"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 9
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Closure": {
+                    "is_static": false,
+                    "by_ref": false,
+                    "params": [],
+                    "use_vars": [
+                      {
+                        "name": "a",
+                        "by_ref": true,
+                        "span": {
+                          "start": 28,
+                          "end": 31
+                        }
+                      },
+                      {
+                        "name": "b",
+                        "by_ref": true,
+                        "span": {
+                          "start": 33,
+                          "end": 36
+                        }
+                      }
+                    ],
+                    "return_type": null,
+                    "body": [
+                      {
+                        "kind": {
+                          "Return": {
+                            "kind": {
+                              "Binary": {
+                                "left": {
+                                  "kind": {
+                                    "Variable": "a"
+                                  },
+                                  "span": {
+                                    "start": 47,
+                                    "end": 49
+                                  }
+                                },
+                                "op": "Add",
+                                "right": {
+                                  "kind": {
+                                    "Variable": "b"
+                                  },
+                                  "span": {
+                                    "start": 52,
+                                    "end": 54
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 47,
+                              "end": 54
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 40,
+                          "end": 56
+                        }
+                      }
+                    ],
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 12,
+                  "end": 57
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 57
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 58
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 58
+  }
+}
+=== closure with return type ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "fn"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 9
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Closure": {
+                    "is_static": false,
+                    "by_ref": false,
+                    "params": [
+                      {
+                        "name": "x",
+                        "type_hint": {
+                          "kind": {
+                            "Named": {
+                              "parts": [
+                                "int"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 21,
+                                "end": 24
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 21,
+                            "end": 24
+                          }
+                        },
+                        "default": null,
+                        "by_ref": false,
+                        "variadic": false,
+                        "is_readonly": false,
+                        "is_final": false,
+                        "visibility": null,
+                        "set_visibility": null,
+                        "attributes": [],
+                        "span": {
+                          "start": 21,
+                          "end": 27
+                        }
+                      }
+                    ],
+                    "use_vars": [],
+                    "return_type": {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "string"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 30,
+                            "end": 36
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 30,
+                        "end": 36
+                      }
+                    },
+                    "body": [
+                      {
+                        "kind": {
+                          "Return": {
+                            "kind": {
+                              "Cast": [
+                                "String",
+                                {
+                                  "kind": {
+                                    "Variable": "x"
+                                  },
+                                  "span": {
+                                    "start": 54,
+                                    "end": 56
+                                  }
+                                }
+                              ]
+                            },
+                            "span": {
+                              "start": 46,
+                              "end": 56
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 39,
+                          "end": 58
+                        }
+                      }
+                    ],
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 12,
+                  "end": 59
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 59
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 60
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 60
+  }
+}
+=== arrow with array ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "fn"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 9
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "ArrowFunction": {
+                    "is_static": false,
+                    "by_ref": false,
+                    "params": [
+                      {
+                        "name": "x",
+                        "type_hint": null,
+                        "default": null,
+                        "by_ref": false,
+                        "variadic": false,
+                        "is_readonly": false,
+                        "is_final": false,
+                        "visibility": null,
+                        "set_visibility": null,
+                        "attributes": [],
+                        "span": {
+                          "start": 15,
+                          "end": 17
+                        }
+                      }
+                    ],
+                    "return_type": null,
+                    "body": {
+                      "kind": {
+                        "Array": [
+                          {
+                            "key": null,
+                            "value": {
+                              "kind": {
+                                "Variable": "x"
+                              },
+                              "span": {
+                                "start": 23,
+                                "end": 25
+                              }
+                            },
+                            "unpack": false,
+                            "span": {
+                              "start": 23,
+                              "end": 25
+                            }
+                          },
+                          {
+                            "key": null,
+                            "value": {
+                              "kind": {
+                                "Binary": {
+                                  "left": {
+                                    "kind": {
+                                      "Variable": "x"
+                                    },
+                                    "span": {
+                                      "start": 27,
+                                      "end": 29
+                                    }
+                                  },
+                                  "op": "Mul",
+                                  "right": {
+                                    "kind": {
+                                      "Int": 2
+                                    },
+                                    "span": {
+                                      "start": 32,
+                                      "end": 33
+                                    }
+                                  }
+                                }
+                              },
+                              "span": {
+                                "start": 27,
+                                "end": 33
+                              }
+                            },
+                            "unpack": false,
+                            "span": {
+                              "start": 27,
+                              "end": 33
+                            }
+                          }
+                        ]
+                      },
+                      "span": {
+                        "start": 22,
+                        "end": 34
+                      }
+                    },
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 12,
+                  "end": 34
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 34
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 35
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 35
+  }
+}
+=== arrow typed ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "fn"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 9
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "ArrowFunction": {
+                    "is_static": false,
+                    "by_ref": false,
+                    "params": [
+                      {
+                        "name": "x",
+                        "type_hint": {
+                          "kind": {
+                            "Named": {
+                              "parts": [
+                                "int"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 15,
+                                "end": 18
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 15,
+                            "end": 18
+                          }
+                        },
+                        "default": null,
+                        "by_ref": false,
+                        "variadic": false,
+                        "is_readonly": false,
+                        "is_final": false,
+                        "visibility": null,
+                        "set_visibility": null,
+                        "attributes": [],
+                        "span": {
+                          "start": 15,
+                          "end": 21
+                        }
+                      }
+                    ],
+                    "return_type": {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "int"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 24,
+                            "end": 27
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 24,
+                        "end": 27
+                      }
+                    },
+                    "body": {
+                      "kind": {
+                        "Binary": {
+                          "left": {
+                            "kind": {
+                              "Variable": "x"
+                            },
+                            "span": {
+                              "start": 31,
+                              "end": 33
+                            }
+                          },
+                          "op": "Mul",
+                          "right": {
+                            "kind": {
+                              "Int": 2
+                            },
+                            "span": {
+                              "start": 36,
+                              "end": 37
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 31,
+                        "end": 37
+                      }
+                    },
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 12,
+                  "end": 37
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 37
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 38
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 38
+  }
+}
+=== arrow in array_map ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "array_map"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 15
+                }
+              },
+              "args": [
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "ArrowFunction": {
+                        "is_static": false,
+                        "by_ref": false,
+                        "params": [
+                          {
+                            "name": "x",
+                            "type_hint": null,
+                            "default": null,
+                            "by_ref": false,
+                            "variadic": false,
+                            "is_readonly": false,
+                            "is_final": false,
+                            "visibility": null,
+                            "set_visibility": null,
+                            "attributes": [],
+                            "span": {
+                              "start": 19,
+                              "end": 21
+                            }
+                          }
+                        ],
+                        "return_type": null,
+                        "body": {
+                          "kind": {
+                            "Binary": {
+                              "left": {
+                                "kind": {
+                                  "Variable": "x"
+                                },
+                                "span": {
+                                  "start": 26,
+                                  "end": 28
+                                }
+                              },
+                              "op": "Mul",
+                              "right": {
+                                "kind": {
+                                  "Int": 2
+                                },
+                                "span": {
+                                  "start": 31,
+                                  "end": 32
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 26,
+                            "end": 32
+                          }
+                        },
+                        "attributes": []
+                      }
+                    },
+                    "span": {
+                      "start": 16,
+                      "end": 32
+                    }
+                  },
+                  "unpack": false,
+                  "by_ref": false,
+                  "span": {
+                    "start": 16,
+                    "end": 32
+                  }
+                },
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Variable": "arr"
+                    },
+                    "span": {
+                      "start": 34,
+                      "end": 38
+                    }
+                  },
+                  "unpack": false,
+                  "by_ref": false,
+                  "span": {
+                    "start": 34,
+                    "end": 38
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 39
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 40
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 40
+  }
+}
+=== arrow with null coalesce ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "fn"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 9
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "ArrowFunction": {
+                    "is_static": false,
+                    "by_ref": false,
+                    "params": [
+                      {
+                        "name": "x",
+                        "type_hint": null,
+                        "default": null,
+                        "by_ref": false,
+                        "variadic": false,
+                        "is_readonly": false,
+                        "is_final": false,
+                        "visibility": null,
+                        "set_visibility": null,
+                        "attributes": [],
+                        "span": {
+                          "start": 15,
+                          "end": 17
+                        }
+                      }
+                    ],
+                    "return_type": null,
+                    "body": {
+                      "kind": {
+                        "NullCoalesce": {
+                          "left": {
+                            "kind": {
+                              "Variable": "x"
+                            },
+                            "span": {
+                              "start": 22,
+                              "end": 24
+                            }
+                          },
+                          "right": {
+                            "kind": {
+                              "String": "default"
+                            },
+                            "span": {
+                              "start": 28,
+                              "end": 37
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 22,
+                        "end": 37
+                      }
+                    },
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 12,
+                  "end": 37
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 37
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 38
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 38
+  }
+}
+=== closure static typed ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "fn"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 9
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Closure": {
+                    "is_static": true,
+                    "by_ref": false,
+                    "params": [
+                      {
+                        "name": "x",
+                        "type_hint": {
+                          "kind": {
+                            "Named": {
+                              "parts": [
+                                "int"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 28,
+                                "end": 31
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 28,
+                            "end": 31
+                          }
+                        },
+                        "default": null,
+                        "by_ref": false,
+                        "variadic": false,
+                        "is_readonly": false,
+                        "is_final": false,
+                        "visibility": null,
+                        "set_visibility": null,
+                        "attributes": [],
+                        "span": {
+                          "start": 28,
+                          "end": 34
+                        }
+                      }
+                    ],
+                    "use_vars": [],
+                    "return_type": {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "int"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 37,
+                            "end": 40
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 37,
+                        "end": 40
+                      }
+                    },
+                    "body": [
+                      {
+                        "kind": {
+                          "Return": {
+                            "kind": {
+                              "Variable": "x"
+                            },
+                            "span": {
+                              "start": 50,
+                              "end": 52
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 43,
+                          "end": 54
+                        }
+                      }
+                    ],
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 12,
+                  "end": 55
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 55
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 56
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 56
+  }
+}
+=== arrow in ternary ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "fn"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 9
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Ternary": {
+                    "condition": {
+                      "kind": {
+                        "Variable": "flag"
+                      },
+                      "span": {
+                        "start": 12,
+                        "end": 17
+                      }
+                    },
+                    "then_expr": {
+                      "kind": {
+                        "ArrowFunction": {
+                          "is_static": false,
+                          "by_ref": false,
+                          "params": [
+                            {
+                              "name": "x",
+                              "type_hint": null,
+                              "default": null,
+                              "by_ref": false,
+                              "variadic": false,
+                              "is_readonly": false,
+                              "is_final": false,
+                              "visibility": null,
+                              "set_visibility": null,
+                              "attributes": [],
+                              "span": {
+                                "start": 23,
+                                "end": 25
+                              }
+                            }
+                          ],
+                          "return_type": null,
+                          "body": {
+                            "kind": {
+                              "Binary": {
+                                "left": {
+                                  "kind": {
+                                    "Variable": "x"
+                                  },
+                                  "span": {
+                                    "start": 30,
+                                    "end": 32
+                                  }
+                                },
+                                "op": "Add",
+                                "right": {
+                                  "kind": {
+                                    "Int": 1
+                                  },
+                                  "span": {
+                                    "start": 35,
+                                    "end": 36
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 30,
+                              "end": 36
+                            }
+                          },
+                          "attributes": []
+                        }
+                      },
+                      "span": {
+                        "start": 20,
+                        "end": 36
+                      }
+                    },
+                    "else_expr": {
+                      "kind": {
+                        "ArrowFunction": {
+                          "is_static": false,
+                          "by_ref": false,
+                          "params": [
+                            {
+                              "name": "x",
+                              "type_hint": null,
+                              "default": null,
+                              "by_ref": false,
+                              "variadic": false,
+                              "is_readonly": false,
+                              "is_final": false,
+                              "visibility": null,
+                              "set_visibility": null,
+                              "attributes": [],
+                              "span": {
+                                "start": 42,
+                                "end": 44
+                              }
+                            }
+                          ],
+                          "return_type": null,
+                          "body": {
+                            "kind": {
+                              "Binary": {
+                                "left": {
+                                  "kind": {
+                                    "Variable": "x"
+                                  },
+                                  "span": {
+                                    "start": 49,
+                                    "end": 51
+                                  }
+                                },
+                                "op": "Sub",
+                                "right": {
+                                  "kind": {
+                                    "Int": 1
+                                  },
+                                  "span": {
+                                    "start": 54,
+                                    "end": 55
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 49,
+                              "end": 55
+                            }
+                          },
+                          "attributes": []
+                        }
+                      },
+                      "span": {
+                        "start": 39,
+                        "end": 55
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 12,
+                  "end": 55
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 55
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 56
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 56
+  }
+}
+=== arrow in call ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "array_filter"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 18
+                }
+              },
+              "args": [
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Variable": "arr"
+                    },
+                    "span": {
+                      "start": 19,
+                      "end": 23
+                    }
+                  },
+                  "unpack": false,
+                  "by_ref": false,
+                  "span": {
+                    "start": 19,
+                    "end": 23
+                  }
+                },
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "ArrowFunction": {
+                        "is_static": false,
+                        "by_ref": false,
+                        "params": [
+                          {
+                            "name": "x",
+                            "type_hint": null,
+                            "default": null,
+                            "by_ref": false,
+                            "variadic": false,
+                            "is_readonly": false,
+                            "is_final": false,
+                            "visibility": null,
+                            "set_visibility": null,
+                            "attributes": [],
+                            "span": {
+                              "start": 28,
+                              "end": 30
+                            }
+                          }
+                        ],
+                        "return_type": null,
+                        "body": {
+                          "kind": {
+                            "Binary": {
+                              "left": {
+                                "kind": {
+                                  "Variable": "x"
+                                },
+                                "span": {
+                                  "start": 35,
+                                  "end": 37
+                                }
+                              },
+                              "op": "Greater",
+                              "right": {
+                                "kind": {
+                                  "Int": 0
+                                },
+                                "span": {
+                                  "start": 40,
+                                  "end": 41
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 35,
+                            "end": 41
+                          }
+                        },
+                        "attributes": []
+                      }
+                    },
+                    "span": {
+                      "start": 25,
+                      "end": 41
+                    }
+                  },
+                  "unpack": false,
+                  "by_ref": false,
+                  "span": {
+                    "start": 25,
+                    "end": 41
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 42
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 43
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 43
+  }
+}
+=== closure immediately invoked ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Parenthesized": {
+                    "kind": {
+                      "Closure": {
+                        "is_static": false,
+                        "by_ref": false,
+                        "params": [],
+                        "use_vars": [],
+                        "return_type": null,
+                        "body": [
+                          {
+                            "kind": {
+                              "Echo": [
+                                {
+                                  "kind": {
+                                    "String": "hi"
+                                  },
+                                  "span": {
+                                    "start": 25,
+                                    "end": 29
+                                  }
+                                }
+                              ]
+                            },
+                            "span": {
+                              "start": 20,
+                              "end": 31
+                            }
+                          }
+                        ],
+                        "attributes": []
+                      }
+                    },
+                    "span": {
+                      "start": 7,
+                      "end": 32
+                    }
+                  }
+                },
+                "span": {
+                  "start": 6,
+                  "end": 33
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 35
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 36
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 36
+  }
+}

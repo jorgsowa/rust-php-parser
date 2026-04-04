@@ -1,0 +1,5 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: format_errors(&result)
+---
+cannot use 'abstract' and 'final' together

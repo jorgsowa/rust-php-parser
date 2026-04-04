@@ -1,0 +1,1315 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: "category_snapshot(\"type_hints\")"
+---
+=== dnf complex ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "f",
+          "params": [
+            {
+              "name": "x",
+              "type_hint": {
+                "kind": {
+                  "Union": [
+                    {
+                      "kind": {
+                        "Intersection": [
+                          {
+                            "kind": {
+                              "Named": {
+                                "parts": [
+                                  "A"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 18,
+                                  "end": 19
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 18,
+                              "end": 19
+                            }
+                          },
+                          {
+                            "kind": {
+                              "Named": {
+                                "parts": [
+                                  "B"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 20,
+                                  "end": 21
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 20,
+                              "end": 21
+                            }
+                          }
+                        ]
+                      },
+                      "span": {
+                        "start": 17,
+                        "end": 22
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "C"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 23,
+                            "end": 25
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 23,
+                        "end": 25
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 17,
+                  "end": 25
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "is_readonly": false,
+              "is_final": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 17,
+                "end": 27
+              }
+            }
+          ],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 31
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 31
+  }
+}
+=== dnf multi groups ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "f",
+          "params": [
+            {
+              "name": "x",
+              "type_hint": {
+                "kind": {
+                  "Union": [
+                    {
+                      "kind": {
+                        "Intersection": [
+                          {
+                            "kind": {
+                              "Named": {
+                                "parts": [
+                                  "A"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 18,
+                                  "end": 19
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 18,
+                              "end": 19
+                            }
+                          },
+                          {
+                            "kind": {
+                              "Named": {
+                                "parts": [
+                                  "B"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 20,
+                                  "end": 21
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 20,
+                              "end": 21
+                            }
+                          }
+                        ]
+                      },
+                      "span": {
+                        "start": 17,
+                        "end": 22
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Intersection": [
+                          {
+                            "kind": {
+                              "Named": {
+                                "parts": [
+                                  "C"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 24,
+                                  "end": 25
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 24,
+                              "end": 25
+                            }
+                          },
+                          {
+                            "kind": {
+                              "Named": {
+                                "parts": [
+                                  "D"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 26,
+                                  "end": 27
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 26,
+                              "end": 27
+                            }
+                          }
+                        ]
+                      },
+                      "span": {
+                        "start": 23,
+                        "end": 28
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 17,
+                  "end": 28
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "is_readonly": false,
+              "is_final": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 17,
+                "end": 31
+              }
+            }
+          ],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 35
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 35
+  }
+}
+=== union with null ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "f",
+          "params": [
+            {
+              "name": "x",
+              "type_hint": {
+                "kind": {
+                  "Union": [
+                    {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "int"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 17,
+                            "end": 20
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 17,
+                        "end": 20
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "string"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 21,
+                            "end": 27
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 21,
+                        "end": 27
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "null"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 28,
+                            "end": 32
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 28,
+                        "end": 32
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 17,
+                  "end": 32
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "is_readonly": false,
+              "is_final": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 17,
+                "end": 35
+              }
+            }
+          ],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 39
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 39
+  }
+}
+=== self return ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "Foo",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Method": {
+                  "name": "bar",
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "self"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 41,
+                          "end": 45
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 41,
+                      "end": 45
+                    }
+                  },
+                  "body": [],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 18,
+                "end": 49
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 50
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 50
+  }
+}
+=== static return ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "Foo",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Method": {
+                  "name": "bar",
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "static"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 41,
+                          "end": 47
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 41,
+                      "end": 47
+                    }
+                  },
+                  "body": [],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 18,
+                "end": 51
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 52
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 52
+  }
+}
+=== parent type ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "Foo",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": {
+            "parts": [
+              "Bar"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 24,
+              "end": 28
+            }
+          },
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Method": {
+                  "name": "bar",
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "parent"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 53,
+                          "end": 59
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 53,
+                      "end": 59
+                    }
+                  },
+                  "body": [],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 30,
+                "end": 63
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 64
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 64
+  }
+}
+=== mixed type ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "f",
+          "params": [
+            {
+              "name": "x",
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "mixed"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 17,
+                      "end": 22
+                    }
+                  }
+                },
+                "span": {
+                  "start": 17,
+                  "end": 22
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "is_readonly": false,
+              "is_final": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 17,
+                "end": 25
+              }
+            }
+          ],
+          "body": [],
+          "return_type": {
+            "kind": {
+              "Named": {
+                "parts": [
+                  "mixed"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 28,
+                  "end": 33
+                }
+              }
+            },
+            "span": {
+              "start": 28,
+              "end": 33
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 36
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 36
+  }
+}
+=== never return ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "abort",
+          "params": [],
+          "body": [
+            {
+              "kind": {
+                "Throw": {
+                  "kind": {
+                    "New": {
+                      "class": {
+                        "kind": {
+                          "Identifier": "Exception"
+                        },
+                        "span": {
+                          "start": 42,
+                          "end": 51
+                        }
+                      },
+                      "args": []
+                    }
+                  },
+                  "span": {
+                    "start": 38,
+                    "end": 53
+                  }
+                }
+              },
+              "span": {
+                "start": 32,
+                "end": 55
+              }
+            }
+          ],
+          "return_type": {
+            "kind": {
+              "Named": {
+                "parts": [
+                  "never"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 24,
+                  "end": 29
+                }
+              }
+            },
+            "span": {
+              "start": 24,
+              "end": 29
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 56
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 56
+  }
+}
+=== void return ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "f",
+          "params": [],
+          "body": [],
+          "return_type": {
+            "kind": {
+              "Named": {
+                "parts": [
+                  "void"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 20,
+                  "end": 24
+                }
+              }
+            },
+            "span": {
+              "start": 20,
+              "end": 24
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 27
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 27
+  }
+}
+=== iterable type ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "f",
+          "params": [
+            {
+              "name": "x",
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "iterable"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 17,
+                      "end": 25
+                    }
+                  }
+                },
+                "span": {
+                  "start": 17,
+                  "end": 25
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "is_readonly": false,
+              "is_final": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 17,
+                "end": 28
+              }
+            }
+          ],
+          "body": [],
+          "return_type": {
+            "kind": {
+              "Named": {
+                "parts": [
+                  "iterable"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 31,
+                  "end": 39
+                }
+              }
+            },
+            "span": {
+              "start": 31,
+              "end": 39
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 42
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 42
+  }
+}
+=== callable type ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "f",
+          "params": [
+            {
+              "name": "x",
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "callable"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 17,
+                      "end": 25
+                    }
+                  }
+                },
+                "span": {
+                  "start": 17,
+                  "end": 25
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "is_readonly": false,
+              "is_final": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 17,
+                "end": 28
+              }
+            }
+          ],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 32
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 32
+  }
+}
+=== three intersection ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "f",
+          "params": [
+            {
+              "name": "x",
+              "type_hint": {
+                "kind": {
+                  "Intersection": [
+                    {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "Countable"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 17,
+                            "end": 26
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 17,
+                        "end": 26
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "Traversable"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 27,
+                            "end": 38
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 27,
+                        "end": 38
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "ArrayAccess"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 39,
+                            "end": 51
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 39,
+                        "end": 51
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 17,
+                  "end": 51
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "is_readonly": false,
+              "is_final": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 17,
+                "end": 53
+              }
+            }
+          ],
+          "body": [],
+          "return_type": {
+            "kind": {
+              "Named": {
+                "parts": [
+                  "void"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 56,
+                  "end": 60
+                }
+              }
+            },
+            "span": {
+              "start": 56,
+              "end": 60
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 63
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 63
+  }
+}
+=== standalone true ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "f",
+          "params": [],
+          "body": [
+            {
+              "kind": {
+                "Return": {
+                  "kind": {
+                    "Bool": true
+                  },
+                  "span": {
+                    "start": 34,
+                    "end": 38
+                  }
+                }
+              },
+              "span": {
+                "start": 27,
+                "end": 40
+              }
+            }
+          ],
+          "return_type": {
+            "kind": {
+              "Named": {
+                "parts": [
+                  "true"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 20,
+                  "end": 24
+                }
+              }
+            },
+            "span": {
+              "start": 20,
+              "end": 24
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 41
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 41
+  }
+}
+=== standalone false ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "f",
+          "params": [],
+          "body": [
+            {
+              "kind": {
+                "Return": {
+                  "kind": {
+                    "Bool": false
+                  },
+                  "span": {
+                    "start": 35,
+                    "end": 40
+                  }
+                }
+              },
+              "span": {
+                "start": 28,
+                "end": 42
+              }
+            }
+          ],
+          "return_type": {
+            "kind": {
+              "Named": {
+                "parts": [
+                  "false"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 20,
+                  "end": 25
+                }
+              }
+            },
+            "span": {
+              "start": 20,
+              "end": 25
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 43
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 43
+  }
+}
+=== true null union ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "f",
+          "params": [],
+          "body": [
+            {
+              "kind": {
+                "Return": {
+                  "kind": "Null",
+                  "span": {
+                    "start": 39,
+                    "end": 43
+                  }
+                }
+              },
+              "span": {
+                "start": 32,
+                "end": 45
+              }
+            }
+          ],
+          "return_type": {
+            "kind": {
+              "Union": [
+                {
+                  "kind": {
+                    "Named": {
+                      "parts": [
+                        "true"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 20,
+                        "end": 24
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 20,
+                    "end": 24
+                  }
+                },
+                {
+                  "kind": {
+                    "Named": {
+                      "parts": [
+                        "null"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 25,
+                        "end": 29
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 25,
+                    "end": 29
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 20,
+              "end": 29
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 46
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 46
+  }
+}
+=== false null union ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "f",
+          "params": [],
+          "body": [
+            {
+              "kind": {
+                "Return": {
+                  "kind": "Null",
+                  "span": {
+                    "start": 40,
+                    "end": 44
+                  }
+                }
+              },
+              "span": {
+                "start": 33,
+                "end": 46
+              }
+            }
+          ],
+          "return_type": {
+            "kind": {
+              "Union": [
+                {
+                  "kind": {
+                    "Named": {
+                      "parts": [
+                        "false"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 20,
+                        "end": 25
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 20,
+                    "end": 25
+                  }
+                },
+                {
+                  "kind": {
+                    "Named": {
+                      "parts": [
+                        "null"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 26,
+                        "end": 30
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 26,
+                    "end": 30
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 20,
+              "end": 30
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 47
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 47
+  }
+}

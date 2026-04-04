@@ -292,11 +292,11 @@ pub const CASES: &[Case] = &[
     case!("generator", "yield in assign", "<?php function gen() { $val = yield 'key' => 'value'; }"),
     case!("generator", "yield null", "<?php function gen() { yield; }"),
 
-    // yield_from_flag
-    case!("yield_from_flag", "yield from array", "<?php function g() { yield from [1]; }"),
-    case!("yield_from_flag", "yield value", "<?php function g() { yield 1; }"),
-    case!("yield_from_flag", "yield bare", "<?php function g() { yield; }"),
-    case!("yield_from_flag", "yield key value", "<?php function g() { yield $k => $v; }"),
+    // generator (yield/yield-from flag variants)
+    case!("generator", "yield from array flag", "<?php function g() { yield from [1]; }"),
+    case!("generator", "yield value flag", "<?php function g() { yield 1; }"),
+    case!("generator", "yield bare flag", "<?php function g() { yield; }"),
+    case!("generator", "yield key value flag", "<?php function g() { yield $k => $v; }"),
 
     // class
     case!("class", "abstract with interface", "<?php abstract class Foo implements Bar, Baz { abstract public function run(): void; }"),
@@ -363,14 +363,14 @@ pub const CASES: &[Case] = &[
     case!("attributes", "stacked attrs", "<?php #[A] #[B] #[C] class Foo {}"),
     case!("attributes", "grouped attrs", "<?php #[A, B, C] class Foo {}"),
 
-    // string_interp_edge
-    case!("string_interp_edge", "array key identifier in string", r#"<?php $x = "$arr[foo] here";"#),
-    case!("string_interp_edge", "empty double-quoted", r#"<?php $x = "";"#),
-    case!("string_interp_edge", "empty heredoc", "<?php $x = <<<EOT\nEOT;\n"),
-    case!("string_interp_edge", "only escape sequences", r#"<?php $x = "\n\r\t\v\e\f\\\$\"";"#),
-    case!("string_interp_edge", "unicode max codepoint", r#"<?php $x = "\u{10FFFF}";"#),
-    case!("string_interp_edge", "var with bracket index in string", r#"<?php $x = "$arr[0] end";"#),
-    case!("string_interp_edge", "var then text then var", r#"<?php $x = "$a-$b";"#),
+    // string_interpolation edge cases
+    case!("string_interpolation", "array key identifier in string", r#"<?php $x = "$arr[foo] here";"#),
+    case!("string_interpolation", "empty double-quoted", r#"<?php $x = "";"#),
+    case!("string_interpolation", "empty heredoc", "<?php $x = <<<EOT\nEOT;\n"),
+    case!("string_interpolation", "only escape sequences", r#"<?php $x = "\n\r\t\v\e\f\\\$\"";"#),
+    case!("string_interpolation", "unicode max codepoint", r#"<?php $x = "\u{10FFFF}";"#),
+    case!("string_interpolation", "var with bracket index in string", r#"<?php $x = "$arr[0] end";"#),
+    case!("string_interpolation", "var then text then var", r#"<?php $x = "$a-$b";"#),
 
     // trait_use
     case!("trait_use", "alias visibility only", "<?php class C { use T { foo as protected; } }"),
@@ -404,7 +404,6 @@ pub const CASES: &[Case] = &[
     case!("builtins", "unset multi", "<?php unset($a, $b);"),
     case!("builtins", "global multi", "<?php global $a, $b, $c;"),
     case!("builtins", "static var multi", "<?php function f() { static $a = 1, $b = 2; }"),
-    case!("builtins", "declare strict", "<?php declare(strict_types=1);"),
     case!("builtins", "eval", "<?php eval('echo 1;');"),
     case!("builtins", "require once", "<?php require_once 'autoload.php';"),
     case!("builtins", "include expr", "<?php include $dir . '/file.php';"),

@@ -1,0 +1,5 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: format_errors(&result_82)
+---
+'typed class constants' requires PHP 8.3 or higher (targeting PHP 8.2)

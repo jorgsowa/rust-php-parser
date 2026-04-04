@@ -1,0 +1,959 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: "category_snapshot(\"control_flow\")"
+---
+=== foreach destructure ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Foreach": {
+          "expr": {
+            "kind": {
+              "Variable": "arr"
+            },
+            "span": {
+              "start": 15,
+              "end": 19
+            }
+          },
+          "key": null,
+          "value": {
+            "kind": {
+              "Array": [
+                {
+                  "key": null,
+                  "value": {
+                    "kind": {
+                      "Variable": "key"
+                    },
+                    "span": {
+                      "start": 24,
+                      "end": 28
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 24,
+                    "end": 28
+                  }
+                },
+                {
+                  "key": null,
+                  "value": {
+                    "kind": {
+                      "Variable": "value"
+                    },
+                    "span": {
+                      "start": 30,
+                      "end": 36
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 30,
+                    "end": 36
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 23,
+              "end": 37
+            }
+          },
+          "body": {
+            "kind": {
+              "Block": [
+                {
+                  "kind": {
+                    "Echo": [
+                      {
+                        "kind": {
+                          "Variable": "key"
+                        },
+                        "span": {
+                          "start": 46,
+                          "end": 50
+                        }
+                      }
+                    ]
+                  },
+                  "span": {
+                    "start": 41,
+                    "end": 52
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 39,
+              "end": 53
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 53
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 53
+  }
+}
+=== foreach keyed destruct ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Foreach": {
+          "expr": {
+            "kind": {
+              "Variable": "arr"
+            },
+            "span": {
+              "start": 15,
+              "end": 19
+            }
+          },
+          "key": {
+            "kind": {
+              "Variable": "k"
+            },
+            "span": {
+              "start": 23,
+              "end": 25
+            }
+          },
+          "value": {
+            "kind": {
+              "Array": [
+                {
+                  "key": null,
+                  "value": {
+                    "kind": {
+                      "Variable": "a"
+                    },
+                    "span": {
+                      "start": 30,
+                      "end": 32
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 30,
+                    "end": 32
+                  }
+                },
+                {
+                  "key": null,
+                  "value": {
+                    "kind": {
+                      "Variable": "b"
+                    },
+                    "span": {
+                      "start": 34,
+                      "end": 36
+                    }
+                  },
+                  "unpack": false,
+                  "span": {
+                    "start": 34,
+                    "end": 36
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 29,
+              "end": 37
+            }
+          },
+          "body": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 39,
+              "end": 41
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 41
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 41
+  }
+}
+=== switch default middle ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Switch": {
+          "expr": {
+            "kind": {
+              "Variable": "x"
+            },
+            "span": {
+              "start": 14,
+              "end": 16
+            }
+          },
+          "cases": [
+            {
+              "value": {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 25,
+                  "end": 26
+                }
+              },
+              "body": [
+                {
+                  "kind": {
+                    "Break": null
+                  },
+                  "span": {
+                    "start": 28,
+                    "end": 35
+                  }
+                }
+              ],
+              "span": {
+                "start": 20,
+                "end": 35
+              }
+            },
+            {
+              "value": null,
+              "body": [
+                {
+                  "kind": {
+                    "Break": null
+                  },
+                  "span": {
+                    "start": 44,
+                    "end": 51
+                  }
+                }
+              ],
+              "span": {
+                "start": 35,
+                "end": 51
+              }
+            },
+            {
+              "value": {
+                "kind": {
+                  "Int": 2
+                },
+                "span": {
+                  "start": 56,
+                  "end": 57
+                }
+              },
+              "body": [
+                {
+                  "kind": {
+                    "Break": null
+                  },
+                  "span": {
+                    "start": 59,
+                    "end": 66
+                  }
+                }
+              ],
+              "span": {
+                "start": 51,
+                "end": 66
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 67
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 67
+  }
+}
+=== empty switch ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Switch": {
+          "expr": {
+            "kind": {
+              "Variable": "x"
+            },
+            "span": {
+              "start": 14,
+              "end": 16
+            }
+          },
+          "cases": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 20
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 20
+  }
+}
+=== multiple braced ns ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Namespace": {
+          "name": {
+            "parts": [
+              "A"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 16,
+              "end": 18
+            }
+          },
+          "body": {
+            "Braced": [
+              {
+                "kind": {
+                  "Function": {
+                    "name": "foo",
+                    "params": [],
+                    "body": [],
+                    "return_type": null,
+                    "by_ref": false,
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 20,
+                  "end": 37
+                }
+              }
+            ]
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 39
+      }
+    },
+    {
+      "kind": {
+        "Namespace": {
+          "name": {
+            "parts": [
+              "B"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 50,
+              "end": 52
+            }
+          },
+          "body": {
+            "Braced": [
+              {
+                "kind": {
+                  "Function": {
+                    "name": "bar",
+                    "params": [],
+                    "body": [],
+                    "return_type": null,
+                    "by_ref": false,
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 54,
+                  "end": 71
+                }
+              }
+            ]
+          }
+        }
+      },
+      "span": {
+        "start": 40,
+        "end": 73
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 73
+  }
+}
+=== empty braced ns ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Namespace": {
+          "name": {
+            "parts": [
+              "A"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 16,
+              "end": 18
+            }
+          },
+          "body": {
+            "Braced": []
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 21
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 21
+  }
+}
+=== global ns block ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Namespace": {
+          "name": null,
+          "body": {
+            "Braced": [
+              {
+                "kind": {
+                  "Function": {
+                    "name": "main",
+                    "params": [],
+                    "body": [],
+                    "return_type": null,
+                    "by_ref": false,
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 18,
+                  "end": 36
+                }
+              }
+            ]
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 38
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 38
+  }
+}
+=== for multi condition ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "For": {
+          "init": [
+            {
+              "kind": {
+                "Assign": {
+                  "target": {
+                    "kind": {
+                      "Variable": "i"
+                    },
+                    "span": {
+                      "start": 11,
+                      "end": 13
+                    }
+                  },
+                  "op": "Assign",
+                  "value": {
+                    "kind": {
+                      "Int": 0
+                    },
+                    "span": {
+                      "start": 14,
+                      "end": 15
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 11,
+                "end": 15
+              }
+            }
+          ],
+          "condition": [
+            {
+              "kind": {
+                "Variable": "a"
+              },
+              "span": {
+                "start": 17,
+                "end": 19
+              }
+            },
+            {
+              "kind": {
+                "Variable": "b"
+              },
+              "span": {
+                "start": 21,
+                "end": 23
+              }
+            }
+          ],
+          "update": [
+            {
+              "kind": {
+                "UnaryPostfix": {
+                  "operand": {
+                    "kind": {
+                      "Variable": "i"
+                    },
+                    "span": {
+                      "start": 25,
+                      "end": 27
+                    }
+                  },
+                  "op": "PostIncrement"
+                }
+              },
+              "span": {
+                "start": 25,
+                "end": 29
+              }
+            }
+          ],
+          "body": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 31,
+              "end": 33
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 33
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 33
+  }
+}
+=== for three init exprs ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "For": {
+          "init": [
+            {
+              "kind": {
+                "Assign": {
+                  "target": {
+                    "kind": {
+                      "Variable": "a"
+                    },
+                    "span": {
+                      "start": 11,
+                      "end": 13
+                    }
+                  },
+                  "op": "Assign",
+                  "value": {
+                    "kind": {
+                      "Int": 0
+                    },
+                    "span": {
+                      "start": 14,
+                      "end": 15
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 11,
+                "end": 15
+              }
+            },
+            {
+              "kind": {
+                "Assign": {
+                  "target": {
+                    "kind": {
+                      "Variable": "b"
+                    },
+                    "span": {
+                      "start": 17,
+                      "end": 19
+                    }
+                  },
+                  "op": "Assign",
+                  "value": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 20,
+                      "end": 21
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 17,
+                "end": 21
+              }
+            },
+            {
+              "kind": {
+                "Assign": {
+                  "target": {
+                    "kind": {
+                      "Variable": "c"
+                    },
+                    "span": {
+                      "start": 23,
+                      "end": 25
+                    }
+                  },
+                  "op": "Assign",
+                  "value": {
+                    "kind": {
+                      "Int": 2
+                    },
+                    "span": {
+                      "start": 26,
+                      "end": 27
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 23,
+                "end": 27
+              }
+            }
+          ],
+          "condition": [
+            {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Variable": "a"
+                    },
+                    "span": {
+                      "start": 29,
+                      "end": 31
+                    }
+                  },
+                  "op": "Less",
+                  "right": {
+                    "kind": {
+                      "Int": 10
+                    },
+                    "span": {
+                      "start": 34,
+                      "end": 36
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 29,
+                "end": 36
+              }
+            }
+          ],
+          "update": [
+            {
+              "kind": {
+                "UnaryPostfix": {
+                  "operand": {
+                    "kind": {
+                      "Variable": "a"
+                    },
+                    "span": {
+                      "start": 38,
+                      "end": 40
+                    }
+                  },
+                  "op": "PostIncrement"
+                }
+              },
+              "span": {
+                "start": 38,
+                "end": 42
+              }
+            }
+          ],
+          "body": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 44,
+              "end": 46
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 46
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 46
+  }
+}
+=== for complex update ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "For": {
+          "init": [
+            {
+              "kind": {
+                "Assign": {
+                  "target": {
+                    "kind": {
+                      "Variable": "i"
+                    },
+                    "span": {
+                      "start": 11,
+                      "end": 13
+                    }
+                  },
+                  "op": "Assign",
+                  "value": {
+                    "kind": {
+                      "Int": 0
+                    },
+                    "span": {
+                      "start": 14,
+                      "end": 15
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 11,
+                "end": 15
+              }
+            }
+          ],
+          "condition": [
+            {
+              "kind": {
+                "Binary": {
+                  "left": {
+                    "kind": {
+                      "Variable": "i"
+                    },
+                    "span": {
+                      "start": 17,
+                      "end": 19
+                    }
+                  },
+                  "op": "Less",
+                  "right": {
+                    "kind": {
+                      "Int": 10
+                    },
+                    "span": {
+                      "start": 20,
+                      "end": 22
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 17,
+                "end": 22
+              }
+            }
+          ],
+          "update": [
+            {
+              "kind": {
+                "UnaryPostfix": {
+                  "operand": {
+                    "kind": {
+                      "Variable": "i"
+                    },
+                    "span": {
+                      "start": 24,
+                      "end": 26
+                    }
+                  },
+                  "op": "PostIncrement"
+                }
+              },
+              "span": {
+                "start": 24,
+                "end": 28
+              }
+            },
+            {
+              "kind": {
+                "UnaryPostfix": {
+                  "operand": {
+                    "kind": {
+                      "Variable": "j"
+                    },
+                    "span": {
+                      "start": 30,
+                      "end": 32
+                    }
+                  },
+                  "op": "PostDecrement"
+                }
+              },
+              "span": {
+                "start": 30,
+                "end": 34
+              }
+            },
+            {
+              "kind": {
+                "Assign": {
+                  "target": {
+                    "kind": {
+                      "Variable": "k"
+                    },
+                    "span": {
+                      "start": 36,
+                      "end": 38
+                    }
+                  },
+                  "op": "Plus",
+                  "value": {
+                    "kind": {
+                      "Int": 2
+                    },
+                    "span": {
+                      "start": 40,
+                      "end": 41
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 36,
+                "end": 41
+              }
+            }
+          ],
+          "body": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 43,
+              "end": 45
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 45
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 45
+  }
+}
+=== for all empty ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "For": {
+          "init": [],
+          "condition": [],
+          "update": [],
+          "body": {
+            "kind": {
+              "Block": [
+                {
+                  "kind": {
+                    "Break": null
+                  },
+                  "span": {
+                    "start": 17,
+                    "end": 24
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 15,
+              "end": 25
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 25
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 25
+  }
+}

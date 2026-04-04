@@ -1,0 +1,387 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: "category_snapshot(\"declare\")"
+---
+=== declare encoding ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Declare": {
+          "directives": [
+            [
+              "encoding",
+              {
+                "kind": {
+                  "String": "UTF-8"
+                },
+                "span": {
+                  "start": 23,
+                  "end": 30
+                }
+              }
+            ]
+          ],
+          "body": null
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 32
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 32
+  }
+}
+=== declare ticks inline ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Declare": {
+          "directives": [
+            [
+              "ticks",
+              {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 20,
+                  "end": 21
+                }
+              }
+            ]
+          ],
+          "body": {
+            "kind": {
+              "Echo": [
+                {
+                  "kind": {
+                    "String": "tick"
+                  },
+                  "span": {
+                    "start": 28,
+                    "end": 34
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 23,
+              "end": 35
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 35
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 35
+  }
+}
+=== declare strict ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Declare": {
+          "directives": [
+            [
+              "strict_types",
+              {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 27,
+                  "end": 28
+                }
+              }
+            ]
+          ],
+          "body": null
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 30
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 30
+  }
+}
+=== declare with block ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Declare": {
+          "directives": [
+            [
+              "ticks",
+              {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 20,
+                  "end": 21
+                }
+              }
+            ]
+          ],
+          "body": {
+            "kind": {
+              "Block": [
+                {
+                  "kind": {
+                    "Expression": {
+                      "kind": {
+                        "FunctionCall": {
+                          "name": {
+                            "kind": {
+                              "Identifier": "foo"
+                            },
+                            "span": {
+                              "start": 25,
+                              "end": 28
+                            }
+                          },
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 25,
+                        "end": 30
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 25,
+                    "end": 32
+                  }
+                },
+                {
+                  "kind": {
+                    "Expression": {
+                      "kind": {
+                        "FunctionCall": {
+                          "name": {
+                            "kind": {
+                              "Identifier": "bar"
+                            },
+                            "span": {
+                              "start": 32,
+                              "end": 35
+                            }
+                          },
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 32,
+                        "end": 37
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 32,
+                    "end": 39
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 23,
+              "end": 40
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 40
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 40
+  }
+}
+=== declare ticks value 100 ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Declare": {
+          "directives": [
+            [
+              "ticks",
+              {
+                "kind": {
+                  "Int": 100
+                },
+                "span": {
+                  "start": 20,
+                  "end": 23
+                }
+              }
+            ]
+          ],
+          "body": null
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 25
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 25
+  }
+}
+=== declare alternative syntax ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Declare": {
+          "directives": [
+            [
+              "ticks",
+              {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 20,
+                  "end": 21
+                }
+              }
+            ]
+          ],
+          "body": {
+            "kind": {
+              "Block": [
+                {
+                  "kind": {
+                    "Echo": [
+                      {
+                        "kind": {
+                          "String": "tick"
+                        },
+                        "span": {
+                          "start": 29,
+                          "end": 35
+                        }
+                      }
+                    ]
+                  },
+                  "span": {
+                    "start": 24,
+                    "end": 37
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 6,
+              "end": 48
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 48
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 48
+  }
+}
+=== declare nested ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Declare": {
+          "directives": [
+            [
+              "ticks",
+              {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 20,
+                  "end": 21
+                }
+              }
+            ]
+          ],
+          "body": {
+            "kind": {
+              "Block": [
+                {
+                  "kind": {
+                    "Declare": {
+                      "directives": [
+                        [
+                          "ticks",
+                          {
+                            "kind": {
+                              "Int": 2
+                            },
+                            "span": {
+                              "start": 39,
+                              "end": 40
+                            }
+                          }
+                        ]
+                      ],
+                      "body": null
+                    }
+                  },
+                  "span": {
+                    "start": 25,
+                    "end": 43
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 23,
+              "end": 44
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 44
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 44
+  }
+}

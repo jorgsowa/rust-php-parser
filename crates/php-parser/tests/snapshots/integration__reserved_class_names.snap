@@ -1,0 +1,15 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: "multi_snapshot(&[\"<?php class self {}\", \"<?php class parent {}\",\n\"<?php class static {}\", \"<?php class readonly {}\"], |result|\n{\n    assert!(!result.errors.is_empty(), \"Expected parse errors\");\n    format_errors(result)\n},)"
+---
+--- <?php class self {} ---
+cannot use 'self' as class name
+
+--- <?php class parent {} ---
+cannot use 'parent' as class name
+
+--- <?php class static {} ---
+cannot use 'static' as class name
+
+--- <?php class readonly {} ---
+cannot use 'readonly' as class name

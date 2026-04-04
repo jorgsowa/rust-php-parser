@@ -1,0 +1,1150 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: "category_snapshot(\"operator_precedence\")"
+---
+=== nested ternary ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Ternary": {
+              "condition": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "then_expr": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 11,
+                  "end": 13
+                }
+              },
+              "else_expr": {
+                "kind": {
+                  "Parenthesized": {
+                    "kind": {
+                      "Ternary": {
+                        "condition": {
+                          "kind": {
+                            "Variable": "c"
+                          },
+                          "span": {
+                            "start": 17,
+                            "end": 19
+                          }
+                        },
+                        "then_expr": {
+                          "kind": {
+                            "Variable": "d"
+                          },
+                          "span": {
+                            "start": 22,
+                            "end": 24
+                          }
+                        },
+                        "else_expr": {
+                          "kind": {
+                            "Variable": "e"
+                          },
+                          "span": {
+                            "start": 27,
+                            "end": 29
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 17,
+                      "end": 29
+                    }
+                  }
+                },
+                "span": {
+                  "start": 16,
+                  "end": 30
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 30
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 31
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 31
+  }
+}
+=== null coalesce chain ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "NullCoalesce": {
+              "left": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "right": {
+                "kind": {
+                  "NullCoalesce": {
+                    "left": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 12,
+                        "end": 14
+                      }
+                    },
+                    "right": {
+                      "kind": {
+                        "NullCoalesce": {
+                          "left": {
+                            "kind": {
+                              "Variable": "c"
+                            },
+                            "span": {
+                              "start": 18,
+                              "end": 20
+                            }
+                          },
+                          "right": {
+                            "kind": {
+                              "String": "default"
+                            },
+                            "span": {
+                              "start": 24,
+                              "end": 33
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 18,
+                        "end": 33
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 12,
+                  "end": 33
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 33
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 34
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 34
+  }
+}
+=== mixed bitwise logical ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 6,
+                        "end": 8
+                      }
+                    },
+                    "op": "BitwiseAnd",
+                    "right": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 13
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 6,
+                  "end": 13
+                }
+              },
+              "op": "BooleanAnd",
+              "right": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 17,
+                        "end": 19
+                      }
+                    },
+                    "op": "BitwiseOr",
+                    "right": {
+                      "kind": {
+                        "Variable": "d"
+                      },
+                      "span": {
+                        "start": 22,
+                        "end": 24
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 17,
+                  "end": 24
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 24
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 25
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 25
+  }
+}
+=== instanceof chain ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 6,
+                        "end": 8
+                      }
+                    },
+                    "op": "Instanceof",
+                    "right": {
+                      "kind": {
+                        "Identifier": "Foo"
+                      },
+                      "span": {
+                        "start": 20,
+                        "end": 23
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 6,
+                  "end": 23
+                }
+              },
+              "op": "BooleanAnd",
+              "right": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 27,
+                        "end": 29
+                      }
+                    },
+                    "op": "Instanceof",
+                    "right": {
+                      "kind": {
+                        "Identifier": "Bar"
+                      },
+                      "span": {
+                        "start": 41,
+                        "end": 44
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 27,
+                  "end": 44
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 44
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 45
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 45
+  }
+}
+=== chained assignment ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Assign": {
+                    "target": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 13
+                      }
+                    },
+                    "op": "Assign",
+                    "value": {
+                      "kind": {
+                        "Assign": {
+                          "target": {
+                            "kind": {
+                              "Variable": "c"
+                            },
+                            "span": {
+                              "start": 16,
+                              "end": 18
+                            }
+                          },
+                          "op": "Assign",
+                          "value": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 21,
+                              "end": 22
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 16,
+                        "end": 22
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 22
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 22
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 23
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 23
+  }
+}
+=== assignment in ternary ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Ternary": {
+                    "condition": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 13
+                      }
+                    },
+                    "then_expr": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 16,
+                        "end": 18
+                      }
+                    },
+                    "else_expr": {
+                      "kind": {
+                        "Variable": "d"
+                      },
+                      "span": {
+                        "start": 21,
+                        "end": 23
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 23
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 23
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 24
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 24
+  }
+}
+=== comparison chain ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 6,
+                        "end": 8
+                      }
+                    },
+                    "op": "Equal",
+                    "right": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 12,
+                        "end": 14
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 6,
+                  "end": 14
+                }
+              },
+              "op": "BooleanAnd",
+              "right": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 18,
+                        "end": 20
+                      }
+                    },
+                    "op": "Equal",
+                    "right": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 24,
+                        "end": 26
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 18,
+                  "end": 26
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 26
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 27
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 27
+  }
+}
+=== power assoc ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Pow",
+              "right": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 12,
+                        "end": 14
+                      }
+                    },
+                    "op": "Pow",
+                    "right": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 18,
+                        "end": 20
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 12,
+                  "end": 20
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 20
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 21
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 21
+  }
+}
+=== unary in binary ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "UnaryPrefix": {
+                          "op": "BooleanNot",
+                          "operand": {
+                            "kind": {
+                              "Variable": "a"
+                            },
+                            "span": {
+                              "start": 7,
+                              "end": 9
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 6,
+                        "end": 9
+                      }
+                    },
+                    "op": "BooleanAnd",
+                    "right": {
+                      "kind": {
+                        "UnaryPrefix": {
+                          "op": "BooleanNot",
+                          "operand": {
+                            "kind": {
+                              "Variable": "b"
+                            },
+                            "span": {
+                              "start": 14,
+                              "end": 16
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 13,
+                        "end": 16
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 6,
+                  "end": 16
+                }
+              },
+              "op": "BooleanOr",
+              "right": {
+                "kind": {
+                  "UnaryPrefix": {
+                    "op": "BooleanNot",
+                    "operand": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 21,
+                        "end": 23
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 20,
+                  "end": 23
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 23
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 24
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 24
+  }
+}
+=== concat precedence ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Binary": {
+                          "left": {
+                            "kind": {
+                              "String": "a"
+                            },
+                            "span": {
+                              "start": 6,
+                              "end": 9
+                            }
+                          },
+                          "op": "Concat",
+                          "right": {
+                            "kind": {
+                              "String": "b"
+                            },
+                            "span": {
+                              "start": 12,
+                              "end": 15
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 6,
+                        "end": 15
+                      }
+                    },
+                    "op": "Concat",
+                    "right": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 18,
+                        "end": 20
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 6,
+                  "end": 20
+                }
+              },
+              "op": "Concat",
+              "right": {
+                "kind": {
+                  "String": "d"
+                },
+                "span": {
+                  "start": 23,
+                  "end": 26
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 26
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 27
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 27
+  }
+}
+=== postfix in expr ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "ArrayAccess": {
+                    "array": {
+                      "kind": {
+                        "Variable": "arr"
+                      },
+                      "span": {
+                        "start": 6,
+                        "end": 10
+                      }
+                    },
+                    "index": {
+                      "kind": {
+                        "UnaryPostfix": {
+                          "operand": {
+                            "kind": {
+                              "Variable": "i"
+                            },
+                            "span": {
+                              "start": 11,
+                              "end": 13
+                            }
+                          },
+                          "op": "PostIncrement"
+                        }
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 15
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 6,
+                  "end": 17
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "UnaryPostfix": {
+                    "operand": {
+                      "kind": {
+                        "Variable": "j"
+                      },
+                      "span": {
+                        "start": 19,
+                        "end": 21
+                      }
+                    },
+                    "op": "PostDecrement"
+                  }
+                },
+                "span": {
+                  "start": 19,
+                  "end": 23
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 23
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 24
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 24
+  }
+}
+=== error suppress complex ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ErrorSuppress": {
+              "kind": {
+                "MethodCall": {
+                  "object": {
+                    "kind": {
+                      "Variable": "obj"
+                    },
+                    "span": {
+                      "start": 7,
+                      "end": 11
+                    }
+                  },
+                  "method": {
+                    "kind": {
+                      "Identifier": "method"
+                    },
+                    "span": {
+                      "start": 13,
+                      "end": 19
+                    }
+                  },
+                  "args": []
+                }
+              },
+              "span": {
+                "start": 7,
+                "end": 21
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 21
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 22
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 22
+  }
+}
+=== cast precedence ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Cast": [
+                    "Int",
+                    {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 13
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 6,
+                  "end": 13
+                }
+              },
+              "op": "Add",
+              "right": {
+                "kind": {
+                  "Cast": [
+                    "String",
+                    {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 24,
+                        "end": 26
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 16,
+                  "end": 26
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 26
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 27
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 27
+  }
+}
+=== spread in array ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Array": [
+              {
+                "key": null,
+                "value": {
+                  "kind": {
+                    "Variable": "a"
+                  },
+                  "span": {
+                    "start": 10,
+                    "end": 12
+                  }
+                },
+                "unpack": true,
+                "span": {
+                  "start": 7,
+                  "end": 12
+                }
+              },
+              {
+                "key": null,
+                "value": {
+                  "kind": {
+                    "Variable": "b"
+                  },
+                  "span": {
+                    "start": 17,
+                    "end": 19
+                  }
+                },
+                "unpack": true,
+                "span": {
+                  "start": 14,
+                  "end": 19
+                }
+              },
+              {
+                "key": null,
+                "value": {
+                  "kind": {
+                    "Int": 1
+                  },
+                  "span": {
+                    "start": 21,
+                    "end": 22
+                  }
+                },
+                "unpack": false,
+                "span": {
+                  "start": 21,
+                  "end": 22
+                }
+              },
+              {
+                "key": null,
+                "value": {
+                  "kind": {
+                    "Int": 2
+                  },
+                  "span": {
+                    "start": 24,
+                    "end": 25
+                  }
+                },
+                "unpack": false,
+                "span": {
+                  "start": 24,
+                  "end": 25
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 6,
+            "end": 26
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 27
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 27
+  }
+}

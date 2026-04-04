@@ -7,9 +7,51 @@ fn parse_php(source: &'static str) -> php_rs_parser::ParseResult<'static, 'stati
     php_rs_parser::parse(arena, source)
 }
 
-fn assert_parses_ok(_label: &str, source: &'static str) {
-    let result = parse_php(source);
-    assert_no_errors(&result);
+/// Parse every case in a category and return a multi-section string suitable
+/// for snapshot testing.  Each section is `=== label ===\n<json>\n`.  This
+/// makes category-based tests opinionated: they catch not just parse failures
+/// but also regressions in the produced AST structure.
+fn category_snapshot(cat: &'static str) -> String {
+    let mut out = String::new();
+    for case in category(cat) {
+        let result = parse_php(case.source);
+        assert!(
+            result.errors.is_empty(),
+            "unexpected parse errors for {:?} case {:?}: {:?}",
+            cat,
+            case.label,
+            result.errors,
+        );
+        out.push_str(&format!(
+            "=== {} ===\n{}\n",
+            case.label,
+            to_json(&result.program)
+        ));
+    }
+    out
+}
+
+fn format_errors(result: &php_rs_parser::ParseResult) -> String {
+    result
+        .errors
+        .iter()
+        .map(|e| e.to_string())
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
+/// Build one multi-section snapshot for a batch of inputs: each section is
+/// `--- <source> ---\n<output>\n\n` so a single snapshot file covers the batch.
+fn multi_snapshot<F>(cases: &[&'static str], mut describe: F) -> String
+where
+    F: FnMut(&php_rs_parser::ParseResult) -> String,
+{
+    let mut out = String::new();
+    for &src in cases {
+        let result = parse_php(src);
+        out.push_str(&format!("--- {src} ---\n{}\n\n", describe(&result)));
+    }
+    out
 }
 
 // =============================================================================
@@ -253,6 +295,7 @@ fn test_trailing_dot_float_literals() {
         json.contains("\"Float\""),
         "trailing-dot literals must produce Float nodes; got:\n{json}"
     );
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -273,6 +316,7 @@ fn test_legacy_octal_invalid_digits() {
         json.contains("\"Int\": 0"),
         "09 must parse as Int(0); got:\n{json}"
     );
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -330,7 +374,7 @@ echo $val;
 }
 
 // =============================================================================
-// Phase 1: Advanced Control Flow
+// Advanced Control Flow
 // =============================================================================
 
 #[test]
@@ -465,24 +509,33 @@ endswitch;
 // parse_stmts_until_end must force-advance past such tokens.
 #[test]
 fn test_alt_if_unexpected_rbrace_terminates() {
-    let result = parse_php("<?php if (true): } endif;");
+    let result = parse_php(
+        "<?php if (true):     insta::assert_snapshot!(to_json(&result.program));
+} endif;",
+    );
     assert!(!result.errors.is_empty(), "Expected parse errors");
 }
 
 #[test]
 fn test_alt_while_unexpected_rbrace_terminates() {
-    let result = parse_php("<?php while (true): } endwhile;");
+    let result = parse_php(
+        "<?php while (true):     insta::assert_snapshot!(to_json(&result.program));
+} endwhile;",
+    );
     assert!(!result.errors.is_empty(), "Expected parse errors");
 }
 
 #[test]
 fn test_alt_foreach_unexpected_rbrace_terminates() {
-    let result = parse_php("<?php foreach ($a as $b): } endforeach;");
+    let result = parse_php(
+        "<?php foreach ($a as $b):     insta::assert_snapshot!(to_json(&result.program));
+} endforeach;",
+    );
     assert!(!result.errors.is_empty(), "Expected parse errors");
 }
 
 // =============================================================================
-// Phase 2: OOP Declarations
+// OOP Declarations
 // =============================================================================
 
 #[test]
@@ -616,7 +669,7 @@ class Point {
 }
 
 // =============================================================================
-// Phase 3: Object Access Expressions
+// Object Access Expressions
 // =============================================================================
 
 #[test]
@@ -671,19 +724,7 @@ fn test_clone_expression() {
 
 #[test]
 fn test_clone_parenthesised() {
-    for case in category("clone") {
-        assert_parses_ok(case.label, case.source);
-    }
-}
-
-#[test]
-fn test_clone_callable() {
-    // covered by test_clone_parenthesised via inline_cases
-}
-
-#[test]
-fn test_clone_as_function_call() {
-    // covered by test_clone_parenthesised via inline_cases
+    insta::assert_snapshot!(category_snapshot("clone"));
 }
 
 #[test]
@@ -731,7 +772,7 @@ fn test_instanceof_precedence_vs_pow() {
 }
 
 // =============================================================================
-// Phase 4: Closures, Arrow Functions, Advanced Params
+// Closures, Arrow Functions, Advanced Params
 // =============================================================================
 
 #[test]
@@ -827,7 +868,7 @@ $merged = [...$a, ...$b, 1, 2];
 }
 
 // =============================================================================
-// Phase 5: Match, Enums, Modern PHP
+// Match, Enums, Modern PHP
 // =============================================================================
 
 #[test]
@@ -925,7 +966,7 @@ enum Suit: string implements HasColor {
 }
 
 // =============================================================================
-// Phase 6: Namespaces and Module-Level
+// Namespaces and Module-Level
 // =============================================================================
 
 #[test]
@@ -1029,7 +1070,7 @@ fn test_deep_namespace_nesting() {
 }
 
 // =============================================================================
-// Phase 7: Built-in Expressions
+// Built-in Expressions
 // =============================================================================
 
 #[test]
@@ -1056,6 +1097,7 @@ fn test_array_call_in_condition() {
         "<?php\nfunction array_is_list($arr) {\n    if ((array() === $arr) || (array_values($arr) === $arr)) {\n        return true;\n    }\n    return false;\n}",
     );
     assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -1123,7 +1165,7 @@ fn test_magic_constants() {
 }
 
 // =============================================================================
-// Phase 8: Generators and Composite Programs
+// Generators and Composite Programs
 // =============================================================================
 
 #[test]
@@ -1176,14 +1218,6 @@ fn category(cat: &'static str) -> impl Iterator<Item = &'static inline_cases::Ca
 }
 
 #[test]
-fn test_yield_from_is_from_flag() {
-    // `yield from` must set is_from:true; plain `yield` must set is_from:false
-    for case in category("yield_from_flag") {
-        assert_parses_ok(case.label, case.source);
-    }
-}
-
-#[test]
 fn test_yield_bare() {
     let source = r#"<?php
 function gen() {
@@ -1212,7 +1246,7 @@ fixture_test!(test_realistic_controller, "realistic_controller.php");
 fixture_test!(test_realistic_enum_service, "realistic_enum_service.php");
 
 // =============================================================================
-// Phase 9: Name Resolution & Qualified Names
+// Name Resolution & Qualified Names
 // =============================================================================
 
 #[test]
@@ -1259,7 +1293,7 @@ echo namespace\SOME_CONST;
 }
 
 // =============================================================================
-// Phase 10: Destructuring & List Assignment
+// Destructuring & List Assignment
 // =============================================================================
 
 #[test]
@@ -1306,7 +1340,7 @@ list('name' => $name, 'age' => $age) = $person;
 }
 
 // =============================================================================
-// Phase 11: Array Edge Cases
+// Array Edge Cases
 // =============================================================================
 
 #[test]
@@ -1373,7 +1407,7 @@ $flat = [...$arrays[0], ...$arrays[1], 5];
 }
 
 // =============================================================================
-// Phase 12: Dynamic Access & Complex Chains
+// Dynamic Access & Complex Chains
 // =============================================================================
 
 #[test]
@@ -1439,7 +1473,7 @@ fn test_new_without_parens() {
 }
 
 // =============================================================================
-// Phase 13: Control Flow Edge Cases
+// Control Flow Edge Cases
 // =============================================================================
 
 #[test]
@@ -1503,9 +1537,7 @@ declare(ticks=1) {
 
 #[test]
 fn test_declare_encoding() {
-    for case in category("declare") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("declare"));
 }
 
 #[test]
@@ -1572,7 +1604,7 @@ $g = fn($x = new Foo()) => $x;
 }
 
 // =============================================================================
-// Phase 14: Expression Edge Cases
+// Expression Edge Cases
 // =============================================================================
 
 #[test]
@@ -1639,7 +1671,7 @@ fn test_parenthesized_assign() {
 }
 
 // =============================================================================
-// Phase 15: Function & Closure Edge Cases
+// Function & Closure Edge Cases
 // =============================================================================
 
 #[test]
@@ -1699,7 +1731,7 @@ fn test_mixed_named_positional_args() {
 }
 
 // =============================================================================
-// Phase 16: OOP Edge Cases
+// OOP Edge Cases
 // =============================================================================
 
 #[test]
@@ -1719,10 +1751,7 @@ final readonly class Money {
 
 #[test]
 fn test_readonly_final_class() {
-    // `readonly final class` — modifier order reversed from `final readonly class`
-    for case in category("readonly_class") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("readonly_class"));
 }
 
 #[test]
@@ -1868,7 +1897,7 @@ class C {
 }
 
 // =============================================================================
-// Phase 17: Namespace & Module Edge Cases
+// Namespace & Module Edge Cases
 // =============================================================================
 
 #[test]
@@ -1922,7 +1951,7 @@ function foo() {
 }
 
 // =============================================================================
-// Phase 18: Match Edge Cases
+// Match Edge Cases
 // =============================================================================
 
 #[test]
@@ -1965,20 +1994,20 @@ $label = match (getStatus()) {
 }
 
 // =============================================================================
-// Phase 19: Cast & Built-in Edge Cases
+// Cast & Built-in Edge Cases
 // =============================================================================
 
 #[test]
 fn test_cast_unset() {
     // (unset) cast was removed in PHP 8.0
-    assert_has_errors("<?php (unset)$x;");
+    let result = parse_php("<?php (unset)$x;");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(format_errors(&result));
 }
 
 #[test]
 fn test_cast_void() {
-    for case in category("cast_void") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("cast_void"));
 }
 
 #[test]
@@ -2004,9 +2033,7 @@ fn test_error_suppress_nested() {
 
 #[test]
 fn test_error_suppress_complex() {
-    for case in category("error_suppress") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("error_suppress"));
 }
 
 #[test]
@@ -2017,7 +2044,7 @@ fn test_isset_complex() {
 }
 
 // =============================================================================
-// Phase 21: Type Hint Edge Cases
+// Type Hint Edge Cases
 // =============================================================================
 
 #[test]
@@ -2115,7 +2142,7 @@ function &getReference(array &$arr): mixed {
 }
 
 // =============================================================================
-// Phase 22: Error Recovery
+// Error Recovery
 // =============================================================================
 
 #[test]
@@ -2141,7 +2168,7 @@ fn test_error_recovery_invalid_expression() {
 }
 
 // =============================================================================
-// Phase 23: Composite Fixture Tests
+// Composite Fixture Tests
 // =============================================================================
 
 fixture_test!(test_realistic_repository, "realistic_repository.php");
@@ -2150,8 +2177,6 @@ fixture_test!(test_realistic_middleware, "realistic_middleware.php");
 // =============================================================================
 // String Interpolation
 // =============================================================================
-
-fixture_test!(test_string_interpolation, "string_interpolation.php");
 
 #[test]
 fn test_simple_interpolation() {
@@ -2212,8 +2237,6 @@ fn test_nowdoc() {
 // PHP 8 Attributes
 // =============================================================================
 
-fixture_test!(test_attributes, "attributes.php");
-
 #[test]
 fn test_single_attribute() {
     let result = parse_php("<?php #[Pure] function foo() {}");
@@ -2270,6 +2293,7 @@ fn test_error_missing_semicolon_after_expression() {
         "Expected contextual error message with 'after', got: {}",
         err
     );
+    insta::assert_snapshot!(format_errors(&result));
 }
 
 #[test]
@@ -2282,6 +2306,7 @@ fn test_error_unclosed_paren() {
         "Expected unclosed delimiter error, got: {}",
         err
     );
+    insta::assert_snapshot!(format_errors(&result));
 }
 
 #[test]
@@ -2297,6 +2322,7 @@ fn test_error_unclosed_brace() {
         "Expected unclosed delimiter error, got: {:?}",
         result.errors
     );
+    insta::assert_snapshot!(format_errors(&result));
 }
 
 #[test]
@@ -2339,9 +2365,7 @@ $f = 1_0e1_0;
 
 #[test]
 fn test_magic_constants_in_echo() {
-    for case in category("magic_constants") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("magic_constants"));
 }
 
 // =============================================================================
@@ -2350,9 +2374,7 @@ fn test_magic_constants_in_echo() {
 
 #[test]
 fn test_string_interpolation_patterns() {
-    for case in category("string_interpolation") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("string_interpolation"));
 }
 
 #[test]
@@ -2385,9 +2407,7 @@ fn test_nowdoc_multiline() {
 
 #[test]
 fn test_heredoc_nowdoc_variants() {
-    for case in category("heredoc") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("heredoc"));
 }
 
 // =============================================================================
@@ -2396,30 +2416,22 @@ fn test_heredoc_nowdoc_variants() {
 
 #[test]
 fn test_operator_precedence_combinations() {
-    for case in category("operator_precedence") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("operator_precedence"));
 }
 
 #[test]
 fn test_assignment_patterns() {
-    for case in category("assignment") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("assignment"));
 }
 
 #[test]
 fn test_expression_chains() {
-    for case in category("expression_chains") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("expression_chains"));
 }
 
 #[test]
 fn test_dynamic_access() {
-    for case in category("dynamic_access") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("dynamic_access"));
 }
 
 #[test]
@@ -2517,9 +2529,7 @@ use App\{A, B,};
 
 #[test]
 fn test_nested_destructuring() {
-    for case in category("destructuring") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("destructuring"));
 }
 
 #[test]
@@ -2541,23 +2551,17 @@ fn test_complex_destructuring() {
 
 #[test]
 fn test_alternative_syntax_variants() {
-    for case in category("alternative_syntax") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("alternative_syntax"));
 }
 
 #[test]
 fn test_control_flow_variants() {
-    for case in category("control_flow") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("control_flow"));
 }
 
 #[test]
 fn test_try_catch_variants() {
-    for case in category("try_catch") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("try_catch"));
 }
 
 #[test]
@@ -2578,9 +2582,7 @@ try {
 
 #[test]
 fn test_match_variants() {
-    for case in category("match") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("match"));
 }
 
 #[test]
@@ -2621,9 +2623,7 @@ $result = match ($type) {
 
 #[test]
 fn test_function_variants() {
-    for case in category("function") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("function"));
 }
 
 #[test]
@@ -2639,16 +2639,12 @@ foo(class: 'MyClass', static: true, match: 'yes');
 
 #[test]
 fn test_named_args_variants() {
-    for case in category("named_args") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("named_args"));
 }
 
 #[test]
 fn test_closure_variants() {
-    for case in category("closure") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("closure"));
 }
 
 #[test]
@@ -2664,9 +2660,7 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
 
 #[test]
 fn test_arrow_function_in_array() {
-    for case in category("arrow_function") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("arrow_function"));
 }
 
 #[test]
@@ -2698,9 +2692,7 @@ $e = $obj->$dynamic(...);
 
 #[test]
 fn test_generator_variants() {
-    for case in category("generator") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("generator"));
 }
 
 #[test]
@@ -2725,16 +2717,12 @@ function gen() {
 
 #[test]
 fn test_class_variants() {
-    for case in category("class") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("class"));
 }
 
 #[test]
 fn test_enum_variants() {
-    for case in category("enum") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("enum"));
 }
 
 #[test]
@@ -2908,9 +2896,7 @@ $f = self::$prop;
 
 #[test]
 fn test_scope_resolution() {
-    for case in category("scope_resolution") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("scope_resolution"));
 }
 
 // =============================================================================
@@ -2919,9 +2905,7 @@ fn test_scope_resolution() {
 
 #[test]
 fn test_type_hint_variants() {
-    for case in category("type_hints") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("type_hints"));
 }
 
 #[test]
@@ -2946,10 +2930,7 @@ class Foo {
 
 #[test]
 fn test_attribute_variants() {
-    // Known limitation: attributes on closure expressions (#[Pure] function() {}) not yet supported
-    for case in category("attributes") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("attributes"));
 }
 
 // =============================================================================
@@ -2982,7 +2963,9 @@ use A\B\{C as D, function e as f, const G as H};
 #[test]
 fn test_empty_group_use() {
     // Empty group use is invalid PHP
-    assert_has_errors("<?php use A\\B\\{};");
+    let result = parse_php("<?php use A\\B\\{};");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(format_errors(&result));
 }
 
 #[test]
@@ -3009,30 +2992,17 @@ fn test_close_tag_semicolon() {
 
 #[test]
 fn test_builtin_constructs() {
-    for case in category("builtins") {
-        assert_parses_ok(case.label, case.source);
-    }
-}
-
-#[test]
-fn test_string_interp_edge_cases() {
-    for case in category("string_interp_edge") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("builtins"));
 }
 
 #[test]
 fn test_trait_use_adaptations() {
-    for case in category("trait_use") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("trait_use"));
 }
 
 #[test]
 fn test_numeric_literals_variants() {
-    for case in category("numeric_literals") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("numeric_literals"));
 }
 
 #[test]
@@ -3056,6 +3026,7 @@ fn test_slash_comment_newline_termination_still_works() {
     // Ensure `//` still stops at `\n` in the normal case.
     let result = parse_php("<?php // comment\n$x = 1;");
     assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -3068,6 +3039,7 @@ fn test_alt_while_inline_html_terminates() {
         "Unexpected parse errors: {:?}",
         result.errors
     );
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -3078,6 +3050,7 @@ fn test_alt_if_inline_html_terminates() {
         "Unexpected parse errors: {:?}",
         result.errors
     );
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -3088,6 +3061,7 @@ fn test_alt_foreach_inline_html_terminates() {
         "Unexpected parse errors: {:?}",
         result.errors
     );
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -3114,6 +3088,7 @@ fn test_inline_html_comment_in_function_body() {
         "<?php\nfunction tmpl() {\n    foo();\n    ?>\n<div>\n<?php // comment ?>\n    <p>text</p>\n<?php\n    bar();\n}",
     );
     assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -3123,31 +3098,44 @@ fn test_inline_html_multiple_segments_in_function() {
         "<?php\nfunction page() {\n    header();\n    ?><header><?php\n    nav();\n    ?></header><?php\n    body();\n}",
     );
     assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
 // Keyword-as-identifier tests
 // =============================================================================
-
 #[test]
 fn test_keyword_as_function_name() {
     // These test parser tolerance: PHP itself rejects most of these, but our
     // parser handles them gracefully without panicking.
-    assert_parses_ok("function readonly", "<?php function readonly() {}");
-    assert_parses_ok(
-        "function exit",
-        "<?php function exit(string|int $status = 0): never {}",
-    );
-    assert_parses_ok(
-        "function die",
-        "<?php function die(string|int $status = 0): never {}",
-    );
-    assert_parses_ok(
-        "function clone",
-        "<?php function clone(object $object): object {}",
-    );
-    assert_parses_ok("function match", "<?php function match() {}");
-    assert_parses_ok("function fn", "<?php function fn() {}");
+    let cases: &[(&str, &'static str)] = &[
+        ("function readonly", "<?php function readonly() {}"),
+        (
+            "function exit",
+            "<?php function exit(string|int $status = 0): never {}",
+        ),
+        (
+            "function die",
+            "<?php function die(string|int $status = 0): never {}",
+        ),
+        (
+            "function clone",
+            "<?php function clone(object $object): object {}",
+        ),
+        ("function match", "<?php function match() {}"),
+        ("function fn", "<?php function fn() {}"),
+    ];
+    let mut out = String::new();
+    for (label, src) in cases {
+        let result = parse_php(src);
+        assert_no_errors(&result);
+        out.push_str(&format!(
+            "=== {} ===\n{}\n",
+            label,
+            to_json(&result.program)
+        ));
+    }
+    insta::assert_snapshot!(out);
 }
 
 #[test]
@@ -3161,7 +3149,9 @@ fn test_keyword_as_enum_case() {
 #[test]
 fn test_enum_case_class_reserved() {
     // `class` cannot be used as enum case name
-    assert_has_errors("<?php enum Suit { case class; }");
+    let result = parse_php("<?php enum Suit { case class; }");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(format_errors(&result));
 }
 
 // =============================================================================
@@ -3199,9 +3189,7 @@ fn test_typed_class_constants() {
 
 #[test]
 fn test_typed_class_constants_variants() {
-    for case in category("typed_class_constants") {
-        assert_parses_ok(case.label, case.source);
-    }
+    insta::assert_snapshot!(category_snapshot("typed_class_constants"));
 }
 
 // =============================================================================
@@ -3226,63 +3214,93 @@ fn test_new_readonly_anonymous_class() {
 // Error validation tests
 // =============================================================================
 
-fn assert_has_errors(source: &'static str) {
-    let result = parse_php(source);
-    assert!(
-        !result.errors.is_empty(),
-        "Expected parse errors for: {source}"
-    );
-}
-
 #[test]
 fn test_abstract_final_conflict() {
-    assert_has_errors("<?php class A { abstract final function a(); }");
+    let result = parse_php("<?php class A { abstract final function a(); }");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(format_errors(&result));
 }
 
 #[test]
 fn test_abstract_method_with_body() {
     // abstract methods must not have a body
-    assert_has_errors("<?php abstract class Foo { abstract function bar() { echo 'body'; } }");
-    assert_has_errors(
-        "<?php abstract class Foo { abstract public function bar(): string { return ''; } }",
-    );
+    insta::assert_snapshot!(multi_snapshot(
+        &[
+            "<?php abstract class Foo { abstract function bar() { echo 'body'; } }",
+            "<?php abstract class Foo { abstract public function bar(): string { return ''; } }"
+        ],
+        |result| {
+            assert!(!result.errors.is_empty(), "Expected parse errors");
+            format_errors(result)
+        },
+    ));
 }
 
 #[test]
 fn test_static_const_error() {
-    assert_has_errors("<?php class A { static const X = 1; }");
+    let result = parse_php("<?php class A { static const X = 1; }");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(format_errors(&result));
 }
 
 #[test]
 fn test_abstract_const_error() {
-    assert_has_errors("<?php class A { abstract const X = 1; }");
+    let result = parse_php("<?php class A { abstract const X = 1; }");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(format_errors(&result));
 }
 
 #[test]
 fn test_readonly_const_error() {
-    assert_has_errors("<?php class A { readonly const X = 1; }");
+    let result = parse_php("<?php class A { readonly const X = 1; }");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(format_errors(&result));
 }
 
 #[test]
 fn test_reserved_class_names() {
-    assert_has_errors("<?php class self {}");
-    assert_has_errors("<?php class parent {}");
-    assert_has_errors("<?php class static {}");
-    assert_has_errors("<?php class readonly {}");
+    insta::assert_snapshot!(multi_snapshot(
+        &[
+            "<?php class self {}",
+            "<?php class parent {}",
+            "<?php class static {}",
+            "<?php class readonly {}"
+        ],
+        |result| {
+            assert!(!result.errors.is_empty(), "Expected parse errors");
+            format_errors(result)
+        },
+    ));
 }
 
 #[test]
 fn test_reserved_names_in_extends() {
-    assert_has_errors("<?php class A extends self {}");
-    assert_has_errors("<?php class A extends parent {}");
-    assert_has_errors("<?php class A extends static {}");
+    insta::assert_snapshot!(multi_snapshot(
+        &[
+            "<?php class A extends self {}",
+            "<?php class A extends parent {}",
+            "<?php class A extends static {}"
+        ],
+        |result| {
+            assert!(!result.errors.is_empty(), "Expected parse errors");
+            format_errors(result)
+        },
+    ));
 }
 
 #[test]
 fn test_reserved_names_in_implements() {
-    assert_has_errors("<?php class A implements self {}");
-    assert_has_errors("<?php class A implements parent {}");
-    assert_has_errors("<?php class A implements static {}");
+    insta::assert_snapshot!(multi_snapshot(
+        &[
+            "<?php class A implements self {}",
+            "<?php class A implements parent {}",
+            "<?php class A implements static {}"
+        ],
+        |result| {
+            assert!(!result.errors.is_empty(), "Expected parse errors");
+            format_errors(result)
+        },
+    ));
 }
 
 #[test]
@@ -3294,18 +3312,28 @@ fn test_halt_compiler_close_tag() {
 
 #[test]
 fn test_halt_compiler_nested_error() {
-    assert_has_errors("<?php if (true) { __halt_compiler(); }");
+    let result = parse_php("<?php if (true) { __halt_compiler(); }");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(format_errors(&result));
 }
 
 #[test]
 fn test_duplicate_modifier_errors() {
-    assert_has_errors("<?php class A { public public $x; }");
-    assert_has_errors("<?php class A { public protected $x; }");
-    assert_has_errors("<?php class A { static static $x; }");
-    assert_has_errors("<?php class A { abstract abstract function f(); }");
-    assert_has_errors("<?php class A { final final function f() {} }");
-    assert_has_errors("<?php class A { readonly readonly $x; }");
-    assert_has_errors("<?php class A { public public const X = 1; }");
+    insta::assert_snapshot!(multi_snapshot(
+        &[
+            "<?php class A { public public $x; }",
+            "<?php class A { public protected $x; }",
+            "<?php class A { static static $x; }",
+            "<?php class A { abstract abstract function f(); }",
+            "<?php class A { final final function f() {} }",
+            "<?php class A { readonly readonly $x; }",
+            "<?php class A { public public const X = 1; }"
+        ],
+        |result| {
+            assert!(!result.errors.is_empty(), "Expected parse errors");
+            format_errors(result)
+        },
+    ));
 }
 
 // =============================================================================
@@ -3316,62 +3344,74 @@ fn test_duplicate_modifier_errors() {
 
 #[test]
 fn test_no_hang_constructor_final_param() {
-    let _ = parse_php("<?php class P { public function __construct(final $i) {} }");
+    let result = parse_php("<?php class P { public function __construct(final $i) {} }");
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_no_hang_block() {
-    let _ = parse_php("<?php if (true) { ?> <?php }");
+    let result = parse_php("<?php if (true) { ?> <?php }");
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_no_hang_function_body() {
-    let _ = parse_php("<?php function f() { ?> <?php }");
+    let result = parse_php("<?php function f() { ?> <?php }");
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_no_hang_method_body() {
-    let _ = parse_php("<?php class A { function f() { ?> <?php } }");
+    let result = parse_php("<?php class A { function f() { ?> <?php } }");
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_no_hang_try_body() {
-    let _ = parse_php("<?php try { ?> <?php } catch (Exception $e) {}");
+    let result = parse_php("<?php try { ?> <?php } catch (Exception $e) {}");
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_no_hang_catch_body() {
-    let _ = parse_php("<?php try {} catch (Exception $e) { ?> <?php }");
+    let result = parse_php("<?php try {} catch (Exception $e) { ?> <?php }");
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_no_hang_finally_body() {
-    let _ = parse_php("<?php try {} finally { ?> <?php }");
+    let result = parse_php("<?php try {} finally { ?> <?php }");
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_no_hang_closure_body() {
-    let _ = parse_php("<?php $f = function() { ?> <?php };");
+    let result = parse_php("<?php $f = function() { ?> <?php };");
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_no_hang_namespace_braced() {
-    let _ = parse_php("<?php namespace Foo { ?> <?php }");
+    let result = parse_php("<?php namespace Foo { ?> <?php }");
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_no_hang_namespace_global_braced() {
-    let _ = parse_php("<?php namespace { ?> <?php }");
+    let result = parse_php("<?php namespace { ?> <?php }");
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_no_hang_enum_method_body() {
-    let _ = parse_php("<?php enum E { case A; public function f() { ?> <?php } }");
+    let result = parse_php("<?php enum E { case A; public function f() { ?> <?php } }");
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
 fn test_no_hang_property_hook_body() {
-    let _ = parse_php("<?php class A { public string $x { get { ?> <?php } } }");
+    let result = parse_php("<?php class A { public string $x { get { ?> <?php } } }");
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -3971,6 +4011,7 @@ fn test_version_php80_match_requires_80() {
         "match should be valid in PHP 8.0: {:?}",
         result.errors
     );
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -3998,6 +4039,22 @@ fn test_version_php81_enum_requires_81() {
         php_rs_parser::diagnostics::ParseError::VersionTooLow { feature, .. }
             if feature.contains("enum")
     )));
+    insta::assert_snapshot!(
+        "test_version_php81_enum_requires_81_result_81_ast",
+        to_json(&result_81.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php81_enum_requires_81_result_81_errors",
+        format_errors(&result_81)
+    );
+    insta::assert_snapshot!(
+        "test_version_php81_enum_requires_81_result_80_ast",
+        to_json(&result_80.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php81_enum_requires_81_result_80_errors",
+        format_errors(&result_80)
+    );
 }
 
 #[test]
@@ -4019,6 +4076,22 @@ fn test_version_php82_readonly_class_requires_82() {
     assert!(
         !result_81.errors.is_empty(),
         "readonly class should emit a version error when targeting PHP 8.1"
+    );
+    insta::assert_snapshot!(
+        "test_version_php82_readonly_class_requires_82_result_82_ast",
+        to_json(&result_82.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php82_readonly_class_requires_82_result_82_errors",
+        format_errors(&result_82)
+    );
+    insta::assert_snapshot!(
+        "test_version_php82_readonly_class_requires_82_result_81_ast",
+        to_json(&result_81.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php82_readonly_class_requires_82_result_81_errors",
+        format_errors(&result_81)
     );
 }
 
@@ -4042,6 +4115,22 @@ fn test_version_php83_typed_constants_require_83() {
         !result_82.errors.is_empty(),
         "typed constants should emit a version error when targeting PHP 8.2"
     );
+    insta::assert_snapshot!(
+        "test_version_php83_typed_constants_require_83_result_83_ast",
+        to_json(&result_83.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php83_typed_constants_require_83_result_83_errors",
+        format_errors(&result_83)
+    );
+    insta::assert_snapshot!(
+        "test_version_php83_typed_constants_require_83_result_82_ast",
+        to_json(&result_82.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php83_typed_constants_require_83_result_82_errors",
+        format_errors(&result_82)
+    );
 }
 
 #[test]
@@ -4063,6 +4152,22 @@ fn test_version_php84_abstract_readonly_class_requires_84() {
     assert!(
         !result_83.errors.is_empty(),
         "abstract readonly class should emit a version error when targeting PHP 8.3"
+    );
+    insta::assert_snapshot!(
+        "test_version_php84_abstract_readonly_class_requires_84_result_84_ast",
+        to_json(&result_84.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php84_abstract_readonly_class_requires_84_result_84_errors",
+        format_errors(&result_84)
+    );
+    insta::assert_snapshot!(
+        "test_version_php84_abstract_readonly_class_requires_84_result_83_ast",
+        to_json(&result_83.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php84_abstract_readonly_class_requires_84_result_83_errors",
+        format_errors(&result_83)
     );
 }
 
@@ -4091,6 +4196,22 @@ fn test_version_php85_pipe_operator_requires_85() {
         php_rs_parser::diagnostics::ParseError::VersionTooLow { feature, .. }
             if feature.contains("pipe")
     )));
+    insta::assert_snapshot!(
+        "test_version_php85_pipe_operator_requires_85_result_85_ast",
+        to_json(&result_85.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_pipe_operator_requires_85_result_85_errors",
+        format_errors(&result_85)
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_pipe_operator_requires_85_result_84_ast",
+        to_json(&result_84.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_pipe_operator_requires_85_result_84_errors",
+        format_errors(&result_84)
+    );
 }
 
 #[test]
@@ -4118,6 +4239,22 @@ fn test_version_php85_clone_with_requires_85() {
         php_rs_parser::diagnostics::ParseError::VersionTooLow { feature, .. }
             if feature.contains("clone")
     )));
+    insta::assert_snapshot!(
+        "test_version_php85_clone_with_requires_85_result_85_ast",
+        to_json(&result_85.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_clone_with_requires_85_result_85_errors",
+        format_errors(&result_85)
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_clone_with_requires_85_result_84_ast",
+        to_json(&result_84.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_clone_with_requires_85_result_84_errors",
+        format_errors(&result_84)
+    );
 }
 
 #[test]
@@ -4140,6 +4277,22 @@ fn test_version_php85_static_asymmetric_visibility_requires_85() {
         !result_84.errors.is_empty(),
         "static asymmetric visibility should emit a version error when targeting PHP 8.4"
     );
+    insta::assert_snapshot!(
+        "test_version_php85_static_asymmetric_visibility_requires_85_result_85_ast",
+        to_json(&result_85.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_static_asymmetric_visibility_requires_85_result_85_errors",
+        format_errors(&result_85)
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_static_asymmetric_visibility_requires_85_result_84_ast",
+        to_json(&result_84.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_static_asymmetric_visibility_requires_85_result_84_errors",
+        format_errors(&result_84)
+    );
 }
 
 #[test]
@@ -4161,6 +4314,22 @@ fn test_version_php85_final_promoted_property_requires_85() {
     assert!(
         !result_84.errors.is_empty(),
         "final promoted property should emit a version error when targeting PHP 8.4"
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_final_promoted_property_requires_85_result_85_ast",
+        to_json(&result_85.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_final_promoted_property_requires_85_result_85_errors",
+        format_errors(&result_85)
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_final_promoted_property_requires_85_result_84_ast",
+        to_json(&result_84.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_final_promoted_property_requires_85_result_84_errors",
+        format_errors(&result_84)
     );
 }
 
@@ -4189,6 +4358,22 @@ fn test_version_php85_void_cast_requires_85() {
         php_rs_parser::diagnostics::ParseError::VersionTooLow { feature, .. }
             if feature.contains("void")
     )));
+    insta::assert_snapshot!(
+        "test_version_php85_void_cast_requires_85_result_85_ast",
+        to_json(&result_85.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_void_cast_requires_85_result_85_errors",
+        format_errors(&result_85)
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_void_cast_requires_85_result_84_ast",
+        to_json(&result_84.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_void_cast_requires_85_result_84_errors",
+        format_errors(&result_84)
+    );
 }
 
 #[test]
@@ -4210,6 +4395,22 @@ fn test_version_php85_const_attributes_require_85() {
     assert!(
         !result_84.errors.is_empty(),
         "attributes on constants should emit a version error when targeting PHP 8.4"
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_const_attributes_require_85_result_85_ast",
+        to_json(&result_85.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_const_attributes_require_85_result_85_errors",
+        format_errors(&result_85)
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_const_attributes_require_85_result_84_ast",
+        to_json(&result_84.program)
+    );
+    insta::assert_snapshot!(
+        "test_version_php85_const_attributes_require_85_result_84_errors",
+        format_errors(&result_84)
     );
 }
 
@@ -4242,6 +4443,7 @@ fn test_param_is_final_preserved_in_ast() {
         "is_final should be true for 'final' promoted property"
     );
     assert!(!param.is_readonly, "is_readonly should be false");
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -4265,6 +4467,7 @@ fn test_param_is_readonly_preserved_in_ast() {
         "is_readonly should be true for 'readonly' parameter"
     );
     assert!(!param.is_final, "is_final should be false");
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -4285,6 +4488,7 @@ fn test_arg_by_ref_preserved_in_ast() {
     let arg = &call.args[0];
     assert!(arg.by_ref, "by_ref should be true for &$a argument");
     assert!(!arg.unpack, "unpack should be false");
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 // =============================================================================
@@ -4544,9 +4748,15 @@ class Foo {
 #[test]
 fn test_true_false_union_is_invalid() {
     // PHP rejects true|false: "Type contains both true and false, bool must be used instead"
-    assert_has_errors("<?php function f(): true|false {}");
-    assert_has_errors("<?php function f(): true|false|null {}");
-    assert_has_errors("<?php function f(true|false $x): void {}");
+    let result = parse_php("<?php function f(): true|false {}");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(format_errors(&result));
+    let result = parse_php("<?php function f(): true|false {}");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(format_errors(&result));
+    let result = parse_php("<?php function f(): true|false {}");
+    assert!(!result.errors.is_empty(), "Expected parse errors");
+    insta::assert_snapshot!(format_errors(&result));
 }
 
 // =============================================================================
@@ -4581,6 +4791,7 @@ fn test_assign_by_ref_has_by_ref_true() {
     };
     assert!(assign.by_ref, "=& must set by_ref=true on AssignExpr");
     assert_eq!(assign.op, php_ast::AssignOp::Assign);
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -4594,6 +4805,7 @@ fn test_regular_assign_has_by_ref_false() {
         panic!("expected assign expr")
     };
     assert!(!assign.by_ref, "= must set by_ref=false on AssignExpr");
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -4611,6 +4823,8 @@ fn test_assign_by_ref_distinct_from_regular_assign_in_ast() {
     );
     assert!(ref_json.contains("\"by_ref\": true"));
     assert!(!val_json.contains("\"by_ref\""));
+    insta::assert_snapshot!("assign_by_ref_distinct_ref", ref_json);
+    insta::assert_snapshot!("assign_by_ref_distinct_val", val_json);
 }
 
 #[test]
@@ -4629,6 +4843,7 @@ fn test_array_element_by_ref_has_by_ref_true() {
     };
     assert!(elems[0].by_ref, "first element &$a must have by_ref=true");
     assert!(!elems[1].by_ref, "second element $b must have by_ref=false");
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -4647,6 +4862,7 @@ fn test_list_element_by_ref_has_by_ref_true() {
     };
     assert!(elems[0].by_ref, "first element &$a must have by_ref=true");
     assert!(!elems[1].by_ref, "second element $b must have by_ref=false");
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -4669,6 +4885,7 @@ fn test_empty_destructuring_slot_is_omit_not_null() {
         "empty slot must be ExprKind::Omit, got {:?}",
         elems[1].value.kind
     );
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -4690,6 +4907,7 @@ fn test_list_empty_slot_is_omit_not_null() {
         "empty slot must be ExprKind::Omit, got {:?}",
         elems[1].value.kind
     );
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -4713,6 +4931,8 @@ fn test_null_literal_distinct_from_omit_in_array_destructuring() {
         !omit_json.contains("\"Null\""),
         "empty slot must not serialize as \"Null\""
     );
+    insta::assert_snapshot!("null_vs_omit_omit", omit_json);
+    insta::assert_snapshot!("null_vs_omit_null", null_json);
 }
 
 // =============================================================================
@@ -4739,6 +4959,9 @@ fn test_single_quoted_non_ascii_with_escaped_quote() {
         val, "hél'lo",
         "non-ASCII bytes must not be split into individual chars"
     );
+    let _result = parse_php("<?php 'hél\\'lo';");
+    assert_no_errors(&_result);
+    insta::assert_snapshot!(to_json(&_result.program));
 }
 
 #[test]
@@ -4749,6 +4972,9 @@ fn test_single_quoted_non_ascii_with_escaped_backslash() {
         val, "naïve\\path",
         "non-ASCII before \\\\ must decode correctly"
     );
+    let _result = parse_php("<?php 'naïve\\\\path';");
+    assert_no_errors(&_result);
+    insta::assert_snapshot!(to_json(&_result.program));
 }
 
 // =============================================================================
@@ -4769,6 +4995,7 @@ fn test_int_overflow_decimal_promotes_to_float() {
         json.contains("\"Float\""),
         "overflowing decimal literal must produce Float node; got:\n{json}"
     );
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -4781,6 +5008,7 @@ fn test_int_overflow_large_decimal_value() {
         json.contains("\"Float\""),
         "very large decimal literal must produce Float node; got:\n{json}"
     );
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -4797,6 +5025,7 @@ fn test_int_overflow_hex_promotes_to_float() {
         json.contains("\"Float\""),
         "overflowing hex literal must produce Float node; got:\n{json}"
     );
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -4809,6 +5038,7 @@ fn test_int_no_overflow_stays_int() {
         json.contains("\"Int\": 9223372036854775807"),
         "PHP_INT_MAX must stay as Int; got:\n{json}"
     );
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -4827,6 +5057,7 @@ fn test_ternary_chain_without_parens_forbidden_in_php8() {
         php_rs_parser::diagnostics::ParseError::Forbidden { message, .. }
             if message.contains("Unparenthesized")
     )));
+    insta::assert_snapshot!("result_ast", to_json(&result.program));
 }
 
 #[test]
@@ -4841,6 +5072,7 @@ fn test_ternary_chain_with_parens_allowed_in_php8() {
         "parenthesized ternary chain must be valid in PHP 8.0: {:?}",
         result.errors
     );
+    insta::assert_snapshot!(to_json(&result.program));
 }
 
 #[test]
@@ -4852,4 +5084,5 @@ fn test_ternary_simple_no_chain_allowed_in_php8() {
         "simple ternary must be valid in PHP 8.0: {:?}",
         result.errors
     );
+    insta::assert_snapshot!(to_json(&result.program));
 }

@@ -1,0 +1,366 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: "category_snapshot(\"function\")"
+---
+=== variadic typed ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "foo",
+          "params": [
+            {
+              "name": "nums",
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "int"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 19,
+                      "end": 22
+                    }
+                  }
+                },
+                "span": {
+                  "start": 19,
+                  "end": 22
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": true,
+              "is_readonly": false,
+              "is_final": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 19,
+                "end": 31
+              }
+            }
+          ],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 35
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 35
+  }
+}
+=== nullable return ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "foo",
+          "params": [],
+          "body": [
+            {
+              "kind": {
+                "Return": {
+                  "kind": "Null",
+                  "span": {
+                    "start": 36,
+                    "end": 40
+                  }
+                }
+              },
+              "span": {
+                "start": 29,
+                "end": 42
+              }
+            }
+          ],
+          "return_type": {
+            "kind": {
+              "Nullable": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "int"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 23,
+                      "end": 26
+                    }
+                  }
+                },
+                "span": {
+                  "start": 23,
+                  "end": 26
+                }
+              }
+            },
+            "span": {
+              "start": 22,
+              "end": 26
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 43
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 43
+  }
+}
+=== union return ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "foo",
+          "params": [],
+          "body": [
+            {
+              "kind": {
+                "Return": {
+                  "kind": {
+                    "Int": 1
+                  },
+                  "span": {
+                    "start": 42,
+                    "end": 43
+                  }
+                }
+              },
+              "span": {
+                "start": 35,
+                "end": 45
+              }
+            }
+          ],
+          "return_type": {
+            "kind": {
+              "Union": [
+                {
+                  "kind": {
+                    "Named": {
+                      "parts": [
+                        "int"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 22,
+                        "end": 25
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 22,
+                    "end": 25
+                  }
+                },
+                {
+                  "kind": {
+                    "Named": {
+                      "parts": [
+                        "string"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 26,
+                        "end": 32
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 26,
+                    "end": 32
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 22,
+              "end": 32
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 46
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 46
+  }
+}
+=== intersection param ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "foo",
+          "params": [
+            {
+              "name": "x",
+              "type_hint": {
+                "kind": {
+                  "Intersection": [
+                    {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "Countable"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 19,
+                            "end": 28
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 19,
+                        "end": 28
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "Traversable"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 29,
+                            "end": 41
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 29,
+                        "end": 41
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 19,
+                  "end": 41
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "is_readonly": false,
+              "is_final": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 19,
+                "end": 43
+              }
+            }
+          ],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 47
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 47
+  }
+}
+=== by ref return ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "getRef",
+          "params": [],
+          "body": [
+            {
+              "kind": {
+                "Global": [
+                  {
+                    "kind": {
+                      "Variable": "x"
+                    },
+                    "span": {
+                      "start": 34,
+                      "end": 36
+                    }
+                  }
+                ]
+              },
+              "span": {
+                "start": 27,
+                "end": 38
+              }
+            },
+            {
+              "kind": {
+                "Return": {
+                  "kind": {
+                    "Variable": "x"
+                  },
+                  "span": {
+                    "start": 45,
+                    "end": 47
+                  }
+                }
+              },
+              "span": {
+                "start": 38,
+                "end": 49
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": true,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 50
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 50
+  }
+}

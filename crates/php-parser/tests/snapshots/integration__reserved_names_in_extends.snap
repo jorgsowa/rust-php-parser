@@ -1,0 +1,12 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: "multi_snapshot(&[\"<?php class A extends self {}\",\n\"<?php class A extends parent {}\", \"<?php class A extends static {}\"],\n|result|\n{\n    assert!(!result.errors.is_empty(), \"Expected parse errors\");\n    format_errors(result)\n},)"
+---
+--- <?php class A extends self {} ---
+cannot use 'self' as class name
+
+--- <?php class A extends parent {} ---
+cannot use 'parent' as class name
+
+--- <?php class A extends static {} ---
+cannot use 'static' as class name

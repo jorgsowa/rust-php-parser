@@ -1,0 +1,352 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: "category_snapshot(\"magic_constants\")"
+---
+=== all magic consts ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Echo": [
+          {
+            "kind": {
+              "MagicConst": "Line"
+            },
+            "span": {
+              "start": 11,
+              "end": 19
+            }
+          },
+          {
+            "kind": {
+              "MagicConst": "File"
+            },
+            "span": {
+              "start": 21,
+              "end": 29
+            }
+          },
+          {
+            "kind": {
+              "MagicConst": "Dir"
+            },
+            "span": {
+              "start": 31,
+              "end": 38
+            }
+          },
+          {
+            "kind": {
+              "MagicConst": "Function"
+            },
+            "span": {
+              "start": 40,
+              "end": 52
+            }
+          },
+          {
+            "kind": {
+              "MagicConst": "Class"
+            },
+            "span": {
+              "start": 54,
+              "end": 63
+            }
+          },
+          {
+            "kind": {
+              "MagicConst": "Trait"
+            },
+            "span": {
+              "start": 65,
+              "end": 74
+            }
+          },
+          {
+            "kind": {
+              "MagicConst": "Method"
+            },
+            "span": {
+              "start": 76,
+              "end": 86
+            }
+          },
+          {
+            "kind": {
+              "MagicConst": "Namespace"
+            },
+            "span": {
+              "start": 88,
+              "end": 101
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 6,
+        "end": 102
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 102
+  }
+}
+=== line in expression ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "line"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 11
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "MagicConst": "Line"
+                      },
+                      "span": {
+                        "start": 14,
+                        "end": 22
+                      }
+                    },
+                    "op": "Add",
+                    "right": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 25,
+                        "end": 26
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 14,
+                  "end": 26
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 26
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 27
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 27
+  }
+}
+=== file in string ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "f"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "String": "loaded from "
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 25
+                      }
+                    },
+                    "op": "Concat",
+                    "right": {
+                      "kind": {
+                        "MagicConst": "File"
+                      },
+                      "span": {
+                        "start": 28,
+                        "end": 36
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 36
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 36
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 37
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 37
+  }
+}
+=== dir concat ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Include": [
+              "Require",
+              {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "MagicConst": "Dir"
+                      },
+                      "span": {
+                        "start": 14,
+                        "end": 21
+                      }
+                    },
+                    "op": "Concat",
+                    "right": {
+                      "kind": {
+                        "String": "/config.php"
+                      },
+                      "span": {
+                        "start": 24,
+                        "end": 37
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 14,
+                  "end": 37
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 6,
+            "end": 37
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 38
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 38
+  }
+}
+=== class in method ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "Foo",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Method": {
+                  "name": "name",
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": null,
+                  "body": [
+                    {
+                      "kind": {
+                        "Return": {
+                          "kind": {
+                            "MagicConst": "Class"
+                          },
+                          "span": {
+                            "start": 50,
+                            "end": 59
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 43,
+                        "end": 61
+                      }
+                    }
+                  ],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 18,
+                "end": 63
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 64
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 64
+  }
+}

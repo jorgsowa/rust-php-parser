@@ -1,0 +1,5 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: format_errors(&result_81)
+---
+'readonly class' requires PHP 8.2 or higher (targeting PHP 8.1)

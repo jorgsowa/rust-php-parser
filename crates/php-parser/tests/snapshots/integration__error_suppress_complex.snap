@@ -1,0 +1,248 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: "category_snapshot(\"error_suppress\")"
+---
+=== suppress chain ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ErrorSuppress": {
+              "kind": {
+                "PropertyAccess": {
+                  "object": {
+                    "kind": {
+                      "MethodCall": {
+                        "object": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 7,
+                            "end": 9
+                          }
+                        },
+                        "method": {
+                          "kind": {
+                            "Identifier": "b"
+                          },
+                          "span": {
+                            "start": 11,
+                            "end": 12
+                          }
+                        },
+                        "args": []
+                      }
+                    },
+                    "span": {
+                      "start": 7,
+                      "end": 14
+                    }
+                  },
+                  "property": {
+                    "kind": {
+                      "Identifier": "c"
+                    },
+                    "span": {
+                      "start": 16,
+                      "end": 17
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 7,
+                "end": 17
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 17
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 18
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 18
+  }
+}
+=== suppress new ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ErrorSuppress": {
+              "kind": {
+                "MethodCall": {
+                  "object": {
+                    "kind": {
+                      "Parenthesized": {
+                        "kind": {
+                          "New": {
+                            "class": {
+                              "kind": {
+                                "Identifier": "Foo"
+                              },
+                              "span": {
+                                "start": 12,
+                                "end": 15
+                              }
+                            },
+                            "args": []
+                          }
+                        },
+                        "span": {
+                          "start": 8,
+                          "end": 17
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 7,
+                      "end": 18
+                    }
+                  },
+                  "method": {
+                    "kind": {
+                      "Identifier": "init"
+                    },
+                    "span": {
+                      "start": 20,
+                      "end": 24
+                    }
+                  },
+                  "args": []
+                }
+              },
+              "span": {
+                "start": 7,
+                "end": 26
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 26
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 27
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 27
+  }
+}
+=== suppress include ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ErrorSuppress": {
+              "kind": {
+                "Include": [
+                  "Include",
+                  {
+                    "kind": {
+                      "String": "optional.php"
+                    },
+                    "span": {
+                      "start": 15,
+                      "end": 29
+                    }
+                  }
+                ]
+              },
+              "span": {
+                "start": 7,
+                "end": 29
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 29
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 30
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 30
+  }
+}
+=== suppress array access ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ErrorSuppress": {
+              "kind": {
+                "ArrayAccess": {
+                  "array": {
+                    "kind": {
+                      "Variable": "arr"
+                    },
+                    "span": {
+                      "start": 7,
+                      "end": 11
+                    }
+                  },
+                  "index": {
+                    "kind": {
+                      "Variable": "key"
+                    },
+                    "span": {
+                      "start": 12,
+                      "end": 16
+                    }
+                  }
+                }
+              },
+              "span": {
+                "start": 7,
+                "end": 17
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 17
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 18
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 18
+  }
+}

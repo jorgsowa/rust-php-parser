@@ -1,0 +1,24 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: "multi_snapshot(&[\"<?php class A { public public $x; }\",\n\"<?php class A { public protected $x; }\",\n\"<?php class A { static static $x; }\",\n\"<?php class A { abstract abstract function f(); }\",\n\"<?php class A { final final function f() {} }\",\n\"<?php class A { readonly readonly $x; }\",\n\"<?php class A { public public const X = 1; }\"], |result|\n{\n    assert!(!result.errors.is_empty(), \"Expected parse errors\");\n    format_errors(result)\n},)"
+---
+--- <?php class A { public public $x; } ---
+cannot use multiple visibility modifiers
+
+--- <?php class A { public protected $x; } ---
+cannot use multiple visibility modifiers
+
+--- <?php class A { static static $x; } ---
+duplicate modifier 'static'
+
+--- <?php class A { abstract abstract function f(); } ---
+duplicate modifier 'abstract'
+
+--- <?php class A { final final function f() {} } ---
+duplicate modifier 'final'
+
+--- <?php class A { readonly readonly $x; } ---
+duplicate modifier 'readonly'
+
+--- <?php class A { public public const X = 1; } ---
+cannot use multiple visibility modifiers

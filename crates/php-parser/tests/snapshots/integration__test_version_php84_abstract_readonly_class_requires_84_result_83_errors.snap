@@ -1,0 +1,5 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: format_errors(&result_83)
+---
+'abstract readonly class' requires PHP 8.4 or higher (targeting PHP 8.3)

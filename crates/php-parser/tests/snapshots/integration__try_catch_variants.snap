@@ -1,0 +1,591 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: "category_snapshot(\"try_catch\")"
+---
+=== multi catch types ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "TryCatch": {
+          "body": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "FunctionCall": {
+                      "name": {
+                        "kind": {
+                          "Identifier": "foo"
+                        },
+                        "span": {
+                          "start": 12,
+                          "end": 15
+                        }
+                      },
+                      "args": []
+                    }
+                  },
+                  "span": {
+                    "start": 12,
+                    "end": 17
+                  }
+                }
+              },
+              "span": {
+                "start": 12,
+                "end": 19
+              }
+            }
+          ],
+          "catches": [
+            {
+              "types": [
+                {
+                  "parts": [
+                    "TypeError"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 28,
+                    "end": 38
+                  }
+                },
+                {
+                  "parts": [
+                    "ValueError"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 40,
+                    "end": 51
+                  }
+                }
+              ],
+              "var": "e",
+              "body": [
+                {
+                  "kind": {
+                    "Echo": [
+                      {
+                        "kind": {
+                          "Variable": "e"
+                        },
+                        "span": {
+                          "start": 62,
+                          "end": 64
+                        }
+                      }
+                    ]
+                  },
+                  "span": {
+                    "start": 57,
+                    "end": 66
+                  }
+                }
+              ],
+              "span": {
+                "start": 27,
+                "end": 67
+              }
+            }
+          ],
+          "finally": null
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 67
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 67
+  }
+}
+=== catch no var ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "TryCatch": {
+          "body": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "FunctionCall": {
+                      "name": {
+                        "kind": {
+                          "Identifier": "foo"
+                        },
+                        "span": {
+                          "start": 12,
+                          "end": 15
+                        }
+                      },
+                      "args": []
+                    }
+                  },
+                  "span": {
+                    "start": 12,
+                    "end": 17
+                  }
+                }
+              },
+              "span": {
+                "start": 12,
+                "end": 19
+              }
+            }
+          ],
+          "catches": [
+            {
+              "types": [
+                {
+                  "parts": [
+                    "Exception"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 28,
+                    "end": 37
+                  }
+                }
+              ],
+              "var": null,
+              "body": [
+                {
+                  "kind": {
+                    "Echo": [
+                      {
+                        "kind": {
+                          "String": "error"
+                        },
+                        "span": {
+                          "start": 46,
+                          "end": 53
+                        }
+                      }
+                    ]
+                  },
+                  "span": {
+                    "start": 41,
+                    "end": 55
+                  }
+                }
+              ],
+              "span": {
+                "start": 27,
+                "end": 56
+              }
+            }
+          ],
+          "finally": null
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 56
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 56
+  }
+}
+=== multi catch blocks ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "TryCatch": {
+          "body": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "FunctionCall": {
+                      "name": {
+                        "kind": {
+                          "Identifier": "foo"
+                        },
+                        "span": {
+                          "start": 12,
+                          "end": 15
+                        }
+                      },
+                      "args": []
+                    }
+                  },
+                  "span": {
+                    "start": 12,
+                    "end": 17
+                  }
+                }
+              },
+              "span": {
+                "start": 12,
+                "end": 19
+              }
+            }
+          ],
+          "catches": [
+            {
+              "types": [
+                {
+                  "parts": [
+                    "A"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 28,
+                    "end": 30
+                  }
+                }
+              ],
+              "var": "a",
+              "body": [],
+              "span": {
+                "start": 27,
+                "end": 38
+              }
+            },
+            {
+              "types": [
+                {
+                  "parts": [
+                    "B"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 45,
+                    "end": 47
+                  }
+                }
+              ],
+              "var": "b",
+              "body": [],
+              "span": {
+                "start": 44,
+                "end": 55
+              }
+            },
+            {
+              "types": [
+                {
+                  "parts": [
+                    "C"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 62,
+                    "end": 64
+                  }
+                }
+              ],
+              "var": "c",
+              "body": [],
+              "span": {
+                "start": 61,
+                "end": 71
+              }
+            }
+          ],
+          "finally": null
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 71
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 71
+  }
+}
+=== try finally no catch ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "TryCatch": {
+          "body": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "FunctionCall": {
+                      "name": {
+                        "kind": {
+                          "Identifier": "foo"
+                        },
+                        "span": {
+                          "start": 12,
+                          "end": 15
+                        }
+                      },
+                      "args": []
+                    }
+                  },
+                  "span": {
+                    "start": 12,
+                    "end": 17
+                  }
+                }
+              },
+              "span": {
+                "start": 12,
+                "end": 19
+              }
+            }
+          ],
+          "catches": [],
+          "finally": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "FunctionCall": {
+                      "name": {
+                        "kind": {
+                          "Identifier": "cleanup"
+                        },
+                        "span": {
+                          "start": 31,
+                          "end": 38
+                        }
+                      },
+                      "args": []
+                    }
+                  },
+                  "span": {
+                    "start": 31,
+                    "end": 40
+                  }
+                }
+              },
+              "span": {
+                "start": 31,
+                "end": 42
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 43
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 43
+  }
+}
+=== catch rethrow ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "TryCatch": {
+          "body": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "FunctionCall": {
+                      "name": {
+                        "kind": {
+                          "Identifier": "foo"
+                        },
+                        "span": {
+                          "start": 12,
+                          "end": 15
+                        }
+                      },
+                      "args": []
+                    }
+                  },
+                  "span": {
+                    "start": 12,
+                    "end": 17
+                  }
+                }
+              },
+              "span": {
+                "start": 12,
+                "end": 19
+              }
+            }
+          ],
+          "catches": [
+            {
+              "types": [
+                {
+                  "parts": [
+                    "Exception"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 28,
+                    "end": 38
+                  }
+                }
+              ],
+              "var": "e",
+              "body": [
+                {
+                  "kind": {
+                    "Throw": {
+                      "kind": {
+                        "Variable": "e"
+                      },
+                      "span": {
+                        "start": 50,
+                        "end": 52
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 44,
+                    "end": 54
+                  }
+                }
+              ],
+              "span": {
+                "start": 27,
+                "end": 55
+              }
+            }
+          ],
+          "finally": null
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 55
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 55
+  }
+}
+=== multi catch no var ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "TryCatch": {
+          "body": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "FunctionCall": {
+                      "name": {
+                        "kind": {
+                          "Identifier": "foo"
+                        },
+                        "span": {
+                          "start": 12,
+                          "end": 15
+                        }
+                      },
+                      "args": []
+                    }
+                  },
+                  "span": {
+                    "start": 12,
+                    "end": 17
+                  }
+                }
+              },
+              "span": {
+                "start": 12,
+                "end": 19
+              }
+            }
+          ],
+          "catches": [
+            {
+              "types": [
+                {
+                  "parts": [
+                    "TypeError"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 28,
+                    "end": 38
+                  }
+                },
+                {
+                  "parts": [
+                    "ValueError"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 40,
+                    "end": 50
+                  }
+                }
+              ],
+              "var": null,
+              "body": [
+                {
+                  "kind": {
+                    "Expression": {
+                      "kind": {
+                        "FunctionCall": {
+                          "name": {
+                            "kind": {
+                              "Identifier": "log"
+                            },
+                            "span": {
+                              "start": 54,
+                              "end": 57
+                            }
+                          },
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 54,
+                        "end": 59
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 54,
+                    "end": 61
+                  }
+                }
+              ],
+              "span": {
+                "start": 27,
+                "end": 62
+              }
+            }
+          ],
+          "finally": null
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 62
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 62
+  }
+}

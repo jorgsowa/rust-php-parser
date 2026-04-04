@@ -1,0 +1,5 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: format_errors(&result_80)
+---
+'enums' requires PHP 8.1 or higher (targeting PHP 8.0)

@@ -1,0 +1,217 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: to_json(&result.program)
+---
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "array_is_list",
+          "params": [
+            {
+              "name": "arr",
+              "type_hint": null,
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "is_readonly": false,
+              "is_final": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 29,
+                "end": 33
+              }
+            }
+          ],
+          "body": [
+            {
+              "kind": {
+                "If": {
+                  "condition": {
+                    "kind": {
+                      "Binary": {
+                        "left": {
+                          "kind": {
+                            "Parenthesized": {
+                              "kind": {
+                                "Binary": {
+                                  "left": {
+                                    "kind": {
+                                      "Array": []
+                                    },
+                                    "span": {
+                                      "start": 46,
+                                      "end": 53
+                                    }
+                                  },
+                                  "op": "Identical",
+                                  "right": {
+                                    "kind": {
+                                      "Variable": "arr"
+                                    },
+                                    "span": {
+                                      "start": 58,
+                                      "end": 62
+                                    }
+                                  }
+                                }
+                              },
+                              "span": {
+                                "start": 46,
+                                "end": 62
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 45,
+                            "end": 64
+                          }
+                        },
+                        "op": "BooleanOr",
+                        "right": {
+                          "kind": {
+                            "Parenthesized": {
+                              "kind": {
+                                "Binary": {
+                                  "left": {
+                                    "kind": {
+                                      "FunctionCall": {
+                                        "name": {
+                                          "kind": {
+                                            "Identifier": "array_values"
+                                          },
+                                          "span": {
+                                            "start": 68,
+                                            "end": 80
+                                          }
+                                        },
+                                        "args": [
+                                          {
+                                            "name": null,
+                                            "value": {
+                                              "kind": {
+                                                "Variable": "arr"
+                                              },
+                                              "span": {
+                                                "start": 81,
+                                                "end": 85
+                                              }
+                                            },
+                                            "unpack": false,
+                                            "by_ref": false,
+                                            "span": {
+                                              "start": 81,
+                                              "end": 85
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 68,
+                                      "end": 87
+                                    }
+                                  },
+                                  "op": "Identical",
+                                  "right": {
+                                    "kind": {
+                                      "Variable": "arr"
+                                    },
+                                    "span": {
+                                      "start": 91,
+                                      "end": 95
+                                    }
+                                  }
+                                }
+                              },
+                              "span": {
+                                "start": 68,
+                                "end": 95
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 67,
+                            "end": 96
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 45,
+                      "end": 96
+                    }
+                  },
+                  "then_branch": {
+                    "kind": {
+                      "Block": [
+                        {
+                          "kind": {
+                            "Return": {
+                              "kind": {
+                                "Bool": true
+                              },
+                              "span": {
+                                "start": 115,
+                                "end": 119
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 108,
+                            "end": 125
+                          }
+                        }
+                      ]
+                    },
+                    "span": {
+                      "start": 98,
+                      "end": 126
+                    }
+                  },
+                  "elseif_branches": [],
+                  "else_branch": null
+                }
+              },
+              "span": {
+                "start": 41,
+                "end": 126
+              }
+            },
+            {
+              "kind": {
+                "Return": {
+                  "kind": {
+                    "Bool": false
+                  },
+                  "span": {
+                    "start": 138,
+                    "end": 143
+                  }
+                }
+              },
+              "span": {
+                "start": 131,
+                "end": 145
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 146
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 146
+  }
+}

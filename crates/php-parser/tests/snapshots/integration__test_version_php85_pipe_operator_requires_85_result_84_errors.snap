@@ -1,0 +1,6 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: format_errors(&result_84)
+---
+'pipe operator (|>)' requires PHP 8.5 or higher (targeting PHP 8.4)
+'pipe operator (|>)' requires PHP 8.5 or higher (targeting PHP 8.4)

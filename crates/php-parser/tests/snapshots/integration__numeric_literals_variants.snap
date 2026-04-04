@@ -1,0 +1,464 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: "category_snapshot(\"numeric_literals\")"
+---
+=== explicit octal ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Int": 511
+                },
+                "span": {
+                  "start": 11,
+                  "end": 16
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 16
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 17
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 17
+  }
+}
+=== hex with underscores ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Int": 4294967295
+                },
+                "span": {
+                  "start": 11,
+                  "end": 22
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 22
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 23
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 23
+  }
+}
+=== leading zero float ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Float": 0.001
+                },
+                "span": {
+                  "start": 11,
+                  "end": 16
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 16
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 17
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 17
+  }
+}
+=== negative exponent float ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Float": 1.5e-10
+                },
+                "span": {
+                  "start": 11,
+                  "end": 18
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 18
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 19
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 19
+  }
+}
+=== int max ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Int": 9223372036854775807
+                },
+                "span": {
+                  "start": 11,
+                  "end": 30
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 30
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 31
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 31
+  }
+}
+=== binary with underscores ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Int": 240
+                },
+                "span": {
+                  "start": 11,
+                  "end": 22
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 22
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 23
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 23
+  }
+}
+=== float no leading zero ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Float": 0.5
+                },
+                "span": {
+                  "start": 11,
+                  "end": 13
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 13
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 14
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 14
+  }
+}
+=== zero literal ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Int": 0
+                },
+                "span": {
+                  "start": 11,
+                  "end": 12
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 12
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 13
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 13
+  }
+}
+=== positive exponent float ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Float": 2500.0
+                },
+                "span": {
+                  "start": 11,
+                  "end": 17
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 17
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 18
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 18
+  }
+}
+=== float literal exceeding 128 byte parse buffer ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Float": 1.0
+                },
+                "span": {
+                  "start": 11,
+                  "end": 145
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 145
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 146
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 146
+  }
+}
