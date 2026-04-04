@@ -1,5 +1,5 @@
 ---
-source: crates/php-parser/tests/integration.rs
+source: crates/php-parser/tests/corpus.rs
 expression: to_json(& result.program)
 ---
 {
@@ -14,35 +14,35 @@ expression: to_json(& result.program)
                   "Binary": {
                     "left": {
                       "kind": {
-                        "Int": 1
+                        "Binary": {
+                          "left": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 6,
+                              "end": 7
+                            }
+                          },
+                          "op": "Add",
+                          "right": {
+                            "kind": {
+                              "Int": 2
+                            },
+                            "span": {
+                              "start": 10,
+                              "end": 11
+                            }
+                          }
+                        }
                       },
                       "span": {
                         "start": 6,
-                        "end": 7
-                      }
-                    },
-                    "op": "Add",
-                    "right": {
-                      "kind": {
-                        "Int": 2
-                      },
-                      "span": {
-                        "start": 10,
                         "end": 11
                       }
-                    }
-                  }
-                },
-                "span": {
-                  "start": 6,
-                  "end": 11
-                }
-              },
-              "op": "Concat",
-              "right": {
-                "kind": {
-                  "Binary": {
-                    "left": {
+                    },
+                    "op": "Concat",
+                    "right": {
                       "kind": {
                         "Int": 3
                       },
@@ -50,21 +50,21 @@ expression: to_json(& result.program)
                         "start": 14,
                         "end": 15
                       }
-                    },
-                    "op": "Add",
-                    "right": {
-                      "kind": {
-                        "Int": 4
-                      },
-                      "span": {
-                        "start": 18,
-                        "end": 19
-                      }
                     }
                   }
                 },
                 "span": {
-                  "start": 14,
+                  "start": 6,
+                  "end": 15
+                }
+              },
+              "op": "Add",
+              "right": {
+                "kind": {
+                  "Int": 4
+                },
+                "span": {
+                  "start": 18,
                   "end": 19
                 }
               }
@@ -101,47 +101,47 @@ expression: to_json(& result.program)
                     "op": "ShiftLeft",
                     "right": {
                       "kind": {
-                        "Int": 2
+                        "Binary": {
+                          "left": {
+                            "kind": {
+                              "Int": 2
+                            },
+                            "span": {
+                              "start": 26,
+                              "end": 27
+                            }
+                          },
+                          "op": "Concat",
+                          "right": {
+                            "kind": {
+                              "Int": 3
+                            },
+                            "span": {
+                              "start": 30,
+                              "end": 31
+                            }
+                          }
+                        }
                       },
                       "span": {
                         "start": 26,
-                        "end": 27
+                        "end": 31
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 21,
-                  "end": 27
+                  "end": 31
                 }
               },
-              "op": "Concat",
+              "op": "ShiftLeft",
               "right": {
                 "kind": {
-                  "Binary": {
-                    "left": {
-                      "kind": {
-                        "Int": 3
-                      },
-                      "span": {
-                        "start": 30,
-                        "end": 31
-                      }
-                    },
-                    "op": "ShiftLeft",
-                    "right": {
-                      "kind": {
-                        "Int": 4
-                      },
-                      "span": {
-                        "start": 35,
-                        "end": 36
-                      }
-                    }
-                  }
+                  "Int": 4
                 },
                 "span": {
-                  "start": 30,
+                  "start": 35,
                   "end": 36
                 }
               }

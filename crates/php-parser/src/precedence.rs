@@ -17,11 +17,10 @@ use php_lexer::TokenKind;
 /// 11. `&`                             (left)
 /// 12. `== != === !== <=>`             (nonassoc)
 /// 13. `< <= > >=`                     (nonassoc)
-/// 14. `.`                             (left)
-/// 15. `<< >>`                         (left)
-/// 16. `+ -`                           (left)
-/// 17. `* / %`                         (left)
-/// 18. `**`                            (right)
+/// 14. `<< >>`                         (left)   ← below + - . per PHP 8
+/// 15. `. + -`                         (left)   ← same level per PHP 8
+/// 16. `* / %`                         (left)
+/// 17. `**`                            (right)
 ///
 ///     Returns the infix binding power for a token, or None if it's not an infix operator.
 ///     Returns (left_bp, right_bp). For left-associative ops, right_bp = left_bp + 1.
@@ -86,14 +85,12 @@ const fn build_bp_table() -> [Option<(u8, u8)>; 256] {
     // Pipe operator (left-associative)
     table[TokenKind::PipeArrow as u8 as usize] = Some((29, 30));
 
-    // String concatenation
-    table[TokenKind::Dot as u8 as usize] = Some((31, 32));
+    // Shift (below concat/additive per PHP 8 precedence table)
+    table[TokenKind::ShiftLeft as u8 as usize] = Some((31, 32));
+    table[TokenKind::ShiftRight as u8 as usize] = Some((31, 32));
 
-    // Shift
-    table[TokenKind::ShiftLeft as u8 as usize] = Some((33, 34));
-    table[TokenKind::ShiftRight as u8 as usize] = Some((33, 34));
-
-    // Additive
+    // String concatenation and additive (same level per PHP 8)
+    table[TokenKind::Dot as u8 as usize] = Some((35, 36));
     table[TokenKind::Plus as u8 as usize] = Some((35, 36));
     table[TokenKind::Minus as u8 as usize] = Some((35, 36));
 
@@ -186,5 +183,25 @@ mod tests {
         let (_, cmp_right) = infix_binding_power(TokenKind::LessThan).unwrap();
         let (concat_left, _) = infix_binding_power(TokenKind::Dot).unwrap();
         assert!(concat_left > cmp_right);
+    }
+
+    #[test]
+    fn test_concat_same_level_as_additive() {
+        // PHP 8: `.` and `+`/`-` share the same precedence level
+        let (dot_left, dot_right) = infix_binding_power(TokenKind::Dot).unwrap();
+        let (plus_left, plus_right) = infix_binding_power(TokenKind::Plus).unwrap();
+        let (minus_left, minus_right) = infix_binding_power(TokenKind::Minus).unwrap();
+        assert_eq!((dot_left, dot_right), (plus_left, plus_right));
+        assert_eq!((dot_left, dot_right), (minus_left, minus_right));
+    }
+
+    #[test]
+    fn test_shift_lower_than_concat_and_additive() {
+        // PHP 8: `<<`/`>>` bind less tightly than `.`, `+`, `-`
+        let (_, shift_right) = infix_binding_power(TokenKind::ShiftLeft).unwrap();
+        let (concat_left, _) = infix_binding_power(TokenKind::Dot).unwrap();
+        let (plus_left, _) = infix_binding_power(TokenKind::Plus).unwrap();
+        assert!(concat_left > shift_right);
+        assert!(plus_left > shift_right);
     }
 }

@@ -102,6 +102,24 @@ fn test_precedence_parens() {
 }
 
 #[test]
+fn test_concat_same_precedence_as_add() {
+    // PHP 8: `.` and `+` share a precedence level (left-to-right)
+    // `1 + 2 . 3 + 4` must parse as `((1 + 2) . 3) + 4`, not `(1+2) . (3+4)`
+    let result = parse_php("<?php 1 + 2 . 3 + 4;");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_shift_lower_than_concat() {
+    // PHP 8: `<<`/`>>` bind less tightly than `.`, `+`, `-`
+    // `1 << 2 . 3 << 4` must parse as `(1 << (2 . 3)) << 4`
+    let result = parse_php("<?php 1 << 2 . 3 << 4;");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
 fn test_ternary_expr() {
     let result = parse_php("<?php $x > 0 ? 'yes' : 'no';");
     assert_no_errors(&result);
