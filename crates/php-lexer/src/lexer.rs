@@ -850,12 +850,10 @@ impl<'src> Lexer<'src> {
         let integer_end = self.pos;
         let mut kind = TokenKind::IntLiteral;
 
-        // Check for legacy octal: 0[0-7]+, no underscores
+        // Check for legacy octal: 0[0-9]+ where PHP reads leading octal digits (0-7)
+        // and silently ignores invalid digits (8, 9).
         if bytes[start] == b'0' && integer_end > start + 1 {
-            let slice = &bytes[start..integer_end];
-            if slice.iter().all(|&b| (b'0'..=b'7').contains(&b)) {
-                kind = TokenKind::OctIntLiteral;
-            }
+            kind = TokenKind::OctIntLiteral;
         }
 
         // Check for decimal point
@@ -1584,6 +1582,16 @@ mod tests {
             let toks = php_tokens("0o77 0O755");
             assert_eq!(toks[0], (TokenKind::OctIntLiteralNew, "0o77".to_string()));
             assert_eq!(toks[1], (TokenKind::OctIntLiteralNew, "0O755".to_string()));
+        }
+
+        #[test]
+        fn test_legacy_octal_with_invalid_digits() {
+            // PHP silently stops scanning at the first 8 or 9 in legacy octal;
+            // the lexer must still classify these as OctIntLiteral, not IntLiteral
+            let toks = php_tokens("0778 019 09");
+            assert_eq!(toks[0], (TokenKind::OctIntLiteral, "0778".to_string()));
+            assert_eq!(toks[1], (TokenKind::OctIntLiteral, "019".to_string()));
+            assert_eq!(toks[2], (TokenKind::OctIntLiteral, "09".to_string()));
         }
 
         #[test]
