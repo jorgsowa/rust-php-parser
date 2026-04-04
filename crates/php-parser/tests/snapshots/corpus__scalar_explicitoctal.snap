@@ -1,5 +1,5 @@
 ---
-source: crates/php-parser/tests/integration.rs
+source: crates/php-parser/tests/corpus.rs
 expression: to_json(& result.program)
 ---
 {
@@ -59,7 +59,7 @@ expression: to_json(& result.program)
       "kind": {
         "Expression": {
           "kind": {
-            "Int": 0
+            "Float": 9.223372036854776e+18
           },
           "span": {
             "start": 29,

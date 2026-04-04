@@ -750,46 +750,71 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
         TokenKind::IntLiteral => {
             let token = parser.advance();
             let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-            let value = parse_int_no_alloc(text.as_bytes(), 10, 0);
-            Expr {
-                kind: ExprKind::Int(value),
-                span: token.span,
+            match parse_int_no_alloc(text.as_bytes(), 10) {
+                Some(value) => Expr {
+                    kind: ExprKind::Int(value),
+                    span: token.span,
+                },
+                None => Expr {
+                    kind: ExprKind::Float(parse_float_no_alloc(text)),
+                    span: token.span,
+                },
             }
         }
         TokenKind::HexIntLiteral => {
             let token = parser.advance();
             let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-            let value = parse_int_no_alloc(&text.as_bytes()[2..], 16, 0);
-            Expr {
-                kind: ExprKind::Int(value),
-                span: token.span,
+            match parse_int_no_alloc(&text.as_bytes()[2..], 16) {
+                Some(value) => Expr {
+                    kind: ExprKind::Int(value),
+                    span: token.span,
+                },
+                None => Expr {
+                    kind: ExprKind::Float(parse_int_as_float(&text.as_bytes()[2..], 16.0)),
+                    span: token.span,
+                },
             }
         }
         TokenKind::BinIntLiteral => {
             let token = parser.advance();
             let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-            let value = parse_int_no_alloc(&text.as_bytes()[2..], 2, 0);
-            Expr {
-                kind: ExprKind::Int(value),
-                span: token.span,
+            match parse_int_no_alloc(&text.as_bytes()[2..], 2) {
+                Some(value) => Expr {
+                    kind: ExprKind::Int(value),
+                    span: token.span,
+                },
+                None => Expr {
+                    kind: ExprKind::Float(parse_int_as_float(&text.as_bytes()[2..], 2.0)),
+                    span: token.span,
+                },
             }
         }
         TokenKind::OctIntLiteral => {
             let token = parser.advance();
             let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-            let value = parse_int_no_alloc(&text.as_bytes()[1..], 8, 0);
-            Expr {
-                kind: ExprKind::Int(value),
-                span: token.span,
+            match parse_int_no_alloc(&text.as_bytes()[1..], 8) {
+                Some(value) => Expr {
+                    kind: ExprKind::Int(value),
+                    span: token.span,
+                },
+                None => Expr {
+                    kind: ExprKind::Float(parse_int_as_float(&text.as_bytes()[1..], 8.0)),
+                    span: token.span,
+                },
             }
         }
         TokenKind::OctIntLiteralNew => {
             let token = parser.advance();
             let text = &parser.source()[token.span.start as usize..token.span.end as usize];
-            let value = parse_int_no_alloc(&text.as_bytes()[2..], 8, 0);
-            Expr {
-                kind: ExprKind::Int(value),
-                span: token.span,
+            match parse_int_no_alloc(&text.as_bytes()[2..], 8) {
+                Some(value) => Expr {
+                    kind: ExprKind::Int(value),
+                    span: token.span,
+                },
+                None => Expr {
+                    kind: ExprKind::Float(parse_int_as_float(&text.as_bytes()[2..], 8.0)),
+                    span: token.span,
+                },
             }
         }
 
@@ -2580,9 +2605,9 @@ fn parse_heredoc_content(text: &str) -> (&str, usize, usize, String) {
 }
 
 /// Parse an integer literal from raw bytes, skipping underscores, without heap allocation.
-/// Returns 0 on overflow (matching the behaviour of the original `str::parse::<i64>().unwrap_or(0)`).
+/// Returns `None` on overflow so the caller can promote the value to float (PHP semantics).
 /// `base` is 2, 8, 10, or 16.
-fn parse_int_no_alloc(bytes: &[u8], base: i64, _skip: usize) -> i64 {
+fn parse_int_no_alloc(bytes: &[u8], base: i64) -> Option<i64> {
     let mut value: i64 = 0;
     for &b in bytes {
         if b == b'_' {
@@ -2608,10 +2633,37 @@ fn parse_int_no_alloc(bytes: &[u8], base: i64, _skip: usize) -> i64 {
                 _ => continue,
             },
         };
-        value = match value.checked_mul(base).and_then(|v| v.checked_add(digit)) {
-            Some(v) => v,
-            None => return 0,
+        value = value.checked_mul(base).and_then(|v| v.checked_add(digit))?;
+    }
+    Some(value)
+}
+
+/// Evaluate an integer literal (hex/bin/oct) as `f64`, skipping underscores.
+/// Used when `parse_int_no_alloc` overflows — matches PHP's float-promotion behaviour.
+fn parse_int_as_float(bytes: &[u8], base: f64) -> f64 {
+    let mut value: f64 = 0.0;
+    for &b in bytes {
+        if b == b'_' {
+            continue;
+        }
+        let digit: f64 = match base as u32 {
+            16 => match b {
+                b'0'..=b'9' => (b - b'0') as f64,
+                b'a'..=b'f' => (b - b'a') as f64 + 10.0,
+                b'A'..=b'F' => (b - b'A') as f64 + 10.0,
+                _ => continue,
+            },
+            2 => match b {
+                b'0'..=b'1' => (b - b'0') as f64,
+                _ => continue,
+            },
+            _ => match b {
+                // base 8
+                b'0'..=b'7' => (b - b'0') as f64,
+                _ => continue,
+            },
         };
+        value = value * base + digit;
     }
     value
 }

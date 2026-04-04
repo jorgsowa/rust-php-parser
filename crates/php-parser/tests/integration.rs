@@ -4741,3 +4741,63 @@ fn test_single_quoted_non_ascii_with_escaped_backslash() {
         "non-ASCII before \\\\ must decode correctly"
     );
 }
+
+// =============================================================================
+// Integer overflow → float promotion (PHP semantics)
+// =============================================================================
+
+#[test]
+fn test_int_overflow_decimal_promotes_to_float() {
+    // PHP_INT_MAX + 1 → PHP promotes to float
+    let result = parse_php("<?php 9223372036854775808;");
+    assert_no_errors(&result);
+    let json = to_json(&result.program);
+    assert!(
+        !json.contains("\"Int\""),
+        "overflowing decimal literal must not produce Int node; got:\n{json}"
+    );
+    assert!(
+        json.contains("\"Float\""),
+        "overflowing decimal literal must produce Float node; got:\n{json}"
+    );
+}
+
+#[test]
+fn test_int_overflow_large_decimal_value() {
+    // 9999999999999999999 → float(1.0E+19)
+    let result = parse_php("<?php 9999999999999999999;");
+    assert_no_errors(&result);
+    let json = to_json(&result.program);
+    assert!(
+        json.contains("\"Float\""),
+        "very large decimal literal must produce Float node; got:\n{json}"
+    );
+}
+
+#[test]
+fn test_int_overflow_hex_promotes_to_float() {
+    // 0x8000000000000000 = PHP_INT_MAX + 1 in hex → float
+    let result = parse_php("<?php 0x8000000000000000;");
+    assert_no_errors(&result);
+    let json = to_json(&result.program);
+    assert!(
+        !json.contains("\"Int\""),
+        "overflowing hex literal must not produce Int node; got:\n{json}"
+    );
+    assert!(
+        json.contains("\"Float\""),
+        "overflowing hex literal must produce Float node; got:\n{json}"
+    );
+}
+
+#[test]
+fn test_int_no_overflow_stays_int() {
+    // PHP_INT_MAX exactly → stays as Int
+    let result = parse_php("<?php 9223372036854775807;");
+    assert_no_errors(&result);
+    let json = to_json(&result.program);
+    assert!(
+        json.contains("\"Int\": 9223372036854775807"),
+        "PHP_INT_MAX must stay as Int; got:\n{json}"
+    );
+}

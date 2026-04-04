@@ -178,7 +178,7 @@ expression: to_json(& result.program)
       "kind": {
         "Expression": {
           "kind": {
-            "Int": 0
+            "Float": 1.8446744073709552e+19
           },
           "span": {
             "start": 186,
@@ -195,7 +195,7 @@ expression: to_json(& result.program)
       "kind": {
         "Expression": {
           "kind": {
-            "Int": 0
+            "Float": 1.8446744073709552e+19
           },
           "span": {
             "start": 208,
@@ -212,7 +212,7 @@ expression: to_json(& result.program)
       "kind": {
         "Expression": {
           "kind": {
-            "Int": 0
+            "Float": 1.7216961135462248e+19
           },
           "span": {
             "start": 228,
@@ -229,7 +229,7 @@ expression: to_json(& result.program)
       "kind": {
         "Expression": {
           "kind": {
-            "Int": 0
+            "Float": 1.8446744073709552e+19
           },
           "span": {
             "start": 248,
@@ -246,7 +246,7 @@ expression: to_json(& result.program)
       "kind": {
         "Expression": {
           "kind": {
-            "Int": 0
+            "Float": 1.4757395258967641e+20
           },
           "span": {
             "start": 273,
@@ -263,7 +263,7 @@ expression: to_json(& result.program)
       "kind": {
         "Expression": {
           "kind": {
-            "Int": 0
+            "Float": 1.8446744073709552e+19
           },
           "span": {
             "start": 300,
