@@ -222,6 +222,22 @@ fn test_numeric_literals() {
 }
 
 #[test]
+fn test_trailing_dot_float_literals() {
+    // PHP: DNUM = LNUM "." — trailing-dot literals must parse as Float, not Int
+    let result = parse_php("<?php 0.; 1.; 42.;");
+    assert_no_errors(&result);
+    let json = to_json(&result.program);
+    assert!(
+        !json.contains("\"Int\""),
+        "trailing-dot literals must not produce Int nodes; got:\n{json}"
+    );
+    assert!(
+        json.contains("\"Float\""),
+        "trailing-dot literals must produce Float nodes; got:\n{json}"
+    );
+}
+
+#[test]
 fn test_string_literals() {
     let result = parse_php(r#"<?php 'single'; "double";"#);
     assert_no_errors(&result);
