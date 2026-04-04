@@ -456,7 +456,11 @@ fixture_test!(stmt_class_name_12, "nikic/stmt/class/name_12.php", errors);
 fixture_test!(stmt_class_name_13, "nikic/stmt/class/name_13.php", errors);
 fixture_test!(stmt_class_name_14, "nikic/stmt/class/name_14.php", errors);
 fixture_test!(stmt_class_name_15, "nikic/stmt/class/name_15.php", errors);
-fixture_test!(stmt_class_php4style, "nikic/stmt/class/php4Style.php");
+fixture_test!(
+    stmt_class_php4style,
+    "nikic/stmt/class/php4Style.php",
+    errors
+);
 fixture_test!(
     stmt_class_propertytypes,
     "nikic/stmt/class/propertyTypes.php"

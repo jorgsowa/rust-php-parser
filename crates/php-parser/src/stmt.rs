@@ -2290,6 +2290,13 @@ pub fn parse_class_members<'arena, 'src>(
                 None
             };
 
+            if is_abstract && body.is_some() {
+                parser.error(ParseError::Forbidden {
+                    message: "abstract method cannot contain a body".into(),
+                    span: Span::new(member_start, parser.current_span().start),
+                });
+            }
+
             let span = Span::new(member_start, parser.current_span().start);
             members.push(ClassMember {
                 kind: ClassMemberKind::Method(MethodDecl {

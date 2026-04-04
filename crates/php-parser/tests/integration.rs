@@ -3240,6 +3240,15 @@ fn test_abstract_final_conflict() {
 }
 
 #[test]
+fn test_abstract_method_with_body() {
+    // abstract methods must not have a body
+    assert_has_errors("<?php abstract class Foo { abstract function bar() { echo 'body'; } }");
+    assert_has_errors(
+        "<?php abstract class Foo { abstract public function bar(): string { return ''; } }",
+    );
+}
+
+#[test]
 fn test_static_const_error() {
     assert_has_errors("<?php class A { static const X = 1; }");
 }
