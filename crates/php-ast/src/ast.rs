@@ -401,7 +401,7 @@ pub enum StmtKind<'arena, 'src> {
     Goto(&'src str),
 
     /// Label statement
-    Label(&'src str),
+    Label(&'arena str),
 
     /// Declare statement
     Declare(&'arena DeclareStmt<'arena, 'src>),
@@ -809,7 +809,7 @@ pub enum ExprKind<'arena, 'src> {
     Float(f64),
 
     /// String literal
-    String(Cow<'src, str>),
+    String(&'arena str),
 
     /// Interpolated string: `"Hello $name, you are {$age} years old"`
     InterpolatedString(ArenaVec<'arena, StringPart<'arena, 'src>>),
@@ -823,7 +823,7 @@ pub enum ExprKind<'arena, 'src> {
     /// Nowdoc: `<<<'EOT' ... EOT`
     Nowdoc {
         label: &'src str,
-        value: Cow<'src, str>,
+        value: &'arena str,
     },
 
     /// Shell execution: `` `command $var` ``
@@ -842,7 +842,7 @@ pub enum ExprKind<'arena, 'src> {
     VariableVariable(&'arena Expr<'arena, 'src>),
 
     /// Identifier (bare name, e.g. function name in a call)
-    Identifier(Cow<'src, str>),
+    Identifier(&'arena str),
 
     /// Assignment: `$x = expr` or `$x += expr`
     Assign(AssignExpr<'arena, 'src>),
@@ -1252,6 +1252,6 @@ pub enum CallableCreateKind<'arena, 'src> {
 
 #[derive(Debug, Serialize)]
 pub enum StringPart<'arena, 'src> {
-    Literal(Cow<'src, str>),
+    Literal(&'arena str),
     Expr(Expr<'arena, 'src>),
 }

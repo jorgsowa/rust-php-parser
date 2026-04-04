@@ -116,4 +116,3 @@ jobs:
 
       - name: Fuzz smoke test (10s)
         run: cargo fuzz run fuzz_parse -- -max_total_time=10
-        working-directory: fuzz

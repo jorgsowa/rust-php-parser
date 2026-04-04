@@ -3168,21 +3168,13 @@ fn parse_expression_stmt_or_label<'arena, 'src>(
     let start = parser.start_span();
     let expr = expr::parse_expr(parser);
 
-    if let ExprKind::Identifier(ref name) = expr.kind {
+    if let ExprKind::Identifier(name) = expr.kind {
         if parser.eat(TokenKind::Colon).is_some() {
             let span = Span::new(start, parser.current_span().start);
             // Label names are always simple identifiers borrowed from source
             // If somehow it's owned (qualified name), we can't get &'src str easily;
-            // in practice labels are always simple identifiers
-            if let Cow::Borrowed(label) = name {
-                return Stmt {
-                    kind: StmtKind::Label(label),
-                    span,
-                };
-            }
-            // Fallback: use a static error sentinel (qualified labels are invalid PHP anyway)
             return Stmt {
-                kind: StmtKind::Label("<error>"),
+                kind: StmtKind::Label(name),
                 span,
             };
         }

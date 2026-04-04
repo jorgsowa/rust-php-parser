@@ -140,10 +140,12 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                 if i + 1 < len && bytes[i + 1] == b'{' {
                     if let Some(buf) = owned.take() {
                         if !buf.is_empty() {
-                            parts.push(StringPart::Literal(Cow::Owned(buf)));
+                            parts.push(StringPart::Literal(arena.alloc_str(&buf)));
                         }
                     } else if i > literal_start {
-                        parts.push(StringPart::Literal(Cow::Borrowed(&inner[literal_start..i])));
+                        parts.push(StringPart::Literal(
+                            arena.alloc_str(&inner[literal_start..i]),
+                        ));
                     }
                     i += 2; // skip ${
                     let var_offset = base_offset + (i - 2) as u32;
@@ -229,10 +231,12 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                     // Flush literal run.
                     if let Some(buf) = owned.take() {
                         if !buf.is_empty() {
-                            parts.push(StringPart::Literal(Cow::Owned(buf)));
+                            parts.push(StringPart::Literal(arena.alloc_str(&buf)));
                         }
                     } else if i > literal_start {
-                        parts.push(StringPart::Literal(Cow::Borrowed(&inner[literal_start..i])));
+                        parts.push(StringPart::Literal(
+                            arena.alloc_str(&inner[literal_start..i]),
+                        ));
                     }
 
                     // Parse variable name
@@ -261,7 +265,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                             while i < len && is_var_char(bytes[i]) {
                                 i += 1;
                             }
-                            let prop_name: Cow<'src, str> = Cow::Borrowed(
+                            let prop_name: &'arena str = arena.alloc_str(
                                 &source
                                     [base_offset as usize + pname_start..base_offset as usize + i],
                             );
@@ -326,10 +330,12 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                 // Complex syntax: {$expr}
                 if let Some(buf) = owned.take() {
                     if !buf.is_empty() {
-                        parts.push(StringPart::Literal(Cow::Owned(buf)));
+                        parts.push(StringPart::Literal(arena.alloc_str(&buf)));
                     }
                 } else if i > literal_start {
-                    parts.push(StringPart::Literal(Cow::Borrowed(&inner[literal_start..i])));
+                    parts.push(StringPart::Literal(
+                        arena.alloc_str(&inner[literal_start..i]),
+                    ));
                 }
 
                 i += 1; // skip {
@@ -387,10 +393,12 @@ pub fn parse_interpolated_parts<'arena, 'src>(
     // Flush remaining literal run.
     if let Some(buf) = owned {
         if !buf.is_empty() {
-            parts.push(StringPart::Literal(Cow::Owned(buf)));
+            parts.push(StringPart::Literal(arena.alloc_str(&buf)));
         }
     } else if i > literal_start {
-        parts.push(StringPart::Literal(Cow::Borrowed(&inner[literal_start..i])));
+        parts.push(StringPart::Literal(
+            arena.alloc_str(&inner[literal_start..i]),
+        ));
     }
 
     parts
@@ -542,9 +550,8 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
             b'$' => {
                 if i + 1 < len && is_var_start(bytes[i + 1]) {
                     if !literal.is_empty() {
-                        parts.push(StringPart::Literal(Cow::Owned(std::mem::take(
-                            &mut literal,
-                        ))));
+                        parts.push(StringPart::Literal(arena.alloc_str(&literal)));
+                        literal.clear();
                     }
                     let var_start = i;
                     i += 1; // skip $
@@ -569,8 +576,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                             while i < len && is_var_char(bytes[i]) {
                                 i += 1;
                             }
-                            let prop_name: Cow<'src, str> =
-                                Cow::Borrowed(&raw_body[pname_start..i]);
+                            let prop_name: &'arena str = arena.alloc_str(&raw_body[pname_start..i]);
                             let prop_span =
                                 Span::new(body_offset + pname_start as u32, body_offset + i as u32);
                             let span = Span::new(var_offset, body_offset + i as u32);
@@ -618,9 +624,8 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
             }
             b'{' if i + 1 < len && bytes[i + 1] == b'$' => {
                 if !literal.is_empty() {
-                    parts.push(StringPart::Literal(Cow::Owned(std::mem::take(
-                        &mut literal,
-                    ))));
+                    parts.push(StringPart::Literal(arena.alloc_str(&literal)));
+                    literal.clear();
                 }
                 i += 1; // skip {
                 let expr_start = i;
@@ -668,7 +673,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
     }
 
     if !literal.is_empty() {
-        parts.push(StringPart::Literal(Cow::Owned(literal)));
+        parts.push(StringPart::Literal(arena.alloc_str(&literal)));
     }
 
     parts
@@ -708,7 +713,7 @@ fn is_var_char(b: u8) -> bool {
 /// Handles integers (including negative like `-1`), `$variable` references,
 /// and bare string keys (e.g. `$arr[key]`).
 fn parse_simple_index<'arena, 'src>(
-    _arena: &'arena bumpalo::Bump,
+    arena: &'arena bumpalo::Bump,
     source: &'src str,
     idx_str: &str,
     idx_offset: u32,
@@ -744,7 +749,7 @@ fn parse_simple_index<'arena, 'src>(
     let key_start = idx_offset as usize;
     let key_end = idx_end as usize;
     Expr {
-        kind: ExprKind::String(std::borrow::Cow::Borrowed(&source[key_start..key_end])),
+        kind: ExprKind::String(arena.alloc_str(&source[key_start..key_end])),
         span,
     }
 }
