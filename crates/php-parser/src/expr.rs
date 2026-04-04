@@ -303,14 +303,15 @@ pub fn parse_expr_bp<'arena, 'src>(
                             };
                         }
                         ArgListResult::Args(args) => {
+                            let lhs_start = lhs.span.start;
                             let callee = Expr {
                                 kind: ExprKind::ClassConstAccessDynamic {
                                     class: parser.alloc(lhs),
                                     member: parser.alloc(member),
                                 },
-                                span: Span::new(0, 0), // placeholder, will be wrapped
+                                span: Span::new(lhs_start, parser.current_span().start),
                             };
-                            let span = Span::new(callee.span.start, parser.current_span().start);
+                            let span = Span::new(lhs_start, parser.current_span().start);
                             lhs = Expr {
                                 kind: ExprKind::FunctionCall(FunctionCallExpr {
                                     name: parser.alloc(callee),

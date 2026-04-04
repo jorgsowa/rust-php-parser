@@ -2424,6 +2424,16 @@ $d = $class::${'prop_' . $name};
 }
 
 #[test]
+fn test_dynamic_static_call_span() {
+    // Foo::{$expr}() — the FunctionCall and its ClassConstAccessDynamic callee
+    // must both have spans starting at the offset of `Foo` (byte 6), not at 0.
+    let source = "<?php Foo::{$m}();";
+    let result = parse_php(source);
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
 fn test_pipe_operator_precedence() {
     let source = r#"<?php
 $x = $a |> $b |> $c;
