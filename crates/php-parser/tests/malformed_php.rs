@@ -332,13 +332,25 @@ fn list_with_string_keys() {
 #[test]
 fn deeply_nested_arrays_hit_depth_limit() {
     let nested = format!("<?php {}{};", "[".repeat(75), "]".repeat(75));
-    assert_errors_snapshot!(&nested);
+    // Debug builds use more stack per recursive call; run in a larger-stack thread.
+    std::thread::Builder::new()
+        .stack_size(16 * 1024 * 1024)
+        .spawn(move || assert_errors_snapshot!(&nested))
+        .unwrap()
+        .join()
+        .unwrap();
 }
 
 #[test]
 fn deeply_nested_parens_hit_depth_limit() {
     let nested = format!("<?php {}{};", "(".repeat(75), ")".repeat(75));
-    assert_errors_snapshot!(&nested);
+    // Debug builds use more stack per recursive call; run in a larger-stack thread.
+    std::thread::Builder::new()
+        .stack_size(16 * 1024 * 1024)
+        .spawn(move || assert_errors_snapshot!(&nested))
+        .unwrap()
+        .join()
+        .unwrap();
 }
 
 // ============================================================================

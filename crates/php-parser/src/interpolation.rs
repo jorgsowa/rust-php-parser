@@ -265,7 +265,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                             while i < len && is_var_char(bytes[i]) {
                                 i += 1;
                             }
-                            let prop_name: Cow<'src, str> = Cow::Borrowed(
+                            let prop_name: &'arena str = arena.alloc_str(
                                 &source
                                     [base_offset as usize + pname_start..base_offset as usize + i],
                             );
@@ -576,8 +576,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                             while i < len && is_var_char(bytes[i]) {
                                 i += 1;
                             }
-                            let prop_name: Cow<'src, str> =
-                                Cow::Borrowed(&raw_body[pname_start..i]);
+                            let prop_name: &'arena str = arena.alloc_str(&raw_body[pname_start..i]);
                             let prop_span =
                                 Span::new(body_offset + pname_start as u32, body_offset + i as u32);
                             let span = Span::new(var_offset, body_offset + i as u32);

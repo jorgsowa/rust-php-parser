@@ -401,7 +401,7 @@ pub enum StmtKind<'arena, 'src> {
     Goto(&'src str),
 
     /// Label statement
-    Label(&'src str),
+    Label(&'arena str),
 
     /// Declare statement
     Declare(&'arena DeclareStmt<'arena, 'src>),
@@ -842,7 +842,7 @@ pub enum ExprKind<'arena, 'src> {
     VariableVariable(&'arena Expr<'arena, 'src>),
 
     /// Identifier (bare name, e.g. function name in a call)
-    Identifier(Cow<'src, str>),
+    Identifier(&'arena str),
 
     /// Assignment: `$x = expr` or `$x += expr`
     Assign(AssignExpr<'arena, 'src>),
