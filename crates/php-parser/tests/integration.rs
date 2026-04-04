@@ -2726,6 +2726,16 @@ fn test_enum_variants() {
 }
 
 #[test]
+fn test_enum_in_match_variants() {
+    insta::assert_snapshot!(category_snapshot("enum_in_match"));
+}
+
+#[test]
+fn test_fiber_variants() {
+    insta::assert_snapshot!(category_snapshot("fiber"));
+}
+
+#[test]
 fn test_enum_with_keyword_methods() {
     let source = r#"<?php
 enum Status {

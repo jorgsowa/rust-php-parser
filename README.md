@@ -2,7 +2,7 @@
 
 A fast, fault-tolerant PHP parser written in Rust. Produces a full AST with source spans, recovers from syntax errors, and covers the vast majority of PHP 8.x syntax.
 
-Inspired by and tested against the [nikic/PHP-Parser](https://github.com/nikic/PHP-Parser) test suite.
+Includes a corpus of test fixtures adapted from the [nikic/PHP-Parser](https://github.com/nikic/PHP-Parser) test suite.
 
 > **Note:** The parser targets **PHP 8.5** by default — all supported syntax from PHP 5.x through 8.5 is accepted.
 
@@ -45,7 +45,9 @@ The parser prioritizes performance on contemporary PHP patterns:
 ## Testing
 
 ```sh
-cargo test --test integration   # integration tests (includes nikic/PHP-Parser corpus fixtures)
+cargo test --test integration   # hand-crafted integration tests
+cargo test --test corpus        # PHP-Parser corpus fixtures (fixtures/corpus/)
+cargo test --test malformed_php # error recovery and diagnostics
 ```
 
 Fixture files live in `crates/php-parser/tests/fixtures/`.

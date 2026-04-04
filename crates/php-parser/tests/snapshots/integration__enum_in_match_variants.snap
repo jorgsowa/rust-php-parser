@@ -1,0 +1,545 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: "category_snapshot(\"enum_in_match\")"
+---
+=== enum case as match arm ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Enum": {
+          "name": "Status",
+          "scalar_type": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Case": {
+                  "name": "Active",
+                  "value": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 20,
+                "end": 33
+              }
+            },
+            {
+              "kind": {
+                "Case": {
+                  "name": "Inactive",
+                  "value": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 33,
+                "end": 48
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 49
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "r"
+                },
+                "span": {
+                  "start": 50,
+                  "end": 52
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Match": {
+                    "subject": {
+                      "kind": {
+                        "Variable": "s"
+                      },
+                      "span": {
+                        "start": 61,
+                        "end": 63
+                      }
+                    },
+                    "arms": [
+                      {
+                        "conditions": [
+                          {
+                            "kind": {
+                              "ClassConstAccess": {
+                                "class": {
+                                  "kind": {
+                                    "Identifier": "Status"
+                                  },
+                                  "span": {
+                                    "start": 67,
+                                    "end": 73
+                                  }
+                                },
+                                "member": "Active"
+                              }
+                            },
+                            "span": {
+                              "start": 67,
+                              "end": 82
+                            }
+                          }
+                        ],
+                        "body": {
+                          "kind": {
+                            "String": "on"
+                          },
+                          "span": {
+                            "start": 85,
+                            "end": 89
+                          }
+                        },
+                        "span": {
+                          "start": 67,
+                          "end": 89
+                        }
+                      },
+                      {
+                        "conditions": [
+                          {
+                            "kind": {
+                              "ClassConstAccess": {
+                                "class": {
+                                  "kind": {
+                                    "Identifier": "Status"
+                                  },
+                                  "span": {
+                                    "start": 91,
+                                    "end": 97
+                                  }
+                                },
+                                "member": "Inactive"
+                              }
+                            },
+                            "span": {
+                              "start": 91,
+                              "end": 108
+                            }
+                          }
+                        ],
+                        "body": {
+                          "kind": {
+                            "String": "off"
+                          },
+                          "span": {
+                            "start": 111,
+                            "end": 116
+                          }
+                        },
+                        "span": {
+                          "start": 91,
+                          "end": 116
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 55,
+                  "end": 118
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 50,
+            "end": 118
+          }
+        }
+      },
+      "span": {
+        "start": 50,
+        "end": 119
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 119
+  }
+}
+=== backed enum in match ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Enum": {
+          "name": "Color",
+          "scalar_type": {
+            "parts": [
+              "string"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 18,
+              "end": 25
+            }
+          },
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Case": {
+                  "name": "Red",
+                  "value": {
+                    "kind": {
+                      "String": "red"
+                    },
+                    "span": {
+                      "start": 38,
+                      "end": 43
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 27,
+                "end": 45
+              }
+            },
+            {
+              "kind": {
+                "Case": {
+                  "name": "Blue",
+                  "value": {
+                    "kind": {
+                      "String": "blue"
+                    },
+                    "span": {
+                      "start": 57,
+                      "end": 63
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 45,
+                "end": 65
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 66
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "r"
+                },
+                "span": {
+                  "start": 67,
+                  "end": 69
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Match": {
+                    "subject": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 78,
+                        "end": 80
+                      }
+                    },
+                    "arms": [
+                      {
+                        "conditions": [
+                          {
+                            "kind": {
+                              "ClassConstAccess": {
+                                "class": {
+                                  "kind": {
+                                    "Identifier": "Color"
+                                  },
+                                  "span": {
+                                    "start": 84,
+                                    "end": 89
+                                  }
+                                },
+                                "member": "Red"
+                              }
+                            },
+                            "span": {
+                              "start": 84,
+                              "end": 95
+                            }
+                          }
+                        ],
+                        "body": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 98,
+                            "end": 99
+                          }
+                        },
+                        "span": {
+                          "start": 84,
+                          "end": 99
+                        }
+                      },
+                      {
+                        "conditions": [
+                          {
+                            "kind": {
+                              "ClassConstAccess": {
+                                "class": {
+                                  "kind": {
+                                    "Identifier": "Color"
+                                  },
+                                  "span": {
+                                    "start": 101,
+                                    "end": 106
+                                  }
+                                },
+                                "member": "Blue"
+                              }
+                            },
+                            "span": {
+                              "start": 101,
+                              "end": 113
+                            }
+                          }
+                        ],
+                        "body": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 116,
+                            "end": 117
+                          }
+                        },
+                        "span": {
+                          "start": 101,
+                          "end": 117
+                        }
+                      },
+                      {
+                        "conditions": null,
+                        "body": {
+                          "kind": {
+                            "Int": 0
+                          },
+                          "span": {
+                            "start": 130,
+                            "end": 131
+                          }
+                        },
+                        "span": {
+                          "start": 119,
+                          "end": 131
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 72,
+                  "end": 133
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 67,
+            "end": 133
+          }
+        }
+      },
+      "span": {
+        "start": 67,
+        "end": 134
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 134
+  }
+}
+=== multiple enum arms ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "r"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Match": {
+                    "subject": {
+                      "kind": {
+                        "Variable": "status"
+                      },
+                      "span": {
+                        "start": 17,
+                        "end": 24
+                      }
+                    },
+                    "arms": [
+                      {
+                        "conditions": [
+                          {
+                            "kind": {
+                              "ClassConstAccess": {
+                                "class": {
+                                  "kind": {
+                                    "Identifier": "Status"
+                                  },
+                                  "span": {
+                                    "start": 28,
+                                    "end": 34
+                                  }
+                                },
+                                "member": "Active"
+                              }
+                            },
+                            "span": {
+                              "start": 28,
+                              "end": 42
+                            }
+                          },
+                          {
+                            "kind": {
+                              "ClassConstAccess": {
+                                "class": {
+                                  "kind": {
+                                    "Identifier": "Status"
+                                  },
+                                  "span": {
+                                    "start": 44,
+                                    "end": 50
+                                  }
+                                },
+                                "member": "Pending"
+                              }
+                            },
+                            "span": {
+                              "start": 44,
+                              "end": 60
+                            }
+                          }
+                        ],
+                        "body": {
+                          "kind": {
+                            "String": "live"
+                          },
+                          "span": {
+                            "start": 63,
+                            "end": 69
+                          }
+                        },
+                        "span": {
+                          "start": 28,
+                          "end": 69
+                        }
+                      },
+                      {
+                        "conditions": [
+                          {
+                            "kind": {
+                              "ClassConstAccess": {
+                                "class": {
+                                  "kind": {
+                                    "Identifier": "Status"
+                                  },
+                                  "span": {
+                                    "start": 71,
+                                    "end": 77
+                                  }
+                                },
+                                "member": "Inactive"
+                              }
+                            },
+                            "span": {
+                              "start": 71,
+                              "end": 88
+                            }
+                          }
+                        ],
+                        "body": {
+                          "kind": {
+                            "String": "off"
+                          },
+                          "span": {
+                            "start": 91,
+                            "end": 96
+                          }
+                        },
+                        "span": {
+                          "start": 71,
+                          "end": 96
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 98
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 98
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 99
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 99
+  }
+}

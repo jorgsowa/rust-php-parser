@@ -407,4 +407,22 @@ pub const CASES: &[Case] = &[
     case!("builtins", "eval", "<?php eval('echo 1;');"),
     case!("builtins", "require once", "<?php require_once 'autoload.php';"),
     case!("builtins", "include expr", "<?php include $dir . '/file.php';"),
+
+    // fibers (PHP 8.1+)
+    case!("fiber", "fiber create and start", "<?php $fiber = new Fiber(function(): void { Fiber::suspend('hello'); }); $val = $fiber->start();", min: MinPhp::Php81),
+    case!("fiber", "fiber resume", "<?php $fiber->resume('world');", min: MinPhp::Php81),
+    case!("fiber", "fiber get return", "<?php $result = $fiber->getReturn();", min: MinPhp::Php81),
+    case!("fiber", "fiber is terminated", "<?php if ($fiber->isTerminated()) {}", min: MinPhp::Php81),
+    case!("fiber", "fiber suspend static", "<?php $val = Fiber::suspend(42);", min: MinPhp::Php81),
+    case!("fiber", "fiber is started", "<?php $fiber->isStarted(); $fiber->isRunning(); $fiber->isSuspended();", min: MinPhp::Php81),
+
+    // enum in match arms
+    case!("enum_in_match", "enum case as match arm", "<?php enum Status { case Active; case Inactive; } $r = match($s) { Status::Active => 'on', Status::Inactive => 'off' };", min: MinPhp::Php81),
+    case!("enum_in_match", "backed enum in match", "<?php enum Color: string { case Red = 'red'; case Blue = 'blue'; } $r = match($c) { Color::Red => 1, Color::Blue => 2, default => 0 };", min: MinPhp::Php81),
+    case!("enum_in_match", "multiple enum arms", "<?php $r = match($status) { Status::Active, Status::Pending => 'live', Status::Inactive => 'off' };", min: MinPhp::Php81),
+
+    // named arguments in attributes
+    case!("attributes", "named arg in attr", "<?php #[Route(path: '/api', methods: ['GET'])] function handler() {}"),
+    case!("attributes", "multiple named args in attr", "<?php #[Assert\\Range(min: 1, max: 100)] class Foo {}"),
+    case!("attributes", "positional and named args in attr", "<?php #[Attr('positional', key: 'value', flag: true)] class Foo {}"),
 ];

@@ -32,7 +32,8 @@ macro_rules! fixture_test {
 }
 
 // =============================================================================
-// PHP-Parser corpus fixtures (error handling, expr, scalar, stmt)
+// Corpus fixtures adapted from nikic/PHP-Parser (error handling, expr, scalar, stmt)
+// Fixture files live in tests/fixtures/corpus/
 // =============================================================================
 
 // error handling
@@ -195,7 +196,10 @@ fixture_test!(
     "corpus/expr/alternative_array_syntax_2.php"
 );
 fixture_test!(expr_arraydef, "corpus/expr/arrayDef.php");
-fixture_test!(expr_arraydestructuring, "corpus/expr/arrayDestructuring.php");
+fixture_test!(
+    expr_arraydestructuring,
+    "corpus/expr/arrayDestructuring.php"
+);
 fixture_test!(
     expr_arrayemptyelemens,
     "corpus/expr/arrayEmptyElemens.php",
@@ -214,8 +218,14 @@ fixture_test!(
     "corpus/expr/closure_use_trailing_comma.php"
 );
 fixture_test!(expr_comparison, "corpus/expr/comparison.php");
-fixture_test!(expr_concatprecedence_1, "corpus/expr/concatPrecedence_1.php");
-fixture_test!(expr_concatprecedence_2, "corpus/expr/concatPrecedence_2.php");
+fixture_test!(
+    expr_concatprecedence_1,
+    "corpus/expr/concatPrecedence_1.php"
+);
+fixture_test!(
+    expr_concatprecedence_2,
+    "corpus/expr/concatPrecedence_2.php"
+);
 fixture_test!(expr_constant_expr, "corpus/expr/constant_expr.php");
 fixture_test!(expr_dynamicclassconst, "corpus/expr/dynamicClassConst.php");
 fixture_test!(expr_errorsuppress, "corpus/expr/errorSuppress.php");
@@ -289,7 +299,10 @@ fixture_test!(expr_nullsafe, "corpus/expr/nullsafe.php");
 fixture_test!(expr_pipe, "corpus/expr/pipe.php");
 fixture_test!(expr_print, "corpus/expr/print.php");
 fixture_test!(expr_shellexec, "corpus/expr/shellExec.php");
-fixture_test!(expr_ternaryandcoalesce, "corpus/expr/ternaryAndCoalesce.php");
+fixture_test!(
+    expr_ternaryandcoalesce,
+    "corpus/expr/ternaryAndCoalesce.php"
+);
 fixture_test!(expr_throw, "corpus/expr/throw.php");
 fixture_test!(expr_trailingcommas, "corpus/expr/trailingCommas.php");
 fixture_test!(expr_uvs_constderef, "corpus/expr/uvs/constDeref.php");
@@ -306,7 +319,10 @@ fixture_test!(
     expr_uvs_newinstanceofexpr,
     "corpus/expr/uvs/newInstanceofExpr.php"
 );
-fixture_test!(expr_uvs_staticproperty, "corpus/expr/uvs/staticProperty.php");
+fixture_test!(
+    expr_uvs_staticproperty,
+    "corpus/expr/uvs/staticProperty.php"
+);
 fixture_test!(expr_varvarpos, "corpus/expr/varVarPos.php");
 fixture_test!(expr_variable, "corpus/expr/variable.php");
 
@@ -342,7 +358,10 @@ fixture_test!(scalar_unicodeescape_3, "corpus/scalar/unicodeEscape_3.php");
 
 // stmt
 fixture_test!(stmt_attributes, "corpus/stmt/attributes.php");
-fixture_test!(stmt_blocklessstatement, "corpus/stmt/blocklessStatement.php");
+fixture_test!(
+    stmt_blocklessstatement,
+    "corpus/stmt/blocklessStatement.php"
+);
 fixture_test!(stmt_class_abstract, "corpus/stmt/class/abstract.php");
 fixture_test!(stmt_class_anonymous, "corpus/stmt/class/anonymous.php");
 fixture_test!(
@@ -594,7 +613,10 @@ fixture_test!(
     stmt_function_intersectiontypes,
     "corpus/stmt/function/intersectionTypes.php"
 );
-fixture_test!(stmt_function_nevertype, "corpus/stmt/function/neverType.php");
+fixture_test!(
+    stmt_function_nevertype,
+    "corpus/stmt/function/neverType.php"
+);
 fixture_test!(
     stmt_function_nullfalsetruetypes_1,
     "corpus/stmt/function/nullFalseTrueTypes_1.php"
@@ -685,7 +707,10 @@ fixture_test!(
     "corpus/stmt/haltCompilerInvalidSyntax.php",
     errors
 );
-fixture_test!(stmt_haltcompileroffset, "corpus/stmt/haltCompilerOffset.php");
+fixture_test!(
+    stmt_haltcompileroffset,
+    "corpus/stmt/haltCompilerOffset.php"
+);
 fixture_test!(
     stmt_haltcompileroutermostscope,
     "corpus/stmt/haltCompilerOutermostScope.php",
@@ -705,7 +730,10 @@ fixture_test!(
     stmt_namespace_commentafternamespace,
     "corpus/stmt/namespace/commentAfterNamespace.php"
 );
-fixture_test!(stmt_namespace_groupuse, "corpus/stmt/namespace/groupUse.php");
+fixture_test!(
+    stmt_namespace_groupuse,
+    "corpus/stmt/namespace/groupUse.php"
+);
 fixture_test!(
     stmt_namespace_groupuseerrors_1,
     "corpus/stmt/namespace/groupUseErrors_1.php",

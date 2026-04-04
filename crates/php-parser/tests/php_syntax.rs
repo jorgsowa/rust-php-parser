@@ -3,6 +3,14 @@ use std::io::Write;
 #[path = "inline_cases.rs"]
 mod inline_cases;
 
+#[path = "common.rs"]
+mod common;
+
+fn parse_php(source: &'static str) -> php_rs_parser::ParseResult<'static, 'static> {
+    let arena: &'static bumpalo::Bump = Box::leak(Box::new(bumpalo::Bump::new()));
+    php_rs_parser::parse(arena, source)
+}
+
 fn php_lint(code: &str) -> std::process::Output {
     let mut child = std::process::Command::new("php")
         .arg("-l")
@@ -156,28 +164,44 @@ fn malformed_clean_cases_are_valid_php() {
 }
 
 // PHP 8.3+
-#[cfg_attr(not(php_min_83), ignore)]
 #[test]
 fn typed_class_constants() {
-    assert_php_syntax("<?php class A { const int X = 1; private const string Y = 'a'; const Foo|Bar|null Z = null; }");
+    let src = "<?php class A { const int X = 1; private const string Y = 'a'; const Foo|Bar|null Z = null; }";
+    #[cfg(php_min_83)]
+    assert_php_syntax(src);
+    let result = parse_php(src);
+    common::assert_no_errors(&result);
+    insta::assert_snapshot!(common::to_json(&result.program));
 }
 
-#[cfg_attr(not(php_min_83), ignore)]
 #[test]
 fn new_readonly_anonymous_class() {
-    assert_php_syntax("<?php new readonly class {};");
+    let src = "<?php new readonly class {};";
+    #[cfg(php_min_83)]
+    assert_php_syntax(src);
+    let result = parse_php(src);
+    common::assert_no_errors(&result);
+    insta::assert_snapshot!(common::to_json(&result.program));
 }
 
 // PHP 8.4+
-#[cfg_attr(not(php_min_84), ignore)]
 #[test]
 fn property_hook_body() {
-    assert_php_syntax("<?php class A { public string $x { get { ?> <?php } } }");
+    let src = "<?php class A { public string $x { get { return $this->x; } set { $this->x = $value; } } }";
+    #[cfg(php_min_84)]
+    assert_php_syntax(src);
+    let result = parse_php(src);
+    common::assert_no_errors(&result);
+    insta::assert_snapshot!(common::to_json(&result.program));
 }
 
 // PHP 8.5+
-#[cfg_attr(not(php_min_85), ignore)]
 #[test]
 fn constructor_final_param() {
-    assert_php_syntax("<?php class P { public function __construct(final $i) {} }");
+    let src = "<?php class P { public function __construct(final int $i) {} }";
+    #[cfg(php_min_85)]
+    assert_php_syntax(src);
+    let result = parse_php(src);
+    common::assert_no_errors(&result);
+    insta::assert_snapshot!(common::to_json(&result.program));
 }

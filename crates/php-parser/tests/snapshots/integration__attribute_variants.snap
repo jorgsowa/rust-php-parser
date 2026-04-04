@@ -475,3 +475,288 @@ expression: "category_snapshot(\"attributes\")"
     "end": 29
   }
 }
+=== named arg in attr ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "handler",
+          "params": [],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": [
+            {
+              "name": {
+                "parts": [
+                  "Route"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 8,
+                  "end": 13
+                }
+              },
+              "args": [
+                {
+                  "name": "path",
+                  "value": {
+                    "kind": {
+                      "String": "/api"
+                    },
+                    "span": {
+                      "start": 20,
+                      "end": 26
+                    }
+                  },
+                  "unpack": false,
+                  "by_ref": false,
+                  "span": {
+                    "start": 14,
+                    "end": 26
+                  }
+                },
+                {
+                  "name": "methods",
+                  "value": {
+                    "kind": {
+                      "Array": [
+                        {
+                          "key": null,
+                          "value": {
+                            "kind": {
+                              "String": "GET"
+                            },
+                            "span": {
+                              "start": 38,
+                              "end": 43
+                            }
+                          },
+                          "unpack": false,
+                          "span": {
+                            "start": 38,
+                            "end": 43
+                          }
+                        }
+                      ]
+                    },
+                    "span": {
+                      "start": 37,
+                      "end": 44
+                    }
+                  },
+                  "unpack": false,
+                  "by_ref": false,
+                  "span": {
+                    "start": 28,
+                    "end": 44
+                  }
+                }
+              ],
+              "span": {
+                "start": 8,
+                "end": 45
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 47,
+        "end": 68
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 68
+  }
+}
+=== multiple named args in attr ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "Foo",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [],
+          "attributes": [
+            {
+              "name": {
+                "parts": [
+                  "Assert",
+                  "Range"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 8,
+                  "end": 20
+                }
+              },
+              "args": [
+                {
+                  "name": "min",
+                  "value": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 26,
+                      "end": 27
+                    }
+                  },
+                  "unpack": false,
+                  "by_ref": false,
+                  "span": {
+                    "start": 21,
+                    "end": 27
+                  }
+                },
+                {
+                  "name": "max",
+                  "value": {
+                    "kind": {
+                      "Int": 100
+                    },
+                    "span": {
+                      "start": 34,
+                      "end": 37
+                    }
+                  },
+                  "unpack": false,
+                  "by_ref": false,
+                  "span": {
+                    "start": 29,
+                    "end": 37
+                  }
+                }
+              ],
+              "span": {
+                "start": 8,
+                "end": 38
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 40,
+        "end": 52
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 52
+  }
+}
+=== positional and named args in attr ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "Foo",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [],
+          "attributes": [
+            {
+              "name": {
+                "parts": [
+                  "Attr"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 8,
+                  "end": 12
+                }
+              },
+              "args": [
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "String": "positional"
+                    },
+                    "span": {
+                      "start": 13,
+                      "end": 25
+                    }
+                  },
+                  "unpack": false,
+                  "by_ref": false,
+                  "span": {
+                    "start": 13,
+                    "end": 25
+                  }
+                },
+                {
+                  "name": "key",
+                  "value": {
+                    "kind": {
+                      "String": "value"
+                    },
+                    "span": {
+                      "start": 32,
+                      "end": 39
+                    }
+                  },
+                  "unpack": false,
+                  "by_ref": false,
+                  "span": {
+                    "start": 27,
+                    "end": 39
+                  }
+                },
+                {
+                  "name": "flag",
+                  "value": {
+                    "kind": {
+                      "Bool": true
+                    },
+                    "span": {
+                      "start": 47,
+                      "end": 51
+                    }
+                  },
+                  "unpack": false,
+                  "by_ref": false,
+                  "span": {
+                    "start": 41,
+                    "end": 51
+                  }
+                }
+              ],
+              "span": {
+                "start": 8,
+                "end": 52
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 54,
+        "end": 66
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 66
+  }
+}
