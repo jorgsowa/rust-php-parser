@@ -390,6 +390,9 @@ pub const CASES: &[Case] = &[
     case!("numeric_literals", "float no leading zero", "<?php $x = .5;"),
     case!("numeric_literals", "zero literal", "<?php $x = 0;"),
     case!("numeric_literals", "positive exponent float", "<?php $x = 2.5e+3;"),
+    // float literal whose cleaned form (underscores removed) exceeds 128 bytes — regression
+    // for a bug where the parse buffer was too small and digits were silently truncated
+    case!("numeric_literals", "float literal exceeding 128 byte parse buffer", "<?php $x = 1.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;"),
 
     // builtins
     case!("builtins", "list assign", "<?php list($a, $b) = $arr;"),
