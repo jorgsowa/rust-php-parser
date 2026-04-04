@@ -706,6 +706,30 @@ $d = $obj instanceof static;
     insta::assert_snapshot!(to_json(&result.program));
 }
 
+#[test]
+fn test_instanceof_precedence_vs_additive() {
+    // PHP: `$a + $b instanceof Foo` → `$a + ($b instanceof Foo)`
+    let result = parse_php("<?php $a + $b instanceof Foo;");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_instanceof_precedence_vs_unary_minus() {
+    // PHP: `-$b instanceof Foo` → `-($b instanceof Foo)`
+    let result = parse_php("<?php -$b instanceof Foo;");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
+#[test]
+fn test_instanceof_precedence_vs_pow() {
+    // PHP: `$a ** $b instanceof Foo` → `($a ** $b) instanceof Foo`
+    let result = parse_php("<?php $a ** $b instanceof Foo;");
+    assert_no_errors(&result);
+    insta::assert_snapshot!(to_json(&result.program));
+}
+
 // =============================================================================
 // Phase 4: Closures, Arrow Functions, Advanced Params
 // =============================================================================

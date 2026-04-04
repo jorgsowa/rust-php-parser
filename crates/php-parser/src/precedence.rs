@@ -20,7 +20,9 @@ use php_lexer::TokenKind;
 /// 14. `<< >>`                         (left)   ← below + - . per PHP 8
 /// 15. `. + -`                         (left)   ← same level per PHP 8
 /// 16. `* / %`                         (left)
-/// 17. `**`                            (right)
+/// 17. `! ~ ++ -- (cast)`              (prefix, right_bp 41) — handled in prefix_binding_power
+/// 18. `instanceof`                    (nonassoc) ← above prefix, below **
+/// 19. `**`                            (right)
 ///
 ///     Returns the infix binding power for a token, or None if it's not an infix operator.
 ///     Returns (left_bp, right_bp). For left-associative ops, right_bp = left_bp + 1.
@@ -75,12 +77,11 @@ const fn build_bp_table() -> [Option<(u8, u8)>; 256] {
     table[TokenKind::BangEqualsEquals as u8 as usize] = Some((25, 26));
     table[TokenKind::Spaceship as u8 as usize] = Some((25, 26));
 
-    // Comparison (nonassoc) + instanceof
+    // Comparison (nonassoc)
     table[TokenKind::LessThan as u8 as usize] = Some((27, 28));
     table[TokenKind::GreaterThan as u8 as usize] = Some((27, 28));
     table[TokenKind::LessThanEquals as u8 as usize] = Some((27, 28));
     table[TokenKind::GreaterThanEquals as u8 as usize] = Some((27, 28));
-    table[TokenKind::Instanceof as u8 as usize] = Some((27, 28));
 
     // Pipe operator (left-associative)
     table[TokenKind::PipeArrow as u8 as usize] = Some((29, 30));
@@ -99,8 +100,11 @@ const fn build_bp_table() -> [Option<(u8, u8)>; 256] {
     table[TokenKind::Slash as u8 as usize] = Some((37, 38));
     table[TokenKind::Percent as u8 as usize] = Some((37, 38));
 
-    // Exponentiation (right-associative)
-    table[TokenKind::StarStar as u8 as usize] = Some((40, 39));
+    // instanceof (nonassoc) — above prefix unary (right_bp 41), below ** (left_bp 60)
+    table[TokenKind::Instanceof as u8 as usize] = Some((45, 46));
+
+    // Exponentiation (right-associative) — highest binary precedence
+    table[TokenKind::StarStar as u8 as usize] = Some((60, 59));
 
     table
 }
@@ -203,5 +207,39 @@ mod tests {
         let (plus_left, _) = infix_binding_power(TokenKind::Plus).unwrap();
         assert!(concat_left > shift_right);
         assert!(plus_left > shift_right);
+    }
+
+    #[test]
+    fn test_instanceof_higher_than_additive() {
+        // PHP: `$a + $b instanceof Foo` → `$a + ($b instanceof Foo)`
+        let (_, add_right) = infix_binding_power(TokenKind::Plus).unwrap();
+        let (inst_left, _) = infix_binding_power(TokenKind::Instanceof).unwrap();
+        assert!(inst_left > add_right);
+    }
+
+    #[test]
+    fn test_instanceof_higher_than_prefix_unary() {
+        // PHP: `-$b instanceof Foo` → `-($b instanceof Foo)`
+        // prefix_binding_power returns the right_bp; instanceof left_bp must exceed it
+        let prefix_right_bp = prefix_binding_power(TokenKind::Minus).unwrap();
+        let (inst_left, _) = infix_binding_power(TokenKind::Instanceof).unwrap();
+        assert!(inst_left > prefix_right_bp);
+    }
+
+    #[test]
+    fn test_pow_higher_than_instanceof() {
+        // PHP: `$a ** $b instanceof Foo` → `($a ** $b) instanceof Foo`
+        // ** right_bp must exceed instanceof left_bp so ** keeps its right operand
+        let (_, pow_right) = infix_binding_power(TokenKind::StarStar).unwrap();
+        let (inst_left, _) = infix_binding_power(TokenKind::Instanceof).unwrap();
+        assert!(pow_right > inst_left);
+    }
+
+    #[test]
+    fn test_instanceof_higher_than_comparison() {
+        // instanceof should be higher than comparison operators
+        let (_, cmp_right) = infix_binding_power(TokenKind::LessThan).unwrap();
+        let (inst_left, _) = infix_binding_power(TokenKind::Instanceof).unwrap();
+        assert!(inst_left > cmp_right);
     }
 }
