@@ -74,6 +74,28 @@ impl<'arena, T: std::fmt::Debug> std::fmt::Debug for ArenaVec<'arena, T> {
     }
 }
 
+/// A comment found in the source file.
+#[derive(Debug, Serialize)]
+pub struct Comment<'src> {
+    pub kind: CommentKind,
+    /// Raw text of the comment including its delimiters (e.g. `// foo`, `/* bar */`, `/** baz */`).
+    pub text: &'src str,
+    pub span: Span,
+}
+
+/// Distinguishes the four syntactic forms of PHP comment.
+#[derive(Debug, Serialize, Clone, Copy, PartialEq, Eq)]
+pub enum CommentKind {
+    /// `// …` — single-line slash comment
+    Line,
+    /// `# …` — single-line hash comment
+    Hash,
+    /// `/* … */` — block comment
+    Block,
+    /// `/** … */` — doc-block comment (first non-whitespace char after `/*` is `*`)
+    Doc,
+}
+
 /// The root AST node representing a complete PHP file.
 #[derive(Debug, Serialize)]
 pub struct Program<'arena, 'src> {

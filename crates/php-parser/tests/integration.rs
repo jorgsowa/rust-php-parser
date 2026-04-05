@@ -2280,6 +2280,50 @@ fn test_hash_comment_still_works() {
 }
 
 // =============================================================================
+// Comment Preservation
+// =============================================================================
+
+#[test]
+fn test_comments_preserved_in_result() {
+    let result =
+        parse_php("<?php\n// line comment\n$x = 1; /* block */ $y = 2; /** doc */ # hash\n$z = 3;");
+    assert_no_errors(&result);
+    assert_eq!(result.comments.len(), 4);
+
+    assert_eq!(result.comments[0].kind, php_ast::CommentKind::Line);
+    assert_eq!(result.comments[0].text, "// line comment");
+
+    assert_eq!(result.comments[1].kind, php_ast::CommentKind::Block);
+    assert_eq!(result.comments[1].text, "/* block */");
+
+    assert_eq!(result.comments[2].kind, php_ast::CommentKind::Doc);
+    assert_eq!(result.comments[2].text, "/** doc */");
+
+    assert_eq!(result.comments[3].kind, php_ast::CommentKind::Hash);
+    assert_eq!(result.comments[3].text, "# hash");
+}
+
+#[test]
+fn test_doc_comment_vs_block_comment() {
+    let result = parse_php("<?php\n/** doc */\n/* block */\n/**/ /* empty-ish block */\n$x = 1;");
+    assert_no_errors(&result);
+    // `/**/` and `/* empty-ish block */` are separate comments, so 4 total
+    assert_eq!(result.comments.len(), 4);
+    assert_eq!(result.comments[0].kind, php_ast::CommentKind::Doc);
+    assert_eq!(result.comments[1].kind, php_ast::CommentKind::Block);
+    // `/**/` — closing `*/` immediately follows `/*`, so NOT a doc comment
+    assert_eq!(result.comments[2].kind, php_ast::CommentKind::Block);
+    assert_eq!(result.comments[3].kind, php_ast::CommentKind::Block);
+}
+
+#[test]
+fn test_no_comments_yields_empty_vec() {
+    let result = parse_php("<?php $x = 1;");
+    assert_no_errors(&result);
+    assert!(result.comments.is_empty());
+}
+
+// =============================================================================
 // Error Messages
 // =============================================================================
 

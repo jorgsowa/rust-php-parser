@@ -22,6 +22,8 @@ pub struct Parser<'arena, 'src> {
     pub arena: &'arena bumpalo::Bump,
     pub source: &'src str,
     errors: Vec<ParseError>,
+    /// All comments found in the source, collected during lexing.
+    comments: Vec<Comment<'src>>,
     /// PHP version being targeted — used for version-specific error reporting.
     pub version: PhpVersion,
 }
@@ -38,7 +40,31 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         source: &'src str,
         version: PhpVersion,
     ) -> Self {
-        let (tokens, lex_errors) = php_lexer::lex_all(source);
+        let (all_tokens, lex_errors) = php_lexer::lex_all(source);
+
+        // Separate comment tokens from the main token stream.
+        // lex_all appends two Eof sentinels; they pass through the filter unchanged.
+        let mut comments: Vec<Comment<'src>> = Vec::new();
+        let mut tokens: Vec<Token> = Vec::with_capacity(all_tokens.len());
+        for tok in all_tokens {
+            if tok.kind.is_comment() {
+                let text = &source[tok.span.start as usize..tok.span.end as usize];
+                let kind = match tok.kind {
+                    TokenKind::LineComment => CommentKind::Line,
+                    TokenKind::HashComment => CommentKind::Hash,
+                    TokenKind::BlockComment => CommentKind::Block,
+                    TokenKind::DocComment => CommentKind::Doc,
+                    _ => unreachable!(),
+                };
+                comments.push(Comment {
+                    kind,
+                    text,
+                    span: tok.span,
+                });
+            } else {
+                tokens.push(tok);
+            }
+        }
 
         // Seed current with the first token and pos with 1
         let current = tokens.first().copied().unwrap_or_else(|| Token::eof(0));
@@ -60,6 +86,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             current,
             source,
             errors,
+            comments,
             depth: 0,
             expr_depth: 0,
             version,
@@ -75,14 +102,31 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     pub fn new_at(arena: &'arena bumpalo::Bump, source: &'src str, offset: usize) -> Self {
         let mut lexer = Lexer::new_at(source, offset);
 
-        // Lex all tokens from this position
+        // Lex all tokens from this position, separating comments from regular tokens
         let mut tokens = Vec::new();
+        let mut comments: Vec<Comment<'src>> = Vec::new();
         let mut errors: Vec<ParseError> = Vec::new();
 
         loop {
             let tok = lexer.next_token();
             let is_eof = tok.kind == TokenKind::Eof;
-            tokens.push(tok);
+            if tok.kind.is_comment() {
+                let text = &source[tok.span.start as usize..tok.span.end as usize];
+                let kind = match tok.kind {
+                    TokenKind::LineComment => CommentKind::Line,
+                    TokenKind::HashComment => CommentKind::Hash,
+                    TokenKind::BlockComment => CommentKind::Block,
+                    TokenKind::DocComment => CommentKind::Doc,
+                    _ => unreachable!(),
+                };
+                comments.push(Comment {
+                    kind,
+                    text,
+                    span: tok.span,
+                });
+            } else {
+                tokens.push(tok);
+            }
             if is_eof {
                 break;
             }
@@ -114,6 +158,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             current,
             source,
             errors,
+            comments,
             depth: 0,
             expr_depth: 0,
             version: PhpVersion::default(),
@@ -292,6 +337,10 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
     pub fn into_errors(self) -> Vec<ParseError> {
         self.errors
+    }
+
+    pub fn take_comments(&mut self) -> Vec<Comment<'src>> {
+        std::mem::take(&mut self.comments)
     }
 
     /// Panic-mode error recovery: advance until we hit a likely statement boundary.
