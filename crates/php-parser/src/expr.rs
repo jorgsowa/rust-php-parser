@@ -1684,7 +1684,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         };
 
         parser.expect(TokenKind::LeftBrace);
-        let members = stmt::parse_class_members(parser);
+        let members = stmt::parse_class_members(parser, false);
         let close = parser.expect(TokenKind::RightBrace);
         let end = close
             .map(|t| t.span.end)

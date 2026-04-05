@@ -1629,7 +1629,7 @@ fn parse_class<'arena, 'src>(
     };
 
     parser.expect(TokenKind::LeftBrace);
-    let members = parse_class_members(parser);
+    let members = parse_class_members(parser, false);
     let close = parser.expect(TokenKind::RightBrace);
     let end = close
         .map(|t| t.span.end)
@@ -1945,6 +1945,7 @@ fn parse_property_hooks<'arena, 'src>(
 
 pub fn parse_class_members<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
+    in_interface: bool,
 ) -> ArenaVec<'arena, ClassMember<'arena, 'src>> {
     // March 2026: reduce from 16 to 4 for class members
     // Most classes have 3-10 members; larger classes grow efficiently
@@ -2297,6 +2298,13 @@ pub fn parse_class_members<'arena, 'src>(
                 });
             }
 
+            if in_interface && body.is_some() {
+                parser.error(ParseError::Forbidden {
+                    message: "interface method cannot contain a body".into(),
+                    span: Span::new(member_start, parser.current_span().start),
+                });
+            }
+
             let span = Span::new(member_start, parser.current_span().start);
             members.push(ClassMember {
                 kind: ClassMemberKind::Method(MethodDecl {
@@ -2469,7 +2477,7 @@ fn parse_interface<'arena, 'src>(
     };
 
     parser.expect(TokenKind::LeftBrace);
-    let members = parse_class_members(parser);
+    let members = parse_class_members(parser, true);
     let close = parser.expect(TokenKind::RightBrace);
     let end = close
         .map(|t| t.span.end)
@@ -2506,7 +2514,7 @@ fn parse_trait<'arena, 'src>(
     };
 
     parser.expect(TokenKind::LeftBrace);
-    let members = parse_class_members(parser);
+    let members = parse_class_members(parser, false);
     let close = parser.expect(TokenKind::RightBrace);
     let end = close
         .map(|t| t.span.end)

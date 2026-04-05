@@ -491,3 +491,15 @@ fn abstract_property_no_visibility() {
 fn abstract_method_in_enum() {
     assert_errors_snapshot!("<?php enum Status { abstract public function label(): string; }");
 }
+
+#[test]
+fn interface_method_with_body() {
+    assert_errors_snapshot!("<?php interface Foo { public function bar() { echo 'body'; } }");
+}
+
+#[test]
+fn interface_method_with_body_multiple() {
+    assert_errors_snapshot!(
+        "<?php interface Foo { public function bar() { return 1; } public function baz(); }"
+    );
+}
