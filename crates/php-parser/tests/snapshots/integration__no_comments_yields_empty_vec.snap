@@ -1,7 +1,10 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result_snapshot(&result)
+expression: "result_snapshot(src, &result)"
 ---
+=== source ===
+<?php $x = 1;
+
 === program ===
 {
   "stmts": [
@@ -48,6 +51,3 @@ expression: result_snapshot(&result)
     "end": 13
   }
 }
-
-=== comments ===
-[]

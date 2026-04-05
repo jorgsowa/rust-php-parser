@@ -1,7 +1,13 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result_snapshot(&result)
+expression: "result_snapshot(src, &result)"
 ---
+=== source ===
+<?php
+// line comment
+$x = 1; /* block */ $y = 2; /** doc */ # hash
+$z = 3;
+
 === program ===
 {
   "stmts": [
@@ -122,39 +128,3 @@ expression: result_snapshot(&result)
     "end": 75
   }
 }
-
-=== comments ===
-[
-  {
-    "kind": "Line",
-    "text": "// line comment",
-    "span": {
-      "start": 6,
-      "end": 21
-    }
-  },
-  {
-    "kind": "Block",
-    "text": "/* block */",
-    "span": {
-      "start": 30,
-      "end": 41
-    }
-  },
-  {
-    "kind": "Doc",
-    "text": "/** doc */",
-    "span": {
-      "start": 50,
-      "end": 60
-    }
-  },
-  {
-    "kind": "Hash",
-    "text": "# hash",
-    "span": {
-      "start": 61,
-      "end": 67
-    }
-  }
-]

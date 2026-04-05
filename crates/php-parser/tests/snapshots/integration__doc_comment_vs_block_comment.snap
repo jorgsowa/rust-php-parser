@@ -1,7 +1,14 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: result_snapshot(&result)
+expression: "result_snapshot(src, &result)"
 ---
+=== source ===
+<?php
+/** doc */
+/* block */
+/**/ /* empty-ish block */
+$x = 1;
+
 === program ===
 {
   "stmts": [
@@ -48,39 +55,3 @@ expression: result_snapshot(&result)
     "end": 63
   }
 }
-
-=== comments ===
-[
-  {
-    "kind": "Doc",
-    "text": "/** doc */",
-    "span": {
-      "start": 6,
-      "end": 16
-    }
-  },
-  {
-    "kind": "Block",
-    "text": "/* block */",
-    "span": {
-      "start": 17,
-      "end": 28
-    }
-  },
-  {
-    "kind": "Block",
-    "text": "/**/",
-    "span": {
-      "start": 29,
-      "end": 33
-    }
-  },
-  {
-    "kind": "Block",
-    "text": "/* empty-ish block */",
-    "span": {
-      "start": 34,
-      "end": 55
-    }
-  }
-]

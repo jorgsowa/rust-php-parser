@@ -2285,25 +2285,27 @@ fn test_hash_comment_still_works() {
 
 #[test]
 fn test_comments_preserved_in_result() {
-    let result =
-        parse_php("<?php\n// line comment\n$x = 1; /* block */ $y = 2; /** doc */ # hash\n$z = 3;");
+    let src = "<?php\n// line comment\n$x = 1; /* block */ $y = 2; /** doc */ # hash\n$z = 3;";
+    let result = parse_php(src);
     assert_no_errors(&result);
-    insta::assert_snapshot!(result_snapshot(&result));
+    insta::assert_snapshot!(result_snapshot(src, &result));
 }
 
 #[test]
 fn test_doc_comment_vs_block_comment() {
     // `/**/` is an empty block comment (closing `*/` follows `/*` immediately — not a doc comment)
-    let result = parse_php("<?php\n/** doc */\n/* block */\n/**/ /* empty-ish block */\n$x = 1;");
+    let src = "<?php\n/** doc */\n/* block */\n/**/ /* empty-ish block */\n$x = 1;";
+    let result = parse_php(src);
     assert_no_errors(&result);
-    insta::assert_snapshot!(result_snapshot(&result));
+    insta::assert_snapshot!(result_snapshot(src, &result));
 }
 
 #[test]
 fn test_no_comments_yields_empty_vec() {
-    let result = parse_php("<?php $x = 1;");
+    let src = "<?php $x = 1;";
+    let result = parse_php(src);
     assert_no_errors(&result);
-    insta::assert_snapshot!(result_snapshot(&result));
+    insta::assert_snapshot!(result_snapshot(src, &result));
 }
 
 // =============================================================================
