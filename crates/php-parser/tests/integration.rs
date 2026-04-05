@@ -1,5 +1,5 @@
 mod common;
-use common::{assert_no_errors, result_snapshot, to_json};
+use common::{assert_no_errors, to_json};
 
 fn parse_php(source: &'static str) -> php_rs_parser::ParseResult<'static, 'static> {
     // Leak arena and source for test simplicity — process exits after test run anyway
@@ -95,6 +95,7 @@ fixture_test!(
     "string_interpolation.php"
 );
 fixture_test!(test_attributes_fixture, "attributes.php");
+fixture_test!(test_comments, "comments.php");
 
 // =============================================================================
 // Error recovery tests
@@ -2277,35 +2278,6 @@ fn test_hash_comment_still_works() {
     let result = parse_php("<?php # This is a comment\n$x = 1;");
     assert_no_errors(&result);
     insta::assert_snapshot!(to_json(&result.program));
-}
-
-// =============================================================================
-// Comment Preservation
-// =============================================================================
-
-#[test]
-fn test_comments_preserved_in_result() {
-    let src = "<?php\n// line comment\n$x = 1; /* block */ $y = 2; /** doc */ # hash\n$z = 3;";
-    let result = parse_php(src);
-    assert_no_errors(&result);
-    insta::assert_snapshot!(result_snapshot(src, &result));
-}
-
-#[test]
-fn test_doc_comment_vs_block_comment() {
-    // `/**/` is an empty block comment (closing `*/` follows `/*` immediately — not a doc comment)
-    let src = "<?php\n/** doc */\n/* block */\n/**/ /* empty-ish block */\n$x = 1;";
-    let result = parse_php(src);
-    assert_no_errors(&result);
-    insta::assert_snapshot!(result_snapshot(src, &result));
-}
-
-#[test]
-fn test_no_comments_yields_empty_vec() {
-    let src = "<?php $x = 1;";
-    let result = parse_php(src);
-    assert_no_errors(&result);
-    insta::assert_snapshot!(result_snapshot(src, &result));
 }
 
 // =============================================================================
