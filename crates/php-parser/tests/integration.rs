@@ -1,5 +1,5 @@
 mod common;
-use common::{assert_no_errors, to_json};
+use common::{assert_no_errors, fixture, to_json};
 
 fn parse_php(source: &'static str) -> php_rs_parser::ParseResult<'static, 'static> {
     // Leak arena and source for test simplicity — process exits after test run anyway
@@ -65,7 +65,7 @@ macro_rules! fixture_test {
             let source = include_str!(concat!("fixtures/", $file));
             let result = parse_php(source);
             assert_no_errors(&result);
-            insta::assert_snapshot!(to_json(&result.program));
+            insta::assert_snapshot!(fixture(source, &result.program));
         }
     };
     ($name:ident, $file:expr, errors) => {
@@ -77,7 +77,7 @@ macro_rules! fixture_test {
                 !result.errors.is_empty(),
                 "expected parse errors but found none"
             );
-            insta::assert_snapshot!(to_json(&result.program));
+            insta::assert_snapshot!(fixture(source, &result.program));
         }
     };
 }
