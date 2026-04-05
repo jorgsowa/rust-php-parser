@@ -8,11 +8,14 @@ pub(crate) mod stmt;
 pub mod version;
 
 use diagnostics::ParseError;
-use php_ast::Program;
+use php_ast::{Comment, Program};
 pub use version::PhpVersion;
 
 pub struct ParseResult<'arena, 'src> {
     pub program: Program<'arena, 'src>,
+    /// All comments found in the source, in source order.
+    /// Comments are not attached to AST nodes; callers can map them by span.
+    pub comments: Vec<Comment<'src>>,
     pub errors: Vec<ParseError>,
 }
 
@@ -24,6 +27,7 @@ pub fn parse<'arena, 'src>(
     let program = parser.parse_program();
     ParseResult {
         program,
+        comments: parser.take_comments(),
         errors: parser.into_errors(),
     }
 }
@@ -42,6 +46,7 @@ pub fn parse_versioned<'arena, 'src>(
     let program = parser.parse_program();
     ParseResult {
         program,
+        comments: parser.take_comments(),
         errors: parser.into_errors(),
     }
 }

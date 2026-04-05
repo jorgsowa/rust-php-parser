@@ -217,8 +217,32 @@ pub enum TokenKind {
     // Invalid numeric literal (e.g. 1_0_0_ with trailing underscore)
     InvalidNumericLiteral,
 
+    // Comments (yielded by the lexer; filtered out by the parser into a side-table)
+    /// `// …` single-line slash comment
+    LineComment,
+    /// `# …` single-line hash comment
+    HashComment,
+    /// `/* … */` block comment
+    BlockComment,
+    /// `/** … */` doc-block comment
+    DocComment,
+
     // End of file
     Eof,
+}
+
+impl TokenKind {
+    /// Returns `true` for the four comment-token variants.
+    #[inline]
+    pub fn is_comment(self) -> bool {
+        matches!(
+            self,
+            TokenKind::LineComment
+                | TokenKind::HashComment
+                | TokenKind::BlockComment
+                | TokenKind::DocComment
+        )
+    }
 }
 
 impl TokenKind {
@@ -681,6 +705,10 @@ impl std::fmt::Display for TokenKind {
             TokenKind::Heredoc => write!(f, "heredoc"),
             TokenKind::Nowdoc => write!(f, "nowdoc"),
             TokenKind::InvalidNumericLiteral => write!(f, "invalid numeric literal"),
+            TokenKind::LineComment => write!(f, "line comment"),
+            TokenKind::HashComment => write!(f, "hash comment"),
+            TokenKind::BlockComment => write!(f, "block comment"),
+            TokenKind::DocComment => write!(f, "doc comment"),
             TokenKind::Eof => write!(f, "end of file"),
         }
     }

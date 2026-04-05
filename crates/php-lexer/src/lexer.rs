@@ -249,60 +249,60 @@ impl<'src> Lexer<'src> {
             return token;
         }
 
-        // Skip whitespace and comments
-        self.skip_whitespace_and_comments();
+        // Skip whitespace only (comments are yielded as tokens below)
+        self.skip_whitespace();
 
         if self.pos >= self.source.len() {
             return Token::eof(self.source.len() as u32);
         }
 
+        let bytes = self.source.as_bytes();
+        let start = self.pos;
+
+        // Yield `//` line comments as tokens.
+        // Note: in PHP, ?> terminates a line comment just like \n does.
+        if bytes[self.pos] == b'/' && self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'/' {
+            self.pos += 2;
+            Self::skip_line_comment_body(bytes, &mut self.pos);
+            return self.tok(TokenKind::LineComment, start);
+        }
+
+        // Yield `/* */` block comments and `/** */` doc comments as tokens.
+        if bytes[self.pos] == b'/' && self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'*' {
+            self.pos += 2;
+            // A doc comment starts with `/**` where the third char is `*` and not immediately
+            // followed by `/` (which would make it the empty comment `/**/`).
+            let kind = if self.pos < bytes.len()
+                && bytes[self.pos] == b'*'
+                && !(self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'/')
+            {
+                TokenKind::DocComment
+            } else {
+                TokenKind::BlockComment
+            };
+            match memmem::find(&bytes[self.pos..], b"*/") {
+                Some(end) => self.pos += end + 2,
+                None => self.pos = bytes.len(), // Unclosed comment — consume rest of file
+            }
+            return self.tok(kind, start);
+        }
+
+        // Yield `#` hash comments as tokens (but not `#[` which starts an attribute).
+        // Note: in PHP, ?> terminates a hash comment just like \n does.
+        if bytes[self.pos] == b'#' && !(self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'[') {
+            self.pos += 1;
+            Self::skip_line_comment_body(bytes, &mut self.pos);
+            return self.tok(TokenKind::HashComment, start);
+        }
+
         self.scan_token()
     }
 
-    /// Skip whitespace, line comments (//), block comments (/* */), and hash comments (#).
-    fn skip_whitespace_and_comments(&mut self) {
+    /// Skip PHP whitespace (space, tab, CR, LF, form-feed) at the current position.
+    fn skip_whitespace(&mut self) {
         let bytes = self.source.as_bytes();
-        loop {
-            // Skip whitespace
-            while self.pos < bytes.len() && IS_PHP_WHITESPACE[bytes[self.pos] as usize] {
-                self.pos += 1;
-            }
-
-            if self.pos >= bytes.len() {
-                break;
-            }
-
-            // Skip // line comments
-            // Note: in PHP, ?> terminates a line comment just like \n does.
-            if bytes[self.pos] == b'/' && self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'/'
-            {
-                self.pos += 2;
-                Self::skip_line_comment_body(bytes, &mut self.pos);
-                continue;
-            }
-
-            // Skip /* */ block comments
-            if bytes[self.pos] == b'/' && self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'*'
-            {
-                self.pos += 2;
-                match memmem::find(&bytes[self.pos..], b"*/") {
-                    Some(end) => self.pos += end + 2,
-                    None => self.pos = bytes.len(), // Unclosed comment - consume rest of file
-                }
-                continue;
-            }
-
-            // Skip # comments (but not #[)
-            // Note: in PHP, ?> terminates a hash comment just like \n does.
-            if bytes[self.pos] == b'#'
-                && !(self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'[')
-            {
-                self.pos += 1;
-                Self::skip_line_comment_body(bytes, &mut self.pos);
-                continue;
-            }
-
-            break;
+        while self.pos < bytes.len() && IS_PHP_WHITESPACE[bytes[self.pos] as usize] {
+            self.pos += 1;
         }
     }
 
@@ -1655,12 +1655,25 @@ mod tests {
         }
 
         #[test]
-        fn test_comments_skipped() {
+        fn test_comments_yielded() {
+            // Comments are now yielded as tokens rather than silently discarded.
             let toks = php_tokens("42 // line comment\n43 /* block */ 44 # hash comment\n45");
             assert_eq!(toks[0], (TokenKind::IntLiteral, "42".to_string()));
-            assert_eq!(toks[1], (TokenKind::IntLiteral, "43".to_string()));
-            assert_eq!(toks[2], (TokenKind::IntLiteral, "44".to_string()));
-            assert_eq!(toks[3], (TokenKind::IntLiteral, "45".to_string()));
+            assert_eq!(
+                toks[1],
+                (TokenKind::LineComment, "// line comment".to_string())
+            );
+            assert_eq!(toks[2], (TokenKind::IntLiteral, "43".to_string()));
+            assert_eq!(
+                toks[3],
+                (TokenKind::BlockComment, "/* block */".to_string())
+            );
+            assert_eq!(toks[4], (TokenKind::IntLiteral, "44".to_string()));
+            assert_eq!(
+                toks[5],
+                (TokenKind::HashComment, "# hash comment".to_string())
+            );
+            assert_eq!(toks[6], (TokenKind::IntLiteral, "45".to_string()));
         }
     }
 }
