@@ -1,7 +1,19 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+function tmpl() {
+    foo();
+    ?>
+<div>
+<?php // comment ?>
+    <p>text</p>
+<?php
+    bar();
+}
+=== snapshot ===
 {
   "stmts": [
     {

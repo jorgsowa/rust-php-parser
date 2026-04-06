@@ -1,7 +1,15 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+$a = $obj instanceof $className;
+$b = $obj instanceof self;
+$c = $obj instanceof parent;
+$d = $obj instanceof static;
+
+=== snapshot ===
 {
   "stmts": [
     {

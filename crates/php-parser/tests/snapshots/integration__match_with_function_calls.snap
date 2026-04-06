@@ -1,7 +1,16 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+$label = match (getStatus()) {
+    isActive() => 'active',
+    isPending() => 'pending',
+    default => throw new LogicException('Unknown'),
+};
+
+=== snapshot ===
 {
   "stmts": [
     {

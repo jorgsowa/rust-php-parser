@@ -1,0 +1,1 @@
+<?php array_map(strlen(...), array_filter($arr, is_string(...)));

@@ -1,7 +1,23 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+abstract class Base {
+    abstract public function doSomething(): void;
+}
+final class Sealed {
+    public function run(): void {}
+}
+readonly class Value {
+    public function __construct(
+        public string $name,
+        public int $age,
+    ) {}
+}
+
+=== snapshot ===
 {
   "stmts": [
     {

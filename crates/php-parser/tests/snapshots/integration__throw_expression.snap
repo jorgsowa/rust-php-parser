@@ -1,7 +1,16 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+$value = $x ?? throw new InvalidArgumentException('Missing value');
+$result = match ($status) {
+    200 => 'ok',
+    default => throw new RuntimeException('Unexpected status'),
+};
+
+=== snapshot ===
 {
   "stmts": [
     {

@@ -1,7 +1,20 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+if ($a) goto labelA;
+if ($b) goto labelB;
+labelA:
+echo 'A';
+goto end;
+labelB:
+echo 'B';
+end:
+echo 'done';
+
+=== snapshot ===
 {
   "stmts": [
     {

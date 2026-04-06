@@ -1,7 +1,15 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+use App\Models\User;
+use App\Services\Auth as AuthService;
+use function App\Helpers\formatDate;
+use const App\Config\VERSION;
+
+=== snapshot ===
 {
   "stmts": [
     {

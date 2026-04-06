@@ -1,0 +1,1 @@
+<?php function noop(): void {}

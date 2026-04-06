@@ -1,7 +1,12 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+use A\B\{C as D, function e as f, const G as H};
+
+=== snapshot ===
 {
   "stmts": [
     {

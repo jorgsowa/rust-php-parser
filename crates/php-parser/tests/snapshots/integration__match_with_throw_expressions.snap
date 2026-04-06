@@ -1,7 +1,16 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+$x = match ($status) {
+    200 => 'ok',
+    404 => throw new NotFoundException(),
+    default => throw new RuntimeException('Unexpected'),
+};
+
+=== snapshot ===
 {
   "stmts": [
     {

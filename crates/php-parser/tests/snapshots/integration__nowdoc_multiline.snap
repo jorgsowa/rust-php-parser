@@ -1,7 +1,16 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+$x = <<<'EOT'
+No $interpolation
+Just literal text
+With 'quotes' and "doubles"
+EOT;
+
+=== snapshot ===
 {
   "stmts": [
     {

@@ -1,7 +1,20 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+function processData(Countable&ArrayAccess $data): array|null {
+    return null;
+}
+class Container {
+    public function __construct(
+        public readonly Countable&Iterator $items,
+        private string|int|float $value
+    ) {}
+}
+
+=== snapshot ===
 {
   "stmts": [
     {

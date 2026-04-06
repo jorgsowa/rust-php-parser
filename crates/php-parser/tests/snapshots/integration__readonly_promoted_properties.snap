@@ -1,7 +1,18 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+readonly class Point {
+    public function __construct(
+        public int $x,
+        public int $y,
+        public int $z = 0,
+    ) {}
+}
+
+=== snapshot ===
 {
   "stmts": [
     {

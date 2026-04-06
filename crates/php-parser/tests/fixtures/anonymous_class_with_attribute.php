@@ -1,0 +1,1 @@
+<?php $x = new #[Attr] class() {};

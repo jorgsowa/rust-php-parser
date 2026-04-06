@@ -1,7 +1,13 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+$arrays = [[1, 2], [3, 4]];
+$flat = [...$arrays[0], ...$arrays[1], 5];
+
+=== snapshot ===
 {
   "stmts": [
     {

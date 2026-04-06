@@ -1,7 +1,18 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+function gen() {
+    $a = yield;
+    $b = yield 'value';
+    $c = yield 'key' => 'value';
+    yield from otherGen();
+    $d = (yield 'x') + 1;
+}
+
+=== snapshot ===
 {
   "stmts": [
     {

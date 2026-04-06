@@ -1,7 +1,18 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+enum Direction implements HasLabel {
+    use LabelTrait;
+    case North;
+    case South;
+    case East;
+    case West;
+}
+
+=== snapshot ===
 {
   "stmts": [
     {

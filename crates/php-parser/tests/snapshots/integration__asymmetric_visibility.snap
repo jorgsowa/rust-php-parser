@@ -1,7 +1,16 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+class User {
+    public protected(set) string $name;
+    public private(set) int $age;
+    protected private(set) string $email = '';
+}
+
+=== snapshot ===
 {
   "stmts": [
     {
