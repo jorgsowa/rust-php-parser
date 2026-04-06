@@ -1,1 +1,0 @@
-<?php use C as static;

@@ -1,0 +1,2 @@
+===source===
+<?php $a and $b or $c xor $d;

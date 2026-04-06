@@ -1,1 +1,0 @@
-<?php function foo((Countable&Traversable)|(ArrayAccess&Stringable) $x): void {}

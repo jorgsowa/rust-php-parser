@@ -1,0 +1,2 @@
+===source===
+<?php 'single'; "double";

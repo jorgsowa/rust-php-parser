@@ -1,1 +1,0 @@
-<?php $obj?->address?->city; $obj?->getAddress()?->getCity();

@@ -1,0 +1,2 @@
+===source===
+<?php (int)$x; (float)$y; (string)$z; (bool)$a; (array)$b; (object)$c;

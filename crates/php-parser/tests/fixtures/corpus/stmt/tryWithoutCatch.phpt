@@ -1,0 +1,6 @@
+===source===
+<?php
+
+try {
+    foo();
+}

@@ -1,1 +1,0 @@
-<?php #[Route("/api")] function foo() {}

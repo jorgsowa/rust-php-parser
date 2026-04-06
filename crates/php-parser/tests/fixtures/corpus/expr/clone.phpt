@@ -1,0 +1,4 @@
+===source===
+<?php
+
+clone $a;

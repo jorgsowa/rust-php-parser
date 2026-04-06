@@ -1,1 +1,0 @@
-<?php $fn = fn($x): Closure => fn($y): int => $x + $y;

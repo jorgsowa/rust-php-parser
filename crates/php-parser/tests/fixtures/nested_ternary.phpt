@@ -1,0 +1,2 @@
+===source===
+<?php $x > 0 ? 'pos' : ($x < 0 ? 'neg' : 'zero');

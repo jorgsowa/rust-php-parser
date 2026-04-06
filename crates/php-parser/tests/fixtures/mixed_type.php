@@ -1,1 +1,0 @@
-<?php function anything(mixed $x): mixed { return $x; }

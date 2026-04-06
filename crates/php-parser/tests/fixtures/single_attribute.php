@@ -1,1 +1,0 @@
-<?php #[Pure] function foo() {}

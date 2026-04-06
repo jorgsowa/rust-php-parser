@@ -68,8 +68,8 @@ fn fixtures() {
         .unwrap()
         .filter_map(|e| e.ok())
         .filter(|e| {
-            e.path().extension().map_or(false, |ext| ext == "php")
-                && e.file_name() != "error_recovery.php"
+            e.path().extension().map_or(false, |ext| ext == "phpt")
+                && e.file_name() != "error_recovery.phpt"
         })
         .map(|e| e.path())
         .collect();
@@ -77,8 +77,9 @@ fn fixtures() {
 
     for path in paths {
         let name = path.file_stem().unwrap().to_str().unwrap().to_string();
-        let source: &'static str =
+        let content: &'static str =
             Box::leak(std::fs::read_to_string(&path).unwrap().into_boxed_str());
+        let (_, source) = common::parse_fixture(content);
         let arena: &'static bumpalo::Bump = Box::leak(Box::new(bumpalo::Bump::new()));
         let result = php_rs_parser::parse(arena, source);
         assert!(
@@ -99,15 +100,16 @@ fn error_fixtures() {
     let mut paths: Vec<_> = std::fs::read_dir(&dir)
         .unwrap()
         .filter_map(|e| e.ok())
-        .filter(|e| e.path().extension().map_or(false, |ext| ext == "php"))
+        .filter(|e| e.path().extension().map_or(false, |ext| ext == "phpt"))
         .map(|e| e.path())
         .collect();
     paths.sort();
 
     for path in paths {
         let name = path.file_stem().unwrap().to_str().unwrap().to_string();
-        let source: &'static str =
+        let content: &'static str =
             Box::leak(std::fs::read_to_string(&path).unwrap().into_boxed_str());
+        let (_, source) = common::parse_fixture(content);
         let arena: &'static bumpalo::Bump = Box::leak(Box::new(bumpalo::Bump::new()));
         let result = php_rs_parser::parse(arena, source);
         assert!(
@@ -124,7 +126,7 @@ fn error_fixtures() {
 
 #[test]
 fn test_error_recovery_partial_parse() {
-    let source = include_str!("fixtures/error_recovery.php");
+    let (_, source) = common::parse_fixture(include_str!("fixtures/error_recovery.phpt"));
     let result = parse_php(source);
     assert!(!result.errors.is_empty(), "Expected parse errors");
     assert!(
@@ -141,7 +143,8 @@ fn test_error_recovery_partial_parse() {
 #[test]
 fn test_trailing_dot_float_literals() {
     // PHP: DNUM = LNUM "." — trailing-dot literals must parse as Float, not Int
-    let source = include_str!("fixtures/trailing_dot_float_literals.php");
+    let (_, source) =
+        common::parse_fixture(include_str!("fixtures/trailing_dot_float_literals.phpt"));
     let result = parse_php(source);
     assert_no_errors(&result);
     let json = to_json(&result.program);
@@ -159,7 +162,8 @@ fn test_trailing_dot_float_literals() {
 #[test]
 fn test_legacy_octal_invalid_digits() {
     // PHP silently ignores 8 and 9 in legacy octal: 0778 = int(63), 019 = int(1), 09 = int(0)
-    let source = include_str!("fixtures/legacy_octal_invalid_digits.php");
+    let (_, source) =
+        common::parse_fixture(include_str!("fixtures/legacy_octal_invalid_digits.phpt"));
     let result = parse_php(source);
     assert_no_errors(&result);
     let json = to_json(&result.program);

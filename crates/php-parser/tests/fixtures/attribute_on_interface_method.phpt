@@ -1,0 +1,2 @@
+===source===
+<?php interface I { #[Pure] public function foo(): void; }

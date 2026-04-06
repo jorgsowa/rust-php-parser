@@ -1,0 +1,2 @@
+===source===
+<?php $x ?: 'default';

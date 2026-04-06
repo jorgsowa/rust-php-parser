@@ -1,1 +1,0 @@
-<?php $obj->$method(); $obj->{'get' . $field}();

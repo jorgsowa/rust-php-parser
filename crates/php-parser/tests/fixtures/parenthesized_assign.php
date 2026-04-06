@@ -1,1 +1,0 @@
-<?php ($x = getValue())->process();

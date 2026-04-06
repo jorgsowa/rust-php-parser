@@ -1,0 +1,2 @@
+===source===
+<?php enum Suit { case for; case function; case match; }

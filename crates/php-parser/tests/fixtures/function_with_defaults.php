@@ -1,1 +1,0 @@
-<?php function foo($a, $b = 10, $c = 'x') { return $a + $b; }

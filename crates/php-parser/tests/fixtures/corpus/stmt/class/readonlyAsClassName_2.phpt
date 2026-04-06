@@ -1,0 +1,3 @@
+===source===
+<?php
+class ReadOnly {}

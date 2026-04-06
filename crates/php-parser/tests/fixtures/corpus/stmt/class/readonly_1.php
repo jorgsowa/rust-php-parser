@@ -1,4 +1,0 @@
-<?php
-
-readonly class A {
-}

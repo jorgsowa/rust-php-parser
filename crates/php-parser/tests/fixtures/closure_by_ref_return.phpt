@@ -1,0 +1,2 @@
+===source===
+<?php $f = function &() { static $x = 0; return $x; };

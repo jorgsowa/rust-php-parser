@@ -1,0 +1,2 @@
+===source===
+<?php enum E { case A; #[Override] public function foo(): void {} }

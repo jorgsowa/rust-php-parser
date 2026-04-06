@@ -1,1 +1,0 @@
-<?php const PI = 3.14; const APP_NAME = 'MyApp';

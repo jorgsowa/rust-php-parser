@@ -1,0 +1,2 @@
+===source===
+<?php class A { final final function a() {} }

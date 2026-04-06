@@ -1,1 +1,0 @@
-<?php foreach ($items as $k => $v) { echo $k; }

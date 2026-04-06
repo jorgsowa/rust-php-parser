@@ -1,0 +1,2 @@
+===source===
+<?php Foo::class; self::class; static::class;

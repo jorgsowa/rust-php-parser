@@ -1,0 +1,2 @@
+===source===
+<?php class A { abstract abstract function a(); }

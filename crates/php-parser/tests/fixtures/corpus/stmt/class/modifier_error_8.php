@@ -1,1 +1,0 @@
-<?php abstract final class A { }

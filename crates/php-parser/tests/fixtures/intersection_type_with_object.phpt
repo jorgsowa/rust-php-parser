@@ -1,0 +1,2 @@
+===source===
+<?php function foo(Iterator&Countable $x): void {}

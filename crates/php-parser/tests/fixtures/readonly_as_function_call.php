@@ -1,1 +1,0 @@
-<?php function readonly() {} readonly();

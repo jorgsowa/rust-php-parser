@@ -1,1 +1,0 @@
-<?php func(...$args, last: 'end');

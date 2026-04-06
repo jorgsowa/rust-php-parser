@@ -1,0 +1,2 @@
+===source===
+<?php exit; exit(); exit(0); die; die(); die('error');

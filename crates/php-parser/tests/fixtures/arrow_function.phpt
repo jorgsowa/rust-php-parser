@@ -1,0 +1,2 @@
+===source===
+<?php $f = fn(int $x): int => $x * 2;

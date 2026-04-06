@@ -1,1 +1,0 @@
-<?php #[A] #[B] class Foo {}

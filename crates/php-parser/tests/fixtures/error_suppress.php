@@ -1,1 +1,0 @@
-<?php @file_get_contents('missing.txt');

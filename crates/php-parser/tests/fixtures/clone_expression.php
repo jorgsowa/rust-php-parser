@@ -1,1 +1,0 @@
-<?php $copy = clone $obj;

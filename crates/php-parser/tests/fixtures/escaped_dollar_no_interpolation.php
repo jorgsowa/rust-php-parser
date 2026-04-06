@@ -1,1 +1,0 @@
-<?php echo "Price: \$100";
