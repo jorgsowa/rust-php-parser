@@ -1,7 +1,0 @@
----
-source: crates/php-parser/tests/malformed_php.rs
-expression: msgs
----
-expected expression
-unclosed '')'' opened at Span { start: 9, end: 10 }
-expected statement
