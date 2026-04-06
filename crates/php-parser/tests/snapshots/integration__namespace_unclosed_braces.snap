@@ -1,0 +1,41 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: "fixture_with_errors(source, &result.errors, &result.program)"
+---
+=== source ===
+<?php namespace App {
+
+=== errors ===
+expected '}', found end of file
+=== snapshot ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Namespace": {
+          "name": {
+            "parts": [
+              "App"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 16,
+              "end": 20
+            }
+          },
+          "body": {
+            "Braced": []
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 22
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 22
+  }
+}
