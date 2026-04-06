@@ -1,10 +1,16 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: "fixture(source, &result.program)"
+assertion_line: 121
+expression: "fixture_with_errors(source, &result.errors, &result.program)"
 ---
 === source ===
 <?php
 $x = array(1, 2,
+
+=== errors ===
+expected expression
+expected ')', found end of file
+expected ';' after expression
 === snapshot ===
 {
   "stmts": [
@@ -65,39 +71,39 @@ $x = array(1, 2,
                       "value": {
                         "kind": "Error",
                         "span": {
-                          "start": 22,
-                          "end": 22
+                          "start": 23,
+                          "end": 23
                         }
                       },
                       "unpack": false,
                       "span": {
-                        "start": 22,
-                        "end": 22
+                        "start": 23,
+                        "end": 23
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 11,
-                  "end": 22
+                  "end": 23
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 22
+            "end": 23
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 22
+        "end": 23
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 22
+    "end": 23
   }
 }

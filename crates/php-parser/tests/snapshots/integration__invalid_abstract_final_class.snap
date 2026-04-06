@@ -1,9 +1,13 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: "fixture(source, &result.program)"
+assertion_line: 121
+expression: "fixture_with_errors(source, &result.errors, &result.program)"
 ---
 === source ===
 <?php abstract final class Foo {}
+
+=== errors ===
+expected 'class', found 'final'
 === snapshot ===
 {
   "stmts": [

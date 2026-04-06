@@ -1,11 +1,15 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: "fixture(source, &result.program)"
+assertion_line: 121
+expression: "fixture_with_errors(source, &result.errors, &result.program)"
 ---
 === source ===
 <?php
 $x = [1, 2, 3;
 $y = 4;
+
+=== errors ===
+expected ']', found ';'
 === snapshot ===
 {
   "stmts": [
@@ -132,12 +136,12 @@ $y = 4;
       },
       "span": {
         "start": 21,
-        "end": 28
+        "end": 29
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 28
+    "end": 29
   }
 }

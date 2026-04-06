@@ -1,11 +1,15 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: "fixture(source, &result.program)"
+assertion_line: 121
+expression: "fixture_with_errors(source, &result.errors, &result.program)"
 ---
 === source ===
 <?php
 if ($x > 1) {
     echo "hello";
+
+=== errors ===
+unclosed ''}'' opened at Span { start: 18, end: 19 }
 === snapshot ===
 {
   "stmts": [
@@ -60,14 +64,14 @@ if ($x > 1) {
                   },
                   "span": {
                     "start": 24,
-                    "end": 37
+                    "end": 38
                   }
                 }
               ]
             },
             "span": {
               "start": 18,
-              "end": 37
+              "end": 38
             }
           },
           "elseif_branches": [],
@@ -76,12 +80,12 @@ if ($x > 1) {
       },
       "span": {
         "start": 6,
-        "end": 37
+        "end": 38
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 37
+    "end": 38
   }
 }

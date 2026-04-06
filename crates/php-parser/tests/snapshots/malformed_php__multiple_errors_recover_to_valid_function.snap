@@ -1,6 +1,0 @@
----
-source: crates/php-parser/tests/malformed_php.rs
-expression: msgs
----
-expected expression
-expected expression

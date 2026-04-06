@@ -3,3 +3,4 @@
 foreach ($items $item) {
     echo $item;
 }
+===errors===

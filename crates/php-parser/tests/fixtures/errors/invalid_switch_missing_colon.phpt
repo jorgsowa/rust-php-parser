@@ -7,3 +7,4 @@ switch ($x) {
     case 2:
         echo "two";
 }
+===errors===

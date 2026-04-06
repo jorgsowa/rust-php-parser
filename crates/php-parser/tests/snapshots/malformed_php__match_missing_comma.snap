@@ -1,9 +1,0 @@
----
-source: crates/php-parser/tests/malformed_php.rs
-expression: msgs
----
-expected '}', found integer
-expected ';' after expression
-expected ';' after expression
-expected expression
-expected expression

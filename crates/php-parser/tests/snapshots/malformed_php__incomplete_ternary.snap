@@ -1,8 +1,0 @@
----
-source: crates/php-parser/tests/malformed_php.rs
-expression: msgs
----
-expected expression
-expected ':', found end of file
-expected expression
-expected ';' after expression

@@ -1,0 +1,54 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: "fixture_with_errors(source, &result.errors, &result.program)"
+---
+=== source ===
+<?php try { } catch { }
+
+=== errors ===
+expected '(', found '{'
+expected identifier, found '{'
+expected ')', found '{'
+=== snapshot ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "TryCatch": {
+          "body": [],
+          "catches": [
+            {
+              "types": [
+                {
+                  "parts": [
+                    "<error>"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 20,
+                    "end": 20
+                  }
+                }
+              ],
+              "var": null,
+              "body": [],
+              "span": {
+                "start": 20,
+                "end": 24
+              }
+            }
+          ],
+          "finally": null
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 24
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 24
+  }
+}

@@ -1,0 +1,3 @@
+===source===
+<?php declare(
+===errors===
