@@ -1,3 +1,4 @@
+===source===
 <?php
 class MyClass {
     use A, B {

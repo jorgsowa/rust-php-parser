@@ -1,3 +1,4 @@
+===source===
 <?php
 $x = <<<END
     Hello {$obj->name}!

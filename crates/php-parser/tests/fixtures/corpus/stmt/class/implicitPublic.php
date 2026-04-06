@@ -1,3 +1,4 @@
+===source===
 <?php
 
 abstract class A {

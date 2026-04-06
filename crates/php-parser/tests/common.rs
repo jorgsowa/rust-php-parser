@@ -26,36 +26,37 @@ pub struct FixtureConfig {
     pub min_php: Option<(u32, u32)>,
 }
 
-/// Parse a fixture file that may start with an optional `===config===` section.
+/// Parse a fixture file with optional `===config===` and mandatory `===source===` sections.
 ///
 /// Format:
 /// ```text
-/// ===config===
+/// ===config===       <- optional
 /// min_php=8.5
-///
+/// ===source===       <- required
 /// <?php
 /// ...
 /// ```
 ///
 /// Returns the parsed config and a slice of `content` containing only the PHP source.
-/// If there is no config section, `content` is returned as-is.
 pub fn parse_fixture(content: &str) -> (FixtureConfig, &str) {
-    let Some(rest) = content.strip_prefix("===config===\n") else {
-        return (FixtureConfig { min_php: None }, content);
-    };
-
-    let (config_text, source) = rest.split_once("\n\n").unwrap_or((rest, ""));
-
     let mut min_php = None;
-    for line in config_text.lines() {
-        if let Some(val) = line.strip_prefix("min_php=") {
-            if let Some((maj_s, min_s)) = val.split_once('.') {
-                if let (Ok(maj), Ok(min)) = (maj_s.parse::<u32>(), min_s.parse::<u32>()) {
-                    min_php = Some((maj, min));
+
+    let rest = if let Some(rest) = content.strip_prefix("===config===\n") {
+        let source_marker = rest.find("===source===\n").unwrap_or(rest.len());
+        for line in rest[..source_marker].lines() {
+            if let Some(val) = line.strip_prefix("min_php=") {
+                if let Some((maj_s, min_s)) = val.split_once('.') {
+                    if let (Ok(maj), Ok(min)) = (maj_s.parse::<u32>(), min_s.parse::<u32>()) {
+                        min_php = Some((maj, min));
+                    }
                 }
             }
         }
-    }
+        &rest[source_marker..]
+    } else {
+        content
+    };
 
+    let source = rest.strip_prefix("===source===\n").unwrap_or(rest);
     (FixtureConfig { min_php }, source)
 }

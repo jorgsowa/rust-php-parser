@@ -1,3 +1,4 @@
+===source===
 <?php
 Foo::BAR;
 Foo::$instance;

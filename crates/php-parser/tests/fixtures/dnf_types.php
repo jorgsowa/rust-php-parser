@@ -1,3 +1,4 @@
+===source===
 <?php
 function foo((A&B)|C $x): (X&Y)|Z {
     return $x;

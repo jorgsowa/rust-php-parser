@@ -1,3 +1,4 @@
+===source===
 <?php
 function f((A&B)|C|null $x): (X&Y)|(P&Q)|null {
     return $x;

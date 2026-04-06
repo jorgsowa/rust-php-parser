@@ -1,3 +1,4 @@
+===source===
 <?php
 
 class Foo {

@@ -1,3 +1,4 @@
+===source===
 <?php
 isset($a);
 isset($a, $b, $c);

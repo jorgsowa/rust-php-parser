@@ -1,3 +1,4 @@
+===source===
 <?php
 
 var_dump(__HALT_COMPILER_OFFSET__);

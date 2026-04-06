@@ -1,3 +1,4 @@
+===source===
 <?php
 abstract class Base {
     abstract public function doSomething(): void;

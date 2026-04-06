@@ -1,3 +1,4 @@
+===source===
 <?php
 $a = b"binary string";
 $b = b'binary single';

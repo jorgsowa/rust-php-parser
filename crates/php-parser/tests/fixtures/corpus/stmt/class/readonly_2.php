@@ -1,3 +1,4 @@
+===source===
 <?php
 
 final readonly class A {

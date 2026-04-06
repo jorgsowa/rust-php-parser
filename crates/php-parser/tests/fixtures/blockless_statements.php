@@ -1,3 +1,4 @@
+===source===
 <?php
 if ($a) $A;
 elseif ($b) $B;

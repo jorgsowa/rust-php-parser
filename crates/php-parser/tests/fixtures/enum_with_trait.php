@@ -1,3 +1,4 @@
+===source===
 <?php
 enum Direction implements HasLabel {
     use LabelTrait;

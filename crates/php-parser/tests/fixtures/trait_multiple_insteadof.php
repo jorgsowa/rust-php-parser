@@ -1,3 +1,4 @@
+===source===
 <?php
 trait T1 { public function m() {} }
 trait T2 { public function m() {} }

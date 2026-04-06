@@ -1,3 +1,4 @@
+===source===
 <?php
 abstract class Complete {
     use SomeTrait;

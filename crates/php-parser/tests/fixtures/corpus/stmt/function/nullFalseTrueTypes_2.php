@@ -1,3 +1,4 @@
+===source===
 <?php
 
 function f_null(): null {}

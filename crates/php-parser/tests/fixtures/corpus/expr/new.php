@@ -1,3 +1,4 @@
+===source===
 <?php
 
 new A;

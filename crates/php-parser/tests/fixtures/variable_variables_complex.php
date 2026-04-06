@@ -1,3 +1,4 @@
+===source===
 <?php
 $$var = 1;
 $$$var = 2;

@@ -1,3 +1,4 @@
+===source===
 <?php
 enum Color {
     case Red;

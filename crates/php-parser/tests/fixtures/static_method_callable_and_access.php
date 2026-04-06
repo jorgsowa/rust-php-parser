@@ -1,3 +1,4 @@
+===source===
 <?php
 $a = Foo::bar(...);
 $b = Foo::$prop;

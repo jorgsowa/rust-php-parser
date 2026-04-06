@@ -1,3 +1,4 @@
+===source===
 <?php
 
 interface A extends C, D {

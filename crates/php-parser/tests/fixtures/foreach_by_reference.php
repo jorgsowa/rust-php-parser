@@ -1,1 +1,2 @@
+===source===
 <?php foreach ($items as &$item) { $item *= 2; }

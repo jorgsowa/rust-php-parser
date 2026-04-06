@@ -1,3 +1,4 @@
+===source===
 <?php
 (array)   $a;
 (bool)    $a;

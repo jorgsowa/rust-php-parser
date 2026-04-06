@@ -1,1 +1,2 @@
+===source===
 <?php function foo(int|string|null $x): string|false { return ''; }

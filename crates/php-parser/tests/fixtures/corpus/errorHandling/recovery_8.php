@@ -1,3 +1,4 @@
+===source===
 <?php
 // Can't recover this yet, as the '}' for the inner_statement_list
 // is always required.

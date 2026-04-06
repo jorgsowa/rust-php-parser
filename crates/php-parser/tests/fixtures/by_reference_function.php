@@ -1,3 +1,4 @@
+===source===
 <?php
 function &getRef() {
     static $val = 0;

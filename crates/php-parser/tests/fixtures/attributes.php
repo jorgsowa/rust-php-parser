@@ -1,3 +1,4 @@
+===source===
 <?php
 
 // Single attribute on function

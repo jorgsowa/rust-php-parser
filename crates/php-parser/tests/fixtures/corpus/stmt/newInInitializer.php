@@ -1,3 +1,4 @@
+===source===
 <?php
 
 const C = new Foo;

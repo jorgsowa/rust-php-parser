@@ -1,3 +1,4 @@
+===source===
 <?php
 function foo($a, $b,) {}
 foo(1, 2,);

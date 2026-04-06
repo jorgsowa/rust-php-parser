@@ -1,3 +1,4 @@
+===source===
 <?php
 $a = $obj instanceof $className;
 $b = $obj instanceof self;

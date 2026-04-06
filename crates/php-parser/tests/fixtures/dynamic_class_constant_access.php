@@ -1,3 +1,4 @@
+===source===
 <?php
 $a = Foo::{$name};
 $b = Foo::{'CONST_' . $suffix};

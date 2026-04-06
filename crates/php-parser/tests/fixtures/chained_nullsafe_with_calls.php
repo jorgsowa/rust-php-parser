@@ -1,3 +1,4 @@
+===source===
 <?php
 $x = $a?->b?->c?->d;
 $y = $a?->getB()?->getC(1, 2)?->value;

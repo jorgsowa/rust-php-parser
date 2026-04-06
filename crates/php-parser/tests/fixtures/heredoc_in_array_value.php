@@ -1,3 +1,4 @@
+===source===
 <?php
 $arr = [
     'key' => <<<EOT

@@ -1,3 +1,4 @@
+===source===
 <?php
 start:
 if ($count++ < 3) {

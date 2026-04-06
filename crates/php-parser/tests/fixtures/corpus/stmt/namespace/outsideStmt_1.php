@@ -1,3 +1,4 @@
+===source===
 <?php
 declare(A='B');
 namespace B {

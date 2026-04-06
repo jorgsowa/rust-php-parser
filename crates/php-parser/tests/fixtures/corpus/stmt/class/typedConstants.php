@@ -1,3 +1,4 @@
+===source===
 <?php
 class Test {
     const int X = 1;

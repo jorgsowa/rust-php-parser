@@ -1,3 +1,4 @@
+===source===
 <?php
 // Missing semicolon
 use Foo\{Bar}

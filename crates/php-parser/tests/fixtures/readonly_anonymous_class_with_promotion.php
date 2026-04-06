@@ -1,3 +1,4 @@
+===source===
 <?php
 $obj = new readonly class(1, 2) {
     public function __construct(

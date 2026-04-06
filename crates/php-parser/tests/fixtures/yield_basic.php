@@ -1,3 +1,4 @@
+===source===
 <?php
 function generate() {
     yield 1;

@@ -1,3 +1,4 @@
+===source===
 <?php
 class Config {
     public const VERSION = '1.0';

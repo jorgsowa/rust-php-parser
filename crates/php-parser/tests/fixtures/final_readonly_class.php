@@ -1,3 +1,4 @@
+===source===
 <?php
 final readonly class Money {
     public function __construct(

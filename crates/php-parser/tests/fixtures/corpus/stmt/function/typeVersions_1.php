@@ -1,3 +1,4 @@
+===source===
 <?php
 function test(
     bool $a1, int $a2, float $a3, string $a4, // PHP 7.0

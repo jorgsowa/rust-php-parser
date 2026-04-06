@@ -1,3 +1,4 @@
+===source===
 <?php
 class Test {
     public $prop {

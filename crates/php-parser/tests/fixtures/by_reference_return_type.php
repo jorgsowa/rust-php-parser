@@ -1,3 +1,4 @@
+===source===
 <?php
 function &getValue(): string {
     return $GLOBALS['value'];

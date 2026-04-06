@@ -1,3 +1,4 @@
+===source===
 <?php
 fn(bool $a) => $a;
 fn($x = 42) => $x;

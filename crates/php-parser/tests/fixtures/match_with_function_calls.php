@@ -1,3 +1,4 @@
+===source===
 <?php
 $label = match (getStatus()) {
     isActive() => 'active',

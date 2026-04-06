@@ -1,3 +1,4 @@
+===source===
 <?php
 $array = [
     $this->value $oopsAnotherValue->get()

@@ -1,3 +1,4 @@
+===source===
 <?php
 
 foreach ($foo) { $bar; }

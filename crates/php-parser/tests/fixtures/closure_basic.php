@@ -1,1 +1,2 @@
+===source===
 <?php $f = function(int $x, string $y): int { return $x; };

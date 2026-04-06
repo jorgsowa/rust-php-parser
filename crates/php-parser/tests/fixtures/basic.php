@@ -1,3 +1,4 @@
+===source===
 <?php
 $x = 42;
 $name = 'hello';

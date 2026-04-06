@@ -1,3 +1,4 @@
+===source===
 <?php
 
 const T_1 = 1 << 1;

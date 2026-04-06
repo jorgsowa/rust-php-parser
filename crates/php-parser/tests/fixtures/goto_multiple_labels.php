@@ -1,3 +1,4 @@
+===source===
 <?php
 if ($a) goto labelA;
 if ($b) goto labelB;

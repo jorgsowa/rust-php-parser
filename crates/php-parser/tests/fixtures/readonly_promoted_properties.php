@@ -1,3 +1,4 @@
+===source===
 <?php
 readonly class Point {
     public function __construct(

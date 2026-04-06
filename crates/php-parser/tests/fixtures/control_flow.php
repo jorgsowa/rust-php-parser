@@ -1,3 +1,4 @@
+===source===
 <?php
 if ($x > 0) {
     echo 'positive';

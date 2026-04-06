@@ -1,3 +1,4 @@
+===source===
 <?php
 new $className;
 new $array['className'];

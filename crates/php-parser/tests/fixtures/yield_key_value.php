@@ -1,3 +1,4 @@
+===source===
 <?php
 function indexedGen() {
     yield 'a' => 1;

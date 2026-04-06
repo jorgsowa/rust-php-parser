@@ -1,3 +1,4 @@
+===source===
 <?php
 function gen() {
     $a = yield;

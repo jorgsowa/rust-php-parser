@@ -1,3 +1,4 @@
+===source===
 <?php
 
 echo match (1) {

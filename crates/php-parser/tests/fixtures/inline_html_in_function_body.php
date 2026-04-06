@@ -1,3 +1,4 @@
+===source===
 <?php
 function tmpl() {
     $x = foo();

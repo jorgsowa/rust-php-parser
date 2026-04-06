@@ -1,3 +1,4 @@
+===source===
 <?php
 // This is legal.
 isset(($a), (($b)));

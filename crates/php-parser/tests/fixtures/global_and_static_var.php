@@ -1,3 +1,4 @@
+===source===
 <?php
 function counter() {
     static $count = 0;

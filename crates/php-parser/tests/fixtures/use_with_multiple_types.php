@@ -1,1 +1,2 @@
+===source===
 <?php use function A\foo; use const SOME_CONST; use B\C;

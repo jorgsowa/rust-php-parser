@@ -1,3 +1,4 @@
+===source===
 <?php
 
 declare (X='Y');

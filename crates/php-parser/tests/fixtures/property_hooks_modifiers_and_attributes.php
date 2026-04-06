@@ -1,3 +1,4 @@
+===source===
 <?php
 abstract class Foo {
     abstract public int $abstract_prop {

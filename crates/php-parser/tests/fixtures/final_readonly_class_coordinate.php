@@ -1,3 +1,4 @@
+===source===
 <?php
 final readonly class Coordinate {
     public function __construct(

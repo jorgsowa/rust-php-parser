@@ -1,2 +1,3 @@
+===source===
 <?php
 print $a;

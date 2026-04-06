@@ -1,3 +1,4 @@
+===source===
 <?php
 class Foo {
     public function list(): array { return []; }

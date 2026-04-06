@@ -1,3 +1,4 @@
+===source===
 <?php
 $result = match ($type) {
     'a' => match ($subtype) {

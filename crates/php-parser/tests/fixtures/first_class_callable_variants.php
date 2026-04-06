@@ -1,3 +1,4 @@
+===source===
 <?php
 $a = strlen(...);
 $b = $obj->method(...);

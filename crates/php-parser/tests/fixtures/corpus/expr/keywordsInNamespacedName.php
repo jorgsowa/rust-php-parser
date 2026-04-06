@@ -1,3 +1,4 @@
+===source===
 <?php
 namespace fn;
 namespace fn\use;

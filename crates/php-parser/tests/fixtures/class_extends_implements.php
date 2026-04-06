@@ -1,3 +1,4 @@
+===source===
 <?php
 interface Loggable {
     public function log(): void;

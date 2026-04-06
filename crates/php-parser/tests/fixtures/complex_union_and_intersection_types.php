@@ -1,3 +1,4 @@
+===source===
 <?php
 function processData(Countable&ArrayAccess $data): array|null {
     return null;

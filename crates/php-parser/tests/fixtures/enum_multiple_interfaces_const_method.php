@@ -1,3 +1,4 @@
+===source===
 <?php
 enum Status: string implements Loggable, Serializable {
     case Active = 'active';

@@ -1,3 +1,4 @@
+===source===
 <?php
 $x = <<<END
     content line

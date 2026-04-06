@@ -1,3 +1,4 @@
+===source===
 <?php
 namespace App\Services;
 $obj = new namespace\MyClass();

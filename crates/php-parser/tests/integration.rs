@@ -126,7 +126,7 @@ fn error_fixtures() {
 
 #[test]
 fn test_error_recovery_partial_parse() {
-    let source = include_str!("fixtures/error_recovery.php");
+    let (_, source) = common::parse_fixture(include_str!("fixtures/error_recovery.php"));
     let result = parse_php(source);
     assert!(!result.errors.is_empty(), "Expected parse errors");
     assert!(
@@ -143,7 +143,8 @@ fn test_error_recovery_partial_parse() {
 #[test]
 fn test_trailing_dot_float_literals() {
     // PHP: DNUM = LNUM "." — trailing-dot literals must parse as Float, not Int
-    let source = include_str!("fixtures/trailing_dot_float_literals.php");
+    let (_, source) =
+        common::parse_fixture(include_str!("fixtures/trailing_dot_float_literals.php"));
     let result = parse_php(source);
     assert_no_errors(&result);
     let json = to_json(&result.program);
@@ -161,7 +162,8 @@ fn test_trailing_dot_float_literals() {
 #[test]
 fn test_legacy_octal_invalid_digits() {
     // PHP silently ignores 8 and 9 in legacy octal: 0778 = int(63), 019 = int(1), 09 = int(0)
-    let source = include_str!("fixtures/legacy_octal_invalid_digits.php");
+    let (_, source) =
+        common::parse_fixture(include_str!("fixtures/legacy_octal_invalid_digits.php"));
     let result = parse_php(source);
     assert_no_errors(&result);
     let json = to_json(&result.program);

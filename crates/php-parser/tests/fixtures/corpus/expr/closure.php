@@ -1,3 +1,4 @@
+===source===
 <?php
 function($a) { $a; };
 function($a) use($b) {};

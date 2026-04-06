@@ -1,3 +1,4 @@
+===source===
 <?php
 function variadic(int ...$args): int {
     return 0;

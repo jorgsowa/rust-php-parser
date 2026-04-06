@@ -1,3 +1,4 @@
+===source===
 <?php
 namespace Foo
 use A

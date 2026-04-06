@@ -1,3 +1,4 @@
+===source===
 <?php
 function gen($x) {
     $v = match(true) {

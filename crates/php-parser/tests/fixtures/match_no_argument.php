@@ -1,3 +1,4 @@
+===source===
 <?php
 $result = match (true) {
     $x > 0 => 'positive',

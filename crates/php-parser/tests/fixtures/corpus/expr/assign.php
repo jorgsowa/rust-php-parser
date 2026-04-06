@@ -1,3 +1,4 @@
+===source===
 <?php
 // simple assign
 $a = $b;

@@ -1,3 +1,4 @@
+===source===
 <?php
 interface HasId {
     public function getId(): int;

@@ -1,3 +1,4 @@
+===source===
 <?php
 // Simple variable interpolation
 $greeting = "Hello $name";

@@ -1,3 +1,4 @@
+===source===
 <?php
 trait Timestampable {
     public function getCreatedAt(): string {

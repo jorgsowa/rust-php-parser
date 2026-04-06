@@ -1,3 +1,4 @@
+===source===
 <?php
 
 function clone(object $object, array $withProperties = []): object {}

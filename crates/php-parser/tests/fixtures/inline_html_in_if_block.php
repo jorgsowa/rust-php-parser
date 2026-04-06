@@ -1,3 +1,4 @@
+===source===
 <?php
 if ($cond) {
     ?><p>html</p><?php

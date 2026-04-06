@@ -1,3 +1,4 @@
+===source===
 <?php
 $numbers = [1, 2, 3];
 $expanded = [...$numbers, 4, 5];

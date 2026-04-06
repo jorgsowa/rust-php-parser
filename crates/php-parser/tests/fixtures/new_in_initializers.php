@@ -1,3 +1,4 @@
+===source===
 <?php
 function foo($x = new Foo(), $y = new Bar(1, 2)) {}
 

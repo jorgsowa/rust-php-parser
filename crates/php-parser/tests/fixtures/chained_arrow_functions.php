@@ -1,1 +1,2 @@
+===source===
 <?php $fn = fn($x) => fn($y) => $x + $y;

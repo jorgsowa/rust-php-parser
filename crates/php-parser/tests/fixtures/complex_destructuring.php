@@ -1,3 +1,4 @@
+===source===
 <?php
 [, , $third] = $arr;
 [[$a, $b], [$c, $d]] = $matrix;
