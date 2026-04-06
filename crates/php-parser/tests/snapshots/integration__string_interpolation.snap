@@ -1,6 +1,6 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: "fixture(source, & result.program)"
+expression: "fixture(source, &result.program)"
 ---
 === source ===
 <?php

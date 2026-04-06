@@ -58,44 +58,37 @@ where
 // Fixture file tests
 // =============================================================================
 
-macro_rules! fixture_test {
-    ($name:ident, $file:expr) => {
-        #[test]
-        fn $name() {
-            let source = include_str!(concat!("fixtures/", $file));
-            let result = parse_php(source);
-            assert_no_errors(&result);
-            insta::assert_snapshot!(fixture(source, &result.program));
-        }
-    };
-    ($name:ident, $file:expr, errors) => {
-        #[test]
-        fn $name() {
-            let source = include_str!(concat!("fixtures/", $file));
-            let result = parse_php(source);
-            assert!(
-                !result.errors.is_empty(),
-                "expected parse errors but found none"
-            );
-            insta::assert_snapshot!(fixture(source, &result.program));
-        }
-    };
-}
+/// Parse every `.php` file in `tests/fixtures/` (non-recursive) and snapshot it.
+/// Adding a new fixture file automatically gets a test — no Rust changes needed.
+/// Files with intentional parse errors are handled by separate tests below.
+#[test]
+fn fixtures() {
+    let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures");
+    let mut paths: Vec<_> = std::fs::read_dir(&dir)
+        .unwrap()
+        .filter_map(|e| e.ok())
+        .filter(|e| {
+            e.path().extension().map_or(false, |ext| ext == "php")
+                && e.file_name() != "error_recovery.php"
+        })
+        .map(|e| e.path())
+        .collect();
+    paths.sort();
 
-fixture_test!(test_basic, "basic.php");
-fixture_test!(test_expressions, "expressions.php");
-fixture_test!(test_control_flow, "control_flow.php");
-fixture_test!(test_functions, "functions.php");
-fixture_test!(test_arrays, "arrays.php");
-fixture_test!(test_inline_html, "inline_html.php");
-fixture_test!(test_assignment_ops, "assignment_ops.php");
-fixture_test!(test_anonymous_classes, "anonymous_classes.php");
-fixture_test!(
-    test_string_interpolation_fixture,
-    "string_interpolation.php"
-);
-fixture_test!(test_attributes_fixture, "attributes.php");
-fixture_test!(test_comments, "comments.php");
+    for path in paths {
+        let name = path.file_stem().unwrap().to_str().unwrap().to_string();
+        let source: &'static str =
+            Box::leak(std::fs::read_to_string(&path).unwrap().into_boxed_str());
+        let arena: &'static bumpalo::Bump = Box::leak(Box::new(bumpalo::Bump::new()));
+        let result = php_rs_parser::parse(arena, source);
+        assert!(
+            result.errors.is_empty(),
+            "unexpected parse errors in {name}: {:?}",
+            result.errors
+        );
+        insta::assert_snapshot!(name, fixture(source, &result.program));
+    }
+}
 
 // =============================================================================
 // Error recovery tests
@@ -105,18 +98,12 @@ fixture_test!(test_comments, "comments.php");
 fn test_error_recovery_partial_parse() {
     let source = include_str!("fixtures/error_recovery.php");
     let result = parse_php(source);
-
-    // Should have at least one error
     assert!(!result.errors.is_empty(), "Expected parse errors");
-
-    // Should still produce a program with some statements
     assert!(
         !result.program.stmts.is_empty(),
         "Expected partial AST even with errors"
     );
-
-    // The valid statements after the error should be parsed
-    insta::assert_snapshot!(to_json(&result.program));
+    insta::assert_snapshot!(fixture(source, &result.program));
 }
 
 // =============================================================================
@@ -1243,9 +1230,6 @@ function gen() {
     insta::assert_snapshot!(to_json(&result.program));
 }
 
-fixture_test!(test_realistic_controller, "realistic_controller.php");
-fixture_test!(test_realistic_enum_service, "realistic_enum_service.php");
-
 // =============================================================================
 // Name Resolution & Qualified Names
 // =============================================================================
@@ -2172,9 +2156,6 @@ fn test_error_recovery_invalid_expression() {
 // Composite Fixture Tests
 // =============================================================================
 
-fixture_test!(test_realistic_repository, "realistic_repository.php");
-fixture_test!(test_realistic_middleware, "realistic_middleware.php");
-
 // =============================================================================
 // String Interpolation
 // =============================================================================
@@ -2210,8 +2191,6 @@ fn test_double_quoted_escape_sequences() {
 // =============================================================================
 // Heredoc/Nowdoc
 // =============================================================================
-
-fixture_test!(test_heredoc_nowdoc, "heredoc_nowdoc.php");
 
 #[test]
 fn test_basic_heredoc() {
