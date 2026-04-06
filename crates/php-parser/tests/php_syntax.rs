@@ -110,6 +110,9 @@ fn fixture_files_are_valid_php() {
         "return_type_self_intersection.phpt",
         // `static;` is parsed by our parser (static as a statement); PHP rejects it.
         "static_semicolon_as_stmt.phpt",
+        // Duplicate `default` in switch is a semantic error, not a parse error;
+        // our parser accepts it and leaves this constraint to semantic analysis.
+        "switch_multiple_defaults.phpt",
     ];
 
     let mut entries: Vec<_> = std::fs::read_dir(&dir)
