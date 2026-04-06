@@ -1,0 +1,226 @@
+---
+source: crates/php-parser/tests/integration.rs
+expression: "fixture(source, & result.program)"
+---
+=== source ===
+<?php
+// line comment
+$x = 1; /* block comment */ $y = 2; /** doc comment */ # hash comment
+$z = 3;
+
+/** @param int $a */
+function add($a, $b) {
+    // return the sum
+    return $a + $b; /* always positive */
+}
+
+/**/
+/* empty-ish block */
+
+=== snapshot ===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 22,
+                  "end": 24
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 27,
+                  "end": 28
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 22,
+            "end": 28
+          }
+        }
+      },
+      "span": {
+        "start": 22,
+        "end": 50
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "y"
+                },
+                "span": {
+                  "start": 50,
+                  "end": 52
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Int": 2
+                },
+                "span": {
+                  "start": 55,
+                  "end": 56
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 50,
+            "end": 56
+          }
+        }
+      },
+      "span": {
+        "start": 50,
+        "end": 92
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "z"
+                },
+                "span": {
+                  "start": 92,
+                  "end": 94
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Int": 3
+                },
+                "span": {
+                  "start": 97,
+                  "end": 98
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 92,
+            "end": 98
+          }
+        }
+      },
+      "span": {
+        "start": 92,
+        "end": 122
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": "add",
+          "params": [
+            {
+              "name": "a",
+              "type_hint": null,
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "is_readonly": false,
+              "is_final": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 135,
+                "end": 137
+              }
+            },
+            {
+              "name": "b",
+              "type_hint": null,
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "is_readonly": false,
+              "is_final": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 139,
+                "end": 141
+              }
+            }
+          ],
+          "body": [
+            {
+              "kind": {
+                "Return": {
+                  "kind": {
+                    "Binary": {
+                      "left": {
+                        "kind": {
+                          "Variable": "a"
+                        },
+                        "span": {
+                          "start": 178,
+                          "end": 180
+                        }
+                      },
+                      "op": "Add",
+                      "right": {
+                        "kind": {
+                          "Variable": "b"
+                        },
+                        "span": {
+                          "start": 183,
+                          "end": 185
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 178,
+                    "end": 185
+                  }
+                }
+              },
+              "span": {
+                "start": 171,
+                "end": 209
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 122,
+        "end": 210
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 210
+  }
+}
