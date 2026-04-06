@@ -77,8 +77,9 @@ fn fixtures() {
 
     for path in paths {
         let name = path.file_stem().unwrap().to_str().unwrap().to_string();
-        let source: &'static str =
+        let content: &'static str =
             Box::leak(std::fs::read_to_string(&path).unwrap().into_boxed_str());
+        let (_, source) = common::parse_fixture(content);
         let arena: &'static bumpalo::Bump = Box::leak(Box::new(bumpalo::Bump::new()));
         let result = php_rs_parser::parse(arena, source);
         assert!(
@@ -106,8 +107,9 @@ fn error_fixtures() {
 
     for path in paths {
         let name = path.file_stem().unwrap().to_str().unwrap().to_string();
-        let source: &'static str =
+        let content: &'static str =
             Box::leak(std::fs::read_to_string(&path).unwrap().into_boxed_str());
+        let (_, source) = common::parse_fixture(content);
         let arena: &'static bumpalo::Bump = Box::leak(Box::new(bumpalo::Bump::new()));
         let result = php_rs_parser::parse(arena, source);
         assert!(

@@ -6,6 +6,17 @@ mod inline_cases;
 #[path = "common.rs"]
 mod common;
 
+fn php_version_met(min: (u32, u32)) -> bool {
+    match min {
+        (8, 1) => cfg!(php_min_81),
+        (8, 2) => cfg!(php_min_82),
+        (8, 3) => cfg!(php_min_83),
+        (8, 4) => cfg!(php_min_84),
+        (8, 5) => cfg!(php_min_85),
+        _ => false,
+    }
+}
+
 fn parse_php(source: &'static str) -> php_rs_parser::ParseResult<'static, 'static> {
     let arena: &'static bumpalo::Bump = Box::leak(Box::new(bumpalo::Bump::new()));
     php_rs_parser::parse(arena, source)
@@ -101,13 +112,6 @@ fn fixture_files_are_valid_php() {
         "static_semicolon_as_stmt.php",
     ];
 
-    // Fixtures that require a minimum PHP version to be valid syntax.
-    // Each entry is (filename, version_is_met) where the bool is a compile-time cfg flag.
-    let min_php_fixtures: &[(&str, bool)] = &[
-        // public protected(set) asymmetric visibility requires PHP 8.5
-        ("asymmetric_visibility.php", cfg!(php_min_85)),
-    ];
-
     let mut entries: Vec<_> = std::fs::read_dir(&dir)
         .unwrap()
         .filter_map(|e| e.ok())
@@ -115,17 +119,9 @@ fn fixture_files_are_valid_php() {
             let p = e.path();
             let name = p.file_name().and_then(|n| n.to_str()).unwrap_or("");
             // error_recovery.php is intentionally invalid PHP
-            if p.extension().and_then(|x| x.to_str()) != Some("php")
-                || name == "error_recovery.php"
-                || php_rejects.contains(&name)
-            {
-                return false;
-            }
-            // Skip version-gated fixtures when the installed PHP doesn't meet the minimum
-            if let Some((_, version_met)) = min_php_fixtures.iter().find(|(f, _)| *f == name) {
-                return *version_met;
-            }
-            true
+            p.extension().and_then(|x| x.to_str()) == Some("php")
+                && name != "error_recovery.php"
+                && !php_rejects.contains(&name)
         })
         .collect();
     // Sort for deterministic output
@@ -134,7 +130,13 @@ fn fixture_files_are_valid_php() {
         let path = entry.path();
         let label = path.file_name().unwrap().to_str().unwrap();
         let src = std::fs::read_to_string(&path).unwrap();
-        assert_php_syntax_labeled(label, &src);
+        let (config, source) = common::parse_fixture(&src);
+        if let Some(min_php) = config.min_php {
+            if !php_version_met(min_php) {
+                continue;
+            }
+        }
+        assert_php_syntax_labeled(label, source);
     }
 }
 
