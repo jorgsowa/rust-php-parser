@@ -1,2 +1,2 @@
 ===source===
-<?php + ; $x = 1;
+<?php + ; $x = 1;===errors===

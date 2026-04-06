@@ -9,4 +9,4 @@ class Foo {
     {
         return 2;
     }
-}
+}===errors===

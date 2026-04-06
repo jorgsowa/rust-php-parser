@@ -5,4 +5,4 @@ try {
 
 catch (Exception $e) {
     bar();
-}
+}===errors===

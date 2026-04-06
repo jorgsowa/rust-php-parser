@@ -1,12 +1,17 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: "fixture(source, &result.program)"
+expression: "fixture_with_errors(source, &result.errors, &result.program)"
 ---
 === source ===
 <?php
 if ($x > 1 {
     echo "hello";
 }
+=== errors ===
+expected expression
+expected '}', found 'echo'
+unclosed '')'' opened at Span { start: 9, end: 10 }
+expected expression
 === snapshot ===
 {
   "stmts": [

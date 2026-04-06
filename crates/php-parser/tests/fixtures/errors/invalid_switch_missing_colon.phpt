@@ -6,4 +6,4 @@ switch ($x) {
         break;
     case 2:
         echo "two";
-}
+}===errors===

@@ -1,2 +1,2 @@
 ===source===
-<?php new readonly readonly class {};
+<?php new readonly readonly class {};===errors===

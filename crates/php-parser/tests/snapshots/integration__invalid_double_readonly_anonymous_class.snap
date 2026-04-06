@@ -1,9 +1,12 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: "fixture(source, &result.program)"
+expression: "fixture_with_errors(source, &result.errors, &result.program)"
 ---
 === source ===
 <?php new readonly readonly class {};
+=== errors ===
+expected ';' after expression
+expected class name, found '{'
 === snapshot ===
 {
   "stmts": [

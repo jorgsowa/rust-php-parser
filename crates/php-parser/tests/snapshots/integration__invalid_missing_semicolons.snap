@@ -1,12 +1,15 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: "fixture(source, &result.program)"
+expression: "fixture_with_errors(source, &result.errors, &result.program)"
 ---
 === source ===
 <?php
 echo "hello"
 echo "world";
 $x = 1 + 2
+=== errors ===
+expected ';' after echo statement
+expected ';' after expression
 === snapshot ===
 {
   "stmts": [
