@@ -101,6 +101,13 @@ fn fixture_files_are_valid_php() {
         "static_semicolon_as_stmt.php",
     ];
 
+    // Fixtures that require a minimum PHP version to be valid syntax.
+    // Each entry is (filename, version_is_met) where the bool is a compile-time cfg flag.
+    let min_php_fixtures: &[(&str, bool)] = &[
+        // public protected(set) asymmetric visibility requires PHP 8.5
+        ("asymmetric_visibility.php", cfg!(php_min_85)),
+    ];
+
     let mut entries: Vec<_> = std::fs::read_dir(&dir)
         .unwrap()
         .filter_map(|e| e.ok())
@@ -108,9 +115,17 @@ fn fixture_files_are_valid_php() {
             let p = e.path();
             let name = p.file_name().and_then(|n| n.to_str()).unwrap_or("");
             // error_recovery.php is intentionally invalid PHP
-            p.extension().and_then(|x| x.to_str()) == Some("php")
-                && name != "error_recovery.php"
-                && !php_rejects.contains(&name)
+            if p.extension().and_then(|x| x.to_str()) != Some("php")
+                || name == "error_recovery.php"
+                || php_rejects.contains(&name)
+            {
+                return false;
+            }
+            // Skip version-gated fixtures when the installed PHP doesn't meet the minimum
+            if let Some((_, version_met)) = min_php_fixtures.iter().find(|(f, _)| *f == name) {
+                return *version_met;
+            }
+            true
         })
         .collect();
     // Sort for deterministic output
