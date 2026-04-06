@@ -1,5 +1,5 @@
 mod common;
-use common::{assert_no_errors, fixture, to_json};
+use common::{assert_no_errors, fixture, fixture_with_errors, to_json};
 
 fn parse_php(source: &'static str) -> php_rs_parser::ParseResult<'static, 'static> {
     // Leak arena and source for test simplicity — process exits after test run anyway
@@ -91,9 +91,9 @@ fn fixtures() {
     }
 }
 
-/// Parse every `.php` file in `tests/fixtures/errors/` and snapshot it.
+/// Parse every `.phpt` file in `tests/fixtures/errors/` and snapshot it.
 /// Each file is expected to produce at least one parse error.
-// error_recovery.php is excluded from auto-discovery (handled separately).
+/// The snapshot includes both the error messages and the partial AST.
 #[test]
 fn error_fixtures() {
     let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/errors");
@@ -116,7 +116,10 @@ fn error_fixtures() {
             !result.errors.is_empty(),
             "expected parse errors in {name} but got none"
         );
-        insta::assert_snapshot!(name, fixture(source, &result.program));
+        insta::assert_snapshot!(
+            name,
+            fixture_with_errors(source, &result.errors, &result.program)
+        );
     }
 }
 
