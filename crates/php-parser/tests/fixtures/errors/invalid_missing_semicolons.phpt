@@ -2,4 +2,5 @@
 <?php
 echo "hello"
 echo "world";
-$x = 1 + 2===errors===
+$x = 1 + 2
+===errors===

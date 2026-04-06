@@ -1,2 +1,3 @@
 ===source===
-<?php new readonly readonly class {};===errors===
+<?php new readonly readonly class {};
+===errors===

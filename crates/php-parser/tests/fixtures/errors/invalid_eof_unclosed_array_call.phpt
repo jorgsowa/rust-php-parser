@@ -1,3 +1,4 @@
 ===source===
 <?php
-$x = array(1, 2,===errors===
+$x = array(1, 2,
+===errors===

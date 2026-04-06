@@ -139,6 +139,9 @@ fn fixture_files_are_valid_php() {
                 continue;
             }
         }
+        if config.expect_errors {
+            continue;
+        }
         assert_php_syntax_labeled(label, source);
     }
 }

@@ -109,13 +109,15 @@ fn error_fixtures() {
         let name = path.file_stem().unwrap().to_str().unwrap().to_string();
         let content: &'static str =
             Box::leak(std::fs::read_to_string(&path).unwrap().into_boxed_str());
-        let (_, source) = common::parse_fixture(content);
+        let (config, source) = common::parse_fixture(content);
         let arena: &'static bumpalo::Bump = Box::leak(Box::new(bumpalo::Bump::new()));
         let result = php_rs_parser::parse(arena, source);
-        assert!(
-            !result.errors.is_empty(),
-            "expected parse errors in {name} but got none"
-        );
+        if config.expect_errors {
+            assert!(
+                !result.errors.is_empty(),
+                "expected parse errors in {name} but got none"
+            );
+        }
         insta::assert_snapshot!(
             name,
             fixture_with_errors(source, &result.errors, &result.program)

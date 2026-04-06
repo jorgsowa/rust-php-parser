@@ -1,4 +1,5 @@
 ===source===
 <?php
 $x = [1, 2, 3;
-$y = 4;===errors===
+$y = 4;
+===errors===

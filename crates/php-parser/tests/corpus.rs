@@ -11,21 +11,25 @@ macro_rules! fixture_test {
     ($name:ident, $file:expr) => {
         #[test]
         fn $name() {
-            let (_, source) = common::parse_fixture(include_str!(concat!("fixtures/", $file)));
+            let (config, source) = common::parse_fixture(include_str!(concat!("fixtures/", $file)));
             let result = parse_php(source);
-            assert_no_errors(&result);
+            if !config.expect_errors {
+                assert_no_errors(&result);
+            }
             insta::assert_snapshot!(to_json(&result.program));
         }
     };
     ($name:ident, $file:expr, errors) => {
         #[test]
         fn $name() {
-            let (_, source) = common::parse_fixture(include_str!(concat!("fixtures/", $file)));
+            let (config, source) = common::parse_fixture(include_str!(concat!("fixtures/", $file)));
             let result = parse_php(source);
-            assert!(
-                !result.errors.is_empty(),
-                "expected parse errors but found none"
-            );
+            if config.expect_errors {
+                assert!(
+                    !result.errors.is_empty(),
+                    "expected parse errors but found none"
+                );
+            }
             insta::assert_snapshot!(to_json(&result.program));
         }
     };

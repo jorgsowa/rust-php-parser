@@ -1,5 +1,6 @@
 ---
 source: crates/php-parser/tests/integration.rs
+assertion_line: 121
 expression: "fixture_with_errors(source, &result.errors, &result.program)"
 ---
 === source ===
@@ -10,6 +11,7 @@ try {
 catch (Exception $e) {
     bar();
 }
+
 === errors ===
 expected expression
 expected catch or finally clause, found end of file
@@ -62,12 +64,12 @@ expected catch or finally clause, found end of file
       },
       "span": {
         "start": 6,
-        "end": 59
+        "end": 60
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 59
+    "end": 60
   }
 }

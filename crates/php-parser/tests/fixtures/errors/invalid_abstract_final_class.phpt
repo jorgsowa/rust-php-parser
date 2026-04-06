@@ -1,2 +1,3 @@
 ===source===
-<?php abstract final class Foo {}===errors===
+<?php abstract final class Foo {}
+===errors===

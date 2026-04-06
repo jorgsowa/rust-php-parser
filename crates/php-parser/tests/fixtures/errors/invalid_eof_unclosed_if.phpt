@@ -1,4 +1,5 @@
 ===source===
 <?php
 if ($x > 1) {
-    echo "hello";===errors===
+    echo "hello";
+===errors===
