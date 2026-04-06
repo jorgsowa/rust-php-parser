@@ -7,7 +7,6 @@ expression: "fixture(source, &result.program)"
 $fn = strlen(...);
 $fn = $obj->method(...);
 $fn = Foo::bar(...);
-$fn = $obj?->method(...);
 
 === snapshot ===
 {
@@ -172,70 +171,10 @@ $fn = $obj?->method(...);
         "start": 50,
         "end": 71
       }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Assign": {
-              "target": {
-                "kind": {
-                  "Variable": "fn"
-                },
-                "span": {
-                  "start": 71,
-                  "end": 74
-                }
-              },
-              "op": "Assign",
-              "value": {
-                "kind": {
-                  "CallableCreate": {
-                    "kind": {
-                      "NullsafeMethod": {
-                        "object": {
-                          "kind": {
-                            "Variable": "obj"
-                          },
-                          "span": {
-                            "start": 77,
-                            "end": 81
-                          }
-                        },
-                        "method": {
-                          "kind": {
-                            "Identifier": "method"
-                          },
-                          "span": {
-                            "start": 84,
-                            "end": 90
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                "span": {
-                  "start": 77,
-                  "end": 95
-                }
-              }
-            }
-          },
-          "span": {
-            "start": 71,
-            "end": 95
-          }
-        }
-      },
-      "span": {
-        "start": 71,
-        "end": 97
-      }
     }
   ],
   "span": {
     "start": 0,
-    "end": 97
+    "end": 71
   }
 }

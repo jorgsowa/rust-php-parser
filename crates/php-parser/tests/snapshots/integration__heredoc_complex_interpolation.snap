@@ -7,7 +7,6 @@ expression: "fixture(source, &result.program)"
 $x = <<<EOT
 Hello {$obj->getName()}
 Item: {$arr[0]['key']}
-Calc: {$a + $b}
 EOT;
 
 === snapshot ===
@@ -118,65 +117,31 @@ EOT;
                             "end": 63
                           }
                         }
-                      },
-                      {
-                        "Literal": "\nCalc: "
-                      },
-                      {
-                        "Expr": {
-                          "kind": {
-                            "Binary": {
-                              "left": {
-                                "kind": {
-                                  "Variable": "a"
-                                },
-                                "span": {
-                                  "start": 72,
-                                  "end": 74
-                                }
-                              },
-                              "op": "Add",
-                              "right": {
-                                "kind": {
-                                  "Variable": "b"
-                                },
-                                "span": {
-                                  "start": 77,
-                                  "end": 79
-                                }
-                              }
-                            }
-                          },
-                          "span": {
-                            "start": 72,
-                            "end": 79
-                          }
-                        }
                       }
                     ]
                   }
                 },
                 "span": {
                   "start": 11,
-                  "end": 84
+                  "end": 68
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 84
+            "end": 68
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 86
+        "end": 70
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 86
+    "end": 70
   }
 }

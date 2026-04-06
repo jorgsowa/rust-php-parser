@@ -1,1 +1,1 @@
-<?php function foo(object&Countable $x): void {}
+<?php function foo(Iterator&Countable $x): void {}

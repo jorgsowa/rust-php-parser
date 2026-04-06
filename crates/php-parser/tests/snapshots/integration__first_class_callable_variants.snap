@@ -6,7 +6,6 @@ expression: "fixture(source, &result.program)"
 <?php
 $a = strlen(...);
 $b = $obj->method(...);
-$c = $obj?->method(...);
 $d = Foo::bar(...);
 $e = $obj->$dynamic(...);
 
@@ -129,71 +128,11 @@ $e = $obj->$dynamic(...);
             "Assign": {
               "target": {
                 "kind": {
-                  "Variable": "c"
+                  "Variable": "d"
                 },
                 "span": {
                   "start": 48,
                   "end": 50
-                }
-              },
-              "op": "Assign",
-              "value": {
-                "kind": {
-                  "CallableCreate": {
-                    "kind": {
-                      "NullsafeMethod": {
-                        "object": {
-                          "kind": {
-                            "Variable": "obj"
-                          },
-                          "span": {
-                            "start": 53,
-                            "end": 57
-                          }
-                        },
-                        "method": {
-                          "kind": {
-                            "Identifier": "method"
-                          },
-                          "span": {
-                            "start": 60,
-                            "end": 66
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                "span": {
-                  "start": 53,
-                  "end": 71
-                }
-              }
-            }
-          },
-          "span": {
-            "start": 48,
-            "end": 71
-          }
-        }
-      },
-      "span": {
-        "start": 48,
-        "end": 73
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Assign": {
-              "target": {
-                "kind": {
-                  "Variable": "d"
-                },
-                "span": {
-                  "start": 73,
-                  "end": 75
                 }
               },
               "op": "Assign",
@@ -207,8 +146,8 @@ $e = $obj->$dynamic(...);
                             "Identifier": "Foo"
                           },
                           "span": {
-                            "start": 78,
-                            "end": 81
+                            "start": 53,
+                            "end": 56
                           }
                         },
                         "method": "bar"
@@ -217,21 +156,21 @@ $e = $obj->$dynamic(...);
                   }
                 },
                 "span": {
-                  "start": 78,
-                  "end": 91
+                  "start": 53,
+                  "end": 66
                 }
               }
             }
           },
           "span": {
-            "start": 73,
-            "end": 91
+            "start": 48,
+            "end": 66
           }
         }
       },
       "span": {
-        "start": 73,
-        "end": 93
+        "start": 48,
+        "end": 68
       }
     },
     {
@@ -244,8 +183,8 @@ $e = $obj->$dynamic(...);
                   "Variable": "e"
                 },
                 "span": {
-                  "start": 93,
-                  "end": 95
+                  "start": 68,
+                  "end": 70
                 }
               },
               "op": "Assign",
@@ -259,8 +198,8 @@ $e = $obj->$dynamic(...);
                             "Variable": "obj"
                           },
                           "span": {
-                            "start": 98,
-                            "end": 102
+                            "start": 73,
+                            "end": 77
                           }
                         },
                         "method": {
@@ -268,8 +207,8 @@ $e = $obj->$dynamic(...);
                             "Variable": "dynamic"
                           },
                           "span": {
-                            "start": 104,
-                            "end": 112
+                            "start": 79,
+                            "end": 87
                           }
                         }
                       }
@@ -277,26 +216,26 @@ $e = $obj->$dynamic(...);
                   }
                 },
                 "span": {
-                  "start": 98,
-                  "end": 117
+                  "start": 73,
+                  "end": 92
                 }
               }
             }
           },
           "span": {
-            "start": 93,
-            "end": 117
+            "start": 68,
+            "end": 92
           }
         }
       },
       "span": {
-        "start": 93,
-        "end": 119
+        "start": 68,
+        "end": 94
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 119
+    "end": 94
   }
 }
