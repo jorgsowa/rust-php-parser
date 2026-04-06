@@ -1,7 +1,17 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+abstract class Base {
+    abstract protected function template(): string;
+    final public function execute(): void {
+        echo $this->template();
+    }
+}
+
+=== snapshot ===
 {
   "stmts": [
     {

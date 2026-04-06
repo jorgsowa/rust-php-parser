@@ -1,0 +1,1 @@
+<?php $y = #[Attr] static fn($a) => $a;

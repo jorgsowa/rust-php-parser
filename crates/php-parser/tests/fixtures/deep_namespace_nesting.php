@@ -1,0 +1,1 @@
+<?php namespace A\B\C\D\E\F\G { class X {} }

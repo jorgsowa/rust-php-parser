@@ -1,7 +1,36 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+abstract class Complete {
+    use SomeTrait;
+
+    public const MAX = 100;
+    protected const MIN = 0;
+
+    public string $name;
+    protected int $age = 0;
+    private static array $instances = [];
+    public readonly string $id;
+
+    public function __construct(string $name, public readonly int $score) {
+        $this->name = $name;
+    }
+
+    public static function create(): self {
+        return new self('default');
+    }
+
+    abstract protected function validate(): bool;
+
+    final public function getId(): string {
+        return $this->id;
+    }
+}
+
+=== snapshot ===
 {
   "stmts": [
     {
@@ -9,7 +38,7 @@ expression: to_json(&result.program)
         "Class": {
           "name": "Complete",
           "modifiers": {
-            "is_abstract": false,
+            "is_abstract": true,
             "is_final": false,
             "is_readonly": false
           },
@@ -26,8 +55,8 @@ expression: to_json(&result.program)
                       ],
                       "kind": "Unqualified",
                       "span": {
-                        "start": 31,
-                        "end": 40
+                        "start": 40,
+                        "end": 49
                       }
                     }
                   ],
@@ -35,8 +64,8 @@ expression: to_json(&result.program)
                 }
               },
               "span": {
-                "start": 27,
-                "end": 47
+                "start": 36,
+                "end": 56
               }
             },
             {
@@ -49,16 +78,16 @@ expression: to_json(&result.program)
                       "Int": 100
                     },
                     "span": {
-                      "start": 66,
-                      "end": 69
+                      "start": 75,
+                      "end": 78
                     }
                   },
                   "attributes": []
                 }
               },
               "span": {
-                "start": 47,
-                "end": 75
+                "start": 56,
+                "end": 84
               }
             },
             {
@@ -71,16 +100,16 @@ expression: to_json(&result.program)
                       "Int": 0
                     },
                     "span": {
-                      "start": 97,
-                      "end": 98
+                      "start": 106,
+                      "end": 107
                     }
                   },
                   "attributes": []
                 }
               },
               "span": {
-                "start": 75,
-                "end": 105
+                "start": 84,
+                "end": 114
               }
             },
             {
@@ -99,14 +128,14 @@ expression: to_json(&result.program)
                         ],
                         "kind": "Unqualified",
                         "span": {
-                          "start": 112,
-                          "end": 118
+                          "start": 121,
+                          "end": 127
                         }
                       }
                     },
                     "span": {
-                      "start": 112,
-                      "end": 118
+                      "start": 121,
+                      "end": 127
                     }
                   },
                   "default": null,
@@ -114,8 +143,8 @@ expression: to_json(&result.program)
                 }
               },
               "span": {
-                "start": 105,
-                "end": 124
+                "start": 114,
+                "end": 133
               }
             },
             {
@@ -134,14 +163,14 @@ expression: to_json(&result.program)
                         ],
                         "kind": "Unqualified",
                         "span": {
-                          "start": 140,
-                          "end": 143
+                          "start": 149,
+                          "end": 152
                         }
                       }
                     },
                     "span": {
-                      "start": 140,
-                      "end": 143
+                      "start": 149,
+                      "end": 152
                     }
                   },
                   "default": {
@@ -149,16 +178,16 @@ expression: to_json(&result.program)
                       "Int": 0
                     },
                     "span": {
-                      "start": 151,
-                      "end": 152
+                      "start": 160,
+                      "end": 161
                     }
                   },
                   "attributes": []
                 }
               },
               "span": {
-                "start": 130,
-                "end": 152
+                "start": 139,
+                "end": 161
               }
             },
             {
@@ -177,14 +206,14 @@ expression: to_json(&result.program)
                         ],
                         "kind": "Unqualified",
                         "span": {
-                          "start": 173,
-                          "end": 178
+                          "start": 182,
+                          "end": 187
                         }
                       }
                     },
                     "span": {
-                      "start": 173,
-                      "end": 178
+                      "start": 182,
+                      "end": 187
                     }
                   },
                   "default": {
@@ -192,16 +221,16 @@ expression: to_json(&result.program)
                       "Array": []
                     },
                     "span": {
-                      "start": 192,
-                      "end": 194
+                      "start": 201,
+                      "end": 203
                     }
                   },
                   "attributes": []
                 }
               },
               "span": {
-                "start": 158,
-                "end": 194
+                "start": 167,
+                "end": 203
               }
             },
             {
@@ -220,14 +249,14 @@ expression: to_json(&result.program)
                         ],
                         "kind": "Unqualified",
                         "span": {
-                          "start": 216,
-                          "end": 222
+                          "start": 225,
+                          "end": 231
                         }
                       }
                     },
                     "span": {
-                      "start": 216,
-                      "end": 222
+                      "start": 225,
+                      "end": 231
                     }
                   },
                   "default": null,
@@ -235,8 +264,8 @@ expression: to_json(&result.program)
                 }
               },
               "span": {
-                "start": 200,
-                "end": 226
+                "start": 209,
+                "end": 235
               }
             },
             {
@@ -259,14 +288,14 @@ expression: to_json(&result.program)
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 261,
-                              "end": 267
+                              "start": 270,
+                              "end": 276
                             }
                           }
                         },
                         "span": {
-                          "start": 261,
-                          "end": 267
+                          "start": 270,
+                          "end": 276
                         }
                       },
                       "default": null,
@@ -278,8 +307,8 @@ expression: to_json(&result.program)
                       "set_visibility": null,
                       "attributes": [],
                       "span": {
-                        "start": 261,
-                        "end": 273
+                        "start": 270,
+                        "end": 282
                       }
                     },
                     {
@@ -292,14 +321,14 @@ expression: to_json(&result.program)
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 291,
-                              "end": 294
+                              "start": 300,
+                              "end": 303
                             }
                           }
                         },
                         "span": {
-                          "start": 291,
-                          "end": 294
+                          "start": 300,
+                          "end": 303
                         }
                       },
                       "default": null,
@@ -311,8 +340,8 @@ expression: to_json(&result.program)
                       "set_visibility": null,
                       "attributes": [],
                       "span": {
-                        "start": 275,
-                        "end": 301
+                        "start": 284,
+                        "end": 310
                       }
                     }
                   ],
@@ -331,8 +360,8 @@ expression: to_json(&result.program)
                                         "Variable": "this"
                                       },
                                       "span": {
-                                        "start": 313,
-                                        "end": 318
+                                        "start": 322,
+                                        "end": 327
                                       }
                                     },
                                     "property": {
@@ -340,15 +369,15 @@ expression: to_json(&result.program)
                                         "Identifier": "name"
                                       },
                                       "span": {
-                                        "start": 320,
-                                        "end": 324
+                                        "start": 329,
+                                        "end": 333
                                       }
                                     }
                                   }
                                 },
                                 "span": {
-                                  "start": 313,
-                                  "end": 324
+                                  "start": 322,
+                                  "end": 333
                                 }
                               },
                               "op": "Assign",
@@ -357,21 +386,21 @@ expression: to_json(&result.program)
                                   "Variable": "name"
                                 },
                                 "span": {
-                                  "start": 327,
-                                  "end": 332
+                                  "start": 336,
+                                  "end": 341
                                 }
                               }
                             }
                           },
                           "span": {
-                            "start": 313,
-                            "end": 332
+                            "start": 322,
+                            "end": 341
                           }
                         }
                       },
                       "span": {
-                        "start": 313,
-                        "end": 338
+                        "start": 322,
+                        "end": 347
                       }
                     }
                   ],
@@ -379,8 +408,8 @@ expression: to_json(&result.program)
                 }
               },
               "span": {
-                "start": 233,
-                "end": 345
+                "start": 242,
+                "end": 354
               }
             },
             {
@@ -401,14 +430,14 @@ expression: to_json(&result.program)
                         ],
                         "kind": "Unqualified",
                         "span": {
-                          "start": 378,
-                          "end": 382
+                          "start": 387,
+                          "end": 391
                         }
                       }
                     },
                     "span": {
-                      "start": 378,
-                      "end": 382
+                      "start": 387,
+                      "end": 391
                     }
                   },
                   "body": [
@@ -422,8 +451,8 @@ expression: to_json(&result.program)
                                   "Identifier": "self"
                                 },
                                 "span": {
-                                  "start": 404,
-                                  "end": 408
+                                  "start": 413,
+                                  "end": 417
                                 }
                               },
                               "args": [
@@ -434,29 +463,29 @@ expression: to_json(&result.program)
                                       "String": "default"
                                     },
                                     "span": {
-                                      "start": 409,
-                                      "end": 418
+                                      "start": 418,
+                                      "end": 427
                                     }
                                   },
                                   "unpack": false,
                                   "by_ref": false,
                                   "span": {
-                                    "start": 409,
-                                    "end": 418
+                                    "start": 418,
+                                    "end": 427
                                   }
                                 }
                               ]
                             }
                           },
                           "span": {
-                            "start": 400,
-                            "end": 419
+                            "start": 409,
+                            "end": 428
                           }
                         }
                       },
                       "span": {
-                        "start": 393,
-                        "end": 425
+                        "start": 402,
+                        "end": 434
                       }
                     }
                   ],
@@ -464,8 +493,8 @@ expression: to_json(&result.program)
                 }
               },
               "span": {
-                "start": 345,
-                "end": 432
+                "start": 354,
+                "end": 441
               }
             },
             {
@@ -486,14 +515,14 @@ expression: to_json(&result.program)
                         ],
                         "kind": "Unqualified",
                         "span": {
-                          "start": 472,
-                          "end": 476
+                          "start": 481,
+                          "end": 485
                         }
                       }
                     },
                     "span": {
-                      "start": 472,
-                      "end": 476
+                      "start": 481,
+                      "end": 485
                     }
                   },
                   "body": null,
@@ -501,8 +530,8 @@ expression: to_json(&result.program)
                 }
               },
               "span": {
-                "start": 432,
-                "end": 483
+                "start": 441,
+                "end": 492
               }
             },
             {
@@ -523,14 +552,14 @@ expression: to_json(&result.program)
                         ],
                         "kind": "Unqualified",
                         "span": {
-                          "start": 514,
-                          "end": 520
+                          "start": 523,
+                          "end": 529
                         }
                       }
                     },
                     "span": {
-                      "start": 514,
-                      "end": 520
+                      "start": 523,
+                      "end": 529
                     }
                   },
                   "body": [
@@ -544,8 +573,8 @@ expression: to_json(&result.program)
                                   "Variable": "this"
                                 },
                                 "span": {
-                                  "start": 538,
-                                  "end": 543
+                                  "start": 547,
+                                  "end": 552
                                 }
                               },
                               "property": {
@@ -553,21 +582,21 @@ expression: to_json(&result.program)
                                   "Identifier": "id"
                                 },
                                 "span": {
-                                  "start": 545,
-                                  "end": 547
+                                  "start": 554,
+                                  "end": 556
                                 }
                               }
                             }
                           },
                           "span": {
-                            "start": 538,
-                            "end": 547
+                            "start": 547,
+                            "end": 556
                           }
                         }
                       },
                       "span": {
-                        "start": 531,
-                        "end": 553
+                        "start": 540,
+                        "end": 562
                       }
                     }
                   ],
@@ -575,8 +604,8 @@ expression: to_json(&result.program)
                 }
               },
               "span": {
-                "start": 483,
-                "end": 555
+                "start": 492,
+                "end": 564
               }
             }
           ],
@@ -584,13 +613,13 @@ expression: to_json(&result.program)
         }
       },
       "span": {
-        "start": 6,
-        "end": 556
+        "start": 15,
+        "end": 565
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 556
+    "end": 565
   }
 }

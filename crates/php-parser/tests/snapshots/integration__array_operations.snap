@@ -1,7 +1,20 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+$data = [1, 2, 3, 4, 5];
+$sum = 0;
+foreach ($data as $item) {
+    $sum = $sum + $item;
+}
+$map = ['a' => 1, 'b' => 2];
+$val = $map['a'];
+echo $sum;
+echo $val;
+
+=== snapshot ===
 {
   "stmts": [
     {

@@ -1,0 +1,1 @@
+<?php $obj->getItems()[0]->name; $a->b()['key']->c();

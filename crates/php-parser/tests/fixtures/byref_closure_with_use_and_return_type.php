@@ -1,0 +1,1 @@
+<?php $f = function &($x) use (&$ref): string { return $ref; };

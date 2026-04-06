@@ -1,0 +1,1 @@
+<?php function foo(object&Countable $x): void {}

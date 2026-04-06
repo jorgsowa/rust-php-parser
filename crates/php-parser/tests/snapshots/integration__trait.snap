@@ -1,7 +1,20 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+trait Timestampable {
+    public function getCreatedAt(): string {
+        return $this->createdAt;
+    }
+}
+class Post {
+    use Timestampable;
+    public string $title;
+}
+
+=== snapshot ===
 {
   "stmts": [
     {

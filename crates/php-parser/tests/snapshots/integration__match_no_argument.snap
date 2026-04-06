@@ -1,7 +1,16 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+$result = match (true) {
+    $x > 0 => 'positive',
+    $x < 0 => 'negative',
+    default => 'zero',
+};
+
+=== snapshot ===
 {
   "stmts": [
     {

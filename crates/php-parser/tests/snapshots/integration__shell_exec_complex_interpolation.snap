@@ -1,7 +1,14 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+$a = `ls {$dirs['home']}`;
+$b = `{$obj->getCommand()} --flag=$value`;
+$c = `echo $arr[0]`;
+
+=== snapshot ===
 {
   "stmts": [
     {

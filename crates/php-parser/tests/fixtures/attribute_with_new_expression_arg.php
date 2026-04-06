@@ -1,0 +1,1 @@
+<?php #[Attr(new Config(debug: false))] function f() {}

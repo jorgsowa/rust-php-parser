@@ -1,7 +1,18 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+try {
+    $x = riskyOperation();
+} catch (Exception $e) {
+    echo $e;
+} finally {
+    cleanup();
+}
+
+=== snapshot ===
 {
   "stmts": [
     {

@@ -1,0 +1,1 @@
+<?php isset($a, $b); empty($x);

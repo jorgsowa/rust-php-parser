@@ -1,7 +1,16 @@
 ---
 source: crates/php-parser/tests/integration.rs
-expression: to_json(&result.program)
+expression: "fixture(source, &result.program)"
 ---
+=== source ===
+<?php
+enum Status: string {
+    case Active = 'active';
+    case Inactive = 'inactive';
+    case Pending = 'pending';
+}
+
+=== snapshot ===
 {
   "stmts": [
     {
