@@ -3,7 +3,8 @@
 //! This module provides zero-cost abstractions for profiling when the `instrument` feature
 //! is enabled. When disabled, all instrumentation macros and calls compile to nothing.
 
-use std::sync::Mutex;
+#[cfg(feature = "instrument")]
+use std::sync::{Mutex, OnceLock};
 
 /// Global instrumentation statistics
 pub struct InstrumentStats {
@@ -64,34 +65,38 @@ pub struct InstrumentStats {
     pub arena_vec_empty: u64,
 }
 
-lazy_static::lazy_static! {
-    static ref STATS: Mutex<InstrumentStats> = Mutex::new(InstrumentStats {
-        parse_expr_calls: 0,
-        parse_expr_bp_recursive_calls: 0,
-        parse_array_element_calls: 0,
-        parse_array_element_with_arrow: 0,
-        parse_expr_array_first: 0,
-        parse_expr_array_second: 0,
-        parse_array_count: 0,
-        parse_array_element_count: 0,
-        parse_atom_calls: 0,
-        parse_array_simple_values: 0,
-        parse_stmt_calls: 0,
-        parse_function_calls: 0,
-        parse_class_calls: 0,
-        parse_foreach_calls: 0,
-        parse_loop_calls: 0,
-        parse_if_calls: 0,
-        parse_switch_calls: 0,
-        parse_try_calls: 0,
-        parse_attribute_calls: 0,
-        arena_vec_allocations: 0,
-        arena_vec_bytes: 0,
-        arena_alloc_calls: 0,
-        arena_vec_reallocations: 0,
-        arena_vec_wasted_capacity: 0,
-        arena_vec_empty: 0,
-    });
+#[cfg(feature = "instrument")]
+fn stats() -> &'static Mutex<InstrumentStats> {
+    static STATS: OnceLock<Mutex<InstrumentStats>> = OnceLock::new();
+    STATS.get_or_init(|| {
+        Mutex::new(InstrumentStats {
+            parse_expr_calls: 0,
+            parse_expr_bp_recursive_calls: 0,
+            parse_array_element_calls: 0,
+            parse_array_element_with_arrow: 0,
+            parse_expr_array_first: 0,
+            parse_expr_array_second: 0,
+            parse_array_count: 0,
+            parse_array_element_count: 0,
+            parse_atom_calls: 0,
+            parse_array_simple_values: 0,
+            parse_stmt_calls: 0,
+            parse_function_calls: 0,
+            parse_class_calls: 0,
+            parse_foreach_calls: 0,
+            parse_loop_calls: 0,
+            parse_if_calls: 0,
+            parse_switch_calls: 0,
+            parse_try_calls: 0,
+            parse_attribute_calls: 0,
+            arena_vec_allocations: 0,
+            arena_vec_bytes: 0,
+            arena_alloc_calls: 0,
+            arena_vec_reallocations: 0,
+            arena_vec_wasted_capacity: 0,
+            arena_vec_empty: 0,
+        })
+    })
 }
 
 /// Record a parse_expr call
@@ -99,7 +104,7 @@ lazy_static::lazy_static! {
 pub fn record_parse_expr() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_expr_calls += 1;
         }
     }
@@ -110,7 +115,7 @@ pub fn record_parse_expr() {
 pub fn record_parse_expr_bp_recursive() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_expr_bp_recursive_calls += 1;
         }
     }
@@ -121,7 +126,7 @@ pub fn record_parse_expr_bp_recursive() {
 pub fn record_parse_array() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_array_count += 1;
         }
     }
@@ -132,7 +137,7 @@ pub fn record_parse_array() {
 pub fn record_parse_array_element() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_array_element_calls += 1;
         }
     }
@@ -143,7 +148,7 @@ pub fn record_parse_array_element() {
 pub fn record_parse_expr_array_first() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_expr_array_first += 1;
         }
     }
@@ -154,7 +159,7 @@ pub fn record_parse_expr_array_first() {
 pub fn record_parse_expr_array_second() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_expr_array_second += 1;
         }
     }
@@ -165,7 +170,7 @@ pub fn record_parse_expr_array_second() {
 pub fn record_parse_array_element_with_arrow() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_array_element_with_arrow += 1;
         }
     }
@@ -176,7 +181,7 @@ pub fn record_parse_array_element_with_arrow() {
 pub fn record_parse_array_element_count(_count: usize) {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_array_element_count += _count as u64;
         }
     }
@@ -187,7 +192,7 @@ pub fn record_parse_array_element_count(_count: usize) {
 pub fn record_parse_atom() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_atom_calls += 1;
         }
     }
@@ -198,7 +203,7 @@ pub fn record_parse_atom() {
 pub fn record_parse_array_simple_value() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_array_simple_values += 1;
         }
     }
@@ -211,7 +216,7 @@ pub fn record_parse_array_simple_value() {
 pub fn record_parse_stmt() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_stmt_calls += 1;
         }
     }
@@ -222,7 +227,7 @@ pub fn record_parse_stmt() {
 pub fn record_parse_function() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_function_calls += 1;
         }
     }
@@ -233,7 +238,7 @@ pub fn record_parse_function() {
 pub fn record_parse_class() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_class_calls += 1;
         }
     }
@@ -244,7 +249,7 @@ pub fn record_parse_class() {
 pub fn record_parse_foreach() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_foreach_calls += 1;
         }
     }
@@ -255,7 +260,7 @@ pub fn record_parse_foreach() {
 pub fn record_parse_loop() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_loop_calls += 1;
         }
     }
@@ -266,7 +271,7 @@ pub fn record_parse_loop() {
 pub fn record_parse_if() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_if_calls += 1;
         }
     }
@@ -277,7 +282,7 @@ pub fn record_parse_if() {
 pub fn record_parse_switch() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_switch_calls += 1;
         }
     }
@@ -288,7 +293,7 @@ pub fn record_parse_switch() {
 pub fn record_parse_try() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_try_calls += 1;
         }
     }
@@ -299,7 +304,7 @@ pub fn record_parse_try() {
 pub fn record_parse_attribute() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_attribute_calls += 1;
         }
     }
@@ -312,7 +317,7 @@ pub fn record_parse_attribute() {
 pub fn record_arena_vec_allocation(_capacity: usize) {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.arena_vec_allocations += 1;
             stats.arena_vec_bytes += _capacity as u64;
         }
@@ -324,7 +329,7 @@ pub fn record_arena_vec_allocation(_capacity: usize) {
 pub fn record_arena_alloc() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.arena_alloc_calls += 1;
         }
     }
@@ -335,7 +340,7 @@ pub fn record_arena_alloc() {
 pub fn record_arena_vec_waste(_wasted_bytes: usize) {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.arena_vec_wasted_capacity += _wasted_bytes as u64;
         }
     }
@@ -346,7 +351,7 @@ pub fn record_arena_vec_waste(_wasted_bytes: usize) {
 pub fn record_arena_vec_empty() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.arena_vec_empty += 1;
         }
     }
@@ -356,7 +361,7 @@ pub fn record_arena_vec_empty() {
 pub fn get_stats() -> InstrumentStats {
     #[cfg(feature = "instrument")]
     {
-        STATS
+        stats()
             .lock()
             .ok()
             .map(|stats| InstrumentStats {
@@ -577,7 +582,7 @@ pub fn report_stats() {
 pub fn reset_stats() {
     #[cfg(feature = "instrument")]
     {
-        if let Ok(mut stats) = STATS.lock() {
+        if let Ok(mut stats) = stats().lock() {
             stats.parse_expr_calls = 0;
             stats.parse_expr_bp_recursive_calls = 0;
             stats.parse_array_element_calls = 0;
