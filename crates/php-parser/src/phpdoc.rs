@@ -174,43 +174,94 @@ fn parse_single_tag<'src>(line: &'src str) -> Option<PhpDocTag<'src>> {
     };
 
     let tag_lower = tag_name.to_ascii_lowercase();
+
+    // Handle psalm-*/phpstan-* prefixed tags that map to standard tags
+    let effective = tag_lower
+        .strip_prefix("psalm-")
+        .or_else(|| tag_lower.strip_prefix("phpstan-"));
+
+    // Check for tool-specific tags first, then fall through to standard tags
     match tag_lower.as_str() {
-        "param" => Some(parse_param_tag(body)),
-        "return" | "returns" => Some(parse_return_tag(body)),
-        "var" => Some(parse_var_tag(body)),
-        "throws" | "throw" => Some(parse_throws_tag(body)),
-        "deprecated" => Some(PhpDocTag::Deprecated { description: body }),
-        "template" => Some(parse_template_tag(body)),
-        "extends" => Some(PhpDocTag::Extends {
-            type_str: body.unwrap_or(""),
+        // Psalm/PHPStan-specific tags (no standard equivalent)
+        "psalm-assert"
+        | "phpstan-assert"
+        | "psalm-assert-if-true"
+        | "phpstan-assert-if-true"
+        | "psalm-assert-if-false"
+        | "phpstan-assert-if-false" => Some(parse_assert_tag(body)),
+        "psalm-type" | "phpstan-type" => Some(parse_type_alias_tag(body)),
+        "psalm-import-type" | "phpstan-import-type" => Some(PhpDocTag::ImportType {
+            body: body.unwrap_or(""),
         }),
-        "implements" => Some(PhpDocTag::Implements {
-            type_str: body.unwrap_or(""),
+        "psalm-suppress" => Some(PhpDocTag::Suppress {
+            rules: body.unwrap_or(""),
         }),
-        "method" => Some(PhpDocTag::Method {
-            signature: body.unwrap_or(""),
+        "phpstan-ignore-next-line" | "phpstan-ignore" => Some(PhpDocTag::Suppress {
+            rules: body.unwrap_or(""),
         }),
-        "property" => Some(parse_property_tag(body, PropertyKind::ReadWrite)),
-        "property-read" => Some(parse_property_tag(body, PropertyKind::Read)),
-        "property-write" => Some(parse_property_tag(body, PropertyKind::Write)),
-        "see" => Some(PhpDocTag::See {
-            reference: body.unwrap_or(""),
+        "psalm-pure" | "pure" => Some(PhpDocTag::Pure),
+        "psalm-readonly" | "readonly" => Some(PhpDocTag::Readonly),
+        "psalm-immutable" | "immutable" => Some(PhpDocTag::Immutable),
+        "mixin" => Some(PhpDocTag::Mixin {
+            class: body.unwrap_or(""),
         }),
-        "link" => Some(PhpDocTag::Link {
-            url: body.unwrap_or(""),
-        }),
-        "since" => Some(PhpDocTag::Since {
-            version: body.unwrap_or(""),
-        }),
-        "author" => Some(PhpDocTag::Author {
-            name: body.unwrap_or(""),
-        }),
-        "internal" => Some(PhpDocTag::Internal),
-        "inheritdoc" => Some(PhpDocTag::InheritDoc),
-        _ => Some(PhpDocTag::Generic {
-            tag: tag_name,
-            body,
-        }),
+        "template-covariant" => {
+            let tag = parse_template_tag(body);
+            match tag {
+                PhpDocTag::Template { name, bound } => {
+                    Some(PhpDocTag::TemplateCovariant { name, bound })
+                }
+                _ => Some(tag),
+            }
+        }
+        "template-contravariant" => {
+            let tag = parse_template_tag(body);
+            match tag {
+                PhpDocTag::Template { name, bound } => {
+                    Some(PhpDocTag::TemplateContravariant { name, bound })
+                }
+                _ => Some(tag),
+            }
+        }
+        // Standard tags (also matched via psalm-*/phpstan-* prefix)
+        _ => match effective.unwrap_or(tag_lower.as_str()) {
+            "param" => Some(parse_param_tag(body)),
+            "return" | "returns" => Some(parse_return_tag(body)),
+            "var" => Some(parse_var_tag(body)),
+            "throws" | "throw" => Some(parse_throws_tag(body)),
+            "deprecated" => Some(PhpDocTag::Deprecated { description: body }),
+            "template" => Some(parse_template_tag(body)),
+            "extends" => Some(PhpDocTag::Extends {
+                type_str: body.unwrap_or(""),
+            }),
+            "implements" => Some(PhpDocTag::Implements {
+                type_str: body.unwrap_or(""),
+            }),
+            "method" => Some(PhpDocTag::Method {
+                signature: body.unwrap_or(""),
+            }),
+            "property" => Some(parse_property_tag(body, PropertyKind::ReadWrite)),
+            "property-read" => Some(parse_property_tag(body, PropertyKind::Read)),
+            "property-write" => Some(parse_property_tag(body, PropertyKind::Write)),
+            "see" => Some(PhpDocTag::See {
+                reference: body.unwrap_or(""),
+            }),
+            "link" => Some(PhpDocTag::Link {
+                url: body.unwrap_or(""),
+            }),
+            "since" => Some(PhpDocTag::Since {
+                version: body.unwrap_or(""),
+            }),
+            "author" => Some(PhpDocTag::Author {
+                name: body.unwrap_or(""),
+            }),
+            "internal" => Some(PhpDocTag::Internal),
+            "inheritdoc" => Some(PhpDocTag::InheritDoc),
+            _ => Some(PhpDocTag::Generic {
+                tag: tag_name,
+                body,
+            }),
+        },
     }
 }
 
@@ -352,6 +403,65 @@ fn parse_template_tag<'src>(body: Option<&'src str>) -> PhpDocTag<'src> {
     PhpDocTag::Template {
         name,
         bound: bound.filter(|b| !b.is_empty()),
+    }
+}
+
+/// Parse `@psalm-assert Type $name` / `@phpstan-assert Type $name`
+fn parse_assert_tag<'src>(body: Option<&'src str>) -> PhpDocTag<'src> {
+    let Some(body) = body else {
+        return PhpDocTag::Assert {
+            type_str: None,
+            name: None,
+        };
+    };
+
+    if body.starts_with('$') {
+        return PhpDocTag::Assert {
+            type_str: None,
+            name: Some(body.split_whitespace().next().unwrap_or(body)),
+        };
+    }
+
+    let (type_str, rest) = split_type(body);
+    let name = rest.and_then(|r| {
+        let r = r.trim_start();
+        if r.starts_with('$') {
+            Some(r.split_whitespace().next().unwrap_or(r))
+        } else {
+            None
+        }
+    });
+
+    PhpDocTag::Assert {
+        type_str: Some(type_str),
+        name,
+    }
+}
+
+/// Parse `@psalm-type Name = Type` / `@phpstan-type Name = Type`
+fn parse_type_alias_tag<'src>(body: Option<&'src str>) -> PhpDocTag<'src> {
+    let Some(body) = body else {
+        return PhpDocTag::TypeAlias {
+            name: None,
+            type_str: None,
+        };
+    };
+
+    let (name, rest) = split_first_word(body);
+    let type_str = rest.and_then(|r| {
+        let r = r.trim_start();
+        // Strip optional `=`
+        let r = r.strip_prefix('=').unwrap_or(r).trim_start();
+        if r.is_empty() {
+            None
+        } else {
+            Some(r)
+        }
+    });
+
+    PhpDocTag::TypeAlias {
+        name: Some(name),
+        type_str,
     }
 }
 
@@ -554,11 +664,11 @@ mod tests {
 
     #[test]
     fn unknown_tag() {
-        let doc = parse("/** @psalm-assert int $x */");
+        let doc = parse("/** @custom-tag some body */");
         match &doc.tags[0] {
             PhpDocTag::Generic { tag, body } => {
-                assert_eq!(*tag, "psalm-assert");
-                assert_eq!(*body, Some("int $x"));
+                assert_eq!(*tag, "custom-tag");
+                assert_eq!(*body, Some("some body"));
             }
             _ => panic!("expected Generic tag"),
         }
@@ -698,5 +808,189 @@ mod tests {
             }
             _ => panic!("expected Return tag"),
         }
+    }
+
+    // =========================================================================
+    // Psalm / PHPStan annotations
+    // =========================================================================
+
+    #[test]
+    fn psalm_param() {
+        let doc = parse("/** @psalm-param array<string, int> $map */");
+        match &doc.tags[0] {
+            PhpDocTag::Param { type_str, name, .. } => {
+                assert_eq!(*type_str, Some("array<string, int>"));
+                assert_eq!(*name, Some("$map"));
+            }
+            _ => panic!("expected Param tag, got {:?}", doc.tags[0]),
+        }
+    }
+
+    #[test]
+    fn phpstan_return() {
+        let doc = parse("/** @phpstan-return list<non-empty-string> */");
+        match &doc.tags[0] {
+            PhpDocTag::Return { type_str, .. } => {
+                assert_eq!(*type_str, Some("list<non-empty-string>"));
+            }
+            _ => panic!("expected Return tag, got {:?}", doc.tags[0]),
+        }
+    }
+
+    #[test]
+    fn psalm_assert() {
+        let doc = parse("/** @psalm-assert int $x */");
+        match &doc.tags[0] {
+            PhpDocTag::Assert { type_str, name } => {
+                assert_eq!(*type_str, Some("int"));
+                assert_eq!(*name, Some("$x"));
+            }
+            _ => panic!("expected Assert tag, got {:?}", doc.tags[0]),
+        }
+    }
+
+    #[test]
+    fn phpstan_assert() {
+        let doc = parse("/** @phpstan-assert non-empty-string $value */");
+        match &doc.tags[0] {
+            PhpDocTag::Assert { type_str, name } => {
+                assert_eq!(*type_str, Some("non-empty-string"));
+                assert_eq!(*name, Some("$value"));
+            }
+            _ => panic!("expected Assert tag, got {:?}", doc.tags[0]),
+        }
+    }
+
+    #[test]
+    fn psalm_type_alias() {
+        let doc = parse("/** @psalm-type UserId = positive-int */");
+        match &doc.tags[0] {
+            PhpDocTag::TypeAlias { name, type_str } => {
+                assert_eq!(*name, Some("UserId"));
+                assert_eq!(*type_str, Some("positive-int"));
+            }
+            _ => panic!("expected TypeAlias tag, got {:?}", doc.tags[0]),
+        }
+    }
+
+    #[test]
+    fn phpstan_type_alias() {
+        let doc = parse("/** @phpstan-type Callback = callable(int): void */");
+        match &doc.tags[0] {
+            PhpDocTag::TypeAlias { name, type_str } => {
+                assert_eq!(*name, Some("Callback"));
+                assert_eq!(*type_str, Some("callable(int): void"));
+            }
+            _ => panic!("expected TypeAlias tag, got {:?}", doc.tags[0]),
+        }
+    }
+
+    #[test]
+    fn psalm_suppress() {
+        let doc = parse("/** @psalm-suppress InvalidReturnType */");
+        match &doc.tags[0] {
+            PhpDocTag::Suppress { rules } => {
+                assert_eq!(*rules, "InvalidReturnType");
+            }
+            _ => panic!("expected Suppress tag, got {:?}", doc.tags[0]),
+        }
+    }
+
+    #[test]
+    fn phpstan_ignore() {
+        let doc = parse("/** @phpstan-ignore-next-line */");
+        assert!(matches!(&doc.tags[0], PhpDocTag::Suppress { .. }));
+    }
+
+    #[test]
+    fn psalm_pure() {
+        let doc = parse("/** @psalm-pure */");
+        assert!(matches!(&doc.tags[0], PhpDocTag::Pure));
+    }
+
+    #[test]
+    fn psalm_immutable() {
+        let doc = parse("/** @psalm-immutable */");
+        assert!(matches!(&doc.tags[0], PhpDocTag::Immutable));
+    }
+
+    #[test]
+    fn mixin_tag() {
+        let doc = parse("/** @mixin \\App\\Helpers\\Foo */");
+        match &doc.tags[0] {
+            PhpDocTag::Mixin { class } => {
+                assert_eq!(*class, "\\App\\Helpers\\Foo");
+            }
+            _ => panic!("expected Mixin tag, got {:?}", doc.tags[0]),
+        }
+    }
+
+    #[test]
+    fn template_covariant() {
+        let doc = parse("/** @template-covariant T of object */");
+        match &doc.tags[0] {
+            PhpDocTag::TemplateCovariant { name, bound } => {
+                assert_eq!(*name, "T");
+                assert_eq!(*bound, Some("object"));
+            }
+            _ => panic!("expected TemplateCovariant tag, got {:?}", doc.tags[0]),
+        }
+    }
+
+    #[test]
+    fn template_contravariant() {
+        let doc = parse("/** @template-contravariant T */");
+        match &doc.tags[0] {
+            PhpDocTag::TemplateContravariant { name, bound } => {
+                assert_eq!(*name, "T");
+                assert_eq!(*bound, None);
+            }
+            _ => panic!("expected TemplateContravariant tag, got {:?}", doc.tags[0]),
+        }
+    }
+
+    #[test]
+    fn psalm_import_type() {
+        let doc = parse("/** @psalm-import-type UserId from UserRepository */");
+        match &doc.tags[0] {
+            PhpDocTag::ImportType { body } => {
+                assert_eq!(*body, "UserId from UserRepository");
+            }
+            _ => panic!("expected ImportType tag, got {:?}", doc.tags[0]),
+        }
+    }
+
+    #[test]
+    fn phpstan_var() {
+        let doc = parse("/** @phpstan-var positive-int $count */");
+        match &doc.tags[0] {
+            PhpDocTag::Var { type_str, name, .. } => {
+                assert_eq!(*type_str, Some("positive-int"));
+                assert_eq!(*name, Some("$count"));
+            }
+            _ => panic!("expected Var tag, got {:?}", doc.tags[0]),
+        }
+    }
+
+    #[test]
+    fn mixed_standard_and_psalm_tags() {
+        let doc = parse(
+            "/**
+             * Create a user.
+             *
+             * @param string $name
+             * @psalm-param non-empty-string $name
+             * @return User
+             * @psalm-assert-if-true User $result
+             * @throws \\InvalidArgumentException
+             */",
+        );
+        assert_eq!(doc.summary, Some("Create a user."));
+        assert_eq!(doc.tags.len(), 5);
+        assert!(matches!(&doc.tags[0], PhpDocTag::Param { .. }));
+        assert!(matches!(&doc.tags[1], PhpDocTag::Param { .. }));
+        assert!(matches!(&doc.tags[2], PhpDocTag::Return { .. }));
+        assert!(matches!(&doc.tags[3], PhpDocTag::Assert { .. }));
+        assert!(matches!(&doc.tags[4], PhpDocTag::Throws { .. }));
     }
 }

@@ -179,6 +179,38 @@ pub enum PhpDocTag<'src> {
     Internal,
     /// `@inheritdoc` / `{@inheritdoc}`
     InheritDoc,
+    /// `@psalm-assert`, `@phpstan-assert` — assert that a parameter has a type after the call.
+    Assert {
+        type_str: Option<&'src str>,
+        name: Option<&'src str>,
+    },
+    /// `@psalm-type`, `@phpstan-type` — local type alias (`@type Foo = int|string`).
+    TypeAlias {
+        name: Option<&'src str>,
+        type_str: Option<&'src str>,
+    },
+    /// `@psalm-import-type`, `@phpstan-import-type` — import a type alias from another class.
+    ImportType { body: &'src str },
+    /// `@psalm-suppress`, `@phpstan-ignore-next-line`, `@phpstan-ignore` — suppress diagnostics.
+    Suppress { rules: &'src str },
+    /// `@psalm-pure`, `@psalm-immutable`, `@psalm-readonly` — purity/immutability markers.
+    Pure,
+    /// `@psalm-readonly`, `@readonly` — marks a property as read-only.
+    Readonly,
+    /// `@psalm-immutable` — marks a class as immutable.
+    Immutable,
+    /// `@mixin [class]` — indicates the class delegates calls to another.
+    Mixin { class: &'src str },
+    /// `@template-covariant T [of bound]`
+    TemplateCovariant {
+        name: &'src str,
+        bound: Option<&'src str>,
+    },
+    /// `@template-contravariant T [of bound]`
+    TemplateContravariant {
+        name: &'src str,
+        bound: Option<&'src str>,
+    },
     /// Any tag not specifically recognized: `@tagname [body]`
     Generic {
         tag: &'src str,

@@ -519,3 +519,136 @@ fn test_int_no_overflow_stays_int() {
         "PHP_INT_MAX must stay as Int; got:\n{json}"
     );
 }
+
+// =============================================================================
+// PHPDoc integration tests
+// =============================================================================
+
+#[test]
+fn phpdoc_comments_parsed_from_full_source() {
+    let result = parse_php(
+        "<?php
+/**
+ * Create a new user.
+ *
+ * @param string $name The user's name
+ * @param int $age
+ * @return User
+ * @throws \\InvalidArgumentException
+ */
+function createUser(string $name, int $age): User {}
+",
+    );
+    assert_no_errors(&result);
+
+    let doc_comments: Vec<_> = result
+        .comments
+        .iter()
+        .filter(|c| c.kind == php_ast::CommentKind::Doc)
+        .collect();
+    assert_eq!(doc_comments.len(), 1);
+
+    let doc = php_rs_parser::phpdoc::parse(doc_comments[0].text);
+    assert_eq!(doc.summary, Some("Create a new user."));
+    assert_eq!(doc.tags.len(), 4);
+    assert!(matches!(
+        &doc.tags[0],
+        php_ast::PhpDocTag::Param {
+            type_str: Some("string"),
+            name: Some("$name"),
+            ..
+        }
+    ));
+    assert!(matches!(
+        &doc.tags[1],
+        php_ast::PhpDocTag::Param {
+            type_str: Some("int"),
+            name: Some("$age"),
+            ..
+        }
+    ));
+    assert!(matches!(
+        &doc.tags[2],
+        php_ast::PhpDocTag::Return {
+            type_str: Some("User"),
+            ..
+        }
+    ));
+    assert!(matches!(
+        &doc.tags[3],
+        php_ast::PhpDocTag::Throws {
+            type_str: Some("\\InvalidArgumentException"),
+            ..
+        }
+    ));
+}
+
+#[test]
+fn phpdoc_psalm_phpstan_integration() {
+    let result = parse_php(
+        "<?php
+/**
+ * @psalm-type UserId = positive-int
+ */
+class UserRepository {
+    /**
+     * @psalm-param non-empty-string $name
+     * @phpstan-return list<User>
+     * @psalm-assert-if-true User $result
+     * @psalm-suppress InvalidReturnType
+     */
+    public function find(string $name): array {}
+}
+",
+    );
+    assert_no_errors(&result);
+
+    let doc_comments: Vec<_> = result
+        .comments
+        .iter()
+        .filter(|c| c.kind == php_ast::CommentKind::Doc)
+        .collect();
+    assert_eq!(doc_comments.len(), 2);
+
+    // Class-level doc
+    let class_doc = php_rs_parser::phpdoc::parse(doc_comments[0].text);
+    assert_eq!(class_doc.tags.len(), 1);
+    assert!(matches!(
+        &class_doc.tags[0],
+        php_ast::PhpDocTag::TypeAlias {
+            name: Some("UserId"),
+            type_str: Some("positive-int")
+        }
+    ));
+
+    // Method-level doc
+    let method_doc = php_rs_parser::phpdoc::parse(doc_comments[1].text);
+    assert_eq!(method_doc.tags.len(), 4);
+    assert!(matches!(
+        &method_doc.tags[0],
+        php_ast::PhpDocTag::Param {
+            type_str: Some("non-empty-string"),
+            ..
+        }
+    ));
+    assert!(matches!(
+        &method_doc.tags[1],
+        php_ast::PhpDocTag::Return {
+            type_str: Some("list<User>"),
+            ..
+        }
+    ));
+    assert!(matches!(
+        &method_doc.tags[2],
+        php_ast::PhpDocTag::Assert {
+            type_str: Some("User"),
+            name: Some("$result")
+        }
+    ));
+    assert!(matches!(
+        &method_doc.tags[3],
+        php_ast::PhpDocTag::Suppress {
+            rules: "InvalidReturnType"
+        }
+    ));
+}
