@@ -4,3 +4,90 @@
 expected '::' or 'as', found identifier
 expected identifier, found ';'
 expected '::' or 'as', found ';'
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Trait": {
+          "name": "A",
+          "members": [
+            {
+              "kind": {
+                "Method": {
+                  "name": "m",
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": null,
+                  "body": [],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 16,
+                "end": 39
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 40
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": "C",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "TraitUse": {
+                  "traits": [
+                    {
+                      "parts": [
+                        "A"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 55,
+                        "end": 57
+                      }
+                    }
+                  ],
+                  "adaptations": []
+                }
+              },
+              "span": {
+                "start": 51,
+                "end": 72
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 41,
+        "end": 73
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 73
+  }
+}

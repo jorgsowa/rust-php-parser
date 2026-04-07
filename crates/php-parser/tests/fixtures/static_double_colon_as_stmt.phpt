@@ -3,3 +3,97 @@
 static::$prop;
 static::method();
 static::class;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "StaticPropertyAccess": {
+              "class": {
+                "kind": {
+                  "Identifier": "static"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 12
+                }
+              },
+              "member": "prop"
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 19
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 21
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "StaticMethodCall": {
+              "class": {
+                "kind": {
+                  "Identifier": "static"
+                },
+                "span": {
+                  "start": 21,
+                  "end": 27
+                }
+              },
+              "method": "method",
+              "args": []
+            }
+          },
+          "span": {
+            "start": 21,
+            "end": 37
+          }
+        }
+      },
+      "span": {
+        "start": 21,
+        "end": 39
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ClassConstAccess": {
+              "class": {
+                "kind": {
+                  "Identifier": "static"
+                },
+                "span": {
+                  "start": 39,
+                  "end": 45
+                }
+              },
+              "member": "class"
+            }
+          },
+          "span": {
+            "start": 39,
+            "end": 52
+          }
+        }
+      },
+      "span": {
+        "start": 39,
+        "end": 53
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 53
+  }
+}

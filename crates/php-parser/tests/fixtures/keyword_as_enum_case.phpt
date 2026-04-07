@@ -1,2 +1,66 @@
 ===source===
 <?php enum Suit { case for; case function; case match; }
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Enum": {
+          "name": "Suit",
+          "scalar_type": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Case": {
+                  "name": "for",
+                  "value": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 18,
+                "end": 28
+              }
+            },
+            {
+              "kind": {
+                "Case": {
+                  "name": "function",
+                  "value": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 28,
+                "end": 43
+              }
+            },
+            {
+              "kind": {
+                "Case": {
+                  "name": "match",
+                  "value": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 43,
+                "end": 55
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 56
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 56
+  }
+}

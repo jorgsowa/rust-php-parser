@@ -1,2 +1,134 @@
 ===source===
 <?php $f = fn(int $x): int => $x * 2;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "f"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "ArrowFunction": {
+                    "is_static": false,
+                    "by_ref": false,
+                    "params": [
+                      {
+                        "name": "x",
+                        "type_hint": {
+                          "kind": {
+                            "Named": {
+                              "parts": [
+                                "int"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 14,
+                                "end": 17
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 14,
+                            "end": 17
+                          }
+                        },
+                        "default": null,
+                        "by_ref": false,
+                        "variadic": false,
+                        "is_readonly": false,
+                        "is_final": false,
+                        "visibility": null,
+                        "set_visibility": null,
+                        "attributes": [],
+                        "span": {
+                          "start": 14,
+                          "end": 20
+                        }
+                      }
+                    ],
+                    "return_type": {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "int"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 23,
+                            "end": 26
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 23,
+                        "end": 26
+                      }
+                    },
+                    "body": {
+                      "kind": {
+                        "Binary": {
+                          "left": {
+                            "kind": {
+                              "Variable": "x"
+                            },
+                            "span": {
+                              "start": 30,
+                              "end": 32
+                            }
+                          },
+                          "op": "Mul",
+                          "right": {
+                            "kind": {
+                              "Int": 2
+                            },
+                            "span": {
+                              "start": 35,
+                              "end": 36
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 30,
+                        "end": 36
+                      }
+                    },
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 36
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 36
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 37
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 37
+  }
+}

@@ -4,3 +4,122 @@ $x = <<<END
     Hello {$obj->name}!
     $arr[0] items
     END;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Heredoc": {
+                    "label": "END",
+                    "parts": [
+                      {
+                        "Literal": "Hello "
+                      },
+                      {
+                        "Expr": {
+                          "kind": {
+                            "PropertyAccess": {
+                              "object": {
+                                "kind": {
+                                  "Variable": "obj"
+                                },
+                                "span": {
+                                  "start": 29,
+                                  "end": 33
+                                }
+                              },
+                              "property": {
+                                "kind": {
+                                  "Identifier": "name"
+                                },
+                                "span": {
+                                  "start": 35,
+                                  "end": 39
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 29,
+                            "end": 39
+                          }
+                        }
+                      },
+                      {
+                        "Literal": "!\n"
+                      },
+                      {
+                        "Expr": {
+                          "kind": {
+                            "ArrayAccess": {
+                              "array": {
+                                "kind": {
+                                  "Variable": "arr"
+                                },
+                                "span": {
+                                  "start": 46,
+                                  "end": 50
+                                }
+                              },
+                              "index": {
+                                "kind": {
+                                  "Int": 0
+                                },
+                                "span": {
+                                  "start": 51,
+                                  "end": 52
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 46,
+                            "end": 53
+                          }
+                        }
+                      },
+                      {
+                        "Literal": " items"
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 67
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 67
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 68
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 68
+  }
+}

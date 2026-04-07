@@ -3,3 +3,193 @@
 function process(?string $name, ?int $count, ?array $items): ?bool {
     return null;
 }
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "process",
+          "params": [
+            {
+              "name": "name",
+              "type_hint": {
+                "kind": {
+                  "Nullable": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "string"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 24,
+                          "end": 30
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 24,
+                      "end": 30
+                    }
+                  }
+                },
+                "span": {
+                  "start": 23,
+                  "end": 30
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "is_readonly": false,
+              "is_final": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 23,
+                "end": 36
+              }
+            },
+            {
+              "name": "count",
+              "type_hint": {
+                "kind": {
+                  "Nullable": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "int"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 39,
+                          "end": 42
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 39,
+                      "end": 42
+                    }
+                  }
+                },
+                "span": {
+                  "start": 38,
+                  "end": 42
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "is_readonly": false,
+              "is_final": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 38,
+                "end": 49
+              }
+            },
+            {
+              "name": "items",
+              "type_hint": {
+                "kind": {
+                  "Nullable": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "array"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 52,
+                          "end": 57
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 52,
+                      "end": 57
+                    }
+                  }
+                },
+                "span": {
+                  "start": 51,
+                  "end": 57
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "is_readonly": false,
+              "is_final": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 51,
+                "end": 64
+              }
+            }
+          ],
+          "body": [
+            {
+              "kind": {
+                "Return": {
+                  "kind": "Null",
+                  "span": {
+                    "start": 86,
+                    "end": 90
+                  }
+                }
+              },
+              "span": {
+                "start": 79,
+                "end": 92
+              }
+            }
+          ],
+          "return_type": {
+            "kind": {
+              "Nullable": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "bool"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 68,
+                      "end": 72
+                    }
+                  }
+                },
+                "span": {
+                  "start": 68,
+                  "end": 72
+                }
+              }
+            },
+            "span": {
+              "start": 67,
+              "end": 72
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 93
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 93
+  }
+}

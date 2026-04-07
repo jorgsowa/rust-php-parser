@@ -6,3 +6,120 @@ final readonly class Coordinate {
         public float $lng,
     ) {}
 }
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "Coordinate",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": true,
+            "is_readonly": true
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Method": {
+                  "name": "__construct",
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [
+                    {
+                      "name": "lat",
+                      "type_hint": {
+                        "kind": {
+                          "Named": {
+                            "parts": [
+                              "float"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 88,
+                              "end": 93
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 88,
+                          "end": 93
+                        }
+                      },
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
+                      "visibility": "Public",
+                      "set_visibility": null,
+                      "attributes": [],
+                      "span": {
+                        "start": 81,
+                        "end": 98
+                      }
+                    },
+                    {
+                      "name": "lng",
+                      "type_hint": {
+                        "kind": {
+                          "Named": {
+                            "parts": [
+                              "float"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 115,
+                              "end": 120
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 115,
+                          "end": 120
+                        }
+                      },
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
+                      "visibility": "Public",
+                      "set_visibility": null,
+                      "attributes": [],
+                      "span": {
+                        "start": 108,
+                        "end": 125
+                      }
+                    }
+                  ],
+                  "return_type": null,
+                  "body": [],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 44,
+                "end": 136
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 21,
+        "end": 137
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 137
+  }
+}

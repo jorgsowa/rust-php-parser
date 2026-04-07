@@ -4,3 +4,68 @@
 var_dump(__HALT_COMPILER_OFFSET__);
 __halt_compiler();
 Foo
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "var_dump"
+                },
+                "span": {
+                  "start": 7,
+                  "end": 15
+                }
+              },
+              "args": [
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Identifier": "__HALT_COMPILER_OFFSET__"
+                    },
+                    "span": {
+                      "start": 16,
+                      "end": 40
+                    }
+                  },
+                  "unpack": false,
+                  "by_ref": false,
+                  "span": {
+                    "start": 16,
+                    "end": 40
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 7,
+            "end": 41
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 43
+      }
+    },
+    {
+      "kind": {
+        "HaltCompiler": "Foo"
+      },
+      "span": {
+        "start": 43,
+        "end": 65
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 65
+  }
+}

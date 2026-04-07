@@ -5,3 +5,76 @@ min_php=8.4
 interface HasName {
     public string $name { get; }
 }
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Interface": {
+          "name": "HasName",
+          "extends": [],
+          "members": [
+            {
+              "kind": {
+                "Property": {
+                  "name": "name",
+                  "visibility": "Public",
+                  "set_visibility": null,
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "string"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 37,
+                          "end": 43
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 37,
+                      "end": 43
+                    }
+                  },
+                  "default": null,
+                  "attributes": [],
+                  "hooks": [
+                    {
+                      "kind": "Get",
+                      "body": "Abstract",
+                      "is_final": false,
+                      "by_ref": false,
+                      "params": [],
+                      "attributes": [],
+                      "span": {
+                        "start": 52,
+                        "end": 57
+                      }
+                    }
+                  ]
+                }
+              },
+              "span": {
+                "start": 30,
+                "end": 59
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 60
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 60
+  }
+}

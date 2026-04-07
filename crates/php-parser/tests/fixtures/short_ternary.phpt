@@ -1,2 +1,48 @@
 ===source===
 <?php $x ?: 'default';
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Ternary": {
+              "condition": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "then_expr": null,
+              "else_expr": {
+                "kind": {
+                  "String": "default"
+                },
+                "span": {
+                  "start": 12,
+                  "end": 21
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 21
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 22
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 22
+  }
+}

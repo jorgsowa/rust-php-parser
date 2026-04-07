@@ -3,3 +3,67 @@
 ===errors===
 expected ';' after expression
 expected class name, found '{'
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "New": {
+              "class": {
+                "kind": {
+                  "Identifier": "readonly"
+                },
+                "span": {
+                  "start": 10,
+                  "end": 19
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 19
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 19
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": "<error>",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": true
+          },
+          "extends": null,
+          "implements": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 28,
+        "end": 36
+      }
+    },
+    {
+      "kind": "Nop",
+      "span": {
+        "start": 36,
+        "end": 37
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 37
+  }
+}

@@ -1,2 +1,48 @@
 ===source===
 <?php echo 1, 2, 3;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Echo": [
+          {
+            "kind": {
+              "Int": 1
+            },
+            "span": {
+              "start": 11,
+              "end": 12
+            }
+          },
+          {
+            "kind": {
+              "Int": 2
+            },
+            "span": {
+              "start": 14,
+              "end": 15
+            }
+          },
+          {
+            "kind": {
+              "Int": 3
+            },
+            "span": {
+              "start": 17,
+              "end": 18
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 6,
+        "end": 19
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 19
+  }
+}

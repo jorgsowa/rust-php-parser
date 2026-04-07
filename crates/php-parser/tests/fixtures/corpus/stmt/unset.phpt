@@ -3,3 +3,59 @@
 
 unset($a);
 unset($b, $c);
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Unset": [
+          {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 13,
+              "end": 15
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 7,
+        "end": 18
+      }
+    },
+    {
+      "kind": {
+        "Unset": [
+          {
+            "kind": {
+              "Variable": "b"
+            },
+            "span": {
+              "start": 24,
+              "end": 26
+            }
+          },
+          {
+            "kind": {
+              "Variable": "c"
+            },
+            "span": {
+              "start": 28,
+              "end": 30
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 18,
+        "end": 32
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 32
+  }
+}

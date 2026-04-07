@@ -1,5 +1,5 @@
 mod common;
-use common::{assert_no_errors, fixture, fixture_with_errors, to_json};
+use common::{assert_no_errors, to_json};
 
 fn parse_php(source: &'static str) -> php_rs_parser::ParseResult<'static, 'static> {
     // Leak arena and source for test simplicity — process exits after test run anyway
@@ -75,11 +75,12 @@ fn fixtures() {
         .collect();
     paths.sort();
 
+    let update = std::env::var("UPDATE_FIXTURES").is_ok();
     for path in paths {
         let name = path.file_stem().unwrap().to_str().unwrap().to_string();
         let content: &'static str =
             Box::leak(std::fs::read_to_string(&path).unwrap().into_boxed_str());
-        let (_, source) = common::parse_fixture(content);
+        let (config, source) = common::parse_fixture(content);
         let arena: &'static bumpalo::Bump = Box::leak(Box::new(bumpalo::Bump::new()));
         let result = php_rs_parser::parse(arena, source);
         assert!(
@@ -87,7 +88,15 @@ fn fixtures() {
             "unexpected parse errors in {name}: {:?}",
             result.errors
         );
-        insta::assert_snapshot!(name, fixture(source, &result.program));
+        let actual = to_json(&result.program);
+        if update {
+            common::update_fixture_ast(path.to_str().unwrap(), &actual);
+        } else {
+            let expected = config
+                .expected_ast
+                .unwrap_or_else(|| panic!("missing ===ast=== section in {name}"));
+            assert_eq!(actual, expected, "AST mismatch in {name}");
+        }
     }
 }
 
@@ -105,6 +114,7 @@ fn error_fixtures() {
         .collect();
     paths.sort();
 
+    let update = std::env::var("UPDATE_FIXTURES").is_ok();
     for path in paths {
         let name = path.file_stem().unwrap().to_str().unwrap().to_string();
         let content: &'static str =
@@ -118,10 +128,27 @@ fn error_fixtures() {
                 "expected parse errors in {name} but got none"
             );
         }
-        insta::assert_snapshot!(
-            name,
-            fixture_with_errors(source, &result.errors, &result.program)
-        );
+        if let Some(expected_errors) = &config.expected_errors {
+            let actual_errors = result
+                .errors
+                .iter()
+                .map(|e| e.to_string())
+                .collect::<Vec<_>>()
+                .join("\n");
+            assert_eq!(
+                actual_errors, *expected_errors,
+                "error messages mismatch in {name}"
+            );
+        }
+        let actual = to_json(&result.program);
+        if update {
+            common::update_fixture_ast(path.to_str().unwrap(), &actual);
+        } else {
+            let expected = config
+                .expected_ast
+                .unwrap_or_else(|| panic!("missing ===ast=== section in {name}"));
+            assert_eq!(actual, expected, "AST mismatch in {name}");
+        }
     }
 }
 
@@ -131,14 +158,26 @@ fn error_fixtures() {
 
 #[test]
 fn test_error_recovery_partial_parse() {
-    let (_, source) = common::parse_fixture(include_str!("fixtures/error_recovery.phpt"));
+    let path = concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/tests/fixtures/error_recovery.phpt"
+    );
+    let (config, source) = common::parse_fixture(include_str!("fixtures/error_recovery.phpt"));
     let result = parse_php(source);
     assert!(!result.errors.is_empty(), "Expected parse errors");
     assert!(
         !result.program.stmts.is_empty(),
         "Expected partial AST even with errors"
     );
-    insta::assert_snapshot!(fixture(source, &result.program));
+    let actual = to_json(&result.program);
+    if std::env::var("UPDATE_FIXTURES").is_ok() {
+        common::update_fixture_ast(path, &actual);
+    } else {
+        let expected = config
+            .expected_ast
+            .unwrap_or_else(|| panic!("missing ===ast=== section in error_recovery.phpt"));
+        assert_eq!(actual, expected, "AST mismatch in error_recovery.phpt");
+    }
 }
 
 // =============================================================================
@@ -161,7 +200,7 @@ fn test_trailing_dot_float_literals() {
         json.contains("\"Float\""),
         "trailing-dot literals must produce Float nodes; got:\n{json}"
     );
-    insta::assert_snapshot!(fixture(source, &result.program));
+    // AST regression covered by fixtures() test
 }
 
 #[test]
@@ -184,7 +223,7 @@ fn test_legacy_octal_invalid_digits() {
         json.contains("\"Int\": 0"),
         "09 must parse as Int(0); got:\n{json}"
     );
-    insta::assert_snapshot!(fixture(source, &result.program));
+    // AST regression covered by fixtures() test
 }
 
 // =============================================================================

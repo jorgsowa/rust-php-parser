@@ -7,3 +7,182 @@ try {
 } catch (RuntimeException) {
     handleRuntime();
 }
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "TryCatch": {
+          "body": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "FunctionCall": {
+                      "name": {
+                        "kind": {
+                          "Identifier": "process"
+                        },
+                        "span": {
+                          "start": 16,
+                          "end": 23
+                        }
+                      },
+                      "args": []
+                    }
+                  },
+                  "span": {
+                    "start": 16,
+                    "end": 25
+                  }
+                }
+              },
+              "span": {
+                "start": 16,
+                "end": 27
+              }
+            }
+          ],
+          "catches": [
+            {
+              "types": [
+                {
+                  "parts": [
+                    "TypeError"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 36,
+                    "end": 45
+                  }
+                },
+                {
+                  "parts": [
+                    "ValueError"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 46,
+                    "end": 57
+                  }
+                }
+              ],
+              "var": "e",
+              "body": [
+                {
+                  "kind": {
+                    "Expression": {
+                      "kind": {
+                        "FunctionCall": {
+                          "name": {
+                            "kind": {
+                              "Identifier": "handleTypeError"
+                            },
+                            "span": {
+                              "start": 67,
+                              "end": 82
+                            }
+                          },
+                          "args": [
+                            {
+                              "name": null,
+                              "value": {
+                                "kind": {
+                                  "Variable": "e"
+                                },
+                                "span": {
+                                  "start": 83,
+                                  "end": 85
+                                }
+                              },
+                              "unpack": false,
+                              "by_ref": false,
+                              "span": {
+                                "start": 83,
+                                "end": 85
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "span": {
+                        "start": 67,
+                        "end": 86
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 67,
+                    "end": 88
+                  }
+                }
+              ],
+              "span": {
+                "start": 35,
+                "end": 90
+              }
+            },
+            {
+              "types": [
+                {
+                  "parts": [
+                    "RuntimeException"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 97,
+                    "end": 113
+                  }
+                }
+              ],
+              "var": null,
+              "body": [
+                {
+                  "kind": {
+                    "Expression": {
+                      "kind": {
+                        "FunctionCall": {
+                          "name": {
+                            "kind": {
+                              "Identifier": "handleRuntime"
+                            },
+                            "span": {
+                              "start": 121,
+                              "end": 134
+                            }
+                          },
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 121,
+                        "end": 136
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 121,
+                    "end": 138
+                  }
+                }
+              ],
+              "span": {
+                "start": 96,
+                "end": 139
+              }
+            }
+          ],
+          "finally": null
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 139
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 139
+  }
+}

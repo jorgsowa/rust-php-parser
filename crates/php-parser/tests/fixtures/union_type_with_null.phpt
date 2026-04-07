@@ -1,2 +1,170 @@
 ===source===
 <?php function foo(int|string|null $x): string|false { return ''; }
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "foo",
+          "params": [
+            {
+              "name": "x",
+              "type_hint": {
+                "kind": {
+                  "Union": [
+                    {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "int"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 19,
+                            "end": 22
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 19,
+                        "end": 22
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "string"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 23,
+                            "end": 29
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 23,
+                        "end": 29
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "null"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 30,
+                            "end": 34
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 30,
+                        "end": 34
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 19,
+                  "end": 34
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "is_readonly": false,
+              "is_final": false,
+              "visibility": null,
+              "set_visibility": null,
+              "attributes": [],
+              "span": {
+                "start": 19,
+                "end": 37
+              }
+            }
+          ],
+          "body": [
+            {
+              "kind": {
+                "Return": {
+                  "kind": {
+                    "String": ""
+                  },
+                  "span": {
+                    "start": 62,
+                    "end": 64
+                  }
+                }
+              },
+              "span": {
+                "start": 55,
+                "end": 66
+              }
+            }
+          ],
+          "return_type": {
+            "kind": {
+              "Union": [
+                {
+                  "kind": {
+                    "Named": {
+                      "parts": [
+                        "string"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 40,
+                        "end": 46
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 40,
+                    "end": 46
+                  }
+                },
+                {
+                  "kind": {
+                    "Named": {
+                      "parts": [
+                        "false"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 47,
+                        "end": 52
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 47,
+                    "end": 52
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 40,
+              "end": 52
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 67
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 67
+  }
+}

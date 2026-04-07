@@ -1,2 +1,76 @@
 ===source===
 <?php $x = match (true) { default => 'always' };
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Match": {
+                    "subject": {
+                      "kind": {
+                        "Bool": true
+                      },
+                      "span": {
+                        "start": 18,
+                        "end": 22
+                      }
+                    },
+                    "arms": [
+                      {
+                        "conditions": null,
+                        "body": {
+                          "kind": {
+                            "String": "always"
+                          },
+                          "span": {
+                            "start": 37,
+                            "end": 45
+                          }
+                        },
+                        "span": {
+                          "start": 26,
+                          "end": 45
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 47
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 47
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 48
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 48
+  }
+}

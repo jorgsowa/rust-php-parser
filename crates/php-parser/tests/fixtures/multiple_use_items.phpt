@@ -1,2 +1,81 @@
 ===source===
 <?php use App\Models\User, App\Models\Post, App\Models\Comment;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Use": {
+          "kind": "Normal",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "App",
+                  "Models",
+                  "User"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 10,
+                  "end": 25
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 10,
+                "end": 25
+              }
+            },
+            {
+              "name": {
+                "parts": [
+                  "App",
+                  "Models",
+                  "Post"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 27,
+                  "end": 42
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 27,
+                "end": 42
+              }
+            },
+            {
+              "name": {
+                "parts": [
+                  "App",
+                  "Models",
+                  "Comment"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 44,
+                  "end": 62
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 44,
+                "end": 62
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 63
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 63
+  }
+}

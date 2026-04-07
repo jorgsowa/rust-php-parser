@@ -11,17 +11,27 @@ macro_rules! fixture_test {
     ($name:ident, $file:expr) => {
         #[test]
         fn $name() {
+            let path = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures/", $file);
             let (config, source) = common::parse_fixture(include_str!(concat!("fixtures/", $file)));
             let result = parse_php(source);
             if !config.expect_errors {
                 assert_no_errors(&result);
             }
-            insta::assert_snapshot!(to_json(&result.program));
+            let actual = to_json(&result.program);
+            if std::env::var("UPDATE_FIXTURES").is_ok() {
+                common::update_fixture_ast(path, &actual);
+            } else {
+                let expected = config
+                    .expected_ast
+                    .unwrap_or_else(|| panic!("missing ===ast=== section in {}", $file));
+                assert_eq!(actual, expected, "AST mismatch in {}", $file);
+            }
         }
     };
     ($name:ident, $file:expr, errors) => {
         #[test]
         fn $name() {
+            let path = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures/", $file);
             let (config, source) = common::parse_fixture(include_str!(concat!("fixtures/", $file)));
             let result = parse_php(source);
             if config.expect_errors {
@@ -30,7 +40,15 @@ macro_rules! fixture_test {
                     "expected parse errors but found none"
                 );
             }
-            insta::assert_snapshot!(to_json(&result.program));
+            let actual = to_json(&result.program);
+            if std::env::var("UPDATE_FIXTURES").is_ok() {
+                common::update_fixture_ast(path, &actual);
+            } else {
+                let expected = config
+                    .expected_ast
+                    .unwrap_or_else(|| panic!("missing ===ast=== section in {}", $file));
+                assert_eq!(actual, expected, "AST mismatch in {}", $file);
+            }
         }
     };
 }

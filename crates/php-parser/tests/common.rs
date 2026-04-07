@@ -44,6 +44,10 @@ pub struct FixtureConfig {
     /// Whether the fixture is expected to produce at least one parse error.
     /// Set to `true` when an `===errors===` marker appears in the file.
     pub expect_errors: bool,
+    /// Expected error messages from the `===errors===` section (if any content is present).
+    pub expected_errors: Option<String>,
+    /// Expected AST JSON from the `===ast===` section.
+    pub expected_ast: Option<String>,
 }
 
 /// Parse a fixture file with optional `===config===` and mandatory `===source===` sections.
@@ -56,6 +60,9 @@ pub struct FixtureConfig {
 /// <?php
 /// ...
 /// ===errors===       <- optional; presence means expect_errors = true
+/// error message 1    <- optional error content
+/// ===ast===          <- optional; contains expected JSON AST
+/// { ... }
 /// ```
 ///
 /// Returns the parsed config and a slice of `content` containing only the PHP source
@@ -81,19 +88,73 @@ pub fn parse_fixture(content: &str) -> (FixtureConfig, &str) {
 
     let after_source_marker = rest.strip_prefix("===source===\n").unwrap_or(rest);
 
-    // Source ends at the next section marker (===errors===) or at EOF.
-    let (source, expect_errors) = if let Some(errors_pos) = after_source_marker.find("===errors===")
-    {
-        (&after_source_marker[..errors_pos], true)
-    } else {
-        (after_source_marker, false)
+    // Find section markers
+    let errors_pos = after_source_marker.find("===errors===\n");
+    let ast_pos = after_source_marker.find("===ast===\n");
+
+    // Source ends at the earliest section marker or EOF.
+    // Strip one trailing '\n' when ending at a marker: that newline is the line
+    // separator before the marker, not part of the source.
+    let source_raw = match (errors_pos, ast_pos) {
+        (Some(e), Some(a)) => &after_source_marker[..e.min(a)],
+        (Some(e), None) => &after_source_marker[..e],
+        (None, Some(a)) => &after_source_marker[..a],
+        (None, None) => after_source_marker,
     };
+    let at_eof = errors_pos.is_none() && ast_pos.is_none();
+    let source = if at_eof {
+        source_raw
+    } else {
+        source_raw.strip_suffix('\n').unwrap_or(source_raw)
+    };
+
+    let expect_errors = errors_pos.is_some();
+
+    // Extract expected errors content (between ===errors=== and ===ast=== or EOF)
+    let expected_errors = errors_pos
+        .map(|e| {
+            let after_errors = &after_source_marker[e + "===errors===\n".len()..];
+            let end = after_errors
+                .find("===ast===\n")
+                .unwrap_or(after_errors.len());
+            let text = after_errors[..end].trim_end_matches('\n').to_string();
+            if text.is_empty() {
+                None
+            } else {
+                Some(text)
+            }
+        })
+        .flatten();
+
+    // Extract expected AST JSON
+    let expected_ast = ast_pos.map(|a| {
+        let after_ast = &after_source_marker[a + "===ast===\n".len()..];
+        after_ast.trim_end_matches('\n').to_string()
+    });
 
     (
         FixtureConfig {
             min_php,
             expect_errors,
+            expected_errors,
+            expected_ast,
         },
         source,
     )
+}
+
+/// Rewrite the `===ast===` section of a fixture file with `new_ast`.
+/// Called when `UPDATE_FIXTURES=1` is set in the environment.
+pub fn update_fixture_ast(path: &str, new_ast: &str) {
+    let content =
+        std::fs::read_to_string(path).unwrap_or_else(|e| panic!("failed to read {path}: {e}"));
+    let new_content = if let Some(pos) = content.find("===ast===\n") {
+        let before = &content[..pos];
+        format!("{before}===ast===\n{new_ast}\n")
+    } else if content.ends_with('\n') {
+        format!("{content}===ast===\n{new_ast}\n")
+    } else {
+        format!("{content}\n===ast===\n{new_ast}\n")
+    };
+    std::fs::write(path, new_content).unwrap_or_else(|e| panic!("failed to write {path}: {e}"));
 }

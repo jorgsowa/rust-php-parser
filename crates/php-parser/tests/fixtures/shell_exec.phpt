@@ -3,3 +3,177 @@
 $out = `ls -la`;
 $cmd = `echo $var`;
 $complex = `{$obj->getCmd()} --flag`;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "out"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 10
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "ShellExec": [
+                    {
+                      "Literal": "ls -la"
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 13,
+                  "end": 21
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 21
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 23
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "cmd"
+                },
+                "span": {
+                  "start": 23,
+                  "end": 27
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "ShellExec": [
+                    {
+                      "Literal": "echo "
+                    },
+                    {
+                      "Expr": {
+                        "kind": {
+                          "Variable": "var"
+                        },
+                        "span": {
+                          "start": 36,
+                          "end": 40
+                        }
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 30,
+                  "end": 41
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 23,
+            "end": 41
+          }
+        }
+      },
+      "span": {
+        "start": 23,
+        "end": 43
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "complex"
+                },
+                "span": {
+                  "start": 43,
+                  "end": 51
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "ShellExec": [
+                    {
+                      "Expr": {
+                        "kind": {
+                          "MethodCall": {
+                            "object": {
+                              "kind": {
+                                "Variable": "obj"
+                              },
+                              "span": {
+                                "start": 56,
+                                "end": 60
+                              }
+                            },
+                            "method": {
+                              "kind": {
+                                "Identifier": "getCmd"
+                              },
+                              "span": {
+                                "start": 62,
+                                "end": 68
+                              }
+                            },
+                            "args": []
+                          }
+                        },
+                        "span": {
+                          "start": 56,
+                          "end": 70
+                        }
+                      }
+                    },
+                    {
+                      "Literal": " --flag"
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 54,
+                  "end": 79
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 43,
+            "end": 79
+          }
+        }
+      },
+      "span": {
+        "start": 43,
+        "end": 80
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 80
+  }
+}

@@ -1,2 +1,67 @@
 ===source===
 <?php $x++; $y--;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "UnaryPostfix": {
+              "operand": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "PostIncrement"
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 10
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 12
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "UnaryPostfix": {
+              "operand": {
+                "kind": {
+                  "Variable": "y"
+                },
+                "span": {
+                  "start": 12,
+                  "end": 14
+                }
+              },
+              "op": "PostDecrement"
+            }
+          },
+          "span": {
+            "start": 12,
+            "end": 16
+          }
+        }
+      },
+      "span": {
+        "start": 12,
+        "end": 17
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 17
+  }
+}

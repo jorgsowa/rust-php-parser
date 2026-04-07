@@ -4,3 +4,54 @@
 if (1);
 
 interface X {}
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "If": {
+          "condition": {
+            "kind": {
+              "Int": 1
+            },
+            "span": {
+              "start": 11,
+              "end": 12
+            }
+          },
+          "then_branch": {
+            "kind": "Nop",
+            "span": {
+              "start": 13,
+              "end": 14
+            }
+          },
+          "elseif_branches": [],
+          "else_branch": null
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 14
+      }
+    },
+    {
+      "kind": {
+        "Interface": {
+          "name": "X",
+          "extends": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 16,
+        "end": 30
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 30
+  }
+}

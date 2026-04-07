@@ -1,3 +1,45 @@
 ===source===
 <?php
 $$$x;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "VariableVariable": {
+              "kind": {
+                "VariableVariable": {
+                  "kind": {
+                    "Variable": "x"
+                  },
+                  "span": {
+                    "start": 8,
+                    "end": 10
+                  }
+                }
+              },
+              "span": {
+                "start": 7,
+                "end": 10
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 10
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 11
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 11
+  }
+}

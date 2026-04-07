@@ -1,2 +1,58 @@
 ===source===
 <?php use B as PARENT;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Use": {
+          "kind": "Normal",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "B"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 10,
+                  "end": 12
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 10,
+                "end": 15
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 15
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Identifier": "parent"
+          },
+          "span": {
+            "start": 15,
+            "end": 21
+          }
+        }
+      },
+      "span": {
+        "start": 15,
+        "end": 22
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 22
+  }
+}

@@ -1,3 +1,47 @@
 ===source===
 <?php
 $foo instanceof
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Variable": "foo"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 10
+                }
+              },
+              "op": "Instanceof",
+              "right": {
+                "kind": "Error",
+                "span": {
+                  "start": 21,
+                  "end": 21
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 21
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 21
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 21
+  }
+}

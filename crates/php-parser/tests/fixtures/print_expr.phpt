@@ -1,2 +1,36 @@
 ===source===
 <?php print 'hello';
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Print": {
+              "kind": {
+                "String": "hello"
+              },
+              "span": {
+                "start": 12,
+                "end": 19
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 19
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 20
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 20
+  }
+}

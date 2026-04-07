@@ -5,3 +5,68 @@ while ($a) {}
 
 while ($a):
 endwhile;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "While": {
+          "condition": {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 14,
+              "end": 16
+            }
+          },
+          "body": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 18,
+              "end": 20
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 20
+      }
+    },
+    {
+      "kind": {
+        "While": {
+          "condition": {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 29,
+              "end": 31
+            }
+          },
+          "body": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 22,
+              "end": 43
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 22,
+        "end": 43
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 43
+  }
+}

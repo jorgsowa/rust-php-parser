@@ -1,2 +1,32 @@
 ===source===
 <?php ;;;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": "Nop",
+      "span": {
+        "start": 6,
+        "end": 7
+      }
+    },
+    {
+      "kind": "Nop",
+      "span": {
+        "start": 7,
+        "end": 8
+      }
+    },
+    {
+      "kind": "Nop",
+      "span": {
+        "start": 8,
+        "end": 9
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 9
+  }
+}

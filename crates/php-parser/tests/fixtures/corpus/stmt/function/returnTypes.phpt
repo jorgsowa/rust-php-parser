@@ -5,3 +5,128 @@ function test1() {}
 function test2() : array {}
 function test3() : callable {}
 function test4() : Foo\Bar {}
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "test1",
+          "params": [],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 26
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": "test2",
+          "params": [],
+          "body": [],
+          "return_type": {
+            "kind": {
+              "Named": {
+                "parts": [
+                  "array"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 46,
+                  "end": 51
+                }
+              }
+            },
+            "span": {
+              "start": 46,
+              "end": 51
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 27,
+        "end": 54
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": "test3",
+          "params": [],
+          "body": [],
+          "return_type": {
+            "kind": {
+              "Named": {
+                "parts": [
+                  "callable"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 74,
+                  "end": 82
+                }
+              }
+            },
+            "span": {
+              "start": 74,
+              "end": 82
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 55,
+        "end": 85
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": "test4",
+          "params": [],
+          "body": [],
+          "return_type": {
+            "kind": {
+              "Named": {
+                "parts": [
+                  "Foo",
+                  "Bar"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 105,
+                  "end": 113
+                }
+              }
+            },
+            "span": {
+              "start": 105,
+              "end": 113
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 86,
+        "end": 115
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 115
+  }
+}
