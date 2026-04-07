@@ -4,3 +4,4 @@
     public function good(): string { return 'ok'; }
 }
 ===errors===
+expected variable, found ')'

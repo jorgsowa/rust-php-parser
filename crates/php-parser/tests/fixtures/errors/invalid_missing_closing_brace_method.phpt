@@ -11,3 +11,5 @@ class Foo {
     }
 }
 ===errors===
+expected expression
+expected '}', found end of file

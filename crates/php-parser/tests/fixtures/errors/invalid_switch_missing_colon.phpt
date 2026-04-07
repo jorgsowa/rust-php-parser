@@ -8,3 +8,4 @@ switch ($x) {
         echo "two";
 }
 ===errors===
+expected ';', found 'echo'
