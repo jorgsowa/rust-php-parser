@@ -99,7 +99,12 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     /// This path creates a lazy Lexer at the offset, then pre-lexes all tokens into
     /// a vector to match the new pre-lexed architecture, while preserving correct
     /// absolute spans relative to the original source.
-    pub fn new_at(arena: &'arena bumpalo::Bump, source: &'src str, offset: usize) -> Self {
+    pub fn new_at(
+        arena: &'arena bumpalo::Bump,
+        source: &'src str,
+        offset: usize,
+        version: PhpVersion,
+    ) -> Self {
         let mut lexer = Lexer::new_at(source, offset);
 
         // Lex all tokens from this position, separating comments from regular tokens
@@ -161,7 +166,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             comments,
             depth: 0,
             expr_depth: 0,
-            version: PhpVersion::default(),
+            version,
         }
     }
 
@@ -582,6 +587,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
         // Union: A|B|C or (A&B)|C (DNF)
         if self.check(TokenKind::Pipe) {
+            self.require_version(PhpVersion::Php80, "union types", self.current_span());
             let mut types = self.alloc_vec_one(first);
             while self.eat(TokenKind::Pipe).is_some() {
                 types.push(self.parse_type_element());
@@ -598,6 +604,13 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     message: "Type contains both true and false, bool must be used instead".into(),
                     span,
                 });
+            }
+            // DNF types (parenthesized intersection in union) require PHP 8.2
+            let has_dnf = types
+                .iter()
+                .any(|t| matches!(t.kind, TypeHintKind::Intersection(_)));
+            if has_dnf {
+                self.require_version(PhpVersion::Php82, "DNF types", span);
             }
             return TypeHint {
                 kind: TypeHintKind::Union(types),
@@ -708,6 +721,15 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             };
             if let Some(builtin) = builtin {
                 let token = self.advance();
+                match builtin {
+                    BuiltinType::Never => {
+                        self.require_version(PhpVersion::Php81, "never type", token.span);
+                    }
+                    BuiltinType::Mixed => {
+                        self.require_version(PhpVersion::Php80, "mixed type", token.span);
+                    }
+                    _ => {}
+                }
                 return TypeHint {
                     kind: TypeHintKind::Keyword(builtin, token.span),
                     span: token.span,
@@ -747,6 +769,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             }
             TokenKind::Null => {
                 let token = self.advance();
+                self.require_version(PhpVersion::Php80, "null type", token.span);
                 TypeHint {
                     kind: TypeHintKind::Keyword(BuiltinType::Null, token.span),
                     span: token.span,
@@ -754,6 +777,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             }
             TokenKind::True => {
                 let token = self.advance();
+                self.require_version(PhpVersion::Php82, "true type", token.span);
                 TypeHint {
                     kind: TypeHintKind::Keyword(BuiltinType::True, token.span),
                     span: token.span,
@@ -761,6 +785,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             }
             TokenKind::False => {
                 let token = self.advance();
+                self.require_version(PhpVersion::Php80, "false type", token.span);
                 TypeHint {
                     kind: TypeHintKind::Keyword(BuiltinType::False, token.span),
                     span: token.span,

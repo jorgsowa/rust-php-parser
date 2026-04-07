@@ -1461,7 +1461,12 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                     .alloc_str(&src[token.span.start as usize..token.span.end as usize]);
                 match parse_arg_list_or_callable(parser) {
                     ArgListResult::CallableMarker => {
-                        // clone(...) — first-class callable
+                        // clone(...) — first-class callable (PHP 8.5)
+                        parser.require_version(
+                            PhpVersion::Php85,
+                            "clone(...) first-class callable",
+                            token.span,
+                        );
                         let span = Span::new(token.span.start, parser.current_span().start);
                         let callee = Expr {
                             kind: ExprKind::Identifier(name_text),
@@ -2086,6 +2091,8 @@ fn parse_arg_list_or_callable<'arena, 'src>(
 
     // Detect first-class callable: (...)
     if parser.check(TokenKind::Ellipsis) && parser.peek_kind() == Some(TokenKind::RightParen) {
+        let span = parser.current_span();
+        parser.require_version(PhpVersion::Php81, "first-class callable syntax", span);
         parser.advance(); // consume ...
         parser.advance(); // consume )
         return ArgListResult::CallableMarker;
