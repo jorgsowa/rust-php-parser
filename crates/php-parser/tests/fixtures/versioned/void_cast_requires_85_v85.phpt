@@ -1,0 +1,52 @@
+===config===
+parse_version=8.5
+===source===
+<?php (void) getVersion();
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Cast": [
+              "Void",
+              {
+                "kind": {
+                  "FunctionCall": {
+                    "name": {
+                      "kind": {
+                        "Identifier": "getVersion"
+                      },
+                      "span": {
+                        "start": 13,
+                        "end": 23
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 13,
+                  "end": 25
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 6,
+            "end": 25
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 26
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 26
+  }
+}

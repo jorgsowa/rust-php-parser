@@ -1,6 +1,0 @@
----
-source: crates/php-parser/tests/integration.rs
-expression: format_errors(&result)
----
-__halt_compiler() can only be used at the outermost scope
-unclosed ''}'' opened at Span { start: 16, end: 17 }

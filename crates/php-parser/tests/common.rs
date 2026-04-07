@@ -12,35 +12,13 @@ pub fn to_json(program: &php_ast::Program) -> String {
     serde_json::to_string_pretty(program).unwrap()
 }
 
-/// Format a fixture snapshot: PHP source followed by the program JSON.
-pub fn fixture(source: &str, program: &php_ast::Program) -> String {
-    format!(
-        "=== source ===\n{source}\n=== snapshot ===\n{}\n",
-        to_json(program)
-    )
-}
-
-/// Format a fixture snapshot that includes parse errors: source, error messages, then AST.
-pub fn fixture_with_errors(
-    source: &str,
-    errors: &[impl ToString],
-    program: &php_ast::Program,
-) -> String {
-    let error_text = errors
-        .iter()
-        .map(|e| e.to_string())
-        .collect::<Vec<_>>()
-        .join("\n");
-    format!(
-        "=== source ===\n{source}\n=== errors ===\n{error_text}\n=== snapshot ===\n{}\n",
-        to_json(program)
-    )
-}
-
 /// Config parsed from an optional `===config===` section at the top of a fixture file.
 pub struct FixtureConfig {
     /// Minimum PHP version required for this fixture (e.g. `Some((8, 5))`).
     pub min_php: Option<(u32, u32)>,
+    /// Specific PHP version to parse with (e.g. `Some((8, 5))` for PHP 8.5).
+    /// When set, the test uses `parse_versioned()` instead of `parse()`.
+    pub parse_version: Option<(u32, u32)>,
     /// Whether the fixture is expected to produce at least one parse error.
     /// Set to `true` when an `===errors===` marker appears in the file.
     pub expect_errors: bool,
@@ -69,16 +47,19 @@ pub struct FixtureConfig {
 /// (everything between `===source===` and the next section marker, or end of file).
 pub fn parse_fixture(content: &str) -> (FixtureConfig, &str) {
     let mut min_php = None;
+    let mut parse_version = None;
 
     let rest = if let Some(rest) = content.strip_prefix("===config===\n") {
         let source_marker = rest.find("===source===\n").unwrap_or(rest.len());
         for line in rest[..source_marker].lines() {
+            let parse_ver = |val: &str| -> Option<(u32, u32)> {
+                val.split_once('.')
+                    .and_then(|(a, b)| Some((a.parse().ok()?, b.parse().ok()?)))
+            };
             if let Some(val) = line.strip_prefix("min_php=") {
-                if let Some((maj_s, min_s)) = val.split_once('.') {
-                    if let (Ok(maj), Ok(min)) = (maj_s.parse::<u32>(), min_s.parse::<u32>()) {
-                        min_php = Some((maj, min));
-                    }
-                }
+                min_php = parse_ver(val);
+            } else if let Some(val) = line.strip_prefix("parse_version=") {
+                parse_version = parse_ver(val);
             }
         }
         &rest[source_marker..]
@@ -135,12 +116,35 @@ pub fn parse_fixture(content: &str) -> (FixtureConfig, &str) {
     (
         FixtureConfig {
             min_php,
+            parse_version,
             expect_errors,
             expected_errors,
             expected_ast,
         },
         source,
     )
+}
+
+/// Convert a `(major, minor)` version tuple to a `PhpVersion` enum.
+pub fn php_version(v: (u32, u32)) -> php_rs_parser::PhpVersion {
+    match v {
+        (8, 0) => php_rs_parser::PhpVersion::Php80,
+        (8, 1) => php_rs_parser::PhpVersion::Php81,
+        (8, 2) => php_rs_parser::PhpVersion::Php82,
+        (8, 3) => php_rs_parser::PhpVersion::Php83,
+        (8, 4) => php_rs_parser::PhpVersion::Php84,
+        (8, 5) => php_rs_parser::PhpVersion::Php85,
+        _ => panic!("unsupported PHP version: {}.{}", v.0, v.1),
+    }
+}
+
+pub fn format_errors(result: &php_rs_parser::ParseResult) -> String {
+    result
+        .errors
+        .iter()
+        .map(|e| e.to_string())
+        .collect::<Vec<_>>()
+        .join("\n")
 }
 
 /// Rewrite the `===ast===` section of a fixture file with `new_ast`.

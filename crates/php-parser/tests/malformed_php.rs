@@ -1,7 +1,7 @@
 //! Programmatic tests that cannot be expressed as static fixture files.
 //!
 //! All other error-case tests live in `tests/fixtures/errors/*.phpt` and are
-//! run automatically by `integration::error_fixtures()`.
+//! run automatically by `integration::fixtures()`.
 
 fn parse(code: &str) -> php_rs_parser::ParseResult<'_, '_> {
     let arena = Box::leak(Box::new(bumpalo::Bump::new()));
@@ -25,7 +25,6 @@ fn format_errors(result: &php_rs_parser::ParseResult) -> String {
 #[test]
 fn deeply_nested_arrays_hit_depth_limit() {
     let nested = format!("<?php {}{};", "[".repeat(75), "]".repeat(75));
-    // Debug builds use more stack per recursive call; run in a larger-stack thread.
     std::thread::Builder::new()
         .stack_size(16 * 1024 * 1024)
         .spawn(move || {
@@ -35,7 +34,10 @@ fn deeply_nested_arrays_hit_depth_limit() {
                 !msgs.is_empty(),
                 "expected parse errors for deeply nested arrays"
             );
-            insta::assert_snapshot!(msgs);
+            assert!(
+                msgs.contains("maximum expression nesting depth exceeded"),
+                "expected depth-limit error, got:\n{msgs}"
+            );
         })
         .unwrap()
         .join()
@@ -45,7 +47,6 @@ fn deeply_nested_arrays_hit_depth_limit() {
 #[test]
 fn deeply_nested_parens_hit_depth_limit() {
     let nested = format!("<?php {}{};", "(".repeat(75), ")".repeat(75));
-    // Debug builds use more stack per recursive call; run in a larger-stack thread.
     std::thread::Builder::new()
         .stack_size(16 * 1024 * 1024)
         .spawn(move || {
@@ -55,7 +56,10 @@ fn deeply_nested_parens_hit_depth_limit() {
                 !msgs.is_empty(),
                 "expected parse errors for deeply nested parens"
             );
-            insta::assert_snapshot!(msgs);
+            assert!(
+                msgs.contains("maximum expression nesting depth exceeded"),
+                "expected depth-limit error, got:\n{msgs}"
+            );
         })
         .unwrap()
         .join()

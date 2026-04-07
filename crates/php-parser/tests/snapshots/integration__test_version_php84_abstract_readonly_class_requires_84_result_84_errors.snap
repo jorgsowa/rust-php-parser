@@ -1,5 +1,0 @@
----
-source: crates/php-parser/tests/integration.rs
-expression: format_errors(&result_84)
----
-
