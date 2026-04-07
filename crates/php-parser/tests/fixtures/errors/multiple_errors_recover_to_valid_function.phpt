@@ -4,3 +4,5 @@ $a = ;
 $b = ;
 function healthy(): string { return 'ok'; }
 ===errors===
+expected expression
+expected expression
