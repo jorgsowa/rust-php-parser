@@ -21,7 +21,6 @@ bumpalo = { workspace = true }
 lazy_static = "1.4"
 
 [dev-dependencies]
-insta = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 criterion = { workspace = true }

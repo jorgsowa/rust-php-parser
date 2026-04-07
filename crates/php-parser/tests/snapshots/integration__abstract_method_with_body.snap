@@ -1,9 +1,0 @@
----
-source: crates/php-parser/tests/integration.rs
-expression: "multi_snapshot(&[\"<?php abstract class Foo { abstract function bar() { echo 'body'; } }\",\n\"<?php abstract class Foo { abstract public function bar(): string { return ''; } }\"],\n|result|\n{\n    assert!(!result.errors.is_empty(), \"Expected parse errors\");\n    format_errors(result)\n},)"
----
---- <?php abstract class Foo { abstract function bar() { echo 'body'; } } ---
-abstract method cannot contain a body
-
---- <?php abstract class Foo { abstract public function bar(): string { return ''; } } ---
-abstract method cannot contain a body

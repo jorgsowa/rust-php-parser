@@ -1,0 +1,76 @@
+===source===
+<?php $a = $b ? $c : $d;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Ternary": {
+                    "condition": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 13
+                      }
+                    },
+                    "then_expr": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 16,
+                        "end": 18
+                      }
+                    },
+                    "else_expr": {
+                      "kind": {
+                        "Variable": "d"
+                      },
+                      "span": {
+                        "start": 21,
+                        "end": 23
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 23
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 23
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 24
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 24
+  }
+}

@@ -3,6 +3,7 @@
 $x = ;
 $y = 42;
 echo $y;
+===errors===
 ===ast===
 {
   "stmts": [
