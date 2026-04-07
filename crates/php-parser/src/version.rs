@@ -12,11 +12,11 @@ use std::fmt;
 /// Defaults to [`PhpVersion::Php84`] (the latest supported version).
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord)]
 pub enum PhpVersion {
-    /// PHP 8.0 — match, named arguments, constructor promotion, union types, nullsafe `?->`, throw expression.
+    /// PHP 8.0 — match, named arguments, constructor promotion, union types, nullsafe `?->`, throw expression, `mixed`/`false`/`null` types.
     Php80,
-    /// PHP 8.1 — enums, `readonly` properties/parameters, intersection types, first-class callables, `never`.
+    /// PHP 8.1 — enums, `readonly` properties/parameters, intersection types, first-class callables, `never` type.
     Php81,
-    /// PHP 8.2 — `readonly class`.
+    /// PHP 8.2 — `readonly class`, DNF types, `true` type.
     Php82,
     /// PHP 8.3 — typed class/enum constants.
     Php83,

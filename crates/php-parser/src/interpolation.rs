@@ -762,7 +762,12 @@ fn parse_complex_interpolation<'arena, 'src>(
     offset: u32,
     end: u32,
 ) -> Expr<'arena, 'src> {
-    let mut sub = crate::parser::Parser::new_at(arena, source, offset as usize);
+    let mut sub = crate::parser::Parser::new_at(
+        arena,
+        source,
+        offset as usize,
+        crate::version::PhpVersion::default(),
+    );
     let expr = crate::expr::parse_expr(&mut sub);
     if matches!(expr.kind, ExprKind::Error) {
         Expr {
