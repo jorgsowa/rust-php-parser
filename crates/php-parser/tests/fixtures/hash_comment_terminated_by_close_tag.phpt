@@ -2,3 +2,58 @@
 <?php # comment ?>
 <span>html</span>
 <?php $x = 1;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "InlineHtml": "\n<span>html</span>\n"
+      },
+      "span": {
+        "start": 18,
+        "end": 37
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 43,
+                  "end": 45
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 48,
+                  "end": 49
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 43,
+            "end": 49
+          }
+        }
+      },
+      "span": {
+        "start": 43,
+        "end": 50
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 50
+  }
+}

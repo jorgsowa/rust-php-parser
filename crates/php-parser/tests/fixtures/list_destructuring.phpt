@@ -2,3 +2,199 @@
 <?php
 list($a, $b, $c) = getValues();
 list($x, , $z) = $array;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Array": [
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "a"
+                        },
+                        "span": {
+                          "start": 11,
+                          "end": 13
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 11,
+                        "end": 13
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "b"
+                        },
+                        "span": {
+                          "start": 15,
+                          "end": 17
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 15,
+                        "end": 17
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "c"
+                        },
+                        "span": {
+                          "start": 19,
+                          "end": 21
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 19,
+                        "end": 21
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 6,
+                  "end": 22
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "FunctionCall": {
+                    "name": {
+                      "kind": {
+                        "Identifier": "getValues"
+                      },
+                      "span": {
+                        "start": 25,
+                        "end": 34
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 25,
+                  "end": 36
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 36
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 38
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Array": [
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "x"
+                        },
+                        "span": {
+                          "start": 43,
+                          "end": 45
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 43,
+                        "end": 45
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": "Omit",
+                        "span": {
+                          "start": 47,
+                          "end": 48
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 47,
+                        "end": 48
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Variable": "z"
+                        },
+                        "span": {
+                          "start": 49,
+                          "end": 51
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 49,
+                        "end": 51
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 38,
+                  "end": 52
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Variable": "array"
+                },
+                "span": {
+                  "start": 55,
+                  "end": 61
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 38,
+            "end": 61
+          }
+        }
+      },
+      "span": {
+        "start": 38,
+        "end": 62
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 62
+  }
+}

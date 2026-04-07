@@ -4,3 +4,111 @@ namespace A {}
 declare(ticks=1);
 foo();
 namespace B {}
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Namespace": {
+          "name": {
+            "parts": [
+              "A"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 16,
+              "end": 18
+            }
+          },
+          "body": {
+            "Braced": []
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 20
+      }
+    },
+    {
+      "kind": {
+        "Declare": {
+          "directives": [
+            [
+              "ticks",
+              {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 35,
+                  "end": 36
+                }
+              }
+            ]
+          ],
+          "body": null
+        }
+      },
+      "span": {
+        "start": 21,
+        "end": 39
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "foo"
+                },
+                "span": {
+                  "start": 39,
+                  "end": 42
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 39,
+            "end": 44
+          }
+        }
+      },
+      "span": {
+        "start": 39,
+        "end": 46
+      }
+    },
+    {
+      "kind": {
+        "Namespace": {
+          "name": {
+            "parts": [
+              "B"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 56,
+              "end": 58
+            }
+          },
+          "body": {
+            "Braced": []
+          }
+        }
+      },
+      "span": {
+        "start": 46,
+        "end": 60
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 60
+  }
+}

@@ -4,3 +4,124 @@ include 'header.php';
 include_once 'config.php';
 require 'bootstrap.php';
 require_once 'autoload.php';
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Include": [
+              "Include",
+              {
+                "kind": {
+                  "String": "header.php"
+                },
+                "span": {
+                  "start": 14,
+                  "end": 26
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 6,
+            "end": 26
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 28
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Include": [
+              "IncludeOnce",
+              {
+                "kind": {
+                  "String": "config.php"
+                },
+                "span": {
+                  "start": 41,
+                  "end": 53
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 28,
+            "end": 53
+          }
+        }
+      },
+      "span": {
+        "start": 28,
+        "end": 55
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Include": [
+              "Require",
+              {
+                "kind": {
+                  "String": "bootstrap.php"
+                },
+                "span": {
+                  "start": 63,
+                  "end": 78
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 55,
+            "end": 78
+          }
+        }
+      },
+      "span": {
+        "start": 55,
+        "end": 80
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Include": [
+              "RequireOnce",
+              {
+                "kind": {
+                  "String": "autoload.php"
+                },
+                "span": {
+                  "start": 93,
+                  "end": 107
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 80,
+            "end": 107
+          }
+        }
+      },
+      "span": {
+        "start": 80,
+        "end": 108
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 108
+  }
+}

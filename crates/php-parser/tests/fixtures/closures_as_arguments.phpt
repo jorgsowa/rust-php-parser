@@ -2,3 +2,297 @@
 <?php
 $filtered = array_filter($items, fn($x) => $x > 0);
 $mapped = array_map(function($x) { return $x * 2; }, $items);
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "filtered"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 15
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "FunctionCall": {
+                    "name": {
+                      "kind": {
+                        "Identifier": "array_filter"
+                      },
+                      "span": {
+                        "start": 18,
+                        "end": 30
+                      }
+                    },
+                    "args": [
+                      {
+                        "name": null,
+                        "value": {
+                          "kind": {
+                            "Variable": "items"
+                          },
+                          "span": {
+                            "start": 31,
+                            "end": 37
+                          }
+                        },
+                        "unpack": false,
+                        "by_ref": false,
+                        "span": {
+                          "start": 31,
+                          "end": 37
+                        }
+                      },
+                      {
+                        "name": null,
+                        "value": {
+                          "kind": {
+                            "ArrowFunction": {
+                              "is_static": false,
+                              "by_ref": false,
+                              "params": [
+                                {
+                                  "name": "x",
+                                  "type_hint": null,
+                                  "default": null,
+                                  "by_ref": false,
+                                  "variadic": false,
+                                  "is_readonly": false,
+                                  "is_final": false,
+                                  "visibility": null,
+                                  "set_visibility": null,
+                                  "attributes": [],
+                                  "span": {
+                                    "start": 42,
+                                    "end": 44
+                                  }
+                                }
+                              ],
+                              "return_type": null,
+                              "body": {
+                                "kind": {
+                                  "Binary": {
+                                    "left": {
+                                      "kind": {
+                                        "Variable": "x"
+                                      },
+                                      "span": {
+                                        "start": 49,
+                                        "end": 51
+                                      }
+                                    },
+                                    "op": "Greater",
+                                    "right": {
+                                      "kind": {
+                                        "Int": 0
+                                      },
+                                      "span": {
+                                        "start": 54,
+                                        "end": 55
+                                      }
+                                    }
+                                  }
+                                },
+                                "span": {
+                                  "start": 49,
+                                  "end": 55
+                                }
+                              },
+                              "attributes": []
+                            }
+                          },
+                          "span": {
+                            "start": 39,
+                            "end": 55
+                          }
+                        },
+                        "unpack": false,
+                        "by_ref": false,
+                        "span": {
+                          "start": 39,
+                          "end": 55
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 18,
+                  "end": 56
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 56
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 58
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "mapped"
+                },
+                "span": {
+                  "start": 58,
+                  "end": 65
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "FunctionCall": {
+                    "name": {
+                      "kind": {
+                        "Identifier": "array_map"
+                      },
+                      "span": {
+                        "start": 68,
+                        "end": 77
+                      }
+                    },
+                    "args": [
+                      {
+                        "name": null,
+                        "value": {
+                          "kind": {
+                            "Closure": {
+                              "is_static": false,
+                              "by_ref": false,
+                              "params": [
+                                {
+                                  "name": "x",
+                                  "type_hint": null,
+                                  "default": null,
+                                  "by_ref": false,
+                                  "variadic": false,
+                                  "is_readonly": false,
+                                  "is_final": false,
+                                  "visibility": null,
+                                  "set_visibility": null,
+                                  "attributes": [],
+                                  "span": {
+                                    "start": 87,
+                                    "end": 89
+                                  }
+                                }
+                              ],
+                              "use_vars": [],
+                              "return_type": null,
+                              "body": [
+                                {
+                                  "kind": {
+                                    "Return": {
+                                      "kind": {
+                                        "Binary": {
+                                          "left": {
+                                            "kind": {
+                                              "Variable": "x"
+                                            },
+                                            "span": {
+                                              "start": 100,
+                                              "end": 102
+                                            }
+                                          },
+                                          "op": "Mul",
+                                          "right": {
+                                            "kind": {
+                                              "Int": 2
+                                            },
+                                            "span": {
+                                              "start": 105,
+                                              "end": 106
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "span": {
+                                        "start": 100,
+                                        "end": 106
+                                      }
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 93,
+                                    "end": 108
+                                  }
+                                }
+                              ],
+                              "attributes": []
+                            }
+                          },
+                          "span": {
+                            "start": 78,
+                            "end": 109
+                          }
+                        },
+                        "unpack": false,
+                        "by_ref": false,
+                        "span": {
+                          "start": 78,
+                          "end": 109
+                        }
+                      },
+                      {
+                        "name": null,
+                        "value": {
+                          "kind": {
+                            "Variable": "items"
+                          },
+                          "span": {
+                            "start": 111,
+                            "end": 117
+                          }
+                        },
+                        "unpack": false,
+                        "by_ref": false,
+                        "span": {
+                          "start": 111,
+                          "end": 117
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 68,
+                  "end": 118
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 58,
+            "end": 118
+          }
+        }
+      },
+      "span": {
+        "start": 58,
+        "end": 119
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 119
+  }
+}

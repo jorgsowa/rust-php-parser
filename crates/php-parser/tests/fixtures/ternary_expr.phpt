@@ -1,2 +1,76 @@
 ===source===
 <?php $x > 0 ? 'yes' : 'no';
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Ternary": {
+              "condition": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 6,
+                        "end": 8
+                      }
+                    },
+                    "op": "Greater",
+                    "right": {
+                      "kind": {
+                        "Int": 0
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 12
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 6,
+                  "end": 12
+                }
+              },
+              "then_expr": {
+                "kind": {
+                  "String": "yes"
+                },
+                "span": {
+                  "start": 15,
+                  "end": 20
+                }
+              },
+              "else_expr": {
+                "kind": {
+                  "String": "no"
+                },
+                "span": {
+                  "start": 23,
+                  "end": 27
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 27
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 28
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 28
+  }
+}

@@ -5,3 +5,100 @@ enum Status: string {
     case Inactive = 'inactive';
     case Pending = 'pending';
 }
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Enum": {
+          "name": "Status",
+          "scalar_type": {
+            "parts": [
+              "string"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 19,
+              "end": 26
+            }
+          },
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Case": {
+                  "name": "Active",
+                  "value": {
+                    "kind": {
+                      "String": "active"
+                    },
+                    "span": {
+                      "start": 46,
+                      "end": 54
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 32,
+                "end": 60
+              }
+            },
+            {
+              "kind": {
+                "Case": {
+                  "name": "Inactive",
+                  "value": {
+                    "kind": {
+                      "String": "inactive"
+                    },
+                    "span": {
+                      "start": 76,
+                      "end": 86
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 60,
+                "end": 92
+              }
+            },
+            {
+              "kind": {
+                "Case": {
+                  "name": "Pending",
+                  "value": {
+                    "kind": {
+                      "String": "pending"
+                    },
+                    "span": {
+                      "start": 107,
+                      "end": 116
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 92,
+                "end": 118
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 119
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 119
+  }
+}

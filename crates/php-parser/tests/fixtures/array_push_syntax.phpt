@@ -1,2 +1,118 @@
 ===source===
 <?php $arr[] = 'new'; $matrix[][] = 1;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "ArrayAccess": {
+                    "array": {
+                      "kind": {
+                        "Variable": "arr"
+                      },
+                      "span": {
+                        "start": 6,
+                        "end": 10
+                      }
+                    },
+                    "index": null
+                  }
+                },
+                "span": {
+                  "start": 6,
+                  "end": 13
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "String": "new"
+                },
+                "span": {
+                  "start": 15,
+                  "end": 20
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 20
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 22
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "ArrayAccess": {
+                    "array": {
+                      "kind": {
+                        "ArrayAccess": {
+                          "array": {
+                            "kind": {
+                              "Variable": "matrix"
+                            },
+                            "span": {
+                              "start": 22,
+                              "end": 29
+                            }
+                          },
+                          "index": null
+                        }
+                      },
+                      "span": {
+                        "start": 22,
+                        "end": 31
+                      }
+                    },
+                    "index": null
+                  }
+                },
+                "span": {
+                  "start": 22,
+                  "end": 34
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 36,
+                  "end": 37
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 22,
+            "end": 37
+          }
+        }
+      },
+      "span": {
+        "start": 22,
+        "end": 38
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 38
+  }
+}

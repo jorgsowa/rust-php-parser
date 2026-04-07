@@ -1,2 +1,55 @@
 ===source===
 <?php function readonly() {} readonly();
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "readonly",
+          "params": [],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 28
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "readonly"
+                },
+                "span": {
+                  "start": 29,
+                  "end": 37
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 29,
+            "end": 39
+          }
+        }
+      },
+      "span": {
+        "start": 29,
+        "end": 40
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 40
+  }
+}

@@ -6,3 +6,119 @@ function counter() {
     $count++;
     return $count;
 }
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "counter",
+          "params": [],
+          "body": [
+            {
+              "kind": {
+                "StaticVar": [
+                  {
+                    "name": "count",
+                    "default": {
+                      "kind": {
+                        "Int": 0
+                      },
+                      "span": {
+                        "start": 47,
+                        "end": 48
+                      }
+                    },
+                    "span": {
+                      "start": 38,
+                      "end": 48
+                    }
+                  }
+                ]
+              },
+              "span": {
+                "start": 31,
+                "end": 54
+              }
+            },
+            {
+              "kind": {
+                "Global": [
+                  {
+                    "kind": {
+                      "Variable": "logger"
+                    },
+                    "span": {
+                      "start": 61,
+                      "end": 68
+                    }
+                  }
+                ]
+              },
+              "span": {
+                "start": 54,
+                "end": 74
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "UnaryPostfix": {
+                      "operand": {
+                        "kind": {
+                          "Variable": "count"
+                        },
+                        "span": {
+                          "start": 74,
+                          "end": 80
+                        }
+                      },
+                      "op": "PostIncrement"
+                    }
+                  },
+                  "span": {
+                    "start": 74,
+                    "end": 82
+                  }
+                }
+              },
+              "span": {
+                "start": 74,
+                "end": 88
+              }
+            },
+            {
+              "kind": {
+                "Return": {
+                  "kind": {
+                    "Variable": "count"
+                  },
+                  "span": {
+                    "start": 95,
+                    "end": 101
+                  }
+                }
+              },
+              "span": {
+                "start": 88,
+                "end": 103
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 104
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 104
+  }
+}

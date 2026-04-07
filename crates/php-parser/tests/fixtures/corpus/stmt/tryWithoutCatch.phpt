@@ -4,3 +4,54 @@
 try {
     foo();
 }
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "TryCatch": {
+          "body": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "FunctionCall": {
+                      "name": {
+                        "kind": {
+                          "Identifier": "foo"
+                        },
+                        "span": {
+                          "start": 17,
+                          "end": 20
+                        }
+                      },
+                      "args": []
+                    }
+                  },
+                  "span": {
+                    "start": 17,
+                    "end": 22
+                  }
+                }
+              },
+              "span": {
+                "start": 17,
+                "end": 24
+              }
+            }
+          ],
+          "catches": [],
+          "finally": null
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 25
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 25
+  }
+}

@@ -1,2 +1,94 @@
 ===source===
 <?php $x = print 'hello'; if (print 'check') {}
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Print": {
+                    "kind": {
+                      "String": "hello"
+                    },
+                    "span": {
+                      "start": 17,
+                      "end": 24
+                    }
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 24
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 24
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 26
+      }
+    },
+    {
+      "kind": {
+        "If": {
+          "condition": {
+            "kind": {
+              "Print": {
+                "kind": {
+                  "String": "check"
+                },
+                "span": {
+                  "start": 36,
+                  "end": 43
+                }
+              }
+            },
+            "span": {
+              "start": 30,
+              "end": 43
+            }
+          },
+          "then_branch": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 45,
+              "end": 47
+            }
+          },
+          "elseif_branches": [],
+          "else_branch": null
+        }
+      },
+      "span": {
+        "start": 26,
+        "end": 47
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 47
+  }
+}

@@ -1,2 +1,66 @@
 ===source===
 <?php $x ?? $y ?? 'fallback';
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "NullCoalesce": {
+              "left": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "right": {
+                "kind": {
+                  "NullCoalesce": {
+                    "left": {
+                      "kind": {
+                        "Variable": "y"
+                      },
+                      "span": {
+                        "start": 12,
+                        "end": 14
+                      }
+                    },
+                    "right": {
+                      "kind": {
+                        "String": "fallback"
+                      },
+                      "span": {
+                        "start": 18,
+                        "end": 28
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 12,
+                  "end": 28
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 28
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 29
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 29
+  }
+}

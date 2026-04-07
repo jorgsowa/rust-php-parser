@@ -6,3 +6,107 @@ $x = 1 + 2
 ===errors===
 expected ';' after echo statement
 expected ';' after expression
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Echo": [
+          {
+            "kind": {
+              "String": "hello"
+            },
+            "span": {
+              "start": 11,
+              "end": 18
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 6,
+        "end": 19
+      }
+    },
+    {
+      "kind": {
+        "Echo": [
+          {
+            "kind": {
+              "String": "world"
+            },
+            "span": {
+              "start": 24,
+              "end": 31
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 19,
+        "end": 33
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 33,
+                  "end": 35
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 38,
+                        "end": 39
+                      }
+                    },
+                    "op": "Add",
+                    "right": {
+                      "kind": {
+                        "Int": 2
+                      },
+                      "span": {
+                        "start": 42,
+                        "end": 43
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 38,
+                  "end": 43
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 33,
+            "end": 43
+          }
+        }
+      },
+      "span": {
+        "start": 33,
+        "end": 43
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 43
+  }
+}

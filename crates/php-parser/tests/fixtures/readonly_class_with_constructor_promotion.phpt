@@ -7,3 +7,161 @@ readonly class Point {
         public float $z = 0.0,
     ) {}
 }
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "Point",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": true
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Method": {
+                  "name": "__construct",
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [
+                    {
+                      "name": "x",
+                      "type_hint": {
+                        "kind": {
+                          "Named": {
+                            "parts": [
+                              "float"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 77,
+                              "end": 82
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 77,
+                          "end": 82
+                        }
+                      },
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
+                      "visibility": "Public",
+                      "set_visibility": null,
+                      "attributes": [],
+                      "span": {
+                        "start": 70,
+                        "end": 85
+                      }
+                    },
+                    {
+                      "name": "y",
+                      "type_hint": {
+                        "kind": {
+                          "Named": {
+                            "parts": [
+                              "float"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 102,
+                              "end": 107
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 102,
+                          "end": 107
+                        }
+                      },
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
+                      "visibility": "Public",
+                      "set_visibility": null,
+                      "attributes": [],
+                      "span": {
+                        "start": 95,
+                        "end": 110
+                      }
+                    },
+                    {
+                      "name": "z",
+                      "type_hint": {
+                        "kind": {
+                          "Named": {
+                            "parts": [
+                              "float"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 127,
+                              "end": 132
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 127,
+                          "end": 132
+                        }
+                      },
+                      "default": {
+                        "kind": {
+                          "Float": 0.0
+                        },
+                        "span": {
+                          "start": 138,
+                          "end": 141
+                        }
+                      },
+                      "by_ref": false,
+                      "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
+                      "visibility": "Public",
+                      "set_visibility": null,
+                      "attributes": [],
+                      "span": {
+                        "start": 120,
+                        "end": 141
+                      }
+                    }
+                  ],
+                  "return_type": null,
+                  "body": [],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 33,
+                "end": 152
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 15,
+        "end": 153
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 153
+  }
+}

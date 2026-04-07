@@ -1,2 +1,117 @@
 ===source===
 <?php $f = function &($x) use (&$ref): string { return $ref; };
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "f"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Closure": {
+                    "is_static": false,
+                    "by_ref": true,
+                    "params": [
+                      {
+                        "name": "x",
+                        "type_hint": null,
+                        "default": null,
+                        "by_ref": false,
+                        "variadic": false,
+                        "is_readonly": false,
+                        "is_final": false,
+                        "visibility": null,
+                        "set_visibility": null,
+                        "attributes": [],
+                        "span": {
+                          "start": 22,
+                          "end": 24
+                        }
+                      }
+                    ],
+                    "use_vars": [
+                      {
+                        "name": "ref",
+                        "by_ref": true,
+                        "span": {
+                          "start": 31,
+                          "end": 36
+                        }
+                      }
+                    ],
+                    "return_type": {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "string"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 39,
+                            "end": 45
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 39,
+                        "end": 45
+                      }
+                    },
+                    "body": [
+                      {
+                        "kind": {
+                          "Return": {
+                            "kind": {
+                              "Variable": "ref"
+                            },
+                            "span": {
+                              "start": 55,
+                              "end": 59
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 48,
+                          "end": 61
+                        }
+                      }
+                    ],
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 62
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 62
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 63
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 63
+  }
+}

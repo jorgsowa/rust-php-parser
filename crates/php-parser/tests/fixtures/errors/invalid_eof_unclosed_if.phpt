@@ -4,3 +4,82 @@ if ($x > 1) {
     echo "hello";
 ===errors===
 unclosed ''}'' opened at Span { start: 18, end: 19 }
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "If": {
+          "condition": {
+            "kind": {
+              "Binary": {
+                "left": {
+                  "kind": {
+                    "Variable": "x"
+                  },
+                  "span": {
+                    "start": 10,
+                    "end": 12
+                  }
+                },
+                "op": "Greater",
+                "right": {
+                  "kind": {
+                    "Int": 1
+                  },
+                  "span": {
+                    "start": 15,
+                    "end": 16
+                  }
+                }
+              }
+            },
+            "span": {
+              "start": 10,
+              "end": 16
+            }
+          },
+          "then_branch": {
+            "kind": {
+              "Block": [
+                {
+                  "kind": {
+                    "Echo": [
+                      {
+                        "kind": {
+                          "String": "hello"
+                        },
+                        "span": {
+                          "start": 29,
+                          "end": 36
+                        }
+                      }
+                    ]
+                  },
+                  "span": {
+                    "start": 24,
+                    "end": 37
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 18,
+              "end": 37
+            }
+          },
+          "elseif_branches": [],
+          "else_branch": null
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 37
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 37
+  }
+}

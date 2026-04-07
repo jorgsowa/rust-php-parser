@@ -1,2 +1,44 @@
 ===source===
 <?php function noop(): void {}
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": "noop",
+          "params": [],
+          "body": [],
+          "return_type": {
+            "kind": {
+              "Named": {
+                "parts": [
+                  "void"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 23,
+                  "end": 27
+                }
+              }
+            },
+            "span": {
+              "start": 23,
+              "end": 27
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 30
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 30
+  }
+}

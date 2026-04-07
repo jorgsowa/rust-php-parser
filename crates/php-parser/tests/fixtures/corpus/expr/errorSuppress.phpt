@@ -1,3 +1,37 @@
 ===source===
 <?php
 @$a;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ErrorSuppress": {
+              "kind": {
+                "Variable": "a"
+              },
+              "span": {
+                "start": 7,
+                "end": 9
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 9
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 10
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 10
+  }
+}

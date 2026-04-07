@@ -1,3 +1,154 @@
 ===source===
 <?php
 list(list($a, $b), list($c, $d)) = $pairs;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Array": [
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Array": [
+                            {
+                              "key": null,
+                              "value": {
+                                "kind": {
+                                  "Variable": "a"
+                                },
+                                "span": {
+                                  "start": 16,
+                                  "end": 18
+                                }
+                              },
+                              "unpack": false,
+                              "span": {
+                                "start": 16,
+                                "end": 18
+                              }
+                            },
+                            {
+                              "key": null,
+                              "value": {
+                                "kind": {
+                                  "Variable": "b"
+                                },
+                                "span": {
+                                  "start": 20,
+                                  "end": 22
+                                }
+                              },
+                              "unpack": false,
+                              "span": {
+                                "start": 20,
+                                "end": 22
+                              }
+                            }
+                          ]
+                        },
+                        "span": {
+                          "start": 11,
+                          "end": 23
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 11,
+                        "end": 23
+                      }
+                    },
+                    {
+                      "key": null,
+                      "value": {
+                        "kind": {
+                          "Array": [
+                            {
+                              "key": null,
+                              "value": {
+                                "kind": {
+                                  "Variable": "c"
+                                },
+                                "span": {
+                                  "start": 30,
+                                  "end": 32
+                                }
+                              },
+                              "unpack": false,
+                              "span": {
+                                "start": 30,
+                                "end": 32
+                              }
+                            },
+                            {
+                              "key": null,
+                              "value": {
+                                "kind": {
+                                  "Variable": "d"
+                                },
+                                "span": {
+                                  "start": 34,
+                                  "end": 36
+                                }
+                              },
+                              "unpack": false,
+                              "span": {
+                                "start": 34,
+                                "end": 36
+                              }
+                            }
+                          ]
+                        },
+                        "span": {
+                          "start": 25,
+                          "end": 37
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 25,
+                        "end": 37
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 6,
+                  "end": 38
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Variable": "pairs"
+                },
+                "span": {
+                  "start": 41,
+                  "end": 47
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 47
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 48
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 48
+  }
+}

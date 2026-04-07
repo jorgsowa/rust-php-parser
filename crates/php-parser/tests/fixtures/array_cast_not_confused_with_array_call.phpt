@@ -1,3 +1,117 @@
 ===source===
 <?php $a = (array) $x;
 $b = array() === [];
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Cast": [
+                    "Array",
+                    {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 19,
+                        "end": 21
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 11,
+                  "end": 21
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 21
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 23
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 23,
+                  "end": 25
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Array": []
+                      },
+                      "span": {
+                        "start": 28,
+                        "end": 35
+                      }
+                    },
+                    "op": "Identical",
+                    "right": {
+                      "kind": {
+                        "Array": []
+                      },
+                      "span": {
+                        "start": 40,
+                        "end": 42
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 28,
+                  "end": 42
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 23,
+            "end": 42
+          }
+        }
+      },
+      "span": {
+        "start": 23,
+        "end": 43
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 43
+  }
+}

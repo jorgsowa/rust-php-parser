@@ -1,2 +1,58 @@
 ===source===
 <?php use A as self;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Use": {
+          "kind": "Normal",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "A"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 10,
+                  "end": 12
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 10,
+                "end": 15
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 15
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Identifier": "self"
+          },
+          "span": {
+            "start": 15,
+            "end": 19
+          }
+        }
+      },
+      "span": {
+        "start": 15,
+        "end": 20
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 20
+  }
+}

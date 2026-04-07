@@ -3,3 +3,33 @@
 <?php
 
 namespace A;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Namespace": {
+          "name": {
+            "parts": [
+              "A"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 36,
+              "end": 37
+            }
+          },
+          "body": "Simple"
+        }
+      },
+      "span": {
+        "start": 26,
+        "end": 38
+      }
+    }
+  ],
+  "span": {
+    "start": 19,
+    "end": 38
+  }
+}

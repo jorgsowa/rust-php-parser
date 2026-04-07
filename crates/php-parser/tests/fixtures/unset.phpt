@@ -1,2 +1,48 @@
 ===source===
 <?php unset($a, $b, $c);
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Unset": [
+          {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 12,
+              "end": 14
+            }
+          },
+          {
+            "kind": {
+              "Variable": "b"
+            },
+            "span": {
+              "start": 16,
+              "end": 18
+            }
+          },
+          {
+            "kind": {
+              "Variable": "c"
+            },
+            "span": {
+              "start": 20,
+              "end": 22
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 6,
+        "end": 24
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 24
+  }
+}

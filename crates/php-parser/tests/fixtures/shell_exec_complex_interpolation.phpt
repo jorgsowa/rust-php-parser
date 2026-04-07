@@ -3,3 +3,237 @@
 $a = `ls {$dirs['home']}`;
 $b = `{$obj->getCommand()} --flag=$value`;
 $c = `echo $arr[0]`;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "ShellExec": [
+                    {
+                      "Literal": "ls "
+                    },
+                    {
+                      "Expr": {
+                        "kind": {
+                          "ArrayAccess": {
+                            "array": {
+                              "kind": {
+                                "Variable": "dirs"
+                              },
+                              "span": {
+                                "start": 16,
+                                "end": 21
+                              }
+                            },
+                            "index": {
+                              "kind": {
+                                "String": "home"
+                              },
+                              "span": {
+                                "start": 22,
+                                "end": 28
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 16,
+                          "end": 29
+                        }
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 11,
+                  "end": 31
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 31
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 33
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 33,
+                  "end": 35
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "ShellExec": [
+                    {
+                      "Expr": {
+                        "kind": {
+                          "MethodCall": {
+                            "object": {
+                              "kind": {
+                                "Variable": "obj"
+                              },
+                              "span": {
+                                "start": 40,
+                                "end": 44
+                              }
+                            },
+                            "method": {
+                              "kind": {
+                                "Identifier": "getCommand"
+                              },
+                              "span": {
+                                "start": 46,
+                                "end": 56
+                              }
+                            },
+                            "args": []
+                          }
+                        },
+                        "span": {
+                          "start": 40,
+                          "end": 58
+                        }
+                      }
+                    },
+                    {
+                      "Literal": " --flag="
+                    },
+                    {
+                      "Expr": {
+                        "kind": {
+                          "Variable": "value"
+                        },
+                        "span": {
+                          "start": 67,
+                          "end": 73
+                        }
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 38,
+                  "end": 74
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 33,
+            "end": 74
+          }
+        }
+      },
+      "span": {
+        "start": 33,
+        "end": 76
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "c"
+                },
+                "span": {
+                  "start": 76,
+                  "end": 78
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "ShellExec": [
+                    {
+                      "Literal": "echo "
+                    },
+                    {
+                      "Expr": {
+                        "kind": {
+                          "ArrayAccess": {
+                            "array": {
+                              "kind": {
+                                "Variable": "arr"
+                              },
+                              "span": {
+                                "start": 87,
+                                "end": 91
+                              }
+                            },
+                            "index": {
+                              "kind": {
+                                "Int": 0
+                              },
+                              "span": {
+                                "start": 92,
+                                "end": 93
+                              }
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 87,
+                          "end": 94
+                        }
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 81,
+                  "end": 95
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 76,
+            "end": 95
+          }
+        }
+      },
+      "span": {
+        "start": 76,
+        "end": 96
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 96
+  }
+}

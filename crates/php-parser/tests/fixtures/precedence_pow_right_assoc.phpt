@@ -1,2 +1,68 @@
 ===source===
 <?php 2 ** 3 ** 2;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Int": 2
+                },
+                "span": {
+                  "start": 6,
+                  "end": 7
+                }
+              },
+              "op": "Pow",
+              "right": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Int": 3
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 12
+                      }
+                    },
+                    "op": "Pow",
+                    "right": {
+                      "kind": {
+                        "Int": 2
+                      },
+                      "span": {
+                        "start": 16,
+                        "end": 17
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 17
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 17
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 18
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 18
+  }
+}

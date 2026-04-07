@@ -20,3 +20,284 @@
 01777777777777777777777;
 0177777777777777777777787;
 0b1111111111111111111111111111111111111111111111111111111111111111;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Float": 0.0
+          },
+          "span": {
+            "start": 7,
+            "end": 10
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 12
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Float": 0.0
+          },
+          "span": {
+            "start": 12,
+            "end": 14
+          }
+        }
+      },
+      "span": {
+        "start": 12,
+        "end": 16
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Float": 0.0
+          },
+          "span": {
+            "start": 16,
+            "end": 18
+          }
+        }
+      },
+      "span": {
+        "start": 16,
+        "end": 20
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Float": 0.0
+          },
+          "span": {
+            "start": 20,
+            "end": 23
+          }
+        }
+      },
+      "span": {
+        "start": 20,
+        "end": 25
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Float": 0.0
+          },
+          "span": {
+            "start": 25,
+            "end": 28
+          }
+        }
+      },
+      "span": {
+        "start": 25,
+        "end": 30
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Float": 0.0
+          },
+          "span": {
+            "start": 30,
+            "end": 34
+          }
+        }
+      },
+      "span": {
+        "start": 30,
+        "end": 36
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Float": 0.0
+          },
+          "span": {
+            "start": 36,
+            "end": 40
+          }
+        }
+      },
+      "span": {
+        "start": 36,
+        "end": 42
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Float": 302000000000.0
+          },
+          "span": {
+            "start": 42,
+            "end": 50
+          }
+        }
+      },
+      "span": {
+        "start": 42,
+        "end": 52
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Float": 3.002e+102
+          },
+          "span": {
+            "start": 52,
+            "end": 63
+          }
+        }
+      },
+      "span": {
+        "start": 52,
+        "end": 65
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Float": null
+          },
+          "span": {
+            "start": 65,
+            "end": 72
+          }
+        }
+      },
+      "span": {
+        "start": 65,
+        "end": 186
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Float": 1.8446744073709552e+19
+          },
+          "span": {
+            "start": 186,
+            "end": 206
+          }
+        }
+      },
+      "span": {
+        "start": 186,
+        "end": 208
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Float": 1.8446744073709552e+19
+          },
+          "span": {
+            "start": 208,
+            "end": 226
+          }
+        }
+      },
+      "span": {
+        "start": 208,
+        "end": 228
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Float": 1.7216961135462248e+19
+          },
+          "span": {
+            "start": 228,
+            "end": 246
+          }
+        }
+      },
+      "span": {
+        "start": 228,
+        "end": 248
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Float": 1.8446744073709552e+19
+          },
+          "span": {
+            "start": 248,
+            "end": 271
+          }
+        }
+      },
+      "span": {
+        "start": 248,
+        "end": 273
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Float": 1.4757395258967641e+20
+          },
+          "span": {
+            "start": 273,
+            "end": 298
+          }
+        }
+      },
+      "span": {
+        "start": 273,
+        "end": 300
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Float": 1.8446744073709552e+19
+          },
+          "span": {
+            "start": 300,
+            "end": 366
+          }
+        }
+      },
+      "span": {
+        "start": 300,
+        "end": 367
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 367
+  }
+}

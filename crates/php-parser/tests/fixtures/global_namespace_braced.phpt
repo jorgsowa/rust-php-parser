@@ -3,3 +3,43 @@
 namespace {
     function globalFunc() {}
 }
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Namespace": {
+          "name": null,
+          "body": {
+            "Braced": [
+              {
+                "kind": {
+                  "Function": {
+                    "name": "globalFunc",
+                    "params": [],
+                    "body": [],
+                    "return_type": null,
+                    "by_ref": false,
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 22,
+                  "end": 46
+                }
+              }
+            ]
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 48
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 48
+  }
+}

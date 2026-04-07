@@ -1,3 +1,100 @@
 ===source===
 <?php
 list('name' => $name, 'age' => $age) = $person;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Array": [
+                    {
+                      "key": {
+                        "kind": {
+                          "String": "name"
+                        },
+                        "span": {
+                          "start": 11,
+                          "end": 17
+                        }
+                      },
+                      "value": {
+                        "kind": {
+                          "Variable": "name"
+                        },
+                        "span": {
+                          "start": 21,
+                          "end": 26
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 11,
+                        "end": 26
+                      }
+                    },
+                    {
+                      "key": {
+                        "kind": {
+                          "String": "age"
+                        },
+                        "span": {
+                          "start": 28,
+                          "end": 33
+                        }
+                      },
+                      "value": {
+                        "kind": {
+                          "Variable": "age"
+                        },
+                        "span": {
+                          "start": 37,
+                          "end": 41
+                        }
+                      },
+                      "unpack": false,
+                      "span": {
+                        "start": 28,
+                        "end": 41
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 6,
+                  "end": 42
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Variable": "person"
+                },
+                "span": {
+                  "start": 45,
+                  "end": 52
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 52
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 53
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 53
+  }
+}

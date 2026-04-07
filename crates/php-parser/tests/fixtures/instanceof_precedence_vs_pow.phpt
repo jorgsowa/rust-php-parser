@@ -1,2 +1,68 @@
 ===source===
 <?php $a ** $b instanceof Foo;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 6,
+                        "end": 8
+                      }
+                    },
+                    "op": "Pow",
+                    "right": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 12,
+                        "end": 14
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 6,
+                  "end": 14
+                }
+              },
+              "op": "Instanceof",
+              "right": {
+                "kind": {
+                  "Identifier": "Foo"
+                },
+                "span": {
+                  "start": 26,
+                  "end": 29
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 29
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 30
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 30
+  }
+}

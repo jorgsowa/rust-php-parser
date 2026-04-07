@@ -4,3 +4,40 @@
 do {
 
 } while ($a);
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "DoWhile": {
+          "body": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 10,
+              "end": 14
+            }
+          },
+          "condition": {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 22,
+              "end": 24
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 26
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 26
+  }
+}

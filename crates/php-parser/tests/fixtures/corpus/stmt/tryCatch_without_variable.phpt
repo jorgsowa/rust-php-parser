@@ -6,3 +6,46 @@ try {
 } catch (Exception) {
 
 }
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "TryCatch": {
+          "body": [],
+          "catches": [
+            {
+              "types": [
+                {
+                  "parts": [
+                    "Exception"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 23,
+                    "end": 32
+                  }
+                }
+              ],
+              "var": null,
+              "body": [],
+              "span": {
+                "start": 22,
+                "end": 38
+              }
+            }
+          ],
+          "finally": null
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 38
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 38
+  }
+}

@@ -1,2 +1,74 @@
 ===source===
 <?php $f = static function() { return 42; };
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "f"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Closure": {
+                    "is_static": true,
+                    "by_ref": false,
+                    "params": [],
+                    "use_vars": [],
+                    "return_type": null,
+                    "body": [
+                      {
+                        "kind": {
+                          "Return": {
+                            "kind": {
+                              "Int": 42
+                            },
+                            "span": {
+                              "start": 38,
+                              "end": 40
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 31,
+                          "end": 42
+                        }
+                      }
+                    ],
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 11,
+                  "end": 43
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 43
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 44
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 44
+  }
+}

@@ -1,2 +1,45 @@
 ===source===
 <?php 'single'; "double";
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": "single"
+          },
+          "span": {
+            "start": 6,
+            "end": 14
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 16
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": "double"
+          },
+          "span": {
+            "start": 16,
+            "end": 24
+          }
+        }
+      },
+      "span": {
+        "start": 16,
+        "end": 25
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 25
+  }
+}

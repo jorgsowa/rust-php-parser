@@ -2,3 +2,61 @@
 <?php
 // Missing NS separator
 use Foo {Bar, Baz};
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Use": {
+          "kind": "Normal",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "Foo",
+                  "Bar"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 34,
+                  "end": 42
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 39,
+                "end": 42
+              }
+            },
+            {
+              "name": {
+                "parts": [
+                  "Foo",
+                  "Baz"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 34,
+                  "end": 47
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 44,
+                "end": 47
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 30,
+        "end": 49
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 49
+  }
+}

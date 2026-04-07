@@ -2,3 +2,74 @@
 <?php
 use A\{B,};
 use function A\{b,};
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Use": {
+          "kind": "Normal",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "A",
+                  "B"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 10,
+                  "end": 14
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 13,
+                "end": 14
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 18
+      }
+    },
+    {
+      "kind": {
+        "Use": {
+          "kind": "Function",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "A",
+                  "b"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 31,
+                  "end": 35
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 34,
+                "end": 35
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 18,
+        "end": 38
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 38
+  }
+}

@@ -1,3 +1,61 @@
 ===source===
 <?php
 fn($foo, ) => $bar;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ArrowFunction": {
+              "is_static": false,
+              "by_ref": false,
+              "params": [
+                {
+                  "name": "foo",
+                  "type_hint": null,
+                  "default": null,
+                  "by_ref": false,
+                  "variadic": false,
+                  "is_readonly": false,
+                  "is_final": false,
+                  "visibility": null,
+                  "set_visibility": null,
+                  "attributes": [],
+                  "span": {
+                    "start": 9,
+                    "end": 13
+                  }
+                }
+              ],
+              "return_type": null,
+              "body": {
+                "kind": {
+                  "Variable": "bar"
+                },
+                "span": {
+                  "start": 20,
+                  "end": 24
+                }
+              },
+              "attributes": []
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 24
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 25
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 25
+  }
+}

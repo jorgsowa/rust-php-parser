@@ -2,3 +2,75 @@
 <?php + ; $x = 1;
 ===errors===
 expected expression
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "UnaryPrefix": {
+              "op": "Plus",
+              "operand": {
+                "kind": "Error",
+                "span": {
+                  "start": 8,
+                  "end": 9
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 9
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 10
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 10,
+                  "end": 12
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 15,
+                  "end": 16
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 10,
+            "end": 16
+          }
+        }
+      },
+      "span": {
+        "start": 10,
+        "end": 17
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 17
+  }
+}

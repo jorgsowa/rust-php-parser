@@ -5,3 +5,67 @@ enum Color {
     case Green;
     case Blue;
 }
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Enum": {
+          "name": "Color",
+          "scalar_type": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Case": {
+                  "name": "Red",
+                  "value": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 23,
+                "end": 37
+              }
+            },
+            {
+              "kind": {
+                "Case": {
+                  "name": "Green",
+                  "value": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 37,
+                "end": 53
+              }
+            },
+            {
+              "kind": {
+                "Case": {
+                  "name": "Blue",
+                  "value": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 53,
+                "end": 64
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 65
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 65
+  }
+}
