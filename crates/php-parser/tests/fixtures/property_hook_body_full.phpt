@@ -1,3 +1,5 @@
+===config===
+min_php=8.4
 ===source===
 <?php class A { public string $x { get { return $this->x; } set { $this->x = $value; } } }
 ===ast===
