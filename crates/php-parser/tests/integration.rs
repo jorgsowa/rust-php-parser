@@ -524,8 +524,11 @@ fn test_int_no_overflow_stays_int() {
 // PHPDoc integration tests
 // =============================================================================
 
+/// Doc comments are attached to AST nodes. The .phpt fixtures in
+/// categories/phpdoc/ test this via the ===ast=== section. This test verifies
+/// the PHPDoc parser works on doc_comment text from AST nodes.
 #[test]
-fn phpdoc_comments_parsed_from_full_source() {
+fn phpdoc_from_ast_node() {
     let result = parse_php(
         "<?php
 /**
@@ -541,14 +544,13 @@ function createUser(string $name, int $age): User {}
     );
     assert_no_errors(&result);
 
-    let doc_comments: Vec<_> = result
-        .comments
-        .iter()
-        .filter(|c| c.kind == php_ast::CommentKind::Doc)
-        .collect();
-    assert_eq!(doc_comments.len(), 1);
-
-    let doc = php_rs_parser::phpdoc::parse(doc_comments[0].text);
+    // Doc comment is on the FunctionDecl node, not in result.comments
+    let func = &result.program.stmts[0];
+    let doc_text = match &func.kind {
+        php_ast::StmtKind::Function(f) => f.doc_comment.as_ref().unwrap().text,
+        _ => panic!("expected Function"),
+    };
+    let doc = php_rs_parser::phpdoc::parse(doc_text);
     assert_eq!(doc.summary, Some("Create a new user."));
     assert_eq!(doc.tags.len(), 4);
     assert!(matches!(
@@ -584,7 +586,7 @@ function createUser(string $name, int $age): User {}
 }
 
 #[test]
-fn phpdoc_psalm_phpstan_integration() {
+fn phpdoc_psalm_phpstan_from_ast_node() {
     let result = parse_php(
         "<?php
 /**
@@ -603,15 +605,12 @@ class UserRepository {
     );
     assert_no_errors(&result);
 
-    let doc_comments: Vec<_> = result
-        .comments
-        .iter()
-        .filter(|c| c.kind == php_ast::CommentKind::Doc)
-        .collect();
-    assert_eq!(doc_comments.len(), 2);
-
-    // Class-level doc
-    let class_doc = php_rs_parser::phpdoc::parse(doc_comments[0].text);
+    // Class doc comment
+    let class = match &result.program.stmts[0].kind {
+        php_ast::StmtKind::Class(c) => c,
+        _ => panic!("expected Class"),
+    };
+    let class_doc = php_rs_parser::phpdoc::parse(class.doc_comment.as_ref().unwrap().text);
     assert_eq!(class_doc.tags.len(), 1);
     assert!(matches!(
         &class_doc.tags[0],
@@ -621,8 +620,12 @@ class UserRepository {
         }
     ));
 
-    // Method-level doc
-    let method_doc = php_rs_parser::phpdoc::parse(doc_comments[1].text);
+    // Method doc comment
+    let method_doc_text = match &class.members[0].kind {
+        php_ast::ClassMemberKind::Method(m) => m.doc_comment.as_ref().unwrap().text,
+        _ => panic!("expected Method"),
+    };
+    let method_doc = php_rs_parser::phpdoc::parse(method_doc_text);
     assert_eq!(method_doc.tags.len(), 4);
     assert!(matches!(
         &method_doc.tags[0],

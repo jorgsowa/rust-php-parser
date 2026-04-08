@@ -92,7 +92,15 @@ class Money {
                     }
                   },
                   "body": [],
-                  "attributes": []
+                  "attributes": [],
+                  "doc_comment": {
+                    "kind": "Doc",
+                    "text": "/**\n     * @psalm-pure\n     * @param positive-int $amount\n     * @return self\n     */",
+                    "span": {
+                      "start": 52,
+                      "end": 137
+                    }
+                  }
                 }
               },
               "span": {
@@ -127,7 +135,15 @@ class Money {
                     }
                   },
                   "default": null,
-                  "attributes": []
+                  "attributes": [],
+                  "doc_comment": {
+                    "kind": "Doc",
+                    "text": "/** @psalm-readonly */",
+                    "span": {
+                      "start": 195,
+                      "end": 217
+                    }
+                  }
                 }
               },
               "span": {
@@ -136,7 +152,15 @@ class Money {
               }
             }
           ],
-          "attributes": []
+          "attributes": [],
+          "doc_comment": {
+            "kind": "Doc",
+            "text": "/**\n * @psalm-immutable\n */",
+            "span": {
+              "start": 6,
+              "end": 33
+            }
+          }
         }
       },
       "span": {

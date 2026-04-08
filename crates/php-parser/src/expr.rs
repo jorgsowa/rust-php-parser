@@ -1705,6 +1705,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
             implements,
             members,
             attributes: anon_attributes,
+            doc_comment: None,
         };
 
         let anon_class_expr = Expr {

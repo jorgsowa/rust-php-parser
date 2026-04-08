@@ -66,7 +66,15 @@ class Proxy {
                       "end": 203
                     }
                   },
-                  "attributes": []
+                  "attributes": [],
+                  "doc_comment": {
+                    "kind": "Doc",
+                    "text": "/** @var array<string, mixed> */",
+                    "span": {
+                      "start": 143,
+                      "end": 175
+                    }
+                  }
                 }
               },
               "span": {
@@ -103,7 +111,15 @@ class Proxy {
                     }
                   },
                   "body": [],
-                  "attributes": []
+                  "attributes": [],
+                  "doc_comment": {
+                    "kind": "Doc",
+                    "text": "/**\n     * @deprecated Use newMethod() instead\n     * @return void\n     */",
+                    "span": {
+                      "start": 210,
+                      "end": 284
+                    }
+                  }
                 }
               },
               "span": {
@@ -112,7 +128,15 @@ class Proxy {
               }
             }
           ],
-          "attributes": []
+          "attributes": [],
+          "doc_comment": {
+            "kind": "Doc",
+            "text": "/**\n * @property string $name\n * @property-read int $id\n * @property-write bool $active\n * @mixin \\App\\Helpers\\Foo\n */",
+            "span": {
+              "start": 6,
+              "end": 124
+            }
+          }
         }
       },
       "span": {

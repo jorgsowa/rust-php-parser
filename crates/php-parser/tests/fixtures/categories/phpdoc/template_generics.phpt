@@ -89,7 +89,15 @@ class Collection {
                     }
                   },
                   "body": [],
-                  "attributes": []
+                  "attributes": [],
+                  "doc_comment": {
+                    "kind": "Doc",
+                    "text": "/**\n     * @param T $item\n     * @return list<T>\n     */",
+                    "span": {
+                      "start": 92,
+                      "end": 148
+                    }
+                  }
                 }
               },
               "span": {
@@ -98,7 +106,15 @@ class Collection {
               }
             }
           ],
-          "attributes": []
+          "attributes": [],
+          "doc_comment": {
+            "kind": "Doc",
+            "text": "/**\n * @template T of object\n * @template-covariant TValue\n */",
+            "span": {
+              "start": 6,
+              "end": 68
+            }
+          }
         }
       },
       "span": {

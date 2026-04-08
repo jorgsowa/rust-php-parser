@@ -104,7 +104,15 @@ function createUser(string $name, int $age): User {}
             }
           },
           "by_ref": false,
-          "attributes": []
+          "attributes": [],
+          "doc_comment": {
+            "kind": "Doc",
+            "text": "/**\n * Create a new user.\n *\n * @param string $name The user's name\n * @param int $age\n * @return User\n * @throws \\InvalidArgumentException\n */",
+            "span": {
+              "start": 6,
+              "end": 149
+            }
+          }
         }
       },
       "span": {

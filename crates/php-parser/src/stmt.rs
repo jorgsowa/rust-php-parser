@@ -961,6 +961,7 @@ fn parse_function<'arena, 'src>(
         .map(|t| t.span.end)
         .unwrap_or(parser.current_span().start);
     let span = Span::new(start, end);
+    let doc_comment = parser.take_doc_comment(start);
 
     Stmt {
         kind: StmtKind::Function(parser.alloc(FunctionDecl {
@@ -970,6 +971,7 @@ fn parse_function<'arena, 'src>(
             return_type,
             by_ref,
             attributes,
+            doc_comment,
         })),
         span,
     }
@@ -1634,6 +1636,7 @@ fn parse_class<'arena, 'src>(
     let end = close
         .map(|t| t.span.end)
         .unwrap_or(parser.current_span().start);
+    let doc_comment = parser.take_doc_comment(start);
 
     Stmt {
         kind: StmtKind::Class(parser.alloc(ClassDecl {
@@ -1643,6 +1646,7 @@ fn parse_class<'arena, 'src>(
             implements,
             members,
             attributes,
+            doc_comment,
         })),
         span: Span::new(start, end),
     }
@@ -2229,6 +2233,7 @@ pub fn parse_class_members<'arena, 'src>(
                             type_hint: shared_type_hint,
                             value: first_value,
                             attributes: member_attrs,
+                            doc_comment: parser.take_doc_comment(member_start),
                         }),
                         span,
                     });
@@ -2240,6 +2245,7 @@ pub fn parse_class_members<'arena, 'src>(
                                 type_hint: shared_type_hint,
                                 value: rest_value,
                                 attributes: parser.alloc_vec(),
+                                doc_comment: None,
                             }),
                             span,
                         });
@@ -2318,6 +2324,7 @@ pub fn parse_class_members<'arena, 'src>(
                     return_type,
                     body,
                     attributes: member_attrs,
+                    doc_comment: parser.take_doc_comment(member_start),
                 }),
                 span,
             });
@@ -2370,6 +2377,7 @@ pub fn parse_class_members<'arena, 'src>(
                     default,
                     attributes: member_attrs,
                     hooks,
+                    doc_comment: parser.take_doc_comment(member_start),
                 }),
                 span,
             });
@@ -2413,6 +2421,7 @@ pub fn parse_class_members<'arena, 'src>(
                             default: pdefault,
                             attributes: parser.alloc_vec(), // attrs apply to first decl only
                             hooks: phooks,
+                            doc_comment: None,
                         }),
                         span: pspan,
                     });
@@ -2482,6 +2491,7 @@ fn parse_interface<'arena, 'src>(
     let end = close
         .map(|t| t.span.end)
         .unwrap_or(parser.current_span().start);
+    let doc_comment = parser.take_doc_comment(start);
 
     Stmt {
         kind: StmtKind::Interface(parser.alloc(InterfaceDecl {
@@ -2489,6 +2499,7 @@ fn parse_interface<'arena, 'src>(
             extends,
             members,
             attributes,
+            doc_comment,
         })),
         span: Span::new(start, end),
     }
@@ -2519,12 +2530,14 @@ fn parse_trait<'arena, 'src>(
     let end = close
         .map(|t| t.span.end)
         .unwrap_or(parser.current_span().start);
+    let doc_comment = parser.take_doc_comment(start);
 
     Stmt {
         kind: StmtKind::Trait(parser.alloc(TraitDecl {
             name,
             members,
             attributes,
+            doc_comment,
         })),
         span: Span::new(start, end),
     }
@@ -2630,6 +2643,7 @@ fn parse_enum<'arena, 'src>(
                     name: case_name,
                     value,
                     attributes: member_attrs,
+                    doc_comment: parser.take_doc_comment(member_start),
                 }),
                 span,
             });
@@ -2711,6 +2725,7 @@ fn parse_enum<'arena, 'src>(
                     type_hint: const_type,
                     value,
                     attributes: member_attrs,
+                    doc_comment: parser.take_doc_comment(member_start),
                 }),
                 span,
             });
@@ -2774,6 +2789,7 @@ fn parse_enum<'arena, 'src>(
                     return_type,
                     body,
                     attributes: member_attrs,
+                    doc_comment: parser.take_doc_comment(member_start),
                 }),
                 span,
             });
@@ -2788,6 +2804,7 @@ fn parse_enum<'arena, 'src>(
     let end = close
         .map(|t| t.span.end)
         .unwrap_or(parser.current_span().start);
+    let doc_comment = parser.take_doc_comment(start);
     Stmt {
         kind: StmtKind::Enum(parser.alloc(EnumDecl {
             name,
@@ -2795,6 +2812,7 @@ fn parse_enum<'arena, 'src>(
             implements,
             members,
             attributes,
+            doc_comment,
         })),
         span: Span::new(start, end),
     }

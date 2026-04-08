@@ -89,7 +89,15 @@ class EventDispatcher {
                     }
                   },
                   "body": [],
-                  "attributes": []
+                  "attributes": [],
+                  "doc_comment": {
+                    "kind": "Doc",
+                    "text": "/**\n     * @phpstan-assert non-empty-string $value\n     * @psalm-assert-if-true int $result\n     */",
+                    "span": {
+                      "start": 141,
+                      "end": 240
+                    }
+                  }
                 }
               },
               "span": {
@@ -98,7 +106,15 @@ class EventDispatcher {
               }
             }
           ],
-          "attributes": []
+          "attributes": [],
+          "doc_comment": {
+            "kind": "Doc",
+            "text": "/**\n * @phpstan-type Callback = callable(int): void\n * @phpstan-import-type UserId from UserRepository\n */",
+            "span": {
+              "start": 6,
+              "end": 112
+            }
+          }
         }
       },
       "span": {

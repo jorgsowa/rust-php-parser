@@ -348,6 +348,17 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         std::mem::take(&mut self.comments)
     }
 
+    /// Take the last doc comment (`/** ... */`) that appears before `pos`.
+    /// The comment is removed from the comments list so it won't be taken again.
+    pub fn take_doc_comment(&mut self, before: u32) -> Option<Comment<'src>> {
+        // Search backwards for the last Doc comment before `before`
+        let idx = self
+            .comments
+            .iter()
+            .rposition(|c| c.kind == CommentKind::Doc && c.span.end <= before)?;
+        Some(self.comments.remove(idx))
+    }
+
     /// Panic-mode error recovery: advance until we hit a likely statement boundary.
     pub fn synchronize(&mut self) {
         loop {

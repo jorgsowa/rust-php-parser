@@ -89,7 +89,15 @@ class UserRepository {
                     }
                   },
                   "body": [],
-                  "attributes": []
+                  "attributes": [],
+                  "doc_comment": {
+                    "kind": "Doc",
+                    "text": "/**\n     * @psalm-param non-empty-string $name\n     * @phpstan-return list<User>\n     * @psalm-suppress InvalidReturnType\n     */",
+                    "span": {
+                      "start": 78,
+                      "end": 207
+                    }
+                  }
                 }
               },
               "span": {
@@ -98,7 +106,15 @@ class UserRepository {
               }
             }
           ],
-          "attributes": []
+          "attributes": [],
+          "doc_comment": {
+            "kind": "Doc",
+            "text": "/**\n * @psalm-type UserId = positive-int\n */",
+            "span": {
+              "start": 6,
+              "end": 50
+            }
+          }
         }
       },
       "span": {

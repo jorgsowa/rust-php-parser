@@ -650,6 +650,8 @@ pub struct FunctionDecl<'arena, 'src> {
     pub return_type: Option<TypeHint<'arena, 'src>>,
     pub by_ref: bool,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 #[derive(Debug, Serialize)]
@@ -716,6 +718,8 @@ pub struct ClassDecl<'arena, 'src> {
     pub implements: ArenaVec<'arena, Name<'arena, 'src>>,
     pub members: ArenaVec<'arena, ClassMember<'arena, 'src>>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize, Default)]
@@ -751,6 +755,8 @@ pub struct PropertyDecl<'arena, 'src> {
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     #[serde(skip_serializing_if = "ArenaVec::is_empty")]
     pub hooks: ArenaVec<'arena, PropertyHook<'arena, 'src>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
@@ -789,6 +795,8 @@ pub struct MethodDecl<'arena, 'src> {
     pub return_type: Option<TypeHint<'arena, 'src>>,
     pub body: Option<ArenaVec<'arena, Stmt<'arena, 'src>>>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 #[derive(Debug, Serialize)]
@@ -799,6 +807,8 @@ pub struct ClassConstDecl<'arena, 'src> {
     pub type_hint: Option<&'arena TypeHint<'arena, 'src>>,
     pub value: Expr<'arena, 'src>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 #[derive(Debug, Serialize)]
@@ -836,6 +846,8 @@ pub struct InterfaceDecl<'arena, 'src> {
     pub extends: ArenaVec<'arena, Name<'arena, 'src>>,
     pub members: ArenaVec<'arena, ClassMember<'arena, 'src>>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 #[derive(Debug, Serialize)]
@@ -843,6 +855,8 @@ pub struct TraitDecl<'arena, 'src> {
     pub name: &'src str,
     pub members: ArenaVec<'arena, ClassMember<'arena, 'src>>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 #[derive(Debug, Serialize)]
@@ -852,6 +866,8 @@ pub struct EnumDecl<'arena, 'src> {
     pub implements: ArenaVec<'arena, Name<'arena, 'src>>,
     pub members: ArenaVec<'arena, EnumMember<'arena, 'src>>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 #[derive(Debug, Serialize)]
@@ -873,6 +889,8 @@ pub struct EnumCase<'arena, 'src> {
     pub name: &'src str,
     pub value: Option<Expr<'arena, 'src>>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 // =============================================================================
