@@ -10,22 +10,11 @@ This roadmap covers feature development and tracks ongoing performance optimizat
 
 Foundational changes that unlock multiple downstream features. Almost everything in Phase 2 and 3 depends on these.
 
-### 1.1 Comment Preservation
+### 1.1 Comment Preservation ✅
 
 Attach comments to AST nodes instead of discarding them during lexing.
 
-**Enables:** pretty printer, formatter, linter, LSP hover docs, doc-block extraction.
-
-**Scope:**
-- Add `Comment` type to `php-ast` with variants: `Line` (`//`), `Hash` (`#`), `Block` (`/* */`), `Doc` (`/** */`)
-- Each comment carries a `Span` and its raw text
-- Store comments on AST nodes (leading/trailing/inner) — similar to how `swc` or `oxc` handle it
-- Lexer must yield comment tokens instead of skipping them; parser attaches them to the nearest node
-
-**Difficulties:**
-- **Placement ambiguity** — a comment between two statements could belong to either. Need a consistent heuristic (e.g. leading-comment attaches to the next node if on its own line, trailing-comment attaches to the previous node if on the same line).
-- **Performance** — storing comments on every node increases memory. Consider a side-table (`HashMap<NodeId, Vec<Comment>>`) instead of inlining on each struct.
-- **Backwards compatibility** — every AST struct gains a new field or every consumer must look up the side-table. Either way, serialization format changes and all 500+ snapshots will need updating.
+**Status:** Complete. Comments are attached to AST nodes with leading/trailing placement. PHPDoc parser added for structured doc-comment extraction including Psalm/PHPStan annotation support. Doc comments are attached to declaration nodes (classes, functions, methods, properties, etc.).
 
 **Blockers:** None.
 
@@ -48,25 +37,11 @@ Trait-based AST traversal for analysis and transformation passes.
 
 **Blockers:** None — can start in parallel with 1.1.
 
-### 1.3 PHP Version Selection
+### 1.3 PHP Version Selection ✅
 
 Configure the target PHP version to control which syntax is accepted and which errors are emitted.
 
-**Enables:** accurate diagnostics per version, version-specific linting, migration tooling.
-
-**Scope:**
-- `PhpVersion` enum (e.g. `PhpVersion::PHP82`, `PhpVersion::PHP84`)
-- Pass version to `parse()` or via a builder/config struct
-- Gate features on version: reject `match` before 8.0, `readonly` classes before 8.2, property hooks before 8.4, etc.
-- Emit version-specific errors: `(unset)` cast removed in 8.0, `(real)` cast removed in 8.0, etc.
-
-**Difficulties:**
-- **Combinatorial surface** — PHP has dozens of version-gated features spanning lexer, parser, and semantics. The nikic/PHP-Parser source is the authoritative reference.
-- **Lexer interaction** — some tokens only exist in certain versions. Either the lexer needs the version, or the parser must reject valid tokens.
-- **Testing** — each version gate needs tests for "accepted in X" and "rejected in Y". Test count roughly doubles.
-- **Default behavior** — safest default is accept-all (current behavior) unless a version is explicitly set.
-
-**Blockers:** None technically, but best started after the visitor API so version-specific lint rules can use it.
+**Status:** Complete. `PhpVersion` enum implemented with version gating for all version-specific syntax. Fixtures use `===config===` sections for version-gated tests. Complete version gating coverage achieved.
 
 ---
 
@@ -96,7 +71,7 @@ Scope tracking, name resolution, and type checking as a separate pass over the A
 - **Standard library** — type information for 5000+ built-in functions requires a stubs database (phpstorm-stubs or php-src).
 - **Trait resolution** — `insteadof` and `as` create complex method resolution orders.
 
-**Blockers:** Visitor API (1.2). Symbol table also benefits from comment preservation (1.1) for doc-block types.
+**Blockers:** Visitor API (1.2). Comment preservation (1.1) is complete, including PHPDoc parsing for doc-block types.
 
 ### 2.2 Pretty Printer
 
@@ -116,7 +91,7 @@ AST-to-source output for code generation and refactoring tools.
 - **Comment placement** — printing comments in the right location (before/after/inline) is one of the hardest problems in pretty printers.
 - **Large surface area** — every AST node needs a print implementation.
 
-**Blockers:** Comment preservation (1.1) and Visitor API (1.2).
+**Blockers:** Visitor API (1.2). Comment preservation (1.1) is complete.
 
 ---
 
@@ -146,7 +121,7 @@ Use the parser as a backend for a PHP Language Server.
 - **Multi-file analysis** — go-to-definition for imported classes requires a project indexer watching the filesystem.
 - **Concurrency** — LSP requests arrive concurrently; the server must handle cancellation and concurrent AST access.
 
-**Blockers:** Semantic analysis (2.1) for anything beyond basic diagnostics. Pretty printer (2.2) for formatting. Comment preservation (1.1) for hover docs.
+**Blockers:** Semantic analysis (2.1) for anything beyond basic diagnostics. Pretty printer (2.2) for formatting. Comment preservation (1.1) is complete.
 
 ### 3.2 Incremental Parsing
 
@@ -194,24 +169,32 @@ Compile to WebAssembly for browser-based PHP tooling.
 ### Dependency Graph
 
 ```
-1.1 Comment Preservation ──────────────┐
+1.1 Comment Preservation ✅ ───────────┐
                                        ├──→ 2.2 Pretty Printer ──→ 3.1 LSP ──→ 3.2 Incremental
 1.2 Visitor / Walker API ──┬───────────┘                             ↑
                            └──→ 2.1 Semantic Analysis ───────────────┘
-1.3 PHP Version Selection
+1.3 PHP Version Selection ✅
 
 3.3 WASM Target (independent, improves with 2.2)
 ```
 
+**Next up:** Visitor / Walker API (1.2) is the critical-path item — it unblocks both semantic analysis and the pretty printer.
+
 **Note:** Performance optimization is tracked separately in `PERFORMANCE_ANALYSIS.md` and is ongoing independent of feature phases.
+
+### Additional completed work (not originally on roadmap)
+
+- **Test infrastructure overhaul** — migrated all tests to `.phpt` fixture files with `===source===`, `===config===`, and `===errors===` sections; eliminated all `.snap` files and removed `insta` dependency; auto-discovery of fixture files
+- **Public API documentation** — rustdoc added to public API surface
+- **Dependency cleanup** — replaced `lazy_static` with `std::sync::OnceLock`
 
 ### Complexity Estimates
 
 | Feature | Complexity | Estimate |
 |---------|------------|----------|
-| 1.1 Comment Preservation | Medium | ~500–800 lines across lexer, AST, parser |
+| 1.1 Comment Preservation | ✅ Complete | Includes PHPDoc parser + Psalm/PHPStan annotations |
 | 1.2 Visitor / Walker API | Medium | ~800–1200 lines (mechanical but large) |
-| 1.3 PHP Version Selection | Medium | ~300–500 lines + significant test additions |
+| 1.3 PHP Version Selection | ✅ Complete | Full version gating for all version-specific syntax |
 | 2.1 Semantic Analysis | Very High | ~3000–5000+ lines (open-ended) |
 | 2.2 Pretty Printer | High | ~2000–3000 lines |
 | 3.1 LSP Integration | High | ~2000–4000 lines + new crate |
