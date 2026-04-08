@@ -18,24 +18,15 @@ Attach comments to AST nodes instead of discarding them during lexing.
 
 **Blockers:** None.
 
-### 1.2 Visitor / Walker API
+### 1.2 Visitor / Walker API ✅
 
 Trait-based AST traversal for analysis and transformation passes.
 
-**Enables:** semantic analysis, linters, codemods, pretty printer, symbol extraction for LSP.
+**Status:** Complete. `Visitor` trait with `ControlFlow<()>` return for early termination and subtree skipping. Visit methods for all node types: statements, expressions, params, args, class/enum members, property hooks, type hints, attributes, catch clauses, match arms, closure use vars. Corresponding `walk_*` free functions for each. Walks type hints (including union/intersection/nullable), attributes, and declare directives that were previously skipped.
 
-**Scope:**
-- `Visitor` trait with `visit_stmt`, `visit_expr`, `visit_type_hint`, etc., with default implementations that recurse
-- `walk_*` free functions that drive the recursion
-- Mutable variant (`VisitorMut` or `Fold`) for AST transformations
-- Derive or hand-write traversal for every AST node
+**Remaining:** `VisitorMut`/`Fold` for AST transformations is deferred — arena allocation (`&'arena`) makes in-place mutation of pointer-behind fields unsound. A `Fold` that rebuilds nodes into a new arena is the correct approach but requires a separate design.
 
-**Difficulties:**
-- **AST size** — 30+ statement kinds, 50+ expression kinds, plus OOP members, params, type hints, match arms, etc. Every variant needs a walk arm. Large, mechanical, error-prone.
-- **Ownership** — a read-only `Visitor<'ast>` taking `&'ast Node` is straightforward. A mutable `Fold` that returns owned nodes requires moving values. Consider providing both.
-- **Traversal control** — callers need to skip subtrees or stop early. A `ControlFlow`-style return type is needed.
-
-**Blockers:** None — can start in parallel with 1.1.
+**Blockers:** None.
 
 ### 1.3 PHP Version Selection ✅
 
@@ -71,7 +62,7 @@ Scope tracking, name resolution, and type checking as a separate pass over the A
 - **Standard library** — type information for 5000+ built-in functions requires a stubs database (phpstorm-stubs or php-src).
 - **Trait resolution** — `insteadof` and `as` create complex method resolution orders.
 
-**Blockers:** Visitor API (1.2). Comment preservation (1.1) is complete, including PHPDoc parsing for doc-block types.
+**Blockers:** None. Visitor API (1.2) and Comment preservation (1.1) are both complete.
 
 ### 2.2 Pretty Printer
 
@@ -91,7 +82,7 @@ AST-to-source output for code generation and refactoring tools.
 - **Comment placement** — printing comments in the right location (before/after/inline) is one of the hardest problems in pretty printers.
 - **Large surface area** — every AST node needs a print implementation.
 
-**Blockers:** Visitor API (1.2). Comment preservation (1.1) is complete.
+**Blockers:** None. Visitor API (1.2) and Comment preservation (1.1) are both complete.
 
 ---
 
@@ -121,7 +112,7 @@ Use the parser as a backend for a PHP Language Server.
 - **Multi-file analysis** — go-to-definition for imported classes requires a project indexer watching the filesystem.
 - **Concurrency** — LSP requests arrive concurrently; the server must handle cancellation and concurrent AST access.
 
-**Blockers:** Semantic analysis (2.1) for anything beyond basic diagnostics. Pretty printer (2.2) for formatting. Comment preservation (1.1) is complete.
+**Blockers:** Semantic analysis (2.1) for anything beyond basic diagnostics. Pretty printer (2.2) for formatting.
 
 ### 3.2 Incremental Parsing
 
@@ -169,16 +160,16 @@ Compile to WebAssembly for browser-based PHP tooling.
 ### Dependency Graph
 
 ```
-1.1 Comment Preservation ✅ ───────────┐
-                                       ├──→ 2.2 Pretty Printer ──→ 3.1 LSP ──→ 3.2 Incremental
-1.2 Visitor / Walker API ──┬───────────┘                             ↑
-                           └──→ 2.1 Semantic Analysis ───────────────┘
+1.1 Comment Preservation ✅ ────────────┐
+                                        ├──→ 2.2 Pretty Printer ──→ 3.1 LSP ──→ 3.2 Incremental
+1.2 Visitor / Walker API ✅ ──┬─────────┘                             ↑
+                              └──→ 2.1 Semantic Analysis ─────────────┘
 1.3 PHP Version Selection ✅
 
 3.3 WASM Target (independent, improves with 2.2)
 ```
 
-**Next up:** Visitor / Walker API (1.2) is the critical-path item — it unblocks both semantic analysis and the pretty printer.
+**Phase 1 complete.** Phase 2 features (semantic analysis, pretty printer) are now unblocked.
 
 **Note:** Performance optimization is tracked separately in `PERFORMANCE_ANALYSIS.md` and is ongoing independent of feature phases.
 
@@ -193,7 +184,7 @@ Compile to WebAssembly for browser-based PHP tooling.
 | Feature | Complexity | Estimate |
 |---------|------------|----------|
 | 1.1 Comment Preservation | ✅ Complete | Includes PHPDoc parser + Psalm/PHPStan annotations |
-| 1.2 Visitor / Walker API | Medium | ~800–1200 lines (mechanical but large) |
+| 1.2 Visitor / Walker API | ✅ Complete | ControlFlow support, type hints, attributes, 13 visit methods |
 | 1.3 PHP Version Selection | ✅ Complete | Full version gating for all version-specific syntax |
 | 2.1 Semantic Analysis | Very High | ~3000–5000+ lines (open-ended) |
 | 2.2 Pretty Printer | High | ~2000–3000 lines |
