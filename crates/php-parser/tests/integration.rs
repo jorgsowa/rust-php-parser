@@ -519,3 +519,139 @@ fn test_int_no_overflow_stays_int() {
         "PHP_INT_MAX must stay as Int; got:\n{json}"
     );
 }
+
+// =============================================================================
+// PHPDoc integration tests
+// =============================================================================
+
+/// Doc comments are attached to AST nodes. The .phpt fixtures in
+/// categories/phpdoc/ test this via the ===ast=== section. This test verifies
+/// the PHPDoc parser works on doc_comment text from AST nodes.
+#[test]
+fn phpdoc_from_ast_node() {
+    let result = parse_php(
+        "<?php
+/**
+ * Create a new user.
+ *
+ * @param string $name The user's name
+ * @param int $age
+ * @return User
+ * @throws \\InvalidArgumentException
+ */
+function createUser(string $name, int $age): User {}
+",
+    );
+    assert_no_errors(&result);
+
+    // Doc comment is on the FunctionDecl node, not in result.comments
+    let func = &result.program.stmts[0];
+    let doc_text = match &func.kind {
+        php_ast::StmtKind::Function(f) => f.doc_comment.as_ref().unwrap().text,
+        _ => panic!("expected Function"),
+    };
+    let doc = php_rs_parser::phpdoc::parse(doc_text);
+    assert_eq!(doc.summary, Some("Create a new user."));
+    assert_eq!(doc.tags.len(), 4);
+    assert!(matches!(
+        &doc.tags[0],
+        php_ast::PhpDocTag::Param {
+            type_str: Some("string"),
+            name: Some("$name"),
+            ..
+        }
+    ));
+    assert!(matches!(
+        &doc.tags[1],
+        php_ast::PhpDocTag::Param {
+            type_str: Some("int"),
+            name: Some("$age"),
+            ..
+        }
+    ));
+    assert!(matches!(
+        &doc.tags[2],
+        php_ast::PhpDocTag::Return {
+            type_str: Some("User"),
+            ..
+        }
+    ));
+    assert!(matches!(
+        &doc.tags[3],
+        php_ast::PhpDocTag::Throws {
+            type_str: Some("\\InvalidArgumentException"),
+            ..
+        }
+    ));
+}
+
+#[test]
+fn phpdoc_psalm_phpstan_from_ast_node() {
+    let result = parse_php(
+        "<?php
+/**
+ * @psalm-type UserId = positive-int
+ */
+class UserRepository {
+    /**
+     * @psalm-param non-empty-string $name
+     * @phpstan-return list<User>
+     * @psalm-assert-if-true User $result
+     * @psalm-suppress InvalidReturnType
+     */
+    public function find(string $name): array {}
+}
+",
+    );
+    assert_no_errors(&result);
+
+    // Class doc comment
+    let class = match &result.program.stmts[0].kind {
+        php_ast::StmtKind::Class(c) => c,
+        _ => panic!("expected Class"),
+    };
+    let class_doc = php_rs_parser::phpdoc::parse(class.doc_comment.as_ref().unwrap().text);
+    assert_eq!(class_doc.tags.len(), 1);
+    assert!(matches!(
+        &class_doc.tags[0],
+        php_ast::PhpDocTag::TypeAlias {
+            name: Some("UserId"),
+            type_str: Some("positive-int")
+        }
+    ));
+
+    // Method doc comment
+    let method_doc_text = match &class.members[0].kind {
+        php_ast::ClassMemberKind::Method(m) => m.doc_comment.as_ref().unwrap().text,
+        _ => panic!("expected Method"),
+    };
+    let method_doc = php_rs_parser::phpdoc::parse(method_doc_text);
+    assert_eq!(method_doc.tags.len(), 4);
+    assert!(matches!(
+        &method_doc.tags[0],
+        php_ast::PhpDocTag::Param {
+            type_str: Some("non-empty-string"),
+            ..
+        }
+    ));
+    assert!(matches!(
+        &method_doc.tags[1],
+        php_ast::PhpDocTag::Return {
+            type_str: Some("list<User>"),
+            ..
+        }
+    ));
+    assert!(matches!(
+        &method_doc.tags[2],
+        php_ast::PhpDocTag::Assert {
+            type_str: Some("User"),
+            name: Some("$result")
+        }
+    ));
+    assert!(matches!(
+        &method_doc.tags[3],
+        php_ast::PhpDocTag::Suppress {
+            rules: "InvalidReturnType"
+        }
+    ));
+}

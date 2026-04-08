@@ -205,7 +205,15 @@ function add($a, $b) {
           ],
           "return_type": null,
           "by_ref": false,
-          "attributes": []
+          "attributes": [],
+          "doc_comment": {
+            "kind": "Doc",
+            "text": "/** @param int $a */",
+            "span": {
+              "start": 101,
+              "end": 121
+            }
+          }
         }
       },
       "span": {

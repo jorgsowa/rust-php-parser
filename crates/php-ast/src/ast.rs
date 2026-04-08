@@ -96,6 +96,128 @@ pub enum CommentKind {
     Doc,
 }
 
+// =============================================================================
+// PHPDoc types
+// =============================================================================
+
+/// A parsed PHPDoc block (`/** ... */`).
+#[derive(Debug, Serialize)]
+pub struct PhpDoc<'src> {
+    /// The summary line (first line of text before a blank line or tag).
+    pub summary: Option<&'src str>,
+    /// The long description (text after the summary, before the first tag).
+    pub description: Option<&'src str>,
+    /// Parsed tags in source order.
+    pub tags: Vec<PhpDocTag<'src>>,
+}
+
+/// A single PHPDoc tag (e.g. `@param int $x The value`).
+#[derive(Debug, Serialize)]
+pub enum PhpDocTag<'src> {
+    /// `@param [type] $name [description]`
+    Param {
+        type_str: Option<&'src str>,
+        name: Option<&'src str>,
+        description: Option<&'src str>,
+    },
+    /// `@return [type] [description]`
+    Return {
+        type_str: Option<&'src str>,
+        description: Option<&'src str>,
+    },
+    /// `@var [type] [$name] [description]`
+    Var {
+        type_str: Option<&'src str>,
+        name: Option<&'src str>,
+        description: Option<&'src str>,
+    },
+    /// `@throws [type] [description]`
+    Throws {
+        type_str: Option<&'src str>,
+        description: Option<&'src str>,
+    },
+    /// `@deprecated [description]`
+    Deprecated { description: Option<&'src str> },
+    /// `@template T [of bound]`
+    Template {
+        name: &'src str,
+        bound: Option<&'src str>,
+    },
+    /// `@extends [type]`
+    Extends { type_str: &'src str },
+    /// `@implements [type]`
+    Implements { type_str: &'src str },
+    /// `@method [static] [return_type] name(params) [description]`
+    Method { signature: &'src str },
+    /// `@property [type] $name [description]`
+    Property {
+        type_str: Option<&'src str>,
+        name: Option<&'src str>,
+        description: Option<&'src str>,
+    },
+    /// `@property-read [type] $name [description]`
+    PropertyRead {
+        type_str: Option<&'src str>,
+        name: Option<&'src str>,
+        description: Option<&'src str>,
+    },
+    /// `@property-write [type] $name [description]`
+    PropertyWrite {
+        type_str: Option<&'src str>,
+        name: Option<&'src str>,
+        description: Option<&'src str>,
+    },
+    /// `@see [reference] [description]`
+    See { reference: &'src str },
+    /// `@link [url] [description]`
+    Link { url: &'src str },
+    /// `@since [version] [description]`
+    Since { version: &'src str },
+    /// `@author name [<email>]`
+    Author { name: &'src str },
+    /// `@internal`
+    Internal,
+    /// `@inheritdoc` / `{@inheritdoc}`
+    InheritDoc,
+    /// `@psalm-assert`, `@phpstan-assert` — assert that a parameter has a type after the call.
+    Assert {
+        type_str: Option<&'src str>,
+        name: Option<&'src str>,
+    },
+    /// `@psalm-type`, `@phpstan-type` — local type alias (`@type Foo = int|string`).
+    TypeAlias {
+        name: Option<&'src str>,
+        type_str: Option<&'src str>,
+    },
+    /// `@psalm-import-type`, `@phpstan-import-type` — import a type alias from another class.
+    ImportType { body: &'src str },
+    /// `@psalm-suppress`, `@phpstan-ignore-next-line`, `@phpstan-ignore` — suppress diagnostics.
+    Suppress { rules: &'src str },
+    /// `@psalm-pure`, `@psalm-immutable`, `@psalm-readonly` — purity/immutability markers.
+    Pure,
+    /// `@psalm-readonly`, `@readonly` — marks a property as read-only.
+    Readonly,
+    /// `@psalm-immutable` — marks a class as immutable.
+    Immutable,
+    /// `@mixin [class]` — indicates the class delegates calls to another.
+    Mixin { class: &'src str },
+    /// `@template-covariant T [of bound]`
+    TemplateCovariant {
+        name: &'src str,
+        bound: Option<&'src str>,
+    },
+    /// `@template-contravariant T [of bound]`
+    TemplateContravariant {
+        name: &'src str,
+        bound: Option<&'src str>,
+    },
+    /// Any tag not specifically recognized: `@tagname [body]`
+    Generic {
+        tag: &'src str,
+        body: Option<&'src str>,
+    },
+}
+
 /// The root AST node representing a complete PHP file.
 #[derive(Debug, Serialize)]
 pub struct Program<'arena, 'src> {
@@ -528,6 +650,8 @@ pub struct FunctionDecl<'arena, 'src> {
     pub return_type: Option<TypeHint<'arena, 'src>>,
     pub by_ref: bool,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 #[derive(Debug, Serialize)]
@@ -594,6 +718,8 @@ pub struct ClassDecl<'arena, 'src> {
     pub implements: ArenaVec<'arena, Name<'arena, 'src>>,
     pub members: ArenaVec<'arena, ClassMember<'arena, 'src>>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 #[derive(Debug, Clone, Serialize, Default)]
@@ -629,6 +755,8 @@ pub struct PropertyDecl<'arena, 'src> {
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     #[serde(skip_serializing_if = "ArenaVec::is_empty")]
     pub hooks: ArenaVec<'arena, PropertyHook<'arena, 'src>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
@@ -667,6 +795,8 @@ pub struct MethodDecl<'arena, 'src> {
     pub return_type: Option<TypeHint<'arena, 'src>>,
     pub body: Option<ArenaVec<'arena, Stmt<'arena, 'src>>>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 #[derive(Debug, Serialize)]
@@ -677,6 +807,8 @@ pub struct ClassConstDecl<'arena, 'src> {
     pub type_hint: Option<&'arena TypeHint<'arena, 'src>>,
     pub value: Expr<'arena, 'src>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 #[derive(Debug, Serialize)]
@@ -714,6 +846,8 @@ pub struct InterfaceDecl<'arena, 'src> {
     pub extends: ArenaVec<'arena, Name<'arena, 'src>>,
     pub members: ArenaVec<'arena, ClassMember<'arena, 'src>>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 #[derive(Debug, Serialize)]
@@ -721,6 +855,8 @@ pub struct TraitDecl<'arena, 'src> {
     pub name: &'src str,
     pub members: ArenaVec<'arena, ClassMember<'arena, 'src>>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 #[derive(Debug, Serialize)]
@@ -730,6 +866,8 @@ pub struct EnumDecl<'arena, 'src> {
     pub implements: ArenaVec<'arena, Name<'arena, 'src>>,
     pub members: ArenaVec<'arena, EnumMember<'arena, 'src>>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 #[derive(Debug, Serialize)]
@@ -751,6 +889,8 @@ pub struct EnumCase<'arena, 'src> {
     pub name: &'src str,
     pub value: Option<Expr<'arena, 'src>>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 // =============================================================================

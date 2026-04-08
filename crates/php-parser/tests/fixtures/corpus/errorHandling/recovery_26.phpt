@@ -36,7 +36,15 @@ class B {
                   "is_readonly": false,
                   "type_hint": null,
                   "default": null,
-                  "attributes": []
+                  "attributes": [],
+                  "doc_comment": {
+                    "kind": "Doc",
+                    "text": "/** @var ?string */",
+                    "span": {
+                      "start": 20,
+                      "end": 39
+                    }
+                  }
                 }
               },
               "span": {
