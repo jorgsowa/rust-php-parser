@@ -1,5 +1,5 @@
 ===config===
-min_php=8.2
+min_php=8.3
 ===source===
 <?php
 $obj = new readonly class(1, 2) {
