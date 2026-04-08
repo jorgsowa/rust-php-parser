@@ -1,0 +1,16 @@
+[package]
+name = "php-printer"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "Pretty printer for PHP AST — converts parsed AST back to PHP source code"
+
+[dependencies]
+php-ast.workspace = true
+
+[dev-dependencies]
+php-rs-parser.workspace = true
+bumpalo.workspace = true

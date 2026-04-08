@@ -12,6 +12,7 @@ members = [
     "crates/php-ast",
     "crates/php-lexer",
     "crates/php-parser",
+    "crates/php-printer",
 ]
 
 [workspace.package]
@@ -26,6 +27,7 @@ homepage = "https://github.com/jorgsowa/rust-php-parser"
 php-ast = { path = "crates/php-ast", version = "0.3.3" }
 php-lexer = { path = "crates/php-lexer", version = "0.3.3" }
 php-rs-parser = { path = "crates/php-parser", version = "0.3.3" }
+php-printer = { path = "crates/php-printer", version = "0.3.3" }
 miette = { version = "7", features = ["fancy"] }
 thiserror = "2"
 serde = { version = "1", features = ["derive"] }

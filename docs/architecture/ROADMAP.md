@@ -64,25 +64,11 @@ Scope tracking, name resolution, and type checking as a separate pass over the A
 
 **Blockers:** None. Visitor API (1.2) and Comment preservation (1.1) are both complete.
 
-### 2.2 Pretty Printer
+### 2.2 Pretty Printer ✅
 
 AST-to-source output for code generation and refactoring tools.
 
-**Enables:** code formatting, automated refactoring (rename, extract method), codegen.
-
-**Scope:**
-- `Printer` struct that walks the AST and emits PHP source
-- Configurable formatting options (indentation style, brace placement, spacing rules)
-- Round-trip fidelity: `parse(source) |> print` should produce semantically equivalent code
-- Comment preservation: print attached comments in the right positions
-
-**Difficulties:**
-- **Whitespace and formatting** — PHP has many syntactic forms (alternative syntax, short tags, heredoc). Each needs formatting decisions.
-- **Operator precedence** — the printer must add parentheses when removing them would change semantics. Requires knowing parent vs. child binding power.
-- **Comment placement** — printing comments in the right location (before/after/inline) is one of the hardest problems in pretty printers.
-- **Large surface area** — every AST node needs a print implementation.
-
-**Blockers:** None. Visitor API (1.2) and Comment preservation (1.1) are both complete.
+**Status:** Complete. New `php-printer` crate with `pretty_print()`, `pretty_print_file()`, and `pretty_print_with_config()` API. Handles all StmtKind/ExprKind variants with correct operator precedence and automatic parenthesization. Configurable indentation (spaces/tabs). Prints doc comments, attributes, type hints (union/intersection/nullable), property hooks, match expressions, closures, arrow functions, enums, and all OOP constructs. 62 tests including round-trip verification.
 
 ---
 
@@ -112,7 +98,7 @@ Use the parser as a backend for a PHP Language Server.
 - **Multi-file analysis** — go-to-definition for imported classes requires a project indexer watching the filesystem.
 - **Concurrency** — LSP requests arrive concurrently; the server must handle cancellation and concurrent AST access.
 
-**Blockers:** Semantic analysis (2.1) for anything beyond basic diagnostics. Pretty printer (2.2) for formatting.
+**Blockers:** Semantic analysis (2.1) for anything beyond basic diagnostics. Pretty printer (2.2) is complete.
 
 ### 3.2 Incremental Parsing
 
@@ -161,15 +147,15 @@ Compile to WebAssembly for browser-based PHP tooling.
 
 ```
 1.1 Comment Preservation ✅ ────────────┐
-                                        ├──→ 2.2 Pretty Printer ──→ 3.1 LSP ──→ 3.2 Incremental
-1.2 Visitor / Walker API ✅ ──┬─────────┘                             ↑
-                              └──→ 2.1 Semantic Analysis ─────────────┘
+                                        ├──→ 2.2 Pretty Printer ✅ ──→ 3.1 LSP ──→ 3.2 Incremental
+1.2 Visitor / Walker API ✅ ──┬─────────┘                               ↑
+                              └──→ 2.1 Semantic Analysis ───────────────┘
 1.3 PHP Version Selection ✅
 
 3.3 WASM Target (independent, improves with 2.2)
 ```
 
-**Phase 1 complete.** Phase 2 features (semantic analysis, pretty printer) are now unblocked.
+**Phase 1 complete. Phase 2.2 complete.** LSP integration and WASM target are now unblocked.
 
 **Note:** Performance optimization is tracked separately in `PERFORMANCE_ANALYSIS.md` and is ongoing independent of feature phases.
 
@@ -187,7 +173,7 @@ Compile to WebAssembly for browser-based PHP tooling.
 | 1.2 Visitor / Walker API | ✅ Complete | ControlFlow support, type hints, attributes, 13 visit methods |
 | 1.3 PHP Version Selection | ✅ Complete | Full version gating for all version-specific syntax |
 | 2.1 Semantic Analysis | Very High | ~3000–5000+ lines (open-ended) |
-| 2.2 Pretty Printer | High | ~2000–3000 lines |
+| 2.2 Pretty Printer | ✅ Complete | New `php-printer` crate, 62 tests, round-trip verified |
 | 3.1 LSP Integration | High | ~2000–4000 lines + new crate |
 | 3.2 Incremental Parsing | Very High | ~3000–5000+ lines (research-level) |
 | 3.3 WASM Target | Low | ~200–400 lines of glue + build config |
