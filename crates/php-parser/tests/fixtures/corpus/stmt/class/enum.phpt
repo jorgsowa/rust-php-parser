@@ -9,6 +9,7 @@ enum B implements Bar, Baz {
 enum C: int implements Bar {
     case Foo = 1;
 }
+===errors===
 ===ast===
 {
   "stmts": [

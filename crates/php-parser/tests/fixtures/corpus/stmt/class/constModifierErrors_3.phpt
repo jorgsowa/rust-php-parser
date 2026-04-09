@@ -3,6 +3,7 @@
 class A {
     readonly const X = 1;
 }
+===errors===
 ===ast===
 {
   "stmts": [

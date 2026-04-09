@@ -9,6 +9,7 @@ class Test {
         readonly get;
     }
 }
+===errors===
 ===ast===
 {
   "stmts": [

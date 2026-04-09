@@ -3,6 +3,7 @@
 
 foreach ($foo) { $bar; }
 foreach ($foo as ) { $bar; }
+===errors===
 ===ast===
 {
   "stmts": [

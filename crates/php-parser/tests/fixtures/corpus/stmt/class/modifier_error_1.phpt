@@ -1,5 +1,6 @@
 ===source===
 <?php class A { public public $a; }
+===errors===
 ===ast===
 {
   "stmts": [

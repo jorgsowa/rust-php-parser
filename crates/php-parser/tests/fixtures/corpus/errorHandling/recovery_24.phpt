@@ -4,6 +4,7 @@ function foo() :
 {
     return $a;
 }
+===errors===
 ===ast===
 {
   "stmts": [

@@ -1,5 +1,6 @@
 ===source===
 <?php class PARENT {}
+===errors===
 ===ast===
 {
   "stmts": [

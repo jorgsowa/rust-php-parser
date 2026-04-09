@@ -9,6 +9,7 @@ $array = [
 $array = [
     'key' => $value $oopsAnotherValue
 ];
+===errors===
 ===ast===
 {
   "stmts": [

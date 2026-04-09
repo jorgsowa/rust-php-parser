@@ -1,6 +1,7 @@
 ===source===
 <?php
 global $$foo->bar;
+===errors===
 ===ast===
 {
   "stmts": [

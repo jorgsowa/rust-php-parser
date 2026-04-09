@@ -1,5 +1,6 @@
 ===source===
 <?php interface A extends PARENT {}
+===errors===
 ===ast===
 {
   "stmts": [

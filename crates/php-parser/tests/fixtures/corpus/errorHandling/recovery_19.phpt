@@ -2,6 +2,7 @@
 <?php
 
 foo(Bar::);
+===errors===
 ===ast===
 {
   "stmts": [

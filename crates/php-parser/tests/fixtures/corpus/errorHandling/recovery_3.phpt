@@ -4,6 +4,7 @@
 foo();
 bar()
 baz();
+===errors===
 ===ast===
 {
   "stmts": [

@@ -6,6 +6,7 @@ class Foo {
     publi $foo;
     public $bar;
 }
+===errors===
 ===ast===
 {
   "stmts": [

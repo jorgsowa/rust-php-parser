@@ -6,6 +6,7 @@ class A {
     function bar() {}
     static abstract function baz() {}
 }
+===errors===
 ===ast===
 {
   "stmts": [

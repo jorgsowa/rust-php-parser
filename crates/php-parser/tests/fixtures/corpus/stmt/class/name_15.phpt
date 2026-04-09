@@ -1,5 +1,6 @@
 ===source===
 <?php interface A extends static {}
+===errors===
 ===ast===
 {
   "stmts": [

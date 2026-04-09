@@ -3,6 +3,7 @@
 class Test {
     public $prop { FOO => bar; }
 }
+===errors===
 ===ast===
 {
   "stmts": [

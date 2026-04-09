@@ -16,6 +16,7 @@ const WithGroupAttributes = 3;
 #[Example]
 const ThisIsInvalid = 4,
     AttributesOnMultipleConstants = 5;
+===errors===
 ===ast===
 {
   "stmts": [

@@ -1,5 +1,6 @@
 ===source===
 <?php class A { abstract abstract function a(); }
+===errors===
 ===ast===
 {
   "stmts": [

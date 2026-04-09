@@ -15,6 +15,7 @@ echo $a
 unset($a)
 throw $x
 goto label
+===errors===
 ===ast===
 {
   "stmts": [

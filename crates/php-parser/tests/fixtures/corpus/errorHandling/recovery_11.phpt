@@ -1,6 +1,7 @@
 ===source===
 <?php
 new T
+===errors===
 ===ast===
 {
   "stmts": [

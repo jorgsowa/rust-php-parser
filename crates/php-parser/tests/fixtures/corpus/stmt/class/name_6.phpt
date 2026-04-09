@@ -1,5 +1,6 @@
 ===source===
 <?php class A extends static {}
+===errors===
 ===ast===
 {
   "stmts": [
