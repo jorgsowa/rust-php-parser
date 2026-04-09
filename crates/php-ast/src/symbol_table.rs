@@ -241,16 +241,24 @@ impl<'arena, 'src> Visitor<'arena, 'src> for SymbolCollector<'src> {
     fn visit_stmt(&mut self, stmt: &Stmt<'arena, 'src>) -> ControlFlow<()> {
         match &stmt.kind {
             StmtKind::Namespace(ns) => {
-                let prev_ns = self.namespace.clone();
                 if let Some(name) = &ns.name {
                     self.namespace = name.join_parts().into_owned();
+                } else {
+                    self.namespace.clear();
                 }
-                if let NamespaceBody::Braced(stmts) = &ns.body {
-                    for s in stmts.iter() {
-                        self.visit_stmt(s)?;
+                match &ns.body {
+                    NamespaceBody::Braced(stmts) => {
+                        for s in stmts.iter() {
+                            self.visit_stmt(s)?;
+                        }
+                        // Restore after braced block — braced namespaces are self-contained
+                        self.namespace.clear();
+                    }
+                    NamespaceBody::Simple => {
+                        // Unbraced: namespace applies to all subsequent siblings
+                        // until the next namespace declaration — don't restore
                     }
                 }
-                self.namespace = prev_ns;
                 return ControlFlow::Continue(());
             }
             StmtKind::Use(use_decl) => {
@@ -618,5 +626,243 @@ mod tests {
         assert_eq!(cases.len(), 1);
         assert_eq!(cases[0].fqn, "Suit::Hearts");
         assert_eq!(cases[0].parent.as_deref(), Some("Suit"));
+    }
+
+    #[test]
+    fn unbraced_namespace_applies_to_siblings() {
+        let arena = bumpalo::Bump::new();
+
+        // namespace App\Models;
+        let ns = arena.alloc(NamespaceDecl {
+            name: Some(Name::Complex {
+                parts: {
+                    let mut v = ArenaVec::new_in(&arena);
+                    v.push("App");
+                    v.push("Models");
+                    v
+                },
+                kind: crate::ast::NameKind::Qualified,
+                span: Span::DUMMY,
+            }),
+            body: NamespaceBody::Simple,
+        });
+
+        // class User {}
+        let class = arena.alloc(ClassDecl {
+            name: Some("User"),
+            modifiers: ClassModifiers::default(),
+            extends: None,
+            implements: ArenaVec::new_in(&arena),
+            members: ArenaVec::new_in(&arena),
+            attributes: ArenaVec::new_in(&arena),
+            doc_comment: None,
+        });
+
+        // function helper() {}
+        let func = arena.alloc(FunctionDecl {
+            name: "helper",
+            params: ArenaVec::new_in(&arena),
+            body: ArenaVec::new_in(&arena),
+            return_type: None,
+            by_ref: false,
+            attributes: ArenaVec::new_in(&arena),
+            doc_comment: None,
+        });
+
+        let mut stmts = ArenaVec::new_in(&arena);
+        stmts.push(Stmt {
+            kind: StmtKind::Namespace(ns),
+            span: Span::new(0, 25),
+        });
+        stmts.push(Stmt {
+            kind: StmtKind::Class(class),
+            span: Span::new(26, 50),
+        });
+        stmts.push(Stmt {
+            kind: StmtKind::Function(func),
+            span: Span::new(51, 80),
+        });
+
+        let table = build_table(&arena, stmts);
+        assert_eq!(table.symbols().len(), 2);
+        assert_eq!(table.symbols()[0].fqn, "App\\Models\\User");
+        assert_eq!(table.symbols()[1].fqn, "App\\Models\\helper");
+    }
+
+    #[test]
+    fn multiple_unbraced_namespaces_switch_context() {
+        // namespace A; class Foo {} namespace B; class Bar {}
+        let arena = bumpalo::Bump::new();
+
+        let ns_a = arena.alloc(NamespaceDecl {
+            name: Some(Name::Simple {
+                value: "A",
+                span: Span::DUMMY,
+            }),
+            body: NamespaceBody::Simple,
+        });
+        let class_foo = arena.alloc(ClassDecl {
+            name: Some("Foo"),
+            modifiers: ClassModifiers::default(),
+            extends: None,
+            implements: ArenaVec::new_in(&arena),
+            members: ArenaVec::new_in(&arena),
+            attributes: ArenaVec::new_in(&arena),
+            doc_comment: None,
+        });
+        let ns_b = arena.alloc(NamespaceDecl {
+            name: Some(Name::Simple {
+                value: "B",
+                span: Span::DUMMY,
+            }),
+            body: NamespaceBody::Simple,
+        });
+        let class_bar = arena.alloc(ClassDecl {
+            name: Some("Bar"),
+            modifiers: ClassModifiers::default(),
+            extends: None,
+            implements: ArenaVec::new_in(&arena),
+            members: ArenaVec::new_in(&arena),
+            attributes: ArenaVec::new_in(&arena),
+            doc_comment: None,
+        });
+
+        let mut stmts = ArenaVec::new_in(&arena);
+        stmts.push(Stmt {
+            kind: StmtKind::Namespace(ns_a),
+            span: Span::DUMMY,
+        });
+        stmts.push(Stmt {
+            kind: StmtKind::Class(class_foo),
+            span: Span::DUMMY,
+        });
+        stmts.push(Stmt {
+            kind: StmtKind::Namespace(ns_b),
+            span: Span::DUMMY,
+        });
+        stmts.push(Stmt {
+            kind: StmtKind::Class(class_bar),
+            span: Span::DUMMY,
+        });
+
+        let table = build_table(&arena, stmts);
+        assert_eq!(table.symbols().len(), 2);
+        assert_eq!(table.symbols()[0].fqn, "A\\Foo");
+        assert_eq!(table.symbols()[1].fqn, "B\\Bar");
+    }
+
+    #[test]
+    fn braced_namespace_does_not_leak_to_siblings() {
+        // namespace A { class Foo {} } class Bar {}
+        let arena = bumpalo::Bump::new();
+
+        let class_foo = arena.alloc(ClassDecl {
+            name: Some("Foo"),
+            modifiers: ClassModifiers::default(),
+            extends: None,
+            implements: ArenaVec::new_in(&arena),
+            members: ArenaVec::new_in(&arena),
+            attributes: ArenaVec::new_in(&arena),
+            doc_comment: None,
+        });
+        let ns = arena.alloc(NamespaceDecl {
+            name: Some(Name::Simple {
+                value: "A",
+                span: Span::DUMMY,
+            }),
+            body: NamespaceBody::Braced({
+                let mut inner = ArenaVec::new_in(&arena);
+                inner.push(Stmt {
+                    kind: StmtKind::Class(class_foo),
+                    span: Span::DUMMY,
+                });
+                inner
+            }),
+        });
+        let class_bar = arena.alloc(ClassDecl {
+            name: Some("Bar"),
+            modifiers: ClassModifiers::default(),
+            extends: None,
+            implements: ArenaVec::new_in(&arena),
+            members: ArenaVec::new_in(&arena),
+            attributes: ArenaVec::new_in(&arena),
+            doc_comment: None,
+        });
+
+        let mut stmts = ArenaVec::new_in(&arena);
+        stmts.push(Stmt {
+            kind: StmtKind::Namespace(ns),
+            span: Span::DUMMY,
+        });
+        stmts.push(Stmt {
+            kind: StmtKind::Class(class_bar),
+            span: Span::DUMMY,
+        });
+
+        let table = build_table(&arena, stmts);
+        assert_eq!(table.symbols().len(), 2);
+        assert_eq!(table.symbols()[0].fqn, "A\\Foo");
+        // Bar is outside the braced namespace — should be global
+        assert_eq!(table.symbols()[1].fqn, "Bar");
+    }
+
+    #[test]
+    fn unbraced_namespace_no_name_clears_namespace() {
+        // namespace A; class Foo {} namespace; class Bar {}
+        // (namespace with no name resets to global)
+        let arena = bumpalo::Bump::new();
+
+        let ns_a = arena.alloc(NamespaceDecl {
+            name: Some(Name::Simple {
+                value: "A",
+                span: Span::DUMMY,
+            }),
+            body: NamespaceBody::Simple,
+        });
+        let class_foo = arena.alloc(ClassDecl {
+            name: Some("Foo"),
+            modifiers: ClassModifiers::default(),
+            extends: None,
+            implements: ArenaVec::new_in(&arena),
+            members: ArenaVec::new_in(&arena),
+            attributes: ArenaVec::new_in(&arena),
+            doc_comment: None,
+        });
+        let ns_global = arena.alloc(NamespaceDecl {
+            name: None,
+            body: NamespaceBody::Simple,
+        });
+        let class_bar = arena.alloc(ClassDecl {
+            name: Some("Bar"),
+            modifiers: ClassModifiers::default(),
+            extends: None,
+            implements: ArenaVec::new_in(&arena),
+            members: ArenaVec::new_in(&arena),
+            attributes: ArenaVec::new_in(&arena),
+            doc_comment: None,
+        });
+
+        let mut stmts = ArenaVec::new_in(&arena);
+        stmts.push(Stmt {
+            kind: StmtKind::Namespace(ns_a),
+            span: Span::DUMMY,
+        });
+        stmts.push(Stmt {
+            kind: StmtKind::Class(class_foo),
+            span: Span::DUMMY,
+        });
+        stmts.push(Stmt {
+            kind: StmtKind::Namespace(ns_global),
+            span: Span::DUMMY,
+        });
+        stmts.push(Stmt {
+            kind: StmtKind::Class(class_bar),
+            span: Span::DUMMY,
+        });
+
+        let table = build_table(&arena, stmts);
+        assert_eq!(table.symbols().len(), 2);
+        assert_eq!(table.symbols()[0].fqn, "A\\Foo");
+        assert_eq!(table.symbols()[1].fqn, "Bar");
     }
 }
