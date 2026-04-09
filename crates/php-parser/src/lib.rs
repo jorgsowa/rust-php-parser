@@ -39,11 +39,15 @@ pub(crate) mod stmt;
 pub mod version;
 
 use diagnostics::ParseError;
+use php_ast::source_map::SourceMap;
 use php_ast::{Comment, Program};
 pub use version::PhpVersion;
 
 /// The result of parsing a PHP source string.
 pub struct ParseResult<'arena, 'src> {
+    /// The original source text. Useful for extracting text from spans
+    /// via `&result.source[span.start as usize..span.end as usize]`.
+    pub source: &'src str,
     /// The parsed AST. Always produced, even when errors are present.
     pub program: Program<'arena, 'src>,
     /// All comments found in the source, in source order.
@@ -51,6 +55,10 @@ pub struct ParseResult<'arena, 'src> {
     pub comments: Vec<Comment<'src>>,
     /// Parse errors and diagnostics. Empty on a successful parse.
     pub errors: Vec<ParseError>,
+    /// Pre-computed line index for resolving byte offsets in [`Span`](php_ast::Span)
+    /// to line/column positions. Use [`SourceMap::offset_to_line_col`] or
+    /// [`SourceMap::span_to_line_col`] to convert.
+    pub source_map: SourceMap,
 }
 
 /// Parse PHP `source` using the latest supported PHP version (currently 8.5).
@@ -65,9 +73,11 @@ pub fn parse<'arena, 'src>(
     let mut parser = parser::Parser::new(arena, source);
     let program = parser.parse_program();
     ParseResult {
+        source,
         program,
         comments: parser.take_comments(),
         errors: parser.into_errors(),
+        source_map: SourceMap::new(source),
     }
 }
 
@@ -84,8 +94,10 @@ pub fn parse_versioned<'arena, 'src>(
     let mut parser = parser::Parser::with_version(arena, source, version);
     let program = parser.parse_program();
     ParseResult {
+        source,
         program,
         comments: parser.take_comments(),
         errors: parser.into_errors(),
+        source_map: SourceMap::new(source),
     }
 }
