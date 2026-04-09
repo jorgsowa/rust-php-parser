@@ -1,9 +1,5 @@
 ===source===
-<?php
-
-$a = 42;
-/*
-$b = 24;
+<?php $x = 1; /* this comment is never closed
 ===errors===
 unterminated block comment
 ===ast===
@@ -16,39 +12,39 @@ unterminated block comment
             "Assign": {
               "target": {
                 "kind": {
-                  "Variable": "a"
+                  "Variable": "x"
                 },
                 "span": {
-                  "start": 7,
-                  "end": 9
+                  "start": 6,
+                  "end": 8
                 }
               },
               "op": "Assign",
               "value": {
                 "kind": {
-                  "Int": 42
+                  "Int": 1
                 },
                 "span": {
-                  "start": 12,
-                  "end": 14
+                  "start": 11,
+                  "end": 12
                 }
               }
             }
           },
           "span": {
-            "start": 7,
-            "end": 14
+            "start": 6,
+            "end": 12
           }
         }
       },
       "span": {
-        "start": 7,
-        "end": 27
+        "start": 6,
+        "end": 45
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 27
+    "end": 45
   }
 }

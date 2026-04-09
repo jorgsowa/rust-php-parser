@@ -282,7 +282,14 @@ impl<'src> Lexer<'src> {
             };
             match memmem::find(&bytes[self.pos..], b"*/") {
                 Some(end) => self.pos += end + 2,
-                None => self.pos = bytes.len(), // Unclosed comment — consume rest of file
+                None => {
+                    let span = Span::new(start as u32, self.source.len() as u32);
+                    self.errors.push(LexerError {
+                        message: "unterminated block comment".to_string(),
+                        span,
+                    });
+                    self.pos = bytes.len();
+                }
             }
             return self.tok(kind, start);
         }
