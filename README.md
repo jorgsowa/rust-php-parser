@@ -70,8 +70,7 @@ The parser prioritizes performance on contemporary PHP patterns:
 ## Testing
 
 ```sh
-cargo test --test integration   # hand-crafted integration tests
-cargo test --test corpus        # PHP-Parser corpus fixtures (fixtures/corpus/)
+cargo test --test integration   # all .phpt fixture tests (including corpus)
 cargo test --test malformed_php # error recovery and diagnostics
 ```
 
