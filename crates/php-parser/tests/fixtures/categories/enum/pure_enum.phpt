@@ -1,3 +1,5 @@
+===config===
+min_php=8.1
 ===source===
 <?php enum Direction { case North; case South; case East; case West; }
 ===ast===

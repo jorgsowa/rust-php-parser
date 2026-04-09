@@ -133,36 +133,7 @@ fn test_legacy_octal_invalid_digits() {
     );
 }
 
-// =============================================================================
-// Alternative syntax — no-hang regression (Bucket C: error-expected, no snapshot)
-// =============================================================================
-
-#[test]
-fn test_alt_if_unexpected_rbrace_terminates() {
-    let result = parse_php(
-        "<?php if (true):     insta::assert_snapshot!(to_json(&result.program));
-} endif;",
-    );
-    assert!(!result.errors.is_empty(), "Expected parse errors");
-}
-
-#[test]
-fn test_alt_while_unexpected_rbrace_terminates() {
-    let result = parse_php(
-        "<?php while (true):     insta::assert_snapshot!(to_json(&result.program));
-} endwhile;",
-    );
-    assert!(!result.errors.is_empty(), "Expected parse errors");
-}
-
-#[test]
-fn test_alt_foreach_unexpected_rbrace_terminates() {
-    let result = parse_php(
-        "<?php foreach ($a as $b):     insta::assert_snapshot!(to_json(&result.program));
-} endforeach;",
-    );
-    assert!(!result.errors.is_empty(), "Expected parse errors");
-}
+// Alternative syntax no-hang regression tests are in fixtures/errors/alt_*_unexpected_rbrace.phpt
 
 // =============================================================================
 // PHP version-specific feature tests — structural assertions
