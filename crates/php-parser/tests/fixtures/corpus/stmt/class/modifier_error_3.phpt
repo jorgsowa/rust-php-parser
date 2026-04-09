@@ -1,5 +1,6 @@
 ===source===
 <?php class C { readonly readonly $a; }
+===errors===
 ===ast===
 {
   "stmts": [

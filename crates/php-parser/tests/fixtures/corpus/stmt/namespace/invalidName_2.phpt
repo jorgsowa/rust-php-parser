@@ -1,5 +1,6 @@
 ===source===
 <?php use B as PARENT;
+===errors===
 ===ast===
 {
   "stmts": [

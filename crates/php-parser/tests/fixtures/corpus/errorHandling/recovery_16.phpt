@@ -1,6 +1,7 @@
 ===source===
 <?php
 Foo::
+===errors===
 ===ast===
 {
   "stmts": [

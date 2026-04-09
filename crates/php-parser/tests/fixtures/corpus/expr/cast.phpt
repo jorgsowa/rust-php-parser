@@ -11,6 +11,7 @@
 (object)  $a;
 (string)  $a;
 (unset)   $a;
+===errors===
 ===ast===
 {
   "stmts": [

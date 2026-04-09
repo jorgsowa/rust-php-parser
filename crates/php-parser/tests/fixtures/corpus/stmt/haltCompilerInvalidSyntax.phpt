@@ -1,6 +1,7 @@
 ===source===
 <?php
 __halt_compiler()
+===errors===
 ===ast===
 {
   "stmts": [

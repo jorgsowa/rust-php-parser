@@ -1,5 +1,6 @@
 ===source===
 <?php interface PARENT {}
+===errors===
 ===ast===
 {
   "stmts": [

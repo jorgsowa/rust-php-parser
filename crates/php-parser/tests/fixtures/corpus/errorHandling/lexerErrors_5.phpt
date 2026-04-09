@@ -5,6 +5,7 @@ if ($b) {
     $a = 1;
     /* unterminated
 }
+===errors===
 ===ast===
 {
   "stmts": [

@@ -1,5 +1,6 @@
 ===source===
 <?php use C as static;
+===errors===
 ===ast===
 {
   "stmts": [

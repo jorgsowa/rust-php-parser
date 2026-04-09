@@ -5,6 +5,7 @@ class C {
         x as y?><?= as my_echo;
     }
 }
+===errors===
 ===ast===
 {
   "stmts": [

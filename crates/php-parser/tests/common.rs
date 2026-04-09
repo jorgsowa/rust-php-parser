@@ -1,13 +1,3 @@
-pub fn assert_no_errors(result: &php_rs_parser::ParseResult) {
-    if !result.errors.is_empty() {
-        panic!(
-            "Expected no parse errors, got {} error(s):\n{:#?}",
-            result.errors.len(),
-            result.errors
-        );
-    }
-}
-
 pub fn to_json(program: &php_ast::Program) -> String {
     serde_json::to_string_pretty(program).unwrap()
 }
@@ -145,21 +135,6 @@ pub fn format_errors(result: &php_rs_parser::ParseResult) -> String {
         .map(|e| e.to_string())
         .collect::<Vec<_>>()
         .join("\n")
-}
-
-/// Rewrite only the `===ast===` section of a fixture file, preserving errors.
-pub fn update_fixture_ast(path: &str, new_ast: &str) {
-    let content =
-        std::fs::read_to_string(path).unwrap_or_else(|e| panic!("failed to read {path}: {e}"));
-    let new_content = if let Some(pos) = content.find("===ast===\n") {
-        let before = &content[..pos];
-        format!("{before}===ast===\n{new_ast}\n")
-    } else if content.ends_with('\n') {
-        format!("{content}===ast===\n{new_ast}\n")
-    } else {
-        format!("{content}\n===ast===\n{new_ast}\n")
-    };
-    std::fs::write(path, new_content).unwrap_or_else(|e| panic!("failed to write {path}: {e}"));
 }
 
 /// Rewrite the `===errors===` and `===ast===` sections of a fixture file.

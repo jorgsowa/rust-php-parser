@@ -1,6 +1,7 @@
 ===source===
 <?php
 $a = ["a "thing"];
+===errors===
 ===ast===
 {
   "stmts": [

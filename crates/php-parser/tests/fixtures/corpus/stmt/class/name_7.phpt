@@ -1,5 +1,6 @@
 ===source===
 <?php class A implements self {}
+===errors===
 ===ast===
 {
   "stmts": [

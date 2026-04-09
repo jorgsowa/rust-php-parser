@@ -3,6 +3,7 @@
 function test() {
     1 +
 }
+===errors===
 ===ast===
 {
   "stmts": [

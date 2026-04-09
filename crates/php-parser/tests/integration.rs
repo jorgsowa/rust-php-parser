@@ -11,10 +11,7 @@ fn collect_phpt_files(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
     for entry in std::fs::read_dir(dir).unwrap().filter_map(|e| e.ok()) {
         let path = entry.path();
         if path.is_dir() {
-            let name = path.file_name().unwrap().to_str().unwrap();
-            if name != "corpus" {
-                paths.extend(collect_phpt_files(&path));
-            }
+            paths.extend(collect_phpt_files(&path));
         } else if path.extension().map_or(false, |ext| ext == "phpt") {
             paths.push(path);
         }

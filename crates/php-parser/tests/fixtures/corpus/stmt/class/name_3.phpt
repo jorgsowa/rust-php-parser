@@ -1,5 +1,6 @@
 ===source===
 <?php class static {}
+===errors===
 ===ast===
 {
   "stmts": [

@@ -2,6 +2,7 @@
 <?php
 // Extra NS separator
 use Foo\{\Bar};
+===errors===
 ===ast===
 {
   "stmts": [

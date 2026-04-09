@@ -11,6 +11,7 @@ class A {
 class B {
     const X = 1
 }
+===errors===
 ===ast===
 {
   "stmts": [

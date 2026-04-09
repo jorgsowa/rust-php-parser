@@ -1,6 +1,7 @@
 ===source===
 <?php
 $foo instanceof
+===errors===
 ===ast===
 {
   "stmts": [

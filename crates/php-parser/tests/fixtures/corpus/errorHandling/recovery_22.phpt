@@ -24,6 +24,7 @@ class Bar {
 }
 
 function(Foo);
+===errors===
 ===ast===
 {
   "stmts": [

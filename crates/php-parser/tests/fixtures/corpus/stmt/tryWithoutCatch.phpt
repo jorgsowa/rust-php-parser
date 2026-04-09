@@ -4,6 +4,7 @@
 try {
     foo();
 }
+===errors===
 ===ast===
 {
   "stmts": [

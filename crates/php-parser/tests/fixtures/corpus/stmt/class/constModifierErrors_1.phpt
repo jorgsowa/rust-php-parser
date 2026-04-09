@@ -3,6 +3,7 @@
 class A {
     static const X = 1;
 }
+===errors===
 ===ast===
 {
   "stmts": [

@@ -1,6 +1,7 @@
 ===source===
 <?php
 class ReadOnly {}
+===errors===
 ===ast===
 {
   "stmts": [

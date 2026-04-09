@@ -2,6 +2,7 @@
 <?php
 $foo->
 ;
+===errors===
 ===ast===
 {
   "stmts": [

@@ -6,6 +6,7 @@ class Test
     public $foo, $bar { }
 
 }
+===errors===
 ===ast===
 {
   "stmts": [

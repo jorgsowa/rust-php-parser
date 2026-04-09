@@ -3,6 +3,7 @@
 class A {
     abstract const X = 1;
 }
+===errors===
 ===ast===
 {
   "stmts": [

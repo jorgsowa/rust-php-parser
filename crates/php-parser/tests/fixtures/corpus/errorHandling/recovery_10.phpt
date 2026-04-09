@@ -3,6 +3,7 @@
 function foo() {
     $bar->
 }
+===errors===
 ===ast===
 {
   "stmts": [

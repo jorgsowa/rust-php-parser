@@ -1,5 +1,6 @@
 ===source===
 <?php use A as self;
+===errors===
 ===ast===
 {
   "stmts": [

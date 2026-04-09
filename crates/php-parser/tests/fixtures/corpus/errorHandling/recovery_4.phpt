@@ -2,6 +2,7 @@
 <?php
 abc;
 1 + ;
+===errors===
 ===ast===
 {
   "stmts": [

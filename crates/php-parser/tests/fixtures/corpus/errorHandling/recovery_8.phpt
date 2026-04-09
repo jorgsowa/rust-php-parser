@@ -7,6 +7,7 @@ $i = 0;
 while (true) {
     $i = 1;
     $i = 2;
+===errors===
 ===ast===
 {
   "stmts": [

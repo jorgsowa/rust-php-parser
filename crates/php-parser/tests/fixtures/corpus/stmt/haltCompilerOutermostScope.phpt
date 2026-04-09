@@ -3,6 +3,7 @@
 if (true) {
     __halt_compiler();
 }
+===errors===
 ===ast===
 {
   "stmts": [
