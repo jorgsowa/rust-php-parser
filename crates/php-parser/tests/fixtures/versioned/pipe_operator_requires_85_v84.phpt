@@ -3,6 +3,8 @@ parse_version=8.4
 ===source===
 <?php $x = $value |> trim(...) |> strtolower(...);
 ===errors===
+'pipe operator (|>)' requires PHP 8.5 or higher (targeting PHP 8.4)
+'pipe operator (|>)' requires PHP 8.5 or higher (targeting PHP 8.4)
 ===ast===
 {
   "stmts": [

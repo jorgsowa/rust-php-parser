@@ -3,6 +3,7 @@ parse_version=8.1
 ===source===
 <?php readonly class Foo { public string $bar; }
 ===errors===
+'readonly class' requires PHP 8.2 or higher (targeting PHP 8.1)
 ===ast===
 {
   "stmts": [

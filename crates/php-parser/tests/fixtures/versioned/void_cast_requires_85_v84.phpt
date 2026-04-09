@@ -3,6 +3,7 @@ parse_version=8.4
 ===source===
 <?php (void) getVersion();
 ===errors===
+'void cast' requires PHP 8.5 or higher (targeting PHP 8.4)
 ===ast===
 {
   "stmts": [

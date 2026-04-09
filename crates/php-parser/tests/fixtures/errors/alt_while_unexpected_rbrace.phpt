@@ -3,6 +3,7 @@
     echo 1;
 } endwhile;
 ===errors===
+expected expression
 ===ast===
 {
   "stmts": [
