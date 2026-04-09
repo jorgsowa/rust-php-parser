@@ -17,7 +17,9 @@ $z = $a?->items[0]?->name;
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -36,7 +38,9 @@ $z = $a?->items[0]?->name;
                                   },
                                   "span": {
                                     "start": 11,
-                                    "end": 13
+                                    "end": 13,
+                                    "start_line": 2,
+                                    "start_col": 5
                                   }
                                 },
                                 "property": {
@@ -45,14 +49,18 @@ $z = $a?->items[0]?->name;
                                   },
                                   "span": {
                                     "start": 16,
-                                    "end": 17
+                                    "end": 17,
+                                    "start_line": 2,
+                                    "start_col": 10
                                   }
                                 }
                               }
                             },
                             "span": {
                               "start": 11,
-                              "end": 17
+                              "end": 17,
+                              "start_line": 2,
+                              "start_col": 5
                             }
                           },
                           "property": {
@@ -61,14 +69,18 @@ $z = $a?->items[0]?->name;
                             },
                             "span": {
                               "start": 20,
-                              "end": 21
+                              "end": 21,
+                              "start_line": 2,
+                              "start_col": 14
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 11,
-                        "end": 21
+                        "end": 21,
+                        "start_line": 2,
+                        "start_col": 5
                       }
                     },
                     "property": {
@@ -77,27 +89,35 @@ $z = $a?->items[0]?->name;
                       },
                       "span": {
                         "start": 24,
-                        "end": 25
+                        "end": 25,
+                        "start_line": 2,
+                        "start_col": 18
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 11,
-                  "end": 25
+                  "end": 25,
+                  "start_line": 2,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 25
+            "end": 25,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 27
+        "end": 27,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -111,7 +131,9 @@ $z = $a?->items[0]?->name;
                 },
                 "span": {
                   "start": 27,
-                  "end": 29
+                  "end": 29,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -130,7 +152,9 @@ $z = $a?->items[0]?->name;
                                   },
                                   "span": {
                                     "start": 32,
-                                    "end": 34
+                                    "end": 34,
+                                    "start_line": 3,
+                                    "start_col": 5
                                   }
                                 },
                                 "method": {
@@ -139,7 +163,9 @@ $z = $a?->items[0]?->name;
                                   },
                                   "span": {
                                     "start": 37,
-                                    "end": 41
+                                    "end": 41,
+                                    "start_line": 3,
+                                    "start_col": 10
                                   }
                                 },
                                 "args": []
@@ -147,7 +173,9 @@ $z = $a?->items[0]?->name;
                             },
                             "span": {
                               "start": 32,
-                              "end": 43
+                              "end": 43,
+                              "start_line": 3,
+                              "start_col": 5
                             }
                           },
                           "method": {
@@ -156,7 +184,9 @@ $z = $a?->items[0]?->name;
                             },
                             "span": {
                               "start": 46,
-                              "end": 50
+                              "end": 50,
+                              "start_line": 3,
+                              "start_col": 19
                             }
                           },
                           "args": [
@@ -168,14 +198,18 @@ $z = $a?->items[0]?->name;
                                 },
                                 "span": {
                                   "start": 51,
-                                  "end": 52
+                                  "end": 52,
+                                  "start_line": 3,
+                                  "start_col": 24
                                 }
                               },
                               "unpack": false,
                               "by_ref": false,
                               "span": {
                                 "start": 51,
-                                "end": 52
+                                "end": 52,
+                                "start_line": 3,
+                                "start_col": 24
                               }
                             },
                             {
@@ -186,14 +220,18 @@ $z = $a?->items[0]?->name;
                                 },
                                 "span": {
                                   "start": 54,
-                                  "end": 55
+                                  "end": 55,
+                                  "start_line": 3,
+                                  "start_col": 27
                                 }
                               },
                               "unpack": false,
                               "by_ref": false,
                               "span": {
                                 "start": 54,
-                                "end": 55
+                                "end": 55,
+                                "start_line": 3,
+                                "start_col": 27
                               }
                             }
                           ]
@@ -201,7 +239,9 @@ $z = $a?->items[0]?->name;
                       },
                       "span": {
                         "start": 32,
-                        "end": 56
+                        "end": 56,
+                        "start_line": 3,
+                        "start_col": 5
                       }
                     },
                     "property": {
@@ -210,27 +250,35 @@ $z = $a?->items[0]?->name;
                       },
                       "span": {
                         "start": 59,
-                        "end": 64
+                        "end": 64,
+                        "start_line": 3,
+                        "start_col": 32
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 32,
-                  "end": 64
+                  "end": 64,
+                  "start_line": 3,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 27,
-            "end": 64
+            "end": 64,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 27,
-        "end": 66
+        "end": 66,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -244,7 +292,9 @@ $z = $a?->items[0]?->name;
                 },
                 "span": {
                   "start": 66,
-                  "end": 68
+                  "end": 68,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -263,7 +313,9 @@ $z = $a?->items[0]?->name;
                                   },
                                   "span": {
                                     "start": 71,
-                                    "end": 73
+                                    "end": 73,
+                                    "start_line": 4,
+                                    "start_col": 5
                                   }
                                 },
                                 "property": {
@@ -272,14 +324,18 @@ $z = $a?->items[0]?->name;
                                   },
                                   "span": {
                                     "start": 76,
-                                    "end": 81
+                                    "end": 81,
+                                    "start_line": 4,
+                                    "start_col": 10
                                   }
                                 }
                               }
                             },
                             "span": {
                               "start": 71,
-                              "end": 81
+                              "end": 81,
+                              "start_line": 4,
+                              "start_col": 5
                             }
                           },
                           "index": {
@@ -288,14 +344,18 @@ $z = $a?->items[0]?->name;
                             },
                             "span": {
                               "start": 82,
-                              "end": 83
+                              "end": 83,
+                              "start_line": 4,
+                              "start_col": 16
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 71,
-                        "end": 84
+                        "end": 84,
+                        "start_line": 4,
+                        "start_col": 5
                       }
                     },
                     "property": {
@@ -304,32 +364,42 @@ $z = $a?->items[0]?->name;
                       },
                       "span": {
                         "start": 87,
-                        "end": 91
+                        "end": 91,
+                        "start_line": 4,
+                        "start_col": 21
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 71,
-                  "end": 91
+                  "end": 91,
+                  "start_line": 4,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 66,
-            "end": 91
+            "end": 91,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 66,
-        "end": 92
+        "end": 92,
+        "start_line": 4,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 92
+    "end": 92,
+    "start_line": 1,
+    "start_col": 0
   }
 }

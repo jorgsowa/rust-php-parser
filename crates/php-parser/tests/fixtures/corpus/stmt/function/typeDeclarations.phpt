@@ -23,7 +23,9 @@ function a($b, array $c, callable $d, E $f) {}
               "attributes": [],
               "span": {
                 "start": 18,
-                "end": 20
+                "end": 20,
+                "start_line": 3,
+                "start_col": 11
               }
             },
             {
@@ -37,13 +39,17 @@ function a($b, array $c, callable $d, E $f) {}
                     "kind": "Unqualified",
                     "span": {
                       "start": 22,
-                      "end": 27
+                      "end": 27,
+                      "start_line": 3,
+                      "start_col": 15
                     }
                   }
                 },
                 "span": {
                   "start": 22,
-                  "end": 27
+                  "end": 27,
+                  "start_line": 3,
+                  "start_col": 15
                 }
               },
               "default": null,
@@ -56,7 +62,9 @@ function a($b, array $c, callable $d, E $f) {}
               "attributes": [],
               "span": {
                 "start": 22,
-                "end": 30
+                "end": 30,
+                "start_line": 3,
+                "start_col": 15
               }
             },
             {
@@ -70,13 +78,17 @@ function a($b, array $c, callable $d, E $f) {}
                     "kind": "Unqualified",
                     "span": {
                       "start": 32,
-                      "end": 40
+                      "end": 40,
+                      "start_line": 3,
+                      "start_col": 25
                     }
                   }
                 },
                 "span": {
                   "start": 32,
-                  "end": 40
+                  "end": 40,
+                  "start_line": 3,
+                  "start_col": 25
                 }
               },
               "default": null,
@@ -89,7 +101,9 @@ function a($b, array $c, callable $d, E $f) {}
               "attributes": [],
               "span": {
                 "start": 32,
-                "end": 43
+                "end": 43,
+                "start_line": 3,
+                "start_col": 25
               }
             },
             {
@@ -103,13 +117,17 @@ function a($b, array $c, callable $d, E $f) {}
                     "kind": "Unqualified",
                     "span": {
                       "start": 45,
-                      "end": 47
+                      "end": 47,
+                      "start_line": 3,
+                      "start_col": 38
                     }
                   }
                 },
                 "span": {
                   "start": 45,
-                  "end": 47
+                  "end": 47,
+                  "start_line": 3,
+                  "start_col": 38
                 }
               },
               "default": null,
@@ -122,7 +140,9 @@ function a($b, array $c, callable $d, E $f) {}
               "attributes": [],
               "span": {
                 "start": 45,
-                "end": 49
+                "end": 49,
+                "start_line": 3,
+                "start_col": 38
               }
             }
           ],
@@ -134,12 +154,16 @@ function a($b, array $c, callable $d, E $f) {}
       },
       "span": {
         "start": 7,
-        "end": 53
+        "end": 53,
+        "start_line": 3,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 53
+    "end": 53,
+    "start_line": 1,
+    "start_col": 0
   }
 }

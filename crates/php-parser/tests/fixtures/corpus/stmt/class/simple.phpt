@@ -33,7 +33,9 @@ class A extends B implements C, D {
             "kind": "Unqualified",
             "span": {
               "start": 23,
-              "end": 25
+              "end": 25,
+              "start_line": 3,
+              "start_col": 16
             }
           },
           "implements": [
@@ -44,7 +46,9 @@ class A extends B implements C, D {
               "kind": "Unqualified",
               "span": {
                 "start": 36,
-                "end": 37
+                "end": 37,
+                "start_line": 3,
+                "start_col": 29
               }
             },
             {
@@ -54,7 +58,9 @@ class A extends B implements C, D {
               "kind": "Unqualified",
               "span": {
                 "start": 39,
-                "end": 41
+                "end": 41,
+                "start_line": 3,
+                "start_col": 32
               }
             }
           ],
@@ -70,7 +76,9 @@ class A extends B implements C, D {
                     },
                     "span": {
                       "start": 57,
-                      "end": 60
+                      "end": 60,
+                      "start_line": 4,
+                      "start_col": 14
                     }
                   },
                   "attributes": []
@@ -78,7 +86,9 @@ class A extends B implements C, D {
               },
               "span": {
                 "start": 47,
-                "end": 76
+                "end": 76,
+                "start_line": 4,
+                "start_col": 4
               }
             },
             {
@@ -92,7 +102,9 @@ class A extends B implements C, D {
                     },
                     "span": {
                       "start": 66,
-                      "end": 69
+                      "end": 69,
+                      "start_line": 4,
+                      "start_col": 23
                     }
                   },
                   "attributes": []
@@ -100,7 +112,9 @@ class A extends B implements C, D {
               },
               "span": {
                 "start": 47,
-                "end": 76
+                "end": 76,
+                "start_line": 4,
+                "start_col": 4
               }
             },
             {
@@ -118,7 +132,9 @@ class A extends B implements C, D {
                     },
                     "span": {
                       "start": 88,
-                      "end": 91
+                      "end": 91,
+                      "start_line": 6,
+                      "start_col": 16
                     }
                   },
                   "attributes": []
@@ -126,7 +142,9 @@ class A extends B implements C, D {
               },
               "span": {
                 "start": 76,
-                "end": 91
+                "end": 91,
+                "start_line": 6,
+                "start_col": 4
               }
             },
             {
@@ -144,7 +162,9 @@ class A extends B implements C, D {
                     },
                     "span": {
                       "start": 98,
-                      "end": 101
+                      "end": 101,
+                      "start_line": 6,
+                      "start_col": 26
                     }
                   },
                   "attributes": []
@@ -152,7 +172,9 @@ class A extends B implements C, D {
               },
               "span": {
                 "start": 76,
-                "end": 101
+                "end": 101,
+                "start_line": 6,
+                "start_col": 4
               }
             },
             {
@@ -170,7 +192,9 @@ class A extends B implements C, D {
               },
               "span": {
                 "start": 107,
-                "end": 119
+                "end": 119,
+                "start_line": 7,
+                "start_col": 4
               }
             },
             {
@@ -188,7 +212,9 @@ class A extends B implements C, D {
               },
               "span": {
                 "start": 125,
-                "end": 135
+                "end": 135,
+                "start_line": 8,
+                "start_col": 4
               }
             },
             {
@@ -208,7 +234,9 @@ class A extends B implements C, D {
               },
               "span": {
                 "start": 142,
-                "end": 169
+                "end": 169,
+                "start_line": 10,
+                "start_col": 4
               }
             },
             {
@@ -234,7 +262,9 @@ class A extends B implements C, D {
                       "attributes": [],
                       "span": {
                         "start": 194,
-                        "end": 196
+                        "end": 196,
+                        "start_line": 11,
+                        "start_col": 29
                       }
                     }
                   ],
@@ -245,7 +275,9 @@ class A extends B implements C, D {
               },
               "span": {
                 "start": 169,
-                "end": 205
+                "end": 205,
+                "start_line": 11,
+                "start_col": 4
               }
             },
             {
@@ -267,13 +299,17 @@ class A extends B implements C, D {
                         "kind": "Unqualified",
                         "span": {
                           "start": 233,
-                          "end": 235
+                          "end": 235,
+                          "start_line": 12,
+                          "start_col": 32
                         }
                       }
                     },
                     "span": {
                       "start": 233,
-                      "end": 235
+                      "end": 235,
+                      "start_line": 12,
+                      "start_col": 32
                     }
                   },
                   "body": [],
@@ -282,7 +318,9 @@ class A extends B implements C, D {
               },
               "span": {
                 "start": 205,
-                "end": 242
+                "end": 242,
+                "start_line": 12,
+                "start_col": 4
               }
             },
             {
@@ -302,7 +340,9 @@ class A extends B implements C, D {
               },
               "span": {
                 "start": 242,
-                "end": 272
+                "end": 272,
+                "start_line": 13,
+                "start_col": 4
               }
             },
             {
@@ -322,7 +362,9 @@ class A extends B implements C, D {
               },
               "span": {
                 "start": 272,
-                "end": 296
+                "end": 296,
+                "start_line": 14,
+                "start_col": 4
               }
             }
           ],
@@ -331,12 +373,16 @@ class A extends B implements C, D {
       },
       "span": {
         "start": 7,
-        "end": 297
+        "end": 297,
+        "start_line": 3,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 297
+    "end": 297,
+    "start_line": 1,
+    "start_col": 0
   }
 }

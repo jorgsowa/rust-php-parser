@@ -18,7 +18,9 @@ Foo
                 },
                 "span": {
                   "start": 7,
-                  "end": 15
+                  "end": 15,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "args": [
@@ -30,14 +32,18 @@ Foo
                     },
                     "span": {
                       "start": 16,
-                      "end": 40
+                      "end": 40,
+                      "start_line": 3,
+                      "start_col": 9
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 16,
-                    "end": 40
+                    "end": 40,
+                    "start_line": 3,
+                    "start_col": 9
                   }
                 }
               ]
@@ -45,13 +51,17 @@ Foo
           },
           "span": {
             "start": 7,
-            "end": 41
+            "end": 41,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 7,
-        "end": 43
+        "end": 43,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -60,12 +70,16 @@ Foo
       },
       "span": {
         "start": 43,
-        "end": 65
+        "end": 65,
+        "start_line": 4,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 65
+    "end": 65,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -46,13 +46,17 @@ class Foo {
                             "kind": "Unqualified",
                             "span": {
                               "start": 66,
-                              "end": 72
+                              "end": 72,
+                              "start_line": 4,
+                              "start_col": 15
                             }
                           }
                         },
                         "span": {
                           "start": 66,
-                          "end": 72
+                          "end": 72,
+                          "start_line": 4,
+                          "start_col": 15
                         }
                       },
                       "default": null,
@@ -76,7 +80,9 @@ class Foo {
                                     },
                                     "span": {
                                       "start": 100,
-                                      "end": 110
+                                      "end": 110,
+                                      "start_line": 5,
+                                      "start_col": 19
                                     }
                                   },
                                   "args": [
@@ -91,7 +97,9 @@ class Foo {
                                               },
                                               "span": {
                                                 "start": 111,
-                                                "end": 116
+                                                "end": 116,
+                                                "start_line": 5,
+                                                "start_col": 30
                                               }
                                             },
                                             "property": {
@@ -100,21 +108,27 @@ class Foo {
                                               },
                                               "span": {
                                                 "start": 118,
-                                                "end": 122
+                                                "end": 122,
+                                                "start_line": 5,
+                                                "start_col": 37
                                               }
                                             }
                                           }
                                         },
                                         "span": {
                                           "start": 111,
-                                          "end": 122
+                                          "end": 122,
+                                          "start_line": 5,
+                                          "start_col": 30
                                         }
                                       },
                                       "unpack": false,
                                       "by_ref": false,
                                       "span": {
                                         "start": 111,
-                                        "end": 122
+                                        "end": 122,
+                                        "start_line": 5,
+                                        "start_col": 30
                                       }
                                     }
                                   ]
@@ -122,7 +136,9 @@ class Foo {
                               },
                               "span": {
                                 "start": 100,
-                                "end": 123
+                                "end": 123,
+                                "start_line": 5,
+                                "start_col": 19
                               }
                             }
                           },
@@ -132,7 +148,9 @@ class Foo {
                           "attributes": [],
                           "span": {
                             "start": 93,
-                            "end": 137
+                            "end": 137,
+                            "start_line": 5,
+                            "start_col": 12
                           }
                         },
                         {
@@ -153,7 +171,9 @@ class Foo {
                                                 },
                                                 "span": {
                                                   "start": 158,
-                                                  "end": 163
+                                                  "end": 163,
+                                                  "start_line": 6,
+                                                  "start_col": 33
                                                 }
                                               },
                                               "property": {
@@ -162,14 +182,18 @@ class Foo {
                                                 },
                                                 "span": {
                                                   "start": 165,
-                                                  "end": 169
+                                                  "end": 169,
+                                                  "start_line": 6,
+                                                  "start_col": 40
                                                 }
                                               }
                                             }
                                           },
                                           "span": {
                                             "start": 158,
-                                            "end": 169
+                                            "end": 169,
+                                            "start_line": 6,
+                                            "start_col": 33
                                           }
                                         },
                                         "op": "Assign",
@@ -182,7 +206,9 @@ class Foo {
                                                 },
                                                 "span": {
                                                   "start": 172,
-                                                  "end": 176
+                                                  "end": 176,
+                                                  "start_line": 6,
+                                                  "start_col": 47
                                                 }
                                               },
                                               "args": [
@@ -194,14 +220,18 @@ class Foo {
                                                     },
                                                     "span": {
                                                       "start": 177,
-                                                      "end": 183
+                                                      "end": 183,
+                                                      "start_line": 6,
+                                                      "start_col": 52
                                                     }
                                                   },
                                                   "unpack": false,
                                                   "by_ref": false,
                                                   "span": {
                                                     "start": 177,
-                                                    "end": 183
+                                                    "end": 183,
+                                                    "start_line": 6,
+                                                    "start_col": 52
                                                   }
                                                 }
                                               ]
@@ -209,20 +239,26 @@ class Foo {
                                           },
                                           "span": {
                                             "start": 172,
-                                            "end": 184
+                                            "end": 184,
+                                            "start_line": 6,
+                                            "start_col": 47
                                           }
                                         }
                                       }
                                     },
                                     "span": {
                                       "start": 158,
-                                      "end": 184
+                                      "end": 184,
+                                      "start_line": 6,
+                                      "start_col": 33
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 158,
-                                  "end": 186
+                                  "end": 186,
+                                  "start_line": 6,
+                                  "start_col": 33
                                 }
                               }
                             ]
@@ -241,13 +277,17 @@ class Foo {
                                     "kind": "Unqualified",
                                     "span": {
                                       "start": 141,
-                                      "end": 147
+                                      "end": 147,
+                                      "start_line": 6,
+                                      "start_col": 16
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 141,
-                                  "end": 147
+                                  "end": 147,
+                                  "start_line": 6,
+                                  "start_col": 16
                                 }
                               },
                               "default": null,
@@ -260,20 +300,26 @@ class Foo {
                               "attributes": [],
                               "span": {
                                 "start": 141,
-                                "end": 154
+                                "end": 154,
+                                "start_line": 6,
+                                "start_col": 16
                               }
                             }
                           ],
                           "attributes": [],
                           "span": {
                             "start": 137,
-                            "end": 196
+                            "end": 196,
+                            "start_line": 6,
+                            "start_col": 12
                           }
                         }
                       ],
                       "span": {
                         "start": 59,
-                        "end": 197
+                        "end": 197,
+                        "start_line": 4,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -284,7 +330,9 @@ class Foo {
               },
               "span": {
                 "start": 22,
-                "end": 208
+                "end": 208,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -293,12 +341,16 @@ class Foo {
       },
       "span": {
         "start": 6,
-        "end": 209
+        "end": 209,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 209
+    "end": 209,
+    "start_line": 1,
+    "start_col": 0
   }
 }

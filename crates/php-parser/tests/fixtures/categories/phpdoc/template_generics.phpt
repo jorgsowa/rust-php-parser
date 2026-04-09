@@ -47,13 +47,17 @@ class Collection {
                             "kind": "Unqualified",
                             "span": {
                               "start": 173,
-                              "end": 179
+                              "end": 179,
+                              "start_line": 11,
+                              "start_col": 24
                             }
                           }
                         },
                         "span": {
                           "start": 173,
-                          "end": 179
+                          "end": 179,
+                          "start_line": 11,
+                          "start_col": 24
                         }
                       },
                       "default": null,
@@ -66,7 +70,9 @@ class Collection {
                       "attributes": [],
                       "span": {
                         "start": 173,
-                        "end": 185
+                        "end": 185,
+                        "start_line": 11,
+                        "start_col": 24
                       }
                     }
                   ],
@@ -79,13 +85,17 @@ class Collection {
                         "kind": "Unqualified",
                         "span": {
                           "start": 188,
-                          "end": 193
+                          "end": 193,
+                          "start_line": 11,
+                          "start_col": 39
                         }
                       }
                     },
                     "span": {
                       "start": 188,
-                      "end": 193
+                      "end": 193,
+                      "start_line": 11,
+                      "start_col": 39
                     }
                   },
                   "body": [],
@@ -95,14 +105,18 @@ class Collection {
                     "text": "/**\n     * @param T $item\n     * @return list<T>\n     */",
                     "span": {
                       "start": 92,
-                      "end": 148
+                      "end": 148,
+                      "start_line": 7,
+                      "start_col": 4
                     }
                   }
                 }
               },
               "span": {
                 "start": 153,
-                "end": 197
+                "end": 197,
+                "start_line": 11,
+                "start_col": 4
               }
             }
           ],
@@ -112,19 +126,25 @@ class Collection {
             "text": "/**\n * @template T of object\n * @template-covariant TValue\n */",
             "span": {
               "start": 6,
-              "end": 68
+              "end": 68,
+              "start_line": 2,
+              "start_col": 0
             }
           }
         }
       },
       "span": {
         "start": 69,
-        "end": 198
+        "end": 198,
+        "start_line": 6,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 198
+    "end": 198,
+    "start_line": 1,
+    "start_col": 0
   }
 }

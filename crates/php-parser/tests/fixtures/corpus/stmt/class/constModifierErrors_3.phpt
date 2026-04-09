@@ -29,7 +29,9 @@ class A {
                     },
                     "span": {
                       "start": 39,
-                      "end": 40
+                      "end": 40,
+                      "start_line": 3,
+                      "start_col": 23
                     }
                   },
                   "attributes": []
@@ -37,7 +39,9 @@ class A {
               },
               "span": {
                 "start": 20,
-                "end": 42
+                "end": 42,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -46,12 +50,16 @@ class A {
       },
       "span": {
         "start": 6,
-        "end": 43
+        "end": 43,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 43
+    "end": 43,
+    "start_line": 1,
+    "start_col": 0
   }
 }

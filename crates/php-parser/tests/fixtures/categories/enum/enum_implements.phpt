@@ -18,7 +18,9 @@ min_php=8.1
               "kind": "Unqualified",
               "span": {
                 "start": 28,
-                "end": 37
+                "end": 37,
+                "start_line": 1,
+                "start_col": 28
               }
             }
           ],
@@ -33,7 +35,9 @@ min_php=8.1
               },
               "span": {
                 "start": 39,
-                "end": 49
+                "end": 49,
+                "start_line": 1,
+                "start_col": 39
               }
             },
             {
@@ -55,13 +59,17 @@ min_php=8.1
                         "kind": "Unqualified",
                         "span": {
                           "start": 74,
-                          "end": 80
+                          "end": 80,
+                          "start_line": 1,
+                          "start_col": 74
                         }
                       }
                     },
                     "span": {
                       "start": 74,
-                      "end": 80
+                      "end": 80,
+                      "start_line": 1,
+                      "start_col": 74
                     }
                   },
                   "body": [
@@ -73,13 +81,17 @@ min_php=8.1
                           },
                           "span": {
                             "start": 90,
-                            "end": 95
+                            "end": 95,
+                            "start_line": 1,
+                            "start_col": 90
                           }
                         }
                       },
                       "span": {
                         "start": 83,
-                        "end": 97
+                        "end": 97,
+                        "start_line": 1,
+                        "start_col": 83
                       }
                     }
                   ],
@@ -88,7 +100,9 @@ min_php=8.1
               },
               "span": {
                 "start": 49,
-                "end": 99
+                "end": 99,
+                "start_line": 1,
+                "start_col": 49
               }
             }
           ],
@@ -97,12 +111,16 @@ min_php=8.1
       },
       "span": {
         "start": 6,
-        "end": 100
+        "end": 100,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 100
+    "end": 100,
+    "start_line": 1,
+    "start_col": 0
   }
 }

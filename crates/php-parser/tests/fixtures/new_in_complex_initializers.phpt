@@ -28,7 +28,9 @@ class Config {
                       },
                       "span": {
                         "start": 33,
-                        "end": 36
+                        "end": 36,
+                        "start_line": 3,
+                        "start_col": 13
                       }
                     },
                     "args": []
@@ -36,7 +38,9 @@ class Config {
                 },
                 "span": {
                   "start": 29,
-                  "end": 38
+                  "end": 38,
+                  "start_line": 3,
+                  "start_col": 9
                 }
               },
               "by_ref": false,
@@ -48,7 +52,9 @@ class Config {
               "attributes": [],
               "span": {
                 "start": 24,
-                "end": 38
+                "end": 38,
+                "start_line": 3,
+                "start_col": 4
               }
             },
             {
@@ -63,7 +69,9 @@ class Config {
                       },
                       "span": {
                         "start": 53,
-                        "end": 56
+                        "end": 56,
+                        "start_line": 4,
+                        "start_col": 13
                       }
                     },
                     "args": [
@@ -75,14 +83,18 @@ class Config {
                           },
                           "span": {
                             "start": 57,
-                            "end": 58
+                            "end": 58,
+                            "start_line": 4,
+                            "start_col": 17
                           }
                         },
                         "unpack": false,
                         "by_ref": false,
                         "span": {
                           "start": 57,
-                          "end": 58
+                          "end": 58,
+                          "start_line": 4,
+                          "start_col": 17
                         }
                       },
                       {
@@ -93,14 +105,18 @@ class Config {
                           },
                           "span": {
                             "start": 60,
-                            "end": 66
+                            "end": 66,
+                            "start_line": 4,
+                            "start_col": 20
                           }
                         },
                         "unpack": false,
                         "by_ref": false,
                         "span": {
                           "start": 60,
-                          "end": 66
+                          "end": 66,
+                          "start_line": 4,
+                          "start_col": 20
                         }
                       }
                     ]
@@ -108,7 +124,9 @@ class Config {
                 },
                 "span": {
                   "start": 49,
-                  "end": 67
+                  "end": 67,
+                  "start_line": 4,
+                  "start_col": 9
                 }
               },
               "by_ref": false,
@@ -120,7 +138,9 @@ class Config {
               "attributes": [],
               "span": {
                 "start": 44,
-                "end": 67
+                "end": 67,
+                "start_line": 4,
+                "start_col": 4
               }
             },
             {
@@ -135,7 +155,9 @@ class Config {
                       },
                       "span": {
                         "start": 82,
-                        "end": 85
+                        "end": 85,
+                        "start_line": 5,
+                        "start_col": 13
                       }
                     },
                     "args": [
@@ -147,14 +169,18 @@ class Config {
                           },
                           "span": {
                             "start": 92,
-                            "end": 95
+                            "end": 95,
+                            "start_line": 5,
+                            "start_col": 23
                           }
                         },
                         "unpack": false,
                         "by_ref": false,
                         "span": {
                           "start": 86,
-                          "end": 95
+                          "end": 95,
+                          "start_line": 5,
+                          "start_col": 17
                         }
                       }
                     ]
@@ -162,7 +188,9 @@ class Config {
                 },
                 "span": {
                   "start": 78,
-                  "end": 96
+                  "end": 96,
+                  "start_line": 5,
+                  "start_col": 9
                 }
               },
               "by_ref": false,
@@ -174,7 +202,9 @@ class Config {
               "attributes": [],
               "span": {
                 "start": 73,
-                "end": 96
+                "end": 96,
+                "start_line": 5,
+                "start_col": 4
               }
             }
           ],
@@ -186,7 +216,9 @@ class Config {
       },
       "span": {
         "start": 6,
-        "end": 102
+        "end": 102,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -215,7 +247,9 @@ class Config {
                           },
                           "span": {
                             "start": 142,
-                            "end": 150
+                            "end": 150,
+                            "start_line": 8,
+                            "start_col": 24
                           }
                         },
                         "args": [
@@ -227,14 +261,18 @@ class Config {
                               },
                               "span": {
                                 "start": 158,
-                                "end": 163
+                                "end": 163,
+                                "start_line": 8,
+                                "start_col": 40
                               }
                             },
                             "unpack": false,
                             "by_ref": false,
                             "span": {
                               "start": 151,
-                              "end": 163
+                              "end": 163,
+                              "start_line": 8,
+                              "start_col": 33
                             }
                           }
                         ]
@@ -242,7 +280,9 @@ class Config {
                     },
                     "span": {
                       "start": 138,
-                      "end": 164
+                      "end": 164,
+                      "start_line": 8,
+                      "start_col": 20
                     }
                   },
                   "attributes": []
@@ -250,7 +290,9 @@ class Config {
               },
               "span": {
                 "start": 122,
-                "end": 166
+                "end": 166,
+                "start_line": 8,
+                "start_col": 4
               }
             }
           ],
@@ -259,12 +301,16 @@ class Config {
       },
       "span": {
         "start": 103,
-        "end": 167
+        "end": 167,
+        "start_line": 7,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 167
+    "end": 167,
+    "start_line": 1,
+    "start_col": 0
   }
 }

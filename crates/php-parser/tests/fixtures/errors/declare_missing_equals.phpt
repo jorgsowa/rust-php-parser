@@ -17,7 +17,9 @@ expected '=', found integer
                 },
                 "span": {
                   "start": 27,
-                  "end": 28
+                  "end": 28,
+                  "start_line": 1,
+                  "start_col": 27
                 }
               }
             ]
@@ -27,12 +29,16 @@ expected '=', found integer
       },
       "span": {
         "start": 6,
-        "end": 30
+        "end": 30,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 30
+    "end": 30,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -49,7 +49,9 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 39,
-                  "end": 48
+                  "end": 48,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -66,7 +68,9 @@ $escapes = "line1\nline2\ttab";
                         },
                         "span": {
                           "start": 58,
-                          "end": 63
+                          "end": 63,
+                          "start_line": 3,
+                          "start_col": 19
                         }
                       }
                     }
@@ -74,20 +78,26 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 51,
-                  "end": 64
+                  "end": 64,
+                  "start_line": 3,
+                  "start_col": 12
                 }
               }
             }
           },
           "span": {
             "start": 39,
-            "end": 64
+            "end": 64,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 39,
-        "end": 100
+        "end": 100,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -101,7 +111,9 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 100,
-                  "end": 104
+                  "end": 104,
+                  "start_line": 6,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -121,7 +133,9 @@ $escapes = "line1\nline2\ttab";
                               },
                               "span": {
                                 "start": 114,
-                                "end": 118
+                                "end": 118,
+                                "start_line": 6,
+                                "start_col": 14
                               }
                             },
                             "property": {
@@ -130,14 +144,18 @@ $escapes = "line1\nline2\ttab";
                               },
                               "span": {
                                 "start": 120,
-                                "end": 124
+                                "end": 124,
+                                "start_line": 6,
+                                "start_col": 20
                               }
                             }
                           }
                         },
                         "span": {
                           "start": 114,
-                          "end": 124
+                          "end": 124,
+                          "start_line": 6,
+                          "start_col": 14
                         }
                       }
                     }
@@ -145,20 +163,26 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 107,
-                  "end": 125
+                  "end": 125,
+                  "start_line": 6,
+                  "start_col": 7
                 }
               }
             }
           },
           "span": {
             "start": 100,
-            "end": 125
+            "end": 125,
+            "start_line": 6,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 100,
-        "end": 174
+        "end": 174,
+        "start_line": 6,
+        "start_col": 0
       }
     },
     {
@@ -172,7 +196,9 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 174,
-                  "end": 179
+                  "end": 179,
+                  "start_line": 9,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -192,7 +218,9 @@ $escapes = "line1\nline2\ttab";
                               },
                               "span": {
                                 "start": 189,
-                                "end": 193
+                                "end": 193,
+                                "start_line": 9,
+                                "start_col": 15
                               }
                             },
                             "index": {
@@ -201,14 +229,18 @@ $escapes = "line1\nline2\ttab";
                               },
                               "span": {
                                 "start": 194,
-                                "end": 195
+                                "end": 195,
+                                "start_line": 9,
+                                "start_col": 20
                               }
                             }
                           }
                         },
                         "span": {
                           "start": 189,
-                          "end": 196
+                          "end": 196,
+                          "start_line": 9,
+                          "start_col": 15
                         }
                       }
                     }
@@ -216,20 +248,26 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 182,
-                  "end": 197
+                  "end": 197,
+                  "start_line": 9,
+                  "start_col": 8
                 }
               }
             }
           },
           "span": {
             "start": 174,
-            "end": 197
+            "end": 197,
+            "start_line": 9,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 174,
-        "end": 241
+        "end": 241,
+        "start_line": 9,
+        "start_col": 0
       }
     },
     {
@@ -243,7 +281,9 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 241,
-                  "end": 245
+                  "end": 245,
+                  "start_line": 12,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -263,7 +303,9 @@ $escapes = "line1\nline2\ttab";
                               },
                               "span": {
                                 "start": 256,
-                                "end": 260
+                                "end": 260,
+                                "start_line": 12,
+                                "start_col": 15
                               }
                             },
                             "index": {
@@ -272,14 +314,18 @@ $escapes = "line1\nline2\ttab";
                               },
                               "span": {
                                 "start": 261,
-                                "end": 264
+                                "end": 264,
+                                "start_line": 12,
+                                "start_col": 20
                               }
                             }
                           }
                         },
                         "span": {
                           "start": 256,
-                          "end": 265
+                          "end": 265,
+                          "start_line": 12,
+                          "start_col": 15
                         }
                       }
                     }
@@ -287,20 +333,26 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 248,
-                  "end": 266
+                  "end": 266,
+                  "start_line": 12,
+                  "start_col": 7
                 }
               }
             }
           },
           "span": {
             "start": 241,
-            "end": 266
+            "end": 266,
+            "start_line": 12,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 241,
-        "end": 309
+        "end": 309,
+        "start_line": 12,
+        "start_col": 0
       }
     },
     {
@@ -314,7 +366,9 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 309,
-                  "end": 314
+                  "end": 314,
+                  "start_line": 15,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -334,7 +388,9 @@ $escapes = "line1\nline2\ttab";
                               },
                               "span": {
                                 "start": 325,
-                                "end": 330
+                                "end": 330,
+                                "start_line": 15,
+                                "start_col": 16
                               }
                             },
                             "method": {
@@ -343,7 +399,9 @@ $escapes = "line1\nline2\ttab";
                               },
                               "span": {
                                 "start": 332,
-                                "end": 339
+                                "end": 339,
+                                "start_line": 15,
+                                "start_col": 23
                               }
                             },
                             "args": []
@@ -351,7 +409,9 @@ $escapes = "line1\nline2\ttab";
                         },
                         "span": {
                           "start": 325,
-                          "end": 341
+                          "end": 341,
+                          "start_line": 15,
+                          "start_col": 16
                         }
                       }
                     }
@@ -359,20 +419,26 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 317,
-                  "end": 343
+                  "end": 343,
+                  "start_line": 15,
+                  "start_col": 8
                 }
               }
             }
           },
           "span": {
             "start": 309,
-            "end": 343
+            "end": 343,
+            "start_line": 15,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 309,
-        "end": 376
+        "end": 376,
+        "start_line": 15,
+        "start_col": 0
       }
     },
     {
@@ -386,7 +452,9 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 376,
-                  "end": 382
+                  "end": 382,
+                  "start_line": 18,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -403,7 +471,9 @@ $escapes = "line1\nline2\ttab";
                         },
                         "span": {
                           "start": 392,
-                          "end": 394
+                          "end": 394,
+                          "start_line": 18,
+                          "start_col": 16
                         }
                       }
                     },
@@ -417,7 +487,9 @@ $escapes = "line1\nline2\ttab";
                         },
                         "span": {
                           "start": 402,
-                          "end": 404
+                          "end": 404,
+                          "start_line": 18,
+                          "start_col": 26
                         }
                       }
                     },
@@ -428,20 +500,26 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 385,
-                  "end": 409
+                  "end": 409,
+                  "start_line": 18,
+                  "start_col": 9
                 }
               }
             }
           },
           "span": {
             "start": 376,
-            "end": 409
+            "end": 409,
+            "start_line": 18,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 376,
-        "end": 449
+        "end": 449,
+        "start_line": 18,
+        "start_col": 0
       }
     },
     {
@@ -455,7 +533,9 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 449,
-                  "end": 457
+                  "end": 457,
+                  "start_line": 21,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -465,20 +545,26 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 460,
-                  "end": 474
+                  "end": 474,
+                  "start_line": 21,
+                  "start_col": 11
                 }
               }
             }
           },
           "span": {
             "start": 449,
-            "end": 474
+            "end": 474,
+            "start_line": 21,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 449,
-        "end": 507
+        "end": 507,
+        "start_line": 21,
+        "start_col": 0
       }
     },
     {
@@ -492,7 +578,9 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 507,
-                  "end": 514
+                  "end": 514,
+                  "start_line": 24,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -512,7 +600,9 @@ $escapes = "line1\nline2\ttab";
                               },
                               "span": {
                                 "start": 524,
-                                "end": 528
+                                "end": 528,
+                                "start_line": 24,
+                                "start_col": 17
                               }
                             },
                             "index": {
@@ -521,14 +611,18 @@ $escapes = "line1\nline2\ttab";
                               },
                               "span": {
                                 "start": 529,
-                                "end": 534
+                                "end": 534,
+                                "start_line": 24,
+                                "start_col": 22
                               }
                             }
                           }
                         },
                         "span": {
                           "start": 524,
-                          "end": 535
+                          "end": 535,
+                          "start_line": 24,
+                          "start_col": 17
                         }
                       }
                     }
@@ -536,20 +630,26 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 517,
-                  "end": 537
+                  "end": 537,
+                  "start_line": 24,
+                  "start_col": 10
                 }
               }
             }
           },
           "span": {
             "start": 507,
-            "end": 537
+            "end": 537,
+            "start_line": 24,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 507,
-        "end": 565
+        "end": 565,
+        "start_line": 24,
+        "start_col": 0
       }
     },
     {
@@ -563,7 +663,9 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 565,
-                  "end": 571
+                  "end": 571,
+                  "start_line": 27,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -577,7 +679,9 @@ $escapes = "line1\nline2\ttab";
                         },
                         "span": {
                           "start": 575,
-                          "end": 580
+                          "end": 580,
+                          "start_line": 27,
+                          "start_col": 10
                         }
                       }
                     },
@@ -588,20 +692,26 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 574,
-                  "end": 590
+                  "end": 590,
+                  "start_line": 27,
+                  "start_col": 9
                 }
               }
             }
           },
           "span": {
             "start": 565,
-            "end": 590
+            "end": 590,
+            "start_line": 27,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 565,
-        "end": 616
+        "end": 616,
+        "start_line": 27,
+        "start_col": 0
       }
     },
     {
@@ -615,7 +725,9 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 616,
-                  "end": 620
+                  "end": 620,
+                  "start_line": 30,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -632,7 +744,9 @@ $escapes = "line1\nline2\ttab";
                         },
                         "span": {
                           "start": 630,
-                          "end": 635
+                          "end": 635,
+                          "start_line": 30,
+                          "start_col": 14
                         }
                       }
                     }
@@ -640,20 +754,26 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 623,
-                  "end": 636
+                  "end": 636,
+                  "start_line": 30,
+                  "start_col": 7
                 }
               }
             }
           },
           "span": {
             "start": 616,
-            "end": 636
+            "end": 636,
+            "start_line": 30,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 616,
-        "end": 683
+        "end": 683,
+        "start_line": 30,
+        "start_col": 0
       }
     },
     {
@@ -667,7 +787,9 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 683,
-                  "end": 689
+                  "end": 689,
+                  "start_line": 33,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -677,20 +799,26 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 692,
-                  "end": 713
+                  "end": 713,
+                  "start_line": 33,
+                  "start_col": 9
                 }
               }
             }
           },
           "span": {
             "start": 683,
-            "end": 713
+            "end": 713,
+            "start_line": 33,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 683,
-        "end": 736
+        "end": 736,
+        "start_line": 33,
+        "start_col": 0
       }
     },
     {
@@ -704,7 +832,9 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 736,
-                  "end": 744
+                  "end": 744,
+                  "start_line": 36,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -714,25 +844,33 @@ $escapes = "line1\nline2\ttab";
                 },
                 "span": {
                   "start": 747,
-                  "end": 766
+                  "end": 766,
+                  "start_line": 36,
+                  "start_col": 11
                 }
               }
             }
           },
           "span": {
             "start": 736,
-            "end": 766
+            "end": 766,
+            "start_line": 36,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 736,
-        "end": 767
+        "end": 767,
+        "start_line": 36,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 767
+    "end": 767,
+    "start_line": 1,
+    "start_col": 0
   }
 }

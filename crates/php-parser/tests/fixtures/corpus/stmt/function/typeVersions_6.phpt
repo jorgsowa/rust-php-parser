@@ -28,13 +28,17 @@ function test2(): never {} // PHP 8.1
                     "kind": "Unqualified",
                     "span": {
                       "start": 25,
-                      "end": 29
+                      "end": 29,
+                      "start_line": 3,
+                      "start_col": 4
                     }
                   }
                 },
                 "span": {
                   "start": 25,
-                  "end": 29
+                  "end": 29,
+                  "start_line": 3,
+                  "start_col": 4
                 }
               },
               "default": null,
@@ -47,7 +51,9 @@ function test2(): never {} // PHP 8.1
               "attributes": [],
               "span": {
                 "start": 25,
-                "end": 33
+                "end": 33,
+                "start_line": 3,
+                "start_col": 4
               }
             },
             {
@@ -61,13 +67,17 @@ function test2(): never {} // PHP 8.1
                     "kind": "Unqualified",
                     "span": {
                       "start": 35,
-                      "end": 38
+                      "end": 38,
+                      "start_line": 3,
+                      "start_col": 14
                     }
                   }
                 },
                 "span": {
                   "start": 35,
-                  "end": 38
+                  "end": 38,
+                  "start_line": 3,
+                  "start_col": 14
                 }
               },
               "default": null,
@@ -80,7 +90,9 @@ function test2(): never {} // PHP 8.1
               "attributes": [],
               "span": {
                 "start": 35,
-                "end": 42
+                "end": 42,
+                "start_line": 3,
+                "start_col": 14
               }
             },
             {
@@ -94,13 +106,17 @@ function test2(): never {} // PHP 8.1
                     "kind": "Unqualified",
                     "span": {
                       "start": 44,
-                      "end": 49
+                      "end": 49,
+                      "start_line": 3,
+                      "start_col": 23
                     }
                   }
                 },
                 "span": {
                   "start": 44,
-                  "end": 49
+                  "end": 49,
+                  "start_line": 3,
+                  "start_col": 23
                 }
               },
               "default": null,
@@ -113,7 +129,9 @@ function test2(): never {} // PHP 8.1
               "attributes": [],
               "span": {
                 "start": 44,
-                "end": 53
+                "end": 53,
+                "start_line": 3,
+                "start_col": 23
               }
             },
             {
@@ -127,13 +145,17 @@ function test2(): never {} // PHP 8.1
                     "kind": "Unqualified",
                     "span": {
                       "start": 55,
-                      "end": 61
+                      "end": 61,
+                      "start_line": 3,
+                      "start_col": 34
                     }
                   }
                 },
                 "span": {
                   "start": 55,
-                  "end": 61
+                  "end": 61,
+                  "start_line": 3,
+                  "start_col": 34
                 }
               },
               "default": null,
@@ -146,7 +168,9 @@ function test2(): never {} // PHP 8.1
               "attributes": [],
               "span": {
                 "start": 55,
-                "end": 65
+                "end": 65,
+                "start_line": 3,
+                "start_col": 34
               }
             },
             {
@@ -160,13 +184,17 @@ function test2(): never {} // PHP 8.1
                     "kind": "Unqualified",
                     "span": {
                       "start": 82,
-                      "end": 90
+                      "end": 90,
+                      "start_line": 4,
+                      "start_col": 4
                     }
                   }
                 },
                 "span": {
                   "start": 82,
-                  "end": 90
+                  "end": 90,
+                  "start_line": 4,
+                  "start_col": 4
                 }
               },
               "default": null,
@@ -179,7 +207,9 @@ function test2(): never {} // PHP 8.1
               "attributes": [],
               "span": {
                 "start": 82,
-                "end": 94
+                "end": 94,
+                "start_line": 4,
+                "start_col": 4
               }
             },
             {
@@ -193,13 +223,17 @@ function test2(): never {} // PHP 8.1
                     "kind": "Unqualified",
                     "span": {
                       "start": 111,
-                      "end": 117
+                      "end": 117,
+                      "start_line": 5,
+                      "start_col": 4
                     }
                   }
                 },
                 "span": {
                   "start": 111,
-                  "end": 117
+                  "end": 117,
+                  "start_line": 5,
+                  "start_col": 4
                 }
               },
               "default": null,
@@ -212,7 +246,9 @@ function test2(): never {} // PHP 8.1
               "attributes": [],
               "span": {
                 "start": 111,
-                "end": 121
+                "end": 121,
+                "start_line": 5,
+                "start_col": 4
               }
             },
             {
@@ -226,13 +262,17 @@ function test2(): never {} // PHP 8.1
                     "kind": "Unqualified",
                     "span": {
                       "start": 138,
-                      "end": 143
+                      "end": 143,
+                      "start_line": 6,
+                      "start_col": 4
                     }
                   }
                 },
                 "span": {
                   "start": 138,
-                  "end": 143
+                  "end": 143,
+                  "start_line": 6,
+                  "start_col": 4
                 }
               },
               "default": null,
@@ -245,7 +285,9 @@ function test2(): never {} // PHP 8.1
               "attributes": [],
               "span": {
                 "start": 138,
-                "end": 147
+                "end": 147,
+                "start_line": 6,
+                "start_col": 4
               }
             },
             {
@@ -259,13 +301,17 @@ function test2(): never {} // PHP 8.1
                     "kind": "Unqualified",
                     "span": {
                       "start": 164,
-                      "end": 168
+                      "end": 168,
+                      "start_line": 7,
+                      "start_col": 4
                     }
                   }
                 },
                 "span": {
                   "start": 164,
-                  "end": 168
+                  "end": 168,
+                  "start_line": 7,
+                  "start_col": 4
                 }
               },
               "default": null,
@@ -278,7 +324,9 @@ function test2(): never {} // PHP 8.1
               "attributes": [],
               "span": {
                 "start": 164,
-                "end": 172
+                "end": 172,
+                "start_line": 7,
+                "start_col": 4
               }
             },
             {
@@ -292,13 +340,17 @@ function test2(): never {} // PHP 8.1
                     "kind": "Unqualified",
                     "span": {
                       "start": 189,
-                      "end": 194
+                      "end": 194,
+                      "start_line": 8,
+                      "start_col": 4
                     }
                   }
                 },
                 "span": {
                   "start": 189,
-                  "end": 194
+                  "end": 194,
+                  "start_line": 8,
+                  "start_col": 4
                 }
               },
               "default": null,
@@ -311,7 +363,9 @@ function test2(): never {} // PHP 8.1
               "attributes": [],
               "span": {
                 "start": 189,
-                "end": 198
+                "end": 198,
+                "start_line": 8,
+                "start_col": 4
               }
             }
           ],
@@ -325,13 +379,17 @@ function test2(): never {} // PHP 8.1
                 "kind": "Unqualified",
                 "span": {
                   "start": 214,
-                  "end": 218
+                  "end": 218,
+                  "start_line": 9,
+                  "start_col": 3
                 }
               }
             },
             "span": {
               "start": 214,
-              "end": 218
+              "end": 218,
+              "start_line": 9,
+              "start_col": 3
             }
           },
           "by_ref": false,
@@ -340,7 +398,9 @@ function test2(): never {} // PHP 8.1
       },
       "span": {
         "start": 6,
-        "end": 221
+        "end": 221,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -358,13 +418,17 @@ function test2(): never {} // PHP 8.1
                 "kind": "Unqualified",
                 "span": {
                   "start": 251,
-                  "end": 256
+                  "end": 256,
+                  "start_line": 10,
+                  "start_col": 18
                 }
               }
             },
             "span": {
               "start": 251,
-              "end": 256
+              "end": 256,
+              "start_line": 10,
+              "start_col": 18
             }
           },
           "by_ref": false,
@@ -373,12 +437,16 @@ function test2(): never {} // PHP 8.1
       },
       "span": {
         "start": 233,
-        "end": 259
+        "end": 259,
+        "start_line": 10,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 259
+    "end": 259,
+    "start_line": 1,
+    "start_col": 0
   }
 }

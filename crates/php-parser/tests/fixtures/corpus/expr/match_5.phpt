@@ -19,7 +19,9 @@ $value = match (1) {
                 },
                 "span": {
                   "start": 7,
-                  "end": 13
+                  "end": 13,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -32,7 +34,9 @@ $value = match (1) {
                       },
                       "span": {
                         "start": 23,
-                        "end": 24
+                        "end": 24,
+                        "start_line": 3,
+                        "start_col": 16
                       }
                     },
                     "arms": [
@@ -44,7 +48,9 @@ $value = match (1) {
                             },
                             "span": {
                               "start": 32,
-                              "end": 33
+                              "end": 33,
+                              "start_line": 4,
+                              "start_col": 4
                             }
                           },
                           {
@@ -53,7 +59,9 @@ $value = match (1) {
                             },
                             "span": {
                               "start": 35,
-                              "end": 36
+                              "end": 36,
+                              "start_line": 4,
+                              "start_col": 7
                             }
                           }
                         ],
@@ -63,12 +71,16 @@ $value = match (1) {
                           },
                           "span": {
                             "start": 41,
-                            "end": 46
+                            "end": 46,
+                            "start_line": 4,
+                            "start_col": 13
                           }
                         },
                         "span": {
                           "start": 32,
-                          "end": 46
+                          "end": 46,
+                          "start_line": 4,
+                          "start_col": 4
                         }
                       },
                       {
@@ -79,12 +91,16 @@ $value = match (1) {
                           },
                           "span": {
                             "start": 64,
-                            "end": 69
+                            "end": 69,
+                            "start_line": 5,
+                            "start_col": 16
                           }
                         },
                         "span": {
                           "start": 52,
-                          "end": 69
+                          "end": 69,
+                          "start_line": 5,
+                          "start_col": 4
                         }
                       }
                     ]
@@ -92,25 +108,33 @@ $value = match (1) {
                 },
                 "span": {
                   "start": 16,
-                  "end": 72
+                  "end": 72,
+                  "start_line": 3,
+                  "start_col": 9
                 }
               }
             }
           },
           "span": {
             "start": 7,
-            "end": 72
+            "end": 72,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 7,
-        "end": 73
+        "end": 73,
+        "start_line": 3,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 73
+    "end": 73,
+    "start_line": 1,
+    "start_col": 0
   }
 }

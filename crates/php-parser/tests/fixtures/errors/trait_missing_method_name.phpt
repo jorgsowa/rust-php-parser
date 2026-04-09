@@ -15,7 +15,9 @@ expected '::' or 'as', found ';'
       },
       "span": {
         "start": 6,
-        "end": 16
+        "end": 16,
+        "start_line": 1,
+        "start_col": 6
       }
     },
     {
@@ -41,7 +43,9 @@ expected '::' or 'as', found ';'
                       "kind": "Unqualified",
                       "span": {
                         "start": 31,
-                        "end": 33
+                        "end": 33,
+                        "start_line": 1,
+                        "start_col": 31
                       }
                     }
                   ],
@@ -50,7 +54,9 @@ expected '::' or 'as', found ';'
               },
               "span": {
                 "start": 27,
-                "end": 48
+                "end": 48,
+                "start_line": 1,
+                "start_col": 27
               }
             }
           ],
@@ -59,12 +65,16 @@ expected '::' or 'as', found ';'
       },
       "span": {
         "start": 17,
-        "end": 49
+        "end": 49,
+        "start_line": 1,
+        "start_col": 17
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 49
+    "end": 49,
+    "start_line": 1,
+    "start_col": 0
   }
 }

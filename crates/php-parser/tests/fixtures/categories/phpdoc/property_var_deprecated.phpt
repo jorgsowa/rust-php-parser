@@ -48,13 +48,17 @@ class Proxy {
                         "kind": "Unqualified",
                         "span": {
                           "start": 187,
-                          "end": 192
+                          "end": 192,
+                          "start_line": 10,
+                          "start_col": 11
                         }
                       }
                     },
                     "span": {
                       "start": 187,
-                      "end": 192
+                      "end": 192,
+                      "start_line": 10,
+                      "start_col": 11
                     }
                   },
                   "default": {
@@ -63,7 +67,9 @@ class Proxy {
                     },
                     "span": {
                       "start": 201,
-                      "end": 203
+                      "end": 203,
+                      "start_line": 10,
+                      "start_col": 25
                     }
                   },
                   "attributes": [],
@@ -72,14 +78,18 @@ class Proxy {
                     "text": "/** @var array<string, mixed> */",
                     "span": {
                       "start": 143,
-                      "end": 175
+                      "end": 175,
+                      "start_line": 9,
+                      "start_col": 4
                     }
                   }
                 }
               },
               "span": {
                 "start": 180,
-                "end": 203
+                "end": 203,
+                "start_line": 10,
+                "start_col": 4
               }
             },
             {
@@ -101,13 +111,17 @@ class Proxy {
                         "kind": "Unqualified",
                         "span": {
                           "start": 318,
-                          "end": 322
+                          "end": 322,
+                          "start_line": 16,
+                          "start_col": 33
                         }
                       }
                     },
                     "span": {
                       "start": 318,
-                      "end": 322
+                      "end": 322,
+                      "start_line": 16,
+                      "start_col": 33
                     }
                   },
                   "body": [],
@@ -117,14 +131,18 @@ class Proxy {
                     "text": "/**\n     * @deprecated Use newMethod() instead\n     * @return void\n     */",
                     "span": {
                       "start": 210,
-                      "end": 284
+                      "end": 284,
+                      "start_line": 12,
+                      "start_col": 4
                     }
                   }
                 }
               },
               "span": {
                 "start": 289,
-                "end": 326
+                "end": 326,
+                "start_line": 16,
+                "start_col": 4
               }
             }
           ],
@@ -134,19 +152,25 @@ class Proxy {
             "text": "/**\n * @property string $name\n * @property-read int $id\n * @property-write bool $active\n * @mixin \\App\\Helpers\\Foo\n */",
             "span": {
               "start": 6,
-              "end": 124
+              "end": 124,
+              "start_line": 2,
+              "start_col": 0
             }
           }
         }
       },
       "span": {
         "start": 125,
-        "end": 327
+        "end": 327,
+        "start_line": 8,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 327
+    "end": 327,
+    "start_line": 1,
+    "start_col": 0
   }
 }

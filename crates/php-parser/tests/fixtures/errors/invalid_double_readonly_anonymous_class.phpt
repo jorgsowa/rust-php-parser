@@ -17,7 +17,9 @@ expected class name, found '{'
                 },
                 "span": {
                   "start": 10,
-                  "end": 19
+                  "end": 19,
+                  "start_line": 1,
+                  "start_col": 10
                 }
               },
               "args": []
@@ -25,13 +27,17 @@ expected class name, found '{'
           },
           "span": {
             "start": 6,
-            "end": 19
+            "end": 19,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 19
+        "end": 19,
+        "start_line": 1,
+        "start_col": 6
       }
     },
     {
@@ -51,19 +57,25 @@ expected class name, found '{'
       },
       "span": {
         "start": 28,
-        "end": 36
+        "end": 36,
+        "start_line": 1,
+        "start_col": 28
       }
     },
     {
       "kind": "Nop",
       "span": {
         "start": 36,
-        "end": 37
+        "end": 37,
+        "start_line": 1,
+        "start_col": 36
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 37
+    "end": 37,
+    "start_line": 1,
+    "start_col": 0
   }
 }

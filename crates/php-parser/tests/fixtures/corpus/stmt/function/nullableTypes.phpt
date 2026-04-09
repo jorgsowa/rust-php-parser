@@ -24,19 +24,25 @@ function test(?Foo $bar, ?string $foo) : ?Baz {
                         "kind": "Unqualified",
                         "span": {
                           "start": 22,
-                          "end": 26
+                          "end": 26,
+                          "start_line": 3,
+                          "start_col": 15
                         }
                       }
                     },
                     "span": {
                       "start": 22,
-                      "end": 26
+                      "end": 26,
+                      "start_line": 3,
+                      "start_col": 15
                     }
                   }
                 },
                 "span": {
                   "start": 21,
-                  "end": 26
+                  "end": 26,
+                  "start_line": 3,
+                  "start_col": 14
                 }
               },
               "default": null,
@@ -49,7 +55,9 @@ function test(?Foo $bar, ?string $foo) : ?Baz {
               "attributes": [],
               "span": {
                 "start": 21,
-                "end": 30
+                "end": 30,
+                "start_line": 3,
+                "start_col": 14
               }
             },
             {
@@ -65,19 +73,25 @@ function test(?Foo $bar, ?string $foo) : ?Baz {
                         "kind": "Unqualified",
                         "span": {
                           "start": 33,
-                          "end": 39
+                          "end": 39,
+                          "start_line": 3,
+                          "start_col": 26
                         }
                       }
                     },
                     "span": {
                       "start": 33,
-                      "end": 39
+                      "end": 39,
+                      "start_line": 3,
+                      "start_col": 26
                     }
                   }
                 },
                 "span": {
                   "start": 32,
-                  "end": 39
+                  "end": 39,
+                  "start_line": 3,
+                  "start_col": 25
                 }
               },
               "default": null,
@@ -90,7 +104,9 @@ function test(?Foo $bar, ?string $foo) : ?Baz {
               "attributes": [],
               "span": {
                 "start": 32,
-                "end": 44
+                "end": 44,
+                "start_line": 3,
+                "start_col": 25
               }
             }
           ],
@@ -106,19 +122,25 @@ function test(?Foo $bar, ?string $foo) : ?Baz {
                     "kind": "Unqualified",
                     "span": {
                       "start": 49,
-                      "end": 53
+                      "end": 53,
+                      "start_line": 3,
+                      "start_col": 42
                     }
                   }
                 },
                 "span": {
                   "start": 49,
-                  "end": 53
+                  "end": 53,
+                  "start_line": 3,
+                  "start_col": 42
                 }
               }
             },
             "span": {
               "start": 48,
-              "end": 53
+              "end": 53,
+              "start_line": 3,
+              "start_col": 41
             }
           },
           "by_ref": false,
@@ -127,12 +149,16 @@ function test(?Foo $bar, ?string $foo) : ?Baz {
       },
       "span": {
         "start": 7,
-        "end": 56
+        "end": 56,
+        "start_line": 3,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 56
+    "end": 56,
+    "start_line": 1,
+    "start_col": 0
   }
 }

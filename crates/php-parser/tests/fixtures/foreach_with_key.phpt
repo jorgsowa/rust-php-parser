@@ -12,7 +12,9 @@
             },
             "span": {
               "start": 15,
-              "end": 21
+              "end": 21,
+              "start_line": 1,
+              "start_col": 15
             }
           },
           "key": {
@@ -21,7 +23,9 @@
             },
             "span": {
               "start": 25,
-              "end": 27
+              "end": 27,
+              "start_line": 1,
+              "start_col": 25
             }
           },
           "value": {
@@ -30,7 +34,9 @@
             },
             "span": {
               "start": 31,
-              "end": 33
+              "end": 33,
+              "start_line": 1,
+              "start_col": 31
             }
           },
           "body": {
@@ -45,33 +51,43 @@
                         },
                         "span": {
                           "start": 42,
-                          "end": 44
+                          "end": 44,
+                          "start_line": 1,
+                          "start_col": 42
                         }
                       }
                     ]
                   },
                   "span": {
                     "start": 37,
-                    "end": 46
+                    "end": 46,
+                    "start_line": 1,
+                    "start_col": 37
                   }
                 }
               ]
             },
             "span": {
               "start": 35,
-              "end": 47
+              "end": 47,
+              "start_line": 1,
+              "start_col": 35
             }
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 47
+        "end": 47,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 47
+    "end": 47,
+    "start_line": 1,
+    "start_col": 0
   }
 }

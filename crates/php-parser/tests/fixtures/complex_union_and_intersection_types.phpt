@@ -31,13 +31,17 @@ class Container {
                           "kind": "Unqualified",
                           "span": {
                             "start": 27,
-                            "end": 36
+                            "end": 36,
+                            "start_line": 2,
+                            "start_col": 21
                           }
                         }
                       },
                       "span": {
                         "start": 27,
-                        "end": 36
+                        "end": 36,
+                        "start_line": 2,
+                        "start_col": 21
                       }
                     },
                     {
@@ -49,20 +53,26 @@ class Container {
                           "kind": "Unqualified",
                           "span": {
                             "start": 37,
-                            "end": 49
+                            "end": 49,
+                            "start_line": 2,
+                            "start_col": 31
                           }
                         }
                       },
                       "span": {
                         "start": 37,
-                        "end": 49
+                        "end": 49,
+                        "start_line": 2,
+                        "start_col": 31
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 27,
-                  "end": 49
+                  "end": 49,
+                  "start_line": 2,
+                  "start_col": 21
                 }
               },
               "default": null,
@@ -75,7 +85,9 @@ class Container {
               "attributes": [],
               "span": {
                 "start": 27,
-                "end": 54
+                "end": 54,
+                "start_line": 2,
+                "start_col": 21
               }
             }
           ],
@@ -86,13 +98,17 @@ class Container {
                   "kind": "Null",
                   "span": {
                     "start": 81,
-                    "end": 85
+                    "end": 85,
+                    "start_line": 3,
+                    "start_col": 11
                   }
                 }
               },
               "span": {
                 "start": 74,
-                "end": 87
+                "end": 87,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -108,13 +124,17 @@ class Container {
                       "kind": "Unqualified",
                       "span": {
                         "start": 57,
-                        "end": 62
+                        "end": 62,
+                        "start_line": 2,
+                        "start_col": 51
                       }
                     }
                   },
                   "span": {
                     "start": 57,
-                    "end": 62
+                    "end": 62,
+                    "start_line": 2,
+                    "start_col": 51
                   }
                 },
                 {
@@ -126,20 +146,26 @@ class Container {
                       "kind": "Unqualified",
                       "span": {
                         "start": 63,
-                        "end": 67
+                        "end": 67,
+                        "start_line": 2,
+                        "start_col": 57
                       }
                     }
                   },
                   "span": {
                     "start": 63,
-                    "end": 67
+                    "end": 67,
+                    "start_line": 2,
+                    "start_col": 57
                   }
                 }
               ]
             },
             "span": {
               "start": 57,
-              "end": 67
+              "end": 67,
+              "start_line": 2,
+              "start_col": 51
             }
           },
           "by_ref": false,
@@ -148,7 +174,9 @@ class Container {
       },
       "span": {
         "start": 6,
-        "end": 88
+        "end": 88,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -187,13 +215,17 @@ class Container {
                                   "kind": "Unqualified",
                                   "span": {
                                     "start": 164,
-                                    "end": 173
+                                    "end": 173,
+                                    "start_line": 7,
+                                    "start_col": 24
                                   }
                                 }
                               },
                               "span": {
                                 "start": 164,
-                                "end": 173
+                                "end": 173,
+                                "start_line": 7,
+                                "start_col": 24
                               }
                             },
                             {
@@ -205,20 +237,26 @@ class Container {
                                   "kind": "Unqualified",
                                   "span": {
                                     "start": 174,
-                                    "end": 183
+                                    "end": 183,
+                                    "start_line": 7,
+                                    "start_col": 34
                                   }
                                 }
                               },
                               "span": {
                                 "start": 174,
-                                "end": 183
+                                "end": 183,
+                                "start_line": 7,
+                                "start_col": 34
                               }
                             }
                           ]
                         },
                         "span": {
                           "start": 164,
-                          "end": 183
+                          "end": 183,
+                          "start_line": 7,
+                          "start_col": 24
                         }
                       },
                       "default": null,
@@ -231,7 +269,9 @@ class Container {
                       "attributes": [],
                       "span": {
                         "start": 148,
-                        "end": 189
+                        "end": 189,
+                        "start_line": 7,
+                        "start_col": 8
                       }
                     },
                     {
@@ -248,13 +288,17 @@ class Container {
                                   "kind": "Unqualified",
                                   "span": {
                                     "start": 207,
-                                    "end": 213
+                                    "end": 213,
+                                    "start_line": 8,
+                                    "start_col": 16
                                   }
                                 }
                               },
                               "span": {
                                 "start": 207,
-                                "end": 213
+                                "end": 213,
+                                "start_line": 8,
+                                "start_col": 16
                               }
                             },
                             {
@@ -266,13 +310,17 @@ class Container {
                                   "kind": "Unqualified",
                                   "span": {
                                     "start": 214,
-                                    "end": 217
+                                    "end": 217,
+                                    "start_line": 8,
+                                    "start_col": 23
                                   }
                                 }
                               },
                               "span": {
                                 "start": 214,
-                                "end": 217
+                                "end": 217,
+                                "start_line": 8,
+                                "start_col": 23
                               }
                             },
                             {
@@ -284,20 +332,26 @@ class Container {
                                   "kind": "Unqualified",
                                   "span": {
                                     "start": 218,
-                                    "end": 223
+                                    "end": 223,
+                                    "start_line": 8,
+                                    "start_col": 27
                                   }
                                 }
                               },
                               "span": {
                                 "start": 218,
-                                "end": 223
+                                "end": 223,
+                                "start_line": 8,
+                                "start_col": 27
                               }
                             }
                           ]
                         },
                         "span": {
                           "start": 207,
-                          "end": 223
+                          "end": 223,
+                          "start_line": 8,
+                          "start_col": 16
                         }
                       },
                       "default": null,
@@ -310,7 +364,9 @@ class Container {
                       "attributes": [],
                       "span": {
                         "start": 199,
-                        "end": 230
+                        "end": 230,
+                        "start_line": 8,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -321,7 +377,9 @@ class Container {
               },
               "span": {
                 "start": 111,
-                "end": 240
+                "end": 240,
+                "start_line": 6,
+                "start_col": 4
               }
             }
           ],
@@ -330,12 +388,16 @@ class Container {
       },
       "span": {
         "start": 89,
-        "end": 241
+        "end": 241,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 241
+    "end": 241,
+    "start_line": 1,
+    "start_col": 0
   }
 }

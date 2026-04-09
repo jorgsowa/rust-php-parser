@@ -25,7 +25,9 @@ function test4($a, Type &... $b) {}
               "attributes": [],
               "span": {
                 "start": 21,
-                "end": 23
+                "end": 23,
+                "start_line": 2,
+                "start_col": 15
               }
             },
             {
@@ -41,7 +43,9 @@ function test4($a, Type &... $b) {}
               "attributes": [],
               "span": {
                 "start": 25,
-                "end": 31
+                "end": 31,
+                "start_line": 2,
+                "start_col": 19
               }
             }
           ],
@@ -53,7 +57,9 @@ function test4($a, Type &... $b) {}
       },
       "span": {
         "start": 6,
-        "end": 35
+        "end": 35,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -74,7 +80,9 @@ function test4($a, Type &... $b) {}
               "attributes": [],
               "span": {
                 "start": 51,
-                "end": 53
+                "end": 53,
+                "start_line": 3,
+                "start_col": 15
               }
             },
             {
@@ -90,7 +98,9 @@ function test4($a, Type &... $b) {}
               "attributes": [],
               "span": {
                 "start": 55,
-                "end": 62
+                "end": 62,
+                "start_line": 3,
+                "start_col": 19
               }
             }
           ],
@@ -102,7 +112,9 @@ function test4($a, Type &... $b) {}
       },
       "span": {
         "start": 36,
-        "end": 66
+        "end": 66,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -123,7 +135,9 @@ function test4($a, Type &... $b) {}
               "attributes": [],
               "span": {
                 "start": 82,
-                "end": 84
+                "end": 84,
+                "start_line": 4,
+                "start_col": 15
               }
             },
             {
@@ -137,13 +151,17 @@ function test4($a, Type &... $b) {}
                     "kind": "Unqualified",
                     "span": {
                       "start": 86,
-                      "end": 91
+                      "end": 91,
+                      "start_line": 4,
+                      "start_col": 19
                     }
                   }
                 },
                 "span": {
                   "start": 86,
-                  "end": 91
+                  "end": 91,
+                  "start_line": 4,
+                  "start_col": 19
                 }
               },
               "default": null,
@@ -156,7 +174,9 @@ function test4($a, Type &... $b) {}
               "attributes": [],
               "span": {
                 "start": 86,
-                "end": 97
+                "end": 97,
+                "start_line": 4,
+                "start_col": 19
               }
             }
           ],
@@ -168,7 +188,9 @@ function test4($a, Type &... $b) {}
       },
       "span": {
         "start": 67,
-        "end": 101
+        "end": 101,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -189,7 +211,9 @@ function test4($a, Type &... $b) {}
               "attributes": [],
               "span": {
                 "start": 117,
-                "end": 119
+                "end": 119,
+                "start_line": 5,
+                "start_col": 15
               }
             },
             {
@@ -203,13 +227,17 @@ function test4($a, Type &... $b) {}
                     "kind": "Unqualified",
                     "span": {
                       "start": 121,
-                      "end": 126
+                      "end": 126,
+                      "start_line": 5,
+                      "start_col": 19
                     }
                   }
                 },
                 "span": {
                   "start": 121,
-                  "end": 126
+                  "end": 126,
+                  "start_line": 5,
+                  "start_col": 19
                 }
               },
               "default": null,
@@ -222,7 +250,9 @@ function test4($a, Type &... $b) {}
               "attributes": [],
               "span": {
                 "start": 121,
-                "end": 133
+                "end": 133,
+                "start_line": 5,
+                "start_col": 19
               }
             }
           ],
@@ -234,12 +264,16 @@ function test4($a, Type &... $b) {}
       },
       "span": {
         "start": 102,
-        "end": 137
+        "end": 137,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 137
+    "end": 137,
+    "start_line": 1,
+    "start_col": 0
   }
 }

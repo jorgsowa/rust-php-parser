@@ -36,13 +36,17 @@
                             "kind": "Unqualified",
                             "span": {
                               "start": 59,
-                              "end": 62
+                              "end": 62,
+                              "start_line": 1,
+                              "start_col": 59
                             }
                           }
                         },
                         "span": {
                           "start": 59,
-                          "end": 62
+                          "end": 62,
+                          "start_line": 1,
+                          "start_col": 59
                         }
                       },
                       "default": null,
@@ -55,7 +59,9 @@
                       "attributes": [],
                       "span": {
                         "start": 59,
-                        "end": 65
+                        "end": 65,
+                        "start_line": 1,
+                        "start_col": 59
                       }
                     }
                   ],
@@ -68,13 +74,17 @@
                         "kind": "Unqualified",
                         "span": {
                           "start": 68,
-                          "end": 74
+                          "end": 74,
+                          "start_line": 1,
+                          "start_col": 68
                         }
                       }
                     },
                     "span": {
                       "start": 68,
-                      "end": 74
+                      "end": 74,
+                      "start_line": 1,
+                      "start_col": 68
                     }
                   },
                   "body": null,
@@ -83,7 +93,9 @@
               },
               "span": {
                 "start": 27,
-                "end": 76
+                "end": 76,
+                "start_line": 1,
+                "start_col": 27
               }
             }
           ],
@@ -92,12 +104,16 @@
       },
       "span": {
         "start": 15,
-        "end": 77
+        "end": 77,
+        "start_line": 1,
+        "start_col": 15
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 77
+    "end": 77,
+    "start_line": 1,
+    "start_col": 0
   }
 }

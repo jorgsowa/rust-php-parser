@@ -24,19 +24,25 @@ function process(?string $name, ?int $count, ?array $items): ?bool {
                         "kind": "Unqualified",
                         "span": {
                           "start": 24,
-                          "end": 30
+                          "end": 30,
+                          "start_line": 2,
+                          "start_col": 18
                         }
                       }
                     },
                     "span": {
                       "start": 24,
-                      "end": 30
+                      "end": 30,
+                      "start_line": 2,
+                      "start_col": 18
                     }
                   }
                 },
                 "span": {
                   "start": 23,
-                  "end": 30
+                  "end": 30,
+                  "start_line": 2,
+                  "start_col": 17
                 }
               },
               "default": null,
@@ -49,7 +55,9 @@ function process(?string $name, ?int $count, ?array $items): ?bool {
               "attributes": [],
               "span": {
                 "start": 23,
-                "end": 36
+                "end": 36,
+                "start_line": 2,
+                "start_col": 17
               }
             },
             {
@@ -65,19 +73,25 @@ function process(?string $name, ?int $count, ?array $items): ?bool {
                         "kind": "Unqualified",
                         "span": {
                           "start": 39,
-                          "end": 42
+                          "end": 42,
+                          "start_line": 2,
+                          "start_col": 33
                         }
                       }
                     },
                     "span": {
                       "start": 39,
-                      "end": 42
+                      "end": 42,
+                      "start_line": 2,
+                      "start_col": 33
                     }
                   }
                 },
                 "span": {
                   "start": 38,
-                  "end": 42
+                  "end": 42,
+                  "start_line": 2,
+                  "start_col": 32
                 }
               },
               "default": null,
@@ -90,7 +104,9 @@ function process(?string $name, ?int $count, ?array $items): ?bool {
               "attributes": [],
               "span": {
                 "start": 38,
-                "end": 49
+                "end": 49,
+                "start_line": 2,
+                "start_col": 32
               }
             },
             {
@@ -106,19 +122,25 @@ function process(?string $name, ?int $count, ?array $items): ?bool {
                         "kind": "Unqualified",
                         "span": {
                           "start": 52,
-                          "end": 57
+                          "end": 57,
+                          "start_line": 2,
+                          "start_col": 46
                         }
                       }
                     },
                     "span": {
                       "start": 52,
-                      "end": 57
+                      "end": 57,
+                      "start_line": 2,
+                      "start_col": 46
                     }
                   }
                 },
                 "span": {
                   "start": 51,
-                  "end": 57
+                  "end": 57,
+                  "start_line": 2,
+                  "start_col": 45
                 }
               },
               "default": null,
@@ -131,7 +153,9 @@ function process(?string $name, ?int $count, ?array $items): ?bool {
               "attributes": [],
               "span": {
                 "start": 51,
-                "end": 64
+                "end": 64,
+                "start_line": 2,
+                "start_col": 45
               }
             }
           ],
@@ -142,13 +166,17 @@ function process(?string $name, ?int $count, ?array $items): ?bool {
                   "kind": "Null",
                   "span": {
                     "start": 86,
-                    "end": 90
+                    "end": 90,
+                    "start_line": 3,
+                    "start_col": 11
                   }
                 }
               },
               "span": {
                 "start": 79,
-                "end": 92
+                "end": 92,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -163,19 +191,25 @@ function process(?string $name, ?int $count, ?array $items): ?bool {
                     "kind": "Unqualified",
                     "span": {
                       "start": 68,
-                      "end": 72
+                      "end": 72,
+                      "start_line": 2,
+                      "start_col": 62
                     }
                   }
                 },
                 "span": {
                   "start": 68,
-                  "end": 72
+                  "end": 72,
+                  "start_line": 2,
+                  "start_col": 62
                 }
               }
             },
             "span": {
               "start": 67,
-              "end": 72
+              "end": 72,
+              "start_line": 2,
+              "start_col": 61
             }
           },
           "by_ref": false,
@@ -184,12 +218,16 @@ function process(?string $name, ?int $count, ?array $items): ?bool {
       },
       "span": {
         "start": 6,
-        "end": 93
+        "end": 93,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 93
+    "end": 93,
+    "start_line": 1,
+    "start_col": 0
   }
 }

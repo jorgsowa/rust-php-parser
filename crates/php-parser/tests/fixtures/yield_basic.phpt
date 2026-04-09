@@ -26,7 +26,9 @@ function generate() {
                         },
                         "span": {
                           "start": 38,
-                          "end": 39
+                          "end": 39,
+                          "start_line": 3,
+                          "start_col": 10
                         }
                       },
                       "is_from": false
@@ -34,13 +36,17 @@ function generate() {
                   },
                   "span": {
                     "start": 32,
-                    "end": 39
+                    "end": 39,
+                    "start_line": 3,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 32,
-                "end": 45
+                "end": 45,
+                "start_line": 3,
+                "start_col": 4
               }
             },
             {
@@ -55,7 +61,9 @@ function generate() {
                         },
                         "span": {
                           "start": 51,
-                          "end": 52
+                          "end": 52,
+                          "start_line": 4,
+                          "start_col": 10
                         }
                       },
                       "is_from": false
@@ -63,13 +71,17 @@ function generate() {
                   },
                   "span": {
                     "start": 45,
-                    "end": 52
+                    "end": 52,
+                    "start_line": 4,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 45,
-                "end": 58
+                "end": 58,
+                "start_line": 4,
+                "start_col": 4
               }
             },
             {
@@ -84,7 +96,9 @@ function generate() {
                         },
                         "span": {
                           "start": 64,
-                          "end": 65
+                          "end": 65,
+                          "start_line": 5,
+                          "start_col": 10
                         }
                       },
                       "is_from": false
@@ -92,13 +106,17 @@ function generate() {
                   },
                   "span": {
                     "start": 58,
-                    "end": 65
+                    "end": 65,
+                    "start_line": 5,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 58,
-                "end": 67
+                "end": 67,
+                "start_line": 5,
+                "start_col": 4
               }
             }
           ],
@@ -109,12 +127,16 @@ function generate() {
       },
       "span": {
         "start": 6,
-        "end": 68
+        "end": 68,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 68
+    "end": 68,
+    "start_line": 1,
+    "start_col": 0
   }
 }

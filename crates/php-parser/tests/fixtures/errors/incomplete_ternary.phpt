@@ -19,39 +19,51 @@ expected ';' after expression
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "then_expr": {
                 "kind": "Error",
                 "span": {
                   "start": 10,
-                  "end": 10
+                  "end": 10,
+                  "start_line": 0,
+                  "start_col": 0
                 }
               },
               "else_expr": {
                 "kind": "Error",
                 "span": {
                   "start": 10,
-                  "end": 10
+                  "end": 10,
+                  "start_line": 0,
+                  "start_col": 0
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 10
+            "end": 10,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 10
+        "end": 10,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 10
+    "end": 10,
+    "start_line": 1,
+    "start_col": 0
   }
 }

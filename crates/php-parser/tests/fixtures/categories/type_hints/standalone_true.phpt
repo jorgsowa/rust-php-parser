@@ -19,13 +19,17 @@ min_php=8.2
                   },
                   "span": {
                     "start": 34,
-                    "end": 38
+                    "end": 38,
+                    "start_line": 1,
+                    "start_col": 34
                   }
                 }
               },
               "span": {
                 "start": 27,
-                "end": 40
+                "end": 40,
+                "start_line": 1,
+                "start_col": 27
               }
             }
           ],
@@ -38,13 +42,17 @@ min_php=8.2
                 "kind": "Unqualified",
                 "span": {
                   "start": 20,
-                  "end": 24
+                  "end": 24,
+                  "start_line": 1,
+                  "start_col": 20
                 }
               }
             },
             "span": {
               "start": 20,
-              "end": 24
+              "end": 24,
+              "start_line": 1,
+              "start_col": 20
             }
           },
           "by_ref": false,
@@ -53,12 +61,16 @@ min_php=8.2
       },
       "span": {
         "start": 6,
-        "end": 41
+        "end": 41,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 41
+    "end": 41,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -60,7 +60,9 @@ class TaskService
             "kind": "Qualified",
             "span": {
               "start": 16,
-              "end": 25
+              "end": 25,
+              "start_line": 2,
+              "start_col": 10
             }
           },
           "body": "Simple"
@@ -68,7 +70,9 @@ class TaskService
       },
       "span": {
         "start": 6,
-        "end": 28
+        "end": 28,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -82,7 +86,9 @@ class TaskService
             "kind": "Unqualified",
             "span": {
               "start": 43,
-              "end": 47
+              "end": 47,
+              "start_line": 4,
+              "start_col": 15
             }
           },
           "implements": [],
@@ -97,7 +103,9 @@ class TaskService
                     },
                     "span": {
                       "start": 64,
-                      "end": 65
+                      "end": 65,
+                      "start_line": 6,
+                      "start_col": 15
                     }
                   },
                   "attributes": []
@@ -105,7 +113,9 @@ class TaskService
               },
               "span": {
                 "start": 53,
-                "end": 71
+                "end": 71,
+                "start_line": 6,
+                "start_col": 4
               }
             },
             {
@@ -118,7 +128,9 @@ class TaskService
                     },
                     "span": {
                       "start": 85,
-                      "end": 86
+                      "end": 86,
+                      "start_line": 7,
+                      "start_col": 18
                     }
                   },
                   "attributes": []
@@ -126,7 +138,9 @@ class TaskService
               },
               "span": {
                 "start": 71,
-                "end": 92
+                "end": 92,
+                "start_line": 7,
+                "start_col": 4
               }
             },
             {
@@ -139,7 +153,9 @@ class TaskService
                     },
                     "span": {
                       "start": 104,
-                      "end": 105
+                      "end": 105,
+                      "start_line": 8,
+                      "start_col": 16
                     }
                   },
                   "attributes": []
@@ -147,7 +163,9 @@ class TaskService
               },
               "span": {
                 "start": 92,
-                "end": 111
+                "end": 111,
+                "start_line": 8,
+                "start_col": 4
               }
             },
             {
@@ -160,7 +178,9 @@ class TaskService
                     },
                     "span": {
                       "start": 127,
-                      "end": 128
+                      "end": 128,
+                      "start_line": 9,
+                      "start_col": 20
                     }
                   },
                   "attributes": []
@@ -168,7 +188,9 @@ class TaskService
               },
               "span": {
                 "start": 111,
-                "end": 135
+                "end": 135,
+                "start_line": 9,
+                "start_col": 4
               }
             },
             {
@@ -190,13 +212,17 @@ class TaskService
                         "kind": "Unqualified",
                         "span": {
                           "start": 160,
-                          "end": 166
+                          "end": 166,
+                          "start_line": 11,
+                          "start_col": 29
                         }
                       }
                     },
                     "span": {
                       "start": 160,
-                      "end": 166
+                      "end": 166,
+                      "start_line": 11,
+                      "start_col": 29
                     }
                   },
                   "body": [
@@ -211,7 +237,9 @@ class TaskService
                                 },
                                 "span": {
                                   "start": 195,
-                                  "end": 200
+                                  "end": 200,
+                                  "start_line": 13,
+                                  "start_col": 22
                                 }
                               },
                               "arms": [
@@ -226,7 +254,9 @@ class TaskService
                                             },
                                             "span": {
                                               "start": 216,
-                                              "end": 224
+                                              "end": 224,
+                                              "start_line": 14,
+                                              "start_col": 12
                                             }
                                           },
                                           "member": "Low"
@@ -234,7 +264,9 @@ class TaskService
                                       },
                                       "span": {
                                         "start": 216,
-                                        "end": 230
+                                        "end": 230,
+                                        "start_line": 14,
+                                        "start_col": 12
                                       }
                                     }
                                   ],
@@ -244,12 +276,16 @@ class TaskService
                                     },
                                     "span": {
                                       "start": 233,
-                                      "end": 247
+                                      "end": 247,
+                                      "start_line": 14,
+                                      "start_col": 29
                                     }
                                   },
                                   "span": {
                                     "start": 216,
-                                    "end": 247
+                                    "end": 247,
+                                    "start_line": 14,
+                                    "start_col": 12
                                   }
                                 },
                                 {
@@ -263,7 +299,9 @@ class TaskService
                                             },
                                             "span": {
                                               "start": 261,
-                                              "end": 269
+                                              "end": 269,
+                                              "start_line": 15,
+                                              "start_col": 12
                                             }
                                           },
                                           "member": "Medium"
@@ -271,7 +309,9 @@ class TaskService
                                       },
                                       "span": {
                                         "start": 261,
-                                        "end": 278
+                                        "end": 278,
+                                        "start_line": 15,
+                                        "start_col": 12
                                       }
                                     }
                                   ],
@@ -281,12 +321,16 @@ class TaskService
                                     },
                                     "span": {
                                       "start": 281,
-                                      "end": 298
+                                      "end": 298,
+                                      "start_line": 15,
+                                      "start_col": 32
                                     }
                                   },
                                   "span": {
                                     "start": 261,
-                                    "end": 298
+                                    "end": 298,
+                                    "start_line": 15,
+                                    "start_col": 12
                                   }
                                 },
                                 {
@@ -300,7 +344,9 @@ class TaskService
                                             },
                                             "span": {
                                               "start": 312,
-                                              "end": 320
+                                              "end": 320,
+                                              "start_line": 16,
+                                              "start_col": 12
                                             }
                                           },
                                           "member": "High"
@@ -308,7 +354,9 @@ class TaskService
                                       },
                                       "span": {
                                         "start": 312,
-                                        "end": 327
+                                        "end": 327,
+                                        "start_line": 16,
+                                        "start_col": 12
                                       }
                                     }
                                   ],
@@ -318,12 +366,16 @@ class TaskService
                                     },
                                     "span": {
                                       "start": 330,
-                                      "end": 345
+                                      "end": 345,
+                                      "start_line": 16,
+                                      "start_col": 30
                                     }
                                   },
                                   "span": {
                                     "start": 312,
-                                    "end": 345
+                                    "end": 345,
+                                    "start_line": 16,
+                                    "start_col": 12
                                   }
                                 },
                                 {
@@ -337,7 +389,9 @@ class TaskService
                                             },
                                             "span": {
                                               "start": 359,
-                                              "end": 367
+                                              "end": 367,
+                                              "start_line": 17,
+                                              "start_col": 12
                                             }
                                           },
                                           "member": "Critical"
@@ -345,7 +399,9 @@ class TaskService
                                       },
                                       "span": {
                                         "start": 359,
-                                        "end": 378
+                                        "end": 378,
+                                        "start_line": 17,
+                                        "start_col": 12
                                       }
                                     }
                                   ],
@@ -355,12 +411,16 @@ class TaskService
                                     },
                                     "span": {
                                       "start": 381,
-                                      "end": 400
+                                      "end": 400,
+                                      "start_line": 17,
+                                      "start_col": 34
                                     }
                                   },
                                   "span": {
                                     "start": 359,
-                                    "end": 400
+                                    "end": 400,
+                                    "start_line": 17,
+                                    "start_col": 12
                                   }
                                 }
                               ]
@@ -368,13 +428,17 @@ class TaskService
                           },
                           "span": {
                             "start": 188,
-                            "end": 411
+                            "end": 411,
+                            "start_line": 13,
+                            "start_col": 15
                           }
                         }
                       },
                       "span": {
                         "start": 181,
-                        "end": 417
+                        "end": 417,
+                        "start_line": 13,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -383,7 +447,9 @@ class TaskService
               },
               "span": {
                 "start": 135,
-                "end": 424
+                "end": 424,
+                "start_line": 11,
+                "start_col": 4
               }
             },
             {
@@ -407,13 +473,17 @@ class TaskService
                             "kind": "Unqualified",
                             "span": {
                               "start": 457,
-                              "end": 463
+                              "end": 463,
+                              "start_line": 21,
+                              "start_col": 37
                             }
                           }
                         },
                         "span": {
                           "start": 457,
-                          "end": 463
+                          "end": 463,
+                          "start_line": 21,
+                          "start_col": 37
                         }
                       },
                       "default": null,
@@ -426,7 +496,9 @@ class TaskService
                       "attributes": [],
                       "span": {
                         "start": 457,
-                        "end": 470
+                        "end": 470,
+                        "start_line": 21,
+                        "start_col": 37
                       }
                     }
                   ],
@@ -439,13 +511,17 @@ class TaskService
                         "kind": "Unqualified",
                         "span": {
                           "start": 473,
-                          "end": 477
+                          "end": 477,
+                          "start_line": 21,
+                          "start_col": 53
                         }
                       }
                     },
                     "span": {
                       "start": 473,
-                      "end": 477
+                      "end": 477,
+                      "start_line": 21,
+                      "start_col": 53
                     }
                   },
                   "body": [
@@ -458,19 +534,25 @@ class TaskService
                               "kind": "Null",
                               "span": {
                                 "start": 506,
-                                "end": 510
+                                "end": 510,
+                                "start_line": 23,
+                                "start_col": 22
                               }
                             },
                             "span": {
                               "start": 499,
-                              "end": 510
+                              "end": 510,
+                              "start_line": 23,
+                              "start_col": 15
                             }
                           }
                         ]
                       },
                       "span": {
                         "start": 492,
-                        "end": 520
+                        "end": 520,
+                        "start_line": 23,
+                        "start_col": 8
                       }
                     },
                     {
@@ -484,7 +566,9 @@ class TaskService
                                 },
                                 "span": {
                                   "start": 527,
-                                  "end": 533
+                                  "end": 533,
+                                  "start_line": 24,
+                                  "start_col": 15
                                 }
                               },
                               "member": "Critical"
@@ -492,13 +576,17 @@ class TaskService
                           },
                           "span": {
                             "start": 527,
-                            "end": 543
+                            "end": 543,
+                            "start_line": 24,
+                            "start_col": 15
                           }
                         }
                       },
                       "span": {
                         "start": 520,
-                        "end": 549
+                        "end": 549,
+                        "start_line": 24,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -507,7 +595,9 @@ class TaskService
               },
               "span": {
                 "start": 424,
-                "end": 551
+                "end": 551,
+                "start_line": 21,
+                "start_col": 4
               }
             }
           ],
@@ -516,7 +606,9 @@ class TaskService
       },
       "span": {
         "start": 28,
-        "end": 552
+        "end": 552,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -548,13 +640,17 @@ class TaskService
                         "kind": "Unqualified",
                         "span": {
                           "start": 593,
-                          "end": 596
+                          "end": 596,
+                          "start_line": 30,
+                          "start_col": 19
                         }
                       }
                     },
                     "span": {
                       "start": 593,
-                      "end": 596
+                      "end": 596,
+                      "start_line": 30,
+                      "start_col": 19
                     }
                   },
                   "default": {
@@ -563,7 +659,9 @@ class TaskService
                     },
                     "span": {
                       "start": 608,
-                      "end": 609
+                      "end": 609,
+                      "start_line": 30,
+                      "start_col": 34
                     }
                   },
                   "attributes": []
@@ -571,7 +669,9 @@ class TaskService
               },
               "span": {
                 "start": 578,
-                "end": 609
+                "end": 609,
+                "start_line": 30,
+                "start_col": 4
               }
             },
             {
@@ -595,13 +695,17 @@ class TaskService
                             "kind": "Unqualified",
                             "span": {
                               "start": 646,
-                              "end": 652
+                              "end": 652,
+                              "start_line": 32,
+                              "start_col": 34
                             }
                           }
                         },
                         "span": {
                           "start": 646,
-                          "end": 652
+                          "end": 652,
+                          "start_line": 32,
+                          "start_col": 34
                         }
                       },
                       "default": null,
@@ -614,7 +718,9 @@ class TaskService
                       "attributes": [],
                       "span": {
                         "start": 646,
-                        "end": 659
+                        "end": 659,
+                        "start_line": 32,
+                        "start_col": 34
                       }
                     },
                     {
@@ -628,13 +734,17 @@ class TaskService
                             "kind": "Unqualified",
                             "span": {
                               "start": 661,
-                              "end": 670
+                              "end": 670,
+                              "start_line": 32,
+                              "start_col": 49
                             }
                           }
                         },
                         "span": {
                           "start": 661,
-                          "end": 670
+                          "end": 670,
+                          "start_line": 32,
+                          "start_col": 49
                         }
                       },
                       "default": null,
@@ -647,7 +757,9 @@ class TaskService
                       "attributes": [],
                       "span": {
                         "start": 661,
-                        "end": 679
+                        "end": 679,
+                        "start_line": 32,
+                        "start_col": 49
                       }
                     }
                   ],
@@ -660,13 +772,17 @@ class TaskService
                         "kind": "Unqualified",
                         "span": {
                           "start": 682,
-                          "end": 687
+                          "end": 687,
+                          "start_line": 32,
+                          "start_col": 70
                         }
                       }
                     },
                     "span": {
                       "start": 682,
-                      "end": 687
+                      "end": 687,
+                      "start_line": 32,
+                      "start_col": 70
                     }
                   },
                   "body": [
@@ -684,7 +800,9 @@ class TaskService
                                       },
                                       "span": {
                                         "start": 702,
-                                        "end": 706
+                                        "end": 706,
+                                        "start_line": 34,
+                                        "start_col": 8
                                       }
                                     },
                                     "member": "counter"
@@ -692,7 +810,9 @@ class TaskService
                                 },
                                 "span": {
                                   "start": 702,
-                                  "end": 716
+                                  "end": 716,
+                                  "start_line": 34,
+                                  "start_col": 8
                                 }
                               },
                               "op": "PostIncrement"
@@ -700,13 +820,17 @@ class TaskService
                           },
                           "span": {
                             "start": 702,
-                            "end": 718
+                            "end": 718,
+                            "start_line": 34,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 702,
-                        "end": 728
+                        "end": 728,
+                        "start_line": 34,
+                        "start_col": 8
                       }
                     },
                     {
@@ -720,7 +844,9 @@ class TaskService
                                 },
                                 "span": {
                                   "start": 728,
-                                  "end": 731
+                                  "end": 731,
+                                  "start_line": 35,
+                                  "start_col": 8
                                 }
                               },
                               "op": "Assign",
@@ -733,7 +859,9 @@ class TaskService
                                       },
                                       "span": {
                                         "start": 734,
-                                        "end": 738
+                                        "end": 738,
+                                        "start_line": 35,
+                                        "start_col": 14
                                       }
                                     },
                                     "member": "counter"
@@ -741,20 +869,26 @@ class TaskService
                                 },
                                 "span": {
                                   "start": 734,
-                                  "end": 748
+                                  "end": 748,
+                                  "start_line": 35,
+                                  "start_col": 14
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 728,
-                            "end": 748
+                            "end": 748,
+                            "start_line": 35,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 728,
-                        "end": 758
+                        "end": 758,
+                        "start_line": 35,
+                        "start_col": 8
                       }
                     },
                     {
@@ -768,7 +902,9 @@ class TaskService
                                 },
                                 "span": {
                                   "start": 758,
-                                  "end": 768
+                                  "end": 768,
+                                  "start_line": 36,
+                                  "start_col": 8
                                 }
                               },
                               "op": "Assign",
@@ -789,13 +925,17 @@ class TaskService
                                               "kind": "Unqualified",
                                               "span": {
                                                 "start": 781,
-                                                "end": 787
+                                                "end": 787,
+                                                "start_line": 36,
+                                                "start_col": 31
                                               }
                                             }
                                           },
                                           "span": {
                                             "start": 781,
-                                            "end": 787
+                                            "end": 787,
+                                            "start_line": 36,
+                                            "start_col": 31
                                           }
                                         },
                                         "default": null,
@@ -808,7 +948,9 @@ class TaskService
                                         "attributes": [],
                                         "span": {
                                           "start": 781,
-                                          "end": 790
+                                          "end": 790,
+                                          "start_line": 36,
+                                          "start_col": 31
                                         }
                                       },
                                       {
@@ -822,13 +964,17 @@ class TaskService
                                               "kind": "Unqualified",
                                               "span": {
                                                 "start": 792,
-                                                "end": 795
+                                                "end": 795,
+                                                "start_line": 36,
+                                                "start_col": 42
                                               }
                                             }
                                           },
                                           "span": {
                                             "start": 792,
-                                            "end": 795
+                                            "end": 795,
+                                            "start_line": 36,
+                                            "start_col": 42
                                           }
                                         },
                                         "default": null,
@@ -841,7 +987,9 @@ class TaskService
                                         "attributes": [],
                                         "span": {
                                           "start": 792,
-                                          "end": 798
+                                          "end": 798,
+                                          "start_line": 36,
+                                          "start_col": 42
                                         }
                                       }
                                     ],
@@ -854,13 +1002,17 @@ class TaskService
                                           "kind": "Unqualified",
                                           "span": {
                                             "start": 801,
-                                            "end": 807
+                                            "end": 807,
+                                            "start_line": 36,
+                                            "start_col": 51
                                           }
                                         }
                                       },
                                       "span": {
                                         "start": 801,
-                                        "end": 807
+                                        "end": 807,
+                                        "start_line": 36,
+                                        "start_col": 51
                                       }
                                     },
                                     "body": {
@@ -875,7 +1027,9 @@ class TaskService
                                                   },
                                                   "span": {
                                                     "start": 811,
-                                                    "end": 813
+                                                    "end": 813,
+                                                    "start_line": 36,
+                                                    "start_col": 61
                                                   }
                                                 },
                                                 "op": "Concat",
@@ -885,14 +1039,18 @@ class TaskService
                                                   },
                                                   "span": {
                                                     "start": 816,
-                                                    "end": 819
+                                                    "end": 819,
+                                                    "start_line": 36,
+                                                    "start_col": 66
                                                   }
                                                 }
                                               }
                                             },
                                             "span": {
                                               "start": 811,
-                                              "end": 819
+                                              "end": 819,
+                                              "start_line": 36,
+                                              "start_col": 61
                                             }
                                           },
                                           "op": "Concat",
@@ -902,14 +1060,18 @@ class TaskService
                                             },
                                             "span": {
                                               "start": 822,
-                                              "end": 824
+                                              "end": 824,
+                                              "start_line": 36,
+                                              "start_col": 72
                                             }
                                           }
                                         }
                                       },
                                       "span": {
                                         "start": 811,
-                                        "end": 824
+                                        "end": 824,
+                                        "start_line": 36,
+                                        "start_col": 61
                                       }
                                     },
                                     "attributes": []
@@ -917,20 +1079,26 @@ class TaskService
                                 },
                                 "span": {
                                   "start": 771,
-                                  "end": 824
+                                  "end": 824,
+                                  "start_line": 36,
+                                  "start_col": 21
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 758,
-                            "end": 824
+                            "end": 824,
+                            "start_line": 36,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 758,
-                        "end": 834
+                        "end": 834,
+                        "start_line": 36,
+                        "start_col": 8
                       }
                     },
                     {
@@ -944,7 +1112,9 @@ class TaskService
                                 },
                                 "span": {
                                   "start": 834,
-                                  "end": 844
+                                  "end": 844,
+                                  "start_line": 37,
+                                  "start_col": 8
                                 }
                               },
                               "op": "Assign",
@@ -957,7 +1127,9 @@ class TaskService
                                       },
                                       "span": {
                                         "start": 847,
-                                        "end": 857
+                                        "end": 857,
+                                        "start_line": 37,
+                                        "start_col": 21
                                       }
                                     },
                                     "args": [
@@ -969,14 +1141,18 @@ class TaskService
                                           },
                                           "span": {
                                             "start": 858,
-                                            "end": 864
+                                            "end": 864,
+                                            "start_line": 37,
+                                            "start_col": 32
                                           }
                                         },
                                         "unpack": false,
                                         "by_ref": false,
                                         "span": {
                                           "start": 858,
-                                          "end": 864
+                                          "end": 864,
+                                          "start_line": 37,
+                                          "start_col": 32
                                         }
                                       },
                                       {
@@ -987,14 +1163,18 @@ class TaskService
                                           },
                                           "span": {
                                             "start": 866,
-                                            "end": 869
+                                            "end": 869,
+                                            "start_line": 37,
+                                            "start_col": 40
                                           }
                                         },
                                         "unpack": false,
                                         "by_ref": false,
                                         "span": {
                                           "start": 866,
-                                          "end": 869
+                                          "end": 869,
+                                          "start_line": 37,
+                                          "start_col": 40
                                         }
                                       }
                                     ]
@@ -1002,20 +1182,26 @@ class TaskService
                                 },
                                 "span": {
                                   "start": 847,
-                                  "end": 870
+                                  "end": 870,
+                                  "start_line": 37,
+                                  "start_col": 21
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 834,
-                            "end": 870
+                            "end": 870,
+                            "start_line": 37,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 834,
-                        "end": 880
+                        "end": 880,
+                        "start_line": 37,
+                        "start_col": 8
                       }
                     },
                     {
@@ -1030,7 +1216,9 @@ class TaskService
                                   },
                                   "span": {
                                     "start": 901,
-                                    "end": 905
+                                    "end": 905,
+                                    "start_line": 39,
+                                    "start_col": 12
                                   }
                                 },
                                 "value": {
@@ -1039,13 +1227,17 @@ class TaskService
                                   },
                                   "span": {
                                     "start": 909,
-                                    "end": 912
+                                    "end": 912,
+                                    "start_line": 39,
+                                    "start_col": 20
                                   }
                                 },
                                 "unpack": false,
                                 "span": {
                                   "start": 901,
-                                  "end": 912
+                                  "end": 912,
+                                  "start_line": 39,
+                                  "start_col": 12
                                 }
                               },
                               {
@@ -1055,7 +1247,9 @@ class TaskService
                                   },
                                   "span": {
                                     "start": 926,
-                                    "end": 933
+                                    "end": 933,
+                                    "start_line": 40,
+                                    "start_col": 12
                                   }
                                 },
                                 "value": {
@@ -1064,13 +1258,17 @@ class TaskService
                                   },
                                   "span": {
                                     "start": 937,
-                                    "end": 947
+                                    "end": 947,
+                                    "start_line": 40,
+                                    "start_col": 23
                                   }
                                 },
                                 "unpack": false,
                                 "span": {
                                   "start": 926,
-                                  "end": 947
+                                  "end": 947,
+                                  "start_line": 40,
+                                  "start_col": 12
                                 }
                               },
                               {
@@ -1080,7 +1278,9 @@ class TaskService
                                   },
                                   "span": {
                                     "start": 961,
-                                    "end": 971
+                                    "end": 971,
+                                    "start_line": 41,
+                                    "start_col": 12
                                   }
                                 },
                                 "value": {
@@ -1092,7 +1292,9 @@ class TaskService
                                         },
                                         "span": {
                                           "start": 975,
-                                          "end": 984
+                                          "end": 984,
+                                          "start_line": 41,
+                                          "start_col": 26
                                         }
                                       },
                                       "method": {
@@ -1101,7 +1303,9 @@ class TaskService
                                         },
                                         "span": {
                                           "start": 986,
-                                          "end": 991
+                                          "end": 991,
+                                          "start_line": 41,
+                                          "start_col": 37
                                         }
                                       },
                                       "args": []
@@ -1109,13 +1313,17 @@ class TaskService
                                   },
                                   "span": {
                                     "start": 975,
-                                    "end": 993
+                                    "end": 993,
+                                    "start_line": 41,
+                                    "start_col": 26
                                   }
                                 },
                                 "unpack": false,
                                 "span": {
                                   "start": 961,
-                                  "end": 993
+                                  "end": 993,
+                                  "start_line": 41,
+                                  "start_col": 12
                                 }
                               },
                               {
@@ -1125,7 +1333,9 @@ class TaskService
                                   },
                                   "span": {
                                     "start": 1007,
-                                    "end": 1018
+                                    "end": 1018,
+                                    "start_line": 42,
+                                    "start_col": 12
                                   }
                                 },
                                 "value": {
@@ -1140,7 +1350,9 @@ class TaskService
                                               },
                                               "span": {
                                                 "start": 1022,
-                                                "end": 1031
+                                                "end": 1031,
+                                                "start_line": 42,
+                                                "start_col": 27
                                               }
                                             },
                                             "op": "Identical",
@@ -1153,7 +1365,9 @@ class TaskService
                                                     },
                                                     "span": {
                                                       "start": 1036,
-                                                      "end": 1044
+                                                      "end": 1044,
+                                                      "start_line": 42,
+                                                      "start_col": 41
                                                     }
                                                   },
                                                   "member": "Critical"
@@ -1161,14 +1375,18 @@ class TaskService
                                               },
                                               "span": {
                                                 "start": 1036,
-                                                "end": 1055
+                                                "end": 1055,
+                                                "start_line": 42,
+                                                "start_col": 41
                                               }
                                             }
                                           }
                                         },
                                         "span": {
                                           "start": 1022,
-                                          "end": 1055
+                                          "end": 1055,
+                                          "start_line": 42,
+                                          "start_col": 27
                                         }
                                       },
                                       "op": "BooleanOr",
@@ -1181,7 +1399,9 @@ class TaskService
                                               },
                                               "span": {
                                                 "start": 1058,
-                                                "end": 1067
+                                                "end": 1067,
+                                                "start_line": 42,
+                                                "start_col": 63
                                               }
                                             },
                                             "op": "Identical",
@@ -1194,7 +1414,9 @@ class TaskService
                                                     },
                                                     "span": {
                                                       "start": 1072,
-                                                      "end": 1080
+                                                      "end": 1080,
+                                                      "start_line": 42,
+                                                      "start_col": 77
                                                     }
                                                   },
                                                   "member": "High"
@@ -1202,40 +1424,52 @@ class TaskService
                                               },
                                               "span": {
                                                 "start": 1072,
-                                                "end": 1086
+                                                "end": 1086,
+                                                "start_line": 42,
+                                                "start_col": 77
                                               }
                                             }
                                           }
                                         },
                                         "span": {
                                           "start": 1058,
-                                          "end": 1086
+                                          "end": 1086,
+                                          "start_line": 42,
+                                          "start_col": 63
                                         }
                                       }
                                     }
                                   },
                                   "span": {
                                     "start": 1022,
-                                    "end": 1086
+                                    "end": 1086,
+                                    "start_line": 42,
+                                    "start_col": 27
                                   }
                                 },
                                 "unpack": false,
                                 "span": {
                                   "start": 1007,
-                                  "end": 1086
+                                  "end": 1086,
+                                  "start_line": 42,
+                                  "start_col": 12
                                 }
                               }
                             ]
                           },
                           "span": {
                             "start": 887,
-                            "end": 1097
+                            "end": 1097,
+                            "start_line": 38,
+                            "start_col": 15
                           }
                         }
                       },
                       "span": {
                         "start": 880,
-                        "end": 1103
+                        "end": 1103,
+                        "start_line": 38,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -1244,7 +1478,9 @@ class TaskService
               },
               "span": {
                 "start": 616,
-                "end": 1105
+                "end": 1105,
+                "start_line": 32,
+                "start_col": 4
               }
             }
           ],
@@ -1253,12 +1489,16 @@ class TaskService
       },
       "span": {
         "start": 554,
-        "end": 1106
+        "end": 1106,
+        "start_line": 28,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 1106
+    "end": 1106,
+    "start_line": 1,
+    "start_col": 0
   }
 }

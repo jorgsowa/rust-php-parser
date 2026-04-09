@@ -17,7 +17,9 @@ expected ';' after expression
                 },
                 "span": {
                   "start": 13,
-                  "end": 15
+                  "end": 15,
+                  "start_line": 1,
+                  "start_col": 13
                 }
               },
               "arms": []
@@ -25,18 +27,24 @@ expected ';' after expression
           },
           "span": {
             "start": 6,
-            "end": 18
+            "end": 18,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 18
+        "end": 18,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 18
+    "end": 18,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -43,13 +43,17 @@ for ($a, ; $b, ; $c, );
                 "kind": "Qualified",
                 "span": {
                   "start": 11,
-                  "end": 15
+                  "end": 15,
+                  "start_line": 3,
+                  "start_col": 4
                 }
               },
               "alias": null,
               "span": {
                 "start": 14,
-                "end": 15
+                "end": 15,
+                "start_line": 3,
+                "start_col": 7
               }
             }
           ]
@@ -57,7 +61,9 @@ for ($a, ; $b, ; $c, );
       },
       "span": {
         "start": 7,
-        "end": 20
+        "end": 20,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -74,13 +80,17 @@ for ($a, ; $b, ; $c, );
                 "kind": "Qualified",
                 "span": {
                   "start": 33,
-                  "end": 37
+                  "end": 37,
+                  "start_line": 4,
+                  "start_col": 13
                 }
               },
               "alias": null,
               "span": {
                 "start": 36,
-                "end": 37
+                "end": 37,
+                "start_line": 4,
+                "start_col": 16
               }
             }
           ]
@@ -88,7 +98,9 @@ for ($a, ; $b, ; $c, );
       },
       "span": {
         "start": 20,
-        "end": 42
+        "end": 42,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -104,13 +116,17 @@ for ($a, ; $b, ; $c, );
                 "kind": "Unqualified",
                 "span": {
                   "start": 46,
-                  "end": 47
+                  "end": 47,
+                  "start_line": 5,
+                  "start_col": 4
                 }
               },
               "alias": null,
               "span": {
                 "start": 46,
-                "end": 47
+                "end": 47,
+                "start_line": 5,
+                "start_col": 4
               }
             }
           ]
@@ -118,7 +134,9 @@ for ($a, ; $b, ; $c, );
       },
       "span": {
         "start": 42,
-        "end": 51
+        "end": 51,
+        "start_line": 5,
+        "start_col": 0
       }
     },
     {
@@ -132,20 +150,26 @@ for ($a, ; $b, ; $c, );
               },
               "span": {
                 "start": 61,
-                "end": 63
+                "end": 63,
+                "start_line": 6,
+                "start_col": 10
               }
             },
             "attributes": [],
             "span": {
               "start": 57,
-              "end": 63
+              "end": 63,
+              "start_line": 6,
+              "start_col": 6
             }
           }
         ]
       },
       "span": {
         "start": 51,
-        "end": 68
+        "end": 68,
+        "start_line": 6,
+        "start_col": 0
       }
     },
     {
@@ -166,7 +190,9 @@ for ($a, ; $b, ; $c, );
               "kind": "Unqualified",
               "span": {
                 "start": 87,
-                "end": 88
+                "end": 88,
+                "start_line": 8,
+                "start_col": 19
               }
             }
           ],
@@ -182,7 +208,9 @@ for ($a, ; $b, ; $c, );
                       "kind": "Unqualified",
                       "span": {
                         "start": 100,
-                        "end": 101
+                        "end": 101,
+                        "start_line": 9,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -191,7 +219,9 @@ for ($a, ; $b, ; $c, );
               },
               "span": {
                 "start": 96,
-                "end": 109
+                "end": 109,
+                "start_line": 9,
+                "start_col": 4
               }
             },
             {
@@ -205,7 +235,9 @@ for ($a, ; $b, ; $c, );
                       "kind": "Unqualified",
                       "span": {
                         "start": 113,
-                        "end": 114
+                        "end": 114,
+                        "start_line": 10,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -220,7 +252,9 @@ for ($a, ; $b, ; $c, );
                             "kind": "Unqualified",
                             "span": {
                               "start": 126,
-                              "end": 127
+                              "end": 127,
+                              "start_line": 11,
+                              "start_col": 8
                             }
                           },
                           "method": "b",
@@ -232,7 +266,9 @@ for ($a, ; $b, ; $c, );
                               "kind": "Unqualified",
                               "span": {
                                 "start": 141,
-                                "end": 142
+                                "end": 142,
+                                "start_line": 11,
+                                "start_col": 23
                               }
                             }
                           ]
@@ -240,7 +276,9 @@ for ($a, ; $b, ; $c, );
                       },
                       "span": {
                         "start": 126,
-                        "end": 150
+                        "end": 150,
+                        "start_line": 11,
+                        "start_col": 8
                       }
                     }
                   ]
@@ -248,7 +286,9 @@ for ($a, ; $b, ; $c, );
               },
               "span": {
                 "start": 109,
-                "end": 156
+                "end": 156,
+                "start_line": 10,
+                "start_col": 4
               }
             },
             {
@@ -262,7 +302,9 @@ for ($a, ; $b, ; $c, );
                     },
                     "span": {
                       "start": 166,
-                      "end": 168
+                      "end": 168,
+                      "start_line": 13,
+                      "start_col": 14
                     }
                   },
                   "attributes": []
@@ -270,7 +312,9 @@ for ($a, ; $b, ; $c, );
               },
               "span": {
                 "start": 156,
-                "end": 176
+                "end": 176,
+                "start_line": 13,
+                "start_col": 4
               }
             },
             {
@@ -288,7 +332,9 @@ for ($a, ; $b, ; $c, );
               },
               "span": {
                 "start": 176,
-                "end": 185
+                "end": 185,
+                "start_line": 14,
+                "start_col": 4
               }
             }
           ],
@@ -297,7 +343,9 @@ for ($a, ; $b, ; $c, );
       },
       "span": {
         "start": 68,
-        "end": 190
+        "end": 190,
+        "start_line": 8,
+        "start_col": 0
       }
     },
     {
@@ -312,7 +360,9 @@ for ($a, ; $b, ; $c, );
               "kind": "Unqualified",
               "span": {
                 "start": 211,
-                "end": 212
+                "end": 212,
+                "start_line": 16,
+                "start_col": 20
               }
             }
           ],
@@ -322,7 +372,9 @@ for ($a, ; $b, ; $c, );
       },
       "span": {
         "start": 191,
-        "end": 216
+        "end": 216,
+        "start_line": 16,
+        "start_col": 0
       }
     },
     {
@@ -334,14 +386,18 @@ for ($a, ; $b, ; $c, );
             },
             "span": {
               "start": 224,
-              "end": 226
+              "end": 226,
+              "start_line": 18,
+              "start_col": 6
             }
           }
         ]
       },
       "span": {
         "start": 218,
-        "end": 231
+        "end": 231,
+        "start_line": 18,
+        "start_col": 0
       }
     },
     {
@@ -355,20 +411,26 @@ for ($a, ; $b, ; $c, );
                 },
                 "span": {
                   "start": 237,
-                  "end": 239
+                  "end": 239,
+                  "start_line": 19,
+                  "start_col": 6
                 }
               }
             ]
           },
           "span": {
             "start": 231,
-            "end": 242
+            "end": 242,
+            "start_line": 19,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 231,
-        "end": 245
+        "end": 245,
+        "start_line": 19,
+        "start_col": 0
       }
     },
     {
@@ -383,7 +445,9 @@ for ($a, ; $b, ; $c, );
                 },
                 "span": {
                   "start": 255,
-                  "end": 257
+                  "end": 257,
+                  "start_line": 21,
+                  "start_col": 10
                 }
               }
             ]
@@ -393,7 +457,9 @@ for ($a, ; $b, ; $c, );
       },
       "span": {
         "start": 245,
-        "end": 263
+        "end": 263,
+        "start_line": 21,
+        "start_col": 0
       }
     },
     {
@@ -405,14 +471,18 @@ for ($a, ; $b, ; $c, );
             },
             "span": {
               "start": 270,
-              "end": 272
+              "end": 272,
+              "start_line": 23,
+              "start_col": 7
             }
           }
         ]
       },
       "span": {
         "start": 263,
-        "end": 276
+        "end": 276,
+        "start_line": 23,
+        "start_col": 0
       }
     },
     {
@@ -423,14 +493,18 @@ for ($a, ; $b, ; $c, );
             "default": null,
             "span": {
               "start": 283,
-              "end": 285
+              "end": 285,
+              "start_line": 24,
+              "start_col": 7
             }
           }
         ]
       },
       "span": {
         "start": 276,
-        "end": 289
+        "end": 289,
+        "start_line": 24,
+        "start_col": 0
       }
     },
     {
@@ -442,14 +516,18 @@ for ($a, ; $b, ; $c, );
             },
             "span": {
               "start": 294,
-              "end": 296
+              "end": 296,
+              "start_line": 25,
+              "start_col": 5
             }
           }
         ]
       },
       "span": {
         "start": 289,
-        "end": 301
+        "end": 301,
+        "start_line": 25,
+        "start_col": 0
       }
     },
     {
@@ -462,7 +540,9 @@ for ($a, ; $b, ; $c, );
               },
               "span": {
                 "start": 306,
-                "end": 308
+                "end": 308,
+                "start_line": 27,
+                "start_col": 5
               }
             }
           ],
@@ -473,7 +553,9 @@ for ($a, ; $b, ; $c, );
               },
               "span": {
                 "start": 312,
-                "end": 314
+                "end": 314,
+                "start_line": 27,
+                "start_col": 11
               }
             }
           ],
@@ -484,7 +566,9 @@ for ($a, ; $b, ; $c, );
               },
               "span": {
                 "start": 318,
-                "end": 320
+                "end": 320,
+                "start_line": 27,
+                "start_col": 17
               }
             }
           ],
@@ -492,19 +576,25 @@ for ($a, ; $b, ; $c, );
             "kind": "Nop",
             "span": {
               "start": 323,
-              "end": 324
+              "end": 324,
+              "start_line": 27,
+              "start_col": 22
             }
           }
         }
       },
       "span": {
         "start": 301,
-        "end": 324
+        "end": 324,
+        "start_line": 27,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 324
+    "end": 324,
+    "start_line": 1,
+    "start_col": 0
   }
 }

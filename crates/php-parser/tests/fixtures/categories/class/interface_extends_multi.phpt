@@ -15,7 +15,9 @@
               "kind": "Unqualified",
               "span": {
                 "start": 28,
-                "end": 31
+                "end": 31,
+                "start_line": 1,
+                "start_col": 28
               }
             },
             {
@@ -25,7 +27,9 @@
               "kind": "Unqualified",
               "span": {
                 "start": 33,
-                "end": 37
+                "end": 37,
+                "start_line": 1,
+                "start_col": 33
               }
             }
           ],
@@ -49,13 +53,17 @@
                         "kind": "Unqualified",
                         "span": {
                           "start": 62,
-                          "end": 66
+                          "end": 66,
+                          "start_line": 1,
+                          "start_col": 62
                         }
                       }
                     },
                     "span": {
                       "start": 62,
-                      "end": 66
+                      "end": 66,
+                      "start_line": 1,
+                      "start_col": 62
                     }
                   },
                   "body": null,
@@ -64,7 +72,9 @@
               },
               "span": {
                 "start": 39,
-                "end": 68
+                "end": 68,
+                "start_line": 1,
+                "start_col": 39
               }
             }
           ],
@@ -73,12 +83,16 @@
       },
       "span": {
         "start": 6,
-        "end": 69
+        "end": 69,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 69
+    "end": 69,
+    "start_line": 1,
+    "start_col": 0
   }
 }

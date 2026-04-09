@@ -19,7 +19,9 @@ $result = match (true) {
                 },
                 "span": {
                   "start": 6,
-                  "end": 13
+                  "end": 13,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -32,7 +34,9 @@ $result = match (true) {
                       },
                       "span": {
                         "start": 23,
-                        "end": 27
+                        "end": 27,
+                        "start_line": 2,
+                        "start_col": 17
                       }
                     },
                     "arms": [
@@ -47,7 +51,9 @@ $result = match (true) {
                                   },
                                   "span": {
                                     "start": 35,
-                                    "end": 37
+                                    "end": 37,
+                                    "start_line": 3,
+                                    "start_col": 4
                                   }
                                 },
                                 "op": "Greater",
@@ -57,14 +63,18 @@ $result = match (true) {
                                   },
                                   "span": {
                                     "start": 40,
-                                    "end": 41
+                                    "end": 41,
+                                    "start_line": 3,
+                                    "start_col": 9
                                   }
                                 }
                               }
                             },
                             "span": {
                               "start": 35,
-                              "end": 41
+                              "end": 41,
+                              "start_line": 3,
+                              "start_col": 4
                             }
                           }
                         ],
@@ -74,12 +84,16 @@ $result = match (true) {
                           },
                           "span": {
                             "start": 45,
-                            "end": 55
+                            "end": 55,
+                            "start_line": 3,
+                            "start_col": 14
                           }
                         },
                         "span": {
                           "start": 35,
-                          "end": 55
+                          "end": 55,
+                          "start_line": 3,
+                          "start_col": 4
                         }
                       },
                       {
@@ -93,7 +107,9 @@ $result = match (true) {
                                   },
                                   "span": {
                                     "start": 61,
-                                    "end": 63
+                                    "end": 63,
+                                    "start_line": 4,
+                                    "start_col": 4
                                   }
                                 },
                                 "op": "Less",
@@ -103,14 +119,18 @@ $result = match (true) {
                                   },
                                   "span": {
                                     "start": 66,
-                                    "end": 67
+                                    "end": 67,
+                                    "start_line": 4,
+                                    "start_col": 9
                                   }
                                 }
                               }
                             },
                             "span": {
                               "start": 61,
-                              "end": 67
+                              "end": 67,
+                              "start_line": 4,
+                              "start_col": 4
                             }
                           }
                         ],
@@ -120,12 +140,16 @@ $result = match (true) {
                           },
                           "span": {
                             "start": 71,
-                            "end": 81
+                            "end": 81,
+                            "start_line": 4,
+                            "start_col": 14
                           }
                         },
                         "span": {
                           "start": 61,
-                          "end": 81
+                          "end": 81,
+                          "start_line": 4,
+                          "start_col": 4
                         }
                       },
                       {
@@ -136,12 +160,16 @@ $result = match (true) {
                           },
                           "span": {
                             "start": 98,
-                            "end": 104
+                            "end": 104,
+                            "start_line": 5,
+                            "start_col": 15
                           }
                         },
                         "span": {
                           "start": 87,
-                          "end": 104
+                          "end": 104,
+                          "start_line": 5,
+                          "start_col": 4
                         }
                       }
                     ]
@@ -149,25 +177,33 @@ $result = match (true) {
                 },
                 "span": {
                   "start": 16,
-                  "end": 107
+                  "end": 107,
+                  "start_line": 2,
+                  "start_col": 10
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 107
+            "end": 107,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 108
+        "end": 108,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 108
+    "end": 108,
+    "start_line": 1,
+    "start_col": 0
   }
 }

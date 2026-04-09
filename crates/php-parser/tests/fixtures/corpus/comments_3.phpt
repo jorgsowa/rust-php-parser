@@ -15,7 +15,9 @@ if (42) {}
             },
             "span": {
               "start": 22,
-              "end": 24
+              "end": 24,
+              "start_line": 4,
+              "start_col": 4
             }
           },
           "then_branch": {
@@ -24,7 +26,9 @@ if (42) {}
             },
             "span": {
               "start": 26,
-              "end": 28
+              "end": 28,
+              "start_line": 4,
+              "start_col": 8
             }
           },
           "elseif_branches": [],
@@ -33,12 +37,16 @@ if (42) {}
       },
       "span": {
         "start": 18,
-        "end": 28
+        "end": 28,
+        "start_line": 4,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 28
+    "end": 28,
+    "start_line": 1,
+    "start_col": 0
   }
 }

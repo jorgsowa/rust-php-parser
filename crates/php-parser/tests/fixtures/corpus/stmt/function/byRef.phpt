@@ -24,7 +24,9 @@ function &b($b) {}
               "attributes": [],
               "span": {
                 "start": 18,
-                "end": 21
+                "end": 21,
+                "start_line": 3,
+                "start_col": 11
               }
             }
           ],
@@ -36,7 +38,9 @@ function &b($b) {}
       },
       "span": {
         "start": 7,
-        "end": 25
+        "end": 25,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -57,7 +61,9 @@ function &b($b) {}
               "attributes": [],
               "span": {
                 "start": 38,
-                "end": 40
+                "end": 40,
+                "start_line": 4,
+                "start_col": 12
               }
             }
           ],
@@ -69,12 +75,16 @@ function &b($b) {}
       },
       "span": {
         "start": 26,
-        "end": 44
+        "end": 44,
+        "start_line": 4,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 44
+    "end": 44,
+    "start_line": 1,
+    "start_col": 0
   }
 }

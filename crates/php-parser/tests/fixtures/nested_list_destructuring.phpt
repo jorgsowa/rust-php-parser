@@ -21,13 +21,17 @@ list($a, [[$b, $c]]) = [[1, [2, 3]]];
                         },
                         "span": {
                           "start": 11,
-                          "end": 13
+                          "end": 13,
+                          "start_line": 2,
+                          "start_col": 5
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 11,
-                        "end": 13
+                        "end": 13,
+                        "start_line": 2,
+                        "start_col": 5
                       }
                     },
                     {
@@ -48,13 +52,17 @@ list($a, [[$b, $c]]) = [[1, [2, 3]]];
                                         },
                                         "span": {
                                           "start": 17,
-                                          "end": 19
+                                          "end": 19,
+                                          "start_line": 2,
+                                          "start_col": 11
                                         }
                                       },
                                       "unpack": false,
                                       "span": {
                                         "start": 17,
-                                        "end": 19
+                                        "end": 19,
+                                        "start_line": 2,
+                                        "start_col": 11
                                       }
                                     },
                                     {
@@ -65,46 +73,60 @@ list($a, [[$b, $c]]) = [[1, [2, 3]]];
                                         },
                                         "span": {
                                           "start": 21,
-                                          "end": 23
+                                          "end": 23,
+                                          "start_line": 2,
+                                          "start_col": 15
                                         }
                                       },
                                       "unpack": false,
                                       "span": {
                                         "start": 21,
-                                        "end": 23
+                                        "end": 23,
+                                        "start_line": 2,
+                                        "start_col": 15
                                       }
                                     }
                                   ]
                                 },
                                 "span": {
                                   "start": 16,
-                                  "end": 24
+                                  "end": 24,
+                                  "start_line": 2,
+                                  "start_col": 10
                                 }
                               },
                               "unpack": false,
                               "span": {
                                 "start": 16,
-                                "end": 24
+                                "end": 24,
+                                "start_line": 2,
+                                "start_col": 10
                               }
                             }
                           ]
                         },
                         "span": {
                           "start": 15,
-                          "end": 25
+                          "end": 25,
+                          "start_line": 2,
+                          "start_col": 9
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 15,
-                        "end": 25
+                        "end": 25,
+                        "start_line": 2,
+                        "start_col": 9
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 6,
-                  "end": 26
+                  "end": 26,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -124,13 +146,17 @@ list($a, [[$b, $c]]) = [[1, [2, 3]]];
                                 },
                                 "span": {
                                   "start": 31,
-                                  "end": 32
+                                  "end": 32,
+                                  "start_line": 2,
+                                  "start_col": 25
                                 }
                               },
                               "unpack": false,
                               "span": {
                                 "start": 31,
-                                "end": 32
+                                "end": 32,
+                                "start_line": 2,
+                                "start_col": 25
                               }
                             },
                             {
@@ -146,13 +172,17 @@ list($a, [[$b, $c]]) = [[1, [2, 3]]];
                                         },
                                         "span": {
                                           "start": 35,
-                                          "end": 36
+                                          "end": 36,
+                                          "start_line": 2,
+                                          "start_col": 29
                                         }
                                       },
                                       "unpack": false,
                                       "span": {
                                         "start": 35,
-                                        "end": 36
+                                        "end": 36,
+                                        "start_line": 2,
+                                        "start_col": 29
                                       }
                                     },
                                     {
@@ -163,59 +193,77 @@ list($a, [[$b, $c]]) = [[1, [2, 3]]];
                                         },
                                         "span": {
                                           "start": 38,
-                                          "end": 39
+                                          "end": 39,
+                                          "start_line": 2,
+                                          "start_col": 32
                                         }
                                       },
                                       "unpack": false,
                                       "span": {
                                         "start": 38,
-                                        "end": 39
+                                        "end": 39,
+                                        "start_line": 2,
+                                        "start_col": 32
                                       }
                                     }
                                   ]
                                 },
                                 "span": {
                                   "start": 34,
-                                  "end": 40
+                                  "end": 40,
+                                  "start_line": 2,
+                                  "start_col": 28
                                 }
                               },
                               "unpack": false,
                               "span": {
                                 "start": 34,
-                                "end": 40
+                                "end": 40,
+                                "start_line": 2,
+                                "start_col": 28
                               }
                             }
                           ]
                         },
                         "span": {
                           "start": 30,
-                          "end": 41
+                          "end": 41,
+                          "start_line": 2,
+                          "start_col": 24
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 30,
-                        "end": 41
+                        "end": 41,
+                        "start_line": 2,
+                        "start_col": 24
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 29,
-                  "end": 42
+                  "end": 42,
+                  "start_line": 2,
+                  "start_col": 23
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 42
+            "end": 42,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 44
+        "end": 44,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -234,13 +282,17 @@ list($a, [[$b, $c]]) = [[1, [2, 3]]];
                         },
                         "span": {
                           "start": 45,
-                          "end": 47
+                          "end": 47,
+                          "start_line": 3,
+                          "start_col": 1
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 45,
-                        "end": 47
+                        "end": 47,
+                        "start_line": 3,
+                        "start_col": 1
                       }
                     },
                     {
@@ -256,13 +308,17 @@ list($a, [[$b, $c]]) = [[1, [2, 3]]];
                                 },
                                 "span": {
                                   "start": 50,
-                                  "end": 52
+                                  "end": 52,
+                                  "start_line": 3,
+                                  "start_col": 6
                                 }
                               },
                               "unpack": false,
                               "span": {
                                 "start": 50,
-                                "end": 52
+                                "end": 52,
+                                "start_line": 3,
+                                "start_col": 6
                               }
                             },
                             {
@@ -273,33 +329,43 @@ list($a, [[$b, $c]]) = [[1, [2, 3]]];
                                 },
                                 "span": {
                                   "start": 54,
-                                  "end": 56
+                                  "end": 56,
+                                  "start_line": 3,
+                                  "start_col": 10
                                 }
                               },
                               "unpack": false,
                               "span": {
                                 "start": 54,
-                                "end": 56
+                                "end": 56,
+                                "start_line": 3,
+                                "start_col": 10
                               }
                             }
                           ]
                         },
                         "span": {
                           "start": 49,
-                          "end": 57
+                          "end": 57,
+                          "start_line": 3,
+                          "start_col": 5
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 49,
-                        "end": 57
+                        "end": 57,
+                        "start_line": 3,
+                        "start_col": 5
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 44,
-                  "end": 58
+                  "end": 58,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -309,25 +375,33 @@ list($a, [[$b, $c]]) = [[1, [2, 3]]];
                 },
                 "span": {
                   "start": 61,
-                  "end": 66
+                  "end": 66,
+                  "start_line": 3,
+                  "start_col": 17
                 }
               }
             }
           },
           "span": {
             "start": 44,
-            "end": 66
+            "end": 66,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 44,
-        "end": 67
+        "end": 67,
+        "start_line": 3,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 67
+    "end": 67,
+    "start_line": 1,
+    "start_col": 0
   }
 }

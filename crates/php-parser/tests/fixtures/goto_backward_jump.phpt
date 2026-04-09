@@ -13,7 +13,9 @@ if ($count++ < 3) {
       },
       "span": {
         "start": 6,
-        "end": 13
+        "end": 13,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -31,7 +33,9 @@ if ($count++ < 3) {
                         },
                         "span": {
                           "start": 17,
-                          "end": 23
+                          "end": 23,
+                          "start_line": 3,
+                          "start_col": 4
                         }
                       },
                       "op": "PostIncrement"
@@ -39,7 +43,9 @@ if ($count++ < 3) {
                   },
                   "span": {
                     "start": 17,
-                    "end": 25
+                    "end": 25,
+                    "start_line": 3,
+                    "start_col": 4
                   }
                 },
                 "op": "Less",
@@ -49,14 +55,18 @@ if ($count++ < 3) {
                   },
                   "span": {
                     "start": 28,
-                    "end": 29
+                    "end": 29,
+                    "start_line": 3,
+                    "start_col": 15
                   }
                 }
               }
             },
             "span": {
               "start": 17,
-              "end": 29
+              "end": 29,
+              "start_line": 3,
+              "start_col": 4
             }
           },
           "then_branch": {
@@ -68,14 +78,18 @@ if ($count++ < 3) {
                   },
                   "span": {
                     "start": 37,
-                    "end": 49
+                    "end": 49,
+                    "start_line": 4,
+                    "start_col": 4
                   }
                 }
               ]
             },
             "span": {
               "start": 31,
-              "end": 50
+              "end": 50,
+              "start_line": 3,
+              "start_col": 18
             }
           },
           "elseif_branches": [],
@@ -84,12 +98,16 @@ if ($count++ < 3) {
       },
       "span": {
         "start": 13,
-        "end": 50
+        "end": 50,
+        "start_line": 3,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 50
+    "end": 50,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -16,7 +16,9 @@ parse_version=8.1
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "op": "Assign",
@@ -26,25 +28,33 @@ parse_version=8.1
                 },
                 "span": {
                   "start": 11,
-                  "end": 16
+                  "end": 16,
+                  "start_line": 1,
+                  "start_col": 11
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 16
+            "end": 16,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 17
+        "end": 17,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 17
+    "end": 17,
+    "start_line": 1,
+    "start_col": 0
   }
 }

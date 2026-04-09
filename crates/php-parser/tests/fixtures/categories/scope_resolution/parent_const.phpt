@@ -19,7 +19,9 @@
             "kind": "Unqualified",
             "span": {
               "start": 24,
-              "end": 28
+              "end": 28,
+              "start_line": 1,
+              "start_col": 24
             }
           },
           "implements": [],
@@ -47,7 +49,9 @@
                                 },
                                 "span": {
                                   "start": 59,
-                                  "end": 65
+                                  "end": 65,
+                                  "start_line": 1,
+                                  "start_col": 59
                                 }
                               },
                               "member": "VERSION"
@@ -55,13 +59,17 @@
                           },
                           "span": {
                             "start": 59,
-                            "end": 74
+                            "end": 74,
+                            "start_line": 1,
+                            "start_col": 59
                           }
                         }
                       },
                       "span": {
                         "start": 52,
-                        "end": 76
+                        "end": 76,
+                        "start_line": 1,
+                        "start_col": 52
                       }
                     }
                   ],
@@ -70,7 +78,9 @@
               },
               "span": {
                 "start": 30,
-                "end": 78
+                "end": 78,
+                "start_line": 1,
+                "start_col": 30
               }
             }
           ],
@@ -79,12 +89,16 @@
       },
       "span": {
         "start": 6,
-        "end": 79
+        "end": 79,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 79
+    "end": 79,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -30,7 +30,9 @@ enum Status: string implements Loggable, Serializable {
             "kind": "Unqualified",
             "span": {
               "start": 19,
-              "end": 26
+              "end": 26,
+              "start_line": 2,
+              "start_col": 13
             }
           },
           "implements": [
@@ -41,7 +43,9 @@ enum Status: string implements Loggable, Serializable {
               "kind": "Unqualified",
               "span": {
                 "start": 37,
-                "end": 45
+                "end": 45,
+                "start_line": 2,
+                "start_col": 31
               }
             },
             {
@@ -51,7 +55,9 @@ enum Status: string implements Loggable, Serializable {
               "kind": "Unqualified",
               "span": {
                 "start": 47,
-                "end": 60
+                "end": 60,
+                "start_line": 2,
+                "start_col": 41
               }
             }
           ],
@@ -66,7 +72,9 @@ enum Status: string implements Loggable, Serializable {
                     },
                     "span": {
                       "start": 80,
-                      "end": 88
+                      "end": 88,
+                      "start_line": 3,
+                      "start_col": 18
                     }
                   },
                   "attributes": []
@@ -74,7 +82,9 @@ enum Status: string implements Loggable, Serializable {
               },
               "span": {
                 "start": 66,
-                "end": 94
+                "end": 94,
+                "start_line": 3,
+                "start_col": 4
               }
             },
             {
@@ -87,7 +97,9 @@ enum Status: string implements Loggable, Serializable {
                     },
                     "span": {
                       "start": 110,
-                      "end": 120
+                      "end": 120,
+                      "start_line": 4,
+                      "start_col": 20
                     }
                   },
                   "attributes": []
@@ -95,7 +107,9 @@ enum Status: string implements Loggable, Serializable {
               },
               "span": {
                 "start": 94,
-                "end": 127
+                "end": 127,
+                "start_line": 4,
+                "start_col": 4
               }
             },
             {
@@ -112,7 +126,9 @@ enum Status: string implements Loggable, Serializable {
                           },
                           "span": {
                             "start": 143,
-                            "end": 147
+                            "end": 147,
+                            "start_line": 6,
+                            "start_col": 20
                           }
                         },
                         "member": "Active"
@@ -120,7 +136,9 @@ enum Status: string implements Loggable, Serializable {
                     },
                     "span": {
                       "start": 143,
-                      "end": 155
+                      "end": 155,
+                      "start_line": 6,
+                      "start_col": 20
                     }
                   },
                   "attributes": []
@@ -128,7 +146,9 @@ enum Status: string implements Loggable, Serializable {
               },
               "span": {
                 "start": 127,
-                "end": 162
+                "end": 162,
+                "start_line": 6,
+                "start_col": 4
               }
             },
             {
@@ -150,13 +170,17 @@ enum Status: string implements Loggable, Serializable {
                         "kind": "Unqualified",
                         "span": {
                           "start": 187,
-                          "end": 193
+                          "end": 193,
+                          "start_line": 8,
+                          "start_col": 29
                         }
                       }
                     },
                     "span": {
                       "start": 187,
-                      "end": 193
+                      "end": 193,
+                      "start_line": 8,
+                      "start_col": 29
                     }
                   },
                   "body": [
@@ -171,7 +195,9 @@ enum Status: string implements Loggable, Serializable {
                                 },
                                 "span": {
                                   "start": 211,
-                                  "end": 216
+                                  "end": 216,
+                                  "start_line": 9,
+                                  "start_col": 15
                                 }
                               },
                               "property": {
@@ -180,20 +206,26 @@ enum Status: string implements Loggable, Serializable {
                                 },
                                 "span": {
                                   "start": 218,
-                                  "end": 223
+                                  "end": 223,
+                                  "start_line": 9,
+                                  "start_col": 22
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 211,
-                            "end": 223
+                            "end": 223,
+                            "start_line": 9,
+                            "start_col": 15
                           }
                         }
                       },
                       "span": {
                         "start": 204,
-                        "end": 229
+                        "end": 229,
+                        "start_line": 9,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -202,7 +234,9 @@ enum Status: string implements Loggable, Serializable {
               },
               "span": {
                 "start": 162,
-                "end": 236
+                "end": 236,
+                "start_line": 8,
+                "start_col": 4
               }
             },
             {
@@ -224,13 +258,17 @@ enum Status: string implements Loggable, Serializable {
                         "kind": "Unqualified",
                         "span": {
                           "start": 264,
-                          "end": 268
+                          "end": 268,
+                          "start_line": 12,
+                          "start_col": 32
                         }
                       }
                     },
                     "span": {
                       "start": 264,
-                      "end": 268
+                      "end": 268,
+                      "start_line": 12,
+                      "start_col": 32
                     }
                   },
                   "body": [
@@ -245,7 +283,9 @@ enum Status: string implements Loggable, Serializable {
                                 },
                                 "span": {
                                   "start": 286,
-                                  "end": 291
+                                  "end": 291,
+                                  "start_line": 13,
+                                  "start_col": 15
                                 }
                               },
                               "op": "Identical",
@@ -258,7 +298,9 @@ enum Status: string implements Loggable, Serializable {
                                       },
                                       "span": {
                                         "start": 296,
-                                        "end": 300
+                                        "end": 300,
+                                        "start_line": 13,
+                                        "start_col": 25
                                       }
                                     },
                                     "member": "Active"
@@ -266,20 +308,26 @@ enum Status: string implements Loggable, Serializable {
                                 },
                                 "span": {
                                   "start": 296,
-                                  "end": 308
+                                  "end": 308,
+                                  "start_line": 13,
+                                  "start_col": 25
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 286,
-                            "end": 308
+                            "end": 308,
+                            "start_line": 13,
+                            "start_col": 15
                           }
                         }
                       },
                       "span": {
                         "start": 279,
-                        "end": 314
+                        "end": 314,
+                        "start_line": 13,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -288,7 +336,9 @@ enum Status: string implements Loggable, Serializable {
               },
               "span": {
                 "start": 236,
-                "end": 316
+                "end": 316,
+                "start_line": 12,
+                "start_col": 4
               }
             }
           ],
@@ -297,12 +347,16 @@ enum Status: string implements Loggable, Serializable {
       },
       "span": {
         "start": 6,
-        "end": 317
+        "end": 317,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 317
+    "end": 317,
+    "start_line": 1,
+    "start_col": 0
   }
 }

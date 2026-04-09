@@ -48,13 +48,17 @@ class Point {
                             "kind": "Unqualified",
                             "span": {
                               "start": 69,
-                              "end": 74
+                              "end": 74,
+                              "start_line": 5,
+                              "start_col": 15
                             }
                           }
                         },
                         "span": {
                           "start": 69,
-                          "end": 74
+                          "end": 74,
+                          "start_line": 5,
+                          "start_col": 15
                         }
                       },
                       "default": {
@@ -63,7 +67,9 @@ class Point {
                         },
                         "span": {
                           "start": 80,
-                          "end": 83
+                          "end": 83,
+                          "start_line": 5,
+                          "start_col": 26
                         }
                       },
                       "by_ref": false,
@@ -75,7 +81,9 @@ class Point {
                       "attributes": [],
                       "span": {
                         "start": 62,
-                        "end": 83
+                        "end": 83,
+                        "start_line": 5,
+                        "start_col": 8
                       }
                     },
                     {
@@ -89,13 +97,17 @@ class Point {
                             "kind": "Unqualified",
                             "span": {
                               "start": 103,
-                              "end": 108
+                              "end": 108,
+                              "start_line": 6,
+                              "start_col": 18
                             }
                           }
                         },
                         "span": {
                           "start": 103,
-                          "end": 108
+                          "end": 108,
+                          "start_line": 6,
+                          "start_col": 18
                         }
                       },
                       "default": {
@@ -104,7 +116,9 @@ class Point {
                         },
                         "span": {
                           "start": 114,
-                          "end": 116
+                          "end": 116,
+                          "start_line": 6,
+                          "start_col": 29
                         }
                       },
                       "by_ref": false,
@@ -116,7 +130,9 @@ class Point {
                       "attributes": [],
                       "span": {
                         "start": 93,
-                        "end": 116
+                        "end": 116,
+                        "start_line": 6,
+                        "start_col": 8
                       }
                     },
                     {
@@ -130,13 +146,17 @@ class Point {
                             "kind": "Unqualified",
                             "span": {
                               "start": 134,
-                              "end": 140
+                              "end": 140,
+                              "start_line": 7,
+                              "start_col": 16
                             }
                           }
                         },
                         "span": {
                           "start": 134,
-                          "end": 140
+                          "end": 140,
+                          "start_line": 7,
+                          "start_col": 16
                         }
                       },
                       "default": {
@@ -145,7 +165,9 @@ class Point {
                         },
                         "span": {
                           "start": 146,
-                          "end": 153
+                          "end": 153,
+                          "start_line": 7,
+                          "start_col": 28
                         }
                       },
                       "by_ref": false,
@@ -157,7 +179,9 @@ class Point {
                       "attributes": [],
                       "span": {
                         "start": 126,
-                        "end": 153
+                        "end": 153,
+                        "start_line": 7,
+                        "start_col": 8
                       }
                     },
                     {
@@ -171,13 +195,17 @@ class Point {
                             "kind": "Unqualified",
                             "span": {
                               "start": 179,
-                              "end": 182
+                              "end": 182,
+                              "start_line": 8,
+                              "start_col": 24
                             }
                           }
                         },
                         "span": {
                           "start": 179,
-                          "end": 182
+                          "end": 182,
+                          "start_line": 8,
+                          "start_col": 24
                         }
                       },
                       "default": {
@@ -186,7 +214,9 @@ class Point {
                         },
                         "span": {
                           "start": 188,
-                          "end": 189
+                          "end": 189,
+                          "start_line": 8,
+                          "start_col": 33
                         }
                       },
                       "by_ref": false,
@@ -198,7 +228,9 @@ class Point {
                       "attributes": [],
                       "span": {
                         "start": 163,
-                        "end": 189
+                        "end": 189,
+                        "start_line": 8,
+                        "start_col": 8
                       }
                     },
                     {
@@ -222,7 +254,9 @@ class Point {
                               },
                               "span": {
                                 "start": 218,
-                                "end": 224
+                                "end": 224,
+                                "start_line": 9,
+                                "start_col": 27
                               }
                             }
                           },
@@ -232,13 +266,17 @@ class Point {
                           "attributes": [],
                           "span": {
                             "start": 211,
-                            "end": 226
+                            "end": 226,
+                            "start_line": 9,
+                            "start_col": 20
                           }
                         }
                       ],
                       "span": {
                         "start": 199,
-                        "end": 227
+                        "end": 227,
+                        "start_line": 9,
+                        "start_col": 8
                       }
                     },
                     {
@@ -250,7 +288,9 @@ class Point {
                         },
                         "span": {
                           "start": 249,
-                          "end": 250
+                          "end": 250,
+                          "start_line": 10,
+                          "start_col": 20
                         }
                       },
                       "by_ref": false,
@@ -270,7 +310,9 @@ class Point {
                               },
                               "span": {
                                 "start": 260,
-                                "end": 261
+                                "end": 261,
+                                "start_line": 10,
+                                "start_col": 31
                               }
                             }
                           },
@@ -280,13 +322,17 @@ class Point {
                           "attributes": [],
                           "span": {
                             "start": 253,
-                            "end": 263
+                            "end": 263,
+                            "start_line": 10,
+                            "start_col": 24
                           }
                         }
                       ],
                       "span": {
                         "start": 237,
-                        "end": 264
+                        "end": 264,
+                        "start_line": 10,
+                        "start_col": 8
                       }
                     },
                     {
@@ -302,7 +348,9 @@ class Point {
                       "attributes": [],
                       "span": {
                         "start": 274,
-                        "end": 282
+                        "end": 282,
+                        "start_line": 11,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -313,7 +361,9 @@ class Point {
               },
               "span": {
                 "start": 25,
-                "end": 293
+                "end": 293,
+                "start_line": 4,
+                "start_col": 4
               }
             }
           ],
@@ -322,12 +372,16 @@ class Point {
       },
       "span": {
         "start": 7,
-        "end": 294
+        "end": 294,
+        "start_line": 3,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 294
+    "end": 294,
+    "start_line": 1,
+    "start_col": 0
   }
 }

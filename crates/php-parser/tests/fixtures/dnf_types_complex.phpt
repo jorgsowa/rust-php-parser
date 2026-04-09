@@ -32,13 +32,17 @@ class Foo {
                                 "kind": "Unqualified",
                                 "span": {
                                   "start": 18,
-                                  "end": 19
+                                  "end": 19,
+                                  "start_line": 2,
+                                  "start_col": 12
                                 }
                               }
                             },
                             "span": {
                               "start": 18,
-                              "end": 19
+                              "end": 19,
+                              "start_line": 2,
+                              "start_col": 12
                             }
                           },
                           {
@@ -50,20 +54,26 @@ class Foo {
                                 "kind": "Unqualified",
                                 "span": {
                                   "start": 20,
-                                  "end": 21
+                                  "end": 21,
+                                  "start_line": 2,
+                                  "start_col": 14
                                 }
                               }
                             },
                             "span": {
                               "start": 20,
-                              "end": 21
+                              "end": 21,
+                              "start_line": 2,
+                              "start_col": 14
                             }
                           }
                         ]
                       },
                       "span": {
                         "start": 17,
-                        "end": 22
+                        "end": 22,
+                        "start_line": 2,
+                        "start_col": 11
                       }
                     },
                     {
@@ -75,13 +85,17 @@ class Foo {
                           "kind": "Unqualified",
                           "span": {
                             "start": 23,
-                            "end": 24
+                            "end": 24,
+                            "start_line": 2,
+                            "start_col": 17
                           }
                         }
                       },
                       "span": {
                         "start": 23,
-                        "end": 24
+                        "end": 24,
+                        "start_line": 2,
+                        "start_col": 17
                       }
                     },
                     {
@@ -93,20 +107,26 @@ class Foo {
                           "kind": "Unqualified",
                           "span": {
                             "start": 25,
-                            "end": 29
+                            "end": 29,
+                            "start_line": 2,
+                            "start_col": 19
                           }
                         }
                       },
                       "span": {
                         "start": 25,
-                        "end": 29
+                        "end": 29,
+                        "start_line": 2,
+                        "start_col": 19
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 17,
-                  "end": 29
+                  "end": 29,
+                  "start_line": 2,
+                  "start_col": 11
                 }
               },
               "default": null,
@@ -119,7 +139,9 @@ class Foo {
               "attributes": [],
               "span": {
                 "start": 17,
-                "end": 32
+                "end": 32,
+                "start_line": 2,
+                "start_col": 11
               }
             }
           ],
@@ -132,13 +154,17 @@ class Foo {
                   },
                   "span": {
                     "start": 65,
-                    "end": 67
+                    "end": 67,
+                    "start_line": 3,
+                    "start_col": 11
                   }
                 }
               },
               "span": {
                 "start": 58,
-                "end": 69
+                "end": 69,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -157,13 +183,17 @@ class Foo {
                             "kind": "Unqualified",
                             "span": {
                               "start": 36,
-                              "end": 37
+                              "end": 37,
+                              "start_line": 2,
+                              "start_col": 30
                             }
                           }
                         },
                         "span": {
                           "start": 36,
-                          "end": 37
+                          "end": 37,
+                          "start_line": 2,
+                          "start_col": 30
                         }
                       },
                       {
@@ -175,20 +205,26 @@ class Foo {
                             "kind": "Unqualified",
                             "span": {
                               "start": 38,
-                              "end": 39
+                              "end": 39,
+                              "start_line": 2,
+                              "start_col": 32
                             }
                           }
                         },
                         "span": {
                           "start": 38,
-                          "end": 39
+                          "end": 39,
+                          "start_line": 2,
+                          "start_col": 32
                         }
                       }
                     ]
                   },
                   "span": {
                     "start": 35,
-                    "end": 40
+                    "end": 40,
+                    "start_line": 2,
+                    "start_col": 29
                   }
                 },
                 {
@@ -203,13 +239,17 @@ class Foo {
                             "kind": "Unqualified",
                             "span": {
                               "start": 42,
-                              "end": 43
+                              "end": 43,
+                              "start_line": 2,
+                              "start_col": 36
                             }
                           }
                         },
                         "span": {
                           "start": 42,
-                          "end": 43
+                          "end": 43,
+                          "start_line": 2,
+                          "start_col": 36
                         }
                       },
                       {
@@ -221,20 +261,26 @@ class Foo {
                             "kind": "Unqualified",
                             "span": {
                               "start": 44,
-                              "end": 45
+                              "end": 45,
+                              "start_line": 2,
+                              "start_col": 38
                             }
                           }
                         },
                         "span": {
                           "start": 44,
-                          "end": 45
+                          "end": 45,
+                          "start_line": 2,
+                          "start_col": 38
                         }
                       }
                     ]
                   },
                   "span": {
                     "start": 41,
-                    "end": 46
+                    "end": 46,
+                    "start_line": 2,
+                    "start_col": 35
                   }
                 },
                 {
@@ -246,20 +292,26 @@ class Foo {
                       "kind": "Unqualified",
                       "span": {
                         "start": 47,
-                        "end": 51
+                        "end": 51,
+                        "start_line": 2,
+                        "start_col": 41
                       }
                     }
                   },
                   "span": {
                     "start": 47,
-                    "end": 51
+                    "end": 51,
+                    "start_line": 2,
+                    "start_col": 41
                   }
                 }
               ]
             },
             "span": {
               "start": 35,
-              "end": 51
+              "end": 51,
+              "start_line": 2,
+              "start_col": 29
             }
           },
           "by_ref": false,
@@ -268,7 +320,9 @@ class Foo {
       },
       "span": {
         "start": 6,
-        "end": 70
+        "end": 70,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -306,13 +360,17 @@ class Foo {
                                     "kind": "Unqualified",
                                     "span": {
                                       "start": 95,
-                                      "end": 96
+                                      "end": 96,
+                                      "start_line": 6,
+                                      "start_col": 12
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 95,
-                                  "end": 96
+                                  "end": 96,
+                                  "start_line": 6,
+                                  "start_col": 12
                                 }
                               },
                               {
@@ -324,20 +382,26 @@ class Foo {
                                     "kind": "Unqualified",
                                     "span": {
                                       "start": 97,
-                                      "end": 98
+                                      "end": 98,
+                                      "start_line": 6,
+                                      "start_col": 14
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 97,
-                                  "end": 98
+                                  "end": 98,
+                                  "start_line": 6,
+                                  "start_col": 14
                                 }
                               }
                             ]
                           },
                           "span": {
                             "start": 94,
-                            "end": 99
+                            "end": 99,
+                            "start_line": 6,
+                            "start_col": 11
                           }
                         },
                         {
@@ -349,20 +413,26 @@ class Foo {
                               "kind": "Unqualified",
                               "span": {
                                 "start": 100,
-                                "end": 102
+                                "end": 102,
+                                "start_line": 6,
+                                "start_col": 17
                               }
                             }
                           },
                           "span": {
                             "start": 100,
-                            "end": 102
+                            "end": 102,
+                            "start_line": 6,
+                            "start_col": 17
                           }
                         }
                       ]
                     },
                     "span": {
                       "start": 94,
-                      "end": 102
+                      "end": 102,
+                      "start_line": 6,
+                      "start_col": 11
                     }
                   },
                   "default": null,
@@ -371,7 +441,9 @@ class Foo {
               },
               "span": {
                 "start": 87,
-                "end": 107
+                "end": 107,
+                "start_line": 6,
+                "start_col": 4
               }
             },
             {
@@ -401,13 +473,17 @@ class Foo {
                                         "kind": "Unqualified",
                                         "span": {
                                           "start": 134,
-                                          "end": 135
+                                          "end": 135,
+                                          "start_line": 7,
+                                          "start_col": 25
                                         }
                                       }
                                     },
                                     "span": {
                                       "start": 134,
-                                      "end": 135
+                                      "end": 135,
+                                      "start_line": 7,
+                                      "start_col": 25
                                     }
                                   },
                                   {
@@ -419,20 +495,26 @@ class Foo {
                                         "kind": "Unqualified",
                                         "span": {
                                           "start": 136,
-                                          "end": 137
+                                          "end": 137,
+                                          "start_line": 7,
+                                          "start_col": 27
                                         }
                                       }
                                     },
                                     "span": {
                                       "start": 136,
-                                      "end": 137
+                                      "end": 137,
+                                      "start_line": 7,
+                                      "start_col": 27
                                     }
                                   }
                                 ]
                               },
                               "span": {
                                 "start": 133,
-                                "end": 138
+                                "end": 138,
+                                "start_line": 7,
+                                "start_col": 24
                               }
                             },
                             {
@@ -447,13 +529,17 @@ class Foo {
                                         "kind": "Unqualified",
                                         "span": {
                                           "start": 140,
-                                          "end": 141
+                                          "end": 141,
+                                          "start_line": 7,
+                                          "start_col": 31
                                         }
                                       }
                                     },
                                     "span": {
                                       "start": 140,
-                                      "end": 141
+                                      "end": 141,
+                                      "start_line": 7,
+                                      "start_col": 31
                                     }
                                   },
                                   {
@@ -465,27 +551,35 @@ class Foo {
                                         "kind": "Unqualified",
                                         "span": {
                                           "start": 142,
-                                          "end": 143
+                                          "end": 143,
+                                          "start_line": 7,
+                                          "start_col": 33
                                         }
                                       }
                                     },
                                     "span": {
                                       "start": 142,
-                                      "end": 143
+                                      "end": 143,
+                                      "start_line": 7,
+                                      "start_col": 33
                                     }
                                   }
                                 ]
                               },
                               "span": {
                                 "start": 139,
-                                "end": 144
+                                "end": 144,
+                                "start_line": 7,
+                                "start_col": 30
                               }
                             }
                           ]
                         },
                         "span": {
                           "start": 133,
-                          "end": 144
+                          "end": 144,
+                          "start_line": 7,
+                          "start_col": 24
                         }
                       },
                       "default": null,
@@ -498,7 +592,9 @@ class Foo {
                       "attributes": [],
                       "span": {
                         "start": 133,
-                        "end": 147
+                        "end": 147,
+                        "start_line": 7,
+                        "start_col": 24
                       }
                     },
                     {
@@ -515,13 +611,17 @@ class Foo {
                                   "kind": "Unqualified",
                                   "span": {
                                     "start": 149,
-                                    "end": 150
+                                    "end": 150,
+                                    "start_line": 7,
+                                    "start_col": 40
                                   }
                                 }
                               },
                               "span": {
                                 "start": 149,
-                                "end": 150
+                                "end": 150,
+                                "start_line": 7,
+                                "start_col": 40
                               }
                             },
                             {
@@ -533,20 +633,26 @@ class Foo {
                                   "kind": "Unqualified",
                                   "span": {
                                     "start": 151,
-                                    "end": 155
+                                    "end": 155,
+                                    "start_line": 7,
+                                    "start_col": 42
                                   }
                                 }
                               },
                               "span": {
                                 "start": 151,
-                                "end": 155
+                                "end": 155,
+                                "start_line": 7,
+                                "start_col": 42
                               }
                             }
                           ]
                         },
                         "span": {
                           "start": 149,
-                          "end": 155
+                          "end": 155,
+                          "start_line": 7,
+                          "start_col": 40
                         }
                       },
                       "default": null,
@@ -559,7 +665,9 @@ class Foo {
                       "attributes": [],
                       "span": {
                         "start": 149,
-                        "end": 158
+                        "end": 158,
+                        "start_line": 7,
+                        "start_col": 40
                       }
                     }
                   ],
@@ -578,13 +686,17 @@ class Foo {
                                     "kind": "Unqualified",
                                     "span": {
                                       "start": 162,
-                                      "end": 163
+                                      "end": 163,
+                                      "start_line": 7,
+                                      "start_col": 53
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 162,
-                                  "end": 163
+                                  "end": 163,
+                                  "start_line": 7,
+                                  "start_col": 53
                                 }
                               },
                               {
@@ -596,20 +708,26 @@ class Foo {
                                     "kind": "Unqualified",
                                     "span": {
                                       "start": 164,
-                                      "end": 165
+                                      "end": 165,
+                                      "start_line": 7,
+                                      "start_col": 55
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 164,
-                                  "end": 165
+                                  "end": 165,
+                                  "start_line": 7,
+                                  "start_col": 55
                                 }
                               }
                             ]
                           },
                           "span": {
                             "start": 161,
-                            "end": 166
+                            "end": 166,
+                            "start_line": 7,
+                            "start_col": 52
                           }
                         },
                         {
@@ -621,20 +739,26 @@ class Foo {
                               "kind": "Unqualified",
                               "span": {
                                 "start": 167,
-                                "end": 171
+                                "end": 171,
+                                "start_line": 7,
+                                "start_col": 58
                               }
                             }
                           },
                           "span": {
                             "start": 167,
-                            "end": 171
+                            "end": 171,
+                            "start_line": 7,
+                            "start_col": 58
                           }
                         }
                       ]
                     },
                     "span": {
                       "start": 161,
-                      "end": 171
+                      "end": 171,
+                      "start_line": 7,
+                      "start_col": 52
                     }
                   },
                   "body": [],
@@ -643,7 +767,9 @@ class Foo {
               },
               "span": {
                 "start": 113,
-                "end": 175
+                "end": 175,
+                "start_line": 7,
+                "start_col": 4
               }
             }
           ],
@@ -652,12 +778,16 @@ class Foo {
       },
       "span": {
         "start": 71,
-        "end": 176
+        "end": 176,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 176
+    "end": 176,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -16,7 +16,9 @@ min_php=8.1
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "op": "Assign",
@@ -29,7 +31,9 @@ min_php=8.1
                       },
                       "span": {
                         "start": 17,
-                        "end": 24
+                        "end": 24,
+                        "start_line": 1,
+                        "start_col": 17
                       }
                     },
                     "arms": [
@@ -44,7 +48,9 @@ min_php=8.1
                                   },
                                   "span": {
                                     "start": 28,
-                                    "end": 34
+                                    "end": 34,
+                                    "start_line": 1,
+                                    "start_col": 28
                                   }
                                 },
                                 "member": "Active"
@@ -52,7 +58,9 @@ min_php=8.1
                             },
                             "span": {
                               "start": 28,
-                              "end": 42
+                              "end": 42,
+                              "start_line": 1,
+                              "start_col": 28
                             }
                           },
                           {
@@ -64,7 +72,9 @@ min_php=8.1
                                   },
                                   "span": {
                                     "start": 44,
-                                    "end": 50
+                                    "end": 50,
+                                    "start_line": 1,
+                                    "start_col": 44
                                   }
                                 },
                                 "member": "Pending"
@@ -72,7 +82,9 @@ min_php=8.1
                             },
                             "span": {
                               "start": 44,
-                              "end": 60
+                              "end": 60,
+                              "start_line": 1,
+                              "start_col": 44
                             }
                           }
                         ],
@@ -82,12 +94,16 @@ min_php=8.1
                           },
                           "span": {
                             "start": 63,
-                            "end": 69
+                            "end": 69,
+                            "start_line": 1,
+                            "start_col": 63
                           }
                         },
                         "span": {
                           "start": 28,
-                          "end": 69
+                          "end": 69,
+                          "start_line": 1,
+                          "start_col": 28
                         }
                       },
                       {
@@ -101,7 +117,9 @@ min_php=8.1
                                   },
                                   "span": {
                                     "start": 71,
-                                    "end": 77
+                                    "end": 77,
+                                    "start_line": 1,
+                                    "start_col": 71
                                   }
                                 },
                                 "member": "Inactive"
@@ -109,7 +127,9 @@ min_php=8.1
                             },
                             "span": {
                               "start": 71,
-                              "end": 88
+                              "end": 88,
+                              "start_line": 1,
+                              "start_col": 71
                             }
                           }
                         ],
@@ -119,12 +139,16 @@ min_php=8.1
                           },
                           "span": {
                             "start": 91,
-                            "end": 96
+                            "end": 96,
+                            "start_line": 1,
+                            "start_col": 91
                           }
                         },
                         "span": {
                           "start": 71,
-                          "end": 96
+                          "end": 96,
+                          "start_line": 1,
+                          "start_col": 71
                         }
                       }
                     ]
@@ -132,25 +156,33 @@ min_php=8.1
                 },
                 "span": {
                   "start": 11,
-                  "end": 98
+                  "end": 98,
+                  "start_line": 1,
+                  "start_col": 11
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 98
+            "end": 98,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 99
+        "end": 99,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 99
+    "end": 99,
+    "start_line": 1,
+    "start_col": 0
   }
 }

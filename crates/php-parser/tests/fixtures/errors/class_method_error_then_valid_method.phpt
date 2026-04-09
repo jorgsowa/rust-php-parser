@@ -41,13 +41,17 @@ expected variable, found ')'
                             "kind": "Unqualified",
                             "span": {
                               "start": 42,
-                              "end": 45
+                              "end": 45,
+                              "start_line": 2,
+                              "start_col": 24
                             }
                           }
                         },
                         "span": {
                           "start": 42,
-                          "end": 45
+                          "end": 45,
+                          "start_line": 2,
+                          "start_col": 24
                         }
                       },
                       "default": null,
@@ -60,7 +64,9 @@ expected variable, found ')'
                       "attributes": [],
                       "span": {
                         "start": 42,
-                        "end": 46
+                        "end": 46,
+                        "start_line": 2,
+                        "start_col": 24
                       }
                     }
                   ],
@@ -71,7 +77,9 @@ expected variable, found ')'
               },
               "span": {
                 "start": 22,
-                "end": 55
+                "end": 55,
+                "start_line": 2,
+                "start_col": 4
               }
             },
             {
@@ -93,13 +101,17 @@ expected variable, found ')'
                         "kind": "Unqualified",
                         "span": {
                           "start": 79,
-                          "end": 85
+                          "end": 85,
+                          "start_line": 3,
+                          "start_col": 28
                         }
                       }
                     },
                     "span": {
                       "start": 79,
-                      "end": 85
+                      "end": 85,
+                      "start_line": 3,
+                      "start_col": 28
                     }
                   },
                   "body": [
@@ -111,13 +123,17 @@ expected variable, found ')'
                           },
                           "span": {
                             "start": 95,
-                            "end": 99
+                            "end": 99,
+                            "start_line": 3,
+                            "start_col": 44
                           }
                         }
                       },
                       "span": {
                         "start": 88,
-                        "end": 101
+                        "end": 101,
+                        "start_line": 3,
+                        "start_col": 37
                       }
                     }
                   ],
@@ -126,7 +142,9 @@ expected variable, found ')'
               },
               "span": {
                 "start": 55,
-                "end": 103
+                "end": 103,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -135,12 +153,16 @@ expected variable, found ')'
       },
       "span": {
         "start": 6,
-        "end": 104
+        "end": 104,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 104
+    "end": 104,
+    "start_line": 1,
+    "start_col": 0
   }
 }

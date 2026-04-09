@@ -23,7 +23,9 @@ try {
                   "kind": "Unqualified",
                   "span": {
                     "start": 23,
-                    "end": 32
+                    "end": 32,
+                    "start_line": 5,
+                    "start_col": 9
                   }
                 }
               ],
@@ -31,7 +33,9 @@ try {
               "body": [],
               "span": {
                 "start": 22,
-                "end": 38
+                "end": 38,
+                "start_line": 5,
+                "start_col": 8
               }
             }
           ],
@@ -40,12 +44,16 @@ try {
       },
       "span": {
         "start": 7,
-        "end": 38
+        "end": 38,
+        "start_line": 3,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 38
+    "end": 38,
+    "start_line": 1,
+    "start_col": 0
   }
 }

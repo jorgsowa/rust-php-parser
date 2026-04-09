@@ -38,14 +38,18 @@ abstract method cannot contain a body
                             },
                             "span": {
                               "start": 58,
-                              "end": 64
+                              "end": 64,
+                              "start_line": 1,
+                              "start_col": 58
                             }
                           }
                         ]
                       },
                       "span": {
                         "start": 53,
-                        "end": 66
+                        "end": 66,
+                        "start_line": 1,
+                        "start_col": 53
                       }
                     }
                   ],
@@ -54,7 +58,9 @@ abstract method cannot contain a body
               },
               "span": {
                 "start": 27,
-                "end": 68
+                "end": 68,
+                "start_line": 1,
+                "start_col": 27
               }
             }
           ],
@@ -63,12 +69,16 @@ abstract method cannot contain a body
       },
       "span": {
         "start": 15,
-        "end": 69
+        "end": 69,
+        "start_line": 1,
+        "start_col": 15
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 69
+    "end": 69,
+    "start_line": 1,
+    "start_col": 0
   }
 }

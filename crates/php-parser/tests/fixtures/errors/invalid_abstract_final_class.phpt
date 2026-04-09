@@ -9,7 +9,9 @@ expected 'class', found 'final'
       "kind": "Error",
       "span": {
         "start": 6,
-        "end": 15
+        "end": 15,
+        "start_line": 1,
+        "start_col": 6
       }
     },
     {
@@ -29,12 +31,16 @@ expected 'class', found 'final'
       },
       "span": {
         "start": 21,
-        "end": 33
+        "end": 33,
+        "start_line": 1,
+        "start_col": 21
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 33
+    "end": 33,
+    "start_line": 1,
+    "start_col": 0
   }
 }

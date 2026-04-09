@@ -18,13 +18,17 @@ expected identifier, found ';'
                 "kind": "Unqualified",
                 "span": {
                   "start": 10,
-                  "end": 10
+                  "end": 10,
+                  "start_line": 1,
+                  "start_col": 10
                 }
               },
               "alias": null,
               "span": {
                 "start": 10,
-                "end": 10
+                "end": 10,
+                "start_line": 1,
+                "start_col": 10
               }
             }
           ]
@@ -32,7 +36,9 @@ expected identifier, found ';'
       },
       "span": {
         "start": 6,
-        "end": 12
+        "end": 12,
+        "start_line": 1,
+        "start_col": 6
       }
     },
     {
@@ -52,12 +58,16 @@ expected identifier, found ';'
       },
       "span": {
         "start": 12,
-        "end": 24
+        "end": 24,
+        "start_line": 1,
+        "start_col": 12
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 24
+    "end": 24,
+    "start_line": 1,
+    "start_col": 0
   }
 }

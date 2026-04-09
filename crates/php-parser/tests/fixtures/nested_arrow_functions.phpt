@@ -16,7 +16,9 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -39,7 +41,9 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                         "attributes": [],
                         "span": {
                           "start": 14,
-                          "end": 16
+                          "end": 16,
+                          "start_line": 2,
+                          "start_col": 8
                         }
                       }
                     ],
@@ -63,7 +67,9 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                               "attributes": [],
                               "span": {
                                 "start": 24,
-                                "end": 26
+                                "end": 26,
+                                "start_line": 2,
+                                "start_col": 18
                               }
                             }
                           ],
@@ -87,7 +93,9 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                                     "attributes": [],
                                     "span": {
                                       "start": 34,
-                                      "end": 36
+                                      "end": 36,
+                                      "start_line": 2,
+                                      "start_col": 28
                                     }
                                   }
                                 ],
@@ -104,7 +112,9 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                                               },
                                               "span": {
                                                 "start": 41,
-                                                "end": 43
+                                                "end": 43,
+                                                "start_line": 2,
+                                                "start_col": 35
                                               }
                                             },
                                             "op": "Add",
@@ -114,14 +124,18 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                                               },
                                               "span": {
                                                 "start": 46,
-                                                "end": 48
+                                                "end": 48,
+                                                "start_line": 2,
+                                                "start_col": 40
                                               }
                                             }
                                           }
                                         },
                                         "span": {
                                           "start": 41,
-                                          "end": 48
+                                          "end": 48,
+                                          "start_line": 2,
+                                          "start_col": 35
                                         }
                                       },
                                       "op": "Add",
@@ -131,14 +145,18 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                                         },
                                         "span": {
                                           "start": 51,
-                                          "end": 53
+                                          "end": 53,
+                                          "start_line": 2,
+                                          "start_col": 45
                                         }
                                       }
                                     }
                                   },
                                   "span": {
                                     "start": 41,
-                                    "end": 53
+                                    "end": 53,
+                                    "start_line": 2,
+                                    "start_col": 35
                                   }
                                 },
                                 "attributes": []
@@ -146,7 +164,9 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                             },
                             "span": {
                               "start": 31,
-                              "end": 53
+                              "end": 53,
+                              "start_line": 2,
+                              "start_col": 25
                             }
                           },
                           "attributes": []
@@ -154,7 +174,9 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                       },
                       "span": {
                         "start": 21,
-                        "end": 53
+                        "end": 53,
+                        "start_line": 2,
+                        "start_col": 15
                       }
                     },
                     "attributes": []
@@ -162,20 +184,26 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                 },
                 "span": {
                   "start": 11,
-                  "end": 53
+                  "end": 53,
+                  "start_line": 2,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 53
+            "end": 53,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 55
+        "end": 55,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -189,7 +217,9 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                 },
                 "span": {
                   "start": 55,
-                  "end": 57
+                  "end": 57,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -212,7 +242,9 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                         "attributes": [],
                         "span": {
                           "start": 63,
-                          "end": 65
+                          "end": 65,
+                          "start_line": 3,
+                          "start_col": 8
                         }
                       }
                     ],
@@ -229,7 +261,9 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                                   },
                                   "span": {
                                     "start": 70,
-                                    "end": 72
+                                    "end": 72,
+                                    "start_line": 3,
+                                    "start_col": 15
                                   }
                                 },
                                 "op": "Greater",
@@ -239,14 +273,18 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                                   },
                                   "span": {
                                     "start": 75,
-                                    "end": 76
+                                    "end": 76,
+                                    "start_line": 3,
+                                    "start_col": 20
                                   }
                                 }
                               }
                             },
                             "span": {
                               "start": 70,
-                              "end": 76
+                              "end": 76,
+                              "start_line": 3,
+                              "start_col": 15
                             }
                           },
                           "then_expr": {
@@ -268,7 +306,9 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                                     "attributes": [],
                                     "span": {
                                       "start": 82,
-                                      "end": 84
+                                      "end": 84,
+                                      "start_line": 3,
+                                      "start_col": 27
                                     }
                                   }
                                 ],
@@ -282,7 +322,9 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                                         },
                                         "span": {
                                           "start": 89,
-                                          "end": 91
+                                          "end": 91,
+                                          "start_line": 3,
+                                          "start_col": 34
                                         }
                                       },
                                       "op": "Mul",
@@ -292,14 +334,18 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                                         },
                                         "span": {
                                           "start": 94,
-                                          "end": 95
+                                          "end": 95,
+                                          "start_line": 3,
+                                          "start_col": 39
                                         }
                                       }
                                     }
                                   },
                                   "span": {
                                     "start": 89,
-                                    "end": 95
+                                    "end": 95,
+                                    "start_line": 3,
+                                    "start_col": 34
                                   }
                                 },
                                 "attributes": []
@@ -307,7 +353,9 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                             },
                             "span": {
                               "start": 79,
-                              "end": 95
+                              "end": 95,
+                              "start_line": 3,
+                              "start_col": 24
                             }
                           },
                           "else_expr": {
@@ -329,7 +377,9 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                                     "attributes": [],
                                     "span": {
                                       "start": 101,
-                                      "end": 103
+                                      "end": 103,
+                                      "start_line": 3,
+                                      "start_col": 46
                                     }
                                   }
                                 ],
@@ -343,7 +393,9 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                                         },
                                         "span": {
                                           "start": 108,
-                                          "end": 110
+                                          "end": 110,
+                                          "start_line": 3,
+                                          "start_col": 53
                                         }
                                       },
                                       "op": "Mul",
@@ -357,21 +409,27 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                                               },
                                               "span": {
                                                 "start": 114,
-                                                "end": 115
+                                                "end": 115,
+                                                "start_line": 3,
+                                                "start_col": 59
                                               }
                                             }
                                           }
                                         },
                                         "span": {
                                           "start": 113,
-                                          "end": 115
+                                          "end": 115,
+                                          "start_line": 3,
+                                          "start_col": 58
                                         }
                                       }
                                     }
                                   },
                                   "span": {
                                     "start": 108,
-                                    "end": 115
+                                    "end": 115,
+                                    "start_line": 3,
+                                    "start_col": 53
                                   }
                                 },
                                 "attributes": []
@@ -379,14 +437,18 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                             },
                             "span": {
                               "start": 98,
-                              "end": 115
+                              "end": 115,
+                              "start_line": 3,
+                              "start_col": 43
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 70,
-                        "end": 115
+                        "end": 115,
+                        "start_line": 3,
+                        "start_col": 15
                       }
                     },
                     "attributes": []
@@ -394,25 +456,33 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                 },
                 "span": {
                   "start": 60,
-                  "end": 115
+                  "end": 115,
+                  "start_line": 3,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 55,
-            "end": 115
+            "end": 115,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 55,
-        "end": 116
+        "end": 116,
+        "start_line": 3,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 116
+    "end": 116,
+    "start_line": 1,
+    "start_col": 0
   }
 }

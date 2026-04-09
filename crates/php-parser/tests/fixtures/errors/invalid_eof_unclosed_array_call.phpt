@@ -19,7 +19,9 @@ expected ';' after expression
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -34,13 +36,17 @@ expected ';' after expression
                         },
                         "span": {
                           "start": 17,
-                          "end": 18
+                          "end": 18,
+                          "start_line": 2,
+                          "start_col": 11
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 17,
-                        "end": 18
+                        "end": 18,
+                        "start_line": 2,
+                        "start_col": 11
                       }
                     },
                     {
@@ -51,13 +57,17 @@ expected ';' after expression
                         },
                         "span": {
                           "start": 20,
-                          "end": 21
+                          "end": 21,
+                          "start_line": 2,
+                          "start_col": 14
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 20,
-                        "end": 21
+                        "end": 21,
+                        "start_line": 2,
+                        "start_col": 14
                       }
                     },
                     {
@@ -66,38 +76,50 @@ expected ';' after expression
                         "kind": "Error",
                         "span": {
                           "start": 22,
-                          "end": 22
+                          "end": 22,
+                          "start_line": 0,
+                          "start_col": 0
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 22,
-                        "end": 22
+                        "end": 22,
+                        "start_line": 2,
+                        "start_col": 16
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 11,
-                  "end": 22
+                  "end": 22,
+                  "start_line": 2,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 22
+            "end": 22,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 22
+        "end": 22,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 22
+    "end": 22,
+    "start_line": 1,
+    "start_col": 0
   }
 }

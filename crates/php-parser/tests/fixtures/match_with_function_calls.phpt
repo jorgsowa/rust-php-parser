@@ -19,7 +19,9 @@ $label = match (getStatus()) {
                 },
                 "span": {
                   "start": 6,
-                  "end": 12
+                  "end": 12,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -35,7 +37,9 @@ $label = match (getStatus()) {
                             },
                             "span": {
                               "start": 22,
-                              "end": 31
+                              "end": 31,
+                              "start_line": 2,
+                              "start_col": 16
                             }
                           },
                           "args": []
@@ -43,7 +47,9 @@ $label = match (getStatus()) {
                       },
                       "span": {
                         "start": 22,
-                        "end": 33
+                        "end": 33,
+                        "start_line": 2,
+                        "start_col": 16
                       }
                     },
                     "arms": [
@@ -58,7 +64,9 @@ $label = match (getStatus()) {
                                   },
                                   "span": {
                                     "start": 41,
-                                    "end": 49
+                                    "end": 49,
+                                    "start_line": 3,
+                                    "start_col": 4
                                   }
                                 },
                                 "args": []
@@ -66,7 +74,9 @@ $label = match (getStatus()) {
                             },
                             "span": {
                               "start": 41,
-                              "end": 52
+                              "end": 52,
+                              "start_line": 3,
+                              "start_col": 4
                             }
                           }
                         ],
@@ -76,12 +86,16 @@ $label = match (getStatus()) {
                           },
                           "span": {
                             "start": 55,
-                            "end": 63
+                            "end": 63,
+                            "start_line": 3,
+                            "start_col": 18
                           }
                         },
                         "span": {
                           "start": 41,
-                          "end": 63
+                          "end": 63,
+                          "start_line": 3,
+                          "start_col": 4
                         }
                       },
                       {
@@ -95,7 +109,9 @@ $label = match (getStatus()) {
                                   },
                                   "span": {
                                     "start": 69,
-                                    "end": 78
+                                    "end": 78,
+                                    "start_line": 4,
+                                    "start_col": 4
                                   }
                                 },
                                 "args": []
@@ -103,7 +119,9 @@ $label = match (getStatus()) {
                             },
                             "span": {
                               "start": 69,
-                              "end": 81
+                              "end": 81,
+                              "start_line": 4,
+                              "start_col": 4
                             }
                           }
                         ],
@@ -113,12 +131,16 @@ $label = match (getStatus()) {
                           },
                           "span": {
                             "start": 84,
-                            "end": 93
+                            "end": 93,
+                            "start_line": 4,
+                            "start_col": 19
                           }
                         },
                         "span": {
                           "start": 69,
-                          "end": 93
+                          "end": 93,
+                          "start_line": 4,
+                          "start_col": 4
                         }
                       },
                       {
@@ -134,7 +156,9 @@ $label = match (getStatus()) {
                                     },
                                     "span": {
                                       "start": 120,
-                                      "end": 134
+                                      "end": 134,
+                                      "start_line": 5,
+                                      "start_col": 25
                                     }
                                   },
                                   "args": [
@@ -146,14 +170,18 @@ $label = match (getStatus()) {
                                         },
                                         "span": {
                                           "start": 135,
-                                          "end": 144
+                                          "end": 144,
+                                          "start_line": 5,
+                                          "start_col": 40
                                         }
                                       },
                                       "unpack": false,
                                       "by_ref": false,
                                       "span": {
                                         "start": 135,
-                                        "end": 144
+                                        "end": 144,
+                                        "start_line": 5,
+                                        "start_col": 40
                                       }
                                     }
                                   ]
@@ -161,18 +189,24 @@ $label = match (getStatus()) {
                               },
                               "span": {
                                 "start": 116,
-                                "end": 145
+                                "end": 145,
+                                "start_line": 5,
+                                "start_col": 21
                               }
                             }
                           },
                           "span": {
                             "start": 110,
-                            "end": 145
+                            "end": 145,
+                            "start_line": 5,
+                            "start_col": 15
                           }
                         },
                         "span": {
                           "start": 99,
-                          "end": 145
+                          "end": 145,
+                          "start_line": 5,
+                          "start_col": 4
                         }
                       }
                     ]
@@ -180,25 +214,33 @@ $label = match (getStatus()) {
                 },
                 "span": {
                   "start": 15,
-                  "end": 148
+                  "end": 148,
+                  "start_line": 2,
+                  "start_col": 9
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 148
+            "end": 148,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 149
+        "end": 149,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 149
+    "end": 149,
+    "start_line": 1,
+    "start_col": 0
   }
 }

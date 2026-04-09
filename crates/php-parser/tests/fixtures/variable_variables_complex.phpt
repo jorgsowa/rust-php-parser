@@ -20,13 +20,17 @@ echo $$obj->prop;
                     },
                     "span": {
                       "start": 7,
-                      "end": 11
+                      "end": 11,
+                      "start_line": 2,
+                      "start_col": 1
                     }
                   }
                 },
                 "span": {
                   "start": 6,
-                  "end": 11
+                  "end": 11,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -36,20 +40,26 @@ echo $$obj->prop;
                 },
                 "span": {
                   "start": 14,
-                  "end": 15
+                  "end": 15,
+                  "start_line": 2,
+                  "start_col": 8
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 15
+            "end": 15,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 17
+        "end": 17,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -67,19 +77,25 @@ echo $$obj->prop;
                         },
                         "span": {
                           "start": 19,
-                          "end": 23
+                          "end": 23,
+                          "start_line": 3,
+                          "start_col": 2
                         }
                       }
                     },
                     "span": {
                       "start": 18,
-                      "end": 23
+                      "end": 23,
+                      "start_line": 3,
+                      "start_col": 1
                     }
                   }
                 },
                 "span": {
                   "start": 17,
-                  "end": 23
+                  "end": 23,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -89,20 +105,26 @@ echo $$obj->prop;
                 },
                 "span": {
                   "start": 26,
-                  "end": 27
+                  "end": 27,
+                  "start_line": 3,
+                  "start_col": 9
                 }
               }
             }
           },
           "span": {
             "start": 17,
-            "end": 27
+            "end": 27,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 17,
-        "end": 29
+        "end": 29,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -121,7 +143,9 @@ echo $$obj->prop;
                           },
                           "span": {
                             "start": 31,
-                            "end": 33
+                            "end": 33,
+                            "start_line": 4,
+                            "start_col": 2
                           }
                         },
                         "op": "Concat",
@@ -131,20 +155,26 @@ echo $$obj->prop;
                           },
                           "span": {
                             "start": 36,
-                            "end": 38
+                            "end": 38,
+                            "start_line": 4,
+                            "start_col": 7
                           }
                         }
                       }
                     },
                     "span": {
                       "start": 31,
-                      "end": 38
+                      "end": 38,
+                      "start_line": 4,
+                      "start_col": 2
                     }
                   }
                 },
                 "span": {
                   "start": 29,
-                  "end": 38
+                  "end": 38,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -154,20 +184,26 @@ echo $$obj->prop;
                 },
                 "span": {
                   "start": 42,
-                  "end": 43
+                  "end": 43,
+                  "start_line": 4,
+                  "start_col": 13
                 }
               }
             }
           },
           "span": {
             "start": 29,
-            "end": 43
+            "end": 43,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 29,
-        "end": 45
+        "end": 45,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -184,13 +220,17 @@ echo $$obj->prop;
                       },
                       "span": {
                         "start": 51,
-                        "end": 55
+                        "end": 55,
+                        "start_line": 5,
+                        "start_col": 6
                       }
                     }
                   },
                   "span": {
                     "start": 50,
-                    "end": 55
+                    "end": 55,
+                    "start_line": 5,
+                    "start_col": 5
                   }
                 },
                 "property": {
@@ -199,26 +239,34 @@ echo $$obj->prop;
                   },
                   "span": {
                     "start": 57,
-                    "end": 61
+                    "end": 61,
+                    "start_line": 5,
+                    "start_col": 12
                   }
                 }
               }
             },
             "span": {
               "start": 50,
-              "end": 61
+              "end": 61,
+              "start_line": 5,
+              "start_col": 5
             }
           }
         ]
       },
       "span": {
         "start": 45,
-        "end": 62
+        "end": 62,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 62
+    "end": 62,
+    "start_line": 1,
+    "start_col": 0
   }
 }

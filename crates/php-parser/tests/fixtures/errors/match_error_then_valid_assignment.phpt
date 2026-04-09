@@ -16,7 +16,9 @@ expected expression
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "op": "Assign",
@@ -29,7 +31,9 @@ expected expression
                       },
                       "span": {
                         "start": 18,
-                        "end": 20
+                        "end": 20,
+                        "start_line": 1,
+                        "start_col": 18
                       }
                     },
                     "arms": [
@@ -41,7 +45,9 @@ expected expression
                             },
                             "span": {
                               "start": 24,
-                              "end": 25
+                              "end": 25,
+                              "start_line": 1,
+                              "start_col": 24
                             }
                           }
                         ],
@@ -49,12 +55,16 @@ expected expression
                           "kind": "Error",
                           "span": {
                             "start": 29,
-                            "end": 30
+                            "end": 30,
+                            "start_line": 1,
+                            "start_col": 29
                           }
                         },
                         "span": {
                           "start": 24,
-                          "end": 30
+                          "end": 30,
+                          "start_line": 1,
+                          "start_col": 24
                         }
                       }
                     ]
@@ -62,20 +72,26 @@ expected expression
                 },
                 "span": {
                   "start": 11,
-                  "end": 30
+                  "end": 30,
+                  "start_line": 1,
+                  "start_col": 11
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 30
+            "end": 30,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 32
+        "end": 32,
+        "start_line": 1,
+        "start_col": 6
       }
     },
     {
@@ -89,7 +105,9 @@ expected expression
                 },
                 "span": {
                   "start": 32,
-                  "end": 34
+                  "end": 34,
+                  "start_line": 1,
+                  "start_col": 32
                 }
               },
               "op": "Assign",
@@ -99,25 +117,33 @@ expected expression
                 },
                 "span": {
                   "start": 37,
-                  "end": 39
+                  "end": 39,
+                  "start_line": 1,
+                  "start_col": 37
                 }
               }
             }
           },
           "span": {
             "start": 32,
-            "end": 39
+            "end": 39,
+            "start_line": 1,
+            "start_col": 32
           }
         }
       },
       "span": {
         "start": 32,
-        "end": 40
+        "end": 40,
+        "start_line": 1,
+        "start_col": 32
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 40
+    "end": 40,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -15,14 +15,18 @@ echo 'Hallo', ' ', 'World', '!';
             },
             "span": {
               "start": 12,
-              "end": 26
+              "end": 26,
+              "start_line": 3,
+              "start_col": 5
             }
           }
         ]
       },
       "span": {
         "start": 7,
-        "end": 28
+        "end": 28,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -34,7 +38,9 @@ echo 'Hallo', ' ', 'World', '!';
             },
             "span": {
               "start": 33,
-              "end": 40
+              "end": 40,
+              "start_line": 4,
+              "start_col": 5
             }
           },
           {
@@ -43,7 +49,9 @@ echo 'Hallo', ' ', 'World', '!';
             },
             "span": {
               "start": 42,
-              "end": 45
+              "end": 45,
+              "start_line": 4,
+              "start_col": 14
             }
           },
           {
@@ -52,7 +60,9 @@ echo 'Hallo', ' ', 'World', '!';
             },
             "span": {
               "start": 47,
-              "end": 54
+              "end": 54,
+              "start_line": 4,
+              "start_col": 19
             }
           },
           {
@@ -61,19 +71,25 @@ echo 'Hallo', ' ', 'World', '!';
             },
             "span": {
               "start": 56,
-              "end": 59
+              "end": 59,
+              "start_line": 4,
+              "start_col": 28
             }
           }
         ]
       },
       "span": {
         "start": 28,
-        "end": 60
+        "end": 60,
+        "start_line": 4,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 60
+    "end": 60,
+    "start_line": 1,
+    "start_col": 0
   }
 }

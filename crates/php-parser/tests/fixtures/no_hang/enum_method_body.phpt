@@ -22,7 +22,9 @@ min_php=8.1
               },
               "span": {
                 "start": 15,
-                "end": 23
+                "end": 23,
+                "start_line": 1,
+                "start_col": 15
               }
             },
             {
@@ -43,14 +45,18 @@ min_php=8.1
                       },
                       "span": {
                         "start": 47,
-                        "end": 48
+                        "end": 48,
+                        "start_line": 1,
+                        "start_col": 47
                       }
                     },
                     {
                       "kind": "Nop",
                       "span": {
                         "start": 54,
-                        "end": 55
+                        "end": 55,
+                        "start_line": 1,
+                        "start_col": 54
                       }
                     }
                   ],
@@ -59,7 +65,9 @@ min_php=8.1
               },
               "span": {
                 "start": 23,
-                "end": 56
+                "end": 56,
+                "start_line": 1,
+                "start_col": 23
               }
             }
           ],
@@ -68,12 +76,16 @@ min_php=8.1
       },
       "span": {
         "start": 6,
-        "end": 57
+        "end": 57,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 57
+    "end": 57,
+    "start_line": 1,
+    "start_col": 0
   }
 }

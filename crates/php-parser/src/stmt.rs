@@ -13,7 +13,7 @@ fn class_modifier_error<'arena, 'src>(
     parser: &mut Parser<'arena, 'src>,
     start: u32,
 ) -> Stmt<'arena, 'src> {
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
     parser.error(ParseError::Expected {
         expected: "'class'".into(),
         found: parser.current_kind(),
@@ -497,7 +497,7 @@ pub fn parse_block<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
     let end = close
         .map(|t| t.span.end)
         .unwrap_or(parser.current_span().start);
-    let span = Span::new(start, end);
+    let span = parser.span(start, end);
 
     Stmt {
         kind: StmtKind::Block(stmts),
@@ -570,7 +570,7 @@ fn parse_echo<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena
     }
 
     parser.expect_semicolon("echo statement");
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
 
     Stmt {
         kind: StmtKind::Echo(exprs),
@@ -593,7 +593,7 @@ fn parse_return<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
     };
 
     parser.expect_semicolon("return statement");
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
 
     Stmt {
         kind: StmtKind::Return(expr.map(|e| parser.alloc(e))),
@@ -624,7 +624,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
         );
         let then_branch = parser.alloc(Stmt {
             kind: StmtKind::Block(stmts),
-            span: Span::new(start, parser.current_span().start),
+            span: parser.span(start, parser.current_span().start),
         });
 
         let mut elseif_branches = parser.alloc_vec();
@@ -640,9 +640,9 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
             );
             let elseif_body = Stmt {
                 kind: StmtKind::Block(elseif_stmts),
-                span: Span::new(elseif_start, parser.current_span().start),
+                span: parser.span(elseif_start, parser.current_span().start),
             };
-            let elseif_span = Span::new(elseif_start, elseif_body.span.end);
+            let elseif_span = parser.span(elseif_start, elseif_body.span.end);
             elseif_branches.push(ElseIfBranch {
                 condition: elseif_cond,
                 body: elseif_body,
@@ -655,7 +655,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
             let else_stmts = parse_stmts_until_end(parser, &[TokenKind::EndIf]);
             Some(parser.alloc(Stmt {
                 kind: StmtKind::Block(else_stmts),
-                span: Span::new(start, parser.current_span().start),
+                span: parser.span(start, parser.current_span().start),
             }))
         } else {
             None
@@ -663,7 +663,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
 
         parser.expect(TokenKind::EndIf);
         parser.expect(TokenKind::Semicolon);
-        let span = Span::new(start, parser.current_span().start);
+        let span = parser.span(start, parser.current_span().start);
 
         return Stmt {
             kind: StmtKind::If(parser.alloc(IfStmt {
@@ -687,7 +687,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
         let elseif_cond = expr::parse_expr(parser);
         parser.expect(TokenKind::RightParen);
         let elseif_body = parse_stmt_or_block(parser);
-        let elseif_span = Span::new(elseif_start, elseif_body.span.end);
+        let elseif_span = parser.span(elseif_start, elseif_body.span.end);
         elseif_branches.push(ElseIfBranch {
             condition: elseif_cond,
             body: elseif_body,
@@ -709,7 +709,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
         .map(|b| b.span.end)
         .or_else(|| elseif_branches.last().map(|b| b.span.end))
         .unwrap_or(then_branch.span.end);
-    let span = Span::new(start, end);
+    let span = parser.span(start, end);
 
     Stmt {
         kind: StmtKind::If(parser.alloc(IfStmt {
@@ -740,7 +740,7 @@ fn parse_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
         let stmts = parse_stmts_until_end(parser, &[TokenKind::EndWhile]);
         parser.expect(TokenKind::EndWhile);
         parser.expect(TokenKind::Semicolon);
-        let span = Span::new(start, parser.current_span().start);
+        let span = parser.span(start, parser.current_span().start);
         let body = parser.alloc(Stmt {
             kind: StmtKind::Block(stmts),
             span,
@@ -753,7 +753,7 @@ fn parse_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
 
     let body_stmt = parse_stmt_or_block(parser);
     let body = parser.alloc(body_stmt);
-    let span = Span::new(start, body.span.end);
+    let span = parser.span(start, body.span.end);
     Stmt {
         kind: StmtKind::While(parser.alloc(WhileStmt { condition, body })),
         span,
@@ -773,7 +773,7 @@ fn parse_do_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
     let condition = expr::parse_expr(parser);
     parser.expect_closing(TokenKind::RightParen, open_span);
     parser.expect_semicolon("do-while statement");
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
     Stmt {
         kind: StmtKind::DoWhile(parser.alloc(DoWhileStmt { body, condition })),
         span,
@@ -798,7 +798,7 @@ fn parse_for<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
         let stmts = parse_stmts_until_end(parser, &[TokenKind::EndFor]);
         parser.expect(TokenKind::EndFor);
         parser.expect(TokenKind::Semicolon);
-        let span = Span::new(start, parser.current_span().start);
+        let span = parser.span(start, parser.current_span().start);
         let body = parser.alloc(Stmt {
             kind: StmtKind::Block(stmts),
             span,
@@ -816,7 +816,7 @@ fn parse_for<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
 
     let body_stmt = parse_stmt_or_block(parser);
     let body = parser.alloc(body_stmt);
-    let span = Span::new(start, body.span.end);
+    let span = parser.span(start, body.span.end);
     Stmt {
         kind: StmtKind::For(parser.alloc(ForStmt {
             init,
@@ -877,7 +877,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
         let stmts = parse_stmts_until_end(parser, &[TokenKind::EndForeach]);
         parser.expect(TokenKind::EndForeach);
         parser.expect(TokenKind::Semicolon);
-        let span = Span::new(start, parser.current_span().start);
+        let span = parser.span(start, parser.current_span().start);
         let body = parser.alloc(Stmt {
             kind: StmtKind::Block(stmts),
             span,
@@ -895,7 +895,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
 
     let body_stmt = parse_stmt_or_block(parser);
     let body = parser.alloc(body_stmt);
-    let span = Span::new(start, body.span.end);
+    let span = parser.span(start, body.span.end);
     Stmt {
         kind: StmtKind::Foreach(parser.alloc(ForeachStmt {
             expr: collection,
@@ -960,7 +960,7 @@ fn parse_function<'arena, 'src>(
     let end = close
         .map(|t| t.span.end)
         .unwrap_or(parser.current_span().start);
-    let span = Span::new(start, end);
+    let span = parser.span(start, end);
     let doc_comment = parser.take_doc_comment(start);
 
     Stmt {
@@ -1017,7 +1017,7 @@ pub fn parse_param_list<'arena, 'src>(
         // Optional visibility (constructor promotion) — PHP 8.0+
         let visibility = parse_optional_visibility(parser);
         if visibility.is_some() {
-            let span = Span::new(param_start, parser.current_span().start);
+            let span = parser.span(param_start, parser.current_span().start);
             parser.require_version(PhpVersion::Php80, "constructor property promotion", span);
         }
 
@@ -1034,7 +1034,7 @@ pub fn parse_param_list<'arena, 'src>(
                 TokenKind::Protected => Visibility::Protected,
                 _ => Visibility::Private,
             };
-            let span = Span::new(param_start, parser.current_span().start);
+            let span = parser.span(param_start, parser.current_span().start);
             parser.require_version(PhpVersion::Php84, "asymmetric visibility", span);
             parser.advance(); // consume second visibility
             parser.advance(); // consume (
@@ -1134,7 +1134,7 @@ pub fn parse_param_list<'arena, 'src>(
             set_visibility,
             attributes: param_attrs,
             hooks,
-            span: Span::new(param_start, param_end),
+            span: parser.span(param_start, param_end),
         });
 
         if parser.eat(TokenKind::Comma).is_none() {
@@ -1186,7 +1186,7 @@ fn try_parse_simple_param_fastpath_minimal<'arena, 'src>(
         set_visibility: None,
         attributes: parser.alloc_vec(),
         hooks: parser.alloc_vec(),
-        span: Span::new(param_start, name_span_end),
+        span: parser.span(param_start, name_span_end),
     })
 }
 
@@ -1221,7 +1221,7 @@ fn parse_break<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
         None
     };
     parser.expect_semicolon("break statement");
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
     Stmt {
         kind: StmtKind::Break(expr.map(|e| parser.alloc(e))),
         span,
@@ -1237,7 +1237,7 @@ fn parse_continue<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
         None
     };
     parser.expect_semicolon("continue statement");
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
     Stmt {
         kind: StmtKind::Continue(expr.map(|e| parser.alloc(e))),
         span,
@@ -1302,7 +1302,7 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
         cases.push(SwitchCase {
             value,
             body,
-            span: Span::new(case_start, parser.current_span().start),
+            span: parser.span(case_start, parser.current_span().start),
         });
     }
 
@@ -1313,7 +1313,7 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
         parser.expect(TokenKind::RightBrace);
     }
 
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
     Stmt {
         kind: StmtKind::Switch(parser.alloc(SwitchStmt {
             expr: switch_expr,
@@ -1332,7 +1332,7 @@ fn parse_throw_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
     parser.advance();
     let expr = expr::parse_expr(parser);
     parser.expect_semicolon("throw statement");
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
     Stmt {
         kind: StmtKind::Throw(parser.alloc(expr)),
         span,
@@ -1390,7 +1390,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             types,
             var,
             body: catch_body,
-            span: Span::new(catch_start, parser.current_span().start),
+            span: parser.span(catch_start, parser.current_span().start),
         });
     }
 
@@ -1414,11 +1414,11 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         parser.error(ParseError::Expected {
             expected: "catch or finally clause".into(),
             found: parser.current_kind(),
-            span: Span::new(start, parser.current_span().start),
+            span: parser.span(start, parser.current_span().start),
         });
     }
 
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
     Stmt {
         kind: StmtKind::TryCatch(parser.alloc(TryCatchStmt {
             body,
@@ -1442,7 +1442,7 @@ fn parse_goto<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena
         .map(|t| &src[t.span.start as usize..t.span.end as usize])
         .unwrap_or("<error>");
     parser.expect(TokenKind::Semicolon);
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
     Stmt {
         kind: StmtKind::Goto(name),
         span,
@@ -1480,7 +1480,7 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
         parser.expect(TokenKind::Semicolon);
         Some(parser.alloc(Stmt {
             kind: StmtKind::Block(stmts),
-            span: Span::new(start, parser.current_span().start),
+            span: parser.span(start, parser.current_span().start),
         }))
     } else {
         {
@@ -1489,7 +1489,7 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
         }
     };
 
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
     Stmt {
         kind: StmtKind::Declare(parser.alloc(DeclareStmt { directives, body })),
         span,
@@ -1510,7 +1510,7 @@ fn parse_unset<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
     }
     parser.expect(TokenKind::RightParen);
     parser.expect(TokenKind::Semicolon);
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
     Stmt {
         kind: StmtKind::Unset(exprs),
         span,
@@ -1545,7 +1545,7 @@ fn parse_global<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
         exprs.push(e);
     }
     parser.expect(TokenKind::Semicolon);
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
     Stmt {
         kind: StmtKind::Global(exprs),
         span,
@@ -1648,7 +1648,7 @@ fn parse_class<'arena, 'src>(
             attributes,
             doc_comment,
         })),
-        span: Span::new(start, end),
+        span: parser.span(start, end),
     }
 }
 
@@ -1708,7 +1708,7 @@ fn parse_trait_adaptations<'arena, 'src>(
                     insteadof.push(parser.parse_name());
                 }
                 parser.expect(TokenKind::Semicolon);
-                let span = Span::new(start, parser.current_span().start);
+                let span = parser.span(start, parser.current_span().start);
                 adaptations.push(TraitAdaptation {
                     kind: TraitAdaptationKind::Precedence {
                         trait_name: first_name,
@@ -1721,7 +1721,7 @@ fn parse_trait_adaptations<'arena, 'src>(
                 // Alias: TraitName::method as [visibility] [newName];
                 let (new_modifier, new_name) = parse_alias_rhs(parser);
                 parser.expect(TokenKind::Semicolon);
-                let span = Span::new(start, parser.current_span().start);
+                let span = parser.span(start, parser.current_span().start);
                 adaptations.push(TraitAdaptation {
                     kind: TraitAdaptationKind::Alias {
                         trait_name: Some(first_name),
@@ -1745,7 +1745,7 @@ fn parse_trait_adaptations<'arena, 'src>(
             let method = first_name.join_parts();
             let (new_modifier, new_name) = parse_alias_rhs(parser);
             parser.expect(TokenKind::Semicolon);
-            let span = Span::new(start, parser.current_span().start);
+            let span = parser.span(start, parser.current_span().start);
             adaptations.push(TraitAdaptation {
                 kind: TraitAdaptationKind::Alias {
                     trait_name: None,
@@ -1931,7 +1931,7 @@ fn parse_property_hooks<'arena, 'src>(
             PropertyHookBody::Abstract
         };
 
-        let hook_span = Span::new(hook_start, parser.current_span().start);
+        let hook_span = parser.span(hook_start, parser.current_span().start);
         hooks.push(PropertyHook {
             kind,
             body,
@@ -1984,7 +1984,7 @@ pub fn parse_class_members<'arena, 'src>(
                 parser.expect(TokenKind::Semicolon);
                 parser.alloc_vec()
             };
-            let span = Span::new(member_start, parser.current_span().start);
+            let span = parser.span(member_start, parser.current_span().start);
             members.push(ClassMember {
                 kind: ClassMemberKind::TraitUse(TraitUseDecl {
                     traits,
@@ -2036,7 +2036,7 @@ pub fn parse_class_members<'arena, 'src>(
                             };
                             // Save span; emit version check after loop when is_static is known.
                             asym_vis_span =
-                                Some(Span::new(member_start, parser.current_span().start));
+                                Some(parser.span(member_start, parser.current_span().start));
                             parser.advance(); // consume second visibility
                             parser.advance(); // consume (
                                               // Expect "set"
@@ -2051,7 +2051,7 @@ pub fn parse_class_members<'arena, 'src>(
                         if parser.check(TokenKind::LeftParen) {
                             // Save span for deferred version check after is_static is known.
                             asym_vis_span =
-                                Some(Span::new(member_start, parser.current_span().start));
+                                Some(parser.span(member_start, parser.current_span().start));
                             parser.advance(); // consume (
                             if parser.current_text() == "set" {
                                 parser.advance(); // consume "set"
@@ -2062,7 +2062,7 @@ pub fn parse_class_members<'arena, 'src>(
                             // Duplicate or conflicting visibility
                             parser.error(ParseError::Forbidden {
                                 message: "cannot use multiple visibility modifiers".into(),
-                                span: Span::new(member_start, parser.current_span().start),
+                                span: parser.span(member_start, parser.current_span().start),
                             });
                         }
                     }
@@ -2071,7 +2071,7 @@ pub fn parse_class_members<'arena, 'src>(
                     if is_static {
                         parser.error(ParseError::Forbidden {
                             message: "duplicate modifier 'static'".into(),
-                            span: Span::new(member_start, parser.current_span().start),
+                            span: parser.span(member_start, parser.current_span().start),
                         });
                     }
                     parser.advance();
@@ -2081,7 +2081,7 @@ pub fn parse_class_members<'arena, 'src>(
                     if is_abstract {
                         parser.error(ParseError::Forbidden {
                             message: "duplicate modifier 'abstract'".into(),
-                            span: Span::new(member_start, parser.current_span().start),
+                            span: parser.span(member_start, parser.current_span().start),
                         });
                     }
                     parser.advance();
@@ -2091,7 +2091,7 @@ pub fn parse_class_members<'arena, 'src>(
                     if is_final {
                         parser.error(ParseError::Forbidden {
                             message: "duplicate modifier 'final'".into(),
-                            span: Span::new(member_start, parser.current_span().start),
+                            span: parser.span(member_start, parser.current_span().start),
                         });
                     }
                     parser.advance();
@@ -2101,7 +2101,7 @@ pub fn parse_class_members<'arena, 'src>(
                     if is_readonly {
                         parser.error(ParseError::Forbidden {
                             message: "duplicate modifier 'readonly'".into(),
-                            span: Span::new(member_start, parser.current_span().start),
+                            span: parser.span(member_start, parser.current_span().start),
                         });
                     }
                     let span = parser.current_span();
@@ -2117,7 +2117,7 @@ pub fn parse_class_members<'arena, 'src>(
         if is_abstract && is_final {
             parser.error(ParseError::Forbidden {
                 message: "cannot use 'abstract' and 'final' together".into(),
-                span: Span::new(member_start, parser.current_span().start),
+                span: parser.span(member_start, parser.current_span().start),
             });
         }
 
@@ -2214,7 +2214,7 @@ pub fn parse_class_members<'arena, 'src>(
                 }
             }
             parser.expect(TokenKind::Semicolon);
-            let span = Span::new(member_start, parser.current_span().start);
+            let span = parser.span(member_start, parser.current_span().start);
             if !member_attrs.is_empty() && const_items.len() > 1 {
                 parser.error(ParseError::Forbidden {
                     message: "cannot use attributes on multi-constant declaration".into(),
@@ -2300,18 +2300,18 @@ pub fn parse_class_members<'arena, 'src>(
             if is_abstract && body.is_some() {
                 parser.error(ParseError::Forbidden {
                     message: "abstract method cannot contain a body".into(),
-                    span: Span::new(member_start, parser.current_span().start),
+                    span: parser.span(member_start, parser.current_span().start),
                 });
             }
 
             if in_interface && body.is_some() {
                 parser.error(ParseError::Forbidden {
                     message: "interface method cannot contain a body".into(),
-                    span: Span::new(member_start, parser.current_span().start),
+                    span: parser.span(member_start, parser.current_span().start),
                 });
             }
 
-            let span = Span::new(member_start, parser.current_span().start);
+            let span = parser.span(member_start, parser.current_span().start);
             members.push(ClassMember {
                 kind: ClassMemberKind::Method(MethodDecl {
                     name: method_name,
@@ -2355,7 +2355,7 @@ pub fn parse_class_members<'arena, 'src>(
             if is_abstract && !had_hooks_block {
                 parser.error(ParseError::Forbidden {
                     message: "properties cannot be abstract".into(),
-                    span: Span::new(member_start, parser.current_span().start),
+                    span: parser.span(member_start, parser.current_span().start),
                 });
             }
             let hooks = if had_hooks_block {
@@ -2365,7 +2365,7 @@ pub fn parse_class_members<'arena, 'src>(
             } else {
                 parser.alloc_vec()
             };
-            let span = Span::new(member_start, parser.current_span().start);
+            let span = parser.span(member_start, parser.current_span().start);
             members.push(ClassMember {
                 kind: ClassMemberKind::Property(PropertyDecl {
                     name: prop_name,
@@ -2409,7 +2409,7 @@ pub fn parse_class_members<'arena, 'src>(
                     } else {
                         parser.alloc_vec()
                     };
-                    let pspan = Span::new(member_start, parser.current_span().start);
+                    let pspan = parser.span(member_start, parser.current_span().start);
                     members.push(ClassMember {
                         kind: ClassMemberKind::Property(PropertyDecl {
                             name: pname,
@@ -2501,7 +2501,7 @@ fn parse_interface<'arena, 'src>(
             attributes,
             doc_comment,
         })),
-        span: Span::new(start, end),
+        span: parser.span(start, end),
     }
 }
 
@@ -2539,7 +2539,7 @@ fn parse_trait<'arena, 'src>(
             attributes,
             doc_comment,
         })),
-        span: Span::new(start, end),
+        span: parser.span(start, end),
     }
 }
 
@@ -2600,7 +2600,7 @@ fn parse_enum<'arena, 'src>(
                 parser.expect(TokenKind::Semicolon);
                 parser.alloc_vec()
             };
-            let span = Span::new(member_start, parser.current_span().start);
+            let span = parser.span(member_start, parser.current_span().start);
             members.push(EnumMember {
                 kind: EnumMemberKind::TraitUse(TraitUseDecl {
                     traits,
@@ -2637,7 +2637,7 @@ fn parse_enum<'arena, 'src>(
                 None
             };
             parser.expect(TokenKind::Semicolon);
-            let span = Span::new(member_start, parser.current_span().start);
+            let span = parser.span(member_start, parser.current_span().start);
             members.push(EnumMember {
                 kind: EnumMemberKind::Case(EnumCase {
                     name: case_name,
@@ -2717,7 +2717,7 @@ fn parse_enum<'arena, 'src>(
             parser.expect(TokenKind::Equals);
             let value = expr::parse_expr(parser);
             parser.expect(TokenKind::Semicolon);
-            let span = Span::new(member_start, parser.current_span().start);
+            let span = parser.span(member_start, parser.current_span().start);
             members.push(EnumMember {
                 kind: EnumMemberKind::ClassConst(ClassConstDecl {
                     name: const_name,
@@ -2737,7 +2737,7 @@ fn parse_enum<'arena, 'src>(
             if is_abstract {
                 parser.error(ParseError::Forbidden {
                     message: "enum methods cannot be abstract".into(),
-                    span: Span::new(member_start, parser.current_span().start),
+                    span: parser.span(member_start, parser.current_span().start),
                 });
             }
 
@@ -2776,7 +2776,7 @@ fn parse_enum<'arena, 'src>(
                 None
             };
 
-            let span = Span::new(member_start, parser.current_span().start);
+            let span = parser.span(member_start, parser.current_span().start);
             members.push(EnumMember {
                 kind: EnumMemberKind::Method(MethodDecl {
                     name: method_name,
@@ -2814,7 +2814,7 @@ fn parse_enum<'arena, 'src>(
             attributes,
             doc_comment,
         })),
-        span: Span::new(start, end),
+        span: parser.span(start, end),
     }
 }
 
@@ -2847,7 +2847,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
                 name: None,
                 body: NamespaceBody::Braced(stmts),
             })),
-            span: Span::new(start, end),
+            span: parser.span(start, end),
         };
     }
 
@@ -2873,12 +2873,12 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
                 name: Some(name),
                 body: NamespaceBody::Braced(stmts),
             })),
-            span: Span::new(start, end),
+            span: parser.span(start, end),
         }
     } else {
         // Simple namespace: namespace Foo\Bar;
         parser.expect(TokenKind::Semicolon);
-        let span = Span::new(start, parser.current_span().start);
+        let span = parser.span(start, parser.current_span().start);
         Stmt {
             kind: StmtKind::Namespace(parser.alloc(NamespaceDecl {
                 name: Some(name),
@@ -2978,7 +2978,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                 }
                 cp
             };
-            let sub_span = Span::new(item_start, parser.current_span().start);
+            let sub_span = parser.span(item_start, parser.current_span().start);
             let combined_name = Name::Complex {
                 parts: combined_parts,
                 kind: if first_name.kind() == NameKind::FullyQualified {
@@ -2997,7 +2997,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                 None
             };
 
-            let use_span = Span::new(sub_start, parser.current_span().start);
+            let use_span = parser.span(sub_start, parser.current_span().start);
             uses.push(UseItem {
                 name: combined_name,
                 alias,
@@ -3020,7 +3020,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             None
         };
 
-        let item_span = Span::new(item_start, parser.current_span().start);
+        let item_span = parser.span(item_start, parser.current_span().start);
         uses.push(UseItem {
             name: first_name,
             alias,
@@ -3043,7 +3043,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                 None
             };
 
-            let next_span = Span::new(next_start, parser.current_span().start);
+            let next_span = parser.span(next_start, parser.current_span().start);
             uses.push(UseItem {
                 name,
                 alias,
@@ -3054,7 +3054,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
     }
 
     parser.expect(TokenKind::Semicolon);
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
     Stmt {
         kind: StmtKind::Use(parser.alloc(UseDecl { kind, uses })),
         span,
@@ -3089,7 +3089,7 @@ fn parse_const_with_attrs<'arena, 'src>(
         };
         parser.expect(TokenKind::Equals);
         let value = expr::parse_expr(parser);
-        let item_span = Span::new(item_start, value.span.end);
+        let item_span = parser.span(item_start, value.span.end);
         let item_attrs = pending_attrs.take().unwrap_or_else(|| parser.alloc_vec());
         items.push(ConstItem {
             name: const_name,
@@ -3107,7 +3107,7 @@ fn parse_const_with_attrs<'arena, 'src>(
     }
 
     parser.expect(TokenKind::Semicolon);
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
     Stmt {
         kind: StmtKind::Const(items),
         span,
@@ -3150,7 +3150,7 @@ fn parse_halt_compiler<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> St
         parser.advance();
     }
 
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
     Stmt {
         kind: StmtKind::HaltCompiler(remaining),
         span,
@@ -3176,7 +3176,7 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
             None
         };
 
-        let var_span = Span::new(
+        let var_span = parser.span(
             var_start,
             default
                 .as_ref()
@@ -3198,7 +3198,7 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
     }
 
     parser.expect(TokenKind::Semicolon);
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
     Stmt {
         kind: StmtKind::StaticVar(vars),
         span,
@@ -3217,7 +3217,7 @@ fn parse_expression_stmt_or_label<'arena, 'src>(
 
     if let ExprKind::Identifier(name) = expr.kind {
         if parser.eat(TokenKind::Colon).is_some() {
-            let span = Span::new(start, parser.current_span().start);
+            let span = parser.span(start, parser.current_span().start);
             // Label names are always simple identifiers borrowed from source
             // If somehow it's owned (qualified name), we can't get &'src str easily;
             return Stmt {
@@ -3231,12 +3231,12 @@ fn parse_expression_stmt_or_label<'arena, 'src>(
         parser.synchronize();
         return Stmt {
             kind: StmtKind::Error,
-            span: Span::new(start, parser.current_span().start),
+            span: parser.span(start, parser.current_span().start),
         };
     }
 
     parser.expect_semicolon("expression");
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
     Stmt {
         kind: StmtKind::Expression(parser.alloc(expr)),
         span,
@@ -3251,12 +3251,12 @@ fn parse_expression_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         parser.synchronize();
         return Stmt {
             kind: StmtKind::Error,
-            span: Span::new(start, parser.current_span().start),
+            span: parser.span(start, parser.current_span().start),
         };
     }
 
     parser.expect_semicolon("expression");
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
     Stmt {
         kind: StmtKind::Expression(parser.alloc(expr)),
         span,

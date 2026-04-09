@@ -26,7 +26,9 @@
                     },
                     "span": {
                       "start": 35,
-                      "end": 36
+                      "end": 36,
+                      "start_line": 1,
+                      "start_col": 35
                     }
                   },
                   "attributes": []
@@ -34,7 +36,9 @@
               },
               "span": {
                 "start": 18,
-                "end": 38
+                "end": 38,
+                "start_line": 1,
+                "start_col": 18
               }
             },
             {
@@ -48,7 +52,9 @@
                     },
                     "span": {
                       "start": 58,
-                      "end": 59
+                      "end": 59,
+                      "start_line": 1,
+                      "start_col": 58
                     }
                   },
                   "attributes": []
@@ -56,7 +62,9 @@
               },
               "span": {
                 "start": 38,
-                "end": 61
+                "end": 61,
+                "start_line": 1,
+                "start_col": 38
               }
             },
             {
@@ -70,7 +78,9 @@
                     },
                     "span": {
                       "start": 79,
-                      "end": 80
+                      "end": 80,
+                      "start_line": 1,
+                      "start_col": 79
                     }
                   },
                   "attributes": []
@@ -78,7 +88,9 @@
               },
               "span": {
                 "start": 61,
-                "end": 82
+                "end": 82,
+                "start_line": 1,
+                "start_col": 61
               }
             }
           ],
@@ -87,12 +99,16 @@
       },
       "span": {
         "start": 6,
-        "end": 83
+        "end": 83,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 83
+    "end": 83,
+    "start_line": 1,
+    "start_col": 0
   }
 }

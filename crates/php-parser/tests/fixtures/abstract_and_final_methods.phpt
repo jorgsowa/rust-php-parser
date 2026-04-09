@@ -40,13 +40,17 @@ abstract class Base {
                         "kind": "Unqualified",
                         "span": {
                           "start": 72,
-                          "end": 78
+                          "end": 78,
+                          "start_line": 3,
+                          "start_col": 44
                         }
                       }
                     },
                     "span": {
                       "start": 72,
-                      "end": 78
+                      "end": 78,
+                      "start_line": 3,
+                      "start_col": 44
                     }
                   },
                   "body": null,
@@ -55,7 +59,9 @@ abstract class Base {
               },
               "span": {
                 "start": 32,
-                "end": 84
+                "end": 84,
+                "start_line": 3,
+                "start_col": 4
               }
             },
             {
@@ -77,13 +83,17 @@ abstract class Base {
                         "kind": "Unqualified",
                         "span": {
                           "start": 117,
-                          "end": 121
+                          "end": 121,
+                          "start_line": 4,
+                          "start_col": 37
                         }
                       }
                     },
                     "span": {
                       "start": 117,
-                      "end": 121
+                      "end": 121,
+                      "start_line": 4,
+                      "start_col": 37
                     }
                   },
                   "body": [
@@ -99,7 +109,9 @@ abstract class Base {
                                   },
                                   "span": {
                                     "start": 137,
-                                    "end": 142
+                                    "end": 142,
+                                    "start_line": 5,
+                                    "start_col": 13
                                   }
                                 },
                                 "method": {
@@ -108,7 +120,9 @@ abstract class Base {
                                   },
                                   "span": {
                                     "start": 144,
-                                    "end": 152
+                                    "end": 152,
+                                    "start_line": 5,
+                                    "start_col": 20
                                   }
                                 },
                                 "args": []
@@ -116,14 +130,18 @@ abstract class Base {
                             },
                             "span": {
                               "start": 137,
-                              "end": 154
+                              "end": 154,
+                              "start_line": 5,
+                              "start_col": 13
                             }
                           }
                         ]
                       },
                       "span": {
                         "start": 132,
-                        "end": 160
+                        "end": 160,
+                        "start_line": 5,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -132,7 +150,9 @@ abstract class Base {
               },
               "span": {
                 "start": 84,
-                "end": 162
+                "end": 162,
+                "start_line": 4,
+                "start_col": 4
               }
             }
           ],
@@ -141,12 +161,16 @@ abstract class Base {
       },
       "span": {
         "start": 15,
-        "end": 163
+        "end": 163,
+        "start_line": 2,
+        "start_col": 9
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 163
+    "end": 163,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -26,7 +26,9 @@ function &getReference(array &$arr): mixed {
                         },
                         "span": {
                           "start": 48,
-                          "end": 56
+                          "end": 56,
+                          "start_line": 3,
+                          "start_col": 11
                         }
                       },
                       "index": {
@@ -35,20 +37,26 @@ function &getReference(array &$arr): mixed {
                         },
                         "span": {
                           "start": 57,
-                          "end": 64
+                          "end": 64,
+                          "start_line": 3,
+                          "start_col": 20
                         }
                       }
                     }
                   },
                   "span": {
                     "start": 48,
-                    "end": 65
+                    "end": 65,
+                    "start_line": 3,
+                    "start_col": 11
                   }
                 }
               },
               "span": {
                 "start": 41,
-                "end": 67
+                "end": 67,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -61,13 +69,17 @@ function &getReference(array &$arr): mixed {
                 "kind": "Unqualified",
                 "span": {
                   "start": 28,
-                  "end": 34
+                  "end": 34,
+                  "start_line": 2,
+                  "start_col": 22
                 }
               }
             },
             "span": {
               "start": 28,
-              "end": 34
+              "end": 34,
+              "start_line": 2,
+              "start_col": 22
             }
           },
           "by_ref": true,
@@ -76,7 +88,9 @@ function &getReference(array &$arr): mixed {
       },
       "span": {
         "start": 6,
-        "end": 68
+        "end": 68,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -95,13 +109,17 @@ function &getReference(array &$arr): mixed {
                     "kind": "Unqualified",
                     "span": {
                       "start": 92,
-                      "end": 97
+                      "end": 97,
+                      "start_line": 5,
+                      "start_col": 23
                     }
                   }
                 },
                 "span": {
                   "start": 92,
-                  "end": 97
+                  "end": 97,
+                  "start_line": 5,
+                  "start_col": 23
                 }
               },
               "default": null,
@@ -114,7 +132,9 @@ function &getReference(array &$arr): mixed {
               "attributes": [],
               "span": {
                 "start": 92,
-                "end": 103
+                "end": 103,
+                "start_line": 5,
+                "start_col": 23
               }
             }
           ],
@@ -130,7 +150,9 @@ function &getReference(array &$arr): mixed {
                         },
                         "span": {
                           "start": 125,
-                          "end": 129
+                          "end": 129,
+                          "start_line": 6,
+                          "start_col": 11
                         }
                       },
                       "index": {
@@ -139,20 +161,26 @@ function &getReference(array &$arr): mixed {
                         },
                         "span": {
                           "start": 130,
-                          "end": 131
+                          "end": 131,
+                          "start_line": 6,
+                          "start_col": 16
                         }
                       }
                     }
                   },
                   "span": {
                     "start": 125,
-                    "end": 132
+                    "end": 132,
+                    "start_line": 6,
+                    "start_col": 11
                   }
                 }
               },
               "span": {
                 "start": 118,
-                "end": 134
+                "end": 134,
+                "start_line": 6,
+                "start_col": 4
               }
             }
           ],
@@ -165,13 +193,17 @@ function &getReference(array &$arr): mixed {
                 "kind": "Unqualified",
                 "span": {
                   "start": 106,
-                  "end": 111
+                  "end": 111,
+                  "start_line": 5,
+                  "start_col": 37
                 }
               }
             },
             "span": {
               "start": 106,
-              "end": 111
+              "end": 111,
+              "start_line": 5,
+              "start_col": 37
             }
           },
           "by_ref": true,
@@ -180,12 +212,16 @@ function &getReference(array &$arr): mixed {
       },
       "span": {
         "start": 69,
-        "end": 135
+        "end": 135,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 135
+    "end": 135,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -48,20 +48,26 @@ expected '}', found end of file
                           },
                           "span": {
                             "start": 65,
-                            "end": 66
+                            "end": 66,
+                            "start_line": 5,
+                            "start_col": 15
                           }
                         }
                       },
                       "span": {
                         "start": 58,
-                        "end": 73
+                        "end": 73,
+                        "start_line": 5,
+                        "start_col": 8
                       }
                     },
                     {
                       "kind": "Error",
                       "span": {
                         "start": 73,
-                        "end": 80
+                        "end": 80,
+                        "start_line": 7,
+                        "start_col": 4
                       }
                     },
                     {
@@ -78,13 +84,17 @@ expected '}', found end of file
                                   },
                                   "span": {
                                     "start": 116,
-                                    "end": 117
+                                    "end": 117,
+                                    "start_line": 9,
+                                    "start_col": 15
                                   }
                                 }
                               },
                               "span": {
                                 "start": 109,
-                                "end": 123
+                                "end": 123,
+                                "start_line": 9,
+                                "start_col": 8
                               }
                             }
                           ],
@@ -95,7 +105,9 @@ expected '}', found end of file
                       },
                       "span": {
                         "start": 80,
-                        "end": 124
+                        "end": 124,
+                        "start_line": 7,
+                        "start_col": 11
                       }
                     }
                   ],
@@ -104,7 +116,9 @@ expected '}', found end of file
               },
               "span": {
                 "start": 22,
-                "end": 126
+                "end": 126,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -113,12 +127,16 @@ expected '}', found end of file
       },
       "span": {
         "start": 6,
-        "end": 126
+        "end": 126,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 126
+    "end": 126,
+    "start_line": 1,
+    "start_col": 0
   }
 }

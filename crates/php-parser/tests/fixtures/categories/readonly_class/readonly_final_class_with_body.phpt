@@ -38,13 +38,17 @@ min_php=8.2
                             "kind": "Unqualified",
                             "span": {
                               "start": 70,
-                              "end": 73
+                              "end": 73,
+                              "start_line": 1,
+                              "start_col": 70
                             }
                           }
                         },
                         "span": {
                           "start": 70,
-                          "end": 73
+                          "end": 73,
+                          "start_line": 1,
+                          "start_col": 70
                         }
                       },
                       "default": null,
@@ -57,7 +61,9 @@ min_php=8.2
                       "attributes": [],
                       "span": {
                         "start": 63,
-                        "end": 76
+                        "end": 76,
+                        "start_line": 1,
+                        "start_col": 63
                       }
                     },
                     {
@@ -71,13 +77,17 @@ min_php=8.2
                             "kind": "Unqualified",
                             "span": {
                               "start": 85,
-                              "end": 88
+                              "end": 88,
+                              "start_line": 1,
+                              "start_col": 85
                             }
                           }
                         },
                         "span": {
                           "start": 85,
-                          "end": 88
+                          "end": 88,
+                          "start_line": 1,
+                          "start_col": 85
                         }
                       },
                       "default": null,
@@ -90,7 +100,9 @@ min_php=8.2
                       "attributes": [],
                       "span": {
                         "start": 78,
-                        "end": 91
+                        "end": 91,
+                        "start_line": 1,
+                        "start_col": 78
                       }
                     }
                   ],
@@ -101,7 +113,9 @@ min_php=8.2
               },
               "span": {
                 "start": 35,
-                "end": 96
+                "end": 96,
+                "start_line": 1,
+                "start_col": 35
               }
             }
           ],
@@ -110,12 +124,16 @@ min_php=8.2
       },
       "span": {
         "start": 21,
-        "end": 97
+        "end": 97,
+        "start_line": 1,
+        "start_col": 21
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 97
+    "end": 97,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -17,7 +17,9 @@ namespace B {}
             "kind": "Unqualified",
             "span": {
               "start": 16,
-              "end": 18
+              "end": 18,
+              "start_line": 2,
+              "start_col": 10
             }
           },
           "body": {
@@ -27,7 +29,9 @@ namespace B {}
       },
       "span": {
         "start": 6,
-        "end": 20
+        "end": 20,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -42,7 +46,9 @@ namespace B {}
                 },
                 "span": {
                   "start": 35,
-                  "end": 36
+                  "end": 36,
+                  "start_line": 3,
+                  "start_col": 14
                 }
               }
             ]
@@ -52,7 +58,9 @@ namespace B {}
       },
       "span": {
         "start": 21,
-        "end": 39
+        "end": 39,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -66,7 +74,9 @@ namespace B {}
                 },
                 "span": {
                   "start": 39,
-                  "end": 42
+                  "end": 42,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "args": []
@@ -74,13 +84,17 @@ namespace B {}
           },
           "span": {
             "start": 39,
-            "end": 44
+            "end": 44,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 39,
-        "end": 46
+        "end": 46,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -93,7 +107,9 @@ namespace B {}
             "kind": "Unqualified",
             "span": {
               "start": 56,
-              "end": 58
+              "end": 58,
+              "start_line": 5,
+              "start_col": 10
             }
           },
           "body": {
@@ -103,12 +119,16 @@ namespace B {}
       },
       "span": {
         "start": 46,
-        "end": 60
+        "end": 60,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 60
+    "end": 60,
+    "start_line": 1,
+    "start_col": 0
   }
 }

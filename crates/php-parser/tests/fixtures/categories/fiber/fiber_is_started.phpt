@@ -16,7 +16,9 @@ min_php=8.1
                 },
                 "span": {
                   "start": 6,
-                  "end": 12
+                  "end": 12,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "method": {
@@ -25,7 +27,9 @@ min_php=8.1
                 },
                 "span": {
                   "start": 14,
-                  "end": 23
+                  "end": 23,
+                  "start_line": 1,
+                  "start_col": 14
                 }
               },
               "args": []
@@ -33,13 +37,17 @@ min_php=8.1
           },
           "span": {
             "start": 6,
-            "end": 25
+            "end": 25,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 27
+        "end": 27,
+        "start_line": 1,
+        "start_col": 6
       }
     },
     {
@@ -53,7 +61,9 @@ min_php=8.1
                 },
                 "span": {
                   "start": 27,
-                  "end": 33
+                  "end": 33,
+                  "start_line": 1,
+                  "start_col": 27
                 }
               },
               "method": {
@@ -62,7 +72,9 @@ min_php=8.1
                 },
                 "span": {
                   "start": 35,
-                  "end": 44
+                  "end": 44,
+                  "start_line": 1,
+                  "start_col": 35
                 }
               },
               "args": []
@@ -70,13 +82,17 @@ min_php=8.1
           },
           "span": {
             "start": 27,
-            "end": 46
+            "end": 46,
+            "start_line": 1,
+            "start_col": 27
           }
         }
       },
       "span": {
         "start": 27,
-        "end": 48
+        "end": 48,
+        "start_line": 1,
+        "start_col": 27
       }
     },
     {
@@ -90,7 +106,9 @@ min_php=8.1
                 },
                 "span": {
                   "start": 48,
-                  "end": 54
+                  "end": 54,
+                  "start_line": 1,
+                  "start_col": 48
                 }
               },
               "method": {
@@ -99,7 +117,9 @@ min_php=8.1
                 },
                 "span": {
                   "start": 56,
-                  "end": 67
+                  "end": 67,
+                  "start_line": 1,
+                  "start_col": 56
                 }
               },
               "args": []
@@ -107,18 +127,24 @@ min_php=8.1
           },
           "span": {
             "start": 48,
-            "end": 69
+            "end": 69,
+            "start_line": 1,
+            "start_col": 48
           }
         }
       },
       "span": {
         "start": 48,
-        "end": 70
+        "end": 70,
+        "start_line": 1,
+        "start_col": 48
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 70
+    "end": 70,
+    "start_line": 1,
+    "start_col": 0
   }
 }

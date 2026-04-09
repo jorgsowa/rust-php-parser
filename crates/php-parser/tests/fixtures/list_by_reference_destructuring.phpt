@@ -22,14 +22,18 @@ list(&$x, &$y) = $pair;
                         },
                         "span": {
                           "start": 8,
-                          "end": 10
+                          "end": 10,
+                          "start_line": 2,
+                          "start_col": 2
                         }
                       },
                       "unpack": false,
                       "by_ref": true,
                       "span": {
                         "start": 7,
-                        "end": 10
+                        "end": 10,
+                        "start_line": 2,
+                        "start_col": 1
                       }
                     },
                     {
@@ -40,21 +44,27 @@ list(&$x, &$y) = $pair;
                         },
                         "span": {
                           "start": 13,
-                          "end": 15
+                          "end": 15,
+                          "start_line": 2,
+                          "start_col": 7
                         }
                       },
                       "unpack": false,
                       "by_ref": true,
                       "span": {
                         "start": 12,
-                        "end": 15
+                        "end": 15,
+                        "start_line": 2,
+                        "start_col": 6
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 6,
-                  "end": 16
+                  "end": 16,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -64,20 +74,26 @@ list(&$x, &$y) = $pair;
                 },
                 "span": {
                   "start": 19,
-                  "end": 23
+                  "end": 23,
+                  "start_line": 2,
+                  "start_col": 13
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 23
+            "end": 23,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 25
+        "end": 25,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -96,14 +112,18 @@ list(&$x, &$y) = $pair;
                         },
                         "span": {
                           "start": 31,
-                          "end": 33
+                          "end": 33,
+                          "start_line": 3,
+                          "start_col": 6
                         }
                       },
                       "unpack": false,
                       "by_ref": true,
                       "span": {
                         "start": 30,
-                        "end": 33
+                        "end": 33,
+                        "start_line": 3,
+                        "start_col": 5
                       }
                     },
                     {
@@ -114,21 +134,27 @@ list(&$x, &$y) = $pair;
                         },
                         "span": {
                           "start": 36,
-                          "end": 38
+                          "end": 38,
+                          "start_line": 3,
+                          "start_col": 11
                         }
                       },
                       "unpack": false,
                       "by_ref": true,
                       "span": {
                         "start": 35,
-                        "end": 38
+                        "end": 38,
+                        "start_line": 3,
+                        "start_col": 10
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 25,
-                  "end": 39
+                  "end": 39,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -138,20 +164,26 @@ list(&$x, &$y) = $pair;
                 },
                 "span": {
                   "start": 42,
-                  "end": 47
+                  "end": 47,
+                  "start_line": 3,
+                  "start_col": 17
                 }
               }
             }
           },
           "span": {
             "start": 25,
-            "end": 47
+            "end": 47,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 25,
-        "end": 49
+        "end": 49,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -170,14 +202,18 @@ list(&$x, &$y) = $pair;
                         },
                         "span": {
                           "start": 51,
-                          "end": 57
+                          "end": 57,
+                          "start_line": 4,
+                          "start_col": 2
                         }
                       },
                       "unpack": false,
                       "by_ref": true,
                       "span": {
                         "start": 50,
-                        "end": 57
+                        "end": 57,
+                        "start_line": 4,
+                        "start_col": 1
                       }
                     },
                     {
@@ -188,20 +224,26 @@ list(&$x, &$y) = $pair;
                         },
                         "span": {
                           "start": 59,
-                          "end": 66
+                          "end": 66,
+                          "start_line": 4,
+                          "start_col": 10
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 59,
-                        "end": 66
+                        "end": 66,
+                        "start_line": 4,
+                        "start_col": 10
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 49,
-                  "end": 67
+                  "end": 67,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -211,25 +253,33 @@ list(&$x, &$y) = $pair;
                 },
                 "span": {
                   "start": 70,
-                  "end": 76
+                  "end": 76,
+                  "start_line": 4,
+                  "start_col": 21
                 }
               }
             }
           },
           "span": {
             "start": 49,
-            "end": 76
+            "end": 76,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 49,
-        "end": 77
+        "end": 77,
+        "start_line": 4,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 77
+    "end": 77,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -14,7 +14,9 @@
                 },
                 "span": {
                   "start": 6,
-                  "end": 10
+                  "end": 10,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "method": {
@@ -23,7 +25,9 @@
                 },
                 "span": {
                   "start": 12,
-                  "end": 19
+                  "end": 19,
+                  "start_line": 1,
+                  "start_col": 12
                 }
               },
               "args": []
@@ -31,13 +35,17 @@
           },
           "span": {
             "start": 6,
-            "end": 21
+            "end": 21,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 23
+        "end": 23,
+        "start_line": 1,
+        "start_col": 6
       }
     },
     {
@@ -54,7 +62,9 @@
                       },
                       "span": {
                         "start": 23,
-                        "end": 31
+                        "end": 31,
+                        "start_line": 1,
+                        "start_col": 23
                       }
                     },
                     "method": {
@@ -63,7 +73,9 @@
                       },
                       "span": {
                         "start": 33,
-                        "end": 40
+                        "end": 40,
+                        "start_line": 1,
+                        "start_col": 33
                       }
                     },
                     "args": [
@@ -75,14 +87,18 @@
                           },
                           "span": {
                             "start": 41,
-                            "end": 46
+                            "end": 46,
+                            "start_line": 1,
+                            "start_col": 41
                           }
                         },
                         "unpack": false,
                         "by_ref": false,
                         "span": {
                           "start": 41,
-                          "end": 46
+                          "end": 46,
+                          "start_line": 1,
+                          "start_col": 41
                         }
                       }
                     ]
@@ -90,7 +106,9 @@
                 },
                 "span": {
                   "start": 23,
-                  "end": 47
+                  "end": 47,
+                  "start_line": 1,
+                  "start_col": 23
                 }
               },
               "method": {
@@ -99,7 +117,9 @@
                 },
                 "span": {
                   "start": 49,
-                  "end": 54
+                  "end": 54,
+                  "start_line": 1,
+                  "start_col": 49
                 }
               },
               "args": []
@@ -107,18 +127,24 @@
           },
           "span": {
             "start": 23,
-            "end": 56
+            "end": 56,
+            "start_line": 1,
+            "start_col": 23
           }
         }
       },
       "span": {
         "start": 23,
-        "end": 57
+        "end": 57,
+        "start_line": 1,
+        "start_col": 23
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 57
+    "end": 57,
+    "start_line": 1,
+    "start_col": 0
   }
 }

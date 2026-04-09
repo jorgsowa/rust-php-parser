@@ -21,7 +21,9 @@ enum Status: string {
             "kind": "Unqualified",
             "span": {
               "start": 19,
-              "end": 26
+              "end": 26,
+              "start_line": 2,
+              "start_col": 13
             }
           },
           "implements": [],
@@ -36,7 +38,9 @@ enum Status: string {
                     },
                     "span": {
                       "start": 46,
-                      "end": 54
+                      "end": 54,
+                      "start_line": 3,
+                      "start_col": 18
                     }
                   },
                   "attributes": []
@@ -44,7 +48,9 @@ enum Status: string {
               },
               "span": {
                 "start": 32,
-                "end": 60
+                "end": 60,
+                "start_line": 3,
+                "start_col": 4
               }
             },
             {
@@ -57,7 +63,9 @@ enum Status: string {
                     },
                     "span": {
                       "start": 76,
-                      "end": 86
+                      "end": 86,
+                      "start_line": 4,
+                      "start_col": 20
                     }
                   },
                   "attributes": []
@@ -65,7 +73,9 @@ enum Status: string {
               },
               "span": {
                 "start": 60,
-                "end": 92
+                "end": 92,
+                "start_line": 4,
+                "start_col": 4
               }
             },
             {
@@ -78,7 +88,9 @@ enum Status: string {
                     },
                     "span": {
                       "start": 107,
-                      "end": 116
+                      "end": 116,
+                      "start_line": 5,
+                      "start_col": 19
                     }
                   },
                   "attributes": []
@@ -86,7 +98,9 @@ enum Status: string {
               },
               "span": {
                 "start": 92,
-                "end": 118
+                "end": 118,
+                "start_line": 5,
+                "start_col": 4
               }
             }
           ],
@@ -95,12 +109,16 @@ enum Status: string {
       },
       "span": {
         "start": 6,
-        "end": 119
+        "end": 119,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 119
+    "end": 119,
+    "start_line": 1,
+    "start_col": 0
   }
 }

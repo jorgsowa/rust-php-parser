@@ -23,7 +23,9 @@ $array = [
                 },
                 "span": {
                   "start": 6,
-                  "end": 12
+                  "end": 12,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -41,7 +43,9 @@ $array = [
                               },
                               "span": {
                                 "start": 21,
-                                "end": 26
+                                "end": 26,
+                                "start_line": 3,
+                                "start_col": 4
                               }
                             },
                             "property": {
@@ -50,40 +54,52 @@ $array = [
                               },
                               "span": {
                                 "start": 28,
-                                "end": 33
+                                "end": 33,
+                                "start_line": 3,
+                                "start_col": 11
                               }
                             }
                           }
                         },
                         "span": {
                           "start": 21,
-                          "end": 33
+                          "end": 33,
+                          "start_line": 3,
+                          "start_col": 4
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 21,
-                        "end": 33
+                        "end": 33,
+                        "start_line": 3,
+                        "start_col": 4
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 15,
-                  "end": 34
+                  "end": 34,
+                  "start_line": 2,
+                  "start_col": 9
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 34
+            "end": 34,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 34
+        "end": 34,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -97,7 +113,9 @@ $array = [
                 },
                 "span": {
                   "start": 34,
-                  "end": 51
+                  "end": 51,
+                  "start_line": 3,
+                  "start_col": 17
                 }
               },
               "method": {
@@ -106,7 +124,9 @@ $array = [
                 },
                 "span": {
                   "start": 53,
-                  "end": 56
+                  "end": 56,
+                  "start_line": 3,
+                  "start_col": 36
                 }
               },
               "args": []
@@ -114,20 +134,26 @@ $array = [
           },
           "span": {
             "start": 34,
-            "end": 59
+            "end": 59,
+            "start_line": 3,
+            "start_col": 17
           }
         }
       },
       "span": {
         "start": 34,
-        "end": 59
+        "end": 59,
+        "start_line": 3,
+        "start_col": 17
       }
     },
     {
       "kind": "Error",
       "span": {
         "start": 59,
-        "end": 62
+        "end": 62,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -141,7 +167,9 @@ $array = [
                 },
                 "span": {
                   "start": 62,
-                  "end": 68
+                  "end": 68,
+                  "start_line": 5,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -156,33 +184,43 @@ $array = [
                         },
                         "span": {
                           "start": 77,
-                          "end": 83
+                          "end": 83,
+                          "start_line": 6,
+                          "start_col": 4
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 77,
-                        "end": 83
+                        "end": 83,
+                        "start_line": 6,
+                        "start_col": 4
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 71,
-                  "end": 84
+                  "end": 84,
+                  "start_line": 5,
+                  "start_col": 9
                 }
               }
             }
           },
           "span": {
             "start": 62,
-            "end": 84
+            "end": 84,
+            "start_line": 5,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 62,
-        "end": 84
+        "end": 84,
+        "start_line": 5,
+        "start_col": 0
       }
     },
     {
@@ -193,20 +231,26 @@ $array = [
           },
           "span": {
             "start": 84,
-            "end": 101
+            "end": 101,
+            "start_line": 6,
+            "start_col": 11
           }
         }
       },
       "span": {
         "start": 84,
-        "end": 102
+        "end": 102,
+        "start_line": 6,
+        "start_col": 11
       }
     },
     {
       "kind": "Error",
       "span": {
         "start": 102,
-        "end": 105
+        "end": 105,
+        "start_line": 7,
+        "start_col": 0
       }
     },
     {
@@ -220,7 +264,9 @@ $array = [
                 },
                 "span": {
                   "start": 105,
-                  "end": 111
+                  "end": 111,
+                  "start_line": 8,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -234,7 +280,9 @@ $array = [
                         },
                         "span": {
                           "start": 120,
-                          "end": 125
+                          "end": 125,
+                          "start_line": 9,
+                          "start_col": 4
                         }
                       },
                       "value": {
@@ -243,33 +291,43 @@ $array = [
                         },
                         "span": {
                           "start": 129,
-                          "end": 135
+                          "end": 135,
+                          "start_line": 9,
+                          "start_col": 13
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 120,
-                        "end": 135
+                        "end": 135,
+                        "start_line": 9,
+                        "start_col": 4
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 114,
-                  "end": 136
+                  "end": 136,
+                  "start_line": 8,
+                  "start_col": 9
                 }
               }
             }
           },
           "span": {
             "start": 105,
-            "end": 136
+            "end": 136,
+            "start_line": 8,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 105,
-        "end": 136
+        "end": 136,
+        "start_line": 8,
+        "start_col": 0
       }
     },
     {
@@ -280,25 +338,33 @@ $array = [
           },
           "span": {
             "start": 136,
-            "end": 153
+            "end": 153,
+            "start_line": 9,
+            "start_col": 20
           }
         }
       },
       "span": {
         "start": 136,
-        "end": 154
+        "end": 154,
+        "start_line": 9,
+        "start_col": 20
       }
     },
     {
       "kind": "Error",
       "span": {
         "start": 154,
-        "end": 156
+        "end": 156,
+        "start_line": 10,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 156
+    "end": 156,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -40,7 +40,9 @@ min_php=8.5
                       "attributes": [],
                       "span": {
                         "start": 44,
-                        "end": 52
+                        "end": 52,
+                        "start_line": 1,
+                        "start_col": 44
                       }
                     }
                   ],
@@ -51,7 +53,9 @@ min_php=8.5
               },
               "span": {
                 "start": 16,
-                "end": 57
+                "end": 57,
+                "start_line": 1,
+                "start_col": 16
               }
             }
           ],
@@ -60,12 +64,16 @@ min_php=8.5
       },
       "span": {
         "start": 6,
-        "end": 58
+        "end": 58,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 58
+    "end": 58,
+    "start_line": 1,
+    "start_col": 0
   }
 }

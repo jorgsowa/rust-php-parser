@@ -17,7 +17,9 @@ $x = <<<END
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -34,25 +36,33 @@ $x = <<<END
                 },
                 "span": {
                   "start": 11,
-                  "end": 42
+                  "end": 42,
+                  "start_line": 2,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 42
+            "end": 42,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 43
+        "end": 43,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 43
+    "end": 43,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -18,7 +18,9 @@ Unparenthesized `a ? b : c ? d : e` is not supported. Use parentheses to make th
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "op": "Assign",
@@ -34,7 +36,9 @@ Unparenthesized `a ? b : c ? d : e` is not supported. Use parentheses to make th
                             },
                             "span": {
                               "start": 11,
-                              "end": 15
+                              "end": 15,
+                              "start_line": 1,
+                              "start_col": 11
                             }
                           },
                           "then_expr": {
@@ -43,7 +47,9 @@ Unparenthesized `a ? b : c ? d : e` is not supported. Use parentheses to make th
                             },
                             "span": {
                               "start": 18,
-                              "end": 19
+                              "end": 19,
+                              "start_line": 1,
+                              "start_col": 18
                             }
                           },
                           "else_expr": {
@@ -52,14 +58,18 @@ Unparenthesized `a ? b : c ? d : e` is not supported. Use parentheses to make th
                             },
                             "span": {
                               "start": 22,
-                              "end": 23
+                              "end": 23,
+                              "start_line": 1,
+                              "start_col": 22
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 11,
-                        "end": 23
+                        "end": 23,
+                        "start_line": 1,
+                        "start_col": 11
                       }
                     },
                     "then_expr": {
@@ -68,7 +78,9 @@ Unparenthesized `a ? b : c ? d : e` is not supported. Use parentheses to make th
                       },
                       "span": {
                         "start": 26,
-                        "end": 27
+                        "end": 27,
+                        "start_line": 1,
+                        "start_col": 26
                       }
                     },
                     "else_expr": {
@@ -77,32 +89,42 @@ Unparenthesized `a ? b : c ? d : e` is not supported. Use parentheses to make th
                       },
                       "span": {
                         "start": 30,
-                        "end": 31
+                        "end": 31,
+                        "start_line": 1,
+                        "start_col": 30
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 11,
-                  "end": 31
+                  "end": 31,
+                  "start_line": 1,
+                  "start_col": 11
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 31
+            "end": 31,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 32
+        "end": 32,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 32
+    "end": 32,
+    "start_line": 1,
+    "start_col": 0
   }
 }

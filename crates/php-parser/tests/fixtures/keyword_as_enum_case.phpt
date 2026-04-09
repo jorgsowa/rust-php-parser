@@ -22,7 +22,9 @@ min_php=8.1
               },
               "span": {
                 "start": 18,
-                "end": 28
+                "end": 28,
+                "start_line": 1,
+                "start_col": 18
               }
             },
             {
@@ -35,7 +37,9 @@ min_php=8.1
               },
               "span": {
                 "start": 28,
-                "end": 43
+                "end": 43,
+                "start_line": 1,
+                "start_col": 28
               }
             },
             {
@@ -48,7 +52,9 @@ min_php=8.1
               },
               "span": {
                 "start": 43,
-                "end": 55
+                "end": 55,
+                "start_line": 1,
+                "start_col": 43
               }
             }
           ],
@@ -57,12 +63,16 @@ min_php=8.1
       },
       "span": {
         "start": 6,
-        "end": 56
+        "end": 56,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 56
+    "end": 56,
+    "start_line": 1,
+    "start_col": 0
   }
 }

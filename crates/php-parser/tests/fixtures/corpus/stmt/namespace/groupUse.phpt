@@ -23,13 +23,17 @@ use A\B\{C\D, function b\c, const D};
                 "kind": "Qualified",
                 "span": {
                   "start": 10,
-                  "end": 14
+                  "end": 14,
+                  "start_line": 2,
+                  "start_col": 4
                 }
               },
               "alias": null,
               "span": {
                 "start": 13,
-                "end": 14
+                "end": 14,
+                "start_line": 2,
+                "start_col": 7
               }
             }
           ]
@@ -37,7 +41,9 @@ use A\B\{C\D, function b\c, const D};
       },
       "span": {
         "start": 6,
-        "end": 17
+        "end": 17,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -55,13 +61,17 @@ use A\B\{C\D, function b\c, const D};
                 "kind": "Qualified",
                 "span": {
                   "start": 21,
-                  "end": 27
+                  "end": 27,
+                  "start_line": 3,
+                  "start_col": 4
                 }
               },
               "alias": null,
               "span": {
                 "start": 24,
-                "end": 27
+                "end": 27,
+                "start_line": 3,
+                "start_col": 7
               }
             },
             {
@@ -73,13 +83,17 @@ use A\B\{C\D, function b\c, const D};
                 "kind": "Qualified",
                 "span": {
                   "start": 21,
-                  "end": 30
+                  "end": 30,
+                  "start_line": 3,
+                  "start_col": 4
                 }
               },
               "alias": null,
               "span": {
                 "start": 29,
-                "end": 30
+                "end": 30,
+                "start_line": 3,
+                "start_col": 12
               }
             }
           ]
@@ -87,7 +101,9 @@ use A\B\{C\D, function b\c, const D};
       },
       "span": {
         "start": 17,
-        "end": 33
+        "end": 33,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -106,13 +122,17 @@ use A\B\{C\D, function b\c, const D};
                 "kind": "FullyQualified",
                 "span": {
                   "start": 37,
-                  "end": 46
+                  "end": 46,
+                  "start_line": 4,
+                  "start_col": 4
                 }
               },
               "alias": null,
               "span": {
                 "start": 43,
-                "end": 46
+                "end": 46,
+                "start_line": 4,
+                "start_col": 10
               }
             },
             {
@@ -125,13 +145,17 @@ use A\B\{C\D, function b\c, const D};
                 "kind": "FullyQualified",
                 "span": {
                   "start": 37,
-                  "end": 49
+                  "end": 49,
+                  "start_line": 4,
+                  "start_col": 4
                 }
               },
               "alias": null,
               "span": {
                 "start": 48,
-                "end": 49
+                "end": 49,
+                "start_line": 4,
+                "start_col": 15
               }
             }
           ]
@@ -139,7 +163,9 @@ use A\B\{C\D, function b\c, const D};
       },
       "span": {
         "start": 33,
-        "end": 52
+        "end": 52,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -157,13 +183,17 @@ use A\B\{C\D, function b\c, const D};
                 "kind": "Qualified",
                 "span": {
                   "start": 65,
-                  "end": 71
+                  "end": 71,
+                  "start_line": 5,
+                  "start_col": 13
                 }
               },
               "alias": null,
               "span": {
                 "start": 68,
-                "end": 71
+                "end": 71,
+                "start_line": 5,
+                "start_col": 16
               }
             },
             {
@@ -175,13 +205,17 @@ use A\B\{C\D, function b\c, const D};
                 "kind": "Qualified",
                 "span": {
                   "start": 65,
-                  "end": 74
+                  "end": 74,
+                  "start_line": 5,
+                  "start_col": 13
                 }
               },
               "alias": null,
               "span": {
                 "start": 73,
-                "end": 74
+                "end": 74,
+                "start_line": 5,
+                "start_col": 21
               }
             }
           ]
@@ -189,7 +223,9 @@ use A\B\{C\D, function b\c, const D};
       },
       "span": {
         "start": 52,
-        "end": 77
+        "end": 77,
+        "start_line": 5,
+        "start_col": 0
       }
     },
     {
@@ -207,13 +243,17 @@ use A\B\{C\D, function b\c, const D};
                 "kind": "FullyQualified",
                 "span": {
                   "start": 87,
-                  "end": 94
+                  "end": 94,
+                  "start_line": 6,
+                  "start_col": 10
                 }
               },
               "alias": null,
               "span": {
                 "start": 91,
-                "end": 94
+                "end": 94,
+                "start_line": 6,
+                "start_col": 14
               }
             },
             {
@@ -225,13 +265,17 @@ use A\B\{C\D, function b\c, const D};
                 "kind": "FullyQualified",
                 "span": {
                   "start": 87,
-                  "end": 97
+                  "end": 97,
+                  "start_line": 6,
+                  "start_col": 10
                 }
               },
               "alias": null,
               "span": {
                 "start": 96,
-                "end": 97
+                "end": 97,
+                "start_line": 6,
+                "start_col": 19
               }
             }
           ]
@@ -239,7 +283,9 @@ use A\B\{C\D, function b\c, const D};
       },
       "span": {
         "start": 77,
-        "end": 100
+        "end": 100,
+        "start_line": 6,
+        "start_col": 0
       }
     },
     {
@@ -258,13 +304,17 @@ use A\B\{C\D, function b\c, const D};
                 "kind": "Qualified",
                 "span": {
                   "start": 104,
-                  "end": 112
+                  "end": 112,
+                  "start_line": 7,
+                  "start_col": 4
                 }
               },
               "alias": null,
               "span": {
                 "start": 109,
-                "end": 112
+                "end": 112,
+                "start_line": 7,
+                "start_col": 9
               }
             },
             {
@@ -278,14 +328,18 @@ use A\B\{C\D, function b\c, const D};
                 "kind": "Qualified",
                 "span": {
                   "start": 104,
-                  "end": 126
+                  "end": 126,
+                  "start_line": 7,
+                  "start_col": 4
                 }
               },
               "alias": null,
               "kind": "Function",
               "span": {
                 "start": 114,
-                "end": 126
+                "end": 126,
+                "start_line": 7,
+                "start_col": 14
               }
             },
             {
@@ -298,14 +352,18 @@ use A\B\{C\D, function b\c, const D};
                 "kind": "Qualified",
                 "span": {
                   "start": 104,
-                  "end": 135
+                  "end": 135,
+                  "start_line": 7,
+                  "start_col": 4
                 }
               },
               "alias": null,
               "kind": "Const",
               "span": {
                 "start": 128,
-                "end": 135
+                "end": 135,
+                "start_line": 7,
+                "start_col": 28
               }
             }
           ]
@@ -313,12 +371,16 @@ use A\B\{C\D, function b\c, const D};
       },
       "span": {
         "start": 100,
-        "end": 137
+        "end": 137,
+        "start_line": 7,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 137
+    "end": 137,
+    "start_line": 1,
+    "start_col": 0
   }
 }

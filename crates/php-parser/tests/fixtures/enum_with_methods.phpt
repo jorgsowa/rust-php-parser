@@ -31,7 +31,9 @@ enum Suit: string implements HasColor {
             "kind": "Unqualified",
             "span": {
               "start": 17,
-              "end": 24
+              "end": 24,
+              "start_line": 2,
+              "start_col": 11
             }
           },
           "implements": [
@@ -42,7 +44,9 @@ enum Suit: string implements HasColor {
               "kind": "Unqualified",
               "span": {
                 "start": 35,
-                "end": 44
+                "end": 44,
+                "start_line": 2,
+                "start_col": 29
               }
             }
           ],
@@ -57,7 +61,9 @@ enum Suit: string implements HasColor {
                     },
                     "span": {
                       "start": 64,
-                      "end": 67
+                      "end": 67,
+                      "start_line": 3,
+                      "start_col": 18
                     }
                   },
                   "attributes": []
@@ -65,7 +71,9 @@ enum Suit: string implements HasColor {
               },
               "span": {
                 "start": 50,
-                "end": 73
+                "end": 73,
+                "start_line": 3,
+                "start_col": 4
               }
             },
             {
@@ -78,7 +86,9 @@ enum Suit: string implements HasColor {
                     },
                     "span": {
                       "start": 89,
-                      "end": 92
+                      "end": 92,
+                      "start_line": 4,
+                      "start_col": 20
                     }
                   },
                   "attributes": []
@@ -86,7 +96,9 @@ enum Suit: string implements HasColor {
               },
               "span": {
                 "start": 73,
-                "end": 98
+                "end": 98,
+                "start_line": 4,
+                "start_col": 4
               }
             },
             {
@@ -99,7 +111,9 @@ enum Suit: string implements HasColor {
                     },
                     "span": {
                       "start": 111,
-                      "end": 114
+                      "end": 114,
+                      "start_line": 5,
+                      "start_col": 17
                     }
                   },
                   "attributes": []
@@ -107,7 +121,9 @@ enum Suit: string implements HasColor {
               },
               "span": {
                 "start": 98,
-                "end": 120
+                "end": 120,
+                "start_line": 5,
+                "start_col": 4
               }
             },
             {
@@ -120,7 +136,9 @@ enum Suit: string implements HasColor {
                     },
                     "span": {
                       "start": 134,
-                      "end": 137
+                      "end": 137,
+                      "start_line": 6,
+                      "start_col": 18
                     }
                   },
                   "attributes": []
@@ -128,7 +146,9 @@ enum Suit: string implements HasColor {
               },
               "span": {
                 "start": 120,
-                "end": 144
+                "end": 144,
+                "start_line": 6,
+                "start_col": 4
               }
             },
             {
@@ -142,7 +162,9 @@ enum Suit: string implements HasColor {
                     },
                     "span": {
                       "start": 158,
-                      "end": 159
+                      "end": 159,
+                      "start_line": 8,
+                      "start_col": 18
                     }
                   },
                   "attributes": []
@@ -150,7 +172,9 @@ enum Suit: string implements HasColor {
               },
               "span": {
                 "start": 144,
-                "end": 166
+                "end": 166,
+                "start_line": 8,
+                "start_col": 4
               }
             },
             {
@@ -172,13 +196,17 @@ enum Suit: string implements HasColor {
                         "kind": "Unqualified",
                         "span": {
                           "start": 191,
-                          "end": 197
+                          "end": 197,
+                          "start_line": 10,
+                          "start_col": 29
                         }
                       }
                     },
                     "span": {
                       "start": 191,
-                      "end": 197
+                      "end": 197,
+                      "start_line": 10,
+                      "start_col": 29
                     }
                   },
                   "body": [
@@ -193,7 +221,9 @@ enum Suit: string implements HasColor {
                                 },
                                 "span": {
                                   "start": 222,
-                                  "end": 227
+                                  "end": 227,
+                                  "start_line": 11,
+                                  "start_col": 22
                                 }
                               },
                               "arms": [
@@ -208,7 +238,9 @@ enum Suit: string implements HasColor {
                                             },
                                             "span": {
                                               "start": 243,
-                                              "end": 247
+                                              "end": 247,
+                                              "start_line": 12,
+                                              "start_col": 12
                                             }
                                           },
                                           "member": "Hearts"
@@ -216,7 +248,9 @@ enum Suit: string implements HasColor {
                                       },
                                       "span": {
                                         "start": 243,
-                                        "end": 255
+                                        "end": 255,
+                                        "start_line": 12,
+                                        "start_col": 12
                                       }
                                     },
                                     {
@@ -228,7 +262,9 @@ enum Suit: string implements HasColor {
                                             },
                                             "span": {
                                               "start": 257,
-                                              "end": 261
+                                              "end": 261,
+                                              "start_line": 12,
+                                              "start_col": 26
                                             }
                                           },
                                           "member": "Diamonds"
@@ -236,7 +272,9 @@ enum Suit: string implements HasColor {
                                       },
                                       "span": {
                                         "start": 257,
-                                        "end": 272
+                                        "end": 272,
+                                        "start_line": 12,
+                                        "start_col": 26
                                       }
                                     }
                                   ],
@@ -246,12 +284,16 @@ enum Suit: string implements HasColor {
                                     },
                                     "span": {
                                       "start": 275,
-                                      "end": 280
+                                      "end": 280,
+                                      "start_line": 12,
+                                      "start_col": 44
                                     }
                                   },
                                   "span": {
                                     "start": 243,
-                                    "end": 280
+                                    "end": 280,
+                                    "start_line": 12,
+                                    "start_col": 12
                                   }
                                 },
                                 {
@@ -265,7 +307,9 @@ enum Suit: string implements HasColor {
                                             },
                                             "span": {
                                               "start": 294,
-                                              "end": 298
+                                              "end": 298,
+                                              "start_line": 13,
+                                              "start_col": 12
                                             }
                                           },
                                           "member": "Clubs"
@@ -273,7 +317,9 @@ enum Suit: string implements HasColor {
                                       },
                                       "span": {
                                         "start": 294,
-                                        "end": 305
+                                        "end": 305,
+                                        "start_line": 13,
+                                        "start_col": 12
                                       }
                                     },
                                     {
@@ -285,7 +331,9 @@ enum Suit: string implements HasColor {
                                             },
                                             "span": {
                                               "start": 307,
-                                              "end": 311
+                                              "end": 311,
+                                              "start_line": 13,
+                                              "start_col": 25
                                             }
                                           },
                                           "member": "Spades"
@@ -293,7 +341,9 @@ enum Suit: string implements HasColor {
                                       },
                                       "span": {
                                         "start": 307,
-                                        "end": 320
+                                        "end": 320,
+                                        "start_line": 13,
+                                        "start_col": 25
                                       }
                                     }
                                   ],
@@ -303,12 +353,16 @@ enum Suit: string implements HasColor {
                                     },
                                     "span": {
                                       "start": 323,
-                                      "end": 330
+                                      "end": 330,
+                                      "start_line": 13,
+                                      "start_col": 41
                                     }
                                   },
                                   "span": {
                                     "start": 294,
-                                    "end": 330
+                                    "end": 330,
+                                    "start_line": 13,
+                                    "start_col": 12
                                   }
                                 }
                               ]
@@ -316,13 +370,17 @@ enum Suit: string implements HasColor {
                           },
                           "span": {
                             "start": 215,
-                            "end": 341
+                            "end": 341,
+                            "start_line": 11,
+                            "start_col": 15
                           }
                         }
                       },
                       "span": {
                         "start": 208,
-                        "end": 347
+                        "end": 347,
+                        "start_line": 11,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -331,7 +389,9 @@ enum Suit: string implements HasColor {
               },
               "span": {
                 "start": 166,
-                "end": 349
+                "end": 349,
+                "start_line": 10,
+                "start_col": 4
               }
             }
           ],
@@ -340,12 +400,16 @@ enum Suit: string implements HasColor {
       },
       "span": {
         "start": 6,
-        "end": 350
+        "end": 350,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 350
+    "end": 350,
+    "start_line": 1,
+    "start_col": 0
   }
 }

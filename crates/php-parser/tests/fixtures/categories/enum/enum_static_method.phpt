@@ -22,7 +22,9 @@ min_php=8.1
               },
               "span": {
                 "start": 19,
-                "end": 29
+                "end": 29,
+                "start_line": 1,
+                "start_col": 19
               }
             },
             {
@@ -44,13 +46,17 @@ min_php=8.1
                         "kind": "Unqualified",
                         "span": {
                           "start": 63,
-                          "end": 67
+                          "end": 67,
+                          "start_line": 1,
+                          "start_col": 63
                         }
                       }
                     },
                     "span": {
                       "start": 63,
-                      "end": 67
+                      "end": 67,
+                      "start_line": 1,
+                      "start_col": 63
                     }
                   },
                   "body": [
@@ -65,7 +71,9 @@ min_php=8.1
                                 },
                                 "span": {
                                   "start": 77,
-                                  "end": 81
+                                  "end": 81,
+                                  "start_line": 1,
+                                  "start_col": 77
                                 }
                               },
                               "member": "Red"
@@ -73,13 +81,17 @@ min_php=8.1
                           },
                           "span": {
                             "start": 77,
-                            "end": 86
+                            "end": 86,
+                            "start_line": 1,
+                            "start_col": 77
                           }
                         }
                       },
                       "span": {
                         "start": 70,
-                        "end": 88
+                        "end": 88,
+                        "start_line": 1,
+                        "start_col": 70
                       }
                     }
                   ],
@@ -88,7 +100,9 @@ min_php=8.1
               },
               "span": {
                 "start": 29,
-                "end": 90
+                "end": 90,
+                "start_line": 1,
+                "start_col": 29
               }
             }
           ],
@@ -97,12 +111,16 @@ min_php=8.1
       },
       "span": {
         "start": 6,
-        "end": 91
+        "end": 91,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 91
+    "end": 91,
+    "start_line": 1,
+    "start_col": 0
   }
 }

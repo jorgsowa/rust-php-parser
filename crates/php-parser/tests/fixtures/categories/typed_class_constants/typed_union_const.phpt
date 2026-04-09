@@ -34,13 +34,17 @@ min_php=8.3
                               "kind": "Unqualified",
                               "span": {
                                 "start": 22,
-                                "end": 25
+                                "end": 25,
+                                "start_line": 1,
+                                "start_col": 22
                               }
                             }
                           },
                           "span": {
                             "start": 22,
-                            "end": 25
+                            "end": 25,
+                            "start_line": 1,
+                            "start_col": 22
                           }
                         },
                         {
@@ -52,20 +56,26 @@ min_php=8.3
                               "kind": "Unqualified",
                               "span": {
                                 "start": 26,
-                                "end": 32
+                                "end": 32,
+                                "start_line": 1,
+                                "start_col": 26
                               }
                             }
                           },
                           "span": {
                             "start": 26,
-                            "end": 32
+                            "end": 32,
+                            "start_line": 1,
+                            "start_col": 26
                           }
                         }
                       ]
                     },
                     "span": {
                       "start": 22,
-                      "end": 32
+                      "end": 32,
+                      "start_line": 1,
+                      "start_col": 22
                     }
                   },
                   "value": {
@@ -74,7 +84,9 @@ min_php=8.3
                     },
                     "span": {
                       "start": 37,
-                      "end": 38
+                      "end": 38,
+                      "start_line": 1,
+                      "start_col": 37
                     }
                   },
                   "attributes": []
@@ -82,7 +94,9 @@ min_php=8.3
               },
               "span": {
                 "start": 16,
-                "end": 40
+                "end": 40,
+                "start_line": 1,
+                "start_col": 16
               }
             }
           ],
@@ -91,12 +105,16 @@ min_php=8.3
       },
       "span": {
         "start": 6,
-        "end": 41
+        "end": 41,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 41
+    "end": 41,
+    "start_line": 1,
+    "start_col": 0
   }
 }

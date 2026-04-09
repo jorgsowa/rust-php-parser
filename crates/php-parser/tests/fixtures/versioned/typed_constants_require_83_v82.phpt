@@ -33,13 +33,17 @@ parse_version=8.2
                         "kind": "Unqualified",
                         "span": {
                           "start": 31,
-                          "end": 37
+                          "end": 37,
+                          "start_line": 1,
+                          "start_col": 31
                         }
                       }
                     },
                     "span": {
                       "start": 31,
-                      "end": 37
+                      "end": 37,
+                      "start_line": 1,
+                      "start_col": 31
                     }
                   },
                   "value": {
@@ -48,7 +52,9 @@ parse_version=8.2
                     },
                     "span": {
                       "start": 45,
-                      "end": 50
+                      "end": 50,
+                      "start_line": 1,
+                      "start_col": 45
                     }
                   },
                   "attributes": []
@@ -56,7 +62,9 @@ parse_version=8.2
               },
               "span": {
                 "start": 18,
-                "end": 52
+                "end": 52,
+                "start_line": 1,
+                "start_col": 18
               }
             }
           ],
@@ -65,12 +73,16 @@ parse_version=8.2
       },
       "span": {
         "start": 6,
-        "end": 53
+        "end": 53,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 53
+    "end": 53,
+    "start_line": 1,
+    "start_col": 0
   }
 }

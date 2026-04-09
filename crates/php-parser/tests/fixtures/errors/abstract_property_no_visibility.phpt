@@ -34,13 +34,17 @@ properties cannot be abstract
                         "kind": "Unqualified",
                         "span": {
                           "start": 27,
-                          "end": 33
+                          "end": 33,
+                          "start_line": 1,
+                          "start_col": 27
                         }
                       }
                     },
                     "span": {
                       "start": 27,
-                      "end": 33
+                      "end": 33,
+                      "start_line": 1,
+                      "start_col": 27
                     }
                   },
                   "default": null,
@@ -49,7 +53,9 @@ properties cannot be abstract
               },
               "span": {
                 "start": 18,
-                "end": 38
+                "end": 38,
+                "start_line": 1,
+                "start_col": 18
               }
             }
           ],
@@ -58,12 +64,16 @@ properties cannot be abstract
       },
       "span": {
         "start": 6,
-        "end": 41
+        "end": 41,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 41
+    "end": 41,
+    "start_line": 1,
+    "start_col": 0
   }
 }

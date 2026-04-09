@@ -31,13 +31,17 @@ min_php=8.3
                         "kind": "Unqualified",
                         "span": {
                           "start": 22,
-                          "end": 25
+                          "end": 25,
+                          "start_line": 1,
+                          "start_col": 22
                         }
                       }
                     },
                     "span": {
                       "start": 22,
-                      "end": 25
+                      "end": 25,
+                      "start_line": 1,
+                      "start_col": 22
                     }
                   },
                   "value": {
@@ -46,7 +50,9 @@ min_php=8.3
                     },
                     "span": {
                       "start": 30,
-                      "end": 31
+                      "end": 31,
+                      "start_line": 1,
+                      "start_col": 30
                     }
                   },
                   "attributes": []
@@ -54,7 +60,9 @@ min_php=8.3
               },
               "span": {
                 "start": 16,
-                "end": 33
+                "end": 33,
+                "start_line": 1,
+                "start_col": 16
               }
             },
             {
@@ -71,13 +79,17 @@ min_php=8.3
                         "kind": "Unqualified",
                         "span": {
                           "start": 47,
-                          "end": 53
+                          "end": 53,
+                          "start_line": 1,
+                          "start_col": 47
                         }
                       }
                     },
                     "span": {
                       "start": 47,
-                      "end": 53
+                      "end": 53,
+                      "start_line": 1,
+                      "start_col": 47
                     }
                   },
                   "value": {
@@ -86,7 +98,9 @@ min_php=8.3
                     },
                     "span": {
                       "start": 58,
-                      "end": 61
+                      "end": 61,
+                      "start_line": 1,
+                      "start_col": 58
                     }
                   },
                   "attributes": []
@@ -94,7 +108,9 @@ min_php=8.3
               },
               "span": {
                 "start": 33,
-                "end": 63
+                "end": 63,
+                "start_line": 1,
+                "start_col": 33
               }
             },
             {
@@ -114,13 +130,17 @@ min_php=8.3
                               "kind": "Unqualified",
                               "span": {
                                 "start": 69,
-                                "end": 72
+                                "end": 72,
+                                "start_line": 1,
+                                "start_col": 69
                               }
                             }
                           },
                           "span": {
                             "start": 69,
-                            "end": 72
+                            "end": 72,
+                            "start_line": 1,
+                            "start_col": 69
                           }
                         },
                         {
@@ -132,13 +152,17 @@ min_php=8.3
                               "kind": "Unqualified",
                               "span": {
                                 "start": 73,
-                                "end": 76
+                                "end": 76,
+                                "start_line": 1,
+                                "start_col": 73
                               }
                             }
                           },
                           "span": {
                             "start": 73,
-                            "end": 76
+                            "end": 76,
+                            "start_line": 1,
+                            "start_col": 73
                           }
                         },
                         {
@@ -150,27 +174,35 @@ min_php=8.3
                               "kind": "Unqualified",
                               "span": {
                                 "start": 77,
-                                "end": 81
+                                "end": 81,
+                                "start_line": 1,
+                                "start_col": 77
                               }
                             }
                           },
                           "span": {
                             "start": 77,
-                            "end": 81
+                            "end": 81,
+                            "start_line": 1,
+                            "start_col": 77
                           }
                         }
                       ]
                     },
                     "span": {
                       "start": 69,
-                      "end": 81
+                      "end": 81,
+                      "start_line": 1,
+                      "start_col": 69
                     }
                   },
                   "value": {
                     "kind": "Null",
                     "span": {
                       "start": 86,
-                      "end": 90
+                      "end": 90,
+                      "start_line": 1,
+                      "start_col": 86
                     }
                   },
                   "attributes": []
@@ -178,7 +210,9 @@ min_php=8.3
               },
               "span": {
                 "start": 63,
-                "end": 92
+                "end": 92,
+                "start_line": 1,
+                "start_col": 63
               }
             }
           ],
@@ -187,12 +221,16 @@ min_php=8.3
       },
       "span": {
         "start": 6,
-        "end": 93
+        "end": 93,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 93
+    "end": 93,
+    "start_line": 1,
+    "start_col": 0
   }
 }

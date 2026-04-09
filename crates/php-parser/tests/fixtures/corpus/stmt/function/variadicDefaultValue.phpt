@@ -18,7 +18,9 @@ function foo(...$foo = []) {}
                 },
                 "span": {
                   "start": 29,
-                  "end": 31
+                  "end": 31,
+                  "start_line": 2,
+                  "start_col": 23
                 }
               },
               "by_ref": false,
@@ -30,7 +32,9 @@ function foo(...$foo = []) {}
               "attributes": [],
               "span": {
                 "start": 19,
-                "end": 31
+                "end": 31,
+                "start_line": 2,
+                "start_col": 13
               }
             }
           ],
@@ -42,12 +46,16 @@ function foo(...$foo = []) {}
       },
       "span": {
         "start": 6,
-        "end": 35
+        "end": 35,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 35
+    "end": 35,
+    "start_line": 1,
+    "start_col": 0
   }
 }

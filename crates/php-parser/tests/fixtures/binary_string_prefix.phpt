@@ -17,7 +17,9 @@ $c = B"case insensitive";
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -27,20 +29,26 @@ $c = B"case insensitive";
                 },
                 "span": {
                   "start": 11,
-                  "end": 27
+                  "end": 27,
+                  "start_line": 2,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 27
+            "end": 27,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 29
+        "end": 29,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -54,7 +62,9 @@ $c = B"case insensitive";
                 },
                 "span": {
                   "start": 29,
-                  "end": 31
+                  "end": 31,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -64,20 +74,26 @@ $c = B"case insensitive";
                 },
                 "span": {
                   "start": 34,
-                  "end": 50
+                  "end": 50,
+                  "start_line": 3,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 29,
-            "end": 50
+            "end": 50,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 29,
-        "end": 52
+        "end": 52,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -91,7 +107,9 @@ $c = B"case insensitive";
                 },
                 "span": {
                   "start": 52,
-                  "end": 54
+                  "end": 54,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -101,25 +119,33 @@ $c = B"case insensitive";
                 },
                 "span": {
                   "start": 57,
-                  "end": 76
+                  "end": 76,
+                  "start_line": 4,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 52,
-            "end": 76
+            "end": 76,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 52,
-        "end": 77
+        "end": 77,
+        "start_line": 4,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 77
+    "end": 77,
+    "start_line": 1,
+    "start_col": 0
   }
 }

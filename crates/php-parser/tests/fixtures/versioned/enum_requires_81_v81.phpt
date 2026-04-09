@@ -22,7 +22,9 @@ parse_version=8.1
               },
               "span": {
                 "start": 20,
-                "end": 33
+                "end": 33,
+                "start_line": 1,
+                "start_col": 20
               }
             },
             {
@@ -35,7 +37,9 @@ parse_version=8.1
               },
               "span": {
                 "start": 33,
-                "end": 48
+                "end": 48,
+                "start_line": 1,
+                "start_col": 33
               }
             }
           ],
@@ -44,12 +48,16 @@ parse_version=8.1
       },
       "span": {
         "start": 6,
-        "end": 49
+        "end": 49,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 49
+    "end": 49,
+    "start_line": 1,
+    "start_col": 0
   }
 }

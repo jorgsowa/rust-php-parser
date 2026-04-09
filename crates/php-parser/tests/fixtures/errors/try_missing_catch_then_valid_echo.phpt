@@ -20,7 +20,9 @@ expected catch or finally clause, found 'echo'
                         },
                         "span": {
                           "start": 12,
-                          "end": 14
+                          "end": 14,
+                          "start_line": 1,
+                          "start_col": 12
                         }
                       },
                       "op": "Assign",
@@ -30,20 +32,26 @@ expected catch or finally clause, found 'echo'
                         },
                         "span": {
                           "start": 17,
-                          "end": 18
+                          "end": 18,
+                          "start_line": 1,
+                          "start_col": 17
                         }
                       }
                     }
                   },
                   "span": {
                     "start": 12,
-                    "end": 18
+                    "end": 18,
+                    "start_line": 1,
+                    "start_col": 12
                   }
                 }
               },
               "span": {
                 "start": 12,
-                "end": 20
+                "end": 20,
+                "start_line": 1,
+                "start_col": 12
               }
             }
           ],
@@ -53,7 +61,9 @@ expected catch or finally clause, found 'echo'
       },
       "span": {
         "start": 6,
-        "end": 22
+        "end": 22,
+        "start_line": 1,
+        "start_col": 6
       }
     },
     {
@@ -65,19 +75,25 @@ expected catch or finally clause, found 'echo'
             },
             "span": {
               "start": 27,
-              "end": 34
+              "end": 34,
+              "start_line": 1,
+              "start_col": 27
             }
           }
         ]
       },
       "span": {
         "start": 22,
-        "end": 35
+        "end": 35,
+        "start_line": 1,
+        "start_col": 22
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 35
+    "end": 35,
+    "start_line": 1,
+    "start_col": 0
   }
 }

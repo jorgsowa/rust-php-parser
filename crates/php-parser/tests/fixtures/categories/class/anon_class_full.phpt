@@ -14,7 +14,9 @@
                 },
                 "span": {
                   "start": 6,
-                  "end": 10
+                  "end": 10,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "op": "Assign",
@@ -37,7 +39,9 @@
                             "kind": "Unqualified",
                             "span": {
                               "start": 34,
-                              "end": 39
+                              "end": 39,
+                              "start_line": 1,
+                              "start_col": 34
                             }
                           },
                           "implements": [
@@ -48,7 +52,9 @@
                               "kind": "Unqualified",
                               "span": {
                                 "start": 50,
-                                "end": 56
+                                "end": 56,
+                                "start_line": 1,
+                                "start_col": 50
                               }
                             },
                             {
@@ -58,7 +64,9 @@
                               "kind": "Unqualified",
                               "span": {
                                 "start": 58,
-                                "end": 65
+                                "end": 65,
+                                "start_line": 1,
+                                "start_col": 58
                               }
                             }
                           ],
@@ -80,7 +88,9 @@
                               },
                               "span": {
                                 "start": 67,
-                                "end": 92
+                                "end": 92,
+                                "start_line": 1,
+                                "start_col": 67
                               }
                             }
                           ],
@@ -89,7 +99,9 @@
                       },
                       "span": {
                         "start": 13,
-                        "end": 93
+                        "end": 93,
+                        "start_line": 1,
+                        "start_col": 13
                       }
                     },
                     "args": [
@@ -101,14 +113,18 @@
                           },
                           "span": {
                             "start": 23,
-                            "end": 24
+                            "end": 24,
+                            "start_line": 1,
+                            "start_col": 23
                           }
                         },
                         "unpack": false,
                         "by_ref": false,
                         "span": {
                           "start": 23,
-                          "end": 24
+                          "end": 24,
+                          "start_line": 1,
+                          "start_col": 23
                         }
                       }
                     ]
@@ -116,25 +132,33 @@
                 },
                 "span": {
                   "start": 13,
-                  "end": 93
+                  "end": 93,
+                  "start_line": 1,
+                  "start_col": 13
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 93
+            "end": 93,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 94
+        "end": 94,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 94
+    "end": 94,
+    "start_line": 1,
+    "start_col": 0
   }
 }

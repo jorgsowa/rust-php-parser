@@ -30,13 +30,17 @@ function combined() {
                                 },
                                 "span": {
                                   "start": 44,
-                                  "end": 45
+                                  "end": 45,
+                                  "start_line": 3,
+                                  "start_col": 16
                                 }
                               },
                               "unpack": false,
                               "span": {
                                 "start": 44,
-                                "end": 45
+                                "end": 45,
+                                "start_line": 3,
+                                "start_col": 16
                               }
                             },
                             {
@@ -47,13 +51,17 @@ function combined() {
                                 },
                                 "span": {
                                   "start": 47,
-                                  "end": 48
+                                  "end": 48,
+                                  "start_line": 3,
+                                  "start_col": 19
                                 }
                               },
                               "unpack": false,
                               "span": {
                                 "start": 47,
-                                "end": 48
+                                "end": 48,
+                                "start_line": 3,
+                                "start_col": 19
                               }
                             },
                             {
@@ -64,20 +72,26 @@ function combined() {
                                 },
                                 "span": {
                                   "start": 50,
-                                  "end": 51
+                                  "end": 51,
+                                  "start_line": 3,
+                                  "start_col": 22
                                 }
                               },
                               "unpack": false,
                               "span": {
                                 "start": 50,
-                                "end": 51
+                                "end": 51,
+                                "start_line": 3,
+                                "start_col": 22
                               }
                             }
                           ]
                         },
                         "span": {
                           "start": 43,
-                          "end": 52
+                          "end": 52,
+                          "start_line": 3,
+                          "start_col": 15
                         }
                       },
                       "is_from": true
@@ -85,13 +99,17 @@ function combined() {
                   },
                   "span": {
                     "start": 32,
-                    "end": 52
+                    "end": 52,
+                    "start_line": 3,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 32,
-                "end": 58
+                "end": 58,
+                "start_line": 3,
+                "start_col": 4
               }
             },
             {
@@ -109,7 +127,9 @@ function combined() {
                               },
                               "span": {
                                 "start": 69,
-                                "end": 83
+                                "end": 83,
+                                "start_line": 4,
+                                "start_col": 15
                               }
                             },
                             "args": []
@@ -117,7 +137,9 @@ function combined() {
                         },
                         "span": {
                           "start": 69,
-                          "end": 85
+                          "end": 85,
+                          "start_line": 4,
+                          "start_col": 15
                         }
                       },
                       "is_from": true
@@ -125,13 +147,17 @@ function combined() {
                   },
                   "span": {
                     "start": 58,
-                    "end": 85
+                    "end": 85,
+                    "start_line": 4,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 58,
-                "end": 87
+                "end": 87,
+                "start_line": 4,
+                "start_col": 4
               }
             }
           ],
@@ -142,12 +168,16 @@ function combined() {
       },
       "span": {
         "start": 6,
-        "end": 88
+        "end": 88,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 88
+    "end": 88,
+    "start_line": 1,
+    "start_col": 0
   }
 }

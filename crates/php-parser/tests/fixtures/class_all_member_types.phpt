@@ -51,7 +51,9 @@ abstract class Complete {
                       "kind": "Unqualified",
                       "span": {
                         "start": 40,
-                        "end": 49
+                        "end": 49,
+                        "start_line": 3,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -60,7 +62,9 @@ abstract class Complete {
               },
               "span": {
                 "start": 36,
-                "end": 56
+                "end": 56,
+                "start_line": 3,
+                "start_col": 4
               }
             },
             {
@@ -74,7 +78,9 @@ abstract class Complete {
                     },
                     "span": {
                       "start": 75,
-                      "end": 78
+                      "end": 78,
+                      "start_line": 5,
+                      "start_col": 23
                     }
                   },
                   "attributes": []
@@ -82,7 +88,9 @@ abstract class Complete {
               },
               "span": {
                 "start": 56,
-                "end": 84
+                "end": 84,
+                "start_line": 5,
+                "start_col": 4
               }
             },
             {
@@ -96,7 +104,9 @@ abstract class Complete {
                     },
                     "span": {
                       "start": 106,
-                      "end": 107
+                      "end": 107,
+                      "start_line": 6,
+                      "start_col": 26
                     }
                   },
                   "attributes": []
@@ -104,7 +114,9 @@ abstract class Complete {
               },
               "span": {
                 "start": 84,
-                "end": 114
+                "end": 114,
+                "start_line": 6,
+                "start_col": 4
               }
             },
             {
@@ -124,13 +136,17 @@ abstract class Complete {
                         "kind": "Unqualified",
                         "span": {
                           "start": 121,
-                          "end": 127
+                          "end": 127,
+                          "start_line": 8,
+                          "start_col": 11
                         }
                       }
                     },
                     "span": {
                       "start": 121,
-                      "end": 127
+                      "end": 127,
+                      "start_line": 8,
+                      "start_col": 11
                     }
                   },
                   "default": null,
@@ -139,7 +155,9 @@ abstract class Complete {
               },
               "span": {
                 "start": 114,
-                "end": 133
+                "end": 133,
+                "start_line": 8,
+                "start_col": 4
               }
             },
             {
@@ -159,13 +177,17 @@ abstract class Complete {
                         "kind": "Unqualified",
                         "span": {
                           "start": 149,
-                          "end": 152
+                          "end": 152,
+                          "start_line": 9,
+                          "start_col": 14
                         }
                       }
                     },
                     "span": {
                       "start": 149,
-                      "end": 152
+                      "end": 152,
+                      "start_line": 9,
+                      "start_col": 14
                     }
                   },
                   "default": {
@@ -174,7 +196,9 @@ abstract class Complete {
                     },
                     "span": {
                       "start": 160,
-                      "end": 161
+                      "end": 161,
+                      "start_line": 9,
+                      "start_col": 25
                     }
                   },
                   "attributes": []
@@ -182,7 +206,9 @@ abstract class Complete {
               },
               "span": {
                 "start": 139,
-                "end": 161
+                "end": 161,
+                "start_line": 9,
+                "start_col": 4
               }
             },
             {
@@ -202,13 +228,17 @@ abstract class Complete {
                         "kind": "Unqualified",
                         "span": {
                           "start": 182,
-                          "end": 187
+                          "end": 187,
+                          "start_line": 10,
+                          "start_col": 19
                         }
                       }
                     },
                     "span": {
                       "start": 182,
-                      "end": 187
+                      "end": 187,
+                      "start_line": 10,
+                      "start_col": 19
                     }
                   },
                   "default": {
@@ -217,7 +247,9 @@ abstract class Complete {
                     },
                     "span": {
                       "start": 201,
-                      "end": 203
+                      "end": 203,
+                      "start_line": 10,
+                      "start_col": 38
                     }
                   },
                   "attributes": []
@@ -225,7 +257,9 @@ abstract class Complete {
               },
               "span": {
                 "start": 167,
-                "end": 203
+                "end": 203,
+                "start_line": 10,
+                "start_col": 4
               }
             },
             {
@@ -245,13 +279,17 @@ abstract class Complete {
                         "kind": "Unqualified",
                         "span": {
                           "start": 225,
-                          "end": 231
+                          "end": 231,
+                          "start_line": 11,
+                          "start_col": 20
                         }
                       }
                     },
                     "span": {
                       "start": 225,
-                      "end": 231
+                      "end": 231,
+                      "start_line": 11,
+                      "start_col": 20
                     }
                   },
                   "default": null,
@@ -260,7 +298,9 @@ abstract class Complete {
               },
               "span": {
                 "start": 209,
-                "end": 235
+                "end": 235,
+                "start_line": 11,
+                "start_col": 4
               }
             },
             {
@@ -284,13 +324,17 @@ abstract class Complete {
                             "kind": "Unqualified",
                             "span": {
                               "start": 270,
-                              "end": 276
+                              "end": 276,
+                              "start_line": 13,
+                              "start_col": 32
                             }
                           }
                         },
                         "span": {
                           "start": 270,
-                          "end": 276
+                          "end": 276,
+                          "start_line": 13,
+                          "start_col": 32
                         }
                       },
                       "default": null,
@@ -303,7 +347,9 @@ abstract class Complete {
                       "attributes": [],
                       "span": {
                         "start": 270,
-                        "end": 282
+                        "end": 282,
+                        "start_line": 13,
+                        "start_col": 32
                       }
                     },
                     {
@@ -317,13 +363,17 @@ abstract class Complete {
                             "kind": "Unqualified",
                             "span": {
                               "start": 300,
-                              "end": 303
+                              "end": 303,
+                              "start_line": 13,
+                              "start_col": 62
                             }
                           }
                         },
                         "span": {
                           "start": 300,
-                          "end": 303
+                          "end": 303,
+                          "start_line": 13,
+                          "start_col": 62
                         }
                       },
                       "default": null,
@@ -336,7 +386,9 @@ abstract class Complete {
                       "attributes": [],
                       "span": {
                         "start": 284,
-                        "end": 310
+                        "end": 310,
+                        "start_line": 13,
+                        "start_col": 46
                       }
                     }
                   ],
@@ -356,7 +408,9 @@ abstract class Complete {
                                       },
                                       "span": {
                                         "start": 322,
-                                        "end": 327
+                                        "end": 327,
+                                        "start_line": 14,
+                                        "start_col": 8
                                       }
                                     },
                                     "property": {
@@ -365,14 +419,18 @@ abstract class Complete {
                                       },
                                       "span": {
                                         "start": 329,
-                                        "end": 333
+                                        "end": 333,
+                                        "start_line": 14,
+                                        "start_col": 15
                                       }
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 322,
-                                  "end": 333
+                                  "end": 333,
+                                  "start_line": 14,
+                                  "start_col": 8
                                 }
                               },
                               "op": "Assign",
@@ -382,20 +440,26 @@ abstract class Complete {
                                 },
                                 "span": {
                                   "start": 336,
-                                  "end": 341
+                                  "end": 341,
+                                  "start_line": 14,
+                                  "start_col": 22
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 322,
-                            "end": 341
+                            "end": 341,
+                            "start_line": 14,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 322,
-                        "end": 347
+                        "end": 347,
+                        "start_line": 14,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -404,7 +468,9 @@ abstract class Complete {
               },
               "span": {
                 "start": 242,
-                "end": 354
+                "end": 354,
+                "start_line": 13,
+                "start_col": 4
               }
             },
             {
@@ -426,13 +492,17 @@ abstract class Complete {
                         "kind": "Unqualified",
                         "span": {
                           "start": 387,
-                          "end": 391
+                          "end": 391,
+                          "start_line": 17,
+                          "start_col": 37
                         }
                       }
                     },
                     "span": {
                       "start": 387,
-                      "end": 391
+                      "end": 391,
+                      "start_line": 17,
+                      "start_col": 37
                     }
                   },
                   "body": [
@@ -447,7 +517,9 @@ abstract class Complete {
                                 },
                                 "span": {
                                   "start": 413,
-                                  "end": 417
+                                  "end": 417,
+                                  "start_line": 18,
+                                  "start_col": 19
                                 }
                               },
                               "args": [
@@ -459,14 +531,18 @@ abstract class Complete {
                                     },
                                     "span": {
                                       "start": 418,
-                                      "end": 427
+                                      "end": 427,
+                                      "start_line": 18,
+                                      "start_col": 24
                                     }
                                   },
                                   "unpack": false,
                                   "by_ref": false,
                                   "span": {
                                     "start": 418,
-                                    "end": 427
+                                    "end": 427,
+                                    "start_line": 18,
+                                    "start_col": 24
                                   }
                                 }
                               ]
@@ -474,13 +550,17 @@ abstract class Complete {
                           },
                           "span": {
                             "start": 409,
-                            "end": 428
+                            "end": 428,
+                            "start_line": 18,
+                            "start_col": 15
                           }
                         }
                       },
                       "span": {
                         "start": 402,
-                        "end": 434
+                        "end": 434,
+                        "start_line": 18,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -489,7 +569,9 @@ abstract class Complete {
               },
               "span": {
                 "start": 354,
-                "end": 441
+                "end": 441,
+                "start_line": 17,
+                "start_col": 4
               }
             },
             {
@@ -511,13 +593,17 @@ abstract class Complete {
                         "kind": "Unqualified",
                         "span": {
                           "start": 481,
-                          "end": 485
+                          "end": 485,
+                          "start_line": 21,
+                          "start_col": 44
                         }
                       }
                     },
                     "span": {
                       "start": 481,
-                      "end": 485
+                      "end": 485,
+                      "start_line": 21,
+                      "start_col": 44
                     }
                   },
                   "body": null,
@@ -526,7 +612,9 @@ abstract class Complete {
               },
               "span": {
                 "start": 441,
-                "end": 492
+                "end": 492,
+                "start_line": 21,
+                "start_col": 4
               }
             },
             {
@@ -548,13 +636,17 @@ abstract class Complete {
                         "kind": "Unqualified",
                         "span": {
                           "start": 523,
-                          "end": 529
+                          "end": 529,
+                          "start_line": 23,
+                          "start_col": 35
                         }
                       }
                     },
                     "span": {
                       "start": 523,
-                      "end": 529
+                      "end": 529,
+                      "start_line": 23,
+                      "start_col": 35
                     }
                   },
                   "body": [
@@ -569,7 +661,9 @@ abstract class Complete {
                                 },
                                 "span": {
                                   "start": 547,
-                                  "end": 552
+                                  "end": 552,
+                                  "start_line": 24,
+                                  "start_col": 15
                                 }
                               },
                               "property": {
@@ -578,20 +672,26 @@ abstract class Complete {
                                 },
                                 "span": {
                                   "start": 554,
-                                  "end": 556
+                                  "end": 556,
+                                  "start_line": 24,
+                                  "start_col": 22
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 547,
-                            "end": 556
+                            "end": 556,
+                            "start_line": 24,
+                            "start_col": 15
                           }
                         }
                       },
                       "span": {
                         "start": 540,
-                        "end": 562
+                        "end": 562,
+                        "start_line": 24,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -600,7 +700,9 @@ abstract class Complete {
               },
               "span": {
                 "start": 492,
-                "end": 564
+                "end": 564,
+                "start_line": 23,
+                "start_col": 4
               }
             }
           ],
@@ -609,12 +711,16 @@ abstract class Complete {
       },
       "span": {
         "start": 15,
-        "end": 565
+        "end": 565,
+        "start_line": 2,
+        "start_col": 9
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 565
+    "end": 565,
+    "start_line": 1,
+    "start_col": 0
   }
 }

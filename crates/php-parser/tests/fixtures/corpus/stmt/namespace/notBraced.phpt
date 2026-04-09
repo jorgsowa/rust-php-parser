@@ -20,7 +20,9 @@ bar;
             "kind": "Qualified",
             "span": {
               "start": 17,
-              "end": 24
+              "end": 24,
+              "start_line": 3,
+              "start_col": 10
             }
           },
           "body": "Simple"
@@ -28,7 +30,9 @@ bar;
       },
       "span": {
         "start": 7,
-        "end": 26
+        "end": 26,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -39,13 +43,17 @@ bar;
           },
           "span": {
             "start": 26,
-            "end": 29
+            "end": 29,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 26,
-        "end": 32
+        "end": 32,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -58,7 +66,9 @@ bar;
             "kind": "Unqualified",
             "span": {
               "start": 42,
-              "end": 45
+              "end": 45,
+              "start_line": 6,
+              "start_col": 10
             }
           },
           "body": "Simple"
@@ -66,7 +76,9 @@ bar;
       },
       "span": {
         "start": 32,
-        "end": 47
+        "end": 47,
+        "start_line": 6,
+        "start_col": 0
       }
     },
     {
@@ -77,18 +89,24 @@ bar;
           },
           "span": {
             "start": 47,
-            "end": 50
+            "end": 50,
+            "start_line": 7,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 47,
-        "end": 51
+        "end": 51,
+        "start_line": 7,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 51
+    "end": 51,
+    "start_line": 1,
+    "start_col": 0
   }
 }

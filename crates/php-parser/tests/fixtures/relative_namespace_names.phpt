@@ -18,7 +18,9 @@ echo namespace\SOME_CONST;
             "kind": "Qualified",
             "span": {
               "start": 16,
-              "end": 28
+              "end": 28,
+              "start_line": 2,
+              "start_col": 10
             }
           },
           "body": "Simple"
@@ -26,7 +28,9 @@ echo namespace\SOME_CONST;
       },
       "span": {
         "start": 6,
-        "end": 30
+        "end": 30,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -40,7 +44,9 @@ echo namespace\SOME_CONST;
                 },
                 "span": {
                   "start": 30,
-                  "end": 34
+                  "end": 34,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -53,7 +59,9 @@ echo namespace\SOME_CONST;
                       },
                       "span": {
                         "start": 41,
-                        "end": 58
+                        "end": 58,
+                        "start_line": 3,
+                        "start_col": 11
                       }
                     },
                     "args": []
@@ -61,20 +69,26 @@ echo namespace\SOME_CONST;
                 },
                 "span": {
                   "start": 37,
-                  "end": 60
+                  "end": 60,
+                  "start_line": 3,
+                  "start_col": 7
                 }
               }
             }
           },
           "span": {
             "start": 30,
-            "end": 60
+            "end": 60,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 30,
-        "end": 62
+        "end": 62,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -88,7 +102,9 @@ echo namespace\SOME_CONST;
                 },
                 "span": {
                   "start": 62,
-                  "end": 83
+                  "end": 83,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "args": []
@@ -96,13 +112,17 @@ echo namespace\SOME_CONST;
           },
           "span": {
             "start": 62,
-            "end": 85
+            "end": 85,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 62,
-        "end": 87
+        "end": 87,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -114,19 +134,25 @@ echo namespace\SOME_CONST;
             },
             "span": {
               "start": 92,
-              "end": 112
+              "end": 112,
+              "start_line": 5,
+              "start_col": 5
             }
           }
         ]
       },
       "span": {
         "start": 87,
-        "end": 113
+        "end": 113,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 113
+    "end": 113,
+    "start_line": 1,
+    "start_col": 0
   }
 }

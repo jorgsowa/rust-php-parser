@@ -36,13 +36,17 @@ abstract method cannot contain a body
                         "kind": "Unqualified",
                         "span": {
                           "start": 59,
-                          "end": 65
+                          "end": 65,
+                          "start_line": 1,
+                          "start_col": 59
                         }
                       }
                     },
                     "span": {
                       "start": 59,
-                      "end": 65
+                      "end": 65,
+                      "start_line": 1,
+                      "start_col": 59
                     }
                   },
                   "body": [
@@ -54,13 +58,17 @@ abstract method cannot contain a body
                           },
                           "span": {
                             "start": 75,
-                            "end": 77
+                            "end": 77,
+                            "start_line": 1,
+                            "start_col": 75
                           }
                         }
                       },
                       "span": {
                         "start": 68,
-                        "end": 79
+                        "end": 79,
+                        "start_line": 1,
+                        "start_col": 68
                       }
                     }
                   ],
@@ -69,7 +77,9 @@ abstract method cannot contain a body
               },
               "span": {
                 "start": 27,
-                "end": 81
+                "end": 81,
+                "start_line": 1,
+                "start_col": 27
               }
             }
           ],
@@ -78,12 +88,16 @@ abstract method cannot contain a body
       },
       "span": {
         "start": 15,
-        "end": 82
+        "end": 82,
+        "start_line": 1,
+        "start_col": 15
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 82
+    "end": 82,
+    "start_line": 1,
+    "start_col": 0
   }
 }

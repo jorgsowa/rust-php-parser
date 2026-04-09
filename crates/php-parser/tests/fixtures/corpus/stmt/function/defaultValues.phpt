@@ -27,7 +27,9 @@ function a(
                 "kind": "Null",
                 "span": {
                   "start": 28,
-                  "end": 32
+                  "end": 32,
+                  "start_line": 4,
+                  "start_col": 9
                 }
               },
               "by_ref": false,
@@ -39,7 +41,9 @@ function a(
               "attributes": [],
               "span": {
                 "start": 23,
-                "end": 32
+                "end": 32,
+                "start_line": 4,
+                "start_col": 4
               }
             },
             {
@@ -51,7 +55,9 @@ function a(
                 },
                 "span": {
                   "start": 43,
-                  "end": 48
+                  "end": 48,
+                  "start_line": 5,
+                  "start_col": 9
                 }
               },
               "by_ref": false,
@@ -63,7 +69,9 @@ function a(
               "attributes": [],
               "span": {
                 "start": 38,
-                "end": 48
+                "end": 48,
+                "start_line": 5,
+                "start_col": 4
               }
             },
             {
@@ -78,7 +86,9 @@ function a(
                       },
                       "span": {
                         "start": 59,
-                        "end": 60
+                        "end": 60,
+                        "start_line": 6,
+                        "start_col": 9
                       }
                     },
                     "member": "B"
@@ -86,7 +96,9 @@ function a(
                 },
                 "span": {
                   "start": 59,
-                  "end": 63
+                  "end": 63,
+                  "start_line": 6,
+                  "start_col": 9
                 }
               },
               "by_ref": false,
@@ -98,7 +110,9 @@ function a(
               "attributes": [],
               "span": {
                 "start": 54,
-                "end": 63
+                "end": 63,
+                "start_line": 6,
+                "start_col": 4
               }
             },
             {
@@ -114,14 +128,18 @@ function a(
                       },
                       "span": {
                         "start": 75,
-                        "end": 76
+                        "end": 76,
+                        "start_line": 7,
+                        "start_col": 10
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 74,
-                  "end": 76
+                  "end": 76,
+                  "start_line": 7,
+                  "start_col": 9
                 }
               },
               "by_ref": false,
@@ -133,7 +151,9 @@ function a(
               "attributes": [],
               "span": {
                 "start": 69,
-                "end": 76
+                "end": 76,
+                "start_line": 7,
+                "start_col": 4
               }
             },
             {
@@ -149,14 +169,18 @@ function a(
                       },
                       "span": {
                         "start": 88,
-                        "end": 91
+                        "end": 91,
+                        "start_line": 8,
+                        "start_col": 10
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 87,
-                  "end": 91
+                  "end": 91,
+                  "start_line": 8,
+                  "start_col": 9
                 }
               },
               "by_ref": false,
@@ -168,7 +192,9 @@ function a(
               "attributes": [],
               "span": {
                 "start": 82,
-                "end": 91
+                "end": 91,
+                "start_line": 8,
+                "start_col": 4
               }
             },
             {
@@ -180,7 +206,9 @@ function a(
                 },
                 "span": {
                   "start": 102,
-                  "end": 109
+                  "end": 109,
+                  "start_line": 9,
+                  "start_col": 9
                 }
               },
               "by_ref": false,
@@ -192,7 +220,9 @@ function a(
               "attributes": [],
               "span": {
                 "start": 97,
-                "end": 109
+                "end": 109,
+                "start_line": 9,
+                "start_col": 4
               }
             },
             {
@@ -204,7 +234,9 @@ function a(
                 },
                 "span": {
                   "start": 120,
-                  "end": 122
+                  "end": 122,
+                  "start_line": 10,
+                  "start_col": 9
                 }
               },
               "by_ref": false,
@@ -216,7 +248,9 @@ function a(
               "attributes": [],
               "span": {
                 "start": 115,
-                "end": 122
+                "end": 122,
+                "start_line": 10,
+                "start_col": 4
               }
             },
             {
@@ -233,20 +267,26 @@ function a(
                         },
                         "span": {
                           "start": 134,
-                          "end": 139
+                          "end": 139,
+                          "start_line": 11,
+                          "start_col": 10
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 134,
-                        "end": 139
+                        "end": 139,
+                        "start_line": 11,
+                        "start_col": 10
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 133,
-                  "end": 140
+                  "end": 140,
+                  "start_line": 11,
+                  "start_col": 9
                 }
               },
               "by_ref": false,
@@ -258,7 +298,9 @@ function a(
               "attributes": [],
               "span": {
                 "start": 128,
-                "end": 140
+                "end": 140,
+                "start_line": 11,
+                "start_col": 4
               }
             },
             {
@@ -275,13 +317,17 @@ function a(
                         },
                         "span": {
                           "start": 152,
-                          "end": 157
+                          "end": 157,
+                          "start_line": 12,
+                          "start_col": 10
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 152,
-                        "end": 157
+                        "end": 157,
+                        "start_line": 12,
+                        "start_col": 10
                       }
                     },
                     {
@@ -291,7 +337,9 @@ function a(
                         },
                         "span": {
                           "start": 159,
-                          "end": 164
+                          "end": 164,
+                          "start_line": 12,
+                          "start_col": 17
                         }
                       },
                       "value": {
@@ -300,20 +348,26 @@ function a(
                         },
                         "span": {
                           "start": 168,
-                          "end": 173
+                          "end": 173,
+                          "start_line": 12,
+                          "start_col": 26
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 159,
-                        "end": 173
+                        "end": 173,
+                        "start_line": 12,
+                        "start_col": 17
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 151,
-                  "end": 174
+                  "end": 174,
+                  "start_line": 12,
+                  "start_col": 9
                 }
               },
               "by_ref": false,
@@ -325,7 +379,9 @@ function a(
               "attributes": [],
               "span": {
                 "start": 146,
-                "end": 174
+                "end": 174,
+                "start_line": 12,
+                "start_col": 4
               }
             }
           ],
@@ -337,12 +393,16 @@ function a(
       },
       "span": {
         "start": 7,
-        "end": 179
+        "end": 179,
+        "start_line": 3,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 179
+    "end": 179,
+    "start_line": 1,
+    "start_col": 0
   }
 }

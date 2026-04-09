@@ -25,7 +25,9 @@ enum Direction implements HasLabel {
               "kind": "Unqualified",
               "span": {
                 "start": 32,
-                "end": 41
+                "end": 41,
+                "start_line": 2,
+                "start_col": 26
               }
             }
           ],
@@ -41,7 +43,9 @@ enum Direction implements HasLabel {
                       "kind": "Unqualified",
                       "span": {
                         "start": 51,
-                        "end": 61
+                        "end": 61,
+                        "start_line": 3,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -50,7 +54,9 @@ enum Direction implements HasLabel {
               },
               "span": {
                 "start": 47,
-                "end": 67
+                "end": 67,
+                "start_line": 3,
+                "start_col": 4
               }
             },
             {
@@ -63,7 +69,9 @@ enum Direction implements HasLabel {
               },
               "span": {
                 "start": 67,
-                "end": 83
+                "end": 83,
+                "start_line": 4,
+                "start_col": 4
               }
             },
             {
@@ -76,7 +84,9 @@ enum Direction implements HasLabel {
               },
               "span": {
                 "start": 83,
-                "end": 99
+                "end": 99,
+                "start_line": 5,
+                "start_col": 4
               }
             },
             {
@@ -89,7 +99,9 @@ enum Direction implements HasLabel {
               },
               "span": {
                 "start": 99,
-                "end": 114
+                "end": 114,
+                "start_line": 6,
+                "start_col": 4
               }
             },
             {
@@ -102,7 +114,9 @@ enum Direction implements HasLabel {
               },
               "span": {
                 "start": 114,
-                "end": 125
+                "end": 125,
+                "start_line": 7,
+                "start_col": 4
               }
             }
           ],
@@ -111,12 +125,16 @@ enum Direction implements HasLabel {
       },
       "span": {
         "start": 6,
-        "end": 126
+        "end": 126,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 126
+    "end": 126,
+    "start_line": 1,
+    "start_col": 0
   }
 }

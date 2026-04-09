@@ -34,7 +34,9 @@ EOT;
                 },
                 "span": {
                   "start": 23,
-                  "end": 28
+                  "end": 28,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -51,20 +53,26 @@ EOT;
                 },
                 "span": {
                   "start": 31,
-                  "end": 53
+                  "end": 53,
+                  "start_line": 3,
+                  "start_col": 8
                 }
               }
             }
           },
           "span": {
             "start": 23,
-            "end": 53
+            "end": 53,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 23,
-        "end": 86
+        "end": 86,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -78,7 +86,9 @@ EOT;
                 },
                 "span": {
                   "start": 86,
-                  "end": 91
+                  "end": 91,
+                  "start_line": 8,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -88,20 +98,26 @@ EOT;
                 },
                 "span": {
                   "start": 94,
-                  "end": 99
+                  "end": 99,
+                  "start_line": 8,
+                  "start_col": 8
                 }
               }
             }
           },
           "span": {
             "start": 86,
-            "end": 99
+            "end": 99,
+            "start_line": 8,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 86,
-        "end": 101
+        "end": 101,
+        "start_line": 8,
+        "start_col": 0
       }
     },
     {
@@ -115,7 +131,9 @@ EOT;
                 },
                 "span": {
                   "start": 101,
-                  "end": 105
+                  "end": 105,
+                  "start_line": 9,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -134,7 +152,9 @@ EOT;
                           },
                           "span": {
                             "start": 121,
-                            "end": 126
+                            "end": 126,
+                            "start_line": 10,
+                            "start_col": 6
                           }
                         }
                       },
@@ -146,20 +166,26 @@ EOT;
                 },
                 "span": {
                   "start": 108,
-                  "end": 131
+                  "end": 131,
+                  "start_line": 9,
+                  "start_col": 7
                 }
               }
             }
           },
           "span": {
             "start": 101,
-            "end": 131
+            "end": 131,
+            "start_line": 9,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 101,
-        "end": 163
+        "end": 163,
+        "start_line": 9,
+        "start_col": 0
       }
     },
     {
@@ -173,7 +199,9 @@ EOT;
                 },
                 "span": {
                   "start": 163,
-                  "end": 167
+                  "end": 167,
+                  "start_line": 14,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -186,20 +214,26 @@ EOT;
                 },
                 "span": {
                   "start": 170,
-                  "end": 195
+                  "end": 195,
+                  "start_line": 14,
+                  "start_col": 7
                 }
               }
             }
           },
           "span": {
             "start": 163,
-            "end": 195
+            "end": 195,
+            "start_line": 14,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 163,
-        "end": 231
+        "end": 231,
+        "start_line": 14,
+        "start_col": 0
       }
     },
     {
@@ -218,19 +252,25 @@ EOT;
             },
             "span": {
               "start": 236,
-              "end": 253
+              "end": 253,
+              "start_line": 19,
+              "start_col": 5
             }
           }
         ]
       },
       "span": {
         "start": 231,
-        "end": 254
+        "end": 254,
+        "start_line": 19,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 254
+    "end": 254,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -16,7 +16,9 @@ class User {}
             "kind": "Qualified",
             "span": {
               "start": 16,
-              "end": 26
+              "end": 26,
+              "start_line": 2,
+              "start_col": 10
             }
           },
           "body": "Simple"
@@ -24,7 +26,9 @@ class User {}
       },
       "span": {
         "start": 6,
-        "end": 28
+        "end": 28,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -44,12 +48,16 @@ class User {}
       },
       "span": {
         "start": 28,
-        "end": 41
+        "end": 41,
+        "start_line": 3,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 41
+    "end": 41,
+    "start_line": 1,
+    "start_col": 0
   }
 }

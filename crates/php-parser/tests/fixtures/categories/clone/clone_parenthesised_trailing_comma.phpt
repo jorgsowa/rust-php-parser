@@ -16,7 +16,9 @@ min_php=8.5
                 },
                 "span": {
                   "start": 6,
-                  "end": 11
+                  "end": 11,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "op": "Assign",
@@ -28,31 +30,41 @@ min_php=8.5
                     },
                     "span": {
                       "start": 20,
-                      "end": 24
+                      "end": 24,
+                      "start_line": 1,
+                      "start_col": 20
                     }
                   }
                 },
                 "span": {
                   "start": 14,
-                  "end": 27
+                  "end": 27,
+                  "start_line": 1,
+                  "start_col": 14
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 27
+            "end": 27,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 28
+        "end": 28,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 28
+    "end": 28,
+    "start_line": 1,
+    "start_col": 0
   }
 }

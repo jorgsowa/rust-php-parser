@@ -20,7 +20,9 @@ $f = 1_0e1_0;
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -30,20 +32,26 @@ $f = 1_0e1_0;
                 },
                 "span": {
                   "start": 11,
-                  "end": 20
+                  "end": 20,
+                  "start_line": 2,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 20
+            "end": 20,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 22
+        "end": 22,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -57,7 +65,9 @@ $f = 1_0e1_0;
                 },
                 "span": {
                   "start": 22,
-                  "end": 24
+                  "end": 24,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -67,20 +77,26 @@ $f = 1_0e1_0;
                 },
                 "span": {
                   "start": 27,
-                  "end": 34
+                  "end": 34,
+                  "start_line": 3,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 22,
-            "end": 34
+            "end": 34,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 22,
-        "end": 36
+        "end": 36,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -94,7 +110,9 @@ $f = 1_0e1_0;
                 },
                 "span": {
                   "start": 36,
-                  "end": 38
+                  "end": 38,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -104,20 +122,26 @@ $f = 1_0e1_0;
                 },
                 "span": {
                   "start": 41,
-                  "end": 52
+                  "end": 52,
+                  "start_line": 4,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 36,
-            "end": 52
+            "end": 52,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 36,
-        "end": 54
+        "end": 54,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -131,7 +155,9 @@ $f = 1_0e1_0;
                 },
                 "span": {
                   "start": 54,
-                  "end": 56
+                  "end": 56,
+                  "start_line": 5,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -141,20 +167,26 @@ $f = 1_0e1_0;
                 },
                 "span": {
                   "start": 59,
-                  "end": 66
+                  "end": 66,
+                  "start_line": 5,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 54,
-            "end": 66
+            "end": 66,
+            "start_line": 5,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 54,
-        "end": 68
+        "end": 68,
+        "start_line": 5,
+        "start_col": 0
       }
     },
     {
@@ -168,7 +200,9 @@ $f = 1_0e1_0;
                 },
                 "span": {
                   "start": 68,
-                  "end": 70
+                  "end": 70,
+                  "start_line": 6,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -178,20 +212,26 @@ $f = 1_0e1_0;
                 },
                 "span": {
                   "start": 73,
-                  "end": 81
+                  "end": 81,
+                  "start_line": 6,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 68,
-            "end": 81
+            "end": 81,
+            "start_line": 6,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 68,
-        "end": 83
+        "end": 83,
+        "start_line": 6,
+        "start_col": 0
       }
     },
     {
@@ -205,7 +245,9 @@ $f = 1_0e1_0;
                 },
                 "span": {
                   "start": 83,
-                  "end": 85
+                  "end": 85,
+                  "start_line": 7,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -215,25 +257,33 @@ $f = 1_0e1_0;
                 },
                 "span": {
                   "start": 88,
-                  "end": 95
+                  "end": 95,
+                  "start_line": 7,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 83,
-            "end": 95
+            "end": 95,
+            "start_line": 7,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 83,
-        "end": 96
+        "end": 96,
+        "start_line": 7,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 96
+    "end": 96,
+    "start_line": 1,
+    "start_col": 0
   }
 }

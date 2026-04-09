@@ -16,7 +16,9 @@ END;
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -33,25 +35,33 @@ END;
                 },
                 "span": {
                   "start": 11,
-                  "end": 21
+                  "end": 21,
+                  "start_line": 2,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 21
+            "end": 21,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 22
+        "end": 22,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 22
+    "end": 22,
+    "start_line": 1,
+    "start_col": 0
   }
 }

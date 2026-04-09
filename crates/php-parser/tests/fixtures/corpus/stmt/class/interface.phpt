@@ -19,7 +19,9 @@ interface A extends C, D {
               "kind": "Unqualified",
               "span": {
                 "start": 27,
-                "end": 28
+                "end": 28,
+                "start_line": 3,
+                "start_col": 20
               }
             },
             {
@@ -29,7 +31,9 @@ interface A extends C, D {
               "kind": "Unqualified",
               "span": {
                 "start": 30,
-                "end": 32
+                "end": 32,
+                "start_line": 3,
+                "start_col": 23
               }
             }
           ],
@@ -51,7 +55,9 @@ interface A extends C, D {
               },
               "span": {
                 "start": 38,
-                "end": 59
+                "end": 59,
+                "start_line": 4,
+                "start_col": 4
               }
             }
           ],
@@ -60,12 +66,16 @@ interface A extends C, D {
       },
       "span": {
         "start": 7,
-        "end": 60
+        "end": 60,
+        "start_line": 3,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 60
+    "end": 60,
+    "start_line": 1,
+    "start_col": 0
   }
 }

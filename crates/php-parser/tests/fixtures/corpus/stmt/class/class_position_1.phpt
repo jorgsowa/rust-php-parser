@@ -16,14 +16,18 @@ class C {}
             },
             "span": {
               "start": 11,
-              "end": 12
+              "end": 12,
+              "start_line": 3,
+              "start_col": 4
             }
           },
           "then_branch": {
             "kind": "Nop",
             "span": {
               "start": 13,
-              "end": 14
+              "end": 14,
+              "start_line": 3,
+              "start_col": 6
             }
           },
           "elseif_branches": [],
@@ -32,7 +36,9 @@ class C {}
       },
       "span": {
         "start": 7,
-        "end": 14
+        "end": 14,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -52,12 +58,16 @@ class C {}
       },
       "span": {
         "start": 16,
-        "end": 26
+        "end": 26,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 26
+    "end": 26,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -21,13 +21,17 @@ list($x, , $z) = $array;
                         },
                         "span": {
                           "start": 11,
-                          "end": 13
+                          "end": 13,
+                          "start_line": 2,
+                          "start_col": 5
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 11,
-                        "end": 13
+                        "end": 13,
+                        "start_line": 2,
+                        "start_col": 5
                       }
                     },
                     {
@@ -38,13 +42,17 @@ list($x, , $z) = $array;
                         },
                         "span": {
                           "start": 15,
-                          "end": 17
+                          "end": 17,
+                          "start_line": 2,
+                          "start_col": 9
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 15,
-                        "end": 17
+                        "end": 17,
+                        "start_line": 2,
+                        "start_col": 9
                       }
                     },
                     {
@@ -55,20 +63,26 @@ list($x, , $z) = $array;
                         },
                         "span": {
                           "start": 19,
-                          "end": 21
+                          "end": 21,
+                          "start_line": 2,
+                          "start_col": 13
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 19,
-                        "end": 21
+                        "end": 21,
+                        "start_line": 2,
+                        "start_col": 13
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 6,
-                  "end": 22
+                  "end": 22,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -81,7 +95,9 @@ list($x, , $z) = $array;
                       },
                       "span": {
                         "start": 25,
-                        "end": 34
+                        "end": 34,
+                        "start_line": 2,
+                        "start_col": 19
                       }
                     },
                     "args": []
@@ -89,20 +105,26 @@ list($x, , $z) = $array;
                 },
                 "span": {
                   "start": 25,
-                  "end": 36
+                  "end": 36,
+                  "start_line": 2,
+                  "start_col": 19
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 36
+            "end": 36,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 38
+        "end": 38,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -121,13 +143,17 @@ list($x, , $z) = $array;
                         },
                         "span": {
                           "start": 43,
-                          "end": 45
+                          "end": 45,
+                          "start_line": 3,
+                          "start_col": 5
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 43,
-                        "end": 45
+                        "end": 45,
+                        "start_line": 3,
+                        "start_col": 5
                       }
                     },
                     {
@@ -136,13 +162,17 @@ list($x, , $z) = $array;
                         "kind": "Omit",
                         "span": {
                           "start": 47,
-                          "end": 48
+                          "end": 48,
+                          "start_line": 3,
+                          "start_col": 9
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 47,
-                        "end": 48
+                        "end": 48,
+                        "start_line": 3,
+                        "start_col": 9
                       }
                     },
                     {
@@ -153,20 +183,26 @@ list($x, , $z) = $array;
                         },
                         "span": {
                           "start": 49,
-                          "end": 51
+                          "end": 51,
+                          "start_line": 3,
+                          "start_col": 11
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 49,
-                        "end": 51
+                        "end": 51,
+                        "start_line": 3,
+                        "start_col": 11
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 38,
-                  "end": 52
+                  "end": 52,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -176,25 +212,33 @@ list($x, , $z) = $array;
                 },
                 "span": {
                   "start": 55,
-                  "end": 61
+                  "end": 61,
+                  "start_line": 3,
+                  "start_col": 17
                 }
               }
             }
           },
           "span": {
             "start": 38,
-            "end": 61
+            "end": 61,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 38,
-        "end": 62
+        "end": 62,
+        "start_line": 3,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 62
+    "end": 62,
+    "start_line": 1,
+    "start_col": 0
   }
 }

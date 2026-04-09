@@ -18,7 +18,9 @@ interface ReadWrite extends Readable, Writable {
               "kind": "Unqualified",
               "span": {
                 "start": 34,
-                "end": 42
+                "end": 42,
+                "start_line": 2,
+                "start_col": 28
               }
             },
             {
@@ -28,7 +30,9 @@ interface ReadWrite extends Readable, Writable {
               "kind": "Unqualified",
               "span": {
                 "start": 44,
-                "end": 53
+                "end": 53,
+                "start_line": 2,
+                "start_col": 38
               }
             }
           ],
@@ -52,13 +56,17 @@ interface ReadWrite extends Readable, Writable {
                         "kind": "Unqualified",
                         "span": {
                           "start": 84,
-                          "end": 88
+                          "end": 88,
+                          "start_line": 3,
+                          "start_col": 29
                         }
                       }
                     },
                     "span": {
                       "start": 84,
-                      "end": 88
+                      "end": 88,
+                      "start_line": 3,
+                      "start_col": 29
                     }
                   },
                   "body": null,
@@ -67,7 +75,9 @@ interface ReadWrite extends Readable, Writable {
               },
               "span": {
                 "start": 59,
-                "end": 90
+                "end": 90,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -76,12 +86,16 @@ interface ReadWrite extends Readable, Writable {
       },
       "span": {
         "start": 6,
-        "end": 91
+        "end": 91,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 91
+    "end": 91,
+    "start_line": 1,
+    "start_col": 0
   }
 }

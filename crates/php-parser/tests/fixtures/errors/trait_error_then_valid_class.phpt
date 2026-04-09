@@ -37,7 +37,9 @@ expected ';', found '}'
                       "attributes": [],
                       "span": {
                         "start": 32,
-                        "end": 32
+                        "end": 32,
+                        "start_line": 1,
+                        "start_col": 32
                       }
                     }
                   ],
@@ -48,7 +50,9 @@ expected ';', found '}'
               },
               "span": {
                 "start": 16,
-                "end": 32
+                "end": 32,
+                "start_line": 1,
+                "start_col": 16
               }
             }
           ],
@@ -57,7 +61,9 @@ expected ';', found '}'
       },
       "span": {
         "start": 6,
-        "end": 33
+        "end": 33,
+        "start_line": 1,
+        "start_col": 6
       }
     },
     {
@@ -83,7 +89,9 @@ expected ';', found '}'
                       "kind": "Unqualified",
                       "span": {
                         "start": 48,
-                        "end": 49
+                        "end": 49,
+                        "start_line": 1,
+                        "start_col": 48
                       }
                     }
                   ],
@@ -92,7 +100,9 @@ expected ';', found '}'
               },
               "span": {
                 "start": 44,
-                "end": 51
+                "end": 51,
+                "start_line": 1,
+                "start_col": 44
               }
             }
           ],
@@ -101,12 +111,16 @@ expected ';', found '}'
       },
       "span": {
         "start": 34,
-        "end": 52
+        "end": 52,
+        "start_line": 1,
+        "start_col": 34
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 52
+    "end": 52,
+    "start_line": 1,
+    "start_col": 0
   }
 }

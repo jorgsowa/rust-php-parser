@@ -18,7 +18,9 @@ EOT;
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -40,7 +42,9 @@ EOT;
                                 },
                                 "span": {
                                   "start": 25,
-                                  "end": 29
+                                  "end": 29,
+                                  "start_line": 3,
+                                  "start_col": 7
                                 }
                               },
                               "method": {
@@ -49,7 +53,9 @@ EOT;
                                 },
                                 "span": {
                                   "start": 31,
-                                  "end": 38
+                                  "end": 38,
+                                  "start_line": 3,
+                                  "start_col": 13
                                 }
                               },
                               "args": []
@@ -57,7 +63,9 @@ EOT;
                           },
                           "span": {
                             "start": 25,
-                            "end": 40
+                            "end": 40,
+                            "start_line": 3,
+                            "start_col": 7
                           }
                         }
                       },
@@ -77,7 +85,9 @@ EOT;
                                       },
                                       "span": {
                                         "start": 49,
-                                        "end": 53
+                                        "end": 53,
+                                        "start_line": 4,
+                                        "start_col": 7
                                       }
                                     },
                                     "index": {
@@ -86,14 +96,18 @@ EOT;
                                       },
                                       "span": {
                                         "start": 54,
-                                        "end": 55
+                                        "end": 55,
+                                        "start_line": 4,
+                                        "start_col": 12
                                       }
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 49,
-                                  "end": 56
+                                  "end": 56,
+                                  "start_line": 4,
+                                  "start_col": 7
                                 }
                               },
                               "index": {
@@ -102,14 +116,18 @@ EOT;
                                 },
                                 "span": {
                                   "start": 57,
-                                  "end": 62
+                                  "end": 62,
+                                  "start_line": 4,
+                                  "start_col": 15
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 49,
-                            "end": 63
+                            "end": 63,
+                            "start_line": 4,
+                            "start_col": 7
                           }
                         }
                       }
@@ -118,25 +136,33 @@ EOT;
                 },
                 "span": {
                   "start": 11,
-                  "end": 68
+                  "end": 68,
+                  "start_line": 2,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 68
+            "end": 68,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 69
+        "end": 69,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 69
+    "end": 69,
+    "start_line": 1,
+    "start_col": 0
   }
 }

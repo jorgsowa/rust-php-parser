@@ -18,7 +18,9 @@ $d = $obj instanceof static;
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -31,7 +33,9 @@ $d = $obj instanceof static;
                       },
                       "span": {
                         "start": 11,
-                        "end": 15
+                        "end": 15,
+                        "start_line": 2,
+                        "start_col": 5
                       }
                     },
                     "op": "Instanceof",
@@ -41,27 +45,35 @@ $d = $obj instanceof static;
                       },
                       "span": {
                         "start": 27,
-                        "end": 37
+                        "end": 37,
+                        "start_line": 2,
+                        "start_col": 21
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 11,
-                  "end": 37
+                  "end": 37,
+                  "start_line": 2,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 37
+            "end": 37,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 39
+        "end": 39,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -75,7 +87,9 @@ $d = $obj instanceof static;
                 },
                 "span": {
                   "start": 39,
-                  "end": 41
+                  "end": 41,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -88,7 +102,9 @@ $d = $obj instanceof static;
                       },
                       "span": {
                         "start": 44,
-                        "end": 48
+                        "end": 48,
+                        "start_line": 3,
+                        "start_col": 5
                       }
                     },
                     "op": "Instanceof",
@@ -98,27 +114,35 @@ $d = $obj instanceof static;
                       },
                       "span": {
                         "start": 60,
-                        "end": 64
+                        "end": 64,
+                        "start_line": 3,
+                        "start_col": 21
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 44,
-                  "end": 64
+                  "end": 64,
+                  "start_line": 3,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 39,
-            "end": 64
+            "end": 64,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 39,
-        "end": 66
+        "end": 66,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -132,7 +156,9 @@ $d = $obj instanceof static;
                 },
                 "span": {
                   "start": 66,
-                  "end": 68
+                  "end": 68,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -145,7 +171,9 @@ $d = $obj instanceof static;
                       },
                       "span": {
                         "start": 71,
-                        "end": 75
+                        "end": 75,
+                        "start_line": 4,
+                        "start_col": 5
                       }
                     },
                     "op": "Instanceof",
@@ -155,27 +183,35 @@ $d = $obj instanceof static;
                       },
                       "span": {
                         "start": 87,
-                        "end": 93
+                        "end": 93,
+                        "start_line": 4,
+                        "start_col": 21
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 71,
-                  "end": 93
+                  "end": 93,
+                  "start_line": 4,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 66,
-            "end": 93
+            "end": 93,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 66,
-        "end": 95
+        "end": 95,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -189,7 +225,9 @@ $d = $obj instanceof static;
                 },
                 "span": {
                   "start": 95,
-                  "end": 97
+                  "end": 97,
+                  "start_line": 5,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -202,7 +240,9 @@ $d = $obj instanceof static;
                       },
                       "span": {
                         "start": 100,
-                        "end": 104
+                        "end": 104,
+                        "start_line": 5,
+                        "start_col": 5
                       }
                     },
                     "op": "Instanceof",
@@ -212,32 +252,42 @@ $d = $obj instanceof static;
                       },
                       "span": {
                         "start": 116,
-                        "end": 122
+                        "end": 122,
+                        "start_line": 5,
+                        "start_col": 21
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 100,
-                  "end": 122
+                  "end": 122,
+                  "start_line": 5,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 95,
-            "end": 122
+            "end": 122,
+            "start_line": 5,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 95,
-        "end": 123
+        "end": 123,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 123
+    "end": 123,
+    "start_line": 1,
+    "start_col": 0
   }
 }

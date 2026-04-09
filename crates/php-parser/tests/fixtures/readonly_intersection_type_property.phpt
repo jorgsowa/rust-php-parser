@@ -38,13 +38,17 @@ class Foo {
                               "kind": "Unqualified",
                               "span": {
                                 "start": 38,
-                                "end": 47
+                                "end": 47,
+                                "start_line": 3,
+                                "start_col": 20
                               }
                             }
                           },
                           "span": {
                             "start": 38,
-                            "end": 47
+                            "end": 47,
+                            "start_line": 3,
+                            "start_col": 20
                           }
                         },
                         {
@@ -56,20 +60,26 @@ class Foo {
                               "kind": "Unqualified",
                               "span": {
                                 "start": 48,
-                                "end": 60
+                                "end": 60,
+                                "start_line": 3,
+                                "start_col": 30
                               }
                             }
                           },
                           "span": {
                             "start": 48,
-                            "end": 60
+                            "end": 60,
+                            "start_line": 3,
+                            "start_col": 30
                           }
                         }
                       ]
                     },
                     "span": {
                       "start": 38,
-                      "end": 60
+                      "end": 60,
+                      "start_line": 3,
+                      "start_col": 20
                     }
                   },
                   "default": null,
@@ -78,7 +88,9 @@ class Foo {
               },
               "span": {
                 "start": 22,
-                "end": 65
+                "end": 65,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -87,12 +99,16 @@ class Foo {
       },
       "span": {
         "start": 6,
-        "end": 68
+        "end": 68,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 68
+    "end": 68,
+    "start_line": 1,
+    "start_col": 0
   }
 }

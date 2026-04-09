@@ -56,7 +56,9 @@ class A {
                         },
                         "span": {
                           "start": 23,
-                          "end": 49
+                          "end": 49,
+                          "start_line": 4,
+                          "start_col": 4
                         }
                       }
                     ],
@@ -65,7 +67,9 @@ class A {
                 },
                 "span": {
                   "start": 7,
-                  "end": 50
+                  "end": 50,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "args": []
@@ -73,13 +77,17 @@ class A {
           },
           "span": {
             "start": 7,
-            "end": 50
+            "end": 50,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 7,
-        "end": 52
+        "end": 52,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -103,7 +111,9 @@ class A {
                       "kind": "Unqualified",
                       "span": {
                         "start": 70,
-                        "end": 72
+                        "end": 72,
+                        "start_line": 6,
+                        "start_col": 18
                       }
                     },
                     "implements": [
@@ -114,7 +124,9 @@ class A {
                         "kind": "Unqualified",
                         "span": {
                           "start": 83,
-                          "end": 84
+                          "end": 84,
+                          "start_line": 6,
+                          "start_col": 31
                         }
                       },
                       {
@@ -124,7 +136,9 @@ class A {
                         "kind": "Unqualified",
                         "span": {
                           "start": 86,
-                          "end": 88
+                          "end": 88,
+                          "start_line": 6,
+                          "start_col": 34
                         }
                       }
                     ],
@@ -134,7 +148,9 @@ class A {
                 },
                 "span": {
                   "start": 52,
-                  "end": 90
+                  "end": 90,
+                  "start_line": 6,
+                  "start_col": 0
                 }
               },
               "args": []
@@ -142,13 +158,17 @@ class A {
           },
           "span": {
             "start": 52,
-            "end": 90
+            "end": 90,
+            "start_line": 6,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 52,
-        "end": 92
+        "end": 92,
+        "start_line": 6,
+        "start_col": 0
       }
     },
     {
@@ -183,7 +203,9 @@ class A {
                         },
                         "span": {
                           "start": 110,
-                          "end": 121
+                          "end": 121,
+                          "start_line": 8,
+                          "start_col": 4
                         }
                       }
                     ],
@@ -192,7 +214,9 @@ class A {
                 },
                 "span": {
                   "start": 92,
-                  "end": 124
+                  "end": 124,
+                  "start_line": 7,
+                  "start_col": 0
                 }
               },
               "args": []
@@ -200,13 +224,17 @@ class A {
           },
           "span": {
             "start": 92,
-            "end": 124
+            "end": 124,
+            "start_line": 7,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 92,
-        "end": 126
+        "end": 126,
+        "start_line": 7,
+        "start_col": 0
       }
     },
     {
@@ -230,7 +258,9 @@ class A {
                       "kind": "Unqualified",
                       "span": {
                         "start": 152,
-                        "end": 154
+                        "end": 154,
+                        "start_line": 10,
+                        "start_col": 26
                       }
                     },
                     "implements": [],
@@ -246,7 +276,9 @@ class A {
                                 "kind": "Unqualified",
                                 "span": {
                                   "start": 164,
-                                  "end": 165
+                                  "end": 165,
+                                  "start_line": 11,
+                                  "start_col": 8
                                 }
                               }
                             ],
@@ -255,7 +287,9 @@ class A {
                         },
                         "span": {
                           "start": 160,
-                          "end": 167
+                          "end": 167,
+                          "start_line": 11,
+                          "start_col": 4
                         }
                       }
                     ],
@@ -264,7 +298,9 @@ class A {
                 },
                 "span": {
                   "start": 126,
-                  "end": 168
+                  "end": 168,
+                  "start_line": 10,
+                  "start_col": 0
                 }
               },
               "args": [
@@ -276,14 +312,18 @@ class A {
                     },
                     "span": {
                       "start": 136,
-                      "end": 138
+                      "end": 138,
+                      "start_line": 10,
+                      "start_col": 10
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 136,
-                    "end": 138
+                    "end": 138,
+                    "start_line": 10,
+                    "start_col": 10
                   }
                 },
                 {
@@ -294,14 +334,18 @@ class A {
                     },
                     "span": {
                       "start": 140,
-                      "end": 142
+                      "end": 142,
+                      "start_line": 10,
+                      "start_col": 14
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 140,
-                    "end": 142
+                    "end": 142,
+                    "start_line": 10,
+                    "start_col": 14
                   }
                 }
               ]
@@ -309,13 +353,17 @@ class A {
           },
           "span": {
             "start": 126,
-            "end": 168
+            "end": 168,
+            "start_line": 10,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 126,
-        "end": 171
+        "end": 171,
+        "start_line": 10,
+        "start_col": 0
       }
     },
     {
@@ -363,7 +411,9 @@ class A {
                                       "kind": "Unqualified",
                                       "span": {
                                         "start": 250,
-                                        "end": 252
+                                        "end": 252,
+                                        "start_line": 16,
+                                        "start_col": 40
                                       }
                                     },
                                     "implements": [],
@@ -379,7 +429,9 @@ class A {
                                               },
                                               "span": {
                                                 "start": 276,
-                                                "end": 279
+                                                "end": 279,
+                                                "start_line": 17,
+                                                "start_col": 22
                                               }
                                             },
                                             "attributes": []
@@ -387,7 +439,9 @@ class A {
                                         },
                                         "span": {
                                           "start": 266,
-                                          "end": 289
+                                          "end": 289,
+                                          "start_line": 17,
+                                          "start_col": 12
                                         }
                                       }
                                     ],
@@ -396,7 +450,9 @@ class A {
                                 },
                                 "span": {
                                   "start": 225,
-                                  "end": 290
+                                  "end": 290,
+                                  "start_line": 16,
+                                  "start_col": 15
                                 }
                               },
                               "args": [
@@ -408,14 +464,18 @@ class A {
                                     },
                                     "span": {
                                       "start": 235,
-                                      "end": 240
+                                      "end": 240,
+                                      "start_line": 16,
+                                      "start_col": 25
                                     }
                                   },
                                   "unpack": false,
                                   "by_ref": false,
                                   "span": {
                                     "start": 235,
-                                    "end": 240
+                                    "end": 240,
+                                    "start_line": 16,
+                                    "start_col": 25
                                   }
                                 }
                               ]
@@ -423,13 +483,17 @@ class A {
                           },
                           "span": {
                             "start": 225,
-                            "end": 290
+                            "end": 290,
+                            "start_line": 16,
+                            "start_col": 15
                           }
                         }
                       },
                       "span": {
                         "start": 218,
-                        "end": 296
+                        "end": 296,
+                        "start_line": 16,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -438,7 +502,9 @@ class A {
               },
               "span": {
                 "start": 185,
-                "end": 298
+                "end": 298,
+                "start_line": 15,
+                "start_col": 4
               }
             }
           ],
@@ -447,12 +513,16 @@ class A {
       },
       "span": {
         "start": 171,
-        "end": 299
+        "end": 299,
+        "start_line": 14,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 299
+    "end": 299,
+    "start_line": 1,
+    "start_col": 0
   }
 }

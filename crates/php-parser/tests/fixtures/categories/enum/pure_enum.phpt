@@ -22,7 +22,9 @@ min_php=8.1
               },
               "span": {
                 "start": 23,
-                "end": 35
+                "end": 35,
+                "start_line": 1,
+                "start_col": 23
               }
             },
             {
@@ -35,7 +37,9 @@ min_php=8.1
               },
               "span": {
                 "start": 35,
-                "end": 47
+                "end": 47,
+                "start_line": 1,
+                "start_col": 35
               }
             },
             {
@@ -48,7 +52,9 @@ min_php=8.1
               },
               "span": {
                 "start": 47,
-                "end": 58
+                "end": 58,
+                "start_line": 1,
+                "start_col": 47
               }
             },
             {
@@ -61,7 +67,9 @@ min_php=8.1
               },
               "span": {
                 "start": 58,
-                "end": 69
+                "end": 69,
+                "start_line": 1,
+                "start_col": 58
               }
             }
           ],
@@ -70,12 +78,16 @@ min_php=8.1
       },
       "span": {
         "start": 6,
-        "end": 70
+        "end": 70,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 70
+    "end": 70,
+    "start_line": 1,
+    "start_col": 0
   }
 }

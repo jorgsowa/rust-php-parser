@@ -20,7 +20,9 @@ expected expression
                 },
                 "span": {
                   "start": 12,
-                  "end": 14
+                  "end": 14,
+                  "start_line": 1,
+                  "start_col": 12
                 }
               },
               "arms": [
@@ -32,7 +34,9 @@ expected expression
                       },
                       "span": {
                         "start": 18,
-                        "end": 19
+                        "end": 19,
+                        "start_line": 1,
+                        "start_col": 18
                       }
                     }
                   ],
@@ -42,12 +46,16 @@ expected expression
                     },
                     "span": {
                       "start": 23,
-                      "end": 26
+                      "end": 26,
+                      "start_line": 1,
+                      "start_col": 23
                     }
                   },
                   "span": {
                     "start": 18,
-                    "end": 26
+                    "end": 26,
+                    "start_line": 1,
+                    "start_col": 18
                   }
                 }
               ]
@@ -55,13 +63,17 @@ expected expression
           },
           "span": {
             "start": 6,
-            "end": 27
+            "end": 27,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 27
+        "end": 27,
+        "start_line": 1,
+        "start_col": 6
       }
     },
     {
@@ -72,32 +84,42 @@ expected expression
           },
           "span": {
             "start": 27,
-            "end": 28
+            "end": 28,
+            "start_line": 1,
+            "start_col": 27
           }
         }
       },
       "span": {
         "start": 27,
-        "end": 29
+        "end": 29,
+        "start_line": 1,
+        "start_col": 27
       }
     },
     {
       "kind": "Error",
       "span": {
         "start": 29,
-        "end": 36
+        "end": 36,
+        "start_line": 1,
+        "start_col": 29
       }
     },
     {
       "kind": "Error",
       "span": {
         "start": 36,
-        "end": 36
+        "end": 36,
+        "start_line": 1,
+        "start_col": 36
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 36
+    "end": 36,
+    "start_line": 1,
+    "start_col": 0
   }
 }

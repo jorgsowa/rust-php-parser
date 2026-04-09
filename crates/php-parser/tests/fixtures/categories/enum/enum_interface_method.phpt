@@ -16,7 +16,9 @@ min_php=8.1
             "kind": "Unqualified",
             "span": {
               "start": 17,
-              "end": 24
+              "end": 24,
+              "start_line": 1,
+              "start_col": 17
             }
           },
           "implements": [
@@ -27,7 +29,9 @@ min_php=8.1
               "kind": "FullyQualified",
               "span": {
                 "start": 35,
-                "end": 47
+                "end": 47,
+                "start_line": 1,
+                "start_col": 35
               }
             }
           ],
@@ -42,7 +46,9 @@ min_php=8.1
                     },
                     "span": {
                       "start": 63,
-                      "end": 66
+                      "end": 66,
+                      "start_line": 1,
+                      "start_col": 63
                     }
                   },
                   "attributes": []
@@ -50,7 +56,9 @@ min_php=8.1
               },
               "span": {
                 "start": 49,
-                "end": 68
+                "end": 68,
+                "start_line": 1,
+                "start_col": 49
               }
             },
             {
@@ -72,13 +80,17 @@ min_php=8.1
                         "kind": "Unqualified",
                         "span": {
                           "start": 98,
-                          "end": 104
+                          "end": 104,
+                          "start_line": 1,
+                          "start_col": 98
                         }
                       }
                     },
                     "span": {
                       "start": 98,
-                      "end": 104
+                      "end": 104,
+                      "start_line": 1,
+                      "start_col": 98
                     }
                   },
                   "body": [
@@ -93,7 +105,9 @@ min_php=8.1
                                 },
                                 "span": {
                                   "start": 114,
-                                  "end": 119
+                                  "end": 119,
+                                  "start_line": 1,
+                                  "start_col": 114
                                 }
                               },
                               "property": {
@@ -102,20 +116,26 @@ min_php=8.1
                                 },
                                 "span": {
                                   "start": 121,
-                                  "end": 126
+                                  "end": 126,
+                                  "start_line": 1,
+                                  "start_col": 121
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 114,
-                            "end": 126
+                            "end": 126,
+                            "start_line": 1,
+                            "start_col": 114
                           }
                         }
                       },
                       "span": {
                         "start": 107,
-                        "end": 128
+                        "end": 128,
+                        "start_line": 1,
+                        "start_col": 107
                       }
                     }
                   ],
@@ -124,7 +144,9 @@ min_php=8.1
               },
               "span": {
                 "start": 68,
-                "end": 130
+                "end": 130,
+                "start_line": 1,
+                "start_col": 68
               }
             }
           ],
@@ -133,12 +155,16 @@ min_php=8.1
       },
       "span": {
         "start": 6,
-        "end": 131
+        "end": 131,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 131
+    "end": 131,
+    "start_line": 1,
+    "start_col": 0
   }
 }

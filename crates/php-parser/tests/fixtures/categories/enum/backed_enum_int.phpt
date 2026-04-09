@@ -16,7 +16,9 @@ min_php=8.1
             "kind": "Unqualified",
             "span": {
               "start": 19,
-              "end": 23
+              "end": 23,
+              "start_line": 1,
+              "start_col": 19
             }
           },
           "implements": [],
@@ -31,7 +33,9 @@ min_php=8.1
                     },
                     "span": {
                       "start": 39,
-                      "end": 40
+                      "end": 40,
+                      "start_line": 1,
+                      "start_col": 39
                     }
                   },
                   "attributes": []
@@ -39,7 +43,9 @@ min_php=8.1
               },
               "span": {
                 "start": 25,
-                "end": 42
+                "end": 42,
+                "start_line": 1,
+                "start_col": 25
               }
             },
             {
@@ -52,7 +58,9 @@ min_php=8.1
                     },
                     "span": {
                       "start": 58,
-                      "end": 59
+                      "end": 59,
+                      "start_line": 1,
+                      "start_col": 58
                     }
                   },
                   "attributes": []
@@ -60,7 +68,9 @@ min_php=8.1
               },
               "span": {
                 "start": 42,
-                "end": 61
+                "end": 61,
+                "start_line": 1,
+                "start_col": 42
               }
             }
           ],
@@ -69,12 +79,16 @@ min_php=8.1
       },
       "span": {
         "start": 6,
-        "end": 62
+        "end": 62,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 62
+    "end": 62,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -23,12 +23,16 @@ function foo() {
                       },
                       "span": {
                         "start": 39,
-                        "end": 40
+                        "end": 40,
+                        "start_line": 3,
+                        "start_col": 16
                       }
                     },
                     "span": {
                       "start": 34,
-                      "end": 40
+                      "end": 40,
+                      "start_line": 3,
+                      "start_col": 11
                     }
                   },
                   {
@@ -39,12 +43,16 @@ function foo() {
                       },
                       "span": {
                         "start": 47,
-                        "end": 53
+                        "end": 53,
+                        "start_line": 3,
+                        "start_col": 24
                       }
                     },
                     "span": {
                       "start": 42,
-                      "end": 53
+                      "end": 53,
+                      "start_line": 3,
+                      "start_col": 19
                     }
                   },
                   {
@@ -55,19 +63,25 @@ function foo() {
                       },
                       "span": {
                         "start": 60,
-                        "end": 62
+                        "end": 62,
+                        "start_line": 3,
+                        "start_col": 37
                       }
                     },
                     "span": {
                       "start": 55,
-                      "end": 62
+                      "end": 62,
+                      "start_line": 3,
+                      "start_col": 32
                     }
                   }
                 ]
               },
               "span": {
                 "start": 27,
-                "end": 64
+                "end": 64,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -78,12 +92,16 @@ function foo() {
       },
       "span": {
         "start": 6,
-        "end": 65
+        "end": 65,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 65
+    "end": 65,
+    "start_line": 1,
+    "start_col": 0
   }
 }

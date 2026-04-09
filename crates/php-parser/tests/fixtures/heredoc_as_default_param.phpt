@@ -24,7 +24,9 @@ EOT
                 },
                 "span": {
                   "start": 22,
-                  "end": 40
+                  "end": 40,
+                  "start_line": 2,
+                  "start_col": 16
                 }
               },
               "by_ref": false,
@@ -36,7 +38,9 @@ EOT
               "attributes": [],
               "span": {
                 "start": 17,
-                "end": 40
+                "end": 40,
+                "start_line": 2,
+                "start_col": 11
               }
             }
           ],
@@ -48,12 +52,16 @@ EOT
       },
       "span": {
         "start": 6,
-        "end": 45
+        "end": 45,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 45
+    "end": 45,
+    "start_line": 1,
+    "start_col": 0
   }
 }

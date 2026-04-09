@@ -28,13 +28,17 @@ function createUser(string $name, int $age): User {}
                     "kind": "Unqualified",
                     "span": {
                       "start": 170,
-                      "end": 176
+                      "end": 176,
+                      "start_line": 10,
+                      "start_col": 20
                     }
                   }
                 },
                 "span": {
                   "start": 170,
-                  "end": 176
+                  "end": 176,
+                  "start_line": 10,
+                  "start_col": 20
                 }
               },
               "default": null,
@@ -47,7 +51,9 @@ function createUser(string $name, int $age): User {}
               "attributes": [],
               "span": {
                 "start": 170,
-                "end": 182
+                "end": 182,
+                "start_line": 10,
+                "start_col": 20
               }
             },
             {
@@ -61,13 +67,17 @@ function createUser(string $name, int $age): User {}
                     "kind": "Unqualified",
                     "span": {
                       "start": 184,
-                      "end": 187
+                      "end": 187,
+                      "start_line": 10,
+                      "start_col": 34
                     }
                   }
                 },
                 "span": {
                   "start": 184,
-                  "end": 187
+                  "end": 187,
+                  "start_line": 10,
+                  "start_col": 34
                 }
               },
               "default": null,
@@ -80,7 +90,9 @@ function createUser(string $name, int $age): User {}
               "attributes": [],
               "span": {
                 "start": 184,
-                "end": 192
+                "end": 192,
+                "start_line": 10,
+                "start_col": 34
               }
             }
           ],
@@ -94,13 +106,17 @@ function createUser(string $name, int $age): User {}
                 "kind": "Unqualified",
                 "span": {
                   "start": 195,
-                  "end": 200
+                  "end": 200,
+                  "start_line": 10,
+                  "start_col": 45
                 }
               }
             },
             "span": {
               "start": 195,
-              "end": 200
+              "end": 200,
+              "start_line": 10,
+              "start_col": 45
             }
           },
           "by_ref": false,
@@ -110,19 +126,25 @@ function createUser(string $name, int $age): User {}
             "text": "/**\n * Create a new user.\n *\n * @param string $name The user's name\n * @param int $age\n * @return User\n * @throws \\InvalidArgumentException\n */",
             "span": {
               "start": 6,
-              "end": 149
+              "end": 149,
+              "start_line": 2,
+              "start_col": 0
             }
           }
         }
       },
       "span": {
         "start": 150,
-        "end": 202
+        "end": 202,
+        "start_line": 10,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 202
+    "end": 202,
+    "start_line": 1,
+    "start_col": 0
   }
 }

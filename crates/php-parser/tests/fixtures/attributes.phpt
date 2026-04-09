@@ -70,13 +70,17 @@ enum Color {
                     "kind": "Unqualified",
                     "span": {
                       "start": 60,
-                      "end": 63
+                      "end": 63,
+                      "start_line": 5,
+                      "start_col": 13
                     }
                   }
                 },
                 "span": {
                   "start": 60,
-                  "end": 63
+                  "end": 63,
+                  "start_line": 5,
+                  "start_col": 13
                 }
               },
               "default": null,
@@ -89,7 +93,9 @@ enum Color {
               "attributes": [],
               "span": {
                 "start": 60,
-                "end": 66
+                "end": 66,
+                "start_line": 5,
+                "start_col": 13
               }
             },
             {
@@ -103,13 +109,17 @@ enum Color {
                     "kind": "Unqualified",
                     "span": {
                       "start": 68,
-                      "end": 71
+                      "end": 71,
+                      "start_line": 5,
+                      "start_col": 21
                     }
                   }
                 },
                 "span": {
                   "start": 68,
-                  "end": 71
+                  "end": 71,
+                  "start_line": 5,
+                  "start_col": 21
                 }
               },
               "default": null,
@@ -122,7 +132,9 @@ enum Color {
               "attributes": [],
               "span": {
                 "start": 68,
-                "end": 74
+                "end": 74,
+                "start_line": 5,
+                "start_col": 21
               }
             }
           ],
@@ -138,7 +150,9 @@ enum Color {
                         },
                         "span": {
                           "start": 94,
-                          "end": 96
+                          "end": 96,
+                          "start_line": 6,
+                          "start_col": 11
                         }
                       },
                       "op": "Add",
@@ -148,20 +162,26 @@ enum Color {
                         },
                         "span": {
                           "start": 99,
-                          "end": 101
+                          "end": 101,
+                          "start_line": 6,
+                          "start_col": 16
                         }
                       }
                     }
                   },
                   "span": {
                     "start": 94,
-                    "end": 101
+                    "end": 101,
+                    "start_line": 6,
+                    "start_col": 11
                   }
                 }
               },
               "span": {
                 "start": 87,
-                "end": 103
+                "end": 103,
+                "start_line": 6,
+                "start_col": 4
               }
             }
           ],
@@ -174,13 +194,17 @@ enum Color {
                 "kind": "Unqualified",
                 "span": {
                   "start": 77,
-                  "end": 80
+                  "end": 80,
+                  "start_line": 5,
+                  "start_col": 30
                 }
               }
             },
             "span": {
               "start": 77,
-              "end": 80
+              "end": 80,
+              "start_line": 5,
+              "start_col": 30
             }
           },
           "by_ref": false,
@@ -193,13 +217,17 @@ enum Color {
                 "kind": "Unqualified",
                 "span": {
                   "start": 41,
-                  "end": 45
+                  "end": 45,
+                  "start_line": 4,
+                  "start_col": 2
                 }
               },
               "args": [],
               "span": {
                 "start": 41,
-                "end": 45
+                "end": 45,
+                "start_line": 4,
+                "start_col": 2
               }
             }
           ]
@@ -207,7 +235,9 @@ enum Color {
       },
       "span": {
         "start": 47,
-        "end": 104
+        "end": 104,
+        "start_line": 5,
+        "start_col": 0
       }
     },
     {
@@ -227,7 +257,9 @@ enum Color {
                 "kind": "Unqualified",
                 "span": {
                   "start": 136,
-                  "end": 141
+                  "end": 141,
+                  "start_line": 10,
+                  "start_col": 2
                 }
               },
               "args": [
@@ -239,14 +271,18 @@ enum Color {
                     },
                     "span": {
                       "start": 142,
-                      "end": 154
+                      "end": 154,
+                      "start_line": 10,
+                      "start_col": 8
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 142,
-                    "end": 154
+                    "end": 154,
+                    "start_line": 10,
+                    "start_col": 8
                   }
                 },
                 {
@@ -262,13 +298,17 @@ enum Color {
                             },
                             "span": {
                               "start": 166,
-                              "end": 171
+                              "end": 171,
+                              "start_line": 10,
+                              "start_col": 32
                             }
                           },
                           "unpack": false,
                           "span": {
                             "start": 166,
-                            "end": 171
+                            "end": 171,
+                            "start_line": 10,
+                            "start_col": 32
                           }
                         },
                         {
@@ -279,33 +319,43 @@ enum Color {
                             },
                             "span": {
                               "start": 173,
-                              "end": 179
+                              "end": 179,
+                              "start_line": 10,
+                              "start_col": 39
                             }
                           },
                           "unpack": false,
                           "span": {
                             "start": 173,
-                            "end": 179
+                            "end": 179,
+                            "start_line": 10,
+                            "start_col": 39
                           }
                         }
                       ]
                     },
                     "span": {
                       "start": 165,
-                      "end": 180
+                      "end": 180,
+                      "start_line": 10,
+                      "start_col": 31
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 156,
-                    "end": 180
+                    "end": 180,
+                    "start_line": 10,
+                    "start_col": 22
                   }
                 }
               ],
               "span": {
                 "start": 136,
-                "end": 181
+                "end": 181,
+                "start_line": 10,
+                "start_col": 2
               }
             }
           ]
@@ -313,7 +363,9 @@ enum Color {
       },
       "span": {
         "start": 183,
-        "end": 206
+        "end": 206,
+        "start_line": 11,
+        "start_col": 0
       }
     },
     {
@@ -337,13 +389,17 @@ enum Color {
                 "kind": "Unqualified",
                 "span": {
                   "start": 241,
-                  "end": 242
+                  "end": 242,
+                  "start_line": 14,
+                  "start_col": 2
                 }
               },
               "args": [],
               "span": {
                 "start": 241,
-                "end": 242
+                "end": 242,
+                "start_line": 14,
+                "start_col": 2
               }
             },
             {
@@ -354,13 +410,17 @@ enum Color {
                 "kind": "Unqualified",
                 "span": {
                   "start": 244,
-                  "end": 245
+                  "end": 245,
+                  "start_line": 14,
+                  "start_col": 5
                 }
               },
               "args": [],
               "span": {
                 "start": 244,
-                "end": 245
+                "end": 245,
+                "start_line": 14,
+                "start_col": 5
               }
             }
           ]
@@ -368,7 +428,9 @@ enum Color {
       },
       "span": {
         "start": 247,
-        "end": 259
+        "end": 259,
+        "start_line": 15,
+        "start_col": 0
       }
     },
     {
@@ -392,13 +454,17 @@ enum Color {
                 "kind": "Unqualified",
                 "span": {
                   "start": 285,
-                  "end": 295
+                  "end": 295,
+                  "start_line": 18,
+                  "start_col": 2
                 }
               },
               "args": [],
               "span": {
                 "start": 285,
-                "end": 295
+                "end": 295,
+                "start_line": 18,
+                "start_col": 2
               }
             },
             {
@@ -409,13 +475,17 @@ enum Color {
                 "kind": "Unqualified",
                 "span": {
                   "start": 299,
-                  "end": 309
+                  "end": 309,
+                  "start_line": 19,
+                  "start_col": 2
                 }
               },
               "args": [],
               "span": {
                 "start": 299,
-                "end": 309
+                "end": 309,
+                "start_line": 19,
+                "start_col": 2
               }
             }
           ]
@@ -423,7 +493,9 @@ enum Color {
       },
       "span": {
         "start": 311,
-        "end": 323
+        "end": 323,
+        "start_line": 20,
+        "start_col": 0
       }
     },
     {
@@ -455,13 +527,17 @@ enum Color {
                         "kind": "Unqualified",
                         "span": {
                           "start": 402,
-                          "end": 408
+                          "end": 408,
+                          "start_line": 25,
+                          "start_col": 11
                         }
                       }
                     },
                     "span": {
                       "start": 402,
-                      "end": 408
+                      "end": 408,
+                      "start_line": 25,
+                      "start_col": 11
                     }
                   },
                   "default": null,
@@ -474,7 +550,9 @@ enum Color {
                         "kind": "Unqualified",
                         "span": {
                           "start": 375,
-                          "end": 381
+                          "end": 381,
+                          "start_line": 24,
+                          "start_col": 6
                         }
                       },
                       "args": [
@@ -486,20 +564,26 @@ enum Color {
                             },
                             "span": {
                               "start": 382,
-                              "end": 388
+                              "end": 388,
+                              "start_line": 24,
+                              "start_col": 13
                             }
                           },
                           "unpack": false,
                           "by_ref": false,
                           "span": {
                             "start": 382,
-                            "end": 388
+                            "end": 388,
+                            "start_line": 24,
+                            "start_col": 13
                           }
                         }
                       ],
                       "span": {
                         "start": 375,
-                        "end": 389
+                        "end": 389,
+                        "start_line": 24,
+                        "start_col": 6
                       }
                     }
                   ]
@@ -507,7 +591,9 @@ enum Color {
               },
               "span": {
                 "start": 373,
-                "end": 414
+                "end": 414,
+                "start_line": 24,
+                "start_col": 4
               }
             },
             {
@@ -527,13 +613,17 @@ enum Color {
                         "kind": "Unqualified",
                         "span": {
                           "start": 461,
-                          "end": 464
+                          "end": 464,
+                          "start_line": 29,
+                          "start_col": 12
                         }
                       }
                     },
                     "span": {
                       "start": 461,
-                      "end": 464
+                      "end": 464,
+                      "start_line": 29,
+                      "start_col": 12
                     }
                   },
                   "default": null,
@@ -546,13 +636,17 @@ enum Color {
                         "kind": "Unqualified",
                         "span": {
                           "start": 423,
-                          "end": 425
+                          "end": 425,
+                          "start_line": 27,
+                          "start_col": 6
                         }
                       },
                       "args": [],
                       "span": {
                         "start": 423,
-                        "end": 425
+                        "end": 425,
+                        "start_line": 27,
+                        "start_col": 6
                       }
                     },
                     {
@@ -563,13 +657,17 @@ enum Color {
                         "kind": "Unqualified",
                         "span": {
                           "start": 433,
-                          "end": 447
+                          "end": 447,
+                          "start_line": 28,
+                          "start_col": 6
                         }
                       },
                       "args": [],
                       "span": {
                         "start": 433,
-                        "end": 447
+                        "end": 447,
+                        "start_line": 28,
+                        "start_col": 6
                       }
                     }
                   ]
@@ -577,7 +675,9 @@ enum Color {
               },
               "span": {
                 "start": 421,
-                "end": 468
+                "end": 468,
+                "start_line": 27,
+                "start_col": 4
               }
             },
             {
@@ -599,13 +699,17 @@ enum Color {
                         "kind": "Unqualified",
                         "span": {
                           "start": 542,
-                          "end": 548
+                          "end": 548,
+                          "start_line": 32,
+                          "start_col": 28
                         }
                       }
                     },
                     "span": {
                       "start": 542,
-                      "end": 548
+                      "end": 548,
+                      "start_line": 32,
+                      "start_col": 28
                     }
                   },
                   "body": [
@@ -620,7 +724,9 @@ enum Color {
                                 },
                                 "span": {
                                   "start": 566,
-                                  "end": 571
+                                  "end": 571,
+                                  "start_line": 33,
+                                  "start_col": 15
                                 }
                               },
                               "property": {
@@ -629,20 +735,26 @@ enum Color {
                                 },
                                 "span": {
                                   "start": 573,
-                                  "end": 577
+                                  "end": 577,
+                                  "start_line": 33,
+                                  "start_col": 22
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 566,
-                            "end": 577
+                            "end": 577,
+                            "start_line": 33,
+                            "start_col": 15
                           }
                         }
                       },
                       "span": {
                         "start": 559,
-                        "end": 583
+                        "end": 583,
+                        "start_line": 33,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -655,7 +767,9 @@ enum Color {
                         "kind": "Unqualified",
                         "span": {
                           "start": 477,
-                          "end": 487
+                          "end": 487,
+                          "start_line": 31,
+                          "start_col": 6
                         }
                       },
                       "args": [
@@ -667,20 +781,26 @@ enum Color {
                             },
                             "span": {
                               "start": 488,
-                              "end": 511
+                              "end": 511,
+                              "start_line": 31,
+                              "start_col": 17
                             }
                           },
                           "unpack": false,
                           "by_ref": false,
                           "span": {
                             "start": 488,
-                            "end": 511
+                            "end": 511,
+                            "start_line": 31,
+                            "start_col": 17
                           }
                         }
                       ],
                       "span": {
                         "start": 477,
-                        "end": 512
+                        "end": 512,
+                        "start_line": 31,
+                        "start_col": 6
                       }
                     }
                   ]
@@ -688,7 +808,9 @@ enum Color {
               },
               "span": {
                 "start": 475,
-                "end": 585
+                "end": 585,
+                "start_line": 31,
+                "start_col": 4
               }
             }
           ],
@@ -697,7 +819,9 @@ enum Color {
       },
       "span": {
         "start": 356,
-        "end": 586
+        "end": 586,
+        "start_line": 23,
+        "start_col": 0
       }
     },
     {
@@ -716,13 +840,17 @@ enum Color {
                     "kind": "Unqualified",
                     "span": {
                       "start": 642,
-                      "end": 648
+                      "end": 648,
+                      "start_line": 38,
+                      "start_col": 28
                     }
                   }
                 },
                 "span": {
                   "start": 642,
-                  "end": 648
+                  "end": 648,
+                  "start_line": 38,
+                  "start_col": 28
                 }
               },
               "default": null,
@@ -741,19 +869,25 @@ enum Color {
                     "kind": "Unqualified",
                     "span": {
                       "start": 631,
-                      "end": 640
+                      "end": 640,
+                      "start_line": 38,
+                      "start_col": 17
                     }
                   },
                   "args": [],
                   "span": {
                     "start": 631,
-                    "end": 640
+                    "end": 640,
+                    "start_line": 38,
+                    "start_col": 17
                   }
                 }
               ],
               "span": {
                 "start": 629,
-                "end": 654
+                "end": 654,
+                "start_line": 38,
+                "start_col": 15
               }
             }
           ],
@@ -765,7 +899,9 @@ enum Color {
       },
       "span": {
         "start": 614,
-        "end": 658
+        "end": 658,
+        "start_line": 38,
+        "start_col": 0
       }
     },
     {
@@ -779,7 +915,9 @@ enum Color {
                 },
                 "span": {
                   "start": 708,
-                  "end": 710
+                  "end": 710,
+                  "start_line": 42,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -789,20 +927,26 @@ enum Color {
                 },
                 "span": {
                   "start": 713,
-                  "end": 714
+                  "end": 714,
+                  "start_line": 42,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 708,
-            "end": 714
+            "end": 714,
+            "start_line": 42,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 708,
-        "end": 738
+        "end": 738,
+        "start_line": 42,
+        "start_col": 0
       }
     },
     {
@@ -826,13 +970,17 @@ enum Color {
                         "kind": "Unqualified",
                         "span": {
                           "start": 769,
-                          "end": 777
+                          "end": 777,
+                          "start_line": 47,
+                          "start_col": 6
                         }
                       },
                       "args": [],
                       "span": {
                         "start": 769,
-                        "end": 777
+                        "end": 777,
+                        "start_line": 47,
+                        "start_col": 6
                       }
                     }
                   ]
@@ -840,7 +988,9 @@ enum Color {
               },
               "span": {
                 "start": 783,
-                "end": 797
+                "end": 797,
+                "start_line": 48,
+                "start_col": 4
               }
             },
             {
@@ -853,7 +1003,9 @@ enum Color {
               },
               "span": {
                 "start": 797,
-                "end": 808
+                "end": 808,
+                "start_line": 49,
+                "start_col": 4
               }
             }
           ],
@@ -866,13 +1018,17 @@ enum Color {
                 "kind": "Unqualified",
                 "span": {
                   "start": 740,
-                  "end": 748
+                  "end": 748,
+                  "start_line": 45,
+                  "start_col": 2
                 }
               },
               "args": [],
               "span": {
                 "start": 740,
-                "end": 748
+                "end": 748,
+                "start_line": 45,
+                "start_col": 2
               }
             }
           ]
@@ -880,12 +1036,16 @@ enum Color {
       },
       "span": {
         "start": 750,
-        "end": 809
+        "end": 809,
+        "start_line": 46,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 809
+    "end": 809,
+    "start_line": 1,
+    "start_col": 0
   }
 }

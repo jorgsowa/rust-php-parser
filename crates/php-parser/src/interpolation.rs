@@ -12,6 +12,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
     source: &'src str,
     inner: &'src str,
     base_offset: u32,
+    line_index: &LineIndex,
 ) -> ArenaVec<'arena, StringPart<'arena, 'src>> {
     let mut parts = ArenaVec::with_capacity_in(8, arena);
     let bytes = inner.as_bytes();
@@ -168,13 +169,14 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                             source,
                             base_offset + expr_start as u32,
                             base_offset + i as u32,
+                            line_index,
                         );
                         if i < len {
                             i += 1; // skip }
                         }
                         parts.push(StringPart::Expr(Expr {
                             kind: ExprKind::VariableVariable(arena.alloc(inner_expr)),
-                            span: Span::new(var_offset, base_offset + i as u32),
+                            span: line_index.span(var_offset, base_offset + i as u32),
                         }));
                     } else {
                         // ${varname} or ${varname[index]} — identifier as variable name
@@ -187,10 +189,8 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                         );
                         let mut expr = Expr {
                             kind: ExprKind::Variable(var_name),
-                            span: Span::new(
-                                base_offset + name_start as u32,
-                                base_offset + i as u32,
-                            ),
+                            span: line_index
+                                .span(base_offset + name_start as u32, base_offset + i as u32),
                         };
                         // Optional [index]
                         if i < len && bytes[i] == b'[' {
@@ -204,9 +204,10 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                                 i += 1;
                                 let idx_offset = base_offset + idx_start as u32;
                                 let idx_end = base_offset + (i - 1) as u32;
-                                let index_expr =
-                                    parse_simple_index(arena, source, idx_str, idx_offset, idx_end);
-                                let span = Span::new(var_offset, base_offset + i as u32);
+                                let index_expr = parse_simple_index(
+                                    arena, source, idx_str, idx_offset, idx_end, line_index,
+                                );
+                                let span = line_index.span(var_offset, base_offset + i as u32);
                                 expr = Expr {
                                     kind: ExprKind::ArrayAccess(ArrayAccessExpr {
                                         array: arena.alloc(expr),
@@ -253,7 +254,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
 
                     let mut expr = Expr {
                         kind: ExprKind::Variable(var_name),
-                        span: Span::new(var_offset, base_offset + i as u32),
+                        span: line_index.span(var_offset, base_offset + i as u32),
                     };
 
                     // Check for ->identifier (simple property access)
@@ -269,9 +270,9 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                                 &source
                                     [base_offset as usize + pname_start..base_offset as usize + i],
                             );
-                            let prop_span =
-                                Span::new(base_offset + pname_start as u32, base_offset + i as u32);
-                            let span = Span::new(var_offset, base_offset + i as u32);
+                            let prop_span = line_index
+                                .span(base_offset + pname_start as u32, base_offset + i as u32);
+                            let span = line_index.span(var_offset, base_offset + i as u32);
                             expr = Expr {
                                 kind: ExprKind::PropertyAccess(PropertyAccessExpr {
                                     object: arena.alloc(expr),
@@ -301,10 +302,11 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                             let idx_offset = base_offset + idx_start as u32;
                             let idx_end = base_offset + (i - 1) as u32;
 
-                            let index_expr =
-                                parse_simple_index(arena, source, idx_str, idx_offset, idx_end);
+                            let index_expr = parse_simple_index(
+                                arena, source, idx_str, idx_offset, idx_end, line_index,
+                            );
 
-                            let span = Span::new(var_offset, base_offset + i as u32);
+                            let span = line_index.span(var_offset, base_offset + i as u32);
                             let _ = bracket_start; // used implicitly
                             expr = Expr {
                                 kind: ExprKind::ArrayAccess(ArrayAccessExpr {
@@ -376,7 +378,8 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                 // Parse the expression using a sub-parser starting at the absolute offset
                 let expr_offset = base_offset + expr_start as u32;
                 let end_offset = base_offset + expr_end as u32;
-                let expr = parse_complex_interpolation(arena, source, expr_offset, end_offset);
+                let expr =
+                    parse_complex_interpolation(arena, source, expr_offset, end_offset, line_index);
                 parts.push(StringPart::Expr(expr));
                 literal_start = i;
             }
@@ -419,6 +422,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
     raw_body: &'src str,
     body_offset: u32,
     indent: &str,
+    line_index: &LineIndex,
 ) -> ArenaVec<'arena, StringPart<'arena, 'src>> {
     let indent_len = indent.len();
     let mut parts: ArenaVec<'arena, StringPart<'arena, 'src>> =
@@ -565,7 +569,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
 
                     let mut expr = Expr {
                         kind: ExprKind::Variable(var_name),
-                        span: Span::new(var_offset, body_offset + i as u32),
+                        span: line_index.span(var_offset, body_offset + i as u32),
                     };
 
                     if i + 2 < len && bytes[i] == b'-' && bytes[i + 1] == b'>' {
@@ -577,9 +581,9 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                                 i += 1;
                             }
                             let prop_name: &'arena str = arena.alloc_str(&raw_body[pname_start..i]);
-                            let prop_span =
-                                Span::new(body_offset + pname_start as u32, body_offset + i as u32);
-                            let span = Span::new(var_offset, body_offset + i as u32);
+                            let prop_span = line_index
+                                .span(body_offset + pname_start as u32, body_offset + i as u32);
+                            let span = line_index.span(var_offset, body_offset + i as u32);
                             expr = Expr {
                                 kind: ExprKind::PropertyAccess(PropertyAccessExpr {
                                     object: arena.alloc(expr),
@@ -604,9 +608,10 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                             i += 1; // skip ]
                             let idx_offset = body_offset + idx_start as u32;
                             let idx_end = body_offset + (i - 1) as u32;
-                            let index_expr =
-                                parse_simple_index(arena, source, idx_str, idx_offset, idx_end);
-                            let span = Span::new(var_offset, body_offset + i as u32);
+                            let index_expr = parse_simple_index(
+                                arena, source, idx_str, idx_offset, idx_end, line_index,
+                            );
+                            let span = line_index.span(var_offset, body_offset + i as u32);
                             expr = Expr {
                                 kind: ExprKind::ArrayAccess(ArrayAccessExpr {
                                     array: arena.alloc(expr),
@@ -662,7 +667,8 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                 // correct absolute position — use the fast sub-parser path directly.
                 let expr_offset = body_offset + expr_start as u32;
                 let end_offset = body_offset + expr_end as u32;
-                let expr = parse_complex_interpolation(arena, source, expr_offset, end_offset);
+                let expr =
+                    parse_complex_interpolation(arena, source, expr_offset, end_offset, line_index);
                 parts.push(StringPart::Expr(expr));
             }
             _ => {
@@ -718,8 +724,9 @@ fn parse_simple_index<'arena, 'src>(
     idx_str: &str,
     idx_offset: u32,
     idx_end: u32,
+    line_index: &LineIndex,
 ) -> Expr<'arena, 'src> {
-    let span = Span::new(idx_offset, idx_end);
+    let span = line_index.span(idx_offset, idx_end);
     // Integer index, including negative (e.g. -1)
     if let Ok(num) = idx_str.parse::<i64>() {
         return Expr {
@@ -761,6 +768,7 @@ fn parse_complex_interpolation<'arena, 'src>(
     source: &'src str,
     offset: u32,
     end: u32,
+    line_index: &LineIndex,
 ) -> Expr<'arena, 'src> {
     let mut sub = crate::parser::Parser::new_at(
         arena,
@@ -772,7 +780,7 @@ fn parse_complex_interpolation<'arena, 'src>(
     if matches!(expr.kind, ExprKind::Error) {
         Expr {
             kind: ExprKind::Error,
-            span: Span::new(offset, end),
+            span: line_index.span(offset, end),
         }
     } else {
         expr

@@ -23,12 +23,16 @@ final readonly class A {
       },
       "span": {
         "start": 22,
-        "end": 33
+        "end": 33,
+        "start_line": 3,
+        "start_col": 15
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 33
+    "end": 33,
+    "start_line": 1,
+    "start_col": 0
   }
 }

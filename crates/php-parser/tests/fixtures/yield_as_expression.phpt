@@ -24,7 +24,9 @@ function gen() {
                         },
                         "span": {
                           "start": 27,
-                          "end": 36
+                          "end": 36,
+                          "start_line": 3,
+                          "start_col": 4
                         }
                       },
                       "op": "Assign",
@@ -38,7 +40,9 @@ function gen() {
                               },
                               "span": {
                                 "start": 45,
-                                "end": 52
+                                "end": 52,
+                                "start_line": 3,
+                                "start_col": 22
                               }
                             },
                             "is_from": false
@@ -46,20 +50,26 @@ function gen() {
                         },
                         "span": {
                           "start": 39,
-                          "end": 52
+                          "end": 52,
+                          "start_line": 3,
+                          "start_col": 16
                         }
                       }
                     }
                   },
                   "span": {
                     "start": 27,
-                    "end": 52
+                    "end": 52,
+                    "start_line": 3,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 27,
-                "end": 58
+                "end": 58,
+                "start_line": 3,
+                "start_col": 4
               }
             },
             {
@@ -73,7 +83,9 @@ function gen() {
                         },
                         "span": {
                           "start": 58,
-                          "end": 67
+                          "end": 67,
+                          "start_line": 4,
+                          "start_col": 4
                         }
                       },
                       "op": "Assign",
@@ -86,7 +98,9 @@ function gen() {
                               },
                               "span": {
                                 "start": 76,
-                                "end": 80
+                                "end": 80,
+                                "start_line": 4,
+                                "start_col": 22
                               }
                             },
                             "value": {
@@ -95,7 +109,9 @@ function gen() {
                               },
                               "span": {
                                 "start": 84,
-                                "end": 90
+                                "end": 90,
+                                "start_line": 4,
+                                "start_col": 30
                               }
                             },
                             "is_from": false
@@ -103,20 +119,26 @@ function gen() {
                         },
                         "span": {
                           "start": 70,
-                          "end": 90
+                          "end": 90,
+                          "start_line": 4,
+                          "start_col": 16
                         }
                       }
                     }
                   },
                   "span": {
                     "start": 58,
-                    "end": 90
+                    "end": 90,
+                    "start_line": 4,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 58,
-                "end": 92
+                "end": 92,
+                "start_line": 4,
+                "start_col": 4
               }
             }
           ],
@@ -127,12 +149,16 @@ function gen() {
       },
       "span": {
         "start": 6,
-        "end": 93
+        "end": 93,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 93
+    "end": 93,
+    "start_line": 1,
+    "start_col": 0
   }
 }

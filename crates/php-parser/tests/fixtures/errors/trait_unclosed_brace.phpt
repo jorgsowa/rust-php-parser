@@ -15,7 +15,9 @@ expected '}', found end of file
       },
       "span": {
         "start": 6,
-        "end": 16
+        "end": 16,
+        "start_line": 1,
+        "start_col": 6
       }
     },
     {
@@ -41,7 +43,9 @@ expected '}', found end of file
                       "kind": "Unqualified",
                       "span": {
                         "start": 31,
-                        "end": 33
+                        "end": 33,
+                        "start_line": 1,
+                        "start_col": 31
                       }
                     }
                   ],
@@ -57,7 +61,9 @@ expected '}', found end of file
                       },
                       "span": {
                         "start": 35,
-                        "end": 43
+                        "end": 43,
+                        "start_line": 1,
+                        "start_col": 35
                       }
                     }
                   ]
@@ -65,7 +71,9 @@ expected '}', found end of file
               },
               "span": {
                 "start": 27,
-                "end": 44
+                "end": 44,
+                "start_line": 1,
+                "start_col": 27
               }
             }
           ],
@@ -74,12 +82,16 @@ expected '}', found end of file
       },
       "span": {
         "start": 17,
-        "end": 44
+        "end": 44,
+        "start_line": 1,
+        "start_col": 17
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 44
+    "end": 44,
+    "start_line": 1,
+    "start_col": 0
   }
 }

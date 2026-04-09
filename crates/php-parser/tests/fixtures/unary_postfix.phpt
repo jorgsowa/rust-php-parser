@@ -14,7 +14,9 @@
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "op": "PostIncrement"
@@ -22,13 +24,17 @@
           },
           "span": {
             "start": 6,
-            "end": 10
+            "end": 10,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 12
+        "end": 12,
+        "start_line": 1,
+        "start_col": 6
       }
     },
     {
@@ -42,7 +48,9 @@
                 },
                 "span": {
                   "start": 12,
-                  "end": 14
+                  "end": 14,
+                  "start_line": 1,
+                  "start_col": 12
                 }
               },
               "op": "PostDecrement"
@@ -50,18 +58,24 @@
           },
           "span": {
             "start": 12,
-            "end": 16
+            "end": 16,
+            "start_line": 1,
+            "start_col": 12
           }
         }
       },
       "span": {
         "start": 12,
-        "end": 17
+        "end": 17,
+        "start_line": 1,
+        "start_col": 12
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 17
+    "end": 17,
+    "start_line": 1,
+    "start_col": 0
   }
 }

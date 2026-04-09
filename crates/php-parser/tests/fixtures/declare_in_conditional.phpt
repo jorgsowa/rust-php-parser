@@ -12,7 +12,9 @@
             },
             "span": {
               "start": 10,
-              "end": 14
+              "end": 14,
+              "start_line": 1,
+              "start_col": 10
             }
           },
           "then_branch": {
@@ -30,7 +32,9 @@
                             },
                             "span": {
                               "start": 32,
-                              "end": 33
+                              "end": 33,
+                              "start_line": 1,
+                              "start_col": 32
                             }
                           }
                         ]
@@ -40,14 +44,18 @@
                   },
                   "span": {
                     "start": 18,
-                    "end": 36
+                    "end": 36,
+                    "start_line": 1,
+                    "start_col": 18
                   }
                 }
               ]
             },
             "span": {
               "start": 16,
-              "end": 37
+              "end": 37,
+              "start_line": 1,
+              "start_col": 16
             }
           },
           "elseif_branches": [],
@@ -56,12 +64,16 @@
       },
       "span": {
         "start": 6,
-        "end": 37
+        "end": 37,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 37
+    "end": 37,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -20,7 +20,9 @@ static::factory();
                 },
                 "span": {
                   "start": 6,
-                  "end": 9
+                  "end": 9,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "member": "BAR"
@@ -28,13 +30,17 @@ static::factory();
           },
           "span": {
             "start": 6,
-            "end": 14
+            "end": 14,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 16
+        "end": 16,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -48,7 +54,9 @@ static::factory();
                 },
                 "span": {
                   "start": 16,
-                  "end": 19
+                  "end": 19,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "member": "instance"
@@ -56,13 +64,17 @@ static::factory();
           },
           "span": {
             "start": 16,
-            "end": 30
+            "end": 30,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 16,
-        "end": 32
+        "end": 32,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -76,7 +88,9 @@ static::factory();
                 },
                 "span": {
                   "start": 32,
-                  "end": 35
+                  "end": 35,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "method": "create",
@@ -85,13 +99,17 @@ static::factory();
           },
           "span": {
             "start": 32,
-            "end": 45
+            "end": 45,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 32,
-        "end": 47
+        "end": 47,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -105,7 +123,9 @@ static::factory();
                 },
                 "span": {
                   "start": 47,
-                  "end": 51
+                  "end": 51,
+                  "start_line": 5,
+                  "start_col": 0
                 }
               },
               "member": "x"
@@ -113,13 +133,17 @@ static::factory();
           },
           "span": {
             "start": 47,
-            "end": 55
+            "end": 55,
+            "start_line": 5,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 47,
-        "end": 57
+        "end": 57,
+        "start_line": 5,
+        "start_col": 0
       }
     },
     {
@@ -133,7 +157,9 @@ static::factory();
                 },
                 "span": {
                   "start": 57,
-                  "end": 63
+                  "end": 63,
+                  "start_line": 6,
+                  "start_col": 0
                 }
               },
               "method": "__construct",
@@ -142,13 +168,17 @@ static::factory();
           },
           "span": {
             "start": 57,
-            "end": 78
+            "end": 78,
+            "start_line": 6,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 57,
-        "end": 80
+        "end": 80,
+        "start_line": 6,
+        "start_col": 0
       }
     },
     {
@@ -162,7 +192,9 @@ static::factory();
                 },
                 "span": {
                   "start": 80,
-                  "end": 86
+                  "end": 86,
+                  "start_line": 7,
+                  "start_col": 0
                 }
               },
               "method": "factory",
@@ -171,18 +203,24 @@ static::factory();
           },
           "span": {
             "start": 80,
-            "end": 97
+            "end": 97,
+            "start_line": 7,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 80,
-        "end": 98
+        "end": 98,
+        "start_line": 7,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 98
+    "end": 98,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -31,7 +31,9 @@ $q = $a ?: 'fallback';
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -44,7 +46,9 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 11,
-                        "end": 12
+                        "end": 12,
+                        "start_line": 2,
+                        "start_col": 5
                       }
                     },
                     "op": "Add",
@@ -57,7 +61,9 @@ $q = $a ?: 'fallback';
                             },
                             "span": {
                               "start": 15,
-                              "end": 16
+                              "end": 16,
+                              "start_line": 2,
+                              "start_col": 9
                             }
                           },
                           "op": "Mul",
@@ -67,34 +73,44 @@ $q = $a ?: 'fallback';
                             },
                             "span": {
                               "start": 19,
-                              "end": 20
+                              "end": 20,
+                              "start_line": 2,
+                              "start_col": 13
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 15,
-                        "end": 20
+                        "end": 20,
+                        "start_line": 2,
+                        "start_col": 9
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 11,
-                  "end": 20
+                  "end": 20,
+                  "start_line": 2,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 20
+            "end": 20,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 22
+        "end": 22,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -108,7 +124,9 @@ $q = $a ?: 'fallback';
                 },
                 "span": {
                   "start": 22,
-                  "end": 24
+                  "end": 24,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -126,7 +144,9 @@ $q = $a ?: 'fallback';
                                 },
                                 "span": {
                                   "start": 28,
-                                  "end": 29
+                                  "end": 29,
+                                  "start_line": 3,
+                                  "start_col": 6
                                 }
                               },
                               "op": "Add",
@@ -136,20 +156,26 @@ $q = $a ?: 'fallback';
                                 },
                                 "span": {
                                   "start": 32,
-                                  "end": 33
+                                  "end": 33,
+                                  "start_line": 3,
+                                  "start_col": 10
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 28,
-                            "end": 33
+                            "end": 33,
+                            "start_line": 3,
+                            "start_col": 6
                           }
                         }
                       },
                       "span": {
                         "start": 27,
-                        "end": 35
+                        "end": 35,
+                        "start_line": 3,
+                        "start_col": 5
                       }
                     },
                     "op": "Mul",
@@ -159,27 +185,35 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 37,
-                        "end": 38
+                        "end": 38,
+                        "start_line": 3,
+                        "start_col": 15
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 27,
-                  "end": 38
+                  "end": 38,
+                  "start_line": 3,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 22,
-            "end": 38
+            "end": 38,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 22,
-        "end": 40
+        "end": 40,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -193,7 +227,9 @@ $q = $a ?: 'fallback';
                 },
                 "span": {
                   "start": 40,
-                  "end": 42
+                  "end": 42,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -206,7 +242,9 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 45,
-                        "end": 46
+                        "end": 46,
+                        "start_line": 4,
+                        "start_col": 5
                       }
                     },
                     "op": "Pow",
@@ -219,7 +257,9 @@ $q = $a ?: 'fallback';
                             },
                             "span": {
                               "start": 50,
-                              "end": 51
+                              "end": 51,
+                              "start_line": 4,
+                              "start_col": 10
                             }
                           },
                           "op": "Pow",
@@ -229,34 +269,44 @@ $q = $a ?: 'fallback';
                             },
                             "span": {
                               "start": 55,
-                              "end": 56
+                              "end": 56,
+                              "start_line": 4,
+                              "start_col": 15
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 50,
-                        "end": 56
+                        "end": 56,
+                        "start_line": 4,
+                        "start_col": 10
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 45,
-                  "end": 56
+                  "end": 56,
+                  "start_line": 4,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 40,
-            "end": 56
+            "end": 56,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 40,
-        "end": 58
+        "end": 58,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -270,7 +320,9 @@ $q = $a ?: 'fallback';
                 },
                 "span": {
                   "start": 58,
-                  "end": 60
+                  "end": 60,
+                  "start_line": 5,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -286,7 +338,9 @@ $q = $a ?: 'fallback';
                             },
                             "span": {
                               "start": 63,
-                              "end": 65
+                              "end": 65,
+                              "start_line": 5,
+                              "start_col": 5
                             }
                           },
                           "op": "Greater",
@@ -296,14 +350,18 @@ $q = $a ?: 'fallback';
                             },
                             "span": {
                               "start": 68,
-                              "end": 69
+                              "end": 69,
+                              "start_line": 5,
+                              "start_col": 10
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 63,
-                        "end": 69
+                        "end": 69,
+                        "start_line": 5,
+                        "start_col": 5
                       }
                     },
                     "then_expr": {
@@ -312,7 +370,9 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 72,
-                        "end": 82
+                        "end": 82,
+                        "start_line": 5,
+                        "start_col": 14
                       }
                     },
                     "else_expr": {
@@ -321,27 +381,35 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 85,
-                        "end": 99
+                        "end": 99,
+                        "start_line": 5,
+                        "start_col": 27
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 63,
-                  "end": 99
+                  "end": 99,
+                  "start_line": 5,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 58,
-            "end": 99
+            "end": 99,
+            "start_line": 5,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 58,
-        "end": 101
+        "end": 101,
+        "start_line": 5,
+        "start_col": 0
       }
     },
     {
@@ -355,7 +423,9 @@ $q = $a ?: 'fallback';
                 },
                 "span": {
                   "start": 101,
-                  "end": 103
+                  "end": 103,
+                  "start_line": 6,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -368,7 +438,9 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 106,
-                        "end": 108
+                        "end": 108,
+                        "start_line": 6,
+                        "start_col": 5
                       }
                     },
                     "right": {
@@ -377,27 +449,35 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 112,
-                        "end": 121
+                        "end": 121,
+                        "start_line": 6,
+                        "start_col": 11
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 106,
-                  "end": 121
+                  "end": 121,
+                  "start_line": 6,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 101,
-            "end": 121
+            "end": 121,
+            "start_line": 6,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 101,
-        "end": 123
+        "end": 123,
+        "start_line": 6,
+        "start_col": 0
       }
     },
     {
@@ -411,7 +491,9 @@ $q = $a ?: 'fallback';
                 },
                 "span": {
                   "start": 123,
-                  "end": 125
+                  "end": 125,
+                  "start_line": 7,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -424,7 +506,9 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 128,
-                        "end": 130
+                        "end": 130,
+                        "start_line": 7,
+                        "start_col": 5
                       }
                     },
                     "op": "Identical",
@@ -434,27 +518,35 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 135,
-                        "end": 137
+                        "end": 137,
+                        "start_line": 7,
+                        "start_col": 12
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 128,
-                  "end": 137
+                  "end": 137,
+                  "start_line": 7,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 123,
-            "end": 137
+            "end": 137,
+            "start_line": 7,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 123,
-        "end": 139
+        "end": 139,
+        "start_line": 7,
+        "start_col": 0
       }
     },
     {
@@ -468,7 +560,9 @@ $q = $a ?: 'fallback';
                 },
                 "span": {
                   "start": 139,
-                  "end": 141
+                  "end": 141,
+                  "start_line": 8,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -482,27 +576,35 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 145,
-                        "end": 150
+                        "end": 150,
+                        "start_line": 8,
+                        "start_col": 6
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 144,
-                  "end": 150
+                  "end": 150,
+                  "start_line": 8,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 139,
-            "end": 150
+            "end": 150,
+            "start_line": 8,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 139,
-        "end": 152
+        "end": 152,
+        "start_line": 8,
+        "start_col": 0
       }
     },
     {
@@ -516,7 +618,9 @@ $q = $a ?: 'fallback';
                 },
                 "span": {
                   "start": 152,
-                  "end": 154
+                  "end": 154,
+                  "start_line": 9,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -530,27 +634,35 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 158,
-                        "end": 160
+                        "end": 160,
+                        "start_line": 9,
+                        "start_col": 6
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 157,
-                  "end": 160
+                  "end": 160,
+                  "start_line": 9,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 152,
-            "end": 160
+            "end": 160,
+            "start_line": 9,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 152,
-        "end": 162
+        "end": 162,
+        "start_line": 9,
+        "start_col": 0
       }
     },
     {
@@ -564,7 +676,9 @@ $q = $a ?: 'fallback';
                 },
                 "span": {
                   "start": 162,
-                  "end": 164
+                  "end": 164,
+                  "start_line": 10,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -577,7 +691,9 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 167,
-                        "end": 169
+                        "end": 169,
+                        "start_line": 10,
+                        "start_col": 5
                       }
                     },
                     "op": "PostIncrement"
@@ -585,20 +701,26 @@ $q = $a ?: 'fallback';
                 },
                 "span": {
                   "start": 167,
-                  "end": 171
+                  "end": 171,
+                  "start_line": 10,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 162,
-            "end": 171
+            "end": 171,
+            "start_line": 10,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 162,
-        "end": 173
+        "end": 173,
+        "start_line": 10,
+        "start_col": 0
       }
     },
     {
@@ -612,7 +734,9 @@ $q = $a ?: 'fallback';
                 },
                 "span": {
                   "start": 173,
-                  "end": 175
+                  "end": 175,
+                  "start_line": 11,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -626,27 +750,35 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 180,
-                        "end": 182
+                        "end": 182,
+                        "start_line": 11,
+                        "start_col": 7
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 178,
-                  "end": 182
+                  "end": 182,
+                  "start_line": 11,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 173,
-            "end": 182
+            "end": 182,
+            "start_line": 11,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 173,
-        "end": 184
+        "end": 184,
+        "start_line": 11,
+        "start_col": 0
       }
     },
     {
@@ -660,7 +792,9 @@ $q = $a ?: 'fallback';
                 },
                 "span": {
                   "start": 184,
-                  "end": 186
+                  "end": 186,
+                  "start_line": 12,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -676,7 +810,9 @@ $q = $a ?: 'fallback';
                             },
                             "span": {
                               "start": 189,
-                              "end": 196
+                              "end": 196,
+                              "start_line": 12,
+                              "start_col": 5
                             }
                           },
                           "op": "Concat",
@@ -686,14 +822,18 @@ $q = $a ?: 'fallback';
                             },
                             "span": {
                               "start": 199,
-                              "end": 202
+                              "end": 202,
+                              "start_line": 12,
+                              "start_col": 15
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 189,
-                        "end": 202
+                        "end": 202,
+                        "start_line": 12,
+                        "start_col": 5
                       }
                     },
                     "op": "Concat",
@@ -703,27 +843,35 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 205,
-                        "end": 212
+                        "end": 212,
+                        "start_line": 12,
+                        "start_col": 21
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 189,
-                  "end": 212
+                  "end": 212,
+                  "start_line": 12,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 184,
-            "end": 212
+            "end": 212,
+            "start_line": 12,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 184,
-        "end": 214
+        "end": 214,
+        "start_line": 12,
+        "start_col": 0
       }
     },
     {
@@ -737,7 +885,9 @@ $q = $a ?: 'fallback';
                 },
                 "span": {
                   "start": 214,
-                  "end": 216
+                  "end": 216,
+                  "start_line": 13,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -753,7 +903,9 @@ $q = $a ?: 'fallback';
                             },
                             "span": {
                               "start": 219,
-                              "end": 221
+                              "end": 221,
+                              "start_line": 13,
+                              "start_col": 5
                             }
                           },
                           "op": "Add",
@@ -763,14 +915,18 @@ $q = $a ?: 'fallback';
                             },
                             "span": {
                               "start": 224,
-                              "end": 226
+                              "end": 226,
+                              "start_line": 13,
+                              "start_col": 10
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 219,
-                        "end": 226
+                        "end": 226,
+                        "start_line": 13,
+                        "start_col": 5
                       }
                     },
                     "op": "Sub",
@@ -786,7 +942,9 @@ $q = $a ?: 'fallback';
                                   },
                                   "span": {
                                     "start": 229,
-                                    "end": 231
+                                    "end": 231,
+                                    "start_line": 13,
+                                    "start_col": 15
                                   }
                                 },
                                 "op": "Mul",
@@ -796,14 +954,18 @@ $q = $a ?: 'fallback';
                                   },
                                   "span": {
                                     "start": 234,
-                                    "end": 236
+                                    "end": 236,
+                                    "start_line": 13,
+                                    "start_col": 20
                                   }
                                 }
                               }
                             },
                             "span": {
                               "start": 229,
-                              "end": 236
+                              "end": 236,
+                              "start_line": 13,
+                              "start_col": 15
                             }
                           },
                           "op": "Div",
@@ -813,34 +975,44 @@ $q = $a ?: 'fallback';
                             },
                             "span": {
                               "start": 239,
-                              "end": 241
+                              "end": 241,
+                              "start_line": 13,
+                              "start_col": 25
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 229,
-                        "end": 241
+                        "end": 241,
+                        "start_line": 13,
+                        "start_col": 15
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 219,
-                  "end": 241
+                  "end": 241,
+                  "start_line": 13,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 214,
-            "end": 241
+            "end": 241,
+            "start_line": 13,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 214,
-        "end": 243
+        "end": 243,
+        "start_line": 13,
+        "start_col": 0
       }
     },
     {
@@ -854,7 +1026,9 @@ $q = $a ?: 'fallback';
                 },
                 "span": {
                   "start": 243,
-                  "end": 245
+                  "end": 245,
+                  "start_line": 14,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -870,7 +1044,9 @@ $q = $a ?: 'fallback';
                             },
                             "span": {
                               "start": 248,
-                              "end": 250
+                              "end": 250,
+                              "start_line": 14,
+                              "start_col": 5
                             }
                           },
                           "op": "BitwiseAnd",
@@ -880,14 +1056,18 @@ $q = $a ?: 'fallback';
                             },
                             "span": {
                               "start": 253,
-                              "end": 255
+                              "end": 255,
+                              "start_line": 14,
+                              "start_col": 10
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 248,
-                        "end": 255
+                        "end": 255,
+                        "start_line": 14,
+                        "start_col": 5
                       }
                     },
                     "op": "BitwiseOr",
@@ -900,7 +1080,9 @@ $q = $a ?: 'fallback';
                             },
                             "span": {
                               "start": 258,
-                              "end": 260
+                              "end": 260,
+                              "start_line": 14,
+                              "start_col": 15
                             }
                           },
                           "op": "BitwiseXor",
@@ -910,34 +1092,44 @@ $q = $a ?: 'fallback';
                             },
                             "span": {
                               "start": 263,
-                              "end": 265
+                              "end": 265,
+                              "start_line": 14,
+                              "start_col": 20
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 258,
-                        "end": 265
+                        "end": 265,
+                        "start_line": 14,
+                        "start_col": 15
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 248,
-                  "end": 265
+                  "end": 265,
+                  "start_line": 14,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 243,
-            "end": 265
+            "end": 265,
+            "start_line": 14,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 243,
-        "end": 267
+        "end": 267,
+        "start_line": 14,
+        "start_col": 0
       }
     },
     {
@@ -951,7 +1143,9 @@ $q = $a ?: 'fallback';
                 },
                 "span": {
                   "start": 267,
-                  "end": 269
+                  "end": 269,
+                  "start_line": 15,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -964,7 +1158,9 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 272,
-                        "end": 274
+                        "end": 274,
+                        "start_line": 15,
+                        "start_col": 5
                       }
                     },
                     "op": "ShiftLeft",
@@ -974,27 +1170,35 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 278,
-                        "end": 279
+                        "end": 279,
+                        "start_line": 15,
+                        "start_col": 11
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 272,
-                  "end": 279
+                  "end": 279,
+                  "start_line": 15,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 267,
-            "end": 279
+            "end": 279,
+            "start_line": 15,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 267,
-        "end": 281
+        "end": 281,
+        "start_line": 15,
+        "start_col": 0
       }
     },
     {
@@ -1008,7 +1212,9 @@ $q = $a ?: 'fallback';
                 },
                 "span": {
                   "start": 281,
-                  "end": 283
+                  "end": 283,
+                  "start_line": 16,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -1021,7 +1227,9 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 286,
-                        "end": 288
+                        "end": 288,
+                        "start_line": 16,
+                        "start_col": 5
                       }
                     },
                     "op": "ShiftRight",
@@ -1031,27 +1239,35 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 292,
-                        "end": 293
+                        "end": 293,
+                        "start_line": 16,
+                        "start_col": 11
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 286,
-                  "end": 293
+                  "end": 293,
+                  "start_line": 16,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 281,
-            "end": 293
+            "end": 293,
+            "start_line": 16,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 281,
-        "end": 295
+        "end": 295,
+        "start_line": 16,
+        "start_col": 0
       }
     },
     {
@@ -1065,7 +1281,9 @@ $q = $a ?: 'fallback';
                 },
                 "span": {
                   "start": 295,
-                  "end": 297
+                  "end": 297,
+                  "start_line": 17,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -1078,7 +1296,9 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 300,
-                        "end": 302
+                        "end": 302,
+                        "start_line": 17,
+                        "start_col": 5
                       }
                     },
                     "op": "Spaceship",
@@ -1088,27 +1308,35 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 307,
-                        "end": 309
+                        "end": 309,
+                        "start_line": 17,
+                        "start_col": 12
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 300,
-                  "end": 309
+                  "end": 309,
+                  "start_line": 17,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 295,
-            "end": 309
+            "end": 309,
+            "start_line": 17,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 295,
-        "end": 311
+        "end": 311,
+        "start_line": 17,
+        "start_col": 0
       }
     },
     {
@@ -1122,7 +1350,9 @@ $q = $a ?: 'fallback';
                 },
                 "span": {
                   "start": 311,
-                  "end": 313
+                  "end": 313,
+                  "start_line": 18,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -1135,7 +1365,9 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 316,
-                        "end": 318
+                        "end": 318,
+                        "start_line": 18,
+                        "start_col": 5
                       }
                     },
                     "then_expr": null,
@@ -1145,32 +1377,42 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 322,
-                        "end": 332
+                        "end": 332,
+                        "start_line": 18,
+                        "start_col": 11
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 316,
-                  "end": 332
+                  "end": 332,
+                  "start_line": 18,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 311,
-            "end": 332
+            "end": 332,
+            "start_line": 18,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 311,
-        "end": 333
+        "end": 333,
+        "start_line": 18,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 333
+    "end": 333,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -60,7 +60,9 @@ class UserController extends BaseController implements JsonResponder
             "kind": "Qualified",
             "span": {
               "start": 16,
-              "end": 31
+              "end": 31,
+              "start_line": 2,
+              "start_col": 10
             }
           },
           "body": "Simple"
@@ -68,7 +70,9 @@ class UserController extends BaseController implements JsonResponder
       },
       "span": {
         "start": 6,
-        "end": 34
+        "end": 34,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -86,13 +90,17 @@ class UserController extends BaseController implements JsonResponder
                 "kind": "Qualified",
                 "span": {
                   "start": 38,
-                  "end": 53
+                  "end": 53,
+                  "start_line": 4,
+                  "start_col": 4
                 }
               },
               "alias": null,
               "span": {
                 "start": 38,
-                "end": 53
+                "end": 53,
+                "start_line": 4,
+                "start_col": 4
               }
             }
           ]
@@ -100,7 +108,9 @@ class UserController extends BaseController implements JsonResponder
       },
       "span": {
         "start": 34,
-        "end": 55
+        "end": 55,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -118,13 +128,17 @@ class UserController extends BaseController implements JsonResponder
                 "kind": "Qualified",
                 "span": {
                   "start": 59,
-                  "end": 84
+                  "end": 84,
+                  "start_line": 5,
+                  "start_col": 4
                 }
               },
               "alias": "Auth",
               "span": {
                 "start": 59,
-                "end": 91
+                "end": 91,
+                "start_line": 5,
+                "start_col": 4
               }
             }
           ]
@@ -132,7 +146,9 @@ class UserController extends BaseController implements JsonResponder
       },
       "span": {
         "start": 55,
-        "end": 94
+        "end": 94,
+        "start_line": 5,
+        "start_col": 0
       }
     },
     {
@@ -151,7 +167,9 @@ class UserController extends BaseController implements JsonResponder
             "kind": "Unqualified",
             "span": {
               "start": 123,
-              "end": 138
+              "end": 138,
+              "start_line": 7,
+              "start_col": 29
             }
           },
           "implements": [
@@ -162,7 +180,9 @@ class UserController extends BaseController implements JsonResponder
               "kind": "Unqualified",
               "span": {
                 "start": 149,
-                "end": 163
+                "end": 163,
+                "start_line": 7,
+                "start_col": 55
               }
             }
           ],
@@ -184,13 +204,17 @@ class UserController extends BaseController implements JsonResponder
                         "kind": "Unqualified",
                         "span": {
                           "start": 186,
-                          "end": 198
+                          "end": 198,
+                          "start_line": 9,
+                          "start_col": 21
                         }
                       }
                     },
                     "span": {
                       "start": 186,
-                      "end": 198
+                      "end": 198,
+                      "start_line": 9,
+                      "start_col": 21
                     }
                   },
                   "default": null,
@@ -199,7 +223,9 @@ class UserController extends BaseController implements JsonResponder
               },
               "span": {
                 "start": 169,
-                "end": 203
+                "end": 203,
+                "start_line": 9,
+                "start_col": 4
               }
             },
             {
@@ -223,13 +249,17 @@ class UserController extends BaseController implements JsonResponder
                             "kind": "Unqualified",
                             "span": {
                               "start": 238,
-                              "end": 250
+                              "end": 250,
+                              "start_line": 11,
+                              "start_col": 32
                             }
                           }
                         },
                         "span": {
                           "start": 238,
-                          "end": 250
+                          "end": 250,
+                          "start_line": 11,
+                          "start_col": 32
                         }
                       },
                       "default": null,
@@ -242,7 +272,9 @@ class UserController extends BaseController implements JsonResponder
                       "attributes": [],
                       "span": {
                         "start": 238,
-                        "end": 255
+                        "end": 255,
+                        "start_line": 11,
+                        "start_col": 32
                       }
                     }
                   ],
@@ -262,7 +294,9 @@ class UserController extends BaseController implements JsonResponder
                                       },
                                       "span": {
                                         "start": 271,
-                                        "end": 276
+                                        "end": 276,
+                                        "start_line": 13,
+                                        "start_col": 8
                                       }
                                     },
                                     "property": {
@@ -271,14 +305,18 @@ class UserController extends BaseController implements JsonResponder
                                       },
                                       "span": {
                                         "start": 278,
-                                        "end": 282
+                                        "end": 282,
+                                        "start_line": 13,
+                                        "start_col": 15
                                       }
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 271,
-                                  "end": 282
+                                  "end": 282,
+                                  "start_line": 13,
+                                  "start_col": 8
                                 }
                               },
                               "op": "Assign",
@@ -288,20 +326,26 @@ class UserController extends BaseController implements JsonResponder
                                 },
                                 "span": {
                                   "start": 285,
-                                  "end": 290
+                                  "end": 290,
+                                  "start_line": 13,
+                                  "start_col": 22
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 271,
-                            "end": 290
+                            "end": 290,
+                            "start_line": 13,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 271,
-                        "end": 296
+                        "end": 296,
+                        "start_line": 13,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -310,7 +354,9 @@ class UserController extends BaseController implements JsonResponder
               },
               "span": {
                 "start": 210,
-                "end": 303
+                "end": 303,
+                "start_line": 11,
+                "start_col": 4
               }
             },
             {
@@ -334,13 +380,17 @@ class UserController extends BaseController implements JsonResponder
                             "kind": "Unqualified",
                             "span": {
                               "start": 324,
-                              "end": 327
+                              "end": 327,
+                              "start_line": 16,
+                              "start_col": 25
                             }
                           }
                         },
                         "span": {
                           "start": 324,
-                          "end": 327
+                          "end": 327,
+                          "start_line": 16,
+                          "start_col": 25
                         }
                       },
                       "default": null,
@@ -353,7 +403,9 @@ class UserController extends BaseController implements JsonResponder
                       "attributes": [],
                       "span": {
                         "start": 324,
-                        "end": 331
+                        "end": 331,
+                        "start_line": 16,
+                        "start_col": 25
                       }
                     }
                   ],
@@ -366,13 +418,17 @@ class UserController extends BaseController implements JsonResponder
                         "kind": "Unqualified",
                         "span": {
                           "start": 334,
-                          "end": 339
+                          "end": 339,
+                          "start_line": 16,
+                          "start_col": 35
                         }
                       }
                     },
                     "span": {
                       "start": 334,
-                      "end": 339
+                      "end": 339,
+                      "start_line": 16,
+                      "start_col": 35
                     }
                   },
                   "body": [
@@ -391,7 +447,9 @@ class UserController extends BaseController implements JsonResponder
                                         },
                                         "span": {
                                           "start": 372,
-                                          "end": 377
+                                          "end": 377,
+                                          "start_line": 19,
+                                          "start_col": 12
                                         }
                                       },
                                       "op": "Assign",
@@ -407,7 +465,9 @@ class UserController extends BaseController implements JsonResponder
                                                     },
                                                     "span": {
                                                       "start": 380,
-                                                      "end": 384
+                                                      "end": 384,
+                                                      "start_line": 19,
+                                                      "start_col": 20
                                                     }
                                                   },
                                                   "method": "find",
@@ -420,14 +480,18 @@ class UserController extends BaseController implements JsonResponder
                                                         },
                                                         "span": {
                                                           "start": 391,
-                                                          "end": 394
+                                                          "end": 394,
+                                                          "start_line": 19,
+                                                          "start_col": 31
                                                         }
                                                       },
                                                       "unpack": false,
                                                       "by_ref": false,
                                                       "span": {
                                                         "start": 391,
-                                                        "end": 394
+                                                        "end": 394,
+                                                        "start_line": 19,
+                                                        "start_col": 31
                                                       }
                                                     }
                                                   ]
@@ -435,7 +499,9 @@ class UserController extends BaseController implements JsonResponder
                                               },
                                               "span": {
                                                 "start": 380,
-                                                "end": 396
+                                                "end": 396,
+                                                "start_line": 19,
+                                                "start_col": 20
                                               }
                                             },
                                             "right": {
@@ -449,7 +515,9 @@ class UserController extends BaseController implements JsonResponder
                                                         },
                                                         "span": {
                                                           "start": 409,
-                                                          "end": 426
+                                                          "end": 426,
+                                                          "start_line": 19,
+                                                          "start_col": 49
                                                         }
                                                       },
                                                       "args": [
@@ -461,14 +529,18 @@ class UserController extends BaseController implements JsonResponder
                                                             },
                                                             "span": {
                                                               "start": 427,
-                                                              "end": 443
+                                                              "end": 443,
+                                                              "start_line": 19,
+                                                              "start_col": 67
                                                             }
                                                           },
                                                           "unpack": false,
                                                           "by_ref": false,
                                                           "span": {
                                                             "start": 427,
-                                                            "end": 443
+                                                            "end": 443,
+                                                            "start_line": 19,
+                                                            "start_col": 67
                                                           }
                                                         }
                                                       ]
@@ -476,33 +548,43 @@ class UserController extends BaseController implements JsonResponder
                                                   },
                                                   "span": {
                                                     "start": 405,
-                                                    "end": 444
+                                                    "end": 444,
+                                                    "start_line": 19,
+                                                    "start_col": 45
                                                   }
                                                 }
                                               },
                                               "span": {
                                                 "start": 399,
-                                                "end": 444
+                                                "end": 444,
+                                                "start_line": 19,
+                                                "start_col": 39
                                               }
                                             }
                                           }
                                         },
                                         "span": {
                                           "start": 380,
-                                          "end": 444
+                                          "end": 444,
+                                          "start_line": 19,
+                                          "start_col": 20
                                         }
                                       }
                                     }
                                   },
                                   "span": {
                                     "start": 372,
-                                    "end": 444
+                                    "end": 444,
+                                    "start_line": 19,
+                                    "start_col": 12
                                   }
                                 }
                               },
                               "span": {
                                 "start": 372,
-                                "end": 458
+                                "end": 458,
+                                "start_line": 19,
+                                "start_col": 12
                               }
                             },
                             {
@@ -516,7 +598,9 @@ class UserController extends BaseController implements JsonResponder
                                         },
                                         "span": {
                                           "start": 458,
-                                          "end": 463
+                                          "end": 463,
+                                          "start_line": 20,
+                                          "start_col": 12
                                         }
                                       },
                                       "op": "Assign",
@@ -532,7 +616,9 @@ class UserController extends BaseController implements JsonResponder
                                                     },
                                                     "span": {
                                                       "start": 473,
-                                                      "end": 478
+                                                      "end": 478,
+                                                      "start_line": 20,
+                                                      "start_col": 27
                                                     }
                                                   },
                                                   "property": {
@@ -541,14 +627,18 @@ class UserController extends BaseController implements JsonResponder
                                                     },
                                                     "span": {
                                                       "start": 480,
-                                                      "end": 484
+                                                      "end": 484,
+                                                      "start_line": 20,
+                                                      "start_col": 34
                                                     }
                                                   }
                                                 }
                                               },
                                               "span": {
                                                 "start": 473,
-                                                "end": 484
+                                                "end": 484,
+                                                "start_line": 20,
+                                                "start_col": 27
                                               }
                                             },
                                             "arms": [
@@ -560,7 +650,9 @@ class UserController extends BaseController implements JsonResponder
                                                     },
                                                     "span": {
                                                       "start": 504,
-                                                      "end": 511
+                                                      "end": 511,
+                                                      "start_line": 21,
+                                                      "start_col": 16
                                                     }
                                                   }
                                                 ],
@@ -570,12 +662,16 @@ class UserController extends BaseController implements JsonResponder
                                                   },
                                                   "span": {
                                                     "start": 515,
-                                                    "end": 530
+                                                    "end": 530,
+                                                    "start_line": 21,
+                                                    "start_col": 27
                                                   }
                                                 },
                                                 "span": {
                                                   "start": 504,
-                                                  "end": 530
+                                                  "end": 530,
+                                                  "start_line": 21,
+                                                  "start_col": 16
                                                 }
                                               },
                                               {
@@ -586,7 +682,9 @@ class UserController extends BaseController implements JsonResponder
                                                     },
                                                     "span": {
                                                       "start": 548,
-                                                      "end": 556
+                                                      "end": 556,
+                                                      "start_line": 22,
+                                                      "start_col": 16
                                                     }
                                                   }
                                                 ],
@@ -596,12 +694,16 @@ class UserController extends BaseController implements JsonResponder
                                                   },
                                                   "span": {
                                                     "start": 560,
-                                                    "end": 568
+                                                    "end": 568,
+                                                    "start_line": 22,
+                                                    "start_col": 28
                                                   }
                                                 },
                                                 "span": {
                                                   "start": 548,
-                                                  "end": 568
+                                                  "end": 568,
+                                                  "start_line": 22,
+                                                  "start_col": 16
                                                 }
                                               },
                                               {
@@ -612,12 +714,16 @@ class UserController extends BaseController implements JsonResponder
                                                   },
                                                   "span": {
                                                     "start": 597,
-                                                    "end": 603
+                                                    "end": 603,
+                                                    "start_line": 23,
+                                                    "start_col": 27
                                                   }
                                                 },
                                                 "span": {
                                                   "start": 586,
-                                                  "end": 603
+                                                  "end": 603,
+                                                  "start_line": 23,
+                                                  "start_col": 16
                                                 }
                                               }
                                             ]
@@ -625,20 +731,26 @@ class UserController extends BaseController implements JsonResponder
                                         },
                                         "span": {
                                           "start": 466,
-                                          "end": 618
+                                          "end": 618,
+                                          "start_line": 20,
+                                          "start_col": 20
                                         }
                                       }
                                     }
                                   },
                                   "span": {
                                     "start": 458,
-                                    "end": 618
+                                    "end": 618,
+                                    "start_line": 20,
+                                    "start_col": 12
                                   }
                                 }
                               },
                               "span": {
                                 "start": 458,
-                                "end": 632
+                                "end": 632,
+                                "start_line": 20,
+                                "start_col": 12
                               }
                             },
                             {
@@ -652,7 +764,9 @@ class UserController extends BaseController implements JsonResponder
                                         },
                                         "span": {
                                           "start": 632,
-                                          "end": 637
+                                          "end": 637,
+                                          "start_line": 25,
+                                          "start_col": 12
                                         }
                                       },
                                       "op": "Assign",
@@ -666,7 +780,9 @@ class UserController extends BaseController implements JsonResponder
                                                 },
                                                 "span": {
                                                   "start": 658,
-                                                  "end": 664
+                                                  "end": 664,
+                                                  "start_line": 26,
+                                                  "start_col": 16
                                                 }
                                               },
                                               "value": {
@@ -678,7 +794,9 @@ class UserController extends BaseController implements JsonResponder
                                                       },
                                                       "span": {
                                                         "start": 668,
-                                                        "end": 673
+                                                        "end": 673,
+                                                        "start_line": 26,
+                                                        "start_col": 26
                                                       }
                                                     },
                                                     "property": {
@@ -687,20 +805,26 @@ class UserController extends BaseController implements JsonResponder
                                                       },
                                                       "span": {
                                                         "start": 675,
-                                                        "end": 679
+                                                        "end": 679,
+                                                        "start_line": 26,
+                                                        "start_col": 33
                                                       }
                                                     }
                                                   }
                                                 },
                                                 "span": {
                                                   "start": 668,
-                                                  "end": 679
+                                                  "end": 679,
+                                                  "start_line": 26,
+                                                  "start_col": 26
                                                 }
                                               },
                                               "unpack": false,
                                               "span": {
                                                 "start": 658,
-                                                "end": 679
+                                                "end": 679,
+                                                "start_line": 26,
+                                                "start_col": 16
                                               }
                                             },
                                             {
@@ -710,7 +834,9 @@ class UserController extends BaseController implements JsonResponder
                                                 },
                                                 "span": {
                                                   "start": 697,
-                                                  "end": 704
+                                                  "end": 704,
+                                                  "start_line": 27,
+                                                  "start_col": 16
                                                 }
                                               },
                                               "value": {
@@ -722,7 +848,9 @@ class UserController extends BaseController implements JsonResponder
                                                       },
                                                       "span": {
                                                         "start": 708,
-                                                        "end": 713
+                                                        "end": 713,
+                                                        "start_line": 27,
+                                                        "start_col": 27
                                                       }
                                                     },
                                                     "property": {
@@ -731,20 +859,26 @@ class UserController extends BaseController implements JsonResponder
                                                       },
                                                       "span": {
                                                         "start": 716,
-                                                        "end": 721
+                                                        "end": 721,
+                                                        "start_line": 27,
+                                                        "start_col": 35
                                                       }
                                                     }
                                                   }
                                                 },
                                                 "span": {
                                                   "start": 708,
-                                                  "end": 721
+                                                  "end": 721,
+                                                  "start_line": 27,
+                                                  "start_col": 27
                                                 }
                                               },
                                               "unpack": false,
                                               "span": {
                                                 "start": 697,
-                                                "end": 721
+                                                "end": 721,
+                                                "start_line": 27,
+                                                "start_col": 16
                                               }
                                             },
                                             {
@@ -754,7 +888,9 @@ class UserController extends BaseController implements JsonResponder
                                                 },
                                                 "span": {
                                                   "start": 739,
-                                                  "end": 745
+                                                  "end": 745,
+                                                  "start_line": 28,
+                                                  "start_col": 16
                                                 }
                                               },
                                               "value": {
@@ -763,33 +899,43 @@ class UserController extends BaseController implements JsonResponder
                                                 },
                                                 "span": {
                                                   "start": 749,
-                                                  "end": 754
+                                                  "end": 754,
+                                                  "start_line": 28,
+                                                  "start_col": 26
                                                 }
                                               },
                                               "unpack": false,
                                               "span": {
                                                 "start": 739,
-                                                "end": 754
+                                                "end": 754,
+                                                "start_line": 28,
+                                                "start_col": 16
                                               }
                                             }
                                           ]
                                         },
                                         "span": {
                                           "start": 640,
-                                          "end": 769
+                                          "end": 769,
+                                          "start_line": 25,
+                                          "start_col": 20
                                         }
                                       }
                                     }
                                   },
                                   "span": {
                                     "start": 632,
-                                    "end": 769
+                                    "end": 769,
+                                    "start_line": 25,
+                                    "start_col": 12
                                   }
                                 }
                               },
                               "span": {
                                 "start": 632,
-                                "end": 783
+                                "end": 783,
+                                "start_line": 25,
+                                "start_col": 12
                               }
                             },
                             {
@@ -800,13 +946,17 @@ class UserController extends BaseController implements JsonResponder
                                   },
                                   "span": {
                                     "start": 790,
-                                    "end": 795
+                                    "end": 795,
+                                    "start_line": 30,
+                                    "start_col": 19
                                   }
                                 }
                               },
                               "span": {
                                 "start": 783,
-                                "end": 805
+                                "end": 805,
+                                "start_line": 30,
+                                "start_col": 12
                               }
                             }
                           ],
@@ -820,7 +970,9 @@ class UserController extends BaseController implements JsonResponder
                                   "kind": "Unqualified",
                                   "span": {
                                     "start": 814,
-                                    "end": 832
+                                    "end": 832,
+                                    "start_line": 31,
+                                    "start_col": 17
                                   }
                                 }
                               ],
@@ -838,7 +990,9 @@ class UserController extends BaseController implements JsonResponder
                                               },
                                               "span": {
                                                 "start": 858,
-                                                "end": 865
+                                                "end": 865,
+                                                "start_line": 32,
+                                                "start_col": 20
                                               }
                                             },
                                             "value": {
@@ -850,7 +1004,9 @@ class UserController extends BaseController implements JsonResponder
                                                     },
                                                     "span": {
                                                       "start": 869,
-                                                      "end": 871
+                                                      "end": 871,
+                                                      "start_line": 32,
+                                                      "start_col": 31
                                                     }
                                                   },
                                                   "method": {
@@ -859,7 +1015,9 @@ class UserController extends BaseController implements JsonResponder
                                                     },
                                                     "span": {
                                                       "start": 873,
-                                                      "end": 883
+                                                      "end": 883,
+                                                      "start_line": 32,
+                                                      "start_col": 35
                                                     }
                                                   },
                                                   "args": []
@@ -867,32 +1025,42 @@ class UserController extends BaseController implements JsonResponder
                                               },
                                               "span": {
                                                 "start": 869,
-                                                "end": 885
+                                                "end": 885,
+                                                "start_line": 32,
+                                                "start_col": 31
                                               }
                                             },
                                             "unpack": false,
                                             "span": {
                                               "start": 858,
-                                              "end": 885
+                                              "end": 885,
+                                              "start_line": 32,
+                                              "start_col": 20
                                             }
                                           }
                                         ]
                                       },
                                       "span": {
                                         "start": 857,
-                                        "end": 886
+                                        "end": 886,
+                                        "start_line": 32,
+                                        "start_col": 19
                                       }
                                     }
                                   },
                                   "span": {
                                     "start": 850,
-                                    "end": 896
+                                    "end": 896,
+                                    "start_line": 32,
+                                    "start_col": 12
                                   }
                                 }
                               ],
                               "span": {
                                 "start": 813,
-                                "end": 898
+                                "end": 898,
+                                "start_line": 31,
+                                "start_col": 16
                               }
                             }
                           ],
@@ -911,7 +1079,9 @@ class UserController extends BaseController implements JsonResponder
                                               },
                                               "span": {
                                                 "start": 920,
-                                                "end": 925
+                                                "end": 925,
+                                                "start_line": 34,
+                                                "start_col": 12
                                               }
                                             },
                                             "property": {
@@ -920,14 +1090,18 @@ class UserController extends BaseController implements JsonResponder
                                               },
                                               "span": {
                                                 "start": 927,
-                                                "end": 931
+                                                "end": 931,
+                                                "start_line": 34,
+                                                "start_col": 19
                                               }
                                             }
                                           }
                                         },
                                         "span": {
                                           "start": 920,
-                                          "end": 931
+                                          "end": 931,
+                                          "start_line": 34,
+                                          "start_col": 12
                                         }
                                       },
                                       "method": {
@@ -936,7 +1110,9 @@ class UserController extends BaseController implements JsonResponder
                                         },
                                         "span": {
                                           "start": 933,
-                                          "end": 942
+                                          "end": 942,
+                                          "start_line": 34,
+                                          "start_col": 25
                                         }
                                       },
                                       "args": [
@@ -948,14 +1124,18 @@ class UserController extends BaseController implements JsonResponder
                                             },
                                             "span": {
                                               "start": 943,
-                                              "end": 946
+                                              "end": 946,
+                                              "start_line": 34,
+                                              "start_col": 35
                                             }
                                           },
                                           "unpack": false,
                                           "by_ref": false,
                                           "span": {
                                             "start": 943,
-                                            "end": 946
+                                            "end": 946,
+                                            "start_line": 34,
+                                            "start_col": 35
                                           }
                                         }
                                       ]
@@ -963,13 +1143,17 @@ class UserController extends BaseController implements JsonResponder
                                   },
                                   "span": {
                                     "start": 920,
-                                    "end": 947
+                                    "end": 947,
+                                    "start_line": 34,
+                                    "start_col": 12
                                   }
                                 }
                               },
                               "span": {
                                 "start": 920,
-                                "end": 957
+                                "end": 957,
+                                "start_line": 34,
+                                "start_col": 12
                               }
                             }
                           ]
@@ -977,7 +1161,9 @@ class UserController extends BaseController implements JsonResponder
                       },
                       "span": {
                         "start": 354,
-                        "end": 963
+                        "end": 963,
+                        "start_line": 18,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -986,7 +1172,9 @@ class UserController extends BaseController implements JsonResponder
               },
               "span": {
                 "start": 303,
-                "end": 970
+                "end": 970,
+                "start_line": 16,
+                "start_col": 4
               }
             },
             {
@@ -1008,13 +1196,17 @@ class UserController extends BaseController implements JsonResponder
                         "kind": "Unqualified",
                         "span": {
                           "start": 994,
-                          "end": 999
+                          "end": 999,
+                          "start_line": 38,
+                          "start_col": 28
                         }
                       }
                     },
                     "span": {
                       "start": 994,
-                      "end": 999
+                      "end": 999,
+                      "start_line": 38,
+                      "start_col": 28
                     }
                   },
                   "body": [
@@ -1029,7 +1221,9 @@ class UserController extends BaseController implements JsonResponder
                                 },
                                 "span": {
                                   "start": 1014,
-                                  "end": 1020
+                                  "end": 1020,
+                                  "start_line": 40,
+                                  "start_col": 8
                                 }
                               },
                               "op": "Assign",
@@ -1042,7 +1236,9 @@ class UserController extends BaseController implements JsonResponder
                                       },
                                       "span": {
                                         "start": 1023,
-                                        "end": 1027
+                                        "end": 1027,
+                                        "start_line": 40,
+                                        "start_col": 17
                                       }
                                     },
                                     "method": "all",
@@ -1051,20 +1247,26 @@ class UserController extends BaseController implements JsonResponder
                                 },
                                 "span": {
                                   "start": 1023,
-                                  "end": 1034
+                                  "end": 1034,
+                                  "start_line": 40,
+                                  "start_col": 17
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 1014,
-                            "end": 1034
+                            "end": 1034,
+                            "start_line": 40,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 1014,
-                        "end": 1044
+                        "end": 1044,
+                        "start_line": 40,
+                        "start_col": 8
                       }
                     },
                     {
@@ -1078,7 +1280,9 @@ class UserController extends BaseController implements JsonResponder
                                 },
                                 "span": {
                                   "start": 1044,
-                                  "end": 1050
+                                  "end": 1050,
+                                  "start_line": 41,
+                                  "start_col": 8
                                 }
                               },
                               "op": "Assign",
@@ -1091,7 +1295,9 @@ class UserController extends BaseController implements JsonResponder
                                       },
                                       "span": {
                                         "start": 1053,
-                                        "end": 1062
+                                        "end": 1062,
+                                        "start_line": 41,
+                                        "start_col": 17
                                       }
                                     },
                                     "args": [
@@ -1116,7 +1322,9 @@ class UserController extends BaseController implements JsonResponder
                                                   "attributes": [],
                                                   "span": {
                                                     "start": 1066,
-                                                    "end": 1068
+                                                    "end": 1068,
+                                                    "start_line": 41,
+                                                    "start_col": 30
                                                   }
                                                 }
                                               ],
@@ -1130,7 +1338,9 @@ class UserController extends BaseController implements JsonResponder
                                                       },
                                                       "span": {
                                                         "start": 1073,
-                                                        "end": 1075
+                                                        "end": 1075,
+                                                        "start_line": 41,
+                                                        "start_col": 37
                                                       }
                                                     },
                                                     "method": {
@@ -1139,7 +1349,9 @@ class UserController extends BaseController implements JsonResponder
                                                       },
                                                       "span": {
                                                         "start": 1077,
-                                                        "end": 1084
+                                                        "end": 1084,
+                                                        "start_line": 41,
+                                                        "start_col": 41
                                                       }
                                                     },
                                                     "args": []
@@ -1147,7 +1359,9 @@ class UserController extends BaseController implements JsonResponder
                                                 },
                                                 "span": {
                                                   "start": 1073,
-                                                  "end": 1086
+                                                  "end": 1086,
+                                                  "start_line": 41,
+                                                  "start_col": 37
                                                 }
                                               },
                                               "attributes": []
@@ -1155,14 +1369,18 @@ class UserController extends BaseController implements JsonResponder
                                           },
                                           "span": {
                                             "start": 1063,
-                                            "end": 1086
+                                            "end": 1086,
+                                            "start_line": 41,
+                                            "start_col": 27
                                           }
                                         },
                                         "unpack": false,
                                         "by_ref": false,
                                         "span": {
                                           "start": 1063,
-                                          "end": 1086
+                                          "end": 1086,
+                                          "start_line": 41,
+                                          "start_col": 27
                                         }
                                       },
                                       {
@@ -1173,14 +1391,18 @@ class UserController extends BaseController implements JsonResponder
                                           },
                                           "span": {
                                             "start": 1088,
-                                            "end": 1094
+                                            "end": 1094,
+                                            "start_line": 41,
+                                            "start_col": 52
                                           }
                                         },
                                         "unpack": false,
                                         "by_ref": false,
                                         "span": {
                                           "start": 1088,
-                                          "end": 1094
+                                          "end": 1094,
+                                          "start_line": 41,
+                                          "start_col": 52
                                         }
                                       }
                                     ]
@@ -1188,20 +1410,26 @@ class UserController extends BaseController implements JsonResponder
                                 },
                                 "span": {
                                   "start": 1053,
-                                  "end": 1095
+                                  "end": 1095,
+                                  "start_line": 41,
+                                  "start_col": 17
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 1044,
-                            "end": 1095
+                            "end": 1095,
+                            "start_line": 41,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 1044,
-                        "end": 1105
+                        "end": 1105,
+                        "start_line": 41,
+                        "start_col": 8
                       }
                     },
                     {
@@ -1215,7 +1443,9 @@ class UserController extends BaseController implements JsonResponder
                                 },
                                 "span": {
                                   "start": 1105,
-                                  "end": 1114
+                                  "end": 1114,
+                                  "start_line": 42,
+                                  "start_col": 8
                                 }
                               },
                               "op": "Assign",
@@ -1228,7 +1458,9 @@ class UserController extends BaseController implements JsonResponder
                                       },
                                       "span": {
                                         "start": 1117,
-                                        "end": 1129
+                                        "end": 1129,
+                                        "start_line": 42,
+                                        "start_col": 20
                                       }
                                     },
                                     "args": [
@@ -1240,14 +1472,18 @@ class UserController extends BaseController implements JsonResponder
                                           },
                                           "span": {
                                             "start": 1130,
-                                            "end": 1136
+                                            "end": 1136,
+                                            "start_line": 42,
+                                            "start_col": 33
                                           }
                                         },
                                         "unpack": false,
                                         "by_ref": false,
                                         "span": {
                                           "start": 1130,
-                                          "end": 1136
+                                          "end": 1136,
+                                          "start_line": 42,
+                                          "start_col": 33
                                         }
                                       },
                                       {
@@ -1271,7 +1507,9 @@ class UserController extends BaseController implements JsonResponder
                                                   "attributes": [],
                                                   "span": {
                                                     "start": 1147,
-                                                    "end": 1152
+                                                    "end": 1152,
+                                                    "start_line": 42,
+                                                    "start_col": 50
                                                   }
                                                 }
                                               ],
@@ -1281,7 +1519,9 @@ class UserController extends BaseController implements JsonResponder
                                                   "by_ref": false,
                                                   "span": {
                                                     "start": 1159,
-                                                    "end": 1165
+                                                    "end": 1165,
+                                                    "start_line": 42,
+                                                    "start_col": 62
                                                   }
                                                 }
                                               ],
@@ -1301,7 +1541,9 @@ class UserController extends BaseController implements JsonResponder
                                                                   },
                                                                   "span": {
                                                                     "start": 1188,
-                                                                    "end": 1194
+                                                                    "end": 1194,
+                                                                    "start_line": 43,
+                                                                    "start_col": 19
                                                                   }
                                                                 },
                                                                 "args": [
@@ -1313,14 +1555,18 @@ class UserController extends BaseController implements JsonResponder
                                                                       },
                                                                       "span": {
                                                                         "start": 1195,
-                                                                        "end": 1200
+                                                                        "end": 1200,
+                                                                        "start_line": 43,
+                                                                        "start_col": 26
                                                                       }
                                                                     },
                                                                     "unpack": false,
                                                                     "by_ref": false,
                                                                     "span": {
                                                                       "start": 1195,
-                                                                      "end": 1200
+                                                                      "end": 1200,
+                                                                      "start_line": 43,
+                                                                      "start_col": 26
                                                                     }
                                                                   }
                                                                 ]
@@ -1328,7 +1574,9 @@ class UserController extends BaseController implements JsonResponder
                                                             },
                                                             "span": {
                                                               "start": 1188,
-                                                              "end": 1202
+                                                              "end": 1202,
+                                                              "start_line": 43,
+                                                              "start_col": 19
                                                             }
                                                           },
                                                           "op": "Greater",
@@ -1338,20 +1586,26 @@ class UserController extends BaseController implements JsonResponder
                                                             },
                                                             "span": {
                                                               "start": 1204,
-                                                              "end": 1205
+                                                              "end": 1205,
+                                                              "start_line": 43,
+                                                              "start_col": 35
                                                             }
                                                           }
                                                         }
                                                       },
                                                       "span": {
                                                         "start": 1188,
-                                                        "end": 1205
+                                                        "end": 1205,
+                                                        "start_line": 43,
+                                                        "start_col": 19
                                                       }
                                                     }
                                                   },
                                                   "span": {
                                                     "start": 1181,
-                                                    "end": 1215
+                                                    "end": 1215,
+                                                    "start_line": 43,
+                                                    "start_col": 12
                                                   }
                                                 }
                                               ],
@@ -1360,14 +1614,18 @@ class UserController extends BaseController implements JsonResponder
                                           },
                                           "span": {
                                             "start": 1138,
-                                            "end": 1216
+                                            "end": 1216,
+                                            "start_line": 42,
+                                            "start_col": 41
                                           }
                                         },
                                         "unpack": false,
                                         "by_ref": false,
                                         "span": {
                                           "start": 1138,
-                                          "end": 1216
+                                          "end": 1216,
+                                          "start_line": 42,
+                                          "start_col": 41
                                         }
                                       }
                                     ]
@@ -1375,20 +1633,26 @@ class UserController extends BaseController implements JsonResponder
                                 },
                                 "span": {
                                   "start": 1117,
-                                  "end": 1217
+                                  "end": 1217,
+                                  "start_line": 42,
+                                  "start_col": 20
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 1105,
-                            "end": 1217
+                            "end": 1217,
+                            "start_line": 42,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 1105,
-                        "end": 1227
+                        "end": 1227,
+                        "start_line": 42,
+                        "start_col": 8
                       }
                     },
                     {
@@ -1399,13 +1663,17 @@ class UserController extends BaseController implements JsonResponder
                           },
                           "span": {
                             "start": 1234,
-                            "end": 1243
+                            "end": 1243,
+                            "start_line": 45,
+                            "start_col": 15
                           }
                         }
                       },
                       "span": {
                         "start": 1227,
-                        "end": 1249
+                        "end": 1249,
+                        "start_line": 45,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -1414,7 +1682,9 @@ class UserController extends BaseController implements JsonResponder
               },
               "span": {
                 "start": 970,
-                "end": 1251
+                "end": 1251,
+                "start_line": 38,
+                "start_col": 4
               }
             }
           ],
@@ -1423,12 +1693,16 @@ class UserController extends BaseController implements JsonResponder
       },
       "span": {
         "start": 94,
-        "end": 1252
+        "end": 1252,
+        "start_line": 7,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 1252
+    "end": 1252,
+    "start_line": 1,
+    "start_col": 0
   }
 }

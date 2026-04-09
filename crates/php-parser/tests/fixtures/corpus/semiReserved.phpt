@@ -82,7 +82,9 @@ class Foo {
               },
               "span": {
                 "start": 24,
-                "end": 48
+                "end": 48,
+                "start_line": 4,
+                "start_col": 4
               }
             },
             {
@@ -102,7 +104,9 @@ class Foo {
               },
               "span": {
                 "start": 48,
-                "end": 74
+                "end": 74,
+                "start_line": 5,
+                "start_col": 4
               }
             },
             {
@@ -122,7 +126,9 @@ class Foo {
               },
               "span": {
                 "start": 74,
-                "end": 104
+                "end": 104,
+                "start_line": 7,
+                "start_col": 4
               }
             },
             {
@@ -142,7 +148,9 @@ class Foo {
               },
               "span": {
                 "start": 104,
-                "end": 140
+                "end": 140,
+                "start_line": 8,
+                "start_col": 4
               }
             },
             {
@@ -160,7 +168,9 @@ class Foo {
               },
               "span": {
                 "start": 140,
-                "end": 153
+                "end": 153,
+                "start_line": 10,
+                "start_col": 4
               }
             },
             {
@@ -178,7 +188,9 @@ class Foo {
               },
               "span": {
                 "start": 159,
-                "end": 174
+                "end": 174,
+                "start_line": 11,
+                "start_col": 4
               }
             },
             {
@@ -192,7 +204,9 @@ class Foo {
                     },
                     "span": {
                       "start": 195,
-                      "end": 196
+                      "end": 196,
+                      "start_line": 13,
+                      "start_col": 18
                     }
                   },
                   "attributes": []
@@ -200,7 +214,9 @@ class Foo {
               },
               "span": {
                 "start": 181,
-                "end": 214
+                "end": 214,
+                "start_line": 13,
+                "start_col": 4
               }
             },
             {
@@ -214,7 +230,9 @@ class Foo {
                     },
                     "span": {
                       "start": 206,
-                      "end": 207
+                      "end": 207,
+                      "start_line": 13,
+                      "start_col": 29
                     }
                   },
                   "attributes": []
@@ -222,7 +240,9 @@ class Foo {
               },
               "span": {
                 "start": 181,
-                "end": 214
+                "end": 214,
+                "start_line": 13,
+                "start_col": 4
               }
             },
             {
@@ -236,7 +256,9 @@ class Foo {
                     },
                     "span": {
                       "start": 232,
-                      "end": 233
+                      "end": 233,
+                      "start_line": 15,
+                      "start_col": 22
                     }
                   },
                   "attributes": []
@@ -244,7 +266,9 @@ class Foo {
               },
               "span": {
                 "start": 214,
-                "end": 391
+                "end": 391,
+                "start_line": 15,
+                "start_col": 4
               }
             },
             {
@@ -258,7 +282,9 @@ class Foo {
                     },
                     "span": {
                       "start": 247,
-                      "end": 248
+                      "end": 248,
+                      "start_line": 15,
+                      "start_col": 37
                     }
                   },
                   "attributes": []
@@ -266,7 +292,9 @@ class Foo {
               },
               "span": {
                 "start": 214,
-                "end": 391
+                "end": 391,
+                "start_line": 15,
+                "start_col": 4
               }
             },
             {
@@ -280,7 +308,9 @@ class Foo {
                     },
                     "span": {
                       "start": 265,
-                      "end": 266
+                      "end": 266,
+                      "start_line": 15,
+                      "start_col": 55
                     }
                   },
                   "attributes": []
@@ -288,7 +318,9 @@ class Foo {
               },
               "span": {
                 "start": 214,
-                "end": 391
+                "end": 391,
+                "start_line": 15,
+                "start_col": 4
               }
             },
             {
@@ -302,7 +334,9 @@ class Foo {
                     },
                     "span": {
                       "start": 281,
-                      "end": 282
+                      "end": 282,
+                      "start_line": 15,
+                      "start_col": 71
                     }
                   },
                   "attributes": []
@@ -310,7 +344,9 @@ class Foo {
               },
               "span": {
                 "start": 214,
-                "end": 391
+                "end": 391,
+                "start_line": 15,
+                "start_col": 4
               }
             },
             {
@@ -324,7 +360,9 @@ class Foo {
                     },
                     "span": {
                       "start": 295,
-                      "end": 296
+                      "end": 296,
+                      "start_line": 15,
+                      "start_col": 85
                     }
                   },
                   "attributes": []
@@ -332,7 +370,9 @@ class Foo {
               },
               "span": {
                 "start": 214,
-                "end": 391
+                "end": 391,
+                "start_line": 15,
+                "start_col": 4
               }
             },
             {
@@ -346,7 +386,9 @@ class Foo {
                     },
                     "span": {
                       "start": 319,
-                      "end": 320
+                      "end": 320,
+                      "start_line": 16,
+                      "start_col": 21
                     }
                   },
                   "attributes": []
@@ -354,7 +396,9 @@ class Foo {
               },
               "span": {
                 "start": 214,
-                "end": 391
+                "end": 391,
+                "start_line": 15,
+                "start_col": 4
               }
             },
             {
@@ -368,7 +412,9 @@ class Foo {
                     },
                     "span": {
                       "start": 332,
-                      "end": 333
+                      "end": 333,
+                      "start_line": 16,
+                      "start_col": 34
                     }
                   },
                   "attributes": []
@@ -376,7 +422,9 @@ class Foo {
               },
               "span": {
                 "start": 214,
-                "end": 391
+                "end": 391,
+                "start_line": 15,
+                "start_col": 4
               }
             },
             {
@@ -390,7 +438,9 @@ class Foo {
                     },
                     "span": {
                       "start": 351,
-                      "end": 352
+                      "end": 352,
+                      "start_line": 16,
+                      "start_col": 53
                     }
                   },
                   "attributes": []
@@ -398,7 +448,9 @@ class Foo {
               },
               "span": {
                 "start": 214,
-                "end": 391
+                "end": 391,
+                "start_line": 15,
+                "start_col": 4
               }
             }
           ],
@@ -407,7 +459,9 @@ class Foo {
       },
       "span": {
         "start": 7,
-        "end": 392
+        "end": 392,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -421,7 +475,9 @@ class Foo {
                 },
                 "span": {
                   "start": 394,
-                  "end": 396
+                  "end": 396,
+                  "start_line": 20,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -434,7 +490,9 @@ class Foo {
                       },
                       "span": {
                         "start": 403,
-                        "end": 407
+                        "end": 407,
+                        "start_line": 20,
+                        "start_col": 9
                       }
                     },
                     "args": []
@@ -442,20 +500,26 @@ class Foo {
                 },
                 "span": {
                   "start": 399,
-                  "end": 407
+                  "end": 407,
+                  "start_line": 20,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 394,
-            "end": 407
+            "end": 407,
+            "start_line": 20,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 394,
-        "end": 409
+        "end": 409,
+        "start_line": 20,
+        "start_col": 0
       }
     },
     {
@@ -469,7 +533,9 @@ class Foo {
                 },
                 "span": {
                   "start": 409,
-                  "end": 411
+                  "end": 411,
+                  "start_line": 21,
+                  "start_col": 0
                 }
               },
               "method": {
@@ -478,7 +544,9 @@ class Foo {
                 },
                 "span": {
                   "start": 413,
-                  "end": 418
+                  "end": 418,
+                  "start_line": 21,
+                  "start_col": 4
                 }
               },
               "args": []
@@ -486,13 +554,17 @@ class Foo {
           },
           "span": {
             "start": 409,
-            "end": 420
+            "end": 420,
+            "start_line": 21,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 409,
-        "end": 422
+        "end": 422,
+        "start_line": 21,
+        "start_col": 0
       }
     },
     {
@@ -506,7 +578,9 @@ class Foo {
                 },
                 "span": {
                   "start": 422,
-                  "end": 424
+                  "end": 424,
+                  "start_line": 22,
+                  "start_col": 0
                 }
               },
               "method": {
@@ -515,7 +589,9 @@ class Foo {
                 },
                 "span": {
                   "start": 426,
-                  "end": 432
+                  "end": 432,
+                  "start_line": 22,
+                  "start_col": 4
                 }
               },
               "args": []
@@ -523,13 +599,17 @@ class Foo {
           },
           "span": {
             "start": 422,
-            "end": 434
+            "end": 434,
+            "start_line": 22,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 422,
-        "end": 437
+        "end": 437,
+        "start_line": 22,
+        "start_col": 0
       }
     },
     {
@@ -543,7 +623,9 @@ class Foo {
                 },
                 "span": {
                   "start": 437,
-                  "end": 441
+                  "end": 441,
+                  "start_line": 24,
+                  "start_col": 0
                 }
               },
               "method": "list",
@@ -552,13 +634,17 @@ class Foo {
           },
           "span": {
             "start": 437,
-            "end": 449
+            "end": 449,
+            "start_line": 24,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 437,
-        "end": 451
+        "end": 451,
+        "start_line": 24,
+        "start_col": 0
       }
     },
     {
@@ -572,7 +658,9 @@ class Foo {
                 },
                 "span": {
                   "start": 451,
-                  "end": 455
+                  "end": 455,
+                  "start_line": 25,
+                  "start_col": 0
                 }
               },
               "method": "protected",
@@ -581,13 +669,17 @@ class Foo {
           },
           "span": {
             "start": 451,
-            "end": 468
+            "end": 468,
+            "start_line": 25,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 451,
-        "end": 471
+        "end": 471,
+        "start_line": 25,
+        "start_col": 0
       }
     },
     {
@@ -601,7 +693,9 @@ class Foo {
                 },
                 "span": {
                   "start": 471,
-                  "end": 473
+                  "end": 473,
+                  "start_line": 27,
+                  "start_col": 0
                 }
               },
               "property": {
@@ -610,20 +704,26 @@ class Foo {
                 },
                 "span": {
                   "start": 475,
-                  "end": 480
+                  "end": 480,
+                  "start_line": 27,
+                  "start_col": 4
                 }
               }
             }
           },
           "span": {
             "start": 471,
-            "end": 480
+            "end": 480,
+            "start_line": 27,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 471,
-        "end": 482
+        "end": 482,
+        "start_line": 27,
+        "start_col": 0
       }
     },
     {
@@ -637,7 +737,9 @@ class Foo {
                 },
                 "span": {
                   "start": 482,
-                  "end": 484
+                  "end": 484,
+                  "start_line": 28,
+                  "start_col": 0
                 }
               },
               "property": {
@@ -646,20 +748,26 @@ class Foo {
                 },
                 "span": {
                   "start": 486,
-                  "end": 493
+                  "end": 493,
+                  "start_line": 28,
+                  "start_col": 4
                 }
               }
             }
           },
           "span": {
             "start": 482,
-            "end": 493
+            "end": 493,
+            "start_line": 28,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 482,
-        "end": 496
+        "end": 496,
+        "start_line": 28,
+        "start_col": 0
       }
     },
     {
@@ -673,7 +781,9 @@ class Foo {
                 },
                 "span": {
                   "start": 496,
-                  "end": 500
+                  "end": 500,
+                  "start_line": 30,
+                  "start_col": 0
                 }
               },
               "member": "TRAIT"
@@ -681,13 +791,17 @@ class Foo {
           },
           "span": {
             "start": 496,
-            "end": 507
+            "end": 507,
+            "start_line": 30,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 496,
-        "end": 509
+        "end": 509,
+        "start_line": 30,
+        "start_col": 0
       }
     },
     {
@@ -701,7 +815,9 @@ class Foo {
                 },
                 "span": {
                   "start": 509,
-                  "end": 513
+                  "end": 513,
+                  "start_line": 31,
+                  "start_col": 0
                 }
               },
               "member": "FINAL"
@@ -709,13 +825,17 @@ class Foo {
           },
           "span": {
             "start": 509,
-            "end": 520
+            "end": 520,
+            "start_line": 31,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 509,
-        "end": 523
+        "end": 523,
+        "start_line": 31,
+        "start_col": 0
       }
     },
     {
@@ -741,7 +861,9 @@ class Foo {
                       "kind": "Unqualified",
                       "span": {
                         "start": 543,
-                        "end": 549
+                        "end": 549,
+                        "start_line": 34,
+                        "start_col": 8
                       }
                     },
                     {
@@ -751,7 +873,9 @@ class Foo {
                       "kind": "Unqualified",
                       "span": {
                         "start": 551,
-                        "end": 558
+                        "end": 558,
+                        "start_line": 34,
+                        "start_col": 16
                       }
                     }
                   ],
@@ -766,7 +890,9 @@ class Foo {
                             "kind": "Unqualified",
                             "span": {
                               "start": 568,
-                              "end": 574
+                              "end": 574,
+                              "start_line": 35,
+                              "start_col": 8
                             }
                           },
                           "method": "catch",
@@ -778,7 +904,9 @@ class Foo {
                               "kind": "Relative",
                               "span": {
                                 "start": 592,
-                                "end": 608
+                                "end": 608,
+                                "start_line": 35,
+                                "start_col": 32
                               }
                             }
                           ]
@@ -786,7 +914,9 @@ class Foo {
                       },
                       "span": {
                         "start": 568,
-                        "end": 618
+                        "end": 618,
+                        "start_line": 35,
+                        "start_col": 8
                       }
                     },
                     {
@@ -799,7 +929,9 @@ class Foo {
                             "kind": "Unqualified",
                             "span": {
                               "start": 618,
-                              "end": 624
+                              "end": 624,
+                              "start_line": 36,
+                              "start_col": 8
                             }
                           },
                           "method": "list",
@@ -809,7 +941,9 @@ class Foo {
                       },
                       "span": {
                         "start": 618,
-                        "end": 651
+                        "end": 651,
+                        "start_line": 36,
+                        "start_col": 8
                       }
                     },
                     {
@@ -822,7 +956,9 @@ class Foo {
                             "kind": "Unqualified",
                             "span": {
                               "start": 651,
-                              "end": 657
+                              "end": 657,
+                              "start_line": 37,
+                              "start_col": 8
                             }
                           },
                           "method": "throw",
@@ -832,7 +968,9 @@ class Foo {
                       },
                       "span": {
                         "start": 651,
-                        "end": 694
+                        "end": 694,
+                        "start_line": 37,
+                        "start_col": 8
                       }
                     },
                     {
@@ -845,7 +983,9 @@ class Foo {
                             "kind": "Unqualified",
                             "span": {
                               "start": 694,
-                              "end": 700
+                              "end": 700,
+                              "start_line": 38,
+                              "start_col": 8
                             }
                           },
                           "method": "self",
@@ -855,7 +995,9 @@ class Foo {
                       },
                       "span": {
                         "start": 694,
-                        "end": 729
+                        "end": 729,
+                        "start_line": 38,
+                        "start_col": 8
                       }
                     },
                     {
@@ -869,7 +1011,9 @@ class Foo {
                       },
                       "span": {
                         "start": 729,
-                        "end": 750
+                        "end": 750,
+                        "start_line": 39,
+                        "start_col": 8
                       }
                     },
                     {
@@ -882,7 +1026,9 @@ class Foo {
                             "kind": "FullyQualified",
                             "span": {
                               "start": 750,
-                              "end": 757
+                              "end": 757,
+                              "start_line": 40,
+                              "start_col": 8
                             }
                           },
                           "method": "exit",
@@ -892,7 +1038,9 @@ class Foo {
                       },
                       "span": {
                         "start": 750,
-                        "end": 780
+                        "end": 780,
+                        "start_line": 40,
+                        "start_col": 8
                       }
                     },
                     {
@@ -905,7 +1053,9 @@ class Foo {
                             "kind": "Relative",
                             "span": {
                               "start": 780,
-                              "end": 796
+                              "end": 796,
+                              "start_line": 41,
+                              "start_col": 8
                             }
                           },
                           "method": "exit",
@@ -915,7 +1065,9 @@ class Foo {
                       },
                       "span": {
                         "start": 780,
-                        "end": 822
+                        "end": 822,
+                        "start_line": 41,
+                        "start_col": 8
                       }
                     },
                     {
@@ -928,7 +1080,9 @@ class Foo {
                             "kind": "Unqualified",
                             "span": {
                               "start": 822,
-                              "end": 828
+                              "end": 828,
+                              "start_line": 42,
+                              "start_col": 8
                             }
                           },
                           "method": "catch",
@@ -940,7 +1094,9 @@ class Foo {
                               "kind": "Unqualified",
                               "span": {
                                 "start": 982,
-                                "end": 988
+                                "end": 988,
+                                "start_line": 49,
+                                "start_col": 18
                               }
                             }
                           ]
@@ -948,7 +1104,9 @@ class Foo {
                       },
                       "span": {
                         "start": 822,
-                        "end": 994
+                        "end": 994,
+                        "start_line": 42,
+                        "start_col": 8
                       }
                     }
                   ]
@@ -956,7 +1114,9 @@ class Foo {
               },
               "span": {
                 "start": 539,
-                "end": 996
+                "end": 996,
+                "start_line": 34,
+                "start_col": 4
               }
             }
           ],
@@ -965,12 +1125,16 @@ class Foo {
       },
       "span": {
         "start": 523,
-        "end": 997
+        "end": 997,
+        "start_line": 33,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 997
+    "end": 997,
+    "start_line": 1,
+    "start_col": 0
   }
 }

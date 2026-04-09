@@ -20,7 +20,9 @@ $d = $class::${'prop_' . $name};
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -33,7 +35,9 @@ $d = $class::${'prop_' . $name};
                       },
                       "span": {
                         "start": 11,
-                        "end": 14
+                        "end": 14,
+                        "start_line": 2,
+                        "start_col": 5
                       }
                     },
                     "member": {
@@ -42,27 +46,35 @@ $d = $class::${'prop_' . $name};
                       },
                       "span": {
                         "start": 17,
-                        "end": 22
+                        "end": 22,
+                        "start_line": 2,
+                        "start_col": 11
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 11,
-                  "end": 23
+                  "end": 23,
+                  "start_line": 2,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 23
+            "end": 23,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 25
+        "end": 25,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -76,7 +88,9 @@ $d = $class::${'prop_' . $name};
                 },
                 "span": {
                   "start": 25,
-                  "end": 27
+                  "end": 27,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -89,7 +103,9 @@ $d = $class::${'prop_' . $name};
                       },
                       "span": {
                         "start": 30,
-                        "end": 33
+                        "end": 33,
+                        "start_line": 3,
+                        "start_col": 5
                       }
                     },
                     "member": {
@@ -101,7 +117,9 @@ $d = $class::${'prop_' . $name};
                             },
                             "span": {
                               "start": 36,
-                              "end": 44
+                              "end": 44,
+                              "start_line": 3,
+                              "start_col": 11
                             }
                           },
                           "op": "Concat",
@@ -111,34 +129,44 @@ $d = $class::${'prop_' . $name};
                             },
                             "span": {
                               "start": 47,
-                              "end": 54
+                              "end": 54,
+                              "start_line": 3,
+                              "start_col": 22
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 36,
-                        "end": 54
+                        "end": 54,
+                        "start_line": 3,
+                        "start_col": 11
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 30,
-                  "end": 55
+                  "end": 55,
+                  "start_line": 3,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 25,
-            "end": 55
+            "end": 55,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 25,
-        "end": 57
+        "end": 57,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -152,7 +180,9 @@ $d = $class::${'prop_' . $name};
                 },
                 "span": {
                   "start": 57,
-                  "end": 59
+                  "end": 59,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -165,7 +195,9 @@ $d = $class::${'prop_' . $name};
                       },
                       "span": {
                         "start": 62,
-                        "end": 68
+                        "end": 68,
+                        "start_line": 4,
+                        "start_col": 5
                       }
                     },
                     "member": {
@@ -176,33 +208,43 @@ $d = $class::${'prop_' . $name};
                           },
                           "span": {
                             "start": 71,
-                            "end": 79
+                            "end": 79,
+                            "start_line": 4,
+                            "start_col": 14
                           }
                         }
                       },
                       "span": {
                         "start": 70,
-                        "end": 79
+                        "end": 79,
+                        "start_line": 4,
+                        "start_col": 13
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 62,
-                  "end": 79
+                  "end": 79,
+                  "start_line": 4,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 57,
-            "end": 79
+            "end": 79,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 57,
-        "end": 81
+        "end": 81,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -216,7 +258,9 @@ $d = $class::${'prop_' . $name};
                 },
                 "span": {
                   "start": 81,
-                  "end": 83
+                  "end": 83,
+                  "start_line": 5,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -229,7 +273,9 @@ $d = $class::${'prop_' . $name};
                       },
                       "span": {
                         "start": 86,
-                        "end": 92
+                        "end": 92,
+                        "start_line": 5,
+                        "start_col": 5
                       }
                     },
                     "member": {
@@ -243,7 +289,9 @@ $d = $class::${'prop_' . $name};
                                 },
                                 "span": {
                                   "start": 96,
-                                  "end": 103
+                                  "end": 103,
+                                  "start_line": 5,
+                                  "start_col": 15
                                 }
                               },
                               "op": "Concat",
@@ -253,45 +301,59 @@ $d = $class::${'prop_' . $name};
                                 },
                                 "span": {
                                   "start": 106,
-                                  "end": 111
+                                  "end": 111,
+                                  "start_line": 5,
+                                  "start_col": 25
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 96,
-                            "end": 111
+                            "end": 111,
+                            "start_line": 5,
+                            "start_col": 15
                           }
                         }
                       },
                       "span": {
                         "start": 94,
-                        "end": 111
+                        "end": 111,
+                        "start_line": 5,
+                        "start_col": 13
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 86,
-                  "end": 111
+                  "end": 111,
+                  "start_line": 5,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 81,
-            "end": 111
+            "end": 111,
+            "start_line": 5,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 81,
-        "end": 113
+        "end": 113,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 113
+    "end": 113,
+    "start_line": 1,
+    "start_col": 0
   }
 }

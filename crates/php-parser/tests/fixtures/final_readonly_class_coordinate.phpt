@@ -44,13 +44,17 @@ final readonly class Coordinate {
                             "kind": "Unqualified",
                             "span": {
                               "start": 88,
-                              "end": 93
+                              "end": 93,
+                              "start_line": 4,
+                              "start_col": 15
                             }
                           }
                         },
                         "span": {
                           "start": 88,
-                          "end": 93
+                          "end": 93,
+                          "start_line": 4,
+                          "start_col": 15
                         }
                       },
                       "default": null,
@@ -63,7 +67,9 @@ final readonly class Coordinate {
                       "attributes": [],
                       "span": {
                         "start": 81,
-                        "end": 98
+                        "end": 98,
+                        "start_line": 4,
+                        "start_col": 8
                       }
                     },
                     {
@@ -77,13 +83,17 @@ final readonly class Coordinate {
                             "kind": "Unqualified",
                             "span": {
                               "start": 115,
-                              "end": 120
+                              "end": 120,
+                              "start_line": 5,
+                              "start_col": 15
                             }
                           }
                         },
                         "span": {
                           "start": 115,
-                          "end": 120
+                          "end": 120,
+                          "start_line": 5,
+                          "start_col": 15
                         }
                       },
                       "default": null,
@@ -96,7 +106,9 @@ final readonly class Coordinate {
                       "attributes": [],
                       "span": {
                         "start": 108,
-                        "end": 125
+                        "end": 125,
+                        "start_line": 5,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -107,7 +119,9 @@ final readonly class Coordinate {
               },
               "span": {
                 "start": 44,
-                "end": 136
+                "end": 136,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -116,12 +130,16 @@ final readonly class Coordinate {
       },
       "span": {
         "start": 21,
-        "end": 137
+        "end": 137,
+        "start_line": 2,
+        "start_col": 15
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 137
+    "end": 137,
+    "start_line": 1,
+    "start_col": 0
   }
 }

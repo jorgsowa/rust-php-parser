@@ -24,19 +24,25 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
                         "kind": "Unqualified",
                         "span": {
                           "start": 24,
-                          "end": 27
+                          "end": 27,
+                          "start_line": 2,
+                          "start_col": 18
                         }
                       }
                     },
                     "span": {
                       "start": 24,
-                      "end": 27
+                      "end": 27,
+                      "start_line": 2,
+                      "start_col": 18
                     }
                   }
                 },
                 "span": {
                   "start": 23,
-                  "end": 27
+                  "end": 27,
+                  "start_line": 2,
+                  "start_col": 17
                 }
               },
               "default": null,
@@ -49,7 +55,9 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
               "attributes": [],
               "span": {
                 "start": 23,
-                "end": 30
+                "end": 30,
+                "start_line": 2,
+                "start_col": 17
               }
             },
             {
@@ -66,13 +74,17 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
                           "kind": "Unqualified",
                           "span": {
                             "start": 32,
-                            "end": 35
+                            "end": 35,
+                            "start_line": 2,
+                            "start_col": 26
                           }
                         }
                       },
                       "span": {
                         "start": 32,
-                        "end": 35
+                        "end": 35,
+                        "start_line": 2,
+                        "start_col": 26
                       }
                     },
                     {
@@ -84,20 +96,26 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
                           "kind": "Unqualified",
                           "span": {
                             "start": 36,
-                            "end": 42
+                            "end": 42,
+                            "start_line": 2,
+                            "start_col": 30
                           }
                         }
                       },
                       "span": {
                         "start": 36,
-                        "end": 42
+                        "end": 42,
+                        "start_line": 2,
+                        "start_col": 30
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 32,
-                  "end": 42
+                  "end": 42,
+                  "start_line": 2,
+                  "start_col": 26
                 }
               },
               "default": null,
@@ -110,7 +128,9 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
               "attributes": [],
               "span": {
                 "start": 32,
-                "end": 45
+                "end": 45,
+                "start_line": 2,
+                "start_col": 26
               }
             },
             {
@@ -127,13 +147,17 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
                           "kind": "Unqualified",
                           "span": {
                             "start": 47,
-                            "end": 56
+                            "end": 56,
+                            "start_line": 2,
+                            "start_col": 41
                           }
                         }
                       },
                       "span": {
                         "start": 47,
-                        "end": 56
+                        "end": 56,
+                        "start_line": 2,
+                        "start_col": 41
                       }
                     },
                     {
@@ -145,20 +169,26 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
                           "kind": "Unqualified",
                           "span": {
                             "start": 57,
-                            "end": 69
+                            "end": 69,
+                            "start_line": 2,
+                            "start_col": 51
                           }
                         }
                       },
                       "span": {
                         "start": 57,
-                        "end": 69
+                        "end": 69,
+                        "start_line": 2,
+                        "start_col": 51
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 47,
-                  "end": 69
+                  "end": 69,
+                  "start_line": 2,
+                  "start_col": 41
                 }
               },
               "default": null,
@@ -171,7 +201,9 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
               "attributes": [],
               "span": {
                 "start": 47,
-                "end": 71
+                "end": 71,
+                "start_line": 2,
+                "start_col": 41
               }
             }
           ],
@@ -182,13 +214,17 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
                   "kind": "Null",
                   "span": {
                     "start": 95,
-                    "end": 99
+                    "end": 99,
+                    "start_line": 3,
+                    "start_col": 11
                   }
                 }
               },
               "span": {
                 "start": 88,
-                "end": 101
+                "end": 101,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -203,19 +239,25 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
                     "kind": "Unqualified",
                     "span": {
                       "start": 75,
-                      "end": 81
+                      "end": 81,
+                      "start_line": 2,
+                      "start_col": 69
                     }
                   }
                 },
                 "span": {
                   "start": 75,
-                  "end": 81
+                  "end": 81,
+                  "start_line": 2,
+                  "start_col": 69
                 }
               }
             },
             "span": {
               "start": 74,
-              "end": 81
+              "end": 81,
+              "start_line": 2,
+              "start_col": 68
             }
           },
           "by_ref": false,
@@ -224,12 +266,16 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
       },
       "span": {
         "start": 6,
-        "end": 102
+        "end": 102,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 102
+    "end": 102,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -17,7 +17,9 @@ if ($b) {
             },
             "span": {
               "start": 11,
-              "end": 13
+              "end": 13,
+              "start_line": 3,
+              "start_col": 4
             }
           },
           "then_branch": {
@@ -34,7 +36,9 @@ if ($b) {
                             },
                             "span": {
                               "start": 21,
-                              "end": 23
+                              "end": 23,
+                              "start_line": 4,
+                              "start_col": 4
                             }
                           },
                           "op": "Assign",
@@ -44,27 +48,35 @@ if ($b) {
                             },
                             "span": {
                               "start": 26,
-                              "end": 27
+                              "end": 27,
+                              "start_line": 4,
+                              "start_col": 9
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 21,
-                        "end": 27
+                        "end": 27,
+                        "start_line": 4,
+                        "start_col": 4
                       }
                     }
                   },
                   "span": {
                     "start": 21,
-                    "end": 50
+                    "end": 50,
+                    "start_line": 4,
+                    "start_col": 4
                   }
                 }
               ]
             },
             "span": {
               "start": 15,
-              "end": 50
+              "end": 50,
+              "start_line": 3,
+              "start_col": 8
             }
           },
           "elseif_branches": [],
@@ -73,12 +85,16 @@ if ($b) {
       },
       "span": {
         "start": 7,
-        "end": 50
+        "end": 50,
+        "start_line": 3,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 50
+    "end": 50,
+    "start_line": 1,
+    "start_col": 0
   }
 }

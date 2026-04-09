@@ -22,7 +22,9 @@ $obj = new readonly class(1, 2) {
                 },
                 "span": {
                   "start": 6,
-                  "end": 10
+                  "end": 10,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -62,13 +64,17 @@ $obj = new readonly class(1, 2) {
                                             "kind": "Unqualified",
                                             "span": {
                                               "start": 88,
-                                              "end": 91
+                                              "end": 91,
+                                              "start_line": 4,
+                                              "start_col": 15
                                             }
                                           }
                                         },
                                         "span": {
                                           "start": 88,
-                                          "end": 91
+                                          "end": 91,
+                                          "start_line": 4,
+                                          "start_col": 15
                                         }
                                       },
                                       "default": null,
@@ -81,7 +87,9 @@ $obj = new readonly class(1, 2) {
                                       "attributes": [],
                                       "span": {
                                         "start": 81,
-                                        "end": 94
+                                        "end": 94,
+                                        "start_line": 4,
+                                        "start_col": 8
                                       }
                                     },
                                     {
@@ -95,13 +103,17 @@ $obj = new readonly class(1, 2) {
                                             "kind": "Unqualified",
                                             "span": {
                                               "start": 111,
-                                              "end": 114
+                                              "end": 114,
+                                              "start_line": 5,
+                                              "start_col": 15
                                             }
                                           }
                                         },
                                         "span": {
                                           "start": 111,
-                                          "end": 114
+                                          "end": 114,
+                                          "start_line": 5,
+                                          "start_col": 15
                                         }
                                       },
                                       "default": null,
@@ -114,7 +126,9 @@ $obj = new readonly class(1, 2) {
                                       "attributes": [],
                                       "span": {
                                         "start": 104,
-                                        "end": 117
+                                        "end": 117,
+                                        "start_line": 5,
+                                        "start_col": 8
                                       }
                                     }
                                   ],
@@ -125,7 +139,9 @@ $obj = new readonly class(1, 2) {
                               },
                               "span": {
                                 "start": 44,
-                                "end": 128
+                                "end": 128,
+                                "start_line": 3,
+                                "start_col": 4
                               }
                             }
                           ],
@@ -134,7 +150,9 @@ $obj = new readonly class(1, 2) {
                       },
                       "span": {
                         "start": 13,
-                        "end": 129
+                        "end": 129,
+                        "start_line": 2,
+                        "start_col": 7
                       }
                     },
                     "args": [
@@ -146,14 +164,18 @@ $obj = new readonly class(1, 2) {
                           },
                           "span": {
                             "start": 32,
-                            "end": 33
+                            "end": 33,
+                            "start_line": 2,
+                            "start_col": 26
                           }
                         },
                         "unpack": false,
                         "by_ref": false,
                         "span": {
                           "start": 32,
-                          "end": 33
+                          "end": 33,
+                          "start_line": 2,
+                          "start_col": 26
                         }
                       },
                       {
@@ -164,14 +186,18 @@ $obj = new readonly class(1, 2) {
                           },
                           "span": {
                             "start": 35,
-                            "end": 36
+                            "end": 36,
+                            "start_line": 2,
+                            "start_col": 29
                           }
                         },
                         "unpack": false,
                         "by_ref": false,
                         "span": {
                           "start": 35,
-                          "end": 36
+                          "end": 36,
+                          "start_line": 2,
+                          "start_col": 29
                         }
                       }
                     ]
@@ -179,25 +205,33 @@ $obj = new readonly class(1, 2) {
                 },
                 "span": {
                   "start": 13,
-                  "end": 129
+                  "end": 129,
+                  "start_line": 2,
+                  "start_col": 7
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 129
+            "end": 129,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 130
+        "end": 130,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 130
+    "end": 130,
+    "start_line": 1,
+    "start_col": 0
   }
 }

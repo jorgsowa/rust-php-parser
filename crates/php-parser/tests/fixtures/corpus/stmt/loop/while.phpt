@@ -17,7 +17,9 @@ endwhile;
             },
             "span": {
               "start": 14,
-              "end": 16
+              "end": 16,
+              "start_line": 3,
+              "start_col": 7
             }
           },
           "body": {
@@ -26,14 +28,18 @@ endwhile;
             },
             "span": {
               "start": 18,
-              "end": 20
+              "end": 20,
+              "start_line": 3,
+              "start_col": 11
             }
           }
         }
       },
       "span": {
         "start": 7,
-        "end": 20
+        "end": 20,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -45,7 +51,9 @@ endwhile;
             },
             "span": {
               "start": 29,
-              "end": 31
+              "end": 31,
+              "start_line": 5,
+              "start_col": 7
             }
           },
           "body": {
@@ -54,19 +62,25 @@ endwhile;
             },
             "span": {
               "start": 22,
-              "end": 43
+              "end": 43,
+              "start_line": 5,
+              "start_col": 0
             }
           }
         }
       },
       "span": {
         "start": 22,
-        "end": 43
+        "end": 43,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 43
+    "end": 43,
+    "start_line": 1,
+    "start_col": 0
   }
 }

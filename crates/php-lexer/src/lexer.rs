@@ -1,5 +1,5 @@
 use memchr::{memchr2, memmem};
-use php_ast::Span;
+use php_ast::{LineIndex, Span};
 
 use crate::token::{resolve_keyword, TokenKind};
 
@@ -88,6 +88,7 @@ pub struct Lexer<'src> {
     peeked: Option<Token>,
     peeked2: Option<Token>,
     pub errors: Vec<LexerError>,
+    line_index: LineIndex,
 }
 
 #[inline(always)]
@@ -123,6 +124,7 @@ impl<'src> Lexer<'src> {
             LexerMode::InlineHtml
         };
 
+        let line_index = LineIndex::new(source);
         Self {
             source,
             mode,
@@ -130,6 +132,7 @@ impl<'src> Lexer<'src> {
             peeked: None,
             peeked2: None,
             errors: Vec::new(),
+            line_index,
         }
     }
 
@@ -138,6 +141,7 @@ impl<'src> Lexer<'src> {
     /// content (no `<?php` tag needed — the lexer is pre-set to PHP mode).
     /// Spans produced will be correct absolute offsets into `source`.
     pub fn new_at(source: &'src str, offset: usize) -> Self {
+        let line_index = LineIndex::new(source);
         Self {
             source,
             mode: LexerMode::Php,
@@ -145,7 +149,13 @@ impl<'src> Lexer<'src> {
             peeked: None,
             peeked2: None,
             errors: Vec::new(),
+            line_index,
         }
+    }
+
+    /// Return the line index used by this lexer.
+    pub fn line_index(&self) -> &LineIndex {
+        &self.line_index
     }
 
     pub fn source(&self) -> &'src str {
@@ -232,12 +242,18 @@ impl<'src> Lexer<'src> {
             let end = self.pos + tag_pos;
             self.pos = end;
             self.mode = LexerMode::Php;
-            Token::new(TokenKind::InlineHtml, Span::new(start as u32, end as u32))
+            Token::new(
+                TokenKind::InlineHtml,
+                self.line_index.span(start as u32, end as u32),
+            )
         } else {
             // Rest of file is inline HTML
             let end = self.source.len();
             self.pos = end;
-            Token::new(TokenKind::InlineHtml, Span::new(start as u32, end as u32))
+            Token::new(
+                TokenKind::InlineHtml,
+                self.line_index.span(start as u32, end as u32),
+            )
         }
     }
 
@@ -993,11 +1009,11 @@ impl<'src> Lexer<'src> {
 
     #[inline]
     fn tok(&self, kind: TokenKind, start: usize) -> Token {
-        Token::new(kind, Span::new(start as u32, self.pos as u32))
+        Token::new(kind, self.line_index.span(start as u32, self.pos as u32))
     }
 
     fn invalid_numeric(&mut self, start: usize) -> Token {
-        let span = Span::new(start as u32, self.pos as u32);
+        let span = self.line_index.span(start as u32, self.pos as u32);
         self.errors.push(LexerError {
             message: "Invalid numeric literal".to_string(),
             span,
@@ -1149,7 +1165,7 @@ impl<'src> Lexer<'src> {
             body_start_in_remaining + end_marker_pos + indent_len + label.len();
         self.pos = base_pos + token_end_in_remaining;
 
-        let span = Span::new(start as u32, self.pos as u32);
+        let span = self.line_index.span(start as u32, self.pos as u32);
 
         if is_nowdoc {
             Some(Token::new(TokenKind::Nowdoc, span))
@@ -1166,7 +1182,7 @@ impl<'src> Lexer<'src> {
 ///
 /// Returns a tuple of (tokens, errors). The token vector is guaranteed to end with
 /// an Eof token, and includes a second Eof sentinel to make peek2 safe.
-pub fn lex_all(source: &str) -> (Vec<Token>, Vec<LexerError>) {
+pub fn lex_all(source: &str) -> (Vec<Token>, Vec<LexerError>, LineIndex) {
     let mut lexer = Lexer::new(source);
     let mut tokens = Vec::new();
 
@@ -1185,7 +1201,8 @@ pub fn lex_all(source: &str) -> (Vec<Token>, Vec<LexerError>) {
     tokens.push(Token::new(TokenKind::Eof, eof_span));
 
     let errors = lexer.errors;
-    (tokens, errors)
+    let line_index = lexer.line_index;
+    (tokens, errors, line_index)
 }
 
 #[cfg(test)]
@@ -1419,8 +1436,8 @@ mod tests {
         fn test_spans_are_correct() {
             let source = "<?php $x";
             let tokens = collect_tokens(source);
-            assert_eq!(tokens[0].span, Span::new(0, 5)); // <?php
-            assert_eq!(tokens[1].span, Span::new(6, 8)); // $x
+            assert_eq!(tokens[0].span, Span::with_position(0, 5, 1, 0)); // <?php
+            assert_eq!(tokens[1].span, Span::with_position(6, 8, 1, 6)); // $x
         }
     }
 

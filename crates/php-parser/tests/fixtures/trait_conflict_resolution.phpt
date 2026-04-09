@@ -36,7 +36,9 @@ class MyClass {
                       "kind": "Unqualified",
                       "span": {
                         "start": 30,
-                        "end": 31
+                        "end": 31,
+                        "start_line": 3,
+                        "start_col": 8
                       }
                     },
                     {
@@ -46,7 +48,9 @@ class MyClass {
                       "kind": "Unqualified",
                       "span": {
                         "start": 33,
-                        "end": 35
+                        "end": 35,
+                        "start_line": 3,
+                        "start_col": 11
                       }
                     }
                   ],
@@ -61,7 +65,9 @@ class MyClass {
                             "kind": "Unqualified",
                             "span": {
                               "start": 45,
-                              "end": 46
+                              "end": 46,
+                              "start_line": 4,
+                              "start_col": 8
                             }
                           },
                           "method": "foo",
@@ -73,7 +79,9 @@ class MyClass {
                               "kind": "Unqualified",
                               "span": {
                                 "start": 62,
-                                "end": 63
+                                "end": 63,
+                                "start_line": 4,
+                                "start_col": 25
                               }
                             }
                           ]
@@ -81,7 +89,9 @@ class MyClass {
                       },
                       "span": {
                         "start": 45,
-                        "end": 73
+                        "end": 73,
+                        "start_line": 4,
+                        "start_col": 8
                       }
                     },
                     {
@@ -94,7 +104,9 @@ class MyClass {
                             "kind": "Unqualified",
                             "span": {
                               "start": 73,
-                              "end": 74
+                              "end": 74,
+                              "start_line": 5,
+                              "start_col": 8
                             }
                           },
                           "method": "foo",
@@ -104,7 +116,9 @@ class MyClass {
                       },
                       "span": {
                         "start": 73,
-                        "end": 96
+                        "end": 96,
+                        "start_line": 5,
+                        "start_col": 8
                       }
                     },
                     {
@@ -118,7 +132,9 @@ class MyClass {
                       },
                       "span": {
                         "start": 96,
-                        "end": 116
+                        "end": 116,
+                        "start_line": 6,
+                        "start_col": 8
                       }
                     },
                     {
@@ -132,7 +148,9 @@ class MyClass {
                       },
                       "span": {
                         "start": 116,
-                        "end": 142
+                        "end": 142,
+                        "start_line": 7,
+                        "start_col": 8
                       }
                     },
                     {
@@ -145,7 +163,9 @@ class MyClass {
                             "kind": "Unqualified",
                             "span": {
                               "start": 142,
-                              "end": 143
+                              "end": 143,
+                              "start_line": 8,
+                              "start_col": 8
                             }
                           },
                           "method": "hello",
@@ -155,7 +175,9 @@ class MyClass {
                       },
                       "span": {
                         "start": 142,
-                        "end": 174
+                        "end": 174,
+                        "start_line": 8,
+                        "start_col": 8
                       }
                     },
                     {
@@ -168,7 +190,9 @@ class MyClass {
                             "kind": "Unqualified",
                             "span": {
                               "start": 174,
-                              "end": 175
+                              "end": 175,
+                              "start_line": 9,
+                              "start_col": 8
                             }
                           },
                           "method": "big",
@@ -180,7 +204,9 @@ class MyClass {
                               "kind": "Unqualified",
                               "span": {
                                 "start": 191,
-                                "end": 192
+                                "end": 192,
+                                "start_line": 9,
+                                "start_col": 25
                               }
                             },
                             {
@@ -190,7 +216,9 @@ class MyClass {
                               "kind": "Unqualified",
                               "span": {
                                 "start": 194,
-                                "end": 195
+                                "end": 195,
+                                "start_line": 9,
+                                "start_col": 28
                               }
                             }
                           ]
@@ -198,7 +226,9 @@ class MyClass {
                       },
                       "span": {
                         "start": 174,
-                        "end": 201
+                        "end": 201,
+                        "start_line": 9,
+                        "start_col": 8
                       }
                     }
                   ]
@@ -206,7 +236,9 @@ class MyClass {
               },
               "span": {
                 "start": 26,
-                "end": 203
+                "end": 203,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -215,12 +247,16 @@ class MyClass {
       },
       "span": {
         "start": 6,
-        "end": 204
+        "end": 204,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 204
+    "end": 204,
+    "start_line": 1,
+    "start_col": 0
   }
 }

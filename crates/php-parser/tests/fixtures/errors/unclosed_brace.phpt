@@ -1,7 +1,7 @@
 ===source===
 <?php function foo() { $x = 1;
 ===errors===
-unclosed ''}'' opened at Span { start: 21, end: 22 }
+unclosed ''}'' opened at 1:21
 ===ast===
 {
   "stmts": [
@@ -22,7 +22,9 @@ unclosed ''}'' opened at Span { start: 21, end: 22 }
                         },
                         "span": {
                           "start": 23,
-                          "end": 25
+                          "end": 25,
+                          "start_line": 1,
+                          "start_col": 23
                         }
                       },
                       "op": "Assign",
@@ -32,20 +34,26 @@ unclosed ''}'' opened at Span { start: 21, end: 22 }
                         },
                         "span": {
                           "start": 28,
-                          "end": 29
+                          "end": 29,
+                          "start_line": 1,
+                          "start_col": 28
                         }
                       }
                     }
                   },
                   "span": {
                     "start": 23,
-                    "end": 29
+                    "end": 29,
+                    "start_line": 1,
+                    "start_col": 23
                   }
                 }
               },
               "span": {
                 "start": 23,
-                "end": 30
+                "end": 30,
+                "start_line": 1,
+                "start_col": 23
               }
             }
           ],
@@ -56,12 +64,16 @@ unclosed ''}'' opened at Span { start: 21, end: 22 }
       },
       "span": {
         "start": 6,
-        "end": 30
+        "end": 30,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 30
+    "end": 30,
+    "start_line": 1,
+    "start_col": 0
   }
 }

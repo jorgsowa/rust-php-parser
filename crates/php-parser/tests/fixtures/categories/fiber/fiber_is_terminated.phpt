@@ -17,7 +17,9 @@ min_php=8.1
                   },
                   "span": {
                     "start": 10,
-                    "end": 16
+                    "end": 16,
+                    "start_line": 1,
+                    "start_col": 10
                   }
                 },
                 "method": {
@@ -26,7 +28,9 @@ min_php=8.1
                   },
                   "span": {
                     "start": 18,
-                    "end": 30
+                    "end": 30,
+                    "start_line": 1,
+                    "start_col": 18
                   }
                 },
                 "args": []
@@ -34,7 +38,9 @@ min_php=8.1
             },
             "span": {
               "start": 10,
-              "end": 32
+              "end": 32,
+              "start_line": 1,
+              "start_col": 10
             }
           },
           "then_branch": {
@@ -43,7 +49,9 @@ min_php=8.1
             },
             "span": {
               "start": 34,
-              "end": 36
+              "end": 36,
+              "start_line": 1,
+              "start_col": 34
             }
           },
           "elseif_branches": [],
@@ -52,12 +60,16 @@ min_php=8.1
       },
       "span": {
         "start": 6,
-        "end": 36
+        "end": 36,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 36
+    "end": 36,
+    "start_line": 1,
+    "start_col": 0
   }
 }

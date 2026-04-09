@@ -17,7 +17,9 @@ $fn = Foo::bar(...);
                 },
                 "span": {
                   "start": 6,
-                  "end": 9
+                  "end": 9,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -31,7 +33,9 @@ $fn = Foo::bar(...);
                         },
                         "span": {
                           "start": 12,
-                          "end": 18
+                          "end": 18,
+                          "start_line": 2,
+                          "start_col": 6
                         }
                       }
                     }
@@ -39,20 +43,26 @@ $fn = Foo::bar(...);
                 },
                 "span": {
                   "start": 12,
-                  "end": 23
+                  "end": 23,
+                  "start_line": 2,
+                  "start_col": 6
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 23
+            "end": 23,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 25
+        "end": 25,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -66,7 +76,9 @@ $fn = Foo::bar(...);
                 },
                 "span": {
                   "start": 25,
-                  "end": 28
+                  "end": 28,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -81,7 +93,9 @@ $fn = Foo::bar(...);
                           },
                           "span": {
                             "start": 31,
-                            "end": 35
+                            "end": 35,
+                            "start_line": 3,
+                            "start_col": 6
                           }
                         },
                         "method": {
@@ -90,7 +104,9 @@ $fn = Foo::bar(...);
                           },
                           "span": {
                             "start": 37,
-                            "end": 43
+                            "end": 43,
+                            "start_line": 3,
+                            "start_col": 12
                           }
                         }
                       }
@@ -99,20 +115,26 @@ $fn = Foo::bar(...);
                 },
                 "span": {
                   "start": 31,
-                  "end": 48
+                  "end": 48,
+                  "start_line": 3,
+                  "start_col": 6
                 }
               }
             }
           },
           "span": {
             "start": 25,
-            "end": 48
+            "end": 48,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 25,
-        "end": 50
+        "end": 50,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -126,7 +148,9 @@ $fn = Foo::bar(...);
                 },
                 "span": {
                   "start": 50,
-                  "end": 53
+                  "end": 53,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -141,7 +165,9 @@ $fn = Foo::bar(...);
                           },
                           "span": {
                             "start": 56,
-                            "end": 59
+                            "end": 59,
+                            "start_line": 4,
+                            "start_col": 6
                           }
                         },
                         "method": "bar"
@@ -151,25 +177,33 @@ $fn = Foo::bar(...);
                 },
                 "span": {
                   "start": 56,
-                  "end": 69
+                  "end": 69,
+                  "start_line": 4,
+                  "start_col": 6
                 }
               }
             }
           },
           "span": {
             "start": 50,
-            "end": 69
+            "end": 69,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 50,
-        "end": 70
+        "end": 70,
+        "start_line": 4,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 70
+    "end": 70,
+    "start_line": 1,
+    "start_col": 0
   }
 }

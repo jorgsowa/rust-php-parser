@@ -23,7 +23,9 @@ $result = match ($type) {
                 },
                 "span": {
                   "start": 6,
-                  "end": 13
+                  "end": 13,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -36,7 +38,9 @@ $result = match ($type) {
                       },
                       "span": {
                         "start": 23,
-                        "end": 28
+                        "end": 28,
+                        "start_line": 2,
+                        "start_col": 17
                       }
                     },
                     "arms": [
@@ -48,7 +52,9 @@ $result = match ($type) {
                             },
                             "span": {
                               "start": 36,
-                              "end": 39
+                              "end": 39,
+                              "start_line": 3,
+                              "start_col": 4
                             }
                           }
                         ],
@@ -61,7 +67,9 @@ $result = match ($type) {
                                 },
                                 "span": {
                                   "start": 50,
-                                  "end": 58
+                                  "end": 58,
+                                  "start_line": 3,
+                                  "start_col": 18
                                 }
                               },
                               "arms": [
@@ -73,7 +81,9 @@ $result = match ($type) {
                                       },
                                       "span": {
                                         "start": 70,
-                                        "end": 71
+                                        "end": 71,
+                                        "start_line": 4,
+                                        "start_col": 8
                                       }
                                     }
                                   ],
@@ -83,12 +93,16 @@ $result = match ($type) {
                                     },
                                     "span": {
                                       "start": 75,
-                                      "end": 79
+                                      "end": 79,
+                                      "start_line": 4,
+                                      "start_col": 13
                                     }
                                   },
                                   "span": {
                                     "start": 70,
-                                    "end": 79
+                                    "end": 79,
+                                    "start_line": 4,
+                                    "start_col": 8
                                   }
                                 },
                                 {
@@ -99,7 +113,9 @@ $result = match ($type) {
                                       },
                                       "span": {
                                         "start": 89,
-                                        "end": 90
+                                        "end": 90,
+                                        "start_line": 5,
+                                        "start_col": 8
                                       }
                                     }
                                   ],
@@ -109,12 +125,16 @@ $result = match ($type) {
                                     },
                                     "span": {
                                       "start": 94,
-                                      "end": 98
+                                      "end": 98,
+                                      "start_line": 5,
+                                      "start_col": 13
                                     }
                                   },
                                   "span": {
                                     "start": 89,
-                                    "end": 98
+                                    "end": 98,
+                                    "start_line": 5,
+                                    "start_col": 8
                                   }
                                 },
                                 {
@@ -125,12 +145,16 @@ $result = match ($type) {
                                     },
                                     "span": {
                                       "start": 119,
-                                      "end": 128
+                                      "end": 128,
+                                      "start_line": 6,
+                                      "start_col": 19
                                     }
                                   },
                                   "span": {
                                     "start": 108,
-                                    "end": 128
+                                    "end": 128,
+                                    "start_line": 6,
+                                    "start_col": 8
                                   }
                                 }
                               ]
@@ -138,12 +162,16 @@ $result = match ($type) {
                           },
                           "span": {
                             "start": 43,
-                            "end": 135
+                            "end": 135,
+                            "start_line": 3,
+                            "start_col": 11
                           }
                         },
                         "span": {
                           "start": 36,
-                          "end": 135
+                          "end": 135,
+                          "start_line": 3,
+                          "start_col": 4
                         }
                       },
                       {
@@ -154,7 +182,9 @@ $result = match ($type) {
                             },
                             "span": {
                               "start": 141,
-                              "end": 144
+                              "end": 144,
+                              "start_line": 8,
+                              "start_col": 4
                             }
                           }
                         ],
@@ -164,12 +194,16 @@ $result = match ($type) {
                           },
                           "span": {
                             "start": 148,
-                            "end": 151
+                            "end": 151,
+                            "start_line": 8,
+                            "start_col": 11
                           }
                         },
                         "span": {
                           "start": 141,
-                          "end": 151
+                          "end": 151,
+                          "start_line": 8,
+                          "start_col": 4
                         }
                       },
                       {
@@ -180,12 +214,16 @@ $result = match ($type) {
                           },
                           "span": {
                             "start": 168,
-                            "end": 175
+                            "end": 175,
+                            "start_line": 9,
+                            "start_col": 15
                           }
                         },
                         "span": {
                           "start": 157,
-                          "end": 175
+                          "end": 175,
+                          "start_line": 9,
+                          "start_col": 4
                         }
                       }
                     ]
@@ -193,25 +231,33 @@ $result = match ($type) {
                 },
                 "span": {
                   "start": 16,
-                  "end": 178
+                  "end": 178,
+                  "start_line": 2,
+                  "start_col": 10
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 178
+            "end": 178,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 179
+        "end": 179,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 179
+    "end": 179,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -45,7 +45,9 @@ class Foo
                       "attributes": [],
                       "span": {
                         "start": 44,
-                        "end": 49
+                        "end": 49,
+                        "start_line": 5,
+                        "start_col": 25
                       }
                     },
                     {
@@ -61,7 +63,9 @@ class Foo
                       "attributes": [],
                       "span": {
                         "start": 51,
-                        "end": 57
+                        "end": 57,
+                        "start_line": 5,
+                        "start_col": 32
                       }
                     }
                   ],
@@ -72,7 +76,9 @@ class Foo
               },
               "span": {
                 "start": 23,
-                "end": 73
+                "end": 73,
+                "start_line": 5,
+                "start_col": 4
               }
             }
           ],
@@ -81,12 +87,16 @@ class Foo
       },
       "span": {
         "start": 7,
-        "end": 74
+        "end": 74,
+        "start_line": 3,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 74
+    "end": 74,
+    "start_line": 1,
+    "start_col": 0
   }
 }

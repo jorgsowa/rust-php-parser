@@ -30,7 +30,9 @@ class Service {
                       "kind": "Unqualified",
                       "span": {
                         "start": 30,
-                        "end": 38
+                        "end": 38,
+                        "start_line": 3,
+                        "start_col": 8
                       }
                     },
                     {
@@ -40,7 +42,9 @@ class Service {
                       "kind": "Unqualified",
                       "span": {
                         "start": 40,
-                        "end": 49
+                        "end": 49,
+                        "start_line": 3,
+                        "start_col": 18
                       }
                     },
                     {
@@ -50,7 +54,9 @@ class Service {
                       "kind": "Unqualified",
                       "span": {
                         "start": 51,
-                        "end": 63
+                        "end": 63,
+                        "start_line": 3,
+                        "start_col": 29
                       }
                     }
                   ],
@@ -59,7 +65,9 @@ class Service {
               },
               "span": {
                 "start": 26,
-                "end": 69
+                "end": 69,
+                "start_line": 3,
+                "start_col": 4
               }
             },
             {
@@ -81,13 +89,17 @@ class Service {
                         "kind": "Unqualified",
                         "span": {
                           "start": 92,
-                          "end": 96
+                          "end": 96,
+                          "start_line": 4,
+                          "start_col": 27
                         }
                       }
                     },
                     "span": {
                       "start": 92,
-                      "end": 96
+                      "end": 96,
+                      "start_line": 4,
+                      "start_col": 27
                     }
                   },
                   "body": [],
@@ -96,7 +108,9 @@ class Service {
               },
               "span": {
                 "start": 69,
-                "end": 100
+                "end": 100,
+                "start_line": 4,
+                "start_col": 4
               }
             }
           ],
@@ -105,12 +119,16 @@ class Service {
       },
       "span": {
         "start": 6,
-        "end": 101
+        "end": 101,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 101
+    "end": 101,
+    "start_line": 1,
+    "start_col": 0
   }
 }

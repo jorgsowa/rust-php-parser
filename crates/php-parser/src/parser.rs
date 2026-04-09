@@ -26,6 +26,8 @@ pub struct Parser<'arena, 'src> {
     comments: Vec<Comment<'src>>,
     /// PHP version being targeted — used for version-specific error reporting.
     pub version: PhpVersion,
+    /// Line index for resolving byte offsets to line/column positions.
+    pub(crate) line_index: LineIndex,
 }
 
 impl<'arena, 'src> Parser<'arena, 'src> {
@@ -40,7 +42,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         source: &'src str,
         version: PhpVersion,
     ) -> Self {
-        let (all_tokens, lex_errors) = php_lexer::lex_all(source);
+        let (all_tokens, lex_errors, line_index) = php_lexer::lex_all(source);
 
         // Separate comment tokens from the main token stream.
         // lex_all appends two Eof sentinels; they pass through the filter unchanged.
@@ -90,6 +92,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             depth: 0,
             expr_depth: 0,
             version,
+            line_index,
         }
     }
 
@@ -141,6 +144,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         let eof_span = tokens.last().unwrap().span;
         tokens.push(Token::new(TokenKind::Eof, eof_span));
 
+        let line_index = lexer.line_index().clone();
+
         // Collect all lexer errors
         for e in lexer.errors {
             errors.push(ParseError::Forbidden {
@@ -167,6 +172,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             depth: 0,
             expr_depth: 0,
             version,
+            line_index,
         }
     }
 
@@ -224,6 +230,12 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     #[inline]
     pub fn current_span(&self) -> Span {
         self.current.span
+    }
+
+    /// Create a span from byte offsets, resolving the start position to line/column.
+    #[inline]
+    pub fn span(&self, start: u32, end: u32) -> Span {
+        self.line_index.span(start, end)
     }
 
     /// Get the text of the current token.
@@ -548,7 +560,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         // Fast path: single unqualified identifier (the common case, ~95% of names).
         // Avoids allocating an ArenaVec entirely.
         if !fully_qualified && !relative && !self.check(TokenKind::Backslash) {
-            let span = Span::new(start, self.current_span().start);
+            let span = self.span(start, self.current_span().start);
             return Name::Simple { value: first, span };
         }
 
@@ -563,7 +575,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             }
         }
 
-        let span = Span::new(start, self.current_span().start);
+        let span = self.span(start, self.current_span().start);
 
         let kind = if fully_qualified {
             NameKind::FullyQualified
@@ -587,7 +599,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         // Nullable: ?Type
         if self.eat(TokenKind::Question).is_some() {
             let inner = self.parse_simple_type();
-            let span = Span::new(start, inner.span.end);
+            let span = self.span(start, inner.span.end);
             return TypeHint {
                 kind: TypeHintKind::Nullable(self.alloc(inner)),
                 span,
@@ -603,7 +615,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             while self.eat(TokenKind::Pipe).is_some() {
                 types.push(self.parse_type_element());
             }
-            let span = Span::new(start, types.last().unwrap().span.end);
+            let span = self.span(start, types.last().unwrap().span.end);
             let has_true = types
                 .iter()
                 .any(|t| matches!(t.kind, TypeHintKind::Keyword(BuiltinType::True, _)));
@@ -653,7 +665,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 while self.eat(TokenKind::Ampersand).is_some() {
                     types.push(self.parse_simple_type());
                 }
-                let span = Span::new(start, types.last().unwrap().span.end);
+                let span = self.span(start, types.last().unwrap().span.end);
                 return TypeHint {
                     kind: TypeHintKind::Intersection(types),
                     span,
@@ -671,7 +683,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             self.require_version(
                 PhpVersion::Php81,
                 "intersection types",
-                Span::new(start, start + 1),
+                self.span(start, start + 1),
             );
             self.advance(); // consume (
             let first_type = self.parse_simple_type();
@@ -683,7 +695,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             let end = close
                 .map(|t| t.span.end)
                 .unwrap_or(self.current_span().start);
-            let span = Span::new(start, end);
+            let span = self.span(start, end);
             TypeHint {
                 kind: TypeHintKind::Intersection(types),
                 span,
@@ -805,7 +817,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             _ => {
                 // Named type from qualified/unqualified name
                 let name = self.parse_name();
-                let span = Span::new(start, name.span().end);
+                let span = self.span(start, name.span().end);
                 TypeHint {
                     kind: TypeHintKind::Named(name),
                     span,
@@ -862,7 +874,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     self.alloc_vec()
                 };
 
-                let span = Span::new(attr_start, self.current_span().start);
+                let span = self.span(attr_start, self.current_span().start);
                 attributes.push(Attribute { name, args, span });
 
                 if self.eat(TokenKind::Comma).is_none() {
@@ -883,7 +895,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         let start = self.start_span();
         let expr = expr::parse_expr(self);
         self.expect_semicolon("short echo tag");
-        let span = Span::new(start, self.current_span().start);
+        let span = self.span(start, self.current_span().start);
         Some(Stmt {
             kind: StmtKind::Echo(self.alloc_vec_one(expr)),
             span,
@@ -958,9 +970,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
 
         let span = if stmts.is_empty() {
-            Span::new(start, self.current.span.end)
+            self.span(start, self.current.span.end)
         } else {
-            Span::new(start, stmts.last().unwrap().span.end)
+            self.span(start, stmts.last().unwrap().span.end)
         };
 
         Program { stmts, span }

@@ -17,7 +17,9 @@ $c = `echo $arr[0]`;
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -37,7 +39,9 @@ $c = `echo $arr[0]`;
                               },
                               "span": {
                                 "start": 16,
-                                "end": 21
+                                "end": 21,
+                                "start_line": 2,
+                                "start_col": 10
                               }
                             },
                             "index": {
@@ -46,14 +50,18 @@ $c = `echo $arr[0]`;
                               },
                               "span": {
                                 "start": 22,
-                                "end": 28
+                                "end": 28,
+                                "start_line": 2,
+                                "start_col": 16
                               }
                             }
                           }
                         },
                         "span": {
                           "start": 16,
-                          "end": 29
+                          "end": 29,
+                          "start_line": 2,
+                          "start_col": 10
                         }
                       }
                     }
@@ -61,20 +69,26 @@ $c = `echo $arr[0]`;
                 },
                 "span": {
                   "start": 11,
-                  "end": 31
+                  "end": 31,
+                  "start_line": 2,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 31
+            "end": 31,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 33
+        "end": 33,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -88,7 +102,9 @@ $c = `echo $arr[0]`;
                 },
                 "span": {
                   "start": 33,
-                  "end": 35
+                  "end": 35,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -105,7 +121,9 @@ $c = `echo $arr[0]`;
                               },
                               "span": {
                                 "start": 40,
-                                "end": 44
+                                "end": 44,
+                                "start_line": 3,
+                                "start_col": 7
                               }
                             },
                             "method": {
@@ -114,7 +132,9 @@ $c = `echo $arr[0]`;
                               },
                               "span": {
                                 "start": 46,
-                                "end": 56
+                                "end": 56,
+                                "start_line": 3,
+                                "start_col": 13
                               }
                             },
                             "args": []
@@ -122,7 +142,9 @@ $c = `echo $arr[0]`;
                         },
                         "span": {
                           "start": 40,
-                          "end": 58
+                          "end": 58,
+                          "start_line": 3,
+                          "start_col": 7
                         }
                       }
                     },
@@ -136,7 +158,9 @@ $c = `echo $arr[0]`;
                         },
                         "span": {
                           "start": 67,
-                          "end": 73
+                          "end": 73,
+                          "start_line": 3,
+                          "start_col": 34
                         }
                       }
                     }
@@ -144,20 +168,26 @@ $c = `echo $arr[0]`;
                 },
                 "span": {
                   "start": 38,
-                  "end": 74
+                  "end": 74,
+                  "start_line": 3,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 33,
-            "end": 74
+            "end": 74,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 33,
-        "end": 76
+        "end": 76,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -171,7 +201,9 @@ $c = `echo $arr[0]`;
                 },
                 "span": {
                   "start": 76,
-                  "end": 78
+                  "end": 78,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -191,7 +223,9 @@ $c = `echo $arr[0]`;
                               },
                               "span": {
                                 "start": 87,
-                                "end": 91
+                                "end": 91,
+                                "start_line": 4,
+                                "start_col": 11
                               }
                             },
                             "index": {
@@ -200,14 +234,18 @@ $c = `echo $arr[0]`;
                               },
                               "span": {
                                 "start": 92,
-                                "end": 93
+                                "end": 93,
+                                "start_line": 4,
+                                "start_col": 16
                               }
                             }
                           }
                         },
                         "span": {
                           "start": 87,
-                          "end": 94
+                          "end": 94,
+                          "start_line": 4,
+                          "start_col": 11
                         }
                       }
                     }
@@ -215,25 +253,33 @@ $c = `echo $arr[0]`;
                 },
                 "span": {
                   "start": 81,
-                  "end": 95
+                  "end": 95,
+                  "start_line": 4,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 76,
-            "end": 95
+            "end": 95,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 76,
-        "end": 96
+        "end": 96,
+        "start_line": 4,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 96
+    "end": 96,
+    "start_line": 1,
+    "start_col": 0
   }
 }

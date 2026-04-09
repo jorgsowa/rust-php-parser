@@ -22,7 +22,9 @@ enum Suit: string
             "kind": "Unqualified",
             "span": {
               "start": 18,
-              "end": 25
+              "end": 25,
+              "start_line": 3,
+              "start_col": 11
             }
           },
           "implements": [],
@@ -37,7 +39,9 @@ enum Suit: string
                     },
                     "span": {
                       "start": 45,
-                      "end": 48
+                      "end": 48,
+                      "start_line": 5,
+                      "start_col": 18
                     }
                   },
                   "attributes": []
@@ -45,7 +49,9 @@ enum Suit: string
               },
               "span": {
                 "start": 31,
-                "end": 54
+                "end": 54,
+                "start_line": 5,
+                "start_col": 4
               }
             },
             {
@@ -58,7 +64,9 @@ enum Suit: string
               },
               "span": {
                 "start": 54,
-                "end": 73
+                "end": 73,
+                "start_line": 6,
+                "start_col": 4
               }
             },
             {
@@ -71,7 +79,9 @@ enum Suit: string
                     },
                     "span": {
                       "start": 86,
-                      "end": 89
+                      "end": 89,
+                      "start_line": 7,
+                      "start_col": 17
                     }
                   },
                   "attributes": []
@@ -79,7 +89,9 @@ enum Suit: string
               },
               "span": {
                 "start": 73,
-                "end": 95
+                "end": 95,
+                "start_line": 7,
+                "start_col": 4
               }
             },
             {
@@ -92,7 +104,9 @@ enum Suit: string
                     },
                     "span": {
                       "start": 109,
-                      "end": 112
+                      "end": 112,
+                      "start_line": 8,
+                      "start_col": 18
                     }
                   },
                   "attributes": []
@@ -100,7 +114,9 @@ enum Suit: string
               },
               "span": {
                 "start": 95,
-                "end": 114
+                "end": 114,
+                "start_line": 8,
+                "start_col": 4
               }
             }
           ],
@@ -109,12 +125,16 @@ enum Suit: string
       },
       "span": {
         "start": 7,
-        "end": 115
+        "end": 115,
+        "start_line": 3,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 115
+    "end": 115,
+    "start_line": 1,
+    "start_col": 0
   }
 }

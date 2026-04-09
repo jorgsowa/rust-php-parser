@@ -34,13 +34,17 @@
                         "kind": "Unqualified",
                         "span": {
                           "start": 41,
-                          "end": 45
+                          "end": 45,
+                          "start_line": 1,
+                          "start_col": 41
                         }
                       }
                     },
                     "span": {
                       "start": 41,
-                      "end": 45
+                      "end": 45,
+                      "start_line": 1,
+                      "start_col": 41
                     }
                   },
                   "body": [],
@@ -49,7 +53,9 @@
               },
               "span": {
                 "start": 18,
-                "end": 49
+                "end": 49,
+                "start_line": 1,
+                "start_col": 18
               }
             }
           ],
@@ -58,12 +64,16 @@
       },
       "span": {
         "start": 6,
-        "end": 50
+        "end": 50,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 50
+    "end": 50,
+    "start_line": 1,
+    "start_col": 0
   }
 }

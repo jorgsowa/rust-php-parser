@@ -102,7 +102,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                 },
                 "span": {
                   "start": 27,
-                  "end": 28
+                  "end": 28,
+                  "start_line": 2,
+                  "start_col": 21
                 }
               }
             ]
@@ -112,7 +114,9 @@ class RateLimitMiddleware implements MiddlewareInterface
       },
       "span": {
         "start": 6,
-        "end": 32
+        "end": 32,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -127,7 +131,9 @@ class RateLimitMiddleware implements MiddlewareInterface
             "kind": "Qualified",
             "span": {
               "start": 42,
-              "end": 61
+              "end": 61,
+              "start_line": 4,
+              "start_col": 10
             }
           },
           "body": "Simple"
@@ -135,7 +141,9 @@ class RateLimitMiddleware implements MiddlewareInterface
       },
       "span": {
         "start": 32,
-        "end": 64
+        "end": 64,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -153,13 +161,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                 "kind": "Qualified",
                 "span": {
                   "start": 68,
-                  "end": 91
+                  "end": 91,
+                  "start_line": 6,
+                  "start_col": 4
                 }
               },
               "alias": null,
               "span": {
                 "start": 68,
-                "end": 91
+                "end": 91,
+                "start_line": 6,
+                "start_col": 4
               }
             }
           ]
@@ -167,7 +179,9 @@ class RateLimitMiddleware implements MiddlewareInterface
       },
       "span": {
         "start": 64,
-        "end": 93
+        "end": 93,
+        "start_line": 6,
+        "start_col": 0
       }
     },
     {
@@ -185,13 +199,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                 "kind": "Qualified",
                 "span": {
                   "start": 97,
-                  "end": 113
+                  "end": 113,
+                  "start_line": 7,
+                  "start_col": 4
                 }
               },
               "alias": null,
               "span": {
                 "start": 97,
-                "end": 113
+                "end": 113,
+                "start_line": 7,
+                "start_col": 4
               }
             }
           ]
@@ -199,7 +217,9 @@ class RateLimitMiddleware implements MiddlewareInterface
       },
       "span": {
         "start": 93,
-        "end": 115
+        "end": 115,
+        "start_line": 7,
+        "start_col": 0
       }
     },
     {
@@ -217,13 +237,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                 "kind": "Qualified",
                 "span": {
                   "start": 119,
-                  "end": 136
+                  "end": 136,
+                  "start_line": 8,
+                  "start_col": 4
                 }
               },
               "alias": null,
               "span": {
                 "start": 119,
-                "end": 136
+                "end": 136,
+                "start_line": 8,
+                "start_col": 4
               }
             }
           ]
@@ -231,7 +255,9 @@ class RateLimitMiddleware implements MiddlewareInterface
       },
       "span": {
         "start": 115,
-        "end": 139
+        "end": 139,
+        "start_line": 8,
+        "start_col": 0
       }
     },
     {
@@ -261,13 +287,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 198,
-                              "end": 206
+                              "end": 206,
+                              "start_line": 12,
+                              "start_col": 27
                             }
                           }
                         },
                         "span": {
                           "start": 198,
-                          "end": 206
+                          "end": 206,
+                          "start_line": 12,
+                          "start_col": 27
                         }
                       },
                       "default": null,
@@ -280,7 +310,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "attributes": [],
                       "span": {
                         "start": 198,
-                        "end": 214
+                        "end": 214,
+                        "start_line": 12,
+                        "start_col": 27
                       }
                     },
                     {
@@ -294,13 +326,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 216,
-                              "end": 224
+                              "end": 224,
+                              "start_line": 12,
+                              "start_col": 45
                             }
                           }
                         },
                         "span": {
                           "start": 216,
-                          "end": 224
+                          "end": 224,
+                          "start_line": 12,
+                          "start_col": 45
                         }
                       },
                       "default": null,
@@ -313,7 +349,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "attributes": [],
                       "span": {
                         "start": 216,
-                        "end": 230
+                        "end": 230,
+                        "start_line": 12,
+                        "start_col": 45
                       }
                     }
                   ],
@@ -326,13 +364,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                         "kind": "Unqualified",
                         "span": {
                           "start": 233,
-                          "end": 241
+                          "end": 241,
+                          "start_line": 12,
+                          "start_col": 62
                         }
                       }
                     },
                     "span": {
                       "start": 233,
-                      "end": 241
+                      "end": 241,
+                      "start_line": 12,
+                      "start_col": 62
                     }
                   },
                   "body": null,
@@ -341,7 +383,9 @@ class RateLimitMiddleware implements MiddlewareInterface
               },
               "span": {
                 "start": 175,
-                "end": 243
+                "end": 243,
+                "start_line": 12,
+                "start_col": 4
               }
             }
           ],
@@ -350,7 +394,9 @@ class RateLimitMiddleware implements MiddlewareInterface
       },
       "span": {
         "start": 139,
-        "end": 244
+        "end": 244,
+        "start_line": 10,
+        "start_col": 0
       }
     },
     {
@@ -371,7 +417,9 @@ class RateLimitMiddleware implements MiddlewareInterface
               "kind": "Unqualified",
               "span": {
                 "start": 278,
-                "end": 298
+                "end": 298,
+                "start_line": 15,
+                "start_col": 32
               }
             }
           ],
@@ -393,13 +441,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                         "kind": "Unqualified",
                         "span": {
                           "start": 321,
-                          "end": 336
+                          "end": 336,
+                          "start_line": 17,
+                          "start_col": 21
                         }
                       }
                     },
                     "span": {
                       "start": 321,
-                      "end": 336
+                      "end": 336,
+                      "start_line": 17,
+                      "start_col": 21
                     }
                   },
                   "default": null,
@@ -408,7 +460,9 @@ class RateLimitMiddleware implements MiddlewareInterface
               },
               "span": {
                 "start": 304,
-                "end": 346
+                "end": 346,
+                "start_line": 17,
+                "start_col": 4
               }
             },
             {
@@ -428,13 +482,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                         "kind": "Unqualified",
                         "span": {
                           "start": 367,
-                          "end": 372
+                          "end": 372,
+                          "start_line": 18,
+                          "start_col": 19
                         }
                       }
                     },
                     "span": {
                       "start": 367,
-                      "end": 372
+                      "end": 372,
+                      "start_line": 18,
+                      "start_col": 19
                     }
                   },
                   "default": {
@@ -443,7 +501,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                     },
                     "span": {
                       "start": 390,
-                      "end": 392
+                      "end": 392,
+                      "start_line": 18,
+                      "start_col": 42
                     }
                   },
                   "attributes": []
@@ -451,7 +511,9 @@ class RateLimitMiddleware implements MiddlewareInterface
               },
               "span": {
                 "start": 352,
-                "end": 392
+                "end": 392,
+                "start_line": 18,
+                "start_col": 4
               }
             },
             {
@@ -475,13 +537,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 427,
-                              "end": 442
+                              "end": 442,
+                              "start_line": 20,
+                              "start_col": 32
                             }
                           }
                         },
                         "span": {
                           "start": 427,
-                          "end": 442
+                          "end": 442,
+                          "start_line": 20,
+                          "start_col": 32
                         }
                       },
                       "default": null,
@@ -494,7 +560,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "attributes": [],
                       "span": {
                         "start": 427,
-                        "end": 452
+                        "end": 452,
+                        "start_line": 20,
+                        "start_col": 32
                       }
                     }
                   ],
@@ -514,7 +582,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 468,
-                                        "end": 473
+                                        "end": 473,
+                                        "start_line": 22,
+                                        "start_col": 8
                                       }
                                     },
                                     "property": {
@@ -523,14 +593,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 475,
-                                        "end": 484
+                                        "end": 484,
+                                        "start_line": 22,
+                                        "start_col": 15
                                       }
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 468,
-                                  "end": 484
+                                  "end": 484,
+                                  "start_line": 22,
+                                  "start_col": 8
                                 }
                               },
                               "op": "Assign",
@@ -540,20 +614,26 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 487,
-                                  "end": 497
+                                  "end": 497,
+                                  "start_line": 22,
+                                  "start_col": 27
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 468,
-                            "end": 497
+                            "end": 497,
+                            "start_line": 22,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 468,
-                        "end": 503
+                        "end": 503,
+                        "start_line": 22,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -562,7 +642,9 @@ class RateLimitMiddleware implements MiddlewareInterface
               },
               "span": {
                 "start": 399,
-                "end": 510
+                "end": 510,
+                "start_line": 20,
+                "start_col": 4
               }
             },
             {
@@ -586,13 +668,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 533,
-                              "end": 541
+                              "end": 541,
+                              "start_line": 25,
+                              "start_col": 27
                             }
                           }
                         },
                         "span": {
                           "start": 533,
-                          "end": 541
+                          "end": 541,
+                          "start_line": 25,
+                          "start_col": 27
                         }
                       },
                       "default": null,
@@ -605,7 +691,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "attributes": [],
                       "span": {
                         "start": 533,
-                        "end": 549
+                        "end": 549,
+                        "start_line": 25,
+                        "start_col": 27
                       }
                     },
                     {
@@ -619,13 +707,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 551,
-                              "end": 559
+                              "end": 559,
+                              "start_line": 25,
+                              "start_col": 45
                             }
                           }
                         },
                         "span": {
                           "start": 551,
-                          "end": 559
+                          "end": 559,
+                          "start_line": 25,
+                          "start_col": 45
                         }
                       },
                       "default": null,
@@ -638,7 +730,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "attributes": [],
                       "span": {
                         "start": 551,
-                        "end": 565
+                        "end": 565,
+                        "start_line": 25,
+                        "start_col": 45
                       }
                     }
                   ],
@@ -651,13 +745,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                         "kind": "Unqualified",
                         "span": {
                           "start": 568,
-                          "end": 581
+                          "end": 581,
+                          "start_line": 25,
+                          "start_col": 62
                         }
                       }
                     },
                     "span": {
                       "start": 568,
-                      "end": 581
+                      "end": 581,
+                      "start_line": 25,
+                      "start_col": 62
                     }
                   },
                   "body": [
@@ -672,7 +770,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 591,
-                                  "end": 596
+                                  "end": 596,
+                                  "start_line": 27,
+                                  "start_col": 8
                                 }
                               },
                               "op": "Assign",
@@ -685,7 +785,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 599,
-                                        "end": 607
+                                        "end": 607,
+                                        "start_line": 27,
+                                        "start_col": 16
                                       }
                                     },
                                     "method": {
@@ -694,7 +796,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 609,
-                                        "end": 616
+                                        "end": 616,
+                                        "start_line": 27,
+                                        "start_col": 26
                                       }
                                     },
                                     "args": []
@@ -702,20 +806,26 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 599,
-                                  "end": 618
+                                  "end": 618,
+                                  "start_line": 27,
+                                  "start_col": 16
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 591,
-                            "end": 618
+                            "end": 618,
+                            "start_line": 27,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 591,
-                        "end": 629
+                        "end": 629,
+                        "start_line": 27,
+                        "start_col": 8
                       }
                     },
                     {
@@ -730,7 +840,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                   },
                                   "span": {
                                     "start": 638,
-                                    "end": 642
+                                    "end": 642,
+                                    "start_line": 29,
+                                    "start_col": 17
                                   }
                                 },
                                 "member": "excludedPaths"
@@ -738,7 +850,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                             },
                             "span": {
                               "start": 638,
-                              "end": 658
+                              "end": 658,
+                              "start_line": 29,
+                              "start_col": 17
                             }
                           },
                           "key": null,
@@ -748,7 +862,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                             },
                             "span": {
                               "start": 662,
-                              "end": 671
+                              "end": 671,
+                              "start_line": 29,
+                              "start_col": 41
                             }
                           },
                           "body": {
@@ -766,7 +882,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                               },
                                               "span": {
                                                 "start": 691,
-                                                "end": 696
+                                                "end": 696,
+                                                "start_line": 30,
+                                                "start_col": 16
                                               }
                                             },
                                             "op": "Identical",
@@ -776,14 +894,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                               },
                                               "span": {
                                                 "start": 701,
-                                                "end": 710
+                                                "end": 710,
+                                                "start_line": 30,
+                                                "start_col": 26
                                               }
                                             }
                                           }
                                         },
                                         "span": {
                                           "start": 691,
-                                          "end": 710
+                                          "end": 710,
+                                          "start_line": 30,
+                                          "start_col": 16
                                         }
                                       },
                                       "then_branch": {
@@ -800,7 +922,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                         },
                                                         "span": {
                                                           "start": 737,
-                                                          "end": 742
+                                                          "end": 742,
+                                                          "start_line": 31,
+                                                          "start_col": 23
                                                         }
                                                       },
                                                       "args": [
@@ -812,14 +936,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                             },
                                                             "span": {
                                                               "start": 743,
-                                                              "end": 751
+                                                              "end": 751,
+                                                              "start_line": 31,
+                                                              "start_col": 29
                                                             }
                                                           },
                                                           "unpack": false,
                                                           "by_ref": false,
                                                           "span": {
                                                             "start": 743,
-                                                            "end": 751
+                                                            "end": 751,
+                                                            "start_line": 31,
+                                                            "start_col": 29
                                                           }
                                                         }
                                                       ]
@@ -827,20 +955,26 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                   },
                                                   "span": {
                                                     "start": 737,
-                                                    "end": 752
+                                                    "end": 752,
+                                                    "start_line": 31,
+                                                    "start_col": 23
                                                   }
                                                 }
                                               },
                                               "span": {
                                                 "start": 730,
-                                                "end": 766
+                                                "end": 766,
+                                                "start_line": 31,
+                                                "start_col": 16
                                               }
                                             }
                                           ]
                                         },
                                         "span": {
                                           "start": 712,
-                                          "end": 767
+                                          "end": 767,
+                                          "start_line": 30,
+                                          "start_col": 37
                                         }
                                       },
                                       "elseif_branches": [],
@@ -849,21 +983,27 @@ class RateLimitMiddleware implements MiddlewareInterface
                                   },
                                   "span": {
                                     "start": 687,
-                                    "end": 767
+                                    "end": 767,
+                                    "start_line": 30,
+                                    "start_col": 12
                                   }
                                 }
                               ]
                             },
                             "span": {
                               "start": 673,
-                              "end": 777
+                              "end": 777,
+                              "start_line": 29,
+                              "start_col": 52
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 629,
-                        "end": 777
+                        "end": 777,
+                        "start_line": 29,
+                        "start_col": 8
                       }
                     },
                     {
@@ -877,7 +1017,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 787,
-                                  "end": 793
+                                  "end": 793,
+                                  "start_line": 35,
+                                  "start_col": 8
                                 }
                               },
                               "op": "Assign",
@@ -893,7 +1035,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                             },
                                             "span": {
                                               "start": 796,
-                                              "end": 804
+                                              "end": 804,
+                                              "start_line": 35,
+                                              "start_col": 17
                                             }
                                           },
                                           "method": {
@@ -902,7 +1046,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                             },
                                             "span": {
                                               "start": 806,
-                                              "end": 815
+                                              "end": 815,
+                                              "start_line": 35,
+                                              "start_col": 27
                                             }
                                           },
                                           "args": [
@@ -914,14 +1060,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                 },
                                                 "span": {
                                                   "start": 816,
-                                                  "end": 831
+                                                  "end": 831,
+                                                  "start_line": 35,
+                                                  "start_col": 37
                                                 }
                                               },
                                               "unpack": false,
                                               "by_ref": false,
                                               "span": {
                                                 "start": 816,
-                                                "end": 831
+                                                "end": 831,
+                                                "start_line": 35,
+                                                "start_col": 37
                                               }
                                             }
                                           ]
@@ -929,7 +1079,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 796,
-                                        "end": 833
+                                        "end": 833,
+                                        "start_line": 35,
+                                        "start_col": 17
                                       }
                                     },
                                     "right": {
@@ -938,27 +1090,35 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 836,
-                                        "end": 838
+                                        "end": 838,
+                                        "start_line": 35,
+                                        "start_col": 57
                                       }
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 796,
-                                  "end": 838
+                                  "end": 838,
+                                  "start_line": 35,
+                                  "start_col": 17
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 787,
-                            "end": 838
+                            "end": 838,
+                            "start_line": 35,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 787,
-                        "end": 848
+                        "end": 848,
+                        "start_line": 35,
+                        "start_col": 8
                       }
                     },
                     {
@@ -972,7 +1132,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 848,
-                                  "end": 854
+                                  "end": 854,
+                                  "start_line": 36,
+                                  "start_col": 8
                                 }
                               },
                               "op": "Assign",
@@ -985,7 +1147,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 857,
-                                        "end": 868
+                                        "end": 868,
+                                        "start_line": 36,
+                                        "start_col": 17
                                       }
                                     },
                                     "args": [
@@ -997,14 +1161,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                           },
                                           "span": {
                                             "start": 869,
-                                            "end": 878
+                                            "end": 878,
+                                            "start_line": 36,
+                                            "start_col": 29
                                           }
                                         },
                                         "unpack": false,
                                         "by_ref": false,
                                         "span": {
                                           "start": 869,
-                                          "end": 878
+                                          "end": 878,
+                                          "start_line": 36,
+                                          "start_col": 29
                                         }
                                       },
                                       {
@@ -1015,14 +1183,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                           },
                                           "span": {
                                             "start": 880,
-                                            "end": 882
+                                            "end": 882,
+                                            "start_line": 36,
+                                            "start_col": 40
                                           }
                                         },
                                         "unpack": false,
                                         "by_ref": false,
                                         "span": {
                                           "start": 880,
-                                          "end": 882
+                                          "end": 882,
+                                          "start_line": 36,
+                                          "start_col": 40
                                         }
                                       },
                                       {
@@ -1033,14 +1205,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                           },
                                           "span": {
                                             "start": 884,
-                                            "end": 890
+                                            "end": 890,
+                                            "start_line": 36,
+                                            "start_col": 44
                                           }
                                         },
                                         "unpack": false,
                                         "by_ref": false,
                                         "span": {
                                           "start": 884,
-                                          "end": 890
+                                          "end": 890,
+                                          "start_line": 36,
+                                          "start_col": 44
                                         }
                                       }
                                     ]
@@ -1048,20 +1224,26 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 857,
-                                  "end": 891
+                                  "end": 891,
+                                  "start_line": 36,
+                                  "start_col": 17
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 848,
-                            "end": 891
+                            "end": 891,
+                            "start_line": 36,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 848,
-                        "end": 902
+                        "end": 902,
+                        "start_line": 36,
+                        "start_col": 8
                       }
                     },
                     {
@@ -1075,13 +1257,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 912,
-                                  "end": 918
+                                  "end": 918,
+                                  "start_line": 38,
+                                  "start_col": 18
                                 }
                               }
                             },
                             "span": {
                               "start": 906,
-                              "end": 919
+                              "end": 919,
+                              "start_line": 38,
+                              "start_col": 12
                             }
                           },
                           "then_branch": {
@@ -1098,7 +1284,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                             },
                                             "span": {
                                               "start": 946,
-                                              "end": 954
+                                              "end": 954,
+                                              "start_line": 39,
+                                              "start_col": 23
                                             }
                                           },
                                           "args": [
@@ -1110,14 +1298,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                 },
                                                 "span": {
                                                   "start": 955,
-                                                  "end": 958
+                                                  "end": 958,
+                                                  "start_line": 39,
+                                                  "start_col": 32
                                                 }
                                               },
                                               "unpack": false,
                                               "by_ref": false,
                                               "span": {
                                                 "start": 955,
-                                                "end": 958
+                                                "end": 958,
+                                                "start_line": 39,
+                                                "start_col": 32
                                               }
                                             },
                                             {
@@ -1132,7 +1324,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                         },
                                                         "span": {
                                                           "start": 961,
-                                                          "end": 968
+                                                          "end": 968,
+                                                          "start_line": 39,
+                                                          "start_col": 38
                                                         }
                                                       },
                                                       "value": {
@@ -1141,27 +1335,35 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                         },
                                                         "span": {
                                                           "start": 972,
-                                                          "end": 987
+                                                          "end": 987,
+                                                          "start_line": 39,
+                                                          "start_col": 49
                                                         }
                                                       },
                                                       "unpack": false,
                                                       "span": {
                                                         "start": 961,
-                                                        "end": 987
+                                                        "end": 987,
+                                                        "start_line": 39,
+                                                        "start_col": 38
                                                       }
                                                     }
                                                   ]
                                                 },
                                                 "span": {
                                                   "start": 960,
-                                                  "end": 988
+                                                  "end": 988,
+                                                  "start_line": 39,
+                                                  "start_col": 37
                                                 }
                                               },
                                               "unpack": false,
                                               "by_ref": false,
                                               "span": {
                                                 "start": 960,
-                                                "end": 988
+                                                "end": 988,
+                                                "start_line": 39,
+                                                "start_col": 37
                                               }
                                             }
                                           ]
@@ -1169,20 +1371,26 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 942,
-                                        "end": 989
+                                        "end": 989,
+                                        "start_line": 39,
+                                        "start_col": 19
                                       }
                                     }
                                   },
                                   "span": {
                                     "start": 935,
-                                    "end": 999
+                                    "end": 999,
+                                    "start_line": 39,
+                                    "start_col": 12
                                   }
                                 }
                               ]
                             },
                             "span": {
                               "start": 921,
-                              "end": 1000
+                              "end": 1000,
+                              "start_line": 38,
+                              "start_col": 27
                             }
                           },
                           "elseif_branches": [],
@@ -1191,7 +1399,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                       },
                       "span": {
                         "start": 902,
-                        "end": 1000
+                        "end": 1000,
+                        "start_line": 38,
+                        "start_col": 8
                       }
                     },
                     {
@@ -1209,7 +1419,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                         },
                                         "span": {
                                           "start": 1028,
-                                          "end": 1035
+                                          "end": 1035,
+                                          "start_line": 43,
+                                          "start_col": 12
                                         }
                                       },
                                       "op": "Assign",
@@ -1225,7 +1437,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                     },
                                                     "span": {
                                                       "start": 1038,
-                                                      "end": 1043
+                                                      "end": 1043,
+                                                      "start_line": 43,
+                                                      "start_col": 22
                                                     }
                                                   },
                                                   "property": {
@@ -1234,14 +1448,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                     },
                                                     "span": {
                                                       "start": 1045,
-                                                      "end": 1054
+                                                      "end": 1054,
+                                                      "start_line": 43,
+                                                      "start_col": 29
                                                     }
                                                   }
                                                 }
                                               },
                                               "span": {
                                                 "start": 1038,
-                                                "end": 1054
+                                                "end": 1054,
+                                                "start_line": 43,
+                                                "start_col": 22
                                               }
                                             },
                                             "method": {
@@ -1250,7 +1468,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                               },
                                               "span": {
                                                 "start": 1056,
-                                                "end": 1064
+                                                "end": 1064,
+                                                "start_line": 43,
+                                                "start_col": 40
                                               }
                                             },
                                             "args": [
@@ -1262,14 +1482,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                   },
                                                   "span": {
                                                     "start": 1065,
-                                                    "end": 1071
+                                                    "end": 1071,
+                                                    "start_line": 43,
+                                                    "start_col": 49
                                                   }
                                                 },
                                                 "unpack": false,
                                                 "by_ref": false,
                                                 "span": {
                                                   "start": 1065,
-                                                  "end": 1071
+                                                  "end": 1071,
+                                                  "start_line": 43,
+                                                  "start_col": 49
                                                 }
                                               }
                                             ]
@@ -1277,20 +1501,26 @@ class RateLimitMiddleware implements MiddlewareInterface
                                         },
                                         "span": {
                                           "start": 1038,
-                                          "end": 1072
+                                          "end": 1072,
+                                          "start_line": 43,
+                                          "start_col": 22
                                         }
                                       }
                                     }
                                   },
                                   "span": {
                                     "start": 1028,
-                                    "end": 1072
+                                    "end": 1072,
+                                    "start_line": 43,
+                                    "start_col": 12
                                   }
                                 }
                               },
                               "span": {
                                 "start": 1028,
-                                "end": 1086
+                                "end": 1086,
+                                "start_line": 43,
+                                "start_col": 12
                               }
                             },
                             {
@@ -1304,7 +1534,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                         },
                                         "span": {
                                           "start": 1086,
-                                          "end": 1094
+                                          "end": 1094,
+                                          "start_line": 44,
+                                          "start_col": 12
                                         }
                                       },
                                       "method": {
@@ -1313,7 +1545,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                         },
                                         "span": {
                                           "start": 1096,
-                                          "end": 1108
+                                          "end": 1108,
+                                          "start_line": 44,
+                                          "start_col": 22
                                         }
                                       },
                                       "args": [
@@ -1325,14 +1559,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                             },
                                             "span": {
                                               "start": 1109,
-                                              "end": 1118
+                                              "end": 1118,
+                                              "start_line": 44,
+                                              "start_col": 35
                                             }
                                           },
                                           "unpack": false,
                                           "by_ref": false,
                                           "span": {
                                             "start": 1109,
-                                            "end": 1118
+                                            "end": 1118,
+                                            "start_line": 44,
+                                            "start_col": 35
                                           }
                                         },
                                         {
@@ -1350,7 +1588,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                         },
                                                         "span": {
                                                           "start": 1125,
-                                                          "end": 1132
+                                                          "end": 1132,
+                                                          "start_line": 44,
+                                                          "start_col": 51
                                                         }
                                                       },
                                                       "index": {
@@ -1359,28 +1599,36 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                         },
                                                         "span": {
                                                           "start": 1133,
-                                                          "end": 1138
+                                                          "end": 1138,
+                                                          "start_line": 44,
+                                                          "start_col": 59
                                                         }
                                                       }
                                                     }
                                                   },
                                                   "span": {
                                                     "start": 1125,
-                                                    "end": 1139
+                                                    "end": 1139,
+                                                    "start_line": 44,
+                                                    "start_col": 51
                                                   }
                                                 }
                                               ]
                                             },
                                             "span": {
                                               "start": 1120,
-                                              "end": 1139
+                                              "end": 1139,
+                                              "start_line": 44,
+                                              "start_col": 46
                                             }
                                           },
                                           "unpack": false,
                                           "by_ref": false,
                                           "span": {
                                             "start": 1120,
-                                            "end": 1139
+                                            "end": 1139,
+                                            "start_line": 44,
+                                            "start_col": 46
                                           }
                                         }
                                       ]
@@ -1388,13 +1636,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                                   },
                                   "span": {
                                     "start": 1086,
-                                    "end": 1140
+                                    "end": 1140,
+                                    "start_line": 44,
+                                    "start_col": 12
                                   }
                                 }
                               },
                               "span": {
                                 "start": 1086,
-                                "end": 1154
+                                "end": 1154,
+                                "start_line": 44,
+                                "start_col": 12
                               }
                             },
                             {
@@ -1408,7 +1660,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                         },
                                         "span": {
                                           "start": 1154,
-                                          "end": 1162
+                                          "end": 1162,
+                                          "start_line": 45,
+                                          "start_col": 12
                                         }
                                       },
                                       "method": {
@@ -1417,7 +1671,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                         },
                                         "span": {
                                           "start": 1164,
-                                          "end": 1176
+                                          "end": 1176,
+                                          "start_line": 45,
+                                          "start_col": 22
                                         }
                                       },
                                       "args": [
@@ -1429,14 +1685,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                             },
                                             "span": {
                                               "start": 1177,
-                                              "end": 1184
+                                              "end": 1184,
+                                              "start_line": 45,
+                                              "start_col": 35
                                             }
                                           },
                                           "unpack": false,
                                           "by_ref": false,
                                           "span": {
                                             "start": 1177,
-                                            "end": 1184
+                                            "end": 1184,
+                                            "start_line": 45,
+                                            "start_col": 35
                                           }
                                         },
                                         {
@@ -1453,7 +1713,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                         },
                                                         "span": {
                                                           "start": 1186,
-                                                          "end": 1193
+                                                          "end": 1193,
+                                                          "start_line": 45,
+                                                          "start_col": 44
                                                         }
                                                       },
                                                       "index": {
@@ -1462,14 +1724,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                         },
                                                         "span": {
                                                           "start": 1194,
-                                                          "end": 1201
+                                                          "end": 1201,
+                                                          "start_line": 45,
+                                                          "start_col": 52
                                                         }
                                                       }
                                                     }
                                                   },
                                                   "span": {
                                                     "start": 1186,
-                                                    "end": 1203
+                                                    "end": 1203,
+                                                    "start_line": 45,
+                                                    "start_col": 44
                                                   }
                                                 },
                                                 "right": {
@@ -1478,21 +1744,27 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                   },
                                                   "span": {
                                                     "start": 1206,
-                                                    "end": 1208
+                                                    "end": 1208,
+                                                    "start_line": 45,
+                                                    "start_col": 64
                                                   }
                                                 }
                                               }
                                             },
                                             "span": {
                                               "start": 1186,
-                                              "end": 1208
+                                              "end": 1208,
+                                              "start_line": 45,
+                                              "start_col": 44
                                             }
                                           },
                                           "unpack": false,
                                           "by_ref": false,
                                           "span": {
                                             "start": 1186,
-                                            "end": 1208
+                                            "end": 1208,
+                                            "start_line": 45,
+                                            "start_col": 44
                                           }
                                         }
                                       ]
@@ -1500,13 +1772,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                                   },
                                   "span": {
                                     "start": 1154,
-                                    "end": 1209
+                                    "end": 1209,
+                                    "start_line": 45,
+                                    "start_col": 12
                                   }
                                 }
                               },
                               "span": {
                                 "start": 1154,
-                                "end": 1219
+                                "end": 1219,
+                                "start_line": 45,
+                                "start_col": 12
                               }
                             }
                           ],
@@ -1520,7 +1796,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                   "kind": "FullyQualified",
                                   "span": {
                                     "start": 1228,
-                                    "end": 1254
+                                    "end": 1254,
+                                    "start_line": 46,
+                                    "start_col": 17
                                   }
                                 }
                               ],
@@ -1537,7 +1815,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                             },
                                             "span": {
                                               "start": 1283,
-                                              "end": 1291
+                                              "end": 1291,
+                                              "start_line": 47,
+                                              "start_col": 23
                                             }
                                           },
                                           "args": [
@@ -1549,14 +1829,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                 },
                                                 "span": {
                                                   "start": 1292,
-                                                  "end": 1295
+                                                  "end": 1295,
+                                                  "start_line": 47,
+                                                  "start_col": 32
                                                 }
                                               },
                                               "unpack": false,
                                               "by_ref": false,
                                               "span": {
                                                 "start": 1292,
-                                                "end": 1295
+                                                "end": 1295,
+                                                "start_line": 47,
+                                                "start_col": 32
                                               }
                                             },
                                             {
@@ -1571,7 +1855,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                         },
                                                         "span": {
                                                           "start": 1298,
-                                                          "end": 1305
+                                                          "end": 1305,
+                                                          "start_line": 47,
+                                                          "start_col": 38
                                                         }
                                                       },
                                                       "value": {
@@ -1583,7 +1869,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                               },
                                                               "span": {
                                                                 "start": 1309,
-                                                                "end": 1311
+                                                                "end": 1311,
+                                                                "start_line": 47,
+                                                                "start_col": 49
                                                               }
                                                             },
                                                             "method": {
@@ -1592,7 +1880,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                               },
                                                               "span": {
                                                                 "start": 1313,
-                                                                "end": 1323
+                                                                "end": 1323,
+                                                                "start_line": 47,
+                                                                "start_col": 53
                                                               }
                                                             },
                                                             "args": []
@@ -1600,27 +1890,35 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                         },
                                                         "span": {
                                                           "start": 1309,
-                                                          "end": 1325
+                                                          "end": 1325,
+                                                          "start_line": 47,
+                                                          "start_col": 49
                                                         }
                                                       },
                                                       "unpack": false,
                                                       "span": {
                                                         "start": 1298,
-                                                        "end": 1325
+                                                        "end": 1325,
+                                                        "start_line": 47,
+                                                        "start_col": 38
                                                       }
                                                     }
                                                   ]
                                                 },
                                                 "span": {
                                                   "start": 1297,
-                                                  "end": 1326
+                                                  "end": 1326,
+                                                  "start_line": 47,
+                                                  "start_col": 37
                                                 }
                                               },
                                               "unpack": false,
                                               "by_ref": false,
                                               "span": {
                                                 "start": 1297,
-                                                "end": 1326
+                                                "end": 1326,
+                                                "start_line": 47,
+                                                "start_col": 37
                                               }
                                             }
                                           ]
@@ -1628,19 +1926,25 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 1279,
-                                        "end": 1327
+                                        "end": 1327,
+                                        "start_line": 47,
+                                        "start_col": 19
                                       }
                                     }
                                   },
                                   "span": {
                                     "start": 1272,
-                                    "end": 1337
+                                    "end": 1337,
+                                    "start_line": 47,
+                                    "start_col": 12
                                   }
                                 }
                               ],
                               "span": {
                                 "start": 1227,
-                                "end": 1339
+                                "end": 1339,
+                                "start_line": 46,
+                                "start_col": 16
                               }
                             },
                             {
@@ -1652,7 +1956,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                   "kind": "FullyQualified",
                                   "span": {
                                     "start": 1346,
-                                    "end": 1364
+                                    "end": 1364,
+                                    "start_line": 48,
+                                    "start_col": 17
                                   }
                                 },
                                 {
@@ -1662,7 +1968,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                   "kind": "FullyQualified",
                                   "span": {
                                     "start": 1366,
-                                    "end": 1382
+                                    "end": 1382,
+                                    "start_line": 48,
+                                    "start_col": 37
                                   }
                                 }
                               ],
@@ -1681,7 +1989,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                 },
                                                 "span": {
                                                   "start": 1401,
-                                                  "end": 1410
+                                                  "end": 1410,
+                                                  "start_line": 49,
+                                                  "start_col": 13
                                                 }
                                               },
                                               "args": [
@@ -1696,7 +2006,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                           },
                                                           "span": {
                                                             "start": 1411,
-                                                            "end": 1425
+                                                            "end": 1425,
+                                                            "start_line": 49,
+                                                            "start_col": 23
                                                           }
                                                         },
                                                         "op": "Concat",
@@ -1709,7 +2021,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                                 },
                                                                 "span": {
                                                                   "start": 1428,
-                                                                  "end": 1430
+                                                                  "end": 1430,
+                                                                  "start_line": 49,
+                                                                  "start_col": 40
                                                                 }
                                                               },
                                                               "method": {
@@ -1718,7 +2032,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                                 },
                                                                 "span": {
                                                                   "start": 1432,
-                                                                  "end": 1442
+                                                                  "end": 1442,
+                                                                  "start_line": 49,
+                                                                  "start_col": 44
                                                                 }
                                                               },
                                                               "args": []
@@ -1726,21 +2042,27 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                           },
                                                           "span": {
                                                             "start": 1428,
-                                                            "end": 1444
+                                                            "end": 1444,
+                                                            "start_line": 49,
+                                                            "start_col": 40
                                                           }
                                                         }
                                                       }
                                                     },
                                                     "span": {
                                                       "start": 1411,
-                                                      "end": 1444
+                                                      "end": 1444,
+                                                      "start_line": 49,
+                                                      "start_col": 23
                                                     }
                                                   },
                                                   "unpack": false,
                                                   "by_ref": false,
                                                   "span": {
                                                     "start": 1411,
-                                                    "end": 1444
+                                                    "end": 1444,
+                                                    "start_line": 49,
+                                                    "start_col": 23
                                                   }
                                                 }
                                               ]
@@ -1748,19 +2070,25 @@ class RateLimitMiddleware implements MiddlewareInterface
                                           },
                                           "span": {
                                             "start": 1401,
-                                            "end": 1445
+                                            "end": 1445,
+                                            "start_line": 49,
+                                            "start_col": 13
                                           }
                                         }
                                       },
                                       "span": {
                                         "start": 1400,
-                                        "end": 1445
+                                        "end": 1445,
+                                        "start_line": 49,
+                                        "start_col": 12
                                       }
                                     }
                                   },
                                   "span": {
                                     "start": 1400,
-                                    "end": 1459
+                                    "end": 1459,
+                                    "start_line": 49,
+                                    "start_col": 12
                                   }
                                 },
                                 {
@@ -1774,7 +2102,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                             },
                                             "span": {
                                               "start": 1470,
-                                              "end": 1478
+                                              "end": 1478,
+                                              "start_line": 50,
+                                              "start_col": 23
                                             }
                                           },
                                           "args": [
@@ -1786,14 +2116,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                 },
                                                 "span": {
                                                   "start": 1479,
-                                                  "end": 1482
+                                                  "end": 1482,
+                                                  "start_line": 50,
+                                                  "start_col": 32
                                                 }
                                               },
                                               "unpack": false,
                                               "by_ref": false,
                                               "span": {
                                                 "start": 1479,
-                                                "end": 1482
+                                                "end": 1482,
+                                                "start_line": 50,
+                                                "start_col": 32
                                               }
                                             },
                                             {
@@ -1808,7 +2142,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                         },
                                                         "span": {
                                                           "start": 1485,
-                                                          "end": 1492
+                                                          "end": 1492,
+                                                          "start_line": 50,
+                                                          "start_col": 38
                                                         }
                                                       },
                                                       "value": {
@@ -1817,27 +2153,35 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                         },
                                                         "span": {
                                                           "start": 1496,
-                                                          "end": 1512
+                                                          "end": 1512,
+                                                          "start_line": 50,
+                                                          "start_col": 49
                                                         }
                                                       },
                                                       "unpack": false,
                                                       "span": {
                                                         "start": 1485,
-                                                        "end": 1512
+                                                        "end": 1512,
+                                                        "start_line": 50,
+                                                        "start_col": 38
                                                       }
                                                     }
                                                   ]
                                                 },
                                                 "span": {
                                                   "start": 1484,
-                                                  "end": 1513
+                                                  "end": 1513,
+                                                  "start_line": 50,
+                                                  "start_col": 37
                                                 }
                                               },
                                               "unpack": false,
                                               "by_ref": false,
                                               "span": {
                                                 "start": 1484,
-                                                "end": 1513
+                                                "end": 1513,
+                                                "start_line": 50,
+                                                "start_col": 37
                                               }
                                             }
                                           ]
@@ -1845,19 +2189,25 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 1466,
-                                        "end": 1514
+                                        "end": 1514,
+                                        "start_line": 50,
+                                        "start_col": 19
                                       }
                                     }
                                   },
                                   "span": {
                                     "start": 1459,
-                                    "end": 1524
+                                    "end": 1524,
+                                    "start_line": 50,
+                                    "start_col": 12
                                   }
                                 }
                               ],
                               "span": {
                                 "start": 1345,
-                                "end": 1535
+                                "end": 1535,
+                                "start_line": 48,
+                                "start_col": 16
                               }
                             }
                           ],
@@ -1866,7 +2216,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                       },
                       "span": {
                         "start": 1010,
-                        "end": 1535
+                        "end": 1535,
+                        "start_line": 42,
+                        "start_col": 8
                       }
                     },
                     {
@@ -1880,7 +2232,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 1542,
-                                  "end": 1547
+                                  "end": 1547,
+                                  "start_line": 53,
+                                  "start_col": 15
                                 }
                               },
                               "args": [
@@ -1892,14 +2246,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                     },
                                     "span": {
                                       "start": 1548,
-                                      "end": 1556
+                                      "end": 1556,
+                                      "start_line": 53,
+                                      "start_col": 21
                                     }
                                   },
                                   "unpack": false,
                                   "by_ref": false,
                                   "span": {
                                     "start": 1548,
-                                    "end": 1556
+                                    "end": 1556,
+                                    "start_line": 53,
+                                    "start_col": 21
                                   }
                                 }
                               ]
@@ -1907,13 +2265,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                           },
                           "span": {
                             "start": 1542,
-                            "end": 1557
+                            "end": 1557,
+                            "start_line": 53,
+                            "start_col": 15
                           }
                         }
                       },
                       "span": {
                         "start": 1535,
-                        "end": 1563
+                        "end": 1563,
+                        "start_line": 53,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -1922,7 +2284,9 @@ class RateLimitMiddleware implements MiddlewareInterface
               },
               "span": {
                 "start": 510,
-                "end": 1570
+                "end": 1570,
+                "start_line": 25,
+                "start_col": 4
               }
             },
             {
@@ -1946,13 +2310,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 1601,
-                              "end": 1607
+                              "end": 1607,
+                              "start_line": 56,
+                              "start_col": 35
                             }
                           }
                         },
                         "span": {
                           "start": 1601,
-                          "end": 1607
+                          "end": 1607,
+                          "start_line": 56,
+                          "start_col": 35
                         }
                       },
                       "default": null,
@@ -1965,7 +2333,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "attributes": [],
                       "span": {
                         "start": 1601,
-                        "end": 1617
+                        "end": 1617,
+                        "start_line": 56,
+                        "start_col": 35
                       }
                     }
                   ],
@@ -1978,13 +2348,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                         "kind": "Unqualified",
                         "span": {
                           "start": 1620,
-                          "end": 1624
+                          "end": 1624,
+                          "start_line": 56,
+                          "start_col": 54
                         }
                       }
                     },
                     "span": {
                       "start": 1620,
-                      "end": 1624
+                      "end": 1624,
+                      "start_line": 56,
+                      "start_col": 54
                     }
                   },
                   "body": [
@@ -2002,7 +2376,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 1639,
-                                        "end": 1643
+                                        "end": 1643,
+                                        "start_line": 58,
+                                        "start_col": 8
                                       }
                                     },
                                     "member": "excludedPaths"
@@ -2010,7 +2386,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 1639,
-                                  "end": 1659
+                                  "end": 1659,
+                                  "start_line": 58,
+                                  "start_col": 8
                                 }
                               },
                               "op": "Assign",
@@ -2028,7 +2406,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                               },
                                               "span": {
                                                 "start": 1666,
-                                                "end": 1670
+                                                "end": 1670,
+                                                "start_line": 58,
+                                                "start_col": 35
                                               }
                                             },
                                             "member": "excludedPaths"
@@ -2036,13 +2416,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                                         },
                                         "span": {
                                           "start": 1666,
-                                          "end": 1686
+                                          "end": 1686,
+                                          "start_line": 58,
+                                          "start_col": 35
                                         }
                                       },
                                       "unpack": true,
                                       "span": {
                                         "start": 1663,
-                                        "end": 1686
+                                        "end": 1686,
+                                        "start_line": 58,
+                                        "start_col": 32
                                       }
                                     },
                                     {
@@ -2053,33 +2437,43 @@ class RateLimitMiddleware implements MiddlewareInterface
                                         },
                                         "span": {
                                           "start": 1691,
-                                          "end": 1697
+                                          "end": 1697,
+                                          "start_line": 58,
+                                          "start_col": 60
                                         }
                                       },
                                       "unpack": true,
                                       "span": {
                                         "start": 1688,
-                                        "end": 1697
+                                        "end": 1697,
+                                        "start_line": 58,
+                                        "start_col": 57
                                       }
                                     }
                                   ]
                                 },
                                 "span": {
                                   "start": 1662,
-                                  "end": 1698
+                                  "end": 1698,
+                                  "start_line": 58,
+                                  "start_col": 31
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 1639,
-                            "end": 1698
+                            "end": 1698,
+                            "start_line": 58,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 1639,
-                        "end": 1704
+                        "end": 1704,
+                        "start_line": 58,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -2088,7 +2482,9 @@ class RateLimitMiddleware implements MiddlewareInterface
               },
               "span": {
                 "start": 1570,
-                "end": 1706
+                "end": 1706,
+                "start_line": 56,
+                "start_col": 4
               }
             }
           ],
@@ -2097,7 +2493,9 @@ class RateLimitMiddleware implements MiddlewareInterface
       },
       "span": {
         "start": 246,
-        "end": 1707
+        "end": 1707,
+        "start_line": 15,
+        "start_col": 0
       }
     },
     {
@@ -2118,7 +2516,9 @@ class RateLimitMiddleware implements MiddlewareInterface
               "kind": "Unqualified",
               "span": {
                 "start": 1746,
-                "end": 1766
+                "end": 1766,
+                "start_line": 62,
+                "start_col": 37
               }
             }
           ],
@@ -2134,7 +2534,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                     },
                     "span": {
                       "start": 1801,
-                      "end": 1804
+                      "end": 1804,
+                      "start_line": 64,
+                      "start_col": 33
                     }
                   },
                   "attributes": []
@@ -2142,7 +2544,9 @@ class RateLimitMiddleware implements MiddlewareInterface
               },
               "span": {
                 "start": 1772,
-                "end": 1810
+                "end": 1810,
+                "start_line": 64,
+                "start_col": 4
               }
             },
             {
@@ -2156,7 +2560,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                     },
                     "span": {
                       "start": 1841,
-                      "end": 1843
+                      "end": 1843,
+                      "start_line": 65,
+                      "start_col": 35
                     }
                   },
                   "attributes": []
@@ -2164,7 +2570,9 @@ class RateLimitMiddleware implements MiddlewareInterface
               },
               "span": {
                 "start": 1810,
-                "end": 1850
+                "end": 1850,
+                "start_line": 65,
+                "start_col": 4
               }
             },
             {
@@ -2188,13 +2596,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 1873,
-                              "end": 1881
+                              "end": 1881,
+                              "start_line": 67,
+                              "start_col": 27
                             }
                           }
                         },
                         "span": {
                           "start": 1873,
-                          "end": 1881
+                          "end": 1881,
+                          "start_line": 67,
+                          "start_col": 27
                         }
                       },
                       "default": null,
@@ -2207,7 +2619,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "attributes": [],
                       "span": {
                         "start": 1873,
-                        "end": 1889
+                        "end": 1889,
+                        "start_line": 67,
+                        "start_col": 27
                       }
                     },
                     {
@@ -2221,13 +2635,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 1891,
-                              "end": 1899
+                              "end": 1899,
+                              "start_line": 67,
+                              "start_col": 45
                             }
                           }
                         },
                         "span": {
                           "start": 1891,
-                          "end": 1899
+                          "end": 1899,
+                          "start_line": 67,
+                          "start_col": 45
                         }
                       },
                       "default": null,
@@ -2240,7 +2658,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "attributes": [],
                       "span": {
                         "start": 1891,
-                        "end": 1905
+                        "end": 1905,
+                        "start_line": 67,
+                        "start_col": 45
                       }
                     }
                   ],
@@ -2253,13 +2673,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                         "kind": "Unqualified",
                         "span": {
                           "start": 1908,
-                          "end": 1921
+                          "end": 1921,
+                          "start_line": 67,
+                          "start_col": 62
                         }
                       }
                     },
                     "span": {
                       "start": 1908,
-                      "end": 1921
+                      "end": 1921,
+                      "start_line": 67,
+                      "start_col": 62
                     }
                   },
                   "body": [
@@ -2274,7 +2698,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 1931,
-                                  "end": 1934
+                                  "end": 1934,
+                                  "start_line": 69,
+                                  "start_col": 8
                                 }
                               },
                               "op": "Assign",
@@ -2287,7 +2713,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 1937,
-                                        "end": 1945
+                                        "end": 1945,
+                                        "start_line": 69,
+                                        "start_col": 14
                                       }
                                     },
                                     "method": {
@@ -2296,7 +2724,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 1947,
-                                        "end": 1952
+                                        "end": 1952,
+                                        "start_line": 69,
+                                        "start_col": 24
                                       }
                                     },
                                     "args": []
@@ -2304,20 +2734,26 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 1937,
-                                  "end": 1954
+                                  "end": 1954,
+                                  "start_line": 69,
+                                  "start_col": 14
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 1931,
-                            "end": 1954
+                            "end": 1954,
+                            "start_line": 69,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 1931,
-                        "end": 1964
+                        "end": 1964,
+                        "start_line": 69,
+                        "start_col": 8
                       }
                     },
                     {
@@ -2331,7 +2767,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 1964,
-                                  "end": 1968
+                                  "end": 1968,
+                                  "start_line": 70,
+                                  "start_col": 8
                                 }
                               },
                               "op": "Assign",
@@ -2344,7 +2782,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 1971,
-                                        "end": 1978
+                                        "end": 1978,
+                                        "start_line": 70,
+                                        "start_col": 15
                                       }
                                     },
                                     "op": "Concat",
@@ -2354,27 +2794,35 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 1981,
-                                        "end": 1984
+                                        "end": 1984,
+                                        "start_line": 70,
+                                        "start_col": 25
                                       }
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 1971,
-                                  "end": 1984
+                                  "end": 1984,
+                                  "start_line": 70,
+                                  "start_col": 15
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 1964,
-                            "end": 1984
+                            "end": 1984,
+                            "start_line": 70,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 1964,
-                        "end": 1994
+                        "end": 1994,
+                        "start_line": 70,
+                        "start_col": 8
                       }
                     },
                     {
@@ -2388,7 +2836,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 1994,
-                                  "end": 2000
+                                  "end": 2000,
+                                  "start_line": 71,
+                                  "start_col": 8
                                 }
                               },
                               "op": "Assign",
@@ -2401,7 +2851,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 2003,
-                                        "end": 2008
+                                        "end": 2008,
+                                        "start_line": 71,
+                                        "start_col": 17
                                       }
                                     },
                                     "method": {
@@ -2410,7 +2862,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 2010,
-                                        "end": 2018
+                                        "end": 2018,
+                                        "start_line": 71,
+                                        "start_col": 24
                                       }
                                     },
                                     "args": [
@@ -2422,14 +2876,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                           },
                                           "span": {
                                             "start": 2019,
-                                            "end": 2023
+                                            "end": 2023,
+                                            "start_line": 71,
+                                            "start_col": 33
                                           }
                                         },
                                         "unpack": false,
                                         "by_ref": false,
                                         "span": {
                                           "start": 2019,
-                                          "end": 2023
+                                          "end": 2023,
+                                          "start_line": 71,
+                                          "start_col": 33
                                         }
                                       }
                                     ]
@@ -2437,20 +2895,26 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 2003,
-                                  "end": 2024
+                                  "end": 2024,
+                                  "start_line": 71,
+                                  "start_col": 17
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 1994,
-                            "end": 2024
+                            "end": 2024,
+                            "start_line": 71,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 1994,
-                        "end": 2035
+                        "end": 2035,
+                        "start_line": 71,
+                        "start_col": 8
                       }
                     },
                     {
@@ -2464,7 +2928,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 2035,
-                                  "end": 2045
+                                  "end": 2045,
+                                  "start_line": 73,
+                                  "start_col": 8
                                 }
                               },
                               "op": "Assign",
@@ -2480,7 +2946,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                             },
                                             "span": {
                                               "start": 2048,
-                                              "end": 2052
+                                              "end": 2052,
+                                              "start_line": 73,
+                                              "start_col": 21
                                             }
                                           },
                                           "member": "MAX_REQUESTS"
@@ -2488,7 +2956,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 2048,
-                                        "end": 2067
+                                        "end": 2067,
+                                        "start_line": 73,
+                                        "start_col": 21
                                       }
                                     },
                                     "op": "Sub",
@@ -2498,27 +2968,35 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 2069,
-                                        "end": 2075
+                                        "end": 2075,
+                                        "start_line": 73,
+                                        "start_col": 42
                                       }
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 2048,
-                                  "end": 2075
+                                  "end": 2075,
+                                  "start_line": 73,
+                                  "start_col": 21
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 2035,
-                            "end": 2075
+                            "end": 2075,
+                            "start_line": 73,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 2035,
-                        "end": 2085
+                        "end": 2085,
+                        "start_line": 73,
+                        "start_col": 8
                       }
                     },
                     {
@@ -2532,7 +3010,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 2085,
-                                  "end": 2093
+                                  "end": 2093,
+                                  "start_line": 74,
+                                  "start_col": 8
                                 }
                               },
                               "op": "Assign",
@@ -2545,7 +3025,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 2096,
-                                        "end": 2106
+                                        "end": 2106,
+                                        "start_line": 74,
+                                        "start_col": 19
                                       }
                                     },
                                     "op": "Greater",
@@ -2555,27 +3037,35 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 2109,
-                                        "end": 2110
+                                        "end": 2110,
+                                        "start_line": 74,
+                                        "start_col": 32
                                       }
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 2096,
-                                  "end": 2110
+                                  "end": 2110,
+                                  "start_line": 74,
+                                  "start_col": 19
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 2085,
-                            "end": 2110
+                            "end": 2110,
+                            "start_line": 74,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 2085,
-                        "end": 2121
+                        "end": 2121,
+                        "start_line": 74,
+                        "start_col": 8
                       }
                     },
                     {
@@ -2589,7 +3079,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 2135,
-                                  "end": 2139
+                                  "end": 2139,
+                                  "start_line": 76,
+                                  "start_col": 22
                                 }
                               },
                               "arms": [
@@ -2605,14 +3097,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                             },
                                             "span": {
                                               "start": 2156,
-                                              "end": 2164
+                                              "end": 2164,
+                                              "start_line": 77,
+                                              "start_col": 13
                                             }
                                           }
                                         }
                                       },
                                       "span": {
                                         "start": 2155,
-                                        "end": 2164
+                                        "end": 2164,
+                                        "start_line": 77,
+                                        "start_col": 12
                                       }
                                     }
                                   ],
@@ -2625,7 +3121,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                           },
                                           "span": {
                                             "start": 2172,
-                                            "end": 2180
+                                            "end": 2180,
+                                            "start_line": 77,
+                                            "start_col": 29
                                           }
                                         },
                                         "args": [
@@ -2637,14 +3135,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                               },
                                               "span": {
                                                 "start": 2181,
-                                                "end": 2184
+                                                "end": 2184,
+                                                "start_line": 77,
+                                                "start_col": 38
                                               }
                                             },
                                             "unpack": false,
                                             "by_ref": false,
                                             "span": {
                                               "start": 2181,
-                                              "end": 2184
+                                              "end": 2184,
+                                              "start_line": 77,
+                                              "start_col": 38
                                             }
                                           },
                                           {
@@ -2659,7 +3161,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                       },
                                                       "span": {
                                                         "start": 2187,
-                                                        "end": 2194
+                                                        "end": 2194,
+                                                        "start_line": 77,
+                                                        "start_col": 44
                                                       }
                                                     },
                                                     "value": {
@@ -2668,27 +3172,35 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                       },
                                                       "span": {
                                                         "start": 2198,
-                                                        "end": 2217
+                                                        "end": 2217,
+                                                        "start_line": 77,
+                                                        "start_col": 55
                                                       }
                                                     },
                                                     "unpack": false,
                                                     "span": {
                                                       "start": 2187,
-                                                      "end": 2217
+                                                      "end": 2217,
+                                                      "start_line": 77,
+                                                      "start_col": 44
                                                     }
                                                   }
                                                 ]
                                               },
                                               "span": {
                                                 "start": 2186,
-                                                "end": 2218
+                                                "end": 2218,
+                                                "start_line": 77,
+                                                "start_col": 43
                                               }
                                             },
                                             "unpack": false,
                                             "by_ref": false,
                                             "span": {
                                               "start": 2186,
-                                              "end": 2218
+                                              "end": 2218,
+                                              "start_line": 77,
+                                              "start_col": 43
                                             }
                                           }
                                         ]
@@ -2696,12 +3208,16 @@ class RateLimitMiddleware implements MiddlewareInterface
                                     },
                                     "span": {
                                       "start": 2168,
-                                      "end": 2219
+                                      "end": 2219,
+                                      "start_line": 77,
+                                      "start_col": 25
                                     }
                                   },
                                   "span": {
                                     "start": 2155,
-                                    "end": 2219
+                                    "end": 2219,
+                                    "start_line": 77,
+                                    "start_col": 12
                                   }
                                 },
                                 {
@@ -2715,7 +3231,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                           },
                                           "span": {
                                             "start": 2244,
-                                            "end": 2249
+                                            "end": 2249,
+                                            "start_line": 78,
+                                            "start_col": 23
                                           }
                                         },
                                         "args": [
@@ -2727,14 +3245,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                               },
                                               "span": {
                                                 "start": 2250,
-                                                "end": 2258
+                                                "end": 2258,
+                                                "start_line": 78,
+                                                "start_col": 29
                                               }
                                             },
                                             "unpack": false,
                                             "by_ref": false,
                                             "span": {
                                               "start": 2250,
-                                              "end": 2258
+                                              "end": 2258,
+                                              "start_line": 78,
+                                              "start_col": 29
                                             }
                                           }
                                         ]
@@ -2742,12 +3264,16 @@ class RateLimitMiddleware implements MiddlewareInterface
                                     },
                                     "span": {
                                       "start": 2244,
-                                      "end": 2259
+                                      "end": 2259,
+                                      "start_line": 78,
+                                      "start_col": 23
                                     }
                                   },
                                   "span": {
                                     "start": 2233,
-                                    "end": 2259
+                                    "end": 2259,
+                                    "start_line": 78,
+                                    "start_col": 12
                                   }
                                 }
                               ]
@@ -2755,13 +3281,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                           },
                           "span": {
                             "start": 2128,
-                            "end": 2270
+                            "end": 2270,
+                            "start_line": 76,
+                            "start_col": 15
                           }
                         }
                       },
                       "span": {
                         "start": 2121,
-                        "end": 2276
+                        "end": 2276,
+                        "start_line": 76,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -2770,7 +3300,9 @@ class RateLimitMiddleware implements MiddlewareInterface
               },
               "span": {
                 "start": 1850,
-                "end": 2283
+                "end": 2283,
+                "start_line": 67,
+                "start_col": 4
               }
             },
             {
@@ -2794,13 +3326,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 2309,
-                              "end": 2315
+                              "end": 2315,
+                              "start_line": 82,
+                              "start_col": 30
                             }
                           }
                         },
                         "span": {
                           "start": 2309,
-                          "end": 2315
+                          "end": 2315,
+                          "start_line": 82,
+                          "start_col": 30
                         }
                       },
                       "default": null,
@@ -2813,7 +3349,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "attributes": [],
                       "span": {
                         "start": 2309,
-                        "end": 2320
+                        "end": 2320,
+                        "start_line": 82,
+                        "start_col": 30
                       }
                     }
                   ],
@@ -2826,13 +3364,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                         "kind": "Unqualified",
                         "span": {
                           "start": 2323,
-                          "end": 2326
+                          "end": 2326,
+                          "start_line": 82,
+                          "start_col": 44
                         }
                       }
                     },
                     "span": {
                       "start": 2323,
-                      "end": 2326
+                      "end": 2326,
+                      "start_line": 82,
+                      "start_col": 44
                     }
                   },
                   "body": [
@@ -2847,19 +3389,25 @@ class RateLimitMiddleware implements MiddlewareInterface
                               },
                               "span": {
                                 "start": 2358,
-                                "end": 2360
+                                "end": 2360,
+                                "start_line": 84,
+                                "start_col": 25
                               }
                             },
                             "span": {
                               "start": 2348,
-                              "end": 2360
+                              "end": 2360,
+                              "start_line": 84,
+                              "start_col": 15
                             }
                           }
                         ]
                       },
                       "span": {
                         "start": 2341,
-                        "end": 2370
+                        "end": 2370,
+                        "start_line": 84,
+                        "start_col": 8
                       }
                     },
                     {
@@ -2876,7 +3424,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 2370,
-                                        "end": 2377
+                                        "end": 2377,
+                                        "start_line": 85,
+                                        "start_col": 8
                                       }
                                     },
                                     "index": {
@@ -2885,14 +3435,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 2378,
-                                        "end": 2382
+                                        "end": 2382,
+                                        "start_line": 85,
+                                        "start_col": 16
                                       }
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 2370,
-                                  "end": 2384
+                                  "end": 2384,
+                                  "start_line": 85,
+                                  "start_col": 8
                                 }
                               },
                               "op": "Assign",
@@ -2911,7 +3465,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                   },
                                                   "span": {
                                                     "start": 2392,
-                                                    "end": 2399
+                                                    "end": 2399,
+                                                    "start_line": 85,
+                                                    "start_col": 30
                                                   }
                                                 },
                                                 "index": {
@@ -2920,21 +3476,27 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                   },
                                                   "span": {
                                                     "start": 2400,
-                                                    "end": 2404
+                                                    "end": 2404,
+                                                    "start_line": 85,
+                                                    "start_col": 38
                                                   }
                                                 }
                                               }
                                             },
                                             "span": {
                                               "start": 2392,
-                                              "end": 2405
+                                              "end": 2405,
+                                              "start_line": 85,
+                                              "start_col": 30
                                             }
                                           }
                                         ]
                                       },
                                       "span": {
                                         "start": 2386,
-                                        "end": 2406
+                                        "end": 2406,
+                                        "start_line": 85,
+                                        "start_col": 24
                                       }
                                     },
                                     "then_expr": {
@@ -2949,7 +3511,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                   },
                                                   "span": {
                                                     "start": 2409,
-                                                    "end": 2416
+                                                    "end": 2416,
+                                                    "start_line": 85,
+                                                    "start_col": 47
                                                   }
                                                 },
                                                 "index": {
@@ -2958,14 +3522,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                   },
                                                   "span": {
                                                     "start": 2417,
-                                                    "end": 2421
+                                                    "end": 2421,
+                                                    "start_line": 85,
+                                                    "start_col": 55
                                                   }
                                                 }
                                               }
                                             },
                                             "span": {
                                               "start": 2409,
-                                              "end": 2423
+                                              "end": 2423,
+                                              "start_line": 85,
+                                              "start_col": 47
                                             }
                                           },
                                           "op": "Add",
@@ -2975,14 +3543,18 @@ class RateLimitMiddleware implements MiddlewareInterface
                                             },
                                             "span": {
                                               "start": 2425,
-                                              "end": 2426
+                                              "end": 2426,
+                                              "start_line": 85,
+                                              "start_col": 63
                                             }
                                           }
                                         }
                                       },
                                       "span": {
                                         "start": 2409,
-                                        "end": 2426
+                                        "end": 2426,
+                                        "start_line": 85,
+                                        "start_col": 47
                                       }
                                     },
                                     "else_expr": {
@@ -2991,27 +3563,35 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 2429,
-                                        "end": 2430
+                                        "end": 2430,
+                                        "start_line": 85,
+                                        "start_col": 67
                                       }
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 2386,
-                                  "end": 2430
+                                  "end": 2430,
+                                  "start_line": 85,
+                                  "start_col": 24
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 2370,
-                            "end": 2430
+                            "end": 2430,
+                            "start_line": 85,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 2370,
-                        "end": 2440
+                        "end": 2440,
+                        "start_line": 85,
+                        "start_col": 8
                       }
                     },
                     {
@@ -3025,7 +3605,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 2447,
-                                  "end": 2454
+                                  "end": 2454,
+                                  "start_line": 86,
+                                  "start_col": 15
                                 }
                               },
                               "index": {
@@ -3034,20 +3616,26 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 2455,
-                                  "end": 2459
+                                  "end": 2459,
+                                  "start_line": 86,
+                                  "start_col": 23
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 2447,
-                            "end": 2460
+                            "end": 2460,
+                            "start_line": 86,
+                            "start_col": 15
                           }
                         }
                       },
                       "span": {
                         "start": 2440,
-                        "end": 2466
+                        "end": 2466,
+                        "start_line": 86,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -3056,7 +3644,9 @@ class RateLimitMiddleware implements MiddlewareInterface
               },
               "span": {
                 "start": 2283,
-                "end": 2468
+                "end": 2468,
+                "start_line": 82,
+                "start_col": 4
               }
             }
           ],
@@ -3065,12 +3655,16 @@ class RateLimitMiddleware implements MiddlewareInterface
       },
       "span": {
         "start": 1709,
-        "end": 2469
+        "end": 2469,
+        "start_line": 62,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 2469
+    "end": 2469,
+    "start_line": 1,
+    "start_col": 0
   }
 }

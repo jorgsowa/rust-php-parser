@@ -21,7 +21,9 @@ $c == $a |> $b;
                       },
                       "span": {
                         "start": 6,
-                        "end": 8
+                        "end": 8,
+                        "start_line": 2,
+                        "start_col": 0
                       }
                     },
                     "op": "Pipe",
@@ -31,14 +33,18 @@ $c == $a |> $b;
                       },
                       "span": {
                         "start": 12,
-                        "end": 14
+                        "end": 14,
+                        "start_line": 2,
+                        "start_col": 6
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 6,
-                  "end": 14
+                  "end": 14,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Pipe",
@@ -48,20 +54,26 @@ $c == $a |> $b;
                 },
                 "span": {
                   "start": 18,
-                  "end": 20
+                  "end": 20,
+                  "start_line": 2,
+                  "start_col": 12
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 20
+            "end": 20,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 22
+        "end": 22,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -78,7 +90,9 @@ $c == $a |> $b;
                       },
                       "span": {
                         "start": 22,
-                        "end": 24
+                        "end": 24,
+                        "start_line": 3,
+                        "start_col": 0
                       }
                     },
                     "op": "Concat",
@@ -88,14 +102,18 @@ $c == $a |> $b;
                       },
                       "span": {
                         "start": 27,
-                        "end": 29
+                        "end": 29,
+                        "start_line": 3,
+                        "start_col": 5
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 22,
-                  "end": 29
+                  "end": 29,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Pipe",
@@ -108,7 +126,9 @@ $c == $a |> $b;
                       },
                       "span": {
                         "start": 33,
-                        "end": 35
+                        "end": 35,
+                        "start_line": 3,
+                        "start_col": 11
                       }
                     },
                     "op": "Concat",
@@ -118,27 +138,35 @@ $c == $a |> $b;
                       },
                       "span": {
                         "start": 38,
-                        "end": 40
+                        "end": 40,
+                        "start_line": 3,
+                        "start_col": 16
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 33,
-                  "end": 40
+                  "end": 40,
+                  "start_line": 3,
+                  "start_col": 11
                 }
               }
             }
           },
           "span": {
             "start": 22,
-            "end": 40
+            "end": 40,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 22,
-        "end": 42
+        "end": 42,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -155,7 +183,9 @@ $c == $a |> $b;
                       },
                       "span": {
                         "start": 42,
-                        "end": 44
+                        "end": 44,
+                        "start_line": 4,
+                        "start_col": 0
                       }
                     },
                     "op": "Pipe",
@@ -165,14 +195,18 @@ $c == $a |> $b;
                       },
                       "span": {
                         "start": 48,
-                        "end": 50
+                        "end": 50,
+                        "start_line": 4,
+                        "start_col": 6
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 42,
-                  "end": 50
+                  "end": 50,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "op": "Equal",
@@ -182,20 +216,26 @@ $c == $a |> $b;
                 },
                 "span": {
                   "start": 54,
-                  "end": 56
+                  "end": 56,
+                  "start_line": 4,
+                  "start_col": 12
                 }
               }
             }
           },
           "span": {
             "start": 42,
-            "end": 56
+            "end": 56,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 42,
-        "end": 58
+        "end": 58,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -209,7 +249,9 @@ $c == $a |> $b;
                 },
                 "span": {
                   "start": 58,
-                  "end": 60
+                  "end": 60,
+                  "start_line": 5,
+                  "start_col": 0
                 }
               },
               "op": "Equal",
@@ -222,7 +264,9 @@ $c == $a |> $b;
                       },
                       "span": {
                         "start": 64,
-                        "end": 66
+                        "end": 66,
+                        "start_line": 5,
+                        "start_col": 6
                       }
                     },
                     "op": "Pipe",
@@ -232,32 +276,42 @@ $c == $a |> $b;
                       },
                       "span": {
                         "start": 70,
-                        "end": 72
+                        "end": 72,
+                        "start_line": 5,
+                        "start_col": 12
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 64,
-                  "end": 72
+                  "end": 72,
+                  "start_line": 5,
+                  "start_col": 6
                 }
               }
             }
           },
           "span": {
             "start": 58,
-            "end": 72
+            "end": 72,
+            "start_line": 5,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 58,
-        "end": 73
+        "end": 73,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 73
+    "end": 73,
+    "start_line": 1,
+    "start_col": 0
   }
 }

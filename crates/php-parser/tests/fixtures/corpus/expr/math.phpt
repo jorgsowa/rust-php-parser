@@ -46,20 +46,26 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 21,
-                  "end": 23
+                  "end": 23,
+                  "start_line": 4,
+                  "start_col": 1
                 }
               }
             }
           },
           "span": {
             "start": 20,
-            "end": 23
+            "end": 23,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 20,
-        "end": 25
+        "end": 25,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -74,20 +80,26 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 26,
-                  "end": 28
+                  "end": 28,
+                  "start_line": 5,
+                  "start_col": 1
                 }
               }
             }
           },
           "span": {
             "start": 25,
-            "end": 28
+            "end": 28,
+            "start_line": 5,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 25,
-        "end": 30
+        "end": 30,
+        "start_line": 5,
+        "start_col": 0
       }
     },
     {
@@ -102,20 +114,26 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 31,
-                  "end": 33
+                  "end": 33,
+                  "start_line": 6,
+                  "start_col": 1
                 }
               }
             }
           },
           "span": {
             "start": 30,
-            "end": 33
+            "end": 33,
+            "start_line": 6,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 30,
-        "end": 50
+        "end": 50,
+        "start_line": 6,
+        "start_col": 0
       }
     },
     {
@@ -129,7 +147,9 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 50,
-                  "end": 52
+                  "end": 52,
+                  "start_line": 9,
+                  "start_col": 0
                 }
               },
               "op": "BitwiseAnd",
@@ -139,20 +159,26 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 55,
-                  "end": 57
+                  "end": 57,
+                  "start_line": 9,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 50,
-            "end": 57
+            "end": 57,
+            "start_line": 9,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 50,
-        "end": 59
+        "end": 59,
+        "start_line": 9,
+        "start_col": 0
       }
     },
     {
@@ -166,7 +192,9 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 59,
-                  "end": 61
+                  "end": 61,
+                  "start_line": 10,
+                  "start_col": 0
                 }
               },
               "op": "BitwiseOr",
@@ -176,20 +204,26 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 64,
-                  "end": 66
+                  "end": 66,
+                  "start_line": 10,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 59,
-            "end": 66
+            "end": 66,
+            "start_line": 10,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 59,
-        "end": 68
+        "end": 68,
+        "start_line": 10,
+        "start_col": 0
       }
     },
     {
@@ -203,7 +237,9 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 68,
-                  "end": 70
+                  "end": 70,
+                  "start_line": 11,
+                  "start_col": 0
                 }
               },
               "op": "BitwiseXor",
@@ -213,20 +249,26 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 73,
-                  "end": 75
+                  "end": 75,
+                  "start_line": 11,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 68,
-            "end": 75
+            "end": 75,
+            "start_line": 11,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 68,
-        "end": 77
+        "end": 77,
+        "start_line": 11,
+        "start_col": 0
       }
     },
     {
@@ -240,7 +282,9 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 77,
-                  "end": 79
+                  "end": 79,
+                  "start_line": 12,
+                  "start_col": 0
                 }
               },
               "op": "Concat",
@@ -250,20 +294,26 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 82,
-                  "end": 84
+                  "end": 84,
+                  "start_line": 12,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 77,
-            "end": 84
+            "end": 84,
+            "start_line": 12,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 77,
-        "end": 86
+        "end": 86,
+        "start_line": 12,
+        "start_col": 0
       }
     },
     {
@@ -277,7 +327,9 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 86,
-                  "end": 88
+                  "end": 88,
+                  "start_line": 13,
+                  "start_col": 0
                 }
               },
               "op": "Div",
@@ -287,20 +339,26 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 91,
-                  "end": 93
+                  "end": 93,
+                  "start_line": 13,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 86,
-            "end": 93
+            "end": 93,
+            "start_line": 13,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 86,
-        "end": 95
+        "end": 95,
+        "start_line": 13,
+        "start_col": 0
       }
     },
     {
@@ -314,7 +372,9 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 95,
-                  "end": 97
+                  "end": 97,
+                  "start_line": 14,
+                  "start_col": 0
                 }
               },
               "op": "Sub",
@@ -324,20 +384,26 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 100,
-                  "end": 102
+                  "end": 102,
+                  "start_line": 14,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 95,
-            "end": 102
+            "end": 102,
+            "start_line": 14,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 95,
-        "end": 104
+        "end": 104,
+        "start_line": 14,
+        "start_col": 0
       }
     },
     {
@@ -351,7 +417,9 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 104,
-                  "end": 106
+                  "end": 106,
+                  "start_line": 15,
+                  "start_col": 0
                 }
               },
               "op": "Mod",
@@ -361,20 +429,26 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 109,
-                  "end": 111
+                  "end": 111,
+                  "start_line": 15,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 104,
-            "end": 111
+            "end": 111,
+            "start_line": 15,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 104,
-        "end": 113
+        "end": 113,
+        "start_line": 15,
+        "start_col": 0
       }
     },
     {
@@ -388,7 +462,9 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 113,
-                  "end": 115
+                  "end": 115,
+                  "start_line": 16,
+                  "start_col": 0
                 }
               },
               "op": "Mul",
@@ -398,20 +474,26 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 118,
-                  "end": 120
+                  "end": 120,
+                  "start_line": 16,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 113,
-            "end": 120
+            "end": 120,
+            "start_line": 16,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 113,
-        "end": 122
+        "end": 122,
+        "start_line": 16,
+        "start_col": 0
       }
     },
     {
@@ -425,7 +507,9 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 122,
-                  "end": 124
+                  "end": 124,
+                  "start_line": 17,
+                  "start_col": 0
                 }
               },
               "op": "Add",
@@ -435,20 +519,26 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 127,
-                  "end": 129
+                  "end": 129,
+                  "start_line": 17,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 122,
-            "end": 129
+            "end": 129,
+            "start_line": 17,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 122,
-        "end": 131
+        "end": 131,
+        "start_line": 17,
+        "start_col": 0
       }
     },
     {
@@ -462,7 +552,9 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 131,
-                  "end": 133
+                  "end": 133,
+                  "start_line": 18,
+                  "start_col": 0
                 }
               },
               "op": "ShiftLeft",
@@ -472,20 +564,26 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 137,
-                  "end": 139
+                  "end": 139,
+                  "start_line": 18,
+                  "start_col": 6
                 }
               }
             }
           },
           "span": {
             "start": 131,
-            "end": 139
+            "end": 139,
+            "start_line": 18,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 131,
-        "end": 141
+        "end": 141,
+        "start_line": 18,
+        "start_col": 0
       }
     },
     {
@@ -499,7 +597,9 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 141,
-                  "end": 143
+                  "end": 143,
+                  "start_line": 19,
+                  "start_col": 0
                 }
               },
               "op": "ShiftRight",
@@ -509,20 +609,26 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 147,
-                  "end": 149
+                  "end": 149,
+                  "start_line": 19,
+                  "start_col": 6
                 }
               }
             }
           },
           "span": {
             "start": 141,
-            "end": 149
+            "end": 149,
+            "start_line": 19,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 141,
-        "end": 151
+        "end": 151,
+        "start_line": 19,
+        "start_col": 0
       }
     },
     {
@@ -536,7 +642,9 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 151,
-                  "end": 153
+                  "end": 153,
+                  "start_line": 20,
+                  "start_col": 0
                 }
               },
               "op": "Pow",
@@ -546,20 +654,26 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 157,
-                  "end": 159
+                  "end": 159,
+                  "start_line": 20,
+                  "start_col": 6
                 }
               }
             }
           },
           "span": {
             "start": 151,
-            "end": 159
+            "end": 159,
+            "start_line": 20,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 151,
-        "end": 179
+        "end": 179,
+        "start_line": 20,
+        "start_col": 0
       }
     },
     {
@@ -576,7 +690,9 @@ $a ** $b ** $c;
                       },
                       "span": {
                         "start": 179,
-                        "end": 181
+                        "end": 181,
+                        "start_line": 23,
+                        "start_col": 0
                       }
                     },
                     "op": "Mul",
@@ -586,14 +702,18 @@ $a ** $b ** $c;
                       },
                       "span": {
                         "start": 184,
-                        "end": 186
+                        "end": 186,
+                        "start_line": 23,
+                        "start_col": 5
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 179,
-                  "end": 186
+                  "end": 186,
+                  "start_line": 23,
+                  "start_col": 0
                 }
               },
               "op": "Mul",
@@ -603,20 +723,26 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 189,
-                  "end": 191
+                  "end": 191,
+                  "start_line": 23,
+                  "start_col": 10
                 }
               }
             }
           },
           "span": {
             "start": 179,
-            "end": 191
+            "end": 191,
+            "start_line": 23,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 179,
-        "end": 193
+        "end": 193,
+        "start_line": 23,
+        "start_col": 0
       }
     },
     {
@@ -630,7 +756,9 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 193,
-                  "end": 195
+                  "end": 195,
+                  "start_line": 24,
+                  "start_col": 0
                 }
               },
               "op": "Mul",
@@ -645,7 +773,9 @@ $a ** $b ** $c;
                           },
                           "span": {
                             "start": 199,
-                            "end": 201
+                            "end": 201,
+                            "start_line": 24,
+                            "start_col": 6
                           }
                         },
                         "op": "Mul",
@@ -655,33 +785,43 @@ $a ** $b ** $c;
                           },
                           "span": {
                             "start": 204,
-                            "end": 206
+                            "end": 206,
+                            "start_line": 24,
+                            "start_col": 11
                           }
                         }
                       }
                     },
                     "span": {
                       "start": 199,
-                      "end": 206
+                      "end": 206,
+                      "start_line": 24,
+                      "start_col": 6
                     }
                   }
                 },
                 "span": {
                   "start": 198,
-                  "end": 207
+                  "end": 207,
+                  "start_line": 24,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 193,
-            "end": 207
+            "end": 207,
+            "start_line": 24,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 193,
-        "end": 224
+        "end": 224,
+        "start_line": 24,
+        "start_col": 0
       }
     },
     {
@@ -695,7 +835,9 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 224,
-                  "end": 226
+                  "end": 226,
+                  "start_line": 27,
+                  "start_col": 0
                 }
               },
               "op": "Add",
@@ -708,7 +850,9 @@ $a ** $b ** $c;
                       },
                       "span": {
                         "start": 229,
-                        "end": 231
+                        "end": 231,
+                        "start_line": 27,
+                        "start_col": 5
                       }
                     },
                     "op": "Mul",
@@ -718,27 +862,35 @@ $a ** $b ** $c;
                       },
                       "span": {
                         "start": 234,
-                        "end": 236
+                        "end": 236,
+                        "start_line": 27,
+                        "start_col": 10
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 229,
-                  "end": 236
+                  "end": 236,
+                  "start_line": 27,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 224,
-            "end": 236
+            "end": 236,
+            "start_line": 27,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 224,
-        "end": 238
+        "end": 238,
+        "start_line": 27,
+        "start_col": 0
       }
     },
     {
@@ -757,7 +909,9 @@ $a ** $b ** $c;
                           },
                           "span": {
                             "start": 239,
-                            "end": 241
+                            "end": 241,
+                            "start_line": 28,
+                            "start_col": 1
                           }
                         },
                         "op": "Add",
@@ -767,20 +921,26 @@ $a ** $b ** $c;
                           },
                           "span": {
                             "start": 244,
-                            "end": 246
+                            "end": 246,
+                            "start_line": 28,
+                            "start_col": 6
                           }
                         }
                       }
                     },
                     "span": {
                       "start": 239,
-                      "end": 246
+                      "end": 246,
+                      "start_line": 28,
+                      "start_col": 1
                     }
                   }
                 },
                 "span": {
                   "start": 238,
-                  "end": 248
+                  "end": 248,
+                  "start_line": 28,
+                  "start_col": 0
                 }
               },
               "op": "Mul",
@@ -790,20 +950,26 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 250,
-                  "end": 252
+                  "end": 252,
+                  "start_line": 28,
+                  "start_col": 12
                 }
               }
             }
           },
           "span": {
             "start": 238,
-            "end": 252
+            "end": 252,
+            "start_line": 28,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 238,
-        "end": 273
+        "end": 273,
+        "start_line": 28,
+        "start_col": 0
       }
     },
     {
@@ -817,7 +983,9 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 273,
-                  "end": 275
+                  "end": 275,
+                  "start_line": 31,
+                  "start_col": 0
                 }
               },
               "op": "Pow",
@@ -830,7 +998,9 @@ $a ** $b ** $c;
                       },
                       "span": {
                         "start": 279,
-                        "end": 281
+                        "end": 281,
+                        "start_line": 31,
+                        "start_col": 6
                       }
                     },
                     "op": "Pow",
@@ -840,27 +1010,35 @@ $a ** $b ** $c;
                       },
                       "span": {
                         "start": 285,
-                        "end": 287
+                        "end": 287,
+                        "start_line": 31,
+                        "start_col": 12
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 279,
-                  "end": 287
+                  "end": 287,
+                  "start_line": 31,
+                  "start_col": 6
                 }
               }
             }
           },
           "span": {
             "start": 273,
-            "end": 287
+            "end": 287,
+            "start_line": 31,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 273,
-        "end": 289
+        "end": 289,
+        "start_line": 31,
+        "start_col": 0
       }
     },
     {
@@ -879,7 +1057,9 @@ $a ** $b ** $c;
                           },
                           "span": {
                             "start": 290,
-                            "end": 292
+                            "end": 292,
+                            "start_line": 32,
+                            "start_col": 1
                           }
                         },
                         "op": "Pow",
@@ -889,20 +1069,26 @@ $a ** $b ** $c;
                           },
                           "span": {
                             "start": 296,
-                            "end": 298
+                            "end": 298,
+                            "start_line": 32,
+                            "start_col": 7
                           }
                         }
                       }
                     },
                     "span": {
                       "start": 290,
-                      "end": 298
+                      "end": 298,
+                      "start_line": 32,
+                      "start_col": 1
                     }
                   }
                 },
                 "span": {
                   "start": 289,
-                  "end": 300
+                  "end": 300,
+                  "start_line": 32,
+                  "start_col": 0
                 }
               },
               "op": "Pow",
@@ -912,25 +1098,33 @@ $a ** $b ** $c;
                 },
                 "span": {
                   "start": 303,
-                  "end": 305
+                  "end": 305,
+                  "start_line": 32,
+                  "start_col": 14
                 }
               }
             }
           },
           "span": {
             "start": 289,
-            "end": 305
+            "end": 305,
+            "start_line": 32,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 289,
-        "end": 306
+        "end": 306,
+        "start_line": 32,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 306
+    "end": 306,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -23,7 +23,9 @@ cannot use 'self' as class name
               "kind": "Unqualified",
               "span": {
                 "start": 25,
-                "end": 30
+                "end": 30,
+                "start_line": 1,
+                "start_col": 25
               }
             }
           ],
@@ -33,12 +35,16 @@ cannot use 'self' as class name
       },
       "span": {
         "start": 6,
-        "end": 32
+        "end": 32,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 32
+    "end": 32,
+    "start_line": 1,
+    "start_col": 0
   }
 }

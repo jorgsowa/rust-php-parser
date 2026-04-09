@@ -22,7 +22,9 @@
               },
               "span": {
                 "start": 18,
-                "end": 30
+                "end": 30,
+                "start_line": 1,
+                "start_col": 18
               }
             }
           ],
@@ -31,12 +33,16 @@
       },
       "span": {
         "start": 6,
-        "end": 31
+        "end": 31,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 31
+    "end": 31,
+    "start_line": 1,
+    "start_col": 0
   }
 }

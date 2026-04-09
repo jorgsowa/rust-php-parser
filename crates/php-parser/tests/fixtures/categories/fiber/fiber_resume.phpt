@@ -16,7 +16,9 @@ min_php=8.1
                 },
                 "span": {
                   "start": 6,
-                  "end": 12
+                  "end": 12,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "method": {
@@ -25,7 +27,9 @@ min_php=8.1
                 },
                 "span": {
                   "start": 14,
-                  "end": 20
+                  "end": 20,
+                  "start_line": 1,
+                  "start_col": 14
                 }
               },
               "args": [
@@ -37,14 +41,18 @@ min_php=8.1
                     },
                     "span": {
                       "start": 21,
-                      "end": 28
+                      "end": 28,
+                      "start_line": 1,
+                      "start_col": 21
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 21,
-                    "end": 28
+                    "end": 28,
+                    "start_line": 1,
+                    "start_col": 21
                   }
                 }
               ]
@@ -52,18 +60,24 @@ min_php=8.1
           },
           "span": {
             "start": 6,
-            "end": 29
+            "end": 29,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 30
+        "end": 30,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 30
+    "end": 30,
+    "start_line": 1,
+    "start_col": 0
   }
 }

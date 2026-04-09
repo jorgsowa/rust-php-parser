@@ -29,7 +29,9 @@ class Bar {
                     },
                     "span": {
                       "start": 21,
-                      "end": 24
+                      "end": 24,
+                      "start_line": 3,
+                      "start_col": 14
                     }
                   },
                   "args": []
@@ -37,20 +39,26 @@ class Bar {
               },
               "span": {
                 "start": 17,
-                "end": 24
+                "end": 24,
+                "start_line": 3,
+                "start_col": 10
               }
             },
             "attributes": [],
             "span": {
               "start": 13,
-              "end": 24
+              "end": 24,
+              "start_line": 3,
+              "start_col": 6
             }
           }
         ]
       },
       "span": {
         "start": 7,
-        "end": 27
+        "end": 27,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -70,7 +78,9 @@ class Bar {
                       },
                       "span": {
                         "start": 47,
-                        "end": 50
+                        "end": 50,
+                        "start_line": 5,
+                        "start_col": 20
                       }
                     },
                     "args": []
@@ -78,7 +88,9 @@ class Bar {
                 },
                 "span": {
                   "start": 43,
-                  "end": 50
+                  "end": 50,
+                  "start_line": 5,
+                  "start_col": 16
                 }
               },
               "by_ref": false,
@@ -90,7 +102,9 @@ class Bar {
               "attributes": [],
               "span": {
                 "start": 38,
-                "end": 50
+                "end": 50,
+                "start_line": 5,
+                "start_col": 11
               }
             }
           ],
@@ -109,7 +123,9 @@ class Bar {
                             },
                             "span": {
                               "start": 74,
-                              "end": 77
+                              "end": 77,
+                              "start_line": 6,
+                              "start_col": 20
                             }
                           },
                           "args": []
@@ -117,19 +133,25 @@ class Bar {
                       },
                       "span": {
                         "start": 70,
-                        "end": 77
+                        "end": 77,
+                        "start_line": 6,
+                        "start_col": 16
                       }
                     },
                     "span": {
                       "start": 65,
-                      "end": 77
+                      "end": 77,
+                      "start_line": 6,
+                      "start_col": 11
                     }
                   }
                 ]
               },
               "span": {
                 "start": 58,
-                "end": 79
+                "end": 79,
+                "start_line": 6,
+                "start_col": 4
               }
             }
           ],
@@ -140,7 +162,9 @@ class Bar {
       },
       "span": {
         "start": 27,
-        "end": 80
+        "end": 80,
+        "start_line": 5,
+        "start_col": 0
       }
     },
     {
@@ -169,7 +193,9 @@ class Bar {
                           },
                           "span": {
                             "start": 129,
-                            "end": 132
+                            "end": 132,
+                            "start_line": 11,
+                            "start_col": 18
                           }
                         },
                         "args": []
@@ -177,7 +203,9 @@ class Bar {
                     },
                     "span": {
                       "start": 125,
-                      "end": 132
+                      "end": 132,
+                      "start_line": 11,
+                      "start_col": 14
                     }
                   },
                   "attributes": []
@@ -185,7 +213,9 @@ class Bar {
               },
               "span": {
                 "start": 115,
-                "end": 138
+                "end": 138,
+                "start_line": 11,
+                "start_col": 4
               }
             },
             {
@@ -206,7 +236,9 @@ class Bar {
                           },
                           "span": {
                             "start": 157,
-                            "end": 160
+                            "end": 160,
+                            "start_line": 12,
+                            "start_col": 23
                           }
                         },
                         "args": []
@@ -214,7 +246,9 @@ class Bar {
                     },
                     "span": {
                       "start": 153,
-                      "end": 160
+                      "end": 160,
+                      "start_line": 12,
+                      "start_col": 19
                     }
                   },
                   "attributes": []
@@ -222,7 +256,9 @@ class Bar {
               },
               "span": {
                 "start": 138,
-                "end": 160
+                "end": 160,
+                "start_line": 12,
+                "start_col": 4
               }
             }
           ],
@@ -235,7 +271,9 @@ class Bar {
                 "kind": "Unqualified",
                 "span": {
                   "start": 84,
-                  "end": 88
+                  "end": 88,
+                  "start_line": 9,
+                  "start_col": 2
                 }
               },
               "args": [
@@ -250,7 +288,9 @@ class Bar {
                           },
                           "span": {
                             "start": 93,
-                            "end": 96
+                            "end": 96,
+                            "start_line": 9,
+                            "start_col": 11
                           }
                         },
                         "args": []
@@ -258,20 +298,26 @@ class Bar {
                     },
                     "span": {
                       "start": 89,
-                      "end": 96
+                      "end": 96,
+                      "start_line": 9,
+                      "start_col": 7
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 89,
-                    "end": 96
+                    "end": 96,
+                    "start_line": 9,
+                    "start_col": 7
                   }
                 }
               ],
               "span": {
                 "start": 84,
-                "end": 97
+                "end": 97,
+                "start_line": 9,
+                "start_col": 2
               }
             }
           ]
@@ -279,12 +325,16 @@ class Bar {
       },
       "span": {
         "start": 99,
-        "end": 163
+        "end": 163,
+        "start_line": 10,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 163
+    "end": 163,
+    "start_line": 1,
+    "start_col": 0
   }
 }

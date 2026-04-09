@@ -44,7 +44,9 @@ expected ';', found '}'
                       "attributes": [],
                       "span": {
                         "start": 34,
-                        "end": 34
+                        "end": 34,
+                        "start_line": 1,
+                        "start_col": 34
                       }
                     }
                   ],
@@ -55,7 +57,9 @@ expected ';', found '}'
               },
               "span": {
                 "start": 18,
-                "end": 34
+                "end": 34,
+                "start_line": 1,
+                "start_col": 18
               }
             }
           ],
@@ -64,7 +68,9 @@ expected ';', found '}'
       },
       "span": {
         "start": 6,
-        "end": 35
+        "end": 35,
+        "start_line": 1,
+        "start_col": 6
       }
     },
     {
@@ -96,13 +102,17 @@ expected ';', found '}'
                         "kind": "Unqualified",
                         "span": {
                           "start": 55,
-                          "end": 58
+                          "end": 58,
+                          "start_line": 1,
+                          "start_col": 55
                         }
                       }
                     },
                     "span": {
                       "start": 55,
-                      "end": 58
+                      "end": 58,
+                      "start_line": 1,
+                      "start_col": 55
                     }
                   },
                   "default": {
@@ -111,7 +121,9 @@ expected ';', found '}'
                     },
                     "span": {
                       "start": 64,
-                      "end": 65
+                      "end": 65,
+                      "start_line": 1,
+                      "start_col": 64
                     }
                   },
                   "attributes": []
@@ -119,7 +131,9 @@ expected ';', found '}'
               },
               "span": {
                 "start": 48,
-                "end": 65
+                "end": 65,
+                "start_line": 1,
+                "start_col": 48
               }
             }
           ],
@@ -128,12 +142,16 @@ expected ';', found '}'
       },
       "span": {
         "start": 36,
-        "end": 68
+        "end": 68,
+        "start_line": 1,
+        "start_col": 36
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 68
+    "end": 68,
+    "start_line": 1,
+    "start_col": 0
   }
 }

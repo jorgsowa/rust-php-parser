@@ -27,7 +27,9 @@ function gen($x) {
               "attributes": [],
               "span": {
                 "start": 19,
-                "end": 21
+                "end": 21,
+                "start_line": 2,
+                "start_col": 13
               }
             }
           ],
@@ -43,7 +45,9 @@ function gen($x) {
                         },
                         "span": {
                           "start": 29,
-                          "end": 31
+                          "end": 31,
+                          "start_line": 3,
+                          "start_col": 4
                         }
                       },
                       "op": "Assign",
@@ -56,7 +60,9 @@ function gen($x) {
                               },
                               "span": {
                                 "start": 40,
-                                "end": 44
+                                "end": 44,
+                                "start_line": 3,
+                                "start_col": 15
                               }
                             },
                             "arms": [
@@ -71,7 +77,9 @@ function gen($x) {
                                           },
                                           "span": {
                                             "start": 56,
-                                            "end": 58
+                                            "end": 58,
+                                            "start_line": 4,
+                                            "start_col": 8
                                           }
                                         },
                                         "op": "Greater",
@@ -81,14 +89,18 @@ function gen($x) {
                                           },
                                           "span": {
                                             "start": 61,
-                                            "end": 62
+                                            "end": 62,
+                                            "start_line": 4,
+                                            "start_col": 13
                                           }
                                         }
                                       }
                                     },
                                     "span": {
                                       "start": 56,
-                                      "end": 62
+                                      "end": 62,
+                                      "start_line": 4,
+                                      "start_col": 8
                                     }
                                   }
                                 ],
@@ -102,7 +114,9 @@ function gen($x) {
                                         },
                                         "span": {
                                           "start": 72,
-                                          "end": 74
+                                          "end": 74,
+                                          "start_line": 4,
+                                          "start_col": 24
                                         }
                                       },
                                       "is_from": false
@@ -110,12 +124,16 @@ function gen($x) {
                                   },
                                   "span": {
                                     "start": 66,
-                                    "end": 74
+                                    "end": 74,
+                                    "start_line": 4,
+                                    "start_col": 18
                                   }
                                 },
                                 "span": {
                                   "start": 56,
-                                  "end": 74
+                                  "end": 74,
+                                  "start_line": 4,
+                                  "start_col": 8
                                 }
                               },
                               {
@@ -130,7 +148,9 @@ function gen($x) {
                                         },
                                         "span": {
                                           "start": 101,
-                                          "end": 102
+                                          "end": 102,
+                                          "start_line": 5,
+                                          "start_col": 25
                                         }
                                       },
                                       "is_from": false
@@ -138,12 +158,16 @@ function gen($x) {
                                   },
                                   "span": {
                                     "start": 95,
-                                    "end": 102
+                                    "end": 102,
+                                    "start_line": 5,
+                                    "start_col": 19
                                   }
                                 },
                                 "span": {
                                   "start": 84,
-                                  "end": 102
+                                  "end": 102,
+                                  "start_line": 5,
+                                  "start_col": 8
                                 }
                               }
                             ]
@@ -151,20 +175,26 @@ function gen($x) {
                         },
                         "span": {
                           "start": 34,
-                          "end": 109
+                          "end": 109,
+                          "start_line": 3,
+                          "start_col": 9
                         }
                       }
                     }
                   },
                   "span": {
                     "start": 29,
-                    "end": 109
+                    "end": 109,
+                    "start_line": 3,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 29,
-                "end": 111
+                "end": 111,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -175,12 +205,16 @@ function gen($x) {
       },
       "span": {
         "start": 6,
-        "end": 112
+        "end": 112,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 112
+    "end": 112,
+    "start_line": 1,
+    "start_col": 0
   }
 }

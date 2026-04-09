@@ -20,7 +20,9 @@
                         },
                         "span": {
                           "start": 27,
-                          "end": 29
+                          "end": 29,
+                          "start_line": 1,
+                          "start_col": 27
                         }
                       },
                       "value": {
@@ -29,7 +31,9 @@
                         },
                         "span": {
                           "start": 33,
-                          "end": 35
+                          "end": 35,
+                          "start_line": 1,
+                          "start_col": 33
                         }
                       },
                       "is_from": false
@@ -37,13 +41,17 @@
                   },
                   "span": {
                     "start": 21,
-                    "end": 35
+                    "end": 35,
+                    "start_line": 1,
+                    "start_col": 21
                   }
                 }
               },
               "span": {
                 "start": 21,
-                "end": 37
+                "end": 37,
+                "start_line": 1,
+                "start_col": 21
               }
             }
           ],
@@ -54,12 +62,16 @@
       },
       "span": {
         "start": 6,
-        "end": 38
+        "end": 38,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 38
+    "end": 38,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -22,7 +22,9 @@ $trailing = [1, 2, 3,];
                 },
                 "span": {
                   "start": 6,
-                  "end": 12
+                  "end": 12,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -32,20 +34,26 @@ $trailing = [1, 2, 3,];
                 },
                 "span": {
                   "start": 15,
-                  "end": 17
+                  "end": 17,
+                  "start_line": 2,
+                  "start_col": 9
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 17
+            "end": 17,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 19
+        "end": 19,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -59,7 +67,9 @@ $trailing = [1, 2, 3,];
                 },
                 "span": {
                   "start": 19,
-                  "end": 27
+                  "end": 27,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -74,13 +84,17 @@ $trailing = [1, 2, 3,];
                         },
                         "span": {
                           "start": 31,
-                          "end": 32
+                          "end": 32,
+                          "start_line": 3,
+                          "start_col": 12
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 31,
-                        "end": 32
+                        "end": 32,
+                        "start_line": 3,
+                        "start_col": 12
                       }
                     },
                     {
@@ -91,13 +105,17 @@ $trailing = [1, 2, 3,];
                         },
                         "span": {
                           "start": 34,
-                          "end": 35
+                          "end": 35,
+                          "start_line": 3,
+                          "start_col": 15
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 34,
-                        "end": 35
+                        "end": 35,
+                        "start_line": 3,
+                        "start_col": 15
                       }
                     },
                     {
@@ -108,33 +126,43 @@ $trailing = [1, 2, 3,];
                         },
                         "span": {
                           "start": 37,
-                          "end": 38
+                          "end": 38,
+                          "start_line": 3,
+                          "start_col": 18
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 37,
-                        "end": 38
+                        "end": 38,
+                        "start_line": 3,
+                        "start_col": 18
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 30,
-                  "end": 39
+                  "end": 39,
+                  "start_line": 3,
+                  "start_col": 11
                 }
               }
             }
           },
           "span": {
             "start": 19,
-            "end": 39
+            "end": 39,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 19,
-        "end": 41
+        "end": 41,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -148,7 +176,9 @@ $trailing = [1, 2, 3,];
                 },
                 "span": {
                   "start": 41,
-                  "end": 45
+                  "end": 45,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -162,7 +192,9 @@ $trailing = [1, 2, 3,];
                         },
                         "span": {
                           "start": 49,
-                          "end": 55
+                          "end": 55,
+                          "start_line": 4,
+                          "start_col": 8
                         }
                       },
                       "value": {
@@ -171,13 +203,17 @@ $trailing = [1, 2, 3,];
                         },
                         "span": {
                           "start": 59,
-                          "end": 64
+                          "end": 64,
+                          "start_line": 4,
+                          "start_col": 18
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 49,
-                        "end": 64
+                        "end": 64,
+                        "start_line": 4,
+                        "start_col": 8
                       }
                     },
                     {
@@ -187,7 +223,9 @@ $trailing = [1, 2, 3,];
                         },
                         "span": {
                           "start": 66,
-                          "end": 75
+                          "end": 75,
+                          "start_line": 4,
+                          "start_col": 25
                         }
                       },
                       "value": {
@@ -196,33 +234,43 @@ $trailing = [1, 2, 3,];
                         },
                         "span": {
                           "start": 79,
-                          "end": 80
+                          "end": 80,
+                          "start_line": 4,
+                          "start_col": 38
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 66,
-                        "end": 80
+                        "end": 80,
+                        "start_line": 4,
+                        "start_col": 25
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 48,
-                  "end": 81
+                  "end": 81,
+                  "start_line": 4,
+                  "start_col": 7
                 }
               }
             }
           },
           "span": {
             "start": 41,
-            "end": 81
+            "end": 81,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 41,
-        "end": 83
+        "end": 83,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -236,7 +284,9 @@ $trailing = [1, 2, 3,];
                 },
                 "span": {
                   "start": 83,
-                  "end": 90
+                  "end": 90,
+                  "start_line": 5,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -256,13 +306,17 @@ $trailing = [1, 2, 3,];
                                 },
                                 "span": {
                                   "start": 95,
-                                  "end": 96
+                                  "end": 96,
+                                  "start_line": 5,
+                                  "start_col": 12
                                 }
                               },
                               "unpack": false,
                               "span": {
                                 "start": 95,
-                                "end": 96
+                                "end": 96,
+                                "start_line": 5,
+                                "start_col": 12
                               }
                             },
                             {
@@ -273,26 +327,34 @@ $trailing = [1, 2, 3,];
                                 },
                                 "span": {
                                   "start": 98,
-                                  "end": 99
+                                  "end": 99,
+                                  "start_line": 5,
+                                  "start_col": 15
                                 }
                               },
                               "unpack": false,
                               "span": {
                                 "start": 98,
-                                "end": 99
+                                "end": 99,
+                                "start_line": 5,
+                                "start_col": 15
                               }
                             }
                           ]
                         },
                         "span": {
                           "start": 94,
-                          "end": 100
+                          "end": 100,
+                          "start_line": 5,
+                          "start_col": 11
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 94,
-                        "end": 100
+                        "end": 100,
+                        "start_line": 5,
+                        "start_col": 11
                       }
                     },
                     {
@@ -308,13 +370,17 @@ $trailing = [1, 2, 3,];
                                 },
                                 "span": {
                                   "start": 103,
-                                  "end": 104
+                                  "end": 104,
+                                  "start_line": 5,
+                                  "start_col": 20
                                 }
                               },
                               "unpack": false,
                               "span": {
                                 "start": 103,
-                                "end": 104
+                                "end": 104,
+                                "start_line": 5,
+                                "start_col": 20
                               }
                             },
                             {
@@ -325,46 +391,60 @@ $trailing = [1, 2, 3,];
                                 },
                                 "span": {
                                   "start": 106,
-                                  "end": 107
+                                  "end": 107,
+                                  "start_line": 5,
+                                  "start_col": 23
                                 }
                               },
                               "unpack": false,
                               "span": {
                                 "start": 106,
-                                "end": 107
+                                "end": 107,
+                                "start_line": 5,
+                                "start_col": 23
                               }
                             }
                           ]
                         },
                         "span": {
                           "start": 102,
-                          "end": 108
+                          "end": 108,
+                          "start_line": 5,
+                          "start_col": 19
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 102,
-                        "end": 108
+                        "end": 108,
+                        "start_line": 5,
+                        "start_col": 19
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 93,
-                  "end": 109
+                  "end": 109,
+                  "start_line": 5,
+                  "start_col": 10
                 }
               }
             }
           },
           "span": {
             "start": 83,
-            "end": 109
+            "end": 109,
+            "start_line": 5,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 83,
-        "end": 111
+        "end": 111,
+        "start_line": 5,
+        "start_col": 0
       }
     },
     {
@@ -378,7 +458,9 @@ $trailing = [1, 2, 3,];
                 },
                 "span": {
                   "start": 111,
-                  "end": 117
+                  "end": 117,
+                  "start_line": 6,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -391,7 +473,9 @@ $trailing = [1, 2, 3,];
                       },
                       "span": {
                         "start": 120,
-                        "end": 128
+                        "end": 128,
+                        "start_line": 6,
+                        "start_col": 9
                       }
                     },
                     "index": {
@@ -400,27 +484,35 @@ $trailing = [1, 2, 3,];
                       },
                       "span": {
                         "start": 129,
-                        "end": 130
+                        "end": 130,
+                        "start_line": 6,
+                        "start_col": 18
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 120,
-                  "end": 131
+                  "end": 131,
+                  "start_line": 6,
+                  "start_col": 9
                 }
               }
             }
           },
           "span": {
             "start": 111,
-            "end": 131
+            "end": 131,
+            "start_line": 6,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 111,
-        "end": 133
+        "end": 133,
+        "start_line": 6,
+        "start_col": 0
       }
     },
     {
@@ -434,7 +526,9 @@ $trailing = [1, 2, 3,];
                 },
                 "span": {
                   "start": 133,
-                  "end": 138
+                  "end": 138,
+                  "start_line": 7,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -447,7 +541,9 @@ $trailing = [1, 2, 3,];
                       },
                       "span": {
                         "start": 141,
-                        "end": 145
+                        "end": 145,
+                        "start_line": 7,
+                        "start_col": 8
                       }
                     },
                     "index": {
@@ -456,27 +552,35 @@ $trailing = [1, 2, 3,];
                       },
                       "span": {
                         "start": 146,
-                        "end": 152
+                        "end": 152,
+                        "start_line": 7,
+                        "start_col": 13
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 141,
-                  "end": 153
+                  "end": 153,
+                  "start_line": 7,
+                  "start_col": 8
                 }
               }
             }
           },
           "span": {
             "start": 133,
-            "end": 153
+            "end": 153,
+            "start_line": 7,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 133,
-        "end": 155
+        "end": 155,
+        "start_line": 7,
+        "start_col": 0
       }
     },
     {
@@ -490,7 +594,9 @@ $trailing = [1, 2, 3,];
                 },
                 "span": {
                   "start": 155,
-                  "end": 160
+                  "end": 160,
+                  "start_line": 8,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -506,7 +612,9 @@ $trailing = [1, 2, 3,];
                             },
                             "span": {
                               "start": 163,
-                              "end": 170
+                              "end": 170,
+                              "start_line": 8,
+                              "start_col": 8
                             }
                           },
                           "index": {
@@ -515,14 +623,18 @@ $trailing = [1, 2, 3,];
                             },
                             "span": {
                               "start": 171,
-                              "end": 172
+                              "end": 172,
+                              "start_line": 8,
+                              "start_col": 16
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 163,
-                        "end": 173
+                        "end": 173,
+                        "start_line": 8,
+                        "start_col": 8
                       }
                     },
                     "index": {
@@ -531,27 +643,35 @@ $trailing = [1, 2, 3,];
                       },
                       "span": {
                         "start": 174,
-                        "end": 175
+                        "end": 175,
+                        "start_line": 8,
+                        "start_col": 19
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 163,
-                  "end": 176
+                  "end": 176,
+                  "start_line": 8,
+                  "start_col": 8
                 }
               }
             }
           },
           "span": {
             "start": 155,
-            "end": 176
+            "end": 176,
+            "start_line": 8,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 155,
-        "end": 178
+        "end": 178,
+        "start_line": 8,
+        "start_col": 0
       }
     },
     {
@@ -565,7 +685,9 @@ $trailing = [1, 2, 3,];
                 },
                 "span": {
                   "start": 178,
-                  "end": 187
+                  "end": 187,
+                  "start_line": 9,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -580,13 +702,17 @@ $trailing = [1, 2, 3,];
                         },
                         "span": {
                           "start": 191,
-                          "end": 192
+                          "end": 192,
+                          "start_line": 9,
+                          "start_col": 13
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 191,
-                        "end": 192
+                        "end": 192,
+                        "start_line": 9,
+                        "start_col": 13
                       }
                     },
                     {
@@ -597,13 +723,17 @@ $trailing = [1, 2, 3,];
                         },
                         "span": {
                           "start": 194,
-                          "end": 195
+                          "end": 195,
+                          "start_line": 9,
+                          "start_col": 16
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 194,
-                        "end": 195
+                        "end": 195,
+                        "start_line": 9,
+                        "start_col": 16
                       }
                     },
                     {
@@ -614,38 +744,50 @@ $trailing = [1, 2, 3,];
                         },
                         "span": {
                           "start": 197,
-                          "end": 198
+                          "end": 198,
+                          "start_line": 9,
+                          "start_col": 19
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 197,
-                        "end": 198
+                        "end": 198,
+                        "start_line": 9,
+                        "start_col": 19
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 190,
-                  "end": 200
+                  "end": 200,
+                  "start_line": 9,
+                  "start_col": 12
                 }
               }
             }
           },
           "span": {
             "start": 178,
-            "end": 200
+            "end": 200,
+            "start_line": 9,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 178,
-        "end": 201
+        "end": 201,
+        "start_line": 9,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 201
+    "end": 201,
+    "start_line": 1,
+    "start_col": 0
   }
 }

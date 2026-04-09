@@ -32,14 +32,18 @@ interface method cannot contain a body
                             },
                             "span": {
                               "start": 51,
-                              "end": 57
+                              "end": 57,
+                              "start_line": 1,
+                              "start_col": 51
                             }
                           }
                         ]
                       },
                       "span": {
                         "start": 46,
-                        "end": 59
+                        "end": 59,
+                        "start_line": 1,
+                        "start_col": 46
                       }
                     }
                   ],
@@ -48,7 +52,9 @@ interface method cannot contain a body
               },
               "span": {
                 "start": 22,
-                "end": 61
+                "end": 61,
+                "start_line": 1,
+                "start_col": 22
               }
             }
           ],
@@ -57,12 +63,16 @@ interface method cannot contain a body
       },
       "span": {
         "start": 6,
-        "end": 62
+        "end": 62,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 62
+    "end": 62,
+    "start_line": 1,
+    "start_col": 0
   }
 }

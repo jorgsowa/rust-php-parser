@@ -20,7 +20,9 @@ expected expression
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -28,20 +30,26 @@ expected expression
                 "kind": "Error",
                 "span": {
                   "start": 11,
-                  "end": 12
+                  "end": 12,
+                  "start_line": 2,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 12
+            "end": 12,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 13
+        "end": 13,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -55,7 +63,9 @@ expected expression
                 },
                 "span": {
                   "start": 13,
-                  "end": 15
+                  "end": 15,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -63,20 +73,26 @@ expected expression
                 "kind": "Error",
                 "span": {
                   "start": 18,
-                  "end": 19
+                  "end": 19,
+                  "start_line": 3,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 13,
-            "end": 19
+            "end": 19,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 13,
-        "end": 20
+        "end": 20,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -93,13 +109,17 @@ expected expression
                   },
                   "span": {
                     "start": 56,
-                    "end": 60
+                    "end": 60,
+                    "start_line": 4,
+                    "start_col": 36
                   }
                 }
               },
               "span": {
                 "start": 49,
-                "end": 62
+                "end": 62,
+                "start_line": 4,
+                "start_col": 29
               }
             }
           ],
@@ -112,13 +132,17 @@ expected expression
                 "kind": "Unqualified",
                 "span": {
                   "start": 40,
-                  "end": 46
+                  "end": 46,
+                  "start_line": 4,
+                  "start_col": 20
                 }
               }
             },
             "span": {
               "start": 40,
-              "end": 46
+              "end": 46,
+              "start_line": 4,
+              "start_col": 20
             }
           },
           "by_ref": false,
@@ -127,12 +151,16 @@ expected expression
       },
       "span": {
         "start": 20,
-        "end": 63
+        "end": 63,
+        "start_line": 4,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 63
+    "end": 63,
+    "start_line": 1,
+    "start_col": 0
   }
 }

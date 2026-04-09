@@ -47,13 +47,17 @@ class UserRepository {
                             "kind": "Unqualified",
                             "span": {
                               "start": 233,
-                              "end": 239
+                              "end": 239,
+                              "start_line": 11,
+                              "start_col": 25
                             }
                           }
                         },
                         "span": {
                           "start": 233,
-                          "end": 239
+                          "end": 239,
+                          "start_line": 11,
+                          "start_col": 25
                         }
                       },
                       "default": null,
@@ -66,7 +70,9 @@ class UserRepository {
                       "attributes": [],
                       "span": {
                         "start": 233,
-                        "end": 245
+                        "end": 245,
+                        "start_line": 11,
+                        "start_col": 25
                       }
                     }
                   ],
@@ -79,13 +85,17 @@ class UserRepository {
                         "kind": "Unqualified",
                         "span": {
                           "start": 248,
-                          "end": 253
+                          "end": 253,
+                          "start_line": 11,
+                          "start_col": 40
                         }
                       }
                     },
                     "span": {
                       "start": 248,
-                      "end": 253
+                      "end": 253,
+                      "start_line": 11,
+                      "start_col": 40
                     }
                   },
                   "body": [],
@@ -95,14 +105,18 @@ class UserRepository {
                     "text": "/**\n     * @psalm-param non-empty-string $name\n     * @phpstan-return list<User>\n     * @psalm-suppress InvalidReturnType\n     */",
                     "span": {
                       "start": 78,
-                      "end": 207
+                      "end": 207,
+                      "start_line": 6,
+                      "start_col": 4
                     }
                   }
                 }
               },
               "span": {
                 "start": 212,
-                "end": 257
+                "end": 257,
+                "start_line": 11,
+                "start_col": 4
               }
             }
           ],
@@ -112,19 +126,25 @@ class UserRepository {
             "text": "/**\n * @psalm-type UserId = positive-int\n */",
             "span": {
               "start": 6,
-              "end": 50
+              "end": 50,
+              "start_line": 2,
+              "start_col": 0
             }
           }
         }
       },
       "span": {
         "start": 51,
-        "end": 258
+        "end": 258,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 258
+    "end": 258,
+    "start_line": 1,
+    "start_col": 0
   }
 }

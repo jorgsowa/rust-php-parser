@@ -21,13 +21,17 @@
                   },
                   "span": {
                     "start": 21,
-                    "end": 26
+                    "end": 26,
+                    "start_line": 1,
+                    "start_col": 21
                   }
                 }
               },
               "span": {
                 "start": 21,
-                "end": 28
+                "end": 28,
+                "start_line": 1,
+                "start_col": 21
               }
             }
           ],
@@ -38,12 +42,16 @@
       },
       "span": {
         "start": 6,
-        "end": 29
+        "end": 29,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 29
+    "end": 29,
+    "start_line": 1,
+    "start_col": 0
   }
 }

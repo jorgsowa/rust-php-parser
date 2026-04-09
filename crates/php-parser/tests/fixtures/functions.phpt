@@ -32,7 +32,9 @@ greet('PHP');
               "attributes": [],
               "span": {
                 "start": 19,
-                "end": 21
+                "end": 21,
+                "start_line": 2,
+                "start_col": 13
               }
             },
             {
@@ -48,7 +50,9 @@ greet('PHP');
               "attributes": [],
               "span": {
                 "start": 23,
-                "end": 25
+                "end": 25,
+                "start_line": 2,
+                "start_col": 17
               }
             }
           ],
@@ -64,7 +68,9 @@ greet('PHP');
                         },
                         "span": {
                           "start": 40,
-                          "end": 42
+                          "end": 42,
+                          "start_line": 3,
+                          "start_col": 11
                         }
                       },
                       "op": "Add",
@@ -74,20 +80,26 @@ greet('PHP');
                         },
                         "span": {
                           "start": 45,
-                          "end": 47
+                          "end": 47,
+                          "start_line": 3,
+                          "start_col": 16
                         }
                       }
                     }
                   },
                   "span": {
                     "start": 40,
-                    "end": 47
+                    "end": 47,
+                    "start_line": 3,
+                    "start_col": 11
                   }
                 }
               },
               "span": {
                 "start": 33,
-                "end": 49
+                "end": 49,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -98,7 +110,9 @@ greet('PHP');
       },
       "span": {
         "start": 6,
-        "end": 50
+        "end": 50,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -115,7 +129,9 @@ greet('PHP');
                 },
                 "span": {
                   "start": 75,
-                  "end": 82
+                  "end": 82,
+                  "start_line": 6,
+                  "start_col": 23
                 }
               },
               "by_ref": false,
@@ -127,7 +143,9 @@ greet('PHP');
               "attributes": [],
               "span": {
                 "start": 67,
-                "end": 82
+                "end": 82,
+                "start_line": 6,
+                "start_col": 15
               }
             }
           ],
@@ -144,7 +162,9 @@ greet('PHP');
                           },
                           "span": {
                             "start": 95,
-                            "end": 104
+                            "end": 104,
+                            "start_line": 7,
+                            "start_col": 9
                           }
                         },
                         "op": "Concat",
@@ -154,21 +174,27 @@ greet('PHP');
                           },
                           "span": {
                             "start": 107,
-                            "end": 112
+                            "end": 112,
+                            "start_line": 7,
+                            "start_col": 21
                           }
                         }
                       }
                     },
                     "span": {
                       "start": 95,
-                      "end": 112
+                      "end": 112,
+                      "start_line": 7,
+                      "start_col": 9
                     }
                   }
                 ]
               },
               "span": {
                 "start": 90,
-                "end": 114
+                "end": 114,
+                "start_line": 7,
+                "start_col": 4
               }
             }
           ],
@@ -179,7 +205,9 @@ greet('PHP');
       },
       "span": {
         "start": 52,
-        "end": 115
+        "end": 115,
+        "start_line": 6,
+        "start_col": 0
       }
     },
     {
@@ -193,7 +221,9 @@ greet('PHP');
                 },
                 "span": {
                   "start": 117,
-                  "end": 124
+                  "end": 124,
+                  "start_line": 10,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -206,7 +236,9 @@ greet('PHP');
                       },
                       "span": {
                         "start": 127,
-                        "end": 130
+                        "end": 130,
+                        "start_line": 10,
+                        "start_col": 10
                       }
                     },
                     "args": [
@@ -218,14 +250,18 @@ greet('PHP');
                           },
                           "span": {
                             "start": 131,
-                            "end": 132
+                            "end": 132,
+                            "start_line": 10,
+                            "start_col": 14
                           }
                         },
                         "unpack": false,
                         "by_ref": false,
                         "span": {
                           "start": 131,
-                          "end": 132
+                          "end": 132,
+                          "start_line": 10,
+                          "start_col": 14
                         }
                       },
                       {
@@ -236,14 +272,18 @@ greet('PHP');
                           },
                           "span": {
                             "start": 134,
-                            "end": 135
+                            "end": 135,
+                            "start_line": 10,
+                            "start_col": 17
                           }
                         },
                         "unpack": false,
                         "by_ref": false,
                         "span": {
                           "start": 134,
-                          "end": 135
+                          "end": 135,
+                          "start_line": 10,
+                          "start_col": 17
                         }
                       }
                     ]
@@ -251,20 +291,26 @@ greet('PHP');
                 },
                 "span": {
                   "start": 127,
-                  "end": 136
+                  "end": 136,
+                  "start_line": 10,
+                  "start_col": 10
                 }
               }
             }
           },
           "span": {
             "start": 117,
-            "end": 136
+            "end": 136,
+            "start_line": 10,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 117,
-        "end": 138
+        "end": 138,
+        "start_line": 10,
+        "start_col": 0
       }
     },
     {
@@ -278,7 +324,9 @@ greet('PHP');
                 },
                 "span": {
                   "start": 138,
-                  "end": 143
+                  "end": 143,
+                  "start_line": 11,
+                  "start_col": 0
                 }
               },
               "args": []
@@ -286,13 +334,17 @@ greet('PHP');
           },
           "span": {
             "start": 138,
-            "end": 145
+            "end": 145,
+            "start_line": 11,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 138,
-        "end": 147
+        "end": 147,
+        "start_line": 11,
+        "start_col": 0
       }
     },
     {
@@ -306,7 +358,9 @@ greet('PHP');
                 },
                 "span": {
                   "start": 147,
-                  "end": 152
+                  "end": 152,
+                  "start_line": 12,
+                  "start_col": 0
                 }
               },
               "args": [
@@ -318,14 +372,18 @@ greet('PHP');
                     },
                     "span": {
                       "start": 153,
-                      "end": 158
+                      "end": 158,
+                      "start_line": 12,
+                      "start_col": 6
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 153,
-                    "end": 158
+                    "end": 158,
+                    "start_line": 12,
+                    "start_col": 6
                   }
                 }
               ]
@@ -333,18 +391,24 @@ greet('PHP');
           },
           "span": {
             "start": 147,
-            "end": 159
+            "end": 159,
+            "start_line": 12,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 147,
-        "end": 160
+        "end": 160,
+        "start_line": 12,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 160
+    "end": 160,
+    "start_line": 1,
+    "start_col": 0
   }
 }

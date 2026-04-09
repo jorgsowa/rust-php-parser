@@ -16,7 +16,9 @@ min_php=8.5
                 },
                 "span": {
                   "start": 6,
-                  "end": 11
+                  "end": 11,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "args": [
@@ -28,14 +30,18 @@ min_php=8.5
                     },
                     "span": {
                       "start": 15,
-                      "end": 20
+                      "end": 20,
+                      "start_line": 1,
+                      "start_col": 15
                     }
                   },
                   "unpack": true,
                   "by_ref": false,
                   "span": {
                     "start": 12,
-                    "end": 20
+                    "end": 20,
+                    "start_line": 1,
+                    "start_col": 12
                   }
                 }
               ]
@@ -43,18 +49,24 @@ min_php=8.5
           },
           "span": {
             "start": 6,
-            "end": 21
+            "end": 21,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 22
+        "end": 22,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 22
+    "end": 22,
+    "start_line": 1,
+    "start_col": 0
   }
 }

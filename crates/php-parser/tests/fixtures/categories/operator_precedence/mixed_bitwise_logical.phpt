@@ -17,7 +17,9 @@
                       },
                       "span": {
                         "start": 6,
-                        "end": 8
+                        "end": 8,
+                        "start_line": 1,
+                        "start_col": 6
                       }
                     },
                     "op": "BitwiseAnd",
@@ -27,14 +29,18 @@
                       },
                       "span": {
                         "start": 11,
-                        "end": 13
+                        "end": 13,
+                        "start_line": 1,
+                        "start_col": 11
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 6,
-                  "end": 13
+                  "end": 13,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "op": "BooleanAnd",
@@ -47,7 +53,9 @@
                       },
                       "span": {
                         "start": 17,
-                        "end": 19
+                        "end": 19,
+                        "start_line": 1,
+                        "start_col": 17
                       }
                     },
                     "op": "BitwiseOr",
@@ -57,32 +65,42 @@
                       },
                       "span": {
                         "start": 22,
-                        "end": 24
+                        "end": 24,
+                        "start_line": 1,
+                        "start_col": 22
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 17,
-                  "end": 24
+                  "end": 24,
+                  "start_line": 1,
+                  "start_col": 17
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 24
+            "end": 24,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 25
+        "end": 25,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 25
+    "end": 25,
+    "start_line": 1,
+    "start_col": 0
   }
 }

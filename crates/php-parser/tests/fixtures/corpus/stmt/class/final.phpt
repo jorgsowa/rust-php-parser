@@ -22,12 +22,16 @@ final class A {}
       },
       "span": {
         "start": 13,
-        "end": 23
+        "end": 23,
+        "start_line": 3,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 23
+    "end": 23,
+    "start_line": 1,
+    "start_col": 0
   }
 }

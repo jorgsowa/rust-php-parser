@@ -43,13 +43,17 @@ function(Foo);
                     "kind": "Unqualified",
                     "span": {
                       "start": 20,
-                      "end": 24
+                      "end": 24,
+                      "start_line": 3,
+                      "start_col": 13
                     }
                   }
                 },
                 "span": {
                   "start": 20,
-                  "end": 24
+                  "end": 24,
+                  "start_line": 3,
+                  "start_col": 13
                 }
               },
               "default": null,
@@ -62,7 +66,9 @@ function(Foo);
               "attributes": [],
               "span": {
                 "start": 20,
-                "end": 24
+                "end": 24,
+                "start_line": 3,
+                "start_col": 13
               }
             }
           ],
@@ -75,13 +81,17 @@ function(Foo);
                   },
                   "span": {
                     "start": 32,
-                    "end": 36
+                    "end": 36,
+                    "start_line": 4,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 32,
-                "end": 38
+                "end": 38,
+                "start_line": 4,
+                "start_col": 4
               }
             }
           ],
@@ -92,7 +102,9 @@ function(Foo);
       },
       "span": {
         "start": 7,
-        "end": 39
+        "end": 39,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -111,13 +123,17 @@ function(Foo);
                     "kind": "Unqualified",
                     "span": {
                       "start": 54,
-                      "end": 60
+                      "end": 60,
+                      "start_line": 7,
+                      "start_col": 13
                     }
                   }
                 },
                 "span": {
                   "start": 54,
-                  "end": 60
+                  "end": 60,
+                  "start_line": 7,
+                  "start_col": 13
                 }
               },
               "default": null,
@@ -130,7 +146,9 @@ function(Foo);
               "attributes": [],
               "span": {
                 "start": 54,
-                "end": 64
+                "end": 64,
+                "start_line": 7,
+                "start_col": 13
               }
             },
             {
@@ -144,13 +162,17 @@ function(Foo);
                     "kind": "Unqualified",
                     "span": {
                       "start": 66,
-                      "end": 71
+                      "end": 71,
+                      "start_line": 7,
+                      "start_col": 25
                     }
                   }
                 },
                 "span": {
                   "start": 66,
-                  "end": 71
+                  "end": 71,
+                  "start_line": 7,
+                  "start_col": 25
                 }
               },
               "default": null,
@@ -163,7 +185,9 @@ function(Foo);
               "attributes": [],
               "span": {
                 "start": 66,
-                "end": 71
+                "end": 71,
+                "start_line": 7,
+                "start_col": 25
               }
             }
           ],
@@ -176,13 +200,17 @@ function(Foo);
                   },
                   "span": {
                     "start": 79,
-                    "end": 83
+                    "end": 83,
+                    "start_line": 8,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 79,
-                "end": 85
+                "end": 85,
+                "start_line": 8,
+                "start_col": 4
               }
             }
           ],
@@ -193,7 +221,9 @@ function(Foo);
       },
       "span": {
         "start": 41,
-        "end": 86
+        "end": 86,
+        "start_line": 7,
+        "start_col": 0
       }
     },
     {
@@ -214,7 +244,9 @@ function(Foo);
               "attributes": [],
               "span": {
                 "start": 101,
-                "end": 104
+                "end": 104,
+                "start_line": 11,
+                "start_col": 13
               }
             }
           ],
@@ -227,13 +259,17 @@ function(Foo);
                   },
                   "span": {
                     "start": 112,
-                    "end": 116
+                    "end": 116,
+                    "start_line": 12,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 112,
-                "end": 118
+                "end": 118,
+                "start_line": 12,
+                "start_col": 4
               }
             }
           ],
@@ -244,7 +280,9 @@ function(Foo);
       },
       "span": {
         "start": 88,
-        "end": 119
+        "end": 119,
+        "start_line": 11,
+        "start_col": 0
       }
     },
     {
@@ -265,7 +303,9 @@ function(Foo);
               "attributes": [],
               "span": {
                 "start": 134,
-                "end": 135
+                "end": 135,
+                "start_line": 15,
+                "start_col": 13
               }
             }
           ],
@@ -278,13 +318,17 @@ function(Foo);
                   },
                   "span": {
                     "start": 143,
-                    "end": 147
+                    "end": 147,
+                    "start_line": 16,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 143,
-                "end": 149
+                "end": 149,
+                "start_line": 16,
+                "start_col": 4
               }
             }
           ],
@@ -295,7 +339,9 @@ function(Foo);
       },
       "span": {
         "start": 121,
-        "end": 150
+        "end": 150,
+        "start_line": 15,
+        "start_col": 0
       }
     },
     {
@@ -314,13 +360,17 @@ function(Foo);
                     "kind": "Unqualified",
                     "span": {
                       "start": 165,
-                      "end": 168
+                      "end": 168,
+                      "start_line": 19,
+                      "start_col": 13
                     }
                   }
                 },
                 "span": {
                   "start": 165,
-                  "end": 168
+                  "end": 168,
+                  "start_line": 19,
+                  "start_col": 13
                 }
               },
               "default": null,
@@ -333,7 +383,9 @@ function(Foo);
               "attributes": [],
               "span": {
                 "start": 165,
-                "end": 168
+                "end": 168,
+                "start_line": 19,
+                "start_col": 13
               }
             }
           ],
@@ -371,13 +423,17 @@ function(Foo);
                                     "kind": "Unqualified",
                                     "span": {
                                       "start": 200,
-                                      "end": 203
+                                      "end": 203,
+                                      "start_line": 22,
+                                      "start_col": 17
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 200,
-                                  "end": 203
+                                  "end": 203,
+                                  "start_line": 22,
+                                  "start_col": 17
                                 }
                               },
                               "default": null,
@@ -390,7 +446,9 @@ function(Foo);
                               "attributes": [],
                               "span": {
                                 "start": 200,
-                                "end": 203
+                                "end": 203,
+                                "start_line": 22,
+                                "start_col": 17
                               }
                             }
                           ],
@@ -401,7 +459,9 @@ function(Foo);
                       },
                       "span": {
                         "start": 187,
-                        "end": 205
+                        "end": 205,
+                        "start_line": 22,
+                        "start_col": 4
                       }
                     }
                   ],
@@ -410,7 +470,9 @@ function(Foo);
               },
               "span": {
                 "start": 171,
-                "end": 206
+                "end": 206,
+                "start_line": 21,
+                "start_col": 0
               }
             },
             {
@@ -432,13 +494,17 @@ function(Foo);
                                 "kind": "Unqualified",
                                 "span": {
                                   "start": 217,
-                                  "end": 220
+                                  "end": 220,
+                                  "start_line": 25,
+                                  "start_col": 9
                                 }
                               }
                             },
                             "span": {
                               "start": 217,
-                              "end": 220
+                              "end": 220,
+                              "start_line": 25,
+                              "start_col": 9
                             }
                           },
                           "default": null,
@@ -451,7 +517,9 @@ function(Foo);
                           "attributes": [],
                           "span": {
                             "start": 217,
-                            "end": 220
+                            "end": 220,
+                            "start_line": 25,
+                            "start_col": 9
                           }
                         }
                       ],
@@ -462,7 +530,9 @@ function(Foo);
                           "kind": "Nop",
                           "span": {
                             "start": 221,
-                            "end": 222
+                            "end": 222,
+                            "start_line": 25,
+                            "start_col": 13
                           }
                         }
                       ],
@@ -471,13 +541,17 @@ function(Foo);
                   },
                   "span": {
                     "start": 208,
-                    "end": 222
+                    "end": 222,
+                    "start_line": 25,
+                    "start_col": 0
                   }
                 }
               },
               "span": {
                 "start": 208,
-                "end": 222
+                "end": 222,
+                "start_line": 25,
+                "start_col": 0
               }
             }
           ],
@@ -488,12 +562,16 @@ function(Foo);
       },
       "span": {
         "start": 152,
-        "end": 222
+        "end": 222,
+        "start_line": 19,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 222
+    "end": 222,
+    "start_line": 1,
+    "start_col": 0
   }
 }

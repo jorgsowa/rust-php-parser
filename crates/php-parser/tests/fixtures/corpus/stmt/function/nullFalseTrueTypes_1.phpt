@@ -22,13 +22,17 @@ function f_true(): true {}
                 "kind": "Unqualified",
                 "span": {
                   "start": 26,
-                  "end": 30
+                  "end": 30,
+                  "start_line": 3,
+                  "start_col": 19
                 }
               }
             },
             "span": {
               "start": 26,
-              "end": 30
+              "end": 30,
+              "start_line": 3,
+              "start_col": 19
             }
           },
           "by_ref": false,
@@ -37,7 +41,9 @@ function f_true(): true {}
       },
       "span": {
         "start": 7,
-        "end": 33
+        "end": 33,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -55,13 +61,17 @@ function f_true(): true {}
                 "kind": "Unqualified",
                 "span": {
                   "start": 54,
-                  "end": 59
+                  "end": 59,
+                  "start_line": 4,
+                  "start_col": 20
                 }
               }
             },
             "span": {
               "start": 54,
-              "end": 59
+              "end": 59,
+              "start_line": 4,
+              "start_col": 20
             }
           },
           "by_ref": false,
@@ -70,7 +80,9 @@ function f_true(): true {}
       },
       "span": {
         "start": 34,
-        "end": 62
+        "end": 62,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -88,13 +100,17 @@ function f_true(): true {}
                 "kind": "Unqualified",
                 "span": {
                   "start": 82,
-                  "end": 86
+                  "end": 86,
+                  "start_line": 5,
+                  "start_col": 19
                 }
               }
             },
             "span": {
               "start": 82,
-              "end": 86
+              "end": 86,
+              "start_line": 5,
+              "start_col": 19
             }
           },
           "by_ref": false,
@@ -103,12 +119,16 @@ function f_true(): true {}
       },
       "span": {
         "start": 63,
-        "end": 89
+        "end": 89,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 89
+    "end": 89,
+    "start_line": 1,
+    "start_col": 0
   }
 }

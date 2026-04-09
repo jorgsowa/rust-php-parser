@@ -22,7 +22,9 @@ expected class name, found '{'
       },
       "span": {
         "start": 6,
-        "end": 14
+        "end": 14,
+        "start_line": 1,
+        "start_col": 6
       }
     },
     {
@@ -39,13 +41,17 @@ expected class name, found '{'
                   },
                   "span": {
                     "start": 44,
-                    "end": 45
+                    "end": 45,
+                    "start_line": 1,
+                    "start_col": 44
                   }
                 }
               },
               "span": {
                 "start": 37,
-                "end": 47
+                "end": 47,
+                "start_line": 1,
+                "start_col": 37
               }
             }
           ],
@@ -58,13 +64,17 @@ expected class name, found '{'
                 "kind": "Unqualified",
                 "span": {
                   "start": 31,
-                  "end": 34
+                  "end": 34,
+                  "start_line": 1,
+                  "start_col": 31
                 }
               }
             },
             "span": {
               "start": 31,
-              "end": 34
+              "end": 34,
+              "start_line": 1,
+              "start_col": 31
             }
           },
           "by_ref": false,
@@ -73,12 +83,16 @@ expected class name, found '{'
       },
       "span": {
         "start": 15,
-        "end": 48
+        "end": 48,
+        "start_line": 1,
+        "start_col": 15
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 48
+    "end": 48,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -16,7 +16,9 @@ if ($cond) {
             },
             "span": {
               "start": 10,
-              "end": 15
+              "end": 15,
+              "start_line": 2,
+              "start_col": 4
             }
           },
           "then_branch": {
@@ -28,7 +30,9 @@ if ($cond) {
                   },
                   "span": {
                     "start": 25,
-                    "end": 36
+                    "end": 36,
+                    "start_line": 3,
+                    "start_col": 6
                   }
                 },
                 {
@@ -42,7 +46,9 @@ if ($cond) {
                             },
                             "span": {
                               "start": 46,
-                              "end": 48
+                              "end": 48,
+                              "start_line": 4,
+                              "start_col": 4
                             }
                           },
                           "op": "Assign",
@@ -52,27 +58,35 @@ if ($cond) {
                             },
                             "span": {
                               "start": 51,
-                              "end": 52
+                              "end": 52,
+                              "start_line": 4,
+                              "start_col": 9
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 46,
-                        "end": 52
+                        "end": 52,
+                        "start_line": 4,
+                        "start_col": 4
                       }
                     }
                   },
                   "span": {
                     "start": 46,
-                    "end": 54
+                    "end": 54,
+                    "start_line": 4,
+                    "start_col": 4
                   }
                 }
               ]
             },
             "span": {
               "start": 17,
-              "end": 55
+              "end": 55,
+              "start_line": 2,
+              "start_col": 11
             }
           },
           "elseif_branches": [],
@@ -81,12 +95,16 @@ if ($cond) {
       },
       "span": {
         "start": 6,
-        "end": 55
+        "end": 55,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 55
+    "end": 55,
+    "start_line": 1,
+    "start_col": 0
   }
 }

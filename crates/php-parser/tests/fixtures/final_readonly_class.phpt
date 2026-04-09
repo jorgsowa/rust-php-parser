@@ -44,13 +44,17 @@ final readonly class Money {
                             "kind": "Unqualified",
                             "span": {
                               "start": 83,
-                              "end": 86
+                              "end": 86,
+                              "start_line": 4,
+                              "start_col": 15
                             }
                           }
                         },
                         "span": {
                           "start": 83,
-                          "end": 86
+                          "end": 86,
+                          "start_line": 4,
+                          "start_col": 15
                         }
                       },
                       "default": null,
@@ -63,7 +67,9 @@ final readonly class Money {
                       "attributes": [],
                       "span": {
                         "start": 76,
-                        "end": 94
+                        "end": 94,
+                        "start_line": 4,
+                        "start_col": 8
                       }
                     },
                     {
@@ -77,13 +83,17 @@ final readonly class Money {
                             "kind": "Unqualified",
                             "span": {
                               "start": 111,
-                              "end": 117
+                              "end": 117,
+                              "start_line": 5,
+                              "start_col": 15
                             }
                           }
                         },
                         "span": {
                           "start": 111,
-                          "end": 117
+                          "end": 117,
+                          "start_line": 5,
+                          "start_col": 15
                         }
                       },
                       "default": null,
@@ -96,7 +106,9 @@ final readonly class Money {
                       "attributes": [],
                       "span": {
                         "start": 104,
-                        "end": 127
+                        "end": 127,
+                        "start_line": 5,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -107,7 +119,9 @@ final readonly class Money {
               },
               "span": {
                 "start": 39,
-                "end": 138
+                "end": 138,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -116,12 +130,16 @@ final readonly class Money {
       },
       "span": {
         "start": 21,
-        "end": 139
+        "end": 139,
+        "start_line": 2,
+        "start_col": 15
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 139
+    "end": 139,
+    "start_line": 1,
+    "start_col": 0
   }
 }

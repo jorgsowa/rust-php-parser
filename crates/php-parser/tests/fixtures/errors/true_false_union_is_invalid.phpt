@@ -23,13 +23,17 @@ Type contains both true and false, bool must be used instead
                       "kind": "Unqualified",
                       "span": {
                         "start": 20,
-                        "end": 24
+                        "end": 24,
+                        "start_line": 1,
+                        "start_col": 20
                       }
                     }
                   },
                   "span": {
                     "start": 20,
-                    "end": 24
+                    "end": 24,
+                    "start_line": 1,
+                    "start_col": 20
                   }
                 },
                 {
@@ -41,20 +45,26 @@ Type contains both true and false, bool must be used instead
                       "kind": "Unqualified",
                       "span": {
                         "start": 25,
-                        "end": 30
+                        "end": 30,
+                        "start_line": 1,
+                        "start_col": 25
                       }
                     }
                   },
                   "span": {
                     "start": 25,
-                    "end": 30
+                    "end": 30,
+                    "start_line": 1,
+                    "start_col": 25
                   }
                 }
               ]
             },
             "span": {
               "start": 20,
-              "end": 30
+              "end": 30,
+              "start_line": 1,
+              "start_col": 20
             }
           },
           "by_ref": false,
@@ -63,12 +73,16 @@ Type contains both true and false, bool must be used instead
       },
       "span": {
         "start": 6,
-        "end": 33
+        "end": 33,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 33
+    "end": 33,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -39,7 +39,9 @@ foreach ($map as $key => $value) {
                   },
                   "span": {
                     "start": 10,
-                    "end": 12
+                    "end": 12,
+                    "start_line": 2,
+                    "start_col": 4
                   }
                 },
                 "op": "Greater",
@@ -49,14 +51,18 @@ foreach ($map as $key => $value) {
                   },
                   "span": {
                     "start": 15,
-                    "end": 16
+                    "end": 16,
+                    "start_line": 2,
+                    "start_col": 9
                   }
                 }
               }
             },
             "span": {
               "start": 10,
-              "end": 16
+              "end": 16,
+              "start_line": 2,
+              "start_col": 4
             }
           },
           "then_branch": {
@@ -71,21 +77,27 @@ foreach ($map as $key => $value) {
                         },
                         "span": {
                           "start": 29,
-                          "end": 39
+                          "end": 39,
+                          "start_line": 3,
+                          "start_col": 9
                         }
                       }
                     ]
                   },
                   "span": {
                     "start": 24,
-                    "end": 41
+                    "end": 41,
+                    "start_line": 3,
+                    "start_col": 4
                   }
                 }
               ]
             },
             "span": {
               "start": 18,
-              "end": 42
+              "end": 42,
+              "start_line": 2,
+              "start_col": 12
             }
           },
           "elseif_branches": [
@@ -99,7 +111,9 @@ foreach ($map as $key => $value) {
                       },
                       "span": {
                         "start": 51,
-                        "end": 53
+                        "end": 53,
+                        "start_line": 4,
+                        "start_col": 10
                       }
                     },
                     "op": "Less",
@@ -109,14 +123,18 @@ foreach ($map as $key => $value) {
                       },
                       "span": {
                         "start": 56,
-                        "end": 57
+                        "end": 57,
+                        "start_line": 4,
+                        "start_col": 15
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 51,
-                  "end": 57
+                  "end": 57,
+                  "start_line": 4,
+                  "start_col": 10
                 }
               },
               "body": {
@@ -131,26 +149,34 @@ foreach ($map as $key => $value) {
                             },
                             "span": {
                               "start": 70,
-                              "end": 80
+                              "end": 80,
+                              "start_line": 5,
+                              "start_col": 9
                             }
                           }
                         ]
                       },
                       "span": {
                         "start": 65,
-                        "end": 82
+                        "end": 82,
+                        "start_line": 5,
+                        "start_col": 4
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 59,
-                  "end": 83
+                  "end": 83,
+                  "start_line": 4,
+                  "start_col": 18
                 }
               },
               "span": {
                 "start": 50,
-                "end": 83
+                "end": 83,
+                "start_line": 4,
+                "start_col": 9
               }
             }
           ],
@@ -166,28 +192,36 @@ foreach ($map as $key => $value) {
                         },
                         "span": {
                           "start": 100,
-                          "end": 106
+                          "end": 106,
+                          "start_line": 7,
+                          "start_col": 9
                         }
                       }
                     ]
                   },
                   "span": {
                     "start": 95,
-                    "end": 108
+                    "end": 108,
+                    "start_line": 7,
+                    "start_col": 4
                   }
                 }
               ]
             },
             "span": {
               "start": 89,
-              "end": 109
+              "end": 109,
+              "start_line": 6,
+              "start_col": 7
             }
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 109
+        "end": 109,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -202,7 +236,9 @@ foreach ($map as $key => $value) {
                   },
                   "span": {
                     "start": 118,
-                    "end": 120
+                    "end": 120,
+                    "start_line": 10,
+                    "start_col": 7
                   }
                 },
                 "op": "Less",
@@ -212,14 +248,18 @@ foreach ($map as $key => $value) {
                   },
                   "span": {
                     "start": 123,
-                    "end": 125
+                    "end": 125,
+                    "start_line": 10,
+                    "start_col": 12
                   }
                 }
               }
             },
             "span": {
               "start": 118,
-              "end": 125
+              "end": 125,
+              "start_line": 10,
+              "start_col": 7
             }
           },
           "body": {
@@ -236,7 +276,9 @@ foreach ($map as $key => $value) {
                             },
                             "span": {
                               "start": 133,
-                              "end": 135
+                              "end": 135,
+                              "start_line": 11,
+                              "start_col": 4
                             }
                           },
                           "op": "Assign",
@@ -249,7 +291,9 @@ foreach ($map as $key => $value) {
                                   },
                                   "span": {
                                     "start": 138,
-                                    "end": 140
+                                    "end": 140,
+                                    "start_line": 11,
+                                    "start_col": 9
                                   }
                                 },
                                 "op": "Add",
@@ -259,41 +303,53 @@ foreach ($map as $key => $value) {
                                   },
                                   "span": {
                                     "start": 143,
-                                    "end": 144
+                                    "end": 144,
+                                    "start_line": 11,
+                                    "start_col": 14
                                   }
                                 }
                               }
                             },
                             "span": {
                               "start": 138,
-                              "end": 144
+                              "end": 144,
+                              "start_line": 11,
+                              "start_col": 9
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 133,
-                        "end": 144
+                        "end": 144,
+                        "start_line": 11,
+                        "start_col": 4
                       }
                     }
                   },
                   "span": {
                     "start": 133,
-                    "end": 146
+                    "end": 146,
+                    "start_line": 11,
+                    "start_col": 4
                   }
                 }
               ]
             },
             "span": {
               "start": 127,
-              "end": 147
+              "end": 147,
+              "start_line": 10,
+              "start_col": 16
             }
           }
         }
       },
       "span": {
         "start": 111,
-        "end": 147
+        "end": 147,
+        "start_line": 10,
+        "start_col": 0
       }
     },
     {
@@ -309,7 +365,9 @@ foreach ($map as $key => $value) {
                     },
                     "span": {
                       "start": 154,
-                      "end": 156
+                      "end": 156,
+                      "start_line": 14,
+                      "start_col": 5
                     }
                   },
                   "op": "Assign",
@@ -319,14 +377,18 @@ foreach ($map as $key => $value) {
                     },
                     "span": {
                       "start": 159,
-                      "end": 160
+                      "end": 160,
+                      "start_line": 14,
+                      "start_col": 10
                     }
                   }
                 }
               },
               "span": {
                 "start": 154,
-                "end": 160
+                "end": 160,
+                "start_line": 14,
+                "start_col": 5
               }
             }
           ],
@@ -340,7 +402,9 @@ foreach ($map as $key => $value) {
                     },
                     "span": {
                       "start": 162,
-                      "end": 164
+                      "end": 164,
+                      "start_line": 14,
+                      "start_col": 13
                     }
                   },
                   "op": "Less",
@@ -350,14 +414,18 @@ foreach ($map as $key => $value) {
                     },
                     "span": {
                       "start": 167,
-                      "end": 169
+                      "end": 169,
+                      "start_line": 14,
+                      "start_col": 18
                     }
                   }
                 }
               },
               "span": {
                 "start": 162,
-                "end": 169
+                "end": 169,
+                "start_line": 14,
+                "start_col": 13
               }
             }
           ],
@@ -371,7 +439,9 @@ foreach ($map as $key => $value) {
                     },
                     "span": {
                       "start": 171,
-                      "end": 173
+                      "end": 173,
+                      "start_line": 14,
+                      "start_col": 22
                     }
                   },
                   "op": "PostIncrement"
@@ -379,7 +449,9 @@ foreach ($map as $key => $value) {
               },
               "span": {
                 "start": 171,
-                "end": 175
+                "end": 175,
+                "start_line": 14,
+                "start_col": 22
               }
             }
           ],
@@ -395,28 +467,36 @@ foreach ($map as $key => $value) {
                         },
                         "span": {
                           "start": 188,
-                          "end": 190
+                          "end": 190,
+                          "start_line": 15,
+                          "start_col": 9
                         }
                       }
                     ]
                   },
                   "span": {
                     "start": 183,
-                    "end": 192
+                    "end": 192,
+                    "start_line": 15,
+                    "start_col": 4
                   }
                 }
               ]
             },
             "span": {
               "start": 177,
-              "end": 193
+              "end": 193,
+              "start_line": 14,
+              "start_col": 28
             }
           }
         }
       },
       "span": {
         "start": 149,
-        "end": 193
+        "end": 193,
+        "start_line": 14,
+        "start_col": 0
       }
     },
     {
@@ -428,7 +508,9 @@ foreach ($map as $key => $value) {
             },
             "span": {
               "start": 204,
-              "end": 210
+              "end": 210,
+              "start_line": 18,
+              "start_col": 9
             }
           },
           "key": null,
@@ -438,7 +520,9 @@ foreach ($map as $key => $value) {
             },
             "span": {
               "start": 214,
-              "end": 219
+              "end": 219,
+              "start_line": 18,
+              "start_col": 19
             }
           },
           "body": {
@@ -453,28 +537,36 @@ foreach ($map as $key => $value) {
                         },
                         "span": {
                           "start": 232,
-                          "end": 237
+                          "end": 237,
+                          "start_line": 19,
+                          "start_col": 9
                         }
                       }
                     ]
                   },
                   "span": {
                     "start": 227,
-                    "end": 239
+                    "end": 239,
+                    "start_line": 19,
+                    "start_col": 4
                   }
                 }
               ]
             },
             "span": {
               "start": 221,
-              "end": 240
+              "end": 240,
+              "start_line": 18,
+              "start_col": 26
             }
           }
         }
       },
       "span": {
         "start": 195,
-        "end": 240
+        "end": 240,
+        "start_line": 18,
+        "start_col": 0
       }
     },
     {
@@ -486,7 +578,9 @@ foreach ($map as $key => $value) {
             },
             "span": {
               "start": 251,
-              "end": 255
+              "end": 255,
+              "start_line": 22,
+              "start_col": 9
             }
           },
           "key": {
@@ -495,7 +589,9 @@ foreach ($map as $key => $value) {
             },
             "span": {
               "start": 259,
-              "end": 263
+              "end": 263,
+              "start_line": 22,
+              "start_col": 17
             }
           },
           "value": {
@@ -504,7 +600,9 @@ foreach ($map as $key => $value) {
             },
             "span": {
               "start": 267,
-              "end": 273
+              "end": 273,
+              "start_line": 22,
+              "start_col": 25
             }
           },
           "body": {
@@ -519,14 +617,18 @@ foreach ($map as $key => $value) {
                         },
                         "span": {
                           "start": 286,
-                          "end": 290
+                          "end": 290,
+                          "start_line": 23,
+                          "start_col": 9
                         }
                       }
                     ]
                   },
                   "span": {
                     "start": 281,
-                    "end": 296
+                    "end": 296,
+                    "start_line": 23,
+                    "start_col": 4
                   }
                 },
                 {
@@ -538,33 +640,43 @@ foreach ($map as $key => $value) {
                         },
                         "span": {
                           "start": 301,
-                          "end": 307
+                          "end": 307,
+                          "start_line": 24,
+                          "start_col": 9
                         }
                       }
                     ]
                   },
                   "span": {
                     "start": 296,
-                    "end": 309
+                    "end": 309,
+                    "start_line": 24,
+                    "start_col": 4
                   }
                 }
               ]
             },
             "span": {
               "start": 275,
-              "end": 310
+              "end": 310,
+              "start_line": 22,
+              "start_col": 33
             }
           }
         }
       },
       "span": {
         "start": 242,
-        "end": 310
+        "end": 310,
+        "start_line": 22,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 310
+    "end": 310,
+    "start_line": 1,
+    "start_col": 0
   }
 }

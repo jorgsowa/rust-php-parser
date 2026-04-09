@@ -34,7 +34,9 @@ class Config {
                     },
                     "span": {
                       "start": 48,
-                      "end": 53
+                      "end": 53,
+                      "start_line": 3,
+                      "start_col": 27
                     }
                   },
                   "attributes": []
@@ -42,7 +44,9 @@ class Config {
               },
               "span": {
                 "start": 25,
-                "end": 59
+                "end": 59,
+                "start_line": 3,
+                "start_col": 4
               }
             },
             {
@@ -56,7 +60,9 @@ class Config {
                     },
                     "span": {
                       "start": 81,
-                      "end": 86
+                      "end": 86,
+                      "start_line": 4,
+                      "start_col": 26
                     }
                   },
                   "attributes": []
@@ -64,7 +70,9 @@ class Config {
               },
               "span": {
                 "start": 59,
-                "end": 92
+                "end": 92,
+                "start_line": 4,
+                "start_col": 4
               }
             },
             {
@@ -84,13 +92,17 @@ class Config {
                         "kind": "Unqualified",
                         "span": {
                           "start": 106,
-                          "end": 109
+                          "end": 109,
+                          "start_line": 5,
+                          "start_col": 18
                         }
                       }
                     },
                     "span": {
                       "start": 106,
-                      "end": 109
+                      "end": 109,
+                      "start_line": 5,
+                      "start_col": 18
                     }
                   },
                   "default": {
@@ -99,7 +111,9 @@ class Config {
                     },
                     "span": {
                       "start": 119,
-                      "end": 120
+                      "end": 120,
+                      "start_line": 5,
+                      "start_col": 31
                     }
                   },
                   "attributes": []
@@ -107,7 +121,9 @@ class Config {
               },
               "span": {
                 "start": 92,
-                "end": 120
+                "end": 120,
+                "start_line": 5,
+                "start_col": 4
               }
             },
             {
@@ -129,13 +145,17 @@ class Config {
                         "kind": "Unqualified",
                         "span": {
                           "start": 162,
-                          "end": 166
+                          "end": 166,
+                          "start_line": 6,
+                          "start_col": 40
                         }
                       }
                     },
                     "span": {
                       "start": 162,
-                      "end": 166
+                      "end": 166,
+                      "start_line": 6,
+                      "start_col": 40
                     }
                   },
                   "body": [
@@ -153,7 +173,9 @@ class Config {
                                       },
                                       "span": {
                                         "start": 177,
-                                        "end": 181
+                                        "end": 181,
+                                        "start_line": 7,
+                                        "start_col": 8
                                       }
                                     },
                                     "member": "count"
@@ -161,7 +183,9 @@ class Config {
                                 },
                                 "span": {
                                   "start": 177,
-                                  "end": 189
+                                  "end": 189,
+                                  "start_line": 7,
+                                  "start_col": 8
                                 }
                               },
                               "op": "PostIncrement"
@@ -169,13 +193,17 @@ class Config {
                           },
                           "span": {
                             "start": 177,
-                            "end": 191
+                            "end": 191,
+                            "start_line": 7,
+                            "start_col": 8
                           }
                         }
                       },
                       "span": {
                         "start": 177,
-                        "end": 197
+                        "end": 197,
+                        "start_line": 7,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -184,7 +212,9 @@ class Config {
               },
               "span": {
                 "start": 126,
-                "end": 199
+                "end": 199,
+                "start_line": 6,
+                "start_col": 4
               }
             }
           ],
@@ -193,12 +223,16 @@ class Config {
       },
       "span": {
         "start": 6,
-        "end": 200
+        "end": 200,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 200
+    "end": 200,
+    "start_line": 1,
+    "start_col": 0
   }
 }

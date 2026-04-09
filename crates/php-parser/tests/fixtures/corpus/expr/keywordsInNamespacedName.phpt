@@ -22,7 +22,9 @@ private\protected\public\static\abstract\final();
             "kind": "Unqualified",
             "span": {
               "start": 16,
-              "end": 18
+              "end": 18,
+              "start_line": 2,
+              "start_col": 10
             }
           },
           "body": "Simple"
@@ -30,7 +32,9 @@ private\protected\public\static\abstract\final();
       },
       "span": {
         "start": 6,
-        "end": 20
+        "end": 20,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -44,7 +48,9 @@ private\protected\public\static\abstract\final();
             "kind": "Qualified",
             "span": {
               "start": 30,
-              "end": 36
+              "end": 36,
+              "start_line": 3,
+              "start_col": 10
             }
           },
           "body": "Simple"
@@ -52,7 +58,9 @@ private\protected\public\static\abstract\final();
       },
       "span": {
         "start": 20,
-        "end": 38
+        "end": 38,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -65,7 +73,9 @@ private\protected\public\static\abstract\final();
             "kind": "Unqualified",
             "span": {
               "start": 48,
-              "end": 52
+              "end": 52,
+              "start_line": 4,
+              "start_col": 10
             }
           },
           "body": "Simple"
@@ -73,7 +83,9 @@ private\protected\public\static\abstract\final();
       },
       "span": {
         "start": 38,
-        "end": 54
+        "end": 54,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -86,7 +98,9 @@ private\protected\public\static\abstract\final();
             "kind": "Unqualified",
             "span": {
               "start": 64,
-              "end": 70
+              "end": 70,
+              "start_line": 5,
+              "start_col": 10
             }
           },
           "body": "Simple"
@@ -94,7 +108,9 @@ private\protected\public\static\abstract\final();
       },
       "span": {
         "start": 54,
-        "end": 72
+        "end": 72,
+        "start_line": 5,
+        "start_col": 0
       }
     },
     {
@@ -107,7 +123,9 @@ private\protected\public\static\abstract\final();
             "kind": "Unqualified",
             "span": {
               "start": 82,
-              "end": 88
+              "end": 88,
+              "start_line": 6,
+              "start_col": 10
             }
           },
           "body": "Simple"
@@ -115,7 +133,9 @@ private\protected\public\static\abstract\final();
       },
       "span": {
         "start": 72,
-        "end": 90
+        "end": 90,
+        "start_line": 6,
+        "start_col": 0
       }
     },
     {
@@ -129,7 +149,9 @@ private\protected\public\static\abstract\final();
                 },
                 "span": {
                   "start": 90,
-                  "end": 96
+                  "end": 96,
+                  "start_line": 7,
+                  "start_col": 0
                 }
               },
               "args": []
@@ -137,13 +159,17 @@ private\protected\public\static\abstract\final();
           },
           "span": {
             "start": 90,
-            "end": 98
+            "end": 98,
+            "start_line": 7,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 90,
-        "end": 100
+        "end": 100,
+        "start_line": 7,
+        "start_col": 0
       }
     },
     {
@@ -157,7 +183,9 @@ private\protected\public\static\abstract\final();
                 },
                 "span": {
                   "start": 100,
-                  "end": 107
+                  "end": 107,
+                  "start_line": 8,
+                  "start_col": 0
                 }
               },
               "args": []
@@ -165,13 +193,17 @@ private\protected\public\static\abstract\final();
           },
           "span": {
             "start": 100,
-            "end": 109
+            "end": 109,
+            "start_line": 8,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 100,
-        "end": 111
+        "end": 111,
+        "start_line": 8,
+        "start_col": 0
       }
     },
     {
@@ -185,7 +217,9 @@ private\protected\public\static\abstract\final();
                 },
                 "span": {
                   "start": 111,
-                  "end": 127
+                  "end": 127,
+                  "start_line": 9,
+                  "start_col": 0
                 }
               },
               "args": []
@@ -193,13 +227,17 @@ private\protected\public\static\abstract\final();
           },
           "span": {
             "start": 111,
-            "end": 129
+            "end": 129,
+            "start_line": 9,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 111,
-        "end": 131
+        "end": 131,
+        "start_line": 9,
+        "start_col": 0
       }
     },
     {
@@ -213,7 +251,9 @@ private\protected\public\static\abstract\final();
                 },
                 "span": {
                   "start": 131,
-                  "end": 177
+                  "end": 177,
+                  "start_line": 10,
+                  "start_col": 0
                 }
               },
               "args": []
@@ -221,18 +261,24 @@ private\protected\public\static\abstract\final();
           },
           "span": {
             "start": 131,
-            "end": 179
+            "end": 179,
+            "start_line": 10,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 131,
-        "end": 180
+        "end": 180,
+        "start_line": 10,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 180
+    "end": 180,
+    "start_line": 1,
+    "start_col": 0
   }
 }

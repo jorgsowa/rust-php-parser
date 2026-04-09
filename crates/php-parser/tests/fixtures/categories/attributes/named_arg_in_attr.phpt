@@ -20,7 +20,9 @@
                 "kind": "Unqualified",
                 "span": {
                   "start": 8,
-                  "end": 13
+                  "end": 13,
+                  "start_line": 1,
+                  "start_col": 8
                 }
               },
               "args": [
@@ -32,14 +34,18 @@
                     },
                     "span": {
                       "start": 20,
-                      "end": 26
+                      "end": 26,
+                      "start_line": 1,
+                      "start_col": 20
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 14,
-                    "end": 26
+                    "end": 26,
+                    "start_line": 1,
+                    "start_col": 14
                   }
                 },
                 {
@@ -55,33 +61,43 @@
                             },
                             "span": {
                               "start": 38,
-                              "end": 43
+                              "end": 43,
+                              "start_line": 1,
+                              "start_col": 38
                             }
                           },
                           "unpack": false,
                           "span": {
                             "start": 38,
-                            "end": 43
+                            "end": 43,
+                            "start_line": 1,
+                            "start_col": 38
                           }
                         }
                       ]
                     },
                     "span": {
                       "start": 37,
-                      "end": 44
+                      "end": 44,
+                      "start_line": 1,
+                      "start_col": 37
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 28,
-                    "end": 44
+                    "end": 44,
+                    "start_line": 1,
+                    "start_col": 28
                   }
                 }
               ],
               "span": {
                 "start": 8,
-                "end": 45
+                "end": 45,
+                "start_line": 1,
+                "start_col": 8
               }
             }
           ]
@@ -89,12 +105,16 @@
       },
       "span": {
         "start": 47,
-        "end": 68
+        "end": 68,
+        "start_line": 1,
+        "start_col": 47
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 68
+    "end": 68,
+    "start_line": 1,
+    "start_col": 0
   }
 }

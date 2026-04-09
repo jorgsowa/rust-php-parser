@@ -22,12 +22,16 @@ min_php=8.2
       },
       "span": {
         "start": 21,
-        "end": 33
+        "end": 33,
+        "start_line": 1,
+        "start_col": 21
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 33
+    "end": 33,
+    "start_line": 1,
+    "start_col": 0
   }
 }

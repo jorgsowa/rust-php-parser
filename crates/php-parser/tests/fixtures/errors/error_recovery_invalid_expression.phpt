@@ -15,20 +15,26 @@ expected expression
                 "kind": "Error",
                 "span": {
                   "start": 8,
-                  "end": 9
+                  "end": 9,
+                  "start_line": 1,
+                  "start_col": 8
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 9
+            "end": 9,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 10
+        "end": 10,
+        "start_line": 1,
+        "start_col": 6
       }
     },
     {
@@ -42,7 +48,9 @@ expected expression
                 },
                 "span": {
                   "start": 10,
-                  "end": 12
+                  "end": 12,
+                  "start_line": 1,
+                  "start_col": 10
                 }
               },
               "op": "Assign",
@@ -52,25 +60,33 @@ expected expression
                 },
                 "span": {
                   "start": 15,
-                  "end": 16
+                  "end": 16,
+                  "start_line": 1,
+                  "start_col": 15
                 }
               }
             }
           },
           "span": {
             "start": 10,
-            "end": 16
+            "end": 16,
+            "start_line": 1,
+            "start_col": 10
           }
         }
       },
       "span": {
         "start": 10,
-        "end": 17
+        "end": 17,
+        "start_line": 1,
+        "start_col": 10
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 17
+    "end": 17,
+    "start_line": 1,
+    "start_col": 0
   }
 }

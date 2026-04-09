@@ -22,12 +22,16 @@ parse_version=8.4
       },
       "span": {
         "start": 24,
-        "end": 36
+        "end": 36,
+        "start_line": 1,
+        "start_col": 24
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 36
+    "end": 36,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -26,7 +26,9 @@
                       "kind": "Unqualified",
                       "span": {
                         "start": 20,
-                        "end": 21
+                        "end": 21,
+                        "start_line": 1,
+                        "start_col": 20
                       }
                     },
                     {
@@ -36,7 +38,9 @@
                       "kind": "Unqualified",
                       "span": {
                         "start": 23,
-                        "end": 25
+                        "end": 25,
+                        "start_line": 1,
+                        "start_col": 23
                       }
                     }
                   ],
@@ -51,7 +55,9 @@
                             "kind": "Unqualified",
                             "span": {
                               "start": 27,
-                              "end": 28
+                              "end": 28,
+                              "start_line": 1,
+                              "start_col": 27
                             }
                           },
                           "method": "m",
@@ -63,7 +69,9 @@
                               "kind": "Unqualified",
                               "span": {
                                 "start": 42,
-                                "end": 43
+                                "end": 43,
+                                "start_line": 1,
+                                "start_col": 42
                               }
                             }
                           ]
@@ -71,7 +79,9 @@
                       },
                       "span": {
                         "start": 27,
-                        "end": 45
+                        "end": 45,
+                        "start_line": 1,
+                        "start_col": 27
                       }
                     },
                     {
@@ -84,7 +94,9 @@
                             "kind": "Unqualified",
                             "span": {
                               "start": 45,
-                              "end": 46
+                              "end": 46,
+                              "start_line": 1,
+                              "start_col": 45
                             }
                           },
                           "method": "n",
@@ -94,7 +106,9 @@
                       },
                       "span": {
                         "start": 45,
-                        "end": 68
+                        "end": 68,
+                        "start_line": 1,
+                        "start_col": 45
                       }
                     }
                   ]
@@ -102,7 +116,9 @@
               },
               "span": {
                 "start": 16,
-                "end": 70
+                "end": 70,
+                "start_line": 1,
+                "start_col": 16
               }
             }
           ],
@@ -111,12 +127,16 @@
       },
       "span": {
         "start": 6,
-        "end": 71
+        "end": 71,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 71
+    "end": 71,
+    "start_line": 1,
+    "start_col": 0
   }
 }

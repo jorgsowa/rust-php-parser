@@ -14,7 +14,9 @@
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "op": "Pow",
@@ -27,7 +29,9 @@
                       },
                       "span": {
                         "start": 12,
-                        "end": 14
+                        "end": 14,
+                        "start_line": 1,
+                        "start_col": 12
                       }
                     },
                     "op": "Pow",
@@ -37,32 +41,42 @@
                       },
                       "span": {
                         "start": 18,
-                        "end": 20
+                        "end": 20,
+                        "start_line": 1,
+                        "start_col": 18
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 12,
-                  "end": 20
+                  "end": 20,
+                  "start_line": 1,
+                  "start_col": 12
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 20
+            "end": 20,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 21
+        "end": 21,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 21
+    "end": 21,
+    "start_line": 1,
+    "start_col": 0
   }
 }

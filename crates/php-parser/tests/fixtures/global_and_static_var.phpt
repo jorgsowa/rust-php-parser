@@ -26,19 +26,25 @@ function counter() {
                       },
                       "span": {
                         "start": 47,
-                        "end": 48
+                        "end": 48,
+                        "start_line": 3,
+                        "start_col": 20
                       }
                     },
                     "span": {
                       "start": 38,
-                      "end": 48
+                      "end": 48,
+                      "start_line": 3,
+                      "start_col": 11
                     }
                   }
                 ]
               },
               "span": {
                 "start": 31,
-                "end": 54
+                "end": 54,
+                "start_line": 3,
+                "start_col": 4
               }
             },
             {
@@ -50,14 +56,18 @@ function counter() {
                     },
                     "span": {
                       "start": 61,
-                      "end": 68
+                      "end": 68,
+                      "start_line": 4,
+                      "start_col": 11
                     }
                   }
                 ]
               },
               "span": {
                 "start": 54,
-                "end": 74
+                "end": 74,
+                "start_line": 4,
+                "start_col": 4
               }
             },
             {
@@ -71,7 +81,9 @@ function counter() {
                         },
                         "span": {
                           "start": 74,
-                          "end": 80
+                          "end": 80,
+                          "start_line": 5,
+                          "start_col": 4
                         }
                       },
                       "op": "PostIncrement"
@@ -79,13 +91,17 @@ function counter() {
                   },
                   "span": {
                     "start": 74,
-                    "end": 82
+                    "end": 82,
+                    "start_line": 5,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 74,
-                "end": 88
+                "end": 88,
+                "start_line": 5,
+                "start_col": 4
               }
             },
             {
@@ -96,13 +112,17 @@ function counter() {
                   },
                   "span": {
                     "start": 95,
-                    "end": 101
+                    "end": 101,
+                    "start_line": 6,
+                    "start_col": 11
                   }
                 }
               },
               "span": {
                 "start": 88,
-                "end": 103
+                "end": 103,
+                "start_line": 6,
+                "start_col": 4
               }
             }
           ],
@@ -113,12 +133,16 @@ function counter() {
       },
       "span": {
         "start": 6,
-        "end": 104
+        "end": 104,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 104
+    "end": 104,
+    "start_line": 1,
+    "start_col": 0
   }
 }

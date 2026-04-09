@@ -150,7 +150,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                 if parser.check(TokenKind::LeftParen) {
                     match parse_arg_list_or_callable(parser) {
                         ArgListResult::CallableMarker => {
-                            let span = Span::new(lhs.span.start, parser.current_span().start);
+                            let span = parser.span(lhs.span.start, parser.current_span().start);
                             let callable_kind = if is_nullsafe {
                                 CallableCreateKind::NullsafeMethod {
                                     object: parser.alloc(lhs),
@@ -170,7 +170,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                             };
                         }
                         ArgListResult::Args(args) => {
-                            let span = Span::new(lhs.span.start, parser.current_span().start);
+                            let span = parser.span(lhs.span.start, parser.current_span().start);
                             let call = parser.alloc(MethodCallExpr {
                                 object: parser.alloc(lhs),
                                 method: parser.alloc(member),
@@ -188,7 +188,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                         }
                     }
                 } else {
-                    let span = Span::new(lhs.span.start, member.span.end);
+                    let span = parser.span(lhs.span.start, member.span.end);
                     let expr_kind = if is_nullsafe {
                         ExprKind::NullsafePropertyAccess(PropertyAccessExpr {
                             object: parser.alloc(lhs),
@@ -275,7 +275,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                 let src = parser.source;
                 let member =
                     Cow::Borrowed(&src[token.span.start as usize + 1..token.span.end as usize]);
-                let span = Span::new(lhs.span.start, token.span.end);
+                let span = parser.span(lhs.span.start, token.span.end);
                 lhs = Expr {
                     kind: ExprKind::StaticPropertyAccess(StaticAccessExpr {
                         class: parser.alloc(lhs),
@@ -286,7 +286,7 @@ pub fn parse_expr_bp<'arena, 'src>(
             } else if parser.check(TokenKind::Dollar) {
                 // Dynamic static property: A::$$b, A::${'b'}
                 let member = parse_atom(parser);
-                let span = Span::new(lhs.span.start, member.span.end);
+                let span = parser.span(lhs.span.start, member.span.end);
                 lhs = Expr {
                     kind: ExprKind::StaticPropertyAccessDynamic {
                         class: parser.alloc(lhs),
@@ -303,7 +303,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                     // Dynamic static method call: A::{'b'}()
                     match parse_arg_list_or_callable(parser) {
                         ArgListResult::CallableMarker => {
-                            let span = Span::new(lhs.span.start, parser.current_span().start);
+                            let span = parser.span(lhs.span.start, parser.current_span().start);
                             lhs = Expr {
                                 kind: ExprKind::CallableCreate(CallableCreateExpr {
                                     kind: CallableCreateKind::StaticMethod {
@@ -321,9 +321,9 @@ pub fn parse_expr_bp<'arena, 'src>(
                                     class: parser.alloc(lhs),
                                     member: parser.alloc(member),
                                 },
-                                span: Span::new(lhs_start, parser.current_span().start),
+                                span: parser.span(lhs_start, parser.current_span().start),
                             };
-                            let span = Span::new(lhs_start, parser.current_span().start);
+                            let span = parser.span(lhs_start, parser.current_span().start);
                             lhs = Expr {
                                 kind: ExprKind::FunctionCall(FunctionCallExpr {
                                     name: parser.alloc(callee),
@@ -335,7 +335,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                     }
                 } else {
                     // Dynamic class constant: Foo::{bar()}
-                    let span = Span::new(lhs.span.start, parser.current_span().start);
+                    let span = parser.span(lhs.span.start, parser.current_span().start);
                     lhs = Expr {
                         kind: ExprKind::ClassConstAccessDynamic {
                             class: parser.alloc(lhs),
@@ -347,7 +347,7 @@ pub fn parse_expr_bp<'arena, 'src>(
             } else if parser.check(TokenKind::Class) {
                 // Special: Class::class (class name resolution)
                 let token = parser.advance();
-                let span = Span::new(lhs.span.start, token.span.end);
+                let span = parser.span(lhs.span.start, token.span.end);
                 lhs = Expr {
                     kind: ExprKind::ClassConstAccess(StaticAccessExpr {
                         class: parser.alloc(lhs),
@@ -373,7 +373,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                 if parser.check(TokenKind::LeftParen) {
                     match parse_arg_list_or_callable(parser) {
                         ArgListResult::CallableMarker => {
-                            let span = Span::new(lhs.span.start, parser.current_span().start);
+                            let span = parser.span(lhs.span.start, parser.current_span().start);
                             lhs = Expr {
                                 kind: ExprKind::CallableCreate(CallableCreateExpr {
                                     kind: CallableCreateKind::StaticMethod {
@@ -385,7 +385,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                             };
                         }
                         ArgListResult::Args(args) => {
-                            let span = Span::new(lhs.span.start, parser.current_span().start);
+                            let span = parser.span(lhs.span.start, parser.current_span().start);
                             lhs = Expr {
                                 kind: ExprKind::StaticMethodCall(parser.alloc(
                                     StaticMethodCallExpr {
@@ -400,7 +400,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                     }
                 } else {
                     // Class constant
-                    let span = Span::new(lhs.span.start, parser.current_span().start);
+                    let span = parser.span(lhs.span.start, parser.current_span().start);
                     lhs = Expr {
                         kind: ExprKind::ClassConstAccess(StaticAccessExpr {
                             class: parser.alloc(lhs),
@@ -426,7 +426,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                 Some(parser.alloc(e))
             };
             parser.expect(TokenKind::RightBracket);
-            let span = Span::new(lhs.span.start, parser.current_span().start);
+            let span = parser.span(lhs.span.start, parser.current_span().start);
             lhs = Expr {
                 kind: ExprKind::ArrayAccess(ArrayAccessExpr {
                     array: parser.alloc(lhs),
@@ -450,7 +450,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                 Some(parser.alloc(e))
             };
             parser.expect(TokenKind::RightBrace);
-            let span = Span::new(lhs.span.start, parser.current_span().start);
+            let span = parser.span(lhs.span.start, parser.current_span().start);
             lhs = Expr {
                 kind: ExprKind::ArrayAccess(ArrayAccessExpr {
                     array: parser.alloc(lhs),
@@ -667,7 +667,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                 parts.push(part);
             }
         }
-        let span = Span::new(token.span.start, parser.current_span().start);
+        let span = parser.span(token.span.start, parser.current_span().start);
         let ident = if parts.len() == 1 {
             parser.arena.alloc_str(parts[0])
         } else {
@@ -701,7 +701,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             });
             return Expr {
                 kind: ExprKind::Error,
-                span: Span::new(start, span.end),
+                span: parser.span(start, span.end),
             };
         }
         if parser.check(TokenKind::Function) {
@@ -719,7 +719,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
         });
         return Expr {
             kind: ExprKind::Error,
-            span: Span::new(start, span.end),
+            span: parser.span(start, span.end),
         };
     }
 
@@ -921,6 +921,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                     src,
                     inner,
                     inner_offset,
+                    &parser.line_index,
                 );
                 Expr {
                     kind: ExprKind::InterpolatedString(parts),
@@ -943,6 +944,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                     src,
                     inner,
                     inner_offset,
+                    &parser.line_index,
                 );
                 // Collapse single literal part into String, or use InterpolatedString
                 if parts.len() == 1 {
@@ -983,6 +985,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                     src,
                     inner,
                     inner_offset,
+                    &parser.line_index,
                 );
                 Expr {
                     kind: ExprKind::ShellExec(parts),
@@ -1007,6 +1010,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                     src,
                     inner,
                     inner_offset,
+                    &parser.line_index,
                 );
                 Expr {
                     kind: ExprKind::ShellExec(parts),
@@ -1035,6 +1039,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                         raw_body,
                         body_offset,
                         &indent,
+                        &parser.line_index,
                     );
                     Expr {
                         kind: ExprKind::Heredoc { label, parts },
@@ -1047,6 +1052,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                         src,
                         raw_body,
                         body_offset,
+                        &parser.line_index,
                     );
                     Expr {
                         kind: ExprKind::Heredoc { label, parts },
@@ -1144,7 +1150,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                 // $$var or $$$var — parse_atom handles recursion
                 parse_atom(parser)
             };
-            let span = Span::new(token.span.start, inner.span.end);
+            let span = parser.span(token.span.start, inner.span.end);
             Expr {
                 kind: ExprKind::VariableVariable(parser.alloc(inner)),
                 span,
@@ -1166,7 +1172,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                         parts.push(part);
                     }
                 }
-                let span = Span::new(token.span.start, parser.current_span().start);
+                let span = parser.span(token.span.start, parser.current_span().start);
                 Expr {
                     kind: ExprKind::Identifier(parser.arena.alloc_str(&parts.join("\\"))),
                     span,
@@ -1185,7 +1191,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             let name = parser.parse_name();
             Expr {
                 kind: ExprKind::Identifier(parser.arena.alloc_str(&name.to_string_repr())),
-                span: Span::new(start, name.span().end),
+                span: parser.span(start, name.span().end),
             }
         }
 
@@ -1279,7 +1285,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             let open = parser.advance(); // consume (
             let inner = parse_expr(parser);
             parser.expect_closing(TokenKind::RightParen, open.span);
-            let span = Span::new(start, parser.current_span().start);
+            let span = parser.span(start, parser.current_span().start);
             Expr {
                 kind: ExprKind::Parenthesized(parser.alloc(inner)),
                 span,
@@ -1314,7 +1320,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                 .unwrap_or(parser.current_span().start);
             Expr {
                 kind: ExprKind::Isset(exprs),
-                span: Span::new(start, end),
+                span: parser.span(start, end),
             }
         }
 
@@ -1330,7 +1336,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                 .unwrap_or(parser.current_span().start);
             Expr {
                 kind: ExprKind::Empty(parser.alloc(inner)),
-                span: Span::new(start, end),
+                span: parser.span(start, end),
             }
         }
 
@@ -1346,7 +1352,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                 .unwrap_or(parser.current_span().start);
             Expr {
                 kind: ExprKind::Eval(parser.alloc(inner)),
-                span: Span::new(start, end),
+                span: parser.span(start, end),
             }
         }
 
@@ -1403,7 +1409,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                             kind: ExprKind::Identifier(name_text),
                             span: token.span,
                         };
-                        let span = Span::new(token.span.start, parser.current_span().start);
+                        let span = parser.span(token.span.start, parser.current_span().start);
                         Expr {
                             kind: ExprKind::CallableCreate(CallableCreateExpr {
                                 kind: CallableCreateKind::Function(parser.alloc(callee)),
@@ -1412,7 +1418,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                         }
                     }
                     ArgListResult::Args(args) => {
-                        let span = Span::new(token.span.start, parser.current_span().start);
+                        let span = parser.span(token.span.start, parser.current_span().start);
                         if args.is_empty() {
                             // exit()
                             Expr {
@@ -1467,7 +1473,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                             "clone(...) first-class callable",
                             token.span,
                         );
-                        let span = Span::new(token.span.start, parser.current_span().start);
+                        let span = parser.span(token.span.start, parser.current_span().start);
                         let callee = Expr {
                             kind: ExprKind::Identifier(name_text),
                             span: token.span,
@@ -1480,7 +1486,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                         }
                     }
                     ArgListResult::Args(args) => {
-                        let span = Span::new(token.span.start, parser.current_span().start);
+                        let span = parser.span(token.span.start, parser.current_span().start);
                         let is_simple =
                             args.len() == 1 && args[0].name.is_none() && !args[0].unpack;
                         let is_clone_with = args.len() == 2
@@ -1613,7 +1619,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                     .alloc_str(&format!("namespace\\{}", name.join_parts()));
                 Expr {
                     kind: ExprKind::Identifier(text),
-                    span: Span::new(start, name.span().end),
+                    span: parser.span(start, name.span().end),
                 }
             } else {
                 let span = parser.current_span();
@@ -1710,7 +1716,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
 
         let anon_class_expr = Expr {
             kind: ExprKind::AnonymousClass(parser.alloc(class_decl)),
-            span: Span::new(start, end),
+            span: parser.span(start, end),
         };
 
         return Expr {
@@ -1718,7 +1724,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
                 class: parser.alloc(anon_class_expr),
                 args,
             }),
-            span: Span::new(start, end),
+            span: parser.span(start, end),
         };
     }
 
@@ -1762,7 +1768,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
             let open = parser.advance(); // consume (
             let inner = parse_expr(parser);
             parser.expect_closing(TokenKind::RightParen, open.span);
-            let paren_span = Span::new(paren_start, parser.current_span().start);
+            let paren_span = parser.span(paren_start, parser.current_span().start);
             Expr {
                 kind: ExprKind::Parenthesized(parser.alloc(inner)),
                 span: paren_span,
@@ -1785,7 +1791,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         parser.alloc_vec()
     };
 
-    let span = Span::new(start, parser.current_span().start);
+    let span = parser.span(start, parser.current_span().start);
     Expr {
         kind: ExprKind::New(NewExpr {
             class: parser.alloc(class),
@@ -1859,7 +1865,7 @@ fn parse_closure<'arena, 'src>(
             body,
             attributes,
         })),
-        span: Span::new(start, end),
+        span: parser.span(start, end),
     }
 }
 
@@ -1876,7 +1882,7 @@ fn parse_closure_use_list<'arena, 'src>(
         if let Some(token) = parser.eat(TokenKind::Variable) {
             let src = parser.source;
             let name = &src[token.span.start as usize + 1..token.span.end as usize];
-            let span = Span::new(var_start, token.span.end);
+            let span = parser.span(var_start, token.span.end);
             vars.push(ClosureUseVar { name, by_ref, span });
         }
         if parser.eat(TokenKind::Comma).is_none() {
@@ -1913,7 +1919,7 @@ fn parse_arrow_function<'arena, 'src>(
 
     parser.expect(TokenKind::FatArrow);
     let body = parse_expr(parser);
-    let span = Span::new(start, body.span.end);
+    let span = parser.span(start, body.span.end);
 
     Expr {
         kind: ExprKind::ArrowFunction(parser.alloc(ArrowFunctionExpr {
@@ -1972,7 +1978,7 @@ fn parse_match_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
 
         parser.expect(TokenKind::FatArrow);
         let body = parse_expr(parser);
-        let arm_span = Span::new(arm_start, body.span.end);
+        let arm_span = parser.span(arm_start, body.span.end);
 
         arms.push(MatchArm {
             conditions,
@@ -1996,7 +2002,7 @@ fn parse_match_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
             subject: parser.alloc(subject),
             arms,
         }),
-        span: Span::new(start, end),
+        span: parser.span(start, end),
     }
 }
 
@@ -2012,7 +2018,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     if parser.check(TokenKind::From) {
         parser.advance();
         let value = parse_expr(parser);
-        let span = Span::new(start, value.span.end);
+        let span = parser.span(start, value.span.end);
         return Expr {
             kind: ExprKind::Yield(YieldExpr {
                 key: None,
@@ -2035,7 +2041,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
         || parser.check(TokenKind::Comma)
         || is_binary_only
     {
-        let span = Span::new(start, parser.current_span().start);
+        let span = parser.span(start, parser.current_span().start);
         return Expr {
             kind: ExprKind::Yield(YieldExpr {
                 key: None,
@@ -2051,7 +2057,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     // yield key => value
     if parser.eat(TokenKind::FatArrow).is_some() {
         let value = parse_expr(parser);
-        let span = Span::new(start, value.span.end);
+        let span = parser.span(start, value.span.end);
         return Expr {
             kind: ExprKind::Yield(YieldExpr {
                 key: Some(parser.alloc(first)),
@@ -2063,7 +2069,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     }
 
     // yield value
-    let span = Span::new(start, first.span.end);
+    let span = parser.span(start, first.span.end);
     Expr {
         kind: ExprKind::Yield(YieldExpr {
             key: None,
@@ -2188,7 +2194,7 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
 
     let value = parse_expr(parser);
-    let span = Span::new(start, value.span.end);
+    let span = parser.span(start, value.span.end);
 
     Arg {
         name,
@@ -2207,7 +2213,7 @@ fn parse_function_call<'arena, 'src>(
 
     match parse_arg_list_or_callable(parser) {
         ArgListResult::CallableMarker => {
-            let span = Span::new(start, parser.current_span().start);
+            let span = parser.span(start, parser.current_span().start);
             Expr {
                 kind: ExprKind::CallableCreate(CallableCreateExpr {
                     kind: CallableCreateKind::Function(parser.alloc(callee)),
@@ -2216,7 +2222,7 @@ fn parse_function_call<'arena, 'src>(
             }
         }
         ArgListResult::Args(args) => {
-            let span = Span::new(start, parser.current_span().start);
+            let span = parser.span(start, parser.current_span().start);
             Expr {
                 kind: ExprKind::FunctionCall(FunctionCallExpr {
                     name: parser.alloc(callee),
@@ -2275,7 +2281,7 @@ fn parse_array_literal<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Ex
     let end = close
         .map(|t| t.span.end)
         .unwrap_or(parser.current_span().start);
-    let span = Span::new(start, end);
+    let span = parser.span(start, end);
 
     Expr {
         kind: ExprKind::Array(elements),
@@ -2309,7 +2315,7 @@ fn parse_array_call<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     let end = close
         .map(|t| t.span.end)
         .unwrap_or(parser.current_span().start);
-    let span = Span::new(start, end);
+    let span = parser.span(start, end);
 
     Expr {
         kind: ExprKind::Array(elements),
@@ -2344,7 +2350,7 @@ fn parse_array_element<'arena, 'src>(
         };
         instrument::record_parse_expr_array_second();
         let value = parse_expr(parser);
-        let elem_span = Span::new(elem_start, value.span.end);
+        let elem_span = parser.span(elem_start, value.span.end);
         ArrayElement {
             key: Some(first_expr),
             value,
@@ -2355,7 +2361,7 @@ fn parse_array_element<'arena, 'src>(
     } else {
         // value only (or unpack, or by-ref value)
         instrument::record_parse_array_simple_value();
-        let elem_span = Span::new(elem_start, first_expr.span.end);
+        let elem_span = parser.span(elem_start, first_expr.span.end);
         ArrayElement {
             key: None,
             value: first_expr,
@@ -2405,7 +2411,7 @@ fn parse_list_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'
     let end = close
         .map(|t| t.span.end)
         .unwrap_or(parser.current_span().start);
-    let span = Span::new(start, end);
+    let span = parser.span(start, end);
 
     Expr {
         kind: ExprKind::Array(elements),
@@ -2424,7 +2430,7 @@ fn parse_list_element<'arena, 'src>(
     if parser.check(TokenKind::Ampersand) {
         parser.advance();
         let value = parse_expr(parser);
-        let elem_span = Span::new(elem_start, value.span.end);
+        let elem_span = parser.span(elem_start, value.span.end);
         return ArrayElement {
             key: None,
             value,
@@ -2443,7 +2449,7 @@ fn parse_list_element<'arena, 'src>(
             true
         };
         let value = parse_expr(parser);
-        let elem_span = Span::new(elem_start, value.span.end);
+        let elem_span = parser.span(elem_start, value.span.end);
         ArrayElement {
             key: Some(first),
             value,
@@ -2452,7 +2458,7 @@ fn parse_list_element<'arena, 'src>(
             span: elem_span,
         }
     } else {
-        let elem_span = Span::new(elem_start, first.span.end);
+        let elem_span = parser.span(elem_start, first.span.end);
         ArrayElement {
             key: None,
             value: first,
@@ -2509,7 +2515,7 @@ fn try_parse_cast<'arena, 'src>(
     }
 
     let operand = parse_expr_bp(parser, 41);
-    let span = Span::new(start, operand.span.end);
+    let span = parser.span(start, operand.span.end);
     Some(Expr {
         kind: ExprKind::Cast(cast_kind, parser.alloc(operand)),
         span,

@@ -37,7 +37,9 @@ expected '}', found end of file
               },
               "span": {
                 "start": 22,
-                "end": 45
+                "end": 45,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -46,12 +48,16 @@ expected '}', found end of file
       },
       "span": {
         "start": 6,
-        "end": 45
+        "end": 45,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 45
+    "end": 45,
+    "start_line": 1,
+    "start_col": 0
   }
 }

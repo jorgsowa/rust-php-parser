@@ -28,7 +28,9 @@ switch ($a): ; endswitch;
             },
             "span": {
               "start": 15,
-              "end": 17
+              "end": 17,
+              "start_line": 3,
+              "start_col": 8
             }
           },
           "cases": [
@@ -39,7 +41,9 @@ switch ($a): ; endswitch;
                 },
                 "span": {
                   "start": 30,
-                  "end": 31
+                  "end": 31,
+                  "start_line": 4,
+                  "start_col": 9
                 }
               },
               "body": [
@@ -49,13 +53,17 @@ switch ($a): ; endswitch;
                   },
                   "span": {
                     "start": 41,
-                    "end": 67
+                    "end": 67,
+                    "start_line": 5,
+                    "start_col": 8
                   }
                 }
               ],
               "span": {
                 "start": 25,
-                "end": 67
+                "end": 67,
+                "start_line": 4,
+                "start_col": 4
               }
             },
             {
@@ -65,13 +73,17 @@ switch ($a): ; endswitch;
                 },
                 "span": {
                   "start": 72,
-                  "end": 73
+                  "end": 73,
+                  "start_line": 7,
+                  "start_col": 9
                 }
               },
               "body": [],
               "span": {
                 "start": 67,
-                "end": 79
+                "end": 79,
+                "start_line": 7,
+                "start_col": 4
               }
             },
             {
@@ -79,7 +91,9 @@ switch ($a): ; endswitch;
               "body": [],
               "span": {
                 "start": 79,
-                "end": 88
+                "end": 88,
+                "start_line": 8,
+                "start_col": 4
               }
             }
           ]
@@ -87,7 +101,9 @@ switch ($a): ; endswitch;
       },
       "span": {
         "start": 7,
-        "end": 113
+        "end": 113,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -99,7 +115,9 @@ switch ($a): ; endswitch;
             },
             "span": {
               "start": 121,
-              "end": 123
+              "end": 123,
+              "start_line": 12,
+              "start_col": 8
             }
           },
           "cases": []
@@ -107,7 +125,9 @@ switch ($a): ; endswitch;
       },
       "span": {
         "start": 113,
-        "end": 159
+        "end": 159,
+        "start_line": 12,
+        "start_col": 0
       }
     },
     {
@@ -119,7 +139,9 @@ switch ($a): ; endswitch;
             },
             "span": {
               "start": 167,
-              "end": 169
+              "end": 169,
+              "start_line": 16,
+              "start_col": 8
             }
           },
           "cases": []
@@ -127,7 +149,9 @@ switch ($a): ; endswitch;
       },
       "span": {
         "start": 159,
-        "end": 177
+        "end": 177,
+        "start_line": 16,
+        "start_col": 0
       }
     },
     {
@@ -139,7 +163,9 @@ switch ($a): ; endswitch;
             },
             "span": {
               "start": 185,
-              "end": 187
+              "end": 187,
+              "start_line": 17,
+              "start_col": 8
             }
           },
           "cases": []
@@ -147,12 +173,16 @@ switch ($a): ; endswitch;
       },
       "span": {
         "start": 177,
-        "end": 202
+        "end": 202,
+        "start_line": 17,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 202
+    "end": 202,
+    "start_line": 1,
+    "start_col": 0
   }
 }

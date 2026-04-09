@@ -14,13 +14,17 @@ expected ';' after expression
           },
           "span": {
             "start": 7,
-            "end": 15
+            "end": 15,
+            "start_line": 1,
+            "start_col": 7
           }
         }
       },
       "span": {
         "start": 7,
-        "end": 16
+        "end": 16,
+        "start_line": 1,
+        "start_col": 7
       }
     },
     {
@@ -31,18 +35,24 @@ expected ';' after expression
           },
           "span": {
             "start": 16,
-            "end": 22
+            "end": 22,
+            "start_line": 1,
+            "start_col": 16
           }
         }
       },
       "span": {
         "start": 16,
-        "end": 22
+        "end": 22,
+        "start_line": 1,
+        "start_col": 16
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 22
+    "end": 22,
+    "start_line": 1,
+    "start_col": 0
   }
 }

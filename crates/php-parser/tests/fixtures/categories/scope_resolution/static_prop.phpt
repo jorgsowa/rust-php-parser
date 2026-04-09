@@ -32,13 +32,17 @@
                         "kind": "Unqualified",
                         "span": {
                           "start": 32,
-                          "end": 35
+                          "end": 35,
+                          "start_line": 1,
+                          "start_col": 32
                         }
                       }
                     },
                     "span": {
                       "start": 32,
-                      "end": 35
+                      "end": 35,
+                      "start_line": 1,
+                      "start_col": 32
                     }
                   },
                   "default": {
@@ -47,7 +51,9 @@
                     },
                     "span": {
                       "start": 45,
-                      "end": 46
+                      "end": 46,
+                      "start_line": 1,
+                      "start_col": 45
                     }
                   },
                   "attributes": []
@@ -55,7 +61,9 @@
               },
               "span": {
                 "start": 18,
-                "end": 46
+                "end": 46,
+                "start_line": 1,
+                "start_col": 18
               }
             }
           ],
@@ -64,12 +72,16 @@
       },
       "span": {
         "start": 6,
-        "end": 49
+        "end": 49,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 49
+    "end": 49,
+    "start_line": 1,
+    "start_col": 0
   }
 }

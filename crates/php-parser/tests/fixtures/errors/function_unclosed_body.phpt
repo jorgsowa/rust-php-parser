@@ -1,7 +1,7 @@
 ===source===
 <?php function test() {
 ===errors===
-unclosed ''}'' opened at Span { start: 22, end: 23 }
+unclosed ''}'' opened at 1:22
 ===ast===
 {
   "stmts": [
@@ -18,12 +18,16 @@ unclosed ''}'' opened at Span { start: 22, end: 23 }
       },
       "span": {
         "start": 6,
-        "end": 23
+        "end": 23,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 23
+    "end": 23,
+    "start_line": 1,
+    "start_col": 0
   }
 }

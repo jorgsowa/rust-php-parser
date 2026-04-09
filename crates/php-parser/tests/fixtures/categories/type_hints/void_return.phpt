@@ -18,13 +18,17 @@
                 "kind": "Unqualified",
                 "span": {
                   "start": 20,
-                  "end": 24
+                  "end": 24,
+                  "start_line": 1,
+                  "start_col": 20
                 }
               }
             },
             "span": {
               "start": 20,
-              "end": 24
+              "end": 24,
+              "start_line": 1,
+              "start_col": 20
             }
           },
           "by_ref": false,
@@ -33,12 +37,16 @@
       },
       "span": {
         "start": 6,
-        "end": 27
+        "end": 27,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 27
+    "end": 27,
+    "start_line": 1,
+    "start_col": 0
   }
 }

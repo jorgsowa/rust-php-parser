@@ -19,7 +19,9 @@ $arr = [
                 },
                 "span": {
                   "start": 6,
-                  "end": 10
+                  "end": 10,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -33,7 +35,9 @@ $arr = [
                         },
                         "span": {
                           "start": 19,
-                          "end": 24
+                          "end": 24,
+                          "start_line": 3,
+                          "start_col": 4
                         }
                       },
                       "value": {
@@ -49,38 +53,50 @@ $arr = [
                         },
                         "span": {
                           "start": 28,
-                          "end": 52
+                          "end": 52,
+                          "start_line": 3,
+                          "start_col": 13
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 19,
-                        "end": 52
+                        "end": 52,
+                        "start_line": 3,
+                        "start_col": 4
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 13,
-                  "end": 55
+                  "end": 55,
+                  "start_line": 2,
+                  "start_col": 7
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 55
+            "end": 55,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 56
+        "end": 56,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 56
+    "end": 56,
+    "start_line": 1,
+    "start_col": 0
   }
 }

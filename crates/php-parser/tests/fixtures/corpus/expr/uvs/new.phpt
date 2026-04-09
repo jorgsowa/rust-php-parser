@@ -20,7 +20,9 @@ new $weird[0]->foo::$className;
                 },
                 "span": {
                   "start": 10,
-                  "end": 20
+                  "end": 20,
+                  "start_line": 2,
+                  "start_col": 4
                 }
               },
               "args": []
@@ -28,13 +30,17 @@ new $weird[0]->foo::$className;
           },
           "span": {
             "start": 6,
-            "end": 20
+            "end": 20,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 22
+        "end": 22,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -51,7 +57,9 @@ new $weird[0]->foo::$className;
                       },
                       "span": {
                         "start": 26,
-                        "end": 32
+                        "end": 32,
+                        "start_line": 3,
+                        "start_col": 4
                       }
                     },
                     "args": []
@@ -59,7 +67,9 @@ new $weird[0]->foo::$className;
                 },
                 "span": {
                   "start": 22,
-                  "end": 32
+                  "end": 32,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "index": {
@@ -68,20 +78,26 @@ new $weird[0]->foo::$className;
                 },
                 "span": {
                   "start": 33,
-                  "end": 44
+                  "end": 44,
+                  "start_line": 3,
+                  "start_col": 11
                 }
               }
             }
           },
           "span": {
             "start": 22,
-            "end": 45
+            "end": 45,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 22,
-        "end": 47
+        "end": 47,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -98,7 +114,9 @@ new $weird[0]->foo::$className;
                       },
                       "span": {
                         "start": 51,
-                        "end": 55
+                        "end": 55,
+                        "start_line": 4,
+                        "start_col": 4
                       }
                     },
                     "args": []
@@ -106,7 +124,9 @@ new $weird[0]->foo::$className;
                 },
                 "span": {
                   "start": 47,
-                  "end": 55
+                  "end": 55,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "property": {
@@ -115,20 +135,26 @@ new $weird[0]->foo::$className;
                 },
                 "span": {
                   "start": 57,
-                  "end": 66
+                  "end": 66,
+                  "start_line": 4,
+                  "start_col": 10
                 }
               }
             }
           },
           "span": {
             "start": 47,
-            "end": 66
+            "end": 66,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 47,
-        "end": 68
+        "end": 68,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -145,7 +171,9 @@ new $weird[0]->foo::$className;
                       },
                       "span": {
                         "start": 72,
-                        "end": 76
+                        "end": 76,
+                        "start_line": 5,
+                        "start_col": 4
                       }
                     },
                     "args": []
@@ -153,7 +181,9 @@ new $weird[0]->foo::$className;
                 },
                 "span": {
                   "start": 68,
-                  "end": 76
+                  "end": 76,
+                  "start_line": 5,
+                  "start_col": 0
                 }
               },
               "member": "className"
@@ -161,13 +191,17 @@ new $weird[0]->foo::$className;
           },
           "span": {
             "start": 68,
-            "end": 88
+            "end": 88,
+            "start_line": 5,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 68,
-        "end": 90
+        "end": 90,
+        "start_line": 5,
+        "start_col": 0
       }
     },
     {
@@ -184,7 +218,9 @@ new $weird[0]->foo::$className;
                       },
                       "span": {
                         "start": 94,
-                        "end": 99
+                        "end": 99,
+                        "start_line": 6,
+                        "start_col": 4
                       }
                     },
                     "args": []
@@ -192,7 +228,9 @@ new $weird[0]->foo::$className;
                 },
                 "span": {
                   "start": 90,
-                  "end": 99
+                  "end": 99,
+                  "start_line": 6,
+                  "start_col": 0
                 }
               },
               "member": "className"
@@ -200,13 +238,17 @@ new $weird[0]->foo::$className;
           },
           "span": {
             "start": 90,
-            "end": 111
+            "end": 111,
+            "start_line": 6,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 90,
-        "end": 113
+        "end": 113,
+        "start_line": 6,
+        "start_col": 0
       }
     },
     {
@@ -229,7 +271,9 @@ new $weird[0]->foo::$className;
                                   },
                                   "span": {
                                     "start": 117,
-                                    "end": 123
+                                    "end": 123,
+                                    "start_line": 7,
+                                    "start_col": 4
                                   }
                                 },
                                 "args": []
@@ -237,7 +281,9 @@ new $weird[0]->foo::$className;
                             },
                             "span": {
                               "start": 113,
-                              "end": 123
+                              "end": 123,
+                              "start_line": 7,
+                              "start_col": 0
                             }
                           },
                           "index": {
@@ -246,14 +292,18 @@ new $weird[0]->foo::$className;
                             },
                             "span": {
                               "start": 124,
-                              "end": 125
+                              "end": 125,
+                              "start_line": 7,
+                              "start_col": 11
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 113,
-                        "end": 126
+                        "end": 126,
+                        "start_line": 7,
+                        "start_col": 0
                       }
                     },
                     "property": {
@@ -262,14 +312,18 @@ new $weird[0]->foo::$className;
                       },
                       "span": {
                         "start": 128,
-                        "end": 131
+                        "end": 131,
+                        "start_line": 7,
+                        "start_col": 15
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 113,
-                  "end": 131
+                  "end": 131,
+                  "start_line": 7,
+                  "start_col": 0
                 }
               },
               "member": "className"
@@ -277,18 +331,24 @@ new $weird[0]->foo::$className;
           },
           "span": {
             "start": 113,
-            "end": 143
+            "end": 143,
+            "start_line": 7,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 113,
-        "end": 144
+        "end": 144,
+        "start_line": 7,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 144
+    "end": 144,
+    "start_line": 1,
+    "start_col": 0
   }
 }

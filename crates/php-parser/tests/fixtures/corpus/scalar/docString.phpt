@@ -44,13 +44,17 @@ EOS;
           },
           "span": {
             "start": 24,
-            "end": 36
+            "end": 36,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 24,
-        "end": 38
+        "end": 38,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -68,13 +72,17 @@ EOS;
           },
           "span": {
             "start": 38,
-            "end": 48
+            "end": 48,
+            "start_line": 6,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 38,
-        "end": 80
+        "end": 80,
+        "start_line": 6,
+        "start_col": 0
       }
     },
     {
@@ -88,13 +96,17 @@ EOS;
           },
           "span": {
             "start": 80,
-            "end": 106
+            "end": 106,
+            "start_line": 10,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 80,
-        "end": 108
+        "end": 108,
+        "start_line": 10,
+        "start_col": 0
       }
     },
     {
@@ -112,13 +124,17 @@ EOS;
           },
           "span": {
             "start": 108,
-            "end": 133
+            "end": 133,
+            "start_line": 13,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 108,
-        "end": 156
+        "end": 156,
+        "start_line": 13,
+        "start_col": 0
       }
     },
     {
@@ -138,7 +154,9 @@ EOS;
                     },
                     "span": {
                       "start": 168,
-                      "end": 170
+                      "end": 170,
+                      "start_line": 19,
+                      "start_col": 5
                     }
                   }
                 }
@@ -147,13 +165,17 @@ EOS;
           },
           "span": {
             "start": 156,
-            "end": 174
+            "end": 174,
+            "start_line": 18,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 156,
-        "end": 176
+        "end": 176,
+        "start_line": 18,
+        "start_col": 0
       }
     },
     {
@@ -173,7 +195,9 @@ EOS;
                     },
                     "span": {
                       "start": 188,
-                      "end": 190
+                      "end": 190,
+                      "start_line": 22,
+                      "start_col": 5
                     }
                   }
                 },
@@ -190,7 +214,9 @@ EOS;
                           },
                           "span": {
                             "start": 195,
-                            "end": 197
+                            "end": 197,
+                            "start_line": 22,
+                            "start_col": 12
                           }
                         },
                         "property": {
@@ -199,14 +225,18 @@ EOS;
                           },
                           "span": {
                             "start": 199,
-                            "end": 200
+                            "end": 200,
+                            "start_line": 22,
+                            "start_col": 16
                           }
                         }
                       }
                     },
                     "span": {
                       "start": 195,
-                      "end": 200
+                      "end": 200,
+                      "start_line": 22,
+                      "start_col": 12
                     }
                   }
                 },
@@ -218,13 +248,17 @@ EOS;
           },
           "span": {
             "start": 176,
-            "end": 209
+            "end": 209,
+            "start_line": 21,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 176,
-        "end": 212
+        "end": 212,
+        "start_line": 21,
+        "start_col": 0
       }
     },
     {
@@ -242,13 +276,17 @@ EOS;
           },
           "span": {
             "start": 212,
-            "end": 230
+            "end": 230,
+            "start_line": 25,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 212,
-        "end": 233
+        "end": 233,
+        "start_line": 25,
+        "start_col": 0
       }
     },
     {
@@ -265,7 +303,9 @@ EOS;
                     },
                     "span": {
                       "start": 240,
-                      "end": 242
+                      "end": 242,
+                      "start_line": 30,
+                      "start_col": 0
                     }
                   }
                 },
@@ -277,18 +317,24 @@ EOS;
           },
           "span": {
             "start": 233,
-            "end": 248
+            "end": 248,
+            "start_line": 29,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 233,
-        "end": 249
+        "end": 249,
+        "start_line": 29,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 249
+    "end": 249,
+    "start_line": 1,
+    "start_col": 0
   }
 }

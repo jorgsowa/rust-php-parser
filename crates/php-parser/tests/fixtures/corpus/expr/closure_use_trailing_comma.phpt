@@ -18,7 +18,9 @@ function() use($a,) {};
                   "by_ref": false,
                   "span": {
                     "start": 21,
-                    "end": 23
+                    "end": 23,
+                    "start_line": 2,
+                    "start_col": 15
                   }
                 }
               ],
@@ -29,18 +31,24 @@ function() use($a,) {};
           },
           "span": {
             "start": 6,
-            "end": 28
+            "end": 28,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 29
+        "end": 29,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 29
+    "end": 29,
+    "start_line": 1,
+    "start_col": 0
   }
 }

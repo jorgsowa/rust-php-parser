@@ -31,7 +31,9 @@ class C {
                       "kind": "Unqualified",
                       "span": {
                         "start": 24,
-                        "end": 26
+                        "end": 26,
+                        "start_line": 3,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -47,7 +49,9 @@ class C {
                       },
                       "span": {
                         "start": 36,
-                        "end": 42
+                        "end": 42,
+                        "start_line": 4,
+                        "start_col": 8
                       }
                     }
                   ]
@@ -55,7 +59,9 @@ class C {
               },
               "span": {
                 "start": 20,
-                "end": 66
+                "end": 66,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -64,12 +70,16 @@ class C {
       },
       "span": {
         "start": 6,
-        "end": 67
+        "end": 67,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 67
+    "end": 67,
+    "start_line": 1,
+    "start_col": 0
   }
 }

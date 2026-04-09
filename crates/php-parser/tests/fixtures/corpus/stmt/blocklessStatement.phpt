@@ -26,7 +26,9 @@ declare (a='b') $C;
             },
             "span": {
               "start": 11,
-              "end": 13
+              "end": 13,
+              "start_line": 3,
+              "start_col": 4
             }
           },
           "then_branch": {
@@ -37,13 +39,17 @@ declare (a='b') $C;
                 },
                 "span": {
                   "start": 15,
-                  "end": 17
+                  "end": 17,
+                  "start_line": 3,
+                  "start_col": 8
                 }
               }
             },
             "span": {
               "start": 15,
-              "end": 19
+              "end": 19,
+              "start_line": 3,
+              "start_col": 8
             }
           },
           "elseif_branches": [
@@ -54,7 +60,9 @@ declare (a='b') $C;
                 },
                 "span": {
                   "start": 27,
-                  "end": 29
+                  "end": 29,
+                  "start_line": 4,
+                  "start_col": 8
                 }
               },
               "body": {
@@ -65,18 +73,24 @@ declare (a='b') $C;
                     },
                     "span": {
                       "start": 31,
-                      "end": 33
+                      "end": 33,
+                      "start_line": 4,
+                      "start_col": 12
                     }
                   }
                 },
                 "span": {
                   "start": 31,
-                  "end": 35
+                  "end": 35,
+                  "start_line": 4,
+                  "start_col": 12
                 }
               },
               "span": {
                 "start": 26,
-                "end": 35
+                "end": 35,
+                "start_line": 4,
+                "start_col": 7
               }
             }
           ],
@@ -88,20 +102,26 @@ declare (a='b') $C;
                 },
                 "span": {
                   "start": 40,
-                  "end": 42
+                  "end": 42,
+                  "start_line": 5,
+                  "start_col": 5
                 }
               }
             },
             "span": {
               "start": 40,
-              "end": 45
+              "end": 45,
+              "start_line": 5,
+              "start_col": 5
             }
           }
         }
       },
       "span": {
         "start": 7,
-        "end": 45
+        "end": 45,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -118,20 +138,26 @@ declare (a='b') $C;
                 },
                 "span": {
                   "start": 54,
-                  "end": 58
+                  "end": 58,
+                  "start_line": 7,
+                  "start_col": 9
                 }
               }
             },
             "span": {
               "start": 54,
-              "end": 61
+              "end": 61,
+              "start_line": 7,
+              "start_col": 9
             }
           }
         }
       },
       "span": {
         "start": 45,
-        "end": 61
+        "end": 61,
+        "start_line": 7,
+        "start_col": 0
       }
     },
     {
@@ -143,7 +169,9 @@ declare (a='b') $C;
             },
             "span": {
               "start": 70,
-              "end": 72
+              "end": 72,
+              "start_line": 9,
+              "start_col": 9
             }
           },
           "key": null,
@@ -153,7 +181,9 @@ declare (a='b') $C;
             },
             "span": {
               "start": 76,
-              "end": 78
+              "end": 78,
+              "start_line": 9,
+              "start_col": 15
             }
           },
           "body": {
@@ -164,20 +194,26 @@ declare (a='b') $C;
                 },
                 "span": {
                   "start": 80,
-                  "end": 83
+                  "end": 83,
+                  "start_line": 9,
+                  "start_col": 19
                 }
               }
             },
             "span": {
               "start": 80,
-              "end": 86
+              "end": 86,
+              "start_line": 9,
+              "start_col": 19
             }
           }
         }
       },
       "span": {
         "start": 61,
-        "end": 86
+        "end": 86,
+        "start_line": 9,
+        "start_col": 0
       }
     },
     {
@@ -189,7 +225,9 @@ declare (a='b') $C;
             },
             "span": {
               "start": 93,
-              "end": 95
+              "end": 95,
+              "start_line": 11,
+              "start_col": 7
             }
           },
           "body": {
@@ -200,20 +238,26 @@ declare (a='b') $C;
                 },
                 "span": {
                   "start": 97,
-                  "end": 99
+                  "end": 99,
+                  "start_line": 11,
+                  "start_col": 11
                 }
               }
             },
             "span": {
               "start": 97,
-              "end": 102
+              "end": 102,
+              "start_line": 11,
+              "start_col": 11
             }
           }
         }
       },
       "span": {
         "start": 86,
-        "end": 102
+        "end": 102,
+        "start_line": 11,
+        "start_col": 0
       }
     },
     {
@@ -227,13 +271,17 @@ declare (a='b') $C;
                 },
                 "span": {
                   "start": 105,
-                  "end": 107
+                  "end": 107,
+                  "start_line": 13,
+                  "start_col": 3
                 }
               }
             },
             "span": {
               "start": 105,
-              "end": 109
+              "end": 109,
+              "start_line": 13,
+              "start_col": 3
             }
           },
           "condition": {
@@ -242,14 +290,18 @@ declare (a='b') $C;
             },
             "span": {
               "start": 116,
-              "end": 118
+              "end": 118,
+              "start_line": 13,
+              "start_col": 14
             }
           }
         }
       },
       "span": {
         "start": 102,
-        "end": 122
+        "end": 122,
+        "start_line": 13,
+        "start_col": 0
       }
     },
     {
@@ -264,7 +316,9 @@ declare (a='b') $C;
                 },
                 "span": {
                   "start": 133,
-                  "end": 136
+                  "end": 136,
+                  "start_line": 15,
+                  "start_col": 11
                 }
               }
             ]
@@ -277,25 +331,33 @@ declare (a='b') $C;
                 },
                 "span": {
                   "start": 138,
-                  "end": 140
+                  "end": 140,
+                  "start_line": 15,
+                  "start_col": 16
                 }
               }
             },
             "span": {
               "start": 138,
-              "end": 141
+              "end": 141,
+              "start_line": 15,
+              "start_col": 16
             }
           }
         }
       },
       "span": {
         "start": 122,
-        "end": 141
+        "end": 141,
+        "start_line": 15,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 141
+    "end": 141,
+    "start_line": 1,
+    "start_col": 0
   }
 }

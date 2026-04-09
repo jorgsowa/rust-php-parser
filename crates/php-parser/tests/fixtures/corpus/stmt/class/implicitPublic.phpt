@@ -40,7 +40,9 @@ abstract class A {
               },
               "span": {
                 "start": 30,
-                "end": 36
+                "end": 36,
+                "start_line": 4,
+                "start_col": 4
               }
             },
             {
@@ -58,7 +60,9 @@ abstract class A {
               },
               "span": {
                 "start": 42,
-                "end": 51
+                "end": 51,
+                "start_line": 5,
+                "start_col": 4
               }
             },
             {
@@ -78,7 +82,9 @@ abstract class A {
               },
               "span": {
                 "start": 57,
-                "end": 84
+                "end": 84,
+                "start_line": 6,
+                "start_col": 4
               }
             },
             {
@@ -98,7 +104,9 @@ abstract class A {
               },
               "span": {
                 "start": 84,
-                "end": 110
+                "end": 110,
+                "start_line": 7,
+                "start_col": 4
               }
             },
             {
@@ -118,7 +126,9 @@ abstract class A {
               },
               "span": {
                 "start": 110,
-                "end": 137
+                "end": 137,
+                "start_line": 8,
+                "start_col": 4
               }
             },
             {
@@ -138,7 +148,9 @@ abstract class A {
               },
               "span": {
                 "start": 137,
-                "end": 170
+                "end": 170,
+                "start_line": 9,
+                "start_col": 4
               }
             },
             {
@@ -158,7 +170,9 @@ abstract class A {
               },
               "span": {
                 "start": 170,
-                "end": 186
+                "end": 186,
+                "start_line": 10,
+                "start_col": 4
               }
             }
           ],
@@ -167,12 +181,16 @@ abstract class A {
       },
       "span": {
         "start": 16,
-        "end": 187
+        "end": 187,
+        "start_line": 3,
+        "start_col": 9
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 187
+    "end": 187,
+    "start_line": 1,
+    "start_col": 0
   }
 }

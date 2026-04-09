@@ -18,7 +18,9 @@ $x = <<<END
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -40,7 +42,9 @@ $x = <<<END
                                 },
                                 "span": {
                                   "start": 29,
-                                  "end": 33
+                                  "end": 33,
+                                  "start_line": 3,
+                                  "start_col": 11
                                 }
                               },
                               "property": {
@@ -49,14 +53,18 @@ $x = <<<END
                                 },
                                 "span": {
                                   "start": 35,
-                                  "end": 39
+                                  "end": 39,
+                                  "start_line": 3,
+                                  "start_col": 17
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 29,
-                            "end": 39
+                            "end": 39,
+                            "start_line": 3,
+                            "start_col": 11
                           }
                         }
                       },
@@ -73,7 +81,9 @@ $x = <<<END
                                 },
                                 "span": {
                                   "start": 46,
-                                  "end": 50
+                                  "end": 50,
+                                  "start_line": 4,
+                                  "start_col": 4
                                 }
                               },
                               "index": {
@@ -82,14 +92,18 @@ $x = <<<END
                                 },
                                 "span": {
                                   "start": 51,
-                                  "end": 52
+                                  "end": 52,
+                                  "start_line": 4,
+                                  "start_col": 9
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 46,
-                            "end": 53
+                            "end": 53,
+                            "start_line": 4,
+                            "start_col": 4
                           }
                         }
                       },
@@ -101,25 +115,33 @@ $x = <<<END
                 },
                 "span": {
                   "start": 11,
-                  "end": 67
+                  "end": 67,
+                  "start_line": 2,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 67
+            "end": 67,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 68
+        "end": 68,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 68
+    "end": 68,
+    "start_line": 1,
+    "start_col": 0
   }
 }

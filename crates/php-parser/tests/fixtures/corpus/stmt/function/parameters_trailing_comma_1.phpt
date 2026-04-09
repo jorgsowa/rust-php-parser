@@ -24,7 +24,9 @@ function foo($bar, ) {
               "attributes": [],
               "span": {
                 "start": 20,
-                "end": 24
+                "end": 24,
+                "start_line": 3,
+                "start_col": 13
               }
             }
           ],
@@ -36,12 +38,16 @@ function foo($bar, ) {
       },
       "span": {
         "start": 7,
-        "end": 31
+        "end": 31,
+        "start_line": 3,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 31
+    "end": 31,
+    "start_line": 1,
+    "start_col": 0
   }
 }

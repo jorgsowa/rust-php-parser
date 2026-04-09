@@ -19,7 +19,9 @@ parse_version=8.4
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "op": "Assign",
@@ -35,7 +37,9 @@ parse_version=8.4
                             },
                             "span": {
                               "start": 11,
-                              "end": 17
+                              "end": 17,
+                              "start_line": 1,
+                              "start_col": 11
                             }
                           },
                           "op": "Pipe",
@@ -49,7 +53,9 @@ parse_version=8.4
                                     },
                                     "span": {
                                       "start": 21,
-                                      "end": 25
+                                      "end": 25,
+                                      "start_line": 1,
+                                      "start_col": 21
                                     }
                                   }
                                 }
@@ -57,14 +63,18 @@ parse_version=8.4
                             },
                             "span": {
                               "start": 21,
-                              "end": 31
+                              "end": 31,
+                              "start_line": 1,
+                              "start_col": 21
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 11,
-                        "end": 31
+                        "end": 31,
+                        "start_line": 1,
+                        "start_col": 11
                       }
                     },
                     "op": "Pipe",
@@ -78,7 +88,9 @@ parse_version=8.4
                               },
                               "span": {
                                 "start": 34,
-                                "end": 44
+                                "end": 44,
+                                "start_line": 1,
+                                "start_col": 34
                               }
                             }
                           }
@@ -86,32 +98,42 @@ parse_version=8.4
                       },
                       "span": {
                         "start": 34,
-                        "end": 49
+                        "end": 49,
+                        "start_line": 1,
+                        "start_col": 34
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 11,
-                  "end": 49
+                  "end": 49,
+                  "start_line": 1,
+                  "start_col": 11
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 49
+            "end": 49,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 50
+        "end": 50,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 50
+    "end": 50,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -18,7 +18,9 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                 },
                 "span": {
                   "start": 6,
-                  "end": 9
+                  "end": 9,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "args": [
@@ -30,14 +32,18 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                     },
                     "span": {
                       "start": 13,
-                      "end": 14
+                      "end": 14,
+                      "start_line": 2,
+                      "start_col": 7
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 10,
-                    "end": 14
+                    "end": 14,
+                    "start_line": 2,
+                    "start_col": 4
                   }
                 },
                 {
@@ -48,14 +54,18 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                     },
                     "span": {
                       "start": 19,
-                      "end": 20
+                      "end": 20,
+                      "start_line": 2,
+                      "start_col": 13
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 16,
-                    "end": 20
+                    "end": 20,
+                    "start_line": 2,
+                    "start_col": 10
                   }
                 },
                 {
@@ -66,14 +76,18 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                     },
                     "span": {
                       "start": 25,
-                      "end": 26
+                      "end": 26,
+                      "start_line": 2,
+                      "start_col": 19
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 22,
-                    "end": 26
+                    "end": 26,
+                    "start_line": 2,
+                    "start_col": 16
                   }
                 }
               ]
@@ -81,13 +95,17 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
           },
           "span": {
             "start": 6,
-            "end": 27
+            "end": 27,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 29
+        "end": 29,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -101,7 +119,9 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                 },
                 "span": {
                   "start": 29,
-                  "end": 32
+                  "end": 32,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "args": [
@@ -113,14 +133,18 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                     },
                     "span": {
                       "start": 36,
-                      "end": 41
+                      "end": 41,
+                      "start_line": 3,
+                      "start_col": 7
                     }
                   },
                   "unpack": true,
                   "by_ref": false,
                   "span": {
                     "start": 33,
-                    "end": 41
+                    "end": 41,
+                    "start_line": 3,
+                    "start_col": 4
                   }
                 },
                 {
@@ -131,14 +155,18 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                     },
                     "span": {
                       "start": 50,
-                      "end": 54
+                      "end": 54,
+                      "start_line": 3,
+                      "start_col": 21
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 43,
-                    "end": 54
+                    "end": 54,
+                    "start_line": 3,
+                    "start_col": 14
                   }
                 }
               ]
@@ -146,13 +174,17 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
           },
           "span": {
             "start": 29,
-            "end": 55
+            "end": 55,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 29,
-        "end": 57
+        "end": 57,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -166,7 +198,9 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                 },
                 "span": {
                   "start": 57,
-                  "end": 60
+                  "end": 60,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "args": [
@@ -178,14 +212,18 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                     },
                     "span": {
                       "start": 61,
-                      "end": 62
+                      "end": 62,
+                      "start_line": 4,
+                      "start_col": 4
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 61,
-                    "end": 62
+                    "end": 62,
+                    "start_line": 4,
+                    "start_col": 4
                   }
                 },
                 {
@@ -196,14 +234,18 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                     },
                     "span": {
                       "start": 64,
-                      "end": 65
+                      "end": 65,
+                      "start_line": 4,
+                      "start_col": 7
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 64,
-                    "end": 65
+                    "end": 65,
+                    "start_line": 4,
+                    "start_col": 7
                   }
                 },
                 {
@@ -214,14 +256,18 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                     },
                     "span": {
                       "start": 73,
-                      "end": 79
+                      "end": 79,
+                      "start_line": 4,
+                      "start_col": 16
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 67,
-                    "end": 79
+                    "end": 79,
+                    "start_line": 4,
+                    "start_col": 10
                   }
                 }
               ]
@@ -229,13 +275,17 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
           },
           "span": {
             "start": 57,
-            "end": 80
+            "end": 80,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 57,
-        "end": 82
+        "end": 82,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -249,7 +299,9 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                 },
                 "span": {
                   "start": 82,
-                  "end": 91
+                  "end": 91,
+                  "start_line": 5,
+                  "start_col": 0
                 }
               },
               "args": [
@@ -274,7 +326,9 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                             "attributes": [],
                             "span": {
                               "start": 105,
-                              "end": 107
+                              "end": 107,
+                              "start_line": 5,
+                              "start_col": 23
                             }
                           }
                         ],
@@ -288,7 +342,9 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                                 },
                                 "span": {
                                   "start": 112,
-                                  "end": 114
+                                  "end": 114,
+                                  "start_line": 5,
+                                  "start_col": 30
                                 }
                               },
                               "op": "Mul",
@@ -298,14 +354,18 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                                 },
                                 "span": {
                                   "start": 117,
-                                  "end": 118
+                                  "end": 118,
+                                  "start_line": 5,
+                                  "start_col": 35
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 112,
-                            "end": 118
+                            "end": 118,
+                            "start_line": 5,
+                            "start_col": 30
                           }
                         },
                         "attributes": []
@@ -313,14 +373,18 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                     },
                     "span": {
                       "start": 102,
-                      "end": 118
+                      "end": 118,
+                      "start_line": 5,
+                      "start_col": 20
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 92,
-                    "end": 118
+                    "end": 118,
+                    "start_line": 5,
+                    "start_col": 10
                   }
                 },
                 {
@@ -331,14 +395,18 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                     },
                     "span": {
                       "start": 127,
-                      "end": 131
+                      "end": 131,
+                      "start_line": 5,
+                      "start_col": 45
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 120,
-                    "end": 131
+                    "end": 131,
+                    "start_line": 5,
+                    "start_col": 38
                   }
                 }
               ]
@@ -346,18 +414,24 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
           },
           "span": {
             "start": 82,
-            "end": 132
+            "end": 132,
+            "start_line": 5,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 82,
-        "end": 133
+        "end": 133,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 133
+    "end": 133,
+    "start_line": 1,
+    "start_col": 0
   }
 }

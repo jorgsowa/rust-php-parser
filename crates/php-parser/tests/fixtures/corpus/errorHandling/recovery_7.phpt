@@ -21,7 +21,9 @@ $k = 2;
                 },
                 "span": {
                   "start": 7,
-                  "end": 9
+                  "end": 9,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -31,20 +33,26 @@ $k = 2;
                 },
                 "span": {
                   "start": 12,
-                  "end": 13
+                  "end": 13,
+                  "start_line": 3,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 7,
-            "end": 13
+            "end": 13,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 7,
-        "end": 15
+        "end": 15,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -54,7 +62,9 @@ $k = 2;
             "kind": "Error",
             "span": {
               "start": 22,
-              "end": 23
+              "end": 23,
+              "start_line": 4,
+              "start_col": 7
             }
           },
           "body": {
@@ -71,7 +81,9 @@ $k = 2;
                             },
                             "span": {
                               "start": 30,
-                              "end": 32
+                              "end": 32,
+                              "start_line": 5,
+                              "start_col": 4
                             }
                           },
                           "op": "Assign",
@@ -81,34 +93,44 @@ $k = 2;
                             },
                             "span": {
                               "start": 35,
-                              "end": 36
+                              "end": 36,
+                              "start_line": 5,
+                              "start_col": 9
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 30,
-                        "end": 36
+                        "end": 36,
+                        "start_line": 5,
+                        "start_col": 4
                       }
                     }
                   },
                   "span": {
                     "start": 30,
-                    "end": 38
+                    "end": 38,
+                    "start_line": 5,
+                    "start_col": 4
                   }
                 }
               ]
             },
             "span": {
               "start": 24,
-              "end": 39
+              "end": 39,
+              "start_line": 4,
+              "start_col": 9
             }
           }
         }
       },
       "span": {
         "start": 15,
-        "end": 39
+        "end": 39,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -122,7 +144,9 @@ $k = 2;
                 },
                 "span": {
                   "start": 40,
-                  "end": 42
+                  "end": 42,
+                  "start_line": 7,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -132,25 +156,33 @@ $k = 2;
                 },
                 "span": {
                   "start": 45,
-                  "end": 46
+                  "end": 46,
+                  "start_line": 7,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 40,
-            "end": 46
+            "end": 46,
+            "start_line": 7,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 40,
-        "end": 123
+        "end": 123,
+        "start_line": 7,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 123
+    "end": 123,
+    "start_line": 1,
+    "start_col": 0
   }
 }

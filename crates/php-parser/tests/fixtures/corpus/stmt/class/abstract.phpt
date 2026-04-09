@@ -37,7 +37,9 @@ abstract class A {
               },
               "span": {
                 "start": 30,
-                "end": 57
+                "end": 57,
+                "start_line": 4,
+                "start_col": 4
               }
             },
             {
@@ -57,7 +59,9 @@ abstract class A {
               },
               "span": {
                 "start": 57,
-                "end": 87
+                "end": 87,
+                "start_line": 5,
+                "start_col": 4
               }
             }
           ],
@@ -66,12 +70,16 @@ abstract class A {
       },
       "span": {
         "start": 16,
-        "end": 88
+        "end": 88,
+        "start_line": 3,
+        "start_col": 9
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 88
+    "end": 88,
+    "start_line": 1,
+    "start_col": 0
   }
 }

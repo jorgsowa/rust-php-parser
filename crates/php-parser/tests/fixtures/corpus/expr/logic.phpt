@@ -32,7 +32,9 @@ $a = $b or $c;
                 },
                 "span": {
                   "start": 22,
-                  "end": 24
+                  "end": 24,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "op": "BooleanAnd",
@@ -42,20 +44,26 @@ $a = $b or $c;
                 },
                 "span": {
                   "start": 28,
-                  "end": 30
+                  "end": 30,
+                  "start_line": 4,
+                  "start_col": 6
                 }
               }
             }
           },
           "span": {
             "start": 22,
-            "end": 30
+            "end": 30,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 22,
-        "end": 32
+        "end": 32,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -69,7 +77,9 @@ $a = $b or $c;
                 },
                 "span": {
                   "start": 32,
-                  "end": 34
+                  "end": 34,
+                  "start_line": 5,
+                  "start_col": 0
                 }
               },
               "op": "BooleanOr",
@@ -79,20 +89,26 @@ $a = $b or $c;
                 },
                 "span": {
                   "start": 38,
-                  "end": 40
+                  "end": 40,
+                  "start_line": 5,
+                  "start_col": 6
                 }
               }
             }
           },
           "span": {
             "start": 32,
-            "end": 40
+            "end": 40,
+            "start_line": 5,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 32,
-        "end": 42
+        "end": 42,
+        "start_line": 5,
+        "start_col": 0
       }
     },
     {
@@ -107,20 +123,26 @@ $a = $b or $c;
                 },
                 "span": {
                   "start": 43,
-                  "end": 45
+                  "end": 45,
+                  "start_line": 6,
+                  "start_col": 1
                 }
               }
             }
           },
           "span": {
             "start": 42,
-            "end": 45
+            "end": 45,
+            "start_line": 6,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 42,
-        "end": 47
+        "end": 47,
+        "start_line": 6,
+        "start_col": 0
       }
     },
     {
@@ -139,27 +161,35 @@ $a = $b or $c;
                       },
                       "span": {
                         "start": 49,
-                        "end": 51
+                        "end": 51,
+                        "start_line": 7,
+                        "start_col": 2
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 48,
-                  "end": 51
+                  "end": 51,
+                  "start_line": 7,
+                  "start_col": 1
                 }
               }
             }
           },
           "span": {
             "start": 47,
-            "end": 51
+            "end": 51,
+            "start_line": 7,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 47,
-        "end": 69
+        "end": 69,
+        "start_line": 7,
+        "start_col": 0
       }
     },
     {
@@ -173,7 +203,9 @@ $a = $b or $c;
                 },
                 "span": {
                   "start": 69,
-                  "end": 71
+                  "end": 71,
+                  "start_line": 10,
+                  "start_col": 0
                 }
               },
               "op": "LogicalAnd",
@@ -183,20 +215,26 @@ $a = $b or $c;
                 },
                 "span": {
                   "start": 76,
-                  "end": 78
+                  "end": 78,
+                  "start_line": 10,
+                  "start_col": 7
                 }
               }
             }
           },
           "span": {
             "start": 69,
-            "end": 78
+            "end": 78,
+            "start_line": 10,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 69,
-        "end": 80
+        "end": 80,
+        "start_line": 10,
+        "start_col": 0
       }
     },
     {
@@ -210,7 +248,9 @@ $a = $b or $c;
                 },
                 "span": {
                   "start": 80,
-                  "end": 82
+                  "end": 82,
+                  "start_line": 11,
+                  "start_col": 0
                 }
               },
               "op": "LogicalOr",
@@ -220,20 +260,26 @@ $a = $b or $c;
                 },
                 "span": {
                   "start": 86,
-                  "end": 88
+                  "end": 88,
+                  "start_line": 11,
+                  "start_col": 6
                 }
               }
             }
           },
           "span": {
             "start": 80,
-            "end": 88
+            "end": 88,
+            "start_line": 11,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 80,
-        "end": 90
+        "end": 90,
+        "start_line": 11,
+        "start_col": 0
       }
     },
     {
@@ -247,7 +293,9 @@ $a = $b or $c;
                 },
                 "span": {
                   "start": 90,
-                  "end": 92
+                  "end": 92,
+                  "start_line": 12,
+                  "start_col": 0
                 }
               },
               "op": "LogicalXor",
@@ -257,20 +305,26 @@ $a = $b or $c;
                 },
                 "span": {
                   "start": 97,
-                  "end": 99
+                  "end": 99,
+                  "start_line": 12,
+                  "start_col": 7
                 }
               }
             }
           },
           "span": {
             "start": 90,
-            "end": 99
+            "end": 99,
+            "start_line": 12,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 90,
-        "end": 116
+        "end": 116,
+        "start_line": 12,
+        "start_col": 0
       }
     },
     {
@@ -287,7 +341,9 @@ $a = $b or $c;
                       },
                       "span": {
                         "start": 116,
-                        "end": 118
+                        "end": 118,
+                        "start_line": 15,
+                        "start_col": 0
                       }
                     },
                     "op": "BooleanAnd",
@@ -297,14 +353,18 @@ $a = $b or $c;
                       },
                       "span": {
                         "start": 122,
-                        "end": 124
+                        "end": 124,
+                        "start_line": 15,
+                        "start_col": 6
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 116,
-                  "end": 124
+                  "end": 124,
+                  "start_line": 15,
+                  "start_col": 0
                 }
               },
               "op": "BooleanOr",
@@ -317,7 +377,9 @@ $a = $b or $c;
                       },
                       "span": {
                         "start": 128,
-                        "end": 130
+                        "end": 130,
+                        "start_line": 15,
+                        "start_col": 12
                       }
                     },
                     "op": "BooleanAnd",
@@ -327,27 +389,35 @@ $a = $b or $c;
                       },
                       "span": {
                         "start": 134,
-                        "end": 136
+                        "end": 136,
+                        "start_line": 15,
+                        "start_col": 18
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 128,
-                  "end": 136
+                  "end": 136,
+                  "start_line": 15,
+                  "start_col": 12
                 }
               }
             }
           },
           "span": {
             "start": 116,
-            "end": 136
+            "end": 136,
+            "start_line": 15,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 116,
-        "end": 138
+        "end": 138,
+        "start_line": 15,
+        "start_col": 0
       }
     },
     {
@@ -364,7 +434,9 @@ $a = $b or $c;
                       },
                       "span": {
                         "start": 138,
-                        "end": 140
+                        "end": 140,
+                        "start_line": 16,
+                        "start_col": 0
                       }
                     },
                     "op": "BooleanAnd",
@@ -379,7 +451,9 @@ $a = $b or $c;
                                 },
                                 "span": {
                                   "start": 145,
-                                  "end": 147
+                                  "end": 147,
+                                  "start_line": 16,
+                                  "start_col": 7
                                 }
                               },
                               "op": "BooleanOr",
@@ -389,27 +463,35 @@ $a = $b or $c;
                                 },
                                 "span": {
                                   "start": 151,
-                                  "end": 153
+                                  "end": 153,
+                                  "start_line": 16,
+                                  "start_col": 13
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 145,
-                            "end": 153
+                            "end": 153,
+                            "start_line": 16,
+                            "start_col": 7
                           }
                         }
                       },
                       "span": {
                         "start": 144,
-                        "end": 155
+                        "end": 155,
+                        "start_line": 16,
+                        "start_col": 6
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 138,
-                  "end": 155
+                  "end": 155,
+                  "start_line": 16,
+                  "start_col": 0
                 }
               },
               "op": "BooleanAnd",
@@ -419,20 +501,26 @@ $a = $b or $c;
                 },
                 "span": {
                   "start": 158,
-                  "end": 160
+                  "end": 160,
+                  "start_line": 16,
+                  "start_col": 20
                 }
               }
             }
           },
           "span": {
             "start": 138,
-            "end": 160
+            "end": 160,
+            "start_line": 16,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 138,
-        "end": 163
+        "end": 163,
+        "start_line": 16,
+        "start_col": 0
       }
     },
     {
@@ -446,7 +534,9 @@ $a = $b or $c;
                 },
                 "span": {
                   "start": 163,
-                  "end": 165
+                  "end": 165,
+                  "start_line": 18,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -459,7 +549,9 @@ $a = $b or $c;
                       },
                       "span": {
                         "start": 168,
-                        "end": 170
+                        "end": 170,
+                        "start_line": 18,
+                        "start_col": 5
                       }
                     },
                     "op": "BooleanOr",
@@ -469,27 +561,35 @@ $a = $b or $c;
                       },
                       "span": {
                         "start": 174,
-                        "end": 176
+                        "end": 176,
+                        "start_line": 18,
+                        "start_col": 11
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 168,
-                  "end": 176
+                  "end": 176,
+                  "start_line": 18,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 163,
-            "end": 176
+            "end": 176,
+            "start_line": 18,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 163,
-        "end": 178
+        "end": 178,
+        "start_line": 18,
+        "start_col": 0
       }
     },
     {
@@ -506,7 +606,9 @@ $a = $b or $c;
                       },
                       "span": {
                         "start": 178,
-                        "end": 180
+                        "end": 180,
+                        "start_line": 19,
+                        "start_col": 0
                       }
                     },
                     "op": "Assign",
@@ -516,14 +618,18 @@ $a = $b or $c;
                       },
                       "span": {
                         "start": 183,
-                        "end": 185
+                        "end": 185,
+                        "start_line": 19,
+                        "start_col": 5
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 178,
-                  "end": 185
+                  "end": 185,
+                  "start_line": 19,
+                  "start_col": 0
                 }
               },
               "op": "LogicalOr",
@@ -533,25 +639,33 @@ $a = $b or $c;
                 },
                 "span": {
                   "start": 189,
-                  "end": 191
+                  "end": 191,
+                  "start_line": 19,
+                  "start_col": 11
                 }
               }
             }
           },
           "span": {
             "start": 178,
-            "end": 191
+            "end": 191,
+            "start_line": 19,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 178,
-        "end": 192
+        "end": 192,
+        "start_line": 19,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 192
+    "end": 192,
+    "start_line": 1,
+    "start_col": 0
   }
 }

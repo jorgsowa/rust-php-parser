@@ -19,7 +19,9 @@ $nothing = null;
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -29,20 +31,26 @@ $nothing = null;
                 },
                 "span": {
                   "start": 11,
-                  "end": 13
+                  "end": 13,
+                  "start_line": 2,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 13
+            "end": 13,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 15
+        "end": 15,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -56,7 +64,9 @@ $nothing = null;
                 },
                 "span": {
                   "start": 15,
-                  "end": 20
+                  "end": 20,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -66,20 +76,26 @@ $nothing = null;
                 },
                 "span": {
                   "start": 23,
-                  "end": 30
+                  "end": 30,
+                  "start_line": 3,
+                  "start_col": 8
                 }
               }
             }
           },
           "span": {
             "start": 15,
-            "end": 30
+            "end": 30,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 15,
-        "end": 32
+        "end": 32,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -93,7 +109,9 @@ $nothing = null;
                 },
                 "span": {
                   "start": 32,
-                  "end": 35
+                  "end": 35,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -103,20 +121,26 @@ $nothing = null;
                 },
                 "span": {
                   "start": 38,
-                  "end": 42
+                  "end": 42,
+                  "start_line": 4,
+                  "start_col": 6
                 }
               }
             }
           },
           "span": {
             "start": 32,
-            "end": 42
+            "end": 42,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 32,
-        "end": 44
+        "end": 44,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -130,7 +154,9 @@ $nothing = null;
                 },
                 "span": {
                   "start": 44,
-                  "end": 49
+                  "end": 49,
+                  "start_line": 5,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -140,20 +166,26 @@ $nothing = null;
                 },
                 "span": {
                   "start": 52,
-                  "end": 56
+                  "end": 56,
+                  "start_line": 5,
+                  "start_col": 8
                 }
               }
             }
           },
           "span": {
             "start": 44,
-            "end": 56
+            "end": 56,
+            "start_line": 5,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 44,
-        "end": 58
+        "end": 58,
+        "start_line": 5,
+        "start_col": 0
       }
     },
     {
@@ -167,7 +199,9 @@ $nothing = null;
                 },
                 "span": {
                   "start": 58,
-                  "end": 66
+                  "end": 66,
+                  "start_line": 6,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -175,25 +209,33 @@ $nothing = null;
                 "kind": "Null",
                 "span": {
                   "start": 69,
-                  "end": 73
+                  "end": 73,
+                  "start_line": 6,
+                  "start_col": 11
                 }
               }
             }
           },
           "span": {
             "start": 58,
-            "end": 73
+            "end": 73,
+            "start_line": 6,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 58,
-        "end": 74
+        "end": 74,
+        "start_line": 6,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 74
+    "end": 74,
+    "start_line": 1,
+    "start_col": 0
   }
 }

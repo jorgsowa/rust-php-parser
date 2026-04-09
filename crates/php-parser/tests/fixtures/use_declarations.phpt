@@ -22,13 +22,17 @@ use const App\Config\VERSION;
                 "kind": "Qualified",
                 "span": {
                   "start": 10,
-                  "end": 25
+                  "end": 25,
+                  "start_line": 2,
+                  "start_col": 4
                 }
               },
               "alias": null,
               "span": {
                 "start": 10,
-                "end": 25
+                "end": 25,
+                "start_line": 2,
+                "start_col": 4
               }
             }
           ]
@@ -36,7 +40,9 @@ use const App\Config\VERSION;
       },
       "span": {
         "start": 6,
-        "end": 27
+        "end": 27,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -54,13 +60,17 @@ use const App\Config\VERSION;
                 "kind": "Qualified",
                 "span": {
                   "start": 31,
-                  "end": 49
+                  "end": 49,
+                  "start_line": 3,
+                  "start_col": 4
                 }
               },
               "alias": "AuthService",
               "span": {
                 "start": 31,
-                "end": 63
+                "end": 63,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ]
@@ -68,7 +78,9 @@ use const App\Config\VERSION;
       },
       "span": {
         "start": 27,
-        "end": 65
+        "end": 65,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -86,13 +98,17 @@ use const App\Config\VERSION;
                 "kind": "Qualified",
                 "span": {
                   "start": 78,
-                  "end": 100
+                  "end": 100,
+                  "start_line": 4,
+                  "start_col": 13
                 }
               },
               "alias": null,
               "span": {
                 "start": 78,
-                "end": 100
+                "end": 100,
+                "start_line": 4,
+                "start_col": 13
               }
             }
           ]
@@ -100,7 +116,9 @@ use const App\Config\VERSION;
       },
       "span": {
         "start": 65,
-        "end": 102
+        "end": 102,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -118,13 +136,17 @@ use const App\Config\VERSION;
                 "kind": "Qualified",
                 "span": {
                   "start": 112,
-                  "end": 130
+                  "end": 130,
+                  "start_line": 5,
+                  "start_col": 10
                 }
               },
               "alias": null,
               "span": {
                 "start": 112,
-                "end": 130
+                "end": 130,
+                "start_line": 5,
+                "start_col": 10
               }
             }
           ]
@@ -132,12 +154,16 @@ use const App\Config\VERSION;
       },
       "span": {
         "start": 102,
-        "end": 131
+        "end": 131,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 131
+    "end": 131,
+    "start_line": 1,
+    "start_col": 0
   }
 }

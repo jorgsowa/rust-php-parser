@@ -33,7 +33,9 @@ class Test {
               },
               "span": {
                 "start": 23,
-                "end": 52
+                "end": 52,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -42,12 +44,16 @@ class Test {
       },
       "span": {
         "start": 6,
-        "end": 53
+        "end": 53,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 53
+    "end": 53,
+    "start_line": 1,
+    "start_col": 0
   }
 }

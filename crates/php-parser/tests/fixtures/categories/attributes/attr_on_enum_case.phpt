@@ -26,7 +26,9 @@ min_php=8.1
                         "kind": "Unqualified",
                         "span": {
                           "start": 20,
-                          "end": 31
+                          "end": 31,
+                          "start_line": 1,
+                          "start_col": 20
                         }
                       },
                       "args": [
@@ -38,20 +40,26 @@ min_php=8.1
                             },
                             "span": {
                               "start": 32,
-                              "end": 40
+                              "end": 40,
+                              "start_line": 1,
+                              "start_col": 32
                             }
                           },
                           "unpack": false,
                           "by_ref": false,
                           "span": {
                             "start": 32,
-                            "end": 40
+                            "end": 40,
+                            "start_line": 1,
+                            "start_col": 32
                           }
                         }
                       ],
                       "span": {
                         "start": 20,
-                        "end": 41
+                        "end": 41,
+                        "start_line": 1,
+                        "start_col": 20
                       }
                     }
                   ]
@@ -59,7 +67,9 @@ min_php=8.1
               },
               "span": {
                 "start": 43,
-                "end": 56
+                "end": 56,
+                "start_line": 1,
+                "start_col": 43
               }
             }
           ],
@@ -68,12 +78,16 @@ min_php=8.1
       },
       "span": {
         "start": 6,
-        "end": 57
+        "end": 57,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 57
+    "end": 57,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -28,7 +28,9 @@ use App\{A, B,};
               "attributes": [],
               "span": {
                 "start": 19,
-                "end": 21
+                "end": 21,
+                "start_line": 2,
+                "start_col": 13
               }
             },
             {
@@ -44,7 +46,9 @@ use App\{A, B,};
               "attributes": [],
               "span": {
                 "start": 23,
-                "end": 25
+                "end": 25,
+                "start_line": 2,
+                "start_col": 17
               }
             }
           ],
@@ -56,7 +60,9 @@ use App\{A, B,};
       },
       "span": {
         "start": 6,
-        "end": 30
+        "end": 30,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -70,7 +76,9 @@ use App\{A, B,};
                 },
                 "span": {
                   "start": 31,
-                  "end": 34
+                  "end": 34,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "args": [
@@ -82,14 +90,18 @@ use App\{A, B,};
                     },
                     "span": {
                       "start": 35,
-                      "end": 36
+                      "end": 36,
+                      "start_line": 3,
+                      "start_col": 4
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 35,
-                    "end": 36
+                    "end": 36,
+                    "start_line": 3,
+                    "start_col": 4
                   }
                 },
                 {
@@ -100,14 +112,18 @@ use App\{A, B,};
                     },
                     "span": {
                       "start": 38,
-                      "end": 39
+                      "end": 39,
+                      "start_line": 3,
+                      "start_col": 7
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 38,
-                    "end": 39
+                    "end": 39,
+                    "start_line": 3,
+                    "start_col": 7
                   }
                 }
               ]
@@ -115,13 +131,17 @@ use App\{A, B,};
           },
           "span": {
             "start": 31,
-            "end": 41
+            "end": 41,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 31,
-        "end": 43
+        "end": 43,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -135,7 +155,9 @@ use App\{A, B,};
                 },
                 "span": {
                   "start": 43,
-                  "end": 45
+                  "end": 45,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -158,7 +180,9 @@ use App\{A, B,};
                         "attributes": [],
                         "span": {
                           "start": 57,
-                          "end": 59
+                          "end": 59,
+                          "start_line": 4,
+                          "start_col": 14
                         }
                       }
                     ],
@@ -168,7 +192,9 @@ use App\{A, B,};
                         "by_ref": false,
                         "span": {
                           "start": 67,
-                          "end": 69
+                          "end": 69,
+                          "start_line": 4,
+                          "start_col": 24
                         }
                       }
                     ],
@@ -179,20 +205,26 @@ use App\{A, B,};
                 },
                 "span": {
                   "start": 48,
-                  "end": 74
+                  "end": 74,
+                  "start_line": 4,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 43,
-            "end": 74
+            "end": 74,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 43,
-        "end": 76
+        "end": 76,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -206,7 +238,9 @@ use App\{A, B,};
                 },
                 "span": {
                   "start": 76,
-                  "end": 78
+                  "end": 78,
+                  "start_line": 5,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -229,7 +263,9 @@ use App\{A, B,};
                         "attributes": [],
                         "span": {
                           "start": 84,
-                          "end": 86
+                          "end": 86,
+                          "start_line": 5,
+                          "start_col": 8
                         }
                       }
                     ],
@@ -240,7 +276,9 @@ use App\{A, B,};
                       },
                       "span": {
                         "start": 92,
-                        "end": 94
+                        "end": 94,
+                        "start_line": 5,
+                        "start_col": 16
                       }
                     },
                     "attributes": []
@@ -248,20 +286,26 @@ use App\{A, B,};
                 },
                 "span": {
                   "start": 81,
-                  "end": 94
+                  "end": 94,
+                  "start_line": 5,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 76,
-            "end": 94
+            "end": 94,
+            "start_line": 5,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 76,
-        "end": 96
+        "end": 96,
+        "start_line": 5,
+        "start_col": 0
       }
     },
     {
@@ -280,13 +324,17 @@ use App\{A, B,};
                         },
                         "span": {
                           "start": 97,
-                          "end": 99
+                          "end": 99,
+                          "start_line": 6,
+                          "start_col": 1
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 97,
-                        "end": 99
+                        "end": 99,
+                        "start_line": 6,
+                        "start_col": 1
                       }
                     },
                     {
@@ -297,20 +345,26 @@ use App\{A, B,};
                         },
                         "span": {
                           "start": 101,
-                          "end": 103
+                          "end": 103,
+                          "start_line": 6,
+                          "start_col": 5
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 101,
-                        "end": 103
+                        "end": 103,
+                        "start_line": 6,
+                        "start_col": 5
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 96,
-                  "end": 105
+                  "end": 105,
+                  "start_line": 6,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -320,20 +374,26 @@ use App\{A, B,};
                 },
                 "span": {
                   "start": 108,
-                  "end": 112
+                  "end": 112,
+                  "start_line": 6,
+                  "start_col": 12
                 }
               }
             }
           },
           "span": {
             "start": 96,
-            "end": 112
+            "end": 112,
+            "start_line": 6,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 96,
-        "end": 114
+        "end": 114,
+        "start_line": 6,
+        "start_col": 0
       }
     },
     {
@@ -347,7 +407,9 @@ use App\{A, B,};
                 },
                 "span": {
                   "start": 121,
-                  "end": 123
+                  "end": 123,
+                  "start_line": 7,
+                  "start_col": 7
                 }
               },
               "arms": [
@@ -359,7 +421,9 @@ use App\{A, B,};
                       },
                       "span": {
                         "start": 127,
-                        "end": 128
+                        "end": 128,
+                        "start_line": 7,
+                        "start_col": 13
                       }
                     }
                   ],
@@ -369,12 +433,16 @@ use App\{A, B,};
                     },
                     "span": {
                       "start": 132,
-                      "end": 135
+                      "end": 135,
+                      "start_line": 7,
+                      "start_col": 18
                     }
                   },
                   "span": {
                     "start": 127,
-                    "end": 135
+                    "end": 135,
+                    "start_line": 7,
+                    "start_col": 13
                   }
                 },
                 {
@@ -385,7 +453,9 @@ use App\{A, B,};
                       },
                       "span": {
                         "start": 137,
-                        "end": 138
+                        "end": 138,
+                        "start_line": 7,
+                        "start_col": 23
                       }
                     }
                   ],
@@ -395,12 +465,16 @@ use App\{A, B,};
                     },
                     "span": {
                       "start": 142,
-                      "end": 145
+                      "end": 145,
+                      "start_line": 7,
+                      "start_col": 28
                     }
                   },
                   "span": {
                     "start": 137,
-                    "end": 145
+                    "end": 145,
+                    "start_line": 7,
+                    "start_col": 23
                   }
                 }
               ]
@@ -408,13 +482,17 @@ use App\{A, B,};
           },
           "span": {
             "start": 114,
-            "end": 148
+            "end": 148,
+            "start_line": 7,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 114,
-        "end": 150
+        "end": 150,
+        "start_line": 7,
+        "start_col": 0
       }
     },
     {
@@ -431,13 +509,17 @@ use App\{A, B,};
                 "kind": "Qualified",
                 "span": {
                   "start": 154,
-                  "end": 160
+                  "end": 160,
+                  "start_line": 8,
+                  "start_col": 4
                 }
               },
               "alias": null,
               "span": {
                 "start": 159,
-                "end": 160
+                "end": 160,
+                "start_line": 8,
+                "start_col": 9
               }
             },
             {
@@ -449,13 +531,17 @@ use App\{A, B,};
                 "kind": "Qualified",
                 "span": {
                   "start": 154,
-                  "end": 163
+                  "end": 163,
+                  "start_line": 8,
+                  "start_col": 4
                 }
               },
               "alias": null,
               "span": {
                 "start": 162,
-                "end": 163
+                "end": 163,
+                "start_line": 8,
+                "start_col": 12
               }
             }
           ]
@@ -463,12 +549,16 @@ use App\{A, B,};
       },
       "span": {
         "start": 150,
-        "end": 166
+        "end": 166,
+        "start_line": 8,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 166
+    "end": 166,
+    "start_line": 1,
+    "start_col": 0
   }
 }

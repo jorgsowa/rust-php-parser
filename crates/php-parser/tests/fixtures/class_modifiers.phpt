@@ -48,13 +48,17 @@ readonly class Value {
                         "kind": "Unqualified",
                         "span": {
                           "start": 72,
-                          "end": 76
+                          "end": 76,
+                          "start_line": 3,
+                          "start_col": 44
                         }
                       }
                     },
                     "span": {
                       "start": 72,
-                      "end": 76
+                      "end": 76,
+                      "start_line": 3,
+                      "start_col": 44
                     }
                   },
                   "body": null,
@@ -63,7 +67,9 @@ readonly class Value {
               },
               "span": {
                 "start": 32,
-                "end": 78
+                "end": 78,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -72,7 +78,9 @@ readonly class Value {
       },
       "span": {
         "start": 15,
-        "end": 79
+        "end": 79,
+        "start_line": 2,
+        "start_col": 9
       }
     },
     {
@@ -106,13 +114,17 @@ readonly class Value {
                         "kind": "Unqualified",
                         "span": {
                           "start": 128,
-                          "end": 132
+                          "end": 132,
+                          "start_line": 6,
+                          "start_col": 27
                         }
                       }
                     },
                     "span": {
                       "start": 128,
-                      "end": 132
+                      "end": 132,
+                      "start_line": 6,
+                      "start_col": 27
                     }
                   },
                   "body": [],
@@ -121,7 +133,9 @@ readonly class Value {
               },
               "span": {
                 "start": 105,
-                "end": 136
+                "end": 136,
+                "start_line": 6,
+                "start_col": 4
               }
             }
           ],
@@ -130,7 +144,9 @@ readonly class Value {
       },
       "span": {
         "start": 86,
-        "end": 137
+        "end": 137,
+        "start_line": 5,
+        "start_col": 6
       }
     },
     {
@@ -166,13 +182,17 @@ readonly class Value {
                             "kind": "Unqualified",
                             "span": {
                               "start": 209,
-                              "end": 215
+                              "end": 215,
+                              "start_line": 10,
+                              "start_col": 15
                             }
                           }
                         },
                         "span": {
                           "start": 209,
-                          "end": 215
+                          "end": 215,
+                          "start_line": 10,
+                          "start_col": 15
                         }
                       },
                       "default": null,
@@ -185,7 +205,9 @@ readonly class Value {
                       "attributes": [],
                       "span": {
                         "start": 202,
-                        "end": 221
+                        "end": 221,
+                        "start_line": 10,
+                        "start_col": 8
                       }
                     },
                     {
@@ -199,13 +221,17 @@ readonly class Value {
                             "kind": "Unqualified",
                             "span": {
                               "start": 238,
-                              "end": 241
+                              "end": 241,
+                              "start_line": 11,
+                              "start_col": 15
                             }
                           }
                         },
                         "span": {
                           "start": 238,
-                          "end": 241
+                          "end": 241,
+                          "start_line": 11,
+                          "start_col": 15
                         }
                       },
                       "default": null,
@@ -218,7 +244,9 @@ readonly class Value {
                       "attributes": [],
                       "span": {
                         "start": 231,
-                        "end": 246
+                        "end": 246,
+                        "start_line": 11,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -229,7 +257,9 @@ readonly class Value {
               },
               "span": {
                 "start": 165,
-                "end": 257
+                "end": 257,
+                "start_line": 9,
+                "start_col": 4
               }
             }
           ],
@@ -238,12 +268,16 @@ readonly class Value {
       },
       "span": {
         "start": 147,
-        "end": 258
+        "end": 258,
+        "start_line": 8,
+        "start_col": 9
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 258
+    "end": 258,
+    "start_line": 1,
+    "start_col": 0
   }
 }

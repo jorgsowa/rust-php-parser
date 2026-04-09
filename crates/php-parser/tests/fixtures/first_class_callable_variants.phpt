@@ -18,7 +18,9 @@ $e = $obj->$dynamic(...);
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -32,7 +34,9 @@ $e = $obj->$dynamic(...);
                         },
                         "span": {
                           "start": 11,
-                          "end": 17
+                          "end": 17,
+                          "start_line": 2,
+                          "start_col": 5
                         }
                       }
                     }
@@ -40,20 +44,26 @@ $e = $obj->$dynamic(...);
                 },
                 "span": {
                   "start": 11,
-                  "end": 22
+                  "end": 22,
+                  "start_line": 2,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 22
+            "end": 22,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 24
+        "end": 24,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -67,7 +77,9 @@ $e = $obj->$dynamic(...);
                 },
                 "span": {
                   "start": 24,
-                  "end": 26
+                  "end": 26,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -82,7 +94,9 @@ $e = $obj->$dynamic(...);
                           },
                           "span": {
                             "start": 29,
-                            "end": 33
+                            "end": 33,
+                            "start_line": 3,
+                            "start_col": 5
                           }
                         },
                         "method": {
@@ -91,7 +105,9 @@ $e = $obj->$dynamic(...);
                           },
                           "span": {
                             "start": 35,
-                            "end": 41
+                            "end": 41,
+                            "start_line": 3,
+                            "start_col": 11
                           }
                         }
                       }
@@ -100,20 +116,26 @@ $e = $obj->$dynamic(...);
                 },
                 "span": {
                   "start": 29,
-                  "end": 46
+                  "end": 46,
+                  "start_line": 3,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 24,
-            "end": 46
+            "end": 46,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 24,
-        "end": 48
+        "end": 48,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -127,7 +149,9 @@ $e = $obj->$dynamic(...);
                 },
                 "span": {
                   "start": 48,
-                  "end": 50
+                  "end": 50,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -142,7 +166,9 @@ $e = $obj->$dynamic(...);
                           },
                           "span": {
                             "start": 53,
-                            "end": 56
+                            "end": 56,
+                            "start_line": 4,
+                            "start_col": 5
                           }
                         },
                         "method": "bar"
@@ -152,20 +178,26 @@ $e = $obj->$dynamic(...);
                 },
                 "span": {
                   "start": 53,
-                  "end": 66
+                  "end": 66,
+                  "start_line": 4,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 48,
-            "end": 66
+            "end": 66,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 48,
-        "end": 68
+        "end": 68,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -179,7 +211,9 @@ $e = $obj->$dynamic(...);
                 },
                 "span": {
                   "start": 68,
-                  "end": 70
+                  "end": 70,
+                  "start_line": 5,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -194,7 +228,9 @@ $e = $obj->$dynamic(...);
                           },
                           "span": {
                             "start": 73,
-                            "end": 77
+                            "end": 77,
+                            "start_line": 5,
+                            "start_col": 5
                           }
                         },
                         "method": {
@@ -203,7 +239,9 @@ $e = $obj->$dynamic(...);
                           },
                           "span": {
                             "start": 79,
-                            "end": 87
+                            "end": 87,
+                            "start_line": 5,
+                            "start_col": 11
                           }
                         }
                       }
@@ -212,25 +250,33 @@ $e = $obj->$dynamic(...);
                 },
                 "span": {
                   "start": 73,
-                  "end": 92
+                  "end": 92,
+                  "start_line": 5,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 68,
-            "end": 92
+            "end": 92,
+            "start_line": 5,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 68,
-        "end": 93
+        "end": 93,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 93
+    "end": 93,
+    "start_line": 1,
+    "start_col": 0
   }
 }

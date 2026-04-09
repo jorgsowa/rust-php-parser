@@ -14,7 +14,9 @@
                 },
                 "span": {
                   "start": 6,
-                  "end": 10
+                  "end": 10,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "property": {
@@ -26,7 +28,9 @@
                       },
                       "span": {
                         "start": 13,
-                        "end": 20
+                        "end": 20,
+                        "start_line": 1,
+                        "start_col": 13
                       }
                     },
                     "op": "Concat",
@@ -36,32 +40,42 @@
                       },
                       "span": {
                         "start": 23,
-                        "end": 29
+                        "end": 29,
+                        "start_line": 1,
+                        "start_col": 23
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 13,
-                  "end": 29
+                  "end": 29,
+                  "start_line": 1,
+                  "start_col": 13
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 29
+            "end": 29,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 31
+        "end": 31,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 31
+    "end": 31,
+    "start_line": 1,
+    "start_col": 0
   }
 }

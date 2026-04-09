@@ -19,7 +19,9 @@ list('name' => $name, 'age' => $age) = $person;
                         },
                         "span": {
                           "start": 11,
-                          "end": 17
+                          "end": 17,
+                          "start_line": 2,
+                          "start_col": 5
                         }
                       },
                       "value": {
@@ -28,13 +30,17 @@ list('name' => $name, 'age' => $age) = $person;
                         },
                         "span": {
                           "start": 21,
-                          "end": 26
+                          "end": 26,
+                          "start_line": 2,
+                          "start_col": 15
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 11,
-                        "end": 26
+                        "end": 26,
+                        "start_line": 2,
+                        "start_col": 5
                       }
                     },
                     {
@@ -44,7 +50,9 @@ list('name' => $name, 'age' => $age) = $person;
                         },
                         "span": {
                           "start": 28,
-                          "end": 33
+                          "end": 33,
+                          "start_line": 2,
+                          "start_col": 22
                         }
                       },
                       "value": {
@@ -53,20 +61,26 @@ list('name' => $name, 'age' => $age) = $person;
                         },
                         "span": {
                           "start": 37,
-                          "end": 41
+                          "end": 41,
+                          "start_line": 2,
+                          "start_col": 31
                         }
                       },
                       "unpack": false,
                       "span": {
                         "start": 28,
-                        "end": 41
+                        "end": 41,
+                        "start_line": 2,
+                        "start_col": 22
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 6,
-                  "end": 42
+                  "end": 42,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -76,25 +90,33 @@ list('name' => $name, 'age' => $age) = $person;
                 },
                 "span": {
                   "start": 45,
-                  "end": 52
+                  "end": 52,
+                  "start_line": 2,
+                  "start_col": 39
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 52
+            "end": 52,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 53
+        "end": 53,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 53
+    "end": 53,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -47,7 +47,7 @@ pub enum ParseError {
     },
 
     /// A delimiter (parenthesis, bracket, brace) was opened but never closed.
-    #[error("unclosed {delimiter} opened at {opened_at:?}")]
+    #[error("unclosed {delimiter} opened at {opened_at}")]
     UnclosedDelimiter {
         delimiter: Cow<'static, str>,
         opened_at: Span,

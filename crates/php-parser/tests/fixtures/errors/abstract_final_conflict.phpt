@@ -34,7 +34,9 @@ cannot use 'abstract' and 'final' together
               },
               "span": {
                 "start": 16,
-                "end": 45
+                "end": 45,
+                "start_line": 1,
+                "start_col": 16
               }
             }
           ],
@@ -43,12 +45,16 @@ cannot use 'abstract' and 'final' together
       },
       "span": {
         "start": 6,
-        "end": 46
+        "end": 46,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 46
+    "end": 46,
+    "start_line": 1,
+    "start_col": 0
   }
 }

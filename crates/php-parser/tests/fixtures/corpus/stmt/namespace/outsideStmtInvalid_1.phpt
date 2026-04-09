@@ -15,14 +15,18 @@ namespace A;
             },
             "span": {
               "start": 11,
-              "end": 12
+              "end": 12,
+              "start_line": 2,
+              "start_col": 5
             }
           }
         ]
       },
       "span": {
         "start": 6,
-        "end": 14
+        "end": 14,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -34,14 +38,18 @@ namespace A;
             },
             "span": {
               "start": 19,
-              "end": 20
+              "end": 20,
+              "start_line": 3,
+              "start_col": 5
             }
           }
         ]
       },
       "span": {
         "start": 14,
-        "end": 22
+        "end": 22,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -54,7 +62,9 @@ namespace A;
             "kind": "Unqualified",
             "span": {
               "start": 32,
-              "end": 33
+              "end": 33,
+              "start_line": 4,
+              "start_col": 10
             }
           },
           "body": "Simple"
@@ -62,12 +72,16 @@ namespace A;
       },
       "span": {
         "start": 22,
-        "end": 34
+        "end": 34,
+        "start_line": 4,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 34
+    "end": 34,
+    "start_line": 1,
+    "start_col": 0
   }
 }

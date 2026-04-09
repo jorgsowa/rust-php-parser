@@ -27,7 +27,9 @@ function tmpl() {
                         },
                         "span": {
                           "start": 28,
-                          "end": 30
+                          "end": 30,
+                          "start_line": 3,
+                          "start_col": 4
                         }
                       },
                       "op": "Assign",
@@ -40,7 +42,9 @@ function tmpl() {
                               },
                               "span": {
                                 "start": 33,
-                                "end": 36
+                                "end": 36,
+                                "start_line": 3,
+                                "start_col": 9
                               }
                             },
                             "args": []
@@ -48,20 +52,26 @@ function tmpl() {
                         },
                         "span": {
                           "start": 33,
-                          "end": 38
+                          "end": 38,
+                          "start_line": 3,
+                          "start_col": 9
                         }
                       }
                     }
                   },
                   "span": {
                     "start": 28,
-                    "end": 38
+                    "end": 38,
+                    "start_line": 3,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 28,
-                "end": 44
+                "end": 44,
+                "start_line": 3,
+                "start_col": 4
               }
             },
             {
@@ -70,14 +80,18 @@ function tmpl() {
               },
               "span": {
                 "start": 46,
-                "end": 63
+                "end": 63,
+                "start_line": 4,
+                "start_col": 6
               }
             },
             {
               "kind": "Nop",
               "span": {
                 "start": 73,
-                "end": 76
+                "end": 76,
+                "start_line": 7,
+                "start_col": 4
               }
             },
             {
@@ -91,7 +105,9 @@ function tmpl() {
                         },
                         "span": {
                           "start": 73,
-                          "end": 76
+                          "end": 76,
+                          "start_line": 7,
+                          "start_col": 4
                         }
                       },
                       "args": []
@@ -99,13 +115,17 @@ function tmpl() {
                   },
                   "span": {
                     "start": 73,
-                    "end": 78
+                    "end": 78,
+                    "start_line": 7,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 73,
-                "end": 80
+                "end": 80,
+                "start_line": 7,
+                "start_col": 4
               }
             }
           ],
@@ -116,12 +136,16 @@ function tmpl() {
       },
       "span": {
         "start": 6,
-        "end": 81
+        "end": 81,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 81
+    "end": 81,
+    "start_line": 1,
+    "start_col": 0
   }
 }

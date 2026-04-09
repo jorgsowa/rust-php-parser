@@ -17,7 +17,9 @@ EOT
                 },
                 "span": {
                   "start": 6,
-                  "end": 9
+                  "end": 9,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "args": [
@@ -36,14 +38,18 @@ EOT
                     },
                     "span": {
                       "start": 10,
-                      "end": 26
+                      "end": 26,
+                      "start_line": 1,
+                      "start_col": 10
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 10,
-                    "end": 26
+                    "end": 26,
+                    "start_line": 1,
+                    "start_col": 10
                   }
                 }
               ]
@@ -51,18 +57,24 @@ EOT
           },
           "span": {
             "start": 6,
-            "end": 28
+            "end": 28,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 29
+        "end": 29,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 29
+    "end": 29,
+    "start_line": 1,
+    "start_col": 0
   }
 }

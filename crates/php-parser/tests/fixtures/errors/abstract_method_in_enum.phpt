@@ -31,13 +31,17 @@ enum methods cannot be abstract
                         "kind": "Unqualified",
                         "span": {
                           "start": 54,
-                          "end": 60
+                          "end": 60,
+                          "start_line": 1,
+                          "start_col": 54
                         }
                       }
                     },
                     "span": {
                       "start": 54,
-                      "end": 60
+                      "end": 60,
+                      "start_line": 1,
+                      "start_col": 54
                     }
                   },
                   "body": null,
@@ -46,7 +50,9 @@ enum methods cannot be abstract
               },
               "span": {
                 "start": 20,
-                "end": 62
+                "end": 62,
+                "start_line": 1,
+                "start_col": 20
               }
             }
           ],
@@ -55,12 +61,16 @@ enum methods cannot be abstract
       },
       "span": {
         "start": 6,
-        "end": 63
+        "end": 63,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 63
+    "end": 63,
+    "start_line": 1,
+    "start_col": 0
   }
 }

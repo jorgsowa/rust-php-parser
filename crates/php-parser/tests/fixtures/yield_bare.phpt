@@ -24,13 +24,17 @@ function gen() {
                   },
                   "span": {
                     "start": 27,
-                    "end": 32
+                    "end": 32,
+                    "start_line": 3,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 27,
-                "end": 34
+                "end": 34,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -41,12 +45,16 @@ function gen() {
       },
       "span": {
         "start": 6,
-        "end": 35
+        "end": 35,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 35
+    "end": 35,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -24,7 +24,9 @@ function indexedGen() {
                         },
                         "span": {
                           "start": 40,
-                          "end": 43
+                          "end": 43,
+                          "start_line": 3,
+                          "start_col": 10
                         }
                       },
                       "value": {
@@ -33,7 +35,9 @@ function indexedGen() {
                         },
                         "span": {
                           "start": 47,
-                          "end": 48
+                          "end": 48,
+                          "start_line": 3,
+                          "start_col": 17
                         }
                       },
                       "is_from": false
@@ -41,13 +45,17 @@ function indexedGen() {
                   },
                   "span": {
                     "start": 34,
-                    "end": 48
+                    "end": 48,
+                    "start_line": 3,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 34,
-                "end": 54
+                "end": 54,
+                "start_line": 3,
+                "start_col": 4
               }
             },
             {
@@ -61,7 +69,9 @@ function indexedGen() {
                         },
                         "span": {
                           "start": 60,
-                          "end": 63
+                          "end": 63,
+                          "start_line": 4,
+                          "start_col": 10
                         }
                       },
                       "value": {
@@ -70,7 +80,9 @@ function indexedGen() {
                         },
                         "span": {
                           "start": 67,
-                          "end": 68
+                          "end": 68,
+                          "start_line": 4,
+                          "start_col": 17
                         }
                       },
                       "is_from": false
@@ -78,13 +90,17 @@ function indexedGen() {
                   },
                   "span": {
                     "start": 54,
-                    "end": 68
+                    "end": 68,
+                    "start_line": 4,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 54,
-                "end": 70
+                "end": 70,
+                "start_line": 4,
+                "start_col": 4
               }
             }
           ],
@@ -95,12 +111,16 @@ function indexedGen() {
       },
       "span": {
         "start": 6,
-        "end": 71
+        "end": 71,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 71
+    "end": 71,
+    "start_line": 1,
+    "start_col": 0
   }
 }

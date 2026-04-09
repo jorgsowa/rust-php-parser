@@ -34,13 +34,17 @@ min_php=8.4
                         "kind": "Unqualified",
                         "span": {
                           "start": 23,
-                          "end": 29
+                          "end": 29,
+                          "start_line": 1,
+                          "start_col": 23
                         }
                       }
                     },
                     "span": {
                       "start": 23,
-                      "end": 29
+                      "end": 29,
+                      "start_line": 1,
+                      "start_col": 23
                     }
                   },
                   "default": null,
@@ -61,7 +65,9 @@ min_php=8.4
                                       },
                                       "span": {
                                         "start": 48,
-                                        "end": 53
+                                        "end": 53,
+                                        "start_line": 1,
+                                        "start_col": 48
                                       }
                                     },
                                     "property": {
@@ -70,20 +76,26 @@ min_php=8.4
                                       },
                                       "span": {
                                         "start": 55,
-                                        "end": 56
+                                        "end": 56,
+                                        "start_line": 1,
+                                        "start_col": 55
                                       }
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 48,
-                                  "end": 56
+                                  "end": 56,
+                                  "start_line": 1,
+                                  "start_col": 48
                                 }
                               }
                             },
                             "span": {
                               "start": 41,
-                              "end": 58
+                              "end": 58,
+                              "start_line": 1,
+                              "start_col": 41
                             }
                           }
                         ]
@@ -94,7 +106,9 @@ min_php=8.4
                       "attributes": [],
                       "span": {
                         "start": 35,
-                        "end": 60
+                        "end": 60,
+                        "start_line": 1,
+                        "start_col": 35
                       }
                     },
                     {
@@ -115,7 +129,9 @@ min_php=8.4
                                             },
                                             "span": {
                                               "start": 66,
-                                              "end": 71
+                                              "end": 71,
+                                              "start_line": 1,
+                                              "start_col": 66
                                             }
                                           },
                                           "property": {
@@ -124,14 +140,18 @@ min_php=8.4
                                             },
                                             "span": {
                                               "start": 73,
-                                              "end": 74
+                                              "end": 74,
+                                              "start_line": 1,
+                                              "start_col": 73
                                             }
                                           }
                                         }
                                       },
                                       "span": {
                                         "start": 66,
-                                        "end": 74
+                                        "end": 74,
+                                        "start_line": 1,
+                                        "start_col": 66
                                       }
                                     },
                                     "op": "Assign",
@@ -141,20 +161,26 @@ min_php=8.4
                                       },
                                       "span": {
                                         "start": 77,
-                                        "end": 83
+                                        "end": 83,
+                                        "start_line": 1,
+                                        "start_col": 77
                                       }
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 66,
-                                  "end": 83
+                                  "end": 83,
+                                  "start_line": 1,
+                                  "start_col": 66
                                 }
                               }
                             },
                             "span": {
                               "start": 66,
-                              "end": 85
+                              "end": 85,
+                              "start_line": 1,
+                              "start_col": 66
                             }
                           }
                         ]
@@ -165,7 +191,9 @@ min_php=8.4
                       "attributes": [],
                       "span": {
                         "start": 60,
-                        "end": 87
+                        "end": 87,
+                        "start_line": 1,
+                        "start_col": 60
                       }
                     }
                   ]
@@ -173,7 +201,9 @@ min_php=8.4
               },
               "span": {
                 "start": 16,
-                "end": 89
+                "end": 89,
+                "start_line": 1,
+                "start_col": 16
               }
             }
           ],
@@ -182,12 +212,16 @@ min_php=8.4
       },
       "span": {
         "start": 6,
-        "end": 90
+        "end": 90,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 90
+    "end": 90,
+    "start_line": 1,
+    "start_col": 0
   }
 }

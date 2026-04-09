@@ -39,20 +39,26 @@ class Test {
                               "kind": "Unqualified",
                               "span": {
                                 "start": 44,
-                                "end": 47
+                                "end": 47,
+                                "start_line": 3,
+                                "start_col": 25
                               }
                             }
                           },
                           "span": {
                             "start": 44,
-                            "end": 47
+                            "end": 47,
+                            "start_line": 3,
+                            "start_col": 25
                           }
                         }
                       ]
                     },
                     "span": {
                       "start": 43,
-                      "end": 48
+                      "end": 48,
+                      "start_line": 3,
+                      "start_col": 24
                     }
                   },
                   "default": null,
@@ -61,7 +67,9 @@ class Test {
               },
               "span": {
                 "start": 43,
-                "end": 51
+                "end": 51,
+                "start_line": 3,
+                "start_col": 24
               }
             },
             {
@@ -84,20 +92,26 @@ class Test {
                               "kind": "Unqualified",
                               "span": {
                                 "start": 77,
-                                "end": 80
+                                "end": 80,
+                                "start_line": 4,
+                                "start_col": 24
                               }
                             }
                           },
                           "span": {
                             "start": 77,
-                            "end": 80
+                            "end": 80,
+                            "start_line": 4,
+                            "start_col": 24
                           }
                         }
                       ]
                     },
                     "span": {
                       "start": 76,
-                      "end": 81
+                      "end": 81,
+                      "start_line": 4,
+                      "start_col": 23
                     }
                   },
                   "default": null,
@@ -106,7 +120,9 @@ class Test {
               },
               "span": {
                 "start": 76,
-                "end": 84
+                "end": 84,
+                "start_line": 4,
+                "start_col": 23
               }
             }
           ],
@@ -115,12 +131,16 @@ class Test {
       },
       "span": {
         "start": 6,
-        "end": 87
+        "end": 87,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 87
+    "end": 87,
+    "start_line": 1,
+    "start_col": 0
   }
 }

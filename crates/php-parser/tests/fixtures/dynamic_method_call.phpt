@@ -14,7 +14,9 @@
                 },
                 "span": {
                   "start": 6,
-                  "end": 10
+                  "end": 10,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "method": {
@@ -23,7 +25,9 @@
                 },
                 "span": {
                   "start": 12,
-                  "end": 19
+                  "end": 19,
+                  "start_line": 1,
+                  "start_col": 12
                 }
               },
               "args": []
@@ -31,13 +35,17 @@
           },
           "span": {
             "start": 6,
-            "end": 21
+            "end": 21,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 23
+        "end": 23,
+        "start_line": 1,
+        "start_col": 6
       }
     },
     {
@@ -51,7 +59,9 @@
                 },
                 "span": {
                   "start": 23,
-                  "end": 27
+                  "end": 27,
+                  "start_line": 1,
+                  "start_col": 23
                 }
               },
               "method": {
@@ -63,7 +73,9 @@
                       },
                       "span": {
                         "start": 30,
-                        "end": 35
+                        "end": 35,
+                        "start_line": 1,
+                        "start_col": 30
                       }
                     },
                     "op": "Concat",
@@ -73,14 +85,18 @@
                       },
                       "span": {
                         "start": 38,
-                        "end": 44
+                        "end": 44,
+                        "start_line": 1,
+                        "start_col": 38
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 30,
-                  "end": 44
+                  "end": 44,
+                  "start_line": 1,
+                  "start_col": 30
                 }
               },
               "args": []
@@ -88,18 +104,24 @@
           },
           "span": {
             "start": 23,
-            "end": 47
+            "end": 47,
+            "start_line": 1,
+            "start_col": 23
           }
         }
       },
       "span": {
         "start": 23,
-        "end": 48
+        "end": 48,
+        "start_line": 1,
+        "start_col": 23
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 48
+    "end": 48,
+    "start_line": 1,
+    "start_col": 0
   }
 }

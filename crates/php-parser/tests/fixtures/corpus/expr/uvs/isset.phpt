@@ -31,13 +31,17 @@ isset("str"->a);
                                         },
                                         "span": {
                                           "start": 15,
-                                          "end": 16
+                                          "end": 16,
+                                          "start_line": 3,
+                                          "start_col": 8
                                         }
                                       },
                                       "unpack": false,
                                       "span": {
                                         "start": 15,
-                                        "end": 16
+                                        "end": 16,
+                                        "start_line": 3,
+                                        "start_col": 8
                                       }
                                     },
                                     {
@@ -48,20 +52,26 @@ isset("str"->a);
                                         },
                                         "span": {
                                           "start": 18,
-                                          "end": 19
+                                          "end": 19,
+                                          "start_line": 3,
+                                          "start_col": 11
                                         }
                                       },
                                       "unpack": false,
                                       "span": {
                                         "start": 18,
-                                        "end": 19
+                                        "end": 19,
+                                        "start_line": 3,
+                                        "start_col": 11
                                       }
                                     }
                                   ]
                                 },
                                 "span": {
                                   "start": 14,
-                                  "end": 20
+                                  "end": 20,
+                                  "start_line": 3,
+                                  "start_col": 7
                                 }
                               },
                               "op": "Add",
@@ -71,20 +81,26 @@ isset("str"->a);
                                 },
                                 "span": {
                                   "start": 23,
-                                  "end": 25
+                                  "end": 25,
+                                  "start_line": 3,
+                                  "start_col": 16
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 14,
-                            "end": 25
+                            "end": 25,
+                            "start_line": 3,
+                            "start_col": 7
                           }
                         }
                       },
                       "span": {
                         "start": 13,
-                        "end": 26
+                        "end": 26,
+                        "start_line": 3,
+                        "start_col": 6
                       }
                     },
                     "index": {
@@ -93,27 +109,35 @@ isset("str"->a);
                       },
                       "span": {
                         "start": 27,
-                        "end": 28
+                        "end": 28,
+                        "start_line": 3,
+                        "start_col": 20
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 13,
-                  "end": 29
+                  "end": 29,
+                  "start_line": 3,
+                  "start_col": 6
                 }
               }
             ]
           },
           "span": {
             "start": 7,
-            "end": 30
+            "end": 30,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 7,
-        "end": 32
+        "end": 32,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -134,7 +158,9 @@ isset("str"->a);
                               },
                               "span": {
                                 "start": 39,
-                                "end": 42
+                                "end": 42,
+                                "start_line": 4,
+                                "start_col": 7
                               }
                             },
                             "value": {
@@ -143,20 +169,26 @@ isset("str"->a);
                               },
                               "span": {
                                 "start": 46,
-                                "end": 49
+                                "end": 49,
+                                "start_line": 4,
+                                "start_col": 14
                               }
                             },
                             "unpack": false,
                             "span": {
                               "start": 39,
-                              "end": 49
+                              "end": 49,
+                              "start_line": 4,
+                              "start_col": 7
                             }
                           }
                         ]
                       },
                       "span": {
                         "start": 38,
-                        "end": 50
+                        "end": 50,
+                        "start_line": 4,
+                        "start_col": 6
                       }
                     },
                     "property": {
@@ -165,27 +197,35 @@ isset("str"->a);
                       },
                       "span": {
                         "start": 52,
-                        "end": 53
+                        "end": 53,
+                        "start_line": 4,
+                        "start_col": 20
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 38,
-                  "end": 53
+                  "end": 53,
+                  "start_line": 4,
+                  "start_col": 6
                 }
               }
             ]
           },
           "span": {
             "start": 32,
-            "end": 54
+            "end": 54,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 32,
-        "end": 56
+        "end": 56,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -202,7 +242,9 @@ isset("str"->a);
                       },
                       "span": {
                         "start": 62,
-                        "end": 67
+                        "end": 67,
+                        "start_line": 5,
+                        "start_col": 6
                       }
                     },
                     "property": {
@@ -211,32 +253,42 @@ isset("str"->a);
                       },
                       "span": {
                         "start": 69,
-                        "end": 70
+                        "end": 70,
+                        "start_line": 5,
+                        "start_col": 13
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 62,
-                  "end": 70
+                  "end": 70,
+                  "start_line": 5,
+                  "start_col": 6
                 }
               }
             ]
           },
           "span": {
             "start": 56,
-            "end": 71
+            "end": 71,
+            "start_line": 5,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 56,
-        "end": 72
+        "end": 72,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 72
+    "end": 72,
+    "start_line": 1,
+    "start_col": 0
   }
 }

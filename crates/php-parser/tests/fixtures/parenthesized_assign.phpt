@@ -19,7 +19,9 @@
                           },
                           "span": {
                             "start": 7,
-                            "end": 9
+                            "end": 9,
+                            "start_line": 1,
+                            "start_col": 7
                           }
                         },
                         "op": "Assign",
@@ -32,7 +34,9 @@
                                 },
                                 "span": {
                                   "start": 12,
-                                  "end": 20
+                                  "end": 20,
+                                  "start_line": 1,
+                                  "start_col": 12
                                 }
                               },
                               "args": []
@@ -40,20 +44,26 @@
                           },
                           "span": {
                             "start": 12,
-                            "end": 22
+                            "end": 22,
+                            "start_line": 1,
+                            "start_col": 12
                           }
                         }
                       }
                     },
                     "span": {
                       "start": 7,
-                      "end": 22
+                      "end": 22,
+                      "start_line": 1,
+                      "start_col": 7
                     }
                   }
                 },
                 "span": {
                   "start": 6,
-                  "end": 23
+                  "end": 23,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "method": {
@@ -62,7 +72,9 @@
                 },
                 "span": {
                   "start": 25,
-                  "end": 32
+                  "end": 32,
+                  "start_line": 1,
+                  "start_col": 25
                 }
               },
               "args": []
@@ -70,18 +82,24 @@
           },
           "span": {
             "start": 6,
-            "end": 34
+            "end": 34,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 35
+        "end": 35,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 35
+    "end": 35,
+    "start_line": 1,
+    "start_col": 0
   }
 }

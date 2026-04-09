@@ -50,13 +50,17 @@ class Money {
                             "kind": "Unqualified",
                             "span": {
                               "start": 168,
-                              "end": 171
+                              "end": 171,
+                              "start_line": 11,
+                              "start_col": 30
                             }
                           }
                         },
                         "span": {
                           "start": 168,
-                          "end": 171
+                          "end": 171,
+                          "start_line": 11,
+                          "start_col": 30
                         }
                       },
                       "default": null,
@@ -69,7 +73,9 @@ class Money {
                       "attributes": [],
                       "span": {
                         "start": 168,
-                        "end": 179
+                        "end": 179,
+                        "start_line": 11,
+                        "start_col": 30
                       }
                     }
                   ],
@@ -82,13 +88,17 @@ class Money {
                         "kind": "Unqualified",
                         "span": {
                           "start": 182,
-                          "end": 186
+                          "end": 186,
+                          "start_line": 11,
+                          "start_col": 44
                         }
                       }
                     },
                     "span": {
                       "start": 182,
-                      "end": 186
+                      "end": 186,
+                      "start_line": 11,
+                      "start_col": 44
                     }
                   },
                   "body": [],
@@ -98,14 +108,18 @@ class Money {
                     "text": "/**\n     * @psalm-pure\n     * @param positive-int $amount\n     * @return self\n     */",
                     "span": {
                       "start": 52,
-                      "end": 137
+                      "end": 137,
+                      "start_line": 6,
+                      "start_col": 4
                     }
                   }
                 }
               },
               "span": {
                 "start": 142,
-                "end": 222
+                "end": 222,
+                "start_line": 11,
+                "start_col": 4
               }
             },
             {
@@ -125,13 +139,17 @@ class Money {
                         "kind": "Unqualified",
                         "span": {
                           "start": 229,
-                          "end": 232
+                          "end": 232,
+                          "start_line": 14,
+                          "start_col": 11
                         }
                       }
                     },
                     "span": {
                       "start": 229,
-                      "end": 232
+                      "end": 232,
+                      "start_line": 14,
+                      "start_col": 11
                     }
                   },
                   "default": null,
@@ -141,14 +159,18 @@ class Money {
                     "text": "/** @psalm-readonly */",
                     "span": {
                       "start": 195,
-                      "end": 217
+                      "end": 217,
+                      "start_line": 13,
+                      "start_col": 4
                     }
                   }
                 }
               },
               "span": {
                 "start": 222,
-                "end": 239
+                "end": 239,
+                "start_line": 14,
+                "start_col": 4
               }
             }
           ],
@@ -158,19 +180,25 @@ class Money {
             "text": "/**\n * @psalm-immutable\n */",
             "span": {
               "start": 6,
-              "end": 33
+              "end": 33,
+              "start_line": 2,
+              "start_col": 0
             }
           }
         }
       },
       "span": {
         "start": 34,
-        "end": 242
+        "end": 242,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 242
+    "end": 242,
+    "start_line": 1,
+    "start_col": 0
   }
 }

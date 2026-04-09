@@ -24,7 +24,9 @@ enddeclare;
                 },
                 "span": {
                   "start": 18,
-                  "end": 21
+                  "end": 21,
+                  "start_line": 3,
+                  "start_col": 11
                 }
               }
             ]
@@ -34,7 +36,9 @@ enddeclare;
       },
       "span": {
         "start": 7,
-        "end": 25
+        "end": 25,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -49,7 +53,9 @@ enddeclare;
                 },
                 "span": {
                   "start": 36,
-                  "end": 39
+                  "end": 39,
+                  "start_line": 5,
+                  "start_col": 11
                 }
               }
             ],
@@ -61,7 +67,9 @@ enddeclare;
                 },
                 "span": {
                   "start": 43,
-                  "end": 46
+                  "end": 46,
+                  "start_line": 5,
+                  "start_col": 18
                 }
               }
             ]
@@ -78,28 +86,36 @@ enddeclare;
                         },
                         "span": {
                           "start": 59,
-                          "end": 64
+                          "end": 64,
+                          "start_line": 6,
+                          "start_col": 9
                         }
                       }
                     ]
                   },
                   "span": {
                     "start": 54,
-                    "end": 66
+                    "end": 66,
+                    "start_line": 6,
+                    "start_col": 4
                   }
                 }
               ]
             },
             "span": {
               "start": 48,
-              "end": 67
+              "end": 67,
+              "start_line": 5,
+              "start_col": 23
             }
           }
         }
       },
       "span": {
         "start": 25,
-        "end": 69
+        "end": 69,
+        "start_line": 5,
+        "start_col": 0
       }
     },
     {
@@ -114,7 +130,9 @@ enddeclare;
                 },
                 "span": {
                   "start": 80,
-                  "end": 83
+                  "end": 83,
+                  "start_line": 9,
+                  "start_col": 11
                 }
               }
             ],
@@ -126,7 +144,9 @@ enddeclare;
                 },
                 "span": {
                   "start": 87,
-                  "end": 90
+                  "end": 90,
+                  "start_line": 9,
+                  "start_col": 18
                 }
               }
             ]
@@ -137,19 +157,25 @@ enddeclare;
             },
             "span": {
               "start": 69,
-              "end": 104
+              "end": 104,
+              "start_line": 9,
+              "start_col": 0
             }
           }
         }
       },
       "span": {
         "start": 69,
-        "end": 104
+        "end": 104,
+        "start_line": 9,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 104
+    "end": 104,
+    "start_line": 1,
+    "start_col": 0
   }
 }

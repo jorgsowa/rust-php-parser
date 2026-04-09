@@ -22,13 +22,17 @@ try {
                   },
                   "span": {
                     "start": 16,
-                    "end": 18
+                    "end": 18,
+                    "start_line": 3,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 16,
-                "end": 20
+                "end": 20,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -42,7 +46,9 @@ try {
                   "kind": "Unqualified",
                   "span": {
                     "start": 29,
-                    "end": 30
+                    "end": 30,
+                    "start_line": 4,
+                    "start_col": 9
                   }
                 },
                 {
@@ -52,7 +58,9 @@ try {
                   "kind": "Unqualified",
                   "span": {
                     "start": 31,
-                    "end": 33
+                    "end": 33,
+                    "start_line": 4,
+                    "start_col": 11
                   }
                 }
               ],
@@ -66,19 +74,25 @@ try {
                       },
                       "span": {
                         "start": 44,
-                        "end": 46
+                        "end": 46,
+                        "start_line": 5,
+                        "start_col": 4
                       }
                     }
                   },
                   "span": {
                     "start": 44,
-                    "end": 48
+                    "end": 48,
+                    "start_line": 5,
+                    "start_col": 4
                   }
                 }
               ],
               "span": {
                 "start": 28,
-                "end": 50
+                "end": 50,
+                "start_line": 4,
+                "start_col": 8
               }
             },
             {
@@ -90,7 +104,9 @@ try {
                   "kind": "FullyQualified",
                   "span": {
                     "start": 57,
-                    "end": 59
+                    "end": 59,
+                    "start_line": 6,
+                    "start_col": 9
                   }
                 },
                 {
@@ -101,7 +117,9 @@ try {
                   "kind": "Qualified",
                   "span": {
                     "start": 60,
-                    "end": 64
+                    "end": 64,
+                    "start_line": 6,
+                    "start_col": 12
                   }
                 }
               ],
@@ -115,19 +133,25 @@ try {
                       },
                       "span": {
                         "start": 75,
-                        "end": 77
+                        "end": 77,
+                        "start_line": 7,
+                        "start_col": 4
                       }
                     }
                   },
                   "span": {
                     "start": 75,
-                    "end": 79
+                    "end": 79,
+                    "start_line": 7,
+                    "start_col": 4
                   }
                 }
               ],
               "span": {
                 "start": 56,
-                "end": 80
+                "end": 80,
+                "start_line": 6,
+                "start_col": 8
               }
             }
           ],
@@ -136,12 +160,16 @@ try {
       },
       "span": {
         "start": 6,
-        "end": 80
+        "end": 80,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 80
+    "end": 80,
+    "start_line": 1,
+    "start_col": 0
   }
 }

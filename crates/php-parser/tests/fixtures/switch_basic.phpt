@@ -23,7 +23,9 @@ switch ($x) {
             },
             "span": {
               "start": 14,
-              "end": 16
+              "end": 16,
+              "start_line": 2,
+              "start_col": 8
             }
           },
           "cases": [
@@ -34,7 +36,9 @@ switch ($x) {
                 },
                 "span": {
                   "start": 29,
-                  "end": 30
+                  "end": 30,
+                  "start_line": 3,
+                  "start_col": 9
                 }
               },
               "body": [
@@ -47,14 +51,18 @@ switch ($x) {
                         },
                         "span": {
                           "start": 45,
-                          "end": 50
+                          "end": 50,
+                          "start_line": 4,
+                          "start_col": 13
                         }
                       }
                     ]
                   },
                   "span": {
                     "start": 40,
-                    "end": 60
+                    "end": 60,
+                    "start_line": 4,
+                    "start_col": 8
                   }
                 },
                 {
@@ -63,13 +71,17 @@ switch ($x) {
                   },
                   "span": {
                     "start": 60,
-                    "end": 71
+                    "end": 71,
+                    "start_line": 5,
+                    "start_col": 8
                   }
                 }
               ],
               "span": {
                 "start": 24,
-                "end": 71
+                "end": 71,
+                "start_line": 3,
+                "start_col": 4
               }
             },
             {
@@ -79,13 +91,17 @@ switch ($x) {
                 },
                 "span": {
                   "start": 76,
-                  "end": 77
+                  "end": 77,
+                  "start_line": 6,
+                  "start_col": 9
                 }
               },
               "body": [],
               "span": {
                 "start": 71,
-                "end": 83
+                "end": 83,
+                "start_line": 6,
+                "start_col": 4
               }
             },
             {
@@ -95,7 +111,9 @@ switch ($x) {
                 },
                 "span": {
                   "start": 88,
-                  "end": 89
+                  "end": 89,
+                  "start_line": 7,
+                  "start_col": 9
                 }
               },
               "body": [
@@ -108,14 +126,18 @@ switch ($x) {
                         },
                         "span": {
                           "start": 104,
-                          "end": 118
+                          "end": 118,
+                          "start_line": 8,
+                          "start_col": 13
                         }
                       }
                     ]
                   },
                   "span": {
                     "start": 99,
-                    "end": 128
+                    "end": 128,
+                    "start_line": 8,
+                    "start_col": 8
                   }
                 },
                 {
@@ -124,13 +146,17 @@ switch ($x) {
                   },
                   "span": {
                     "start": 128,
-                    "end": 139
+                    "end": 139,
+                    "start_line": 9,
+                    "start_col": 8
                   }
                 }
               ],
               "span": {
                 "start": 83,
-                "end": 139
+                "end": 139,
+                "start_line": 7,
+                "start_col": 4
               }
             },
             {
@@ -145,20 +171,26 @@ switch ($x) {
                         },
                         "span": {
                           "start": 161,
-                          "end": 168
+                          "end": 168,
+                          "start_line": 11,
+                          "start_col": 13
                         }
                       }
                     ]
                   },
                   "span": {
                     "start": 156,
-                    "end": 170
+                    "end": 170,
+                    "start_line": 11,
+                    "start_col": 8
                   }
                 }
               ],
               "span": {
                 "start": 139,
-                "end": 170
+                "end": 170,
+                "start_line": 10,
+                "start_col": 4
               }
             }
           ]
@@ -166,12 +198,16 @@ switch ($x) {
       },
       "span": {
         "start": 6,
-        "end": 171
+        "end": 171,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 171
+    "end": 171,
+    "start_line": 1,
+    "start_col": 0
   }
 }

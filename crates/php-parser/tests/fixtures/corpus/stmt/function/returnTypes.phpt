@@ -21,7 +21,9 @@ function test4() : Foo\Bar {}
       },
       "span": {
         "start": 7,
-        "end": 26
+        "end": 26,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -39,13 +41,17 @@ function test4() : Foo\Bar {}
                 "kind": "Unqualified",
                 "span": {
                   "start": 46,
-                  "end": 51
+                  "end": 51,
+                  "start_line": 4,
+                  "start_col": 19
                 }
               }
             },
             "span": {
               "start": 46,
-              "end": 51
+              "end": 51,
+              "start_line": 4,
+              "start_col": 19
             }
           },
           "by_ref": false,
@@ -54,7 +60,9 @@ function test4() : Foo\Bar {}
       },
       "span": {
         "start": 27,
-        "end": 54
+        "end": 54,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -72,13 +80,17 @@ function test4() : Foo\Bar {}
                 "kind": "Unqualified",
                 "span": {
                   "start": 74,
-                  "end": 82
+                  "end": 82,
+                  "start_line": 5,
+                  "start_col": 19
                 }
               }
             },
             "span": {
               "start": 74,
-              "end": 82
+              "end": 82,
+              "start_line": 5,
+              "start_col": 19
             }
           },
           "by_ref": false,
@@ -87,7 +99,9 @@ function test4() : Foo\Bar {}
       },
       "span": {
         "start": 55,
-        "end": 85
+        "end": 85,
+        "start_line": 5,
+        "start_col": 0
       }
     },
     {
@@ -106,13 +120,17 @@ function test4() : Foo\Bar {}
                 "kind": "Qualified",
                 "span": {
                   "start": 105,
-                  "end": 113
+                  "end": 113,
+                  "start_line": 6,
+                  "start_col": 19
                 }
               }
             },
             "span": {
               "start": 105,
-              "end": 113
+              "end": 113,
+              "start_line": 6,
+              "start_col": 19
             }
           },
           "by_ref": false,
@@ -121,12 +139,16 @@ function test4() : Foo\Bar {}
       },
       "span": {
         "start": 86,
-        "end": 115
+        "end": 115,
+        "start_line": 6,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 115
+    "end": 115,
+    "start_line": 1,
+    "start_col": 0
   }
 }

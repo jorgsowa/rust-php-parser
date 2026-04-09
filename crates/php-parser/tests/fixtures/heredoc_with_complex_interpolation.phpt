@@ -18,7 +18,9 @@ EOT;
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -40,7 +42,9 @@ EOT;
                                 },
                                 "span": {
                                   "start": 25,
-                                  "end": 29
+                                  "end": 29,
+                                  "start_line": 3,
+                                  "start_col": 7
                                 }
                               },
                               "property": {
@@ -49,14 +53,18 @@ EOT;
                                 },
                                 "span": {
                                   "start": 31,
-                                  "end": 35
+                                  "end": 35,
+                                  "start_line": 3,
+                                  "start_col": 13
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 25,
-                            "end": 35
+                            "end": 35,
+                            "start_line": 3,
+                            "start_col": 7
                           }
                         }
                       },
@@ -73,7 +81,9 @@ EOT;
                                 },
                                 "span": {
                                   "start": 38,
-                                  "end": 42
+                                  "end": 42,
+                                  "start_line": 4,
+                                  "start_col": 0
                                 }
                               },
                               "index": {
@@ -82,14 +92,18 @@ EOT;
                                 },
                                 "span": {
                                   "start": 43,
-                                  "end": 44
+                                  "end": 44,
+                                  "start_line": 4,
+                                  "start_col": 5
                                 }
                               }
                             }
                           },
                           "span": {
                             "start": 38,
-                            "end": 45
+                            "end": 45,
+                            "start_line": 4,
+                            "start_col": 0
                           }
                         }
                       },
@@ -101,25 +115,33 @@ EOT;
                 },
                 "span": {
                   "start": 11,
-                  "end": 55
+                  "end": 55,
+                  "start_line": 2,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 55
+            "end": 55,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 56
+        "end": 56,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 56
+    "end": 56,
+    "start_line": 1,
+    "start_col": 0
   }
 }

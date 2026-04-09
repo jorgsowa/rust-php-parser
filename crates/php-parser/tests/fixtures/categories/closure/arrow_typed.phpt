@@ -14,7 +14,9 @@
                 },
                 "span": {
                   "start": 6,
-                  "end": 9
+                  "end": 9,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "op": "Assign",
@@ -35,13 +37,17 @@
                               "kind": "Unqualified",
                               "span": {
                                 "start": 15,
-                                "end": 18
+                                "end": 18,
+                                "start_line": 1,
+                                "start_col": 15
                               }
                             }
                           },
                           "span": {
                             "start": 15,
-                            "end": 18
+                            "end": 18,
+                            "start_line": 1,
+                            "start_col": 15
                           }
                         },
                         "default": null,
@@ -54,7 +60,9 @@
                         "attributes": [],
                         "span": {
                           "start": 15,
-                          "end": 21
+                          "end": 21,
+                          "start_line": 1,
+                          "start_col": 15
                         }
                       }
                     ],
@@ -67,13 +75,17 @@
                           "kind": "Unqualified",
                           "span": {
                             "start": 24,
-                            "end": 27
+                            "end": 27,
+                            "start_line": 1,
+                            "start_col": 24
                           }
                         }
                       },
                       "span": {
                         "start": 24,
-                        "end": 27
+                        "end": 27,
+                        "start_line": 1,
+                        "start_col": 24
                       }
                     },
                     "body": {
@@ -85,7 +97,9 @@
                             },
                             "span": {
                               "start": 31,
-                              "end": 33
+                              "end": 33,
+                              "start_line": 1,
+                              "start_col": 31
                             }
                           },
                           "op": "Mul",
@@ -95,14 +109,18 @@
                             },
                             "span": {
                               "start": 36,
-                              "end": 37
+                              "end": 37,
+                              "start_line": 1,
+                              "start_col": 36
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 31,
-                        "end": 37
+                        "end": 37,
+                        "start_line": 1,
+                        "start_col": 31
                       }
                     },
                     "attributes": []
@@ -110,25 +128,33 @@
                 },
                 "span": {
                   "start": 12,
-                  "end": 37
+                  "end": 37,
+                  "start_line": 1,
+                  "start_col": 12
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 37
+            "end": 37,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 38
+        "end": 38,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 38
+    "end": 38,
+    "start_line": 1,
+    "start_col": 0
   }
 }

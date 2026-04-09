@@ -12,7 +12,9 @@
             },
             "span": {
               "start": 10,
-              "end": 14
+              "end": 14,
+              "start_line": 1,
+              "start_col": 10
             }
           },
           "then_branch": {
@@ -24,14 +26,18 @@
                   },
                   "span": {
                     "start": 19,
-                    "end": 25
+                    "end": 25,
+                    "start_line": 1,
+                    "start_col": 19
                   }
                 }
               ]
             },
             "span": {
               "start": 6,
-              "end": 31
+              "end": 31,
+              "start_line": 1,
+              "start_col": 6
             }
           },
           "elseif_branches": [],
@@ -40,12 +46,16 @@
       },
       "span": {
         "start": 6,
-        "end": 38
+        "end": 38,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 38
+    "end": 38,
+    "start_line": 1,
+    "start_col": 0
   }
 }

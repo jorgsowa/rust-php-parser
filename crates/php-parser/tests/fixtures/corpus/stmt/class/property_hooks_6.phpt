@@ -36,7 +36,9 @@ class Test
               },
               "span": {
                 "start": 24,
-                "end": 35
+                "end": 35,
+                "start_line": 5,
+                "start_col": 4
               }
             },
             {
@@ -63,13 +65,17 @@ class Test
                                 },
                                 "span": {
                                   "start": 57,
-                                  "end": 59
+                                  "end": 59,
+                                  "start_line": 5,
+                                  "start_col": 37
                                 }
                               }
                             },
                             "span": {
                               "start": 50,
-                              "end": 61
+                              "end": 61,
+                              "start_line": 5,
+                              "start_col": 30
                             }
                           }
                         ]
@@ -80,7 +86,9 @@ class Test
                       "attributes": [],
                       "span": {
                         "start": 44,
-                        "end": 63
+                        "end": 63,
+                        "start_line": 5,
+                        "start_col": 24
                       }
                     }
                   ]
@@ -88,7 +96,9 @@ class Test
               },
               "span": {
                 "start": 24,
-                "end": 66
+                "end": 66,
+                "start_line": 5,
+                "start_col": 4
               }
             }
           ],
@@ -97,12 +107,16 @@ class Test
       },
       "span": {
         "start": 6,
-        "end": 67
+        "end": 67,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 67
+    "end": 67,
+    "start_line": 1,
+    "start_col": 0
   }
 }

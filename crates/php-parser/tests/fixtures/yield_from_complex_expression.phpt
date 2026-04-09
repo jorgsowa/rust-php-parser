@@ -27,7 +27,9 @@ function gen() {
                               },
                               "span": {
                                 "start": 38,
-                                "end": 47
+                                "end": 47,
+                                "start_line": 3,
+                                "start_col": 15
                               }
                             },
                             "args": [
@@ -52,7 +54,9 @@ function gen() {
                                           "attributes": [],
                                           "span": {
                                             "start": 51,
-                                            "end": 53
+                                            "end": 53,
+                                            "start_line": 3,
+                                            "start_col": 28
                                           }
                                         }
                                       ],
@@ -66,7 +70,9 @@ function gen() {
                                               },
                                               "span": {
                                                 "start": 58,
-                                                "end": 60
+                                                "end": 60,
+                                                "start_line": 3,
+                                                "start_col": 35
                                               }
                                             },
                                             "op": "Mul",
@@ -76,14 +82,18 @@ function gen() {
                                               },
                                               "span": {
                                                 "start": 63,
-                                                "end": 64
+                                                "end": 64,
+                                                "start_line": 3,
+                                                "start_col": 40
                                               }
                                             }
                                           }
                                         },
                                         "span": {
                                           "start": 58,
-                                          "end": 64
+                                          "end": 64,
+                                          "start_line": 3,
+                                          "start_col": 35
                                         }
                                       },
                                       "attributes": []
@@ -91,14 +101,18 @@ function gen() {
                                   },
                                   "span": {
                                     "start": 48,
-                                    "end": 64
+                                    "end": 64,
+                                    "start_line": 3,
+                                    "start_col": 25
                                   }
                                 },
                                 "unpack": false,
                                 "by_ref": false,
                                 "span": {
                                   "start": 48,
-                                  "end": 64
+                                  "end": 64,
+                                  "start_line": 3,
+                                  "start_col": 25
                                 }
                               },
                               {
@@ -114,13 +128,17 @@ function gen() {
                                           },
                                           "span": {
                                             "start": 67,
-                                            "end": 68
+                                            "end": 68,
+                                            "start_line": 3,
+                                            "start_col": 44
                                           }
                                         },
                                         "unpack": false,
                                         "span": {
                                           "start": 67,
-                                          "end": 68
+                                          "end": 68,
+                                          "start_line": 3,
+                                          "start_col": 44
                                         }
                                       },
                                       {
@@ -131,13 +149,17 @@ function gen() {
                                           },
                                           "span": {
                                             "start": 70,
-                                            "end": 71
+                                            "end": 71,
+                                            "start_line": 3,
+                                            "start_col": 47
                                           }
                                         },
                                         "unpack": false,
                                         "span": {
                                           "start": 70,
-                                          "end": 71
+                                          "end": 71,
+                                          "start_line": 3,
+                                          "start_col": 47
                                         }
                                       },
                                       {
@@ -148,27 +170,35 @@ function gen() {
                                           },
                                           "span": {
                                             "start": 73,
-                                            "end": 74
+                                            "end": 74,
+                                            "start_line": 3,
+                                            "start_col": 50
                                           }
                                         },
                                         "unpack": false,
                                         "span": {
                                           "start": 73,
-                                          "end": 74
+                                          "end": 74,
+                                          "start_line": 3,
+                                          "start_col": 50
                                         }
                                       }
                                     ]
                                   },
                                   "span": {
                                     "start": 66,
-                                    "end": 75
+                                    "end": 75,
+                                    "start_line": 3,
+                                    "start_col": 43
                                   }
                                 },
                                 "unpack": false,
                                 "by_ref": false,
                                 "span": {
                                   "start": 66,
-                                  "end": 75
+                                  "end": 75,
+                                  "start_line": 3,
+                                  "start_col": 43
                                 }
                               }
                             ]
@@ -176,7 +206,9 @@ function gen() {
                         },
                         "span": {
                           "start": 38,
-                          "end": 76
+                          "end": 76,
+                          "start_line": 3,
+                          "start_col": 15
                         }
                       },
                       "is_from": true
@@ -184,13 +216,17 @@ function gen() {
                   },
                   "span": {
                     "start": 27,
-                    "end": 76
+                    "end": 76,
+                    "start_line": 3,
+                    "start_col": 4
                   }
                 }
               },
               "span": {
                 "start": 27,
-                "end": 78
+                "end": 78,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -201,12 +237,16 @@ function gen() {
       },
       "span": {
         "start": 6,
-        "end": 79
+        "end": 79,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 79
+    "end": 79,
+    "start_line": 1,
+    "start_col": 0
   }
 }

@@ -17,7 +17,9 @@ $complex = `{$obj->getCmd()} --flag`;
                 },
                 "span": {
                   "start": 6,
-                  "end": 10
+                  "end": 10,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -31,20 +33,26 @@ $complex = `{$obj->getCmd()} --flag`;
                 },
                 "span": {
                   "start": 13,
-                  "end": 21
+                  "end": 21,
+                  "start_line": 2,
+                  "start_col": 7
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 21
+            "end": 21,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 23
+        "end": 23,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -58,7 +66,9 @@ $complex = `{$obj->getCmd()} --flag`;
                 },
                 "span": {
                   "start": 23,
-                  "end": 27
+                  "end": 27,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -75,7 +85,9 @@ $complex = `{$obj->getCmd()} --flag`;
                         },
                         "span": {
                           "start": 36,
-                          "end": 40
+                          "end": 40,
+                          "start_line": 3,
+                          "start_col": 13
                         }
                       }
                     }
@@ -83,20 +95,26 @@ $complex = `{$obj->getCmd()} --flag`;
                 },
                 "span": {
                   "start": 30,
-                  "end": 41
+                  "end": 41,
+                  "start_line": 3,
+                  "start_col": 7
                 }
               }
             }
           },
           "span": {
             "start": 23,
-            "end": 41
+            "end": 41,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 23,
-        "end": 43
+        "end": 43,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -110,7 +128,9 @@ $complex = `{$obj->getCmd()} --flag`;
                 },
                 "span": {
                   "start": 43,
-                  "end": 51
+                  "end": 51,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -127,7 +147,9 @@ $complex = `{$obj->getCmd()} --flag`;
                               },
                               "span": {
                                 "start": 56,
-                                "end": 60
+                                "end": 60,
+                                "start_line": 4,
+                                "start_col": 13
                               }
                             },
                             "method": {
@@ -136,7 +158,9 @@ $complex = `{$obj->getCmd()} --flag`;
                               },
                               "span": {
                                 "start": 62,
-                                "end": 68
+                                "end": 68,
+                                "start_line": 4,
+                                "start_col": 19
                               }
                             },
                             "args": []
@@ -144,7 +168,9 @@ $complex = `{$obj->getCmd()} --flag`;
                         },
                         "span": {
                           "start": 56,
-                          "end": 70
+                          "end": 70,
+                          "start_line": 4,
+                          "start_col": 13
                         }
                       }
                     },
@@ -155,25 +181,33 @@ $complex = `{$obj->getCmd()} --flag`;
                 },
                 "span": {
                   "start": 54,
-                  "end": 79
+                  "end": 79,
+                  "start_line": 4,
+                  "start_col": 11
                 }
               }
             }
           },
           "span": {
             "start": 43,
-            "end": 79
+            "end": 79,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 43,
-        "end": 80
+        "end": 80,
+        "start_line": 4,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 80
+    "end": 80,
+    "start_line": 1,
+    "start_col": 0
   }
 }

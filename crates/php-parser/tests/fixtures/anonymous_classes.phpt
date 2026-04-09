@@ -45,7 +45,9 @@ $obj = new class($x) extends Base implements Iface {
                 },
                 "span": {
                   "start": 32,
-                  "end": 36
+                  "end": 36,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -69,7 +71,9 @@ $obj = new class($x) extends Base implements Iface {
                       },
                       "span": {
                         "start": 39,
-                        "end": 51
+                        "end": 51,
+                        "start_line": 4,
+                        "start_col": 7
                       }
                     },
                     "args": []
@@ -77,20 +81,26 @@ $obj = new class($x) extends Base implements Iface {
                 },
                 "span": {
                   "start": 39,
-                  "end": 51
+                  "end": 51,
+                  "start_line": 4,
+                  "start_col": 7
                 }
               }
             }
           },
           "span": {
             "start": 32,
-            "end": 51
+            "end": 51,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 32,
-        "end": 79
+        "end": 79,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -104,7 +114,9 @@ $obj = new class($x) extends Base implements Iface {
                 },
                 "span": {
                   "start": 79,
-                  "end": 83
+                  "end": 83,
+                  "start_line": 7,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -128,7 +140,9 @@ $obj = new class($x) extends Base implements Iface {
                       },
                       "span": {
                         "start": 86,
-                        "end": 104
+                        "end": 104,
+                        "start_line": 7,
+                        "start_col": 7
                       }
                     },
                     "args": [
@@ -140,14 +154,18 @@ $obj = new class($x) extends Base implements Iface {
                           },
                           "span": {
                             "start": 96,
-                            "end": 97
+                            "end": 97,
+                            "start_line": 7,
+                            "start_col": 17
                           }
                         },
                         "unpack": false,
                         "by_ref": false,
                         "span": {
                           "start": 96,
-                          "end": 97
+                          "end": 97,
+                          "start_line": 7,
+                          "start_col": 17
                         }
                       },
                       {
@@ -158,14 +176,18 @@ $obj = new class($x) extends Base implements Iface {
                           },
                           "span": {
                             "start": 99,
-                            "end": 100
+                            "end": 100,
+                            "start_line": 7,
+                            "start_col": 20
                           }
                         },
                         "unpack": false,
                         "by_ref": false,
                         "span": {
                           "start": 99,
-                          "end": 100
+                          "end": 100,
+                          "start_line": 7,
+                          "start_col": 20
                         }
                       }
                     ]
@@ -173,20 +195,26 @@ $obj = new class($x) extends Base implements Iface {
                 },
                 "span": {
                   "start": 86,
-                  "end": 104
+                  "end": 104,
+                  "start_line": 7,
+                  "start_col": 7
                 }
               }
             }
           },
           "span": {
             "start": 79,
-            "end": 104
+            "end": 104,
+            "start_line": 7,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 79,
-        "end": 123
+        "end": 123,
+        "start_line": 7,
+        "start_col": 0
       }
     },
     {
@@ -200,7 +228,9 @@ $obj = new class($x) extends Base implements Iface {
                 },
                 "span": {
                   "start": 123,
-                  "end": 127
+                  "end": 127,
+                  "start_line": 10,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -223,7 +253,9 @@ $obj = new class($x) extends Base implements Iface {
                             "kind": "Unqualified",
                             "span": {
                               "start": 148,
-                              "end": 152
+                              "end": 152,
+                              "start_line": 10,
+                              "start_col": 25
                             }
                           },
                           "implements": [],
@@ -233,7 +265,9 @@ $obj = new class($x) extends Base implements Iface {
                       },
                       "span": {
                         "start": 130,
-                        "end": 154
+                        "end": 154,
+                        "start_line": 10,
+                        "start_col": 7
                       }
                     },
                     "args": []
@@ -241,20 +275,26 @@ $obj = new class($x) extends Base implements Iface {
                 },
                 "span": {
                   "start": 130,
-                  "end": 154
+                  "end": 154,
+                  "start_line": 10,
+                  "start_col": 7
                 }
               }
             }
           },
           "span": {
             "start": 123,
-            "end": 154
+            "end": 154,
+            "start_line": 10,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 123,
-        "end": 176
+        "end": 176,
+        "start_line": 10,
+        "start_col": 0
       }
     },
     {
@@ -268,7 +308,9 @@ $obj = new class($x) extends Base implements Iface {
                 },
                 "span": {
                   "start": 176,
-                  "end": 180
+                  "end": 180,
+                  "start_line": 13,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -293,7 +335,9 @@ $obj = new class($x) extends Base implements Iface {
                               "kind": "Unqualified",
                               "span": {
                                 "start": 204,
-                                "end": 207
+                                "end": 207,
+                                "start_line": 13,
+                                "start_col": 28
                               }
                             },
                             {
@@ -303,7 +347,9 @@ $obj = new class($x) extends Base implements Iface {
                               "kind": "Unqualified",
                               "span": {
                                 "start": 209,
-                                "end": 213
+                                "end": 213,
+                                "start_line": 13,
+                                "start_col": 33
                               }
                             }
                           ],
@@ -313,7 +359,9 @@ $obj = new class($x) extends Base implements Iface {
                       },
                       "span": {
                         "start": 183,
-                        "end": 215
+                        "end": 215,
+                        "start_line": 13,
+                        "start_col": 7
                       }
                     },
                     "args": []
@@ -321,20 +369,26 @@ $obj = new class($x) extends Base implements Iface {
                 },
                 "span": {
                   "start": 183,
-                  "end": 215
+                  "end": 215,
+                  "start_line": 13,
+                  "start_col": 7
                 }
               }
             }
           },
           "span": {
             "start": 176,
-            "end": 215
+            "end": 215,
+            "start_line": 13,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 176,
-        "end": 234
+        "end": 234,
+        "start_line": 13,
+        "start_col": 0
       }
     },
     {
@@ -348,7 +402,9 @@ $obj = new class($x) extends Base implements Iface {
                 },
                 "span": {
                   "start": 234,
-                  "end": 238
+                  "end": 238,
+                  "start_line": 16,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -382,7 +438,9 @@ $obj = new class($x) extends Base implements Iface {
                                     },
                                     "span": {
                                       "start": 269,
-                                      "end": 271
+                                      "end": 271,
+                                      "start_line": 17,
+                                      "start_col": 16
                                     }
                                   },
                                   "attributes": []
@@ -390,7 +448,9 @@ $obj = new class($x) extends Base implements Iface {
                               },
                               "span": {
                                 "start": 257,
-                                "end": 271
+                                "end": 271,
+                                "start_line": 17,
+                                "start_col": 4
                               }
                             },
                             {
@@ -413,13 +473,17 @@ $obj = new class($x) extends Base implements Iface {
                                           },
                                           "span": {
                                             "start": 318,
-                                            "end": 322
+                                            "end": 322,
+                                            "start_line": 19,
+                                            "start_col": 15
                                           }
                                         }
                                       },
                                       "span": {
                                         "start": 311,
-                                        "end": 328
+                                        "end": 328,
+                                        "start_line": 19,
+                                        "start_col": 8
                                       }
                                     }
                                   ],
@@ -428,7 +492,9 @@ $obj = new class($x) extends Base implements Iface {
                               },
                               "span": {
                                 "start": 277,
-                                "end": 330
+                                "end": 330,
+                                "start_line": 18,
+                                "start_col": 4
                               }
                             }
                           ],
@@ -437,7 +503,9 @@ $obj = new class($x) extends Base implements Iface {
                       },
                       "span": {
                         "start": 241,
-                        "end": 331
+                        "end": 331,
+                        "start_line": 16,
+                        "start_col": 7
                       }
                     },
                     "args": []
@@ -445,20 +513,26 @@ $obj = new class($x) extends Base implements Iface {
                 },
                 "span": {
                   "start": 241,
-                  "end": 331
+                  "end": 331,
+                  "start_line": 16,
+                  "start_col": 7
                 }
               }
             }
           },
           "span": {
             "start": 234,
-            "end": 331
+            "end": 331,
+            "start_line": 16,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 234,
-        "end": 393
+        "end": 393,
+        "start_line": 16,
+        "start_col": 0
       }
     },
     {
@@ -472,7 +546,9 @@ $obj = new class($x) extends Base implements Iface {
                 },
                 "span": {
                   "start": 393,
-                  "end": 397
+                  "end": 397,
+                  "start_line": 24,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -495,7 +571,9 @@ $obj = new class($x) extends Base implements Iface {
                             "kind": "Unqualified",
                             "span": {
                               "start": 422,
-                              "end": 427
+                              "end": 427,
+                              "start_line": 24,
+                              "start_col": 29
                             }
                           },
                           "implements": [
@@ -506,7 +584,9 @@ $obj = new class($x) extends Base implements Iface {
                               "kind": "Unqualified",
                               "span": {
                                 "start": 438,
-                                "end": 444
+                                "end": 444,
+                                "start_line": 24,
+                                "start_col": 45
                               }
                             }
                           ],
@@ -526,7 +606,9 @@ $obj = new class($x) extends Base implements Iface {
                               },
                               "span": {
                                 "start": 450,
-                                "end": 462
+                                "end": 462,
+                                "start_line": 25,
+                                "start_col": 4
                               }
                             },
                             {
@@ -552,7 +634,9 @@ $obj = new class($x) extends Base implements Iface {
                                       "attributes": [],
                                       "span": {
                                         "start": 496,
-                                        "end": 500
+                                        "end": 500,
+                                        "start_line": 26,
+                                        "start_col": 32
                                       }
                                     }
                                   ],
@@ -572,7 +656,9 @@ $obj = new class($x) extends Base implements Iface {
                                                       },
                                                       "span": {
                                                         "start": 512,
-                                                        "end": 517
+                                                        "end": 517,
+                                                        "start_line": 27,
+                                                        "start_col": 8
                                                       }
                                                     },
                                                     "property": {
@@ -581,14 +667,18 @@ $obj = new class($x) extends Base implements Iface {
                                                       },
                                                       "span": {
                                                         "start": 519,
-                                                        "end": 522
+                                                        "end": 522,
+                                                        "start_line": 27,
+                                                        "start_col": 15
                                                       }
                                                     }
                                                   }
                                                 },
                                                 "span": {
                                                   "start": 512,
-                                                  "end": 522
+                                                  "end": 522,
+                                                  "start_line": 27,
+                                                  "start_col": 8
                                                 }
                                               },
                                               "op": "Assign",
@@ -598,20 +688,26 @@ $obj = new class($x) extends Base implements Iface {
                                                 },
                                                 "span": {
                                                   "start": 525,
-                                                  "end": 529
+                                                  "end": 529,
+                                                  "start_line": 27,
+                                                  "start_col": 21
                                                 }
                                               }
                                             }
                                           },
                                           "span": {
                                             "start": 512,
-                                            "end": 529
+                                            "end": 529,
+                                            "start_line": 27,
+                                            "start_col": 8
                                           }
                                         }
                                       },
                                       "span": {
                                         "start": 512,
-                                        "end": 535
+                                        "end": 535,
+                                        "start_line": 27,
+                                        "start_col": 8
                                       }
                                     }
                                   ],
@@ -620,7 +716,9 @@ $obj = new class($x) extends Base implements Iface {
                               },
                               "span": {
                                 "start": 468,
-                                "end": 541
+                                "end": 541,
+                                "start_line": 26,
+                                "start_col": 4
                               }
                             },
                             {
@@ -646,7 +744,9 @@ $obj = new class($x) extends Base implements Iface {
                                                 },
                                                 "span": {
                                                   "start": 585,
-                                                  "end": 590
+                                                  "end": 590,
+                                                  "start_line": 30,
+                                                  "start_col": 15
                                                 }
                                               },
                                               "property": {
@@ -655,20 +755,26 @@ $obj = new class($x) extends Base implements Iface {
                                                 },
                                                 "span": {
                                                   "start": 592,
-                                                  "end": 595
+                                                  "end": 595,
+                                                  "start_line": 30,
+                                                  "start_col": 22
                                                 }
                                               }
                                             }
                                           },
                                           "span": {
                                             "start": 585,
-                                            "end": 595
+                                            "end": 595,
+                                            "start_line": 30,
+                                            "start_col": 15
                                           }
                                         }
                                       },
                                       "span": {
                                         "start": 578,
-                                        "end": 601
+                                        "end": 601,
+                                        "start_line": 30,
+                                        "start_col": 8
                                       }
                                     }
                                   ],
@@ -677,7 +783,9 @@ $obj = new class($x) extends Base implements Iface {
                               },
                               "span": {
                                 "start": 541,
-                                "end": 603
+                                "end": 603,
+                                "start_line": 29,
+                                "start_col": 4
                               }
                             }
                           ],
@@ -686,7 +794,9 @@ $obj = new class($x) extends Base implements Iface {
                       },
                       "span": {
                         "start": 400,
-                        "end": 604
+                        "end": 604,
+                        "start_line": 24,
+                        "start_col": 7
                       }
                     },
                     "args": [
@@ -698,14 +808,18 @@ $obj = new class($x) extends Base implements Iface {
                           },
                           "span": {
                             "start": 410,
-                            "end": 412
+                            "end": 412,
+                            "start_line": 24,
+                            "start_col": 17
                           }
                         },
                         "unpack": false,
                         "by_ref": false,
                         "span": {
                           "start": 410,
-                          "end": 412
+                          "end": 412,
+                          "start_line": 24,
+                          "start_col": 17
                         }
                       }
                     ]
@@ -713,25 +827,33 @@ $obj = new class($x) extends Base implements Iface {
                 },
                 "span": {
                   "start": 400,
-                  "end": 604
+                  "end": 604,
+                  "start_line": 24,
+                  "start_col": 7
                 }
               }
             }
           },
           "span": {
             "start": 393,
-            "end": 604
+            "end": 604,
+            "start_line": 24,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 393,
-        "end": 605
+        "end": 605,
+        "start_line": 24,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 605
+    "end": 605,
+    "start_line": 1,
+    "start_col": 0
   }
 }

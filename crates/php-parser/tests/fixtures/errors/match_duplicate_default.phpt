@@ -16,7 +16,9 @@ match expression may only contain one default arm
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "op": "Assign",
@@ -29,7 +31,9 @@ match expression may only contain one default arm
                       },
                       "span": {
                         "start": 18,
-                        "end": 20
+                        "end": 20,
+                        "start_line": 1,
+                        "start_col": 18
                       }
                     },
                     "arms": [
@@ -41,7 +45,9 @@ match expression may only contain one default arm
                             },
                             "span": {
                               "start": 24,
-                              "end": 25
+                              "end": 25,
+                              "start_line": 1,
+                              "start_col": 24
                             }
                           }
                         ],
@@ -51,12 +57,16 @@ match expression may only contain one default arm
                           },
                           "span": {
                             "start": 29,
-                            "end": 34
+                            "end": 34,
+                            "start_line": 1,
+                            "start_col": 29
                           }
                         },
                         "span": {
                           "start": 24,
-                          "end": 34
+                          "end": 34,
+                          "start_line": 1,
+                          "start_col": 24
                         }
                       },
                       {
@@ -67,12 +77,16 @@ match expression may only contain one default arm
                           },
                           "span": {
                             "start": 47,
-                            "end": 54
+                            "end": 54,
+                            "start_line": 1,
+                            "start_col": 47
                           }
                         },
                         "span": {
                           "start": 36,
-                          "end": 54
+                          "end": 54,
+                          "start_line": 1,
+                          "start_col": 36
                         }
                       },
                       {
@@ -83,12 +97,16 @@ match expression may only contain one default arm
                           },
                           "span": {
                             "start": 67,
-                            "end": 75
+                            "end": 75,
+                            "start_line": 1,
+                            "start_col": 67
                           }
                         },
                         "span": {
                           "start": 56,
-                          "end": 75
+                          "end": 75,
+                          "start_line": 1,
+                          "start_col": 56
                         }
                       }
                     ]
@@ -96,25 +114,33 @@ match expression may only contain one default arm
                 },
                 "span": {
                   "start": 11,
-                  "end": 77
+                  "end": 77,
+                  "start_line": 1,
+                  "start_col": 11
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 77
+            "end": 77,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 78
+        "end": 78,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 78
+    "end": 78,
+    "start_line": 1,
+    "start_col": 0
   }
 }

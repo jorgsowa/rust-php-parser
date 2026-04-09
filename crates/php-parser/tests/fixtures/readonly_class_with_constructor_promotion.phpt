@@ -45,13 +45,17 @@ readonly class Point {
                             "kind": "Unqualified",
                             "span": {
                               "start": 77,
-                              "end": 82
+                              "end": 82,
+                              "start_line": 4,
+                              "start_col": 15
                             }
                           }
                         },
                         "span": {
                           "start": 77,
-                          "end": 82
+                          "end": 82,
+                          "start_line": 4,
+                          "start_col": 15
                         }
                       },
                       "default": null,
@@ -64,7 +68,9 @@ readonly class Point {
                       "attributes": [],
                       "span": {
                         "start": 70,
-                        "end": 85
+                        "end": 85,
+                        "start_line": 4,
+                        "start_col": 8
                       }
                     },
                     {
@@ -78,13 +84,17 @@ readonly class Point {
                             "kind": "Unqualified",
                             "span": {
                               "start": 102,
-                              "end": 107
+                              "end": 107,
+                              "start_line": 5,
+                              "start_col": 15
                             }
                           }
                         },
                         "span": {
                           "start": 102,
-                          "end": 107
+                          "end": 107,
+                          "start_line": 5,
+                          "start_col": 15
                         }
                       },
                       "default": null,
@@ -97,7 +107,9 @@ readonly class Point {
                       "attributes": [],
                       "span": {
                         "start": 95,
-                        "end": 110
+                        "end": 110,
+                        "start_line": 5,
+                        "start_col": 8
                       }
                     },
                     {
@@ -111,13 +123,17 @@ readonly class Point {
                             "kind": "Unqualified",
                             "span": {
                               "start": 127,
-                              "end": 132
+                              "end": 132,
+                              "start_line": 6,
+                              "start_col": 15
                             }
                           }
                         },
                         "span": {
                           "start": 127,
-                          "end": 132
+                          "end": 132,
+                          "start_line": 6,
+                          "start_col": 15
                         }
                       },
                       "default": {
@@ -126,7 +142,9 @@ readonly class Point {
                         },
                         "span": {
                           "start": 138,
-                          "end": 141
+                          "end": 141,
+                          "start_line": 6,
+                          "start_col": 26
                         }
                       },
                       "by_ref": false,
@@ -138,7 +156,9 @@ readonly class Point {
                       "attributes": [],
                       "span": {
                         "start": 120,
-                        "end": 141
+                        "end": 141,
+                        "start_line": 6,
+                        "start_col": 8
                       }
                     }
                   ],
@@ -149,7 +169,9 @@ readonly class Point {
               },
               "span": {
                 "start": 33,
-                "end": 152
+                "end": 152,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -158,12 +180,16 @@ readonly class Point {
       },
       "span": {
         "start": 15,
-        "end": 153
+        "end": 153,
+        "start_line": 2,
+        "start_col": 9
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 153
+    "end": 153,
+    "start_line": 1,
+    "start_col": 0
   }
 }

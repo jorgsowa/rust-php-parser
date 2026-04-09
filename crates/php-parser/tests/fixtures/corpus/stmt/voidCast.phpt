@@ -28,7 +28,9 @@ $x = (void) $y;
                       },
                       "span": {
                         "start": 12,
-                        "end": 15
+                        "end": 15,
+                        "start_line": 2,
+                        "start_col": 6
                       }
                     },
                     "args": []
@@ -36,20 +38,26 @@ $x = (void) $y;
                 },
                 "span": {
                   "start": 12,
-                  "end": 17
+                  "end": 17,
+                  "start_line": 2,
+                  "start_col": 6
                 }
               }
             ]
           },
           "span": {
             "start": 6,
-            "end": 17
+            "end": 17,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 19
+        "end": 19,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -67,7 +75,9 @@ $x = (void) $y;
                       },
                       "span": {
                         "start": 28,
-                        "end": 31
+                        "end": 31,
+                        "start_line": 3,
+                        "start_col": 9
                       }
                     },
                     "args": []
@@ -75,20 +85,26 @@ $x = (void) $y;
                 },
                 "span": {
                   "start": 28,
-                  "end": 33
+                  "end": 33,
+                  "start_line": 3,
+                  "start_col": 9
                 }
               }
             ]
           },
           "span": {
             "start": 19,
-            "end": 33
+            "end": 33,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 19,
-        "end": 35
+        "end": 35,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -106,14 +122,18 @@ $x = (void) $y;
                       },
                       "span": {
                         "start": 41,
-                        "end": 43
+                        "end": 43,
+                        "start_line": 4,
+                        "start_col": 6
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 35,
-                  "end": 43
+                  "end": 43,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "op": "LogicalOr",
@@ -123,20 +143,26 @@ $x = (void) $y;
                 },
                 "span": {
                   "start": 47,
-                  "end": 49
+                  "end": 49,
+                  "start_line": 4,
+                  "start_col": 12
                 }
               }
             }
           },
           "span": {
             "start": 35,
-            "end": 49
+            "end": 49,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 35,
-        "end": 83
+        "end": 83,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -156,7 +182,9 @@ $x = (void) $y;
                           },
                           "span": {
                             "start": 94,
-                            "end": 95
+                            "end": 95,
+                            "start_line": 7,
+                            "start_col": 11
                           }
                         },
                         "args": []
@@ -164,14 +192,18 @@ $x = (void) $y;
                     },
                     "span": {
                       "start": 94,
-                      "end": 97
+                      "end": 97,
+                      "start_line": 7,
+                      "start_col": 11
                     }
                   }
                 ]
               },
               "span": {
                 "start": 88,
-                "end": 97
+                "end": 97,
+                "start_line": 7,
+                "start_col": 5
               }
             }
           ],
@@ -182,7 +214,9 @@ $x = (void) $y;
               },
               "span": {
                 "start": 99,
-                "end": 101
+                "end": 101,
+                "start_line": 7,
+                "start_col": 16
               }
             }
           ],
@@ -197,14 +231,18 @@ $x = (void) $y;
                     },
                     "span": {
                       "start": 109,
-                      "end": 111
+                      "end": 111,
+                      "start_line": 7,
+                      "start_col": 26
                     }
                   }
                 ]
               },
               "span": {
                 "start": 103,
-                "end": 111
+                "end": 111,
+                "start_line": 7,
+                "start_col": 20
               }
             }
           ],
@@ -214,14 +252,18 @@ $x = (void) $y;
             },
             "span": {
               "start": 113,
-              "end": 116
+              "end": 116,
+              "start_line": 7,
+              "start_col": 30
             }
           }
         }
       },
       "span": {
         "start": 83,
-        "end": 116
+        "end": 116,
+        "start_line": 7,
+        "start_col": 0
       }
     },
     {
@@ -235,7 +277,9 @@ $x = (void) $y;
                 },
                 "span": {
                   "start": 173,
-                  "end": 175
+                  "end": 175,
+                  "start_line": 11,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -249,32 +293,42 @@ $x = (void) $y;
                       },
                       "span": {
                         "start": 185,
-                        "end": 187
+                        "end": 187,
+                        "start_line": 11,
+                        "start_col": 12
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 178,
-                  "end": 187
+                  "end": 187,
+                  "start_line": 11,
+                  "start_col": 5
                 }
               }
             }
           },
           "span": {
             "start": 173,
-            "end": 187
+            "end": 187,
+            "start_line": 11,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 173,
-        "end": 188
+        "end": 188,
+        "start_line": 11,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 188
+    "end": 188,
+    "start_line": 1,
+    "start_col": 0
   }
 }

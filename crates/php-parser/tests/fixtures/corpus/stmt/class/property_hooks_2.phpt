@@ -34,7 +34,9 @@ class Test {
               },
               "span": {
                 "start": 23,
-                "end": 43
+                "end": 43,
+                "start_line": 3,
+                "start_col": 4
               }
             },
             {
@@ -60,7 +62,9 @@ class Test {
                       "attributes": [],
                       "span": {
                         "start": 71,
-                        "end": 84
+                        "end": 84,
+                        "start_line": 4,
+                        "start_col": 32
                       }
                     }
                   ],
@@ -71,7 +75,9 @@ class Test {
               },
               "span": {
                 "start": 43,
-                "end": 92
+                "end": 92,
+                "start_line": 4,
+                "start_col": 4
               }
             }
           ],
@@ -80,12 +86,16 @@ class Test {
       },
       "span": {
         "start": 6,
-        "end": 93
+        "end": 93,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 93
+    "end": 93,
+    "start_line": 1,
+    "start_col": 0
   }
 }

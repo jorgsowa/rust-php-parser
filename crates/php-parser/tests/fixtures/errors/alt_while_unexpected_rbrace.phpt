@@ -16,7 +16,9 @@ expected expression
             },
             "span": {
               "start": 13,
-              "end": 17
+              "end": 17,
+              "start_line": 1,
+              "start_col": 13
             }
           },
           "body": {
@@ -31,40 +33,52 @@ expected expression
                         },
                         "span": {
                           "start": 29,
-                          "end": 30
+                          "end": 30,
+                          "start_line": 2,
+                          "start_col": 9
                         }
                       }
                     ]
                   },
                   "span": {
                     "start": 24,
-                    "end": 32
+                    "end": 32,
+                    "start_line": 2,
+                    "start_col": 4
                   }
                 },
                 {
                   "kind": "Error",
                   "span": {
                     "start": 32,
-                    "end": 32
+                    "end": 32,
+                    "start_line": 3,
+                    "start_col": 0
                   }
                 }
               ]
             },
             "span": {
               "start": 6,
-              "end": 43
+              "end": 43,
+              "start_line": 1,
+              "start_col": 6
             }
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 43
+        "end": 43,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 43
+    "end": 43,
+    "start_line": 1,
+    "start_col": 0
   }
 }

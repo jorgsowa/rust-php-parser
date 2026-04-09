@@ -27,7 +27,9 @@ $a->b()['c'];
                 },
                 "span": {
                   "start": 36,
-                  "end": 38
+                  "end": 38,
+                  "start_line": 4,
+                  "start_col": 0
                 }
               },
               "property": {
@@ -36,20 +38,26 @@ $a->b()['c'];
                 },
                 "span": {
                   "start": 40,
-                  "end": 41
+                  "end": 41,
+                  "start_line": 4,
+                  "start_col": 4
                 }
               }
             }
           },
           "span": {
             "start": 36,
-            "end": 41
+            "end": 41,
+            "start_line": 4,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 36,
-        "end": 43
+        "end": 43,
+        "start_line": 4,
+        "start_col": 0
       }
     },
     {
@@ -66,7 +74,9 @@ $a->b()['c'];
                       },
                       "span": {
                         "start": 43,
-                        "end": 45
+                        "end": 45,
+                        "start_line": 5,
+                        "start_col": 0
                       }
                     },
                     "property": {
@@ -75,14 +85,18 @@ $a->b()['c'];
                       },
                       "span": {
                         "start": 47,
-                        "end": 48
+                        "end": 48,
+                        "start_line": 5,
+                        "start_col": 4
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 43,
-                  "end": 48
+                  "end": 48,
+                  "start_line": 5,
+                  "start_col": 0
                 }
               },
               "index": {
@@ -91,20 +105,26 @@ $a->b()['c'];
                 },
                 "span": {
                   "start": 49,
-                  "end": 52
+                  "end": 52,
+                  "start_line": 5,
+                  "start_col": 6
                 }
               }
             }
           },
           "span": {
             "start": 43,
-            "end": 53
+            "end": 53,
+            "start_line": 5,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 43,
-        "end": 82
+        "end": 82,
+        "start_line": 5,
+        "start_col": 0
       }
     },
     {
@@ -118,7 +138,9 @@ $a->b()['c'];
                 },
                 "span": {
                   "start": 82,
-                  "end": 84
+                  "end": 84,
+                  "start_line": 8,
+                  "start_col": 0
                 }
               },
               "method": {
@@ -127,7 +149,9 @@ $a->b()['c'];
                 },
                 "span": {
                   "start": 86,
-                  "end": 87
+                  "end": 87,
+                  "start_line": 8,
+                  "start_col": 4
                 }
               },
               "args": []
@@ -135,13 +159,17 @@ $a->b()['c'];
           },
           "span": {
             "start": 82,
-            "end": 89
+            "end": 89,
+            "start_line": 8,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 82,
-        "end": 91
+        "end": 91,
+        "start_line": 8,
+        "start_col": 0
       }
     },
     {
@@ -155,7 +183,9 @@ $a->b()['c'];
                 },
                 "span": {
                   "start": 91,
-                  "end": 93
+                  "end": 93,
+                  "start_line": 9,
+                  "start_col": 0
                 }
               },
               "method": {
@@ -164,7 +194,9 @@ $a->b()['c'];
                 },
                 "span": {
                   "start": 96,
-                  "end": 99
+                  "end": 99,
+                  "start_line": 9,
+                  "start_col": 5
                 }
               },
               "args": []
@@ -172,13 +204,17 @@ $a->b()['c'];
           },
           "span": {
             "start": 91,
-            "end": 102
+            "end": 102,
+            "start_line": 9,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 91,
-        "end": 104
+        "end": 104,
+        "start_line": 9,
+        "start_col": 0
       }
     },
     {
@@ -192,7 +228,9 @@ $a->b()['c'];
                 },
                 "span": {
                   "start": 104,
-                  "end": 106
+                  "end": 106,
+                  "start_line": 10,
+                  "start_col": 0
                 }
               },
               "method": {
@@ -201,7 +239,9 @@ $a->b()['c'];
                 },
                 "span": {
                   "start": 108,
-                  "end": 110
+                  "end": 110,
+                  "start_line": 10,
+                  "start_col": 4
                 }
               },
               "args": []
@@ -209,13 +249,17 @@ $a->b()['c'];
           },
           "span": {
             "start": 104,
-            "end": 112
+            "end": 112,
+            "start_line": 10,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 104,
-        "end": 114
+        "end": 114,
+        "start_line": 10,
+        "start_col": 0
       }
     },
     {
@@ -235,7 +279,9 @@ $a->b()['c'];
                             },
                             "span": {
                               "start": 114,
-                              "end": 116
+                              "end": 116,
+                              "start_line": 11,
+                              "start_col": 0
                             }
                           },
                           "property": {
@@ -244,14 +290,18 @@ $a->b()['c'];
                             },
                             "span": {
                               "start": 118,
-                              "end": 120
+                              "end": 120,
+                              "start_line": 11,
+                              "start_col": 4
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 114,
-                        "end": 120
+                        "end": 120,
+                        "start_line": 11,
+                        "start_col": 0
                       }
                     },
                     "index": {
@@ -260,14 +310,18 @@ $a->b()['c'];
                       },
                       "span": {
                         "start": 121,
-                        "end": 124
+                        "end": 124,
+                        "start_line": 11,
+                        "start_col": 7
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 114,
-                  "end": 125
+                  "end": 125,
+                  "start_line": 11,
+                  "start_col": 0
                 }
               },
               "args": []
@@ -275,13 +329,17 @@ $a->b()['c'];
           },
           "span": {
             "start": 114,
-            "end": 127
+            "end": 127,
+            "start_line": 11,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 114,
-        "end": 153
+        "end": 153,
+        "start_line": 11,
+        "start_col": 0
       }
     },
     {
@@ -298,7 +356,9 @@ $a->b()['c'];
                       },
                       "span": {
                         "start": 153,
-                        "end": 155
+                        "end": 155,
+                        "start_line": 14,
+                        "start_col": 0
                       }
                     },
                     "method": {
@@ -307,7 +367,9 @@ $a->b()['c'];
                       },
                       "span": {
                         "start": 157,
-                        "end": 158
+                        "end": 158,
+                        "start_line": 14,
+                        "start_col": 4
                       }
                     },
                     "args": []
@@ -315,7 +377,9 @@ $a->b()['c'];
                 },
                 "span": {
                   "start": 153,
-                  "end": 160
+                  "end": 160,
+                  "start_line": 14,
+                  "start_col": 0
                 }
               },
               "index": {
@@ -324,25 +388,33 @@ $a->b()['c'];
                 },
                 "span": {
                   "start": 161,
-                  "end": 164
+                  "end": 164,
+                  "start_line": 14,
+                  "start_col": 8
                 }
               }
             }
           },
           "span": {
             "start": 153,
-            "end": 165
+            "end": 165,
+            "start_line": 14,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 153,
-        "end": 166
+        "end": 166,
+        "start_line": 14,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 166
+    "end": 166,
+    "start_line": 1,
+    "start_col": 0
   }
 }

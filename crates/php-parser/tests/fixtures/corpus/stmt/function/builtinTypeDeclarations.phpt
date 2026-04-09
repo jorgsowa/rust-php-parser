@@ -20,13 +20,17 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
                     "kind": "Unqualified",
                     "span": {
                       "start": 20,
-                      "end": 24
+                      "end": 24,
+                      "start_line": 2,
+                      "start_col": 14
                     }
                   }
                 },
                 "span": {
                   "start": 20,
-                  "end": 24
+                  "end": 24,
+                  "start_line": 2,
+                  "start_col": 14
                 }
               },
               "default": null,
@@ -39,7 +43,9 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
               "attributes": [],
               "span": {
                 "start": 20,
-                "end": 27
+                "end": 27,
+                "start_line": 2,
+                "start_col": 14
               }
             },
             {
@@ -53,13 +59,17 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
                     "kind": "Unqualified",
                     "span": {
                       "start": 29,
-                      "end": 32
+                      "end": 32,
+                      "start_line": 2,
+                      "start_col": 23
                     }
                   }
                 },
                 "span": {
                   "start": 29,
-                  "end": 32
+                  "end": 32,
+                  "start_line": 2,
+                  "start_col": 23
                 }
               },
               "default": null,
@@ -72,7 +82,9 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
               "attributes": [],
               "span": {
                 "start": 29,
-                "end": 35
+                "end": 35,
+                "start_line": 2,
+                "start_col": 23
               }
             },
             {
@@ -86,13 +98,17 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
                     "kind": "Unqualified",
                     "span": {
                       "start": 37,
-                      "end": 42
+                      "end": 42,
+                      "start_line": 2,
+                      "start_col": 31
                     }
                   }
                 },
                 "span": {
                   "start": 37,
-                  "end": 42
+                  "end": 42,
+                  "start_line": 2,
+                  "start_col": 31
                 }
               },
               "default": null,
@@ -105,7 +121,9 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
               "attributes": [],
               "span": {
                 "start": 37,
-                "end": 45
+                "end": 45,
+                "start_line": 2,
+                "start_col": 31
               }
             },
             {
@@ -119,13 +137,17 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
                     "kind": "Unqualified",
                     "span": {
                       "start": 47,
-                      "end": 53
+                      "end": 53,
+                      "start_line": 2,
+                      "start_col": 41
                     }
                   }
                 },
                 "span": {
                   "start": 47,
-                  "end": 53
+                  "end": 53,
+                  "start_line": 2,
+                  "start_col": 41
                 }
               },
               "default": null,
@@ -138,7 +160,9 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
               "attributes": [],
               "span": {
                 "start": 47,
-                "end": 56
+                "end": 56,
+                "start_line": 2,
+                "start_col": 41
               }
             },
             {
@@ -152,13 +176,17 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
                     "kind": "Unqualified",
                     "span": {
                       "start": 58,
-                      "end": 66
+                      "end": 66,
+                      "start_line": 2,
+                      "start_col": 52
                     }
                   }
                 },
                 "span": {
                   "start": 58,
-                  "end": 66
+                  "end": 66,
+                  "start_line": 2,
+                  "start_col": 52
                 }
               },
               "default": null,
@@ -171,7 +199,9 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
               "attributes": [],
               "span": {
                 "start": 58,
-                "end": 69
+                "end": 69,
+                "start_line": 2,
+                "start_col": 52
               }
             },
             {
@@ -185,13 +215,17 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
                     "kind": "Unqualified",
                     "span": {
                       "start": 71,
-                      "end": 77
+                      "end": 77,
+                      "start_line": 2,
+                      "start_col": 65
                     }
                   }
                 },
                 "span": {
                   "start": 71,
-                  "end": 77
+                  "end": 77,
+                  "start_line": 2,
+                  "start_col": 65
                 }
               },
               "default": null,
@@ -204,7 +238,9 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
               "attributes": [],
               "span": {
                 "start": 71,
-                "end": 80
+                "end": 80,
+                "start_line": 2,
+                "start_col": 65
               }
             },
             {
@@ -218,13 +254,17 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
                     "kind": "Unqualified",
                     "span": {
                       "start": 82,
-                      "end": 87
+                      "end": 87,
+                      "start_line": 2,
+                      "start_col": 76
                     }
                   }
                 },
                 "span": {
                   "start": 82,
-                  "end": 87
+                  "end": 87,
+                  "start_line": 2,
+                  "start_col": 76
                 }
               },
               "default": null,
@@ -237,7 +277,9 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
               "attributes": [],
               "span": {
                 "start": 82,
-                "end": 90
+                "end": 90,
+                "start_line": 2,
+                "start_col": 76
               }
             }
           ],
@@ -251,13 +293,17 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
                 "kind": "Unqualified",
                 "span": {
                   "start": 94,
-                  "end": 98
+                  "end": 98,
+                  "start_line": 2,
+                  "start_col": 88
                 }
               }
             },
             "span": {
               "start": 94,
-              "end": 98
+              "end": 98,
+              "start_line": 2,
+              "start_col": 88
             }
           },
           "by_ref": false,
@@ -266,12 +312,16 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
       },
       "span": {
         "start": 6,
-        "end": 101
+        "end": 101,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 101
+    "end": 101,
+    "start_line": 1,
+    "start_col": 0
   }
 }

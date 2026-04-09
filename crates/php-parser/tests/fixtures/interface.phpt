@@ -34,13 +34,17 @@ interface HasName extends HasId {
                         "kind": "Unqualified",
                         "span": {
                           "start": 53,
-                          "end": 56
+                          "end": 56,
+                          "start_line": 3,
+                          "start_col": 29
                         }
                       }
                     },
                     "span": {
                       "start": 53,
-                      "end": 56
+                      "end": 56,
+                      "start_line": 3,
+                      "start_col": 29
                     }
                   },
                   "body": null,
@@ -49,7 +53,9 @@ interface HasName extends HasId {
               },
               "span": {
                 "start": 28,
-                "end": 58
+                "end": 58,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -58,7 +64,9 @@ interface HasName extends HasId {
       },
       "span": {
         "start": 6,
-        "end": 59
+        "end": 59,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -73,7 +81,9 @@ interface HasName extends HasId {
               "kind": "Unqualified",
               "span": {
                 "start": 86,
-                "end": 92
+                "end": 92,
+                "start_line": 5,
+                "start_col": 26
               }
             }
           ],
@@ -97,13 +107,17 @@ interface HasName extends HasId {
                         "kind": "Unqualified",
                         "span": {
                           "start": 125,
-                          "end": 131
+                          "end": 131,
+                          "start_line": 6,
+                          "start_col": 31
                         }
                       }
                     },
                     "span": {
                       "start": 125,
-                      "end": 131
+                      "end": 131,
+                      "start_line": 6,
+                      "start_col": 31
                     }
                   },
                   "body": null,
@@ -112,7 +126,9 @@ interface HasName extends HasId {
               },
               "span": {
                 "start": 98,
-                "end": 133
+                "end": 133,
+                "start_line": 6,
+                "start_col": 4
               }
             }
           ],
@@ -121,12 +137,16 @@ interface HasName extends HasId {
       },
       "span": {
         "start": 60,
-        "end": 134
+        "end": 134,
+        "start_line": 5,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 134
+    "end": 134,
+    "start_line": 1,
+    "start_col": 0
   }
 }

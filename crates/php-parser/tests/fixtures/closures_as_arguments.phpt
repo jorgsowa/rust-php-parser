@@ -16,7 +16,9 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                 },
                 "span": {
                   "start": 6,
-                  "end": 15
+                  "end": 15,
+                  "start_line": 2,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -29,7 +31,9 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                       },
                       "span": {
                         "start": 18,
-                        "end": 30
+                        "end": 30,
+                        "start_line": 2,
+                        "start_col": 12
                       }
                     },
                     "args": [
@@ -41,14 +45,18 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                           },
                           "span": {
                             "start": 31,
-                            "end": 37
+                            "end": 37,
+                            "start_line": 2,
+                            "start_col": 25
                           }
                         },
                         "unpack": false,
                         "by_ref": false,
                         "span": {
                           "start": 31,
-                          "end": 37
+                          "end": 37,
+                          "start_line": 2,
+                          "start_col": 25
                         }
                       },
                       {
@@ -72,7 +80,9 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                                   "attributes": [],
                                   "span": {
                                     "start": 42,
-                                    "end": 44
+                                    "end": 44,
+                                    "start_line": 2,
+                                    "start_col": 36
                                   }
                                 }
                               ],
@@ -86,7 +96,9 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                                       },
                                       "span": {
                                         "start": 49,
-                                        "end": 51
+                                        "end": 51,
+                                        "start_line": 2,
+                                        "start_col": 43
                                       }
                                     },
                                     "op": "Greater",
@@ -96,14 +108,18 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                                       },
                                       "span": {
                                         "start": 54,
-                                        "end": 55
+                                        "end": 55,
+                                        "start_line": 2,
+                                        "start_col": 48
                                       }
                                     }
                                   }
                                 },
                                 "span": {
                                   "start": 49,
-                                  "end": 55
+                                  "end": 55,
+                                  "start_line": 2,
+                                  "start_col": 43
                                 }
                               },
                               "attributes": []
@@ -111,14 +127,18 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                           },
                           "span": {
                             "start": 39,
-                            "end": 55
+                            "end": 55,
+                            "start_line": 2,
+                            "start_col": 33
                           }
                         },
                         "unpack": false,
                         "by_ref": false,
                         "span": {
                           "start": 39,
-                          "end": 55
+                          "end": 55,
+                          "start_line": 2,
+                          "start_col": 33
                         }
                       }
                     ]
@@ -126,20 +146,26 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                 },
                 "span": {
                   "start": 18,
-                  "end": 56
+                  "end": 56,
+                  "start_line": 2,
+                  "start_col": 12
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 56
+            "end": 56,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 58
+        "end": 58,
+        "start_line": 2,
+        "start_col": 0
       }
     },
     {
@@ -153,7 +179,9 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                 },
                 "span": {
                   "start": 58,
-                  "end": 65
+                  "end": 65,
+                  "start_line": 3,
+                  "start_col": 0
                 }
               },
               "op": "Assign",
@@ -166,7 +194,9 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                       },
                       "span": {
                         "start": 68,
-                        "end": 77
+                        "end": 77,
+                        "start_line": 3,
+                        "start_col": 10
                       }
                     },
                     "args": [
@@ -191,7 +221,9 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                                   "attributes": [],
                                   "span": {
                                     "start": 87,
-                                    "end": 89
+                                    "end": 89,
+                                    "start_line": 3,
+                                    "start_col": 29
                                   }
                                 }
                               ],
@@ -209,7 +241,9 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                                             },
                                             "span": {
                                               "start": 100,
-                                              "end": 102
+                                              "end": 102,
+                                              "start_line": 3,
+                                              "start_col": 42
                                             }
                                           },
                                           "op": "Mul",
@@ -219,20 +253,26 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                                             },
                                             "span": {
                                               "start": 105,
-                                              "end": 106
+                                              "end": 106,
+                                              "start_line": 3,
+                                              "start_col": 47
                                             }
                                           }
                                         }
                                       },
                                       "span": {
                                         "start": 100,
-                                        "end": 106
+                                        "end": 106,
+                                        "start_line": 3,
+                                        "start_col": 42
                                       }
                                     }
                                   },
                                   "span": {
                                     "start": 93,
-                                    "end": 108
+                                    "end": 108,
+                                    "start_line": 3,
+                                    "start_col": 35
                                   }
                                 }
                               ],
@@ -241,14 +281,18 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                           },
                           "span": {
                             "start": 78,
-                            "end": 109
+                            "end": 109,
+                            "start_line": 3,
+                            "start_col": 20
                           }
                         },
                         "unpack": false,
                         "by_ref": false,
                         "span": {
                           "start": 78,
-                          "end": 109
+                          "end": 109,
+                          "start_line": 3,
+                          "start_col": 20
                         }
                       },
                       {
@@ -259,14 +303,18 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                           },
                           "span": {
                             "start": 111,
-                            "end": 117
+                            "end": 117,
+                            "start_line": 3,
+                            "start_col": 53
                           }
                         },
                         "unpack": false,
                         "by_ref": false,
                         "span": {
                           "start": 111,
-                          "end": 117
+                          "end": 117,
+                          "start_line": 3,
+                          "start_col": 53
                         }
                       }
                     ]
@@ -274,25 +322,33 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                 },
                 "span": {
                   "start": 68,
-                  "end": 118
+                  "end": 118,
+                  "start_line": 3,
+                  "start_col": 10
                 }
               }
             }
           },
           "span": {
             "start": 58,
-            "end": 118
+            "end": 118,
+            "start_line": 3,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 58,
-        "end": 119
+        "end": 119,
+        "start_line": 3,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 119
+    "end": 119,
+    "start_line": 1,
+    "start_col": 0
   }
 }

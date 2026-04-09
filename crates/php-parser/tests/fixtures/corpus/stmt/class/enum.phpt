@@ -29,7 +29,9 @@ enum C: int implements Bar {
               },
               "span": {
                 "start": 20,
-                "end": 32
+                "end": 32,
+                "start_line": 4,
+                "start_col": 4
               }
             }
           ],
@@ -38,7 +40,9 @@ enum C: int implements Bar {
       },
       "span": {
         "start": 7,
-        "end": 33
+        "end": 33,
+        "start_line": 3,
+        "start_col": 0
       }
     },
     {
@@ -54,7 +58,9 @@ enum C: int implements Bar {
               "kind": "Unqualified",
               "span": {
                 "start": 52,
-                "end": 55
+                "end": 55,
+                "start_line": 6,
+                "start_col": 18
               }
             },
             {
@@ -64,7 +70,9 @@ enum C: int implements Bar {
               "kind": "Unqualified",
               "span": {
                 "start": 57,
-                "end": 61
+                "end": 61,
+                "start_line": 6,
+                "start_col": 23
               }
             }
           ],
@@ -74,7 +82,9 @@ enum C: int implements Bar {
       },
       "span": {
         "start": 34,
-        "end": 64
+        "end": 64,
+        "start_line": 6,
+        "start_col": 0
       }
     },
     {
@@ -88,7 +98,9 @@ enum C: int implements Bar {
             "kind": "Unqualified",
             "span": {
               "start": 73,
-              "end": 77
+              "end": 77,
+              "start_line": 8,
+              "start_col": 8
             }
           },
           "implements": [
@@ -99,7 +111,9 @@ enum C: int implements Bar {
               "kind": "Unqualified",
               "span": {
                 "start": 88,
-                "end": 92
+                "end": 92,
+                "start_line": 8,
+                "start_col": 23
               }
             }
           ],
@@ -114,7 +128,9 @@ enum C: int implements Bar {
                     },
                     "span": {
                       "start": 109,
-                      "end": 110
+                      "end": 110,
+                      "start_line": 9,
+                      "start_col": 15
                     }
                   },
                   "attributes": []
@@ -122,7 +138,9 @@ enum C: int implements Bar {
               },
               "span": {
                 "start": 98,
-                "end": 112
+                "end": 112,
+                "start_line": 9,
+                "start_col": 4
               }
             }
           ],
@@ -131,12 +149,16 @@ enum C: int implements Bar {
       },
       "span": {
         "start": 65,
-        "end": 113
+        "end": 113,
+        "start_line": 8,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 113
+    "end": 113,
+    "start_line": 1,
+    "start_col": 0
   }
 }

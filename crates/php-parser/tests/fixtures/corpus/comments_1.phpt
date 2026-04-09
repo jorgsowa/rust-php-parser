@@ -29,13 +29,17 @@ if ($cond) {
           },
           "span": {
             "start": 53,
-            "end": 57
+            "end": 57,
+            "start_line": 7,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 53,
-        "end": 60
+        "end": 60,
+        "start_line": 7,
+        "start_col": 0
       }
     },
     {
@@ -47,7 +51,9 @@ if ($cond) {
             },
             "span": {
               "start": 64,
-              "end": 69
+              "end": 69,
+              "start_line": 9,
+              "start_col": 4
             }
           },
           "then_branch": {
@@ -56,7 +62,9 @@ if ($cond) {
             },
             "span": {
               "start": 71,
-              "end": 136
+              "end": 136,
+              "start_line": 9,
+              "start_col": 11
             }
           },
           "elseif_branches": [],
@@ -65,12 +73,16 @@ if ($cond) {
       },
       "span": {
         "start": 60,
-        "end": 136
+        "end": 136,
+        "start_line": 9,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 136
+    "end": 136,
+    "start_line": 1,
+    "start_col": 0
   }
 }

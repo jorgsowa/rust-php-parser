@@ -36,7 +36,9 @@ class A {
               },
               "span": {
                 "start": 21,
-                "end": 29
+                "end": 29,
+                "start_line": 4,
+                "start_col": 4
               }
             },
             {
@@ -56,7 +58,9 @@ class A {
               },
               "span": {
                 "start": 35,
-                "end": 57
+                "end": 57,
+                "start_line": 5,
+                "start_col": 4
               }
             },
             {
@@ -76,7 +80,9 @@ class A {
               },
               "span": {
                 "start": 57,
-                "end": 91
+                "end": 91,
+                "start_line": 6,
+                "start_col": 4
               }
             }
           ],
@@ -85,12 +91,16 @@ class A {
       },
       "span": {
         "start": 7,
-        "end": 92
+        "end": 92,
+        "start_line": 3,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 92
+    "end": 92,
+    "start_line": 1,
+    "start_col": 0
   }
 }

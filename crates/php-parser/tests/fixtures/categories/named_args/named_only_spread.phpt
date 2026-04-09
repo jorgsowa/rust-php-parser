@@ -14,7 +14,9 @@
                 },
                 "span": {
                   "start": 6,
-                  "end": 9
+                  "end": 9,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "args": [
@@ -30,7 +32,9 @@
                             },
                             "span": {
                               "start": 14,
-                              "end": 20
+                              "end": 20,
+                              "start_line": 1,
+                              "start_col": 14
                             }
                           },
                           "value": {
@@ -39,27 +43,35 @@
                             },
                             "span": {
                               "start": 24,
-                              "end": 26
+                              "end": 26,
+                              "start_line": 1,
+                              "start_col": 24
                             }
                           },
                           "unpack": false,
                           "span": {
                             "start": 14,
-                            "end": 26
+                            "end": 26,
+                            "start_line": 1,
+                            "start_col": 14
                           }
                         }
                       ]
                     },
                     "span": {
                       "start": 13,
-                      "end": 27
+                      "end": 27,
+                      "start_line": 1,
+                      "start_col": 13
                     }
                   },
                   "unpack": true,
                   "by_ref": false,
                   "span": {
                     "start": 10,
-                    "end": 27
+                    "end": 27,
+                    "start_line": 1,
+                    "start_col": 10
                   }
                 }
               ]
@@ -67,18 +79,24 @@
           },
           "span": {
             "start": 6,
-            "end": 28
+            "end": 28,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 29
+        "end": 29,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 29
+    "end": 29,
+    "start_line": 1,
+    "start_col": 0
   }
 }

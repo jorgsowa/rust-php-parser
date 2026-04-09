@@ -31,13 +31,17 @@ interface HasName {
                         "kind": "Unqualified",
                         "span": {
                           "start": 37,
-                          "end": 43
+                          "end": 43,
+                          "start_line": 3,
+                          "start_col": 11
                         }
                       }
                     },
                     "span": {
                       "start": 37,
-                      "end": 43
+                      "end": 43,
+                      "start_line": 3,
+                      "start_col": 11
                     }
                   },
                   "default": null,
@@ -52,7 +56,9 @@ interface HasName {
                       "attributes": [],
                       "span": {
                         "start": 52,
-                        "end": 57
+                        "end": 57,
+                        "start_line": 3,
+                        "start_col": 26
                       }
                     }
                   ]
@@ -60,7 +66,9 @@ interface HasName {
               },
               "span": {
                 "start": 30,
-                "end": 59
+                "end": 59,
+                "start_line": 3,
+                "start_col": 4
               }
             }
           ],
@@ -69,12 +77,16 @@ interface HasName {
       },
       "span": {
         "start": 6,
-        "end": 60
+        "end": 60,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 60
+    "end": 60,
+    "start_line": 1,
+    "start_col": 0
   }
 }

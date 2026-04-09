@@ -25,7 +25,9 @@ fn($foo, ) => $bar;
                   "attributes": [],
                   "span": {
                     "start": 9,
-                    "end": 13
+                    "end": 13,
+                    "start_line": 2,
+                    "start_col": 3
                   }
                 }
               ],
@@ -36,7 +38,9 @@ fn($foo, ) => $bar;
                 },
                 "span": {
                   "start": 20,
-                  "end": 24
+                  "end": 24,
+                  "start_line": 2,
+                  "start_col": 14
                 }
               },
               "attributes": []
@@ -44,18 +48,24 @@ fn($foo, ) => $bar;
           },
           "span": {
             "start": 6,
-            "end": 24
+            "end": 24,
+            "start_line": 2,
+            "start_col": 0
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 25
+        "end": 25,
+        "start_line": 2,
+        "start_col": 0
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 25
+    "end": 25,
+    "start_line": 1,
+    "start_col": 0
   }
 }

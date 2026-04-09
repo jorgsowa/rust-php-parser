@@ -20,7 +20,9 @@ expected expression
                     "kind": "Error",
                     "span": {
                       "start": 34,
-                      "end": 35
+                      "end": 35,
+                      "start_line": 1,
+                      "start_col": 34
                     }
                   },
                   "attributes": []
@@ -28,7 +30,9 @@ expected expression
               },
               "span": {
                 "start": 20,
-                "end": 36
+                "end": 36,
+                "start_line": 1,
+                "start_col": 20
               }
             }
           ],
@@ -37,7 +41,9 @@ expected expression
       },
       "span": {
         "start": 6,
-        "end": 37
+        "end": 37,
+        "start_line": 1,
+        "start_col": 6
       }
     },
     {
@@ -57,7 +63,9 @@ expected expression
                         },
                         "span": {
                           "start": 69,
-                          "end": 75
+                          "end": 75,
+                          "start_line": 1,
+                          "start_col": 69
                         }
                       },
                       "member": "Active"
@@ -65,13 +73,17 @@ expected expression
                   },
                   "span": {
                     "start": 69,
-                    "end": 83
+                    "end": 83,
+                    "start_line": 1,
+                    "start_col": 69
                   }
                 }
               },
               "span": {
                 "start": 62,
-                "end": 85
+                "end": 85,
+                "start_line": 1,
+                "start_col": 62
               }
             }
           ],
@@ -82,12 +94,16 @@ expected expression
       },
       "span": {
         "start": 38,
-        "end": 86
+        "end": 86,
+        "start_line": 1,
+        "start_col": 38
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 86
+    "end": 86,
+    "start_line": 1,
+    "start_col": 0
   }
 }

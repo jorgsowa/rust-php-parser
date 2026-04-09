@@ -14,7 +14,9 @@
                 },
                 "span": {
                   "start": 6,
-                  "end": 8
+                  "end": 8,
+                  "start_line": 1,
+                  "start_col": 6
                 }
               },
               "op": "Add",
@@ -27,7 +29,9 @@
                       },
                       "span": {
                         "start": 11,
-                        "end": 13
+                        "end": 13,
+                        "start_line": 1,
+                        "start_col": 11
                       }
                     },
                     "op": "Instanceof",
@@ -37,32 +41,42 @@
                       },
                       "span": {
                         "start": 25,
-                        "end": 28
+                        "end": 28,
+                        "start_line": 1,
+                        "start_col": 25
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 11,
-                  "end": 28
+                  "end": 28,
+                  "start_line": 1,
+                  "start_col": 11
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 28
+            "end": 28,
+            "start_line": 1,
+            "start_col": 6
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 29
+        "end": 29,
+        "start_line": 1,
+        "start_col": 6
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 29
+    "end": 29,
+    "start_line": 1,
+    "start_col": 0
   }
 }
