@@ -3,6 +3,7 @@
     echo $b;
 } endforeach;
 ===errors===
+expected expression
 ===ast===
 {
   "stmts": [

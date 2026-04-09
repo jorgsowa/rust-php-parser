@@ -4,6 +4,7 @@ $x = ;
 $y = 42;
 echo $y;
 ===errors===
+expected expression
 ===ast===
 {
   "stmts": [

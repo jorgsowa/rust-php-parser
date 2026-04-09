@@ -147,8 +147,7 @@ pub fn format_errors(result: &php_rs_parser::ParseResult) -> String {
         .join("\n")
 }
 
-/// Rewrite the `===ast===` section of a fixture file with `new_ast`.
-/// Called when `UPDATE_FIXTURES=1` is set in the environment.
+/// Rewrite only the `===ast===` section of a fixture file, preserving errors.
 pub fn update_fixture_ast(path: &str, new_ast: &str) {
     let content =
         std::fs::read_to_string(path).unwrap_or_else(|e| panic!("failed to read {path}: {e}"));
@@ -159,6 +158,36 @@ pub fn update_fixture_ast(path: &str, new_ast: &str) {
         format!("{content}===ast===\n{new_ast}\n")
     } else {
         format!("{content}\n===ast===\n{new_ast}\n")
+    };
+    std::fs::write(path, new_content).unwrap_or_else(|e| panic!("failed to write {path}: {e}"));
+}
+
+/// Rewrite the `===errors===` and `===ast===` sections of a fixture file.
+/// Called when `UPDATE_FIXTURES=1` is set in the environment.
+pub fn update_fixture(path: &str, errors: &str, new_ast: &str) {
+    let content =
+        std::fs::read_to_string(path).unwrap_or_else(|e| panic!("failed to read {path}: {e}"));
+
+    // Find the end of the ===source=== section (first marker after it)
+    let source_marker = "===source===\n";
+    let after_source = content
+        .find(source_marker)
+        .map(|p| p + source_marker.len())
+        .unwrap_or(0);
+
+    // Find where source content ends (at first section marker after source)
+    let rest = &content[after_source..];
+    let source_end = rest
+        .find("===errors===\n")
+        .or_else(|| rest.find("===ast===\n"))
+        .map(|p| after_source + p)
+        .unwrap_or(content.len());
+
+    let before_sections = &content[..source_end];
+    let new_content = if errors.is_empty() {
+        format!("{before_sections}===ast===\n{new_ast}\n")
+    } else {
+        format!("{before_sections}===errors===\n{errors}\n===ast===\n{new_ast}\n")
     };
     std::fs::write(path, new_content).unwrap_or_else(|e| panic!("failed to write {path}: {e}"));
 }

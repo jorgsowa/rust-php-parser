@@ -70,6 +70,7 @@ fn fixture_files_are_valid_php() {
         // Calling with & at call-site was deprecated in PHP 5.3 and removed in 5.4;
         // our parser still accepts it for AST completeness.
         "arg_by_ref.phpt",
+        "arg_by_ref_preserved.phpt",
         // PHP forbids using reserved keywords as function names; our parser
         // accepts them gracefully without panicking.
         "keyword_as_function_clone.phpt",
@@ -81,6 +82,7 @@ fn fixture_files_are_valid_php() {
         // PHP rejects `null` in destructuring position; our parser accepts it
         // and lets semantic analysis report the error.
         "null_in_destructuring.phpt",
+        "destructuring_null_vs_omit.phpt",
         // PHP 8 made legacy octal digits (e.g. 0778) a parse error; our parser
         // still accepts them for compatibility and emits a warning-level diagnostic.
         "legacy_octal_invalid_digits.phpt",

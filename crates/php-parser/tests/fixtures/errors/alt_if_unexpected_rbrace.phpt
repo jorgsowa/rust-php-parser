@@ -3,6 +3,7 @@
     echo 1;
 } endif;
 ===errors===
+expected expression
 ===ast===
 {
   "stmts": [
