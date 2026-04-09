@@ -40,7 +40,7 @@ Configure the target PHP version to control which syntax is accepted and which e
 
 Builds on Phase 1 infrastructure.
 
-### 2.1 Semantic Analysis
+### 2.1 Semantic Analysis (in progress)
 
 Scope tracking, name resolution, and type checking as a separate pass over the AST.
 
@@ -48,15 +48,17 @@ Scope tracking, name resolution, and type checking as a separate pass over the A
 
 **Scope (each sub-feature is independently useful):**
 
-1. **Symbol table** — collect all declarations (functions, classes, constants, variables) with their scopes and spans
-2. **Scope tracking** — resolve variable visibility (`global`, `static`, closure `use`, function scope boundaries)
-3. **Name resolution** — resolve `use` aliases, qualified names, `self`/`parent`/`static` to their declarations
-4. **Type inference** — propagate types through assignments, returns, and expressions
-5. **Compile-error detection** — duplicate declarations, `break` outside loop, abstract method in non-abstract class, etc.
-6. **Type checking** — validate argument types, return types, property types against declarations
+1. **Symbol table** ✅ — collect all declarations (functions, classes, interfaces, traits, enums, constants) with namespace-aware FQNs, member collection (methods, properties, class constants, enum cases), `use` import tracking, offset-based lookup, and basic name resolution
+2. **Source map** ✅ — byte-offset spans to 0-based line/column positions (and back) with O(log n) lookup per query
+3. **Comment mapping** ✅ — attach comments to AST nodes by span proximity (leading comments to following statements, trailing comments collected separately)
+4. **Scope tracking** — resolve variable visibility (`global`, `static`, closure `use`, function scope boundaries)
+5. **Name resolution** — resolve `use` aliases, qualified names, `self`/`parent`/`static` to their declarations (basic `use` resolution exists in symbol table)
+6. **Type inference** — propagate types through assignments, returns, and expressions
+7. **Compile-error detection** — duplicate declarations, `break` outside loop, abstract method in non-abstract class, etc.
+8. **Type checking** — validate argument types, return types, property types against declarations
 
 **Difficulties:**
-- **Scope is enormous** — full semantic analysis is effectively building a PHP compiler frontend. Prioritize symbol table + name resolution first.
+- **Scope is enormous** — full semantic analysis is effectively building a PHP compiler frontend. Symbol table and source map are now complete; scope tracking and full name resolution are next.
 - **PHP's dynamic nature** — `$$var`, `extract()`, `compact()`, `new $className` make static analysis fundamentally incomplete. The analyzer must be sound but incomplete.
 - **Autoloading** — single-file analysis cannot resolve cross-file references without a project-level index. Major architectural decision: single-file vs. project-wide.
 - **Standard library** — type information for 5000+ built-in functions requires a stubs database (phpstorm-stubs or php-src).
@@ -98,7 +100,7 @@ Use the parser as a backend for a PHP Language Server.
 - **Multi-file analysis** — go-to-definition for imported classes requires a project indexer watching the filesystem.
 - **Concurrency** — LSP requests arrive concurrently; the server must handle cancellation and concurrent AST access.
 
-**Blockers:** Semantic analysis (2.1) for anything beyond basic diagnostics. Pretty printer (2.2) is complete.
+**Blockers:** Full semantic analysis (2.1) for go-to-definition and completions. Symbol table, source map, and comment map are now available for diagnostics, document symbols, and basic hover.
 
 ### 3.2 Incremental Parsing
 
@@ -149,13 +151,17 @@ Compile to WebAssembly for browser-based PHP tooling.
 1.1 Comment Preservation ✅ ────────────┐
                                         ├──→ 2.2 Pretty Printer ✅ ──→ 3.1 LSP ──→ 3.2 Incremental
 1.2 Visitor / Walker API ✅ ──┬─────────┘                               ↑
-                              └──→ 2.1 Semantic Analysis ───────────────┘
-1.3 PHP Version Selection ✅
+                              └──→ 2.1 Semantic Analysis (in progress) ─┘
+1.3 PHP Version Selection ✅       ├── symbol table ✅
+                                   ├── source map ✅
+                                   ├── comment map ✅
+                                   ├── scope tracking
+                                   └── full name resolution
 
 3.3 WASM Target (independent, improves with 2.2)
 ```
 
-**Phase 1 complete. Phase 2.2 complete.** LSP integration and WASM target are now unblocked.
+**Phase 1 complete. Phase 2.2 complete. Phase 2.1 in progress** (symbol table, source map, comment map done). LSP integration and WASM target are now unblocked.
 
 **Note:** Performance optimization is tracked separately in `PERFORMANCE_ANALYSIS.md` and is ongoing independent of feature phases.
 
@@ -164,6 +170,7 @@ Compile to WebAssembly for browser-based PHP tooling.
 - **Test infrastructure overhaul** — migrated all tests to `.phpt` fixture files with `===source===`, `===config===`, and `===errors===` sections; eliminated all `.snap` files and removed `insta` dependency; auto-discovery of fixture files
 - **Public API documentation** — rustdoc added to public API surface
 - **Dependency cleanup** — replaced `lazy_static` with `std::sync::OnceLock`
+- **LSP foundations** — `source_map` (byte offset ↔ line/col), `comment_map` (comment-to-node attachment), `symbol_table` (declaration extraction with FQN resolution) added to `php-ast`
 
 ### Complexity Estimates
 
@@ -172,7 +179,7 @@ Compile to WebAssembly for browser-based PHP tooling.
 | 1.1 Comment Preservation | ✅ Complete | Includes PHPDoc parser + Psalm/PHPStan annotations |
 | 1.2 Visitor / Walker API | ✅ Complete | ControlFlow support, type hints, attributes, 13 visit methods |
 | 1.3 PHP Version Selection | ✅ Complete | Full version gating for all version-specific syntax |
-| 2.1 Semantic Analysis | Very High | ~3000–5000+ lines (open-ended) |
+| 2.1 Semantic Analysis | Very High | In progress — symbol table, source map, comment map done (~1000 lines); scope tracking + full name resolution remaining (~2000–4000 lines) |
 | 2.2 Pretty Printer | ✅ Complete | New `php-printer` crate, 62 tests, round-trip verified |
 | 3.1 LSP Integration | High | ~2000–4000 lines + new crate |
 | 3.2 Incremental Parsing | Very High | ~3000–5000+ lines (research-level) |
