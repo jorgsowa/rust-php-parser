@@ -13,7 +13,7 @@ Cargo workspace with three crates:
 | Crate | crates.io | Purpose |
 |-------|-----------|---------|
 | **php-lexer** | [![crates.io](https://img.shields.io/crates/v/php-lexer)](https://crates.io/crates/php-lexer) | Hand-written tokenizer with handling for strings, heredoc/nowdoc, and inline HTML |
-| **php-ast** | [![crates.io](https://img.shields.io/crates/v/php-ast)](https://crates.io/crates/php-ast) | AST type definitions, serializable via Serde |
+| **php-ast** | [![crates.io](https://img.shields.io/crates/v/php-ast)](https://crates.io/crates/php-ast) | AST type definitions, visitor trait, source map, comment map, symbol table |
 | **php-rs-parser** | [![crates.io](https://img.shields.io/crates/v/php-rs-parser)](https://crates.io/crates/php-rs-parser) | Pratt-based recursive descent parser with panic-mode error recovery |
 
 ## Usage
@@ -28,6 +28,31 @@ println!("{:#?}", result.program);
 for err in &result.errors {
     println!("error at {:?}: {}", err.span(), err);
 }
+```
+
+### LSP / Static Analysis Utilities
+
+`php-ast` includes utilities for building analysis tools on top of the AST:
+
+```rust
+use php_ast::source_map::SourceMap;
+use php_ast::comment_map::CommentMap;
+use php_ast::symbol_table::SymbolTable;
+
+let source = "<?php\nnamespace App;\nclass User { public function getName(): string {} }";
+let result = php_rs_parser::parse(source);
+
+// Byte offset → line/column
+let map = SourceMap::new(source);
+let pos = map.offset_to_line_col(6); // line 1, col 0
+
+// Attach comments to AST nodes
+let comments = CommentMap::build(&result.comments, &result.program.stmts);
+
+// Extract declarations with namespace-aware FQNs
+let symbols = SymbolTable::build(&result.program);
+let classes = symbols.classes().collect::<Vec<_>>();
+// classes[0].fqn == "App\\User"
 ```
 
 ## Performance
