@@ -158,6 +158,8 @@ fn fixture_files_are_valid_php() {
     let mut paths = collect_phpt_files(&dir);
     paths.sort();
 
+    let mut failures: Vec<String> = Vec::new();
+
     for path in paths {
         let name = path.file_name().and_then(|n| n.to_str()).unwrap_or("");
         if name == "error_recovery.phpt" || php_rejects.contains(&name) {
@@ -185,6 +187,21 @@ fn fixture_files_are_valid_php() {
         if config.expect_errors {
             continue;
         }
-        assert_php_syntax_labeled(&label, source);
+
+        let out = php_lint(source);
+        if !out.status.success() {
+            failures.push(format!(
+                "{label}:\n  {}",
+                String::from_utf8_lossy(&out.stderr).trim()
+            ));
+        }
+    }
+
+    if !failures.is_empty() {
+        panic!(
+            "php -l failed for {} fixture(s):\n\n{}",
+            failures.len(),
+            failures.join("\n\n")
+        );
     }
 }
