@@ -1,5 +1,3 @@
-use std::borrow::Cow;
-
 use php_ast::*;
 
 use crate::version::PhpVersion;
@@ -186,9 +184,8 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                         while i < len && is_var_char(bytes[i]) {
                             i += 1;
                         }
-                        let var_name: Cow<'src, str> = Cow::Borrowed(
-                            &source[base_offset as usize + name_start..base_offset as usize + i],
-                        );
+                        let var_name: &'src str =
+                            &source[base_offset as usize + name_start..base_offset as usize + i];
                         let mut expr = Expr {
                             kind: ExprKind::Variable(var_name),
                             span: Span::new(
@@ -250,9 +247,8 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                     while i < len && is_var_char(bytes[i]) {
                         i += 1;
                     }
-                    let var_name: Cow<'src, str> = Cow::Borrowed(
-                        &source[base_offset as usize + name_start..base_offset as usize + i],
-                    );
+                    let var_name: &'src str =
+                        &source[base_offset as usize + name_start..base_offset as usize + i];
                     let var_offset = base_offset + var_start as u32;
 
                     let mut expr = Expr {
@@ -566,7 +562,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                         i += 1;
                     }
                     // raw_body is &'src str so we can borrow directly
-                    let var_name: Cow<'src, str> = Cow::Borrowed(&raw_body[name_start..i]);
+                    let var_name: &'src str = &raw_body[name_start..i];
                     let var_offset = body_offset + var_start as u32;
 
                     let mut expr = Expr {
@@ -748,7 +744,7 @@ fn parse_simple_index<'arena, 'src>(
         let name_start = idx_offset as usize + 1;
         let name_end = idx_offset as usize + idx_str.len();
         return Expr {
-            kind: ExprKind::Variable(std::borrow::Cow::Borrowed(&source[name_start..name_end])),
+            kind: ExprKind::Variable(&source[name_start..name_end]),
             span,
         };
     }

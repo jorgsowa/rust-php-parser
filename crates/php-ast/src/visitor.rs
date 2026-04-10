@@ -693,8 +693,6 @@ fn walk_attributes<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 mod tests {
     use super::*;
     use crate::Span;
-    use std::borrow::Cow;
-
     // =========================================================================
     // Unit tests with hand-built ASTs
     // =========================================================================
@@ -716,15 +714,15 @@ mod tests {
     fn counts_variables() {
         let arena = bumpalo::Bump::new();
         let var_x = arena.alloc(Expr {
-            kind: ExprKind::Variable(Cow::Borrowed("x")),
+            kind: ExprKind::Variable("x"),
             span: Span::DUMMY,
         });
         let var_y = arena.alloc(Expr {
-            kind: ExprKind::Variable(Cow::Borrowed("y")),
+            kind: ExprKind::Variable("y"),
             span: Span::DUMMY,
         });
         let var_z = arena.alloc(Expr {
-            kind: ExprKind::Variable(Cow::Borrowed("z")),
+            kind: ExprKind::Variable("z"),
             span: Span::DUMMY,
         });
         let binary = arena.alloc(Expr {
@@ -763,11 +761,11 @@ mod tests {
     fn early_termination() {
         let arena = bumpalo::Bump::new();
         let var_a = arena.alloc(Expr {
-            kind: ExprKind::Variable(Cow::Borrowed("a")),
+            kind: ExprKind::Variable("a"),
             span: Span::DUMMY,
         });
         let var_b = arena.alloc(Expr {
-            kind: ExprKind::Variable(Cow::Borrowed("b")),
+            kind: ExprKind::Variable("b"),
             span: Span::DUMMY,
         });
         let binary = arena.alloc(Expr {

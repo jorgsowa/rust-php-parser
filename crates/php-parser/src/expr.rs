@@ -684,7 +684,7 @@ fn parse_member_name<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr
             let src = parser.source;
             let name = &src[token.span.start as usize + 1..token.span.end as usize];
             Expr {
-                kind: ExprKind::Variable(Cow::Borrowed(name)),
+                kind: ExprKind::Variable(name),
                 span: token.span,
             }
         }
@@ -1198,7 +1198,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             // Strip the $ prefix
             let name = &src[token.span.start as usize + 1..token.span.end as usize];
             Expr {
-                kind: ExprKind::Variable(Cow::Borrowed(name)),
+                kind: ExprKind::Variable(name),
                 span: token.span,
             }
         }
@@ -1814,9 +1814,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
             let t = parser.advance();
             let src = parser.source;
             Expr {
-                kind: ExprKind::Variable(Cow::Borrowed(
-                    &src[t.span.start as usize + 1..t.span.end as usize],
-                )),
+                kind: ExprKind::Variable(&src[t.span.start as usize + 1..t.span.end as usize]),
                 span: t.span,
             }
         }
