@@ -921,6 +921,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                     src,
                     inner,
                     inner_offset,
+                    parser.version,
                 );
                 Expr {
                     kind: ExprKind::InterpolatedString(parts),
@@ -943,6 +944,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                     src,
                     inner,
                     inner_offset,
+                    parser.version,
                 );
                 // Collapse single literal part into String, or use InterpolatedString
                 if parts.len() == 1 {
@@ -983,6 +985,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                     src,
                     inner,
                     inner_offset,
+                    parser.version,
                 );
                 Expr {
                     kind: ExprKind::ShellExec(parts),
@@ -1007,6 +1010,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                     src,
                     inner,
                     inner_offset,
+                    parser.version,
                 );
                 Expr {
                     kind: ExprKind::ShellExec(parts),
@@ -1035,6 +1039,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                         raw_body,
                         body_offset,
                         &indent,
+                        parser.version,
                     );
                     Expr {
                         kind: ExprKind::Heredoc { label, parts },
@@ -1047,6 +1052,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                         src,
                         raw_body,
                         body_offset,
+                        parser.version,
                     );
                     Expr {
                         kind: ExprKind::Heredoc { label, parts },

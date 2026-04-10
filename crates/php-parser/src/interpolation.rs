@@ -2,6 +2,8 @@ use std::borrow::Cow;
 
 use php_ast::*;
 
+use crate::version::PhpVersion;
+
 /// Parse the inner content of a double-quoted or backtick string into parts.
 /// `source` is the full original source string.
 /// `inner` is the string content without surrounding quotes — must be a verbatim
@@ -12,6 +14,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
     source: &'src str,
     inner: &'src str,
     base_offset: u32,
+    version: PhpVersion,
 ) -> ArenaVec<'arena, StringPart<'arena, 'src>> {
     let mut parts = ArenaVec::with_capacity_in(8, arena);
     let bytes = inner.as_bytes();
@@ -168,6 +171,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                             source,
                             base_offset + expr_start as u32,
                             base_offset + i as u32,
+                            version,
                         );
                         if i < len {
                             i += 1; // skip }
@@ -376,7 +380,8 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                 // Parse the expression using a sub-parser starting at the absolute offset
                 let expr_offset = base_offset + expr_start as u32;
                 let end_offset = base_offset + expr_end as u32;
-                let expr = parse_complex_interpolation(arena, source, expr_offset, end_offset);
+                let expr =
+                    parse_complex_interpolation(arena, source, expr_offset, end_offset, version);
                 parts.push(StringPart::Expr(expr));
                 literal_start = i;
             }
@@ -419,6 +424,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
     raw_body: &'src str,
     body_offset: u32,
     indent: &str,
+    version: PhpVersion,
 ) -> ArenaVec<'arena, StringPart<'arena, 'src>> {
     let indent_len = indent.len();
     let mut parts: ArenaVec<'arena, StringPart<'arena, 'src>> =
@@ -662,7 +668,8 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                 // correct absolute position — use the fast sub-parser path directly.
                 let expr_offset = body_offset + expr_start as u32;
                 let end_offset = body_offset + expr_end as u32;
-                let expr = parse_complex_interpolation(arena, source, expr_offset, end_offset);
+                let expr =
+                    parse_complex_interpolation(arena, source, expr_offset, end_offset, version);
                 parts.push(StringPart::Expr(expr));
             }
             _ => {
@@ -761,13 +768,9 @@ fn parse_complex_interpolation<'arena, 'src>(
     source: &'src str,
     offset: u32,
     end: u32,
+    version: PhpVersion,
 ) -> Expr<'arena, 'src> {
-    let mut sub = crate::parser::Parser::new_at(
-        arena,
-        source,
-        offset as usize,
-        crate::version::PhpVersion::default(),
-    );
+    let mut sub = crate::parser::Parser::new_at(arena, source, offset as usize, version);
     let expr = crate::expr::parse_expr(&mut sub);
     if matches!(expr.kind, ExprKind::Error) {
         Expr {
