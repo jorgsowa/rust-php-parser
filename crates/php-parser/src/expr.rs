@@ -342,6 +342,12 @@ pub fn parse_expr_bp<'arena, 'src>(
                 };
             } else if parser.check(TokenKind::LeftBrace) {
                 // Dynamic class constant/method: A::{'b'}(), Foo::{bar()}
+                let brace_span = parser.current_span();
+                parser.require_version(
+                    PhpVersion::Php83,
+                    "dynamic class constant fetch",
+                    brace_span,
+                );
                 parser.advance(); // consume {
                 let member = parse_expr(parser);
                 parser.expect(TokenKind::RightBrace);
@@ -2554,6 +2560,20 @@ fn try_parse_cast<'arena, 'src>(
     }
     if cast_kind == CastKind::Void {
         parser.require_version(PhpVersion::Php85, "void cast", kw_span);
+    }
+    // (real) was removed in PHP 8.0, (binary) is a PHP 5-era artifact
+    let kw_text = &parser.source[kw_span.start as usize..kw_span.end as usize];
+    if kw_text.eq_ignore_ascii_case("real") {
+        parser.error(ParseError::Forbidden {
+            message: "the (real) cast is no longer supported, use (float) instead".into(),
+            span: kw_span,
+        });
+    }
+    if kw_text.eq_ignore_ascii_case("binary") {
+        parser.error(ParseError::Forbidden {
+            message: "the (binary) cast is not supported, use (string) instead".into(),
+            span: kw_span,
+        });
     }
 
     let operand = parse_expr_bp(parser, 41);
