@@ -10,6 +10,41 @@ use crate::precedence::{self, ASSIGNMENT_BP, TERNARY_BP};
 use crate::stmt;
 use crate::version::PhpVersion;
 
+/// Returns true if the token is a non-associative operator in PHP 8.
+/// Chaining these (e.g. `1 < 2 < 3`) is a fatal error in PHP 8.0+.
+fn is_nonassoc_token(kind: TokenKind) -> bool {
+    matches!(
+        kind,
+        TokenKind::EqualsEquals
+            | TokenKind::BangEquals
+            | TokenKind::EqualsEqualsEquals
+            | TokenKind::BangEqualsEquals
+            | TokenKind::Spaceship
+            | TokenKind::LessThan
+            | TokenKind::GreaterThan
+            | TokenKind::LessThanEquals
+            | TokenKind::GreaterThanEquals
+            | TokenKind::Instanceof
+    )
+}
+
+/// Returns true if the binary op is a non-associative operator.
+fn is_nonassoc_binary_op(op: BinaryOp) -> bool {
+    matches!(
+        op,
+        BinaryOp::Equal
+            | BinaryOp::NotEqual
+            | BinaryOp::Identical
+            | BinaryOp::NotIdentical
+            | BinaryOp::Spaceship
+            | BinaryOp::Less
+            | BinaryOp::Greater
+            | BinaryOp::LessOrEqual
+            | BinaryOp::GreaterOrEqual
+            | BinaryOp::Instanceof
+    )
+}
+
 /// Cast keyword strings and their CastKind values
 const CAST_KEYWORDS: &[(&str, CastKind)] = &[
     ("int", CastKind::Int),
@@ -89,14 +124,13 @@ pub fn parse_expr_bp<'arena, 'src>(
                 }
             }
 
-            // Ternary operator (right-associative, special handling)
+            // Ternary operator (non-associative in PHP 8.0+)
             TokenKind::Question => {
                 if TERNARY_BP < min_bp {
                     break;
                 }
                 // PHP 8.0+: unparenthesized ternary chaining is a fatal parse error.
-                // `a ? b : c ? d : e` must be parenthesized; detect by checking
-                // whether the current lhs is already a completed ternary.
+                // Pattern B: `a ? b : c ? d : e` — LHS is already a ternary.
                 if parser.version >= PhpVersion::Php80 && matches!(lhs.kind, ExprKind::Ternary(_)) {
                     let span = parser.current_span();
                     parser.error(ParseError::Forbidden {
@@ -113,11 +147,23 @@ pub fn parse_expr_bp<'arena, 'src>(
                     None
                 } else {
                     let e = parse_expr_bp(parser, 0);
+                    // PHP 8.0+: Pattern A: `a ? b ? c : d : e` — then branch is an
+                    // unparenthesized ternary (Parenthesized wrapping is fine).
+                    if parser.version >= PhpVersion::Php80 && matches!(e.kind, ExprKind::Ternary(_))
+                    {
+                        parser.error(ParseError::Forbidden {
+                            message: "Unparenthesized `a ? b ? c : d : e` is not supported. \
+                                  Use parentheses to make the order explicit."
+                                .into(),
+                            span: e.span,
+                        });
+                    }
                     Some(parser.alloc(e))
                 };
 
                 parser.expect(TokenKind::Colon);
-                // Ternary is LEFT-associative in PHP, so use TERNARY_BP + 1
+                // Non-associative in PHP 8.0+; use TERNARY_BP + 1 to prevent
+                // the else branch from consuming another ternary at the same level.
                 let else_expr = parse_expr_bp(parser, TERNARY_BP + 1);
                 let span = lhs.span.merge(else_expr.span);
                 lhs = Expr {
@@ -494,6 +540,20 @@ pub fn parse_expr_bp<'arena, 'src>(
         if let Some((left_bp, right_bp)) = precedence::infix_binding_power(kind) {
             if left_bp < min_bp {
                 break;
+            }
+            // PHP 8.0+: chaining non-associative operators is a fatal error.
+            // Detect when the LHS is already a binary expression with a non-assoc op
+            // and the current token is also a non-assoc op at the same precedence level.
+            if parser.version >= PhpVersion::Php80
+                && is_nonassoc_token(kind)
+                && matches!(&lhs.kind, ExprKind::Binary(b) if is_nonassoc_binary_op(b.op))
+            {
+                let span = parser.current_span();
+                parser.error(ParseError::Forbidden {
+                    message: "Chaining non-associative operators requires explicit parentheses."
+                        .into(),
+                    span,
+                });
             }
             let op_token = parser.advance();
             if op_token.kind == TokenKind::PipeArrow {
