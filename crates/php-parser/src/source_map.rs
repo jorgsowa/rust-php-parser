@@ -8,7 +8,7 @@
 /// # Example
 ///
 /// ```
-/// use php_ast::source_map::{SourceMap, LineCol};
+/// use php_rs_parser::source_map::{SourceMap, LineCol};
 ///
 /// let src = "<?php\necho 'hi';\n";
 /// let map = SourceMap::new(src);
@@ -16,7 +16,7 @@
 /// assert_eq!(map.offset_to_line_col(0), LineCol { line: 0, col: 0 });
 /// assert_eq!(map.offset_to_line_col(6), LineCol { line: 1, col: 0 });
 /// ```
-use crate::Span;
+use php_ast::Span;
 
 /// A 0-based line/column position.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]

@@ -35,12 +35,13 @@ pub(crate) mod interpolation;
 pub(crate) mod parser;
 pub mod phpdoc;
 pub(crate) mod precedence;
+pub mod source_map;
 pub(crate) mod stmt;
 pub mod version;
 
 use diagnostics::ParseError;
-use php_ast::source_map::SourceMap;
 use php_ast::{Comment, Program};
+use source_map::SourceMap;
 pub use version::PhpVersion;
 
 /// The result of parsing a PHP source string.
