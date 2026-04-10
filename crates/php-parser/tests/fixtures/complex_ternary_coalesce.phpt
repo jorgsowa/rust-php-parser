@@ -2,7 +2,6 @@
 <?php
 $a = $x ?: $y ?? $z;
 $b = $x ?? $y ?: $z;
-$c = $a ? $b ? $c : $d : $e;
 $d = ($a ?? $b) ? ($c ?: $d) : ($e ?? $f);
 ===ast===
 {
@@ -166,104 +165,11 @@ $d = ($a ?? $b) ? ($c ?: $d) : ($e ?? $f);
             "Assign": {
               "target": {
                 "kind": {
-                  "Variable": "c"
+                  "Variable": "d"
                 },
                 "span": {
                   "start": 48,
                   "end": 50
-                }
-              },
-              "op": "Assign",
-              "value": {
-                "kind": {
-                  "Ternary": {
-                    "condition": {
-                      "kind": {
-                        "Variable": "a"
-                      },
-                      "span": {
-                        "start": 53,
-                        "end": 55
-                      }
-                    },
-                    "then_expr": {
-                      "kind": {
-                        "Ternary": {
-                          "condition": {
-                            "kind": {
-                              "Variable": "b"
-                            },
-                            "span": {
-                              "start": 58,
-                              "end": 60
-                            }
-                          },
-                          "then_expr": {
-                            "kind": {
-                              "Variable": "c"
-                            },
-                            "span": {
-                              "start": 63,
-                              "end": 65
-                            }
-                          },
-                          "else_expr": {
-                            "kind": {
-                              "Variable": "d"
-                            },
-                            "span": {
-                              "start": 68,
-                              "end": 70
-                            }
-                          }
-                        }
-                      },
-                      "span": {
-                        "start": 58,
-                        "end": 70
-                      }
-                    },
-                    "else_expr": {
-                      "kind": {
-                        "Variable": "e"
-                      },
-                      "span": {
-                        "start": 73,
-                        "end": 75
-                      }
-                    }
-                  }
-                },
-                "span": {
-                  "start": 53,
-                  "end": 75
-                }
-              }
-            }
-          },
-          "span": {
-            "start": 48,
-            "end": 75
-          }
-        }
-      },
-      "span": {
-        "start": 48,
-        "end": 76
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Assign": {
-              "target": {
-                "kind": {
-                  "Variable": "d"
-                },
-                "span": {
-                  "start": 77,
-                  "end": 79
                 }
               },
               "op": "Assign",
@@ -280,8 +186,8 @@ $d = ($a ?? $b) ? ($c ?: $d) : ($e ?? $f);
                                   "Variable": "a"
                                 },
                                 "span": {
-                                  "start": 83,
-                                  "end": 85
+                                  "start": 54,
+                                  "end": 56
                                 }
                               },
                               "right": {
@@ -289,21 +195,21 @@ $d = ($a ?? $b) ? ($c ?: $d) : ($e ?? $f);
                                   "Variable": "b"
                                 },
                                 "span": {
-                                  "start": 89,
-                                  "end": 91
+                                  "start": 60,
+                                  "end": 62
                                 }
                               }
                             }
                           },
                           "span": {
-                            "start": 83,
-                            "end": 91
+                            "start": 54,
+                            "end": 62
                           }
                         }
                       },
                       "span": {
-                        "start": 82,
-                        "end": 92
+                        "start": 53,
+                        "end": 63
                       }
                     },
                     "then_expr": {
@@ -316,8 +222,8 @@ $d = ($a ?? $b) ? ($c ?: $d) : ($e ?? $f);
                                   "Variable": "c"
                                 },
                                 "span": {
-                                  "start": 96,
-                                  "end": 98
+                                  "start": 67,
+                                  "end": 69
                                 }
                               },
                               "then_expr": null,
@@ -326,21 +232,21 @@ $d = ($a ?? $b) ? ($c ?: $d) : ($e ?? $f);
                                   "Variable": "d"
                                 },
                                 "span": {
-                                  "start": 102,
-                                  "end": 104
+                                  "start": 73,
+                                  "end": 75
                                 }
                               }
                             }
                           },
                           "span": {
-                            "start": 96,
-                            "end": 104
+                            "start": 67,
+                            "end": 75
                           }
                         }
                       },
                       "span": {
-                        "start": 95,
-                        "end": 105
+                        "start": 66,
+                        "end": 76
                       }
                     },
                     "else_expr": {
@@ -353,8 +259,8 @@ $d = ($a ?? $b) ? ($c ?: $d) : ($e ?? $f);
                                   "Variable": "e"
                                 },
                                 "span": {
-                                  "start": 109,
-                                  "end": 111
+                                  "start": 80,
+                                  "end": 82
                                 }
                               },
                               "right": {
@@ -362,46 +268,46 @@ $d = ($a ?? $b) ? ($c ?: $d) : ($e ?? $f);
                                   "Variable": "f"
                                 },
                                 "span": {
-                                  "start": 115,
-                                  "end": 117
+                                  "start": 86,
+                                  "end": 88
                                 }
                               }
                             }
                           },
                           "span": {
-                            "start": 109,
-                            "end": 117
+                            "start": 80,
+                            "end": 88
                           }
                         }
                       },
                       "span": {
-                        "start": 108,
-                        "end": 118
+                        "start": 79,
+                        "end": 89
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 82,
-                  "end": 118
+                  "start": 53,
+                  "end": 89
                 }
               }
             }
           },
           "span": {
-            "start": 77,
-            "end": 118
+            "start": 48,
+            "end": 89
           }
         }
       },
       "span": {
-        "start": 77,
-        "end": 119
+        "start": 48,
+        "end": 90
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 119
+    "end": 90
   }
 }
