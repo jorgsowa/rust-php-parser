@@ -2,6 +2,7 @@
 <?php
 class ReadOnly {}
 ===errors===
+cannot use 'ReadOnly' as class name
 ===ast===
 {
   "stmts": [

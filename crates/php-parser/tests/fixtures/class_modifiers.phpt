@@ -63,7 +63,7 @@ readonly class Value {
               },
               "span": {
                 "start": 32,
-                "end": 78
+                "end": 77
               }
             }
           ],
@@ -121,7 +121,7 @@ readonly class Value {
               },
               "span": {
                 "start": 105,
-                "end": 136
+                "end": 135
               }
             }
           ],
@@ -229,7 +229,7 @@ readonly class Value {
               },
               "span": {
                 "start": 165,
-                "end": 257
+                "end": 256
               }
             }
           ],

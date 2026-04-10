@@ -31,7 +31,7 @@ enum Suit: string implements HasColor {
             "kind": "Unqualified",
             "span": {
               "start": 17,
-              "end": 24
+              "end": 23
             }
           },
           "implements": [
@@ -42,7 +42,7 @@ enum Suit: string implements HasColor {
               "kind": "Unqualified",
               "span": {
                 "start": 35,
-                "end": 44
+                "end": 43
               }
             }
           ],
@@ -65,7 +65,7 @@ enum Suit: string implements HasColor {
               },
               "span": {
                 "start": 50,
-                "end": 73
+                "end": 68
               }
             },
             {
@@ -86,7 +86,7 @@ enum Suit: string implements HasColor {
               },
               "span": {
                 "start": 73,
-                "end": 98
+                "end": 93
               }
             },
             {
@@ -107,7 +107,7 @@ enum Suit: string implements HasColor {
               },
               "span": {
                 "start": 98,
-                "end": 120
+                "end": 115
               }
             },
             {
@@ -128,7 +128,7 @@ enum Suit: string implements HasColor {
               },
               "span": {
                 "start": 120,
-                "end": 144
+                "end": 138
               }
             },
             {
@@ -150,7 +150,7 @@ enum Suit: string implements HasColor {
               },
               "span": {
                 "start": 144,
-                "end": 166
+                "end": 160
               }
             },
             {
@@ -236,7 +236,7 @@ enum Suit: string implements HasColor {
                                       },
                                       "span": {
                                         "start": 257,
-                                        "end": 272
+                                        "end": 271
                                       }
                                     }
                                   ],
@@ -293,7 +293,7 @@ enum Suit: string implements HasColor {
                                       },
                                       "span": {
                                         "start": 307,
-                                        "end": 320
+                                        "end": 319
                                       }
                                     }
                                   ],
@@ -322,7 +322,7 @@ enum Suit: string implements HasColor {
                       },
                       "span": {
                         "start": 208,
-                        "end": 347
+                        "end": 342
                       }
                     }
                   ],
@@ -331,7 +331,7 @@ enum Suit: string implements HasColor {
               },
               "span": {
                 "start": 166,
-                "end": 349
+                "end": 348
               }
             }
           ],

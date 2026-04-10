@@ -85,7 +85,7 @@ foo(class: 'MyClass', static: true, match: 'yes');
       },
       "span": {
         "start": 6,
-        "end": 54
+        "end": 53
       }
     },
     {

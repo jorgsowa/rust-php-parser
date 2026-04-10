@@ -2,6 +2,7 @@
 <?php
 new;
 ===errors===
+expected identifier, found ';'
 ===ast===
 {
   "stmts": [

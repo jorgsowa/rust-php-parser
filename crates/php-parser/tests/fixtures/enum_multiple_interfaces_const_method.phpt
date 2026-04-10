@@ -30,7 +30,7 @@ enum Status: string implements Loggable, Serializable {
             "kind": "Unqualified",
             "span": {
               "start": 19,
-              "end": 26
+              "end": 25
             }
           },
           "implements": [
@@ -51,7 +51,7 @@ enum Status: string implements Loggable, Serializable {
               "kind": "Unqualified",
               "span": {
                 "start": 47,
-                "end": 60
+                "end": 59
               }
             }
           ],
@@ -74,7 +74,7 @@ enum Status: string implements Loggable, Serializable {
               },
               "span": {
                 "start": 66,
-                "end": 94
+                "end": 89
               }
             },
             {
@@ -95,7 +95,7 @@ enum Status: string implements Loggable, Serializable {
               },
               "span": {
                 "start": 94,
-                "end": 127
+                "end": 121
               }
             },
             {
@@ -128,7 +128,7 @@ enum Status: string implements Loggable, Serializable {
               },
               "span": {
                 "start": 127,
-                "end": 162
+                "end": 156
               }
             },
             {
@@ -193,7 +193,7 @@ enum Status: string implements Loggable, Serializable {
                       },
                       "span": {
                         "start": 204,
-                        "end": 229
+                        "end": 224
                       }
                     }
                   ],
@@ -202,7 +202,7 @@ enum Status: string implements Loggable, Serializable {
               },
               "span": {
                 "start": 162,
-                "end": 236
+                "end": 230
               }
             },
             {
@@ -279,7 +279,7 @@ enum Status: string implements Loggable, Serializable {
                       },
                       "span": {
                         "start": 279,
-                        "end": 314
+                        "end": 309
                       }
                     }
                   ],
@@ -288,7 +288,7 @@ enum Status: string implements Loggable, Serializable {
               },
               "span": {
                 "start": 236,
-                "end": 316
+                "end": 315
               }
             }
           ],

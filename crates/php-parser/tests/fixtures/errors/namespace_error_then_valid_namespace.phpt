@@ -15,7 +15,7 @@ expected identifier, found ';'
             "kind": "Unqualified",
             "span": {
               "start": 16,
-              "end": 16
+              "end": 15
             }
           },
           "body": "Simple"
@@ -23,7 +23,7 @@ expected identifier, found ';'
       },
       "span": {
         "start": 6,
-        "end": 18
+        "end": 17
       }
     },
     {

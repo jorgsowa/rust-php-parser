@@ -4,6 +4,7 @@
 [1, , 2];
 array(1, , 2);
 ===errors===
+expected expression
 ===ast===
 {
   "stmts": [
@@ -71,7 +72,7 @@ array(1, , 2);
       },
       "span": {
         "start": 7,
-        "end": 17
+        "end": 16
       }
     },
     {

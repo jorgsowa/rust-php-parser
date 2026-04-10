@@ -10,6 +10,7 @@ enum C: int implements Bar {
     case Foo = 1;
 }
 ===errors===
+'class' cannot be used as an enum case name
 ===ast===
 {
   "stmts": [
@@ -30,7 +31,7 @@ enum C: int implements Bar {
               },
               "span": {
                 "start": 20,
-                "end": 32
+                "end": 31
               }
             }
           ],
@@ -65,7 +66,7 @@ enum C: int implements Bar {
               "kind": "Unqualified",
               "span": {
                 "start": 57,
-                "end": 61
+                "end": 60
               }
             }
           ],
@@ -89,7 +90,7 @@ enum C: int implements Bar {
             "kind": "Unqualified",
             "span": {
               "start": 73,
-              "end": 77
+              "end": 76
             }
           },
           "implements": [
@@ -100,7 +101,7 @@ enum C: int implements Bar {
               "kind": "Unqualified",
               "span": {
                 "start": 88,
-                "end": 92
+                "end": 91
               }
             }
           ],
@@ -123,7 +124,7 @@ enum C: int implements Bar {
               },
               "span": {
                 "start": 98,
-                "end": 112
+                "end": 111
               }
             }
           ],

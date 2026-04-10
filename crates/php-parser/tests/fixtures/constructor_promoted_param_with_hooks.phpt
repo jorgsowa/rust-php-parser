@@ -132,7 +132,7 @@ class Foo {
                           "attributes": [],
                           "span": {
                             "start": 93,
-                            "end": 137
+                            "end": 124
                           }
                         },
                         {
@@ -222,7 +222,7 @@ class Foo {
                                 },
                                 "span": {
                                   "start": 158,
-                                  "end": 186
+                                  "end": 185
                                 }
                               }
                             ]
@@ -267,7 +267,7 @@ class Foo {
                           "attributes": [],
                           "span": {
                             "start": 137,
-                            "end": 196
+                            "end": 187
                           }
                         }
                       ],
@@ -284,7 +284,7 @@ class Foo {
               },
               "span": {
                 "start": 22,
-                "end": 208
+                "end": 207
               }
             }
           ],

@@ -12,6 +12,8 @@ class B {
     const X = 1
 }
 ===errors===
+expected ';', found 'public'
+expected ';', found '}'
 ===ast===
 {
   "stmts": [
@@ -50,7 +52,7 @@ class B {
               },
               "span": {
                 "start": 44,
-                "end": 62
+                "end": 56
               }
             },
             {
@@ -152,7 +154,7 @@ class B {
                       },
                       "span": {
                         "start": 111,
-                        "end": 132
+                        "end": 127
                       }
                     }
                   ],
@@ -161,7 +163,7 @@ class B {
               },
               "span": {
                 "start": 62,
-                "end": 134
+                "end": 133
               }
             }
           ],
@@ -204,7 +206,7 @@ class B {
               },
               "span": {
                 "start": 150,
-                "end": 162
+                "end": 161
               }
             }
           ],

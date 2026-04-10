@@ -33,7 +33,7 @@ class A extends B implements C, D {
             "kind": "Unqualified",
             "span": {
               "start": 23,
-              "end": 25
+              "end": 24
             }
           },
           "implements": [
@@ -54,7 +54,7 @@ class A extends B implements C, D {
               "kind": "Unqualified",
               "span": {
                 "start": 39,
-                "end": 41
+                "end": 40
               }
             }
           ],
@@ -78,7 +78,7 @@ class A extends B implements C, D {
               },
               "span": {
                 "start": 47,
-                "end": 76
+                "end": 70
               }
             },
             {
@@ -100,7 +100,7 @@ class A extends B implements C, D {
               },
               "span": {
                 "start": 47,
-                "end": 76
+                "end": 70
               }
             },
             {
@@ -208,7 +208,7 @@ class A extends B implements C, D {
               },
               "span": {
                 "start": 142,
-                "end": 169
+                "end": 164
               }
             },
             {
@@ -245,7 +245,7 @@ class A extends B implements C, D {
               },
               "span": {
                 "start": 169,
-                "end": 205
+                "end": 200
               }
             },
             {
@@ -267,13 +267,13 @@ class A extends B implements C, D {
                         "kind": "Unqualified",
                         "span": {
                           "start": 233,
-                          "end": 235
+                          "end": 234
                         }
                       }
                     },
                     "span": {
                       "start": 233,
-                      "end": 235
+                      "end": 234
                     }
                   },
                   "body": [],
@@ -282,7 +282,7 @@ class A extends B implements C, D {
               },
               "span": {
                 "start": 205,
-                "end": 242
+                "end": 237
               }
             },
             {
@@ -302,7 +302,7 @@ class A extends B implements C, D {
               },
               "span": {
                 "start": 242,
-                "end": 272
+                "end": 267
               }
             },
             {
@@ -322,7 +322,7 @@ class A extends B implements C, D {
               },
               "span": {
                 "start": 272,
-                "end": 296
+                "end": 295
               }
             }
           ],

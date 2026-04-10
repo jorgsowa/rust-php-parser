@@ -17,6 +17,7 @@ const WithGroupAttributes = 3;
 const ThisIsInvalid = 4,
     AttributesOnMultipleConstants = 5;
 ===errors===
+cannot use attributes on multi-constant declaration
 ===ast===
 {
   "stmts": [
@@ -95,7 +96,7 @@ const ThisIsInvalid = 4,
       },
       "span": {
         "start": 7,
-        "end": 46
+        "end": 44
       }
     },
     {
@@ -140,7 +141,7 @@ const ThisIsInvalid = 4,
       },
       "span": {
         "start": 57,
-        "end": 86
+        "end": 84
       }
     },
     {
@@ -202,7 +203,7 @@ const ThisIsInvalid = 4,
       },
       "span": {
         "start": 105,
-        "end": 140
+        "end": 138
       }
     },
     {
@@ -264,7 +265,7 @@ const ThisIsInvalid = 4,
       },
       "span": {
         "start": 157,
-        "end": 189
+        "end": 187
       }
     },
     {

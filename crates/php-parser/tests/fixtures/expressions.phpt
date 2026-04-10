@@ -94,7 +94,7 @@ $q = $a ?: 'fallback';
       },
       "span": {
         "start": 6,
-        "end": 22
+        "end": 21
       }
     },
     {
@@ -149,7 +149,7 @@ $q = $a ?: 'fallback';
                       },
                       "span": {
                         "start": 27,
-                        "end": 35
+                        "end": 34
                       }
                     },
                     "op": "Mul",
@@ -179,7 +179,7 @@ $q = $a ?: 'fallback';
       },
       "span": {
         "start": 22,
-        "end": 40
+        "end": 39
       }
     },
     {
@@ -256,7 +256,7 @@ $q = $a ?: 'fallback';
       },
       "span": {
         "start": 40,
-        "end": 58
+        "end": 57
       }
     },
     {
@@ -341,7 +341,7 @@ $q = $a ?: 'fallback';
       },
       "span": {
         "start": 58,
-        "end": 101
+        "end": 100
       }
     },
     {
@@ -397,7 +397,7 @@ $q = $a ?: 'fallback';
       },
       "span": {
         "start": 101,
-        "end": 123
+        "end": 122
       }
     },
     {
@@ -454,7 +454,7 @@ $q = $a ?: 'fallback';
       },
       "span": {
         "start": 123,
-        "end": 139
+        "end": 138
       }
     },
     {
@@ -502,7 +502,7 @@ $q = $a ?: 'fallback';
       },
       "span": {
         "start": 139,
-        "end": 152
+        "end": 151
       }
     },
     {
@@ -550,7 +550,7 @@ $q = $a ?: 'fallback';
       },
       "span": {
         "start": 152,
-        "end": 162
+        "end": 161
       }
     },
     {
@@ -598,7 +598,7 @@ $q = $a ?: 'fallback';
       },
       "span": {
         "start": 162,
-        "end": 173
+        "end": 172
       }
     },
     {
@@ -646,7 +646,7 @@ $q = $a ?: 'fallback';
       },
       "span": {
         "start": 173,
-        "end": 184
+        "end": 183
       }
     },
     {
@@ -723,7 +723,7 @@ $q = $a ?: 'fallback';
       },
       "span": {
         "start": 184,
-        "end": 214
+        "end": 213
       }
     },
     {
@@ -840,7 +840,7 @@ $q = $a ?: 'fallback';
       },
       "span": {
         "start": 214,
-        "end": 243
+        "end": 242
       }
     },
     {
@@ -937,7 +937,7 @@ $q = $a ?: 'fallback';
       },
       "span": {
         "start": 243,
-        "end": 267
+        "end": 266
       }
     },
     {
@@ -994,7 +994,7 @@ $q = $a ?: 'fallback';
       },
       "span": {
         "start": 267,
-        "end": 281
+        "end": 280
       }
     },
     {
@@ -1051,7 +1051,7 @@ $q = $a ?: 'fallback';
       },
       "span": {
         "start": 281,
-        "end": 295
+        "end": 294
       }
     },
     {
@@ -1108,7 +1108,7 @@ $q = $a ?: 'fallback';
       },
       "span": {
         "start": 295,
-        "end": 311
+        "end": 310
       }
     },
     {

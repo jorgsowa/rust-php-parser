@@ -6,6 +6,8 @@ if ($b) {
     /* unterminated
 }
 ===errors===
+unterminated block comment
+unclosed ''}'' opened at Span { start: 15, end: 16 }
 ===ast===
 {
   "stmts": [
@@ -58,14 +60,14 @@ if ($b) {
                   },
                   "span": {
                     "start": 21,
-                    "end": 50
+                    "end": 28
                   }
                 }
               ]
             },
             "span": {
               "start": 15,
-              "end": 50
+              "end": 28
             }
           },
           "elseif_branches": [],
@@ -74,12 +76,12 @@ if ($b) {
       },
       "span": {
         "start": 7,
-        "end": 50
+        "end": 28
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 50
+    "end": 28
   }
 }

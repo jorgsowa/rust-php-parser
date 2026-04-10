@@ -1,6 +1,7 @@
 ===source===
 <?php class A { abstract final function a(); }
 ===errors===
+cannot use 'abstract' and 'final' together
 ===ast===
 {
   "stmts": [
@@ -33,7 +34,7 @@
               },
               "span": {
                 "start": 16,
-                "end": 45
+                "end": 44
               }
             }
           ],

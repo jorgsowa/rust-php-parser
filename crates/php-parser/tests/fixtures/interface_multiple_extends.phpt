@@ -28,7 +28,7 @@ interface ReadWrite extends Readable, Writable {
               "kind": "Unqualified",
               "span": {
                 "start": 44,
-                "end": 53
+                "end": 52
               }
             }
           ],
@@ -67,7 +67,7 @@ interface ReadWrite extends Readable, Writable {
               },
               "span": {
                 "start": 59,
-                "end": 90
+                "end": 89
               }
             }
           ],

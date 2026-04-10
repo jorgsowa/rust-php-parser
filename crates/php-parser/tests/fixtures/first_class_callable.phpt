@@ -52,7 +52,7 @@ $fn = Foo::bar(...);
       },
       "span": {
         "start": 6,
-        "end": 25
+        "end": 24
       }
     },
     {
@@ -112,7 +112,7 @@ $fn = Foo::bar(...);
       },
       "span": {
         "start": 25,
-        "end": 50
+        "end": 49
       }
     },
     {

@@ -50,13 +50,13 @@
                           "kind": "Unqualified",
                           "span": {
                             "start": 20,
-                            "end": 28
+                            "end": 27
                           }
                         }
                       },
                       "span": {
                         "start": 20,
-                        "end": 28
+                        "end": 27
                       }
                     },
                     "body": {

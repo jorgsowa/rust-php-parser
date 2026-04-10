@@ -47,7 +47,7 @@ function indexedGen() {
               },
               "span": {
                 "start": 34,
-                "end": 54
+                "end": 49
               }
             },
             {
@@ -84,7 +84,7 @@ function indexedGen() {
               },
               "span": {
                 "start": 54,
-                "end": 70
+                "end": 69
               }
             }
           ],

@@ -1,6 +1,7 @@
 ===source===
 <?php class A { abstract abstract function a(); }
 ===errors===
+duplicate modifier 'abstract'
 ===ast===
 {
   "stmts": [
@@ -33,7 +34,7 @@
               },
               "span": {
                 "start": 16,
-                "end": 48
+                "end": 47
               }
             }
           ],

@@ -20,7 +20,7 @@ __halt_compiler();Hallo World!
       },
       "span": {
         "start": 7,
-        "end": 11
+        "end": 10
       }
     },
     {

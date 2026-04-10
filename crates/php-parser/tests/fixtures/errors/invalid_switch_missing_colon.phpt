@@ -52,7 +52,7 @@ expected ';', found 'echo'
                   },
                   "span": {
                     "start": 39,
-                    "end": 59
+                    "end": 50
                   }
                 },
                 {
@@ -61,13 +61,13 @@ expected ';', found 'echo'
                   },
                   "span": {
                     "start": 59,
-                    "end": 70
+                    "end": 65
                   }
                 }
               ],
               "span": {
                 "start": 24,
-                "end": 70
+                "end": 65
               }
             },
             {
@@ -97,13 +97,13 @@ expected ';', found 'echo'
                   },
                   "span": {
                     "start": 86,
-                    "end": 98
+                    "end": 97
                   }
                 }
               ],
               "span": {
                 "start": 70,
-                "end": 98
+                "end": 97
               }
             }
           ]

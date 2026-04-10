@@ -149,7 +149,7 @@ class Point {
               },
               "span": {
                 "start": 24,
-                "end": 160
+                "end": 159
               }
             }
           ],

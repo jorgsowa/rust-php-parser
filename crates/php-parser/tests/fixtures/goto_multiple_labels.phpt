@@ -30,7 +30,7 @@ echo 'done';
             },
             "span": {
               "start": 14,
-              "end": 27
+              "end": 26
             }
           },
           "elseif_branches": [],
@@ -39,7 +39,7 @@ echo 'done';
       },
       "span": {
         "start": 6,
-        "end": 27
+        "end": 26
       }
     },
     {
@@ -60,7 +60,7 @@ echo 'done';
             },
             "span": {
               "start": 35,
-              "end": 48
+              "end": 47
             }
           },
           "elseif_branches": [],
@@ -69,7 +69,7 @@ echo 'done';
       },
       "span": {
         "start": 27,
-        "end": 48
+        "end": 47
       }
     },
     {
@@ -78,7 +78,7 @@ echo 'done';
       },
       "span": {
         "start": 48,
-        "end": 56
+        "end": 55
       }
     },
     {
@@ -97,7 +97,7 @@ echo 'done';
       },
       "span": {
         "start": 56,
-        "end": 66
+        "end": 65
       }
     },
     {
@@ -106,7 +106,7 @@ echo 'done';
       },
       "span": {
         "start": 66,
-        "end": 76
+        "end": 75
       }
     },
     {
@@ -115,7 +115,7 @@ echo 'done';
       },
       "span": {
         "start": 76,
-        "end": 84
+        "end": 83
       }
     },
     {
@@ -134,7 +134,7 @@ echo 'done';
       },
       "span": {
         "start": 84,
-        "end": 94
+        "end": 93
       }
     },
     {
@@ -143,7 +143,7 @@ echo 'done';
       },
       "span": {
         "start": 94,
-        "end": 99
+        "end": 98
       }
     },
     {

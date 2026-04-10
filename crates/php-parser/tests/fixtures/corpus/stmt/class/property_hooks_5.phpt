@@ -10,6 +10,13 @@ class Test {
     }
 }
 ===errors===
+expected 'get' or 'set', found 'public'
+expected 'get' or 'set', found 'public'
+expected 'get' or 'set', found 'protected'
+expected 'get' or 'set', found 'private'
+expected 'get' or 'set', found 'abstract'
+expected 'get' or 'set', found 'static'
+expected 'get' or 'set', found 'readonly'
 ===ast===
 {
   "stmts": [
@@ -46,7 +53,7 @@ class Test {
                       "attributes": [],
                       "span": {
                         "start": 46,
-                        "end": 73
+                        "end": 64
                       }
                     },
                     {
@@ -58,7 +65,7 @@ class Test {
                       "attributes": [],
                       "span": {
                         "start": 73,
-                        "end": 96
+                        "end": 87
                       }
                     },
                     {
@@ -70,7 +77,7 @@ class Test {
                       "attributes": [],
                       "span": {
                         "start": 96,
-                        "end": 117
+                        "end": 108
                       }
                     },
                     {
@@ -82,7 +89,7 @@ class Test {
                       "attributes": [],
                       "span": {
                         "start": 117,
-                        "end": 146
+                        "end": 137
                       }
                     },
                     {
@@ -94,7 +101,7 @@ class Test {
                       "attributes": [],
                       "span": {
                         "start": 146,
-                        "end": 164
+                        "end": 159
                       }
                     }
                   ]
@@ -102,7 +109,7 @@ class Test {
               },
               "span": {
                 "start": 23,
-                "end": 166
+                "end": 165
               }
             }
           ],

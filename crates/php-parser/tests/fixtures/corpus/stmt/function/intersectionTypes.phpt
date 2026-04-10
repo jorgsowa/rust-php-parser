@@ -59,20 +59,20 @@ function test(A&B $a): A&B {}
                               "kind": "Unqualified",
                               "span": {
                                 "start": 33,
-                                "end": 35
+                                "end": 34
                               }
                             }
                           },
                           "span": {
                             "start": 33,
-                            "end": 35
+                            "end": 34
                           }
                         }
                       ]
                     },
                     "span": {
                       "start": 31,
-                      "end": 35
+                      "end": 34
                     }
                   },
                   "default": null,
@@ -130,20 +130,20 @@ function test(A&B $a): A&B {}
                           "kind": "Unqualified",
                           "span": {
                             "start": 61,
-                            "end": 63
+                            "end": 62
                           }
                         }
                       },
                       "span": {
                         "start": 61,
-                        "end": 63
+                        "end": 62
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 59,
-                  "end": 63
+                  "end": 62
                 }
               },
               "default": null,
@@ -191,20 +191,20 @@ function test(A&B $a): A&B {}
                       "kind": "Unqualified",
                       "span": {
                         "start": 70,
-                        "end": 72
+                        "end": 71
                       }
                     }
                   },
                   "span": {
                     "start": 70,
-                    "end": 72
+                    "end": 71
                   }
                 }
               ]
             },
             "span": {
               "start": 68,
-              "end": 72
+              "end": 71
             }
           },
           "by_ref": false,

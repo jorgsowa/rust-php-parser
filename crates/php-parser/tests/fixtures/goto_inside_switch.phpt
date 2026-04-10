@@ -41,13 +41,13 @@ echo 'done';
                   },
                   "span": {
                     "start": 40,
-                    "end": 55
+                    "end": 50
                   }
                 }
               ],
               "span": {
                 "start": 24,
-                "end": 55
+                "end": 50
               }
             },
             {
@@ -77,13 +77,13 @@ echo 'done';
                   },
                   "span": {
                     "start": 71,
-                    "end": 83
+                    "end": 82
                   }
                 }
               ],
               "span": {
                 "start": 55,
-                "end": 83
+                "end": 82
               }
             }
           ]
@@ -91,7 +91,7 @@ echo 'done';
       },
       "span": {
         "start": 6,
-        "end": 85
+        "end": 84
       }
     },
     {
@@ -100,7 +100,7 @@ echo 'done';
       },
       "span": {
         "start": 85,
-        "end": 91
+        "end": 90
       }
     },
     {

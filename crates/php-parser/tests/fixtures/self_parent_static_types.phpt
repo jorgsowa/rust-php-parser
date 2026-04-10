@@ -96,7 +96,7 @@ class Builder {
                       },
                       "span": {
                         "start": 72,
-                        "end": 86
+                        "end": 85
                       }
                     }
                   ],
@@ -105,7 +105,7 @@ class Builder {
               },
               "span": {
                 "start": 26,
-                "end": 92
+                "end": 87
               }
             },
             {
@@ -162,7 +162,7 @@ class Builder {
                       },
                       "span": {
                         "start": 134,
-                        "end": 155
+                        "end": 154
                       }
                     }
                   ],
@@ -171,7 +171,7 @@ class Builder {
               },
               "span": {
                 "start": 92,
-                "end": 157
+                "end": 156
               }
             }
           ],

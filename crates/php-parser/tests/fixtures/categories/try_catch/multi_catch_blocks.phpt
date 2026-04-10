@@ -32,7 +32,7 @@
               },
               "span": {
                 "start": 12,
-                "end": 19
+                "end": 18
               }
             }
           ],
@@ -46,7 +46,7 @@
                   "kind": "Unqualified",
                   "span": {
                     "start": 28,
-                    "end": 30
+                    "end": 29
                   }
                 }
               ],
@@ -54,7 +54,7 @@
               "body": [],
               "span": {
                 "start": 27,
-                "end": 38
+                "end": 37
               }
             },
             {
@@ -66,7 +66,7 @@
                   "kind": "Unqualified",
                   "span": {
                     "start": 45,
-                    "end": 47
+                    "end": 46
                   }
                 }
               ],
@@ -74,7 +74,7 @@
               "body": [],
               "span": {
                 "start": 44,
-                "end": 55
+                "end": 54
               }
             },
             {
@@ -86,7 +86,7 @@
                   "kind": "Unqualified",
                   "span": {
                     "start": 62,
-                    "end": 64
+                    "end": 63
                   }
                 }
               ],

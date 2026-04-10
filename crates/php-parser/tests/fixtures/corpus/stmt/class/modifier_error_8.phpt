@@ -1,6 +1,7 @@
 ===source===
 <?php abstract final class A { }
 ===errors===
+expected 'class', found 'final'
 ===ast===
 {
   "stmts": [
@@ -8,7 +9,7 @@
       "kind": "Error",
       "span": {
         "start": 6,
-        "end": 15
+        "end": 14
       }
     },
     {

@@ -127,7 +127,7 @@ class Foo {
                       "attributes": [],
                       "span": {
                         "start": 52,
-                        "end": 92
+                        "end": 83
                       }
                     },
                     {
@@ -213,7 +213,7 @@ class Foo {
                       "attributes": [],
                       "span": {
                         "start": 92,
-                        "end": 138
+                        "end": 133
                       }
                     }
                   ]
@@ -221,7 +221,7 @@ class Foo {
               },
               "span": {
                 "start": 22,
-                "end": 144
+                "end": 139
               }
             },
             {
@@ -290,7 +290,7 @@ class Foo {
                             },
                             "span": {
                               "start": 178,
-                              "end": 199
+                              "end": 198
                             }
                           }
                         ]
@@ -301,7 +301,7 @@ class Foo {
                       "attributes": [],
                       "span": {
                         "start": 172,
-                        "end": 209
+                        "end": 200
                       }
                     },
                     {
@@ -409,7 +409,7 @@ class Foo {
                             },
                             "span": {
                               "start": 215,
-                              "end": 246
+                              "end": 245
                             }
                           }
                         ]
@@ -420,7 +420,7 @@ class Foo {
                       "attributes": [],
                       "span": {
                         "start": 209,
-                        "end": 252
+                        "end": 247
                       }
                     }
                   ]
@@ -428,7 +428,7 @@ class Foo {
               },
               "span": {
                 "start": 144,
-                "end": 258
+                "end": 253
               }
             },
             {
@@ -497,7 +497,7 @@ class Foo {
                             },
                             "span": {
                               "start": 290,
-                              "end": 308
+                              "end": 307
                             }
                           }
                         ]
@@ -508,7 +508,7 @@ class Foo {
                       "attributes": [],
                       "span": {
                         "start": 283,
-                        "end": 314
+                        "end": 309
                       }
                     }
                   ]
@@ -516,7 +516,7 @@ class Foo {
               },
               "span": {
                 "start": 258,
-                "end": 316
+                "end": 315
               }
             }
           ],

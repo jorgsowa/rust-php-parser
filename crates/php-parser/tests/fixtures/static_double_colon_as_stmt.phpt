@@ -31,7 +31,7 @@ static::class;
       },
       "span": {
         "start": 6,
-        "end": 21
+        "end": 20
       }
     },
     {
@@ -60,7 +60,7 @@ static::class;
       },
       "span": {
         "start": 21,
-        "end": 39
+        "end": 38
       }
     },
     {

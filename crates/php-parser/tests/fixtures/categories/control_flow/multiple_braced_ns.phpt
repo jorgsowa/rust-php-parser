@@ -13,7 +13,7 @@
             "kind": "Unqualified",
             "span": {
               "start": 16,
-              "end": 18
+              "end": 17
             }
           },
           "body": {
@@ -53,7 +53,7 @@
             "kind": "Unqualified",
             "span": {
               "start": 50,
-              "end": 52
+              "end": 51
             }
           },
           "body": {

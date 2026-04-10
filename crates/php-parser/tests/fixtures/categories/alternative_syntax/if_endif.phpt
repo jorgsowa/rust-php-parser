@@ -34,14 +34,14 @@
                   },
                   "span": {
                     "start": 15,
-                    "end": 23
+                    "end": 22
                   }
                 }
               ]
             },
             "span": {
               "start": 6,
-              "end": 23
+              "end": 22
             }
           },
           "elseif_branches": [
@@ -74,19 +74,19 @@
                       },
                       "span": {
                         "start": 36,
-                        "end": 44
+                        "end": 43
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 30,
-                  "end": 44
+                  "end": 43
                 }
               },
               "span": {
                 "start": 30,
-                "end": 44
+                "end": 43
               }
             }
           ],
@@ -109,14 +109,14 @@
                   },
                   "span": {
                     "start": 50,
-                    "end": 58
+                    "end": 57
                   }
                 }
               ]
             },
             "span": {
               "start": 6,
-              "end": 58
+              "end": 57
             }
           }
         }

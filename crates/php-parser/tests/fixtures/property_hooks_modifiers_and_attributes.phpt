@@ -71,7 +71,7 @@ abstract class Foo {
                       "attributes": [],
                       "span": {
                         "start": 76,
-                        "end": 89
+                        "end": 80
                       }
                     },
                     {
@@ -83,7 +83,7 @@ abstract class Foo {
                       "attributes": [],
                       "span": {
                         "start": 89,
-                        "end": 98
+                        "end": 93
                       }
                     }
                   ]
@@ -91,7 +91,7 @@ abstract class Foo {
               },
               "span": {
                 "start": 31,
-                "end": 104
+                "end": 99
               }
             },
             {
@@ -141,7 +141,7 @@ abstract class Foo {
                             },
                             "span": {
                               "start": 149,
-                              "end": 160
+                              "end": 159
                             }
                           }
                         ]
@@ -152,7 +152,7 @@ abstract class Foo {
                       "attributes": [],
                       "span": {
                         "start": 137,
-                        "end": 170
+                        "end": 161
                       }
                     },
                     {
@@ -212,7 +212,7 @@ abstract class Foo {
                             },
                             "span": {
                               "start": 194,
-                              "end": 222
+                              "end": 221
                             }
                           }
                         ]
@@ -257,7 +257,7 @@ abstract class Foo {
                       "attributes": [],
                       "span": {
                         "start": 170,
-                        "end": 228
+                        "end": 223
                       }
                     }
                   ]
@@ -265,7 +265,7 @@ abstract class Foo {
               },
               "span": {
                 "start": 104,
-                "end": 234
+                "end": 229
               }
             },
             {
@@ -335,7 +335,7 @@ abstract class Foo {
                             },
                             "span": {
                               "start": 289,
-                              "end": 314
+                              "end": 313
                             }
                           }
                         ]
@@ -364,7 +364,7 @@ abstract class Foo {
                       ],
                       "span": {
                         "start": 266,
-                        "end": 324
+                        "end": 315
                       }
                     },
                     {
@@ -424,7 +424,7 @@ abstract class Foo {
                             },
                             "span": {
                               "start": 362,
-                              "end": 389
+                              "end": 388
                             }
                           }
                         ]
@@ -487,7 +487,7 @@ abstract class Foo {
                       ],
                       "span": {
                         "start": 324,
-                        "end": 395
+                        "end": 390
                       }
                     }
                   ]
@@ -495,7 +495,7 @@ abstract class Foo {
               },
               "span": {
                 "start": 234,
-                "end": 397
+                "end": 396
               }
             }
           ],

@@ -106,13 +106,13 @@ function test4() : Foo\Bar {}
                 "kind": "Qualified",
                 "span": {
                   "start": 105,
-                  "end": 113
+                  "end": 112
                 }
               }
             },
             "span": {
               "start": 105,
-              "end": 113
+              "end": 112
             }
           },
           "by_ref": false,

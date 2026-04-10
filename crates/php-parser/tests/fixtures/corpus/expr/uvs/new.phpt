@@ -34,7 +34,7 @@ new $weird[0]->foo::$className;
       },
       "span": {
         "start": 6,
-        "end": 22
+        "end": 21
       }
     },
     {
@@ -81,7 +81,7 @@ new $weird[0]->foo::$className;
       },
       "span": {
         "start": 22,
-        "end": 47
+        "end": 46
       }
     },
     {
@@ -128,7 +128,7 @@ new $weird[0]->foo::$className;
       },
       "span": {
         "start": 47,
-        "end": 68
+        "end": 67
       }
     },
     {
@@ -167,7 +167,7 @@ new $weird[0]->foo::$className;
       },
       "span": {
         "start": 68,
-        "end": 90
+        "end": 89
       }
     },
     {
@@ -206,7 +206,7 @@ new $weird[0]->foo::$className;
       },
       "span": {
         "start": 90,
-        "end": 113
+        "end": 112
       }
     },
     {

@@ -60,7 +60,7 @@ $obj instanceof ('Foo' . $bar);
       },
       "span": {
         "start": 7,
-        "end": 27
+        "end": 26
       }
     },
     {
@@ -135,7 +135,7 @@ $obj instanceof ('Foo' . $bar);
       },
       "span": {
         "start": 27,
-        "end": 53
+        "end": 52
       }
     },
     {

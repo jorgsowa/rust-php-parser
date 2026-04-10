@@ -4,6 +4,8 @@ function test() {
     1 +
 }
 ===errors===
+expected expression
+expected ';' after expression
 ===ast===
 {
   "stmts": [
@@ -45,7 +47,7 @@ function test() {
               },
               "span": {
                 "start": 28,
-                "end": 32
+                "end": 31
               }
             }
           ],

@@ -71,12 +71,12 @@
       },
       "span": {
         "start": 6,
-        "end": 27
+        "end": 26
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 27
+    "end": 26
   }
 }

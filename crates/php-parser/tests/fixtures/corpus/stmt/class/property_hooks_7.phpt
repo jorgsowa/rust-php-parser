@@ -7,6 +7,7 @@ class Test
 
 }
 ===errors===
+cannot have hooks on comma-separated property
 ===ast===
 {
   "stmts": [
@@ -55,7 +56,7 @@ class Test
               },
               "span": {
                 "start": 24,
-                "end": 47
+                "end": 45
               }
             }
           ],

@@ -31,19 +31,19 @@
             },
             "span": {
               "start": 6,
-              "end": 44
+              "end": 43
             }
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 44
+        "end": 43
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 44
+    "end": 43
   }
 }

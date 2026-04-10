@@ -55,13 +55,13 @@ expected expression
           },
           "span": {
             "start": 6,
-            "end": 27
+            "end": 26
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 27
+        "end": 26
       }
     },
     {
@@ -78,26 +78,26 @@ expected expression
       },
       "span": {
         "start": 27,
-        "end": 29
+        "end": 28
       }
     },
     {
       "kind": "Error",
       "span": {
         "start": 29,
-        "end": 36
+        "end": 35
       }
     },
     {
       "kind": "Error",
       "span": {
         "start": 36,
-        "end": 36
+        "end": 35
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 36
+    "end": 35
   }
 }

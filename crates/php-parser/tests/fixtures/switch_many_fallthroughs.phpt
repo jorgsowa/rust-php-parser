@@ -42,7 +42,7 @@ switch ($x) {
               "body": [],
               "span": {
                 "start": 24,
-                "end": 36
+                "end": 31
               }
             },
             {
@@ -58,7 +58,7 @@ switch ($x) {
               "body": [],
               "span": {
                 "start": 36,
-                "end": 48
+                "end": 43
               }
             },
             {
@@ -88,7 +88,7 @@ switch ($x) {
                   },
                   "span": {
                     "start": 64,
-                    "end": 84
+                    "end": 75
                   }
                 },
                 {
@@ -97,13 +97,13 @@ switch ($x) {
                   },
                   "span": {
                     "start": 84,
-                    "end": 95
+                    "end": 90
                   }
                 }
               ],
               "span": {
                 "start": 48,
-                "end": 95
+                "end": 90
               }
             },
             {
@@ -119,7 +119,7 @@ switch ($x) {
               "body": [],
               "span": {
                 "start": 95,
-                "end": 107
+                "end": 102
               }
             },
             {
@@ -149,7 +149,7 @@ switch ($x) {
                   },
                   "span": {
                     "start": 123,
-                    "end": 143
+                    "end": 134
                   }
                 },
                 {
@@ -158,13 +158,13 @@ switch ($x) {
                   },
                   "span": {
                     "start": 143,
-                    "end": 154
+                    "end": 149
                   }
                 }
               ],
               "span": {
                 "start": 107,
-                "end": 154
+                "end": 149
               }
             },
             {
@@ -186,13 +186,13 @@ switch ($x) {
                   },
                   "span": {
                     "start": 171,
-                    "end": 185
+                    "end": 184
                   }
                 }
               ],
               "span": {
                 "start": 154,
-                "end": 185
+                "end": 184
               }
             }
           ]

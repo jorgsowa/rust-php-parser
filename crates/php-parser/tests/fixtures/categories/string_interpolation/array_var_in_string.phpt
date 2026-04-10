@@ -74,12 +74,12 @@
       },
       "span": {
         "start": 6,
-        "end": 32
+        "end": 31
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 32
+    "end": 31
   }
 }

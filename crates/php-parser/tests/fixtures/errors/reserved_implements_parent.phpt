@@ -23,7 +23,7 @@ cannot use 'parent' as class name
               "kind": "Unqualified",
               "span": {
                 "start": 25,
-                "end": 32
+                "end": 31
               }
             }
           ],

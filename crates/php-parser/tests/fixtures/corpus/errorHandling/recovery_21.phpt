@@ -4,6 +4,9 @@
 foreach ($foo) { $bar; }
 foreach ($foo as ) { $bar; }
 ===errors===
+expected 'as', found ')'
+expected expression
+expected expression
 ===ast===
 {
   "stmts": [
@@ -44,7 +47,7 @@ foreach ($foo as ) { $bar; }
                   },
                   "span": {
                     "start": 24,
-                    "end": 30
+                    "end": 29
                   }
                 }
               ]
@@ -98,7 +101,7 @@ foreach ($foo as ) { $bar; }
                   },
                   "span": {
                     "start": 53,
-                    "end": 59
+                    "end": 58
                   }
                 }
               ]

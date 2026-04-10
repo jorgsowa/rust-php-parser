@@ -22,7 +22,7 @@ unset($b, $c);
       },
       "span": {
         "start": 7,
-        "end": 18
+        "end": 17
       }
     },
     {

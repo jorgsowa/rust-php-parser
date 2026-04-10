@@ -58,7 +58,7 @@ $f = self::$prop;
       },
       "span": {
         "start": 6,
-        "end": 26
+        "end": 25
       }
     },
     {
@@ -106,7 +106,7 @@ $f = self::$prop;
       },
       "span": {
         "start": 26,
-        "end": 43
+        "end": 42
       }
     },
     {
@@ -154,7 +154,7 @@ $f = self::$prop;
       },
       "span": {
         "start": 43,
-        "end": 60
+        "end": 59
       }
     },
     {
@@ -203,7 +203,7 @@ $f = self::$prop;
       },
       "span": {
         "start": 60,
-        "end": 83
+        "end": 82
       }
     },
     {
@@ -252,7 +252,7 @@ $f = self::$prop;
       },
       "span": {
         "start": 83,
-        "end": 106
+        "end": 105
       }
     },
     {

@@ -1,6 +1,7 @@
 ===source===
 <?php class A extends self {}
 ===errors===
+cannot use 'self' as class name
 ===ast===
 {
   "stmts": [
@@ -20,7 +21,7 @@
             "kind": "Unqualified",
             "span": {
               "start": 22,
-              "end": 27
+              "end": 26
             }
           },
           "implements": [],

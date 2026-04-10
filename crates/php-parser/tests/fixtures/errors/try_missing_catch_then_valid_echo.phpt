@@ -43,7 +43,7 @@ expected catch or finally clause, found 'echo'
               },
               "span": {
                 "start": 12,
-                "end": 20
+                "end": 19
               }
             }
           ],
@@ -53,7 +53,7 @@ expected catch or finally clause, found 'echo'
       },
       "span": {
         "start": 6,
-        "end": 22
+        "end": 21
       }
     },
     {

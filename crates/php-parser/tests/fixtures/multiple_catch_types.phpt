@@ -39,7 +39,7 @@ try {
               },
               "span": {
                 "start": 16,
-                "end": 23
+                "end": 22
               }
             }
           ],
@@ -53,7 +53,7 @@ try {
                   "kind": "Unqualified",
                   "span": {
                     "start": 32,
-                    "end": 42
+                    "end": 41
                   }
                 },
                 {
@@ -63,7 +63,7 @@ try {
                   "kind": "Unqualified",
                   "span": {
                     "start": 44,
-                    "end": 55
+                    "end": 54
                   }
                 },
                 {
@@ -73,7 +73,7 @@ try {
                   "kind": "Unqualified",
                   "span": {
                     "start": 57,
-                    "end": 74
+                    "end": 73
                   }
                 }
               ],
@@ -123,13 +123,13 @@ try {
                   },
                   "span": {
                     "start": 84,
-                    "end": 96
+                    "end": 95
                   }
                 }
               ],
               "span": {
                 "start": 31,
-                "end": 98
+                "end": 97
               }
             },
             {
@@ -141,7 +141,7 @@ try {
                   "kind": "Unqualified",
                   "span": {
                     "start": 105,
-                    "end": 120
+                    "end": 119
                   }
                 }
               ],
@@ -191,7 +191,7 @@ try {
                   },
                   "span": {
                     "start": 130,
-                    "end": 141
+                    "end": 140
                   }
                 }
               ],

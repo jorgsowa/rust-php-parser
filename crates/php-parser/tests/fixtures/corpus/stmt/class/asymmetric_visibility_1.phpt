@@ -201,7 +201,7 @@ class Test {
               },
               "span": {
                 "start": 107,
-                "end": 239
+                "end": 238
               }
             }
           ],

@@ -49,7 +49,7 @@ function add($a, $b) {
       },
       "span": {
         "start": 22,
-        "end": 50
+        "end": 29
       }
     },
     {
@@ -86,7 +86,7 @@ function add($a, $b) {
       },
       "span": {
         "start": 50,
-        "end": 92
+        "end": 57
       }
     },
     {
@@ -123,7 +123,7 @@ function add($a, $b) {
       },
       "span": {
         "start": 92,
-        "end": 122
+        "end": 99
       }
     },
     {
@@ -199,7 +199,7 @@ function add($a, $b) {
               },
               "span": {
                 "start": 171,
-                "end": 209
+                "end": 186
               }
             }
           ],

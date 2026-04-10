@@ -37,7 +37,7 @@ expected ';', found '}'
                       "attributes": [],
                       "span": {
                         "start": 32,
-                        "end": 32
+                        "end": 31
                       }
                     }
                   ],
@@ -48,7 +48,7 @@ expected ';', found '}'
               },
               "span": {
                 "start": 16,
-                "end": 32
+                "end": 31
               }
             }
           ],
@@ -92,7 +92,7 @@ expected ';', found '}'
               },
               "span": {
                 "start": 44,
-                "end": 51
+                "end": 50
               }
             }
           ],

@@ -55,7 +55,7 @@ class User extends Model implements Loggable, Serializable {
               },
               "span": {
                 "start": 31,
-                "end": 60
+                "end": 59
               }
             }
           ],
@@ -107,7 +107,7 @@ class User extends Model implements Loggable, Serializable {
               },
               "span": {
                 "start": 91,
-                "end": 128
+                "end": 127
               }
             }
           ],
@@ -135,7 +135,7 @@ class User extends Model implements Loggable, Serializable {
             "kind": "Unqualified",
             "span": {
               "start": 149,
-              "end": 155
+              "end": 154
             }
           },
           "implements": [
@@ -156,7 +156,7 @@ class User extends Model implements Loggable, Serializable {
               "kind": "Unqualified",
               "span": {
                 "start": 176,
-                "end": 189
+                "end": 188
               }
             }
           ],
@@ -195,7 +195,7 @@ class User extends Model implements Loggable, Serializable {
               },
               "span": {
                 "start": 195,
-                "end": 230
+                "end": 225
               }
             },
             {
@@ -241,7 +241,7 @@ class User extends Model implements Loggable, Serializable {
                       },
                       "span": {
                         "start": 276,
-                        "end": 291
+                        "end": 286
                       }
                     }
                   ],
@@ -250,7 +250,7 @@ class User extends Model implements Loggable, Serializable {
               },
               "span": {
                 "start": 230,
-                "end": 293
+                "end": 292
               }
             }
           ],

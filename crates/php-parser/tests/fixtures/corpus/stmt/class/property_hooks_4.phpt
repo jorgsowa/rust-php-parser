@@ -4,6 +4,7 @@ class Test {
     public $prop { FOO => bar; }
 }
 ===errors===
+expected 'get' or 'set', found identifier
 ===ast===
 {
   "stmts": [
@@ -34,7 +35,7 @@ class Test {
               },
               "span": {
                 "start": 23,
-                "end": 52
+                "end": 51
               }
             }
           ],

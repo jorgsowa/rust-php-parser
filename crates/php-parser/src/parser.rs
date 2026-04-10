@@ -12,6 +12,9 @@ pub(crate) const MAX_DEPTH: u32 = 50;
 
 pub struct Parser<'arena, 'src> {
     current: Token,
+    /// End offset of the most recently consumed token.
+    /// Updated on every `advance()`, used for precise span construction.
+    previous_end: u32,
     /// Block nesting depth (0 = top-level scope)
     pub depth: u32,
     /// Expression nesting depth — guards against stack overflow on deeply nested input
@@ -84,6 +87,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             tokens,
             pos: 1,
             current,
+            previous_end: current.span.start,
             source,
             errors,
             comments,
@@ -161,6 +165,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             tokens,
             pos: 1,
             current,
+            previous_end: current.span.start,
             source,
             errors,
             comments,
@@ -236,9 +241,17 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     #[inline]
     pub fn advance(&mut self) -> Token {
         let prev = self.current;
+        self.previous_end = prev.span.end;
         self.current = self.tokens[self.pos];
         self.pos += 1;
         prev
+    }
+
+    /// End offset of the most recently consumed token.
+    /// Use this instead of `current_span().start` for precise span ends.
+    #[inline]
+    pub fn previous_end(&self) -> u32 {
+        self.previous_end
     }
 
     /// Check if the current token matches the given kind.
@@ -548,7 +561,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         // Fast path: single unqualified identifier (the common case, ~95% of names).
         // Avoids allocating an ArenaVec entirely.
         if !fully_qualified && !relative && !self.check(TokenKind::Backslash) {
-            let span = Span::new(start, self.current_span().start);
+            let span = Span::new(start, self.previous_end());
             return Name::Simple { value: first, span };
         }
 
@@ -563,7 +576,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             }
         }
 
-        let span = Span::new(start, self.current_span().start);
+        let span = Span::new(start, self.previous_end());
 
         let kind = if fully_qualified {
             NameKind::FullyQualified
@@ -679,10 +692,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             while self.eat(TokenKind::Ampersand).is_some() {
                 types.push(self.parse_simple_type());
             }
-            let close = self.expect(TokenKind::RightParen);
-            let end = close
-                .map(|t| t.span.end)
-                .unwrap_or(self.current_span().start);
+            self.expect(TokenKind::RightParen);
+            let end = self.previous_end();
             let span = Span::new(start, end);
             TypeHint {
                 kind: TypeHintKind::Intersection(types),
@@ -862,7 +873,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     self.alloc_vec()
                 };
 
-                let span = Span::new(attr_start, self.current_span().start);
+                let span = Span::new(attr_start, self.previous_end());
                 attributes.push(Attribute { name, args, span });
 
                 if self.eat(TokenKind::Comma).is_none() {
@@ -883,7 +894,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         let start = self.start_span();
         let expr = expr::parse_expr(self);
         self.expect_semicolon("short echo tag");
-        let span = Span::new(start, self.current_span().start);
+        let span = Span::new(start, self.previous_end());
         Some(Stmt {
             kind: StmtKind::Echo(self.alloc_vec_one(expr)),
             span,

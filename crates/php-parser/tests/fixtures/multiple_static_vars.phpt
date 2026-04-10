@@ -67,7 +67,7 @@ function foo() {
               },
               "span": {
                 "start": 27,
-                "end": 64
+                "end": 63
               }
             }
           ],

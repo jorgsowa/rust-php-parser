@@ -63,7 +63,7 @@ function byref(&$ref): void {
               },
               "span": {
                 "start": 49,
-                "end": 59
+                "end": 58
               }
             }
           ],
@@ -151,7 +151,7 @@ function byref(&$ref): void {
               },
               "span": {
                 "start": 95,
-                "end": 105
+                "end": 104
               }
             }
           ],

@@ -2,6 +2,8 @@
 <?php
 Foo::
 ===errors===
+expected identifier, found end of file
+expected ';' after expression
 ===ast===
 {
   "stmts": [

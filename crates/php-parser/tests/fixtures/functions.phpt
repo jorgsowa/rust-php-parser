@@ -87,7 +87,7 @@ greet('PHP');
               },
               "span": {
                 "start": 33,
-                "end": 49
+                "end": 48
               }
             }
           ],
@@ -168,7 +168,7 @@ greet('PHP');
               },
               "span": {
                 "start": 90,
-                "end": 114
+                "end": 113
               }
             }
           ],
@@ -264,7 +264,7 @@ greet('PHP');
       },
       "span": {
         "start": 117,
-        "end": 138
+        "end": 137
       }
     },
     {
@@ -292,7 +292,7 @@ greet('PHP');
       },
       "span": {
         "start": 138,
-        "end": 147
+        "end": 146
       }
     },
     {

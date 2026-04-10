@@ -74,7 +74,7 @@ $c = `echo $arr[0]`;
       },
       "span": {
         "start": 6,
-        "end": 33
+        "end": 32
       }
     },
     {
@@ -157,7 +157,7 @@ $c = `echo $arr[0]`;
       },
       "span": {
         "start": 33,
-        "end": 76
+        "end": 75
       }
     },
     {

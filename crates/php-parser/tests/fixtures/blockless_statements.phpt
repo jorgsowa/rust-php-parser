@@ -36,7 +36,7 @@ do $A; while ($a);
             },
             "span": {
               "start": 14,
-              "end": 18
+              "end": 17
             }
           },
           "elseif_branches": [
@@ -64,12 +64,12 @@ do $A; while ($a);
                 },
                 "span": {
                   "start": 30,
-                  "end": 34
+                  "end": 33
                 }
               },
               "span": {
                 "start": 25,
-                "end": 34
+                "end": 33
               }
             }
           ],
@@ -87,14 +87,14 @@ do $A; while ($a);
             },
             "span": {
               "start": 39,
-              "end": 43
+              "end": 42
             }
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 43
+        "end": 42
       }
     },
     {
@@ -117,14 +117,14 @@ do $A; while ($a);
             },
             "span": {
               "start": 52,
-              "end": 58
+              "end": 57
             }
           }
         }
       },
       "span": {
         "start": 43,
-        "end": 58
+        "end": 57
       }
     },
     {
@@ -163,14 +163,14 @@ do $A; while ($a);
             },
             "span": {
               "start": 77,
-              "end": 82
+              "end": 81
             }
           }
         }
       },
       "span": {
         "start": 58,
-        "end": 82
+        "end": 81
       }
     },
     {
@@ -199,14 +199,14 @@ do $A; while ($a);
             },
             "span": {
               "start": 93,
-              "end": 97
+              "end": 96
             }
           }
         }
       },
       "span": {
         "start": 82,
-        "end": 97
+        "end": 96
       }
     },
     {
@@ -226,7 +226,7 @@ do $A; while ($a);
             },
             "span": {
               "start": 100,
-              "end": 104
+              "end": 103
             }
           },
           "condition": {

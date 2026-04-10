@@ -79,7 +79,7 @@ expected expression
       },
       "span": {
         "start": 6,
-        "end": 20
+        "end": 19
       }
     },
     {

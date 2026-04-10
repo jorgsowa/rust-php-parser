@@ -250,7 +250,7 @@ class Config {
               },
               "span": {
                 "start": 122,
-                "end": 166
+                "end": 165
               }
             }
           ],

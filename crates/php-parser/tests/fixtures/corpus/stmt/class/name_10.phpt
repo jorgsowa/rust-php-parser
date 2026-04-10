@@ -1,6 +1,7 @@
 ===source===
 <?php interface self {}
 ===errors===
+cannot use 'self' as interface name
 ===ast===
 {
   "stmts": [

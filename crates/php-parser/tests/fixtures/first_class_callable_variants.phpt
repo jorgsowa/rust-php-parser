@@ -53,7 +53,7 @@ $e = $obj->$dynamic(...);
       },
       "span": {
         "start": 6,
-        "end": 24
+        "end": 23
       }
     },
     {
@@ -113,7 +113,7 @@ $e = $obj->$dynamic(...);
       },
       "span": {
         "start": 24,
-        "end": 48
+        "end": 47
       }
     },
     {
@@ -165,7 +165,7 @@ $e = $obj->$dynamic(...);
       },
       "span": {
         "start": 48,
-        "end": 68
+        "end": 67
       }
     },
     {

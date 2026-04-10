@@ -78,7 +78,7 @@ foreach ($map as $key => $value) {
                   },
                   "span": {
                     "start": 24,
-                    "end": 41
+                    "end": 40
                   }
                 }
               ]
@@ -138,7 +138,7 @@ foreach ($map as $key => $value) {
                       },
                       "span": {
                         "start": 65,
-                        "end": 82
+                        "end": 81
                       }
                     }
                   ]
@@ -173,7 +173,7 @@ foreach ($map as $key => $value) {
                   },
                   "span": {
                     "start": 95,
-                    "end": 108
+                    "end": 107
                   }
                 }
               ]
@@ -279,7 +279,7 @@ foreach ($map as $key => $value) {
                   },
                   "span": {
                     "start": 133,
-                    "end": 146
+                    "end": 145
                   }
                 }
               ]
@@ -402,7 +402,7 @@ foreach ($map as $key => $value) {
                   },
                   "span": {
                     "start": 183,
-                    "end": 192
+                    "end": 191
                   }
                 }
               ]
@@ -460,7 +460,7 @@ foreach ($map as $key => $value) {
                   },
                   "span": {
                     "start": 227,
-                    "end": 239
+                    "end": 238
                   }
                 }
               ]
@@ -526,7 +526,7 @@ foreach ($map as $key => $value) {
                   },
                   "span": {
                     "start": 281,
-                    "end": 296
+                    "end": 291
                   }
                 },
                 {
@@ -545,7 +545,7 @@ foreach ($map as $key => $value) {
                   },
                   "span": {
                     "start": 296,
-                    "end": 309
+                    "end": 308
                   }
                 }
               ]

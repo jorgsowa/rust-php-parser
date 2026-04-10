@@ -22,7 +22,7 @@ echo 'Hallo', ' ', 'World', '!';
       },
       "span": {
         "start": 7,
-        "end": 28
+        "end": 27
       }
     },
     {

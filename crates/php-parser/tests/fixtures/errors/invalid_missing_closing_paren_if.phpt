@@ -50,14 +50,14 @@ expected expression
                   },
                   "span": {
                     "start": 15,
-                    "end": 23
+                    "end": 18
                   }
                 }
               }
             },
             "span": {
               "start": 10,
-              "end": 23
+              "end": 18
             }
           },
           "then_branch": {
@@ -76,7 +76,7 @@ expected expression
             },
             "span": {
               "start": 23,
-              "end": 37
+              "end": 36
             }
           },
           "elseif_branches": [],
@@ -85,19 +85,19 @@ expected expression
       },
       "span": {
         "start": 6,
-        "end": 37
+        "end": 36
       }
     },
     {
       "kind": "Error",
       "span": {
         "start": 37,
-        "end": 37
+        "end": 36
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 37
+    "end": 36
   }
 }

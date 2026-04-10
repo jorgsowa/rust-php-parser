@@ -99,7 +99,7 @@ $result = match ($status) {
       },
       "span": {
         "start": 6,
-        "end": 74
+        "end": 73
       }
     },
     {

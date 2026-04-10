@@ -161,7 +161,7 @@ enum Color {
               },
               "span": {
                 "start": 87,
-                "end": 103
+                "end": 102
               }
             }
           ],
@@ -642,7 +642,7 @@ enum Color {
                       },
                       "span": {
                         "start": 559,
-                        "end": 583
+                        "end": 578
                       }
                     }
                   ],
@@ -688,7 +688,7 @@ enum Color {
               },
               "span": {
                 "start": 475,
-                "end": 585
+                "end": 584
               }
             }
           ],
@@ -802,7 +802,7 @@ enum Color {
       },
       "span": {
         "start": 708,
-        "end": 738
+        "end": 715
       }
     },
     {
@@ -840,7 +840,7 @@ enum Color {
               },
               "span": {
                 "start": 783,
-                "end": 797
+                "end": 792
               }
             },
             {
@@ -853,7 +853,7 @@ enum Color {
               },
               "span": {
                 "start": 797,
-                "end": 808
+                "end": 807
               }
             }
           ],

@@ -32,7 +32,7 @@ Hi!
       },
       "span": {
         "start": 6,
-        "end": 22
+        "end": 21
       }
     },
     {
@@ -45,7 +45,7 @@ Hi!
             "kind": "Unqualified",
             "span": {
               "start": 32,
-              "end": 34
+              "end": 33
             }
           },
           "body": {

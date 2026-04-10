@@ -37,7 +37,7 @@ interface method cannot contain a body
                       },
                       "span": {
                         "start": 46,
-                        "end": 56
+                        "end": 55
                       }
                     }
                   ],
@@ -46,7 +46,7 @@ interface method cannot contain a body
               },
               "span": {
                 "start": 22,
-                "end": 58
+                "end": 57
               }
             },
             {
@@ -66,7 +66,7 @@ interface method cannot contain a body
               },
               "span": {
                 "start": 58,
-                "end": 81
+                "end": 80
               }
             }
           ],

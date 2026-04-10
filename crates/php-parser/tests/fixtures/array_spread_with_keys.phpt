@@ -92,7 +92,7 @@ $combined = ['a' => 1, ...$other, 'b' => 2];
       },
       "span": {
         "start": 6,
-        "end": 28
+        "end": 27
       }
     },
     {
@@ -181,7 +181,7 @@ $combined = ['a' => 1, ...$other, 'b' => 2];
       },
       "span": {
         "start": 28,
-        "end": 61
+        "end": 60
       }
     },
     {

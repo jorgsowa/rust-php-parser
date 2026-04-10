@@ -23,7 +23,7 @@ cannot use 'self' as class name
               "kind": "Unqualified",
               "span": {
                 "start": 25,
-                "end": 30
+                "end": 29
               }
             }
           ],

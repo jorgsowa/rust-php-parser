@@ -138,7 +138,7 @@ class Foo {
               },
               "span": {
                 "start": 58,
-                "end": 69
+                "end": 68
               }
             }
           ],
@@ -349,20 +349,20 @@ class Foo {
                               "kind": "Unqualified",
                               "span": {
                                 "start": 100,
-                                "end": 102
+                                "end": 101
                               }
                             }
                           },
                           "span": {
                             "start": 100,
-                            "end": 102
+                            "end": 101
                           }
                         }
                       ]
                     },
                     "span": {
                       "start": 94,
-                      "end": 102
+                      "end": 101
                     }
                   },
                   "default": null,
@@ -643,7 +643,7 @@ class Foo {
               },
               "span": {
                 "start": 113,
-                "end": 175
+                "end": 174
               }
             }
           ],

@@ -113,7 +113,7 @@ isset("str"->a);
       },
       "span": {
         "start": 7,
-        "end": 32
+        "end": 31
       }
     },
     {
@@ -185,7 +185,7 @@ isset("str"->a);
       },
       "span": {
         "start": 32,
-        "end": 56
+        "end": 55
       }
     },
     {

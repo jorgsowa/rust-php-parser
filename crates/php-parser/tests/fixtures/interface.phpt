@@ -49,7 +49,7 @@ interface HasName extends HasId {
               },
               "span": {
                 "start": 28,
-                "end": 58
+                "end": 57
               }
             }
           ],
@@ -73,7 +73,7 @@ interface HasName extends HasId {
               "kind": "Unqualified",
               "span": {
                 "start": 86,
-                "end": 92
+                "end": 91
               }
             }
           ],
@@ -112,7 +112,7 @@ interface HasName extends HasId {
               },
               "span": {
                 "start": 98,
-                "end": 133
+                "end": 132
               }
             }
           ],

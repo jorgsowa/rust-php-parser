@@ -41,7 +41,7 @@ expected '}', found end of file
                       "kind": "Unqualified",
                       "span": {
                         "start": 31,
-                        "end": 33
+                        "end": 32
                       }
                     }
                   ],
@@ -57,7 +57,7 @@ expected '}', found end of file
                       },
                       "span": {
                         "start": 35,
-                        "end": 43
+                        "end": 42
                       }
                     }
                   ]

@@ -20,6 +20,14 @@ _100;
 1_e2;
 1e_2;
 ===errors===
+Invalid numeric literal
+Invalid numeric literal
+Invalid numeric literal
+Invalid numeric literal
+Invalid numeric literal
+Invalid numeric literal
+Invalid numeric literal
+Invalid numeric literal
 ===ast===
 {
   "stmts": [
@@ -37,7 +45,7 @@ _100;
       },
       "span": {
         "start": 7,
-        "end": 22
+        "end": 21
       }
     },
     {
@@ -54,7 +62,7 @@ _100;
       },
       "span": {
         "start": 22,
-        "end": 35
+        "end": 34
       }
     },
     {
@@ -71,7 +79,7 @@ _100;
       },
       "span": {
         "start": 35,
-        "end": 48
+        "end": 47
       }
     },
     {
@@ -88,7 +96,7 @@ _100;
       },
       "span": {
         "start": 48,
-        "end": 61
+        "end": 60
       }
     },
     {
@@ -105,7 +113,7 @@ _100;
       },
       "span": {
         "start": 61,
-        "end": 105
+        "end": 70
       }
     },
     {
@@ -122,7 +130,7 @@ _100;
       },
       "span": {
         "start": 105,
-        "end": 129
+        "end": 110
       }
     },
     {
@@ -139,7 +147,7 @@ _100;
       },
       "span": {
         "start": 129,
-        "end": 135
+        "end": 134
       }
     },
     {
@@ -156,7 +164,7 @@ _100;
       },
       "span": {
         "start": 135,
-        "end": 141
+        "end": 140
       }
     },
     {
@@ -173,7 +181,7 @@ _100;
       },
       "span": {
         "start": 141,
-        "end": 147
+        "end": 146
       }
     },
     {
@@ -190,7 +198,7 @@ _100;
       },
       "span": {
         "start": 147,
-        "end": 153
+        "end": 152
       }
     },
     {
@@ -207,7 +215,7 @@ _100;
       },
       "span": {
         "start": 153,
-        "end": 161
+        "end": 160
       }
     },
     {
@@ -224,7 +232,7 @@ _100;
       },
       "span": {
         "start": 161,
-        "end": 169
+        "end": 168
       }
     },
     {
@@ -241,7 +249,7 @@ _100;
       },
       "span": {
         "start": 169,
-        "end": 175
+        "end": 174
       }
     },
     {

@@ -103,13 +103,13 @@ function a($b, array $c, callable $d, E $f) {}
                     "kind": "Unqualified",
                     "span": {
                       "start": 45,
-                      "end": 47
+                      "end": 46
                     }
                   }
                 },
                 "span": {
                   "start": 45,
-                  "end": 47
+                  "end": 46
                 }
               },
               "default": null,

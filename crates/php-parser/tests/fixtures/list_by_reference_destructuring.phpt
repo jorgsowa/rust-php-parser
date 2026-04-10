@@ -77,7 +77,7 @@ list(&$x, &$y) = $pair;
       },
       "span": {
         "start": 6,
-        "end": 25
+        "end": 24
       }
     },
     {
@@ -151,7 +151,7 @@ list(&$x, &$y) = $pair;
       },
       "span": {
         "start": 25,
-        "end": 49
+        "end": 48
       }
     },
     {

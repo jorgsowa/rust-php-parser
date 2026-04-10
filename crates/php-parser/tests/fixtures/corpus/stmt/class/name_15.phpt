@@ -1,6 +1,7 @@
 ===source===
 <?php interface A extends static {}
 ===errors===
+cannot use 'static' as class name
 ===ast===
 {
   "stmts": [
@@ -16,7 +17,7 @@
               "kind": "Unqualified",
               "span": {
                 "start": 26,
-                "end": 33
+                "end": 32
               }
             }
           ],

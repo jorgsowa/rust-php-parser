@@ -59,7 +59,7 @@ function gen() {
               },
               "span": {
                 "start": 27,
-                "end": 58
+                "end": 53
               }
             },
             {
@@ -116,7 +116,7 @@ function gen() {
               },
               "span": {
                 "start": 58,
-                "end": 92
+                "end": 91
               }
             }
           ],

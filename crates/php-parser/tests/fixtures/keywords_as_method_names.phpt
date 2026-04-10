@@ -64,7 +64,7 @@ class Foo {
                       },
                       "span": {
                         "start": 54,
-                        "end": 65
+                        "end": 64
                       }
                     }
                   ],
@@ -73,7 +73,7 @@ class Foo {
               },
               "span": {
                 "start": 22,
-                "end": 71
+                "end": 66
               }
             },
             {
@@ -110,7 +110,7 @@ class Foo {
               },
               "span": {
                 "start": 71,
-                "end": 108
+                "end": 103
               }
             },
             {
@@ -156,7 +156,7 @@ class Foo {
                       },
                       "span": {
                         "start": 142,
-                        "end": 153
+                        "end": 152
                       }
                     }
                   ],
@@ -165,7 +165,7 @@ class Foo {
               },
               "span": {
                 "start": 108,
-                "end": 159
+                "end": 154
               }
             },
             {
@@ -202,7 +202,7 @@ class Foo {
               },
               "span": {
                 "start": 159,
-                "end": 193
+                "end": 192
               }
             }
           ],

@@ -92,7 +92,7 @@ function bar($x, $y,) {}
       },
       "span": {
         "start": 6,
-        "end": 25
+        "end": 24
       }
     },
     {
@@ -175,7 +175,7 @@ function bar($x, $y,) {}
       },
       "span": {
         "start": 25,
-        "end": 43
+        "end": 42
       }
     },
     {

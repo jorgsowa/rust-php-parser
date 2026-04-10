@@ -61,7 +61,7 @@ function tmpl() {
               },
               "span": {
                 "start": 28,
-                "end": 44
+                "end": 39
               }
             },
             {
@@ -105,7 +105,7 @@ function tmpl() {
               },
               "span": {
                 "start": 73,
-                "end": 80
+                "end": 79
               }
             }
           ],

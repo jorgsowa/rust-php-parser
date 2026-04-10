@@ -37,7 +37,7 @@
                             "kind": "Unqualified",
                             "span": {
                               "start": 34,
-                              "end": 39
+                              "end": 38
                             }
                           },
                           "implements": [
@@ -58,7 +58,7 @@
                               "kind": "Unqualified",
                               "span": {
                                 "start": 58,
-                                "end": 65
+                                "end": 64
                               }
                             }
                           ],
@@ -80,7 +80,7 @@
                               },
                               "span": {
                                 "start": 67,
-                                "end": 92
+                                "end": 91
                               }
                             }
                           ],

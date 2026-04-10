@@ -5,6 +5,7 @@ function foo() :
     return $a;
 }
 ===errors===
+expected identifier, found '{'
 ===ast===
 {
   "stmts": [
@@ -28,7 +29,7 @@ function foo() :
               },
               "span": {
                 "start": 29,
-                "end": 40
+                "end": 39
               }
             }
           ],
@@ -41,13 +42,13 @@ function foo() :
                 "kind": "Unqualified",
                 "span": {
                   "start": 23,
-                  "end": 23
+                  "end": 22
                 }
               }
             },
             "span": {
               "start": 23,
-              "end": 23
+              "end": 22
             }
           },
           "by_ref": false,

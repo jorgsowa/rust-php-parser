@@ -102,7 +102,7 @@ class Collection {
               },
               "span": {
                 "start": 153,
-                "end": 197
+                "end": 196
               }
             }
           ],

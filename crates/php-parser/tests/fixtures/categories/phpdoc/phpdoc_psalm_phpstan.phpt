@@ -103,7 +103,7 @@ class UserRepository {
               },
               "span": {
                 "start": 254,
-                "end": 299
+                "end": 298
               }
             }
           ],

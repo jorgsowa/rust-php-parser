@@ -1,6 +1,7 @@
 ===source===
 <?php class A { final final function a() {} }
 ===errors===
+duplicate modifier 'final'
 ===ast===
 {
   "stmts": [
@@ -33,7 +34,7 @@
               },
               "span": {
                 "start": 16,
-                "end": 44
+                "end": 43
               }
             }
           ],

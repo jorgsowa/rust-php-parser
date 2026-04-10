@@ -204,7 +204,7 @@ class User {
                       },
                       "span": {
                         "start": 127,
-                        "end": 152
+                        "end": 147
                       }
                     }
                   ],
@@ -213,7 +213,7 @@ class User {
               },
               "span": {
                 "start": 75,
-                "end": 159
+                "end": 153
               }
             },
             {
@@ -278,7 +278,7 @@ class User {
                       },
                       "span": {
                         "start": 203,
-                        "end": 227
+                        "end": 222
                       }
                     }
                   ],
@@ -287,7 +287,7 @@ class User {
               },
               "span": {
                 "start": 159,
-                "end": 229
+                "end": 228
               }
             }
           ],

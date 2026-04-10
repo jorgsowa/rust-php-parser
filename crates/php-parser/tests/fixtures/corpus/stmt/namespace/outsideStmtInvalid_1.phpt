@@ -22,7 +22,7 @@ namespace A;
       },
       "span": {
         "start": 6,
-        "end": 14
+        "end": 13
       }
     },
     {
@@ -41,7 +41,7 @@ namespace A;
       },
       "span": {
         "start": 14,
-        "end": 22
+        "end": 21
       }
     },
     {

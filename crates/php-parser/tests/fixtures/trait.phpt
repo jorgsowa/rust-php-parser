@@ -79,7 +79,7 @@ class Post {
                       },
                       "span": {
                         "start": 81,
-                        "end": 110
+                        "end": 105
                       }
                     }
                   ],
@@ -88,7 +88,7 @@ class Post {
               },
               "span": {
                 "start": 32,
-                "end": 112
+                "end": 111
               }
             }
           ],
@@ -132,7 +132,7 @@ class Post {
               },
               "span": {
                 "start": 131,
-                "end": 154
+                "end": 149
               }
             },
             {

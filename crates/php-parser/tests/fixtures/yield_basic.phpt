@@ -40,7 +40,7 @@ function generate() {
               },
               "span": {
                 "start": 32,
-                "end": 45
+                "end": 40
               }
             },
             {
@@ -69,7 +69,7 @@ function generate() {
               },
               "span": {
                 "start": 45,
-                "end": 58
+                "end": 53
               }
             },
             {
@@ -98,7 +98,7 @@ function generate() {
               },
               "span": {
                 "start": 58,
-                "end": 67
+                "end": 66
               }
             }
           ],

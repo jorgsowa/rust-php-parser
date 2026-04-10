@@ -49,13 +49,13 @@ switch ($a): ; endswitch;
                   },
                   "span": {
                     "start": 41,
-                    "end": 67
+                    "end": 47
                   }
                 }
               ],
               "span": {
                 "start": 25,
-                "end": 67
+                "end": 47
               }
             },
             {
@@ -71,7 +71,7 @@ switch ($a): ; endswitch;
               "body": [],
               "span": {
                 "start": 67,
-                "end": 79
+                "end": 74
               }
             },
             {
@@ -79,7 +79,7 @@ switch ($a): ; endswitch;
               "body": [],
               "span": {
                 "start": 79,
-                "end": 88
+                "end": 87
               }
             }
           ]
@@ -87,7 +87,7 @@ switch ($a): ; endswitch;
       },
       "span": {
         "start": 7,
-        "end": 113
+        "end": 89
       }
     },
     {
@@ -107,7 +107,7 @@ switch ($a): ; endswitch;
       },
       "span": {
         "start": 113,
-        "end": 159
+        "end": 136
       }
     },
     {
@@ -127,7 +127,7 @@ switch ($a): ; endswitch;
       },
       "span": {
         "start": 159,
-        "end": 177
+        "end": 176
       }
     },
     {

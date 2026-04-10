@@ -32,7 +32,7 @@ require_once 'autoload.php';
       },
       "span": {
         "start": 6,
-        "end": 28
+        "end": 27
       }
     },
     {
@@ -60,7 +60,7 @@ require_once 'autoload.php';
       },
       "span": {
         "start": 28,
-        "end": 55
+        "end": 54
       }
     },
     {
@@ -88,7 +88,7 @@ require_once 'autoload.php';
       },
       "span": {
         "start": 55,
-        "end": 80
+        "end": 79
       }
     },
     {

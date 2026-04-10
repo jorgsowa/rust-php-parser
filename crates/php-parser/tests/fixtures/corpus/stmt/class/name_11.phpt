@@ -1,6 +1,7 @@
 ===source===
 <?php interface PARENT {}
 ===errors===
+cannot use 'PARENT' as interface name
 ===ast===
 {
   "stmts": [

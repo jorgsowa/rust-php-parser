@@ -21,7 +21,7 @@ namespace {
             "kind": "Qualified",
             "span": {
               "start": 17,
-              "end": 25
+              "end": 24
             }
           },
           "body": {
@@ -40,7 +40,7 @@ namespace {
                 },
                 "span": {
                   "start": 31,
-                  "end": 36
+                  "end": 35
                 }
               }
             ]
@@ -72,7 +72,7 @@ namespace {
                 },
                 "span": {
                   "start": 54,
-                  "end": 59
+                  "end": 58
                 }
               }
             ]

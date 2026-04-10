@@ -25,7 +25,7 @@
               "kind": "Unqualified",
               "span": {
                 "start": 33,
-                "end": 37
+                "end": 36
               }
             }
           ],
@@ -64,7 +64,7 @@
               },
               "span": {
                 "start": 39,
-                "end": 68
+                "end": 67
               }
             }
           ],

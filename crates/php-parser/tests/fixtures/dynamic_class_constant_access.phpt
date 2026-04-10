@@ -62,7 +62,7 @@ $d = $class::${'prop_' . $name};
       },
       "span": {
         "start": 6,
-        "end": 25
+        "end": 24
       }
     },
     {
@@ -138,7 +138,7 @@ $d = $class::${'prop_' . $name};
       },
       "span": {
         "start": 25,
-        "end": 57
+        "end": 56
       }
     },
     {
@@ -202,7 +202,7 @@ $d = $class::${'prop_' . $name};
       },
       "span": {
         "start": 57,
-        "end": 81
+        "end": 80
       }
     },
     {

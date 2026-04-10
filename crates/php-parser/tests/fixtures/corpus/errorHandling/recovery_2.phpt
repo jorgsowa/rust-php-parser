@@ -5,6 +5,7 @@ foo()
 bar();
 baz();
 ===errors===
+expected ';' after expression
 ===ast===
 {
   "stmts": [
@@ -27,13 +28,13 @@ baz();
           },
           "span": {
             "start": 7,
-            "end": 13
+            "end": 12
           }
         }
       },
       "span": {
         "start": 7,
-        "end": 13
+        "end": 12
       }
     },
     {
@@ -61,7 +62,7 @@ baz();
       },
       "span": {
         "start": 13,
-        "end": 20
+        "end": 19
       }
     },
     {

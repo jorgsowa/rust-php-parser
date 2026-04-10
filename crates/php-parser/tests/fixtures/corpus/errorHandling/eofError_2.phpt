@@ -1,6 +1,7 @@
 ===source===
 <?php foo /* bar */
 ===errors===
+expected ';' after expression
 ===ast===
 {
   "stmts": [
@@ -18,12 +19,12 @@
       },
       "span": {
         "start": 6,
-        "end": 19
+        "end": 9
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 19
+    "end": 9
   }
 }

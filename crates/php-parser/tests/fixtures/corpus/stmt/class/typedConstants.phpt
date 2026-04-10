@@ -58,7 +58,7 @@ class Test {
               },
               "span": {
                 "start": 23,
-                "end": 44
+                "end": 39
               }
             },
             {
@@ -98,7 +98,7 @@ class Test {
               },
               "span": {
                 "start": 44,
-                "end": 87
+                "end": 82
               }
             },
             {
@@ -138,7 +138,7 @@ class Test {
               },
               "span": {
                 "start": 44,
-                "end": 87
+                "end": 82
               }
             },
             {
@@ -178,7 +178,7 @@ class Test {
               },
               "span": {
                 "start": 87,
-                "end": 115
+                "end": 110
               }
             },
             {
@@ -262,7 +262,7 @@ class Test {
               },
               "span": {
                 "start": 115,
-                "end": 146
+                "end": 145
               }
             }
           ],

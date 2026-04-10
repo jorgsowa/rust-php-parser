@@ -45,7 +45,7 @@ abstract method cannot contain a body
                       },
                       "span": {
                         "start": 53,
-                        "end": 66
+                        "end": 65
                       }
                     }
                   ],
@@ -54,7 +54,7 @@ abstract method cannot contain a body
               },
               "span": {
                 "start": 27,
-                "end": 68
+                "end": 67
               }
             }
           ],

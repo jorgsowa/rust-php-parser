@@ -55,7 +55,7 @@ abstract class Base {
               },
               "span": {
                 "start": 32,
-                "end": 84
+                "end": 79
               }
             },
             {
@@ -123,7 +123,7 @@ abstract class Base {
                       },
                       "span": {
                         "start": 132,
-                        "end": 160
+                        "end": 155
                       }
                     }
                   ],
@@ -132,7 +132,7 @@ abstract class Base {
               },
               "span": {
                 "start": 84,
-                "end": 162
+                "end": 161
               }
             }
           ],

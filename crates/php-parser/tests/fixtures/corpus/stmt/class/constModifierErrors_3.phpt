@@ -4,6 +4,7 @@ class A {
     readonly const X = 1;
 }
 ===errors===
+cannot use 'readonly' as constant modifier
 ===ast===
 {
   "stmts": [
@@ -38,7 +39,7 @@ class A {
               },
               "span": {
                 "start": 20,
-                "end": 42
+                "end": 41
               }
             }
           ],

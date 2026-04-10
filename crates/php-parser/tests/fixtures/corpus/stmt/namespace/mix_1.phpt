@@ -27,7 +27,7 @@ echo 3;
       },
       "span": {
         "start": 6,
-        "end": 19
+        "end": 18
       }
     },
     {
@@ -46,7 +46,7 @@ echo 3;
       },
       "span": {
         "start": 19,
-        "end": 27
+        "end": 26
       }
     },
     {
@@ -59,7 +59,7 @@ echo 3;
             "kind": "Unqualified",
             "span": {
               "start": 37,
-              "end": 39
+              "end": 38
             }
           },
           "body": {
@@ -80,7 +80,7 @@ echo 3;
                 },
                 "span": {
                   "start": 45,
-                  "end": 53
+                  "end": 52
                 }
               }
             ]

@@ -44,7 +44,7 @@ expected ';', found '}'
                       "attributes": [],
                       "span": {
                         "start": 34,
-                        "end": 34
+                        "end": 33
                       }
                     }
                   ],
@@ -55,7 +55,7 @@ expected ';', found '}'
               },
               "span": {
                 "start": 18,
-                "end": 34
+                "end": 33
               }
             }
           ],

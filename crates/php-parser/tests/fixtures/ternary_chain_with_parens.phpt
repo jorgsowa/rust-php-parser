@@ -65,7 +65,7 @@ parse_version=8.0
                       },
                       "span": {
                         "start": 11,
-                        "end": 26
+                        "end": 25
                       }
                     },
                     "then_expr": {

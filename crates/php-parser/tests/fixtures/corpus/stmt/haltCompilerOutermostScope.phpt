@@ -4,6 +4,8 @@ if (true) {
     __halt_compiler();
 }
 ===errors===
+__halt_compiler() can only be used at the outermost scope
+unclosed ''}'' opened at Span { start: 16, end: 17 }
 ===ast===
 {
   "stmts": [

@@ -67,7 +67,7 @@ expected ')', found ';'
       },
       "span": {
         "start": 6,
-        "end": 16
+        "end": 15
       }
     },
     {

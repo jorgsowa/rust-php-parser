@@ -46,7 +46,7 @@ enum methods cannot be abstract
               },
               "span": {
                 "start": 20,
-                "end": 62
+                "end": 61
               }
             }
           ],

@@ -8,6 +8,7 @@ while () {
 $k = 2;
 // The output here drops the loop - would require Error node to handle this
 ===errors===
+expected expression
 ===ast===
 {
   "stmts": [
@@ -45,7 +46,7 @@ $k = 2;
       },
       "span": {
         "start": 7,
-        "end": 15
+        "end": 14
       }
     },
     {
@@ -95,7 +96,7 @@ $k = 2;
                   },
                   "span": {
                     "start": 30,
-                    "end": 38
+                    "end": 37
                   }
                 }
               ]
@@ -146,12 +147,12 @@ $k = 2;
       },
       "span": {
         "start": 40,
-        "end": 123
+        "end": 47
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 123
+    "end": 47
   }
 }

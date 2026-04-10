@@ -44,7 +44,7 @@ class B {
               },
               "span": {
                 "start": 21,
-                "end": 44
+                "end": 43
               }
             }
           ],
@@ -88,7 +88,7 @@ class B {
               },
               "span": {
                 "start": 61,
-                "end": 72
+                "end": 67
               }
             },
             {
@@ -102,7 +102,7 @@ class B {
                       "kind": "Unqualified",
                       "span": {
                         "start": 76,
-                        "end": 78
+                        "end": 77
                       }
                     }
                   ],
@@ -118,7 +118,7 @@ class B {
                       },
                       "span": {
                         "start": 88,
-                        "end": 114
+                        "end": 105
                       }
                     },
                     {
@@ -132,7 +132,7 @@ class B {
                       },
                       "span": {
                         "start": 114,
-                        "end": 130
+                        "end": 121
                       }
                     },
                     {
@@ -146,7 +146,7 @@ class B {
                       },
                       "span": {
                         "start": 130,
-                        "end": 148
+                        "end": 143
                       }
                     }
                   ]
@@ -154,7 +154,7 @@ class B {
               },
               "span": {
                 "start": 72,
-                "end": 154
+                "end": 149
               }
             },
             {
@@ -188,7 +188,7 @@ class B {
                       "kind": "Unqualified",
                       "span": {
                         "start": 164,
-                        "end": 166
+                        "end": 165
                       }
                     }
                   ],
@@ -233,7 +233,7 @@ class B {
                       },
                       "span": {
                         "start": 176,
-                        "end": 205
+                        "end": 196
                       }
                     },
                     {
@@ -256,7 +256,7 @@ class B {
                       },
                       "span": {
                         "start": 205,
-                        "end": 234
+                        "end": 225
                       }
                     },
                     {
@@ -279,7 +279,7 @@ class B {
                       },
                       "span": {
                         "start": 234,
-                        "end": 253
+                        "end": 244
                       }
                     },
                     {
@@ -302,7 +302,7 @@ class B {
                       },
                       "span": {
                         "start": 253,
-                        "end": 274
+                        "end": 269
                       }
                     }
                   ]
@@ -310,7 +310,7 @@ class B {
               },
               "span": {
                 "start": 154,
-                "end": 276
+                "end": 275
               }
             }
           ],

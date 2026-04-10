@@ -57,14 +57,14 @@ parse_version=8.4
                             },
                             "span": {
                               "start": 21,
-                              "end": 31
+                              "end": 30
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 11,
-                        "end": 31
+                        "end": 30
                       }
                     },
                     "op": "Pipe",

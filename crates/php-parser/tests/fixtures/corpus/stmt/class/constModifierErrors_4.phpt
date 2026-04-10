@@ -4,6 +4,7 @@ class A {
     public public const X = 1;
 }
 ===errors===
+cannot use multiple visibility modifiers
 ===ast===
 {
   "stmts": [
@@ -38,7 +39,7 @@ class A {
               },
               "span": {
                 "start": 20,
-                "end": 47
+                "end": 46
               }
             }
           ],

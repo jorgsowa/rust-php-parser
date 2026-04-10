@@ -1,6 +1,8 @@
 ===source===
 <?php use C as static;
 ===errors===
+expected identifier, found 'static'
+expected ';', found 'static'
 ===ast===
 {
   "stmts": [
@@ -17,13 +19,13 @@
                 "kind": "Unqualified",
                 "span": {
                   "start": 10,
-                  "end": 12
+                  "end": 11
                 }
               },
               "alias": null,
               "span": {
                 "start": 10,
-                "end": 15
+                "end": 14
               }
             }
           ]
@@ -31,7 +33,7 @@
       },
       "span": {
         "start": 6,
-        "end": 15
+        "end": 14
       }
     },
     {

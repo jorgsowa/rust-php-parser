@@ -3,6 +3,7 @@
 
 foo(Bar::);
 ===errors===
+expected identifier, found ')'
 ===ast===
 {
   "stmts": [

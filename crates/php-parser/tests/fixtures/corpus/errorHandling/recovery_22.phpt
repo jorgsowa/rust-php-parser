@@ -25,6 +25,19 @@ class Bar {
 
 function(Foo);
 ===errors===
+expected variable, found ')'
+expected variable, found ')'
+expected variable, found ')'
+expected variable, found ')'
+expected variable, found ')'
+expected '{', found 'class'
+expected variable, found ')'
+expected ';', found '}'
+expected variable, found ')'
+expected '{', found ';'
+expected '}', found end of file
+expected ';' after expression
+unclosed ''}'' opened at Span { start: 171, end: 176 }
 ===ast===
 {
   "stmts": [
@@ -82,7 +95,7 @@ function(Foo);
               },
               "span": {
                 "start": 32,
-                "end": 38
+                "end": 37
               }
             }
           ],
@@ -112,13 +125,13 @@ function(Foo);
                     "kind": "Unqualified",
                     "span": {
                       "start": 54,
-                      "end": 60
+                      "end": 59
                     }
                   }
                 },
                 "span": {
                   "start": 54,
-                  "end": 60
+                  "end": 59
                 }
               },
               "default": null,
@@ -183,7 +196,7 @@ function(Foo);
               },
               "span": {
                 "start": 79,
-                "end": 85
+                "end": 84
               }
             }
           ],
@@ -234,7 +247,7 @@ function(Foo);
               },
               "span": {
                 "start": 112,
-                "end": 118
+                "end": 117
               }
             }
           ],
@@ -285,7 +298,7 @@ function(Foo);
               },
               "span": {
                 "start": 143,
-                "end": 149
+                "end": 148
               }
             }
           ],
@@ -402,7 +415,7 @@ function(Foo);
                       },
                       "span": {
                         "start": 187,
-                        "end": 205
+                        "end": 204
                       }
                     }
                   ],

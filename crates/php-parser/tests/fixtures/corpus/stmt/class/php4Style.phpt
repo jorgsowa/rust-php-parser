@@ -7,6 +7,7 @@ class A {
     static abstract function baz() {}
 }
 ===errors===
+abstract method cannot contain a body
 ===ast===
 {
   "stmts": [
@@ -57,7 +58,7 @@ class A {
               },
               "span": {
                 "start": 35,
-                "end": 57
+                "end": 52
               }
             },
             {
@@ -77,7 +78,7 @@ class A {
               },
               "span": {
                 "start": 57,
-                "end": 91
+                "end": 90
               }
             }
           ],

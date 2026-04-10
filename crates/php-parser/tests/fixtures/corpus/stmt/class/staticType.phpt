@@ -52,7 +52,7 @@ class Test {
               },
               "span": {
                 "start": 23,
-                "end": 66
+                "end": 65
               }
             }
           ],

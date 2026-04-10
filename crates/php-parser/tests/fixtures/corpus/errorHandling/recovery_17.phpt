@@ -16,6 +16,24 @@ unset($a)
 throw $x
 goto label
 ===errors===
+expected ';', found 'use'
+expected ';', found 'use'
+expected ';', found 'use'
+expected ';', found 'const'
+expected ';', found 'break'
+expected expression
+expected ';' after break statement
+expected ';' after break statement
+expected expression
+expected ';' after continue statement
+expected ';' after continue statement
+expected expression
+expected ';' after return statement
+expected ';' after return statement
+expected ';' after echo statement
+expected ';', found 'throw'
+expected ';' after throw statement
+expected ';', found end of file
 ===ast===
 {
   "stmts": [
@@ -29,7 +47,7 @@ goto label
             "kind": "Unqualified",
             "span": {
               "start": 16,
-              "end": 20
+              "end": 19
             }
           },
           "body": "Simple"
@@ -37,7 +55,7 @@ goto label
       },
       "span": {
         "start": 6,
-        "end": 20
+        "end": 19
       }
     },
     {
@@ -53,13 +71,13 @@ goto label
                 "kind": "Unqualified",
                 "span": {
                   "start": 24,
-                  "end": 26
+                  "end": 25
                 }
               },
               "alias": null,
               "span": {
                 "start": 24,
-                "end": 26
+                "end": 25
               }
             }
           ]
@@ -67,7 +85,7 @@ goto label
       },
       "span": {
         "start": 20,
-        "end": 26
+        "end": 25
       }
     },
     {
@@ -83,13 +101,13 @@ goto label
                 "kind": "Unqualified",
                 "span": {
                   "start": 39,
-                  "end": 41
+                  "end": 40
                 }
               },
               "alias": null,
               "span": {
                 "start": 39,
-                "end": 41
+                "end": 40
               }
             }
           ]
@@ -97,7 +115,7 @@ goto label
       },
       "span": {
         "start": 26,
-        "end": 41
+        "end": 40
       }
     },
     {
@@ -128,7 +146,7 @@ goto label
       },
       "span": {
         "start": 41,
-        "end": 51
+        "end": 50
       }
     },
     {
@@ -155,7 +173,7 @@ goto label
       },
       "span": {
         "start": 51,
-        "end": 63
+        "end": 62
       }
     },
     {
@@ -170,7 +188,7 @@ goto label
       },
       "span": {
         "start": 63,
-        "end": 69
+        "end": 68
       }
     },
     {
@@ -187,7 +205,7 @@ goto label
       },
       "span": {
         "start": 69,
-        "end": 77
+        "end": 76
       }
     },
     {
@@ -202,7 +220,7 @@ goto label
       },
       "span": {
         "start": 77,
-        "end": 86
+        "end": 85
       }
     },
     {
@@ -219,7 +237,7 @@ goto label
       },
       "span": {
         "start": 86,
-        "end": 97
+        "end": 96
       }
     },
     {
@@ -234,7 +252,7 @@ goto label
       },
       "span": {
         "start": 97,
-        "end": 104
+        "end": 103
       }
     },
     {
@@ -251,7 +269,7 @@ goto label
       },
       "span": {
         "start": 104,
-        "end": 113
+        "end": 112
       }
     },
     {
@@ -270,7 +288,7 @@ goto label
       },
       "span": {
         "start": 113,
-        "end": 121
+        "end": 120
       }
     },
     {
@@ -289,7 +307,7 @@ goto label
       },
       "span": {
         "start": 121,
-        "end": 131
+        "end": 130
       }
     },
     {
@@ -306,7 +324,7 @@ goto label
       },
       "span": {
         "start": 131,
-        "end": 140
+        "end": 139
       }
     },
     {

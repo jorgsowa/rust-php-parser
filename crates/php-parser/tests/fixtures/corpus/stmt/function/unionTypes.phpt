@@ -148,20 +148,20 @@ function test(A|B $a): int|false {}
                           "kind": "Unqualified",
                           "span": {
                             "start": 73,
-                            "end": 75
+                            "end": 74
                           }
                         }
                       },
                       "span": {
                         "start": 73,
-                        "end": 75
+                        "end": 74
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 71,
-                  "end": 75
+                  "end": 74
                 }
               },
               "default": null,

@@ -20,7 +20,7 @@ expected ';' after expression
       },
       "span": {
         "start": 7,
-        "end": 16
+        "end": 15
       }
     },
     {

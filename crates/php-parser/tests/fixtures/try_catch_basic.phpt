@@ -59,7 +59,7 @@ try {
               },
               "span": {
                 "start": 16,
-                "end": 39
+                "end": 38
               }
             }
           ],
@@ -73,7 +73,7 @@ try {
                   "kind": "Unqualified",
                   "span": {
                     "start": 48,
-                    "end": 58
+                    "end": 57
                   }
                 }
               ],
@@ -95,13 +95,13 @@ try {
                   },
                   "span": {
                     "start": 68,
-                    "end": 77
+                    "end": 76
                   }
                 }
               ],
               "span": {
                 "start": 47,
-                "end": 79
+                "end": 78
               }
             }
           ],
@@ -131,7 +131,7 @@ try {
               },
               "span": {
                 "start": 93,
-                "end": 104
+                "end": 103
               }
             }
           ]

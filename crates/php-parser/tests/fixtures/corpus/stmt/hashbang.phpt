@@ -25,7 +25,7 @@ echo "foobar";
       },
       "span": {
         "start": 26,
-        "end": 42
+        "end": 40
       }
     },
     {

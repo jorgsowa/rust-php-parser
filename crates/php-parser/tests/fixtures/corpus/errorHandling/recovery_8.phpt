@@ -8,6 +8,7 @@ while (true) {
     $i = 1;
     $i = 2;
 ===errors===
+unclosed ''}'' opened at Span { start: 118, end: 119 }
 ===ast===
 {
   "stmts": [
@@ -45,7 +46,7 @@ while (true) {
       },
       "span": {
         "start": 97,
-        "end": 105
+        "end": 104
       }
     },
     {
@@ -97,7 +98,7 @@ while (true) {
                   },
                   "span": {
                     "start": 124,
-                    "end": 136
+                    "end": 131
                   }
                 },
                 {

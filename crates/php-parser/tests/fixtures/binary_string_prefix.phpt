@@ -40,7 +40,7 @@ $c = B"case insensitive";
       },
       "span": {
         "start": 6,
-        "end": 29
+        "end": 28
       }
     },
     {
@@ -77,7 +77,7 @@ $c = B"case insensitive";
       },
       "span": {
         "start": 29,
-        "end": 52
+        "end": 51
       }
     },
     {

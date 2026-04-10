@@ -59,7 +59,7 @@ class Service {
               },
               "span": {
                 "start": 26,
-                "end": 69
+                "end": 64
               }
             },
             {
@@ -96,7 +96,7 @@ class Service {
               },
               "span": {
                 "start": 69,
-                "end": 100
+                "end": 99
               }
             }
           ],

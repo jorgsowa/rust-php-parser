@@ -27,7 +27,7 @@ expected ';' after expression
       },
       "span": {
         "start": 6,
-        "end": 21
+        "end": 20
       }
     },
     {

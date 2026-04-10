@@ -70,7 +70,7 @@ $x = \strlen('hello');
       },
       "span": {
         "start": 6,
-        "end": 36
+        "end": 35
       }
     },
     {
@@ -118,7 +118,7 @@ $x = \strlen('hello');
       },
       "span": {
         "start": 36,
-        "end": 70
+        "end": 69
       }
     },
     {

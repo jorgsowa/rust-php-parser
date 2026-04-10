@@ -137,13 +137,13 @@ function test4($a, Type &... $b) {}
                     "kind": "Unqualified",
                     "span": {
                       "start": 86,
-                      "end": 91
+                      "end": 90
                     }
                   }
                 },
                 "span": {
                   "start": 86,
-                  "end": 91
+                  "end": 90
                 }
               },
               "default": null,
@@ -203,13 +203,13 @@ function test4($a, Type &... $b) {}
                     "kind": "Unqualified",
                     "span": {
                       "start": 121,
-                      "end": 126
+                      "end": 125
                     }
                   }
                 },
                 "span": {
                   "start": 121,
-                  "end": 126
+                  "end": 125
                 }
               },
               "default": null,

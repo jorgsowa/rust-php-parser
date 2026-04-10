@@ -54,14 +54,14 @@ expected '}', found end of file
                       },
                       "span": {
                         "start": 58,
-                        "end": 73
+                        "end": 67
                       }
                     },
                     {
                       "kind": "Error",
                       "span": {
                         "start": 73,
-                        "end": 80
+                        "end": 79
                       }
                     },
                     {
@@ -84,7 +84,7 @@ expected '}', found end of file
                               },
                               "span": {
                                 "start": 109,
-                                "end": 123
+                                "end": 118
                               }
                             }
                           ],

@@ -10,6 +10,18 @@ $array = [
     'key' => $value $oopsAnotherValue
 ];
 ===errors===
+expected ']', found variable
+expected ';' after expression
+expected ';' after expression
+expected expression
+expected ']', found variable
+expected ';' after expression
+expected ';' after expression
+expected expression
+expected ']', found variable
+expected ';' after expression
+expected ';' after expression
+expected expression
 ===ast===
 {
   "stmts": [
@@ -71,20 +83,20 @@ $array = [
                 },
                 "span": {
                   "start": 15,
-                  "end": 34
+                  "end": 33
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 34
+            "end": 33
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 34
+        "end": 33
       }
     },
     {
@@ -115,20 +127,20 @@ $array = [
           },
           "span": {
             "start": 34,
-            "end": 59
+            "end": 58
           }
         }
       },
       "span": {
         "start": 34,
-        "end": 59
+        "end": 58
       }
     },
     {
       "kind": "Error",
       "span": {
         "start": 59,
-        "end": 62
+        "end": 61
       }
     },
     {
@@ -170,20 +182,20 @@ $array = [
                 },
                 "span": {
                   "start": 71,
-                  "end": 84
+                  "end": 83
                 }
               }
             }
           },
           "span": {
             "start": 62,
-            "end": 84
+            "end": 83
           }
         }
       },
       "span": {
         "start": 62,
-        "end": 84
+        "end": 83
       }
     },
     {
@@ -200,14 +212,14 @@ $array = [
       },
       "span": {
         "start": 84,
-        "end": 102
+        "end": 101
       }
     },
     {
       "kind": "Error",
       "span": {
         "start": 102,
-        "end": 105
+        "end": 104
       }
     },
     {
@@ -257,20 +269,20 @@ $array = [
                 },
                 "span": {
                   "start": 114,
-                  "end": 136
+                  "end": 135
                 }
               }
             }
           },
           "span": {
             "start": 105,
-            "end": 136
+            "end": 135
           }
         }
       },
       "span": {
         "start": 105,
-        "end": 136
+        "end": 135
       }
     },
     {
@@ -287,7 +299,7 @@ $array = [
       },
       "span": {
         "start": 136,
-        "end": 154
+        "end": 153
       }
     },
     {

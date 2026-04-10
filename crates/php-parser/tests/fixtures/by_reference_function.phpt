@@ -36,7 +36,7 @@ function &getRef() {
               },
               "span": {
                 "start": 31,
-                "end": 52
+                "end": 47
               }
             },
             {
@@ -53,7 +53,7 @@ function &getRef() {
               },
               "span": {
                 "start": 52,
-                "end": 65
+                "end": 64
               }
             }
           ],

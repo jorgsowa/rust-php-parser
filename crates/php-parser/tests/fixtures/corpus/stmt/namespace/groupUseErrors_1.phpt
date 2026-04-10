@@ -4,6 +4,7 @@
 use Foo\{Bar}
 use Bar\{Foo};
 ===errors===
+expected ';', found 'use'
 ===ast===
 {
   "stmts": [
@@ -35,7 +36,7 @@ use Bar\{Foo};
       },
       "span": {
         "start": 27,
-        "end": 41
+        "end": 40
       }
     },
     {

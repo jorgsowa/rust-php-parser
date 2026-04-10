@@ -224,7 +224,7 @@ $g = fn($x = new Foo()) => $x;
               },
               "span": {
                 "start": 116,
-                "end": 145
+                "end": 139
               }
             },
             {
@@ -280,7 +280,7 @@ $g = fn($x = new Foo()) => $x;
               },
               "span": {
                 "start": 145,
-                "end": 189
+                "end": 188
               }
             }
           ],
@@ -332,7 +332,7 @@ $g = fn($x = new Foo()) => $x;
               },
               "span": {
                 "start": 213,
-                "end": 242
+                "end": 241
               }
             }
           ],
@@ -488,7 +488,7 @@ $g = fn($x = new Foo()) => $x;
       },
       "span": {
         "start": 283,
-        "end": 318
+        "end": 317
       }
     },
     {

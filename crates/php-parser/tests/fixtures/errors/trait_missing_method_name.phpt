@@ -41,7 +41,7 @@ expected '::' or 'as', found ';'
                       "kind": "Unqualified",
                       "span": {
                         "start": 31,
-                        "end": 33
+                        "end": 32
                       }
                     }
                   ],
@@ -50,7 +50,7 @@ expected '::' or 'as', found ';'
               },
               "span": {
                 "start": 27,
-                "end": 48
+                "end": 47
               }
             }
           ],

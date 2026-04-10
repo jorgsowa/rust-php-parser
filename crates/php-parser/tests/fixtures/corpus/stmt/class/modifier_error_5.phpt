@@ -1,6 +1,7 @@
 ===source===
 <?php class A { static static $a; }
 ===errors===
+duplicate modifier 'static'
 ===ast===
 {
   "stmts": [

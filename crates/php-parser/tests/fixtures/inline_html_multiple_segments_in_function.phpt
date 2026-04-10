@@ -41,7 +41,7 @@ function page() {
               },
               "span": {
                 "start": 28,
-                "end": 42
+                "end": 37
               }
             },
             {
@@ -85,7 +85,7 @@ function page() {
               },
               "span": {
                 "start": 62,
-                "end": 73
+                "end": 68
               }
             },
             {
@@ -129,7 +129,7 @@ function page() {
               },
               "span": {
                 "start": 94,
-                "end": 102
+                "end": 101
               }
             }
           ],

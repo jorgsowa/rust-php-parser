@@ -106,12 +106,12 @@
       },
       "span": {
         "start": 6,
-        "end": 37
+        "end": 36
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 37
+    "end": 36
   }
 }

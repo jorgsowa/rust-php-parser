@@ -43,7 +43,7 @@ declare (a='b') $C;
             },
             "span": {
               "start": 15,
-              "end": 19
+              "end": 18
             }
           },
           "elseif_branches": [
@@ -71,12 +71,12 @@ declare (a='b') $C;
                 },
                 "span": {
                   "start": 31,
-                  "end": 35
+                  "end": 34
                 }
               },
               "span": {
                 "start": 26,
-                "end": 35
+                "end": 34
               }
             }
           ],
@@ -94,14 +94,14 @@ declare (a='b') $C;
             },
             "span": {
               "start": 40,
-              "end": 45
+              "end": 43
             }
           }
         }
       },
       "span": {
         "start": 7,
-        "end": 45
+        "end": 43
       }
     },
     {
@@ -124,14 +124,14 @@ declare (a='b') $C;
             },
             "span": {
               "start": 54,
-              "end": 61
+              "end": 59
             }
           }
         }
       },
       "span": {
         "start": 45,
-        "end": 61
+        "end": 59
       }
     },
     {
@@ -170,14 +170,14 @@ declare (a='b') $C;
             },
             "span": {
               "start": 80,
-              "end": 86
+              "end": 84
             }
           }
         }
       },
       "span": {
         "start": 61,
-        "end": 86
+        "end": 84
       }
     },
     {
@@ -206,14 +206,14 @@ declare (a='b') $C;
             },
             "span": {
               "start": 97,
-              "end": 102
+              "end": 100
             }
           }
         }
       },
       "span": {
         "start": 86,
-        "end": 102
+        "end": 100
       }
     },
     {
@@ -233,7 +233,7 @@ declare (a='b') $C;
             },
             "span": {
               "start": 105,
-              "end": 109
+              "end": 108
             }
           },
           "condition": {
@@ -249,7 +249,7 @@ declare (a='b') $C;
       },
       "span": {
         "start": 102,
-        "end": 122
+        "end": 120
       }
     },
     {

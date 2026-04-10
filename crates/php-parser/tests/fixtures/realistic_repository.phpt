@@ -131,7 +131,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
       },
       "span": {
         "start": 6,
-        "end": 32
+        "end": 30
       }
     },
     {
@@ -153,7 +153,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
       },
       "span": {
         "start": 32,
-        "end": 59
+        "end": 57
       }
     },
     {
@@ -185,7 +185,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
       },
       "span": {
         "start": 59,
-        "end": 80
+        "end": 79
       }
     },
     {
@@ -203,7 +203,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                 "kind": "Qualified",
                 "span": {
                   "start": 84,
-                  "end": 108
+                  "end": 107
                 }
               },
               "alias": "DB",
@@ -217,7 +217,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
       },
       "span": {
         "start": 80,
-        "end": 115
+        "end": 114
       }
     },
     {
@@ -249,7 +249,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
       },
       "span": {
         "start": 115,
-        "end": 151
+        "end": 149
       }
     },
     {
@@ -334,7 +334,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               },
               "span": {
                 "start": 187,
-                "end": 229
+                "end": 224
               }
             },
             {
@@ -371,7 +371,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               },
               "span": {
                 "start": 229,
-                "end": 267
+                "end": 262
               }
             },
             {
@@ -395,13 +395,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 288,
-                              "end": 293
+                              "end": 292
                             }
                           }
                         },
                         "span": {
                           "start": 288,
-                          "end": 293
+                          "end": 292
                         }
                       },
                       "default": null,
@@ -442,7 +442,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               },
               "span": {
                 "start": 267,
-                "end": 311
+                "end": 306
               }
             },
             {
@@ -513,7 +513,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               },
               "span": {
                 "start": 311,
-                "end": 350
+                "end": 349
               }
             }
           ],
@@ -554,13 +554,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                         "kind": "Unqualified",
                         "span": {
                           "start": 412,
-                          "end": 415
+                          "end": 414
                         }
                       }
                     },
                     "span": {
                       "start": 412,
-                      "end": 415
+                      "end": 414
                     }
                   },
                   "default": null,
@@ -593,13 +593,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 453,
-                              "end": 456
+                              "end": 455
                             }
                           }
                         },
                         "span": {
                           "start": 453,
-                          "end": 456
+                          "end": 455
                         }
                       },
                       "default": null,
@@ -671,7 +671,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 475,
-                        "end": 496
+                        "end": 491
                       }
                     }
                   ],
@@ -680,7 +680,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               },
               "span": {
                 "start": 425,
-                "end": 503
+                "end": 497
               }
             },
             {
@@ -717,7 +717,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               },
               "span": {
                 "start": 503,
-                "end": 556
+                "end": 551
               }
             },
             {
@@ -788,7 +788,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               },
               "span": {
                 "start": 556,
-                "end": 618
+                "end": 612
               }
             },
             {
@@ -952,7 +952,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 667,
-                        "end": 749
+                        "end": 740
                       }
                     },
                     {
@@ -999,7 +999,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 749,
-                        "end": 777
+                        "end": 772
                       }
                     }
                   ],
@@ -1008,7 +1008,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               },
               "span": {
                 "start": 618,
-                "end": 779
+                "end": 778
               }
             }
           ],
@@ -1036,7 +1036,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             "kind": "Unqualified",
             "span": {
               "start": 811,
-              "end": 830
+              "end": 829
             }
           },
           "implements": [
@@ -1047,7 +1047,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               "kind": "Unqualified",
               "span": {
                 "start": 841,
-                "end": 861
+                "end": 860
               }
             }
           ],
@@ -1082,7 +1082,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               },
               "span": {
                 "start": 867,
-                "end": 897
+                "end": 891
               }
             },
             {
@@ -1104,7 +1104,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               },
               "span": {
                 "start": 897,
-                "end": 929
+                "end": 924
               }
             },
             {
@@ -1193,7 +1193,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 1023,
-                        "end": 1043
+                        "end": 1038
                       }
                     }
                   ],
@@ -1202,7 +1202,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               },
               "span": {
                 "start": 970,
-                "end": 1050
+                "end": 1044
               }
             },
             {
@@ -1258,13 +1258,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                         "kind": "Unqualified",
                         "span": {
                           "start": 1090,
-                          "end": 1099
+                          "end": 1094
                         }
                       }
                     },
                     "span": {
                       "start": 1090,
-                      "end": 1099
+                      "end": 1094
                     }
                   },
                   "body": [
@@ -1398,7 +1398,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                           },
                                           "span": {
                                             "start": 1210,
-                                            "end": 1224
+                                            "end": 1223
                                           }
                                         },
                                         "right": {
@@ -1433,7 +1433,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 1109,
-                        "end": 1248
+                        "end": 1243
                       }
                     }
                   ],
@@ -1442,7 +1442,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               },
               "span": {
                 "start": 1050,
-                "end": 1255
+                "end": 1249
               }
             },
             {
@@ -1500,19 +1500,19 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 1287,
-                              "end": 1296
+                              "end": 1291
                             }
                           }
                         },
                         "span": {
                           "start": 1287,
-                          "end": 1296
+                          "end": 1291
                         }
                       }
                     },
                     "span": {
                       "start": 1286,
-                      "end": 1296
+                      "end": 1291
                     }
                   },
                   "body": [
@@ -1552,7 +1552,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 1306,
-                        "end": 1335
+                        "end": 1326
                       }
                     },
                     {
@@ -1647,7 +1647,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 1335,
-                        "end": 1405
+                        "end": 1396
                       }
                     },
                     {
@@ -1757,7 +1757,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                 },
                                 "span": {
                                   "start": 1430,
-                                  "end": 1455
+                                  "end": 1454
                                 }
                               },
                               "else_expr": {
@@ -1777,7 +1777,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 1405,
-                        "end": 1467
+                        "end": 1462
                       }
                     }
                   ],
@@ -1786,7 +1786,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               },
               "span": {
                 "start": 1255,
-                "end": 1474
+                "end": 1468
               }
             },
             {
@@ -1854,7 +1854,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 1521,
-                        "end": 1550
+                        "end": 1541
                       }
                     },
                     {
@@ -1989,7 +1989,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 1550,
-                        "end": 1623
+                        "end": 1614
                       }
                     },
                     {
@@ -2142,7 +2142,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 1623,
-                        "end": 1692
+                        "end": 1687
                       }
                     }
                   ],
@@ -2151,7 +2151,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               },
               "span": {
                 "start": 1474,
-                "end": 1699
+                "end": 1693
               }
             },
             {
@@ -2209,19 +2209,19 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 1744,
-                              "end": 1753
+                              "end": 1748
                             }
                           }
                         },
                         "span": {
                           "start": 1744,
-                          "end": 1753
+                          "end": 1748
                         }
                       }
                     },
                     "span": {
                       "start": 1743,
-                      "end": 1753
+                      "end": 1748
                     }
                   },
                   "body": [
@@ -2289,7 +2289,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 1763,
-                        "end": 1802
+                        "end": 1793
                       }
                     },
                     {
@@ -2346,7 +2346,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 1802,
-                        "end": 1837
+                        "end": 1828
                       }
                     },
                     {
@@ -2414,13 +2414,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                                         "kind": "Unqualified",
                                                         "span": {
                                                           "start": 1904,
-                                                          "end": 1909
+                                                          "end": 1908
                                                         }
                                                       }
                                                     },
                                                     "span": {
                                                       "start": 1904,
-                                                      "end": 1909
+                                                      "end": 1908
                                                     }
                                                   },
                                                   "default": null,
@@ -2519,7 +2519,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                                   },
                                                   "span": {
                                                     "start": 1954,
-                                                    "end": 1999
+                                                    "end": 1986
                                                   }
                                                 }
                                               ],
@@ -2556,7 +2556,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 1837,
-                        "end": 2020
+                        "end": 2011
                       }
                     },
                     {
@@ -2589,7 +2589,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                 },
                                 "span": {
                                   "start": 2027,
-                                  "end": 2040
+                                  "end": 2039
                                 }
                               },
                               "right": {
@@ -2609,7 +2609,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 2020,
-                        "end": 2053
+                        "end": 2048
                       }
                     }
                   ],
@@ -2618,7 +2618,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               },
               "span": {
                 "start": 1699,
-                "end": 2060
+                "end": 2054
               }
             },
             {
@@ -2642,13 +2642,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 2081,
-                              "end": 2086
+                              "end": 2085
                             }
                           }
                         },
                         "span": {
                           "start": 2081,
-                          "end": 2086
+                          "end": 2085
                         }
                       },
                       "default": null,
@@ -2760,7 +2760,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                               },
                               "span": {
                                 "start": 2131,
-                                "end": 2193
+                                "end": 2180
                               }
                             },
                             {
@@ -2855,7 +2855,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                               },
                               "span": {
                                 "start": 2193,
-                                "end": 2243
+                                "end": 2234
                               }
                             }
                           ],
@@ -2869,7 +2869,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                   "kind": "FullyQualified",
                                   "span": {
                                     "start": 2252,
-                                    "end": 2266
+                                    "end": 2265
                                   }
                                 }
                               ],
@@ -2968,7 +2968,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                   },
                                   "span": {
                                     "start": 2284,
-                                    "end": 2344
+                                    "end": 2331
                                   }
                                 },
                                 {
@@ -2985,13 +2985,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                   },
                                   "span": {
                                     "start": 2344,
-                                    "end": 2362
+                                    "end": 2353
                                   }
                                 }
                               ],
                               "span": {
                                 "start": 2251,
-                                "end": 2368
+                                "end": 2363
                               }
                             }
                           ],
@@ -3000,7 +3000,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 2113,
-                        "end": 2368
+                        "end": 2363
                       }
                     }
                   ],
@@ -3009,7 +3009,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               },
               "span": {
                 "start": 2060,
-                "end": 2375
+                "end": 2369
               }
             },
             {
@@ -3138,7 +3138,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                       },
                                       "span": {
                                         "start": 2435,
-                                        "end": 2452
+                                        "end": 2451
                                       }
                                     },
                                     "right": {
@@ -3205,7 +3205,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 2427,
-                        "end": 2510
+                        "end": 2501
                       }
                     },
                     {
@@ -3280,7 +3280,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 2510,
-                        "end": 2570
+                        "end": 2561
                       }
                     },
                     {
@@ -3375,7 +3375,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 2570,
-                        "end": 2618
+                        "end": 2613
                       }
                     }
                   ],
@@ -3384,7 +3384,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               },
               "span": {
                 "start": 2375,
-                "end": 2625
+                "end": 2619
               }
             },
             {
@@ -3441,7 +3441,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       },
                       "span": {
                         "start": 2683,
-                        "end": 2713
+                        "end": 2708
                       }
                     }
                   ],
@@ -3450,7 +3450,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               },
               "span": {
                 "start": 2625,
-                "end": 2715
+                "end": 2714
               }
             }
           ],

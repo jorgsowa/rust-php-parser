@@ -22,7 +22,7 @@ namespace\A\B;
       },
       "span": {
         "start": 7,
-        "end": 10
+        "end": 9
       }
     },
     {
@@ -39,7 +39,7 @@ namespace\A\B;
       },
       "span": {
         "start": 10,
-        "end": 15
+        "end": 14
       }
     },
     {
@@ -56,7 +56,7 @@ namespace\A\B;
       },
       "span": {
         "start": 15,
-        "end": 21
+        "end": 20
       }
     },
     {

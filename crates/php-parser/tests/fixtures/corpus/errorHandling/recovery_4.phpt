@@ -3,6 +3,7 @@
 abc;
 1 + ;
 ===errors===
+expected expression
 ===ast===
 {
   "stmts": [
@@ -20,7 +21,7 @@ abc;
       },
       "span": {
         "start": 6,
-        "end": 11
+        "end": 10
       }
     },
     {

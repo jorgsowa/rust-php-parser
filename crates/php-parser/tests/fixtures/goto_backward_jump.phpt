@@ -13,7 +13,7 @@ if ($count++ < 3) {
       },
       "span": {
         "start": 6,
-        "end": 13
+        "end": 12
       }
     },
     {
@@ -68,7 +68,7 @@ if ($count++ < 3) {
                   },
                   "span": {
                     "start": 37,
-                    "end": 49
+                    "end": 48
                   }
                 }
               ]

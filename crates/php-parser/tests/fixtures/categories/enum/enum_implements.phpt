@@ -18,7 +18,7 @@ min_php=8.1
               "kind": "Unqualified",
               "span": {
                 "start": 28,
-                "end": 37
+                "end": 36
               }
             }
           ],
@@ -33,7 +33,7 @@ min_php=8.1
               },
               "span": {
                 "start": 39,
-                "end": 49
+                "end": 48
               }
             },
             {
@@ -79,7 +79,7 @@ min_php=8.1
                       },
                       "span": {
                         "start": 83,
-                        "end": 97
+                        "end": 96
                       }
                     }
                   ],
@@ -88,7 +88,7 @@ min_php=8.1
               },
               "span": {
                 "start": 49,
-                "end": 99
+                "end": 98
               }
             }
           ],

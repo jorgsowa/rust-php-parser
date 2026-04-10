@@ -87,7 +87,7 @@ $escapes = "line1\nline2\ttab";
       },
       "span": {
         "start": 39,
-        "end": 100
+        "end": 65
       }
     },
     {
@@ -158,7 +158,7 @@ $escapes = "line1\nline2\ttab";
       },
       "span": {
         "start": 100,
-        "end": 174
+        "end": 126
       }
     },
     {
@@ -229,7 +229,7 @@ $escapes = "line1\nline2\ttab";
       },
       "span": {
         "start": 174,
-        "end": 241
+        "end": 198
       }
     },
     {
@@ -300,7 +300,7 @@ $escapes = "line1\nline2\ttab";
       },
       "span": {
         "start": 241,
-        "end": 309
+        "end": 267
       }
     },
     {
@@ -372,7 +372,7 @@ $escapes = "line1\nline2\ttab";
       },
       "span": {
         "start": 309,
-        "end": 376
+        "end": 344
       }
     },
     {
@@ -441,7 +441,7 @@ $escapes = "line1\nline2\ttab";
       },
       "span": {
         "start": 376,
-        "end": 449
+        "end": 410
       }
     },
     {
@@ -478,7 +478,7 @@ $escapes = "line1\nline2\ttab";
       },
       "span": {
         "start": 449,
-        "end": 507
+        "end": 475
       }
     },
     {
@@ -549,7 +549,7 @@ $escapes = "line1\nline2\ttab";
       },
       "span": {
         "start": 507,
-        "end": 565
+        "end": 538
       }
     },
     {
@@ -601,7 +601,7 @@ $escapes = "line1\nline2\ttab";
       },
       "span": {
         "start": 565,
-        "end": 616
+        "end": 591
       }
     },
     {
@@ -653,7 +653,7 @@ $escapes = "line1\nline2\ttab";
       },
       "span": {
         "start": 616,
-        "end": 683
+        "end": 637
       }
     },
     {
@@ -690,7 +690,7 @@ $escapes = "line1\nline2\ttab";
       },
       "span": {
         "start": 683,
-        "end": 736
+        "end": 714
       }
     },
     {

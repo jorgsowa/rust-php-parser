@@ -1,6 +1,7 @@
 ===source===
 <?php class A implements static {}
 ===errors===
+cannot use 'static' as class name
 ===ast===
 {
   "stmts": [
@@ -22,7 +23,7 @@
               "kind": "Unqualified",
               "span": {
                 "start": 25,
-                "end": 32
+                "end": 31
               }
             }
           ],

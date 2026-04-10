@@ -1,6 +1,7 @@
 ===source===
 <?php class PARENT {}
 ===errors===
+cannot use 'PARENT' as class name
 ===ast===
 {
   "stmts": [

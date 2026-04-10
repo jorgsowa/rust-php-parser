@@ -64,7 +64,7 @@ function a() {
               },
               "span": {
                 "start": 26,
-                "end": 54
+                "end": 49
               }
             },
             {
@@ -98,7 +98,7 @@ function a() {
               },
               "span": {
                 "start": 54,
-                "end": 75
+                "end": 74
               }
             }
           ],
