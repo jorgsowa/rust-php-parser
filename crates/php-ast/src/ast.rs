@@ -998,7 +998,7 @@ pub enum ExprKind<'arena, 'src> {
     Null,
 
     /// Variable: `$name`
-    Variable(Cow<'src, str>),
+    Variable(&'src str),
 
     /// Variable variable: `$$var`, `$$$var`, `${expr}`
     VariableVariable(&'arena Expr<'arena, 'src>),
