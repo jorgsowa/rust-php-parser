@@ -7,6 +7,8 @@ class A {
     private ?float $c;
     readonly static public ?int $d;
 }
+===errors===
+static properties cannot be readonly
 ===ast===
 {
   "stmts": [

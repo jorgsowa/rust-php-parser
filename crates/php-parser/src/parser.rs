@@ -632,6 +632,23 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     span,
                 });
             }
+            // void, never, and mixed cannot appear in union types
+            for ty in types.iter() {
+                if let TypeHintKind::Keyword(builtin, _) = &ty.kind {
+                    let msg = match builtin {
+                        BuiltinType::Void => Some("void cannot be used as part of a union type"),
+                        BuiltinType::Never => Some("never cannot be used as part of a union type"),
+                        BuiltinType::Mixed => Some("mixed cannot be used as part of a union type"),
+                        _ => None,
+                    };
+                    if let Some(msg) = msg {
+                        self.error(ParseError::Forbidden {
+                            message: msg.into(),
+                            span: ty.span,
+                        });
+                    }
+                }
+            }
             // DNF types (parenthesized intersection in union) require PHP 8.2
             let has_dnf = types
                 .iter()
