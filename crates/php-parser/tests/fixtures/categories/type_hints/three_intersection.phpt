@@ -58,20 +58,20 @@
                           "kind": "Unqualified",
                           "span": {
                             "start": 39,
-                            "end": 51
+                            "end": 50
                           }
                         }
                       },
                       "span": {
                         "start": 39,
-                        "end": 51
+                        "end": 50
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 17,
-                  "end": 51
+                  "end": 50
                 }
               },
               "default": null,

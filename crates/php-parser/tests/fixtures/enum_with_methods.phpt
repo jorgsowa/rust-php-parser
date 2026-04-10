@@ -31,7 +31,7 @@ enum Suit: string implements HasColor {
             "kind": "Unqualified",
             "span": {
               "start": 17,
-              "end": 24
+              "end": 23
             }
           },
           "implements": [
@@ -42,7 +42,7 @@ enum Suit: string implements HasColor {
               "kind": "Unqualified",
               "span": {
                 "start": 35,
-                "end": 44
+                "end": 43
               }
             }
           ],

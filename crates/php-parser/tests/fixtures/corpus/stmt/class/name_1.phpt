@@ -1,6 +1,7 @@
 ===source===
 <?php class self {}
 ===errors===
+cannot use 'self' as class name
 ===ast===
 {
   "stmts": [

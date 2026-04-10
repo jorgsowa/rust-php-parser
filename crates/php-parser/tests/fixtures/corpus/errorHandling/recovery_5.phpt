@@ -4,6 +4,8 @@ function test() {
     1 +
 }
 ===errors===
+expected expression
+expected ';' after expression
 ===ast===
 {
   "stmts": [

@@ -4,6 +4,7 @@ class A {
     abstract const X = 1;
 }
 ===errors===
+cannot use 'abstract' as constant modifier
 ===ast===
 {
   "stmts": [

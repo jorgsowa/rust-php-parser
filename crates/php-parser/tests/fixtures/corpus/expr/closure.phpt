@@ -317,13 +317,13 @@ function() use($a) : \Foo\Bar {};
                     "kind": "FullyQualified",
                     "span": {
                       "start": 168,
-                      "end": 177
+                      "end": 176
                     }
                   }
                 },
                 "span": {
                   "start": 168,
-                  "end": 177
+                  "end": 176
                 }
               },
               "body": [],

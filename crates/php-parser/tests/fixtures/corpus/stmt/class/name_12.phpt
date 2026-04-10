@@ -1,6 +1,7 @@
 ===source===
 <?php interface static {}
 ===errors===
+cannot use 'static' as interface name
 ===ast===
 {
   "stmts": [

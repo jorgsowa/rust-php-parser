@@ -25,6 +25,19 @@ class Bar {
 
 function(Foo);
 ===errors===
+expected variable, found ')'
+expected variable, found ')'
+expected variable, found ')'
+expected variable, found ')'
+expected variable, found ')'
+expected '{', found 'class'
+expected variable, found ')'
+expected ';', found '}'
+expected variable, found ')'
+expected '{', found ';'
+expected '}', found end of file
+expected ';' after expression
+unclosed ''}'' opened at Span { start: 171, end: 176 }
 ===ast===
 {
   "stmts": [
@@ -112,13 +125,13 @@ function(Foo);
                     "kind": "Unqualified",
                     "span": {
                       "start": 54,
-                      "end": 60
+                      "end": 59
                     }
                   }
                 },
                 "span": {
                   "start": 54,
-                  "end": 60
+                  "end": 59
                 }
               },
               "default": null,

@@ -6,6 +6,8 @@ if ($b) {
     /* unterminated
 }
 ===errors===
+unterminated block comment
+unclosed ''}'' opened at Span { start: 15, end: 16 }
 ===ast===
 {
   "stmts": [

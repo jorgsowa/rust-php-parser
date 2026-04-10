@@ -16,7 +16,7 @@ min_php=8.1
             "kind": "Unqualified",
             "span": {
               "start": 18,
-              "end": 25
+              "end": 24
             }
           },
           "implements": [],

@@ -7,6 +7,7 @@ class Foo {
     public $bar;
 }
 ===errors===
+expected modifier, found identifier
 ===ast===
 {
   "stmts": [
@@ -57,13 +58,13 @@ class Foo {
                         "kind": "Unqualified",
                         "span": {
                           "start": 41,
-                          "end": 47
+                          "end": 46
                         }
                       }
                     },
                     "span": {
                       "start": 41,
-                      "end": 47
+                      "end": 46
                     }
                   },
                   "default": null,

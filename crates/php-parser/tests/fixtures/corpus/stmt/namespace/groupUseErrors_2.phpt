@@ -3,6 +3,7 @@
 // Missing NS separator
 use Foo {Bar, Baz};
 ===errors===
+expected namespace separator before '{', found '{'
 ===ast===
 {
   "stmts": [

@@ -40,20 +40,20 @@
                           "kind": "Unqualified",
                           "span": {
                             "start": 28,
-                            "end": 38
+                            "end": 37
                           }
                         }
                       },
                       "span": {
                         "start": 28,
-                        "end": 38
+                        "end": 37
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 19,
-                  "end": 38
+                  "end": 37
                 }
               },
               "default": null,

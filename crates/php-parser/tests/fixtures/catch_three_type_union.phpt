@@ -71,7 +71,7 @@ try {
                   "kind": "Unqualified",
                   "span": {
                     "start": 38,
-                    "end": 40
+                    "end": 39
                   }
                 }
               ],

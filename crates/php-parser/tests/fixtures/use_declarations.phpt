@@ -54,7 +54,7 @@ use const App\Config\VERSION;
                 "kind": "Qualified",
                 "span": {
                   "start": 31,
-                  "end": 49
+                  "end": 48
                 }
               },
               "alias": "AuthService",

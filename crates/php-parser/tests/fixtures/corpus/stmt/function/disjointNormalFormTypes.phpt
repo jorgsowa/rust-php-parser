@@ -207,20 +207,20 @@ function test((A&B)|(X&Y) $a): (A&B)|(X&Y) {}
                               "kind": "Unqualified",
                               "span": {
                                 "start": 76,
-                                "end": 78
+                                "end": 77
                               }
                             }
                           },
                           "span": {
                             "start": 76,
-                            "end": 78
+                            "end": 77
                           }
                         }
                       ]
                     },
                     "span": {
                       "start": 70,
-                      "end": 78
+                      "end": 77
                     }
                   },
                   "default": null,

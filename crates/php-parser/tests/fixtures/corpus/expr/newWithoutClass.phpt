@@ -2,6 +2,7 @@
 <?php
 new;
 ===errors===
+expected identifier, found ';'
 ===ast===
 {
   "stmts": [
@@ -16,7 +17,7 @@ new;
                 },
                 "span": {
                   "start": 9,
-                  "end": 9
+                  "end": 10
                 }
               },
               "args": []

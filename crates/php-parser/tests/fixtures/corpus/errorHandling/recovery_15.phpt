@@ -2,6 +2,8 @@
 <?php
 Foo::$
 ===errors===
+expected expression
+expected ';' after expression
 ===ast===
 {
   "stmts": [

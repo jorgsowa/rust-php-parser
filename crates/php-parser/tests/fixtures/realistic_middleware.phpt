@@ -261,13 +261,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 198,
-                              "end": 206
+                              "end": 205
                             }
                           }
                         },
                         "span": {
                           "start": 198,
-                          "end": 206
+                          "end": 205
                         }
                       },
                       "default": null,
@@ -371,7 +371,7 @@ class RateLimitMiddleware implements MiddlewareInterface
               "kind": "Unqualified",
               "span": {
                 "start": 278,
-                "end": 298
+                "end": 297
               }
             }
           ],
@@ -393,13 +393,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                         "kind": "Unqualified",
                         "span": {
                           "start": 321,
-                          "end": 336
+                          "end": 335
                         }
                       }
                     },
                     "span": {
                       "start": 321,
-                      "end": 336
+                      "end": 335
                     }
                   },
                   "default": null,
@@ -475,13 +475,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 427,
-                              "end": 442
+                              "end": 441
                             }
                           }
                         },
                         "span": {
                           "start": 427,
-                          "end": 442
+                          "end": 441
                         }
                       },
                       "default": null,
@@ -586,13 +586,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 533,
-                              "end": 541
+                              "end": 540
                             }
                           }
                         },
                         "span": {
                           "start": 533,
-                          "end": 541
+                          "end": 540
                         }
                       },
                       "default": null,
@@ -651,13 +651,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                         "kind": "Unqualified",
                         "span": {
                           "start": 568,
-                          "end": 581
+                          "end": 576
                         }
                       }
                     },
                     "span": {
                       "start": 568,
-                      "end": 581
+                      "end": 576
                     }
                   },
                   "body": [
@@ -1520,7 +1520,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                                   "kind": "FullyQualified",
                                   "span": {
                                     "start": 1228,
-                                    "end": 1254
+                                    "end": 1253
                                   }
                                 }
                               ],
@@ -1652,7 +1652,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                                   "kind": "FullyQualified",
                                   "span": {
                                     "start": 1346,
-                                    "end": 1364
+                                    "end": 1363
                                   }
                                 },
                                 {
@@ -1662,7 +1662,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                                   "kind": "FullyQualified",
                                   "span": {
                                     "start": 1366,
-                                    "end": 1382
+                                    "end": 1381
                                   }
                                 }
                               ],
@@ -2118,7 +2118,7 @@ class RateLimitMiddleware implements MiddlewareInterface
               "kind": "Unqualified",
               "span": {
                 "start": 1746,
-                "end": 1766
+                "end": 1765
               }
             }
           ],
@@ -2188,13 +2188,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 1873,
-                              "end": 1881
+                              "end": 1880
                             }
                           }
                         },
                         "span": {
                           "start": 1873,
-                          "end": 1881
+                          "end": 1880
                         }
                       },
                       "default": null,
@@ -2253,13 +2253,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                         "kind": "Unqualified",
                         "span": {
                           "start": 1908,
-                          "end": 1921
+                          "end": 1916
                         }
                       }
                     },
                     "span": {
                       "start": 1908,
-                      "end": 1921
+                      "end": 1916
                     }
                   },
                   "body": [

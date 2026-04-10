@@ -33,7 +33,7 @@ class A extends B implements C, D {
             "kind": "Unqualified",
             "span": {
               "start": 23,
-              "end": 25
+              "end": 24
             }
           },
           "implements": [
@@ -54,7 +54,7 @@ class A extends B implements C, D {
               "kind": "Unqualified",
               "span": {
                 "start": 39,
-                "end": 41
+                "end": 40
               }
             }
           ],
@@ -267,13 +267,13 @@ class A extends B implements C, D {
                         "kind": "Unqualified",
                         "span": {
                           "start": 233,
-                          "end": 235
+                          "end": 234
                         }
                       }
                     },
                     "span": {
                       "start": 233,
-                      "end": 235
+                      "end": 234
                     }
                   },
                   "body": [],

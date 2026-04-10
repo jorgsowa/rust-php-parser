@@ -2,6 +2,7 @@
 <?php
 new T
 ===errors===
+expected ';' after expression
 ===ast===
 {
   "stmts": [

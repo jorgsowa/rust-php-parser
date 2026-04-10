@@ -74,20 +74,20 @@ function bar((A&B)|(C&D) $y): (E&F)|null {
                           "kind": "Unqualified",
                           "span": {
                             "start": 25,
-                            "end": 27
+                            "end": 26
                           }
                         }
                       },
                       "span": {
                         "start": 25,
-                        "end": 27
+                        "end": 26
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 19,
-                  "end": 27
+                  "end": 26
                 }
               },
               "default": null,
@@ -181,20 +181,20 @@ function bar((A&B)|(C&D) $y): (E&F)|null {
                       "kind": "Unqualified",
                       "span": {
                         "start": 38,
-                        "end": 40
+                        "end": 39
                       }
                     }
                   },
                   "span": {
                     "start": 38,
-                    "end": 40
+                    "end": 39
                   }
                 }
               ]
             },
             "span": {
               "start": 32,
-              "end": 40
+              "end": 39
             }
           },
           "by_ref": false,

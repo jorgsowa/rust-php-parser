@@ -203,7 +203,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                 "kind": "Qualified",
                 "span": {
                   "start": 84,
-                  "end": 108
+                  "end": 107
                 }
               },
               "alias": "DB",
@@ -395,13 +395,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 288,
-                              "end": 293
+                              "end": 292
                             }
                           }
                         },
                         "span": {
                           "start": 288,
-                          "end": 293
+                          "end": 292
                         }
                       },
                       "default": null,
@@ -554,13 +554,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                         "kind": "Unqualified",
                         "span": {
                           "start": 412,
-                          "end": 415
+                          "end": 414
                         }
                       }
                     },
                     "span": {
                       "start": 412,
-                      "end": 415
+                      "end": 414
                     }
                   },
                   "default": null,
@@ -593,13 +593,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 453,
-                              "end": 456
+                              "end": 455
                             }
                           }
                         },
                         "span": {
                           "start": 453,
-                          "end": 456
+                          "end": 455
                         }
                       },
                       "default": null,
@@ -1036,7 +1036,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             "kind": "Unqualified",
             "span": {
               "start": 811,
-              "end": 830
+              "end": 829
             }
           },
           "implements": [
@@ -1047,7 +1047,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
               "kind": "Unqualified",
               "span": {
                 "start": 841,
-                "end": 861
+                "end": 860
               }
             }
           ],
@@ -1258,13 +1258,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                         "kind": "Unqualified",
                         "span": {
                           "start": 1090,
-                          "end": 1099
+                          "end": 1094
                         }
                       }
                     },
                     "span": {
                       "start": 1090,
-                      "end": 1099
+                      "end": 1094
                     }
                   },
                   "body": [
@@ -1500,19 +1500,19 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 1287,
-                              "end": 1296
+                              "end": 1291
                             }
                           }
                         },
                         "span": {
                           "start": 1287,
-                          "end": 1296
+                          "end": 1291
                         }
                       }
                     },
                     "span": {
                       "start": 1286,
-                      "end": 1296
+                      "end": 1291
                     }
                   },
                   "body": [
@@ -2209,19 +2209,19 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 1744,
-                              "end": 1753
+                              "end": 1748
                             }
                           }
                         },
                         "span": {
                           "start": 1744,
-                          "end": 1753
+                          "end": 1748
                         }
                       }
                     },
                     "span": {
                       "start": 1743,
-                      "end": 1753
+                      "end": 1748
                     }
                   },
                   "body": [
@@ -2414,13 +2414,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                                         "kind": "Unqualified",
                                                         "span": {
                                                           "start": 1904,
-                                                          "end": 1909
+                                                          "end": 1908
                                                         }
                                                       }
                                                     },
                                                     "span": {
                                                       "start": 1904,
-                                                      "end": 1909
+                                                      "end": 1908
                                                     }
                                                   },
                                                   "default": null,
@@ -2642,13 +2642,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                             "kind": "Unqualified",
                             "span": {
                               "start": 2081,
-                              "end": 2086
+                              "end": 2085
                             }
                           }
                         },
                         "span": {
                           "start": 2081,
-                          "end": 2086
+                          "end": 2085
                         }
                       },
                       "default": null,
@@ -2869,7 +2869,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                   "kind": "FullyQualified",
                                   "span": {
                                     "start": 2252,
-                                    "end": 2266
+                                    "end": 2265
                                   }
                                 }
                               ],

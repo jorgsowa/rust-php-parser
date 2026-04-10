@@ -94,13 +94,13 @@ function createUser(string $name, int $age): User {}
                 "kind": "Unqualified",
                 "span": {
                   "start": 195,
-                  "end": 200
+                  "end": 199
                 }
               }
             },
             "span": {
               "start": 195,
-              "end": 200
+              "end": 199
             }
           },
           "by_ref": false,

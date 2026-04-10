@@ -10,6 +10,18 @@ $array = [
     'key' => $value $oopsAnotherValue
 ];
 ===errors===
+expected ']', found variable
+expected ';' after expression
+expected ';' after expression
+expected expression
+expected ']', found variable
+expected ';' after expression
+expected ';' after expression
+expected expression
+expected ']', found variable
+expected ';' after expression
+expected ';' after expression
+expected expression
 ===ast===
 {
   "stmts": [

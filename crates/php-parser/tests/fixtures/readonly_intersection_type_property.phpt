@@ -56,20 +56,20 @@ class Foo {
                               "kind": "Unqualified",
                               "span": {
                                 "start": 48,
-                                "end": 60
+                                "end": 59
                               }
                             }
                           },
                           "span": {
                             "start": 48,
-                            "end": 60
+                            "end": 59
                           }
                         }
                       ]
                     },
                     "span": {
                       "start": 38,
-                      "end": 60
+                      "end": 59
                     }
                   },
                   "default": null,

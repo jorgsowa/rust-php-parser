@@ -7,6 +7,8 @@ while
 $j = 1;
 $k = 2;
 ===errors===
+expected '(', found variable
+unclosed '')'' opened at Span { start: 22, end: 24 }
 ===ast===
 {
   "stmts": [

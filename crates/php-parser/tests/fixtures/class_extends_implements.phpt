@@ -135,7 +135,7 @@ class User extends Model implements Loggable, Serializable {
             "kind": "Unqualified",
             "span": {
               "start": 149,
-              "end": 155
+              "end": 154
             }
           },
           "implements": [
@@ -156,7 +156,7 @@ class User extends Model implements Loggable, Serializable {
               "kind": "Unqualified",
               "span": {
                 "start": 176,
-                "end": 189
+                "end": 188
               }
             }
           ],

@@ -21,7 +21,7 @@ cannot use 'parent' as class name
             "kind": "Unqualified",
             "span": {
               "start": 22,
-              "end": 29
+              "end": 28
             }
           },
           "implements": [],

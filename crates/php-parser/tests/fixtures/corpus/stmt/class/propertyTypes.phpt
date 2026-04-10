@@ -74,13 +74,13 @@ class A {
                         "kind": "Unqualified",
                         "span": {
                           "start": 60,
-                          "end": 62
+                          "end": 61
                         }
                       }
                     },
                     "span": {
                       "start": 60,
-                      "end": 62
+                      "end": 61
                     }
                   },
                   "default": null,

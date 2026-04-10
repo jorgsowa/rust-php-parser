@@ -21,7 +21,7 @@ cannot use 'self' as class name
             "kind": "Unqualified",
             "span": {
               "start": 22,
-              "end": 27
+              "end": 26
             }
           },
           "implements": [],

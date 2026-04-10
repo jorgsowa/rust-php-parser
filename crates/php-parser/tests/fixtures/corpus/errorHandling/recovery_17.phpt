@@ -16,6 +16,24 @@ unset($a)
 throw $x
 goto label
 ===errors===
+expected ';', found 'use'
+expected ';', found 'use'
+expected ';', found 'use'
+expected ';', found 'const'
+expected ';', found 'break'
+expected expression
+expected ';' after break statement
+expected ';' after break statement
+expected expression
+expected ';' after continue statement
+expected ';' after continue statement
+expected expression
+expected ';' after return statement
+expected ';' after return statement
+expected ';' after echo statement
+expected ';', found 'throw'
+expected ';' after throw statement
+expected ';', found end of file
 ===ast===
 {
   "stmts": [
@@ -29,7 +47,7 @@ goto label
             "kind": "Unqualified",
             "span": {
               "start": 16,
-              "end": 20
+              "end": 19
             }
           },
           "body": "Simple"
@@ -53,7 +71,7 @@ goto label
                 "kind": "Unqualified",
                 "span": {
                   "start": 24,
-                  "end": 26
+                  "end": 25
                 }
               },
               "alias": null,
@@ -83,7 +101,7 @@ goto label
                 "kind": "Unqualified",
                 "span": {
                   "start": 39,
-                  "end": 41
+                  "end": 40
                 }
               },
               "alias": null,

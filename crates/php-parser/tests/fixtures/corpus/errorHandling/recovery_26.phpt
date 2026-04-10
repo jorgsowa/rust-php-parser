@@ -12,6 +12,8 @@ class B {
     const X = 1
 }
 ===errors===
+expected ';', found 'public'
+expected ';', found '}'
 ===ast===
 {
   "stmts": [

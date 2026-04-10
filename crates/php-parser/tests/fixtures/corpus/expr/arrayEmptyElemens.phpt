@@ -4,6 +4,7 @@
 [1, , 2];
 array(1, , 2);
 ===errors===
+expected expression
 ===ast===
 {
   "stmts": [

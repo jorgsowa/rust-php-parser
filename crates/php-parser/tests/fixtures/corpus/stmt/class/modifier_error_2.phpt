@@ -1,6 +1,7 @@
 ===source===
 <?php class A { public protected $a; }
 ===errors===
+cannot use multiple visibility modifiers
 ===ast===
 {
   "stmts": [

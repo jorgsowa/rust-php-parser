@@ -18,7 +18,7 @@ min_php=8.1
               "kind": "Unqualified",
               "span": {
                 "start": 28,
-                "end": 37
+                "end": 36
               }
             }
           ],

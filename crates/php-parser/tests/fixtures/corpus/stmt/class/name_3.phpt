@@ -1,6 +1,7 @@
 ===source===
 <?php class static {}
 ===errors===
+cannot use 'static' as class name
 ===ast===
 {
   "stmts": [

@@ -4,6 +4,7 @@
 use Foo\{Bar}
 use Bar\{Foo};
 ===errors===
+expected ';', found 'use'
 ===ast===
 {
   "stmts": [

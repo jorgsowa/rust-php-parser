@@ -1,6 +1,8 @@
 ===source===
 <?php use A as self;
 ===errors===
+expected identifier, found 'self'
+expected ';', found 'self'
 ===ast===
 {
   "stmts": [
@@ -17,7 +19,7 @@
                 "kind": "Unqualified",
                 "span": {
                   "start": 10,
-                  "end": 12
+                  "end": 11
                 }
               },
               "alias": null,

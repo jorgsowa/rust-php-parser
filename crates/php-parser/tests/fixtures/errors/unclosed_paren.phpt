@@ -1,7 +1,8 @@
 ===source===
-<?php ($x + $y;
+<?php foo(1, 2
 ===errors===
-unclosed '')'' opened at Span { start: 6, end: 7 }
+expected ')', found end of file
+expected ';' after expression
 ===ast===
 {
   "stmts": [
@@ -9,34 +10,54 @@ unclosed '')'' opened at Span { start: 6, end: 7 }
       "kind": {
         "Expression": {
           "kind": {
-            "Parenthesized": {
-              "kind": {
-                "Binary": {
-                  "left": {
-                    "kind": {
-                      "Variable": "x"
-                    },
-                    "span": {
-                      "start": 7,
-                      "end": 9
-                    }
-                  },
-                  "op": "Add",
-                  "right": {
-                    "kind": {
-                      "Variable": "y"
-                    },
-                    "span": {
-                      "start": 12,
-                      "end": 14
-                    }
-                  }
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Identifier": "foo"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 9
                 }
               },
-              "span": {
-                "start": 7,
-                "end": 14
-              }
+              "args": [
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 10,
+                      "end": 11
+                    }
+                  },
+                  "unpack": false,
+                  "by_ref": false,
+                  "span": {
+                    "start": 10,
+                    "end": 11
+                  }
+                },
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Int": 2
+                    },
+                    "span": {
+                      "start": 13,
+                      "end": 14
+                    }
+                  },
+                  "unpack": false,
+                  "by_ref": false,
+                  "span": {
+                    "start": 13,
+                    "end": 14
+                  }
+                }
+              ]
             }
           },
           "span": {
@@ -47,12 +68,12 @@ unclosed '')'' opened at Span { start: 6, end: 7 }
       },
       "span": {
         "start": 6,
-        "end": 15
+        "end": 14
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 15
+    "end": 14
   }
 }

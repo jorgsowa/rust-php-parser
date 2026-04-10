@@ -751,7 +751,7 @@ class Foo {
                       "kind": "Unqualified",
                       "span": {
                         "start": 551,
-                        "end": 558
+                        "end": 557
                       }
                     }
                   ],

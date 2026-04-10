@@ -12,6 +12,7 @@
 (string)  $a;
 (unset)   $a;
 ===errors===
+the (unset) cast is no longer supported
 ===ast===
 {
   "stmts": [

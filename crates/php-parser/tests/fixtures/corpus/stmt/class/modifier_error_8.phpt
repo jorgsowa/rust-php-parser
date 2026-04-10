@@ -1,6 +1,7 @@
 ===source===
 <?php abstract final class A { }
 ===errors===
+expected 'class', found 'final'
 ===ast===
 {
   "stmts": [

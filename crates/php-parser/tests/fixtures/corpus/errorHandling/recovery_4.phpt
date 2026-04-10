@@ -3,6 +3,7 @@
 abc;
 1 + ;
 ===errors===
+expected expression
 ===ast===
 {
   "stmts": [

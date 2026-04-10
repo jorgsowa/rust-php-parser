@@ -1,6 +1,7 @@
 ===source===
 <?php class A { final final function a() {} }
 ===errors===
+duplicate modifier 'final'
 ===ast===
 {
   "stmts": [

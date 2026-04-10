@@ -1,6 +1,7 @@
 ===source===
 <?php foo /* bar */
 ===errors===
+expected ';' after expression
 ===ast===
 {
   "stmts": [

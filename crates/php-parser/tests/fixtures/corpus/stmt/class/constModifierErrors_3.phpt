@@ -4,6 +4,7 @@ class A {
     readonly const X = 1;
 }
 ===errors===
+cannot use 'readonly' as constant modifier
 ===ast===
 {
   "stmts": [

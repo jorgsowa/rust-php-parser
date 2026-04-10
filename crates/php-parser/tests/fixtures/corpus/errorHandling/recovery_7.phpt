@@ -8,6 +8,7 @@ while () {
 $k = 2;
 // The output here drops the loop - would require Error node to handle this
 ===errors===
+expected expression
 ===ast===
 {
   "stmts": [

@@ -103,7 +103,7 @@ class A {
                       "kind": "Unqualified",
                       "span": {
                         "start": 70,
-                        "end": 72
+                        "end": 71
                       }
                     },
                     "implements": [
@@ -124,7 +124,7 @@ class A {
                         "kind": "Unqualified",
                         "span": {
                           "start": 86,
-                          "end": 88
+                          "end": 87
                         }
                       }
                     ],
@@ -230,7 +230,7 @@ class A {
                       "kind": "Unqualified",
                       "span": {
                         "start": 152,
-                        "end": 154
+                        "end": 153
                       }
                     },
                     "implements": [],
@@ -363,7 +363,7 @@ class A {
                                       "kind": "Unqualified",
                                       "span": {
                                         "start": 250,
-                                        "end": 252
+                                        "end": 251
                                       }
                                     },
                                     "implements": [],

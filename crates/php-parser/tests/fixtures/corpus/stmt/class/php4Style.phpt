@@ -7,6 +7,7 @@ class A {
     static abstract function baz() {}
 }
 ===errors===
+abstract method cannot contain a body
 ===ast===
 {
   "stmts": [
