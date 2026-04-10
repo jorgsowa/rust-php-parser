@@ -162,93 +162,11 @@ fn many_class_members() {
 }
 
 // ============================================================================
-// EMPTY / DEGENERATE INPUT
+// NULL BYTES
+// Cannot be expressed in .phpt fixture files.
 // ============================================================================
-
-#[test]
-fn empty_input() {
-    assert_no_errors("");
-}
-
-#[test]
-fn only_open_tag() {
-    assert_no_errors("<?php");
-}
-
-#[test]
-fn only_whitespace_after_open_tag() {
-    assert_no_errors("<?php   \n\n\n  ");
-}
 
 #[test]
 fn null_bytes_in_source() {
     assert_has_errors("<?php $x = \0;");
-}
-
-#[test]
-fn only_semicolons() {
-    assert_no_errors("<?php ;;;;;;;;");
-}
-
-// ============================================================================
-// UNTERMINATED CONSTRUCTS
-// ============================================================================
-
-#[test]
-fn missing_expression_after_echo() {
-    assert_has_errors("<?php echo ;");
-}
-
-#[test]
-fn unterminated_heredoc() {
-    assert_has_errors("<?php $x = <<<EOT\nhello\n");
-}
-
-#[test]
-fn unclosed_paren() {
-    assert_has_errors("<?php foo(1, 2");
-}
-
-#[test]
-fn unclosed_bracket() {
-    assert_has_errors("<?php $x = [1, 2");
-}
-
-#[test]
-fn unclosed_brace() {
-    assert_has_errors("<?php if (true) { $x = 1;");
-}
-
-#[test]
-fn unclosed_class_body() {
-    assert_has_errors("<?php class Foo { public function bar() {}");
-}
-
-// ============================================================================
-// UNEXPECTED TOKEN SEQUENCES
-// ============================================================================
-
-#[test]
-fn consecutive_operators() {
-    assert_has_errors("<?php $x = + + ;");
-}
-
-#[test]
-fn arrow_function_missing_body() {
-    assert_has_errors("<?php fn($x) =>;");
-}
-
-#[test]
-fn double_comma_in_args() {
-    assert_has_errors("<?php foo(1,, 2);");
-}
-
-#[test]
-fn keyword_salad() {
-    assert_has_errors("<?php class function while;");
-}
-
-#[test]
-fn missing_semicolons_between_statements() {
-    assert_has_errors("<?php $x = 1 $y = 2");
 }

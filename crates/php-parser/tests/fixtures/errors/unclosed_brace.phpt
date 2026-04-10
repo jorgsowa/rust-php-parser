@@ -1,67 +1,81 @@
 ===source===
-<?php function foo() { $x = 1;
+<?php if (true) { $x = 1;
 ===errors===
-unclosed ''}'' opened at Span { start: 21, end: 22 }
+unclosed ''}'' opened at Span { start: 16, end: 17 }
 ===ast===
 {
   "stmts": [
     {
       "kind": {
-        "Function": {
-          "name": "foo",
-          "params": [],
-          "body": [
-            {
-              "kind": {
-                "Expression": {
+        "If": {
+          "condition": {
+            "kind": {
+              "Bool": true
+            },
+            "span": {
+              "start": 10,
+              "end": 14
+            }
+          },
+          "then_branch": {
+            "kind": {
+              "Block": [
+                {
                   "kind": {
-                    "Assign": {
-                      "target": {
-                        "kind": {
-                          "Variable": "x"
-                        },
-                        "span": {
-                          "start": 23,
-                          "end": 25
+                    "Expression": {
+                      "kind": {
+                        "Assign": {
+                          "target": {
+                            "kind": {
+                              "Variable": "x"
+                            },
+                            "span": {
+                              "start": 18,
+                              "end": 20
+                            }
+                          },
+                          "op": "Assign",
+                          "value": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 23,
+                              "end": 24
+                            }
+                          }
                         }
                       },
-                      "op": "Assign",
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 28,
-                          "end": 29
-                        }
+                      "span": {
+                        "start": 18,
+                        "end": 24
                       }
                     }
                   },
                   "span": {
-                    "start": 23,
-                    "end": 29
+                    "start": 18,
+                    "end": 25
                   }
                 }
-              },
-              "span": {
-                "start": 23,
-                "end": 30
-              }
+              ]
+            },
+            "span": {
+              "start": 16,
+              "end": 25
             }
-          ],
-          "return_type": null,
-          "by_ref": false,
-          "attributes": []
+          },
+          "elseif_branches": [],
+          "else_branch": null
         }
       },
       "span": {
         "start": 6,
-        "end": 30
+        "end": 25
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 30
+    "end": 25
   }
 }
