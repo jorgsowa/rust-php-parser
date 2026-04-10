@@ -38,14 +38,14 @@ expected expression
                   },
                   "span": {
                     "start": 24,
-                    "end": 32
+                    "end": 31
                   }
                 },
                 {
                   "kind": "Error",
                   "span": {
                     "start": 32,
-                    "end": 32
+                    "end": 31
                   }
                 }
               ]

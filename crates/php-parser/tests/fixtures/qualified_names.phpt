@@ -50,7 +50,7 @@ App\Helpers\format($data);
       },
       "span": {
         "start": 6,
-        "end": 37
+        "end": 36
       }
     },
     {

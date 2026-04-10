@@ -125,7 +125,7 @@ $obj = new readonly class(1, 2) {
                               },
                               "span": {
                                 "start": 44,
-                                "end": 128
+                                "end": 127
                               }
                             }
                           ],

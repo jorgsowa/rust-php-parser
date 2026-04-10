@@ -68,7 +68,7 @@ parse_version=8.5
               },
               "span": {
                 "start": 18,
-                "end": 75
+                "end": 74
               }
             }
           ],

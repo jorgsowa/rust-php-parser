@@ -48,7 +48,7 @@ function &getReference(array &$arr): mixed {
               },
               "span": {
                 "start": 41,
-                "end": 67
+                "end": 66
               }
             }
           ],
@@ -152,7 +152,7 @@ function &getReference(array &$arr): mixed {
               },
               "span": {
                 "start": 118,
-                "end": 134
+                "end": 133
               }
             }
           ],

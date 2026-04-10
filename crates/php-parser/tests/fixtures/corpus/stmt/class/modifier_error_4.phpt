@@ -34,7 +34,7 @@ duplicate modifier 'abstract'
               },
               "span": {
                 "start": 16,
-                "end": 48
+                "end": 47
               }
             }
           ],

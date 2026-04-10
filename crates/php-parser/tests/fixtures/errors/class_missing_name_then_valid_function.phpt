@@ -45,7 +45,7 @@ expected class name, found '{'
               },
               "span": {
                 "start": 37,
-                "end": 47
+                "end": 46
               }
             }
           ],

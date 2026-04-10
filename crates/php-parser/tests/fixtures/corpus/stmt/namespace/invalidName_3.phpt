@@ -25,7 +25,7 @@ expected ';', found 'static'
               "alias": null,
               "span": {
                 "start": 10,
-                "end": 15
+                "end": 14
               }
             }
           ]
@@ -33,7 +33,7 @@ expected ';', found 'static'
       },
       "span": {
         "start": 6,
-        "end": 15
+        "end": 14
       }
     },
     {

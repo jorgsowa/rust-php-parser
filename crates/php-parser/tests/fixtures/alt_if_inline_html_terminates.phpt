@@ -31,7 +31,7 @@
             },
             "span": {
               "start": 6,
-              "end": 31
+              "end": 30
             }
           },
           "elseif_branches": [],
@@ -40,12 +40,12 @@
       },
       "span": {
         "start": 6,
-        "end": 38
+        "end": 37
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 38
+    "end": 37
   }
 }

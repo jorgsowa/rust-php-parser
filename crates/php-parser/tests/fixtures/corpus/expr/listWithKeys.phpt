@@ -92,7 +92,7 @@ list('a' => list($b => $c), 'd' => $e) = $x;
       },
       "span": {
         "start": 7,
-        "end": 39
+        "end": 38
       }
     },
     {

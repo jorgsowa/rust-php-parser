@@ -68,7 +68,7 @@ class TaskService
       },
       "span": {
         "start": 6,
-        "end": 28
+        "end": 26
       }
     },
     {
@@ -105,7 +105,7 @@ class TaskService
               },
               "span": {
                 "start": 53,
-                "end": 71
+                "end": 66
               }
             },
             {
@@ -126,7 +126,7 @@ class TaskService
               },
               "span": {
                 "start": 71,
-                "end": 92
+                "end": 87
               }
             },
             {
@@ -147,7 +147,7 @@ class TaskService
               },
               "span": {
                 "start": 92,
-                "end": 111
+                "end": 106
               }
             },
             {
@@ -168,7 +168,7 @@ class TaskService
               },
               "span": {
                 "start": 111,
-                "end": 135
+                "end": 129
               }
             },
             {
@@ -234,7 +234,7 @@ class TaskService
                                       },
                                       "span": {
                                         "start": 216,
-                                        "end": 230
+                                        "end": 229
                                       }
                                     }
                                   ],
@@ -271,7 +271,7 @@ class TaskService
                                       },
                                       "span": {
                                         "start": 261,
-                                        "end": 278
+                                        "end": 277
                                       }
                                     }
                                   ],
@@ -308,7 +308,7 @@ class TaskService
                                       },
                                       "span": {
                                         "start": 312,
-                                        "end": 327
+                                        "end": 326
                                       }
                                     }
                                   ],
@@ -345,7 +345,7 @@ class TaskService
                                       },
                                       "span": {
                                         "start": 359,
-                                        "end": 378
+                                        "end": 377
                                       }
                                     }
                                   ],
@@ -374,7 +374,7 @@ class TaskService
                       },
                       "span": {
                         "start": 181,
-                        "end": 417
+                        "end": 412
                       }
                     }
                   ],
@@ -383,7 +383,7 @@ class TaskService
               },
               "span": {
                 "start": 135,
-                "end": 424
+                "end": 418
               }
             },
             {
@@ -470,7 +470,7 @@ class TaskService
                       },
                       "span": {
                         "start": 492,
-                        "end": 520
+                        "end": 511
                       }
                     },
                     {
@@ -498,7 +498,7 @@ class TaskService
                       },
                       "span": {
                         "start": 520,
-                        "end": 549
+                        "end": 544
                       }
                     }
                   ],
@@ -507,7 +507,7 @@ class TaskService
               },
               "span": {
                 "start": 424,
-                "end": 551
+                "end": 550
               }
             }
           ],
@@ -706,7 +706,7 @@ class TaskService
                       },
                       "span": {
                         "start": 702,
-                        "end": 728
+                        "end": 719
                       }
                     },
                     {
@@ -754,7 +754,7 @@ class TaskService
                       },
                       "span": {
                         "start": 728,
-                        "end": 758
+                        "end": 749
                       }
                     },
                     {
@@ -930,7 +930,7 @@ class TaskService
                       },
                       "span": {
                         "start": 758,
-                        "end": 834
+                        "end": 825
                       }
                     },
                     {
@@ -1015,7 +1015,7 @@ class TaskService
                       },
                       "span": {
                         "start": 834,
-                        "end": 880
+                        "end": 871
                       }
                     },
                     {
@@ -1161,14 +1161,14 @@ class TaskService
                                               },
                                               "span": {
                                                 "start": 1036,
-                                                "end": 1055
+                                                "end": 1054
                                               }
                                             }
                                           }
                                         },
                                         "span": {
                                           "start": 1022,
-                                          "end": 1055
+                                          "end": 1054
                                         }
                                       },
                                       "op": "BooleanOr",
@@ -1235,7 +1235,7 @@ class TaskService
                       },
                       "span": {
                         "start": 880,
-                        "end": 1103
+                        "end": 1098
                       }
                     }
                   ],
@@ -1244,7 +1244,7 @@ class TaskService
               },
               "span": {
                 "start": 616,
-                "end": 1105
+                "end": 1104
               }
             }
           ],

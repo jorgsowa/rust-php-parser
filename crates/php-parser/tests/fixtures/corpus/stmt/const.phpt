@@ -96,7 +96,7 @@ cannot use attributes on multi-constant declaration
       },
       "span": {
         "start": 7,
-        "end": 46
+        "end": 44
       }
     },
     {
@@ -141,7 +141,7 @@ cannot use attributes on multi-constant declaration
       },
       "span": {
         "start": 57,
-        "end": 86
+        "end": 84
       }
     },
     {
@@ -203,7 +203,7 @@ cannot use attributes on multi-constant declaration
       },
       "span": {
         "start": 105,
-        "end": 140
+        "end": 138
       }
     },
     {
@@ -265,7 +265,7 @@ cannot use attributes on multi-constant declaration
       },
       "span": {
         "start": 157,
-        "end": 189
+        "end": 187
       }
     },
     {

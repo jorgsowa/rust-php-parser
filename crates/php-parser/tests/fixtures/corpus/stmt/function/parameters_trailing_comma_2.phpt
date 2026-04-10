@@ -72,7 +72,7 @@ class Foo
               },
               "span": {
                 "start": 23,
-                "end": 73
+                "end": 72
               }
             }
           ],

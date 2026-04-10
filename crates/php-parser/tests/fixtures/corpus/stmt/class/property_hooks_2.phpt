@@ -34,7 +34,7 @@ class Test {
               },
               "span": {
                 "start": 23,
-                "end": 43
+                "end": 38
               }
             },
             {
@@ -71,7 +71,7 @@ class Test {
               },
               "span": {
                 "start": 43,
-                "end": 92
+                "end": 91
               }
             }
           ],

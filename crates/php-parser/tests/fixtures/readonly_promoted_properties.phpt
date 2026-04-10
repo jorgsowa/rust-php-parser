@@ -149,7 +149,7 @@ readonly class Point {
               },
               "span": {
                 "start": 33,
-                "end": 144
+                "end": 143
               }
             }
           ],

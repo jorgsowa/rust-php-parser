@@ -84,7 +84,7 @@ echo $result;
                           },
                           "span": {
                             "start": 52,
-                            "end": 67
+                            "end": 62
                           }
                         }
                       ]
@@ -164,7 +164,7 @@ echo $result;
                         },
                         "span": {
                           "start": 80,
-                          "end": 92
+                          "end": 91
                         }
                       },
                       "op": "Add",
@@ -237,7 +237,7 @@ echo $result;
               },
               "span": {
                 "start": 73,
-                "end": 107
+                "end": 106
               }
             }
           ],
@@ -315,7 +315,7 @@ echo $result;
       },
       "span": {
         "start": 110,
-        "end": 129
+        "end": 128
       }
     },
     {

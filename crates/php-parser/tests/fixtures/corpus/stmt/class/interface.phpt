@@ -51,7 +51,7 @@ interface A extends C, D {
               },
               "span": {
                 "start": 38,
-                "end": 59
+                "end": 58
               }
             }
           ],

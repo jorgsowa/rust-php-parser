@@ -27,7 +27,7 @@ enum Color {
               },
               "span": {
                 "start": 23,
-                "end": 37
+                "end": 32
               }
             },
             {
@@ -40,7 +40,7 @@ enum Color {
               },
               "span": {
                 "start": 37,
-                "end": 53
+                "end": 48
               }
             },
             {
@@ -53,7 +53,7 @@ enum Color {
               },
               "span": {
                 "start": 53,
-                "end": 64
+                "end": 63
               }
             }
           ],

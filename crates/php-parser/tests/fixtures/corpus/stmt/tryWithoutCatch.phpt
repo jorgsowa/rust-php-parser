@@ -38,7 +38,7 @@ expected catch or finally clause, found end of file
               },
               "span": {
                 "start": 17,
-                "end": 24
+                "end": 23
               }
             }
           ],

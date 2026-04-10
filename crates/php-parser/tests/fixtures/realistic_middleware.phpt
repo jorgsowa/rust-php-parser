@@ -112,7 +112,7 @@ class RateLimitMiddleware implements MiddlewareInterface
       },
       "span": {
         "start": 6,
-        "end": 32
+        "end": 30
       }
     },
     {
@@ -135,7 +135,7 @@ class RateLimitMiddleware implements MiddlewareInterface
       },
       "span": {
         "start": 32,
-        "end": 64
+        "end": 62
       }
     },
     {
@@ -167,7 +167,7 @@ class RateLimitMiddleware implements MiddlewareInterface
       },
       "span": {
         "start": 64,
-        "end": 93
+        "end": 92
       }
     },
     {
@@ -199,7 +199,7 @@ class RateLimitMiddleware implements MiddlewareInterface
       },
       "span": {
         "start": 93,
-        "end": 115
+        "end": 114
       }
     },
     {
@@ -231,7 +231,7 @@ class RateLimitMiddleware implements MiddlewareInterface
       },
       "span": {
         "start": 115,
-        "end": 139
+        "end": 137
       }
     },
     {
@@ -341,7 +341,7 @@ class RateLimitMiddleware implements MiddlewareInterface
               },
               "span": {
                 "start": 175,
-                "end": 243
+                "end": 242
               }
             }
           ],
@@ -553,7 +553,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                       },
                       "span": {
                         "start": 468,
-                        "end": 503
+                        "end": 498
                       }
                     }
                   ],
@@ -562,7 +562,7 @@ class RateLimitMiddleware implements MiddlewareInterface
               },
               "span": {
                 "start": 399,
-                "end": 510
+                "end": 504
               }
             },
             {
@@ -715,7 +715,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                       },
                       "span": {
                         "start": 591,
-                        "end": 629
+                        "end": 619
                       }
                     },
                     {
@@ -833,7 +833,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                                               },
                                               "span": {
                                                 "start": 730,
-                                                "end": 766
+                                                "end": 753
                                               }
                                             }
                                           ]
@@ -929,7 +929,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 796,
-                                        "end": 833
+                                        "end": 832
                                       }
                                     },
                                     "right": {
@@ -958,7 +958,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                       },
                       "span": {
                         "start": 787,
-                        "end": 848
+                        "end": 839
                       }
                     },
                     {
@@ -1061,7 +1061,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                       },
                       "span": {
                         "start": 848,
-                        "end": 902
+                        "end": 892
                       }
                     },
                     {
@@ -1175,7 +1175,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                                   },
                                   "span": {
                                     "start": 935,
-                                    "end": 999
+                                    "end": 990
                                   }
                                 }
                               ]
@@ -1290,7 +1290,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                               },
                               "span": {
                                 "start": 1028,
-                                "end": 1086
+                                "end": 1073
                               }
                             },
                             {
@@ -1394,7 +1394,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                               },
                               "span": {
                                 "start": 1086,
-                                "end": 1154
+                                "end": 1141
                               }
                             },
                             {
@@ -1469,7 +1469,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                   },
                                                   "span": {
                                                     "start": 1186,
-                                                    "end": 1203
+                                                    "end": 1202
                                                   }
                                                 },
                                                 "right": {
@@ -1506,7 +1506,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                               },
                               "span": {
                                 "start": 1154,
-                                "end": 1219
+                                "end": 1210
                               }
                             }
                           ],
@@ -1634,13 +1634,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                                   },
                                   "span": {
                                     "start": 1272,
-                                    "end": 1337
+                                    "end": 1328
                                   }
                                 }
                               ],
                               "span": {
                                 "start": 1227,
-                                "end": 1339
+                                "end": 1338
                               }
                             },
                             {
@@ -1760,7 +1760,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                                   },
                                   "span": {
                                     "start": 1400,
-                                    "end": 1459
+                                    "end": 1446
                                   }
                                 },
                                 {
@@ -1851,13 +1851,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                                   },
                                   "span": {
                                     "start": 1459,
-                                    "end": 1524
+                                    "end": 1515
                                   }
                                 }
                               ],
                               "span": {
                                 "start": 1345,
-                                "end": 1535
+                                "end": 1525
                               }
                             }
                           ],
@@ -1866,7 +1866,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                       },
                       "span": {
                         "start": 1010,
-                        "end": 1535
+                        "end": 1525
                       }
                     },
                     {
@@ -1913,7 +1913,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                       },
                       "span": {
                         "start": 1535,
-                        "end": 1563
+                        "end": 1558
                       }
                     }
                   ],
@@ -1922,7 +1922,7 @@ class RateLimitMiddleware implements MiddlewareInterface
               },
               "span": {
                 "start": 510,
-                "end": 1570
+                "end": 1564
               }
             },
             {
@@ -2079,7 +2079,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                       },
                       "span": {
                         "start": 1639,
-                        "end": 1704
+                        "end": 1699
                       }
                     }
                   ],
@@ -2088,7 +2088,7 @@ class RateLimitMiddleware implements MiddlewareInterface
               },
               "span": {
                 "start": 1570,
-                "end": 1706
+                "end": 1705
               }
             }
           ],
@@ -2142,7 +2142,7 @@ class RateLimitMiddleware implements MiddlewareInterface
               },
               "span": {
                 "start": 1772,
-                "end": 1810
+                "end": 1805
               }
             },
             {
@@ -2164,7 +2164,7 @@ class RateLimitMiddleware implements MiddlewareInterface
               },
               "span": {
                 "start": 1810,
-                "end": 1850
+                "end": 1844
               }
             },
             {
@@ -2317,7 +2317,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                       },
                       "span": {
                         "start": 1931,
-                        "end": 1964
+                        "end": 1955
                       }
                     },
                     {
@@ -2374,7 +2374,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                       },
                       "span": {
                         "start": 1964,
-                        "end": 1994
+                        "end": 1985
                       }
                     },
                     {
@@ -2450,7 +2450,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                       },
                       "span": {
                         "start": 1994,
-                        "end": 2035
+                        "end": 2025
                       }
                     },
                     {
@@ -2488,7 +2488,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       "span": {
                                         "start": 2048,
-                                        "end": 2067
+                                        "end": 2066
                                       }
                                     },
                                     "op": "Sub",
@@ -2518,7 +2518,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                       },
                       "span": {
                         "start": 2035,
-                        "end": 2085
+                        "end": 2076
                       }
                     },
                     {
@@ -2575,7 +2575,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                       },
                       "span": {
                         "start": 2085,
-                        "end": 2121
+                        "end": 2111
                       }
                     },
                     {
@@ -2761,7 +2761,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                       },
                       "span": {
                         "start": 2121,
-                        "end": 2276
+                        "end": 2271
                       }
                     }
                   ],
@@ -2770,7 +2770,7 @@ class RateLimitMiddleware implements MiddlewareInterface
               },
               "span": {
                 "start": 1850,
-                "end": 2283
+                "end": 2277
               }
             },
             {
@@ -2859,7 +2859,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                       },
                       "span": {
                         "start": 2341,
-                        "end": 2370
+                        "end": 2361
                       }
                     },
                     {
@@ -2892,7 +2892,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                                 },
                                 "span": {
                                   "start": 2370,
-                                  "end": 2384
+                                  "end": 2383
                                 }
                               },
                               "op": "Assign",
@@ -2965,7 +2965,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                                             },
                                             "span": {
                                               "start": 2409,
-                                              "end": 2423
+                                              "end": 2422
                                             }
                                           },
                                           "op": "Add",
@@ -3011,7 +3011,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                       },
                       "span": {
                         "start": 2370,
-                        "end": 2440
+                        "end": 2431
                       }
                     },
                     {
@@ -3047,7 +3047,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                       },
                       "span": {
                         "start": 2440,
-                        "end": 2466
+                        "end": 2461
                       }
                     }
                   ],
@@ -3056,7 +3056,7 @@ class RateLimitMiddleware implements MiddlewareInterface
               },
               "span": {
                 "start": 2283,
-                "end": 2468
+                "end": 2467
               }
             }
           ],

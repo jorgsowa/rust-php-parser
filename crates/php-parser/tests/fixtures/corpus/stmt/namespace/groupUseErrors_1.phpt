@@ -36,7 +36,7 @@ expected ';', found 'use'
       },
       "span": {
         "start": 27,
-        "end": 41
+        "end": 40
       }
     },
     {

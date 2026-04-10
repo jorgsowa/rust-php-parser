@@ -102,7 +102,7 @@ list($x, , $z) = $array;
       },
       "span": {
         "start": 6,
-        "end": 38
+        "end": 37
       }
     },
     {

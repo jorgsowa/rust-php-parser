@@ -39,12 +39,12 @@ unterminated block comment
       },
       "span": {
         "start": 6,
-        "end": 45
+        "end": 13
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 45
+    "end": 13
   }
 }

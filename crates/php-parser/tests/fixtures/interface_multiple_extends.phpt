@@ -67,7 +67,7 @@ interface ReadWrite extends Readable, Writable {
               },
               "span": {
                 "start": 59,
-                "end": 90
+                "end": 89
               }
             }
           ],

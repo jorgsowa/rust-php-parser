@@ -22,7 +22,7 @@ parse_version=8.1
               },
               "span": {
                 "start": 20,
-                "end": 33
+                "end": 32
               }
             },
             {
@@ -35,7 +35,7 @@ parse_version=8.1
               },
               "span": {
                 "start": 33,
-                "end": 48
+                "end": 47
               }
             }
           ],

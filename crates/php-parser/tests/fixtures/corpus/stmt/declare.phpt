@@ -34,7 +34,7 @@ enddeclare;
       },
       "span": {
         "start": 7,
-        "end": 25
+        "end": 23
       }
     },
     {
@@ -85,7 +85,7 @@ enddeclare;
                   },
                   "span": {
                     "start": 54,
-                    "end": 66
+                    "end": 65
                   }
                 }
               ]
@@ -99,7 +99,7 @@ enddeclare;
       },
       "span": {
         "start": 25,
-        "end": 69
+        "end": 67
       }
     },
     {

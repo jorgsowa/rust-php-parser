@@ -119,7 +119,7 @@ function bar((A&B)|(C&D) $y): (E&F)|null {
               },
               "span": {
                 "start": 46,
-                "end": 57
+                "end": 56
               }
             }
           ],
@@ -344,7 +344,7 @@ function bar((A&B)|(C&D) $y): (E&F)|null {
               },
               "span": {
                 "start": 106,
-                "end": 117
+                "end": 116
               }
             }
           ],

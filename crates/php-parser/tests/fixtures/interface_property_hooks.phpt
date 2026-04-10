@@ -52,7 +52,7 @@ interface HasName {
                       "attributes": [],
                       "span": {
                         "start": 52,
-                        "end": 57
+                        "end": 56
                       }
                     }
                   ]
@@ -60,7 +60,7 @@ interface HasName {
               },
               "span": {
                 "start": 30,
-                "end": 59
+                "end": 58
               }
             }
           ],

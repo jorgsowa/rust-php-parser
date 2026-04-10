@@ -23,7 +23,7 @@ min_php=8.2
               },
               "span": {
                 "start": 32,
-                "end": 45
+                "end": 44
               }
             }
           ],

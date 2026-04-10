@@ -42,7 +42,7 @@ class Config {
               },
               "span": {
                 "start": 25,
-                "end": 59
+                "end": 54
               }
             },
             {
@@ -64,7 +64,7 @@ class Config {
               },
               "span": {
                 "start": 59,
-                "end": 92
+                "end": 87
               }
             },
             {
@@ -175,7 +175,7 @@ class Config {
                       },
                       "span": {
                         "start": 177,
-                        "end": 197
+                        "end": 192
                       }
                     }
                   ],
@@ -184,7 +184,7 @@ class Config {
               },
               "span": {
                 "start": 126,
-                "end": 199
+                "end": 198
               }
             }
           ],

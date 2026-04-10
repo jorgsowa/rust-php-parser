@@ -51,7 +51,7 @@ class Test {
                       "attributes": [],
                       "span": {
                         "start": 46,
-                        "end": 63
+                        "end": 58
                       }
                     }
                   ]
@@ -59,7 +59,7 @@ class Test {
               },
               "span": {
                 "start": 23,
-                "end": 65
+                "end": 64
               }
             }
           ],

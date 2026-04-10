@@ -34,7 +34,7 @@ expected ';' after expression
       },
       "span": {
         "start": 7,
-        "end": 14
+        "end": 13
       }
     },
     {
@@ -56,13 +56,13 @@ expected ';' after expression
           },
           "span": {
             "start": 14,
-            "end": 20
+            "end": 19
           }
         }
       },
       "span": {
         "start": 14,
-        "end": 20
+        "end": 19
       }
     },
     {

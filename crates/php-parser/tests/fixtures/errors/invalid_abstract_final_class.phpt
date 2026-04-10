@@ -9,7 +9,7 @@ expected 'class', found 'final'
       "kind": "Error",
       "span": {
         "start": 6,
-        "end": 15
+        "end": 14
       }
     },
     {

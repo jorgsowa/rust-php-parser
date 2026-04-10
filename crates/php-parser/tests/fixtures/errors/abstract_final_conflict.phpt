@@ -34,7 +34,7 @@ cannot use 'abstract' and 'final' together
               },
               "span": {
                 "start": 16,
-                "end": 45
+                "end": 44
               }
             }
           ],

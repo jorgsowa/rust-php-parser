@@ -39,7 +39,7 @@ cannot use 'abstract' as constant modifier
               },
               "span": {
                 "start": 20,
-                "end": 42
+                "end": 41
               }
             }
           ],

@@ -19,12 +19,12 @@ expected ';' after expression
       },
       "span": {
         "start": 6,
-        "end": 19
+        "end": 9
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 19
+    "end": 9
   }
 }

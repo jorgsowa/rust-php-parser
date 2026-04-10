@@ -91,7 +91,7 @@ function combined() {
               },
               "span": {
                 "start": 32,
-                "end": 58
+                "end": 53
               }
             },
             {
@@ -131,7 +131,7 @@ function combined() {
               },
               "span": {
                 "start": 58,
-                "end": 87
+                "end": 86
               }
             }
           ],

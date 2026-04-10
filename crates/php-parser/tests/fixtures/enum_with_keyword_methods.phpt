@@ -30,7 +30,7 @@ enum Status {
               },
               "span": {
                 "start": 24,
-                "end": 41
+                "end": 36
               }
             },
             {
@@ -43,7 +43,7 @@ enum Status {
               },
               "span": {
                 "start": 41,
-                "end": 61
+                "end": 55
               }
             },
             {
@@ -89,7 +89,7 @@ enum Status {
                       },
                       "span": {
                         "start": 93,
-                        "end": 104
+                        "end": 103
                       }
                     }
                   ],
@@ -98,7 +98,7 @@ enum Status {
               },
               "span": {
                 "start": 61,
-                "end": 110
+                "end": 105
               }
             },
             {
@@ -144,7 +144,7 @@ enum Status {
                       },
                       "span": {
                         "start": 144,
-                        "end": 155
+                        "end": 154
                       }
                     }
                   ],
@@ -153,7 +153,7 @@ enum Status {
               },
               "span": {
                 "start": 110,
-                "end": 161
+                "end": 156
               }
             },
             {
@@ -190,7 +190,7 @@ enum Status {
               },
               "span": {
                 "start": 161,
-                "end": 195
+                "end": 194
               }
             }
           ],

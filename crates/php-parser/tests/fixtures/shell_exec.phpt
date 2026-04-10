@@ -44,7 +44,7 @@ $complex = `{$obj->getCmd()} --flag`;
       },
       "span": {
         "start": 6,
-        "end": 23
+        "end": 22
       }
     },
     {
@@ -96,7 +96,7 @@ $complex = `{$obj->getCmd()} --flag`;
       },
       "span": {
         "start": 23,
-        "end": 43
+        "end": 42
       }
     },
     {

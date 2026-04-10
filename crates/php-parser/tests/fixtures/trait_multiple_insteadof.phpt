@@ -34,7 +34,7 @@ class C {
               },
               "span": {
                 "start": 17,
-                "end": 40
+                "end": 39
               }
             }
           ],
@@ -68,7 +68,7 @@ class C {
               },
               "span": {
                 "start": 53,
-                "end": 76
+                "end": 75
               }
             }
           ],
@@ -102,7 +102,7 @@ class C {
               },
               "span": {
                 "start": 89,
-                "end": 112
+                "end": 111
               }
             }
           ],
@@ -202,7 +202,7 @@ class C {
                       },
                       "span": {
                         "start": 153,
-                        "end": 185
+                        "end": 176
                       }
                     },
                     {
@@ -235,7 +235,7 @@ class C {
                       },
                       "span": {
                         "start": 185,
-                        "end": 209
+                        "end": 204
                       }
                     }
                   ]
@@ -243,7 +243,7 @@ class C {
               },
               "span": {
                 "start": 128,
-                "end": 211
+                "end": 210
               }
             }
           ],

@@ -38,7 +38,7 @@ function counter() {
               },
               "span": {
                 "start": 31,
-                "end": 54
+                "end": 49
               }
             },
             {
@@ -57,7 +57,7 @@ function counter() {
               },
               "span": {
                 "start": 54,
-                "end": 74
+                "end": 69
               }
             },
             {
@@ -85,7 +85,7 @@ function counter() {
               },
               "span": {
                 "start": 74,
-                "end": 88
+                "end": 83
               }
             },
             {
@@ -102,7 +102,7 @@ function counter() {
               },
               "span": {
                 "start": 88,
-                "end": 103
+                "end": 102
               }
             }
           ],

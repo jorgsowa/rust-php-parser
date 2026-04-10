@@ -93,7 +93,7 @@ expected ']', found ';'
       },
       "span": {
         "start": 6,
-        "end": 21
+        "end": 20
       }
     },
     {

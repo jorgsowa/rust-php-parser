@@ -55,7 +55,7 @@ use App\{Models\User as U, Services\Auth as A};
       },
       "span": {
         "start": 6,
-        "end": 44
+        "end": 43
       }
     },
     {
@@ -106,7 +106,7 @@ use App\{Models\User as U, Services\Auth as A};
       },
       "span": {
         "start": 44,
-        "end": 89
+        "end": 88
       }
     },
     {
@@ -157,7 +157,7 @@ use App\{Models\User as U, Services\Auth as A};
       },
       "span": {
         "start": 89,
-        "end": 130
+        "end": 129
       }
     },
     {
@@ -175,7 +175,7 @@ use App\{Models\User as U, Services\Auth as A};
                 "kind": "Qualified",
                 "span": {
                   "start": 134,
-                  "end": 151
+                  "end": 150
                 }
               },
               "alias": "U",
@@ -194,7 +194,7 @@ use App\{Models\User as U, Services\Auth as A};
                 "kind": "Qualified",
                 "span": {
                   "start": 134,
-                  "end": 171
+                  "end": 170
                 }
               },
               "alias": "A",

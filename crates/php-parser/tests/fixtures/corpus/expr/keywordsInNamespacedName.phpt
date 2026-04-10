@@ -30,7 +30,7 @@ private\protected\public\static\abstract\final();
       },
       "span": {
         "start": 6,
-        "end": 20
+        "end": 19
       }
     },
     {
@@ -52,7 +52,7 @@ private\protected\public\static\abstract\final();
       },
       "span": {
         "start": 20,
-        "end": 38
+        "end": 37
       }
     },
     {
@@ -73,7 +73,7 @@ private\protected\public\static\abstract\final();
       },
       "span": {
         "start": 38,
-        "end": 54
+        "end": 53
       }
     },
     {
@@ -94,7 +94,7 @@ private\protected\public\static\abstract\final();
       },
       "span": {
         "start": 54,
-        "end": 72
+        "end": 71
       }
     },
     {
@@ -115,7 +115,7 @@ private\protected\public\static\abstract\final();
       },
       "span": {
         "start": 72,
-        "end": 90
+        "end": 89
       }
     },
     {
@@ -143,7 +143,7 @@ private\protected\public\static\abstract\final();
       },
       "span": {
         "start": 90,
-        "end": 100
+        "end": 99
       }
     },
     {
@@ -171,7 +171,7 @@ private\protected\public\static\abstract\final();
       },
       "span": {
         "start": 100,
-        "end": 111
+        "end": 110
       }
     },
     {
@@ -199,7 +199,7 @@ private\protected\public\static\abstract\final();
       },
       "span": {
         "start": 111,
-        "end": 131
+        "end": 130
       }
     },
     {

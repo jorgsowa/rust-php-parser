@@ -38,21 +38,21 @@ expected expression
                   },
                   "span": {
                     "start": 21,
-                    "end": 29
+                    "end": 28
                   }
                 },
                 {
                   "kind": "Error",
                   "span": {
                     "start": 29,
-                    "end": 29
+                    "end": 28
                   }
                 }
               ]
             },
             "span": {
               "start": 6,
-              "end": 31
+              "end": 30
             }
           },
           "elseif_branches": [],

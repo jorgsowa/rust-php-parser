@@ -24,7 +24,7 @@ expected identifier, found ';'
               "alias": null,
               "span": {
                 "start": 10,
-                "end": 10
+                "end": 9
               }
             }
           ]
@@ -32,7 +32,7 @@ expected identifier, found ';'
       },
       "span": {
         "start": 6,
-        "end": 12
+        "end": 11
       }
     },
     {

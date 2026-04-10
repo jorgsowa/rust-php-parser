@@ -90,7 +90,7 @@ $obj = new class($x) extends Base implements Iface {
       },
       "span": {
         "start": 32,
-        "end": 79
+        "end": 52
       }
     },
     {
@@ -186,7 +186,7 @@ $obj = new class($x) extends Base implements Iface {
       },
       "span": {
         "start": 79,
-        "end": 123
+        "end": 105
       }
     },
     {
@@ -254,7 +254,7 @@ $obj = new class($x) extends Base implements Iface {
       },
       "span": {
         "start": 123,
-        "end": 176
+        "end": 155
       }
     },
     {
@@ -334,7 +334,7 @@ $obj = new class($x) extends Base implements Iface {
       },
       "span": {
         "start": 176,
-        "end": 234
+        "end": 216
       }
     },
     {
@@ -419,7 +419,7 @@ $obj = new class($x) extends Base implements Iface {
                                       },
                                       "span": {
                                         "start": 311,
-                                        "end": 328
+                                        "end": 323
                                       }
                                     }
                                   ],
@@ -428,7 +428,7 @@ $obj = new class($x) extends Base implements Iface {
                               },
                               "span": {
                                 "start": 277,
-                                "end": 330
+                                "end": 329
                               }
                             }
                           ],
@@ -458,7 +458,7 @@ $obj = new class($x) extends Base implements Iface {
       },
       "span": {
         "start": 234,
-        "end": 393
+        "end": 332
       }
     },
     {
@@ -611,7 +611,7 @@ $obj = new class($x) extends Base implements Iface {
                                       },
                                       "span": {
                                         "start": 512,
-                                        "end": 535
+                                        "end": 530
                                       }
                                     }
                                   ],
@@ -620,7 +620,7 @@ $obj = new class($x) extends Base implements Iface {
                               },
                               "span": {
                                 "start": 468,
-                                "end": 541
+                                "end": 536
                               }
                             },
                             {
@@ -668,7 +668,7 @@ $obj = new class($x) extends Base implements Iface {
                                       },
                                       "span": {
                                         "start": 578,
-                                        "end": 601
+                                        "end": 596
                                       }
                                     }
                                   ],
@@ -677,7 +677,7 @@ $obj = new class($x) extends Base implements Iface {
                               },
                               "span": {
                                 "start": 541,
-                                "end": 603
+                                "end": 602
                               }
                             }
                           ],

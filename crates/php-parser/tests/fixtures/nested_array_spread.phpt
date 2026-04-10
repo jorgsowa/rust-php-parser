@@ -144,7 +144,7 @@ $flat = [...$arrays[0], ...$arrays[1], 5];
       },
       "span": {
         "start": 6,
-        "end": 34
+        "end": 33
       }
     },
     {

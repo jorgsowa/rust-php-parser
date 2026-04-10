@@ -52,7 +52,7 @@ function gen() {
               },
               "span": {
                 "start": 28,
-                "end": 42
+                "end": 37
               }
             },
             {
@@ -92,7 +92,7 @@ function gen() {
               },
               "span": {
                 "start": 42,
-                "end": 56
+                "end": 51
               }
             },
             {
@@ -110,7 +110,7 @@ function gen() {
                         },
                         "span": {
                           "start": 56,
-                          "end": 62
+                          "end": 61
                         }
                       },
                       "op": "Mul",
@@ -144,7 +144,7 @@ function gen() {
               },
               "span": {
                 "start": 56,
-                "end": 68
+                "end": 67
               }
             }
           ],

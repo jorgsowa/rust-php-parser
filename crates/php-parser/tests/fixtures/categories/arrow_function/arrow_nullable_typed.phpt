@@ -140,7 +140,7 @@
                             },
                             "span": {
                               "start": 41,
-                              "end": 52
+                              "end": 51
                             }
                           },
                           "else_expr": {

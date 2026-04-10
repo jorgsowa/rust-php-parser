@@ -74,7 +74,7 @@ min_php=8.4
                       "attributes": [],
                       "span": {
                         "start": 35,
-                        "end": 52
+                        "end": 51
                       }
                     }
                   ]
@@ -82,7 +82,7 @@ min_php=8.4
               },
               "span": {
                 "start": 16,
-                "end": 54
+                "end": 53
               }
             }
           ],

@@ -52,7 +52,7 @@ expected ';', found '}'
               },
               "span": {
                 "start": 44,
-                "end": 62
+                "end": 56
               }
             },
             {
@@ -154,7 +154,7 @@ expected ';', found '}'
                       },
                       "span": {
                         "start": 111,
-                        "end": 132
+                        "end": 127
                       }
                     }
                   ],
@@ -163,7 +163,7 @@ expected ';', found '}'
               },
               "span": {
                 "start": 62,
-                "end": 134
+                "end": 133
               }
             }
           ],
@@ -206,7 +206,7 @@ expected ';', found '}'
               },
               "span": {
                 "start": 150,
-                "end": 162
+                "end": 161
               }
             }
           ],

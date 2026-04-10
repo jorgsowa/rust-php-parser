@@ -50,7 +50,7 @@ class Bar {
       },
       "span": {
         "start": 7,
-        "end": 27
+        "end": 25
       }
     },
     {
@@ -129,7 +129,7 @@ class Bar {
               },
               "span": {
                 "start": 58,
-                "end": 79
+                "end": 78
               }
             }
           ],
@@ -185,7 +185,7 @@ class Bar {
               },
               "span": {
                 "start": 115,
-                "end": 138
+                "end": 133
               }
             },
             {

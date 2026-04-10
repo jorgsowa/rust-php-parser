@@ -60,7 +60,7 @@ expected variable, found ')'
                       "attributes": [],
                       "span": {
                         "start": 42,
-                        "end": 46
+                        "end": 45
                       }
                     }
                   ],
@@ -71,7 +71,7 @@ expected variable, found ')'
               },
               "span": {
                 "start": 22,
-                "end": 55
+                "end": 50
               }
             },
             {
@@ -117,7 +117,7 @@ expected variable, found ')'
                       },
                       "span": {
                         "start": 88,
-                        "end": 101
+                        "end": 100
                       }
                     }
                   ],
@@ -126,7 +126,7 @@ expected variable, found ')'
               },
               "span": {
                 "start": 55,
-                "end": 103
+                "end": 102
               }
             }
           ],

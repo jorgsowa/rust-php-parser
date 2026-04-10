@@ -19,7 +19,7 @@ use A\B\{C as D, function e as f, const G as H};
                 "kind": "Qualified",
                 "span": {
                   "start": 10,
-                  "end": 17
+                  "end": 16
                 }
               },
               "alias": "D",
@@ -38,7 +38,7 @@ use A\B\{C as D, function e as f, const G as H};
                 "kind": "Qualified",
                 "span": {
                   "start": 10,
-                  "end": 34
+                  "end": 33
                 }
               },
               "alias": "f",
@@ -58,7 +58,7 @@ use A\B\{C as D, function e as f, const G as H};
                 "kind": "Qualified",
                 "span": {
                   "start": 10,
-                  "end": 48
+                  "end": 47
                 }
               },
               "alias": "H",

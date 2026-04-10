@@ -78,18 +78,18 @@
                               },
                               "span": {
                                 "start": 51,
-                                "end": 67
+                                "end": 66
                               }
                             }
                           },
                           "span": {
                             "start": 45,
-                            "end": 67
+                            "end": 66
                           }
                         },
                         "span": {
                           "start": 34,
-                          "end": 67
+                          "end": 66
                         }
                       }
                     ]

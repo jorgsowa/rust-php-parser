@@ -49,7 +49,7 @@ expected 'as', found variable
                   },
                   "span": {
                     "start": 35,
-                    "end": 47
+                    "end": 46
                   }
                 }
               ]

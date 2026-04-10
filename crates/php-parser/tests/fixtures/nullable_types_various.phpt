@@ -148,7 +148,7 @@ function process(?string $name, ?int $count, ?array $items): ?bool {
               },
               "span": {
                 "start": 79,
-                "end": 92
+                "end": 91
               }
             }
           ],

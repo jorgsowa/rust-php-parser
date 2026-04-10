@@ -107,7 +107,7 @@ final readonly class Coordinate {
               },
               "span": {
                 "start": 44,
-                "end": 136
+                "end": 135
               }
             }
           ],

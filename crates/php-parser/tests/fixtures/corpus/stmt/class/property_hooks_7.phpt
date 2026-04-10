@@ -56,7 +56,7 @@ cannot have hooks on comma-separated property
               },
               "span": {
                 "start": 24,
-                "end": 47
+                "end": 45
               }
             }
           ],

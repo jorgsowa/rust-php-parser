@@ -39,7 +39,7 @@ cannot use 'static' as constant modifier
               },
               "span": {
                 "start": 20,
-                "end": 40
+                "end": 39
               }
             }
           ],

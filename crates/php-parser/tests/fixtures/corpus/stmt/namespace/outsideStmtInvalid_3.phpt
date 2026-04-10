@@ -52,7 +52,7 @@ namespace B {}
       },
       "span": {
         "start": 21,
-        "end": 39
+        "end": 38
       }
     },
     {
@@ -80,7 +80,7 @@ namespace B {}
       },
       "span": {
         "start": 39,
-        "end": 46
+        "end": 45
       }
     },
     {

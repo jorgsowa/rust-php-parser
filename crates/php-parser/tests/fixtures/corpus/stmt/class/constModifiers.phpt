@@ -42,7 +42,7 @@ class Foo {
               },
               "span": {
                 "start": 23,
-                "end": 40
+                "end": 35
               }
             },
             {
@@ -64,7 +64,7 @@ class Foo {
               },
               "span": {
                 "start": 40,
-                "end": 64
+                "end": 59
               }
             },
             {
@@ -86,7 +86,7 @@ class Foo {
               },
               "span": {
                 "start": 64,
-                "end": 91
+                "end": 86
               }
             },
             {
@@ -108,7 +108,7 @@ class Foo {
               },
               "span": {
                 "start": 91,
-                "end": 116
+                "end": 111
               }
             },
             {
@@ -130,7 +130,7 @@ class Foo {
               },
               "span": {
                 "start": 116,
-                "end": 135
+                "end": 134
               }
             }
           ],

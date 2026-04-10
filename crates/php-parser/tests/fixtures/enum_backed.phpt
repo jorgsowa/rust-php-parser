@@ -44,7 +44,7 @@ enum Status: string {
               },
               "span": {
                 "start": 32,
-                "end": 60
+                "end": 55
               }
             },
             {
@@ -65,7 +65,7 @@ enum Status: string {
               },
               "span": {
                 "start": 60,
-                "end": 92
+                "end": 87
               }
             },
             {
@@ -86,7 +86,7 @@ enum Status: string {
               },
               "span": {
                 "start": 92,
-                "end": 118
+                "end": 117
               }
             }
           ],

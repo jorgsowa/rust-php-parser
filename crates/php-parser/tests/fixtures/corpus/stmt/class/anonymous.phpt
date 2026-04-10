@@ -56,7 +56,7 @@ class A {
                         },
                         "span": {
                           "start": 23,
-                          "end": 49
+                          "end": 48
                         }
                       }
                     ],
@@ -79,7 +79,7 @@ class A {
       },
       "span": {
         "start": 7,
-        "end": 52
+        "end": 51
       }
     },
     {
@@ -148,7 +148,7 @@ class A {
       },
       "span": {
         "start": 52,
-        "end": 92
+        "end": 91
       }
     },
     {
@@ -206,7 +206,7 @@ class A {
       },
       "span": {
         "start": 92,
-        "end": 126
+        "end": 125
       }
     },
     {
@@ -255,7 +255,7 @@ class A {
                         },
                         "span": {
                           "start": 160,
-                          "end": 167
+                          "end": 166
                         }
                       }
                     ],
@@ -315,7 +315,7 @@ class A {
       },
       "span": {
         "start": 126,
-        "end": 171
+        "end": 169
       }
     },
     {
@@ -387,7 +387,7 @@ class A {
                                         },
                                         "span": {
                                           "start": 266,
-                                          "end": 289
+                                          "end": 280
                                         }
                                       }
                                     ],
@@ -429,7 +429,7 @@ class A {
                       },
                       "span": {
                         "start": 218,
-                        "end": 296
+                        "end": 291
                       }
                     }
                   ],
@@ -438,7 +438,7 @@ class A {
               },
               "span": {
                 "start": 185,
-                "end": 298
+                "end": 297
               }
             }
           ],

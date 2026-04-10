@@ -45,7 +45,7 @@ enum Suit: string
               },
               "span": {
                 "start": 31,
-                "end": 54
+                "end": 49
               }
             },
             {
@@ -58,7 +58,7 @@ enum Suit: string
               },
               "span": {
                 "start": 54,
-                "end": 73
+                "end": 68
               }
             },
             {
@@ -79,7 +79,7 @@ enum Suit: string
               },
               "span": {
                 "start": 73,
-                "end": 95
+                "end": 90
               }
             },
             {
@@ -100,7 +100,7 @@ enum Suit: string
               },
               "span": {
                 "start": 95,
-                "end": 114
+                "end": 113
               }
             }
           ],

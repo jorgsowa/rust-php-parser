@@ -25,7 +25,7 @@ __halt_compiler();
       },
       "span": {
         "start": 7,
-        "end": 20
+        "end": 19
       }
     },
     {
@@ -42,7 +42,7 @@ __halt_compiler();
       },
       "span": {
         "start": 20,
-        "end": 24
+        "end": 23
       }
     },
     {

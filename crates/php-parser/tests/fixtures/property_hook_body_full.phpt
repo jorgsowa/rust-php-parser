@@ -83,7 +83,7 @@ min_php=8.4
                             },
                             "span": {
                               "start": 41,
-                              "end": 58
+                              "end": 57
                             }
                           }
                         ]
@@ -94,7 +94,7 @@ min_php=8.4
                       "attributes": [],
                       "span": {
                         "start": 35,
-                        "end": 60
+                        "end": 59
                       }
                     },
                     {
@@ -154,7 +154,7 @@ min_php=8.4
                             },
                             "span": {
                               "start": 66,
-                              "end": 85
+                              "end": 84
                             }
                           }
                         ]
@@ -165,7 +165,7 @@ min_php=8.4
                       "attributes": [],
                       "span": {
                         "start": 60,
-                        "end": 87
+                        "end": 86
                       }
                     }
                   ]
@@ -173,7 +173,7 @@ min_php=8.4
               },
               "span": {
                 "start": 16,
-                "end": 89
+                "end": 88
               }
             }
           ],

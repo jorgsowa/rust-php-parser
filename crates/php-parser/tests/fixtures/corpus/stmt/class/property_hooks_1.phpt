@@ -63,7 +63,7 @@ class Test {
                             },
                             "span": {
                               "start": 52,
-                              "end": 63
+                              "end": 62
                             }
                           }
                         ]
@@ -74,7 +74,7 @@ class Test {
                       "attributes": [],
                       "span": {
                         "start": 46,
-                        "end": 73
+                        "end": 64
                       }
                     },
                     {
@@ -97,7 +97,7 @@ class Test {
                             },
                             "span": {
                               "start": 79,
-                              "end": 92
+                              "end": 91
                             }
                           }
                         ]
@@ -108,7 +108,7 @@ class Test {
                       "attributes": [],
                       "span": {
                         "start": 73,
-                        "end": 98
+                        "end": 93
                       }
                     }
                   ]
@@ -116,7 +116,7 @@ class Test {
               },
               "span": {
                 "start": 23,
-                "end": 104
+                "end": 99
               }
             },
             {
@@ -150,7 +150,7 @@ class Test {
                       "attributes": [],
                       "span": {
                         "start": 129,
-                        "end": 148
+                        "end": 139
                       }
                     },
                     {
@@ -172,7 +172,7 @@ class Test {
                       "attributes": [],
                       "span": {
                         "start": 148,
-                        "end": 167
+                        "end": 162
                       }
                     }
                   ]
@@ -180,7 +180,7 @@ class Test {
               },
               "span": {
                 "start": 104,
-                "end": 173
+                "end": 168
               }
             },
             {
@@ -204,7 +204,7 @@ class Test {
                       "attributes": [],
                       "span": {
                         "start": 199,
-                        "end": 213
+                        "end": 204
                       }
                     },
                     {
@@ -216,7 +216,7 @@ class Test {
                       "attributes": [],
                       "span": {
                         "start": 213,
-                        "end": 222
+                        "end": 217
                       }
                     }
                   ]
@@ -224,7 +224,7 @@ class Test {
               },
               "span": {
                 "start": 173,
-                "end": 228
+                "end": 223
               }
             },
             {
@@ -257,7 +257,7 @@ class Test {
                             },
                             "span": {
                               "start": 264,
-                              "end": 275
+                              "end": 274
                             }
                           }
                         ]
@@ -268,7 +268,7 @@ class Test {
                       "attributes": [],
                       "span": {
                         "start": 252,
-                        "end": 285
+                        "end": 276
                       }
                     },
                     {
@@ -316,7 +316,7 @@ class Test {
                       "attributes": [],
                       "span": {
                         "start": 285,
-                        "end": 312
+                        "end": 307
                       }
                     }
                   ]
@@ -324,7 +324,7 @@ class Test {
               },
               "span": {
                 "start": 228,
-                "end": 314
+                "end": 313
               }
             }
           ],

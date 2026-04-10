@@ -72,7 +72,7 @@ expected expression
       },
       "span": {
         "start": 7,
-        "end": 17
+        "end": 16
       }
     },
     {

@@ -52,7 +52,7 @@ function() use($a) : \Foo\Bar {};
                   },
                   "span": {
                     "start": 21,
-                    "end": 25
+                    "end": 24
                   }
                 }
               ],
@@ -67,7 +67,7 @@ function() use($a) : \Foo\Bar {};
       },
       "span": {
         "start": 6,
-        "end": 28
+        "end": 27
       }
     },
     {
@@ -118,7 +118,7 @@ function() use($a) : \Foo\Bar {};
       },
       "span": {
         "start": 28,
-        "end": 53
+        "end": 52
       }
     },
     {
@@ -160,7 +160,7 @@ function() use($a) : \Foo\Bar {};
       },
       "span": {
         "start": 53,
-        "end": 81
+        "end": 80
       }
     },
     {
@@ -202,7 +202,7 @@ function() use($a) : \Foo\Bar {};
       },
       "span": {
         "start": 81,
-        "end": 100
+        "end": 99
       }
     },
     {
@@ -227,7 +227,7 @@ function() use($a) : \Foo\Bar {};
       },
       "span": {
         "start": 100,
-        "end": 122
+        "end": 121
       }
     },
     {
@@ -286,7 +286,7 @@ function() use($a) : \Foo\Bar {};
       },
       "span": {
         "start": 122,
-        "end": 147
+        "end": 146
       }
     },
     {

@@ -19,12 +19,12 @@
       },
       "span": {
         "start": 4,
-        "end": 11
+        "end": 10
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 11
+    "end": 10
   }
 }

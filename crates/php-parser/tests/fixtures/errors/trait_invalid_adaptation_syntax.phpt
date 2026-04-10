@@ -29,7 +29,7 @@ expected '::' or 'as', found ';'
               },
               "span": {
                 "start": 16,
-                "end": 39
+                "end": 38
               }
             }
           ],
@@ -73,7 +73,7 @@ expected '::' or 'as', found ';'
               },
               "span": {
                 "start": 51,
-                "end": 72
+                "end": 71
               }
             }
           ],

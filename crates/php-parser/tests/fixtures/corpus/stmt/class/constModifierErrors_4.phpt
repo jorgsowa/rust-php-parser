@@ -39,7 +39,7 @@ cannot use multiple visibility modifiers
               },
               "span": {
                 "start": 20,
-                "end": 47
+                "end": 46
               }
             }
           ],

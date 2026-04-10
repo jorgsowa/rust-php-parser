@@ -61,7 +61,7 @@ $d = $obj instanceof static;
       },
       "span": {
         "start": 6,
-        "end": 39
+        "end": 38
       }
     },
     {
@@ -118,7 +118,7 @@ $d = $obj instanceof static;
       },
       "span": {
         "start": 39,
-        "end": 66
+        "end": 65
       }
     },
     {
@@ -175,7 +175,7 @@ $d = $obj instanceof static;
       },
       "span": {
         "start": 66,
-        "end": 95
+        "end": 94
       }
     },
     {

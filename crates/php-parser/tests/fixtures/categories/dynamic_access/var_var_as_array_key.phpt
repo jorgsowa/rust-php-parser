@@ -41,7 +41,7 @@
                 },
                 "span": {
                   "start": 6,
-                  "end": 18
+                  "end": 17
                 }
               },
               "op": "Assign",

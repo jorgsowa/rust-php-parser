@@ -188,7 +188,7 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
               },
               "span": {
                 "start": 88,
-                "end": 101
+                "end": 100
               }
             }
           ],

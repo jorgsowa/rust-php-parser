@@ -42,7 +42,7 @@ $nothing = null;
       },
       "span": {
         "start": 6,
-        "end": 15
+        "end": 14
       }
     },
     {
@@ -79,7 +79,7 @@ $nothing = null;
       },
       "span": {
         "start": 15,
-        "end": 32
+        "end": 31
       }
     },
     {
@@ -116,7 +116,7 @@ $nothing = null;
       },
       "span": {
         "start": 32,
-        "end": 44
+        "end": 43
       }
     },
     {
@@ -153,7 +153,7 @@ $nothing = null;
       },
       "span": {
         "start": 44,
-        "end": 58
+        "end": 57
       }
     },
     {

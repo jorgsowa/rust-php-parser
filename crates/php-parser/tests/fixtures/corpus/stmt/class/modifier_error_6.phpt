@@ -34,7 +34,7 @@ duplicate modifier 'final'
               },
               "span": {
                 "start": 16,
-                "end": 44
+                "end": 43
               }
             }
           ],

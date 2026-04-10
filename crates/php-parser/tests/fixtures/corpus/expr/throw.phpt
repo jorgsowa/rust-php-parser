@@ -57,7 +57,7 @@ $a ?? throw new Exception;
       },
       "span": {
         "start": 6,
-        "end": 22
+        "end": 21
       }
     },
     {

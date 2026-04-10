@@ -39,7 +39,7 @@ function foo() {}
       },
       "span": {
         "start": 6,
-        "end": 16
+        "end": 15
       }
     },
     {
@@ -79,7 +79,7 @@ function foo() {}
       },
       "span": {
         "start": 16,
-        "end": 33
+        "end": 32
       }
     },
     {
@@ -111,7 +111,7 @@ function foo() {}
       },
       "span": {
         "start": 33,
-        "end": 103
+        "end": 45
       }
     },
     {
@@ -139,7 +139,7 @@ function foo() {}
       },
       "span": {
         "start": 103,
-        "end": 117
+        "end": 116
       }
     },
     {
@@ -179,7 +179,7 @@ function foo() {}
       },
       "span": {
         "start": 117,
-        "end": 136
+        "end": 134
       }
     },
     {

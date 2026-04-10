@@ -153,7 +153,7 @@ if ($a): endif; // without else
             },
             "span": {
               "start": 100,
-              "end": 114
+              "end": 113
             }
           },
           "elseif_branches": [
@@ -173,12 +173,12 @@ if ($a): endif; // without else
                 },
                 "span": {
                   "start": 122,
-                  "end": 128
+                  "end": 127
                 }
               },
               "span": {
                 "start": 122,
-                "end": 128
+                "end": 127
               }
             },
             {
@@ -197,12 +197,12 @@ if ($a): endif; // without else
                 },
                 "span": {
                   "start": 136,
-                  "end": 142
+                  "end": 141
                 }
               },
               "span": {
                 "start": 136,
-                "end": 142
+                "end": 141
               }
             }
           ],
@@ -212,14 +212,14 @@ if ($a): endif; // without else
             },
             "span": {
               "start": 100,
-              "end": 156
+              "end": 155
             }
           }
         }
       },
       "span": {
         "start": 100,
-        "end": 164
+        "end": 162
       }
     },
     {
@@ -240,7 +240,7 @@ if ($a): endif; // without else
             },
             "span": {
               "start": 164,
-              "end": 173
+              "end": 172
             }
           },
           "elseif_branches": [],
@@ -249,12 +249,12 @@ if ($a): endif; // without else
       },
       "span": {
         "start": 164,
-        "end": 195
+        "end": 179
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 195
+    "end": 179
   }
 }

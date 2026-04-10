@@ -23,7 +23,7 @@ $a::class;
       },
       "span": {
         "start": 7,
-        "end": 10
+        "end": 9
       }
     },
     {
@@ -51,7 +51,7 @@ $a::class;
       },
       "span": {
         "start": 10,
-        "end": 16
+        "end": 15
       }
     },
     {
@@ -79,7 +79,7 @@ $a::class;
       },
       "span": {
         "start": 16,
-        "end": 26
+        "end": 25
       }
     },
     {
@@ -107,7 +107,7 @@ $a::class;
       },
       "span": {
         "start": 26,
-        "end": 33
+        "end": 32
       }
     },
     {

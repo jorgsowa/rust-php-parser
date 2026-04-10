@@ -72,7 +72,7 @@ isset($a, $b, );
       },
       "span": {
         "start": 7,
-        "end": 22
+        "end": 21
       }
     },
     {
@@ -146,7 +146,7 @@ isset($a, $b, );
       },
       "span": {
         "start": 22,
-        "end": 43
+        "end": 42
       }
     },
     {
@@ -212,7 +212,7 @@ isset($a, $b, );
       },
       "span": {
         "start": 43,
-        "end": 63
+        "end": 62
       }
     },
     {
@@ -277,7 +277,7 @@ isset($a, $b, );
       },
       "span": {
         "start": 63,
-        "end": 82
+        "end": 81
       }
     },
     {
@@ -305,7 +305,7 @@ isset($a, $b, );
       },
       "span": {
         "start": 82,
-        "end": 99
+        "end": 98
       }
     },
     {

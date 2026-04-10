@@ -32,7 +32,7 @@ min_php=8.1
               },
               "span": {
                 "start": 18,
-                "end": 33
+                "end": 32
               }
             },
             {
@@ -45,7 +45,7 @@ min_php=8.1
               },
               "span": {
                 "start": 33,
-                "end": 46
+                "end": 45
               }
             }
           ],

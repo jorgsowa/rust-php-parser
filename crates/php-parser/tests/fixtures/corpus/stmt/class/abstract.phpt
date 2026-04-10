@@ -37,7 +37,7 @@ abstract class A {
               },
               "span": {
                 "start": 30,
-                "end": 57
+                "end": 52
               }
             },
             {
@@ -57,7 +57,7 @@ abstract class A {
               },
               "span": {
                 "start": 57,
-                "end": 87
+                "end": 86
               }
             }
           ],

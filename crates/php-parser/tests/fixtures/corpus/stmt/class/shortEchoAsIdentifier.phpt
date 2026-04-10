@@ -64,7 +64,7 @@ expected '::' or 'as', found ';'
               },
               "span": {
                 "start": 20,
-                "end": 66
+                "end": 65
               }
             }
           ],

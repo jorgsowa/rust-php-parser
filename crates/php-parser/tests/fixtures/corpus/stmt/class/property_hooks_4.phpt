@@ -35,7 +35,7 @@ expected 'get' or 'set', found identifier
               },
               "span": {
                 "start": 23,
-                "end": 52
+                "end": 51
               }
             }
           ],

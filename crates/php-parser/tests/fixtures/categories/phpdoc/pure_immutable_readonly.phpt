@@ -105,7 +105,7 @@ class Money {
               },
               "span": {
                 "start": 142,
-                "end": 222
+                "end": 189
               }
             },
             {

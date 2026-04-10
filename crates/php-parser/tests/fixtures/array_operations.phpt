@@ -132,7 +132,7 @@ echo $val;
       },
       "span": {
         "start": 6,
-        "end": 31
+        "end": 30
       }
     },
     {
@@ -169,7 +169,7 @@ echo $val;
       },
       "span": {
         "start": 31,
-        "end": 41
+        "end": 40
       }
     },
     {
@@ -251,7 +251,7 @@ echo $val;
                   },
                   "span": {
                     "start": 72,
-                    "end": 93
+                    "end": 92
                   }
                 }
               ]
@@ -353,7 +353,7 @@ echo $val;
       },
       "span": {
         "start": 95,
-        "end": 124
+        "end": 123
       }
     },
     {
@@ -409,7 +409,7 @@ echo $val;
       },
       "span": {
         "start": 124,
-        "end": 142
+        "end": 141
       }
     },
     {
@@ -428,7 +428,7 @@ echo $val;
       },
       "span": {
         "start": 142,
-        "end": 153
+        "end": 152
       }
     },
     {

@@ -95,7 +95,7 @@ unclosed ''}'' opened at Span { start: 171, end: 176 }
               },
               "span": {
                 "start": 32,
-                "end": 38
+                "end": 37
               }
             }
           ],
@@ -196,7 +196,7 @@ unclosed ''}'' opened at Span { start: 171, end: 176 }
               },
               "span": {
                 "start": 79,
-                "end": 85
+                "end": 84
               }
             }
           ],
@@ -247,7 +247,7 @@ unclosed ''}'' opened at Span { start: 171, end: 176 }
               },
               "span": {
                 "start": 112,
-                "end": 118
+                "end": 117
               }
             }
           ],
@@ -298,7 +298,7 @@ unclosed ''}'' opened at Span { start: 171, end: 176 }
               },
               "span": {
                 "start": 143,
-                "end": 149
+                "end": 148
               }
             }
           ],
@@ -415,7 +415,7 @@ unclosed ''}'' opened at Span { start: 171, end: 176 }
                       },
                       "span": {
                         "start": 187,
-                        "end": 205
+                        "end": 204
                       }
                     }
                   ],

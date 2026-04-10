@@ -25,7 +25,7 @@
                 },
                 "span": {
                   "start": 6,
-                  "end": 13
+                  "end": 12
                 }
               },
               "op": "Assign",

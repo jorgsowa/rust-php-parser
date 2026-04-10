@@ -40,7 +40,7 @@ echo 3;
                 },
                 "span": {
                   "start": 24,
-                  "end": 32
+                  "end": 31
                 }
               }
             ]
@@ -68,7 +68,7 @@ echo 3;
       },
       "span": {
         "start": 34,
-        "end": 42
+        "end": 41
       }
     },
     {
@@ -89,7 +89,7 @@ echo 3;
       },
       "span": {
         "start": 42,
-        "end": 55
+        "end": 54
       }
     },
     {

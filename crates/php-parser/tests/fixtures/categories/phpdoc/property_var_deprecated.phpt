@@ -124,7 +124,7 @@ class Proxy {
               },
               "span": {
                 "start": 289,
-                "end": 326
+                "end": 325
               }
             }
           ],

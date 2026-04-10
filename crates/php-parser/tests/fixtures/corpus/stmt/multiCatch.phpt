@@ -28,7 +28,7 @@ try {
               },
               "span": {
                 "start": 16,
-                "end": 20
+                "end": 19
               }
             }
           ],
@@ -72,13 +72,13 @@ try {
                   },
                   "span": {
                     "start": 44,
-                    "end": 48
+                    "end": 47
                   }
                 }
               ],
               "span": {
                 "start": 28,
-                "end": 50
+                "end": 49
               }
             },
             {
@@ -121,7 +121,7 @@ try {
                   },
                   "span": {
                     "start": 75,
-                    "end": 79
+                    "end": 78
                   }
                 }
               ],

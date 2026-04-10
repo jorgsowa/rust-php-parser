@@ -139,7 +139,7 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
       },
       "span": {
         "start": 6,
-        "end": 58
+        "end": 57
       }
     },
     {
@@ -232,7 +232,7 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                                   },
                                   "span": {
                                     "start": 93,
-                                    "end": 108
+                                    "end": 107
                                   }
                                 }
                               ],

@@ -25,13 +25,13 @@ expected class name, found '{'
           },
           "span": {
             "start": 6,
-            "end": 19
+            "end": 18
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 19
+        "end": 18
       }
     },
     {

@@ -33,7 +33,7 @@ empty(array(1, 2, 3));
       },
       "span": {
         "start": 6,
-        "end": 17
+        "end": 16
       }
     },
     {
@@ -78,7 +78,7 @@ empty(array(1, 2, 3));
       },
       "span": {
         "start": 17,
-        "end": 37
+        "end": 35
       }
     },
     {
@@ -103,7 +103,7 @@ empty(array(1, 2, 3));
       },
       "span": {
         "start": 37,
-        "end": 48
+        "end": 47
       }
     },
     {
@@ -139,7 +139,7 @@ empty(array(1, 2, 3));
       },
       "span": {
         "start": 48,
-        "end": 62
+        "end": 61
       }
     },
     {

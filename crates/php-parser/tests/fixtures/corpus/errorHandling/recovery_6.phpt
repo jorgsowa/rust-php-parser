@@ -46,7 +46,7 @@ unclosed '')'' opened at Span { start: 22, end: 24 }
       },
       "span": {
         "start": 7,
-        "end": 15
+        "end": 14
       }
     },
     {

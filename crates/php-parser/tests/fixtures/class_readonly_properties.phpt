@@ -225,7 +225,7 @@ class Point {
                       },
                       "span": {
                         "start": 142,
-                        "end": 165
+                        "end": 156
                       }
                     },
                     {
@@ -281,7 +281,7 @@ class Point {
                       },
                       "span": {
                         "start": 165,
-                        "end": 184
+                        "end": 179
                       }
                     }
                   ],
@@ -290,7 +290,7 @@ class Point {
               },
               "span": {
                 "start": 84,
-                "end": 186
+                "end": 185
               }
             }
           ],

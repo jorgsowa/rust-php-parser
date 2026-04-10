@@ -107,7 +107,7 @@ final readonly class Money {
               },
               "span": {
                 "start": 39,
-                "end": 138
+                "end": 137
               }
             }
           ],

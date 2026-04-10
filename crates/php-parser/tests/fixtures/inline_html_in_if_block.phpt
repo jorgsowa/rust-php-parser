@@ -65,7 +65,7 @@ if ($cond) {
                   },
                   "span": {
                     "start": 46,
-                    "end": 54
+                    "end": 53
                   }
                 }
               ]

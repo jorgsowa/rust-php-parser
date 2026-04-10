@@ -55,7 +55,7 @@ expected ';', found end of file
       },
       "span": {
         "start": 6,
-        "end": 20
+        "end": 19
       }
     },
     {
@@ -77,7 +77,7 @@ expected ';', found end of file
               "alias": null,
               "span": {
                 "start": 24,
-                "end": 26
+                "end": 25
               }
             }
           ]
@@ -85,7 +85,7 @@ expected ';', found end of file
       },
       "span": {
         "start": 20,
-        "end": 26
+        "end": 25
       }
     },
     {
@@ -107,7 +107,7 @@ expected ';', found end of file
               "alias": null,
               "span": {
                 "start": 39,
-                "end": 41
+                "end": 40
               }
             }
           ]
@@ -115,7 +115,7 @@ expected ';', found end of file
       },
       "span": {
         "start": 26,
-        "end": 41
+        "end": 40
       }
     },
     {
@@ -146,7 +146,7 @@ expected ';', found end of file
       },
       "span": {
         "start": 41,
-        "end": 51
+        "end": 50
       }
     },
     {
@@ -173,7 +173,7 @@ expected ';', found end of file
       },
       "span": {
         "start": 51,
-        "end": 63
+        "end": 62
       }
     },
     {
@@ -188,7 +188,7 @@ expected ';', found end of file
       },
       "span": {
         "start": 63,
-        "end": 69
+        "end": 68
       }
     },
     {
@@ -205,7 +205,7 @@ expected ';', found end of file
       },
       "span": {
         "start": 69,
-        "end": 77
+        "end": 76
       }
     },
     {
@@ -220,7 +220,7 @@ expected ';', found end of file
       },
       "span": {
         "start": 77,
-        "end": 86
+        "end": 85
       }
     },
     {
@@ -237,7 +237,7 @@ expected ';', found end of file
       },
       "span": {
         "start": 86,
-        "end": 97
+        "end": 96
       }
     },
     {
@@ -252,7 +252,7 @@ expected ';', found end of file
       },
       "span": {
         "start": 97,
-        "end": 104
+        "end": 103
       }
     },
     {
@@ -269,7 +269,7 @@ expected ';', found end of file
       },
       "span": {
         "start": 104,
-        "end": 113
+        "end": 112
       }
     },
     {
@@ -288,7 +288,7 @@ expected ';', found end of file
       },
       "span": {
         "start": 113,
-        "end": 121
+        "end": 120
       }
     },
     {
@@ -307,7 +307,7 @@ expected ';', found end of file
       },
       "span": {
         "start": 121,
-        "end": 131
+        "end": 130
       }
     },
     {
@@ -324,7 +324,7 @@ expected ';', found end of file
       },
       "span": {
         "start": 131,
-        "end": 140
+        "end": 139
       }
     },
     {

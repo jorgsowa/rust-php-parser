@@ -25,7 +25,7 @@
                 },
                 "span": {
                   "start": 6,
-                  "end": 13
+                  "end": 12
                 }
               },
               "op": "Assign",
@@ -48,7 +48,7 @@
       },
       "span": {
         "start": 6,
-        "end": 22
+        "end": 21
       }
     },
     {
@@ -84,7 +84,7 @@
                 },
                 "span": {
                   "start": 22,
-                  "end": 34
+                  "end": 33
                 }
               },
               "op": "Assign",

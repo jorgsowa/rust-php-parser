@@ -34,7 +34,7 @@ static::factory();
       },
       "span": {
         "start": 6,
-        "end": 16
+        "end": 15
       }
     },
     {
@@ -62,7 +62,7 @@ static::factory();
       },
       "span": {
         "start": 16,
-        "end": 32
+        "end": 31
       }
     },
     {
@@ -91,7 +91,7 @@ static::factory();
       },
       "span": {
         "start": 32,
-        "end": 47
+        "end": 46
       }
     },
     {
@@ -119,7 +119,7 @@ static::factory();
       },
       "span": {
         "start": 47,
-        "end": 57
+        "end": 56
       }
     },
     {
@@ -148,7 +148,7 @@ static::factory();
       },
       "span": {
         "start": 57,
-        "end": 80
+        "end": 79
       }
     },
     {

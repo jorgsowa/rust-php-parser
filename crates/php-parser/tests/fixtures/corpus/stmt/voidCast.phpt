@@ -49,7 +49,7 @@ $x = (void) $y;
       },
       "span": {
         "start": 6,
-        "end": 19
+        "end": 18
       }
     },
     {
@@ -88,7 +88,7 @@ $x = (void) $y;
       },
       "span": {
         "start": 19,
-        "end": 35
+        "end": 34
       }
     },
     {
@@ -136,7 +136,7 @@ $x = (void) $y;
       },
       "span": {
         "start": 35,
-        "end": 83
+        "end": 50
       }
     },
     {

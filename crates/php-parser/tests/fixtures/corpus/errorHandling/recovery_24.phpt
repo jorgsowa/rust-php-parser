@@ -29,7 +29,7 @@ expected identifier, found '{'
               },
               "span": {
                 "start": 29,
-                "end": 40
+                "end": 39
               }
             }
           ],

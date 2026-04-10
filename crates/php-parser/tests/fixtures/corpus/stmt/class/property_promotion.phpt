@@ -234,7 +234,7 @@ class Point {
                           "attributes": [],
                           "span": {
                             "start": 211,
-                            "end": 226
+                            "end": 225
                           }
                         }
                       ],
@@ -282,7 +282,7 @@ class Point {
                           "attributes": [],
                           "span": {
                             "start": 253,
-                            "end": 263
+                            "end": 262
                           }
                         }
                       ],
@@ -315,7 +315,7 @@ class Point {
               },
               "span": {
                 "start": 25,
-                "end": 293
+                "end": 292
               }
             }
           ],

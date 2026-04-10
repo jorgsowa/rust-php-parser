@@ -71,7 +71,7 @@ cannot have hooks on comma-separated property
                             },
                             "span": {
                               "start": 50,
-                              "end": 61
+                              "end": 60
                             }
                           }
                         ]
@@ -82,7 +82,7 @@ cannot have hooks on comma-separated property
                       "attributes": [],
                       "span": {
                         "start": 44,
-                        "end": 63
+                        "end": 62
                       }
                     }
                   ]
@@ -90,7 +90,7 @@ cannot have hooks on comma-separated property
               },
               "span": {
                 "start": 24,
-                "end": 66
+                "end": 64
               }
             }
           ],

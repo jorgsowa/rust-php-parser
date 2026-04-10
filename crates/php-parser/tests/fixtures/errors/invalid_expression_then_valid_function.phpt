@@ -37,7 +37,7 @@ expected expression
       },
       "span": {
         "start": 6,
-        "end": 13
+        "end": 12
       }
     },
     {
@@ -60,7 +60,7 @@ expected expression
               },
               "span": {
                 "start": 30,
-                "end": 41
+                "end": 40
               }
             }
           ],

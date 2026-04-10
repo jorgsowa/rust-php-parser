@@ -102,7 +102,7 @@ class EventDispatcher {
               },
               "span": {
                 "start": 245,
-                "end": 293
+                "end": 292
               }
             }
           ],

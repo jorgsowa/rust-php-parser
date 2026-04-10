@@ -46,7 +46,7 @@ unclosed ''}'' opened at Span { start: 118, end: 119 }
       },
       "span": {
         "start": 97,
-        "end": 105
+        "end": 104
       }
     },
     {
@@ -98,7 +98,7 @@ unclosed ''}'' opened at Span { start: 118, end: 119 }
                   },
                   "span": {
                     "start": 124,
-                    "end": 136
+                    "end": 131
                   }
                 },
                 {

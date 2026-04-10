@@ -81,7 +81,7 @@ class MyClass {
                       },
                       "span": {
                         "start": 45,
-                        "end": 73
+                        "end": 64
                       }
                     },
                     {
@@ -104,7 +104,7 @@ class MyClass {
                       },
                       "span": {
                         "start": 73,
-                        "end": 96
+                        "end": 87
                       }
                     },
                     {
@@ -118,7 +118,7 @@ class MyClass {
                       },
                       "span": {
                         "start": 96,
-                        "end": 116
+                        "end": 107
                       }
                     },
                     {
@@ -132,7 +132,7 @@ class MyClass {
                       },
                       "span": {
                         "start": 116,
-                        "end": 142
+                        "end": 133
                       }
                     },
                     {
@@ -155,7 +155,7 @@ class MyClass {
                       },
                       "span": {
                         "start": 142,
-                        "end": 174
+                        "end": 165
                       }
                     },
                     {
@@ -198,7 +198,7 @@ class MyClass {
                       },
                       "span": {
                         "start": 174,
-                        "end": 201
+                        "end": 196
                       }
                     }
                   ]
@@ -206,7 +206,7 @@ class MyClass {
               },
               "span": {
                 "start": 26,
-                "end": 203
+                "end": 202
               }
             }
           ],

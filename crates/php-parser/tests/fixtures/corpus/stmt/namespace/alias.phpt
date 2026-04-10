@@ -45,7 +45,7 @@ use const foo\BAR as BAZ;
       },
       "span": {
         "start": 7,
-        "end": 16
+        "end": 15
       }
     },
     {
@@ -76,7 +76,7 @@ use const foo\BAR as BAZ;
       },
       "span": {
         "start": 16,
-        "end": 30
+        "end": 29
       }
     },
     {
@@ -124,7 +124,7 @@ use const foo\BAR as BAZ;
       },
       "span": {
         "start": 30,
-        "end": 85
+        "end": 46
       }
     },
     {
@@ -154,7 +154,7 @@ use const foo\BAR as BAZ;
       },
       "span": {
         "start": 85,
-        "end": 93
+        "end": 92
       }
     },
     {
@@ -184,7 +184,7 @@ use const foo\BAR as BAZ;
       },
       "span": {
         "start": 93,
-        "end": 140
+        "end": 105
       }
     },
     {
@@ -215,7 +215,7 @@ use const foo\BAR as BAZ;
       },
       "span": {
         "start": 140,
-        "end": 162
+        "end": 161
       }
     },
     {
@@ -246,7 +246,7 @@ use const foo\BAR as BAZ;
       },
       "span": {
         "start": 162,
-        "end": 191
+        "end": 190
       }
     },
     {
@@ -277,7 +277,7 @@ use const foo\BAR as BAZ;
       },
       "span": {
         "start": 191,
-        "end": 210
+        "end": 209
       }
     },
     {

@@ -22,7 +22,7 @@ min_php=8.1
               },
               "span": {
                 "start": 19,
-                "end": 29
+                "end": 28
               }
             },
             {
@@ -79,7 +79,7 @@ min_php=8.1
                       },
                       "span": {
                         "start": 70,
-                        "end": 88
+                        "end": 87
                       }
                     }
                   ],
@@ -88,7 +88,7 @@ min_php=8.1
               },
               "span": {
                 "start": 29,
-                "end": 90
+                "end": 89
               }
             }
           ],

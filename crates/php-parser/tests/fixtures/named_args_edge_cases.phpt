@@ -87,7 +87,7 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
       },
       "span": {
         "start": 6,
-        "end": 29
+        "end": 28
       }
     },
     {
@@ -152,7 +152,7 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
       },
       "span": {
         "start": 29,
-        "end": 57
+        "end": 56
       }
     },
     {
@@ -235,7 +235,7 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
       },
       "span": {
         "start": 57,
-        "end": 82
+        "end": 81
       }
     },
     {

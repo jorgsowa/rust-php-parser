@@ -31,7 +31,7 @@ enum C: int implements Bar {
               },
               "span": {
                 "start": 20,
-                "end": 32
+                "end": 31
               }
             }
           ],
@@ -124,7 +124,7 @@ enum C: int implements Bar {
               },
               "span": {
                 "start": 98,
-                "end": 112
+                "end": 111
               }
             }
           ],

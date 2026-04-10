@@ -26,7 +26,7 @@ echo namespace\SOME_CONST;
       },
       "span": {
         "start": 6,
-        "end": 30
+        "end": 29
       }
     },
     {
@@ -74,7 +74,7 @@ echo namespace\SOME_CONST;
       },
       "span": {
         "start": 30,
-        "end": 62
+        "end": 61
       }
     },
     {
@@ -102,7 +102,7 @@ echo namespace\SOME_CONST;
       },
       "span": {
         "start": 62,
-        "end": 87
+        "end": 86
       }
     },
     {

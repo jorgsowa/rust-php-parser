@@ -37,7 +37,7 @@ use A\B\{C\D, function b\c, const D};
       },
       "span": {
         "start": 6,
-        "end": 17
+        "end": 16
       }
     },
     {
@@ -87,7 +87,7 @@ use A\B\{C\D, function b\c, const D};
       },
       "span": {
         "start": 17,
-        "end": 33
+        "end": 32
       }
     },
     {
@@ -139,7 +139,7 @@ use A\B\{C\D, function b\c, const D};
       },
       "span": {
         "start": 33,
-        "end": 52
+        "end": 51
       }
     },
     {
@@ -189,7 +189,7 @@ use A\B\{C\D, function b\c, const D};
       },
       "span": {
         "start": 52,
-        "end": 77
+        "end": 76
       }
     },
     {
@@ -239,7 +239,7 @@ use A\B\{C\D, function b\c, const D};
       },
       "span": {
         "start": 77,
-        "end": 100
+        "end": 99
       }
     },
     {

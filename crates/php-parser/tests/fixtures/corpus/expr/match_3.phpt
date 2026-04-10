@@ -54,7 +54,7 @@ $result = match ($operator) {
                             },
                             "span": {
                               "start": 41,
-                              "end": 61
+                              "end": 60
                             }
                           }
                         ],

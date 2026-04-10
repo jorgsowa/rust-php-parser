@@ -21,7 +21,7 @@ expected expression
       },
       "span": {
         "start": 6,
-        "end": 11
+        "end": 10
       }
     },
     {

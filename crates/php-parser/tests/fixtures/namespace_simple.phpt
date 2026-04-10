@@ -24,7 +24,7 @@ class User {}
       },
       "span": {
         "start": 6,
-        "end": 28
+        "end": 27
       }
     },
     {

@@ -66,7 +66,7 @@ $label = match (getStatus()) {
                             },
                             "span": {
                               "start": 41,
-                              "end": 52
+                              "end": 51
                             }
                           }
                         ],
@@ -103,7 +103,7 @@ $label = match (getStatus()) {
                             },
                             "span": {
                               "start": 69,
-                              "end": 81
+                              "end": 80
                             }
                           }
                         ],

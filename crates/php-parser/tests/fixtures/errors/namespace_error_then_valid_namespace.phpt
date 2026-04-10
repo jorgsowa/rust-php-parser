@@ -23,7 +23,7 @@ expected identifier, found ';'
       },
       "span": {
         "start": 6,
-        "end": 18
+        "end": 17
       }
     },
     {

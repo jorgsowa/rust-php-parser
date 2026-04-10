@@ -121,7 +121,7 @@ use App\{A, B,};
       },
       "span": {
         "start": 31,
-        "end": 43
+        "end": 42
       }
     },
     {
@@ -192,7 +192,7 @@ use App\{A, B,};
       },
       "span": {
         "start": 43,
-        "end": 76
+        "end": 75
       }
     },
     {
@@ -261,7 +261,7 @@ use App\{A, B,};
       },
       "span": {
         "start": 76,
-        "end": 96
+        "end": 95
       }
     },
     {
@@ -333,7 +333,7 @@ use App\{A, B,};
       },
       "span": {
         "start": 96,
-        "end": 114
+        "end": 113
       }
     },
     {
@@ -414,7 +414,7 @@ use App\{A, B,};
       },
       "span": {
         "start": 114,
-        "end": 150
+        "end": 149
       }
     },
     {

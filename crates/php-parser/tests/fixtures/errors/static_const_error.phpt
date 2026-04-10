@@ -36,7 +36,7 @@ cannot use 'static' as constant modifier
               },
               "span": {
                 "start": 16,
-                "end": 36
+                "end": 35
               }
             }
           ],

@@ -49,7 +49,7 @@ echo $$obj->prop;
       },
       "span": {
         "start": 6,
-        "end": 17
+        "end": 16
       }
     },
     {
@@ -102,7 +102,7 @@ echo $$obj->prop;
       },
       "span": {
         "start": 17,
-        "end": 29
+        "end": 28
       }
     },
     {
@@ -167,7 +167,7 @@ echo $$obj->prop;
       },
       "span": {
         "start": 29,
-        "end": 45
+        "end": 44
       }
     },
     {

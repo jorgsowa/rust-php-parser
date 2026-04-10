@@ -53,7 +53,7 @@ expected 'get' or 'set', found 'readonly'
                       "attributes": [],
                       "span": {
                         "start": 46,
-                        "end": 73
+                        "end": 64
                       }
                     },
                     {
@@ -65,7 +65,7 @@ expected 'get' or 'set', found 'readonly'
                       "attributes": [],
                       "span": {
                         "start": 73,
-                        "end": 96
+                        "end": 87
                       }
                     },
                     {
@@ -77,7 +77,7 @@ expected 'get' or 'set', found 'readonly'
                       "attributes": [],
                       "span": {
                         "start": 96,
-                        "end": 117
+                        "end": 108
                       }
                     },
                     {
@@ -89,7 +89,7 @@ expected 'get' or 'set', found 'readonly'
                       "attributes": [],
                       "span": {
                         "start": 117,
-                        "end": 146
+                        "end": 137
                       }
                     },
                     {
@@ -101,7 +101,7 @@ expected 'get' or 'set', found 'readonly'
                       "attributes": [],
                       "span": {
                         "start": 146,
-                        "end": 164
+                        "end": 159
                       }
                     }
                   ]
@@ -109,7 +109,7 @@ expected 'get' or 'set', found 'readonly'
               },
               "span": {
                 "start": 23,
-                "end": 166
+                "end": 165
               }
             }
           ],

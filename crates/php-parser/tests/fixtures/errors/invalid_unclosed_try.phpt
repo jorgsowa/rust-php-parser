@@ -41,14 +41,14 @@ expected catch or finally clause, found end of file
               },
               "span": {
                 "start": 16,
-                "end": 24
+                "end": 22
               }
             },
             {
               "kind": "Error",
               "span": {
                 "start": 24,
-                "end": 58
+                "end": 57
               }
             }
           ],

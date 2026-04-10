@@ -42,7 +42,7 @@ declare(ticks=1) {
                   },
                   "span": {
                     "start": 29,
-                    "end": 42
+                    "end": 41
                   }
                 }
               ]

@@ -45,7 +45,7 @@ Invalid numeric literal
       },
       "span": {
         "start": 7,
-        "end": 22
+        "end": 21
       }
     },
     {
@@ -62,7 +62,7 @@ Invalid numeric literal
       },
       "span": {
         "start": 22,
-        "end": 35
+        "end": 34
       }
     },
     {
@@ -79,7 +79,7 @@ Invalid numeric literal
       },
       "span": {
         "start": 35,
-        "end": 48
+        "end": 47
       }
     },
     {
@@ -96,7 +96,7 @@ Invalid numeric literal
       },
       "span": {
         "start": 48,
-        "end": 61
+        "end": 60
       }
     },
     {
@@ -113,7 +113,7 @@ Invalid numeric literal
       },
       "span": {
         "start": 61,
-        "end": 105
+        "end": 70
       }
     },
     {
@@ -130,7 +130,7 @@ Invalid numeric literal
       },
       "span": {
         "start": 105,
-        "end": 129
+        "end": 110
       }
     },
     {
@@ -147,7 +147,7 @@ Invalid numeric literal
       },
       "span": {
         "start": 129,
-        "end": 135
+        "end": 134
       }
     },
     {
@@ -164,7 +164,7 @@ Invalid numeric literal
       },
       "span": {
         "start": 135,
-        "end": 141
+        "end": 140
       }
     },
     {
@@ -181,7 +181,7 @@ Invalid numeric literal
       },
       "span": {
         "start": 141,
-        "end": 147
+        "end": 146
       }
     },
     {
@@ -198,7 +198,7 @@ Invalid numeric literal
       },
       "span": {
         "start": 147,
-        "end": 153
+        "end": 152
       }
     },
     {
@@ -215,7 +215,7 @@ Invalid numeric literal
       },
       "span": {
         "start": 153,
-        "end": 161
+        "end": 160
       }
     },
     {
@@ -232,7 +232,7 @@ Invalid numeric literal
       },
       "span": {
         "start": 161,
-        "end": 169
+        "end": 168
       }
     },
     {
@@ -249,7 +249,7 @@ Invalid numeric literal
       },
       "span": {
         "start": 169,
-        "end": 175
+        "end": 174
       }
     },
     {

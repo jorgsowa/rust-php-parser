@@ -134,7 +134,7 @@ $outer = function($x) {
                                           },
                                           "span": {
                                             "start": 75,
-                                            "end": 95
+                                            "end": 90
                                           }
                                         }
                                       ],
@@ -156,7 +156,7 @@ $outer = function($x) {
                         },
                         "span": {
                           "start": 34,
-                          "end": 102
+                          "end": 97
                         }
                       },
                       {
@@ -173,7 +173,7 @@ $outer = function($x) {
                         },
                         "span": {
                           "start": 102,
-                          "end": 117
+                          "end": 116
                         }
                       }
                     ],

@@ -67,7 +67,7 @@ bar(class: 0);
       },
       "span": {
         "start": 6,
-        "end": 25
+        "end": 24
       }
     },
     {

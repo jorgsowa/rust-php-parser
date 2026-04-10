@@ -60,14 +60,14 @@ unclosed ''}'' opened at Span { start: 15, end: 16 }
                   },
                   "span": {
                     "start": 21,
-                    "end": 50
+                    "end": 28
                   }
                 }
               ]
             },
             "span": {
               "start": 15,
-              "end": 50
+              "end": 28
             }
           },
           "elseif_branches": [],
@@ -76,12 +76,12 @@ unclosed ''}'' opened at Span { start: 15, end: 16 }
       },
       "span": {
         "start": 7,
-        "end": 50
+        "end": 28
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 50
+    "end": 28
   }
 }

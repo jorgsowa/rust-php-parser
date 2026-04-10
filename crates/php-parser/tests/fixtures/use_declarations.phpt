@@ -36,7 +36,7 @@ use const App\Config\VERSION;
       },
       "span": {
         "start": 6,
-        "end": 27
+        "end": 26
       }
     },
     {
@@ -68,7 +68,7 @@ use const App\Config\VERSION;
       },
       "span": {
         "start": 27,
-        "end": 65
+        "end": 64
       }
     },
     {
@@ -100,7 +100,7 @@ use const App\Config\VERSION;
       },
       "span": {
         "start": 65,
-        "end": 102
+        "end": 101
       }
     },
     {

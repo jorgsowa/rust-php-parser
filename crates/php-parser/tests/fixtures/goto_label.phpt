@@ -13,7 +13,7 @@ echo 'done';
       },
       "span": {
         "start": 6,
-        "end": 16
+        "end": 15
       }
     },
     {
@@ -32,7 +32,7 @@ echo 'done';
       },
       "span": {
         "start": 16,
-        "end": 40
+        "end": 39
       }
     },
     {
@@ -41,7 +41,7 @@ echo 'done';
       },
       "span": {
         "start": 40,
-        "end": 45
+        "end": 44
       }
     },
     {
