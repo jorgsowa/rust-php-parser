@@ -71,10 +71,11 @@ The parser prioritizes performance on contemporary PHP patterns:
 
 ```sh
 cargo test --test integration   # all .phpt fixture tests (including corpus)
+cargo test --test php_syntax    # validate fixtures via php -l
 cargo test --test malformed_php # error recovery and diagnostics
 ```
 
-Fixture files live in `crates/php-parser/tests/fixtures/`.
+Fixture files live in `crates/php-parser/tests/fixtures/`. All fixtures are validated against `php -l` in CI across PHP 8.2–8.5. Fixtures using version-gated syntax should include a `===config===` section with `min_php=X.Y`.
 
 ## Documentation
 
