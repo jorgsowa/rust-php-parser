@@ -29,7 +29,7 @@ interface A extends C, D {
               "kind": "Unqualified",
               "span": {
                 "start": 30,
-                "end": 32
+                "end": 31
               }
             }
           ],

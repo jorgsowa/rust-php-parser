@@ -2,6 +2,8 @@
 <?php
 $foo instanceof
 ===errors===
+expected expression
+expected ';' after expression
 ===ast===
 {
   "stmts": [

@@ -24,19 +24,19 @@ function test(?Foo $bar, ?string $foo) : ?Baz {
                         "kind": "Unqualified",
                         "span": {
                           "start": 22,
-                          "end": 26
+                          "end": 25
                         }
                       }
                     },
                     "span": {
                       "start": 22,
-                      "end": 26
+                      "end": 25
                     }
                   }
                 },
                 "span": {
                   "start": 21,
-                  "end": 26
+                  "end": 25
                 }
               },
               "default": null,
@@ -106,19 +106,19 @@ function test(?Foo $bar, ?string $foo) : ?Baz {
                     "kind": "Unqualified",
                     "span": {
                       "start": 49,
-                      "end": 53
+                      "end": 52
                     }
                   }
                 },
                 "span": {
                   "start": 49,
-                  "end": 53
+                  "end": 52
                 }
               }
             },
             "span": {
               "start": 48,
-              "end": 53
+              "end": 52
             }
           },
           "by_ref": false,

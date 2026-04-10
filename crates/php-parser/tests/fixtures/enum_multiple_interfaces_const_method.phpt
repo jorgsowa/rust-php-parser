@@ -30,7 +30,7 @@ enum Status: string implements Loggable, Serializable {
             "kind": "Unqualified",
             "span": {
               "start": 19,
-              "end": 26
+              "end": 25
             }
           },
           "implements": [
@@ -51,7 +51,7 @@ enum Status: string implements Loggable, Serializable {
               "kind": "Unqualified",
               "span": {
                 "start": 47,
-                "end": 60
+                "end": 59
               }
             }
           ],

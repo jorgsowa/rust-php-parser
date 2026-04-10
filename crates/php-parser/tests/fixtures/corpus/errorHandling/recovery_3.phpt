@@ -5,6 +5,7 @@ foo();
 bar()
 baz();
 ===errors===
+expected ';' after expression
 ===ast===
 {
   "stmts": [

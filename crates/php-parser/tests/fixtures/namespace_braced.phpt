@@ -20,7 +20,7 @@ namespace App\Models {
             "kind": "Qualified",
             "span": {
               "start": 16,
-              "end": 29
+              "end": 28
             }
           },
           "body": {
@@ -65,7 +65,7 @@ namespace App\Models {
             "kind": "Qualified",
             "span": {
               "start": 68,
-              "end": 79
+              "end": 78
             }
           },
           "body": {

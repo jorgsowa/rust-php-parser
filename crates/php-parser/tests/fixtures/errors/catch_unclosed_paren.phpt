@@ -19,7 +19,7 @@ expected ')', found '{'
                   "kind": "Unqualified",
                   "span": {
                     "start": 21,
-                    "end": 31
+                    "end": 30
                   }
                 }
               ],

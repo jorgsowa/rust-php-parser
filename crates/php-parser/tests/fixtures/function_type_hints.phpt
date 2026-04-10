@@ -145,20 +145,20 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
                           "kind": "Unqualified",
                           "span": {
                             "start": 57,
-                            "end": 69
+                            "end": 68
                           }
                         }
                       },
                       "span": {
                         "start": 57,
-                        "end": 69
+                        "end": 68
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 47,
-                  "end": 69
+                  "end": 68
                 }
               },
               "default": null,

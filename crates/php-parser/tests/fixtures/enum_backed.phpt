@@ -21,7 +21,7 @@ enum Status: string {
             "kind": "Unqualified",
             "span": {
               "start": 19,
-              "end": 26
+              "end": 25
             }
           },
           "implements": [],

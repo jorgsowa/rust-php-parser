@@ -25,7 +25,7 @@ enum Direction implements HasLabel {
               "kind": "Unqualified",
               "span": {
                 "start": 32,
-                "end": 41
+                "end": 40
               }
             }
           ],

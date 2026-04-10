@@ -62,7 +62,7 @@ use const foo\BAR as BAZ;
                 "kind": "Qualified",
                 "span": {
                   "start": 20,
-                  "end": 24
+                  "end": 23
                 }
               },
               "alias": "E",
@@ -93,7 +93,7 @@ use const foo\BAR as BAZ;
                 "kind": "Qualified",
                 "span": {
                   "start": 34,
-                  "end": 38
+                  "end": 37
                 }
               },
               "alias": "H",
@@ -170,7 +170,7 @@ use const foo\BAR as BAZ;
                 "kind": "FullyQualified",
                 "span": {
                   "start": 97,
-                  "end": 100
+                  "end": 99
                 }
               },
               "alias": "B",
@@ -232,7 +232,7 @@ use const foo\BAR as BAZ;
                 "kind": "Qualified",
                 "span": {
                   "start": 175,
-                  "end": 183
+                  "end": 182
                 }
               },
               "alias": "baz",
@@ -294,7 +294,7 @@ use const foo\BAR as BAZ;
                 "kind": "Qualified",
                 "span": {
                   "start": 220,
-                  "end": 228
+                  "end": 227
                 }
               },
               "alias": "BAZ",

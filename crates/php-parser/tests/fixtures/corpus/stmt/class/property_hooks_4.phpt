@@ -4,6 +4,7 @@ class Test {
     public $prop { FOO => bar; }
 }
 ===errors===
+expected 'get' or 'set', found identifier
 ===ast===
 {
   "stmts": [

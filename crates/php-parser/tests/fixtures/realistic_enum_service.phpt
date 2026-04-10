@@ -82,7 +82,7 @@ class TaskService
             "kind": "Unqualified",
             "span": {
               "start": 43,
-              "end": 47
+              "end": 46
             }
           },
           "implements": [],
@@ -628,13 +628,13 @@ class TaskService
                             "kind": "Unqualified",
                             "span": {
                               "start": 661,
-                              "end": 670
+                              "end": 669
                             }
                           }
                         },
                         "span": {
                           "start": 661,
-                          "end": 670
+                          "end": 669
                         }
                       },
                       "default": null,

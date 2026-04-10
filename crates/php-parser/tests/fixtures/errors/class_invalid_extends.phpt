@@ -21,7 +21,7 @@ expected identifier, found '{'
             "kind": "Unqualified",
             "span": {
               "start": 25,
-              "end": 25
+              "end": 26
             }
           },
           "implements": [],

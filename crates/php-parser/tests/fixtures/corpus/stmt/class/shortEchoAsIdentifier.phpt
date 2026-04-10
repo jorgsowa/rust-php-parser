@@ -6,6 +6,14 @@ class C {
     }
 }
 ===errors===
+expected ';', found '?>'
+expected identifier, found '?>'
+expected '::' or 'as', found '?>'
+expected identifier, found '<?php'
+expected '::' or 'as', found '<?php'
+expected '::' or 'as', found identifier
+expected identifier, found ';'
+expected '::' or 'as', found ';'
 ===ast===
 {
   "stmts": [
@@ -32,7 +40,7 @@ class C {
                       "kind": "Unqualified",
                       "span": {
                         "start": 24,
-                        "end": 26
+                        "end": 25
                       }
                     }
                   ],

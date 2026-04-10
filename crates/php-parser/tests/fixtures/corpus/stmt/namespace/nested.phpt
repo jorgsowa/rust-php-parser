@@ -18,7 +18,7 @@ namespace A {
             "kind": "Unqualified",
             "span": {
               "start": 16,
-              "end": 18
+              "end": 17
             }
           },
           "body": {
@@ -33,7 +33,7 @@ namespace A {
                       "kind": "Unqualified",
                       "span": {
                         "start": 34,
-                        "end": 36
+                        "end": 35
                       }
                     },
                     "body": {

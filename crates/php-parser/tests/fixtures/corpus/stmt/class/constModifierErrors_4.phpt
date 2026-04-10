@@ -4,6 +4,7 @@ class A {
     public public const X = 1;
 }
 ===errors===
+cannot use multiple visibility modifiers
 ===ast===
 {
   "stmts": [

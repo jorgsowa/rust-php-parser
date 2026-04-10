@@ -36,7 +36,7 @@
                       "kind": "Unqualified",
                       "span": {
                         "start": 23,
-                        "end": 25
+                        "end": 24
                       }
                     }
                   ],

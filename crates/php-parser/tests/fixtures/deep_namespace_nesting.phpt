@@ -19,7 +19,7 @@
             "kind": "Qualified",
             "span": {
               "start": 16,
-              "end": 30
+              "end": 29
             }
           },
           "body": {

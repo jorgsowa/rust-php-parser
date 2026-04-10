@@ -60,7 +60,7 @@ try {
                           "kind": "Unqualified",
                           "span": {
                             "start": 58,
-                            "end": 73
+                            "end": 72
                           }
                         }
                       ],
@@ -156,7 +156,7 @@ try {
                   "kind": "Unqualified",
                   "span": {
                     "start": 129,
-                    "end": 144
+                    "end": 143
                   }
                 }
               ],

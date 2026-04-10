@@ -4,6 +4,8 @@ function foo() {
     $bar->
 }
 ===errors===
+expected member name, found '}'
+expected ';' after expression
 ===ast===
 {
   "stmts": [

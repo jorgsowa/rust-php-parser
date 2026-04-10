@@ -349,20 +349,20 @@ class Foo {
                               "kind": "Unqualified",
                               "span": {
                                 "start": 100,
-                                "end": 102
+                                "end": 101
                               }
                             }
                           },
                           "span": {
                             "start": 100,
-                            "end": 102
+                            "end": 101
                           }
                         }
                       ]
                     },
                     "span": {
                       "start": 94,
-                      "end": 102
+                      "end": 101
                     }
                   },
                   "default": null,

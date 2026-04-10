@@ -1,6 +1,7 @@
 ===source===
 <?php interface A extends self {}
 ===errors===
+cannot use 'self' as class name
 ===ast===
 {
   "stmts": [
@@ -16,7 +17,7 @@
               "kind": "Unqualified",
               "span": {
                 "start": 26,
-                "end": 31
+                "end": 30
               }
             }
           ],

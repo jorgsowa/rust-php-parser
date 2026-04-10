@@ -46,7 +46,7 @@ class MyClass {
                       "kind": "Unqualified",
                       "span": {
                         "start": 33,
-                        "end": 35
+                        "end": 34
                       }
                     }
                   ],

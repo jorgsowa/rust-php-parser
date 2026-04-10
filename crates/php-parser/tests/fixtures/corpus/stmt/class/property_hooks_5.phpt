@@ -10,6 +10,13 @@ class Test {
     }
 }
 ===errors===
+expected 'get' or 'set', found 'public'
+expected 'get' or 'set', found 'public'
+expected 'get' or 'set', found 'protected'
+expected 'get' or 'set', found 'private'
+expected 'get' or 'set', found 'abstract'
+expected 'get' or 'set', found 'static'
+expected 'get' or 'set', found 'readonly'
 ===ast===
 {
   "stmts": [

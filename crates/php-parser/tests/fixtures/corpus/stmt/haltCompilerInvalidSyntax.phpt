@@ -2,6 +2,7 @@
 <?php
 __halt_compiler()
 ===errors===
+expected ';' or '?>' after __halt_compiler()
 ===ast===
 {
   "stmts": [

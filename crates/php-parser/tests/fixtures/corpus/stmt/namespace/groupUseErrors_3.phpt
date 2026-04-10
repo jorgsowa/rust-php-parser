@@ -3,6 +3,7 @@
 // Extra NS separator
 use Foo\{\Bar};
 ===errors===
+expected non-fully-qualified name in group use, found '}'
 ===ast===
 {
   "stmts": [

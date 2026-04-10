@@ -2,6 +2,7 @@
 <?php
 global $$foo->bar;
 ===errors===
+expected variable, found ';'
 ===ast===
 {
   "stmts": [

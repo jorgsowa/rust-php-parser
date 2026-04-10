@@ -20,7 +20,7 @@
             "kind": "Unqualified",
             "span": {
               "start": 31,
-              "end": 36
+              "end": 35
             }
           },
           "implements": [],

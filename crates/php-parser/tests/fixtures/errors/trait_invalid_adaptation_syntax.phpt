@@ -64,7 +64,7 @@ expected '::' or 'as', found ';'
                       "kind": "Unqualified",
                       "span": {
                         "start": 55,
-                        "end": 57
+                        "end": 56
                       }
                     }
                   ],

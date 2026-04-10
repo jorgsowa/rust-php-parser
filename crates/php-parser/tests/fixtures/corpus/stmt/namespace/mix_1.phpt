@@ -59,7 +59,7 @@ echo 3;
             "kind": "Unqualified",
             "span": {
               "start": 37,
-              "end": 39
+              "end": 38
             }
           },
           "body": {

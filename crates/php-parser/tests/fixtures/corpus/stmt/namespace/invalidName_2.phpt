@@ -1,6 +1,8 @@
 ===source===
 <?php use B as PARENT;
 ===errors===
+expected identifier, found 'parent'
+expected ';', found 'parent'
 ===ast===
 {
   "stmts": [
@@ -17,7 +19,7 @@
                 "kind": "Unqualified",
                 "span": {
                   "start": 10,
-                  "end": 12
+                  "end": 11
                 }
               },
               "alias": null,

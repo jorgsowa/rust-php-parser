@@ -17,6 +17,7 @@ const WithGroupAttributes = 3;
 const ThisIsInvalid = 4,
     AttributesOnMultipleConstants = 5;
 ===errors===
+cannot use attributes on multi-constant declaration
 ===ast===
 {
   "stmts": [

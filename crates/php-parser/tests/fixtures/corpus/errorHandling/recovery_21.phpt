@@ -4,6 +4,9 @@
 foreach ($foo) { $bar; }
 foreach ($foo as ) { $bar; }
 ===errors===
+expected 'as', found ')'
+expected expression
+expected expression
 ===ast===
 {
   "stmts": [

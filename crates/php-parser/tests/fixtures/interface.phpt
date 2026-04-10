@@ -73,7 +73,7 @@ interface HasName extends HasId {
               "kind": "Unqualified",
               "span": {
                 "start": 86,
-                "end": 92
+                "end": 91
               }
             }
           ],

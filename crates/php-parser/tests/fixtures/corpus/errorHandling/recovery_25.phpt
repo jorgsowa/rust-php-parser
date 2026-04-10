@@ -2,6 +2,10 @@
 <?php
 $a = ["a "thing"];
 ===errors===
+expected ']', found identifier
+expected ';' after expression
+expected ';' after expression
+expected expression
 ===ast===
 {
   "stmts": [

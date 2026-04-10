@@ -7,6 +7,7 @@ class Test
 
 }
 ===errors===
+cannot have hooks on comma-separated property
 ===ast===
 {
   "stmts": [

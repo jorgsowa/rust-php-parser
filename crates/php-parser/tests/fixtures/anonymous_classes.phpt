@@ -223,7 +223,7 @@ $obj = new class($x) extends Base implements Iface {
                             "kind": "Unqualified",
                             "span": {
                               "start": 148,
-                              "end": 152
+                              "end": 151
                             }
                           },
                           "implements": [],
@@ -303,7 +303,7 @@ $obj = new class($x) extends Base implements Iface {
                               "kind": "Unqualified",
                               "span": {
                                 "start": 209,
-                                "end": 213
+                                "end": 212
                               }
                             }
                           ],
@@ -495,7 +495,7 @@ $obj = new class($x) extends Base implements Iface {
                             "kind": "Unqualified",
                             "span": {
                               "start": 422,
-                              "end": 427
+                              "end": 426
                             }
                           },
                           "implements": [
@@ -506,7 +506,7 @@ $obj = new class($x) extends Base implements Iface {
                               "kind": "Unqualified",
                               "span": {
                                 "start": 438,
-                                "end": 444
+                                "end": 443
                               }
                             }
                           ],

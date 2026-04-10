@@ -49,20 +49,20 @@ class Container {
                           "kind": "Unqualified",
                           "span": {
                             "start": 37,
-                            "end": 49
+                            "end": 48
                           }
                         }
                       },
                       "span": {
                         "start": 37,
-                        "end": 49
+                        "end": 48
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 27,
-                  "end": 49
+                  "end": 48
                 }
               },
               "default": null,
@@ -205,20 +205,20 @@ class Container {
                                   "kind": "Unqualified",
                                   "span": {
                                     "start": 174,
-                                    "end": 183
+                                    "end": 182
                                   }
                                 }
                               },
                               "span": {
                                 "start": 174,
-                                "end": 183
+                                "end": 182
                               }
                             }
                           ]
                         },
                         "span": {
                           "start": 164,
-                          "end": 183
+                          "end": 182
                         }
                       },
                       "default": null,

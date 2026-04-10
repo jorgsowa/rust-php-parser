@@ -1,6 +1,7 @@
 ===source===
 <?php class A { abstract final function a(); }
 ===errors===
+cannot use 'abstract' and 'final' together
 ===ast===
 {
   "stmts": [

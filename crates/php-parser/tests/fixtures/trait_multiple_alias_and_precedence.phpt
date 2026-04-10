@@ -133,7 +133,7 @@ class C {
                       "kind": "Unqualified",
                       "span": {
                         "start": 126,
-                        "end": 128
+                        "end": 127
                       }
                     }
                   ],

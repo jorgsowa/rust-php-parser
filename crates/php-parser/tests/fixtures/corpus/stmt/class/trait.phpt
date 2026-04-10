@@ -102,7 +102,7 @@ class B {
                       "kind": "Unqualified",
                       "span": {
                         "start": 76,
-                        "end": 78
+                        "end": 77
                       }
                     }
                   ],
@@ -188,7 +188,7 @@ class B {
                       "kind": "Unqualified",
                       "span": {
                         "start": 164,
-                        "end": 166
+                        "end": 165
                       }
                     }
                   ],

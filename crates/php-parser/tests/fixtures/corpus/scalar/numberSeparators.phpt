@@ -20,6 +20,14 @@ _100;
 1_e2;
 1e_2;
 ===errors===
+Invalid numeric literal
+Invalid numeric literal
+Invalid numeric literal
+Invalid numeric literal
+Invalid numeric literal
+Invalid numeric literal
+Invalid numeric literal
+Invalid numeric literal
 ===ast===
 {
   "stmts": [

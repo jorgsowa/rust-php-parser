@@ -118,7 +118,7 @@ class UserController extends BaseController implements JsonResponder
                 "kind": "Qualified",
                 "span": {
                   "start": 59,
-                  "end": 84
+                  "end": 83
                 }
               },
               "alias": "Auth",
@@ -151,7 +151,7 @@ class UserController extends BaseController implements JsonResponder
             "kind": "Unqualified",
             "span": {
               "start": 123,
-              "end": 138
+              "end": 137
             }
           },
           "implements": [
@@ -162,7 +162,7 @@ class UserController extends BaseController implements JsonResponder
               "kind": "Unqualified",
               "span": {
                 "start": 149,
-                "end": 163
+                "end": 162
               }
             }
           ],
@@ -184,13 +184,13 @@ class UserController extends BaseController implements JsonResponder
                         "kind": "Unqualified",
                         "span": {
                           "start": 186,
-                          "end": 198
+                          "end": 197
                         }
                       }
                     },
                     "span": {
                       "start": 186,
-                      "end": 198
+                      "end": 197
                     }
                   },
                   "default": null,
@@ -223,13 +223,13 @@ class UserController extends BaseController implements JsonResponder
                             "kind": "Unqualified",
                             "span": {
                               "start": 238,
-                              "end": 250
+                              "end": 249
                             }
                           }
                         },
                         "span": {
                           "start": 238,
-                          "end": 250
+                          "end": 249
                         }
                       },
                       "default": null,
@@ -820,7 +820,7 @@ class UserController extends BaseController implements JsonResponder
                                   "kind": "Unqualified",
                                   "span": {
                                     "start": 814,
-                                    "end": 832
+                                    "end": 831
                                   }
                                 }
                               ],

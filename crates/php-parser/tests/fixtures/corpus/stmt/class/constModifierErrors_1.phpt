@@ -4,6 +4,7 @@ class A {
     static const X = 1;
 }
 ===errors===
+cannot use 'static' as constant modifier
 ===ast===
 {
   "stmts": [
