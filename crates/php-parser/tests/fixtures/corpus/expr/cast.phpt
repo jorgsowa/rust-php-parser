@@ -12,6 +12,7 @@
 (string)  $a;
 (unset)   $a;
 ===errors===
+the (real) cast is no longer supported, use (float) instead
 the (unset) cast is no longer supported
 ===ast===
 {
