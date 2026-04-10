@@ -146,6 +146,26 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
                     },
                     parser.alloc_vec(),
                 )
+            } else if parser.check(TokenKind::Final) {
+                // `abstract final class` — collect both modifiers and emit diagnostic
+                parser.advance(); // consume 'final'
+                parser.error(ParseError::Forbidden {
+                    message: "cannot use 'abstract' and 'final' together on a class".into(),
+                    span: Span::new(start, parser.previous_end()),
+                });
+                if parser.check(TokenKind::Class) {
+                    parse_class(
+                        parser,
+                        ClassModifiers {
+                            is_abstract: true,
+                            is_final: true,
+                            ..Default::default()
+                        },
+                        parser.alloc_vec(),
+                    )
+                } else {
+                    class_modifier_error(parser, start)
+                }
             } else {
                 // abstract without class - error recovery
                 class_modifier_error(parser, start)
@@ -173,6 +193,26 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
                         ClassModifiers {
                             is_final: true,
                             is_readonly: true,
+                            ..Default::default()
+                        },
+                        parser.alloc_vec(),
+                    )
+                } else {
+                    class_modifier_error(parser, start)
+                }
+            } else if parser.check(TokenKind::Abstract) {
+                // `final abstract class` — collect both modifiers and emit diagnostic
+                parser.advance(); // consume 'abstract'
+                parser.error(ParseError::Forbidden {
+                    message: "cannot use 'abstract' and 'final' together on a class".into(),
+                    span: Span::new(start, parser.previous_end()),
+                });
+                if parser.check(TokenKind::Class) {
+                    parse_class(
+                        parser,
+                        ClassModifiers {
+                            is_abstract: true,
+                            is_final: true,
                             ..Default::default()
                         },
                         parser.alloc_vec(),
@@ -313,11 +353,31 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     },
                     attributes,
                 );
+            } else if parser.check(TokenKind::Final) {
+                parser.advance();
+                parser.error(ParseError::Forbidden {
+                    message: "cannot use 'abstract' and 'final' together on a class".into(),
+                    span: Span::new(start, parser.previous_end()),
+                });
+                if parser.check(TokenKind::Class) {
+                    return parse_class(
+                        parser,
+                        ClassModifiers {
+                            is_abstract: true,
+                            is_final: true,
+                            ..Default::default()
+                        },
+                        attributes,
+                    );
+                } else {
+                    class_modifier_error(parser, start)
+                }
             } else {
                 class_modifier_error(parser, start)
             }
         }
         TokenKind::Final => {
+            let start = parser.start_span();
             parser.advance();
             if parser.check(TokenKind::Class) {
                 parse_class(
@@ -341,18 +401,27 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     },
                     attributes,
                 )
-            } else {
-                let span = parser.current_span();
-                parser.error(ParseError::Expected {
-                    expected: "'class'".into(),
-                    found: parser.current_kind(),
-                    span,
+            } else if parser.check(TokenKind::Abstract) {
+                parser.advance();
+                parser.error(ParseError::Forbidden {
+                    message: "cannot use 'abstract' and 'final' together on a class".into(),
+                    span: Span::new(start, parser.previous_end()),
                 });
-                parser.synchronize();
-                Stmt {
-                    kind: StmtKind::Error,
-                    span,
+                if parser.check(TokenKind::Class) {
+                    parse_class(
+                        parser,
+                        ClassModifiers {
+                            is_abstract: true,
+                            is_final: true,
+                            ..Default::default()
+                        },
+                        attributes,
+                    )
+                } else {
+                    class_modifier_error(parser, start)
                 }
+            } else {
+                class_modifier_error(parser, start)
             }
         }
         TokenKind::Readonly => {
@@ -2109,6 +2178,12 @@ pub fn parse_class_members<'arena, 'src>(
         if is_abstract && is_final {
             parser.error(ParseError::Forbidden {
                 message: "cannot use 'abstract' and 'final' together".into(),
+                span: Span::new(member_start, parser.previous_end()),
+            });
+        }
+        if is_static && is_readonly {
+            parser.error(ParseError::Forbidden {
+                message: "static properties cannot be readonly".into(),
                 span: Span::new(member_start, parser.previous_end()),
             });
         }

@@ -1,23 +1,16 @@
 ===source===
 <?php abstract final class A { }
 ===errors===
-expected 'class', found 'final'
+cannot use 'abstract' and 'final' together on a class
 ===ast===
 {
   "stmts": [
-    {
-      "kind": "Error",
-      "span": {
-        "start": 6,
-        "end": 14
-      }
-    },
     {
       "kind": {
         "Class": {
           "name": "A",
           "modifiers": {
-            "is_abstract": false,
+            "is_abstract": true,
             "is_final": true,
             "is_readonly": false
           },
