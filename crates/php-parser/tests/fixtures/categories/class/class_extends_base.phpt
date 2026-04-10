@@ -1,14 +1,13 @@
 ===source===
-<?php class Test extends { }
-===errors===
-expected identifier, found '{'
+<?php class Incomplete extends Base {
+}
 ===ast===
 {
   "stmts": [
     {
       "kind": {
         "Class": {
-          "name": "Test",
+          "name": "Incomplete",
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -16,12 +15,12 @@ expected identifier, found '{'
           },
           "extends": {
             "parts": [
-              "<error>"
+              "Base"
             ],
             "kind": "Unqualified",
             "span": {
-              "start": 25,
-              "end": 26
+              "start": 31,
+              "end": 35
             }
           },
           "implements": [],
@@ -31,12 +30,12 @@ expected identifier, found '{'
       },
       "span": {
         "start": 6,
-        "end": 28
+        "end": 39
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 28
+    "end": 39
   }
 }

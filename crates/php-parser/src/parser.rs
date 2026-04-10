@@ -547,21 +547,22 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
 
         // First part
-        let first: &'src str = if let Some((text, _)) = self.eat_identifier_or_keyword() {
-            text
-        } else {
-            self.error(ParseError::Expected {
-                expected: "identifier".into(),
-                found: self.current_kind(),
-                span: self.current_span(),
-            });
-            "<error>"
-        };
+        let (first, first_span): (&'src str, Span) =
+            if let Some((text, span)) = self.eat_identifier_or_keyword() {
+                (text, span)
+            } else {
+                self.error(ParseError::Expected {
+                    expected: "identifier".into(),
+                    found: self.current_kind(),
+                    span: self.current_span(),
+                });
+                ("<error>", self.current_span())
+            };
 
         // Fast path: single unqualified identifier (the common case, ~95% of names).
         // Avoids allocating an ArenaVec entirely.
         if !fully_qualified && !relative && !self.check(TokenKind::Backslash) {
-            let span = Span::new(start, self.previous_end());
+            let span = Span::new(start, first_span.end);
             return Name::Simple { value: first, span };
         }
 
@@ -570,13 +571,15 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         parts.push(first);
 
         // Subsequent parts: \Ident
+        let mut last_end = first_span.end;
         while self.eat(TokenKind::Backslash).is_some() {
-            if let Some((text, _)) = self.eat_identifier_or_keyword() {
+            if let Some((text, span)) = self.eat_identifier_or_keyword() {
                 parts.push(text);
+                last_end = span.end;
             }
         }
 
-        let span = Span::new(start, self.previous_end());
+        let span = Span::new(start, last_end);
 
         let kind = if fully_qualified {
             NameKind::FullyQualified

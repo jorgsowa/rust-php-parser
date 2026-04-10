@@ -1,8 +1,7 @@
 ===source===
-<?php foo(1, 2
+<?php foo(1,, 2);
 ===errors===
-expected ')', found end of file
-expected ';' after expression
+expected expression
 ===ast===
 {
   "stmts": [
@@ -42,19 +41,35 @@ expected ';' after expression
                 {
                   "name": null,
                   "value": {
-                    "kind": {
-                      "Int": 2
-                    },
+                    "kind": "Error",
                     "span": {
-                      "start": 13,
-                      "end": 14
+                      "start": 12,
+                      "end": 13
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
-                    "start": 13,
-                    "end": 14
+                    "start": 12,
+                    "end": 13
+                  }
+                },
+                {
+                  "name": null,
+                  "value": {
+                    "kind": {
+                      "Int": 2
+                    },
+                    "span": {
+                      "start": 14,
+                      "end": 15
+                    }
+                  },
+                  "unpack": false,
+                  "by_ref": false,
+                  "span": {
+                    "start": 14,
+                    "end": 15
                   }
                 }
               ]
@@ -62,18 +77,18 @@ expected ';' after expression
           },
           "span": {
             "start": 6,
-            "end": 14
+            "end": 16
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 14
+        "end": 17
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 14
+    "end": 17
   }
 }

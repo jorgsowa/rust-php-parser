@@ -1,29 +1,21 @@
 ===source===
-<?php class Test extends { }
+<?php class function while;
 ===errors===
-expected identifier, found '{'
+expected '{', found 'while'
+expected '}', found end of file
 ===ast===
 {
   "stmts": [
     {
       "kind": {
         "Class": {
-          "name": "Test",
+          "name": "function",
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
             "is_readonly": false
           },
-          "extends": {
-            "parts": [
-              "<error>"
-            ],
-            "kind": "Unqualified",
-            "span": {
-              "start": 25,
-              "end": 26
-            }
-          },
+          "extends": null,
           "implements": [],
           "members": [],
           "attributes": []
@@ -31,12 +23,12 @@ expected identifier, found '{'
       },
       "span": {
         "start": 6,
-        "end": 28
+        "end": 27
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 28
+    "end": 27
   }
 }

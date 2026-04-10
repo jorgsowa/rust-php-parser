@@ -23,7 +23,7 @@ expected identifier, found '{'
               "kind": "Unqualified",
               "span": {
                 "start": 28,
-                "end": 27
+                "end": 29
               }
             }
           ],
