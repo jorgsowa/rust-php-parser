@@ -122,6 +122,8 @@ fn fixture_files_are_valid_php() {
         "misc.phpt", // corpus/expr/uvs/misc.phpt
         // [parse-leniency] (void) cast — not valid in PHP.
         "voidCast.phpt",
+        // [semantic] declare() inside a conditional block — PHP rejects at compile time.
+        "declare_in_conditional.phpt",
         // [semantic] break/continue outside loop.
         "controlFlow.phpt",
         // [semantic] Unicode escape with codepoint too large.
