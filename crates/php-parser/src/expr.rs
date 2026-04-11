@@ -927,7 +927,12 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                 .strip_prefix('b')
                 .or_else(|| text.strip_prefix('B'))
                 .unwrap_or(text);
-            let inner = &text[1..text.len() - 1];
+            // Use strip_prefix/strip_suffix to respect UTF-8 char boundaries.
+            // An unterminated string may end with a multi-byte character whose last
+            // byte coincidentally matches the closing delimiter byte; byte indexing
+            // would panic in that case.
+            let without_open = text.strip_prefix('\'').unwrap_or(text);
+            let inner = without_open.strip_suffix('\'').unwrap_or(without_open);
             // Fast path: if no backslash, inner is a verbatim source slice
             let value: &'arena str = if !inner.contains('\\') {
                 // inner is a subslice of `src` which has lifetime 'src
@@ -977,18 +982,22 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                 .strip_prefix('b')
                 .or_else(|| text.strip_prefix('B'))
                 .unwrap_or(text);
-            // Guard against unterminated strings (lexer already emitted an error)
-            if stripped.len() < 2 {
+            // Use strip_prefix/strip_suffix to respect UTF-8 char boundaries.
+            // An unterminated string may end with a multi-byte character; byte indexing
+            // would panic in that case. The lexer already emitted an error for unterminated
+            // strings, so it is safe to treat the missing closing quote as absent here.
+            let Some(without_open) = stripped.strip_prefix('"') else {
                 return Expr {
                     kind: ExprKind::String(parser.arena.alloc_str("")),
                     span: token.span,
                 };
-            }
-            let inner = &stripped[1..stripped.len() - 1];
+            };
+            let inner = without_open.strip_suffix('"').unwrap_or(without_open);
 
             if crate::interpolation::has_interpolation(inner) {
-                // Offset of first char of inner content in source
-                let inner_offset = token.span.end - 1 - inner.len() as u32;
+                // Compute the byte offset of inner within src via pointer arithmetic so
+                // the result is correct regardless of the b/B prefix or termination.
+                let inner_offset = (inner.as_ptr() as usize - src.as_ptr() as usize) as u32;
                 let parts = crate::interpolation::parse_interpolated_parts(
                     parser.arena,
                     src,
@@ -1049,14 +1058,14 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             let token = parser.advance();
             let src = parser.source();
             let text = &src[token.span.start as usize..token.span.end as usize];
-            // Guard against unterminated backtick strings (lexer already emitted an error)
-            if text.len() < 2 {
+            // Use strip_prefix/strip_suffix to respect UTF-8 char boundaries.
+            let Some(without_open) = text.strip_prefix('`') else {
                 return Expr {
                     kind: ExprKind::ShellExec(parser.alloc_vec_with_capacity(0)),
                     span: token.span,
                 };
-            }
-            let inner = &text[1..text.len() - 1];
+            };
+            let inner = without_open.strip_suffix('`').unwrap_or(without_open);
 
             if crate::interpolation::has_interpolation(inner) {
                 let inner_offset = token.span.start + 1;
