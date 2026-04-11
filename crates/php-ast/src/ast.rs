@@ -1012,6 +1012,20 @@ pub enum ExprKind<'arena, 'src> {
     Error,
 }
 
+impl<'arena, 'src> Expr<'arena, 'src> {
+    /// Returns the name string for `Variable` and `Identifier` nodes, `None` for everything else.
+    ///
+    /// This is the idiomatic way to extract a name when you need to handle both cases without
+    /// writing two separate match arms with incompatible binding types (`&'src str` vs `&'arena str`).
+    pub fn name_str(&self) -> Option<&str> {
+        match &self.kind {
+            ExprKind::Variable(s) => Some(s),
+            ExprKind::Identifier(s) => Some(s),
+            _ => None,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 pub enum CastKind {
     Int,
