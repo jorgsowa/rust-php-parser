@@ -476,7 +476,7 @@ impl Printer {
             ExprKind::Null => self.w("null"),
             ExprKind::Variable(name) => {
                 self.w("$");
-                self.w(name);
+                self.w(name.as_str());
             }
             ExprKind::VariableVariable(inner) => {
                 self.w("$");
@@ -488,7 +488,7 @@ impl Printer {
                     self.w("}");
                 }
             }
-            ExprKind::Identifier(name) => self.w(name),
+            ExprKind::Identifier(name) => self.w(name.as_str()),
             ExprKind::Assign(assign) => {
                 let (_, lhs_prec, rhs_prec) = assign_op_precedence(assign.op);
                 self.print_expr(assign.target, lhs_prec);
@@ -1435,7 +1435,7 @@ impl Printer {
                 StringPart::Expr(expr) => match &expr.kind {
                     ExprKind::Variable(name) => {
                         self.w("$");
-                        self.w(name);
+                        self.w(name.as_str());
                     }
                     _ => {
                         self.w("{");

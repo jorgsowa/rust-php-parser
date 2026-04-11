@@ -3275,10 +3275,12 @@ fn parse_expression_stmt_or_label<'arena, 'src>(
     if let ExprKind::Identifier(name) = expr.kind {
         if parser.eat(TokenKind::Colon).is_some() {
             let span = Span::new(start, parser.previous_end());
-            // Label names are always simple identifiers borrowed from source
-            // If somehow it's owned (qualified name), we can't get &'src str easily;
+            let label: &'arena str = match name {
+                NameStr::Src(s) => parser.arena.alloc_str(s),
+                NameStr::Arena(s) => s,
+            };
             return Stmt {
-                kind: StmtKind::Label(name),
+                kind: StmtKind::Label(label),
                 span,
             };
         }
