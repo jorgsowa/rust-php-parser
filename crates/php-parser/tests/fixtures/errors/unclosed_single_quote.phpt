@@ -10,7 +10,7 @@ expected ';' after expression
       "kind": {
         "Expression": {
           "kind": {
-            "String": "unclosed strin"
+            "String": "unclosed string"
           },
           "span": {
             "start": 6,

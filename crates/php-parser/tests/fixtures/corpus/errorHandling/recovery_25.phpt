@@ -86,7 +86,7 @@ expected ';' after expression
       "kind": {
         "Expression": {
           "kind": {
-            "String": "]"
+            "String": "];"
           },
           "span": {
             "start": 21,

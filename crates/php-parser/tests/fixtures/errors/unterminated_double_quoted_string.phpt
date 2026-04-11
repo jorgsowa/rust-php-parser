@@ -23,7 +23,7 @@ expected ';' after expression
               "op": "Assign",
               "value": {
                 "kind": {
-                  "String": "unclosed"
+                  "String": "unclosed;"
                 },
                 "span": {
                   "start": 11,
