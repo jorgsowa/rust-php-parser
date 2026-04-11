@@ -9,9 +9,11 @@ use std::fmt;
 ///
 /// Ordering is meaningful: `Php82 > Php81`, etc.
 ///
-/// Defaults to [`PhpVersion::Php84`] (the latest supported version).
+/// Defaults to [`PhpVersion::Php85`] (the latest supported version).
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord)]
 pub enum PhpVersion {
+    /// PHP 7.4 — arrow functions, typed properties, spread in array expressions, numeric literal separator.
+    Php74,
     /// PHP 8.0 — match, named arguments, constructor promotion, union types, nullsafe `?->`, throw expression, `mixed`/`false`/`null` types.
     Php80,
     /// PHP 8.1 — enums, `readonly` properties/parameters, intersection types, first-class callables, `never` type.
@@ -31,6 +33,7 @@ pub enum PhpVersion {
 impl fmt::Display for PhpVersion {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            PhpVersion::Php74 => write!(f, "7.4"),
             PhpVersion::Php80 => write!(f, "8.0"),
             PhpVersion::Php81 => write!(f, "8.1"),
             PhpVersion::Php82 => write!(f, "8.2"),
