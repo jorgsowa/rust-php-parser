@@ -1,5 +1,5 @@
 use php_ast::*;
-use php_lexer::{Lexer, Token, TokenKind};
+use php_lexer::{Lexer, LexerErrorKind, Token, TokenKind};
 
 use crate::diagnostics::ParseError;
 use crate::expr;
@@ -75,9 +75,13 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         // Convert lexer errors to parser errors
         let mut errors: Vec<ParseError> = Vec::new();
         for e in lex_errors {
-            errors.push(ParseError::Forbidden {
-                message: e.message.into(),
-                span: e.span,
+            errors.push(if e.kind == LexerErrorKind::UnterminatedString {
+                ParseError::UnterminatedString { span: e.span }
+            } else {
+                ParseError::Forbidden {
+                    message: e.message.into(),
+                    span: e.span,
+                }
             });
         }
         errors.truncate(MAX_ERRORS);
@@ -147,9 +151,13 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
         // Collect all lexer errors
         for e in lexer.errors {
-            errors.push(ParseError::Forbidden {
-                message: e.message.into(),
-                span: e.span,
+            errors.push(if e.kind == LexerErrorKind::UnterminatedString {
+                ParseError::UnterminatedString { span: e.span }
+            } else {
+                ParseError::Forbidden {
+                    message: e.message.into(),
+                    span: e.span,
+                }
             });
         }
         errors.truncate(MAX_ERRORS);

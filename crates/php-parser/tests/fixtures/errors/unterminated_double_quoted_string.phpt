@@ -1,10 +1,7 @@
 ===source===
-<?php $x = 'unterminated
- echo 'hello';
+<?php $x = "unclosed;
 ===errors===
 unterminated string literal
-expected ';' after expression
-expected ';' after expression
 expected ';' after expression
 ===ast===
 {
@@ -26,63 +23,29 @@ expected ';' after expression
               "op": "Assign",
               "value": {
                 "kind": {
-                  "String": "unterminated\n echo "
+                  "String": "unclosed"
                 },
                 "span": {
                   "start": 11,
-                  "end": 32
+                  "end": 21
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 32
+            "end": 21
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 32
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Identifier": "hello"
-          },
-          "span": {
-            "start": 32,
-            "end": 37
-          }
-        }
-      },
-      "span": {
-        "start": 32,
-        "end": 37
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "String": ""
-          },
-          "span": {
-            "start": 37,
-            "end": 39
-          }
-        }
-      },
-      "span": {
-        "start": 37,
-        "end": 39
+        "end": 21
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 39
+    "end": 21
   }
 }
