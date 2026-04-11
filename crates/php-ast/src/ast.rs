@@ -104,6 +104,146 @@ pub struct Program<'arena, 'src> {
     pub span: Span,
 }
 
+impl<'arena, 'src> Program<'arena, 'src> {
+    /// Returns all top-level declarations in the program with their
+    /// fully-qualified names.
+    ///
+    /// This correctly handles both namespace declaration styles:
+    ///
+    /// - **Non-bracketed** (`namespace Foo;`): the namespace applies to all
+    ///   subsequent top-level statements until the next `namespace` declaration.
+    /// - **Bracketed** (`namespace Foo { ... }`): the namespace applies only to
+    ///   the statements within the braces.
+    ///
+    /// Anonymous classes (e.g. `new class {}`) are not included because they
+    /// have no name.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use php_ast::ast::{Program, DeclKind};
+    /// # fn example(program: &Program<'_, '_>) {
+    /// for decl in program.declarations() {
+    ///     println!("{} ({:?})", decl.fqn, decl.kind);
+    /// }
+    /// # }
+    /// ```
+    pub fn declarations(&self) -> Vec<Declaration<'src>> {
+        let mut result = Vec::new();
+        let mut current_ns: Option<String> = None;
+        collect_declarations(&self.stmts, &mut current_ns, &mut result);
+        result
+    }
+}
+
+/// The kind of a top-level PHP declaration.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum DeclKind {
+    Class,
+    Interface,
+    Trait,
+    Enum,
+    Function,
+    Const,
+}
+
+/// A top-level PHP declaration with its fully-qualified name resolved.
+#[derive(Debug)]
+pub struct Declaration<'src> {
+    /// The fully-qualified name, e.g. `Foo\Bar\MyClass`.
+    /// In the global namespace this is just the bare name.
+    pub fqn: String,
+    /// The kind of declaration.
+    pub kind: DeclKind,
+    /// The source span of the entire declaration statement.
+    pub span: Span,
+    /// The `&'src str` name slice from the source buffer (without namespace prefix).
+    pub name: &'src str,
+}
+
+fn build_fqn(ns: &Option<String>, name: &str) -> String {
+    match ns {
+        None => name.to_string(),
+        Some(ns) => format!("{}\\{}", ns, name),
+    }
+}
+
+fn collect_declarations<'arena, 'src>(
+    stmts: &[Stmt<'arena, 'src>],
+    current_ns: &mut Option<String>,
+    result: &mut Vec<Declaration<'src>>,
+) {
+    for stmt in stmts {
+        match &stmt.kind {
+            StmtKind::Namespace(ns) => {
+                let ns_name = ns.name.as_ref().map(|n| n.join_parts().into_owned());
+                match &ns.body {
+                    NamespaceBody::Braced(inner) => {
+                        let mut inner_ns = ns_name;
+                        collect_declarations(inner, &mut inner_ns, result);
+                    }
+                    NamespaceBody::Simple => {
+                        *current_ns = ns_name;
+                    }
+                }
+            }
+            StmtKind::Class(c) => {
+                if let Some(name) = c.name {
+                    result.push(Declaration {
+                        fqn: build_fqn(current_ns, name),
+                        kind: DeclKind::Class,
+                        span: stmt.span,
+                        name,
+                    });
+                }
+            }
+            StmtKind::Interface(i) => {
+                result.push(Declaration {
+                    fqn: build_fqn(current_ns, i.name),
+                    kind: DeclKind::Interface,
+                    span: stmt.span,
+                    name: i.name,
+                });
+            }
+            StmtKind::Trait(t) => {
+                result.push(Declaration {
+                    fqn: build_fqn(current_ns, t.name),
+                    kind: DeclKind::Trait,
+                    span: stmt.span,
+                    name: t.name,
+                });
+            }
+            StmtKind::Enum(e) => {
+                result.push(Declaration {
+                    fqn: build_fqn(current_ns, e.name),
+                    kind: DeclKind::Enum,
+                    span: stmt.span,
+                    name: e.name,
+                });
+            }
+            StmtKind::Function(f) => {
+                result.push(Declaration {
+                    fqn: build_fqn(current_ns, f.name),
+                    kind: DeclKind::Function,
+                    span: stmt.span,
+                    name: f.name,
+                });
+            }
+            StmtKind::Const(items) => {
+                for item in items.iter() {
+                    result.push(Declaration {
+                        fqn: build_fqn(current_ns, item.name),
+                        kind: DeclKind::Const,
+                        span: item.span,
+                        name: item.name,
+                    });
+                }
+            }
+            _ => {}
+        }
+    }
+}
+
 // =============================================================================
 // Names and Types
 // =============================================================================

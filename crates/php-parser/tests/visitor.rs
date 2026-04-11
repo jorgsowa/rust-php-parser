@@ -367,6 +367,159 @@ fn walks_declare_directive_expressions() {
 }
 
 // =============================================================================
+// Program::declarations() integration tests
+// =============================================================================
+
+#[test]
+fn declarations_global_namespace() {
+    with_parsed(
+        "<?php
+        class MyClass {}
+        interface MyInterface {}
+        trait MyTrait {}
+        enum MyEnum {}
+        function myFunc() {}
+        const MY_CONST = 1;",
+        |program| {
+            let decls = program.declarations();
+            assert_eq!(decls.len(), 6);
+            assert!(decls
+                .iter()
+                .any(|d| d.fqn == "MyClass" && d.kind == DeclKind::Class));
+            assert!(decls
+                .iter()
+                .any(|d| d.fqn == "MyInterface" && d.kind == DeclKind::Interface));
+            assert!(decls
+                .iter()
+                .any(|d| d.fqn == "MyTrait" && d.kind == DeclKind::Trait));
+            assert!(decls
+                .iter()
+                .any(|d| d.fqn == "MyEnum" && d.kind == DeclKind::Enum));
+            assert!(decls
+                .iter()
+                .any(|d| d.fqn == "myFunc" && d.kind == DeclKind::Function));
+            assert!(decls
+                .iter()
+                .any(|d| d.fqn == "MY_CONST" && d.kind == DeclKind::Const));
+        },
+    );
+}
+
+#[test]
+fn declarations_simple_namespace() {
+    with_parsed(
+        "<?php
+        namespace Foo\\Bar;
+        class Baz {}
+        function qux() {}",
+        |program| {
+            let decls = program.declarations();
+            assert_eq!(decls.len(), 2);
+            assert!(decls
+                .iter()
+                .any(|d| d.fqn == "Foo\\Bar\\Baz" && d.kind == DeclKind::Class));
+            assert!(decls
+                .iter()
+                .any(|d| d.fqn == "Foo\\Bar\\qux" && d.kind == DeclKind::Function));
+        },
+    );
+}
+
+#[test]
+fn declarations_braced_namespace() {
+    with_parsed(
+        "<?php
+        namespace Foo\\Bar {
+            class Baz {}
+            function qux() {}
+        }",
+        |program| {
+            let decls = program.declarations();
+            assert_eq!(decls.len(), 2);
+            assert!(decls
+                .iter()
+                .any(|d| d.fqn == "Foo\\Bar\\Baz" && d.kind == DeclKind::Class));
+            assert!(decls
+                .iter()
+                .any(|d| d.fqn == "Foo\\Bar\\qux" && d.kind == DeclKind::Function));
+        },
+    );
+}
+
+#[test]
+fn declarations_multiple_braced_namespaces() {
+    with_parsed(
+        "<?php
+        namespace Alpha {
+            class A {}
+        }
+        namespace Beta {
+            class B {}
+        }",
+        |program| {
+            let decls = program.declarations();
+            assert_eq!(decls.len(), 2);
+            assert!(decls
+                .iter()
+                .any(|d| d.fqn == "Alpha\\A" && d.kind == DeclKind::Class));
+            assert!(decls
+                .iter()
+                .any(|d| d.fqn == "Beta\\B" && d.kind == DeclKind::Class));
+        },
+    );
+}
+
+#[test]
+fn declarations_multiple_simple_namespaces() {
+    with_parsed(
+        "<?php
+        namespace Alpha;
+        class A {}
+        namespace Beta;
+        class B {}",
+        |program| {
+            let decls = program.declarations();
+            assert_eq!(decls.len(), 2);
+            assert!(decls
+                .iter()
+                .any(|d| d.fqn == "Alpha\\A" && d.kind == DeclKind::Class));
+            assert!(decls
+                .iter()
+                .any(|d| d.fqn == "Beta\\B" && d.kind == DeclKind::Class));
+        },
+    );
+}
+
+#[test]
+fn declarations_name_field_is_unqualified() {
+    with_parsed(
+        "<?php
+        namespace Foo;
+        class Bar {}",
+        |program| {
+            let decls = program.declarations();
+            assert_eq!(decls.len(), 1);
+            assert_eq!(decls[0].fqn, "Foo\\Bar");
+            assert_eq!(decls[0].name, "Bar");
+        },
+    );
+}
+
+#[test]
+fn declarations_anonymous_class_excluded() {
+    with_parsed(
+        "<?php
+        $obj = new class {};
+        class Named {}",
+        |program| {
+            let decls = program.declarations();
+            assert_eq!(decls.len(), 1);
+            assert_eq!(decls[0].fqn, "Named");
+        },
+    );
+}
+
+// =============================================================================
 // ScopeVisitor integration tests
 // =============================================================================
 
