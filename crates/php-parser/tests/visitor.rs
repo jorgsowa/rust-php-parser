@@ -3,7 +3,7 @@
 //! the visitor reaches all expected nodes.
 
 use php_ast::ast::*;
-use php_ast::visitor::{self, Visitor};
+use php_ast::visitor::{self, Scope, ScopeVisitor, ScopeWalker, Visitor};
 use std::ops::ControlFlow;
 
 /// Parse PHP source and run a callback with the resulting program.
@@ -364,4 +364,286 @@ fn walks_declare_directive_expressions() {
         let _ = c.visit_program(program);
         assert!(c.exprs >= 1); // the `1` in strict_types=1
     });
+}
+
+// =============================================================================
+// ScopeVisitor integration tests
+// =============================================================================
+
+/// Collects (class_name, method_name) pairs seen while visiting class members.
+#[derive(Default)]
+struct MethodScopeCollector {
+    /// (class_name, method_name) for each Method member visited.
+    entries: Vec<(Option<String>, String)>,
+}
+
+impl<'arena, 'src> ScopeVisitor<'arena, 'src> for MethodScopeCollector {
+    fn visit_class_member(
+        &mut self,
+        member: &ClassMember<'arena, 'src>,
+        scope: &Scope<'src>,
+    ) -> ControlFlow<()> {
+        if let ClassMemberKind::Method(m) = &member.kind {
+            self.entries
+                .push((scope.class_name.map(str::to_string), m.name.to_string()));
+        }
+        ControlFlow::Continue(())
+    }
+}
+
+#[test]
+fn scope_visitor_tracks_class_for_methods() {
+    with_parsed(
+        "<?php
+        class Foo {
+            public function bar(): void {}
+            public function baz(): void {}
+        }",
+        |program| {
+            let mut walker = ScopeWalker::new(MethodScopeCollector::default());
+            let _ = walker.walk(program);
+            let c = walker.into_inner();
+            assert_eq!(
+                c.entries,
+                vec![
+                    (Some("Foo".into()), "bar".into()),
+                    (Some("Foo".into()), "baz".into()),
+                ]
+            );
+        },
+    );
+}
+
+#[test]
+fn scope_visitor_tracks_namespace() {
+    with_parsed(
+        "<?php
+        namespace App\\Http;
+
+        function handle(): void {}",
+        |program| {
+            #[derive(Default)]
+            struct NsCollector {
+                fn_namespaces: Vec<Option<String>>,
+            }
+            impl<'arena, 'src> ScopeVisitor<'arena, 'src> for NsCollector {
+                fn visit_stmt(
+                    &mut self,
+                    stmt: &Stmt<'arena, 'src>,
+                    scope: &Scope<'src>,
+                ) -> ControlFlow<()> {
+                    if matches!(&stmt.kind, StmtKind::Function(_)) {
+                        self.fn_namespaces
+                            .push(scope.namespace.as_deref().map(str::to_string));
+                    }
+                    ControlFlow::Continue(())
+                }
+            }
+
+            let mut walker = ScopeWalker::new(NsCollector::default());
+            let _ = walker.walk(program);
+            let c = walker.into_inner();
+            assert_eq!(c.fn_namespaces, vec![Some("App\\Http".into())]);
+        },
+    );
+}
+
+#[test]
+fn scope_visitor_function_name_inside_body() {
+    with_parsed(
+        "<?php
+        function outer(): void {
+            $x = 1;
+        }",
+        |program| {
+            #[derive(Default)]
+            struct FnCollector {
+                /// function_name seen for each Expression stmt visited.
+                fn_names: Vec<Option<String>>,
+            }
+            impl<'arena, 'src> ScopeVisitor<'arena, 'src> for FnCollector {
+                fn visit_stmt(
+                    &mut self,
+                    stmt: &Stmt<'arena, 'src>,
+                    scope: &Scope<'src>,
+                ) -> ControlFlow<()> {
+                    if matches!(&stmt.kind, StmtKind::Expression(_)) {
+                        self.fn_names.push(scope.function_name.map(str::to_string));
+                    }
+                    ControlFlow::Continue(())
+                }
+            }
+
+            let mut walker = ScopeWalker::new(FnCollector::default());
+            let _ = walker.walk(program);
+            let c = walker.into_inner();
+            assert_eq!(c.fn_names, vec![Some("outer".into())]);
+        },
+    );
+}
+
+#[test]
+fn scope_visitor_closure_clears_function_name() {
+    with_parsed(
+        "<?php
+        function outer(): void {
+            $f = function() { $x = 1; };
+        }",
+        |program| {
+            #[derive(Default)]
+            struct FnNameCollector {
+                /// function_name seen for $x = 1 expression stmt inside closure.
+                names_inside_closure: Vec<Option<String>>,
+            }
+            impl<'arena, 'src> ScopeVisitor<'arena, 'src> for FnNameCollector {
+                fn visit_expr(
+                    &mut self,
+                    expr: &Expr<'arena, 'src>,
+                    scope: &Scope<'src>,
+                ) -> ControlFlow<()> {
+                    // Collect function_name whenever we see an Assign inside the closure.
+                    if matches!(&expr.kind, ExprKind::Assign(_)) {
+                        self.names_inside_closure
+                            .push(scope.function_name.map(str::to_string));
+                    }
+                    ControlFlow::Continue(())
+                }
+            }
+
+            let mut walker = ScopeWalker::new(FnNameCollector::default());
+            let _ = walker.walk(program);
+            let c = walker.into_inner();
+            // $f = ... at outer scope has function_name = "outer"
+            // $x = ... inside closure has function_name = None
+            assert!(c.names_inside_closure.contains(&Some("outer".into())));
+            assert!(c.names_inside_closure.contains(&None));
+        },
+    );
+}
+
+#[test]
+fn scope_visitor_method_tracks_class_and_function() {
+    with_parsed(
+        "<?php
+        class MyClass {
+            public function myMethod(): void {
+                $x = 1;
+            }
+        }",
+        |program| {
+            #[derive(Default)]
+            struct ScopeCapture {
+                /// (class_name, function_name) for each expression stmt visited.
+                captures: Vec<(Option<String>, Option<String>)>,
+            }
+            impl<'arena, 'src> ScopeVisitor<'arena, 'src> for ScopeCapture {
+                fn visit_stmt(
+                    &mut self,
+                    stmt: &Stmt<'arena, 'src>,
+                    scope: &Scope<'src>,
+                ) -> ControlFlow<()> {
+                    if matches!(&stmt.kind, StmtKind::Expression(_)) {
+                        self.captures.push((
+                            scope.class_name.map(str::to_string),
+                            scope.function_name.map(str::to_string),
+                        ));
+                    }
+                    ControlFlow::Continue(())
+                }
+            }
+
+            let mut walker = ScopeWalker::new(ScopeCapture::default());
+            let _ = walker.walk(program);
+            let c = walker.into_inner();
+            assert_eq!(
+                c.captures,
+                vec![(Some("MyClass".into()), Some("myMethod".into()))]
+            );
+        },
+    );
+}
+
+#[test]
+fn scope_visitor_braced_namespace_scopes_correctly() {
+    with_parsed(
+        "<?php
+        namespace Alpha {
+            function foo() {}
+        }
+        namespace Beta {
+            function bar() {}
+        }",
+        |program| {
+            #[derive(Default)]
+            struct NsFnCollector {
+                entries: Vec<(Option<String>, String)>,
+            }
+            impl<'arena, 'src> ScopeVisitor<'arena, 'src> for NsFnCollector {
+                fn visit_stmt(
+                    &mut self,
+                    stmt: &Stmt<'arena, 'src>,
+                    scope: &Scope<'src>,
+                ) -> ControlFlow<()> {
+                    if let StmtKind::Function(f) = &stmt.kind {
+                        self.entries.push((
+                            scope.namespace.as_deref().map(str::to_string),
+                            f.name.to_string(),
+                        ));
+                    }
+                    ControlFlow::Continue(())
+                }
+            }
+
+            let mut walker = ScopeWalker::new(NsFnCollector::default());
+            let _ = walker.walk(program);
+            let c = walker.into_inner();
+            assert_eq!(
+                c.entries,
+                vec![
+                    (Some("Alpha".into()), "foo".into()),
+                    (Some("Beta".into()), "bar".into()),
+                ]
+            );
+        },
+    );
+}
+
+#[test]
+fn scope_visitor_enum_method_tracks_enum_and_function() {
+    with_parsed(
+        "<?php
+        enum Status {
+            case Active;
+            public function label(): string { return 'active'; }
+        }",
+        |program| {
+            #[derive(Default)]
+            struct EnumScopeCollector {
+                method_scopes: Vec<(Option<String>, Option<String>)>,
+            }
+            impl<'arena, 'src> ScopeVisitor<'arena, 'src> for EnumScopeCollector {
+                fn visit_enum_member(
+                    &mut self,
+                    member: &EnumMember<'arena, 'src>,
+                    scope: &Scope<'src>,
+                ) -> ControlFlow<()> {
+                    if let EnumMemberKind::Method(m) = &member.kind {
+                        self.method_scopes.push((
+                            scope.class_name.map(str::to_string),
+                            Some(m.name.to_string()),
+                        ));
+                    }
+                    ControlFlow::Continue(())
+                }
+            }
+
+            let mut walker = ScopeWalker::new(EnumScopeCollector::default());
+            let _ = walker.walk(program);
+            let c = walker.into_inner();
+            assert_eq!(
+                c.method_scopes,
+                vec![(Some("Status".into()), Some("label".into()))]
+            );
+        },
+    );
 }
