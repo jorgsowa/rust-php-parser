@@ -977,6 +977,13 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                 .strip_prefix('b')
                 .or_else(|| text.strip_prefix('B'))
                 .unwrap_or(text);
+            // Guard against unterminated strings (lexer already emitted an error)
+            if stripped.len() < 2 {
+                return Expr {
+                    kind: ExprKind::String(parser.arena.alloc_str("")),
+                    span: token.span,
+                };
+            }
             let inner = &stripped[1..stripped.len() - 1];
 
             if crate::interpolation::has_interpolation(inner) {
@@ -1042,7 +1049,14 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             let token = parser.advance();
             let src = parser.source();
             let text = &src[token.span.start as usize..token.span.end as usize];
-            let inner = &text[1..text.len() - 1]; // strip backticks
+            // Guard against unterminated backtick strings (lexer already emitted an error)
+            if text.len() < 2 {
+                return Expr {
+                    kind: ExprKind::ShellExec(parser.alloc_vec_with_capacity(0)),
+                    span: token.span,
+                };
+            }
+            let inner = &text[1..text.len() - 1];
 
             if crate::interpolation::has_interpolation(inner) {
                 let inner_offset = token.span.start + 1;

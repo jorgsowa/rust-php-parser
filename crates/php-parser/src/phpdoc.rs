@@ -6,14 +6,130 @@
 //! # Usage
 //!
 //! ```
-//! use php_ast::{CommentKind, PhpDoc};
-//!
 //! let text = "/** @param int $x The value */";
 //! let doc = php_rs_parser::phpdoc::parse(text);
 //! assert_eq!(doc.tags.len(), 1);
 //! ```
 
-use php_ast::{PhpDoc, PhpDocTag};
+use std::borrow::Cow;
+
+/// A parsed PHPDoc block (`/** ... */`).
+#[derive(Debug)]
+pub struct PhpDoc<'src> {
+    /// The summary line (first line of text before a blank line or tag).
+    pub summary: Option<&'src str>,
+    /// The long description (text after the summary, before the first tag).
+    pub description: Option<&'src str>,
+    /// Parsed tags in source order.
+    pub tags: Vec<PhpDocTag<'src>>,
+}
+
+/// A single PHPDoc tag (e.g. `@param int $x The value`).
+#[derive(Debug)]
+pub enum PhpDocTag<'src> {
+    /// `@param [type] $name [description]`
+    Param {
+        type_str: Option<&'src str>,
+        name: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
+    },
+    /// `@return [type] [description]`
+    Return {
+        type_str: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
+    },
+    /// `@var [type] [$name] [description]`
+    Var {
+        type_str: Option<&'src str>,
+        name: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
+    },
+    /// `@throws [type] [description]`
+    Throws {
+        type_str: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
+    },
+    /// `@deprecated [description]`
+    Deprecated { description: Option<Cow<'src, str>> },
+    /// `@template T [of bound]`
+    Template {
+        name: &'src str,
+        bound: Option<&'src str>,
+    },
+    /// `@extends [type]`
+    Extends { type_str: &'src str },
+    /// `@implements [type]`
+    Implements { type_str: &'src str },
+    /// `@method [static] [return_type] name(params) [description]`
+    Method { signature: &'src str },
+    /// `@property [type] $name [description]`
+    Property {
+        type_str: Option<&'src str>,
+        name: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
+    },
+    /// `@property-read [type] $name [description]`
+    PropertyRead {
+        type_str: Option<&'src str>,
+        name: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
+    },
+    /// `@property-write [type] $name [description]`
+    PropertyWrite {
+        type_str: Option<&'src str>,
+        name: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
+    },
+    /// `@see [reference] [description]`
+    See { reference: &'src str },
+    /// `@link [url] [description]`
+    Link { url: &'src str },
+    /// `@since [version] [description]`
+    Since { version: &'src str },
+    /// `@author name [<email>]`
+    Author { name: &'src str },
+    /// `@internal`
+    Internal,
+    /// `@inheritdoc` / `{@inheritdoc}`
+    InheritDoc,
+    /// `@psalm-assert`, `@phpstan-assert` — assert that a parameter has a type after the call.
+    Assert {
+        type_str: Option<&'src str>,
+        name: Option<&'src str>,
+    },
+    /// `@psalm-type`, `@phpstan-type` — local type alias (`@type Foo = int|string`).
+    TypeAlias {
+        name: Option<&'src str>,
+        type_str: Option<&'src str>,
+    },
+    /// `@psalm-import-type`, `@phpstan-import-type` — import a type alias from another class.
+    ImportType { body: &'src str },
+    /// `@psalm-suppress`, `@phpstan-ignore-next-line`, `@phpstan-ignore` — suppress diagnostics.
+    Suppress { rules: &'src str },
+    /// `@psalm-pure`, `@psalm-immutable`, `@psalm-readonly` — purity/immutability markers.
+    Pure,
+    /// `@psalm-readonly`, `@readonly` — marks a property as read-only.
+    Readonly,
+    /// `@psalm-immutable` — marks a class as immutable.
+    Immutable,
+    /// `@mixin [class]` — indicates the class delegates calls to another.
+    Mixin { class: &'src str },
+    /// `@template-covariant T [of bound]`
+    TemplateCovariant {
+        name: &'src str,
+        bound: Option<&'src str>,
+    },
+    /// `@template-contravariant T [of bound]`
+    TemplateContravariant {
+        name: &'src str,
+        bound: Option<&'src str>,
+    },
+    /// Any tag not specifically recognized: `@tagname [body]`
+    Generic {
+        tag: &'src str,
+        body: Option<Cow<'src, str>>,
+    },
+}
 
 /// Parse a raw doc-comment string into a [`PhpDoc`].
 ///
@@ -136,7 +252,8 @@ fn extract_prose<'src>(lines: &[CleanLine<'src>]) -> (Option<&'src str>, Option<
 }
 
 /// Parse tag lines into PhpDocTag values.
-/// Tag blocks can span multiple lines (continuation lines don't start with `@`).
+/// Tag blocks can span multiple lines; continuation lines are accumulated into
+/// the tag's description/body field.
 fn parse_tags<'src>(lines: &[CleanLine<'src>]) -> Vec<PhpDocTag<'src>> {
     let mut tags = Vec::new();
     let mut i = 0;
@@ -148,15 +265,57 @@ fn parse_tags<'src>(lines: &[CleanLine<'src>]) -> Vec<PhpDocTag<'src>> {
             continue;
         }
 
-        // This is a tag line — use just this line for now
-        // (continuation lines are a future enhancement)
-        if let Some(tag) = parse_single_tag(line) {
+        if let Some(mut tag) = parse_single_tag(line) {
+            i += 1;
+            // Accumulate continuation lines (non-empty lines that don't start a new tag)
+            while i < lines.len() && !lines[i].text.starts_with('@') {
+                let cont = lines[i].text.trim();
+                if !cont.is_empty() {
+                    append_to_description(&mut tag, cont);
+                }
+                i += 1;
+            }
             tags.push(tag);
+        } else {
+            i += 1;
         }
-        i += 1;
     }
 
     tags
+}
+
+/// Append a continuation line to the description/body field of a tag.
+fn append_to_description<'src>(tag: &mut PhpDocTag<'src>, cont: &str) {
+    fn append(field: &mut Option<Cow<'_, str>>, cont: &str) {
+        match field {
+            None => *field = Some(Cow::Owned(cont.to_owned())),
+            Some(Cow::Borrowed(s)) => {
+                let mut owned = String::with_capacity(s.len() + 1 + cont.len());
+                owned.push_str(s);
+                owned.push(' ');
+                owned.push_str(cont);
+                *field = Some(Cow::Owned(owned));
+            }
+            Some(Cow::Owned(s)) => {
+                s.push(' ');
+                s.push_str(cont);
+            }
+        }
+    }
+
+    match tag {
+        PhpDocTag::Param { description, .. } => append(description, cont),
+        PhpDocTag::Return { description, .. } => append(description, cont),
+        PhpDocTag::Var { description, .. } => append(description, cont),
+        PhpDocTag::Throws { description, .. } => append(description, cont),
+        PhpDocTag::Deprecated { description } => append(description, cont),
+        PhpDocTag::Property { description, .. } => append(description, cont),
+        PhpDocTag::PropertyRead { description, .. } => append(description, cont),
+        PhpDocTag::PropertyWrite { description, .. } => append(description, cont),
+        PhpDocTag::Generic { body, .. } => append(body, cont),
+        // Tags with no prose description field: continuation is silently ignored
+        _ => {}
+    }
 }
 
 /// Parse a single tag line like `@param int $x The value`.
@@ -229,7 +388,9 @@ fn parse_single_tag<'src>(line: &'src str) -> Option<PhpDocTag<'src>> {
             "return" | "returns" => Some(parse_return_tag(body)),
             "var" => Some(parse_var_tag(body)),
             "throws" | "throw" => Some(parse_throws_tag(body)),
-            "deprecated" => Some(PhpDocTag::Deprecated { description: body }),
+            "deprecated" => Some(PhpDocTag::Deprecated {
+                description: body.map(Cow::Borrowed),
+            }),
             "template" => Some(parse_template_tag(body)),
             "extends" => Some(PhpDocTag::Extends {
                 type_str: body.unwrap_or(""),
@@ -259,7 +420,7 @@ fn parse_single_tag<'src>(line: &'src str) -> Option<PhpDocTag<'src>> {
             "inheritdoc" => Some(PhpDocTag::InheritDoc),
             _ => Some(PhpDocTag::Generic {
                 tag: tag_name,
-                body,
+                body: body.map(Cow::Borrowed),
             }),
         },
     }
@@ -285,7 +446,7 @@ fn parse_param_tag<'src>(body: Option<&'src str>) -> PhpDocTag<'src> {
         return PhpDocTag::Param {
             type_str: None,
             name: Some(name),
-            description: desc,
+            description: desc.map(Cow::Borrowed),
         };
     }
 
@@ -299,13 +460,13 @@ fn parse_param_tag<'src>(body: Option<&'src str>) -> PhpDocTag<'src> {
             PhpDocTag::Param {
                 type_str: Some(type_str),
                 name: Some(name),
-                description: desc,
+                description: desc.map(Cow::Borrowed),
             }
         }
         _ => PhpDocTag::Param {
             type_str: Some(type_str),
             name: None,
-            description: rest,
+            description: rest.map(Cow::Borrowed),
         },
     }
 }
@@ -322,7 +483,7 @@ fn parse_return_tag<'src>(body: Option<&'src str>) -> PhpDocTag<'src> {
     let (type_str, desc) = split_type(body);
     PhpDocTag::Return {
         type_str: Some(type_str),
-        description: desc.map(|d| d.trim_start()),
+        description: desc.map(|d| Cow::Borrowed(d.trim_start())),
     }
 }
 
@@ -341,7 +502,7 @@ fn parse_var_tag<'src>(body: Option<&'src str>) -> PhpDocTag<'src> {
         return PhpDocTag::Var {
             type_str: None,
             name: Some(name),
-            description: desc,
+            description: desc.map(Cow::Borrowed),
         };
     }
 
@@ -354,13 +515,13 @@ fn parse_var_tag<'src>(body: Option<&'src str>) -> PhpDocTag<'src> {
             PhpDocTag::Var {
                 type_str: Some(type_str),
                 name: Some(name),
-                description: desc,
+                description: desc.map(Cow::Borrowed),
             }
         }
         _ => PhpDocTag::Var {
             type_str: Some(type_str),
             name: None,
-            description: rest,
+            description: rest.map(Cow::Borrowed),
         },
     }
 }
@@ -377,7 +538,7 @@ fn parse_throws_tag<'src>(body: Option<&'src str>) -> PhpDocTag<'src> {
     let (type_str, desc) = split_type(body);
     PhpDocTag::Throws {
         type_str: Some(type_str),
-        description: desc.map(|d| d.trim_start()),
+        description: desc.map(|d| Cow::Borrowed(d.trim_start())),
     }
 }
 
@@ -495,14 +656,16 @@ fn parse_property_tag<'src>(body: Option<&'src str>, kind: PropertyKind) -> PhpD
 }
 
 /// Common parser for `[type] $name [description]` pattern.
-fn parse_type_name_desc(body: Option<&str>) -> (Option<&str>, Option<&str>, Option<&str>) {
+fn parse_type_name_desc<'src>(
+    body: Option<&'src str>,
+) -> (Option<&'src str>, Option<&'src str>, Option<Cow<'src, str>>) {
     let Some(body) = body else {
         return (None, None, None);
     };
 
     if body.starts_with('$') {
         let (name, desc) = split_first_word(body);
-        return (None, Some(name), desc);
+        return (None, Some(name), desc.map(Cow::Borrowed));
     }
 
     let (type_str, rest) = split_type(body);
@@ -511,9 +674,9 @@ fn parse_type_name_desc(body: Option<&str>) -> (Option<&str>, Option<&str>, Opti
     match rest {
         Some(r) if r.starts_with('$') => {
             let (name, desc) = split_first_word(r);
-            (Some(type_str), Some(name), desc)
+            (Some(type_str), Some(name), desc.map(Cow::Borrowed))
         }
-        _ => (Some(type_str), None, rest),
+        _ => (Some(type_str), None, rest.map(Cow::Borrowed)),
     }
 }
 
@@ -587,7 +750,7 @@ mod tests {
             } => {
                 assert_eq!(*type_str, Some("int"));
                 assert_eq!(*name, Some("$x"));
-                assert_eq!(*description, Some("The value"));
+                assert_eq!(description.as_deref(), Some("The value"));
             }
             _ => panic!("expected Param tag"),
         }
@@ -650,7 +813,7 @@ mod tests {
         let doc = parse("/** @deprecated Use newMethod() instead */");
         match &doc.tags[0] {
             PhpDocTag::Deprecated { description } => {
-                assert_eq!(*description, Some("Use newMethod() instead"));
+                assert_eq!(description.as_deref(), Some("Use newMethod() instead"));
             }
             _ => panic!("expected Deprecated tag"),
         }
@@ -668,7 +831,7 @@ mod tests {
         match &doc.tags[0] {
             PhpDocTag::Generic { tag, body } => {
                 assert_eq!(*tag, "custom-tag");
-                assert_eq!(*body, Some("some body"));
+                assert_eq!(body.as_deref(), Some("some body"));
             }
             _ => panic!("expected Generic tag"),
         }
@@ -728,7 +891,7 @@ mod tests {
                 description,
             } => {
                 assert_eq!(*type_str, Some("\\RuntimeException"));
-                assert_eq!(*description, Some("When things go wrong"));
+                assert_eq!(description.as_deref(), Some("When things go wrong"));
             }
             _ => panic!("expected Throws tag"),
         }
