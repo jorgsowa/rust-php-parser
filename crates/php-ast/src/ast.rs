@@ -118,26 +118,26 @@ pub enum PhpDocTag<'src> {
     Param {
         type_str: Option<&'src str>,
         name: Option<&'src str>,
-        description: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
     },
     /// `@return [type] [description]`
     Return {
         type_str: Option<&'src str>,
-        description: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
     },
     /// `@var [type] [$name] [description]`
     Var {
         type_str: Option<&'src str>,
         name: Option<&'src str>,
-        description: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
     },
     /// `@throws [type] [description]`
     Throws {
         type_str: Option<&'src str>,
-        description: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
     },
     /// `@deprecated [description]`
-    Deprecated { description: Option<&'src str> },
+    Deprecated { description: Option<Cow<'src, str>> },
     /// `@template T [of bound]`
     Template {
         name: &'src str,
@@ -153,19 +153,19 @@ pub enum PhpDocTag<'src> {
     Property {
         type_str: Option<&'src str>,
         name: Option<&'src str>,
-        description: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
     },
     /// `@property-read [type] $name [description]`
     PropertyRead {
         type_str: Option<&'src str>,
         name: Option<&'src str>,
-        description: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
     },
     /// `@property-write [type] $name [description]`
     PropertyWrite {
         type_str: Option<&'src str>,
         name: Option<&'src str>,
-        description: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
     },
     /// `@see [reference] [description]`
     See { reference: &'src str },
@@ -214,7 +214,7 @@ pub enum PhpDocTag<'src> {
     /// Any tag not specifically recognized: `@tagname [body]`
     Generic {
         tag: &'src str,
-        body: Option<&'src str>,
+        body: Option<Cow<'src, str>>,
     },
 }
 
