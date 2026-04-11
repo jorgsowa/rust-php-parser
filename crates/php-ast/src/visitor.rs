@@ -1,3 +1,4 @@
+use std::borrow::Cow;
 use std::ops::ControlFlow;
 
 use crate::ast::*;
@@ -687,6 +688,366 @@ fn walk_attributes<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
         visitor.visit_attribute(attr)?;
     }
     ControlFlow::Continue(())
+}
+
+// =============================================================================
+// ScopeVisitor — scope-aware traversal
+// =============================================================================
+
+/// Lexical scope context passed to each [`ScopeVisitor`] method.
+///
+/// Represents the immediately enclosing namespace, class-like definition,
+/// and named function or method at the point a node is visited.
+/// All fields are `None` when the node is at the global top level.
+///
+/// **Namespace** is set when inside a braced or simple `namespace` declaration.
+/// **`class_name`** is set inside `class`, `interface`, `trait`, and `enum`
+/// declarations; it is `None` for anonymous classes.
+/// **`function_name`** is set inside named functions and methods; it is `None`
+/// inside closures and arrow functions.
+#[derive(Debug, Clone, Default)]
+pub struct Scope<'src> {
+    /// Current namespace, or `None` for the global namespace.
+    pub namespace: Option<Cow<'src, str>>,
+    /// Name of the immediately enclosing class-like declaration, or `None`.
+    pub class_name: Option<&'src str>,
+    /// Name of the immediately enclosing named function or method, or `None`.
+    pub function_name: Option<&'src str>,
+}
+
+/// A scope-aware variant of [`Visitor`].
+///
+/// Every visit method receives a [`Scope`] describing the lexical context at
+/// that node — the current namespace, enclosing class-like declaration, and
+/// enclosing named function or method.  All methods have no-op default
+/// implementations, so implementors override only what they need.
+///
+/// Drive traversal with [`ScopeWalker`], which maintains the scope
+/// automatically and calls these methods with the current context.
+///
+/// # Example
+///
+/// ```
+/// use php_ast::visitor::{ScopeVisitor, ScopeWalker, Scope};
+/// use php_ast::ast::*;
+/// use std::ops::ControlFlow;
+///
+/// struct MethodCollector { methods: Vec<String> }
+///
+/// impl<'arena, 'src> ScopeVisitor<'arena, 'src> for MethodCollector {
+///     fn visit_class_member(
+///         &mut self,
+///         member: &ClassMember<'arena, 'src>,
+///         scope: &Scope<'src>,
+///     ) -> ControlFlow<()> {
+///         if let ClassMemberKind::Method(m) = &member.kind {
+///             self.methods.push(format!(
+///                 "{}::{}",
+///                 scope.class_name.unwrap_or("<anon>"),
+///                 m.name
+///             ));
+///         }
+///         ControlFlow::Continue(())
+///     }
+/// }
+/// ```
+pub trait ScopeVisitor<'arena, 'src> {
+    fn visit_program(
+        &mut self,
+        _program: &Program<'arena, 'src>,
+        _scope: &Scope<'src>,
+    ) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
+    fn visit_stmt(&mut self, _stmt: &Stmt<'arena, 'src>, _scope: &Scope<'src>) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
+    fn visit_expr(&mut self, _expr: &Expr<'arena, 'src>, _scope: &Scope<'src>) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
+    fn visit_param(
+        &mut self,
+        _param: &Param<'arena, 'src>,
+        _scope: &Scope<'src>,
+    ) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
+    fn visit_arg(&mut self, _arg: &Arg<'arena, 'src>, _scope: &Scope<'src>) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
+    fn visit_class_member(
+        &mut self,
+        _member: &ClassMember<'arena, 'src>,
+        _scope: &Scope<'src>,
+    ) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
+    fn visit_enum_member(
+        &mut self,
+        _member: &EnumMember<'arena, 'src>,
+        _scope: &Scope<'src>,
+    ) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
+    fn visit_property_hook(
+        &mut self,
+        _hook: &PropertyHook<'arena, 'src>,
+        _scope: &Scope<'src>,
+    ) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
+    fn visit_type_hint(
+        &mut self,
+        _type_hint: &TypeHint<'arena, 'src>,
+        _scope: &Scope<'src>,
+    ) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
+    fn visit_attribute(
+        &mut self,
+        _attribute: &Attribute<'arena, 'src>,
+        _scope: &Scope<'src>,
+    ) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
+    fn visit_catch_clause(
+        &mut self,
+        _catch: &CatchClause<'arena, 'src>,
+        _scope: &Scope<'src>,
+    ) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
+    fn visit_match_arm(
+        &mut self,
+        _arm: &MatchArm<'arena, 'src>,
+        _scope: &Scope<'src>,
+    ) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
+    fn visit_closure_use_var(
+        &mut self,
+        _var: &ClosureUseVar<'src>,
+        _scope: &Scope<'src>,
+    ) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
+}
+
+/// Drives a [`ScopeVisitor`] over an AST, maintaining [`Scope`] automatically.
+///
+/// `ScopeWalker` wraps a [`ScopeVisitor`] and tracks the lexical scope as it
+/// descends the tree, updating scope before visiting children and restoring it
+/// on exit from scope-defining nodes (functions, classes, namespaces).
+///
+/// # Usage
+///
+/// ```no_run
+/// # use php_ast::visitor::{ScopeWalker, ScopeVisitor, Scope};
+/// # use php_ast::ast::*;
+/// # use std::ops::ControlFlow;
+/// # struct MyVisitor;
+/// # impl<'a, 'b> ScopeVisitor<'a, 'b> for MyVisitor {}
+/// # fn parse<'a, 'b>(_: &'a bumpalo::Bump, _: &'b str) -> Program<'a, 'b> { unimplemented!() }
+/// let arena = bumpalo::Bump::new();
+/// let src = "<?php class Foo { public function bar() {} }";
+/// let program = parse(&arena, src);
+/// let mut walker = ScopeWalker::new(MyVisitor);
+/// walker.walk(&program);
+/// let _my_visitor = walker.into_inner();
+/// ```
+pub struct ScopeWalker<'src, V> {
+    inner: V,
+    scope: Scope<'src>,
+}
+
+impl<'src, V> ScopeWalker<'src, V> {
+    /// Creates a new `ScopeWalker` wrapping `inner`.
+    pub fn new(inner: V) -> Self {
+        Self {
+            inner,
+            scope: Scope::default(),
+        }
+    }
+
+    /// Consumes the walker and returns the inner visitor.
+    pub fn into_inner(self) -> V {
+        self.inner
+    }
+
+    /// Returns a reference to the inner visitor.
+    pub fn inner(&self) -> &V {
+        &self.inner
+    }
+
+    /// Returns a mutable reference to the inner visitor.
+    pub fn inner_mut(&mut self) -> &mut V {
+        &mut self.inner
+    }
+}
+
+impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> ScopeWalker<'src, V> {
+    /// Walks `program`, calling [`ScopeVisitor`] methods with scope context.
+    pub fn walk(&mut self, program: &Program<'arena, 'src>) -> ControlFlow<()> {
+        self.visit_program(program)
+    }
+}
+
+impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> Visitor<'arena, 'src> for ScopeWalker<'src, V> {
+    fn visit_program(&mut self, program: &Program<'arena, 'src>) -> ControlFlow<()> {
+        self.inner.visit_program(program, &self.scope)?;
+        walk_program(self, program)
+    }
+
+    fn visit_stmt(&mut self, stmt: &Stmt<'arena, 'src>) -> ControlFlow<()> {
+        self.inner.visit_stmt(stmt, &self.scope)?;
+        match &stmt.kind {
+            StmtKind::Function(func) => {
+                let prev_fn = self.scope.function_name.replace(func.name);
+                walk_stmt(self, stmt)?;
+                self.scope.function_name = prev_fn;
+            }
+            StmtKind::Class(class) => {
+                let prev_class = self.scope.class_name;
+                let prev_fn = self.scope.function_name.take();
+                self.scope.class_name = class.name;
+                walk_stmt(self, stmt)?;
+                self.scope.class_name = prev_class;
+                self.scope.function_name = prev_fn;
+            }
+            StmtKind::Interface(iface) => {
+                let prev_class = self.scope.class_name.replace(iface.name);
+                let prev_fn = self.scope.function_name.take();
+                walk_stmt(self, stmt)?;
+                self.scope.class_name = prev_class;
+                self.scope.function_name = prev_fn;
+            }
+            StmtKind::Trait(trait_decl) => {
+                let prev_class = self.scope.class_name.replace(trait_decl.name);
+                let prev_fn = self.scope.function_name.take();
+                walk_stmt(self, stmt)?;
+                self.scope.class_name = prev_class;
+                self.scope.function_name = prev_fn;
+            }
+            StmtKind::Enum(enum_decl) => {
+                let prev_class = self.scope.class_name.replace(enum_decl.name);
+                let prev_fn = self.scope.function_name.take();
+                walk_stmt(self, stmt)?;
+                self.scope.class_name = prev_class;
+                self.scope.function_name = prev_fn;
+            }
+            StmtKind::Namespace(ns) => {
+                let ns_str = ns.name.as_ref().map(|n| n.to_string_repr());
+                match &ns.body {
+                    NamespaceBody::Braced(_) => {
+                        let prev_ns = self.scope.namespace.clone();
+                        let prev_class = self.scope.class_name.take();
+                        let prev_fn = self.scope.function_name.take();
+                        self.scope.namespace = ns_str;
+                        walk_stmt(self, stmt)?;
+                        self.scope.namespace = prev_ns;
+                        self.scope.class_name = prev_class;
+                        self.scope.function_name = prev_fn;
+                    }
+                    NamespaceBody::Simple => {
+                        // Simple namespace: update scope and leave it set for
+                        // the remainder of the file (no push/pop).
+                        self.scope.namespace = ns_str;
+                        self.scope.class_name = None;
+                        self.scope.function_name = None;
+                    }
+                }
+            }
+            _ => {
+                walk_stmt(self, stmt)?;
+            }
+        }
+        ControlFlow::Continue(())
+    }
+
+    fn visit_expr(&mut self, expr: &Expr<'arena, 'src>) -> ControlFlow<()> {
+        self.inner.visit_expr(expr, &self.scope)?;
+        match &expr.kind {
+            ExprKind::Closure(_) | ExprKind::ArrowFunction(_) => {
+                let prev_fn = self.scope.function_name.take();
+                walk_expr(self, expr)?;
+                self.scope.function_name = prev_fn;
+            }
+            ExprKind::AnonymousClass(_) => {
+                let prev_class = self.scope.class_name.take();
+                let prev_fn = self.scope.function_name.take();
+                walk_expr(self, expr)?;
+                self.scope.class_name = prev_class;
+                self.scope.function_name = prev_fn;
+            }
+            _ => {
+                walk_expr(self, expr)?;
+            }
+        }
+        ControlFlow::Continue(())
+    }
+
+    fn visit_class_member(&mut self, member: &ClassMember<'arena, 'src>) -> ControlFlow<()> {
+        self.inner.visit_class_member(member, &self.scope)?;
+        if let ClassMemberKind::Method(method) = &member.kind {
+            let prev_fn = self.scope.function_name.replace(method.name);
+            walk_class_member(self, member)?;
+            self.scope.function_name = prev_fn;
+        } else {
+            walk_class_member(self, member)?;
+        }
+        ControlFlow::Continue(())
+    }
+
+    fn visit_enum_member(&mut self, member: &EnumMember<'arena, 'src>) -> ControlFlow<()> {
+        self.inner.visit_enum_member(member, &self.scope)?;
+        if let EnumMemberKind::Method(method) = &member.kind {
+            let prev_fn = self.scope.function_name.replace(method.name);
+            walk_enum_member(self, member)?;
+            self.scope.function_name = prev_fn;
+        } else {
+            walk_enum_member(self, member)?;
+        }
+        ControlFlow::Continue(())
+    }
+
+    fn visit_param(&mut self, param: &Param<'arena, 'src>) -> ControlFlow<()> {
+        self.inner.visit_param(param, &self.scope)?;
+        walk_param(self, param)
+    }
+
+    fn visit_arg(&mut self, arg: &Arg<'arena, 'src>) -> ControlFlow<()> {
+        self.inner.visit_arg(arg, &self.scope)?;
+        walk_arg(self, arg)
+    }
+
+    fn visit_property_hook(&mut self, hook: &PropertyHook<'arena, 'src>) -> ControlFlow<()> {
+        self.inner.visit_property_hook(hook, &self.scope)?;
+        walk_property_hook(self, hook)
+    }
+
+    fn visit_type_hint(&mut self, type_hint: &TypeHint<'arena, 'src>) -> ControlFlow<()> {
+        self.inner.visit_type_hint(type_hint, &self.scope)?;
+        walk_type_hint(self, type_hint)
+    }
+
+    fn visit_attribute(&mut self, attribute: &Attribute<'arena, 'src>) -> ControlFlow<()> {
+        self.inner.visit_attribute(attribute, &self.scope)?;
+        walk_attribute(self, attribute)
+    }
+
+    fn visit_catch_clause(&mut self, catch: &CatchClause<'arena, 'src>) -> ControlFlow<()> {
+        self.inner.visit_catch_clause(catch, &self.scope)?;
+        walk_catch_clause(self, catch)
+    }
+
+    fn visit_match_arm(&mut self, arm: &MatchArm<'arena, 'src>) -> ControlFlow<()> {
+        self.inner.visit_match_arm(arm, &self.scope)?;
+        walk_match_arm(self, arm)
+    }
+
+    fn visit_closure_use_var(&mut self, var: &ClosureUseVar<'src>) -> ControlFlow<()> {
+        self.inner.visit_closure_use_var(var, &self.scope)
+    }
 }
 
 #[cfg(test)]
