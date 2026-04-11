@@ -25,7 +25,7 @@ expected ';' after expression
                 "kind": {
                   "ShellExec": [
                     {
-                      "Literal": "unclosed"
+                      "Literal": "unclosed;"
                     }
                   ]
                 },

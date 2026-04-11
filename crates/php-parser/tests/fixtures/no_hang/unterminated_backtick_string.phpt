@@ -61,7 +61,11 @@ expected ';' after expression
               },
               "index": {
                 "kind": {
-                  "ShellExec": []
+                  "ShellExec": [
+                    {
+                      "Literal": ""
+                    }
+                  ]
                 },
                 "span": {
                   "start": 14,
