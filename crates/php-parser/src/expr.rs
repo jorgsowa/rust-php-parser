@@ -674,7 +674,7 @@ fn parse_member_name<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr
             let token = parser.advance();
             let text = &parser.source[token.span.start as usize..token.span.end as usize];
             Expr {
-                kind: ExprKind::Identifier(parser.arena.alloc_str(text)),
+                kind: ExprKind::Identifier(NameStr::Src(text)),
                 span: token.span,
             }
         }
@@ -684,7 +684,7 @@ fn parse_member_name<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr
             let src = parser.source;
             let name = &src[token.span.start as usize + 1..token.span.end as usize];
             Expr {
-                kind: ExprKind::Variable(name),
+                kind: ExprKind::Variable(NameStr::Src(name)),
                 span: token.span,
             }
         }
@@ -735,9 +735,9 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
         }
         let span = Span::new(token.span.start, parser.previous_end());
         let ident = if parts.len() == 1 {
-            parser.arena.alloc_str(parts[0])
+            NameStr::Src(parts[0])
         } else {
-            parser.arena.alloc_str(&parts.join("\\"))
+            NameStr::Arena(parser.arena.alloc_str(&parts.join("\\")))
         };
         return Expr {
             kind: ExprKind::Identifier(ident),
@@ -1212,7 +1212,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             // Strip the $ prefix
             let name = &src[token.span.start as usize + 1..token.span.end as usize];
             Expr {
-                kind: ExprKind::Variable(name),
+                kind: ExprKind::Variable(NameStr::Src(name)),
                 span: token.span,
             }
         }
@@ -1254,12 +1254,14 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                 }
                 let span = Span::new(token.span.start, parser.previous_end());
                 Expr {
-                    kind: ExprKind::Identifier(parser.arena.alloc_str(&parts.join("\\"))),
+                    kind: ExprKind::Identifier(NameStr::Arena(
+                        parser.arena.alloc_str(&parts.join("\\")),
+                    )),
                     span,
                 }
             } else {
                 Expr {
-                    kind: ExprKind::Identifier(parser.arena.alloc_str(text)),
+                    kind: ExprKind::Identifier(NameStr::Src(text)),
                     span: token.span,
                 }
             }
@@ -1269,8 +1271,12 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
         TokenKind::Backslash => {
             let start = parser.start_span();
             let name = parser.parse_name();
+            let ident = match name.to_string_repr() {
+                Cow::Borrowed(s) => NameStr::Src(s),
+                Cow::Owned(ref s) => NameStr::Arena(parser.arena.alloc_str(s)),
+            };
             Expr {
-                kind: ExprKind::Identifier(parser.arena.alloc_str(&name.to_string_repr())),
+                kind: ExprKind::Identifier(ident),
                 span: Span::new(start, name.span().end),
             }
         }
@@ -1279,14 +1285,14 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
         TokenKind::Self_ => {
             let token = parser.advance();
             Expr {
-                kind: ExprKind::Identifier("self"),
+                kind: ExprKind::Identifier(NameStr::Arena("self")),
                 span: token.span,
             }
         }
         TokenKind::Parent_ => {
             let token = parser.advance();
             Expr {
-                kind: ExprKind::Identifier("parent"),
+                kind: ExprKind::Identifier(NameStr::Arena("parent")),
                 span: token.span,
             }
         }
@@ -1301,7 +1307,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                 return parse_arrow_function(parser, true, token.span.start, parser.alloc_vec());
             }
             Expr {
-                kind: ExprKind::Identifier("static"),
+                kind: ExprKind::Identifier(NameStr::Arena("static")),
                 span: token.span,
             }
         }
@@ -1472,9 +1478,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
         TokenKind::Exit | TokenKind::Die => {
             let token = parser.advance();
             let src = parser.source;
-            let name_text = parser
-                .arena
-                .alloc_str(&src[token.span.start as usize..token.span.end as usize]);
+            let name_text = NameStr::Src(&src[token.span.start as usize..token.span.end as usize]);
             if parser.check(TokenKind::LeftParen) {
                 match parse_arg_list_or_callable(parser) {
                     ArgListResult::CallableMarker => {
@@ -1536,9 +1540,8 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             let token = parser.advance();
             if parser.check(TokenKind::LeftParen) {
                 let src = parser.source;
-                let name_text = parser
-                    .arena
-                    .alloc_str(&src[token.span.start as usize..token.span.end as usize]);
+                let name_text =
+                    NameStr::Src(&src[token.span.start as usize..token.span.end as usize]);
                 match parse_arg_list_or_callable(parser) {
                     ArgListResult::CallableMarker => {
                         // clone(...) — first-class callable (PHP 8.5)
@@ -1692,7 +1695,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                     .arena
                     .alloc_str(&format!("namespace\\{}", name.join_parts()));
                 Expr {
-                    kind: ExprKind::Identifier(text),
+                    kind: ExprKind::Identifier(NameStr::Arena(text)),
                     span: Span::new(start, name.span().end),
                 }
             } else {
@@ -1709,7 +1712,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
         TokenKind::Readonly => {
             let token = parser.advance();
             Expr {
-                kind: ExprKind::Identifier("readonly"),
+                kind: ExprKind::Identifier(NameStr::Arena("readonly")),
                 span: token.span,
             }
         }
@@ -1805,21 +1808,21 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         TokenKind::Self_ => {
             let t = parser.advance();
             Expr {
-                kind: ExprKind::Identifier("self"),
+                kind: ExprKind::Identifier(NameStr::Arena("self")),
                 span: t.span,
             }
         }
         TokenKind::Parent_ => {
             let t = parser.advance();
             Expr {
-                kind: ExprKind::Identifier("parent"),
+                kind: ExprKind::Identifier(NameStr::Arena("parent")),
                 span: t.span,
             }
         }
         TokenKind::Static => {
             let t = parser.advance();
             Expr {
-                kind: ExprKind::Identifier("static"),
+                kind: ExprKind::Identifier(NameStr::Arena("static")),
                 span: t.span,
             }
         }
@@ -1828,7 +1831,9 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
             let t = parser.advance();
             let src = parser.source;
             Expr {
-                kind: ExprKind::Variable(&src[t.span.start as usize + 1..t.span.end as usize]),
+                kind: ExprKind::Variable(NameStr::Src(
+                    &src[t.span.start as usize + 1..t.span.end as usize],
+                )),
                 span: t.span,
             }
         }
@@ -1847,8 +1852,12 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         _ => {
             // Parse as a name (possibly qualified)
             let name = parser.parse_name();
+            let ident = match name.to_string_repr() {
+                Cow::Borrowed(s) => NameStr::Src(s),
+                Cow::Owned(ref s) => NameStr::Arena(parser.arena.alloc_str(s)),
+            };
             Expr {
-                kind: ExprKind::Identifier(parser.arena.alloc_str(&name.to_string_repr())),
+                kind: ExprKind::Identifier(ident),
                 span: name.span(),
             }
         }

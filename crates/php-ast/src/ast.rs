@@ -835,6 +835,58 @@ pub struct StaticVar<'arena, 'src> {
 // Expressions
 // =============================================================================
 
+/// A name string that originates either from the source buffer (`&'src str`) or was
+/// constructed in the arena (`&'arena str`).
+///
+/// Using this as the payload for both `ExprKind::Variable` and `ExprKind::Identifier`
+/// gives them the same binding type, so or-patterns compile natively:
+///
+/// ```
+/// # use php_ast::ast::{ExprKind, NameStr};
+/// # fn example<'a, 'b>(kind: &ExprKind<'a, 'b>) {
+/// if let ExprKind::Variable(name) | ExprKind::Identifier(name) = kind {
+///     let _s: &str = name.as_str();
+/// }
+/// # }
+/// ```
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
+pub enum NameStr<'arena, 'src> {
+    /// Borrowed directly from the source buffer.
+    Src(&'src str),
+    /// Allocated in the bump arena (e.g. a joined qualified name).
+    Arena(&'arena str),
+}
+
+impl<'arena, 'src> NameStr<'arena, 'src> {
+    #[inline]
+    pub fn as_str(&self) -> &str {
+        match self {
+            NameStr::Src(s) => s,
+            NameStr::Arena(s) => s,
+        }
+    }
+}
+
+impl<'arena, 'src> std::ops::Deref for NameStr<'arena, 'src> {
+    type Target = str;
+    #[inline]
+    fn deref(&self) -> &str {
+        self.as_str()
+    }
+}
+
+impl<'arena, 'src> std::fmt::Debug for NameStr<'arena, 'src> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        self.as_str().fmt(f)
+    }
+}
+
+impl<'arena, 'src> serde::Serialize for NameStr<'arena, 'src> {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        self.as_str().serialize(serializer)
+    }
+}
+
 #[derive(Debug, Serialize)]
 pub struct Expr<'arena, 'src> {
     pub kind: ExprKind<'arena, 'src>,
@@ -877,13 +929,13 @@ pub enum ExprKind<'arena, 'src> {
     Null,
 
     /// Variable: `$name`
-    Variable(&'src str),
+    Variable(NameStr<'arena, 'src>),
 
     /// Variable variable: `$$var`, `$$$var`, `${expr}`
     VariableVariable(&'arena Expr<'arena, 'src>),
 
     /// Identifier (bare name, e.g. function name in a call)
-    Identifier(&'arena str),
+    Identifier(NameStr<'arena, 'src>),
 
     /// Assignment: `$x = expr` or `$x += expr`
     Assign(AssignExpr<'arena, 'src>),
@@ -1014,13 +1066,9 @@ pub enum ExprKind<'arena, 'src> {
 
 impl<'arena, 'src> Expr<'arena, 'src> {
     /// Returns the name string for `Variable` and `Identifier` nodes, `None` for everything else.
-    ///
-    /// This is the idiomatic way to extract a name when you need to handle both cases without
-    /// writing two separate match arms with incompatible binding types (`&'src str` vs `&'arena str`).
     pub fn name_str(&self) -> Option<&str> {
         match &self.kind {
-            ExprKind::Variable(s) => Some(s),
-            ExprKind::Identifier(s) => Some(s),
+            ExprKind::Variable(s) | ExprKind::Identifier(s) => Some(s.as_str()),
             _ => None,
         }
     }
