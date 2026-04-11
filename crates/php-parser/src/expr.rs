@@ -2582,7 +2582,7 @@ fn try_parse_cast<'arena, 'src>(
     parser.advance(); // consume the cast keyword
     parser.eat(TokenKind::RightParen)?;
 
-    if cast_kind == CastKind::Unset {
+    if cast_kind == CastKind::Unset && parser.version >= PhpVersion::Php80 {
         parser.error(ParseError::Forbidden {
             message: "the (unset) cast is no longer supported".into(),
             span: kw_span,
@@ -2593,7 +2593,7 @@ fn try_parse_cast<'arena, 'src>(
     }
     // (real) was removed in PHP 8.0, (binary) is a PHP 5-era artifact
     let kw_text = &parser.source[kw_span.start as usize..kw_span.end as usize];
-    if kw_text.eq_ignore_ascii_case("real") {
+    if kw_text.eq_ignore_ascii_case("real") && parser.version >= PhpVersion::Php80 {
         parser.error(ParseError::Forbidden {
             message: "the (real) cast is no longer supported, use (float) instead".into(),
             span: kw_span,

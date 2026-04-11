@@ -118,6 +118,7 @@ pub fn parse_fixture(content: &str) -> (FixtureConfig, &str) {
 /// Convert a `(major, minor)` version tuple to a `PhpVersion` enum.
 pub fn php_version(v: (u32, u32)) -> php_rs_parser::PhpVersion {
     match v {
+        (7, 4) => php_rs_parser::PhpVersion::Php74,
         (8, 0) => php_rs_parser::PhpVersion::Php80,
         (8, 1) => php_rs_parser::PhpVersion::Php81,
         (8, 2) => php_rs_parser::PhpVersion::Php82,
