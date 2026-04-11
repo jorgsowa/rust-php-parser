@@ -50,8 +50,15 @@ static IS_PHP_WHITESPACE: [bool; 256] = make_whitespace_table();
 static IS_IDENT_START: [bool; 256] = make_ident_start_table();
 static IS_IDENT_CONTINUE: [bool; 256] = make_ident_continue_table();
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum LexerErrorKind {
+    UnterminatedString,
+    Other,
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub struct LexerError {
+    pub kind: LexerErrorKind,
     pub message: String,
     pub span: Span,
 }
@@ -285,6 +292,7 @@ impl<'src> Lexer<'src> {
                 None => {
                     let span = Span::new(start as u32, self.source.len() as u32);
                     self.errors.push(LexerError {
+                        kind: LexerErrorKind::Other,
                         message: "unterminated block comment".to_string(),
                         span,
                     });
@@ -692,9 +700,13 @@ impl<'src> Lexer<'src> {
         loop {
             match memchr2(b'\\', b'\'', &bytes[p..]) {
                 None => {
-                    // Unclosed string — skip opening quote and retry
-                    self.pos = start + 1;
-                    return self.read_next_token();
+                    self.errors.push(LexerError {
+                        kind: LexerErrorKind::UnterminatedString,
+                        message: "unterminated string literal".to_string(),
+                        span: Span::new(start as u32, self.source.len() as u32),
+                    });
+                    self.pos = self.source.len();
+                    return self.tok(TokenKind::SingleQuotedString, start);
                 }
                 Some(offset) => {
                     p += offset;
@@ -730,9 +742,13 @@ impl<'src> Lexer<'src> {
         loop {
             match memchr2(b'\\', b'"', &bytes[p..]) {
                 None => {
-                    // Unclosed string — skip just the opening quote and retry
-                    self.pos = start + 1;
-                    return self.read_next_token();
+                    self.errors.push(LexerError {
+                        kind: LexerErrorKind::UnterminatedString,
+                        message: "unterminated string literal".to_string(),
+                        span: Span::new(start as u32, self.source.len() as u32),
+                    });
+                    self.pos = self.source.len();
+                    return self.tok(TokenKind::DoubleQuotedString, start);
                 }
                 Some(offset) => {
                     p += offset;
@@ -764,9 +780,13 @@ impl<'src> Lexer<'src> {
         loop {
             match memchr2(b'\\', b'`', &bytes[p..]) {
                 None => {
-                    // Unclosed string — skip opening backtick and retry
-                    self.pos = start + 1;
-                    return self.read_next_token();
+                    self.errors.push(LexerError {
+                        kind: LexerErrorKind::UnterminatedString,
+                        message: "unterminated string literal".to_string(),
+                        span: Span::new(start as u32, self.source.len() as u32),
+                    });
+                    self.pos = self.source.len();
+                    return self.tok(TokenKind::BacktickString, start);
                 }
                 Some(offset) => {
                     p += offset;
@@ -1006,6 +1026,7 @@ impl<'src> Lexer<'src> {
     fn invalid_numeric(&mut self, start: usize) -> Token {
         let span = Span::new(start as u32, self.pos as u32);
         self.errors.push(LexerError {
+            kind: LexerErrorKind::Other,
             message: "Invalid numeric literal".to_string(),
             span,
         });

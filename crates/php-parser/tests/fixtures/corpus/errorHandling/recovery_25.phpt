@@ -2,10 +2,11 @@
 <?php
 $a = ["a "thing"];
 ===errors===
+unterminated string literal
 expected ']', found identifier
 expected ';' after expression
 expected ';' after expression
-expected expression
+expected ';' after expression
 ===ast===
 {
   "stmts": [
@@ -82,9 +83,19 @@ expected expression
       }
     },
     {
-      "kind": "Error",
+      "kind": {
+        "Expression": {
+          "kind": {
+            "String": "]"
+          },
+          "span": {
+            "start": 21,
+            "end": 24
+          }
+        }
+      },
       "span": {
-        "start": 22,
+        "start": 21,
         "end": 24
       }
     }
