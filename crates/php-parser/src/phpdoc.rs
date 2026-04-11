@@ -6,8 +6,6 @@
 //! # Usage
 //!
 //! ```
-//! use php_ast::{CommentKind, PhpDoc};
-//!
 //! let text = "/** @param int $x The value */";
 //! let doc = php_rs_parser::phpdoc::parse(text);
 //! assert_eq!(doc.tags.len(), 1);
@@ -15,7 +13,123 @@
 
 use std::borrow::Cow;
 
-use php_ast::{PhpDoc, PhpDocTag};
+/// A parsed PHPDoc block (`/** ... */`).
+#[derive(Debug)]
+pub struct PhpDoc<'src> {
+    /// The summary line (first line of text before a blank line or tag).
+    pub summary: Option<&'src str>,
+    /// The long description (text after the summary, before the first tag).
+    pub description: Option<&'src str>,
+    /// Parsed tags in source order.
+    pub tags: Vec<PhpDocTag<'src>>,
+}
+
+/// A single PHPDoc tag (e.g. `@param int $x The value`).
+#[derive(Debug)]
+pub enum PhpDocTag<'src> {
+    /// `@param [type] $name [description]`
+    Param {
+        type_str: Option<&'src str>,
+        name: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
+    },
+    /// `@return [type] [description]`
+    Return {
+        type_str: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
+    },
+    /// `@var [type] [$name] [description]`
+    Var {
+        type_str: Option<&'src str>,
+        name: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
+    },
+    /// `@throws [type] [description]`
+    Throws {
+        type_str: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
+    },
+    /// `@deprecated [description]`
+    Deprecated { description: Option<Cow<'src, str>> },
+    /// `@template T [of bound]`
+    Template {
+        name: &'src str,
+        bound: Option<&'src str>,
+    },
+    /// `@extends [type]`
+    Extends { type_str: &'src str },
+    /// `@implements [type]`
+    Implements { type_str: &'src str },
+    /// `@method [static] [return_type] name(params) [description]`
+    Method { signature: &'src str },
+    /// `@property [type] $name [description]`
+    Property {
+        type_str: Option<&'src str>,
+        name: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
+    },
+    /// `@property-read [type] $name [description]`
+    PropertyRead {
+        type_str: Option<&'src str>,
+        name: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
+    },
+    /// `@property-write [type] $name [description]`
+    PropertyWrite {
+        type_str: Option<&'src str>,
+        name: Option<&'src str>,
+        description: Option<Cow<'src, str>>,
+    },
+    /// `@see [reference] [description]`
+    See { reference: &'src str },
+    /// `@link [url] [description]`
+    Link { url: &'src str },
+    /// `@since [version] [description]`
+    Since { version: &'src str },
+    /// `@author name [<email>]`
+    Author { name: &'src str },
+    /// `@internal`
+    Internal,
+    /// `@inheritdoc` / `{@inheritdoc}`
+    InheritDoc,
+    /// `@psalm-assert`, `@phpstan-assert` — assert that a parameter has a type after the call.
+    Assert {
+        type_str: Option<&'src str>,
+        name: Option<&'src str>,
+    },
+    /// `@psalm-type`, `@phpstan-type` — local type alias (`@type Foo = int|string`).
+    TypeAlias {
+        name: Option<&'src str>,
+        type_str: Option<&'src str>,
+    },
+    /// `@psalm-import-type`, `@phpstan-import-type` — import a type alias from another class.
+    ImportType { body: &'src str },
+    /// `@psalm-suppress`, `@phpstan-ignore-next-line`, `@phpstan-ignore` — suppress diagnostics.
+    Suppress { rules: &'src str },
+    /// `@psalm-pure`, `@psalm-immutable`, `@psalm-readonly` — purity/immutability markers.
+    Pure,
+    /// `@psalm-readonly`, `@readonly` — marks a property as read-only.
+    Readonly,
+    /// `@psalm-immutable` — marks a class as immutable.
+    Immutable,
+    /// `@mixin [class]` — indicates the class delegates calls to another.
+    Mixin { class: &'src str },
+    /// `@template-covariant T [of bound]`
+    TemplateCovariant {
+        name: &'src str,
+        bound: Option<&'src str>,
+    },
+    /// `@template-contravariant T [of bound]`
+    TemplateContravariant {
+        name: &'src str,
+        bound: Option<&'src str>,
+    },
+    /// Any tag not specifically recognized: `@tagname [body]`
+    Generic {
+        tag: &'src str,
+        body: Option<Cow<'src, str>>,
+    },
+}
 
 /// Parse a raw doc-comment string into a [`PhpDoc`].
 ///
