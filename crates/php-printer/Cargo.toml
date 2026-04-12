@@ -7,6 +7,7 @@ authors.workspace = true
 repository.workspace = true
 homepage.workspace = true
 description = "Pretty printer for PHP AST — converts parsed AST back to PHP source code"
+exclude = ["tests/"]
 
 [dependencies]
 php-ast.workspace = true
