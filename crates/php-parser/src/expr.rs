@@ -318,9 +318,7 @@ pub fn parse_expr_bp<'arena, 'src>(
             if parser.check(TokenKind::Variable) {
                 // Static property: Class::$prop
                 let token = parser.advance();
-                let src = parser.source;
-                let member =
-                    Cow::Borrowed(&src[token.span.start as usize + 1..token.span.end as usize]);
+                let member = Cow::Borrowed(parser.variable_name(token));
                 let span = Span::new(lhs.span.start, token.span.end);
                 lhs = Expr {
                     kind: ExprKind::StaticPropertyAccess(StaticAccessExpr {
@@ -681,8 +679,7 @@ fn parse_member_name<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr
         // Dynamic: $obj->$var
         TokenKind::Variable => {
             let token = parser.advance();
-            let src = parser.source;
-            let name = &src[token.span.start as usize + 1..token.span.end as usize];
+            let name = parser.variable_name(token);
             Expr {
                 kind: ExprKind::Variable(NameStr::Src(name)),
                 span: token.span,
@@ -1217,9 +1214,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
         // Variables
         TokenKind::Variable => {
             let token = parser.advance();
-            let src = parser.source;
-            // Strip the $ prefix
-            let name = &src[token.span.start as usize + 1..token.span.end as usize];
+            let name = parser.variable_name(token);
             Expr {
                 kind: ExprKind::Variable(NameStr::Src(name)),
                 span: token.span,
@@ -1838,11 +1833,8 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         TokenKind::Variable => {
             // new $className()
             let t = parser.advance();
-            let src = parser.source;
             Expr {
-                kind: ExprKind::Variable(NameStr::Src(
-                    &src[t.span.start as usize + 1..t.span.end as usize],
-                )),
+                kind: ExprKind::Variable(NameStr::Src(parser.variable_name(t))),
                 span: t.span,
             }
         }
@@ -1966,8 +1958,7 @@ fn parse_closure_use_list<'arena, 'src>(
         let var_start = parser.start_span();
         let by_ref = parser.eat(TokenKind::Ampersand).is_some();
         if let Some(token) = parser.eat(TokenKind::Variable) {
-            let src = parser.source;
-            let name = &src[token.span.start as usize + 1..token.span.end as usize];
+            let name = parser.variable_name(token);
             let span = Span::new(var_start, token.span.end);
             vars.push(ClosureUseVar { name, by_ref, span });
         }
