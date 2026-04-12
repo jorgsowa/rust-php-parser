@@ -262,6 +262,23 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         self.previous_end
     }
 
+    /// Strip the `$` prefix from a Variable token and return the bare name.
+    ///
+    /// For all tokens produced by the lexer `span.end >= span.start + 2` is an
+    /// invariant, so the guard is always eliminated by the optimiser in release
+    /// builds.  It exists solely to prevent a backwards-range panic if a
+    /// zero-length error-recovery token is ever introduced.
+    #[inline]
+    pub fn variable_name(&self, token: Token) -> &'src str {
+        let start = token.span.start as usize;
+        let end = token.span.end as usize;
+        if start < end {
+            &self.source[start + 1..end]
+        } else {
+            ""
+        }
+    }
+
     /// Check if the current token matches the given kind.
     #[inline]
     pub fn check(&self, kind: TokenKind) -> bool {

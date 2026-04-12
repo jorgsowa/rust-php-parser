@@ -1150,9 +1150,8 @@ pub fn parse_param_list<'arena, 'src>(
 
         let name_token = parser.expect(TokenKind::Variable);
         let name_span_end = name_token.as_ref().map(|t| t.span.end);
-        let src = parser.source;
         let name: &str = name_token
-            .map(|t| &src[t.span.start as usize + 1..t.span.end as usize])
+            .map(|t| parser.variable_name(t))
             .unwrap_or("<error>");
 
         let default = if parser.eat(TokenKind::Equals).is_some() {
@@ -1236,8 +1235,7 @@ fn try_parse_simple_param_fastpath_minimal<'arena, 'src>(
     // Safe to fast path. Now consume the tokens.
     let name_token = parser.advance();
     let name_span_end = name_token.span.end;
-    let src = parser.source;
-    let name: &str = &src[name_token.span.start as usize + 1..name_token.span.end as usize];
+    let name: &str = parser.variable_name(name_token);
 
     Some(Param {
         name,
@@ -1433,8 +1431,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
 
         let var = if parser.check(TokenKind::Variable) {
             let t = parser.advance();
-            let src = parser.source;
-            Some(&src[t.span.start as usize + 1..t.span.end as usize])
+            Some(parser.variable_name(t))
         } else {
             None
         };
@@ -2407,8 +2404,7 @@ pub fn parse_class_members<'arena, 'src>(
 
         if parser.check(TokenKind::Variable) {
             let var_token = parser.advance();
-            let src = parser.source;
-            let prop_name = &src[var_token.span.start as usize + 1..var_token.span.end as usize];
+            let prop_name = parser.variable_name(var_token);
 
             let default = if parser.eat(TokenKind::Equals).is_some() {
                 Some(expr::parse_expr(parser))
@@ -2456,9 +2452,7 @@ pub fn parse_class_members<'arena, 'src>(
                 // Parse remaining comma-separated properties
                 while parser.check(TokenKind::Variable) {
                     let var_token = parser.advance();
-                    let src = parser.source;
-                    let pname =
-                        &src[var_token.span.start as usize + 1..var_token.span.end as usize];
+                    let pname = parser.variable_name(var_token);
 
                     let pdefault = if parser.eat(TokenKind::Equals).is_some() {
                         Some(expr::parse_expr(parser))
@@ -3222,9 +3216,8 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
     loop {
         let var_start = parser.start_span();
         let var_token = parser.expect(TokenKind::Variable);
-        let src = parser.source;
         let name: &str = var_token
-            .map(|t| &src[t.span.start as usize + 1..t.span.end as usize])
+            .map(|t| parser.variable_name(t))
             .unwrap_or("<error>");
 
         let default = if parser.eat(TokenKind::Equals).is_some() {
