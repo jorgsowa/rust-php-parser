@@ -5,7 +5,7 @@ use crate::precedence::*;
 /// Configuration for the pretty printer.
 pub struct PrinterConfig {
     pub indent: Indent,
-    pub newline: String,
+    pub newline: &'static str,
 }
 
 /// Indentation style.
@@ -18,32 +18,52 @@ impl Default for PrinterConfig {
     fn default() -> Self {
         Self {
             indent: Indent::Spaces(4),
-            newline: "\n".to_string(),
+            newline: "\n",
         }
     }
 }
+
+const SPACES: [&str; 17] = [
+    "",
+    " ",
+    "  ",
+    "   ",
+    "    ",
+    "     ",
+    "      ",
+    "       ",
+    "        ",
+    "         ",
+    "          ",
+    "           ",
+    "            ",
+    "             ",
+    "              ",
+    "               ",
+    "                ",
+];
 
 const MAX_DEPTH: usize = 256;
 
 pub(crate) struct Printer {
     output: String,
     indent_level: usize,
-    indent_str: String,
-    nl: String,
+    indent_str: &'static str,
+    nl: &'static str,
     depth: usize,
 }
 
 impl Printer {
     pub fn new(config: &PrinterConfig) -> Self {
-        let indent_str = match &config.indent {
-            Indent::Spaces(n) => " ".repeat((*n).min(16)),
-            Indent::Tabs => "\t".to_string(),
+        let indent_str = match config.indent {
+            Indent::Spaces(n) => SPACES[n.min(16)],
+            Indent::Tabs => "\t",
         };
         Self {
             output: String::with_capacity(4096),
             indent_level: 0,
             indent_str,
-            nl: config.newline.clone(),
+            nl: config.newline,
             depth: 0,
         }
     }
@@ -57,12 +77,12 @@ impl Printer {
     }
 
     fn newline(&mut self) {
-        self.output.push_str(&self.nl);
+        self.output.push_str(self.nl);
     }
 
     fn write_indent(&mut self) {
         for _ in 0..self.indent_level {
-            self.output.push_str(&self.indent_str);
+            self.output.push_str(self.indent_str);
         }
     }
 
