@@ -3,11 +3,6 @@
 //! All other error-case tests live in `tests/fixtures/errors/*.phpt` and are
 //! run automatically by `integration::fixtures()`.
 
-fn parse(code: &str) -> php_rs_parser::ParseResult<'_, '_> {
-    let arena = Box::leak(Box::new(bumpalo::Bump::new()));
-    php_rs_parser::parse(arena, code)
-}
-
 fn format_errors(result: &php_rs_parser::ParseResult) -> String {
     result
         .errors
@@ -28,7 +23,8 @@ fn with_large_stack<F: FnOnce() + Send + 'static>(f: F) {
 }
 
 fn assert_has_errors(code: &str) {
-    let result = parse(code);
+    let arena = bumpalo::Bump::new();
+    let result = php_rs_parser::parse(&arena, code);
     assert!(
         !result.errors.is_empty(),
         "expected parse errors but got none for: {}...",
@@ -37,7 +33,8 @@ fn assert_has_errors(code: &str) {
 }
 
 fn assert_depth_exceeded(code: &str) {
-    let result = parse(code);
+    let arena = bumpalo::Bump::new();
+    let result = php_rs_parser::parse(&arena, code);
     let msgs = format_errors(&result);
     assert!(
         msgs.contains("maximum expression nesting depth exceeded"),
@@ -46,7 +43,8 @@ fn assert_depth_exceeded(code: &str) {
 }
 
 fn assert_no_errors(code: &str) {
-    let result = parse(code);
+    let arena = bumpalo::Bump::new();
+    let result = php_rs_parser::parse(&arena, code);
     assert!(
         result.errors.is_empty(),
         "unexpected errors: {}",
@@ -112,7 +110,8 @@ fn deeply_nested_match_hit_depth_limit() {
 #[test]
 fn many_sequential_statements() {
     let code = format!("<?php {}", "$x = 1;\n".repeat(10_000));
-    let result = parse(&code);
+    let arena = bumpalo::Bump::new();
+    let result = php_rs_parser::parse(&arena, &code);
     assert!(result.errors.is_empty());
 }
 
