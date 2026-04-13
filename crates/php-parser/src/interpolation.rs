@@ -781,32 +781,37 @@ mod tests {
     #[allow(unused_imports)]
     use super::*;
 
-    fn parse_src(src: &'static str) -> crate::ParseResult<'static, 'static> {
-        let arena: &'static bumpalo::Bump = Box::leak(Box::new(bumpalo::Bump::new()));
-        crate::parse(arena, src)
-    }
-
     #[test]
     fn indented_heredoc_simple_var() {
-        let result = parse_src("<?php\n$x = <<<END\n    Hello $name!\n    END;\n");
+        let arena = bumpalo::Bump::new();
+        let result = crate::parse(&arena, "<?php\n$x = <<<END\n    Hello $name!\n    END;\n");
         assert!(result.errors.is_empty(), "{:?}", result.errors);
     }
 
     #[test]
     fn indented_heredoc_complex_interpolation() {
-        let result = parse_src("<?php\n$x = <<<END\n    Hello {$obj->name}!\n    END;\n");
+        let arena = bumpalo::Bump::new();
+        let result = crate::parse(
+            &arena,
+            "<?php\n$x = <<<END\n    Hello {$obj->name}!\n    END;\n",
+        );
         assert!(result.errors.is_empty(), "{:?}", result.errors);
     }
 
     #[test]
     fn indented_heredoc_multiline_interpolation() {
-        let result = parse_src("<?php\n$x = <<<END\n    Line 1 {$a}\n    Line 2 {$b}\n    END;\n");
+        let arena = bumpalo::Bump::new();
+        let result = crate::parse(
+            &arena,
+            "<?php\n$x = <<<END\n    Line 1 {$a}\n    Line 2 {$b}\n    END;\n",
+        );
         assert!(result.errors.is_empty(), "{:?}", result.errors);
     }
 
     #[test]
     fn indented_nowdoc() {
-        let result = parse_src("<?php\n$x = <<<'END'\n    Hello world!\n    END;\n");
+        let arena = bumpalo::Bump::new();
+        let result = crate::parse(&arena, "<?php\n$x = <<<'END'\n    Hello world!\n    END;\n");
         assert!(result.errors.is_empty(), "{:?}", result.errors);
     }
 }

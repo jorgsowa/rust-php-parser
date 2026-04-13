@@ -30,15 +30,14 @@ fn fixtures() {
     let update = std::env::var("UPDATE_FIXTURES").is_ok();
     for path in paths {
         let rel = path.strip_prefix(&dir).unwrap().to_string_lossy();
-        let content: &'static str =
-            Box::leak(std::fs::read_to_string(&path).unwrap().into_boxed_str());
-        let (config, source) = common::parse_fixture(content);
-        let arena: &'static bumpalo::Bump = Box::leak(Box::new(bumpalo::Bump::new()));
+        let content = std::fs::read_to_string(&path).unwrap();
+        let (config, source) = common::parse_fixture(&content);
+        let arena = bumpalo::Bump::new();
 
         let result = if let Some(ver) = config.parse_version {
-            php_rs_parser::parse_versioned(arena, source, common::php_version(ver))
+            php_rs_parser::parse_versioned(&arena, source, common::php_version(ver))
         } else {
-            php_rs_parser::parse(arena, source)
+            php_rs_parser::parse(&arena, source)
         };
 
         if config.expect_errors {
