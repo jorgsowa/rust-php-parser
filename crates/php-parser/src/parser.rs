@@ -640,11 +640,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         // Union: A|B|C or (A&B)|C (DNF)
         if self.check(TokenKind::Pipe) {
             self.require_version(PhpVersion::Php80, "union types", self.current_span());
+            let mut end = first.span.end;
             let mut types = self.alloc_vec_one(first);
             while self.eat(TokenKind::Pipe).is_some() {
-                types.push(self.parse_type_element());
+                let t = self.parse_type_element();
+                end = t.span.end;
+                types.push(t);
             }
-            let span = Span::new(start, types.last().unwrap().span.end);
+            let span = Span::new(start, end);
             let has_true = types
                 .iter()
                 .any(|t| matches!(t.kind, TypeHintKind::Keyword(BuiltinType::True, _)));
@@ -707,11 +710,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             if looks_like_type {
                 let span = self.current_span();
                 self.require_version(PhpVersion::Php81, "intersection types", span);
+                let mut end = first.span.end;
                 let mut types = self.alloc_vec_one(first);
                 while self.eat(TokenKind::Ampersand).is_some() {
-                    types.push(self.parse_simple_type());
+                    let t = self.parse_simple_type();
+                    end = t.span.end;
+                    types.push(t);
                 }
-                let span = Span::new(start, types.last().unwrap().span.end);
+                let span = Span::new(start, end);
                 return TypeHint {
                     kind: TypeHintKind::Intersection(types),
                     span,
@@ -1016,7 +1022,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         let span = if stmts.is_empty() {
             Span::new(start, self.current.span.end)
         } else {
-            Span::new(start, stmts.last().unwrap().span.end)
+            Span::new(
+                start,
+                stmts
+                    .last()
+                    .expect("stmts non-empty: checked above")
+                    .span
+                    .end,
+            )
         };
 
         Program { stmts, span }

@@ -1027,7 +1027,11 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                 );
                 // Collapse single literal part into String, or use InterpolatedString
                 if parts.len() == 1 {
-                    match parts.into_iter().next().unwrap() {
+                    match parts
+                        .into_iter()
+                        .next()
+                        .expect("parts.len() == 1 checked above")
+                    {
                         StringPart::Literal(s) => Expr {
                             kind: ExprKind::String(s),
                             span: token.span,
@@ -1509,7 +1513,11 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                             }
                         } else if args.len() == 1 && args[0].name.is_none() && !args[0].unpack {
                             // exit(expr)
-                            let value = args.into_iter().next().unwrap().value;
+                            let value = args
+                                .into_iter()
+                                .next()
+                                .expect("args.len() == 1 checked above")
+                                .value;
                             Expr {
                                 kind: ExprKind::Exit(Some(parser.alloc(value))),
                                 span,
@@ -1577,7 +1585,11 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                             && !args[1].unpack;
                         if is_simple {
                             // clone($obj) — parenthesised single-argument form
-                            let object = args.into_iter().next().unwrap().value;
+                            let object = args
+                                .into_iter()
+                                .next()
+                                .expect("is_simple: args.len() == 1 checked above")
+                                .value;
                             Expr {
                                 kind: ExprKind::Clone(parser.alloc(object)),
                                 span,
@@ -1590,8 +1602,14 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                                 token.span,
                             );
                             let mut iter = args.into_iter();
-                            let object = iter.next().unwrap().value;
-                            let overrides = iter.next().unwrap().value;
+                            let object = iter
+                                .next()
+                                .expect("is_clone_with: args.len() == 2 checked above")
+                                .value;
+                            let overrides = iter
+                                .next()
+                                .expect("is_clone_with: args.len() == 2 checked above")
+                                .value;
                             Expr {
                                 kind: ExprKind::CloneWith(
                                     parser.alloc(object),
