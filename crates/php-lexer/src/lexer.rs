@@ -1089,7 +1089,7 @@ impl<'src> Lexer<'src> {
         if let Some(after_quote) = after_arrows_trimmed.strip_prefix('\'') {
             // Nowdoc: <<<'LABEL'
             let closing = after_quote.find('\'')?;
-            label = after_quote[..closing].to_string();
+            label = &after_quote[..closing];
             is_nowdoc = true;
             let after_label = &after_arrows_trimmed[2 + closing..];
             // Find end of line
@@ -1102,7 +1102,7 @@ impl<'src> Lexer<'src> {
             // Heredoc: <<<LABEL or <<<"LABEL"
             let s = if let Some(after_dquote) = after_arrows_trimmed.strip_prefix('"') {
                 let closing = after_dquote.find('"')?;
-                label = after_dquote[..closing].to_string();
+                label = &after_dquote[..closing];
                 &after_dquote[1 + closing..]
             } else {
                 // Bare identifier
@@ -1112,7 +1112,7 @@ impl<'src> Lexer<'src> {
                 if end == 0 {
                     return None;
                 }
-                label = after_arrows_trimmed[..end].to_string();
+                label = &after_arrows_trimmed[..end];
                 &after_arrows_trimmed[end..]
             };
             is_nowdoc = false;
@@ -1152,7 +1152,7 @@ impl<'src> Lexer<'src> {
             // PHP 7.3+ flexible heredoc allows the closing marker to be followed by , or )
             // so that heredoc can appear in function argument lists and array literals.
             if trimmed_line == label
-                || trimmed_line.starts_with(&label)
+                || trimmed_line.starts_with(label)
                     && trimmed_line[label.len()..]
                         .trim_start_matches([';', ',', ')'])
                         .trim()
