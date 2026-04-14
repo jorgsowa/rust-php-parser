@@ -53,6 +53,7 @@ static IS_IDENT_CONTINUE: [bool; 256] = make_ident_continue_table();
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum LexerErrorKind {
     UnterminatedString,
+    FileTooLarge,
     Other,
 }
 
@@ -109,6 +110,12 @@ fn is_ident_continue(b: u8) -> bool {
 
 impl<'src> Lexer<'src> {
     pub fn new(source: &'src str) -> Self {
+        debug_assert!(
+            source.len() <= u32::MAX as usize,
+            "source is {} bytes, which exceeds the u32::MAX span limit",
+            source.len()
+        );
+
         // Skip shebang line if present (e.g., #!/usr/bin/env php)
         let pos = if source.starts_with("#!") {
             source.find('\n').map(|p| p + 1).unwrap_or(source.len())
@@ -145,6 +152,12 @@ impl<'src> Lexer<'src> {
     /// content (no `<?php` tag needed — the lexer is pre-set to PHP mode).
     /// Spans produced will be correct absolute offsets into `source`.
     pub fn new_at(source: &'src str, offset: usize) -> Self {
+        debug_assert!(
+            source.len() <= u32::MAX as usize,
+            "source is {} bytes, which exceeds the u32::MAX span limit",
+            source.len()
+        );
+
         Self {
             source,
             mode: LexerMode::Php,
@@ -1195,6 +1208,20 @@ impl<'src> Lexer<'src> {
 /// Returns a tuple of (tokens, errors). The token vector is guaranteed to end with
 /// an Eof token, and includes a second Eof sentinel to make peek2 safe.
 pub fn lex_all(source: &str) -> (Vec<Token>, Vec<LexerError>) {
+    if source.len() > u32::MAX as usize {
+        let error = LexerError {
+            kind: LexerErrorKind::FileTooLarge,
+            message: format!(
+                "source is {} bytes, which exceeds the maximum supported size of {} bytes",
+                source.len(),
+                u32::MAX
+            ),
+            span: Span::new(0, 0),
+        };
+        let eof = Token::eof(0);
+        return (vec![eof, eof], vec![error]);
+    }
+
     let mut lexer = Lexer::new(source);
     let mut tokens = Vec::new();
 
