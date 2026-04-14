@@ -144,6 +144,22 @@ impl<'arena, 'src> Name<'arena, 'src> {
         }
     }
 
+    /// Returns the name as a borrowed slice of the source string.
+    ///
+    /// Unlike [`to_string_repr`], this never allocates: it uses the stored
+    /// span to slice directly into `src`.  The slice includes any leading `\`
+    /// for fully-qualified names, exactly as it appears in the source.
+    ///
+    /// Use this when you need a zero-copy `&'src str` and already have the
+    /// source buffer available (e.g. inside [`crate::visitor::ScopeWalker`]).
+    #[inline]
+    pub fn src_repr(&self, src: &'src str) -> &'src str {
+        match self {
+            Self::Simple { value, .. } => value,
+            Self::Complex { span, .. } => &src[span.start as usize..span.end as usize],
+        }
+    }
+
     /// Joins all parts with `\` and prepends `\` if fully qualified.
     /// Returns `Cow::Borrowed` for simple names (zero allocation).
     #[inline]

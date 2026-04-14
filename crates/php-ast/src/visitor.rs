@@ -1,4 +1,3 @@
-use std::borrow::Cow;
 use std::ops::ControlFlow;
 
 use crate::ast::*;
@@ -705,10 +704,13 @@ fn walk_attributes<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 /// declarations; it is `None` for anonymous classes.
 /// **`function_name`** is set inside named functions and methods; it is `None`
 /// inside closures and arrow functions.
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Copy, Default)]
 pub struct Scope<'src> {
     /// Current namespace, or `None` for the global namespace.
-    pub namespace: Option<Cow<'src, str>>,
+    ///
+    /// This is a borrowed slice of the original source string, so copying or
+    /// cloning the scope is always allocation-free.
+    pub namespace: Option<&'src str>,
     /// Name of the immediately enclosing class-like declaration, or `None`.
     pub class_name: Option<&'src str>,
     /// Name of the immediately enclosing named function or method, or `None`.
@@ -851,21 +853,28 @@ pub trait ScopeVisitor<'arena, 'src> {
 /// let arena = bumpalo::Bump::new();
 /// let src = "<?php class Foo { public function bar() {} }";
 /// let program = parse(&arena, src);
-/// let mut walker = ScopeWalker::new(MyVisitor);
+/// let mut walker = ScopeWalker::new(src, MyVisitor);
 /// walker.walk(&program);
 /// let _my_visitor = walker.into_inner();
 /// ```
 pub struct ScopeWalker<'src, V> {
     inner: V,
     scope: Scope<'src>,
+    src: &'src str,
 }
 
 impl<'src, V> ScopeWalker<'src, V> {
     /// Creates a new `ScopeWalker` wrapping `inner`.
-    pub fn new(inner: V) -> Self {
+    ///
+    /// `src` must be the same source string that was passed to the parser that
+    /// produced the [`Program`] you will walk.  It is used to derive
+    /// zero-allocation [`Scope::namespace`] slices for qualified namespace
+    /// names (e.g. `Foo\Bar`).
+    pub fn new(src: &'src str, inner: V) -> Self {
         Self {
             inner,
             scope: Scope::default(),
+            src,
         }
     }
 
@@ -936,10 +945,10 @@ impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> Visitor<'arena, 'src> for Scop
                 self.scope.function_name = prev_fn;
             }
             StmtKind::Namespace(ns) => {
-                let ns_str = ns.name.as_ref().map(|n| n.to_string_repr());
+                let ns_str = ns.name.as_ref().map(|n| n.src_repr(self.src));
                 match &ns.body {
                     NamespaceBody::Braced(_) => {
-                        let prev_ns = self.scope.namespace.clone();
+                        let prev_ns = self.scope.namespace;
                         let prev_class = self.scope.class_name.take();
                         let prev_fn = self.scope.function_name.take();
                         self.scope.namespace = ns_str;
