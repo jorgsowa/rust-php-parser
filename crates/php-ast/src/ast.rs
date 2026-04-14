@@ -24,17 +24,11 @@ impl<'arena, T> ArenaVec<'arena, T> {
     pub fn push(&mut self, val: T) {
         self.0.push(val)
     }
+    /// Kept as an explicit method so `"ArenaVec::is_empty"` works as a serde
+    /// `skip_serializing_if` path (deref-inherited methods don't resolve via UFCS).
     #[inline]
     pub fn is_empty(&self) -> bool {
         self.0.is_empty()
-    }
-    #[inline]
-    pub fn len(&self) -> usize {
-        self.0.len()
-    }
-    #[inline]
-    pub fn last(&self) -> Option<&T> {
-        self.0.last()
     }
 }
 
