@@ -8,7 +8,7 @@ use std::ops::ControlFlow;
 
 /// Parse PHP source and run a callback with the resulting program.
 /// Keeps the arena alive for the duration of the callback.
-fn with_parsed<F: for<'arena, 'src> FnOnce(&Program<'arena, 'src>)>(src: &str, f: F) {
+fn with_parsed<F: for<'arena, 'src> FnOnce(&'src str, &Program<'arena, 'src>)>(src: &str, f: F) {
     let arena = bumpalo::Bump::new();
     let result = php_rs_parser::parse(&arena, src);
     assert!(
@@ -16,7 +16,7 @@ fn with_parsed<F: for<'arena, 'src> FnOnce(&Program<'arena, 'src>)>(src: &str, f
         "parse errors: {:?}",
         result.errors
     );
-    f(&result.program);
+    f(src, &result.program);
 }
 
 /// Counts occurrences of each node type visited.
@@ -86,7 +86,7 @@ impl<'arena, 'src> Visitor<'arena, 'src> for NodeCounter {
 fn walks_function_params_and_return_type() {
     with_parsed(
         "<?php function add(int $a, int $b): int { return $a + $b; }",
-        |program| {
+        |_src, program| {
             let mut c = NodeCounter::default();
             let _ = c.visit_program(program);
             assert_eq!(c.params, 2);
@@ -103,7 +103,7 @@ fn walks_class_members() {
             public function bar(): void {}
             const Y = 2;
         }",
-        |program| {
+        |_src, program| {
             let mut c = NodeCounter::default();
             let _ = c.visit_program(program);
             assert_eq!(c.class_members, 3); // property, method, const
@@ -120,7 +120,7 @@ fn walks_enum_members() {
             case Blue = 'blue';
             public function label(): string { return $this->value; }
         }",
-        |program| {
+        |_src, program| {
             let mut c = NodeCounter::default();
             let _ = c.visit_program(program);
             assert_eq!(c.enum_members, 3); // 2 cases + 1 method
@@ -137,7 +137,7 @@ fn walks_match_arms() {
             2, 3 => 'few',
             default => 'many',
         };",
-        |program| {
+        |_src, program| {
             let mut c = NodeCounter::default();
             let _ = c.visit_program(program);
             assert_eq!(c.match_arms, 3);
@@ -157,7 +157,7 @@ fn walks_catch_clauses() {
         } finally {
             cleanup();
         }",
-        |program| {
+        |_src, program| {
             let mut c = NodeCounter::default();
             let _ = c.visit_program(program);
             assert_eq!(c.catch_clauses, 2);
@@ -169,7 +169,7 @@ fn walks_catch_clauses() {
 fn walks_closure_use_vars() {
     with_parsed(
         "<?php $f = function() use ($x, &$y) { return $x + $y; };",
-        |program| {
+        |_src, program| {
             let mut c = NodeCounter::default();
             let _ = c.visit_program(program);
             assert_eq!(c.closure_use_vars, 2);
@@ -184,7 +184,7 @@ fn walks_attributes() {
         #[Route('/api')]
         #[Auth('admin')]
         function handler(#[FromQuery] int $page): void {}",
-        |program| {
+        |_src, program| {
             let mut c = NodeCounter::default();
             let _ = c.visit_program(program);
             assert_eq!(c.attributes, 3); // Route, Auth, FromQuery
@@ -196,7 +196,7 @@ fn walks_attributes() {
 fn walks_union_and_nullable_types() {
     with_parsed(
         "<?php function foo(?int $a, string|int $b): bool|null {}",
-        |program| {
+        |_src, program| {
             let mut c = NodeCounter::default();
             let _ = c.visit_program(program);
             // ?int(2) + string|int(3) + bool|null(3) = 8
@@ -207,7 +207,7 @@ fn walks_union_and_nullable_types() {
 
 #[test]
 fn walks_arrow_function() {
-    with_parsed("<?php $f = fn(int $x): int => $x * 2;", |program| {
+    with_parsed("<?php $f = fn(int $x): int => $x * 2;", |_src, program| {
         let mut c = NodeCounter::default();
         let _ = c.visit_program(program);
         assert_eq!(c.params, 1);
@@ -219,7 +219,7 @@ fn walks_arrow_function() {
 fn walks_named_args() {
     with_parsed(
         "<?php array_slice(array: $a, offset: 1, length: 2);",
-        |program| {
+        |_src, program| {
             let mut c = NodeCounter::default();
             let _ = c.visit_program(program);
             assert_eq!(c.args, 3);
@@ -234,7 +234,7 @@ fn early_break_stops_traversal() {
         $first = 1;
         $second = 2;
         $third = 3;",
-        |program| {
+        |_src, program| {
             struct StopAfterFirst {
                 var_count: usize,
             }
@@ -271,7 +271,7 @@ fn walks_nested_closures_and_control_flow() {
             }
             return fn($y) => $y + $outer;
         };",
-        |program| {
+        |_src, program| {
             struct VarCollector {
                 names: Vec<String>,
             }
@@ -311,7 +311,7 @@ fn walks_try_catch_switch_and_foreach() {
                 log($e);
             }
         }",
-        |program| {
+        |_src, program| {
             let mut c = NodeCounter::default();
             let _ = c.visit_program(program);
             assert_eq!(c.catch_clauses, 1);
@@ -329,7 +329,7 @@ fn walks_class_property_and_method_types() {
             protected ?int $count;
             public function find(int $id): ?self {}
         }",
-        |program| {
+        |_src, program| {
             struct TypeCollector {
                 types: Vec<String>,
             }
@@ -359,7 +359,7 @@ fn walks_class_property_and_method_types() {
 
 #[test]
 fn walks_declare_directive_expressions() {
-    with_parsed("<?php declare(strict_types=1);", |program| {
+    with_parsed("<?php declare(strict_types=1);", |_src, program| {
         let mut c = NodeCounter::default();
         let _ = c.visit_program(program);
         assert!(c.exprs >= 1); // the `1` in strict_types=1
@@ -399,8 +399,8 @@ fn scope_visitor_tracks_class_for_methods() {
             public function bar(): void {}
             public function baz(): void {}
         }",
-        |program| {
-            let mut walker = ScopeWalker::new(MethodScopeCollector::default());
+        |src, program| {
+            let mut walker = ScopeWalker::new(src, MethodScopeCollector::default());
             let _ = walker.walk(program);
             let c = walker.into_inner();
             assert_eq!(
@@ -421,7 +421,7 @@ fn scope_visitor_tracks_namespace() {
         namespace App\\Http;
 
         function handle(): void {}",
-        |program| {
+        |src, program| {
             #[derive(Default)]
             struct NsCollector {
                 fn_namespaces: Vec<Option<String>>,
@@ -440,7 +440,7 @@ fn scope_visitor_tracks_namespace() {
                 }
             }
 
-            let mut walker = ScopeWalker::new(NsCollector::default());
+            let mut walker = ScopeWalker::new(src, NsCollector::default());
             let _ = walker.walk(program);
             let c = walker.into_inner();
             assert_eq!(c.fn_namespaces, vec![Some("App\\Http".into())]);
@@ -455,7 +455,7 @@ fn scope_visitor_function_name_inside_body() {
         function outer(): void {
             $x = 1;
         }",
-        |program| {
+        |src, program| {
             #[derive(Default)]
             struct FnCollector {
                 /// function_name seen for each Expression stmt visited.
@@ -474,7 +474,7 @@ fn scope_visitor_function_name_inside_body() {
                 }
             }
 
-            let mut walker = ScopeWalker::new(FnCollector::default());
+            let mut walker = ScopeWalker::new(src, FnCollector::default());
             let _ = walker.walk(program);
             let c = walker.into_inner();
             assert_eq!(c.fn_names, vec![Some("outer".into())]);
@@ -489,7 +489,7 @@ fn scope_visitor_closure_clears_function_name() {
         function outer(): void {
             $f = function() { $x = 1; };
         }",
-        |program| {
+        |src, program| {
             #[derive(Default)]
             struct FnNameCollector {
                 /// function_name seen for $x = 1 expression stmt inside closure.
@@ -510,7 +510,7 @@ fn scope_visitor_closure_clears_function_name() {
                 }
             }
 
-            let mut walker = ScopeWalker::new(FnNameCollector::default());
+            let mut walker = ScopeWalker::new(src, FnNameCollector::default());
             let _ = walker.walk(program);
             let c = walker.into_inner();
             // $f = ... at outer scope has function_name = "outer"
@@ -530,7 +530,7 @@ fn scope_visitor_method_tracks_class_and_function() {
                 $x = 1;
             }
         }",
-        |program| {
+        |src, program| {
             #[derive(Default)]
             struct ScopeCapture {
                 /// (class_name, function_name) for each expression stmt visited.
@@ -552,7 +552,7 @@ fn scope_visitor_method_tracks_class_and_function() {
                 }
             }
 
-            let mut walker = ScopeWalker::new(ScopeCapture::default());
+            let mut walker = ScopeWalker::new(src, ScopeCapture::default());
             let _ = walker.walk(program);
             let c = walker.into_inner();
             assert_eq!(
@@ -573,7 +573,7 @@ fn scope_visitor_braced_namespace_scopes_correctly() {
         namespace Beta {
             function bar() {}
         }",
-        |program| {
+        |src, program| {
             #[derive(Default)]
             struct NsFnCollector {
                 entries: Vec<(Option<String>, String)>,
@@ -594,7 +594,7 @@ fn scope_visitor_braced_namespace_scopes_correctly() {
                 }
             }
 
-            let mut walker = ScopeWalker::new(NsFnCollector::default());
+            let mut walker = ScopeWalker::new(src, NsFnCollector::default());
             let _ = walker.walk(program);
             let c = walker.into_inner();
             assert_eq!(
@@ -616,7 +616,7 @@ fn scope_visitor_enum_method_tracks_enum_and_function() {
             case Active;
             public function label(): string { return 'active'; }
         }",
-        |program| {
+        |src, program| {
             #[derive(Default)]
             struct EnumScopeCollector {
                 method_scopes: Vec<(Option<String>, Option<String>)>,
@@ -637,7 +637,7 @@ fn scope_visitor_enum_method_tracks_enum_and_function() {
                 }
             }
 
-            let mut walker = ScopeWalker::new(EnumScopeCollector::default());
+            let mut walker = ScopeWalker::new(src, EnumScopeCollector::default());
             let _ = walker.walk(program);
             let c = walker.into_inner();
             assert_eq!(
