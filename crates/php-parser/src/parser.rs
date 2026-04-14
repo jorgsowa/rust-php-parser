@@ -57,7 +57,10 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     TokenKind::HashComment => CommentKind::Hash,
                     TokenKind::BlockComment => CommentKind::Block,
                     TokenKind::DocComment => CommentKind::Doc,
-                    _ => unreachable!(),
+                    _ => unreachable!(
+                        "is_comment() returned true for non-comment token {:?}",
+                        tok.kind
+                    ),
                 };
                 comments.push(Comment {
                     kind,
@@ -130,7 +133,10 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     TokenKind::HashComment => CommentKind::Hash,
                     TokenKind::BlockComment => CommentKind::Block,
                     TokenKind::DocComment => CommentKind::Doc,
-                    _ => unreachable!(),
+                    _ => unreachable!(
+                        "is_comment() returned true for non-comment token {:?}",
+                        tok.kind
+                    ),
                 };
                 comments.push(Comment {
                     kind,
