@@ -108,7 +108,10 @@ pub fn parse_expr_bp<'arena, 'src>(
                     let op = match op_token.kind {
                         TokenKind::PlusPlus => UnaryPostfixOp::PostIncrement,
                         TokenKind::MinusMinus => UnaryPostfixOp::PostDecrement,
-                        _ => unreachable!(),
+                        _ => unreachable!(
+                            "outer arm already matched PlusPlus/MinusMinus, got {:?}",
+                            op_token.kind
+                        ),
                     };
                     let span = lhs.span.merge(op_token.span);
                     lhs = Expr {
@@ -288,7 +291,10 @@ pub fn parse_expr_bp<'arena, 'src>(
                 TokenKind::ShiftLeftEquals => AssignOp::ShiftLeft,
                 TokenKind::ShiftRightEquals => AssignOp::ShiftRight,
                 TokenKind::CoalesceEquals => AssignOp::Coalesce,
-                _ => unreachable!(), // is_assignment_op() guarantees one of the listed variants
+                _ => unreachable!(
+                    "is_assignment_op() guarantees one of the listed variants, got {:?}",
+                    kind
+                ),
             };
             // Right-associative: parse RHS with same bp
             let rhs = parse_expr_bp(parser, ASSIGNMENT_BP);
@@ -563,7 +569,12 @@ pub fn parse_expr_bp<'arena, 'src>(
             if op_token.kind == TokenKind::PipeArrow {
                 parser.require_version(PhpVersion::Php85, "pipe operator (|>)", op_token.span);
             }
-            let op = token_to_binary_op(op_token.kind);
+            let op = token_to_binary_op(op_token.kind).unwrap_or_else(|| {
+                unreachable!(
+                    "infix_binding_power returned Some for {:?} but token_to_binary_op returned None",
+                    op_token.kind
+                )
+            });
             let rhs = parse_expr_bp(parser, right_bp);
             let span = lhs.span.merge(rhs.span);
             lhs = Expr {
@@ -808,7 +819,10 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             TokenKind::Tilde => UnaryPrefixOp::BitwiseNot,
             TokenKind::PlusPlus => UnaryPrefixOp::PreIncrement,
             TokenKind::MinusMinus => UnaryPrefixOp::PreDecrement,
-            _ => unreachable!(), // prefix_binding_power only returns Some for -, +, !, ~, ++, --
+            _ => unreachable!(
+                "prefix_binding_power only returns Some for -, +, !, ~, ++, --, got {:?}",
+                op_token.kind
+            ),
         };
         let span = op_token.span.merge(operand.span);
         return Expr {
@@ -2623,38 +2637,37 @@ fn try_parse_cast<'arena, 'src>(
     })
 }
 
-fn token_to_binary_op(kind: TokenKind) -> BinaryOp {
+fn token_to_binary_op(kind: TokenKind) -> Option<BinaryOp> {
     match kind {
-        TokenKind::Plus => BinaryOp::Add,
-        TokenKind::Minus => BinaryOp::Sub,
-        TokenKind::Star => BinaryOp::Mul,
-        TokenKind::Slash => BinaryOp::Div,
-        TokenKind::Percent => BinaryOp::Mod,
-        TokenKind::StarStar => BinaryOp::Pow,
-        TokenKind::Dot => BinaryOp::Concat,
-        TokenKind::EqualsEquals => BinaryOp::Equal,
-        TokenKind::BangEquals => BinaryOp::NotEqual,
-        TokenKind::EqualsEqualsEquals => BinaryOp::Identical,
-        TokenKind::BangEqualsEquals => BinaryOp::NotIdentical,
-        TokenKind::LessThan => BinaryOp::Less,
-        TokenKind::GreaterThan => BinaryOp::Greater,
-        TokenKind::LessThanEquals => BinaryOp::LessOrEqual,
-        TokenKind::GreaterThanEquals => BinaryOp::GreaterOrEqual,
-        TokenKind::Spaceship => BinaryOp::Spaceship,
-        TokenKind::AmpersandAmpersand => BinaryOp::BooleanAnd,
-        TokenKind::PipePipe => BinaryOp::BooleanOr,
-        TokenKind::Ampersand => BinaryOp::BitwiseAnd,
-        TokenKind::Pipe => BinaryOp::BitwiseOr,
-        TokenKind::Caret => BinaryOp::BitwiseXor,
-        TokenKind::ShiftLeft => BinaryOp::ShiftLeft,
-        TokenKind::ShiftRight => BinaryOp::ShiftRight,
-        TokenKind::And => BinaryOp::LogicalAnd,
-        TokenKind::Or => BinaryOp::LogicalOr,
-        TokenKind::Xor => BinaryOp::LogicalXor,
-        TokenKind::Instanceof => BinaryOp::Instanceof,
-        TokenKind::PipeArrow => BinaryOp::Pipe,
-        TokenKind::QuestionQuestion => unreachable!("?? handled separately"),
-        _ => unreachable!("not a binary operator: {:?}", kind),
+        TokenKind::Plus => Some(BinaryOp::Add),
+        TokenKind::Minus => Some(BinaryOp::Sub),
+        TokenKind::Star => Some(BinaryOp::Mul),
+        TokenKind::Slash => Some(BinaryOp::Div),
+        TokenKind::Percent => Some(BinaryOp::Mod),
+        TokenKind::StarStar => Some(BinaryOp::Pow),
+        TokenKind::Dot => Some(BinaryOp::Concat),
+        TokenKind::EqualsEquals => Some(BinaryOp::Equal),
+        TokenKind::BangEquals => Some(BinaryOp::NotEqual),
+        TokenKind::EqualsEqualsEquals => Some(BinaryOp::Identical),
+        TokenKind::BangEqualsEquals => Some(BinaryOp::NotIdentical),
+        TokenKind::LessThan => Some(BinaryOp::Less),
+        TokenKind::GreaterThan => Some(BinaryOp::Greater),
+        TokenKind::LessThanEquals => Some(BinaryOp::LessOrEqual),
+        TokenKind::GreaterThanEquals => Some(BinaryOp::GreaterOrEqual),
+        TokenKind::Spaceship => Some(BinaryOp::Spaceship),
+        TokenKind::AmpersandAmpersand => Some(BinaryOp::BooleanAnd),
+        TokenKind::PipePipe => Some(BinaryOp::BooleanOr),
+        TokenKind::Ampersand => Some(BinaryOp::BitwiseAnd),
+        TokenKind::Pipe => Some(BinaryOp::BitwiseOr),
+        TokenKind::Caret => Some(BinaryOp::BitwiseXor),
+        TokenKind::ShiftLeft => Some(BinaryOp::ShiftLeft),
+        TokenKind::ShiftRight => Some(BinaryOp::ShiftRight),
+        TokenKind::And => Some(BinaryOp::LogicalAnd),
+        TokenKind::Or => Some(BinaryOp::LogicalOr),
+        TokenKind::Xor => Some(BinaryOp::LogicalXor),
+        TokenKind::Instanceof => Some(BinaryOp::Instanceof),
+        TokenKind::PipeArrow => Some(BinaryOp::Pipe),
+        _ => None,
     }
 }
 
