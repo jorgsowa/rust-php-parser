@@ -18,10 +18,6 @@ pub enum ParseError {
         span: Span,
     },
 
-    /// A token appeared where it is not valid.
-    #[error("unexpected token {found}")]
-    Unexpected { found: TokenKind, span: Span },
-
     /// An expression was expected but not found (e.g. empty parentheses).
     #[error("expected expression")]
     ExpectedExpression { span: Span },
@@ -78,7 +74,6 @@ impl ParseError {
     pub fn span(&self) -> Span {
         match self {
             ParseError::Expected { span, .. }
-            | ParseError::Unexpected { span, .. }
             | ParseError::ExpectedExpression { span }
             | ParseError::ExpectedStatement { span }
             | ParseError::ExpectedOpenTag { span }
