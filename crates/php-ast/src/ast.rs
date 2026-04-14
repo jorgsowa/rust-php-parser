@@ -24,17 +24,14 @@ impl<'arena, T> ArenaVec<'arena, T> {
     pub fn push(&mut self, val: T) {
         self.0.push(val)
     }
+    /// Returns `true` if the vec contains no elements.
+    ///
+    /// Kept as a named method (rather than relying on `Deref<Target=[T]>`) so
+    /// that the path `"ArenaVec::is_empty"` is usable in serde's
+    /// `skip_serializing_if` attribute.
     #[inline]
     pub fn is_empty(&self) -> bool {
         self.0.is_empty()
-    }
-    #[inline]
-    pub fn len(&self) -> usize {
-        self.0.len()
-    }
-    #[inline]
-    pub fn last(&self) -> Option<&T> {
-        self.0.last()
     }
 }
 
