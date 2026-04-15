@@ -6,7 +6,7 @@ use php_lexer::TokenKind;
 use crate::diagnostics::ParseError;
 use crate::instrument;
 use crate::parser::{Parser, MAX_DEPTH};
-use crate::precedence::{self, ASSIGNMENT_BP, TERNARY_BP};
+use crate::precedence::{self, ASSIGNMENT_BP, NULL_COALESCE_LEFT_BP, TERNARY_BP};
 use crate::stmt;
 use crate::version::PhpVersion;
 
@@ -61,6 +61,64 @@ const CAST_KEYWORDS: &[(&str, CastKind)] = &[
     ("unset", CastKind::Unset),
     ("void", CastKind::Void),
 ];
+
+/// Parse an assignment operator and its RHS, treating `lhs` as the assignment target.
+///
+/// PHP grammar quirk: assignment operators bind tighter than prefix unary operators,
+/// the `??` right operand, `@`, and casts. For example:
+/// - `-$x += 1`       parses as `-(($x += 1))`,   not `(-$x) += 1`
+/// - `$a ?? $b = $c`  parses as `$a ?? ($b = $c)`, not `($a ?? $b) = $c`
+/// - `@$a = 1`        parses as `@($a = 1)`,       not `(@$a) = 1`
+///
+/// **Deliberate deviation from standard Pratt semantics**: this function is called
+/// *after* `parse_expr_bp` returns, meaning it consumes the assignment regardless of
+/// whatever `min_bp` the surrounding context passed to `parse_expr_bp`. This is
+/// intentional: PHP's grammar allows assignment to "escape" prefix unary / `??` / `@`
+/// / ternary-else context. Callers must opt-in via an explicit
+/// `if parser.current_kind().is_assignment_op()` guard rather than relying on `min_bp`
+/// to block it.
+fn parse_assign_continuation<'arena, 'src>(
+    parser: &mut Parser<'arena, 'src>,
+    lhs: Expr<'arena, 'src>,
+) -> Expr<'arena, 'src> {
+    debug_assert!(parser.current_kind().is_assignment_op());
+    let op_token = parser.advance();
+    let by_ref = op_token.kind == TokenKind::Equals && parser.check(TokenKind::Ampersand);
+    if by_ref {
+        parser.advance();
+    }
+    let op = match op_token.kind {
+        TokenKind::Equals => AssignOp::Assign,
+        TokenKind::PlusEquals => AssignOp::Plus,
+        TokenKind::MinusEquals => AssignOp::Minus,
+        TokenKind::StarEquals => AssignOp::Mul,
+        TokenKind::SlashEquals => AssignOp::Div,
+        TokenKind::PercentEquals => AssignOp::Mod,
+        TokenKind::StarStarEquals => AssignOp::Pow,
+        TokenKind::DotEquals => AssignOp::Concat,
+        TokenKind::AmpersandEquals => AssignOp::BitwiseAnd,
+        TokenKind::PipeEquals => AssignOp::BitwiseOr,
+        TokenKind::CaretEquals => AssignOp::BitwiseXor,
+        TokenKind::ShiftLeftEquals => AssignOp::ShiftLeft,
+        TokenKind::ShiftRightEquals => AssignOp::ShiftRight,
+        TokenKind::CoalesceEquals => AssignOp::Coalesce,
+        _ => unreachable!(
+            "is_assignment_op() guarantees one of the listed variants, got {:?}",
+            op_token.kind
+        ),
+    };
+    let rhs = parse_expr_bp(parser, ASSIGNMENT_BP);
+    let span = lhs.span.merge(rhs.span);
+    Expr {
+        kind: ExprKind::Assign(AssignExpr {
+            target: parser.alloc(lhs),
+            op,
+            value: parser.alloc(rhs),
+            by_ref,
+        }),
+        span,
+    }
+}
 
 /// Parse an expression.
 pub fn parse_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
@@ -167,7 +225,12 @@ pub fn parse_expr_bp<'arena, 'src>(
                 parser.expect(TokenKind::Colon);
                 // Non-associative in PHP 8.0+; use TERNARY_BP + 1 to prevent
                 // the else branch from consuming another ternary at the same level.
-                let else_expr = parse_expr_bp(parser, TERNARY_BP + 1);
+                // PHP grammar quirk: assignment can still appear in the else branch.
+                // e.g., $a ? $b : $c = $d  →  $a ? $b : ($c = $d)
+                let mut else_expr = parse_expr_bp(parser, TERNARY_BP + 1);
+                if parser.current_kind().is_assignment_op() {
+                    else_expr = parse_assign_continuation(parser, else_expr);
+                }
                 let span = lhs.span.merge(else_expr.span);
                 lhs = Expr {
                     kind: ExprKind::Ternary(TernaryExpr {
@@ -268,6 +331,24 @@ pub fn parse_expr_bp<'arena, 'src>(
         if kind.is_assignment_op() {
             if ASSIGNMENT_BP < min_bp {
                 break;
+            }
+            // PHP rejects pre/post-increment/decrement as an assignment target at parse time.
+            // e.g. `++$x = 1` and `$x++ = 1` → syntax error (same as PHP).
+            if matches!(
+                lhs.kind,
+                ExprKind::UnaryPrefix(UnaryPrefixExpr {
+                    op: UnaryPrefixOp::PreIncrement | UnaryPrefixOp::PreDecrement,
+                    ..
+                }) | ExprKind::UnaryPostfix(UnaryPostfixExpr {
+                    op: UnaryPostfixOp::PostIncrement | UnaryPostfixOp::PostDecrement,
+                    ..
+                })
+            ) {
+                let span = parser.current_span();
+                parser.error(ParseError::Forbidden {
+                    message: "Cannot use increment/decrement as an assignment target.".into(),
+                    span,
+                });
             }
             let op_token = parser.advance();
 
@@ -528,22 +609,28 @@ pub fn parse_expr_bp<'arena, 'src>(
 
         // Null coalescing operator (produces NullCoalesce node, not Binary)
         if kind == TokenKind::QuestionQuestion {
-            if let Some((left_bp, right_bp)) = precedence::infix_binding_power(kind) {
-                if left_bp < min_bp {
-                    break;
-                }
-                parser.advance();
-                let rhs = parse_expr_bp(parser, right_bp);
-                let span = lhs.span.merge(rhs.span);
-                lhs = Expr {
-                    kind: ExprKind::NullCoalesce(NullCoalesceExpr {
-                        left: parser.alloc(lhs),
-                        right: parser.alloc(rhs),
-                    }),
-                    span,
-                };
-                continue;
+            if NULL_COALESCE_LEFT_BP < min_bp {
+                break;
             }
+            parser.advance();
+            // PHP grammar quirk: the right operand of ?? can contain assignment but not
+            // unparenthesized ternary.  Use TERNARY_BP + 1 to block ternary, then
+            // explicitly consume any following assignment operator.
+            // e.g. `$a ?? $b = $c`  →  `$a ?? ($b = $c)`
+            // e.g. `$a ?? $b ? $c : $d`  →  `($a ?? $b) ? $c : $d`
+            let mut rhs = parse_expr_bp(parser, TERNARY_BP + 1);
+            if parser.current_kind().is_assignment_op() {
+                rhs = parse_assign_continuation(parser, rhs);
+            }
+            let span = lhs.span.merge(rhs.span);
+            lhs = Expr {
+                kind: ExprKind::NullCoalesce(NullCoalesceExpr {
+                    left: parser.alloc(lhs),
+                    right: parser.alloc(rhs),
+                }),
+                span,
+            };
+            continue;
         }
 
         // Infix binary operators
@@ -800,7 +887,11 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
     // @ error suppression (prefix, high precedence)
     if kind == TokenKind::At {
         let token = parser.advance();
-        let operand = parse_expr_bp(parser, 41); // same as other prefix unary
+        let mut operand = parse_expr_bp(parser, 41); // same as other prefix unary
+                                                     // PHP grammar quirk: assignment binds tighter than @
+        if parser.current_kind().is_assignment_op() {
+            operand = parse_assign_continuation(parser, operand);
+        }
         let span = token.span.merge(operand.span);
         return Expr {
             kind: ExprKind::ErrorSuppress(parser.alloc(operand)),
@@ -811,7 +902,18 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
     // Prefix unary operators
     if let Some(right_bp) = precedence::prefix_binding_power(kind) {
         let op_token = parser.advance();
-        let operand = parse_expr_bp(parser, right_bp);
+        let mut operand = parse_expr_bp(parser, right_bp);
+        // PHP grammar quirk: assignment operators bind tighter than prefix unary.
+        // e.g., -$x += 1  parses as  -(($x += 1)),  not  (-$x) += 1
+        //
+        // Exception: `++` and `--` require a variable (l-value) as operand — PHP enforces
+        // this at parse time (`++$x += 1` is a syntax error in PHP). Skip the assignment
+        // continuation for those two operators.
+        if parser.current_kind().is_assignment_op()
+            && !matches!(op_token.kind, TokenKind::PlusPlus | TokenKind::MinusMinus)
+        {
+            operand = parse_assign_continuation(parser, operand);
+        }
         let op = match op_token.kind {
             TokenKind::Minus => UnaryPrefixOp::Negate,
             TokenKind::Plus => UnaryPrefixOp::Plus,
@@ -2629,7 +2731,11 @@ fn try_parse_cast<'arena, 'src>(
         });
     }
 
-    let operand = parse_expr_bp(parser, 41);
+    let mut operand = parse_expr_bp(parser, 41);
+    // PHP grammar quirk: assignment binds tighter than casts.
+    if parser.current_kind().is_assignment_op() {
+        operand = parse_assign_continuation(parser, operand);
+    }
     let span = Span::new(start, operand.span.end);
     Some(Expr {
         kind: ExprKind::Cast(cast_kind, parser.alloc(operand)),

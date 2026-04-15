@@ -9,7 +9,7 @@ use php_lexer::TokenKind;
 ///  3. `and`                           (left)
 ///  4. `= += -= ...` (assignment)      (right) — handled separately
 ///  5. `?:` (ternary)                  (right) — handled separately
-///  6. `??`                            (right)
+///  6. `??`                            (right) — handled separately (left_bp=14, NOT in table)
 ///  7. `||`                            (left)
 ///  8. `&&`                            (left)
 ///  9. `|`                             (left)
@@ -51,9 +51,6 @@ const fn build_bp_table() -> [Option<(u8, u8)>; 256] {
     table[TokenKind::Or as u8 as usize] = Some((1, 2));
     table[TokenKind::Xor as u8 as usize] = Some((3, 4));
     table[TokenKind::And as u8 as usize] = Some((5, 6));
-
-    // Null coalescing (right-associative)
-    table[TokenKind::QuestionQuestion as u8 as usize] = Some((14, 13));
 
     // Boolean or
     table[TokenKind::PipePipe as u8 as usize] = Some((15, 16));
@@ -139,6 +136,12 @@ pub const ASSIGNMENT_BP: u8 = 8;
 /// Ternary binding power — handled specially in the parser.
 pub const TERNARY_BP: u8 = 10;
 
+/// Null coalesce left binding power — handled specially in the parser (not in the infix table).
+/// Right-associative: the effective right_bp used during parsing is `TERNARY_BP + 1` (= 11),
+/// which blocks unparenthesized ternary in the RHS while still allowing assignment via
+/// `parse_assign_continuation`.
+pub const NULL_COALESCE_LEFT_BP: u8 = 14;
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -177,9 +180,21 @@ mod tests {
     }
 
     #[test]
-    fn test_null_coalesce_right_associative() {
-        let (left, right) = infix_binding_power(TokenKind::QuestionQuestion).unwrap();
-        assert!(left > right);
+    fn test_null_coalesce_not_in_table() {
+        // `??` is handled by a dedicated special case in parse_expr_bp (not the generic
+        // infix table). Its left_bp is hardcoded as 14 and its effective right_bp is
+        // TERNARY_BP + 1 (= 11) to block unparenthesized ternary in the RHS while still
+        // allowing assignment via parse_assign_continuation.
+        assert!(
+            infix_binding_power(TokenKind::QuestionQuestion).is_none(),
+            "`??` must not appear in the infix table — it has a dedicated special-case handler"
+        );
+        // NULL_COALESCE_LEFT_BP must exceed the effective right_bp (TERNARY_BP + 1 = 11),
+        // confirming right-associativity for chained `??`.
+        assert!(NULL_COALESCE_LEFT_BP > TERNARY_BP + 1);
+        // NULL_COALESCE_LEFT_BP must also exceed TERNARY_BP so that `$a ?? $b ? $c : $d`
+        // groups as `($a ?? $b) ? $c : $d` (ternary can consume the ?? result).
+        assert!(NULL_COALESCE_LEFT_BP > TERNARY_BP);
     }
 
     #[test]
