@@ -62,6 +62,56 @@ const CAST_KEYWORDS: &[(&str, CastKind)] = &[
     ("void", CastKind::Void),
 ];
 
+/// Parse an assignment operator and its RHS, treating `lhs` as the assignment target.
+///
+/// PHP grammar quirk: assignment operators bind tighter than prefix unary operators,
+/// the `??` right operand, `@`, and casts. For example:
+/// - `-$x += 1`       parses as `-(($x += 1))`,   not `(-$x) += 1`
+/// - `$a ?? $b = $c`  parses as `$a ?? ($b = $c)`, not `($a ?? $b) = $c`
+/// - `@$a = 1`        parses as `@($a = 1)`,       not `(@$a) = 1`
+fn parse_assign_continuation<'arena, 'src>(
+    parser: &mut Parser<'arena, 'src>,
+    lhs: Expr<'arena, 'src>,
+) -> Expr<'arena, 'src> {
+    debug_assert!(parser.current_kind().is_assignment_op());
+    let op_token = parser.advance();
+    let by_ref = op_token.kind == TokenKind::Equals && parser.check(TokenKind::Ampersand);
+    if by_ref {
+        parser.advance();
+    }
+    let op = match op_token.kind {
+        TokenKind::Equals => AssignOp::Assign,
+        TokenKind::PlusEquals => AssignOp::Plus,
+        TokenKind::MinusEquals => AssignOp::Minus,
+        TokenKind::StarEquals => AssignOp::Mul,
+        TokenKind::SlashEquals => AssignOp::Div,
+        TokenKind::PercentEquals => AssignOp::Mod,
+        TokenKind::StarStarEquals => AssignOp::Pow,
+        TokenKind::DotEquals => AssignOp::Concat,
+        TokenKind::AmpersandEquals => AssignOp::BitwiseAnd,
+        TokenKind::PipeEquals => AssignOp::BitwiseOr,
+        TokenKind::CaretEquals => AssignOp::BitwiseXor,
+        TokenKind::ShiftLeftEquals => AssignOp::ShiftLeft,
+        TokenKind::ShiftRightEquals => AssignOp::ShiftRight,
+        TokenKind::CoalesceEquals => AssignOp::Coalesce,
+        _ => unreachable!(
+            "is_assignment_op() guarantees one of the listed variants, got {:?}",
+            op_token.kind
+        ),
+    };
+    let rhs = parse_expr_bp(parser, ASSIGNMENT_BP);
+    let span = lhs.span.merge(rhs.span);
+    Expr {
+        kind: ExprKind::Assign(AssignExpr {
+            target: parser.alloc(lhs),
+            op,
+            value: parser.alloc(rhs),
+            by_ref,
+        }),
+        span,
+    }
+}
+
 /// Parse an expression.
 pub fn parse_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
     instrument::record_parse_expr();
@@ -527,23 +577,30 @@ pub fn parse_expr_bp<'arena, 'src>(
         }
 
         // Null coalescing operator (produces NullCoalesce node, not Binary)
+        // left_bp = 14 (right-associative; right_bp would be 13 but we override below).
         if kind == TokenKind::QuestionQuestion {
-            if let Some((left_bp, right_bp)) = precedence::infix_binding_power(kind) {
-                if left_bp < min_bp {
-                    break;
-                }
-                parser.advance();
-                let rhs = parse_expr_bp(parser, right_bp);
-                let span = lhs.span.merge(rhs.span);
-                lhs = Expr {
-                    kind: ExprKind::NullCoalesce(NullCoalesceExpr {
-                        left: parser.alloc(lhs),
-                        right: parser.alloc(rhs),
-                    }),
-                    span,
-                };
-                continue;
+            if 14u8 < min_bp {
+                break;
             }
+            parser.advance();
+            // PHP grammar quirk: the right operand of ?? can contain assignment but not
+            // unparenthesized ternary.  Use TERNARY_BP + 1 to block ternary, then
+            // explicitly consume any following assignment operator.
+            // e.g. `$a ?? $b = $c`  →  `$a ?? ($b = $c)`
+            // e.g. `$a ?? $b ? $c : $d`  →  `($a ?? $b) ? $c : $d`
+            let mut rhs = parse_expr_bp(parser, TERNARY_BP + 1);
+            if parser.current_kind().is_assignment_op() {
+                rhs = parse_assign_continuation(parser, rhs);
+            }
+            let span = lhs.span.merge(rhs.span);
+            lhs = Expr {
+                kind: ExprKind::NullCoalesce(NullCoalesceExpr {
+                    left: parser.alloc(lhs),
+                    right: parser.alloc(rhs),
+                }),
+                span,
+            };
+            continue;
         }
 
         // Infix binary operators
@@ -800,7 +857,11 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
     // @ error suppression (prefix, high precedence)
     if kind == TokenKind::At {
         let token = parser.advance();
-        let operand = parse_expr_bp(parser, 41); // same as other prefix unary
+        let mut operand = parse_expr_bp(parser, 41); // same as other prefix unary
+                                                     // PHP grammar quirk: assignment binds tighter than @
+        if parser.current_kind().is_assignment_op() {
+            operand = parse_assign_continuation(parser, operand);
+        }
         let span = token.span.merge(operand.span);
         return Expr {
             kind: ExprKind::ErrorSuppress(parser.alloc(operand)),
@@ -811,7 +872,12 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
     // Prefix unary operators
     if let Some(right_bp) = precedence::prefix_binding_power(kind) {
         let op_token = parser.advance();
-        let operand = parse_expr_bp(parser, right_bp);
+        let mut operand = parse_expr_bp(parser, right_bp);
+        // PHP grammar quirk: assignment operators bind tighter than prefix unary.
+        // e.g., -$x += 1  parses as  -(($x += 1)),  not  (-$x) += 1
+        if parser.current_kind().is_assignment_op() {
+            operand = parse_assign_continuation(parser, operand);
+        }
         let op = match op_token.kind {
             TokenKind::Minus => UnaryPrefixOp::Negate,
             TokenKind::Plus => UnaryPrefixOp::Plus,
@@ -2629,7 +2695,11 @@ fn try_parse_cast<'arena, 'src>(
         });
     }
 
-    let operand = parse_expr_bp(parser, 41);
+    let mut operand = parse_expr_bp(parser, 41);
+    // PHP grammar quirk: assignment binds tighter than casts.
+    if parser.current_kind().is_assignment_op() {
+        operand = parse_assign_continuation(parser, operand);
+    }
     let span = Span::new(start, operand.span.end);
     Some(Expr {
         kind: ExprKind::Cast(cast_kind, parser.alloc(operand)),

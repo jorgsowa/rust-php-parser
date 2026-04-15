@@ -7,12 +7,12 @@
       "kind": {
         "Expression": {
           "kind": {
-            "Assign": {
-              "target": {
+            "UnaryPrefix": {
+              "op": "Negate",
+              "operand": {
                 "kind": {
-                  "UnaryPrefix": {
-                    "op": "Negate",
-                    "operand": {
+                  "Assign": {
+                    "target": {
                       "kind": {
                         "Variable": "x"
                       },
@@ -20,21 +20,21 @@
                         "start": 7,
                         "end": 9
                       }
+                    },
+                    "op": "Plus",
+                    "value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 13,
+                        "end": 14
+                      }
                     }
                   }
                 },
                 "span": {
-                  "start": 6,
-                  "end": 9
-                }
-              },
-              "op": "Plus",
-              "value": {
-                "kind": {
-                  "Int": 1
-                },
-                "span": {
-                  "start": 13,
+                  "start": 7,
                   "end": 14
                 }
               }
