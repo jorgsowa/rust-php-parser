@@ -16,11 +16,8 @@ pub struct FixtureConfig {
     pub expected_errors: Option<String>,
     /// Expected AST JSON from the `===ast===` section.
     pub expected_ast: Option<String>,
-    /// Why `php -l` would reject this fixture.
-    /// Set via `php_rejects=<category>` in `===config===`.
-    /// Categories: `parse-leniency`, `semantic`, `deprecated`.
-    pub php_rejects: Option<String>,
     /// Expected `php -l` stderr from the `===php_error===` section.
+    /// When `Some`, the fixture represents code that PHP intentionally rejects.
     pub php_error: Option<String>,
 }
 
@@ -30,7 +27,6 @@ pub struct FixtureConfig {
 /// ```text
 /// ===config===          <- optional
 /// min_php=8.5
-/// php_rejects=semantic
 /// ===source===          <- required
 /// <?php
 /// ...
@@ -38,7 +34,7 @@ pub struct FixtureConfig {
 /// error message 1       <- optional error content
 /// ===ast===             <- optional; contains expected JSON AST
 /// { ... }
-/// ===php_error===       <- optional; expected `php -l` stderr for php_rejects fixtures
+/// ===php_error===       <- optional; expected `php -l` stderr (marks fixture as PHP-rejected)
 /// Fatal error: ...
 /// ```
 ///
@@ -47,7 +43,6 @@ pub struct FixtureConfig {
 pub fn parse_fixture(content: &str) -> (FixtureConfig, &str) {
     let mut min_php = None;
     let mut parse_version = None;
-    let mut php_rejects = None;
 
     let rest = if let Some(rest) = content.strip_prefix("===config===\n") {
         let source_marker = rest.find("===source===\n").unwrap_or(rest.len());
@@ -60,8 +55,6 @@ pub fn parse_fixture(content: &str) -> (FixtureConfig, &str) {
                 min_php = parse_ver(val);
             } else if let Some(val) = line.strip_prefix("parse_version=") {
                 parse_version = parse_ver(val);
-            } else if let Some(val) = line.strip_prefix("php_rejects=") {
-                php_rejects = Some(val.to_string());
             }
         }
         &rest[source_marker..]
@@ -132,7 +125,6 @@ pub fn parse_fixture(content: &str) -> (FixtureConfig, &str) {
             expect_errors,
             expected_errors,
             expected_ast,
-            php_rejects,
             php_error,
         },
         source,

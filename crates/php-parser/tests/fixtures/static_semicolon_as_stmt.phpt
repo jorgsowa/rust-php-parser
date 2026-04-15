@@ -1,5 +1,3 @@
-===config===
-php_rejects=parse-leniency
 ===source===
 <?php static;
 ===ast===

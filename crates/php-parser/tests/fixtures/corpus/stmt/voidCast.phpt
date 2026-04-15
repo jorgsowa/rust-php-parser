@@ -1,5 +1,3 @@
-===config===
-php_rejects=parse-leniency
 ===source===
 <?php
 (void)foo();

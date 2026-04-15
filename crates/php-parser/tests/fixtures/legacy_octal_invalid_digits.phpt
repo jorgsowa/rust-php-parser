@@ -1,5 +1,3 @@
-===config===
-php_rejects=deprecated
 ===source===
 <?php 0778; 019; 09;
 ===ast===

@@ -1,5 +1,3 @@
-===config===
-php_rejects=deprecated
 ===source===
 <?php
 $a =& new B;

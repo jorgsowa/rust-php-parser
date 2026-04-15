@@ -46,13 +46,8 @@ fn collect_phpt_files(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
 }
 
 /// Validates every `.phpt` fixture file through `php -l` (recursive, including corpus/).
-/// Skips error-expected fixtures, version-specific fixtures, and fixtures that declare
-/// `php_rejects=<category>` in their `===config===` section (intentional parser leniency).
-///
-/// Categories used in `php_rejects`:
-///   `parse-leniency` — syntax PHP rejects at parse time; we accept for AST completeness
-///   `semantic`        — syntactically valid but PHP rejects at compile time (Fatal error)
-///   `deprecated`      — removed syntax our parser still accepts for compatibility
+/// Skips error-expected fixtures, version-specific fixtures, and fixtures that have a
+/// `===php_error===` section (intentional parser leniency — PHP rejects these).
 #[cfg_attr(not(php_available), ignore)]
 #[test]
 fn fixture_files_are_valid_php() {
@@ -72,7 +67,7 @@ fn fixture_files_are_valid_php() {
         let src = std::fs::read_to_string(&path).unwrap();
         let (config, source) = common::parse_fixture(&src);
 
-        if config.php_rejects.is_some() {
+        if config.php_error.is_some() {
             continue;
         }
         if let Some(min_php) = config.min_php {
@@ -107,8 +102,8 @@ fn fixture_files_are_valid_php() {
     }
 }
 
-/// Asserts that every `php_rejects` fixture is actually rejected by `php -l` and that
-/// its `===php_error===` section matches the real stderr output.
+/// Asserts that every fixture with a `===php_error===` section is actually rejected by
+/// `php -l` and that its `===php_error===` content matches the real stderr output.
 ///
 /// Run `UPDATE_FIXTURES=1 cargo test` to populate or refresh `===php_error===` sections.
 #[cfg_attr(not(php_available), ignore)]
@@ -131,7 +126,7 @@ fn php_rejects_fixtures_fail_lint() {
         let src = std::fs::read_to_string(&path).unwrap();
         let (config, source) = common::parse_fixture(&src);
 
-        if config.php_rejects.is_none() {
+        if config.php_error.is_none() {
             continue;
         }
 
