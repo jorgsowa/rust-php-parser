@@ -45,70 +45,16 @@ fn collect_phpt_files(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
     paths
 }
 
-/// Validates every `.phpt` fixture file through `php -l` (recursive, including corpus/).
-/// Skips error-expected fixtures, version-specific fixtures, and fixtures that have a
-/// `===php_error===` section (intentional parser leniency — PHP rejects these).
+/// Validates every `.phpt` fixture file through `php -l`.
+///
+/// - Fixtures with `===php_error===`: asserts `php -l` rejects them and that the stderr
+///   matches the stored expected error. Run `UPDATE_FIXTURES=1 cargo test` to populate or
+///   refresh `===php_error===` sections.
+/// - All other fixtures (except those skipped by `min_php`, `parse_version`, or
+///   `===errors===`): asserts `php -l` accepts them.
 #[cfg_attr(not(php_available), ignore)]
 #[test]
 fn fixture_files_are_valid_php() {
-    let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures");
-
-    let mut paths = collect_phpt_files(&dir);
-    paths.sort();
-
-    let mut failures: Vec<String> = Vec::new();
-
-    for path in paths {
-        let label = path
-            .strip_prefix(&dir)
-            .unwrap()
-            .to_string_lossy()
-            .to_string();
-        let src = std::fs::read_to_string(&path).unwrap();
-        let (config, source) = common::parse_fixture(&src);
-
-        if config.php_error.is_some() {
-            continue;
-        }
-        if let Some(min_php) = config.min_php {
-            if !php_version_met(min_php) {
-                continue;
-            }
-        }
-        // Skip version-specific fixtures — they test parser behavior at a particular
-        // PHP version and may contain syntax that PHP itself rejects semantically.
-        if config.parse_version.is_some() {
-            continue;
-        }
-        if config.expect_errors {
-            continue;
-        }
-
-        let out = php_lint(source);
-        if !out.status.success() {
-            failures.push(format!(
-                "{label}:\n  {}",
-                String::from_utf8_lossy(&out.stderr).trim()
-            ));
-        }
-    }
-
-    if !failures.is_empty() {
-        panic!(
-            "php -l failed for {} fixture(s):\n\n{}",
-            failures.len(),
-            failures.join("\n\n")
-        );
-    }
-}
-
-/// Asserts that every fixture with a `===php_error===` section is actually rejected by
-/// `php -l` and that its `===php_error===` content matches the real stderr output.
-///
-/// Run `UPDATE_FIXTURES=1 cargo test` to populate or refresh `===php_error===` sections.
-#[cfg_attr(not(php_available), ignore)]
-#[test]
-fn php_rejects_fixtures_fail_lint() {
     let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures");
     let update = std::env::var("UPDATE_FIXTURES").is_ok();
 
@@ -126,36 +72,50 @@ fn php_rejects_fixtures_fail_lint() {
         let src = std::fs::read_to_string(&path).unwrap();
         let (config, source) = common::parse_fixture(&src);
 
-        if config.php_error.is_none() {
+        if let Some(min_php) = config.min_php {
+            if !php_version_met(min_php) {
+                continue;
+            }
+        }
+        // Skip version-specific fixtures — they test parser behavior at a particular
+        // PHP version and may contain syntax that PHP itself rejects semantically.
+        if config.parse_version.is_some() {
+            continue;
+        }
+        if config.expect_errors {
             continue;
         }
 
         let out = php_lint(source);
-        if out.status.success() {
-            failures.push(format!("{label}: expected php -l to fail but it passed"));
-            continue;
-        }
 
-        let actual = String::from_utf8_lossy(&out.stderr).trim().to_string();
-
-        if update {
-            common::update_fixture_php_error(path.to_str().unwrap(), &actual);
-        } else if let Some(expected) = &config.php_error {
-            if actual != *expected {
+        if let Some(expected) = &config.php_error {
+            // Fixture is marked as intentionally rejected by PHP — assert it fails.
+            if out.status.success() {
+                failures.push(format!("{label}: expected php -l to fail but it passed"));
+                continue;
+            }
+            let actual = String::from_utf8_lossy(&out.stderr).trim().to_string();
+            if update {
+                common::update_fixture_php_error(path.to_str().unwrap(), &actual);
+            } else if actual != *expected {
                 failures.push(format!(
                     "{label}:\n  expected: {expected}\n  actual:   {actual}"
                 ));
             }
         } else {
-            failures.push(format!(
-                "{label}: missing ===php_error=== section (run UPDATE_FIXTURES=1 to generate)"
-            ));
+            // Normal fixture — assert it passes.
+            if !out.status.success() {
+                failures.push(format!(
+                    "{label}:\n  {}",
+                    String::from_utf8_lossy(&out.stderr).trim()
+                ));
+            }
         }
     }
 
     if !failures.is_empty() {
         panic!(
-            "php_rejects check failed for {} fixture(s):\n\n{}",
+            "php -l check failed for {} fixture(s):\n\n{}",
             failures.len(),
             failures.join("\n\n")
         );
