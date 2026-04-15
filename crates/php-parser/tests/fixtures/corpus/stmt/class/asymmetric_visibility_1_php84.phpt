@@ -1,0 +1,226 @@
+===config===
+min_php=8.4
+max_php=8.4
+===source===
+<?php
+
+class Test {
+    protected private(set) $a;
+    private public(set) $b;
+    protected(set) $c;
+
+    public function __construct(
+        protected private(set) $d,
+        private public(set) $e,
+        protected(set) $f,
+    ) {}
+}
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "Test",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Property": {
+                  "name": "a",
+                  "visibility": "Protected",
+                  "set_visibility": "Private",
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": null,
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 24,
+                "end": 49
+              }
+            },
+            {
+              "kind": {
+                "Property": {
+                  "name": "b",
+                  "visibility": "Private",
+                  "set_visibility": "Public",
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": null,
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 55,
+                "end": 77
+              }
+            },
+            {
+              "kind": {
+                "Property": {
+                  "name": "c",
+                  "visibility": "Protected",
+                  "set_visibility": null,
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": {
+                    "kind": {
+                      "Intersection": [
+                        {
+                          "kind": {
+                            "Named": {
+                              "parts": [
+                                "set"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 93,
+                                "end": 96
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 93,
+                            "end": 96
+                          }
+                        }
+                      ]
+                    },
+                    "span": {
+                      "start": 92,
+                      "end": 97
+                    }
+                  },
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 83,
+                "end": 100
+              }
+            },
+            {
+              "kind": {
+                "Method": {
+                  "name": "__construct",
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [
+                    {
+                      "name": "d",
+                      "type_hint": null,
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
+                      "visibility": "Protected",
+                      "set_visibility": "Private",
+                      "attributes": [],
+                      "span": {
+                        "start": 144,
+                        "end": 169
+                      }
+                    },
+                    {
+                      "name": "e",
+                      "type_hint": null,
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
+                      "visibility": "Private",
+                      "set_visibility": "Public",
+                      "attributes": [],
+                      "span": {
+                        "start": 179,
+                        "end": 201
+                      }
+                    },
+                    {
+                      "name": "f",
+                      "type_hint": {
+                        "kind": {
+                          "Intersection": [
+                            {
+                              "kind": {
+                                "Named": {
+                                  "parts": [
+                                    "set"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 221,
+                                    "end": 224
+                                  }
+                                }
+                              },
+                              "span": {
+                                "start": 221,
+                                "end": 224
+                              }
+                            }
+                          ]
+                        },
+                        "span": {
+                          "start": 220,
+                          "end": 225
+                        }
+                      },
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
+                      "visibility": "Protected",
+                      "set_visibility": null,
+                      "attributes": [],
+                      "span": {
+                        "start": 211,
+                        "end": 228
+                      }
+                    }
+                  ],
+                  "return_type": null,
+                  "body": [],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 107,
+                "end": 238
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 240
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 240
+  }
+}
+===php_error===
+PHP Fatal error:  Property with asymmetric visibility Test::$a must have type in Standard input code on line 4

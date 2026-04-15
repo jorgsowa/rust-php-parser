@@ -14,6 +14,17 @@ fn php_version_met(min: (u32, u32)) -> bool {
     }
 }
 
+/// Returns true if the installed PHP version is strictly greater than `max`.
+fn php_version_exceeded(max: (u32, u32)) -> bool {
+    match max {
+        (8, 1) => cfg!(php_min_82),
+        (8, 2) => cfg!(php_min_83),
+        (8, 3) => cfg!(php_min_84),
+        (8, 4) => cfg!(php_min_85),
+        _ => false,
+    }
+}
+
 fn php_lint(code: &str) -> std::process::Output {
     let mut child = std::process::Command::new("php")
         .arg("-l")
@@ -74,6 +85,11 @@ fn fixture_files_are_valid_php() {
 
         if let Some(min_php) = config.min_php {
             if !php_version_met(min_php) {
+                continue;
+            }
+        }
+        if let Some(max_php) = config.max_php {
+            if php_version_exceeded(max_php) {
                 continue;
             }
         }

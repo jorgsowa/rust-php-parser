@@ -1,0 +1,95 @@
+===config===
+max_php=8.3
+===source===
+<?php
+class Test {
+    public $prop {}
+    public function __construct(public $prop2 {}) {}
+}
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "Test",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Property": {
+                  "name": "prop",
+                  "visibility": "Public",
+                  "set_visibility": null,
+                  "is_static": false,
+                  "is_readonly": false,
+                  "type_hint": null,
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 23,
+                "end": 38
+              }
+            },
+            {
+              "kind": {
+                "Method": {
+                  "name": "__construct",
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [
+                    {
+                      "name": "prop2",
+                      "type_hint": null,
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
+                      "visibility": "Public",
+                      "set_visibility": null,
+                      "attributes": [],
+                      "span": {
+                        "start": 71,
+                        "end": 84
+                      }
+                    }
+                  ],
+                  "return_type": null,
+                  "body": [],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 43,
+                "end": 91
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 93
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 93
+  }
+}
+===php_error===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3

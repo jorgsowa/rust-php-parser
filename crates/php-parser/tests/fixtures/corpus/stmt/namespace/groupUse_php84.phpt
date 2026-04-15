@@ -1,0 +1,328 @@
+===config===
+max_php=8.4
+===source===
+<?php
+use A\{B};
+use A\{B\C, D};
+use \A\B\{C\D, E};
+use function A\{b\c, d};
+use const \A\{B\C, D};
+use A\B\{C\D, function b\c, const D};
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Use": {
+          "kind": "Normal",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "A",
+                  "B"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 10,
+                  "end": 14
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 13,
+                "end": 14
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 16
+      }
+    },
+    {
+      "kind": {
+        "Use": {
+          "kind": "Normal",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "A",
+                  "B",
+                  "C"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 21,
+                  "end": 27
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 24,
+                "end": 27
+              }
+            },
+            {
+              "name": {
+                "parts": [
+                  "A",
+                  "D"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 21,
+                  "end": 30
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 29,
+                "end": 30
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 17,
+        "end": 32
+      }
+    },
+    {
+      "kind": {
+        "Use": {
+          "kind": "Normal",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "kind": "FullyQualified",
+                "span": {
+                  "start": 37,
+                  "end": 46
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 43,
+                "end": 46
+              }
+            },
+            {
+              "name": {
+                "parts": [
+                  "A",
+                  "B",
+                  "E"
+                ],
+                "kind": "FullyQualified",
+                "span": {
+                  "start": 37,
+                  "end": 49
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 48,
+                "end": 49
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 33,
+        "end": 51
+      }
+    },
+    {
+      "kind": {
+        "Use": {
+          "kind": "Function",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "A",
+                  "b",
+                  "c"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 65,
+                  "end": 71
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 68,
+                "end": 71
+              }
+            },
+            {
+              "name": {
+                "parts": [
+                  "A",
+                  "d"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 65,
+                  "end": 74
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 73,
+                "end": 74
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 52,
+        "end": 76
+      }
+    },
+    {
+      "kind": {
+        "Use": {
+          "kind": "Const",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "A",
+                  "B",
+                  "C"
+                ],
+                "kind": "FullyQualified",
+                "span": {
+                  "start": 87,
+                  "end": 94
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 91,
+                "end": 94
+              }
+            },
+            {
+              "name": {
+                "parts": [
+                  "A",
+                  "D"
+                ],
+                "kind": "FullyQualified",
+                "span": {
+                  "start": 87,
+                  "end": 97
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 96,
+                "end": 97
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 77,
+        "end": 99
+      }
+    },
+    {
+      "kind": {
+        "Use": {
+          "kind": "Normal",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 104,
+                  "end": 112
+                }
+              },
+              "alias": null,
+              "span": {
+                "start": 109,
+                "end": 112
+              }
+            },
+            {
+              "name": {
+                "parts": [
+                  "A",
+                  "B",
+                  "b",
+                  "c"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 104,
+                  "end": 126
+                }
+              },
+              "alias": null,
+              "kind": "Function",
+              "span": {
+                "start": 114,
+                "end": 126
+              }
+            },
+            {
+              "name": {
+                "parts": [
+                  "A",
+                  "B",
+                  "D"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 104,
+                  "end": 135
+                }
+              },
+              "alias": null,
+              "kind": "Const",
+              "span": {
+                "start": 128,
+                "end": 135
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 100,
+        "end": 137
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 137
+  }
+}
+===php_error===
+PHP Fatal error:  Cannot use A\B\C\D as D because the name is already in use in Standard input code on line 4

@@ -1,3 +1,5 @@
+===config===
+min_php=8.5
 ===source===
 <?php
 list($a, [[$b, $c]]) = [[1, [2, 3]]];

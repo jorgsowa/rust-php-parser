@@ -6,6 +6,9 @@ pub fn to_json(program: &php_ast::Program) -> String {
 pub struct FixtureConfig {
     /// Minimum PHP version required for this fixture (e.g. `Some((8, 5))`).
     pub min_php: Option<(u32, u32)>,
+    /// Maximum PHP version for this fixture (e.g. `Some((8, 4))`).
+    /// When set, the fixture is skipped on PHP versions above this.
+    pub max_php: Option<(u32, u32)>,
     /// Specific PHP version to parse with (e.g. `Some((8, 5))` for PHP 8.5).
     /// When set, the test uses `parse_versioned()` instead of `parse()`.
     pub parse_version: Option<(u32, u32)>,
@@ -44,6 +47,8 @@ pub fn parse_fixture(content: &str) -> (FixtureConfig, &str) {
     let mut min_php = None;
     let mut parse_version = None;
 
+    let mut max_php = None;
+
     let rest = if let Some(rest) = content.strip_prefix("===config===\n") {
         let source_marker = rest.find("===source===\n").unwrap_or(rest.len());
         for line in rest[..source_marker].lines() {
@@ -53,6 +58,8 @@ pub fn parse_fixture(content: &str) -> (FixtureConfig, &str) {
             };
             if let Some(val) = line.strip_prefix("min_php=") {
                 min_php = parse_ver(val);
+            } else if let Some(val) = line.strip_prefix("max_php=") {
+                max_php = parse_ver(val);
             } else if let Some(val) = line.strip_prefix("parse_version=") {
                 parse_version = parse_ver(val);
             }
@@ -121,6 +128,7 @@ pub fn parse_fixture(content: &str) -> (FixtureConfig, &str) {
     (
         FixtureConfig {
             min_php,
+            max_php,
             parse_version,
             expect_errors,
             expected_errors,

@@ -1,3 +1,5 @@
+===config===
+min_php=8.5
 ===source===
 <?php switch ($x) { default: break; case 1: break; default: break; }
 ===ast===
