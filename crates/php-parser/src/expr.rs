@@ -6,7 +6,7 @@ use php_lexer::TokenKind;
 use crate::diagnostics::ParseError;
 use crate::instrument;
 use crate::parser::{Parser, MAX_DEPTH};
-use crate::precedence::{self, ASSIGNMENT_BP, TERNARY_BP};
+use crate::precedence::{self, ASSIGNMENT_BP, NULL_COALESCE_LEFT_BP, TERNARY_BP};
 use crate::stmt;
 use crate::version::PhpVersion;
 
@@ -69,6 +69,14 @@ const CAST_KEYWORDS: &[(&str, CastKind)] = &[
 /// - `-$x += 1`       parses as `-(($x += 1))`,   not `(-$x) += 1`
 /// - `$a ?? $b = $c`  parses as `$a ?? ($b = $c)`, not `($a ?? $b) = $c`
 /// - `@$a = 1`        parses as `@($a = 1)`,       not `(@$a) = 1`
+///
+/// **Deliberate deviation from standard Pratt semantics**: this function is called
+/// *after* `parse_expr_bp` returns, meaning it consumes the assignment regardless of
+/// whatever `min_bp` the surrounding context passed to `parse_expr_bp`. This is
+/// intentional: PHP's grammar allows assignment to "escape" prefix unary / `??` / `@`
+/// / ternary-else context. Callers must opt-in via an explicit
+/// `if parser.current_kind().is_assignment_op()` guard rather than relying on `min_bp`
+/// to block it.
 fn parse_assign_continuation<'arena, 'src>(
     parser: &mut Parser<'arena, 'src>,
     lhs: Expr<'arena, 'src>,
@@ -323,6 +331,24 @@ pub fn parse_expr_bp<'arena, 'src>(
         if kind.is_assignment_op() {
             if ASSIGNMENT_BP < min_bp {
                 break;
+            }
+            // PHP rejects pre/post-increment/decrement as an assignment target at parse time.
+            // e.g. `++$x = 1` and `$x++ = 1` → syntax error (same as PHP).
+            if matches!(
+                lhs.kind,
+                ExprKind::UnaryPrefix(UnaryPrefixExpr {
+                    op: UnaryPrefixOp::PreIncrement | UnaryPrefixOp::PreDecrement,
+                    ..
+                }) | ExprKind::UnaryPostfix(UnaryPostfixExpr {
+                    op: UnaryPostfixOp::PostIncrement | UnaryPostfixOp::PostDecrement,
+                    ..
+                })
+            ) {
+                let span = parser.current_span();
+                parser.error(ParseError::Forbidden {
+                    message: "Cannot use increment/decrement as an assignment target.".into(),
+                    span,
+                });
             }
             let op_token = parser.advance();
 
@@ -582,9 +608,8 @@ pub fn parse_expr_bp<'arena, 'src>(
         }
 
         // Null coalescing operator (produces NullCoalesce node, not Binary)
-        // left_bp = 14 (right-associative; right_bp would be 13 but we override below).
         if kind == TokenKind::QuestionQuestion {
-            if 14u8 < min_bp {
+            if NULL_COALESCE_LEFT_BP < min_bp {
                 break;
             }
             parser.advance();
@@ -880,7 +905,13 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
         let mut operand = parse_expr_bp(parser, right_bp);
         // PHP grammar quirk: assignment operators bind tighter than prefix unary.
         // e.g., -$x += 1  parses as  -(($x += 1)),  not  (-$x) += 1
-        if parser.current_kind().is_assignment_op() {
+        //
+        // Exception: `++` and `--` require a variable (l-value) as operand — PHP enforces
+        // this at parse time (`++$x += 1` is a syntax error in PHP). Skip the assignment
+        // continuation for those two operators.
+        if parser.current_kind().is_assignment_op()
+            && !matches!(op_token.kind, TokenKind::PlusPlus | TokenKind::MinusMinus)
+        {
             operand = parse_assign_continuation(parser, operand);
         }
         let op = match op_token.kind {
