@@ -222,3 +222,7 @@ function foo() {}
     "end": 165
   }
 }
+===php_error===
+PHP Fatal error:  Cannot create Closure for new expression in Standard input code on line 7
+Stack trace:
+#0 {main}

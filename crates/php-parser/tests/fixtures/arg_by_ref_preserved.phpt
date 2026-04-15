@@ -56,3 +56,5 @@
     "end": 13
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "&" in Standard input code on line 1

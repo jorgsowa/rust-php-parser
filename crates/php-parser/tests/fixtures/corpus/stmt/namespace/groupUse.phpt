@@ -322,3 +322,7 @@ use A\B\{C\D, function b\c, const D};
     "end": 137
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use A\B\C\D as D because the name is already in use in Standard input code on line 4
+Stack trace:
+#0 {main}

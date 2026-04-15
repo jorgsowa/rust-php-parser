@@ -71,3 +71,7 @@ namespace A;
     "end": 34
   }
 }
+===php_error===
+PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in Standard input code on line 4
+Stack trace:
+#0 {main}

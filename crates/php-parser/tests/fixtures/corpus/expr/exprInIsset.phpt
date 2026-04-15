@@ -120,3 +120,7 @@ isset(1 + 1);
     "end": 102
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use isset() on the result of an expression (you can use "null !== expression" instead) in Standard input code on line 5
+Stack trace:
+#0 {main}

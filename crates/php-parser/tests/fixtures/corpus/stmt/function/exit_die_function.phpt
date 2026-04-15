@@ -219,3 +219,5 @@ function die(string|int $status = 0): never {}
     "end": 102
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "exit", expecting "(" in Standard input code on line 3

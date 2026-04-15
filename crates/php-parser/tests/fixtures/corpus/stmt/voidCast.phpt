@@ -278,3 +278,5 @@ $x = (void) $y;
     "end": 188
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "(void)" in Standard input code on line 11

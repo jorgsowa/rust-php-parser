@@ -508,3 +508,5 @@ for ($a, ; $b, ; $c, );
     "end": 324
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token ";", expecting identifier or fully qualified name or namespaced name in Standard input code on line 5

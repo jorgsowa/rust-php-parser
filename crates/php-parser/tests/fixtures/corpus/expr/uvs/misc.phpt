@@ -347,3 +347,7 @@
     "end": 99
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use temporary expression in write context in Standard input code on line 7
+Stack trace:
+#0 {main}

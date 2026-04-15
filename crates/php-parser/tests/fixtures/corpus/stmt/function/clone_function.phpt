@@ -1003,3 +1003,5 @@ clone(...);
     "end": 524
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Standard input code on line 3

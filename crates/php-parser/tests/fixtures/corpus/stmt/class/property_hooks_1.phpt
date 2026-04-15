@@ -342,3 +342,7 @@ class Test {
     "end": 315
   }
 }
+===php_error===
+PHP Fatal error:  Type of parameter $value of hook Test::$prop4::set must be compatible with property type in Standard input code on line 17
+Stack trace:
+#0 {main}

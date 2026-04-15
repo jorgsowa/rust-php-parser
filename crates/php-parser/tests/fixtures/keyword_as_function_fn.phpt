@@ -25,3 +25,5 @@
     "end": 22
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "fn", expecting "(" in Standard input code on line 1

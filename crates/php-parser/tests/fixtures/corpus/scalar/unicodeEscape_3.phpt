@@ -27,3 +27,5 @@
     "end": 29
   }
 }
+===php_error===
+PHP Parse error:  Invalid UTF-8 codepoint escape sequence: Codepoint too large in Standard input code on line 2

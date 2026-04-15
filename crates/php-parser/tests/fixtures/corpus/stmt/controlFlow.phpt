@@ -136,3 +136,7 @@ goto label;
     "end": 96
   }
 }
+===php_error===
+PHP Fatal error:  'break' not in the 'loop' or 'switch' context in Standard input code on line 3
+Stack trace:
+#0 {main}

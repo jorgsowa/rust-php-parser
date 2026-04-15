@@ -112,3 +112,5 @@
     "end": 53
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "exit", expecting "(" in Standard input code on line 1

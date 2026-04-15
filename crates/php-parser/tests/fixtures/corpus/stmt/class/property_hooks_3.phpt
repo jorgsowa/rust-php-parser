@@ -77,3 +77,7 @@ class Test {
     "end": 66
   }
 }
+===php_error===
+PHP Fatal error:  get hook of property Test::$prop must not have a parameter list in Standard input code on line 4
+Stack trace:
+#0 {main}

@@ -92,3 +92,7 @@
     "end": 68
   }
 }
+===php_error===
+PHP Fatal error:  Switch statements may only contain one default clause in Standard input code on line 1
+Stack trace:
+#0 {main}
