@@ -20,21 +20,26 @@ pub struct FixtureConfig {
     /// Set via `php_rejects=<category>` in `===config===`.
     /// Categories: `parse-leniency`, `semantic`, `deprecated`.
     pub php_rejects: Option<String>,
+    /// Expected `php -l` stderr from the `===php_error===` section.
+    pub php_error: Option<String>,
 }
 
 /// Parse a fixture file with optional `===config===` and mandatory `===source===` sections.
 ///
 /// Format:
 /// ```text
-/// ===config===       <- optional
+/// ===config===          <- optional
 /// min_php=8.5
-/// ===source===       <- required
+/// php_rejects=semantic
+/// ===source===          <- required
 /// <?php
 /// ...
-/// ===errors===       <- optional; presence means expect_errors = true
-/// error message 1    <- optional error content
-/// ===ast===          <- optional; contains expected JSON AST
+/// ===errors===          <- optional; presence means expect_errors = true
+/// error message 1       <- optional error content
+/// ===ast===             <- optional; contains expected JSON AST
 /// { ... }
+/// ===php_error===       <- optional; expected `php -l` stderr for php_rejects fixtures
+/// Fatal error: ...
 /// ```
 ///
 /// Returns the parsed config and a slice of `content` containing only the PHP source
@@ -69,6 +74,7 @@ pub fn parse_fixture(content: &str) -> (FixtureConfig, &str) {
     // Find section markers
     let errors_pos = after_source_marker.find("===errors===\n");
     let ast_pos = after_source_marker.find("===ast===\n");
+    let php_error_pos = after_source_marker.find("===php_error===\n");
 
     // Source ends at the earliest section marker or EOF.
     // Strip one trailing '\n' when ending at a marker: that newline is the line
@@ -104,10 +110,19 @@ pub fn parse_fixture(content: &str) -> (FixtureConfig, &str) {
         })
         .flatten();
 
-    // Extract expected AST JSON
+    // Extract expected AST JSON (ends at ===php_error=== or EOF)
     let expected_ast = ast_pos.map(|a| {
         let after_ast = &after_source_marker[a + "===ast===\n".len()..];
-        after_ast.trim_end_matches('\n').to_string()
+        let end = after_ast
+            .find("===php_error===\n")
+            .unwrap_or(after_ast.len());
+        after_ast[..end].trim_end_matches('\n').to_string()
+    });
+
+    // Extract expected php -l stderr (between ===php_error=== and EOF)
+    let php_error = php_error_pos.map(|p| {
+        let after = &after_source_marker[p + "===php_error===\n".len()..];
+        after.trim_end_matches('\n').to_string()
     });
 
     (
@@ -118,6 +133,7 @@ pub fn parse_fixture(content: &str) -> (FixtureConfig, &str) {
             expected_errors,
             expected_ast,
             php_rejects,
+            php_error,
         },
         source,
     )
@@ -147,10 +163,16 @@ pub fn format_errors(result: &php_rs_parser::ParseResult) -> String {
 }
 
 /// Rewrite the `===errors===` and `===ast===` sections of a fixture file.
+/// Preserves any existing `===php_error===` section that follows.
 /// Called when `UPDATE_FIXTURES=1` is set in the environment.
 pub fn update_fixture(path: &str, errors: &str, new_ast: &str) {
     let content =
         std::fs::read_to_string(path).unwrap_or_else(|e| panic!("failed to read {path}: {e}"));
+
+    // Preserve any ===php_error=== section that was written by php_syntax tests.
+    let php_error_section = content
+        .find("===php_error===\n")
+        .map(|p| content[p..].trim_end_matches('\n').to_string() + "\n");
 
     // Find the end of the ===source=== section (first marker after it)
     let source_marker = "===source===\n";
@@ -168,10 +190,31 @@ pub fn update_fixture(path: &str, errors: &str, new_ast: &str) {
         .unwrap_or(content.len());
 
     let before_sections = &content[..source_end];
+    let php_error_tail = php_error_section.as_deref().unwrap_or("");
     let new_content = if errors.is_empty() {
-        format!("{before_sections}===ast===\n{new_ast}\n")
+        format!("{before_sections}===ast===\n{new_ast}\n{php_error_tail}")
     } else {
-        format!("{before_sections}===errors===\n{errors}\n===ast===\n{new_ast}\n")
+        format!("{before_sections}===errors===\n{errors}\n===ast===\n{new_ast}\n{php_error_tail}")
+    };
+    std::fs::write(path, new_content).unwrap_or_else(|e| panic!("failed to write {path}: {e}"));
+}
+
+/// Write or replace the `===php_error===` section of a fixture file.
+/// Called when `UPDATE_FIXTURES=1` is set in the environment during php_syntax tests.
+pub fn update_fixture_php_error(path: &str, php_error: &str) {
+    let content =
+        std::fs::read_to_string(path).unwrap_or_else(|e| panic!("failed to read {path}: {e}"));
+
+    let new_content = if let Some(p) = content.find("===php_error===\n") {
+        // Replace existing section.
+        format!("{}===php_error===\n{}\n", &content[..p], php_error)
+    } else {
+        // Append after ===ast=== (or at EOF if absent).
+        format!(
+            "{}\n===php_error===\n{}\n",
+            content.trim_end_matches('\n'),
+            php_error
+        )
     };
     std::fs::write(path, new_content).unwrap_or_else(|e| panic!("failed to write {path}: {e}"));
 }

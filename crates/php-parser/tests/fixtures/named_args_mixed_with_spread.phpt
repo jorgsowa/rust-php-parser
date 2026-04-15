@@ -102,3 +102,7 @@ php_rejects=parse-leniency
     "end": 32
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use argument unpacking after named arguments in Standard input code on line 1
+Stack trace:
+#0 {main}

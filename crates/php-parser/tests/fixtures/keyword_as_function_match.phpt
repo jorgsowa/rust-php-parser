@@ -27,3 +27,5 @@ php_rejects=parse-leniency
     "end": 25
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "match", expecting "(" in Standard input code on line 1

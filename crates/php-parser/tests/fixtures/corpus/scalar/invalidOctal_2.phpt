@@ -29,3 +29,5 @@ php_rejects=deprecated
     "end": 11
   }
 }
+===php_error===
+PHP Parse error:  Invalid numeric literal in Standard input code on line 2

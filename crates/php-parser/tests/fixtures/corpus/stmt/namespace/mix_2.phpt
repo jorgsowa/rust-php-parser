@@ -119,3 +119,7 @@ echo 3;
     "end": 62
   }
 }
+===php_error===
+PHP Fatal error:  No code may exist outside of namespace {} in Standard input code on line 5
+Stack trace:
+#0 {main}

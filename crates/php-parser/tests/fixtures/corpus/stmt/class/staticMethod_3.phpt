@@ -52,3 +52,7 @@ php_rejects=semantic
     "end": 46
   }
 }
+===php_error===
+PHP Fatal error:  Method A::__clone() cannot be static in Standard input code on line 1
+Stack trace:
+#0 {main}

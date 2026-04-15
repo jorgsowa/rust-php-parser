@@ -52,3 +52,5 @@ php_rejects=semantic
     "end": 44
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use the readonly modifier on a method in Standard input code on line 1

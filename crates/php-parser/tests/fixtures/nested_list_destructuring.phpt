@@ -333,3 +333,7 @@ list($a, [[$b, $c]]) = [[1, [2, 3]]];
     "end": 67
   }
 }
+===php_error===
+PHP Fatal error:  Cannot mix [] and list() in Standard input code on line 2
+Stack trace:
+#0 {main}

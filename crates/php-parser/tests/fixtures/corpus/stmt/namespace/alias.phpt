@@ -319,3 +319,9 @@ use const foo\BAR as BAZ;
     "end": 235
   }
 }
+===php_error===
+PHP Warning:  The use statement with non-compound name 'J' has no effect in Standard input code on line 5
+PHP Warning:  The use statement with non-compound name 'A' has no effect in Standard input code on line 8
+PHP Fatal error:  Cannot use A as B because the name is already in use in Standard input code on line 9
+Stack trace:
+#0 {main}

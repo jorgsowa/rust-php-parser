@@ -126,3 +126,5 @@ class Test {
     "end": 87
   }
 }
+===php_error===
+PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 3

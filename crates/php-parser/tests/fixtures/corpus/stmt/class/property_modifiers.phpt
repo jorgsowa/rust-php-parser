@@ -91,3 +91,7 @@ class Test {
     "end": 90
   }
 }
+===php_error===
+PHP Fatal error:  Cannot redeclare Test::$prop in Standard input code on line 4
+Stack trace:
+#0 {main}

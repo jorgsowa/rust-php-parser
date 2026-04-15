@@ -106,3 +106,63 @@ fn fixture_files_are_valid_php() {
         );
     }
 }
+
+/// Asserts that every `php_rejects` fixture is actually rejected by `php -l` and that
+/// its `===php_error===` section matches the real stderr output.
+///
+/// Run `UPDATE_FIXTURES=1 cargo test` to populate or refresh `===php_error===` sections.
+#[cfg_attr(not(php_available), ignore)]
+#[test]
+fn php_rejects_fixtures_fail_lint() {
+    let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures");
+    let update = std::env::var("UPDATE_FIXTURES").is_ok();
+
+    let mut paths = collect_phpt_files(&dir);
+    paths.sort();
+
+    let mut failures: Vec<String> = Vec::new();
+
+    for path in paths {
+        let label = path
+            .strip_prefix(&dir)
+            .unwrap()
+            .to_string_lossy()
+            .to_string();
+        let src = std::fs::read_to_string(&path).unwrap();
+        let (config, source) = common::parse_fixture(&src);
+
+        if config.php_rejects.is_none() {
+            continue;
+        }
+
+        let out = php_lint(source);
+        if out.status.success() {
+            failures.push(format!("{label}: expected php -l to fail but it passed"));
+            continue;
+        }
+
+        let actual = String::from_utf8_lossy(&out.stderr).trim().to_string();
+
+        if update {
+            common::update_fixture_php_error(path.to_str().unwrap(), &actual);
+        } else if let Some(expected) = &config.php_error {
+            if actual != *expected {
+                failures.push(format!(
+                    "{label}:\n  expected: {expected}\n  actual:   {actual}"
+                ));
+            }
+        } else {
+            failures.push(format!(
+                "{label}: missing ===php_error=== section (run UPDATE_FIXTURES=1 to generate)"
+            ));
+        }
+    }
+
+    if !failures.is_empty() {
+        panic!(
+            "php_rejects check failed for {} fixture(s):\n\n{}",
+            failures.len(),
+            failures.join("\n\n")
+        );
+    }
+}

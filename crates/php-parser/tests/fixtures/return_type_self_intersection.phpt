@@ -72,3 +72,5 @@ php_rejects=semantic
     "end": 42
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "{", expecting "|" in Standard input code on line 1

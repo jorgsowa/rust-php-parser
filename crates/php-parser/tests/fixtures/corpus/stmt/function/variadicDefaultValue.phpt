@@ -53,3 +53,7 @@ function foo(...$foo = []) {}
     "end": 35
   }
 }
+===php_error===
+PHP Fatal error:  Variadic parameter cannot have a default value in Standard input code on line 2
+Stack trace:
+#0 {main}

@@ -1,5 +1,3 @@
-===config===
-php_rejects=semantic
 ===source===
 <?php if (true) { declare(ticks=1); }
 ===ast===

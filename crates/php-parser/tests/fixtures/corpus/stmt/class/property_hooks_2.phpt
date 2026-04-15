@@ -91,3 +91,7 @@ class Test {
     "end": 93
   }
 }
+===php_error===
+PHP Fatal error:  Property hook list must not be empty in Standard input code on line 3
+Stack trace:
+#0 {main}
