@@ -54,7 +54,3 @@ expected expression
     "end": 25
   }
 }
-===php_error===
-PHP Fatal error:  Spread operator is not supported in assignments in Standard input code on line 1
-Stack trace:
-#0 {main}

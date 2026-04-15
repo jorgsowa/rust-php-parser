@@ -113,14 +113,11 @@ fn fixture_files_are_valid_php() {
         if config.parse_version.is_some() {
             continue;
         }
-        if config.expect_errors {
-            continue;
-        }
 
         let out = php_lint(source);
 
         if let Some(expected) = &config.php_error {
-            // Fixture is marked as intentionally rejected by PHP — assert it fails.
+            // Fixture declares PHP must reject it — assert it fails and message matches.
             if out.status.success() {
                 failures.push(format!("{label}: expected php -l to fail but it passed"));
                 continue;
@@ -133,8 +130,11 @@ fn fixture_files_are_valid_php() {
                     "{label}:\n  expected: {expected}\n  actual:   {actual}"
                 ));
             }
+        } else if config.expect_errors {
+            // Our parser rejects this — PHP may accept or reject (e.g. named_arg_duplicate
+            // is rejected by our parser but accepted by PHP). No assertion on php -l result.
         } else {
-            // Normal fixture — assert it passes.
+            // No parser errors and no php_error — PHP must accept.
             if !out.status.success() {
                 failures.push(format!(
                     "{label}:\n  {}",
