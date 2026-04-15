@@ -1,7 +1,7 @@
 ===source===
-<?php func(a: 1, ...['b' => 2]);
+<?php func(a: 1, a: 2);
 ===errors===
-cannot use positional argument after named argument
+named argument 'a' overwrites previous argument
 ===ast===
 {
   "stmts": [
@@ -39,47 +39,21 @@ cannot use positional argument after named argument
                   }
                 },
                 {
-                  "name": null,
+                  "name": "a",
                   "value": {
                     "kind": {
-                      "Array": [
-                        {
-                          "key": {
-                            "kind": {
-                              "String": "b"
-                            },
-                            "span": {
-                              "start": 21,
-                              "end": 24
-                            }
-                          },
-                          "value": {
-                            "kind": {
-                              "Int": 2
-                            },
-                            "span": {
-                              "start": 28,
-                              "end": 29
-                            }
-                          },
-                          "unpack": false,
-                          "span": {
-                            "start": 21,
-                            "end": 29
-                          }
-                        }
-                      ]
+                      "Int": 2
                     },
                     "span": {
                       "start": 20,
-                      "end": 30
+                      "end": 21
                     }
                   },
-                  "unpack": true,
+                  "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 17,
-                    "end": 30
+                    "end": 21
                   }
                 }
               ]
@@ -87,22 +61,18 @@ cannot use positional argument after named argument
           },
           "span": {
             "start": 6,
-            "end": 31
+            "end": 22
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 32
+        "end": 23
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 32
+    "end": 23
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use argument unpacking after named arguments in Standard input code on line 1
-Stack trace:
-#0 {main}
