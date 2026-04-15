@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 function foo(...$foo = []) {}
@@ -55,5 +53,3 @@ function foo(...$foo = []) {}
 }
 ===php_error===
 PHP Fatal error:  Variadic parameter cannot have a default value in Standard input code on line 2
-Stack trace:
-#0 {main}

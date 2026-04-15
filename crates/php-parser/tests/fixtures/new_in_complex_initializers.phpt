@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 function foo(
@@ -272,5 +270,3 @@ class Config {
 }
 ===php_error===
 PHP Fatal error:  New expressions are not supported in this context in Standard input code on line 8
-Stack trace:
-#0 {main}

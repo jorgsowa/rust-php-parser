@@ -1,5 +1,5 @@
 ===config===
-min_php=8.5
+min_php=8.4
 ===source===
 <?php
 class Test {
@@ -346,5 +346,3 @@ class Test {
 }
 ===php_error===
 PHP Fatal error:  Type of parameter $value of hook Test::$prop4::set must be compatible with property type in Standard input code on line 17
-Stack trace:
-#0 {main}

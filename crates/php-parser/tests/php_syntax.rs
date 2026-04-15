@@ -14,6 +14,21 @@ fn php_version_met(min: (u32, u32)) -> bool {
     }
 }
 
+/// Strip any trailing "Stack trace:\n#N {main}" block that PHP 8.5 appends to
+/// fatal-error output. Stored `===php_error===` values contain only the error
+/// line itself, so trimming the actual output keeps the comparison version-agnostic.
+fn strip_stack_trace(s: &str) -> String {
+    let mut lines: Vec<&str> = s.lines().collect();
+    while let Some(last) = lines.last() {
+        if last.starts_with("#") || *last == "Stack trace:" {
+            lines.pop();
+        } else {
+            break;
+        }
+    }
+    lines.join("\n")
+}
+
 /// Returns true if the installed PHP version is strictly greater than `max`.
 fn php_version_exceeded(max: (u32, u32)) -> bool {
     match max {
@@ -110,10 +125,10 @@ fn fixture_files_are_valid_php() {
                 failures.push(format!("{label}: expected php -l to fail but it passed"));
                 continue;
             }
-            let actual = String::from_utf8_lossy(&out.stderr).trim().to_string();
+            let actual = strip_stack_trace(String::from_utf8_lossy(&out.stderr).trim());
             if update {
                 common::update_fixture_php_error(path.to_str().unwrap(), &actual);
-            } else if actual != *expected {
+            } else if actual != strip_stack_trace(expected) {
                 failures.push(format!(
                     "{label}:\n  expected: {expected}\n  actual:   {actual}"
                 ));

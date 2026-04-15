@@ -1,5 +1,5 @@
 ===config===
-min_php=8.5
+min_php=8.4
 ===source===
 <?php
 
@@ -223,5 +223,3 @@ class Test {
 }
 ===php_error===
 PHP Fatal error:  Property with asymmetric visibility Test::$a must have type in Standard input code on line 4
-Stack trace:
-#0 {main}

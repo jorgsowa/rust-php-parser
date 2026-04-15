@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 // This is legal.
@@ -124,5 +122,3 @@ isset(1 + 1);
 }
 ===php_error===
 PHP Fatal error:  Cannot use isset() on the result of an expression (you can use "null !== expression" instead) in Standard input code on line 5
-Stack trace:
-#0 {main}

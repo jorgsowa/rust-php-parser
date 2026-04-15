@@ -1,5 +1,5 @@
 ===config===
-min_php=8.5
+min_php=8.4
 ===source===
 <?php
 class Test {
@@ -93,5 +93,3 @@ class Test {
 }
 ===php_error===
 PHP Fatal error:  Property hook list must not be empty in Standard input code on line 3
-Stack trace:
-#0 {main}

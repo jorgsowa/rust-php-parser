@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 namespace A;
@@ -121,5 +119,3 @@ echo 3;
 }
 ===php_error===
 PHP Fatal error:  Cannot mix bracketed namespace declarations with unbracketed namespace declarations in Standard input code on line 4
-Stack trace:
-#0 {main}

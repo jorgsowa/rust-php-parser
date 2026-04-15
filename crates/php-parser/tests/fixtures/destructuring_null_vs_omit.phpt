@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php [$a, null, $c] = $arr;
 ===ast===
@@ -100,5 +98,3 @@ min_php=8.5
 }
 ===php_error===
 PHP Fatal error:  Assignments can only happen to writable values in Standard input code on line 1
-Stack trace:
-#0 {main}

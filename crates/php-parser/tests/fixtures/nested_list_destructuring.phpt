@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 list($a, [[$b, $c]]) = [[1, [2, 3]]];
@@ -335,5 +333,3 @@ list($a, [[$b, $c]]) = [[1, [2, 3]]];
 }
 ===php_error===
 PHP Fatal error:  Cannot mix [] and list() in Standard input code on line 2
-Stack trace:
-#0 {main}

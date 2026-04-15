@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php class A { static function __CONSTRUCT() {} }
 ===ast===
@@ -54,5 +52,3 @@ min_php=8.5
 }
 ===php_error===
 PHP Fatal error:  Method A::__CONSTRUCT() cannot be static in Standard input code on line 1
-Stack trace:
-#0 {main}

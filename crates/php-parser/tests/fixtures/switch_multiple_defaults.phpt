@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php switch ($x) { default: break; case 1: break; default: break; }
 ===ast===
@@ -96,5 +94,3 @@ min_php=8.5
 }
 ===php_error===
 PHP Fatal error:  Switch statements may only contain one default clause in Standard input code on line 1
-Stack trace:
-#0 {main}
