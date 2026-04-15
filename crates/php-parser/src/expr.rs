@@ -2315,12 +2315,38 @@ fn parse_arg_list_or_callable<'arena, 'src>(
     }
 
     let mut args = parser.alloc_vec_with_capacity(4);
+    let mut seen_named = false;
+
     if !parser.check(TokenKind::RightParen) {
         loop {
             if parser.check(TokenKind::RightParen) {
                 break; // trailing comma
             }
-            args.push(parse_arg(parser));
+            let arg = parse_arg(parser);
+
+            if let Some(ref name) = arg.name {
+                // Check for duplicate named argument
+                let name_str = name.as_ref();
+                if args
+                    .iter()
+                    .any(|a: &Arg| a.name.as_deref() == Some(name_str))
+                {
+                    parser.error(ParseError::Forbidden {
+                        message: format!("named argument '{}' overwrites previous argument", name)
+                            .into(),
+                        span: arg.span,
+                    });
+                }
+                seen_named = true;
+            } else if seen_named {
+                // Positional argument (including spread) after a named argument
+                parser.error(ParseError::Forbidden {
+                    message: "cannot use positional argument after named argument".into(),
+                    span: arg.span,
+                });
+            }
+
+            args.push(arg);
             if parser.eat(TokenKind::Comma).is_none() {
                 break;
             }

@@ -14,6 +14,8 @@ clone(object: $x);
 clone(object: $x, [ "foo" => $foo, "bar" => $bar ]);
 clone(...["object" => $x, "withProperties" => [ "foo" => $foo, "bar" => $bar ]]);
 clone(...);
+===errors===
+cannot use positional argument after named argument
 ===ast===
 {
   "stmts": [
