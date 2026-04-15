@@ -1,3 +1,5 @@
+===config===
+php_rejects=parse-leniency
 ===source===
 <?php func(a: 1, ...['b' => 2]);
 ===ast===

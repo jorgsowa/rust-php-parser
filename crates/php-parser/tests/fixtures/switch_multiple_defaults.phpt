@@ -1,3 +1,5 @@
+===config===
+php_rejects=semantic
 ===source===
 <?php switch ($x) { default: break; case 1: break; default: break; }
 ===ast===

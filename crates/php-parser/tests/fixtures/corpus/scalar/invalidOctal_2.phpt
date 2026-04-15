@@ -1,3 +1,5 @@
+===config===
+php_rejects=deprecated
 ===source===
 <?php
 0787;

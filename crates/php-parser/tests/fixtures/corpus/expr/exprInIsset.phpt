@@ -1,3 +1,5 @@
+===config===
+php_rejects=semantic
 ===source===
 <?php
 // This is legal.

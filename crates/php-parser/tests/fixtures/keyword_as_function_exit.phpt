@@ -1,3 +1,5 @@
+===config===
+php_rejects=parse-leniency
 ===source===
 <?php function exit(string|int $status = 0): never {}
 ===ast===

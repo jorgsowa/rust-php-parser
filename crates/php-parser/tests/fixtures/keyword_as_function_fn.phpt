@@ -1,3 +1,5 @@
+===config===
+php_rejects=parse-leniency
 ===source===
 <?php function fn() {}
 ===ast===

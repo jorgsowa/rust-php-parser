@@ -1,3 +1,5 @@
+===config===
+php_rejects=parse-leniency
 ===source===
 <?php
 list($a, [[$b, $c]]) = [[1, [2, 3]]];

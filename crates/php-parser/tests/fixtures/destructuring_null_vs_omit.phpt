@@ -1,3 +1,5 @@
+===config===
+php_rejects=semantic
 ===source===
 <?php [$a, null, $c] = $arr;
 ===ast===

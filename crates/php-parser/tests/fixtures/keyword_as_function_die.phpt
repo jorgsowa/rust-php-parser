@@ -1,3 +1,5 @@
+===config===
+php_rejects=parse-leniency
 ===source===
 <?php function die(string|int $status = 0): never {}
 ===ast===
