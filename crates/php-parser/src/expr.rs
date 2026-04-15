@@ -217,7 +217,12 @@ pub fn parse_expr_bp<'arena, 'src>(
                 parser.expect(TokenKind::Colon);
                 // Non-associative in PHP 8.0+; use TERNARY_BP + 1 to prevent
                 // the else branch from consuming another ternary at the same level.
-                let else_expr = parse_expr_bp(parser, TERNARY_BP + 1);
+                // PHP grammar quirk: assignment can still appear in the else branch.
+                // e.g., $a ? $b : $c = $d  →  $a ? $b : ($c = $d)
+                let mut else_expr = parse_expr_bp(parser, TERNARY_BP + 1);
+                if parser.current_kind().is_assignment_op() {
+                    else_expr = parse_assign_continuation(parser, else_expr);
+                }
                 let span = lhs.span.merge(else_expr.span);
                 lhs = Expr {
                     kind: ExprKind::Ternary(TernaryExpr {
