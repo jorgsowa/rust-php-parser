@@ -144,7 +144,15 @@ $fn = Foo::bar(...);
                             "end": 59
                           }
                         },
-                        "method": "bar"
+                        "method": {
+                          "kind": {
+                            "Identifier": "bar"
+                          },
+                          "span": {
+                            "start": 61,
+                            "end": 64
+                          }
+                        }
                       }
                     }
                   }

@@ -152,7 +152,16 @@ DIE($a, $b);
               },
               "args": [
                 {
-                  "name": "status",
+                  "name": {
+                    "parts": [
+                      "status"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 66,
+                      "end": 72
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 42

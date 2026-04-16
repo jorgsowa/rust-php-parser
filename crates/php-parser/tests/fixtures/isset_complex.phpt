@@ -76,7 +76,15 @@
                         "end": 35
                       }
                     },
-                    "member": "static"
+                    "member": {
+                      "kind": {
+                        "Identifier": "static"
+                      },
+                      "span": {
+                        "start": 37,
+                        "end": 44
+                      }
+                    }
                   }
                 },
                 "span": {

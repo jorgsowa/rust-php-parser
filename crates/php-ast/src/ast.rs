@@ -361,7 +361,7 @@ impl<'arena, 'src> serde::Serialize for TypeHintKind<'arena, 'src> {
 
 #[derive(Debug, Serialize)]
 pub struct Arg<'arena, 'src> {
-    pub name: Option<Cow<'src, str>>,
+    pub name: Option<Name<'arena, 'src>>,
     pub value: Expr<'arena, 'src>,
     pub unpack: bool,
     pub by_ref: bool,
@@ -717,15 +717,15 @@ pub enum TraitAdaptationKind<'arena, 'src> {
     /// `A::foo insteadof B, C;`
     Precedence {
         trait_name: Name<'arena, 'src>,
-        method: &'src str,
+        method: Name<'arena, 'src>,
         insteadof: ArenaVec<'arena, Name<'arena, 'src>>,
     },
     /// `foo as bar;` or `A::foo as protected bar;` or `foo as protected;`
     Alias {
         trait_name: Option<Name<'arena, 'src>>,
-        method: Cow<'src, str>,
+        method: Name<'arena, 'src>,
         new_modifier: Option<Visibility>,
-        new_name: Option<&'src str>,
+        new_name: Option<Name<'arena, 'src>>,
     },
 }
 
@@ -1273,13 +1273,13 @@ pub struct MethodCallExpr<'arena, 'src> {
 #[derive(Debug, Serialize)]
 pub struct StaticAccessExpr<'arena, 'src> {
     pub class: &'arena Expr<'arena, 'src>,
-    pub member: Cow<'src, str>,
+    pub member: &'arena Expr<'arena, 'src>,
 }
 
 #[derive(Debug, Serialize)]
 pub struct StaticMethodCallExpr<'arena, 'src> {
     pub class: &'arena Expr<'arena, 'src>,
-    pub method: Cow<'src, str>,
+    pub method: &'arena Expr<'arena, 'src>,
     pub args: ArenaVec<'arena, Arg<'arena, 'src>>,
 }
 
@@ -1357,7 +1357,7 @@ pub enum CallableCreateKind<'arena, 'src> {
     /// `Foo::bar(...)`
     StaticMethod {
         class: &'arena Expr<'arena, 'src>,
-        method: Cow<'src, str>,
+        method: &'arena Expr<'arena, 'src>,
     },
 }
 

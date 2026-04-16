@@ -151,7 +151,16 @@ class C {
                               "end": 139
                             }
                           },
-                          "method": "foo",
+                          "method": {
+                            "parts": [
+                              "foo"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 141,
+                              "end": 144
+                            }
+                          },
                           "insteadof": [
                             {
                               "parts": [
@@ -184,9 +193,27 @@ class C {
                               "end": 167
                             }
                           },
-                          "method": "foo",
+                          "method": {
+                            "parts": [
+                              "foo"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 169,
+                              "end": 172
+                            }
+                          },
                           "new_modifier": "Private",
-                          "new_name": "afoo"
+                          "new_name": {
+                            "parts": [
+                              "afoo"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 184,
+                              "end": 188
+                            }
+                          }
                         }
                       },
                       "span": {
@@ -207,9 +234,27 @@ class C {
                               "end": 199
                             }
                           },
-                          "method": "bar",
+                          "method": {
+                            "parts": [
+                              "bar"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 201,
+                              "end": 204
+                            }
+                          },
                           "new_modifier": "Public",
-                          "new_name": "bbar"
+                          "new_name": {
+                            "parts": [
+                              "bbar"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 215,
+                              "end": 219
+                            }
+                          }
                         }
                       },
                       "span": {

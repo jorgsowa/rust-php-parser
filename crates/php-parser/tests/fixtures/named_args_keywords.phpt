@@ -21,7 +21,16 @@ foo(class: 'MyClass', static: true, match: 'yes');
               },
               "args": [
                 {
-                  "name": "array",
+                  "name": {
+                    "parts": [
+                      "array"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 18,
+                      "end": 23
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "arr"
@@ -39,7 +48,16 @@ foo(class: 'MyClass', static: true, match: 'yes');
                   }
                 },
                 {
-                  "name": "offset",
+                  "name": {
+                    "parts": [
+                      "offset"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 31,
+                      "end": 37
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 1
@@ -57,7 +75,16 @@ foo(class: 'MyClass', static: true, match: 'yes');
                   }
                 },
                 {
-                  "name": "length",
+                  "name": {
+                    "parts": [
+                      "length"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 42,
+                      "end": 48
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 2
@@ -104,7 +131,16 @@ foo(class: 'MyClass', static: true, match: 'yes');
               },
               "args": [
                 {
-                  "name": "class",
+                  "name": {
+                    "parts": [
+                      "class"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 58,
+                      "end": 63
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "MyClass"
@@ -122,7 +158,16 @@ foo(class: 'MyClass', static: true, match: 'yes');
                   }
                 },
                 {
-                  "name": "static",
+                  "name": {
+                    "parts": [
+                      "static"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 76,
+                      "end": 82
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Bool": true
@@ -140,7 +185,16 @@ foo(class: 'MyClass', static: true, match: 'yes');
                   }
                 },
                 {
-                  "name": "match",
+                  "name": {
+                    "parts": [
+                      "match"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 90,
+                      "end": 95
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "yes"

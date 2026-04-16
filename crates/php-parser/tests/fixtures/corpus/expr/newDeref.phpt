@@ -141,7 +141,15 @@ new class {}();
                   "end": 44
                 }
               },
-              "member": "FOO"
+              "member": {
+                "kind": {
+                  "Identifier": "FOO"
+                },
+                "span": {
+                  "start": 46,
+                  "end": 49
+                }
+              }
             }
           },
           "span": {
@@ -180,7 +188,15 @@ new class {}();
                   "end": 58
                 }
               },
-              "method": "foo",
+              "method": {
+                "kind": {
+                  "Identifier": "foo"
+                },
+                "span": {
+                  "start": 60,
+                  "end": 63
+                }
+              },
               "args": []
             }
           },
@@ -220,7 +236,15 @@ new class {}();
                   "end": 74
                 }
               },
-              "member": "foo"
+              "member": {
+                "kind": {
+                  "Identifier": "foo"
+                },
+                "span": {
+                  "start": 76,
+                  "end": 80
+                }
+              }
             }
           },
           "span": {
@@ -473,7 +497,15 @@ new class {}();
                   "end": 158
                 }
               },
-              "member": "FOO"
+              "member": {
+                "kind": {
+                  "Identifier": "FOO"
+                },
+                "span": {
+                  "start": 160,
+                  "end": 163
+                }
+              }
             }
           },
           "span": {
@@ -523,7 +555,15 @@ new class {}();
                   "end": 177
                 }
               },
-              "method": "foo",
+              "method": {
+                "kind": {
+                  "Identifier": "foo"
+                },
+                "span": {
+                  "start": 179,
+                  "end": 182
+                }
+              },
               "args": []
             }
           },
@@ -574,7 +614,15 @@ new class {}();
                   "end": 198
                 }
               },
-              "member": "foo"
+              "member": {
+                "kind": {
+                  "Identifier": "foo"
+                },
+                "span": {
+                  "start": 200,
+                  "end": 204
+                }
+              }
             }
           },
           "span": {

@@ -546,7 +546,15 @@ class Foo {
                   "end": 441
                 }
               },
-              "method": "list",
+              "method": {
+                "kind": {
+                  "Identifier": "list"
+                },
+                "span": {
+                  "start": 443,
+                  "end": 447
+                }
+              },
               "args": []
             }
           },
@@ -575,7 +583,15 @@ class Foo {
                   "end": 455
                 }
               },
-              "method": "protected",
+              "method": {
+                "kind": {
+                  "Identifier": "protected"
+                },
+                "span": {
+                  "start": 457,
+                  "end": 466
+                }
+              },
               "args": []
             }
           },
@@ -676,7 +692,15 @@ class Foo {
                   "end": 500
                 }
               },
-              "member": "TRAIT"
+              "member": {
+                "kind": {
+                  "Identifier": "TRAIT"
+                },
+                "span": {
+                  "start": 502,
+                  "end": 507
+                }
+              }
             }
           },
           "span": {
@@ -704,7 +728,15 @@ class Foo {
                   "end": 513
                 }
               },
-              "member": "FINAL"
+              "member": {
+                "kind": {
+                  "Identifier": "FINAL"
+                },
+                "span": {
+                  "start": 515,
+                  "end": 520
+                }
+              }
             }
           },
           "span": {
@@ -769,7 +801,16 @@ class Foo {
                               "end": 574
                             }
                           },
-                          "method": "catch",
+                          "method": {
+                            "parts": [
+                              "catch"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 576,
+                              "end": 581
+                            }
+                          },
                           "insteadof": [
                             {
                               "parts": [
@@ -802,9 +843,27 @@ class Foo {
                               "end": 624
                             }
                           },
-                          "method": "list",
+                          "method": {
+                            "parts": [
+                              "list"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 626,
+                              "end": 630
+                            }
+                          },
                           "new_modifier": null,
-                          "new_name": "foreach"
+                          "new_name": {
+                            "parts": [
+                              "foreach"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 634,
+                              "end": 641
+                            }
+                          }
                         }
                       },
                       "span": {
@@ -825,9 +884,27 @@ class Foo {
                               "end": 657
                             }
                           },
-                          "method": "throw",
+                          "method": {
+                            "parts": [
+                              "throw"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 659,
+                              "end": 664
+                            }
+                          },
                           "new_modifier": "Protected",
-                          "new_name": "public"
+                          "new_name": {
+                            "parts": [
+                              "public"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 678,
+                              "end": 684
+                            }
+                          }
                         }
                       },
                       "span": {
@@ -848,7 +925,16 @@ class Foo {
                               "end": 700
                             }
                           },
-                          "method": "self",
+                          "method": {
+                            "parts": [
+                              "self"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 702,
+                              "end": 706
+                            }
+                          },
                           "new_modifier": "Protected",
                           "new_name": null
                         }
@@ -862,9 +948,27 @@ class Foo {
                       "kind": {
                         "Alias": {
                           "trait_name": null,
-                          "method": "exit",
+                          "method": {
+                            "parts": [
+                              "exit"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 729,
+                              "end": 733
+                            }
+                          },
                           "new_modifier": null,
-                          "new_name": "die"
+                          "new_name": {
+                            "parts": [
+                              "die"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 737,
+                              "end": 740
+                            }
+                          }
                         }
                       },
                       "span": {
@@ -885,9 +989,27 @@ class Foo {
                               "end": 757
                             }
                           },
-                          "method": "exit",
+                          "method": {
+                            "parts": [
+                              "exit"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 759,
+                              "end": 763
+                            }
+                          },
                           "new_modifier": null,
-                          "new_name": "bye"
+                          "new_name": {
+                            "parts": [
+                              "bye"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 767,
+                              "end": 770
+                            }
+                          }
                         }
                       },
                       "span": {
@@ -908,9 +1030,27 @@ class Foo {
                               "end": 796
                             }
                           },
-                          "method": "exit",
+                          "method": {
+                            "parts": [
+                              "exit"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 798,
+                              "end": 802
+                            }
+                          },
                           "new_modifier": null,
-                          "new_name": "byebye"
+                          "new_name": {
+                            "parts": [
+                              "byebye"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 806,
+                              "end": 812
+                            }
+                          }
                         }
                       },
                       "span": {
@@ -931,7 +1071,16 @@ class Foo {
                               "end": 828
                             }
                           },
-                          "method": "catch",
+                          "method": {
+                            "parts": [
+                              "catch"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 899,
+                              "end": 904
+                            }
+                          },
                           "insteadof": [
                             {
                               "parts": [

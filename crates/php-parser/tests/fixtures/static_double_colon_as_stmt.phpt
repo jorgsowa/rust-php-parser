@@ -20,7 +20,15 @@ static::class;
                   "end": 12
                 }
               },
-              "member": "prop"
+              "member": {
+                "kind": {
+                  "Identifier": "prop"
+                },
+                "span": {
+                  "start": 14,
+                  "end": 19
+                }
+              }
             }
           },
           "span": {
@@ -48,7 +56,15 @@ static::class;
                   "end": 27
                 }
               },
-              "method": "method",
+              "method": {
+                "kind": {
+                  "Identifier": "method"
+                },
+                "span": {
+                  "start": 29,
+                  "end": 35
+                }
+              },
               "args": []
             }
           },
@@ -77,7 +93,15 @@ static::class;
                   "end": 45
                 }
               },
-              "member": "class"
+              "member": {
+                "kind": {
+                  "Identifier": "class"
+                },
+                "span": {
+                  "start": 47,
+                  "end": 52
+                }
+              }
             }
           },
           "span": {

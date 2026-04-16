@@ -47,7 +47,15 @@ min_php=8.1
                                     "end": 34
                                   }
                                 },
-                                "member": "Active"
+                                "member": {
+                                  "kind": {
+                                    "Identifier": "Active"
+                                  },
+                                  "span": {
+                                    "start": 36,
+                                    "end": 42
+                                  }
+                                }
                               }
                             },
                             "span": {
@@ -67,7 +75,15 @@ min_php=8.1
                                     "end": 50
                                   }
                                 },
-                                "member": "Pending"
+                                "member": {
+                                  "kind": {
+                                    "Identifier": "Pending"
+                                  },
+                                  "span": {
+                                    "start": 52,
+                                    "end": 59
+                                  }
+                                }
                               }
                             },
                             "span": {
@@ -104,7 +120,15 @@ min_php=8.1
                                     "end": 77
                                   }
                                 },
-                                "member": "Inactive"
+                                "member": {
+                                  "kind": {
+                                    "Identifier": "Inactive"
+                                  },
+                                  "span": {
+                                    "start": 79,
+                                    "end": 87
+                                  }
+                                }
                               }
                             },
                             "span": {

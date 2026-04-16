@@ -68,7 +68,15 @@ min_php=8.1
                                   "end": 81
                                 }
                               },
-                              "member": "Red"
+                              "member": {
+                                "kind": {
+                                  "Identifier": "Red"
+                                },
+                                "span": {
+                                  "start": 83,
+                                  "end": 86
+                                }
+                              }
                             }
                           },
                           "span": {

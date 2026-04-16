@@ -17,7 +17,15 @@
                   "end": 12
                 }
               },
-              "member": "CONST_NAME"
+              "member": {
+                "kind": {
+                  "Identifier": "CONST_NAME"
+                },
+                "span": {
+                  "start": 14,
+                  "end": 24
+                }
+              }
             }
           },
           "span": {

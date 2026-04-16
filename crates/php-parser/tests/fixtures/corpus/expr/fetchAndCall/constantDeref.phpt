@@ -607,7 +607,15 @@ $foo::BAR[2][1][0];
                         "end": 125
                       }
                     },
-                    "member": "BAR"
+                    "member": {
+                      "kind": {
+                        "Identifier": "BAR"
+                      },
+                      "span": {
+                        "start": 127,
+                        "end": 130
+                      }
+                    }
                   }
                 },
                 "span": {
@@ -660,7 +668,15 @@ $foo::BAR[2][1][0];
                                     "end": 139
                                   }
                                 },
-                                "member": "BAR"
+                                "member": {
+                                  "kind": {
+                                    "Identifier": "BAR"
+                                  },
+                                  "span": {
+                                    "start": 141,
+                                    "end": 144
+                                  }
+                                }
                               }
                             },
                             "span": {

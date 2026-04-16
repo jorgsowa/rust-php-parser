@@ -19,7 +19,16 @@
               },
               "args": [
                 {
-                  "name": "while",
+                  "name": {
+                    "parts": [
+                      "while"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 10,
+                      "end": 15
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "x"

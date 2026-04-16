@@ -43,7 +43,16 @@
                   }
                 },
                 {
-                  "name": "methods",
+                  "name": {
+                    "parts": [
+                      "methods"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 22,
+                      "end": 29
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Array": [

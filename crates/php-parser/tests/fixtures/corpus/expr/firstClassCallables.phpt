@@ -98,7 +98,15 @@ function foo() {}
                       "end": 34
                     }
                   },
-                  "method": "foo"
+                  "method": {
+                    "kind": {
+                      "Identifier": "foo"
+                    },
+                    "span": {
+                      "start": 36,
+                      "end": 39
+                    }
+                  }
                 }
               }
             }

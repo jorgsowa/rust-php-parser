@@ -19,7 +19,16 @@
               },
               "args": [
                 {
-                  "name": "x",
+                  "name": {
+                    "parts": [
+                      "x"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 14,
+                      "end": 15
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 1
@@ -37,7 +46,16 @@
                   }
                 },
                 {
-                  "name": "y",
+                  "name": {
+                    "parts": [
+                      "y"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 20,
+                      "end": 21
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 2

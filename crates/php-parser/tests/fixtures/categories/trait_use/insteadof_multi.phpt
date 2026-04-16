@@ -54,7 +54,16 @@
                               "end": 28
                             }
                           },
-                          "method": "m",
+                          "method": {
+                            "parts": [
+                              "m"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 30,
+                              "end": 31
+                            }
+                          },
                           "insteadof": [
                             {
                               "parts": [

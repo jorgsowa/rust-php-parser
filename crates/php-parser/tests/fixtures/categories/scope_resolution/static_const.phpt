@@ -41,7 +41,15 @@
                                   "end": 53
                                 }
                               },
-                              "member": "DEFAULT"
+                              "member": {
+                                "kind": {
+                                  "Identifier": "DEFAULT"
+                                },
+                                "span": {
+                                  "start": 55,
+                                  "end": 62
+                                }
+                              }
                             }
                           },
                           "span": {

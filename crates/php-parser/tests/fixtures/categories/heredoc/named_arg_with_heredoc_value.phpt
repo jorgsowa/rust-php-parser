@@ -22,7 +22,16 @@ EOT
               },
               "args": [
                 {
-                  "name": "bar",
+                  "name": {
+                    "parts": [
+                      "bar"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 10,
+                      "end": 13
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Heredoc": {

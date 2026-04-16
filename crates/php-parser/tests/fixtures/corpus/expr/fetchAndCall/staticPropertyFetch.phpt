@@ -27,7 +27,15 @@ A::$b['c'];
                   "end": 36
                 }
               },
-              "member": "b"
+              "member": {
+                "kind": {
+                  "Identifier": "b"
+                },
+                "span": {
+                  "start": 38,
+                  "end": 40
+                }
+              }
             }
           },
           "span": {
@@ -146,7 +154,15 @@ A::$b['c'];
                         "end": 79
                       }
                     },
-                    "member": "b"
+                    "member": {
+                      "kind": {
+                        "Identifier": "b"
+                      },
+                      "span": {
+                        "start": 81,
+                        "end": 83
+                      }
+                    }
                   }
                 },
                 "span": {

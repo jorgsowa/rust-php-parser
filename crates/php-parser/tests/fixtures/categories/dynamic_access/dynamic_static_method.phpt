@@ -20,7 +20,15 @@
                         "end": 12
                       }
                     },
-                    "member": "method"
+                    "member": {
+                      "kind": {
+                        "Identifier": "method"
+                      },
+                      "span": {
+                        "start": 14,
+                        "end": 21
+                      }
+                    }
                   }
                 },
                 "span": {

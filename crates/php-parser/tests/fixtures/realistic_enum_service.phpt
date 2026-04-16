@@ -229,7 +229,15 @@ class TaskService
                                               "end": 224
                                             }
                                           },
-                                          "member": "Low"
+                                          "member": {
+                                            "kind": {
+                                              "Identifier": "Low"
+                                            },
+                                            "span": {
+                                              "start": 226,
+                                              "end": 229
+                                            }
+                                          }
                                         }
                                       },
                                       "span": {
@@ -266,7 +274,15 @@ class TaskService
                                               "end": 269
                                             }
                                           },
-                                          "member": "Medium"
+                                          "member": {
+                                            "kind": {
+                                              "Identifier": "Medium"
+                                            },
+                                            "span": {
+                                              "start": 271,
+                                              "end": 277
+                                            }
+                                          }
                                         }
                                       },
                                       "span": {
@@ -303,7 +319,15 @@ class TaskService
                                               "end": 320
                                             }
                                           },
-                                          "member": "High"
+                                          "member": {
+                                            "kind": {
+                                              "Identifier": "High"
+                                            },
+                                            "span": {
+                                              "start": 322,
+                                              "end": 326
+                                            }
+                                          }
                                         }
                                       },
                                       "span": {
@@ -340,7 +364,15 @@ class TaskService
                                               "end": 367
                                             }
                                           },
-                                          "member": "Critical"
+                                          "member": {
+                                            "kind": {
+                                              "Identifier": "Critical"
+                                            },
+                                            "span": {
+                                              "start": 369,
+                                              "end": 377
+                                            }
+                                          }
                                         }
                                       },
                                       "span": {
@@ -487,7 +519,15 @@ class TaskService
                                   "end": 533
                                 }
                               },
-                              "member": "Critical"
+                              "member": {
+                                "kind": {
+                                  "Identifier": "Critical"
+                                },
+                                "span": {
+                                  "start": 535,
+                                  "end": 543
+                                }
+                              }
                             }
                           },
                           "span": {
@@ -687,7 +727,15 @@ class TaskService
                                         "end": 706
                                       }
                                     },
-                                    "member": "counter"
+                                    "member": {
+                                      "kind": {
+                                        "Identifier": "counter"
+                                      },
+                                      "span": {
+                                        "start": 708,
+                                        "end": 716
+                                      }
+                                    }
                                   }
                                 },
                                 "span": {
@@ -736,7 +784,15 @@ class TaskService
                                         "end": 738
                                       }
                                     },
-                                    "member": "counter"
+                                    "member": {
+                                      "kind": {
+                                        "Identifier": "counter"
+                                      },
+                                      "span": {
+                                        "start": 740,
+                                        "end": 748
+                                      }
+                                    }
                                   }
                                 },
                                 "span": {
@@ -1156,7 +1212,15 @@ class TaskService
                                                       "end": 1044
                                                     }
                                                   },
-                                                  "member": "Critical"
+                                                  "member": {
+                                                    "kind": {
+                                                      "Identifier": "Critical"
+                                                    },
+                                                    "span": {
+                                                      "start": 1046,
+                                                      "end": 1054
+                                                    }
+                                                  }
                                                 }
                                               },
                                               "span": {
@@ -1197,7 +1261,15 @@ class TaskService
                                                       "end": 1080
                                                     }
                                                   },
-                                                  "member": "High"
+                                                  "member": {
+                                                    "kind": {
+                                                      "Identifier": "High"
+                                                    },
+                                                    "span": {
+                                                      "start": 1082,
+                                                      "end": 1086
+                                                    }
+                                                  }
                                                 }
                                               },
                                               "span": {

@@ -20,7 +20,15 @@
                         "end": 9
                       }
                     },
-                    "method": "create",
+                    "method": {
+                      "kind": {
+                        "Identifier": "create"
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 17
+                      }
+                    },
                     "args": []
                   }
                 },

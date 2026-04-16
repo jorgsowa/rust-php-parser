@@ -19,7 +19,16 @@
               },
               "args": [
                 {
-                  "name": "true",
+                  "name": {
+                    "parts": [
+                      "true"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 10,
+                      "end": 14
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "x"

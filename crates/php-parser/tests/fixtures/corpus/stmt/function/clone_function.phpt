@@ -442,7 +442,16 @@ cannot use positional argument after named argument
               },
               "args": [
                 {
-                  "name": "object",
+                  "name": {
+                    "parts": [
+                      "object"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 235,
+                      "end": 241
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "x"
@@ -460,7 +469,16 @@ cannot use positional argument after named argument
                   }
                 },
                 {
-                  "name": "withProperties",
+                  "name": {
+                    "parts": [
+                      "withProperties"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 247,
+                      "end": 261
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Array": [
@@ -576,7 +594,16 @@ cannot use positional argument after named argument
                   }
                 },
                 {
-                  "name": "withProperties",
+                  "name": {
+                    "parts": [
+                      "withProperties"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 308,
+                      "end": 322
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Array": [
@@ -674,7 +701,16 @@ cannot use positional argument after named argument
               },
               "args": [
                 {
-                  "name": "object",
+                  "name": {
+                    "parts": [
+                      "object"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 365,
+                      "end": 371
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "x"
@@ -721,7 +757,16 @@ cannot use positional argument after named argument
               },
               "args": [
                 {
-                  "name": "object",
+                  "name": {
+                    "parts": [
+                      "object"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 384,
+                      "end": 390
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "x"

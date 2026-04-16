@@ -60,7 +60,15 @@ expected expression
                           "end": 75
                         }
                       },
-                      "member": "Active"
+                      "member": {
+                        "kind": {
+                          "Identifier": "Active"
+                        },
+                        "span": {
+                          "start": 77,
+                          "end": 83
+                        }
+                      }
                     }
                   },
                   "span": {

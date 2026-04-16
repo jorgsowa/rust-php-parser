@@ -33,7 +33,15 @@ $a['b']::c();
                   "end": 34
                 }
               },
-              "method": "b",
+              "method": {
+                "kind": {
+                  "Identifier": "b"
+                },
+                "span": {
+                  "start": 36,
+                  "end": 37
+                }
+              },
               "args": []
             }
           },
@@ -112,7 +120,15 @@ $a['b']::c();
                         "end": 54
                       }
                     },
-                    "member": "b"
+                    "member": {
+                      "kind": {
+                        "Identifier": "b"
+                      },
+                      "span": {
+                        "start": 56,
+                        "end": 58
+                      }
+                    }
                   }
                 },
                 "span": {
@@ -154,7 +170,15 @@ $a['b']::c();
                               "end": 63
                             }
                           },
-                          "member": "b"
+                          "member": {
+                            "kind": {
+                              "Identifier": "b"
+                            },
+                            "span": {
+                              "start": 65,
+                              "end": 67
+                            }
+                          }
                         }
                       },
                       "span": {
@@ -215,7 +239,15 @@ $a['b']::c();
                                     "end": 77
                                   }
                                 },
-                                "member": "b"
+                                "member": {
+                                  "kind": {
+                                    "Identifier": "b"
+                                  },
+                                  "span": {
+                                    "start": 79,
+                                    "end": 81
+                                  }
+                                }
                               }
                             },
                             "span": {
@@ -286,7 +318,15 @@ $a['b']::c();
                         "end": 120
                       }
                     },
-                    "method": "b",
+                    "method": {
+                      "kind": {
+                        "Identifier": "b"
+                      },
+                      "span": {
+                        "start": 122,
+                        "end": 123
+                      }
+                    },
                     "args": []
                   }
                 },
@@ -331,7 +371,15 @@ $a['b']::c();
                   "end": 164
                 }
               },
-              "method": "b",
+              "method": {
+                "kind": {
+                  "Identifier": "b"
+                },
+                "span": {
+                  "start": 166,
+                  "end": 167
+                }
+              },
               "args": []
             }
           },
@@ -360,7 +408,15 @@ $a['b']::c();
                   "end": 173
                 }
               },
-              "method": "b",
+              "method": {
+                "kind": {
+                  "Identifier": "b"
+                },
+                "span": {
+                  "start": 175,
+                  "end": 176
+                }
+              },
               "args": []
             }
           },
@@ -397,7 +453,15 @@ $a['b']::c();
                   "end": 185
                 }
               },
-              "method": "b",
+              "method": {
+                "kind": {
+                  "Identifier": "b"
+                },
+                "span": {
+                  "start": 188,
+                  "end": 189
+                }
+              },
               "args": []
             }
           },
@@ -445,7 +509,15 @@ $a['b']::c();
                   "end": 200
                 }
               },
-              "method": "c",
+              "method": {
+                "kind": {
+                  "Identifier": "c"
+                },
+                "span": {
+                  "start": 202,
+                  "end": 203
+                }
+              },
               "args": []
             }
           },

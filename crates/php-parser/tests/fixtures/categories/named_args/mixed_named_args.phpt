@@ -55,7 +55,16 @@
                   }
                 },
                 {
-                  "name": "name",
+                  "name": {
+                    "parts": [
+                      "name"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 16,
+                      "end": 20
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "test"
@@ -73,7 +82,16 @@
                   }
                 },
                 {
-                  "name": "other",
+                  "name": {
+                    "parts": [
+                      "other"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 30,
+                      "end": 35
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Bool": true

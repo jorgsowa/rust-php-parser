@@ -23,7 +23,15 @@ static::factory();
                   "end": 9
                 }
               },
-              "member": "BAR"
+              "member": {
+                "kind": {
+                  "Identifier": "BAR"
+                },
+                "span": {
+                  "start": 11,
+                  "end": 14
+                }
+              }
             }
           },
           "span": {
@@ -51,7 +59,15 @@ static::factory();
                   "end": 19
                 }
               },
-              "member": "instance"
+              "member": {
+                "kind": {
+                  "Identifier": "instance"
+                },
+                "span": {
+                  "start": 21,
+                  "end": 30
+                }
+              }
             }
           },
           "span": {
@@ -79,7 +95,15 @@ static::factory();
                   "end": 35
                 }
               },
-              "method": "create",
+              "method": {
+                "kind": {
+                  "Identifier": "create"
+                },
+                "span": {
+                  "start": 37,
+                  "end": 43
+                }
+              },
               "args": []
             }
           },
@@ -108,7 +132,15 @@ static::factory();
                   "end": 51
                 }
               },
-              "member": "x"
+              "member": {
+                "kind": {
+                  "Identifier": "x"
+                },
+                "span": {
+                  "start": 53,
+                  "end": 55
+                }
+              }
             }
           },
           "span": {
@@ -136,7 +168,15 @@ static::factory();
                   "end": 63
                 }
               },
-              "method": "__construct",
+              "method": {
+                "kind": {
+                  "Identifier": "__construct"
+                },
+                "span": {
+                  "start": 65,
+                  "end": 76
+                }
+              },
               "args": []
             }
           },
@@ -165,7 +205,15 @@ static::factory();
                   "end": 86
                 }
               },
-              "method": "factory",
+              "method": {
+                "kind": {
+                  "Identifier": "factory"
+                },
+                "span": {
+                  "start": 88,
+                  "end": 95
+                }
+              },
               "args": []
             }
           },

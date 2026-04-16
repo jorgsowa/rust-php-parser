@@ -36,7 +36,15 @@ expected identifier, found ')'
                             "end": 14
                           }
                         },
-                        "member": "<error>"
+                        "member": {
+                          "kind": {
+                            "Identifier": "<error>"
+                          },
+                          "span": {
+                            "start": 16,
+                            "end": 17
+                          }
+                        }
                       }
                     },
                     "span": {

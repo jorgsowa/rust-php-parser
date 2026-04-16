@@ -21,7 +21,16 @@ min_php=8.5
               },
               "args": [
                 {
-                  "name": "object",
+                  "name": {
+                    "parts": [
+                      "object"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 12,
+                      "end": 18
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "x"

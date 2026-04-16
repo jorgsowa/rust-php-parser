@@ -47,7 +47,16 @@
                   }
                 },
                 {
-                  "name": "key",
+                  "name": {
+                    "parts": [
+                      "key"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 27,
+                      "end": 30
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "value"
@@ -65,7 +74,16 @@
                   }
                 },
                 {
-                  "name": "flag",
+                  "name": {
+                    "parts": [
+                      "flag"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 41,
+                      "end": 45
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Bool": true

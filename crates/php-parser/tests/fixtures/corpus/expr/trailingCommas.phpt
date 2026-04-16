@@ -163,7 +163,15 @@ isset($a, $b, );
                   "end": 46
                 }
               },
-              "method": "bar",
+              "method": {
+                "kind": {
+                  "Identifier": "bar"
+                },
+                "span": {
+                  "start": 48,
+                  "end": 51
+                }
+              },
               "args": [
                 {
                   "name": null,

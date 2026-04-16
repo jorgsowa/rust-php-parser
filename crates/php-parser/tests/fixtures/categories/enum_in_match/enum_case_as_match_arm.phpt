@@ -89,7 +89,15 @@ min_php=8.1
                                     "end": 73
                                   }
                                 },
-                                "member": "Active"
+                                "member": {
+                                  "kind": {
+                                    "Identifier": "Active"
+                                  },
+                                  "span": {
+                                    "start": 75,
+                                    "end": 81
+                                  }
+                                }
                               }
                             },
                             "span": {
@@ -126,7 +134,15 @@ min_php=8.1
                                     "end": 97
                                   }
                                 },
-                                "member": "Inactive"
+                                "member": {
+                                  "kind": {
+                                    "Identifier": "Inactive"
+                                  },
+                                  "span": {
+                                    "start": 99,
+                                    "end": 107
+                                  }
+                                }
                               }
                             },
                             "span": {

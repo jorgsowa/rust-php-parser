@@ -17,7 +17,15 @@
                   "end": 12
                 }
               },
-              "method": "from",
+              "method": {
+                "kind": {
+                  "Identifier": "from"
+                },
+                "span": {
+                  "start": 14,
+                  "end": 18
+                }
+              },
               "args": [
                 {
                   "name": null,
@@ -65,7 +73,15 @@
                   "end": 29
                 }
               },
-              "method": "tryFrom",
+              "method": {
+                "kind": {
+                  "Identifier": "tryFrom"
+                },
+                "span": {
+                  "start": 31,
+                  "end": 38
+                }
+              },
               "args": [
                 {
                   "name": null,

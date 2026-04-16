@@ -28,7 +28,16 @@
               },
               "args": [
                 {
-                  "name": "key",
+                  "name": {
+                    "parts": [
+                      "key"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 19,
+                      "end": 22
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "val"

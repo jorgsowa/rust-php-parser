@@ -40,7 +40,15 @@ $a::class;
                   "end": 11
                 }
               },
-              "member": "B"
+              "member": {
+                "kind": {
+                  "Identifier": "B"
+                },
+                "span": {
+                  "start": 13,
+                  "end": 14
+                }
+              }
             }
           },
           "span": {
@@ -68,7 +76,15 @@ $a::class;
                   "end": 17
                 }
               },
-              "member": "class"
+              "member": {
+                "kind": {
+                  "Identifier": "class"
+                },
+                "span": {
+                  "start": 19,
+                  "end": 24
+                }
+              }
             }
           },
           "span": {
@@ -96,7 +112,15 @@ $a::class;
                   "end": 28
                 }
               },
-              "member": "B"
+              "member": {
+                "kind": {
+                  "Identifier": "B"
+                },
+                "span": {
+                  "start": 30,
+                  "end": 31
+                }
+              }
             }
           },
           "span": {
@@ -124,7 +148,15 @@ $a::class;
                   "end": 35
                 }
               },
-              "member": "class"
+              "member": {
+                "kind": {
+                  "Identifier": "class"
+                },
+                "span": {
+                  "start": 37,
+                  "end": 42
+                }
+              }
             }
           },
           "span": {
