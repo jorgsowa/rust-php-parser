@@ -40,3 +40,5 @@ expected ';' after expression
     "end": 18
   }
 }
+===php_error===
+PHP Parse error:  Unclosed '{' in Standard input code on line 1

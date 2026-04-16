@@ -52,3 +52,5 @@ unterminated block comment
     "end": 15
   }
 }
+===php_error===
+PHP Parse error:  Unterminated comment starting line 4 in Standard input code on line 4

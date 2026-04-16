@@ -66,5 +66,3 @@
 }
 ===php_error===
 PHP Fatal error:  Cannot use empty list in Standard input code on line 1
-Stack trace:
-#0 {main}

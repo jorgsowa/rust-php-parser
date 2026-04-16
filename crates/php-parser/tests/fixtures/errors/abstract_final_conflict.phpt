@@ -52,3 +52,5 @@ cannot use 'abstract' and 'final' together
     "end": 46
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use the final modifier on an abstract method in Standard input code on line 1

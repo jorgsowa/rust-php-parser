@@ -511,3 +511,5 @@ unclosed ''}'' opened at Span { start: 171, end: 176 }
     "end": 222
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token ")", expecting variable in Standard input code on line 3

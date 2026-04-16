@@ -120,5 +120,3 @@ enum Suit: string
 }
 ===php_error===
 PHP Fatal error:  Case Diamonds of backed enum Suit must have a value in Standard input code on line 6
-Stack trace:
-#0 {main}

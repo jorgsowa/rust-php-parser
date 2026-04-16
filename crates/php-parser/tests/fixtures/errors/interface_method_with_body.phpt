@@ -66,3 +66,5 @@ interface method cannot contain a body
     "end": 62
   }
 }
+===php_error===
+PHP Fatal error:  Interface function Foo::bar() cannot contain body in Standard input code on line 1

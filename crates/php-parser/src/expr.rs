@@ -1825,24 +1825,23 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
         }
 
         // namespace\Foo\Bar — relative name in expression context
+        TokenKind::Namespace if parser.peek_kind() == Some(TokenKind::Backslash) => {
+            let start = parser.start_span();
+            let name = parser.parse_name();
+            let text = parser
+                .arena
+                .alloc_str(&format!("namespace\\{}", name.join_parts()));
+            Expr {
+                kind: ExprKind::Identifier(NameStr::Arena(text)),
+                span: Span::new(start, name.span().end),
+            }
+        }
         TokenKind::Namespace => {
-            if parser.peek_kind() == Some(TokenKind::Backslash) {
-                let start = parser.start_span();
-                let name = parser.parse_name();
-                let text = parser
-                    .arena
-                    .alloc_str(&format!("namespace\\{}", name.join_parts()));
-                Expr {
-                    kind: ExprKind::Identifier(NameStr::Arena(text)),
-                    span: Span::new(start, name.span().end),
-                }
-            } else {
-                let span = parser.current_span();
-                parser.error(ParseError::ExpectedExpression { span });
-                Expr {
-                    kind: ExprKind::Error,
-                    span,
-                }
+            let span = parser.current_span();
+            parser.error(ParseError::ExpectedExpression { span });
+            Expr {
+                kind: ExprKind::Error,
+                span,
             }
         }
 
@@ -2324,19 +2323,7 @@ fn parse_arg_list_or_callable<'arena, 'src>(
             }
             let arg = parse_arg(parser);
 
-            if let Some(ref name) = arg.name {
-                // Check for duplicate named argument
-                let name_str = name.as_ref();
-                if args
-                    .iter()
-                    .any(|a: &Arg| a.name.as_deref() == Some(name_str))
-                {
-                    parser.error(ParseError::Forbidden {
-                        message: format!("named argument '{}' overwrites previous argument", name)
-                            .into(),
-                        span: arg.span,
-                    });
-                }
+            if arg.name.is_some() {
                 seen_named = true;
             } else if seen_named {
                 // Positional argument (including spread) after a named argument
@@ -2742,17 +2729,11 @@ fn try_parse_cast<'arena, 'src>(
     if cast_kind == CastKind::Void {
         parser.require_version(PhpVersion::Php85, "void cast", kw_span);
     }
-    // (real) was removed in PHP 8.0, (binary) is a PHP 5-era artifact
+    // (real) was removed in PHP 8.0
     let kw_text = &parser.source[kw_span.start as usize..kw_span.end as usize];
     if kw_text.eq_ignore_ascii_case("real") && parser.version >= PhpVersion::Php80 {
         parser.error(ParseError::Forbidden {
             message: "the (real) cast is no longer supported, use (float) instead".into(),
-            span: kw_span,
-        });
-    }
-    if kw_text.eq_ignore_ascii_case("binary") {
-        parser.error(ParseError::Forbidden {
-            message: "the (binary) cast is not supported, use (string) instead".into(),
             span: kw_span,
         });
     }

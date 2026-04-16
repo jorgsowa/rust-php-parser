@@ -25,3 +25,5 @@ cannot use 'PARENT' as interface name
     "end": 25
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use "PARENT" as an interface name as it is reserved in Standard input code on line 1

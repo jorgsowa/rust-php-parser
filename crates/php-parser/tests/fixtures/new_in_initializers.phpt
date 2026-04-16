@@ -587,5 +587,3 @@ $g = fn($x = new Foo()) => $x;
 }
 ===php_error===
 PHP Fatal error:  New expressions are not supported in this context in Standard input code on line 5
-Stack trace:
-#0 {main}

@@ -1,10 +1,8 @@
 ===source===
 <?php
 $a = (real) 1.5;
-$b = (binary) "hello";
 ===errors===
 the (real) cast is no longer supported, use (float) instead
-the (binary) cast is not supported, use (string) instead
 ===ast===
 {
   "stmts": [
@@ -55,58 +53,12 @@ the (binary) cast is not supported, use (string) instead
         "start": 6,
         "end": 22
       }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Assign": {
-              "target": {
-                "kind": {
-                  "Variable": "b"
-                },
-                "span": {
-                  "start": 23,
-                  "end": 25
-                }
-              },
-              "op": "Assign",
-              "value": {
-                "kind": {
-                  "Cast": [
-                    "String",
-                    {
-                      "kind": {
-                        "String": "hello"
-                      },
-                      "span": {
-                        "start": 37,
-                        "end": 44
-                      }
-                    }
-                  ]
-                },
-                "span": {
-                  "start": 28,
-                  "end": 44
-                }
-              }
-            }
-          },
-          "span": {
-            "start": 23,
-            "end": 44
-          }
-        }
-      },
-      "span": {
-        "start": 23,
-        "end": 45
-      }
     }
   ],
   "span": {
     "start": 0,
-    "end": 45
+    "end": 22
   }
 }
+===php_error===
+PHP Parse error:  The (real) cast has been removed, use (float) instead in Standard input code on line 2

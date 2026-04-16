@@ -56,3 +56,5 @@ expected ';' after expression
     "end": 33
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "class" in Standard input code on line 1

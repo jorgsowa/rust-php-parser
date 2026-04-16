@@ -109,3 +109,5 @@ expected modifier, found identifier
     "end": 71
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected identifier "publi", expecting "function" in Standard input code on line 5

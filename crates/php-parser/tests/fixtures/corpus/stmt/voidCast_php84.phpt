@@ -1,0 +1,284 @@
+===config===
+max_php=8.4
+===source===
+<?php
+(void)foo();
+( VOID ) foo();
+(void)$a or $b;
+
+// This is explicitly allowed.
+for ((void)a(); $b; (void)$c) {
+}
+
+// PHP does not allow this, but the parser accepts it.
+$x = (void) $y;
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Cast": [
+              "Void",
+              {
+                "kind": {
+                  "FunctionCall": {
+                    "name": {
+                      "kind": {
+                        "Identifier": "foo"
+                      },
+                      "span": {
+                        "start": 12,
+                        "end": 15
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 12,
+                  "end": 17
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 6,
+            "end": 17
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 18
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Cast": [
+              "Void",
+              {
+                "kind": {
+                  "FunctionCall": {
+                    "name": {
+                      "kind": {
+                        "Identifier": "foo"
+                      },
+                      "span": {
+                        "start": 28,
+                        "end": 31
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 28,
+                  "end": 33
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 19,
+            "end": 33
+          }
+        }
+      },
+      "span": {
+        "start": 19,
+        "end": 34
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Cast": [
+                    "Void",
+                    {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 41,
+                        "end": 43
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 35,
+                  "end": 43
+                }
+              },
+              "op": "LogicalOr",
+              "right": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 47,
+                  "end": 49
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 35,
+            "end": 49
+          }
+        }
+      },
+      "span": {
+        "start": 35,
+        "end": 50
+      }
+    },
+    {
+      "kind": {
+        "For": {
+          "init": [
+            {
+              "kind": {
+                "Cast": [
+                  "Void",
+                  {
+                    "kind": {
+                      "FunctionCall": {
+                        "name": {
+                          "kind": {
+                            "Identifier": "a"
+                          },
+                          "span": {
+                            "start": 94,
+                            "end": 95
+                          }
+                        },
+                        "args": []
+                      }
+                    },
+                    "span": {
+                      "start": 94,
+                      "end": 97
+                    }
+                  }
+                ]
+              },
+              "span": {
+                "start": 88,
+                "end": 97
+              }
+            }
+          ],
+          "condition": [
+            {
+              "kind": {
+                "Variable": "b"
+              },
+              "span": {
+                "start": 99,
+                "end": 101
+              }
+            }
+          ],
+          "update": [
+            {
+              "kind": {
+                "Cast": [
+                  "Void",
+                  {
+                    "kind": {
+                      "Variable": "c"
+                    },
+                    "span": {
+                      "start": 109,
+                      "end": 111
+                    }
+                  }
+                ]
+              },
+              "span": {
+                "start": 103,
+                "end": 111
+              }
+            }
+          ],
+          "body": {
+            "kind": {
+              "Block": []
+            },
+            "span": {
+              "start": 113,
+              "end": 116
+            }
+          }
+        }
+      },
+      "span": {
+        "start": 83,
+        "end": 116
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 173,
+                  "end": 175
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Cast": [
+                    "Void",
+                    {
+                      "kind": {
+                        "Variable": "y"
+                      },
+                      "span": {
+                        "start": 185,
+                        "end": 187
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 178,
+                  "end": 187
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 173,
+            "end": 187
+          }
+        }
+      },
+      "span": {
+        "start": 173,
+        "end": 188
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 188
+  }
+}
+===php_error===
+PHP Parse error:  syntax error, unexpected identifier "foo" in Standard input code on line 2

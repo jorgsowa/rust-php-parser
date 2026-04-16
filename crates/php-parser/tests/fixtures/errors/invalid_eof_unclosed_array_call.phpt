@@ -101,3 +101,5 @@ expected ';' after expression
     "end": 22
   }
 }
+===php_error===
+PHP Parse error:  Unclosed '(' in Standard input code on line 2

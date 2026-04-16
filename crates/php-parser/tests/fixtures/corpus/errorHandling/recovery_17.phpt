@@ -342,3 +342,5 @@ expected ';', found end of file
     "end": 150
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "use", expecting "{" in Standard input code on line 3

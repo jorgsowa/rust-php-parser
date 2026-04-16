@@ -63,7 +63,7 @@ fn collect_phpt_files(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
         let path = entry.path();
         if path.is_dir() {
             paths.extend(collect_phpt_files(&path));
-        } else if path.extension().map_or(false, |ext| ext == "phpt") {
+        } else if path.extension().is_some_and(|ext| ext == "phpt") {
             paths.push(path);
         }
     }

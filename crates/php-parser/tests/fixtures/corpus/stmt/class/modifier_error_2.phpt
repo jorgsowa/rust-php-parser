@@ -50,3 +50,5 @@ cannot use multiple visibility modifiers
     "end": 38
   }
 }
+===php_error===
+PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 1

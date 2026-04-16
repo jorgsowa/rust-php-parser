@@ -1,3 +1,5 @@
+===config===
+min_php=8.4
 ===source===
 <?php
 class Test {
@@ -127,3 +129,5 @@ expected 'get' or 'set', found 'readonly'
     "end": 167
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use the public modifier on a property hook in Standard input code on line 4

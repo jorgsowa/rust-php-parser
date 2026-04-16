@@ -40,3 +40,5 @@ expected identifier, found ';'
     "end": 10
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token ";", expecting "class" in Standard input code on line 2

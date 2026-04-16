@@ -82,3 +82,5 @@ expected '::' or 'as', found ';'
     "end": 67
   }
 }
+===php_error===
+PHP Parse error:  Cannot use "<?=" as an identifier in Standard input code on line 4

@@ -59,3 +59,5 @@ Cannot use increment/decrement as an assignment target.
     "end": 15
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "=" in Standard input code on line 1

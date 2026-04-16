@@ -91,3 +91,5 @@ expected '::' or 'as', found ';'
     "end": 73
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected identifier "invalid", expecting "::" in Standard input code on line 1

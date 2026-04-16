@@ -1,0 +1,56 @@
+===config===
+max_php=8.2
+===source===
+<?php class A { readonly function foo() {} }
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": "A",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Method": {
+                  "name": "foo",
+                  "visibility": null,
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": null,
+                  "body": [],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 16,
+                "end": 42
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 44
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 44
+  }
+}
+===php_error===
+PHP Fatal error:  Cannot use 'readonly' as method modifier in Standard input code on line 1

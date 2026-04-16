@@ -63,5 +63,3 @@ namespace A {
 }
 ===php_error===
 PHP Fatal error:  Namespace declarations cannot be nested in Standard input code on line 3
-Stack trace:
-#0 {main}

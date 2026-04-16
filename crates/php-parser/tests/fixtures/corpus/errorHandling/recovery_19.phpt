@@ -71,3 +71,5 @@ expected identifier, found ')'
     "end": 18
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 3

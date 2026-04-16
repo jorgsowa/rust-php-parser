@@ -40,3 +40,5 @@ expected ';' after expression
     "end": 11
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected end of file in Standard input code on line 2

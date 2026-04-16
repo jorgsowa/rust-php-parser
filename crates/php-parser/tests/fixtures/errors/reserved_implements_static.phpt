@@ -42,3 +42,5 @@ cannot use 'static' as class name
     "end": 34
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use "static" as interface name, as it is reserved in Standard input code on line 1

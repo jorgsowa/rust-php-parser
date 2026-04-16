@@ -67,3 +67,5 @@ expected class name, found '{'
     "end": 37
   }
 }
+===php_error===
+PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input code on line 1

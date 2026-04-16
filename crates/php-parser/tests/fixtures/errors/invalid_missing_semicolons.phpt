@@ -110,3 +110,5 @@ expected ';' after expression
     "end": 43
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "echo", expecting "," or ";" in Standard input code on line 3

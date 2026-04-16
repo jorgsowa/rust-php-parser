@@ -118,3 +118,5 @@ match expression may only contain one default arm
     "end": 78
   }
 }
+===php_error===
+PHP Fatal error:  Match expressions may only contain one default arm in Standard input code on line 1

@@ -40,3 +40,5 @@ cannot use 'PARENT' as class name
     "end": 31
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use "PARENT" as class name, as it is reserved in Standard input code on line 1

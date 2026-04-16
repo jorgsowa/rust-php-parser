@@ -1,7 +1,5 @@
 ===source===
 <?php func(a: 1, a: 2);
-===errors===
-named argument 'a' overwrites previous argument
 ===ast===
 {
   "stmts": [

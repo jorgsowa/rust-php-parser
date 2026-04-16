@@ -57,3 +57,5 @@ cannot use 'abstract' as constant modifier
     "end": 43
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use the abstract modifier on a class constant in Standard input code on line 3

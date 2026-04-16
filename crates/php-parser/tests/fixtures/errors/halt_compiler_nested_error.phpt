@@ -52,3 +52,5 @@ unclosed ''}'' opened at Span { start: 16, end: 17 }
     "end": 38
   }
 }
+===php_error===
+PHP Fatal error:  __HALT_COMPILER() can only be used from the outermost scope in Standard input code on line 1

@@ -104,5 +104,3 @@ cannot use positional argument after named argument
 }
 ===php_error===
 PHP Fatal error:  Cannot use argument unpacking after named arguments in Standard input code on line 1
-Stack trace:
-#0 {main}

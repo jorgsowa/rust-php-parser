@@ -52,3 +52,5 @@ duplicate modifier 'final'
     "end": 45
   }
 }
+===php_error===
+PHP Fatal error:  Multiple final modifiers are not allowed in Standard input code on line 1

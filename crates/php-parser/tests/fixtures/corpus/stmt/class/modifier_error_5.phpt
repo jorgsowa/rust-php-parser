@@ -50,3 +50,5 @@ duplicate modifier 'static'
     "end": 35
   }
 }
+===php_error===
+PHP Fatal error:  Multiple static modifiers are not allowed in Standard input code on line 1

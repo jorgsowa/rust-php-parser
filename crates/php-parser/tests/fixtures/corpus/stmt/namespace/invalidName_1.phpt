@@ -59,3 +59,5 @@ expected ';', found 'self'
     "end": 20
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use A as self because 'self' is a special class name in Standard input code on line 1

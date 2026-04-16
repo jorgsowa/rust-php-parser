@@ -197,5 +197,3 @@ static properties cannot be readonly
 }
 ===php_error===
 PHP Fatal error:  Static property A::$d cannot be readonly in Standard input code on line 7
-Stack trace:
-#0 {main}
