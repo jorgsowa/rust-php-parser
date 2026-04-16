@@ -124,7 +124,16 @@ $b = #[A13] static fn() => 0;
               },
               "args": [
                 {
-                  "name": "x",
+                  "name": {
+                    "parts": [
+                      "x"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 46,
+                      "end": 47
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 1

@@ -25,7 +25,16 @@
               },
               "args": [
                 {
-                  "name": "path",
+                  "name": {
+                    "parts": [
+                      "path"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 14,
+                      "end": 18
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "/api"
@@ -43,7 +52,16 @@
                   }
                 },
                 {
-                  "name": "methods",
+                  "name": {
+                    "parts": [
+                      "methods"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 28,
+                      "end": 35
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Array": [

@@ -19,7 +19,16 @@
               },
               "args": [
                 {
-                  "name": "string",
+                  "name": {
+                    "parts": [
+                      "string"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 23,
+                      "end": 29
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "str"
@@ -37,7 +46,16 @@
                   }
                 },
                 {
-                  "name": "flags",
+                  "name": {
+                    "parts": [
+                      "flags"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 37,
+                      "end": 42
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Identifier": "ENT_QUOTES"
@@ -55,7 +73,16 @@
                   }
                 },
                 {
-                  "name": "encoding",
+                  "name": {
+                    "parts": [
+                      "encoding"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 56,
+                      "end": 64
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "UTF-8"

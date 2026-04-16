@@ -114,7 +114,15 @@ min_php=8.1
                                     "end": 89
                                   }
                                 },
-                                "member": "Red"
+                                "member": {
+                                  "kind": {
+                                    "Identifier": "Red"
+                                  },
+                                  "span": {
+                                    "start": 91,
+                                    "end": 94
+                                  }
+                                }
                               }
                             },
                             "span": {
@@ -151,7 +159,15 @@ min_php=8.1
                                     "end": 106
                                   }
                                 },
-                                "member": "Blue"
+                                "member": {
+                                  "kind": {
+                                    "Identifier": "Blue"
+                                  },
+                                  "span": {
+                                    "start": 108,
+                                    "end": 112
+                                  }
+                                }
                               }
                             },
                             "span": {

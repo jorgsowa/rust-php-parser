@@ -50,7 +50,15 @@
                                   "end": 58
                                 }
                               },
-                              "method": "f",
+                              "method": {
+                                "kind": {
+                                  "Identifier": "f"
+                                },
+                                "span": {
+                                  "start": 60,
+                                  "end": 61
+                                }
+                              },
                               "args": []
                             }
                           },

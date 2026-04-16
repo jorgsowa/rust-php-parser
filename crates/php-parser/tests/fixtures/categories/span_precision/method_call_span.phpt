@@ -132,7 +132,15 @@ Foo::bar(1);
                   "end": 44
                 }
               },
-              "method": "bar",
+              "method": {
+                "kind": {
+                  "Identifier": "bar"
+                },
+                "span": {
+                  "start": 46,
+                  "end": 49
+                }
+              },
               "args": [
                 {
                   "name": null,

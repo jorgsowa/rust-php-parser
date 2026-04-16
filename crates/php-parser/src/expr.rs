@@ -405,7 +405,10 @@ pub fn parse_expr_bp<'arena, 'src>(
             if parser.check(TokenKind::Variable) {
                 // Static property: Class::$prop
                 let token = parser.advance();
-                let member = Cow::Borrowed(parser.variable_name(token));
+                let member = parser.alloc(Expr {
+                    kind: ExprKind::Identifier(NameStr::Src(parser.variable_name(token))),
+                    span: token.span,
+                });
                 let span = Span::new(lhs.span.start, token.span.end);
                 lhs = Expr {
                     kind: ExprKind::StaticPropertyAccess(StaticAccessExpr {
@@ -445,7 +448,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                                 kind: ExprKind::CallableCreate(CallableCreateExpr {
                                     kind: CallableCreateKind::StaticMethod {
                                         class: parser.alloc(lhs),
-                                        method: Cow::Borrowed("{dynamic}"),
+                                        method: parser.alloc(member),
                                     },
                                 }),
                                 span,
@@ -488,13 +491,16 @@ pub fn parse_expr_bp<'arena, 'src>(
                 lhs = Expr {
                     kind: ExprKind::ClassConstAccess(StaticAccessExpr {
                         class: parser.alloc(lhs),
-                        member: Cow::Borrowed("class"),
+                        member: parser.alloc(Expr {
+                            kind: ExprKind::Identifier(NameStr::Src("class")),
+                            span: token.span,
+                        }),
                     }),
                     span,
                 };
             } else {
                 // Static method call or class constant
-                let (member_name, _member_span) =
+                let (member_name, member_span) =
                     if let Some(result) = parser.eat_identifier_or_keyword() {
                         result
                     } else {
@@ -506,6 +512,10 @@ pub fn parse_expr_bp<'arena, 'src>(
                         });
                         ("<error>", span)
                     };
+                let member = parser.alloc(Expr {
+                    kind: ExprKind::Identifier(NameStr::Src(member_name)),
+                    span: member_span,
+                });
 
                 if parser.check(TokenKind::LeftParen) {
                     match parse_arg_list_or_callable(parser) {
@@ -515,7 +525,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                                 kind: ExprKind::CallableCreate(CallableCreateExpr {
                                     kind: CallableCreateKind::StaticMethod {
                                         class: parser.alloc(lhs),
-                                        method: Cow::Borrowed(member_name),
+                                        method: member,
                                     },
                                 }),
                                 span,
@@ -527,7 +537,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                                 kind: ExprKind::StaticMethodCall(parser.alloc(
                                     StaticMethodCallExpr {
                                         class: parser.alloc(lhs),
-                                        method: Cow::Borrowed(member_name),
+                                        method: member,
                                         args,
                                     },
                                 )),
@@ -541,7 +551,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                     lhs = Expr {
                         kind: ExprKind::ClassConstAccess(StaticAccessExpr {
                             class: parser.alloc(lhs),
-                            member: Cow::Borrowed(member_name),
+                            member,
                         }),
                         span,
                     };
@@ -2399,9 +2409,10 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
             parser.require_version(PhpVersion::Php80, "named arguments", span);
             parser.advance(); // consume :
             let src = parser.source;
-            Some(Cow::Borrowed(
-                &src[name_token.span.start as usize..name_token.span.end as usize],
-            ))
+            Some(Name::Simple {
+                value: &src[name_token.span.start as usize..name_token.span.end as usize],
+                span: name_token.span,
+            })
         } else {
             None
         }

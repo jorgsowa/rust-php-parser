@@ -50,9 +50,27 @@ expected '}', found end of file
                       "kind": {
                         "Alias": {
                           "trait_name": null,
-                          "method": "m",
+                          "method": {
+                            "parts": [
+                              "m"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 35,
+                              "end": 36
+                            }
+                          },
                           "new_modifier": null,
-                          "new_name": "x"
+                          "new_name": {
+                            "parts": [
+                              "x"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 40,
+                              "end": 41
+                            }
+                          }
                         }
                       },
                       "span": {

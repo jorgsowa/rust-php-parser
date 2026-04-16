@@ -54,7 +54,16 @@
                               "end": 28
                             }
                           },
-                          "method": "m",
+                          "method": {
+                            "parts": [
+                              "m"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 30,
+                              "end": 31
+                            }
+                          },
                           "insteadof": [
                             {
                               "parts": [
@@ -87,9 +96,27 @@
                               "end": 46
                             }
                           },
-                          "method": "n",
+                          "method": {
+                            "parts": [
+                              "n"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 48,
+                              "end": 49
+                            }
+                          },
                           "new_modifier": "Public",
-                          "new_name": "nAlias"
+                          "new_name": {
+                            "parts": [
+                              "nAlias"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 60,
+                              "end": 66
+                            }
+                          }
                         }
                       },
                       "span": {

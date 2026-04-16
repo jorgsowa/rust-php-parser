@@ -250,7 +250,16 @@ enum Color {
                   }
                 },
                 {
-                  "name": "methods",
+                  "name": {
+                    "parts": [
+                      "methods"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 156,
+                      "end": 163
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Array": [

@@ -40,7 +40,16 @@
                         },
                         "args": [
                           {
-                            "name": "debug",
+                            "name": {
+                              "parts": [
+                                "debug"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 24,
+                                "end": 29
+                              }
+                            },
                             "value": {
                               "kind": {
                                 "Bool": false

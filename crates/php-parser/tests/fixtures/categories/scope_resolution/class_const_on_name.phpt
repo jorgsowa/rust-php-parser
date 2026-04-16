@@ -18,7 +18,15 @@
                     "end": 14
                   }
                 },
-                "member": "class"
+                "member": {
+                  "kind": {
+                    "Identifier": "class"
+                  },
+                  "span": {
+                    "start": 16,
+                    "end": 21
+                  }
+                }
               }
             },
             "span": {

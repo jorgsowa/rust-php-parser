@@ -19,7 +19,16 @@
               },
               "args": [
                 {
-                  "name": "for",
+                  "name": {
+                    "parts": [
+                      "for"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 10,
+                      "end": 13
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "x"

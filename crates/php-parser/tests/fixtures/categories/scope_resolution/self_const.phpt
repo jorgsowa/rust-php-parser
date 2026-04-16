@@ -63,7 +63,15 @@
                                   "end": 64
                                 }
                               },
-                              "member": "X"
+                              "member": {
+                                "kind": {
+                                  "Identifier": "X"
+                                },
+                                "span": {
+                                  "start": 66,
+                                  "end": 67
+                                }
+                              }
                             }
                           },
                           "span": {

@@ -81,7 +81,15 @@ function a(
                         "end": 60
                       }
                     },
-                    "member": "B"
+                    "member": {
+                      "kind": {
+                        "Identifier": "B"
+                      },
+                      "span": {
+                        "start": 62,
+                        "end": 63
+                      }
+                    }
                   }
                 },
                 "span": {

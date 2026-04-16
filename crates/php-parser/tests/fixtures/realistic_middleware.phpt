@@ -733,7 +733,15 @@ class RateLimitMiddleware implements MiddlewareInterface
                                     "end": 642
                                   }
                                 },
-                                "member": "excludedPaths"
+                                "member": {
+                                  "kind": {
+                                    "Identifier": "excludedPaths"
+                                  },
+                                  "span": {
+                                    "start": 644,
+                                    "end": 658
+                                  }
+                                }
                               }
                             },
                             "span": {
@@ -2005,7 +2013,15 @@ class RateLimitMiddleware implements MiddlewareInterface
                                         "end": 1643
                                       }
                                     },
-                                    "member": "excludedPaths"
+                                    "member": {
+                                      "kind": {
+                                        "Identifier": "excludedPaths"
+                                      },
+                                      "span": {
+                                        "start": 1645,
+                                        "end": 1659
+                                      }
+                                    }
                                   }
                                 },
                                 "span": {
@@ -2031,7 +2047,15 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                 "end": 1670
                                               }
                                             },
-                                            "member": "excludedPaths"
+                                            "member": {
+                                              "kind": {
+                                                "Identifier": "excludedPaths"
+                                              },
+                                              "span": {
+                                                "start": 1672,
+                                                "end": 1686
+                                              }
+                                            }
                                           }
                                         },
                                         "span": {
@@ -2483,7 +2507,15 @@ class RateLimitMiddleware implements MiddlewareInterface
                                               "end": 2052
                                             }
                                           },
-                                          "member": "MAX_REQUESTS"
+                                          "member": {
+                                            "kind": {
+                                              "Identifier": "MAX_REQUESTS"
+                                            },
+                                            "span": {
+                                              "start": 2054,
+                                              "end": 2066
+                                            }
+                                          }
                                         }
                                       },
                                       "span": {

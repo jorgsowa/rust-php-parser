@@ -55,7 +55,16 @@
                   }
                 },
                 {
-                  "name": "name",
+                  "name": {
+                    "parts": [
+                      "name"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 20,
+                      "end": 24
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "val"
@@ -73,7 +82,16 @@
                   }
                 },
                 {
-                  "name": "count",
+                  "name": {
+                    "parts": [
+                      "count"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 32,
+                      "end": 37
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 5

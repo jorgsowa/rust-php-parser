@@ -207,7 +207,15 @@ new $a->b['c']();
                         "end": 81
                       }
                     },
-                    "member": "b"
+                    "member": {
+                      "kind": {
+                        "Identifier": "b"
+                      },
+                      "span": {
+                        "start": 83,
+                        "end": 85
+                      }
+                    }
                   }
                 },
                 "span": {

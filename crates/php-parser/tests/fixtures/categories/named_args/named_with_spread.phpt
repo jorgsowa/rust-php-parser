@@ -37,7 +37,16 @@
                   }
                 },
                 {
-                  "name": "name",
+                  "name": {
+                    "parts": [
+                      "name"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 21,
+                      "end": 25
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "test"

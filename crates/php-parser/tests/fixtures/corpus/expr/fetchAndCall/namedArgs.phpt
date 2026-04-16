@@ -21,7 +21,16 @@ bar(class: 0);
               },
               "args": [
                 {
-                  "name": "a",
+                  "name": {
+                    "parts": [
+                      "a"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 10,
+                      "end": 11
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "b"
@@ -39,7 +48,16 @@ bar(class: 0);
                   }
                 },
                 {
-                  "name": "c",
+                  "name": {
+                    "parts": [
+                      "c"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 17,
+                      "end": 18
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "d"
@@ -86,7 +104,16 @@ bar(class: 0);
               },
               "args": [
                 {
-                  "name": "class",
+                  "name": {
+                    "parts": [
+                      "class"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 29,
+                      "end": 34
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 0

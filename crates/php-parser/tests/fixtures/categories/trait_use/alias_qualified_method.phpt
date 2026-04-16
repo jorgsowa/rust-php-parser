@@ -44,9 +44,27 @@
                               "end": 25
                             }
                           },
-                          "method": "foo",
+                          "method": {
+                            "parts": [
+                              "foo"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 27,
+                              "end": 30
+                            }
+                          },
                           "new_modifier": null,
-                          "new_name": "bar"
+                          "new_name": {
+                            "parts": [
+                              "bar"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 34,
+                              "end": 37
+                            }
+                          }
                         }
                       },
                       "span": {

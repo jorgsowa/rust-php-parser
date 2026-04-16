@@ -49,9 +49,27 @@ expected '::' or 'as', found ';'
                       "kind": {
                         "Alias": {
                           "trait_name": null,
-                          "method": "x",
+                          "method": {
+                            "parts": [
+                              "x"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 36,
+                              "end": 37
+                            }
+                          },
                           "new_modifier": null,
-                          "new_name": "y"
+                          "new_name": {
+                            "parts": [
+                              "y"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 41,
+                              "end": 42
+                            }
+                          }
                         }
                       },
                       "span": {

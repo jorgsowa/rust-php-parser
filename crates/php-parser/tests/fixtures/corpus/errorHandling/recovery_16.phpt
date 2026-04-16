@@ -21,7 +21,15 @@ expected ';' after expression
                   "end": 9
                 }
               },
-              "member": "<error>"
+              "member": {
+                "kind": {
+                  "Identifier": "<error>"
+                },
+                "span": {
+                  "start": 11,
+                  "end": 11
+                }
+              }
             }
           },
           "span": {

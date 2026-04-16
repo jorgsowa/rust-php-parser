@@ -35,7 +35,16 @@
                       "kind": {
                         "Alias": {
                           "trait_name": null,
-                          "method": "foo",
+                          "method": {
+                            "parts": [
+                              "foo"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 24,
+                              "end": 27
+                            }
+                          },
                           "new_modifier": "Protected",
                           "new_name": null
                         }

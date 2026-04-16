@@ -111,9 +111,27 @@ class B {
                       "kind": {
                         "Alias": {
                           "trait_name": null,
-                          "method": "a",
+                          "method": {
+                            "parts": [
+                              "a"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 88,
+                              "end": 89
+                            }
+                          },
                           "new_modifier": "Protected",
-                          "new_name": "b"
+                          "new_name": {
+                            "parts": [
+                              "b"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 103,
+                              "end": 104
+                            }
+                          }
                         }
                       },
                       "span": {
@@ -125,9 +143,27 @@ class B {
                       "kind": {
                         "Alias": {
                           "trait_name": null,
-                          "method": "c",
+                          "method": {
+                            "parts": [
+                              "c"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 114,
+                              "end": 115
+                            }
+                          },
                           "new_modifier": null,
-                          "new_name": "d"
+                          "new_name": {
+                            "parts": [
+                              "d"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 119,
+                              "end": 120
+                            }
+                          }
                         }
                       },
                       "span": {
@@ -139,7 +175,16 @@ class B {
                       "kind": {
                         "Alias": {
                           "trait_name": null,
-                          "method": "e",
+                          "method": {
+                            "parts": [
+                              "e"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 130,
+                              "end": 131
+                            }
+                          },
                           "new_modifier": "Private",
                           "new_name": null
                         }
@@ -206,7 +251,16 @@ class B {
                               "end": 177
                             }
                           },
-                          "method": "a",
+                          "method": {
+                            "parts": [
+                              "a"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 179,
+                              "end": 180
+                            }
+                          },
                           "insteadof": [
                             {
                               "parts": [
@@ -249,9 +303,27 @@ class B {
                               "end": 206
                             }
                           },
-                          "method": "b",
+                          "method": {
+                            "parts": [
+                              "b"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 208,
+                              "end": 209
+                            }
+                          },
                           "new_modifier": "Protected",
-                          "new_name": "c"
+                          "new_name": {
+                            "parts": [
+                              "c"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 223,
+                              "end": 224
+                            }
+                          }
                         }
                       },
                       "span": {
@@ -272,9 +344,27 @@ class B {
                               "end": 235
                             }
                           },
-                          "method": "d",
+                          "method": {
+                            "parts": [
+                              "d"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 237,
+                              "end": 238
+                            }
+                          },
                           "new_modifier": null,
-                          "new_name": "e"
+                          "new_name": {
+                            "parts": [
+                              "e"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 242,
+                              "end": 243
+                            }
+                          }
                         }
                       },
                       "span": {
@@ -295,7 +385,16 @@ class B {
                               "end": 254
                             }
                           },
-                          "method": "f",
+                          "method": {
+                            "parts": [
+                              "f"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 256,
+                              "end": 257
+                            }
+                          },
                           "new_modifier": "Private",
                           "new_name": null
                         }

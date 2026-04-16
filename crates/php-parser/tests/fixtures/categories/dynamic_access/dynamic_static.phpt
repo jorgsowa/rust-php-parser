@@ -17,7 +17,15 @@
                   "end": 12
                 }
               },
-              "member": "prop"
+              "member": {
+                "kind": {
+                  "Identifier": "prop"
+                },
+                "span": {
+                  "start": 14,
+                  "end": 19
+                }
+              }
             }
           },
           "span": {

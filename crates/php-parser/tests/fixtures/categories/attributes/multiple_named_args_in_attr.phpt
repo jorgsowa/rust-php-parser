@@ -30,7 +30,16 @@
               },
               "args": [
                 {
-                  "name": "min",
+                  "name": {
+                    "parts": [
+                      "min"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 21,
+                      "end": 24
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 1
@@ -48,7 +57,16 @@
                   }
                 },
                 {
-                  "name": "max",
+                  "name": {
+                    "parts": [
+                      "max"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 29,
+                      "end": 32
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 100

@@ -44,9 +44,27 @@
                               "end": 25
                             }
                           },
-                          "method": "foo",
+                          "method": {
+                            "parts": [
+                              "foo"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 27,
+                              "end": 30
+                            }
+                          },
                           "new_modifier": "Protected",
-                          "new_name": "baz"
+                          "new_name": {
+                            "parts": [
+                              "baz"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 44,
+                              "end": 47
+                            }
+                          }
                         }
                       },
                       "span": {
