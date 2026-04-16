@@ -47,3 +47,5 @@ expected member name, found ';'
     "end": 14
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token ";", expecting identifier or variable or "{" or "$" in Standard input code on line 3

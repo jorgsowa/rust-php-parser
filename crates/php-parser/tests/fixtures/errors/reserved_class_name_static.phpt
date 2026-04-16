@@ -31,3 +31,5 @@ cannot use 'static' as class name
     "end": 21
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "static", expecting identifier in Standard input code on line 1

@@ -67,3 +67,5 @@ expected catch or finally clause, found end of file
     "end": 59
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "catch" in Standard input code on line 5

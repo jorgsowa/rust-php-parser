@@ -52,3 +52,5 @@ duplicate modifier 'abstract'
     "end": 49
   }
 }
+===php_error===
+PHP Fatal error:  Multiple abstract modifiers are not allowed in Standard input code on line 1

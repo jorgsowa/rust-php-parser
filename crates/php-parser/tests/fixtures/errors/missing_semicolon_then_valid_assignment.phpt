@@ -85,3 +85,5 @@ expected ';' after expression
     "end": 20
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected variable "$y" in Standard input code on line 1

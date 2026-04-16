@@ -25,3 +25,5 @@ cannot use 'static' as interface name
     "end": 25
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "static", expecting identifier in Standard input code on line 1

@@ -1005,3 +1005,5 @@ cannot use positional argument after named argument
     "end": 524
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Standard input code on line 3

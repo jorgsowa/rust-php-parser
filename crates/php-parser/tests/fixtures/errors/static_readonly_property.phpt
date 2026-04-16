@@ -78,3 +78,5 @@ static properties cannot be readonly
     "end": 58
   }
 }
+===php_error===
+PHP Fatal error:  Readonly property Foo::$x cannot have default value in Standard input code on line 3

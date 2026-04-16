@@ -68,3 +68,5 @@ expected '::' or 'as', found ';'
     "end": 49
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token ";", expecting "as" in Standard input code on line 1

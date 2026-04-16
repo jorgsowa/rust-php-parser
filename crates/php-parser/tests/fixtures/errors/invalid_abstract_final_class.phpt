@@ -31,3 +31,5 @@ cannot use 'abstract' and 'final' together on a class
     "end": 33
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use the final modifier on an abstract class in Standard input code on line 1

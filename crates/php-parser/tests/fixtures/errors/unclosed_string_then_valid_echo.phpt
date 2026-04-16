@@ -86,3 +86,5 @@ expected ';' after expression
     "end": 39
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected identifier "hello" in Standard input code on line 2

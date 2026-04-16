@@ -331,3 +331,6 @@ the (unset) cast is no longer supported
     "end": 159
   }
 }
+===php_error===
+PHP Deprecated:  Non-canonical cast (boolean) is deprecated, use the (bool) cast instead in Standard input code on line 4
+PHP Parse error:  The (real) cast has been removed, use (float) instead in Standard input code on line 5

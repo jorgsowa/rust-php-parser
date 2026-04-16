@@ -120,3 +120,5 @@ expected ';', found 'echo'
     "end": 99
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "echo" in Standard input code on line 4

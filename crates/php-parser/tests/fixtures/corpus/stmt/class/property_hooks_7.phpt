@@ -74,3 +74,5 @@ cannot have hooks on comma-separated property
     "end": 48
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 5

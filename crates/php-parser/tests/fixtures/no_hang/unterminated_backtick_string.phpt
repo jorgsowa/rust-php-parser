@@ -91,3 +91,5 @@ expected ';' after expression
     "end": 15
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected variable "$x", expecting "]" in Standard input code on line 1

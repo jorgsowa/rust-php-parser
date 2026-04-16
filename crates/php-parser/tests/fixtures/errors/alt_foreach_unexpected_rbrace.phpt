@@ -78,3 +78,5 @@ expected expression
     "end": 52
   }
 }
+===php_error===
+PHP Parse error:  Unmatched '}' in Standard input code on line 3

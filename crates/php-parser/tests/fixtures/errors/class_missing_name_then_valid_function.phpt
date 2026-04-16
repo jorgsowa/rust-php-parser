@@ -82,3 +82,5 @@ expected class name, found '{'
     "end": 48
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "{", expecting identifier in Standard input code on line 1

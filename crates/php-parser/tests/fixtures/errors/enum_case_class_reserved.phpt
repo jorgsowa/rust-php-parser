@@ -40,3 +40,5 @@
     "end": 31
   }
 }
+===php_error===
+PHP Fatal error:  A class constant must not be called 'class'; it is reserved for class name fetching in Standard input code on line 1

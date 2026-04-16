@@ -36,3 +36,5 @@ expected '=', found integer
     "end": 30
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected integer "1", expecting "=" in Standard input code on line 1

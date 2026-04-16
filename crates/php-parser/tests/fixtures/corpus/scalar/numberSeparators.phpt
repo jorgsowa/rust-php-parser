@@ -275,3 +275,5 @@ Invalid numeric literal
     "end": 180
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected identifier "_" in Standard input code on line 13

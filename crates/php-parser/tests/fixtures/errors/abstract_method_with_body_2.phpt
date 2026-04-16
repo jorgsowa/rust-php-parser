@@ -87,3 +87,5 @@ abstract method cannot contain a body
     "end": 82
   }
 }
+===php_error===
+PHP Fatal error:  Abstract function Foo::bar() cannot contain body in Standard input code on line 1

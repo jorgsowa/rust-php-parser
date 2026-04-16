@@ -59,3 +59,5 @@ expected ';', found 'parent'
     "end": 22
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use B as PARENT because 'PARENT' is a special class name in Standard input code on line 1

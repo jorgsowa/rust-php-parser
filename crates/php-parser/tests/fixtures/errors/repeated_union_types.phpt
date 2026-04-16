@@ -124,3 +124,5 @@ expected variable, found ')'
     "end": 40
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token ")", expecting variable in Standard input code on line 1

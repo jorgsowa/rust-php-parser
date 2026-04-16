@@ -67,3 +67,5 @@ properties cannot be abstract
     "end": 41
   }
 }
+===php_error===
+PHP Fatal error:  Only hooked properties may be declared abstract in Standard input code on line 1

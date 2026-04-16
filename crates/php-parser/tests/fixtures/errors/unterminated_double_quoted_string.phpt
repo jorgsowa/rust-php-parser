@@ -49,3 +49,5 @@ expected ';' after expression
     "end": 21
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected end of file, expecting variable or "${" or "{$" in Standard input code on line 1

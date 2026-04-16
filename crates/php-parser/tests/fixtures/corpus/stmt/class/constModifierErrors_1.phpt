@@ -57,3 +57,5 @@ cannot use 'static' as constant modifier
     "end": 41
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use the static modifier on a class constant in Standard input code on line 3

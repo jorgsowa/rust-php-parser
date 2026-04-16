@@ -336,3 +336,5 @@ cannot use attributes on multi-constant declaration
     "end": 263
   }
 }
+===php_error===
+PHP Fatal error:  Cannot apply attributes to multiple constants at once in Standard input code on line 16

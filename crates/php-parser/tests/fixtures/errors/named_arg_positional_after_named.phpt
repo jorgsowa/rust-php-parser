@@ -76,3 +76,5 @@ cannot use positional argument after named argument
     "end": 20
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use positional argument after named argument in Standard input code on line 1

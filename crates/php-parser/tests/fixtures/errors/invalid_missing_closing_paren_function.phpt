@@ -118,3 +118,5 @@ unclosed '')'' opened at Span { start: 18, end: 19 }
     "end": 53
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "return", expecting identifier in Standard input code on line 3

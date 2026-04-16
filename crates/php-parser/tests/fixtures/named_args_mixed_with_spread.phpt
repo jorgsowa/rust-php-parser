@@ -102,3 +102,5 @@ cannot use positional argument after named argument
     "end": 32
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use argument unpacking after named arguments in Standard input code on line 1

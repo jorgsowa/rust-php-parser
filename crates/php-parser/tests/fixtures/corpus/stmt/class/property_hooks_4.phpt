@@ -53,3 +53,5 @@ expected 'get' or 'set', found identifier
     "end": 53
   }
 }
+===php_error===
+PHP Fatal error:  Unknown hook "FOO" for property Test::$prop, expected "get" or "set" in Standard input code on line 3

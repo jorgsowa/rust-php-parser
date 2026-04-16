@@ -101,3 +101,5 @@ expected ';' after expression
     "end": 24
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected identifier "bar" in Standard input code on line 4

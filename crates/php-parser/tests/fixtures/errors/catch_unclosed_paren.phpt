@@ -45,3 +45,5 @@ expected ')', found '{'
     "end": 34
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard input code on line 1

@@ -199,3 +199,5 @@ mixed cannot be used as part of a union type
     "end": 85
   }
 }
+===php_error===
+PHP Fatal error:  Void can only be used as a standalone type in Standard input code on line 2

@@ -57,3 +57,5 @@ cannot use 'readonly' as constant modifier
     "end": 43
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use the readonly modifier on a class constant in Standard input code on line 3
