@@ -76,8 +76,9 @@ fn collect_phpt_files(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
 /// - Fixtures with `===php_error===`: asserts `php -l` rejects them and that the stderr
 ///   matches the stored expected error. Run `UPDATE_FIXTURES=1 cargo test` to populate or
 ///   refresh `===php_error===` sections.
-/// - All other fixtures (except those skipped by `min_php`, `parse_version`, or
-///   `===errors===`): asserts `php -l` accepts them.
+/// - All other fixtures: asserts `php -l` accepts them.
+///
+/// `===errors===` is about the Rust parser only and does not affect this test.
 #[cfg_attr(not(php_available), ignore)]
 #[test]
 fn fixture_files_are_valid_php() {
@@ -130,18 +131,8 @@ fn fixture_files_are_valid_php() {
                     "{label}:\n  expected: {expected}\n  actual:   {actual}"
                 ));
             }
-        } else if config.expect_errors {
-            // Our parser rejects this. PHP must also reject it — unless the fixture
-            // declares `php_accepts=true`, meaning our parser is intentionally stricter.
-            if !config.php_accepts && out.status.success() {
-                failures.push(format!(
-                    "{label}: our parser rejected this but php -l accepted it (add php_accepts=true to ===config=== if intentional)"
-                ));
-            } else if config.php_accepts && !out.status.success() {
-                failures.push(format!("{label}: php_accepts=true but php -l rejected it"));
-            }
         } else {
-            // No parser errors and no php_error — PHP must accept.
+            // No ===php_error=== — PHP must accept.
             if !out.status.success() {
                 failures.push(format!(
                     "{label}:\n  {}",

@@ -22,9 +22,6 @@ pub struct FixtureConfig {
     /// Expected `php -l` stderr from the `===php_error===` section.
     /// When `Some`, the fixture represents code that PHP intentionally rejects.
     pub php_error: Option<String>,
-    /// When `true`, our parser rejects this code but PHP accepts it.
-    /// Set via `php_accepts=true` in the `===config===` section.
-    pub php_accepts: bool,
 }
 
 /// Parse a fixture file with optional `===config===` and mandatory `===source===` sections.
@@ -50,7 +47,6 @@ pub fn parse_fixture(content: &str) -> (FixtureConfig, &str) {
     let mut min_php = None;
     let mut parse_version = None;
     let mut max_php = None;
-    let mut php_accepts = false;
 
     let rest = if let Some(rest) = content.strip_prefix("===config===\n") {
         let source_marker = rest.find("===source===\n").unwrap_or(rest.len());
@@ -65,8 +61,6 @@ pub fn parse_fixture(content: &str) -> (FixtureConfig, &str) {
                 max_php = parse_ver(val);
             } else if let Some(val) = line.strip_prefix("parse_version=") {
                 parse_version = parse_ver(val);
-            } else if line == "php_accepts=true" {
-                php_accepts = true;
             }
         }
         &rest[source_marker..]
@@ -139,7 +133,6 @@ pub fn parse_fixture(content: &str) -> (FixtureConfig, &str) {
             expected_errors,
             expected_ast,
             php_error,
-            php_accepts,
         },
         source,
     )
