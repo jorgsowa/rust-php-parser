@@ -52,6 +52,14 @@ fn strip_stack_trace(s: &str) -> String {
     lines.join("\n")
 }
 
+/// Normalize identifier quote style in PHP error messages.
+/// PHP versions differ in whether they use single or double quotes around
+/// identifiers (e.g. `"static"` vs `'static'`). Normalizing to double quotes
+/// before comparing keeps the check version-agnostic.
+fn normalize_quotes(s: &str) -> String {
+    s.replace('\'', "\"")
+}
+
 fn php_lint(code: &str) -> std::process::Output {
     let mut child = std::process::Command::new("php")
         .arg("-l")
@@ -194,7 +202,7 @@ fn fixture_files_are_valid_php() {
             let actual = strip_stack_trace(String::from_utf8_lossy(&out.stderr).trim());
             if update {
                 update_fixture_php_error(path.to_str().unwrap(), &actual);
-            } else if actual != strip_stack_trace(expected) {
+            } else if normalize_quotes(&actual) != normalize_quotes(&strip_stack_trace(expected)) {
                 failures.push(format!(
                     "{label}:\n  expected: {expected}\n  actual:   {actual}"
                 ));
