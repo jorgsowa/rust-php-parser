@@ -1825,24 +1825,23 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
         }
 
         // namespace\Foo\Bar — relative name in expression context
+        TokenKind::Namespace if parser.peek_kind() == Some(TokenKind::Backslash) => {
+            let start = parser.start_span();
+            let name = parser.parse_name();
+            let text = parser
+                .arena
+                .alloc_str(&format!("namespace\\{}", name.join_parts()));
+            Expr {
+                kind: ExprKind::Identifier(NameStr::Arena(text)),
+                span: Span::new(start, name.span().end),
+            }
+        }
         TokenKind::Namespace => {
-            if parser.peek_kind() == Some(TokenKind::Backslash) {
-                let start = parser.start_span();
-                let name = parser.parse_name();
-                let text = parser
-                    .arena
-                    .alloc_str(&format!("namespace\\{}", name.join_parts()));
-                Expr {
-                    kind: ExprKind::Identifier(NameStr::Arena(text)),
-                    span: Span::new(start, name.span().end),
-                }
-            } else {
-                let span = parser.current_span();
-                parser.error(ParseError::ExpectedExpression { span });
-                Expr {
-                    kind: ExprKind::Error,
-                    span,
-                }
+            let span = parser.current_span();
+            parser.error(ParseError::ExpectedExpression { span });
+            Expr {
+                kind: ExprKind::Error,
+                span,
             }
         }
 

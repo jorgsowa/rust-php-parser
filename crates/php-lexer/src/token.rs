@@ -525,15 +525,11 @@ pub fn resolve_keyword(text: &str) -> Option<TokenKind> {
                 return Some(TokenKind::MagicProperty);
             }
         }
-        13 => {
-            if t.eq_ignore_ascii_case("__namespace__") {
-                return Some(TokenKind::MagicNamespace);
-            }
+        13 if t.eq_ignore_ascii_case("__namespace__") => {
+            return Some(TokenKind::MagicNamespace);
         }
-        15 => {
-            if t.eq_ignore_ascii_case("__halt_compiler") {
-                return Some(TokenKind::HaltCompiler);
-            }
+        15 if t.eq_ignore_ascii_case("__halt_compiler") => {
+            return Some(TokenKind::HaltCompiler);
         }
         _ => {}
     }

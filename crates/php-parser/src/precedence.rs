@@ -191,10 +191,10 @@ mod tests {
         );
         // NULL_COALESCE_LEFT_BP must exceed the effective right_bp (TERNARY_BP + 1 = 11),
         // confirming right-associativity for chained `??`.
-        assert!(NULL_COALESCE_LEFT_BP > TERNARY_BP + 1);
+        const { assert!(NULL_COALESCE_LEFT_BP > TERNARY_BP + 1) }
         // NULL_COALESCE_LEFT_BP must also exceed TERNARY_BP so that `$a ?? $b ? $c : $d`
         // groups as `($a ?? $b) ? $c : $d` (ternary can consume the ?? result).
-        assert!(NULL_COALESCE_LEFT_BP > TERNARY_BP);
+        const { assert!(NULL_COALESCE_LEFT_BP > TERNARY_BP) }
     }
 
     #[test]

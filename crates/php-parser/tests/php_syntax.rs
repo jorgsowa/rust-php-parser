@@ -3,13 +3,36 @@ use std::io::Write;
 #[path = "common.rs"]
 mod common;
 
+/// Returns true if the installed PHP is >= min.
 fn php_version_met(min: (u32, u32)) -> bool {
+    // Named constants prevent Clippy from folding cfg!() values into bool literals.
+    const V81: bool = cfg!(php_min_81);
+    const V82: bool = cfg!(php_min_82);
+    const V83: bool = cfg!(php_min_83);
+    const V84: bool = cfg!(php_min_84);
+    const V85: bool = cfg!(php_min_85);
     match min {
-        (8, 1) => cfg!(php_min_81),
-        (8, 2) => cfg!(php_min_82),
-        (8, 3) => cfg!(php_min_83),
-        (8, 4) => cfg!(php_min_84),
-        (8, 5) => cfg!(php_min_85),
+        (8, 1) => V81,
+        (8, 2) => V82,
+        (8, 3) => V83,
+        (8, 4) => V84,
+        (8, 5) => V85,
+        _ => false,
+    }
+}
+
+/// Returns true if the installed PHP version is strictly greater than `max`.
+fn php_version_exceeded(max: (u32, u32)) -> bool {
+    // Named constants prevent Clippy from folding cfg!() values into bool literals.
+    const V82: bool = cfg!(php_min_82);
+    const V83: bool = cfg!(php_min_83);
+    const V84: bool = cfg!(php_min_84);
+    const V85: bool = cfg!(php_min_85);
+    match max {
+        (8, 1) => V82,
+        (8, 2) => V83,
+        (8, 3) => V84,
+        (8, 4) => V85,
         _ => false,
     }
 }
@@ -20,24 +43,13 @@ fn php_version_met(min: (u32, u32)) -> bool {
 fn strip_stack_trace(s: &str) -> String {
     let mut lines: Vec<&str> = s.lines().collect();
     while let Some(last) = lines.last() {
-        if last.starts_with("#") || *last == "Stack trace:" {
+        if last.starts_with('#') || *last == "Stack trace:" {
             lines.pop();
         } else {
             break;
         }
     }
     lines.join("\n")
-}
-
-/// Returns true if the installed PHP version is strictly greater than `max`.
-fn php_version_exceeded(max: (u32, u32)) -> bool {
-    match max {
-        (8, 1) => cfg!(php_min_82),
-        (8, 2) => cfg!(php_min_83),
-        (8, 3) => cfg!(php_min_84),
-        (8, 4) => cfg!(php_min_85),
-        _ => false,
-    }
 }
 
 fn php_lint(code: &str) -> std::process::Output {
@@ -64,11 +76,65 @@ fn collect_phpt_files(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
         let path = entry.path();
         if path.is_dir() {
             paths.extend(collect_phpt_files(&path));
-        } else if path.extension().map_or(false, |ext| ext == "phpt") {
+        } else if path.extension().is_some_and(|ext| ext == "phpt") {
             paths.push(path);
         }
     }
     paths
+}
+
+type VersionPair = (u32, u32);
+
+/// Parse the `===config===` section of a fixture, returning `(min_php, max_php)`.
+fn parse_config_versions(content: &str) -> (Option<VersionPair>, Option<VersionPair>) {
+    let parse_ver = |val: &str| -> Option<(u32, u32)> {
+        val.split_once('.')
+            .and_then(|(a, b)| Some((a.parse().ok()?, b.parse().ok()?)))
+    };
+
+    let mut min_php = None;
+    let mut max_php = None;
+
+    if let Some(rest) = content.strip_prefix("===config===\n") {
+        let source_marker = rest.find("===source===\n").unwrap_or(rest.len());
+        for line in rest[..source_marker].lines() {
+            if let Some(val) = line.strip_prefix("min_php=") {
+                min_php = parse_ver(val);
+            } else if let Some(val) = line.strip_prefix("max_php=") {
+                max_php = parse_ver(val);
+            }
+        }
+    }
+
+    (min_php, max_php)
+}
+
+/// Extract the `===php_error===` section from fixture content, if present.
+fn parse_php_error(content: &str) -> Option<String> {
+    content.find("===php_error===\n").map(|p| {
+        let after = &content[p + "===php_error===\n".len()..];
+        after.trim_end_matches('\n').to_string()
+    })
+}
+
+/// Rewrite (or add) the `===php_error===` section of a fixture file.
+fn update_fixture_php_error(path: &str, actual: &str) {
+    let content =
+        std::fs::read_to_string(path).unwrap_or_else(|e| panic!("failed to read {path}: {e}"));
+
+    let new_content = if let Some(p) = content.find("===php_error===\n") {
+        // Replace the existing section.
+        format!("{}===php_error===\n{}\n", &content[..p], actual)
+    } else {
+        // Append a new section.
+        format!(
+            "{}===php_error===\n{}\n",
+            content.trim_end_matches('\n'),
+            actual
+        )
+    };
+
+    std::fs::write(path, new_content).unwrap_or_else(|e| panic!("failed to write {path}: {e}"));
 }
 
 /// Validates every `.phpt` fixture file through `php -l`.
@@ -97,27 +163,29 @@ fn fixture_files_are_valid_php() {
             .to_string_lossy()
             .to_string();
         let src = std::fs::read_to_string(&path).unwrap();
-        let (config, source) = common::parse_fixture(&src);
+        let (parse_version, source) = common::parse_fixture(&src);
+        let (min_php, max_php) = parse_config_versions(&src);
+        let php_error = parse_php_error(&src);
 
-        if let Some(min_php) = config.min_php {
-            if !php_version_met(min_php) {
+        if let Some(min) = min_php {
+            if !php_version_met(min) {
                 continue;
             }
         }
-        if let Some(max_php) = config.max_php {
-            if php_version_exceeded(max_php) {
+        if let Some(max) = max_php {
+            if php_version_exceeded(max) {
                 continue;
             }
         }
         // Skip version-specific fixtures — they test parser behavior at a particular
         // PHP version and may contain syntax that PHP itself rejects semantically.
-        if config.parse_version.is_some() {
+        if parse_version.is_some() {
             continue;
         }
 
         let out = php_lint(source);
 
-        if let Some(expected) = &config.php_error {
+        if let Some(expected) = &php_error {
             // Fixture declares PHP must reject it — assert it fails and message matches.
             if out.status.success() {
                 failures.push(format!("{label}: expected php -l to fail but it passed"));
@@ -125,7 +193,7 @@ fn fixture_files_are_valid_php() {
             }
             let actual = strip_stack_trace(String::from_utf8_lossy(&out.stderr).trim());
             if update {
-                common::update_fixture_php_error(path.to_str().unwrap(), &actual);
+                update_fixture_php_error(path.to_str().unwrap(), &actual);
             } else if actual != strip_stack_trace(expected) {
                 failures.push(format!(
                     "{label}:\n  expected: {expected}\n  actual:   {actual}"

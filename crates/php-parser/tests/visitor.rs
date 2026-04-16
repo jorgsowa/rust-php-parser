@@ -433,8 +433,7 @@ fn scope_visitor_tracks_namespace() {
                     scope: &Scope<'src>,
                 ) -> ControlFlow<()> {
                     if matches!(&stmt.kind, StmtKind::Function(_)) {
-                        self.fn_namespaces
-                            .push(scope.namespace.as_deref().map(str::to_string));
+                        self.fn_namespaces.push(scope.namespace.map(str::to_string));
                     }
                     ControlFlow::Continue(())
                 }
@@ -585,10 +584,8 @@ fn scope_visitor_braced_namespace_scopes_correctly() {
                     scope: &Scope<'src>,
                 ) -> ControlFlow<()> {
                     if let StmtKind::Function(f) = &stmt.kind {
-                        self.entries.push((
-                            scope.namespace.as_deref().map(str::to_string),
-                            f.name.to_string(),
-                        ));
+                        self.entries
+                            .push((scope.namespace.map(str::to_string), f.name.to_string()));
                     }
                     ControlFlow::Continue(())
                 }
