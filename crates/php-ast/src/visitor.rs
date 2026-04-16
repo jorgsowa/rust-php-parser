@@ -375,6 +375,7 @@ pub fn walk_expr<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
         }
         ExprKind::StaticPropertyAccess(access) | ExprKind::ClassConstAccess(access) => {
             visitor.visit_expr(access.class)?;
+            visitor.visit_expr(access.member)?;
         }
         ExprKind::ClassConstAccessDynamic { class, member }
         | ExprKind::StaticPropertyAccessDynamic { class, member } => {
@@ -383,6 +384,7 @@ pub fn walk_expr<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
         }
         ExprKind::StaticMethodCall(call) => {
             visitor.visit_expr(call.class)?;
+            visitor.visit_expr(call.method)?;
             for arg in call.args.iter() {
                 visitor.visit_arg(arg)?;
             }
@@ -452,8 +454,9 @@ pub fn walk_expr<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
                 visitor.visit_expr(object)?;
                 visitor.visit_expr(method)?;
             }
-            CallableCreateKind::StaticMethod { class, .. } => {
+            CallableCreateKind::StaticMethod { class, method } => {
                 visitor.visit_expr(class)?;
+                visitor.visit_expr(method)?;
             }
         },
         ExprKind::Int(_)
