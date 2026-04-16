@@ -44,9 +44,21 @@
                               "end": 25
                             }
                           },
-                          "method": "foo",
+                          "method": {
+                            "name": "foo",
+                            "span": {
+                              "start": 27,
+                              "end": 30
+                            }
+                          },
                           "new_modifier": "Protected",
-                          "new_name": "baz"
+                          "new_name": {
+                            "name": "baz",
+                            "span": {
+                              "start": 44,
+                              "end": 47
+                            }
+                          }
                         }
                       },
                       "span": {

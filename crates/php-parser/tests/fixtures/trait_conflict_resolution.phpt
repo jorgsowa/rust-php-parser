@@ -64,7 +64,13 @@ class MyClass {
                               "end": 46
                             }
                           },
-                          "method": "foo",
+                          "method": {
+                            "name": "foo",
+                            "span": {
+                              "start": 48,
+                              "end": 51
+                            }
+                          },
                           "insteadof": [
                             {
                               "parts": [
@@ -97,9 +103,21 @@ class MyClass {
                               "end": 74
                             }
                           },
-                          "method": "foo",
+                          "method": {
+                            "name": "foo",
+                            "span": {
+                              "start": 76,
+                              "end": 79
+                            }
+                          },
                           "new_modifier": null,
-                          "new_name": "baz"
+                          "new_name": {
+                            "name": "baz",
+                            "span": {
+                              "start": 83,
+                              "end": 86
+                            }
+                          }
                         }
                       },
                       "span": {
@@ -111,9 +129,21 @@ class MyClass {
                       "kind": {
                         "Alias": {
                           "trait_name": null,
-                          "method": "foo",
+                          "method": {
+                            "name": "foo",
+                            "span": {
+                              "start": 96,
+                              "end": 99
+                            }
+                          },
                           "new_modifier": null,
-                          "new_name": "bar"
+                          "new_name": {
+                            "name": "bar",
+                            "span": {
+                              "start": 103,
+                              "end": 106
+                            }
+                          }
                         }
                       },
                       "span": {
@@ -125,7 +155,13 @@ class MyClass {
                       "kind": {
                         "Alias": {
                           "trait_name": null,
-                          "method": "foo",
+                          "method": {
+                            "name": "foo",
+                            "span": {
+                              "start": 116,
+                              "end": 119
+                            }
+                          },
                           "new_modifier": "Protected",
                           "new_name": null
                         }
@@ -148,9 +184,21 @@ class MyClass {
                               "end": 143
                             }
                           },
-                          "method": "hello",
+                          "method": {
+                            "name": "hello",
+                            "span": {
+                              "start": 145,
+                              "end": 150
+                            }
+                          },
                           "new_modifier": "Private",
-                          "new_name": "hi"
+                          "new_name": {
+                            "name": "hi",
+                            "span": {
+                              "start": 162,
+                              "end": 164
+                            }
+                          }
                         }
                       },
                       "span": {
@@ -171,7 +219,13 @@ class MyClass {
                               "end": 175
                             }
                           },
-                          "method": "big",
+                          "method": {
+                            "name": "big",
+                            "span": {
+                              "start": 177,
+                              "end": 180
+                            }
+                          },
                           "insteadof": [
                             {
                               "parts": [

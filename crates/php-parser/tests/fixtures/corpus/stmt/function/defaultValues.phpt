@@ -81,7 +81,13 @@ function a(
                         "end": 60
                       }
                     },
-                    "member": "B"
+                    "member": {
+                      "name": "B",
+                      "span": {
+                        "start": 62,
+                        "end": 63
+                      }
+                    }
                   }
                 },
                 "span": {

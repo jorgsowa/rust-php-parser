@@ -21,7 +21,13 @@ foo(class: 'MyClass', static: true, match: 'yes');
               },
               "args": [
                 {
-                  "name": "array",
+                  "name": {
+                    "name": "array",
+                    "span": {
+                      "start": 18,
+                      "end": 23
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "arr"
@@ -39,7 +45,13 @@ foo(class: 'MyClass', static: true, match: 'yes');
                   }
                 },
                 {
-                  "name": "offset",
+                  "name": {
+                    "name": "offset",
+                    "span": {
+                      "start": 31,
+                      "end": 37
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 1
@@ -57,7 +69,13 @@ foo(class: 'MyClass', static: true, match: 'yes');
                   }
                 },
                 {
-                  "name": "length",
+                  "name": {
+                    "name": "length",
+                    "span": {
+                      "start": 42,
+                      "end": 48
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 2
@@ -104,7 +122,13 @@ foo(class: 'MyClass', static: true, match: 'yes');
               },
               "args": [
                 {
-                  "name": "class",
+                  "name": {
+                    "name": "class",
+                    "span": {
+                      "start": 58,
+                      "end": 63
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "MyClass"
@@ -122,7 +146,13 @@ foo(class: 'MyClass', static: true, match: 'yes');
                   }
                 },
                 {
-                  "name": "static",
+                  "name": {
+                    "name": "static",
+                    "span": {
+                      "start": 76,
+                      "end": 82
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Bool": true
@@ -140,7 +170,13 @@ foo(class: 'MyClass', static: true, match: 'yes');
                   }
                 },
                 {
-                  "name": "match",
+                  "name": {
+                    "name": "match",
+                    "span": {
+                      "start": 90,
+                      "end": 95
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "yes"

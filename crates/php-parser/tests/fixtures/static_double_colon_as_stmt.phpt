@@ -20,7 +20,13 @@ static::class;
                   "end": 12
                 }
               },
-              "member": "prop"
+              "member": {
+                "name": "prop",
+                "span": {
+                  "start": 14,
+                  "end": 19
+                }
+              }
             }
           },
           "span": {
@@ -48,7 +54,13 @@ static::class;
                   "end": 27
                 }
               },
-              "method": "method",
+              "method": {
+                "name": "method",
+                "span": {
+                  "start": 29,
+                  "end": 35
+                }
+              },
               "args": []
             }
           },
@@ -77,7 +89,13 @@ static::class;
                   "end": 45
                 }
               },
-              "member": "class"
+              "member": {
+                "name": "class",
+                "span": {
+                  "start": 47,
+                  "end": 52
+                }
+              }
             }
           },
           "span": {

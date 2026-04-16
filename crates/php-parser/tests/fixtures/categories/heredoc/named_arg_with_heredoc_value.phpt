@@ -22,7 +22,13 @@ EOT
               },
               "args": [
                 {
-                  "name": "bar",
+                  "name": {
+                    "name": "bar",
+                    "span": {
+                      "start": 10,
+                      "end": 13
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Heredoc": {

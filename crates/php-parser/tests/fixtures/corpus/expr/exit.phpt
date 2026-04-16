@@ -152,7 +152,13 @@ DIE($a, $b);
               },
               "args": [
                 {
-                  "name": "status",
+                  "name": {
+                    "name": "status",
+                    "span": {
+                      "start": 66,
+                      "end": 72
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 42

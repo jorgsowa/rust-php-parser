@@ -175,7 +175,13 @@ class C {
                               "end": 155
                             }
                           },
-                          "method": "m",
+                          "method": {
+                            "name": "m",
+                            "span": {
+                              "start": 157,
+                              "end": 158
+                            }
+                          },
                           "insteadof": [
                             {
                               "parts": [
@@ -218,7 +224,13 @@ class C {
                               "end": 187
                             }
                           },
-                          "method": "m",
+                          "method": {
+                            "name": "m",
+                            "span": {
+                              "start": 189,
+                              "end": 190
+                            }
+                          },
                           "insteadof": [
                             {
                               "parts": [

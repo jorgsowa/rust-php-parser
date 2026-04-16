@@ -151,7 +151,13 @@ class C {
                               "end": 139
                             }
                           },
-                          "method": "foo",
+                          "method": {
+                            "name": "foo",
+                            "span": {
+                              "start": 141,
+                              "end": 144
+                            }
+                          },
                           "insteadof": [
                             {
                               "parts": [
@@ -184,9 +190,21 @@ class C {
                               "end": 167
                             }
                           },
-                          "method": "foo",
+                          "method": {
+                            "name": "foo",
+                            "span": {
+                              "start": 169,
+                              "end": 172
+                            }
+                          },
                           "new_modifier": "Private",
-                          "new_name": "afoo"
+                          "new_name": {
+                            "name": "afoo",
+                            "span": {
+                              "start": 184,
+                              "end": 188
+                            }
+                          }
                         }
                       },
                       "span": {
@@ -207,9 +225,21 @@ class C {
                               "end": 199
                             }
                           },
-                          "method": "bar",
+                          "method": {
+                            "name": "bar",
+                            "span": {
+                              "start": 201,
+                              "end": 204
+                            }
+                          },
                           "new_modifier": "Public",
-                          "new_name": "bbar"
+                          "new_name": {
+                            "name": "bbar",
+                            "span": {
+                              "start": 215,
+                              "end": 219
+                            }
+                          }
                         }
                       },
                       "span": {

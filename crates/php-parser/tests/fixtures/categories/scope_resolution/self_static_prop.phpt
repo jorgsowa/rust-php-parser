@@ -67,7 +67,13 @@
                                   "end": 73
                                 }
                               },
-                              "member": "x"
+                              "member": {
+                                "name": "x",
+                                "span": {
+                                  "start": 75,
+                                  "end": 77
+                                }
+                              }
                             }
                           },
                           "span": {

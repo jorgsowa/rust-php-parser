@@ -21,7 +21,13 @@ cannot use positional argument after named argument
               },
               "args": [
                 {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 11,
+                      "end": 12
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 1

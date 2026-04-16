@@ -54,7 +54,13 @@
                               "end": 28
                             }
                           },
-                          "method": "m",
+                          "method": {
+                            "name": "m",
+                            "span": {
+                              "start": 30,
+                              "end": 31
+                            }
+                          },
                           "insteadof": [
                             {
                               "parts": [
@@ -87,9 +93,21 @@
                               "end": 46
                             }
                           },
-                          "method": "n",
+                          "method": {
+                            "name": "n",
+                            "span": {
+                              "start": 48,
+                              "end": 49
+                            }
+                          },
                           "new_modifier": "Public",
-                          "new_name": "nAlias"
+                          "new_name": {
+                            "name": "nAlias",
+                            "span": {
+                              "start": 60,
+                              "end": 66
+                            }
+                          }
                         }
                       },
                       "span": {

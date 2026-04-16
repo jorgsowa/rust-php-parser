@@ -50,7 +50,13 @@
                                   "end": 65
                                 }
                               },
-                              "member": "VERSION"
+                              "member": {
+                                "name": "VERSION",
+                                "span": {
+                                  "start": 67,
+                                  "end": 74
+                                }
+                              }
                             }
                           },
                           "span": {

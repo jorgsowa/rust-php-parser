@@ -50,7 +50,13 @@
                                   "end": 58
                                 }
                               },
-                              "method": "f",
+                              "method": {
+                                "name": "f",
+                                "span": {
+                                  "start": 60,
+                                  "end": 61
+                                }
+                              },
                               "args": []
                             }
                           },

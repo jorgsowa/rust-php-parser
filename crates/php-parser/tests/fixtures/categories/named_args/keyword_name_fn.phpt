@@ -19,7 +19,13 @@
               },
               "args": [
                 {
-                  "name": "fn",
+                  "name": {
+                    "name": "fn",
+                    "span": {
+                      "start": 10,
+                      "end": 12
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "x"

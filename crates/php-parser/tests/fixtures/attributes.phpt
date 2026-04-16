@@ -250,7 +250,13 @@ enum Color {
                   }
                 },
                 {
-                  "name": "methods",
+                  "name": {
+                    "name": "methods",
+                    "span": {
+                      "start": 156,
+                      "end": 163
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Array": [

@@ -111,9 +111,21 @@ class B {
                       "kind": {
                         "Alias": {
                           "trait_name": null,
-                          "method": "a",
+                          "method": {
+                            "name": "a",
+                            "span": {
+                              "start": 88,
+                              "end": 89
+                            }
+                          },
                           "new_modifier": "Protected",
-                          "new_name": "b"
+                          "new_name": {
+                            "name": "b",
+                            "span": {
+                              "start": 103,
+                              "end": 104
+                            }
+                          }
                         }
                       },
                       "span": {
@@ -125,9 +137,21 @@ class B {
                       "kind": {
                         "Alias": {
                           "trait_name": null,
-                          "method": "c",
+                          "method": {
+                            "name": "c",
+                            "span": {
+                              "start": 114,
+                              "end": 115
+                            }
+                          },
                           "new_modifier": null,
-                          "new_name": "d"
+                          "new_name": {
+                            "name": "d",
+                            "span": {
+                              "start": 119,
+                              "end": 120
+                            }
+                          }
                         }
                       },
                       "span": {
@@ -139,7 +163,13 @@ class B {
                       "kind": {
                         "Alias": {
                           "trait_name": null,
-                          "method": "e",
+                          "method": {
+                            "name": "e",
+                            "span": {
+                              "start": 130,
+                              "end": 131
+                            }
+                          },
                           "new_modifier": "Private",
                           "new_name": null
                         }
@@ -206,7 +236,13 @@ class B {
                               "end": 177
                             }
                           },
-                          "method": "a",
+                          "method": {
+                            "name": "a",
+                            "span": {
+                              "start": 179,
+                              "end": 180
+                            }
+                          },
                           "insteadof": [
                             {
                               "parts": [
@@ -249,9 +285,21 @@ class B {
                               "end": 206
                             }
                           },
-                          "method": "b",
+                          "method": {
+                            "name": "b",
+                            "span": {
+                              "start": 208,
+                              "end": 209
+                            }
+                          },
                           "new_modifier": "Protected",
-                          "new_name": "c"
+                          "new_name": {
+                            "name": "c",
+                            "span": {
+                              "start": 223,
+                              "end": 224
+                            }
+                          }
                         }
                       },
                       "span": {
@@ -272,9 +320,21 @@ class B {
                               "end": 235
                             }
                           },
-                          "method": "d",
+                          "method": {
+                            "name": "d",
+                            "span": {
+                              "start": 237,
+                              "end": 238
+                            }
+                          },
                           "new_modifier": null,
-                          "new_name": "e"
+                          "new_name": {
+                            "name": "e",
+                            "span": {
+                              "start": 242,
+                              "end": 243
+                            }
+                          }
                         }
                       },
                       "span": {
@@ -295,7 +355,13 @@ class B {
                               "end": 254
                             }
                           },
-                          "method": "f",
+                          "method": {
+                            "name": "f",
+                            "span": {
+                              "start": 256,
+                              "end": 257
+                            }
+                          },
                           "new_modifier": "Private",
                           "new_name": null
                         }

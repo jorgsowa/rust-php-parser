@@ -156,7 +156,13 @@ new $weird[0]->foo::$className;
                   "end": 76
                 }
               },
-              "member": "className"
+              "member": {
+                "name": "className",
+                "span": {
+                  "start": 78,
+                  "end": 88
+                }
+              }
             }
           },
           "span": {
@@ -195,7 +201,13 @@ new $weird[0]->foo::$className;
                   "end": 99
                 }
               },
-              "member": "className"
+              "member": {
+                "name": "className",
+                "span": {
+                  "start": 101,
+                  "end": 111
+                }
+              }
             }
           },
           "span": {
@@ -272,7 +284,13 @@ new $weird[0]->foo::$className;
                   "end": 131
                 }
               },
-              "member": "className"
+              "member": {
+                "name": "className",
+                "span": {
+                  "start": 133,
+                  "end": 143
+                }
+              }
             }
           },
           "span": {

@@ -19,7 +19,13 @@
               },
               "args": [
                 {
-                  "name": "null",
+                  "name": {
+                    "name": "null",
+                    "span": {
+                      "start": 10,
+                      "end": 14
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "x"

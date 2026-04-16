@@ -87,7 +87,13 @@ $x = \strlen('hello');
                   "end": 56
                 }
               },
-              "method": "log",
+              "method": {
+                "name": "log",
+                "span": {
+                  "start": 58,
+                  "end": 61
+                }
+              },
               "args": [
                 {
                   "name": null,

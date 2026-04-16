@@ -55,7 +55,13 @@
                   }
                 },
                 {
-                  "name": "name",
+                  "name": {
+                    "name": "name",
+                    "span": {
+                      "start": 20,
+                      "end": 24
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "val"
@@ -73,7 +79,13 @@
                   }
                 },
                 {
-                  "name": "count",
+                  "name": {
+                    "name": "count",
+                    "span": {
+                      "start": 32,
+                      "end": 37
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 5

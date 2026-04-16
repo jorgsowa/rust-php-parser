@@ -18,7 +18,13 @@
                     "end": 14
                   }
                 },
-                "member": "class"
+                "member": {
+                  "name": "class",
+                  "span": {
+                    "start": 16,
+                    "end": 21
+                  }
+                }
               }
             },
             "span": {

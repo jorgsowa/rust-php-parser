@@ -17,7 +17,13 @@
                   "end": 12
                 }
               },
-              "member": "prop"
+              "member": {
+                "name": "prop",
+                "span": {
+                  "start": 14,
+                  "end": 19
+                }
+              }
             }
           },
           "span": {

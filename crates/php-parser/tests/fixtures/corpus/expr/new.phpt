@@ -207,7 +207,13 @@ new $a->b['c']();
                         "end": 81
                       }
                     },
-                    "member": "b"
+                    "member": {
+                      "name": "b",
+                      "span": {
+                        "start": 83,
+                        "end": 85
+                      }
+                    }
                   }
                 },
                 "span": {

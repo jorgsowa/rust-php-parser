@@ -28,7 +28,13 @@
               },
               "args": [
                 {
-                  "name": "key",
+                  "name": {
+                    "name": "key",
+                    "span": {
+                      "start": 19,
+                      "end": 22
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "val"

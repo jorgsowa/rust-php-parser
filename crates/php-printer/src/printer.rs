@@ -667,12 +667,12 @@ impl Printer {
             ExprKind::StaticPropertyAccess(access) => {
                 self.print_expr(access.class, PREC_PRIMARY);
                 self.w("::$");
-                self.w(&access.member);
+                self.w(access.member.name);
             }
             ExprKind::ClassConstAccess(access) => {
                 self.print_expr(access.class, PREC_PRIMARY);
                 self.w("::");
-                self.w(&access.member);
+                self.w(access.member.name);
             }
             ExprKind::ClassConstAccessDynamic { class, member } => {
                 self.print_expr(class, PREC_PRIMARY);
@@ -688,7 +688,7 @@ impl Printer {
             ExprKind::StaticMethodCall(call) => {
                 self.print_expr(call.class, PREC_PRIMARY);
                 self.w("::");
-                self.w(&call.method);
+                self.w(call.method.name);
                 self.w("(");
                 self.print_args(&call.args);
                 self.w(")");
@@ -744,7 +744,7 @@ impl Printer {
                 CallableCreateKind::StaticMethod { class, method } => {
                     self.print_expr(class, PREC_PRIMARY);
                     self.w("::");
-                    self.w(method);
+                    self.w(method.name);
                     self.w("(...)");
                 }
             },
@@ -1019,7 +1019,7 @@ impl Printer {
                     } => {
                         self.print_name(trait_name);
                         self.w("::");
-                        self.w(method);
+                        self.w(method.name);
                         self.w(" insteadof ");
                         for (i, name) in insteadof.iter().enumerate() {
                             if i > 0 {
@@ -1038,7 +1038,7 @@ impl Printer {
                             self.print_name(tn);
                             self.w("::");
                         }
-                        self.w(method);
+                        self.w(method.name);
                         self.w(" as");
                         if let Some(vis) = new_modifier {
                             self.w(" ");
@@ -1046,7 +1046,7 @@ impl Printer {
                         }
                         if let Some(name) = new_name {
                             self.w(" ");
-                            self.w(name);
+                            self.w(name.name);
                         }
                     }
                 }
@@ -1365,7 +1365,7 @@ impl Printer {
                 self.w(", ");
             }
             if let Some(name) = &arg.name {
-                self.w(name);
+                self.w(name.name);
                 self.w(": ");
             }
             if arg.unpack {

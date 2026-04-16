@@ -211,7 +211,13 @@ enum Suit: string implements HasColor {
                                               "end": 247
                                             }
                                           },
-                                          "member": "Hearts"
+                                          "member": {
+                                            "name": "Hearts",
+                                            "span": {
+                                              "start": 249,
+                                              "end": 255
+                                            }
+                                          }
                                         }
                                       },
                                       "span": {
@@ -231,7 +237,13 @@ enum Suit: string implements HasColor {
                                               "end": 261
                                             }
                                           },
-                                          "member": "Diamonds"
+                                          "member": {
+                                            "name": "Diamonds",
+                                            "span": {
+                                              "start": 263,
+                                              "end": 271
+                                            }
+                                          }
                                         }
                                       },
                                       "span": {
@@ -268,7 +280,13 @@ enum Suit: string implements HasColor {
                                               "end": 298
                                             }
                                           },
-                                          "member": "Clubs"
+                                          "member": {
+                                            "name": "Clubs",
+                                            "span": {
+                                              "start": 300,
+                                              "end": 305
+                                            }
+                                          }
                                         }
                                       },
                                       "span": {
@@ -288,7 +306,13 @@ enum Suit: string implements HasColor {
                                               "end": 311
                                             }
                                           },
-                                          "member": "Spades"
+                                          "member": {
+                                            "name": "Spades",
+                                            "span": {
+                                              "start": 313,
+                                              "end": 319
+                                            }
+                                          }
                                         }
                                       },
                                       "span": {

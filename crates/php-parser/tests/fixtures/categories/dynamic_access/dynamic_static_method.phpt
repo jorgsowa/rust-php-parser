@@ -20,7 +20,13 @@
                         "end": 12
                       }
                     },
-                    "member": "method"
+                    "member": {
+                      "name": "method",
+                      "span": {
+                        "start": 14,
+                        "end": 21
+                      }
+                    }
                   }
                 },
                 "span": {

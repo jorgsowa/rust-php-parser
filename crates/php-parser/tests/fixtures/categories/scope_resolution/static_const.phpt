@@ -41,7 +41,13 @@
                                   "end": 53
                                 }
                               },
-                              "member": "DEFAULT"
+                              "member": {
+                                "name": "DEFAULT",
+                                "span": {
+                                  "start": 55,
+                                  "end": 62
+                                }
+                              }
                             }
                           },
                           "span": {

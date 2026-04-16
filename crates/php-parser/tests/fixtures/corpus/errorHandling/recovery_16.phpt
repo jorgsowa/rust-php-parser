@@ -21,7 +21,13 @@ expected ';' after expression
                   "end": 9
                 }
               },
-              "member": "<error>"
+              "member": {
+                "name": "<error>",
+                "span": {
+                  "start": 11,
+                  "end": 11
+                }
+              }
             }
           },
           "span": {

@@ -442,7 +442,13 @@ cannot use positional argument after named argument
               },
               "args": [
                 {
-                  "name": "object",
+                  "name": {
+                    "name": "object",
+                    "span": {
+                      "start": 235,
+                      "end": 241
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "x"
@@ -460,7 +466,13 @@ cannot use positional argument after named argument
                   }
                 },
                 {
-                  "name": "withProperties",
+                  "name": {
+                    "name": "withProperties",
+                    "span": {
+                      "start": 247,
+                      "end": 261
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Array": [
@@ -576,7 +588,13 @@ cannot use positional argument after named argument
                   }
                 },
                 {
-                  "name": "withProperties",
+                  "name": {
+                    "name": "withProperties",
+                    "span": {
+                      "start": 308,
+                      "end": 322
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Array": [
@@ -674,7 +692,13 @@ cannot use positional argument after named argument
               },
               "args": [
                 {
-                  "name": "object",
+                  "name": {
+                    "name": "object",
+                    "span": {
+                      "start": 365,
+                      "end": 371
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "x"
@@ -721,7 +745,13 @@ cannot use positional argument after named argument
               },
               "args": [
                 {
-                  "name": "object",
+                  "name": {
+                    "name": "object",
+                    "span": {
+                      "start": 384,
+                      "end": 390
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "x"

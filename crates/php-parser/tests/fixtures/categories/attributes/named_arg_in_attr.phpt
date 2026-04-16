@@ -25,7 +25,13 @@
               },
               "args": [
                 {
-                  "name": "path",
+                  "name": {
+                    "name": "path",
+                    "span": {
+                      "start": 14,
+                      "end": 18
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "/api"
@@ -43,7 +49,13 @@
                   }
                 },
                 {
-                  "name": "methods",
+                  "name": {
+                    "name": "methods",
+                    "span": {
+                      "start": 28,
+                      "end": 35
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Array": [

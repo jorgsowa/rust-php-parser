@@ -47,7 +47,13 @@
                   }
                 },
                 {
-                  "name": "key",
+                  "name": {
+                    "name": "key",
+                    "span": {
+                      "start": 27,
+                      "end": 30
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "value"
@@ -65,7 +71,13 @@
                   }
                 },
                 {
-                  "name": "flag",
+                  "name": {
+                    "name": "flag",
+                    "span": {
+                      "start": 41,
+                      "end": 45
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Bool": true

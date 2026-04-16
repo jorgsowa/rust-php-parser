@@ -30,7 +30,13 @@
               },
               "args": [
                 {
-                  "name": "min",
+                  "name": {
+                    "name": "min",
+                    "span": {
+                      "start": 21,
+                      "end": 24
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 1
@@ -48,7 +54,13 @@
                   }
                 },
                 {
-                  "name": "max",
+                  "name": {
+                    "name": "max",
+                    "span": {
+                      "start": 29,
+                      "end": 32
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 100

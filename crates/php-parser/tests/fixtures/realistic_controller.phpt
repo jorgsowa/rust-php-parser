@@ -410,7 +410,13 @@ class UserController extends BaseController implements JsonResponder
                                                       "end": 384
                                                     }
                                                   },
-                                                  "method": "find",
+                                                  "method": {
+                                                    "name": "find",
+                                                    "span": {
+                                                      "start": 386,
+                                                      "end": 390
+                                                    }
+                                                  },
                                                   "args": [
                                                     {
                                                       "name": null,
@@ -1045,7 +1051,13 @@ class UserController extends BaseController implements JsonResponder
                                         "end": 1027
                                       }
                                     },
-                                    "method": "all",
+                                    "method": {
+                                      "name": "all",
+                                      "span": {
+                                        "start": 1029,
+                                        "end": 1032
+                                      }
+                                    },
                                     "args": []
                                   }
                                 },

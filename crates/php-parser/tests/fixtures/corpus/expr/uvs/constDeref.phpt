@@ -220,7 +220,13 @@ __FUNCIONT__->length();
                         "end": 51
                       }
                     },
-                    "member": "B"
+                    "member": {
+                      "name": "B",
+                      "span": {
+                        "start": 53,
+                        "end": 54
+                      }
+                    }
                   }
                 },
                 "span": {
@@ -273,7 +279,13 @@ __FUNCIONT__->length();
                                     "end": 60
                                   }
                                 },
-                                "member": "B"
+                                "member": {
+                                  "name": "B",
+                                  "span": {
+                                    "start": 62,
+                                    "end": 63
+                                  }
+                                }
                               }
                             },
                             "span": {
@@ -352,7 +364,13 @@ __FUNCIONT__->length();
                         "end": 75
                       }
                     },
-                    "member": "B"
+                    "member": {
+                      "name": "B",
+                      "span": {
+                        "start": 77,
+                        "end": 78
+                      }
+                    }
                   }
                 },
                 "span": {
@@ -399,7 +417,13 @@ __FUNCIONT__->length();
                         "end": 89
                       }
                     },
-                    "member": "B"
+                    "member": {
+                      "name": "B",
+                      "span": {
+                        "start": 91,
+                        "end": 92
+                      }
+                    }
                   }
                 },
                 "span": {
@@ -447,7 +471,13 @@ __FUNCIONT__->length();
                         "end": 105
                       }
                     },
-                    "member": "B"
+                    "member": {
+                      "name": "B",
+                      "span": {
+                        "start": 107,
+                        "end": 108
+                      }
+                    }
                   }
                 },
                 "span": {
@@ -455,7 +485,13 @@ __FUNCIONT__->length();
                   "end": 108
                 }
               },
-              "member": "C"
+              "member": {
+                "name": "C",
+                "span": {
+                  "start": 110,
+                  "end": 111
+                }
+              }
             }
           },
           "span": {
@@ -486,7 +522,13 @@ __FUNCIONT__->length();
                         "end": 114
                       }
                     },
-                    "member": "B"
+                    "member": {
+                      "name": "B",
+                      "span": {
+                        "start": 116,
+                        "end": 117
+                      }
+                    }
                   }
                 },
                 "span": {
@@ -494,7 +536,13 @@ __FUNCIONT__->length();
                   "end": 117
                 }
               },
-              "member": "c"
+              "member": {
+                "name": "c",
+                "span": {
+                  "start": 119,
+                  "end": 121
+                }
+              }
             }
           },
           "span": {
@@ -525,7 +573,13 @@ __FUNCIONT__->length();
                         "end": 124
                       }
                     },
-                    "member": "B"
+                    "member": {
+                      "name": "B",
+                      "span": {
+                        "start": 126,
+                        "end": 127
+                      }
+                    }
                   }
                 },
                 "span": {
@@ -533,7 +587,13 @@ __FUNCIONT__->length();
                   "end": 127
                 }
               },
-              "method": "c",
+              "method": {
+                "name": "c",
+                "span": {
+                  "start": 129,
+                  "end": 130
+                }
+              },
               "args": []
             }
           },

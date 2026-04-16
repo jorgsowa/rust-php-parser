@@ -43,7 +43,13 @@
                   }
                 },
                 {
-                  "name": "methods",
+                  "name": {
+                    "name": "methods",
+                    "span": {
+                      "start": 22,
+                      "end": 29
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Array": [

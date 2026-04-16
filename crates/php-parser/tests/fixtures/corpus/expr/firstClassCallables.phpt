@@ -98,7 +98,13 @@ function foo() {}
                       "end": 34
                     }
                   },
-                  "method": "foo"
+                  "method": {
+                    "name": "foo",
+                    "span": {
+                      "start": 36,
+                      "end": 39
+                    }
+                  }
                 }
               }
             }

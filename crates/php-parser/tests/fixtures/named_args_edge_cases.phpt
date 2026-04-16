@@ -23,7 +23,13 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
               },
               "args": [
                 {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 10,
+                      "end": 11
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 1
@@ -41,7 +47,13 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                   }
                 },
                 {
-                  "name": "b",
+                  "name": {
+                    "name": "b",
+                    "span": {
+                      "start": 16,
+                      "end": 17
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 2
@@ -59,7 +71,13 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                   }
                 },
                 {
-                  "name": "c",
+                  "name": {
+                    "name": "c",
+                    "span": {
+                      "start": 22,
+                      "end": 23
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 3
@@ -124,7 +142,13 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                   }
                 },
                 {
-                  "name": "extra",
+                  "name": {
+                    "name": "extra",
+                    "span": {
+                      "start": 43,
+                      "end": 48
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Bool": true
@@ -207,7 +231,13 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                   }
                 },
                 {
-                  "name": "name",
+                  "name": {
+                    "name": "name",
+                    "span": {
+                      "start": 67,
+                      "end": 71
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "test"
@@ -254,7 +284,13 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
               },
               "args": [
                 {
-                  "name": "callback",
+                  "name": {
+                    "name": "callback",
+                    "span": {
+                      "start": 92,
+                      "end": 100
+                    }
+                  },
                   "value": {
                     "kind": {
                       "ArrowFunction": {
@@ -324,7 +360,13 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                   }
                 },
                 {
-                  "name": "array",
+                  "name": {
+                    "name": "array",
+                    "span": {
+                      "start": 120,
+                      "end": 125
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "arr"

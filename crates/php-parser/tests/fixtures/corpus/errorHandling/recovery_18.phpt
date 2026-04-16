@@ -223,7 +223,13 @@ for ($a, ; $b, ; $c, );
                               "end": 127
                             }
                           },
-                          "method": "b",
+                          "method": {
+                            "name": "b",
+                            "span": {
+                              "start": 129,
+                              "end": 130
+                            }
+                          },
                           "insteadof": [
                             {
                               "parts": [

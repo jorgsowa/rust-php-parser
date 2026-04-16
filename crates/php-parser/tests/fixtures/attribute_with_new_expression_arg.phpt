@@ -40,7 +40,13 @@
                         },
                         "args": [
                           {
-                            "name": "debug",
+                            "name": {
+                              "name": "debug",
+                              "span": {
+                                "start": 24,
+                                "end": 29
+                              }
+                            },
                             "value": {
                               "kind": {
                                 "Bool": false

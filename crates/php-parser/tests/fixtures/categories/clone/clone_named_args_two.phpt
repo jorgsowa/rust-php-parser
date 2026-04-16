@@ -21,7 +21,13 @@ min_php=8.5
               },
               "args": [
                 {
-                  "name": "object",
+                  "name": {
+                    "name": "object",
+                    "span": {
+                      "start": 12,
+                      "end": 18
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "x"
@@ -39,7 +45,13 @@ min_php=8.5
                   }
                 },
                 {
-                  "name": "withProperties",
+                  "name": {
+                    "name": "withProperties",
+                    "span": {
+                      "start": 24,
+                      "end": 38
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Array": [

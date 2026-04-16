@@ -38,7 +38,13 @@ $f = self::$prop;
                             "end": 14
                           }
                         },
-                        "method": "bar"
+                        "method": {
+                          "name": "bar",
+                          "span": {
+                            "start": 16,
+                            "end": 19
+                          }
+                        }
                       }
                     }
                   }
@@ -88,7 +94,13 @@ $f = self::$prop;
                         "end": 34
                       }
                     },
-                    "member": "prop"
+                    "member": {
+                      "name": "prop",
+                      "span": {
+                        "start": 36,
+                        "end": 41
+                      }
+                    }
                   }
                 },
                 "span": {
@@ -136,7 +148,13 @@ $f = self::$prop;
                         "end": 51
                       }
                     },
-                    "member": "CONST"
+                    "member": {
+                      "name": "CONST",
+                      "span": {
+                        "start": 53,
+                        "end": 58
+                      }
+                    }
                   }
                 },
                 "span": {
@@ -184,7 +202,13 @@ $f = self::$prop;
                         "end": 71
                       }
                     },
-                    "method": "method",
+                    "method": {
+                      "name": "method",
+                      "span": {
+                        "start": 73,
+                        "end": 79
+                      }
+                    },
                     "args": []
                   }
                 },
@@ -233,7 +257,13 @@ $f = self::$prop;
                         "end": 94
                       }
                     },
-                    "method": "method",
+                    "method": {
+                      "name": "method",
+                      "span": {
+                        "start": 96,
+                        "end": 102
+                      }
+                    },
                     "args": []
                   }
                 },
@@ -282,7 +312,13 @@ $f = self::$prop;
                         "end": 115
                       }
                     },
-                    "member": "prop"
+                    "member": {
+                      "name": "prop",
+                      "span": {
+                        "start": 117,
+                        "end": 122
+                      }
+                    }
                   }
                 },
                 "span": {

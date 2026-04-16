@@ -115,7 +115,13 @@ enum Status: string implements Loggable, Serializable {
                             "end": 147
                           }
                         },
-                        "member": "Active"
+                        "member": {
+                          "name": "Active",
+                          "span": {
+                            "start": 149,
+                            "end": 155
+                          }
+                        }
                       }
                     },
                     "span": {
@@ -261,7 +267,13 @@ enum Status: string implements Loggable, Serializable {
                                         "end": 300
                                       }
                                     },
-                                    "member": "Active"
+                                    "member": {
+                                      "name": "Active",
+                                      "span": {
+                                        "start": 302,
+                                        "end": 308
+                                      }
+                                    }
                                   }
                                 },
                                 "span": {

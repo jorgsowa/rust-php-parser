@@ -156,7 +156,13 @@ class Config {
                                         "end": 181
                                       }
                                     },
-                                    "member": "count"
+                                    "member": {
+                                      "name": "count",
+                                      "span": {
+                                        "start": 183,
+                                        "end": 189
+                                      }
+                                    }
                                   }
                                 },
                                 "span": {

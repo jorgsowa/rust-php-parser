@@ -114,7 +114,13 @@ min_php=8.1
                                     "end": 89
                                   }
                                 },
-                                "member": "Red"
+                                "member": {
+                                  "name": "Red",
+                                  "span": {
+                                    "start": 91,
+                                    "end": 94
+                                  }
+                                }
                               }
                             },
                             "span": {
@@ -151,7 +157,13 @@ min_php=8.1
                                     "end": 106
                                   }
                                 },
-                                "member": "Blue"
+                                "member": {
+                                  "name": "Blue",
+                                  "span": {
+                                    "start": 108,
+                                    "end": 112
+                                  }
+                                }
                               }
                             },
                             "span": {

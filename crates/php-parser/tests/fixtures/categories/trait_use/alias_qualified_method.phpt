@@ -44,9 +44,21 @@
                               "end": 25
                             }
                           },
-                          "method": "foo",
+                          "method": {
+                            "name": "foo",
+                            "span": {
+                              "start": 27,
+                              "end": 30
+                            }
+                          },
                           "new_modifier": null,
-                          "new_name": "bar"
+                          "new_name": {
+                            "name": "bar",
+                            "span": {
+                              "start": 34,
+                              "end": 37
+                            }
+                          }
                         }
                       },
                       "span": {

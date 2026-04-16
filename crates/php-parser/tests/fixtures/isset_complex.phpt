@@ -76,7 +76,13 @@
                         "end": 35
                       }
                     },
-                    "member": "static"
+                    "member": {
+                      "name": "static",
+                      "span": {
+                        "start": 37,
+                        "end": 44
+                      }
+                    }
                   }
                 },
                 "span": {

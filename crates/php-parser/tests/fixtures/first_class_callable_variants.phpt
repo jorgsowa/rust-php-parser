@@ -145,7 +145,13 @@ $e = $obj->$dynamic(...);
                             "end": 56
                           }
                         },
-                        "method": "bar"
+                        "method": {
+                          "name": "bar",
+                          "span": {
+                            "start": 58,
+                            "end": 61
+                          }
+                        }
                       }
                     }
                   }

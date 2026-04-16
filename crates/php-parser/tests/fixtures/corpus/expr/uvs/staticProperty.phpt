@@ -25,7 +25,13 @@ A::$A::$b;
                   "end": 7
                 }
               },
-              "member": "b"
+              "member": {
+                "name": "b",
+                "span": {
+                  "start": 9,
+                  "end": 11
+                }
+              }
             }
           },
           "span": {
@@ -53,7 +59,13 @@ A::$A::$b;
                   "end": 15
                 }
               },
-              "member": "b"
+              "member": {
+                "name": "b",
+                "span": {
+                  "start": 17,
+                  "end": 19
+                }
+              }
             }
           },
           "span": {
@@ -81,7 +93,13 @@ A::$A::$b;
                   "end": 24
                 }
               },
-              "member": "b"
+              "member": {
+                "name": "b",
+                "span": {
+                  "start": 26,
+                  "end": 28
+                }
+              }
             }
           },
           "span": {
@@ -137,7 +155,13 @@ A::$A::$b;
                   "end": 40
                 }
               },
-              "member": "b"
+              "member": {
+                "name": "b",
+                "span": {
+                  "start": 42,
+                  "end": 44
+                }
+              }
             }
           },
           "span": {
@@ -184,7 +208,13 @@ A::$A::$b;
                   "end": 52
                 }
               },
-              "member": "b"
+              "member": {
+                "name": "b",
+                "span": {
+                  "start": 54,
+                  "end": 56
+                }
+              }
             }
           },
           "span": {
@@ -322,7 +352,13 @@ A::$A::$b;
                         "end": 78
                       }
                     },
-                    "member": "A"
+                    "member": {
+                      "name": "A",
+                      "span": {
+                        "start": 80,
+                        "end": 82
+                      }
+                    }
                   }
                 },
                 "span": {
@@ -330,7 +366,13 @@ A::$A::$b;
                   "end": 82
                 }
               },
-              "member": "b"
+              "member": {
+                "name": "b",
+                "span": {
+                  "start": 84,
+                  "end": 86
+                }
+              }
             }
           },
           "span": {

@@ -140,7 +140,13 @@ class Config {
                     },
                     "args": [
                       {
-                        "name": "name",
+                        "name": {
+                          "name": "name",
+                          "span": {
+                            "start": 86,
+                            "end": 90
+                          }
+                        },
                         "value": {
                           "kind": {
                             "String": "x"
@@ -220,7 +226,13 @@ class Config {
                         },
                         "args": [
                           {
-                            "name": "debug",
+                            "name": {
+                              "name": "debug",
+                              "span": {
+                                "start": 151,
+                                "end": 156
+                              }
+                            },
                             "value": {
                               "kind": {
                                 "Bool": false

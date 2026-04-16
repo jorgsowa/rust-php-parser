@@ -239,6 +239,16 @@ pub enum NameKind {
     Relative,
 }
 
+/// A simple identifier with its source span.
+///
+/// Used for method names, member names, and argument names where source
+/// position is needed (e.g. `Foo::bar()`, `Foo::CONST`, `f(name: val)`).
+#[derive(Debug, Clone, Copy, Serialize)]
+pub struct Ident<'src> {
+    pub name: &'src str,
+    pub span: Span,
+}
+
 /// PHP built-in type keyword — zero-cost alternative to `Name::Simple` for the
 /// 20 reserved type names. One byte instead of a `Cow<str>` + `Span` in the AST.
 #[repr(u8)]
@@ -361,7 +371,7 @@ impl<'arena, 'src> serde::Serialize for TypeHintKind<'arena, 'src> {
 
 #[derive(Debug, Serialize)]
 pub struct Arg<'arena, 'src> {
-    pub name: Option<Cow<'src, str>>,
+    pub name: Option<Ident<'src>>,
     pub value: Expr<'arena, 'src>,
     pub unpack: bool,
     pub by_ref: bool,
@@ -717,15 +727,15 @@ pub enum TraitAdaptationKind<'arena, 'src> {
     /// `A::foo insteadof B, C;`
     Precedence {
         trait_name: Name<'arena, 'src>,
-        method: &'src str,
+        method: Ident<'src>,
         insteadof: ArenaVec<'arena, Name<'arena, 'src>>,
     },
     /// `foo as bar;` or `A::foo as protected bar;` or `foo as protected;`
     Alias {
         trait_name: Option<Name<'arena, 'src>>,
-        method: Cow<'src, str>,
+        method: Ident<'src>,
         new_modifier: Option<Visibility>,
-        new_name: Option<&'src str>,
+        new_name: Option<Ident<'src>>,
     },
 }
 
@@ -1273,13 +1283,13 @@ pub struct MethodCallExpr<'arena, 'src> {
 #[derive(Debug, Serialize)]
 pub struct StaticAccessExpr<'arena, 'src> {
     pub class: &'arena Expr<'arena, 'src>,
-    pub member: Cow<'src, str>,
+    pub member: Ident<'src>,
 }
 
 #[derive(Debug, Serialize)]
 pub struct StaticMethodCallExpr<'arena, 'src> {
     pub class: &'arena Expr<'arena, 'src>,
-    pub method: Cow<'src, str>,
+    pub method: Ident<'src>,
     pub args: ArenaVec<'arena, Arg<'arena, 'src>>,
 }
 
@@ -1357,7 +1367,7 @@ pub enum CallableCreateKind<'arena, 'src> {
     /// `Foo::bar(...)`
     StaticMethod {
         class: &'arena Expr<'arena, 'src>,
-        method: Cow<'src, str>,
+        method: Ident<'src>,
     },
 }
 

@@ -54,7 +54,13 @@
                               "end": 28
                             }
                           },
-                          "method": "m",
+                          "method": {
+                            "name": "m",
+                            "span": {
+                              "start": 30,
+                              "end": 31
+                            }
+                          },
                           "insteadof": [
                             {
                               "parts": [

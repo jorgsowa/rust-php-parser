@@ -19,7 +19,13 @@
               },
               "args": [
                 {
-                  "name": "x",
+                  "name": {
+                    "name": "x",
+                    "span": {
+                      "start": 14,
+                      "end": 15
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 1
@@ -37,7 +43,13 @@
                   }
                 },
                 {
-                  "name": "y",
+                  "name": {
+                    "name": "y",
+                    "span": {
+                      "start": 20,
+                      "end": 21
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 2

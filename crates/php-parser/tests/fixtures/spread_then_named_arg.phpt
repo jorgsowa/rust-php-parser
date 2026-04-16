@@ -37,7 +37,13 @@
                   }
                 },
                 {
-                  "name": "last",
+                  "name": {
+                    "name": "last",
+                    "span": {
+                      "start": 21,
+                      "end": 25
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "end"

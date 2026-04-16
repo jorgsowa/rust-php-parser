@@ -68,7 +68,13 @@ min_php=8.1
                                   "end": 81
                                 }
                               },
-                              "member": "Red"
+                              "member": {
+                                "name": "Red",
+                                "span": {
+                                  "start": 83,
+                                  "end": 86
+                                }
+                              }
                             }
                           },
                           "span": {

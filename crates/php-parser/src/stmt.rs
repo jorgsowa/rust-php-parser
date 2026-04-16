@@ -1,5 +1,3 @@
-use std::borrow::Cow;
-
 use php_ast::*;
 use php_lexer::TokenKind;
 
@@ -1741,8 +1739,8 @@ fn parse_trait_adaptations<'arena, 'src>(
 
         if parser.eat(TokenKind::DoubleColon).is_some() {
             // Qualified: TraitName::method
-            let method = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-                text
+            let method = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
+                Ident { name: text, span }
             } else {
                 let span = parser.current_span();
                 parser.error(ParseError::Expected {
@@ -1750,7 +1748,10 @@ fn parse_trait_adaptations<'arena, 'src>(
                     found: parser.current_kind(),
                     span,
                 });
-                "<error>"
+                Ident {
+                    name: "<error>",
+                    span,
+                }
             };
 
             // Check for `insteadof` or `as`
@@ -1785,7 +1786,7 @@ fn parse_trait_adaptations<'arena, 'src>(
                 adaptations.push(TraitAdaptation {
                     kind: TraitAdaptationKind::Alias {
                         trait_name: Some(first_name),
-                        method: Cow::Borrowed(method),
+                        method,
                         new_modifier,
                         new_name,
                     },
@@ -1802,7 +1803,19 @@ fn parse_trait_adaptations<'arena, 'src>(
             }
         } else if parser.eat(TokenKind::As).is_some() {
             // Unqualified alias: method as [visibility] [newName];
-            let method = first_name.join_parts();
+            let method = match &first_name {
+                Name::Simple { value, span } => Ident {
+                    name: value,
+                    span: *span,
+                },
+                Name::Complex { span, .. } => {
+                    let src = parser.source;
+                    Ident {
+                        name: &src[span.start as usize..span.end as usize],
+                        span: *span,
+                    }
+                }
+            };
             let (new_modifier, new_name) = parse_alias_rhs(parser);
             parser.expect(TokenKind::Semicolon);
             let span = Span::new(start, parser.previous_end());
@@ -1832,7 +1845,7 @@ fn parse_trait_adaptations<'arena, 'src>(
 /// Parse the right-hand side of an `as` alias: `[visibility] [newName]`
 fn parse_alias_rhs<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
-) -> (Option<Visibility>, Option<&'src str>) {
+) -> (Option<Visibility>, Option<Ident<'src>>) {
     let new_modifier = match parser.current_kind() {
         TokenKind::Public => {
             parser.advance();
@@ -1851,8 +1864,8 @@ fn parse_alias_rhs<'arena, 'src>(
 
     // New name (optional if visibility was given)
     let new_name = if parser.check(TokenKind::Identifier) || parser.is_semi_reserved_keyword() {
-        let (text, _) = parser.eat_identifier_or_keyword().unwrap();
-        Some(text)
+        let (text, span) = parser.eat_identifier_or_keyword().unwrap();
+        Some(Ident { name: text, span })
     } else {
         None
     };

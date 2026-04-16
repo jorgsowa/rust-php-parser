@@ -55,7 +55,13 @@
                   }
                 },
                 {
-                  "name": "name",
+                  "name": {
+                    "name": "name",
+                    "span": {
+                      "start": 16,
+                      "end": 20
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "test"
@@ -73,7 +79,13 @@
                   }
                 },
                 {
-                  "name": "other",
+                  "name": {
+                    "name": "other",
+                    "span": {
+                      "start": 30,
+                      "end": 35
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Bool": true

@@ -17,7 +17,13 @@
                   "end": 9
                 }
               },
-              "member": "class"
+              "member": {
+                "name": "class",
+                "span": {
+                  "start": 11,
+                  "end": 16
+                }
+              }
             }
           },
           "span": {
@@ -45,7 +51,13 @@
                   "end": 22
                 }
               },
-              "member": "class"
+              "member": {
+                "name": "class",
+                "span": {
+                  "start": 24,
+                  "end": 29
+                }
+              }
             }
           },
           "span": {
@@ -73,7 +85,13 @@
                   "end": 37
                 }
               },
-              "member": "class"
+              "member": {
+                "name": "class",
+                "span": {
+                  "start": 39,
+                  "end": 44
+                }
+              }
             }
           },
           "span": {

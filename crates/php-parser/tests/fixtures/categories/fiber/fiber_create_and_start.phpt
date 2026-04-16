@@ -75,7 +75,13 @@ min_php=8.1
                                               "end": 49
                                             }
                                           },
-                                          "method": "suspend",
+                                          "method": {
+                                            "name": "suspend",
+                                            "span": {
+                                              "start": 51,
+                                              "end": 58
+                                            }
+                                          },
                                           "args": [
                                             {
                                               "name": null,

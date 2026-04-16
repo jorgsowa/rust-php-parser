@@ -1284,7 +1284,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                               },
                               "args": [
                                 {
-                                  "name": "id",
+                                  "name": {
+                                    "name": "id",
+                                    "span": {
+                                      "start": 1138,
+                                      "end": 1140
+                                    }
+                                  },
                                   "value": {
                                     "kind": {
                                       "Cast": [
@@ -1332,7 +1338,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                   }
                                 },
                                 {
-                                  "name": "name",
+                                  "name": {
+                                    "name": "name",
+                                    "span": {
+                                      "start": 1171,
+                                      "end": 1175
+                                    }
+                                  },
                                   "value": {
                                     "kind": {
                                       "ArrayAccess": {
@@ -1369,7 +1381,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                   }
                                 },
                                 {
-                                  "name": "email",
+                                  "name": {
+                                    "name": "email",
+                                    "span": {
+                                      "start": 1203,
+                                      "end": 1208
+                                    }
+                                  },
                                   "value": {
                                     "kind": {
                                       "NullCoalesce": {
@@ -1533,7 +1551,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                         "end": 1310
                                       }
                                     },
-                                    "member": "queryCount"
+                                    "member": {
+                                      "name": "queryCount",
+                                      "span": {
+                                        "start": 1312,
+                                        "end": 1323
+                                      }
+                                    }
                                   }
                                 },
                                 "span": {
@@ -1835,7 +1859,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                         "end": 1525
                                       }
                                     },
-                                    "member": "queryCount"
+                                    "member": {
+                                      "name": "queryCount",
+                                      "span": {
+                                        "start": 1527,
+                                        "end": 1538
+                                      }
+                                    }
                                   }
                                 },
                                 "span": {
@@ -3430,7 +3460,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                   "end": 2694
                                 }
                               },
-                              "member": "queryCount"
+                              "member": {
+                                "name": "queryCount",
+                                "span": {
+                                  "start": 2696,
+                                  "end": 2707
+                                }
+                              }
                             }
                           },
                           "span": {

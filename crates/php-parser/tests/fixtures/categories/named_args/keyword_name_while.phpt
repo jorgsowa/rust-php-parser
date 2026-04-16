@@ -19,7 +19,13 @@
               },
               "args": [
                 {
-                  "name": "while",
+                  "name": {
+                    "name": "while",
+                    "span": {
+                      "start": 10,
+                      "end": 15
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Variable": "x"

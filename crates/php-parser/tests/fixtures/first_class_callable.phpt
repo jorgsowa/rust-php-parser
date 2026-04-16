@@ -144,7 +144,13 @@ $fn = Foo::bar(...);
                             "end": 59
                           }
                         },
-                        "method": "bar"
+                        "method": {
+                          "name": "bar",
+                          "span": {
+                            "start": 61,
+                            "end": 64
+                          }
+                        }
                       }
                     }
                   }

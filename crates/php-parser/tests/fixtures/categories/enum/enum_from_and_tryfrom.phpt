@@ -17,7 +17,13 @@
                   "end": 12
                 }
               },
-              "method": "from",
+              "method": {
+                "name": "from",
+                "span": {
+                  "start": 14,
+                  "end": 18
+                }
+              },
               "args": [
                 {
                   "name": null,
@@ -65,7 +71,13 @@
                   "end": 29
                 }
               },
-              "method": "tryFrom",
+              "method": {
+                "name": "tryFrom",
+                "span": {
+                  "start": 31,
+                  "end": 38
+                }
+              },
               "args": [
                 {
                   "name": null,

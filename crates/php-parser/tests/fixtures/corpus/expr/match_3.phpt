@@ -49,7 +49,13 @@ $result = match ($operator) {
                                     "end": 55
                                   }
                                 },
-                                "member": "ADD"
+                                "member": {
+                                  "name": "ADD",
+                                  "span": {
+                                    "start": 57,
+                                    "end": 60
+                                  }
+                                }
                               }
                             },
                             "span": {
