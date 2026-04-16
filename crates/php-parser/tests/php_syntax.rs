@@ -131,8 +131,15 @@ fn fixture_files_are_valid_php() {
                 ));
             }
         } else if config.expect_errors {
-            // Our parser rejects this — PHP may accept or reject (e.g. named_arg_duplicate
-            // is rejected by our parser but accepted by PHP). No assertion on php -l result.
+            // Our parser rejects this. PHP must also reject it — unless the fixture
+            // declares `php_accepts=true`, meaning our parser is intentionally stricter.
+            if !config.php_accepts && out.status.success() {
+                failures.push(format!(
+                    "{label}: our parser rejected this but php -l accepted it (add php_accepts=true to ===config=== if intentional)"
+                ));
+            } else if config.php_accepts && !out.status.success() {
+                failures.push(format!("{label}: php_accepts=true but php -l rejected it"));
+            }
         } else {
             // No parser errors and no php_error — PHP must accept.
             if !out.status.success() {

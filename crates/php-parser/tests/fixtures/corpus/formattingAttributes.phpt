@@ -48,8 +48,6 @@ list($x) = $y;
 (boolean) $boolean;
 (string) $string;
 (binary) $binary;
-===errors===
-the (binary) cast is not supported, use (string) instead
 ===ast===
 {
   "stmts": [
