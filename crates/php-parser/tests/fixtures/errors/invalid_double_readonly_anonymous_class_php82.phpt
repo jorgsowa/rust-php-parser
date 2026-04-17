@@ -1,0 +1,73 @@
+===config===
+max_php=8.2
+===source===
+<?php new readonly readonly class {};
+===errors===
+expected ';' after expression
+expected class name, found '{'
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "New": {
+              "class": {
+                "kind": {
+                  "Identifier": "readonly"
+                },
+                "span": {
+                  "start": 10,
+                  "end": 18
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 18
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 18
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": "<error>",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": true
+          },
+          "extends": null,
+          "implements": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 28,
+        "end": 36
+      }
+    },
+    {
+      "kind": "Nop",
+      "span": {
+        "start": 36,
+        "end": 37
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 37
+  }
+}
+===php_error===
+PHP Parse error:  syntax error, unexpected token "readonly" in Standard input code on line 1
