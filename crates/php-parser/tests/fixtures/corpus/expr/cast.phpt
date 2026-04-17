@@ -4,8 +4,8 @@ min_php=8.5
 <?php
 (array)   $a;
 (bool)    $a;
-(boolean) $a;
 (real)    $a;
+(boolean) $a;
 (double)  $a;
 (float)   $a;
 (int)     $a;
@@ -80,7 +80,7 @@ the (unset) cast is no longer supported
         "Expression": {
           "kind": {
             "Cast": [
-              "Bool",
+              "Float",
               {
                 "kind": {
                   "Variable": "a"
@@ -108,7 +108,7 @@ the (unset) cast is no longer supported
         "Expression": {
           "kind": {
             "Cast": [
-              "Float",
+              "Bool",
               {
                 "kind": {
                   "Variable": "a"
@@ -334,5 +334,4 @@ the (unset) cast is no longer supported
   }
 }
 ===php_error===
-PHP Deprecated:  Non-canonical cast (boolean) is deprecated, use the (bool) cast instead in Standard input code on line 4
-PHP Parse error:  The (real) cast has been removed, use (float) instead in Standard input code on line 5
+PHP Parse error:  The (real) cast has been removed, use (float) instead in Standard input code on line 4

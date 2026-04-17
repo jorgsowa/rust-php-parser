@@ -1,5 +1,5 @@
 ===config===
-min_php=8.4
+max_php=8.3
 ===source===
 <?php function f(): true|false {}
 ===errors===
@@ -75,4 +75,4 @@ Type contains both true and false, bool must be used instead
   }
 }
 ===php_error===
-PHP Fatal error:  Type contains both true and false, bool must be used instead in Standard input code on line 1
+PHP Fatal error:  Type contains both true and false, bool should be used instead in Standard input code on line 1

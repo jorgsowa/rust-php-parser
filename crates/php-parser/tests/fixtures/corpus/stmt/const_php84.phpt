@@ -1,5 +1,5 @@
 ===config===
-min_php=8.5
+max_php=8.4
 ===source===
 <?php
 
@@ -339,4 +339,4 @@ cannot use attributes on multi-constant declaration
   }
 }
 ===php_error===
-PHP Fatal error:  Cannot apply attributes to multiple constants at once in Standard input code on line 16
+PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 6

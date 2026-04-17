@@ -1,9 +1,9 @@
 ===config===
-min_php=8.3
+max_php=8.2
 ===source===
-<?php class A { readonly const X = 1; }
+<?php class A { static const X = 1; }
 ===errors===
-cannot use 'readonly' as constant modifier
+cannot use 'static' as constant modifier
 ===ast===
 {
   "stmts": [
@@ -29,8 +29,8 @@ cannot use 'readonly' as constant modifier
                       "Int": 1
                     },
                     "span": {
-                      "start": 35,
-                      "end": 36
+                      "start": 33,
+                      "end": 34
                     }
                   },
                   "attributes": []
@@ -38,7 +38,7 @@ cannot use 'readonly' as constant modifier
               },
               "span": {
                 "start": 16,
-                "end": 37
+                "end": 35
               }
             }
           ],
@@ -47,14 +47,14 @@ cannot use 'readonly' as constant modifier
       },
       "span": {
         "start": 6,
-        "end": 39
+        "end": 37
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 39
+    "end": 37
   }
 }
 ===php_error===
-PHP Fatal error:  Cannot use the readonly modifier on a class constant in Standard input code on line 1
+PHP Fatal error:  Cannot use 'static' as constant modifier in Standard input code on line 1

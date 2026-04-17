@@ -1,5 +1,5 @@
 ===config===
-min_php=8.3
+max_php=8.2
 ===source===
 <?php
 new
@@ -44,4 +44,4 @@ expected ';' after expression
   }
 }
 ===php_error===
-PHP Parse error:  syntax error, unexpected end of file, expecting "class" in Standard input code on line 2
+PHP Parse error:  syntax error, unexpected end of file in Standard input code on line 2

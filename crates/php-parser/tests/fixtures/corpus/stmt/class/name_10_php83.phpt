@@ -1,5 +1,5 @@
 ===config===
-min_php=8.4
+max_php=8.3
 ===source===
 <?php interface self {}
 ===errors===
@@ -28,4 +28,4 @@ cannot use 'self' as interface name
   }
 }
 ===php_error===
-PHP Fatal error:  Cannot use "self" as an interface name as it is reserved in Standard input code on line 1
+PHP Fatal error:  Cannot use 'self' as class name as it is reserved in Standard input code on line 1

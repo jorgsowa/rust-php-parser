@@ -1,5 +1,5 @@
 ===config===
-min_php=8.3
+max_php=8.2
 ===source===
 <?php
 
@@ -112,4 +112,4 @@ expected modifier, found identifier
   }
 }
 ===php_error===
-PHP Parse error:  syntax error, unexpected identifier "publi", expecting "function" in Standard input code on line 5
+PHP Parse error:  syntax error, unexpected identifier "publi", expecting "function" or "const" in Standard input code on line 5

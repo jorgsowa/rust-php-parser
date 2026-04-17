@@ -1,3 +1,5 @@
+===config===
+min_php=8.4
 ===source===
 <?php class parent {}
 ===errors===

@@ -1,9 +1,9 @@
 ===config===
-min_php=8.3
+max_php=8.2
 ===source===
-<?php class A { readonly const X = 1; }
+<?php class A { abstract final function a(); }
 ===errors===
-cannot use 'readonly' as constant modifier
+cannot use 'abstract' and 'final' together
 ===ast===
 {
   "stmts": [
@@ -21,24 +21,22 @@ cannot use 'readonly' as constant modifier
           "members": [
             {
               "kind": {
-                "ClassConst": {
-                  "name": "X",
+                "Method": {
+                  "name": "a",
                   "visibility": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 35,
-                      "end": 36
-                    }
-                  },
+                  "is_static": false,
+                  "is_abstract": true,
+                  "is_final": true,
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": null,
+                  "body": null,
                   "attributes": []
                 }
               },
               "span": {
                 "start": 16,
-                "end": 37
+                "end": 44
               }
             }
           ],
@@ -47,14 +45,14 @@ cannot use 'readonly' as constant modifier
       },
       "span": {
         "start": 6,
-        "end": 39
+        "end": 46
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 39
+    "end": 46
   }
 }
 ===php_error===
-PHP Fatal error:  Cannot use the readonly modifier on a class constant in Standard input code on line 1
+PHP Fatal error:  Cannot use the final modifier on an abstract class member in Standard input code on line 1

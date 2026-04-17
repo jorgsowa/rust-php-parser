@@ -1,5 +1,5 @@
 ===config===
-min_php=8.3
+max_php=8.2
 ===source===
 <?php new readonly readonly class {};
 ===errors===
@@ -70,4 +70,4 @@ expected class name, found '{'
   }
 }
 ===php_error===
-PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input code on line 1
+PHP Parse error:  syntax error, unexpected token "readonly" in Standard input code on line 1

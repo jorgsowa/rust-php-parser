@@ -1,5 +1,5 @@
 ===config===
-min_php=8.4
+max_php=8.3
 ===source===
 <?php
 function foo(int $a, $b {
@@ -121,4 +121,4 @@ unclosed '')'' opened at Span { start: 18, end: 19 }
   }
 }
 ===php_error===
-PHP Parse error:  syntax error, unexpected token "return", expecting identifier in Standard input code on line 3
+PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard input code on line 2

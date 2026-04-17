@@ -1,30 +1,34 @@
 ===config===
-min_php=8.5
+min_php=8.3
+max_php=8.3
 ===source===
-<?php enum Status { abstract public function label(): string; }
+<?php class Foo { abstract string $bar; }
 ===errors===
-enum methods cannot be abstract
+properties cannot be abstract
 ===ast===
 {
   "stmts": [
     {
       "kind": {
-        "Enum": {
-          "name": "Status",
-          "scalar_type": null,
+        "Class": {
+          "name": "Foo",
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
           "implements": [],
           "members": [
             {
               "kind": {
-                "Method": {
-                  "name": "label",
-                  "visibility": "Public",
+                "Property": {
+                  "name": "bar",
+                  "visibility": null,
+                  "set_visibility": null,
                   "is_static": false,
-                  "is_abstract": true,
-                  "is_final": false,
-                  "by_ref": false,
-                  "params": [],
-                  "return_type": {
+                  "is_readonly": false,
+                  "type_hint": {
                     "kind": {
                       "Named": {
                         "parts": [
@@ -32,23 +36,23 @@ enum methods cannot be abstract
                         ],
                         "kind": "Unqualified",
                         "span": {
-                          "start": 54,
-                          "end": 60
+                          "start": 27,
+                          "end": 33
                         }
                       }
                     },
                     "span": {
-                      "start": 54,
-                      "end": 60
+                      "start": 27,
+                      "end": 33
                     }
                   },
-                  "body": null,
+                  "default": null,
                   "attributes": []
                 }
               },
               "span": {
-                "start": 20,
-                "end": 61
+                "start": 18,
+                "end": 38
               }
             }
           ],
@@ -57,14 +61,14 @@ enum methods cannot be abstract
       },
       "span": {
         "start": 6,
-        "end": 63
+        "end": 41
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 63
+    "end": 41
   }
 }
 ===php_error===
-PHP Fatal error:  Enum method Status::label() must not be abstract in Standard input code on line 1
+PHP Fatal error:  Cannot use the abstract modifier on a property in Standard input code on line 1

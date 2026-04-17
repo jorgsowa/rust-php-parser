@@ -1,5 +1,5 @@
 ===config===
-min_php=8.5
+max_php=8.4
 ===source===
 <?php
 
@@ -99,4 +99,4 @@ abstract method cannot contain a body
   }
 }
 ===php_error===
-PHP Fatal error:  Class A declares abstract method baz() and must therefore be declared abstract in Standard input code on line 6
+PHP Fatal error:  Abstract function A::baz() cannot contain body in Standard input code on line 6

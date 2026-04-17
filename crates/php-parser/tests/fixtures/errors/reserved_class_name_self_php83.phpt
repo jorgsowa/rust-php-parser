@@ -1,16 +1,16 @@
 ===config===
-min_php=8.4
+max_php=8.3
 ===source===
-<?php class PARENT {}
+<?php class self {}
 ===errors===
-cannot use 'PARENT' as class name
+cannot use 'self' as class name
 ===ast===
 {
   "stmts": [
     {
       "kind": {
         "Class": {
-          "name": "PARENT",
+          "name": "self",
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -24,14 +24,14 @@ cannot use 'PARENT' as class name
       },
       "span": {
         "start": 6,
-        "end": 21
+        "end": 19
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 21
+    "end": 19
   }
 }
 ===php_error===
-PHP Fatal error:  Cannot use "PARENT" as a class name as it is reserved in Standard input code on line 1
+PHP Fatal error:  Cannot use 'self' as class name as it is reserved in Standard input code on line 1

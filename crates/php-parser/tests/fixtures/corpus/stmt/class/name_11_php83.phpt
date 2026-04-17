@@ -1,16 +1,16 @@
 ===config===
-min_php=8.4
+max_php=8.3
 ===source===
-<?php interface self {}
+<?php interface PARENT {}
 ===errors===
-cannot use 'self' as interface name
+cannot use 'PARENT' as interface name
 ===ast===
 {
   "stmts": [
     {
       "kind": {
         "Interface": {
-          "name": "self",
+          "name": "PARENT",
           "extends": [],
           "members": [],
           "attributes": []
@@ -18,14 +18,14 @@ cannot use 'self' as interface name
       },
       "span": {
         "start": 6,
-        "end": 23
+        "end": 25
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 23
+    "end": 25
   }
 }
 ===php_error===
-PHP Fatal error:  Cannot use "self" as an interface name as it is reserved in Standard input code on line 1
+PHP Fatal error:  Cannot use 'PARENT' as class name as it is reserved in Standard input code on line 1

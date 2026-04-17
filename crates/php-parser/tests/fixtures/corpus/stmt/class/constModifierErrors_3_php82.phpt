@@ -1,7 +1,10 @@
 ===config===
-min_php=8.3
+max_php=8.2
 ===source===
-<?php class A { readonly const X = 1; }
+<?php
+class A {
+    readonly const X = 1;
+}
 ===errors===
 cannot use 'readonly' as constant modifier
 ===ast===
@@ -29,16 +32,16 @@ cannot use 'readonly' as constant modifier
                       "Int": 1
                     },
                     "span": {
-                      "start": 35,
-                      "end": 36
+                      "start": 39,
+                      "end": 40
                     }
                   },
                   "attributes": []
                 }
               },
               "span": {
-                "start": 16,
-                "end": 37
+                "start": 20,
+                "end": 41
               }
             }
           ],
@@ -47,14 +50,14 @@ cannot use 'readonly' as constant modifier
       },
       "span": {
         "start": 6,
-        "end": 39
+        "end": 43
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 39
+    "end": 43
   }
 }
 ===php_error===
-PHP Fatal error:  Cannot use the readonly modifier on a class constant in Standard input code on line 1
+PHP Fatal error:  Cannot use 'readonly' as constant modifier in Standard input code on line 3

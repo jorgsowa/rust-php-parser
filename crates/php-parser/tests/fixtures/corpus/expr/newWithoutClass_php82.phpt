@@ -1,11 +1,10 @@
 ===config===
-min_php=8.3
+max_php=8.2
 ===source===
 <?php
-new
+new;
 ===errors===
-expected identifier, found end of file
-expected ';' after expression
+expected identifier, found ';'
 ===ast===
 {
   "stmts": [
@@ -20,7 +19,7 @@ expected ';' after expression
                 },
                 "span": {
                   "start": 9,
-                  "end": 9
+                  "end": 10
                 }
               },
               "args": []
@@ -34,14 +33,14 @@ expected ';' after expression
       },
       "span": {
         "start": 6,
-        "end": 9
+        "end": 10
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 9
+    "end": 10
   }
 }
 ===php_error===
-PHP Parse error:  syntax error, unexpected end of file, expecting "class" in Standard input code on line 2
+PHP Parse error:  syntax error, unexpected token ";" in Standard input code on line 2
