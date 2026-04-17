@@ -1,3 +1,5 @@
+===config===
+min_php=8.3
 ===source===
 <?php new readonly readonly class {};
 ===errors===

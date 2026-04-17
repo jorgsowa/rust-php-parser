@@ -1,3 +1,5 @@
+===config===
+min_php=8.5
 ===source===
 <?php enum Status { abstract public function label(): string; }
 ===errors===
