@@ -55,6 +55,9 @@
 ### Releases & Changelog
 - **[CHANGELOG.md](development/CHANGELOG.md)** — Version history and notable changes
 
+### Development Guides
+- **[ERRORS.md](development/ERRORS.md)** — Error types, fixture error sections, and parse-leniency divergences
+
 ---
 
 ## Key Findings
@@ -123,7 +126,8 @@ docs/
 │   ├── COVERAGE_REPORT.md                           # Code coverage (93-94%)
 │   └── STMT_COVERAGE_ANALYSIS.md                    # Statement coverage gaps
 └── development/
-    └── CHANGELOG.md                                  # Version history
+    ├── CHANGELOG.md                                  # Version history
+    └── ERRORS.md                                     # Error types and fixture error sections
 ```
 
 ---

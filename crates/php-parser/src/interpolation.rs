@@ -1,5 +1,6 @@
 use php_ast::*;
 
+use crate::diagnostics::ParseError;
 use crate::version::PhpVersion;
 
 /// Parse the inner content of a double-quoted or backtick string into parts.
@@ -13,6 +14,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
     inner: &'src str,
     base_offset: u32,
     version: PhpVersion,
+    errors: &mut Vec<ParseError>,
 ) -> ArenaVec<'arena, StringPart<'arena, 'src>> {
     let mut parts = ArenaVec::with_capacity_in(8, arena);
     let bytes = inner.as_bytes();
@@ -173,6 +175,11 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                         );
                         if i < len {
                             i += 1; // skip }
+                        } else {
+                            errors.push(ParseError::Forbidden {
+                                message: "unclosed '${' in string interpolation".into(),
+                                span: Span::new(var_offset, base_offset + i as u32),
+                            });
                         }
                         parts.push(StringPart::Expr(Expr {
                             kind: ExprKind::VariableVariable(arena.alloc(inner_expr)),
@@ -195,6 +202,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                         };
                         // Optional [index]
                         if i < len && bytes[i] == b'[' {
+                            let bracket_offset = base_offset + i as u32;
                             i += 1;
                             let idx_start = i;
                             while i < len && bytes[i] != b']' && bytes[i] != b'}' {
@@ -215,6 +223,11 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                                     }),
                                     span,
                                 };
+                            } else {
+                                errors.push(ParseError::Forbidden {
+                                    message: "unclosed '[' in string offset interpolation".into(),
+                                    span: Span::new(bracket_offset, base_offset + i as u32),
+                                });
                             }
                         }
                         // Skip to closing }
@@ -336,6 +349,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                     ));
                 }
 
+                let brace_offset = base_offset + i as u32;
                 i += 1; // skip {
                         // Find matching }
                 let expr_start = i;
@@ -369,6 +383,11 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                 let expr_end = i; // position of } or end of string
                 if depth == 0 {
                     i += 1; // skip }
+                } else {
+                    errors.push(ParseError::Forbidden {
+                        message: "unclosed '{' in string interpolation".into(),
+                        span: Span::new(brace_offset, base_offset + expr_end as u32),
+                    });
                 }
 
                 // Parse the expression using a sub-parser starting at the absolute offset
@@ -419,6 +438,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
     body_offset: u32,
     indent: &str,
     version: PhpVersion,
+    errors: &mut Vec<ParseError>,
 ) -> ArenaVec<'arena, StringPart<'arena, 'src>> {
     let indent_len = indent.len();
     let mut parts: ArenaVec<'arena, StringPart<'arena, 'src>> =
@@ -627,6 +647,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                     parts.push(StringPart::Literal(arena.alloc_str(&literal)));
                     literal.clear();
                 }
+                let brace_offset = body_offset + i as u32;
                 i += 1; // skip {
                 let expr_start = i;
                 let mut depth = 1;
@@ -657,6 +678,11 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                 let expr_end = i;
                 if depth == 0 {
                     i += 1; // skip }
+                } else {
+                    errors.push(ParseError::Forbidden {
+                        message: "unclosed '{' in string interpolation".into(),
+                        span: Span::new(brace_offset, body_offset + expr_end as u32),
+                    });
                 }
                 // raw_body is a verbatim source slice, so body_offset + expr_start is the
                 // correct absolute position — use the fast sub-parser path directly.

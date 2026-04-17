@@ -384,6 +384,10 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
     }
 
+    pub fn errors_mut(&mut self) -> &mut Vec<ParseError> {
+        &mut self.errors
+    }
+
     pub fn into_errors(self) -> Vec<ParseError> {
         self.errors
     }
