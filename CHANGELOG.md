@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-04-17
+
+### Added
+
+- Spans on static method/member/argument identifiers in the AST (`php-ast`, #197).
+- Named argument ordering and uniqueness validation: duplicate names and non-trailing named arguments now produce diagnostics (`php-rs-parser`, #193).
+- `Name::src_repr(&self, src: &'src str) -> &'src str` — zero-alloc slice into source for any name shape (`php-ast`, #169).
+
+### Changed (breaking)
+
+- `ScopeWalker::new` now requires the source string (`src: &'src str`) to support zero-alloc namespace resolution. Update call sites to pass `result.source` or your source buffer (#169).
+- `Scope` now derives `Copy`; `Scope::namespace` changed from `Option<Cow<'src, str>>` to `Option<&'src str>` (#169).
+- `ArenaVec::len` and `ArenaVec::last` explicit methods removed — both remain accessible via `Deref<Target=[T]>` and continue to work without call-site changes (#170).
+
+### Performance
+
+- `ScopeWalker` namespace tracking is now zero-alloc; scope saves/restores are a free word copy (#169).
+- `Printer` internal strings changed from heap-allocated `String` to `&'static str` (#164).
+- Lexer heredoc label now borrows from source instead of allocating a `String` (#163).
+
+### Fixed
+
+- Guard against silent `u32` truncation for source files larger than 4 GB in the lexer (#166).
+- Eliminated panic-prone `unwrap()` calls after explicit length checks in the parser (#165).
+- Replaced bare `unreachable!()` calls with descriptive messages and `Option` returns in the parser (#167).
+- Removed dead `ParseError::Unexpected` variant from diagnostics (#168).
+- Variable name extraction now guarded against empty-span tokens (#160).
+
+---
+
 ## [0.6.2] - 2026-04-12
 
 ### Fixed
