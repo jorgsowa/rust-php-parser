@@ -1,5 +1,4 @@
 ===config===
-parse_version=8.5
 min_php=8.5
 ===source===
 <?php class Foo { public static protected(set) int $count = 0; }
