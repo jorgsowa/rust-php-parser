@@ -84,6 +84,17 @@ pub trait Visitor<'arena, 'src> {
     fn visit_closure_use_var(&mut self, _var: &ClosureUseVar<'src>) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+
+    fn visit_trait_use(&mut self, trait_use: &TraitUseDecl<'arena, 'src>) -> ControlFlow<()> {
+        walk_trait_use(self, trait_use)
+    }
+
+    fn visit_trait_adaptation(
+        &mut self,
+        _adaptation: &TraitAdaptation<'arena, 'src>,
+    ) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
 }
 
 // =============================================================================
@@ -512,7 +523,9 @@ pub fn walk_class_member<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
         ClassMemberKind::ClassConst(cc) => {
             walk_class_const_decl(visitor, cc)?;
         }
-        ClassMemberKind::TraitUse(_) => {}
+        ClassMemberKind::TraitUse(trait_use) => {
+            visitor.visit_trait_use(trait_use)?;
+        }
     }
     ControlFlow::Continue(())
 }
@@ -556,7 +569,9 @@ pub fn walk_enum_member<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
         EnumMemberKind::ClassConst(cc) => {
             walk_class_const_decl(visitor, cc)?;
         }
-        EnumMemberKind::TraitUse(_) => {}
+        EnumMemberKind::TraitUse(trait_use) => {
+            visitor.visit_trait_use(trait_use)?;
+        }
     }
     ControlFlow::Continue(())
 }
@@ -609,6 +624,16 @@ pub fn walk_match_arm<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
         }
     }
     visitor.visit_expr(&arm.body)
+}
+
+pub fn walk_trait_use<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
+    visitor: &mut V,
+    trait_use: &TraitUseDecl<'arena, 'src>,
+) -> ControlFlow<()> {
+    for adaptation in trait_use.adaptations.iter() {
+        visitor.visit_trait_adaptation(adaptation)?;
+    }
+    ControlFlow::Continue(())
 }
 
 // =============================================================================
@@ -836,6 +861,22 @@ pub trait ScopeVisitor<'arena, 'src> {
     ) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+
+    fn visit_trait_use(
+        &mut self,
+        _trait_use: &TraitUseDecl<'arena, 'src>,
+        _scope: &Scope<'src>,
+    ) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
+
+    fn visit_trait_adaptation(
+        &mut self,
+        _adaptation: &TraitAdaptation<'arena, 'src>,
+        _scope: &Scope<'src>,
+    ) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
 }
 
 /// Drives a [`ScopeVisitor`] over an AST, maintaining [`Scope`] automatically.
@@ -1059,6 +1100,18 @@ impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> Visitor<'arena, 'src> for Scop
 
     fn visit_closure_use_var(&mut self, var: &ClosureUseVar<'src>) -> ControlFlow<()> {
         self.inner.visit_closure_use_var(var, &self.scope)
+    }
+
+    fn visit_trait_use(&mut self, trait_use: &TraitUseDecl<'arena, 'src>) -> ControlFlow<()> {
+        self.inner.visit_trait_use(trait_use, &self.scope)?;
+        walk_trait_use(self, trait_use)
+    }
+
+    fn visit_trait_adaptation(
+        &mut self,
+        adaptation: &TraitAdaptation<'arena, 'src>,
+    ) -> ControlFlow<()> {
+        self.inner.visit_trait_adaptation(adaptation, &self.scope)
     }
 }
 
