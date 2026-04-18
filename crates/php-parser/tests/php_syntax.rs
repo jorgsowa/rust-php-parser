@@ -91,6 +91,22 @@ fn collect_phpt_files(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
     paths
 }
 
+/// Parse `max_php` from the `===config===` section of a fixture, if present.
+fn parse_max_php(content: &str) -> Option<(u32, u32)> {
+    let parse_ver = |val: &str| -> Option<(u32, u32)> {
+        val.split_once('.')
+            .and_then(|(a, b)| Some((a.parse().ok()?, b.parse().ok()?)))
+    };
+    let rest = content.strip_prefix("===config===\n")?;
+    let source_marker = rest.find("===source===\n").unwrap_or(rest.len());
+    for line in rest[..source_marker].lines() {
+        if let Some(val) = line.strip_prefix("max_php=") {
+            return parse_ver(val);
+        }
+    }
+    None
+}
+
 /// Extract the `===php_error===` section from fixture content, if present.
 fn parse_php_error(content: &str) -> Option<String> {
     content.find("===php_error===\n").map(|p| {
@@ -145,15 +161,16 @@ fn fixture_files_are_valid_php() {
             .to_string_lossy()
             .to_string();
         let src = std::fs::read_to_string(&path).unwrap();
-        let (config, source) = common::parse_fixture(&src);
+        let (min_php, source) = common::parse_fixture(&src);
+        let max_php = parse_max_php(&src);
         let php_error = parse_php_error(&src);
 
-        if let Some(min) = config.min_php {
+        if let Some(min) = min_php {
             if !php_version_met(min) {
                 continue;
             }
         }
-        if let Some(max) = config.max_php {
+        if let Some(max) = max_php {
             if php_version_exceeded(max) {
                 continue;
             }
