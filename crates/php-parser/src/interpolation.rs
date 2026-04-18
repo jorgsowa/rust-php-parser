@@ -242,18 +242,26 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                             if i < len && bytes[i] == b']' {
                                 let idx_str = &inner[idx_start..i];
                                 i += 1;
-                                let idx_offset = base_offset + idx_start as u32;
-                                let idx_end = base_offset + (i - 1) as u32;
-                                let index_expr =
-                                    parse_simple_index(arena, source, idx_str, idx_offset, idx_end);
-                                let span = Span::new(var_offset, base_offset + i as u32);
-                                expr = Expr {
-                                    kind: ExprKind::ArrayAccess(ArrayAccessExpr {
-                                        array: arena.alloc(expr),
-                                        index: Some(arena.alloc(index_expr)),
-                                    }),
-                                    span,
-                                };
+                                if idx_str.is_empty() {
+                                    errors.push(ParseError::Forbidden {
+                                        message: "empty index in string interpolation".into(),
+                                        span: Span::new(bracket_offset, base_offset + i as u32),
+                                    });
+                                } else {
+                                    let idx_offset = base_offset + idx_start as u32;
+                                    let idx_end = base_offset + (i - 1) as u32;
+                                    let index_expr = parse_simple_index(
+                                        arena, source, idx_str, idx_offset, idx_end,
+                                    );
+                                    let span = Span::new(var_offset, base_offset + i as u32);
+                                    expr = Expr {
+                                        kind: ExprKind::ArrayAccess(ArrayAccessExpr {
+                                            array: arena.alloc(expr),
+                                            index: Some(arena.alloc(index_expr)),
+                                        }),
+                                        span,
+                                    };
+                                }
                             } else {
                                 errors.push(ParseError::Forbidden {
                                     message: "unclosed '[' in string offset interpolation".into(),
@@ -340,21 +348,30 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                             let idx_str = &inner[idx_start..i];
                             i += 1; // skip ]
 
-                            let idx_offset = base_offset + idx_start as u32;
-                            let idx_end = base_offset + (i - 1) as u32;
+                            if idx_str.is_empty() {
+                                errors.push(ParseError::Forbidden {
+                                    message: "empty index in string interpolation".into(),
+                                    span: Span::new(
+                                        base_offset + bracket_start as u32,
+                                        base_offset + i as u32,
+                                    ),
+                                });
+                            } else {
+                                let idx_offset = base_offset + idx_start as u32;
+                                let idx_end = base_offset + (i - 1) as u32;
 
-                            let index_expr =
-                                parse_simple_index(arena, source, idx_str, idx_offset, idx_end);
+                                let index_expr =
+                                    parse_simple_index(arena, source, idx_str, idx_offset, idx_end);
 
-                            let span = Span::new(var_offset, base_offset + i as u32);
-                            let _ = bracket_start; // used implicitly
-                            expr = Expr {
-                                kind: ExprKind::ArrayAccess(ArrayAccessExpr {
-                                    array: arena.alloc(expr),
-                                    index: Some(arena.alloc(index_expr)),
-                                }),
-                                span,
-                            };
+                                let span = Span::new(var_offset, base_offset + i as u32);
+                                expr = Expr {
+                                    kind: ExprKind::ArrayAccess(ArrayAccessExpr {
+                                        array: arena.alloc(expr),
+                                        index: Some(arena.alloc(index_expr)),
+                                    }),
+                                    span,
+                                };
+                            }
                         }
                     }
 
@@ -673,6 +690,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                     }
 
                     if i < len && bytes[i] == b'[' {
+                        let bracket_start = i;
                         i += 1; // skip [
                         let idx_start = i;
                         while i < len && bytes[i] != b']' {
@@ -681,18 +699,28 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                         if i < len && bytes[i] == b']' {
                             let idx_str = &raw_body[idx_start..i];
                             i += 1; // skip ]
-                            let idx_offset = body_offset + idx_start as u32;
-                            let idx_end = body_offset + (i - 1) as u32;
-                            let index_expr =
-                                parse_simple_index(arena, source, idx_str, idx_offset, idx_end);
-                            let span = Span::new(var_offset, body_offset + i as u32);
-                            expr = Expr {
-                                kind: ExprKind::ArrayAccess(ArrayAccessExpr {
-                                    array: arena.alloc(expr),
-                                    index: Some(arena.alloc(index_expr)),
-                                }),
-                                span,
-                            };
+                            if idx_str.is_empty() {
+                                errors.push(ParseError::Forbidden {
+                                    message: "empty index in string interpolation".into(),
+                                    span: Span::new(
+                                        body_offset + bracket_start as u32,
+                                        body_offset + i as u32,
+                                    ),
+                                });
+                            } else {
+                                let idx_offset = body_offset + idx_start as u32;
+                                let idx_end = body_offset + (i - 1) as u32;
+                                let index_expr =
+                                    parse_simple_index(arena, source, idx_str, idx_offset, idx_end);
+                                let span = Span::new(var_offset, body_offset + i as u32);
+                                expr = Expr {
+                                    kind: ExprKind::ArrayAccess(ArrayAccessExpr {
+                                        array: arena.alloc(expr),
+                                        index: Some(arena.alloc(index_expr)),
+                                    }),
+                                    span,
+                                };
+                            }
                         }
                     }
                     parts.push(StringPart::Expr(expr));
