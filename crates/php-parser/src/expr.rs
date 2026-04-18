@@ -10,39 +10,45 @@ use crate::precedence::{self, ASSIGNMENT_BP, NULL_COALESCE_LEFT_BP, TERNARY_BP};
 use crate::stmt;
 use crate::version::PhpVersion;
 
-/// Returns true if the token is a non-associative operator in PHP 8.
-/// Chaining these (e.g. `1 < 2 < 3`) is a fatal error in PHP 8.0+.
-fn is_nonassoc_token(kind: TokenKind) -> bool {
-    matches!(
-        kind,
+/// Returns the "chain group" binding power for a non-associative token, if applicable.
+///
+/// PHP 8.0+ rejects chaining non-associative operators within the same precedence group:
+/// - Equality group (bp 25): `==`, `!=`, `===`, `!==`, `<=>`
+/// - Comparison group (bp 27): `<`, `>`, `<=`, `>=`
+///
+/// `instanceof` is intentionally excluded: PHP allows `$a instanceof Foo instanceof Bar`
+/// at parse time and does not reject cross-group chains like `$a > $b == $c`.
+fn nonassoc_chain_level_for_token(kind: TokenKind) -> Option<u8> {
+    match kind {
         TokenKind::EqualsEquals
-            | TokenKind::BangEquals
-            | TokenKind::EqualsEqualsEquals
-            | TokenKind::BangEqualsEquals
-            | TokenKind::Spaceship
-            | TokenKind::LessThan
-            | TokenKind::GreaterThan
-            | TokenKind::LessThanEquals
-            | TokenKind::GreaterThanEquals
-            | TokenKind::Instanceof
-    )
+        | TokenKind::BangEquals
+        | TokenKind::EqualsEqualsEquals
+        | TokenKind::BangEqualsEquals
+        | TokenKind::Spaceship => Some(25),
+        TokenKind::LessThan
+        | TokenKind::GreaterThan
+        | TokenKind::LessThanEquals
+        | TokenKind::GreaterThanEquals => Some(27),
+        _ => None,
+    }
 }
 
-/// Returns true if the binary op is a non-associative operator.
-fn is_nonassoc_binary_op(op: BinaryOp) -> bool {
-    matches!(
-        op,
+/// Returns the "chain group" binding power for a binary op produced by a non-associative token.
+///
+/// Mirrors `nonassoc_chain_level_for_token` but operates on the already-parsed binary op.
+/// `instanceof` returns `None` for the same reasons described above.
+fn nonassoc_chain_level_for_op(op: BinaryOp) -> Option<u8> {
+    match op {
         BinaryOp::Equal
-            | BinaryOp::NotEqual
-            | BinaryOp::Identical
-            | BinaryOp::NotIdentical
-            | BinaryOp::Spaceship
-            | BinaryOp::Less
-            | BinaryOp::Greater
-            | BinaryOp::LessOrEqual
-            | BinaryOp::GreaterOrEqual
-            | BinaryOp::Instanceof
-    )
+        | BinaryOp::NotEqual
+        | BinaryOp::Identical
+        | BinaryOp::NotIdentical
+        | BinaryOp::Spaceship => Some(25),
+        BinaryOp::Less | BinaryOp::Greater | BinaryOp::LessOrEqual | BinaryOp::GreaterOrEqual => {
+            Some(27)
+        }
+        _ => None,
+    }
 }
 
 /// Cast keyword strings and their CastKind values
@@ -648,19 +654,23 @@ pub fn parse_expr_bp<'arena, 'src>(
             if left_bp < min_bp {
                 break;
             }
-            // PHP 8.0+: chaining non-associative operators is a fatal error.
-            // Detect when the LHS is already a binary expression with a non-assoc op
-            // and the current token is also a non-assoc op at the same precedence level.
-            if parser.version >= PhpVersion::Php80
-                && is_nonassoc_token(kind)
-                && matches!(&lhs.kind, ExprKind::Binary(b) if is_nonassoc_binary_op(b.op))
-            {
-                let span = parser.current_span();
-                parser.error(ParseError::Forbidden {
-                    message: "Chaining non-associative operators requires explicit parentheses."
-                        .into(),
-                    span,
-                });
+            // PHP 8.0+: chaining non-associative operators within the same precedence group
+            // is a fatal error (e.g. `1 < 2 < 3`, `$a === $b == $c`).
+            // Cross-group chains (e.g. `$a > $b == $c`) and instanceof chains are
+            // allowed by PHP and must not be flagged here.
+            if parser.version >= PhpVersion::Php80 {
+                if let Some(current_level) = nonassoc_chain_level_for_token(kind) {
+                    if matches!(&lhs.kind, ExprKind::Binary(b) if nonassoc_chain_level_for_op(b.op) == Some(current_level))
+                    {
+                        let span = parser.current_span();
+                        parser.error(ParseError::Forbidden {
+                            message:
+                                "Chaining non-associative operators requires explicit parentheses."
+                                    .into(),
+                            span,
+                        });
+                    }
+                }
             }
             let op_token = parser.advance();
             if op_token.kind == TokenKind::PipeArrow {
