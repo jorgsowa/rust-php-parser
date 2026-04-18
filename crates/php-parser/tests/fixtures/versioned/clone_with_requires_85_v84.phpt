@@ -1,5 +1,5 @@
 ===config===
-parse_version=8.4
+min_php=8.4
 ===source===
 <?php $b = clone($a, ['alpha' => 128]);
 ===errors===

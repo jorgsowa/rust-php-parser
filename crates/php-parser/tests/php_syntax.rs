@@ -91,32 +91,6 @@ fn collect_phpt_files(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
     paths
 }
 
-type VersionPair = (u32, u32);
-
-/// Parse the `===config===` section of a fixture, returning `(min_php, max_php)`.
-fn parse_config_versions(content: &str) -> (Option<VersionPair>, Option<VersionPair>) {
-    let parse_ver = |val: &str| -> Option<(u32, u32)> {
-        val.split_once('.')
-            .and_then(|(a, b)| Some((a.parse().ok()?, b.parse().ok()?)))
-    };
-
-    let mut min_php = None;
-    let mut max_php = None;
-
-    if let Some(rest) = content.strip_prefix("===config===\n") {
-        let source_marker = rest.find("===source===\n").unwrap_or(rest.len());
-        for line in rest[..source_marker].lines() {
-            if let Some(val) = line.strip_prefix("min_php=") {
-                min_php = parse_ver(val);
-            } else if let Some(val) = line.strip_prefix("max_php=") {
-                max_php = parse_ver(val);
-            }
-        }
-    }
-
-    (min_php, max_php)
-}
-
 /// Extract the `===php_error===` section from fixture content, if present.
 fn parse_php_error(content: &str) -> Option<String> {
     content.find("===php_error===\n").map(|p| {
@@ -136,7 +110,7 @@ fn update_fixture_php_error(path: &str, actual: &str) {
     } else {
         // Append a new section.
         format!(
-            "{}===php_error===\n{}\n",
+            "{}\n===php_error===\n{}\n",
             content.trim_end_matches('\n'),
             actual
         )
@@ -171,24 +145,18 @@ fn fixture_files_are_valid_php() {
             .to_string_lossy()
             .to_string();
         let src = std::fs::read_to_string(&path).unwrap();
-        let (parse_version, source) = common::parse_fixture(&src);
-        let (min_php, max_php) = parse_config_versions(&src);
+        let (config, source) = common::parse_fixture(&src);
         let php_error = parse_php_error(&src);
 
-        if let Some(min) = min_php {
+        if let Some(min) = config.min_php {
             if !php_version_met(min) {
                 continue;
             }
         }
-        if let Some(max) = max_php {
+        if let Some(max) = config.max_php {
             if php_version_exceeded(max) {
                 continue;
             }
-        }
-        // Skip version-specific fixtures — they test parser behavior at a particular
-        // PHP version and may contain syntax that PHP itself rejects semantically.
-        if parse_version.is_some() {
-            continue;
         }
 
         let out = php_lint(source);
@@ -210,10 +178,12 @@ fn fixture_files_are_valid_php() {
         } else {
             // No ===php_error=== — PHP must accept.
             if !out.status.success() {
-                failures.push(format!(
-                    "{label}:\n  {}",
-                    String::from_utf8_lossy(&out.stderr).trim()
-                ));
+                let actual = strip_stack_trace(String::from_utf8_lossy(&out.stderr).trim());
+                if update {
+                    update_fixture_php_error(path.to_str().unwrap(), &actual);
+                } else {
+                    failures.push(format!("{label}:\n  {actual}"));
+                }
             }
         }
     }

@@ -1,5 +1,5 @@
 ===config===
-parse_version=8.2
+min_php=8.2
 ===source===
 <?php readonly class Foo { public string $bar; }
 ===ast===

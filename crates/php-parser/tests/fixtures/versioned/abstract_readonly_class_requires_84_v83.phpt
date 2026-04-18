@@ -1,5 +1,5 @@
 ===config===
-parse_version=8.3
+min_php=8.3
 ===source===
 <?php abstract readonly class Foo {}
 ===errors===

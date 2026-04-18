@@ -1,5 +1,4 @@
 ===config===
-parse_version=8.5
 min_php=8.5
 ===source===
 <?php $x = (void)1 + 2;
@@ -80,3 +79,5 @@ min_php=8.5
     "end": 23
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "(void)" in Standard input code on line 1

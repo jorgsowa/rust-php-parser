@@ -1,5 +1,5 @@
 ===config===
-parse_version=8.0
+min_php=8.0
 ===source===
 <?php $x = (true ? 1 : 2) ? 3 : 4;
 ===ast===

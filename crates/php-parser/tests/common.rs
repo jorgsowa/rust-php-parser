@@ -1,24 +1,33 @@
-/// Parse a fixture file and return `(parse_version, source)`.
+/// Configuration parsed from a fixture's `===config===` section.
+pub struct FixtureConfig {
+    pub min_php: Option<(u32, u32)>,
+    pub max_php: Option<(u32, u32)>,
+}
+
+/// Parse a fixture file and return `(config, source)`.
 ///
-/// `parse_version` is read from an optional `===config===` section.
+/// Config is read from an optional `===config===` section.
 /// `source` is the PHP code between `===source===` and the next section marker.
 ///
 /// All other section contents (`===errors===`, `===ast===`, `===php_error===`) are
 /// left for each test binary to extract directly from the original content, since
 /// different test binaries need different subsets.
-pub fn parse_fixture(content: &str) -> (Option<(u32, u32)>, &str) {
+pub fn parse_fixture(content: &str) -> (FixtureConfig, &str) {
     let parse_ver = |val: &str| -> Option<(u32, u32)> {
         val.split_once('.')
             .and_then(|(a, b)| Some((a.parse().ok()?, b.parse().ok()?)))
     };
 
-    let mut parse_version = None;
+    let mut min_php = None;
+    let mut max_php = None;
 
     let rest = if let Some(rest) = content.strip_prefix("===config===\n") {
         let source_marker = rest.find("===source===\n").unwrap_or(rest.len());
         for line in rest[..source_marker].lines() {
-            if let Some(val) = line.strip_prefix("parse_version=") {
-                parse_version = parse_ver(val);
+            if let Some(val) = line.strip_prefix("min_php=") {
+                min_php = parse_ver(val);
+            } else if let Some(val) = line.strip_prefix("max_php=") {
+                max_php = parse_ver(val);
             }
         }
         &rest[source_marker..]
@@ -45,5 +54,5 @@ pub fn parse_fixture(content: &str) -> (Option<(u32, u32)>, &str) {
         source_raw.strip_suffix('\n').unwrap_or(source_raw)
     };
 
-    (parse_version, source)
+    (FixtureConfig { min_php, max_php }, source)
 }

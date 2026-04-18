@@ -1,5 +1,5 @@
 ===config===
-parse_version=8.4
+min_php=8.4
 ===source===
 <?php class Foo { public static private(set) string $bar = 'x'; }
 ===errors===
