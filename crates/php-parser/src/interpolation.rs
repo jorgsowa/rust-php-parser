@@ -30,10 +30,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
         match bytes[i] {
             b'\\' => {
                 // Materialise an owned buffer for this run if not already done.
-                if owned.is_none() {
-                    owned = Some(inner[literal_start..i].to_string());
-                }
-                let buf = owned.as_mut().unwrap();
+                let buf = owned.get_or_insert_with(|| inner[literal_start..i].to_string());
                 if i + 1 < len {
                     let next = bytes[i + 1];
                     match next {
