@@ -1851,14 +1851,9 @@ fn parse_alias_rhs<'arena, 'src>(
     };
 
     // New name (optional if visibility was given)
-    let new_name = if parser.check(TokenKind::Identifier) || parser.is_semi_reserved_keyword() {
-        let (text, span) = parser
-            .eat_identifier_or_keyword()
-            .expect("guaranteed by check above");
-        Some(Name::Simple { value: text, span })
-    } else {
-        None
-    };
+    let new_name = parser
+        .eat_identifier_or_keyword()
+        .map(|(text, span)| Name::Simple { value: text, span });
 
     (new_modifier, new_name)
 }
