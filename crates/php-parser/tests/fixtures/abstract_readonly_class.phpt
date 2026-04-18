@@ -1,5 +1,5 @@
 ===config===
-min_php=8.2
+min_php=8.4
 ===source===
 <?php abstract readonly class Foo {}
 ===ast===

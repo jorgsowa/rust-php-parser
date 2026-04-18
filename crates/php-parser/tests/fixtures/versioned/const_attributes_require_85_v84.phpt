@@ -1,5 +1,6 @@
 ===config===
-parse_version=8.4
+min_php=8.4
+max_php=8.4
 ===source===
 <?php #[MyAttr] const VERSION = '8.5';
 ===errors===
@@ -58,3 +59,5 @@ parse_version=8.4
     "end": 38
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 1

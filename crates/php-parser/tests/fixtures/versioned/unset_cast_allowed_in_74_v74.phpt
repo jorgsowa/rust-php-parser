@@ -1,5 +1,5 @@
 ===config===
-parse_version=7.4
+min_php=7.4
 ===source===
 <?php (unset)$x;
 ===ast===

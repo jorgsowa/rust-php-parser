@@ -1,5 +1,6 @@
 ===config===
-parse_version=8.4
+min_php=8.4
+max_php=8.4
 ===source===
 <?php $fn = clone(...);
 ===errors===
@@ -62,3 +63,5 @@ parse_version=8.4
     "end": 23
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "..." in Standard input code on line 1

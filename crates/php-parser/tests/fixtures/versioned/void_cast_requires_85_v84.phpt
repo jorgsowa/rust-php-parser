@@ -1,5 +1,6 @@
 ===config===
-parse_version=8.4
+min_php=8.4
+max_php=8.4
 ===source===
 <?php (void) getVersion();
 ===errors===
@@ -52,3 +53,5 @@ parse_version=8.4
     "end": 26
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected identifier "getVersion" in Standard input code on line 1

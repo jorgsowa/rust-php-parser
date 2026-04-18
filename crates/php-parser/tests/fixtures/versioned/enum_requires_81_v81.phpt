@@ -1,5 +1,5 @@
 ===config===
-parse_version=8.1
+min_php=8.1
 ===source===
 <?php enum Status { case Active; case Inactive; }
 ===ast===

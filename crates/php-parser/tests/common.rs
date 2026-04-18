@@ -1,6 +1,7 @@
-/// Parse a fixture file and return `(parse_version, source)`.
+/// Parse a fixture file and return `(min_php, source)`.
 ///
-/// `parse_version` is read from an optional `===config===` section.
+/// `min_php` is read from an optional `===config===` section and controls both
+/// the Rust parse target version and the minimum PHP version for `php -l` gating.
 /// `source` is the PHP code between `===source===` and the next section marker.
 ///
 /// All other section contents (`===errors===`, `===ast===`, `===php_error===`) are
@@ -12,13 +13,13 @@ pub fn parse_fixture(content: &str) -> (Option<(u32, u32)>, &str) {
             .and_then(|(a, b)| Some((a.parse().ok()?, b.parse().ok()?)))
     };
 
-    let mut parse_version = None;
+    let mut min_php = None;
 
     let rest = if let Some(rest) = content.strip_prefix("===config===\n") {
         let source_marker = rest.find("===source===\n").unwrap_or(rest.len());
         for line in rest[..source_marker].lines() {
-            if let Some(val) = line.strip_prefix("parse_version=") {
-                parse_version = parse_ver(val);
+            if let Some(val) = line.strip_prefix("min_php=") {
+                min_php = parse_ver(val);
             }
         }
         &rest[source_marker..]
@@ -45,5 +46,5 @@ pub fn parse_fixture(content: &str) -> (Option<(u32, u32)>, &str) {
         source_raw.strip_suffix('\n').unwrap_or(source_raw)
     };
 
-    (parse_version, source)
+    (min_php, source)
 }

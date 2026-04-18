@@ -1,5 +1,6 @@
 ===config===
-parse_version=8.2
+min_php=8.2
+max_php=8.2
 ===source===
 <?php class Foo { public const string NAME = 'foo'; }
 ===errors===
@@ -74,3 +75,5 @@ parse_version=8.2
     "end": 53
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected identifier "NAME", expecting "=" in Standard input code on line 1

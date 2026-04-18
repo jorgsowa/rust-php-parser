@@ -1,5 +1,5 @@
 ===config===
-parse_version=8.5
+min_php=8.5
 ===source===
 <?php $x = $value |> trim(...) |> strtolower(...);
 ===ast===

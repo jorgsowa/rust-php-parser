@@ -1,5 +1,6 @@
 ===config===
-parse_version=8.4
+min_php=8.4
+max_php=8.4
 ===source===
 <?php class Foo { public static private(set) string $bar = 'x'; }
 ===errors===
@@ -77,3 +78,5 @@ parse_version=8.4
     "end": 65
   }
 }
+===php_error===
+PHP Fatal error:  Static property may not have asymmetric visibility in Standard input code on line 1

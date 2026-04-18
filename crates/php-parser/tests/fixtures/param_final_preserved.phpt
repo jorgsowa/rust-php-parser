@@ -1,5 +1,5 @@
 ===config===
-parse_version=8.5
+min_php=8.5
 ===source===
 <?php class Foo { public function __construct(public final string $bar) {} }
 ===ast===

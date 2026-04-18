@@ -1,5 +1,6 @@
 ===config===
-parse_version=8.4
+min_php=8.4
+max_php=8.4
 ===source===
 <?php class Foo { public function __construct(public final string $bar) {} }
 ===errors===
@@ -88,3 +89,5 @@ parse_version=8.4
     "end": 76
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use the final modifier on a parameter in Standard input code on line 1

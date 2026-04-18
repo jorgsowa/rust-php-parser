@@ -89,10 +89,10 @@ fn fixtures() {
     for path in paths {
         let rel = path.strip_prefix(&dir).unwrap().to_string_lossy();
         let content = std::fs::read_to_string(&path).unwrap();
-        let (parse_version, source) = common::parse_fixture(&content);
+        let (min_php, source) = common::parse_fixture(&content);
         let arena = bumpalo::Bump::new();
 
-        let result = if let Some(ver) = parse_version {
+        let result = if let Some(ver) = min_php {
             php_rs_parser::parse_versioned(&arena, source, php_version(ver))
         } else {
             php_rs_parser::parse(&arena, source)

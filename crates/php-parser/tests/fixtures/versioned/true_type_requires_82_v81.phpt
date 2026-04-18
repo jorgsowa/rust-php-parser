@@ -1,5 +1,5 @@
 ===config===
-parse_version=8.1
+min_php=8.1
 ===source===
 <?php function f(true $x) {}
 ===errors===
