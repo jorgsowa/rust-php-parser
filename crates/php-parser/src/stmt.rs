@@ -1961,9 +1961,31 @@ fn parse_property_hooks<'arena, 'src>(
 
         // Parse optional (params) for set hooks
         let params = if parser.check(TokenKind::LeftParen) {
+            let paren_span = parser.current_span();
             parser.advance();
             let p = parse_param_list(parser);
             parser.expect(TokenKind::RightParen);
+
+            // Validate parameter counts against hook kind
+            match kind {
+                PropertyHookKind::Get => {
+                    if !p.is_empty() {
+                        parser.error(ParseError::Forbidden {
+                            message: "get hook must not have a parameter list".into(),
+                            span: paren_span,
+                        });
+                    }
+                }
+                PropertyHookKind::Set => {
+                    if p.len() != 1 {
+                        parser.error(ParseError::Forbidden {
+                            message: "set hook must have exactly one parameter".into(),
+                            span: paren_span,
+                        });
+                    }
+                }
+            }
+
             p
         } else {
             parser.alloc_vec()
