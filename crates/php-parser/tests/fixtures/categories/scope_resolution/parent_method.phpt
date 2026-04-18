@@ -51,9 +51,10 @@
                                 }
                               },
                               "method": {
-                                "kind": {
-                                  "Identifier": "f"
-                                },
+                                "parts": [
+                                  "f"
+                                ],
+                                "kind": "Unqualified",
                                 "span": {
                                   "start": 60,
                                   "end": 61

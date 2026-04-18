@@ -189,9 +189,10 @@ new class {}();
                 }
               },
               "method": {
-                "kind": {
-                  "Identifier": "foo"
-                },
+                "parts": [
+                  "foo"
+                ],
+                "kind": "Unqualified",
                 "span": {
                   "start": 60,
                   "end": 63
@@ -556,9 +557,10 @@ new class {}();
                 }
               },
               "method": {
-                "kind": {
-                  "Identifier": "foo"
-                },
+                "parts": [
+                  "foo"
+                ],
+                "kind": "Unqualified",
                 "span": {
                   "start": 179,
                   "end": 182

@@ -21,9 +21,10 @@
                       }
                     },
                     "method": {
-                      "kind": {
-                        "Identifier": "create"
-                      },
+                      "parts": [
+                        "create"
+                      ],
+                      "kind": "Unqualified",
                       "span": {
                         "start": 11,
                         "end": 17

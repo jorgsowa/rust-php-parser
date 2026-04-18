@@ -209,9 +209,10 @@ $f = self::$prop;
                       }
                     },
                     "method": {
-                      "kind": {
-                        "Identifier": "method"
-                      },
+                      "parts": [
+                        "method"
+                      ],
+                      "kind": "Unqualified",
                       "span": {
                         "start": 73,
                         "end": 79
@@ -266,9 +267,10 @@ $f = self::$prop;
                       }
                     },
                     "method": {
-                      "kind": {
-                        "Identifier": "method"
-                      },
+                      "parts": [
+                        "method"
+                      ],
+                      "kind": "Unqualified",
                       "span": {
                         "start": 96,
                         "end": 102

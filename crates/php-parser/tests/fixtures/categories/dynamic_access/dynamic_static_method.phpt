@@ -7,32 +7,22 @@
       "kind": {
         "Expression": {
           "kind": {
-            "FunctionCall": {
-              "name": {
+            "StaticDynMethodCall": {
+              "class": {
                 "kind": {
-                  "StaticPropertyAccess": {
-                    "class": {
-                      "kind": {
-                        "Variable": "class"
-                      },
-                      "span": {
-                        "start": 6,
-                        "end": 12
-                      }
-                    },
-                    "member": {
-                      "kind": {
-                        "Identifier": "method"
-                      },
-                      "span": {
-                        "start": 14,
-                        "end": 21
-                      }
-                    }
-                  }
+                  "Variable": "class"
                 },
                 "span": {
                   "start": 6,
+                  "end": 12
+                }
+              },
+              "method": {
+                "kind": {
+                  "Variable": "method"
+                },
+                "span": {
+                  "start": 14,
                   "end": 21
                 }
               },

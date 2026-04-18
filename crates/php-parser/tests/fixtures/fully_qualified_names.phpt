@@ -88,9 +88,10 @@ $x = \strlen('hello');
                 }
               },
               "method": {
-                "kind": {
-                  "Identifier": "log"
-                },
+                "parts": [
+                  "log"
+                ],
+                "kind": "Unqualified",
                 "span": {
                   "start": 58,
                   "end": 61

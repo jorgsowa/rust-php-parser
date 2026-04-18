@@ -606,9 +606,10 @@ __FUNCIONT__->length();
                 }
               },
               "method": {
-                "kind": {
-                  "Identifier": "c"
-                },
+                "parts": [
+                  "c"
+                ],
+                "kind": "Unqualified",
                 "span": {
                   "start": 129,
                   "end": 130

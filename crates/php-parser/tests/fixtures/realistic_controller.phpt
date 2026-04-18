@@ -411,9 +411,10 @@ class UserController extends BaseController implements JsonResponder
                                                     }
                                                   },
                                                   "method": {
-                                                    "kind": {
-                                                      "Identifier": "find"
-                                                    },
+                                                    "parts": [
+                                                      "find"
+                                                    ],
+                                                    "kind": "Unqualified",
                                                     "span": {
                                                       "start": 386,
                                                       "end": 390
@@ -1054,9 +1055,10 @@ class UserController extends BaseController implements JsonResponder
                                       }
                                     },
                                     "method": {
-                                      "kind": {
-                                        "Identifier": "all"
-                                      },
+                                      "parts": [
+                                        "all"
+                                      ],
+                                      "kind": "Unqualified",
                                       "span": {
                                         "start": 1029,
                                         "end": 1032

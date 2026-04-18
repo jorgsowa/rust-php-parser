@@ -395,6 +395,12 @@ pub fn walk_expr<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
         }
         ExprKind::StaticMethodCall(call) => {
             visitor.visit_expr(call.class)?;
+            for arg in call.args.iter() {
+                visitor.visit_arg(arg)?;
+            }
+        }
+        ExprKind::StaticDynMethodCall(call) => {
+            visitor.visit_expr(call.class)?;
             visitor.visit_expr(call.method)?;
             for arg in call.args.iter() {
                 visitor.visit_arg(arg)?;

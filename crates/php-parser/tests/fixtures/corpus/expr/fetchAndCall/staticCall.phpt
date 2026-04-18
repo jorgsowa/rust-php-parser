@@ -34,9 +34,10 @@ $a['b']::c();
                 }
               },
               "method": {
-                "kind": {
-                  "Identifier": "b"
-                },
+                "parts": [
+                  "b"
+                ],
+                "kind": "Unqualified",
                 "span": {
                   "start": 36,
                   "end": 37
@@ -107,32 +108,22 @@ $a['b']::c();
       "kind": {
         "Expression": {
           "kind": {
-            "FunctionCall": {
-              "name": {
+            "StaticDynMethodCall": {
+              "class": {
                 "kind": {
-                  "StaticPropertyAccess": {
-                    "class": {
-                      "kind": {
-                        "Identifier": "A"
-                      },
-                      "span": {
-                        "start": 53,
-                        "end": 54
-                      }
-                    },
-                    "member": {
-                      "kind": {
-                        "Identifier": "b"
-                      },
-                      "span": {
-                        "start": 56,
-                        "end": 58
-                      }
-                    }
-                  }
+                  "Identifier": "A"
                 },
                 "span": {
                   "start": 53,
+                  "end": 54
+                }
+              },
+              "method": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 56,
                   "end": 58
                 }
               },
@@ -319,9 +310,10 @@ $a['b']::c();
                       }
                     },
                     "method": {
-                      "kind": {
-                        "Identifier": "b"
-                      },
+                      "parts": [
+                        "b"
+                      ],
+                      "kind": "Unqualified",
                       "span": {
                         "start": 122,
                         "end": 123
@@ -372,9 +364,10 @@ $a['b']::c();
                 }
               },
               "method": {
-                "kind": {
-                  "Identifier": "b"
-                },
+                "parts": [
+                  "b"
+                ],
+                "kind": "Unqualified",
                 "span": {
                   "start": 166,
                   "end": 167
@@ -409,9 +402,10 @@ $a['b']::c();
                 }
               },
               "method": {
-                "kind": {
-                  "Identifier": "b"
-                },
+                "parts": [
+                  "b"
+                ],
+                "kind": "Unqualified",
                 "span": {
                   "start": 175,
                   "end": 176
@@ -454,9 +448,10 @@ $a['b']::c();
                 }
               },
               "method": {
-                "kind": {
-                  "Identifier": "b"
-                },
+                "parts": [
+                  "b"
+                ],
+                "kind": "Unqualified",
                 "span": {
                   "start": 188,
                   "end": 189
@@ -510,9 +505,10 @@ $a['b']::c();
                 }
               },
               "method": {
-                "kind": {
-                  "Identifier": "c"
-                },
+                "parts": [
+                  "c"
+                ],
+                "kind": "Unqualified",
                 "span": {
                   "start": 202,
                   "end": 203

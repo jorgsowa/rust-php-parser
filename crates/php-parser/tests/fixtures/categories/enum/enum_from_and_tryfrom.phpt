@@ -18,9 +18,10 @@
                 }
               },
               "method": {
-                "kind": {
-                  "Identifier": "from"
-                },
+                "parts": [
+                  "from"
+                ],
+                "kind": "Unqualified",
                 "span": {
                   "start": 14,
                   "end": 18
@@ -74,9 +75,10 @@
                 }
               },
               "method": {
-                "kind": {
-                  "Identifier": "tryFrom"
-                },
+                "parts": [
+                  "tryFrom"
+                ],
+                "kind": "Unqualified",
                 "span": {
                   "start": 31,
                   "end": 38

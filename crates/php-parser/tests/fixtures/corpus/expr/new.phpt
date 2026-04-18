@@ -183,43 +183,33 @@ new $a->b['c']();
       "kind": {
         "Expression": {
           "kind": {
-            "FunctionCall": {
-              "name": {
+            "StaticDynMethodCall": {
+              "class": {
                 "kind": {
-                  "StaticPropertyAccess": {
+                  "New": {
                     "class": {
                       "kind": {
-                        "New": {
-                          "class": {
-                            "kind": {
-                              "Identifier": "A"
-                            },
-                            "span": {
-                              "start": 80,
-                              "end": 81
-                            }
-                          },
-                          "args": []
-                        }
+                        "Identifier": "A"
                       },
                       "span": {
-                        "start": 76,
+                        "start": 80,
                         "end": 81
                       }
                     },
-                    "member": {
-                      "kind": {
-                        "Identifier": "b"
-                      },
-                      "span": {
-                        "start": 83,
-                        "end": 85
-                      }
-                    }
+                    "args": []
                   }
                 },
                 "span": {
                   "start": 76,
+                  "end": 81
+                }
+              },
+              "method": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 83,
                   "end": 85
                 }
               },

@@ -443,20 +443,58 @@ pub fn parse_expr_bp<'arena, 'src>(
 
             // Check what follows ::
             if parser.check(TokenKind::Variable) {
-                // Static property: Class::$prop
                 let token = parser.advance();
-                let member = parser.alloc(Expr {
-                    kind: ExprKind::Identifier(NameStr::Src(parser.variable_name(token))),
-                    span: token.span,
-                });
-                let span = Span::new(lhs.span.start, token.span.end);
-                lhs = Expr {
-                    kind: ExprKind::StaticPropertyAccess(StaticAccessExpr {
-                        class: parser.alloc(lhs),
-                        member,
-                    }),
-                    span,
-                };
+                let var_name = parser.variable_name(token);
+                let var_span = token.span;
+
+                if parser.check(TokenKind::LeftParen) {
+                    // Dynamic static method call: Class::$method()
+                    let method = parser.alloc(Expr {
+                        kind: ExprKind::Variable(NameStr::Src(var_name)),
+                        span: var_span,
+                    });
+                    match parse_arg_list_or_callable(parser) {
+                        ArgListResult::CallableMarker => {
+                            let span = Span::new(lhs.span.start, parser.previous_end());
+                            lhs = Expr {
+                                kind: ExprKind::CallableCreate(CallableCreateExpr {
+                                    kind: CallableCreateKind::StaticMethod {
+                                        class: parser.alloc(lhs),
+                                        method,
+                                    },
+                                }),
+                                span,
+                            };
+                        }
+                        ArgListResult::Args(args) => {
+                            let span = Span::new(lhs.span.start, parser.previous_end());
+                            lhs = Expr {
+                                kind: ExprKind::StaticDynMethodCall(parser.alloc(
+                                    StaticDynMethodCallExpr {
+                                        class: parser.alloc(lhs),
+                                        method,
+                                        args,
+                                    },
+                                )),
+                                span,
+                            };
+                        }
+                    }
+                } else {
+                    // Static property: Class::$prop
+                    let member = parser.alloc(Expr {
+                        kind: ExprKind::Identifier(NameStr::Src(var_name)),
+                        span: var_span,
+                    });
+                    let span = Span::new(lhs.span.start, var_span.end);
+                    lhs = Expr {
+                        kind: ExprKind::StaticPropertyAccess(StaticAccessExpr {
+                            class: parser.alloc(lhs),
+                            member,
+                        }),
+                        span,
+                    };
+                }
             } else if parser.check(TokenKind::Dollar) {
                 // Dynamic static property: A::$$b, A::${'b'}
                 let member = parse_atom(parser);
@@ -552,20 +590,24 @@ pub fn parse_expr_bp<'arena, 'src>(
                         });
                         ("<error>", span)
                     };
-                let member = parser.alloc(Expr {
-                    kind: ExprKind::Identifier(NameStr::Src(member_name)),
-                    span: member_span,
-                });
 
                 if parser.check(TokenKind::LeftParen) {
+                    let method = Name::Simple {
+                        value: member_name,
+                        span: member_span,
+                    };
                     match parse_arg_list_or_callable(parser) {
                         ArgListResult::CallableMarker => {
+                            let method_expr = parser.alloc(Expr {
+                                kind: ExprKind::Identifier(NameStr::Src(member_name)),
+                                span: member_span,
+                            });
                             let span = Span::new(lhs.span.start, parser.previous_end());
                             lhs = Expr {
                                 kind: ExprKind::CallableCreate(CallableCreateExpr {
                                     kind: CallableCreateKind::StaticMethod {
                                         class: parser.alloc(lhs),
-                                        method: member,
+                                        method: method_expr,
                                     },
                                 }),
                                 span,
@@ -577,7 +619,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                                 kind: ExprKind::StaticMethodCall(parser.alloc(
                                     StaticMethodCallExpr {
                                         class: parser.alloc(lhs),
-                                        method: member,
+                                        method,
                                         args,
                                     },
                                 )),
@@ -587,6 +629,10 @@ pub fn parse_expr_bp<'arena, 'src>(
                     }
                 } else {
                     // Class constant
+                    let member = parser.alloc(Expr {
+                        kind: ExprKind::Identifier(NameStr::Src(member_name)),
+                        span: member_span,
+                    });
                     let span = Span::new(lhs.span.start, parser.previous_end());
                     lhs = Expr {
                         kind: ExprKind::ClassConstAccess(StaticAccessExpr {
