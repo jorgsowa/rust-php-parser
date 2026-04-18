@@ -58,7 +58,8 @@ pub(crate) mod stmt;
 pub mod version;
 
 use diagnostics::ParseError;
-use php_ast::{Comment, Program};
+use php_ast::{Comment, Program, Stmt};
+use php_lexer::TokenKind;
 use source_map::SourceMap;
 pub use version::PhpVersion;
 
@@ -118,6 +119,69 @@ pub fn parse_versioned<'arena, 'src>(
         comments: parser.take_comments(),
         errors: parser.into_errors(),
         source_map: SourceMap::new(source),
+    }
+}
+
+/// The result of parsing a single PHP statement.
+pub struct StmtResult<'arena, 'src> {
+    /// The parsed statement, or `None` if the offset points to end-of-file or
+    /// only whitespace/comments remain.
+    pub stmt: Option<Stmt<'arena, 'src>>,
+    /// All comments found from `offset` to the end of the consumed statement.
+    pub comments: Vec<Comment<'src>>,
+    /// Parse errors and diagnostics. Empty on a successful parse.
+    pub errors: Vec<ParseError>,
+}
+
+/// Parse a single PHP statement from `source` starting at byte `offset`.
+///
+/// The parser starts in **PHP mode** (not inline HTML mode), so
+/// `source[offset..]` must contain a PHP statement without a `<?php` open tag.
+/// Spans in the returned statement are absolute byte offsets into `source`.
+///
+/// Returns `None` for [`StmtResult::stmt`] if the source at `offset` is empty
+/// or only contains whitespace/comments.
+///
+/// # Example
+///
+/// ```
+/// let arena = bumpalo::Bump::new();
+/// let source = "<?php $x = 1; $y = 2;";
+/// // offset 6 skips "<?php " and lands on "$x = 1;"
+/// let result = php_rs_parser::parse_statement(&arena, source, 6);
+/// assert!(result.errors.is_empty());
+/// assert!(result.stmt.is_some());
+/// ```
+pub fn parse_statement<'arena, 'src>(
+    arena: &'arena bumpalo::Bump,
+    source: &'src str,
+    offset: usize,
+) -> StmtResult<'arena, 'src> {
+    parse_statement_versioned(arena, source, offset, PhpVersion::default())
+}
+
+/// Parse a single PHP statement targeting the given PHP `version`.
+///
+/// See [`parse_statement`] for details on the `offset` parameter and return value.
+pub fn parse_statement_versioned<'arena, 'src>(
+    arena: &'arena bumpalo::Bump,
+    source: &'src str,
+    offset: usize,
+    version: PhpVersion,
+) -> StmtResult<'arena, 'src> {
+    let mut parser = parser::Parser::new_at(arena, source, offset, version);
+    if parser.check(TokenKind::Eof) {
+        return StmtResult {
+            stmt: None,
+            comments: parser.take_comments(),
+            errors: parser.into_errors(),
+        };
+    }
+    let stmt = stmt::parse_stmt(&mut parser);
+    StmtResult {
+        stmt: Some(stmt),
+        comments: parser.take_comments(),
+        errors: parser.into_errors(),
     }
 }
 

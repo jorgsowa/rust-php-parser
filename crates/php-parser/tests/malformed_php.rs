@@ -223,3 +223,82 @@ fn unterminated_b_prefixed_double_quoted_ends_with_multibyte_char() {
     let arena = bumpalo::Bump::new();
     let _ = php_rs_parser::parse(&arena, src);
 }
+
+// ============================================================================
+// parse_statement — single-statement API
+// These tests use parse_statement/parse_statement_versioned, which start in
+// PHP mode at a given byte offset and return a single Stmt.  They cannot be
+// expressed as .phpt fixtures because the fixture runner always invokes the
+// full parse() API.
+// ============================================================================
+
+#[test]
+fn parse_statement_basic() {
+    let arena = bumpalo::Bump::new();
+    // Skip the "<?php " prefix (6 bytes) so we start right at the statement.
+    let source = "<?php $x = 42;";
+    let result = php_rs_parser::parse_statement(&arena, source, 6);
+    assert!(
+        result.errors.is_empty(),
+        "unexpected errors: {:?}",
+        result.errors
+    );
+    assert!(result.stmt.is_some(), "expected a statement");
+}
+
+#[test]
+fn parse_statement_second_statement() {
+    let arena = bumpalo::Bump::new();
+    // Source has two statements; we skip ahead to parse only the second one.
+    let source = "<?php $x = 1; $y = 2;";
+    //                           ^ offset 14 — "$y = 2;"
+    let result = php_rs_parser::parse_statement(&arena, source, 14);
+    assert!(
+        result.errors.is_empty(),
+        "unexpected errors: {:?}",
+        result.errors
+    );
+    assert!(result.stmt.is_some(), "expected a statement");
+}
+
+#[test]
+fn parse_statement_at_eof_returns_none() {
+    let arena = bumpalo::Bump::new();
+    let source = "<?php $x = 1;";
+    // Offset at the end of source → should return None (no statement).
+    let result = php_rs_parser::parse_statement(&arena, source, source.len());
+    assert!(result.stmt.is_none(), "expected None at EOF");
+}
+
+#[test]
+fn parse_statement_versioned_emits_version_error() {
+    let arena = bumpalo::Bump::new();
+    // Enum syntax requires PHP 8.1; targeting 8.0 should emit a VersionTooLow error.
+    let source = "<?php enum Status { case Active; }";
+    let result = php_rs_parser::parse_statement_versioned(
+        &arena,
+        source,
+        6,
+        php_rs_parser::PhpVersion::Php80,
+    );
+    assert!(result.stmt.is_some(), "statement should still be produced");
+    assert!(
+        !result.errors.is_empty(),
+        "expected a VersionTooLow error for enum on PHP 8.0"
+    );
+    let msg = result.errors[0].to_string();
+    assert!(msg.contains("requires PHP"), "unexpected error: {msg}");
+}
+
+#[test]
+fn parse_statement_with_syntax_error() {
+    let arena = bumpalo::Bump::new();
+    // Missing semicolon — parser should recover and still return a stmt.
+    let source = "<?php $x = 42";
+    let result = php_rs_parser::parse_statement(&arena, source, 6);
+    assert!(result.stmt.is_some(), "expected a (recovered) statement");
+    assert!(
+        !result.errors.is_empty(),
+        "expected a parse error for missing semicolon"
+    );
+}
