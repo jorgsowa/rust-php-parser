@@ -1247,6 +1247,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             let (label, body_start_in_text, body_end_in_text, indent) = parse_heredoc_content(text);
             let body_offset = token.span.start + body_start_in_text as u32;
             let raw_body = &src[body_offset as usize..token.span.start as usize + body_end_in_text];
+            validate_heredoc_indentation(raw_body, &indent, body_offset, parser.errors_mut());
             if crate::interpolation::has_interpolation(raw_body) {
                 if !indent.is_empty() {
                     // Indented heredoc — raw_body is a verbatim source slice but each line
@@ -1307,7 +1308,9 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             let src = parser.source();
             let text = &src[token.span.start as usize..token.span.end as usize];
             let (label, body_start_in_text, body_end_in_text, indent) = parse_heredoc_content(text);
+            let body_offset = token.span.start + body_start_in_text as u32;
             let raw_body = &text[body_start_in_text..body_end_in_text];
+            validate_heredoc_indentation(raw_body, &indent, body_offset, parser.errors_mut());
             let value: &'arena str = if !indent.is_empty() {
                 let s = raw_body
                     .lines()
@@ -2880,6 +2883,30 @@ fn parse_heredoc_content(text: &str) -> (&str, usize, usize, String) {
     let body_end_in_text = body_start_in_text + content.len();
 
     (label, body_start_in_text, body_end_in_text, indent)
+}
+
+/// Validate that every non-empty body line of an indented heredoc/nowdoc starts with `indent`.
+/// Emits `ParseError::Forbidden` for each line that violates the indentation requirement.
+/// Empty lines are always valid.
+fn validate_heredoc_indentation(
+    raw_body: &str,
+    indent: &str,
+    body_offset: u32,
+    errors: &mut Vec<ParseError>,
+) {
+    if indent.is_empty() {
+        return;
+    }
+    let mut offset = body_offset as usize;
+    for line in raw_body.split('\n') {
+        if !line.is_empty() && !line.starts_with(indent) {
+            errors.push(ParseError::Forbidden {
+                message: "Invalid body indentation level".into(),
+                span: Span::new(offset as u32, (offset + line.len()) as u32),
+            });
+        }
+        offset += line.len() + 1; // +1 for the '\n'
+    }
 }
 
 /// Parse an integer literal from raw bytes, skipping underscores, without heap allocation.
