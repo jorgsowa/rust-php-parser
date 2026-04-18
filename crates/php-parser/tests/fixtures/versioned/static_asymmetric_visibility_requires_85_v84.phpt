@@ -78,3 +78,5 @@ max_php=8.4
     "end": 65
   }
 }
+===php_error===
+PHP Fatal error:  Static property may not have asymmetric visibility in Standard input code on line 1

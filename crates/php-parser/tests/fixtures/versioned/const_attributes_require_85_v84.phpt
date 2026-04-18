@@ -59,3 +59,5 @@ max_php=8.4
     "end": 38
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 1

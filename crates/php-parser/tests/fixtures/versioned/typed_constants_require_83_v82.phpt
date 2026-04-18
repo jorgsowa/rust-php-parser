@@ -75,3 +75,5 @@ max_php=8.2
     "end": 53
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected identifier "NAME", expecting "=" in Standard input code on line 1

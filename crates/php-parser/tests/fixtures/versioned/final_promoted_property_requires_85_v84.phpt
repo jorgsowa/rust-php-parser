@@ -89,3 +89,5 @@ max_php=8.4
     "end": 76
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use the final modifier on a parameter in Standard input code on line 1
