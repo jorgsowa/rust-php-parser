@@ -27,6 +27,24 @@
 //! );
 //! assert!(!result.errors.is_empty()); // enums require PHP 8.1
 //! ```
+//!
+//! # Reusing arenas across re-parses (LSP usage)
+//!
+//! Use [`ParserContext`] to avoid allocator churn when the same document is
+//! re-parsed on every edit. The context owns a `bumpalo::Bump` arena and resets
+//! it in O(1) before each parse, reusing the backing memory once it has grown
+//! to a stable size.
+//!
+//! ```
+//! let mut ctx = php_rs_parser::ParserContext::new();
+//!
+//! let result = ctx.reparse("<?php echo 1;");
+//! assert!(result.errors.is_empty());
+//! drop(result); // must be dropped before the next reparse
+//!
+//! let result = ctx.reparse("<?php echo 2;");
+//! assert!(result.errors.is_empty());
+//! ```
 
 pub mod diagnostics;
 pub(crate) mod expr;
@@ -100,5 +118,74 @@ pub fn parse_versioned<'arena, 'src>(
         comments: parser.take_comments(),
         errors: parser.into_errors(),
         source_map: SourceMap::new(source),
+    }
+}
+
+/// A reusable parse context that keeps a `bumpalo::Bump` arena alive between
+/// re-parses, resetting it (O(1)) instead of dropping and reallocating.
+///
+/// This is the preferred entry point for LSP servers or any tool that parses
+/// the same document repeatedly. Once the arena has grown to accommodate the
+/// largest document seen, subsequent parses reuse the backing memory without
+/// any new allocations.
+///
+/// The Rust lifetime system enforces safety: the returned [`ParseResult`]
+/// borrows from `self`, so the borrow checker prevents calling [`reparse`] or
+/// [`reparse_versioned`] again while the previous result is still alive.
+///
+/// [`reparse`]: ParserContext::reparse
+/// [`reparse_versioned`]: ParserContext::reparse_versioned
+///
+/// # Example
+///
+/// ```
+/// let mut ctx = php_rs_parser::ParserContext::new();
+///
+/// let result = ctx.reparse("<?php echo 1;");
+/// assert!(result.errors.is_empty());
+/// drop(result); // must be dropped before the next reparse
+///
+/// let result = ctx.reparse("<?php echo 2;");
+/// assert!(result.errors.is_empty());
+/// ```
+pub struct ParserContext {
+    arena: bumpalo::Bump,
+}
+
+impl ParserContext {
+    /// Create a new context with an empty arena.
+    pub fn new() -> Self {
+        Self {
+            arena: bumpalo::Bump::new(),
+        }
+    }
+
+    /// Reset the arena and parse `source` using PHP 8.5 (the latest version).
+    ///
+    /// The previous [`ParseResult`] **must be dropped** before calling this
+    /// method. The borrow checker enforces this: the returned result borrows
+    /// `self` for the duration of its lifetime, so a second call while the
+    /// first result is still live is a compile-time error.
+    pub fn reparse<'a, 'src>(&'a mut self, source: &'src str) -> ParseResult<'a, 'src> {
+        self.arena.reset();
+        parse(&self.arena, source)
+    }
+
+    /// Reset the arena and parse `source` targeting the given PHP `version`.
+    ///
+    /// See [`reparse`](ParserContext::reparse) for lifetime safety notes.
+    pub fn reparse_versioned<'a, 'src>(
+        &'a mut self,
+        source: &'src str,
+        version: PhpVersion,
+    ) -> ParseResult<'a, 'src> {
+        self.arena.reset();
+        parse_versioned(&self.arena, source, version)
+    }
+}
+
+impl Default for ParserContext {
+    fn default() -> Self {
+        Self::new()
     }
 }
