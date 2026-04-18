@@ -1,5 +1,6 @@
 ===config===
 min_php=8.3
+max_php=8.3
 ===source===
 <?php abstract readonly class Foo {}
 ===errors===

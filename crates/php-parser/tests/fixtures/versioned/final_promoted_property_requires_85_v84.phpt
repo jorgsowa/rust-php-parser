@@ -1,5 +1,6 @@
 ===config===
 min_php=8.4
+max_php=8.4
 ===source===
 <?php class Foo { public function __construct(public final string $bar) {} }
 ===errors===

@@ -1,5 +1,6 @@
 ===config===
 min_php=8.4
+max_php=8.4
 ===source===
 <?php class Foo { public static private(set) string $bar = 'x'; }
 ===errors===
