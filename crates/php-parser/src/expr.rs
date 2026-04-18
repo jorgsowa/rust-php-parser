@@ -51,6 +51,27 @@ fn nonassoc_chain_level_for_op(op: BinaryOp) -> Option<u8> {
     }
 }
 
+/// Returns true if `kind` is a valid PHP assignment target (lvalue).
+///
+/// Valid targets: variable, variable-variable, array access, property access,
+/// static property access, array/list destructuring, and parenthesized valid targets.
+/// Invalid targets emit a `ParseError::Forbidden` diagnostic at the assignment site.
+fn is_valid_assignment_target(kind: &ExprKind<'_, '_>) -> bool {
+    match kind {
+        ExprKind::Variable(_)
+        | ExprKind::VariableVariable(_)
+        | ExprKind::ArrayAccess(_)
+        | ExprKind::PropertyAccess(_)
+        | ExprKind::NullsafePropertyAccess(_)
+        | ExprKind::StaticPropertyAccess(_)
+        | ExprKind::StaticPropertyAccessDynamic { .. }
+        | ExprKind::Array(_)
+        | ExprKind::Error => true,
+        ExprKind::Parenthesized(inner) => is_valid_assignment_target(&inner.kind),
+        _ => false,
+    }
+}
+
 /// Cast keyword strings and their CastKind values
 const CAST_KEYWORDS: &[(&str, CastKind)] = &[
     ("int", CastKind::Int),
@@ -88,6 +109,13 @@ fn parse_assign_continuation<'arena, 'src>(
     lhs: Expr<'arena, 'src>,
 ) -> Expr<'arena, 'src> {
     debug_assert!(parser.current_kind().is_assignment_op());
+    if !is_valid_assignment_target(&lhs.kind) {
+        let span = parser.current_span();
+        parser.error(ParseError::Forbidden {
+            message: "Cannot use expression as assignment target.".into(),
+            span,
+        });
+    }
     let op_token = parser.advance();
     let by_ref = op_token.kind == TokenKind::Equals && parser.check(TokenKind::Ampersand);
     if by_ref {
@@ -353,6 +381,12 @@ pub fn parse_expr_bp<'arena, 'src>(
                 let span = parser.current_span();
                 parser.error(ParseError::Forbidden {
                     message: "Cannot use increment/decrement as an assignment target.".into(),
+                    span,
+                });
+            } else if !is_valid_assignment_target(&lhs.kind) {
+                let span = parser.current_span();
+                parser.error(ParseError::Forbidden {
+                    message: "Cannot use expression as assignment target.".into(),
                     span,
                 });
             }
