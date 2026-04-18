@@ -91,6 +91,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                         }
                         b'u' => {
                             // Unicode escape: \u{HHHH} — PHP 7.0+
+                            let escape_start = i;
                             i += 2;
                             if i < len && bytes[i] == b'{' {
                                 i += 1; // skip {
@@ -100,15 +101,45 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                                 }
                                 if i < len && bytes[i] == b'}' {
                                     let hex = &inner[start..i];
-                                    if let Ok(codepoint) = u32::from_str_radix(hex, 16) {
+                                    i += 1; // skip }
+                                    let span = Span::new(
+                                        base_offset + escape_start as u32,
+                                        base_offset + i as u32,
+                                    );
+                                    if hex.is_empty() {
+                                        errors.push(ParseError::Forbidden {
+                                            message: "Invalid UTF-8 codepoint escape sequence: empty code point".into(),
+                                            span,
+                                        });
+                                    } else if let Ok(codepoint) = u32::from_str_radix(hex, 16) {
                                         if let Some(c) = char::from_u32(codepoint) {
                                             buf.push(c);
+                                        } else {
+                                            errors.push(ParseError::Forbidden {
+                                                message: "Invalid UTF-8 codepoint escape sequence: Codepoint too large".into(),
+                                                span,
+                                            });
                                         }
                                     }
-                                    i += 1; // skip }
                                 } else {
-                                    // Malformed — keep as-is
-                                    buf.push_str(&inner[start - 2..i]);
+                                    // Invalid hex content (e.g. \u{ZZZZ}) — scan to closing } for recovery
+                                    while i < len
+                                        && bytes[i] != b'}'
+                                        && bytes[i] != b'"'
+                                        && bytes[i] != b'\n'
+                                    {
+                                        i += 1;
+                                    }
+                                    if i < len && bytes[i] == b'}' {
+                                        i += 1; // skip }
+                                    }
+                                    errors.push(ParseError::Forbidden {
+                                        message: "Invalid UTF-8 codepoint escape sequence".into(),
+                                        span: Span::new(
+                                            base_offset + escape_start as u32,
+                                            base_offset + i as u32,
+                                        ),
+                                    });
                                 }
                             } else {
                                 buf.push('\\');
@@ -514,6 +545,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                         }
                         b'u' => {
                             // Unicode escape: \u{HHHH} — PHP 7.0+
+                            let escape_start = i;
                             i += 2;
                             if i < len && bytes[i] == b'{' {
                                 i += 1; // skip {
@@ -523,14 +555,41 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                                 }
                                 if i < len && bytes[i] == b'}' {
                                     let hex = &raw_body[start..i];
-                                    if let Ok(codepoint) = u32::from_str_radix(hex, 16) {
+                                    i += 1; // skip }
+                                    let span = Span::new(
+                                        body_offset + escape_start as u32,
+                                        body_offset + i as u32,
+                                    );
+                                    if hex.is_empty() {
+                                        errors.push(ParseError::Forbidden {
+                                            message: "Invalid UTF-8 codepoint escape sequence: empty code point".into(),
+                                            span,
+                                        });
+                                    } else if let Ok(codepoint) = u32::from_str_radix(hex, 16) {
                                         if let Some(c) = char::from_u32(codepoint) {
                                             literal.push(c);
+                                        } else {
+                                            errors.push(ParseError::Forbidden {
+                                                message: "Invalid UTF-8 codepoint escape sequence: Codepoint too large".into(),
+                                                span,
+                                            });
                                         }
                                     }
-                                    i += 1; // skip }
                                 } else {
-                                    literal.push_str(&raw_body[start - 2..i]);
+                                    // Invalid hex content (e.g. \u{ZZZZ}) — scan to closing } for recovery
+                                    while i < len && bytes[i] != b'}' && bytes[i] != b'\n' {
+                                        i += 1;
+                                    }
+                                    if i < len && bytes[i] == b'}' {
+                                        i += 1; // skip }
+                                    }
+                                    errors.push(ParseError::Forbidden {
+                                        message: "Invalid UTF-8 codepoint escape sequence".into(),
+                                        span: Span::new(
+                                            body_offset + escape_start as u32,
+                                            body_offset + i as u32,
+                                        ),
+                                    });
                                 }
                             } else {
                                 literal.push('\\');
