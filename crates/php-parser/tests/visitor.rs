@@ -3,7 +3,7 @@
 //! the visitor reaches all expected nodes.
 
 use php_ast::ast::*;
-use php_ast::visitor::{self, Scope, ScopeVisitor, ScopeWalker, Visitor};
+use php_ast::visitor::{self, walk_trait_use, Scope, ScopeVisitor, ScopeWalker, Visitor};
 use std::ops::ControlFlow;
 
 /// Parse PHP source and run a callback with the resulting program.
@@ -641,6 +641,119 @@ fn scope_visitor_enum_method_tracks_enum_and_function() {
                 c.method_scopes,
                 vec![(Some("Status".into()), Some("label".into()))]
             );
+        },
+    );
+}
+
+#[test]
+fn walks_trait_use_adaptations() {
+    with_parsed(
+        "<?php class Foo {
+            use A, B {
+                A::foo insteadof B;
+                B::foo as bar;
+            }
+        }",
+        |_src, program| {
+            struct AdaptationCounter {
+                count: usize,
+            }
+            impl<'arena, 'src> Visitor<'arena, 'src> for AdaptationCounter {
+                fn visit_trait_adaptation(
+                    &mut self,
+                    _adaptation: &TraitAdaptation<'arena, 'src>,
+                ) -> ControlFlow<()> {
+                    self.count += 1;
+                    ControlFlow::Continue(())
+                }
+            }
+
+            let mut v = AdaptationCounter { count: 0 };
+            let _ = v.visit_program(program);
+            assert_eq!(v.count, 2);
+        },
+    );
+}
+
+#[test]
+fn walk_trait_use_can_be_called_directly() {
+    with_parsed(
+        "<?php class Foo {
+            use A, B {
+                A::foo insteadof B;
+                B::bar as protected baz;
+            }
+        }",
+        |_src, program| {
+            struct AdaptationKindCollector {
+                precedence: usize,
+                alias: usize,
+            }
+            impl<'arena, 'src> Visitor<'arena, 'src> for AdaptationKindCollector {
+                fn visit_class_member(
+                    &mut self,
+                    member: &ClassMember<'arena, 'src>,
+                ) -> ControlFlow<()> {
+                    if let ClassMemberKind::TraitUse(tu) = &member.kind {
+                        walk_trait_use(self, tu)?;
+                    }
+                    ControlFlow::Continue(())
+                }
+                fn visit_trait_adaptation(
+                    &mut self,
+                    adaptation: &TraitAdaptation<'arena, 'src>,
+                ) -> ControlFlow<()> {
+                    match &adaptation.kind {
+                        TraitAdaptationKind::Precedence { .. } => self.precedence += 1,
+                        TraitAdaptationKind::Alias { .. } => self.alias += 1,
+                    }
+                    ControlFlow::Continue(())
+                }
+            }
+
+            let mut v = AdaptationKindCollector {
+                precedence: 0,
+                alias: 0,
+            };
+            let _ = v.visit_program(program);
+            assert_eq!(v.precedence, 1);
+            assert_eq!(v.alias, 1);
+        },
+    );
+}
+
+#[test]
+fn scope_visitor_visits_trait_adaptations() {
+    with_parsed(
+        "<?php class Foo {
+            use A, B {
+                A::foo insteadof B;
+                B::foo as bar;
+            }
+        }",
+        |src, program| {
+            #[derive(Default)]
+            struct AdaptationScopeCollector {
+                adaptation_count: usize,
+                class_names: Vec<Option<String>>,
+            }
+            impl<'arena, 'src> ScopeVisitor<'arena, 'src> for AdaptationScopeCollector {
+                fn visit_trait_adaptation(
+                    &mut self,
+                    _adaptation: &TraitAdaptation<'arena, 'src>,
+                    scope: &Scope<'src>,
+                ) -> ControlFlow<()> {
+                    self.adaptation_count += 1;
+                    self.class_names.push(scope.class_name.map(str::to_string));
+                    ControlFlow::Continue(())
+                }
+            }
+
+            let mut walker = ScopeWalker::new(src, AdaptationScopeCollector::default());
+            let _ = walker.walk(program);
+            let c = walker.into_inner();
+            assert_eq!(c.adaptation_count, 2);
+            assert_eq!(c.class_names, vec![Some("Foo".into()), Some("Foo".into())]);
         },
     );
 }
