@@ -6,6 +6,19 @@ use php_ast::ast::*;
 use php_ast::visitor::{self, walk_trait_use, Scope, ScopeVisitor, ScopeWalker, Visitor};
 use std::ops::ControlFlow;
 
+/// Collects all Name nodes seen during traversal as string representations.
+#[derive(Default)]
+struct NameCollector {
+    names: Vec<String>,
+}
+
+impl<'arena, 'src> Visitor<'arena, 'src> for NameCollector {
+    fn visit_name(&mut self, name: &Name<'arena, 'src>) -> ControlFlow<()> {
+        self.names.push(name.to_string_repr().to_string());
+        ControlFlow::Continue(())
+    }
+}
+
 /// Parse PHP source and run a callback with the resulting program.
 /// Keeps the arena alive for the duration of the callback.
 fn with_parsed<F: for<'arena, 'src> FnOnce(&'src str, &Program<'arena, 'src>)>(src: &str, f: F) {
@@ -754,6 +767,113 @@ fn scope_visitor_visits_trait_adaptations() {
             let c = walker.into_inner();
             assert_eq!(c.adaptation_count, 2);
             assert_eq!(c.class_names, vec![Some("Foo".into()), Some("Foo".into())]);
+        },
+    );
+}
+
+// =============================================================================
+// visit_name tests
+// =============================================================================
+
+#[test]
+fn visits_class_extends_and_implements() {
+    with_parsed(
+        "<?php class Foo extends Bar implements Baz, Qux {}",
+        |_src, program| {
+            let mut v = NameCollector::default();
+            let _ = v.visit_program(program);
+            // Exact: extends first, then implements in order. No other names in this snippet.
+            assert_eq!(v.names, vec!["Bar", "Baz", "Qux"]);
+        },
+    );
+}
+
+#[test]
+fn visits_interface_extends() {
+    with_parsed("<?php interface A extends B, C {}", |_src, program| {
+        let mut v = NameCollector::default();
+        let _ = v.visit_program(program);
+        assert_eq!(v.names, vec!["B", "C"]);
+    });
+}
+
+#[test]
+fn visits_enum_scalar_type() {
+    // Split from implements so each path is independently verified.
+    with_parsed("<?php enum E: string {}", |_src, program| {
+        let mut v = NameCollector::default();
+        let _ = v.visit_program(program);
+        // "string" must come from scalar_type — no other names in this snippet.
+        assert_eq!(v.names, vec!["string"]);
+    });
+}
+
+#[test]
+fn visits_enum_implements() {
+    with_parsed("<?php enum E implements Countable {}", |_src, program| {
+        let mut v = NameCollector::default();
+        let _ = v.visit_program(program);
+        assert_eq!(v.names, vec!["Countable"]);
+    });
+}
+
+#[test]
+fn visits_catch_clause_types() {
+    with_parsed(
+        "<?php try { foo(); } catch (RuntimeException|LogicException $e) { bar(); }",
+        |_src, program| {
+            let mut v = NameCollector::default();
+            let _ = v.visit_program(program);
+            assert_eq!(v.names, vec!["RuntimeException", "LogicException"]);
+        },
+    );
+}
+
+#[test]
+fn visits_trait_use_names() {
+    with_parsed(
+        "<?php class Foo { use Loggable, Serializable; }",
+        |_src, program| {
+            let mut v = NameCollector::default();
+            let _ = v.visit_program(program);
+            assert_eq!(v.names, vec!["Loggable", "Serializable"]);
+        },
+    );
+}
+
+#[test]
+fn visits_attribute_names() {
+    with_parsed(
+        "<?php #[Route('/api')] #[Middleware\\Auth] function handler(): void {}",
+        |_src, program| {
+            let mut v = NameCollector::default();
+            let _ = v.visit_program(program);
+            assert_eq!(v.names, vec!["Route", "Middleware\\Auth"]);
+        },
+    );
+}
+
+#[test]
+fn visits_named_type_hints() {
+    with_parsed(
+        "<?php function foo(App\\Request $req): App\\Response {}",
+        |_src, program| {
+            let mut v = NameCollector::default();
+            let _ = v.visit_program(program);
+            // param type hint first, then return type.
+            assert_eq!(v.names, vec!["App\\Request", "App\\Response"]);
+        },
+    );
+}
+
+#[test]
+fn visits_use_statement_names() {
+    with_parsed(
+        "<?php use App\\Http\\Request; use App\\Http\\Response as Resp;",
+        |_src, program| {
+            let mut v = NameCollector::default();
+            let _ = v.visit_program(program);
+            assert_eq!(v.names, vec!["App\\Http\\Request", "App\\Http\\Response"]);
         },
     );
 }

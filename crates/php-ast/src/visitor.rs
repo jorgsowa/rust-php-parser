@@ -95,11 +95,22 @@ pub trait Visitor<'arena, 'src> {
     ) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+
+    fn visit_name(&mut self, _name: &Name<'arena, 'src>) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
 }
 
 // =============================================================================
 // Walk functions
 // =============================================================================
+
+pub fn walk_name<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
+    visitor: &mut V,
+    name: &Name<'arena, 'src>,
+) -> ControlFlow<()> {
+    visitor.visit_name(name)
+}
 
 pub fn walk_program<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
@@ -226,12 +237,21 @@ pub fn walk_stmt<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
         }
         StmtKind::Class(class) => {
             walk_attributes(visitor, &class.attributes)?;
+            if let Some(extends) = &class.extends {
+                visitor.visit_name(extends)?;
+            }
+            for name in class.implements.iter() {
+                visitor.visit_name(name)?;
+            }
             for member in class.members.iter() {
                 visitor.visit_class_member(member)?;
             }
         }
         StmtKind::Interface(iface) => {
             walk_attributes(visitor, &iface.attributes)?;
+            for name in iface.extends.iter() {
+                visitor.visit_name(name)?;
+            }
             for member in iface.members.iter() {
                 visitor.visit_class_member(member)?;
             }
@@ -244,6 +264,12 @@ pub fn walk_stmt<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
         }
         StmtKind::Enum(enum_decl) => {
             walk_attributes(visitor, &enum_decl.attributes)?;
+            if let Some(scalar_type) = &enum_decl.scalar_type {
+                visitor.visit_name(scalar_type)?;
+            }
+            for name in enum_decl.implements.iter() {
+                visitor.visit_name(name)?;
+            }
             for member in enum_decl.members.iter() {
                 visitor.visit_enum_member(member)?;
             }
@@ -268,8 +294,12 @@ pub fn walk_stmt<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
                 }
             }
         }
-        StmtKind::Use(_)
-        | StmtKind::Goto(_)
+        StmtKind::Use(decl) => {
+            for item in decl.uses.iter() {
+                visitor.visit_name(&item.name)?;
+            }
+        }
+        StmtKind::Goto(_)
         | StmtKind::Label(_)
         | StmtKind::Nop
         | StmtKind::InlineHtml(_)
@@ -596,7 +626,10 @@ pub fn walk_type_hint<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
                 visitor.visit_type_hint(ty)?;
             }
         }
-        TypeHintKind::Named(_) | TypeHintKind::Keyword(_, _) => {}
+        TypeHintKind::Named(name) => {
+            visitor.visit_name(name)?;
+        }
+        TypeHintKind::Keyword(_, _) => {}
     }
     ControlFlow::Continue(())
 }
@@ -605,6 +638,7 @@ pub fn walk_attribute<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     attribute: &Attribute<'arena, 'src>,
 ) -> ControlFlow<()> {
+    visitor.visit_name(&attribute.name)?;
     for arg in attribute.args.iter() {
         visitor.visit_arg(arg)?;
     }
@@ -615,6 +649,9 @@ pub fn walk_catch_clause<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     catch: &CatchClause<'arena, 'src>,
 ) -> ControlFlow<()> {
+    for ty in catch.types.iter() {
+        visitor.visit_name(ty)?;
+    }
     for stmt in catch.body.iter() {
         visitor.visit_stmt(stmt)?;
     }
@@ -637,6 +674,9 @@ pub fn walk_trait_use<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     trait_use: &TraitUseDecl<'arena, 'src>,
 ) -> ControlFlow<()> {
+    for name in trait_use.traits.iter() {
+        visitor.visit_name(name)?;
+    }
     for adaptation in trait_use.adaptations.iter() {
         visitor.visit_trait_adaptation(adaptation)?;
     }
