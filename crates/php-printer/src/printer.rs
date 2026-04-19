@@ -693,6 +693,14 @@ impl Printer {
                 self.print_args(&call.args);
                 self.w(")");
             }
+            ExprKind::StaticDynMethodCall(call) => {
+                self.print_expr(call.class, PREC_PRIMARY);
+                self.w("::");
+                self.print_expr(call.method, PREC_PRIMARY);
+                self.w("(");
+                self.print_args(&call.args);
+                self.w(")");
+            }
             ExprKind::Closure(closure) => self.print_closure(closure),
             ExprKind::ArrowFunction(af) => self.print_arrow_function(af),
             ExprKind::Match(m) => self.print_match(m),

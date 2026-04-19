@@ -107,32 +107,22 @@ $a['b']::c();
       "kind": {
         "Expression": {
           "kind": {
-            "FunctionCall": {
-              "name": {
+            "StaticDynMethodCall": {
+              "class": {
                 "kind": {
-                  "StaticPropertyAccess": {
-                    "class": {
-                      "kind": {
-                        "Identifier": "A"
-                      },
-                      "span": {
-                        "start": 53,
-                        "end": 54
-                      }
-                    },
-                    "member": {
-                      "kind": {
-                        "Identifier": "b"
-                      },
-                      "span": {
-                        "start": 56,
-                        "end": 58
-                      }
-                    }
-                  }
+                  "Identifier": "A"
                 },
                 "span": {
                   "start": 53,
+                  "end": 54
+                }
+              },
+              "method": {
+                "kind": {
+                  "Variable": "b"
+                },
+                "span": {
+                  "start": 56,
                   "end": 58
                 }
               },
