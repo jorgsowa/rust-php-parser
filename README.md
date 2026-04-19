@@ -165,7 +165,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for contributor and performance researche
 
 ## Acknowledgements
 
-The test corpus includes fixtures adapted from the [nikic/PHP-Parser](https://github.com/nikic/PHP-Parser) test suite, used under the BSD 3-Clause License.
+Test corpus fixtures were adapted from [nikic/PHP-Parser](https://github.com/nikic/PHP-Parser). Thanks to Nikita Popov and contributors.
 
 ## License
 
