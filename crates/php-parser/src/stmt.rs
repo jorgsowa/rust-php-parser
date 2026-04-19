@@ -1866,6 +1866,8 @@ fn parse_property_hooks<'arena, 'src>(
     let open_span = open.map(|t| t.span).unwrap_or(parser.current_span());
 
     let mut hooks = parser.alloc_vec();
+    let mut seen_get = false;
+    let mut seen_set = false;
 
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let hook_start = parser.start_span();
@@ -2010,6 +2012,28 @@ fn parse_property_hooks<'arena, 'src>(
             parser.expect(TokenKind::Semicolon);
             PropertyHookBody::Abstract
         };
+
+        // Check for duplicate hook kinds
+        match kind {
+            PropertyHookKind::Get => {
+                if seen_get {
+                    parser.error(ParseError::Forbidden {
+                        message: "duplicate 'get' hook".into(),
+                        span: Span::new(hook_start, parser.previous_end()),
+                    });
+                }
+                seen_get = true;
+            }
+            PropertyHookKind::Set => {
+                if seen_set {
+                    parser.error(ParseError::Forbidden {
+                        message: "duplicate 'set' hook".into(),
+                        span: Span::new(hook_start, parser.previous_end()),
+                    });
+                }
+                seen_set = true;
+            }
+        }
 
         let hook_span = Span::new(hook_start, parser.previous_end());
         hooks.push(PropertyHook {

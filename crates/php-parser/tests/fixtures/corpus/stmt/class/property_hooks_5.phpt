@@ -15,10 +15,14 @@ class Test {
 expected 'get' or 'set', found 'public'
 expected 'get' or 'set', found 'public'
 expected 'get' or 'set', found 'protected'
+duplicate 'get' hook
 expected 'get' or 'set', found 'private'
+duplicate 'get' hook
 expected 'get' or 'set', found 'abstract'
 expected 'get' or 'set', found 'static'
+duplicate 'get' hook
 expected 'get' or 'set', found 'readonly'
+duplicate 'get' hook
 ===ast===
 {
   "stmts": [
