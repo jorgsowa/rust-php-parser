@@ -440,6 +440,15 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                 let end_offset = base_offset + expr_end as u32;
                 let expr =
                     parse_complex_interpolation(arena, source, expr_offset, end_offset, version);
+                if matches!(
+                    expr.kind,
+                    ExprKind::ClassConstAccess(_) | ExprKind::ClassConstAccessDynamic { .. }
+                ) {
+                    errors.push(ParseError::Forbidden {
+                        message: "class constant access is not valid as a standalone interpolation expression".into(),
+                        span: expr.span,
+                    });
+                }
                 parts.push(StringPart::Expr(expr));
                 literal_start = i;
             }
@@ -774,6 +783,15 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                 let end_offset = body_offset + expr_end as u32;
                 let expr =
                     parse_complex_interpolation(arena, source, expr_offset, end_offset, version);
+                if matches!(
+                    expr.kind,
+                    ExprKind::ClassConstAccess(_) | ExprKind::ClassConstAccessDynamic { .. }
+                ) {
+                    errors.push(ParseError::Forbidden {
+                        message: "class constant access is not valid as a standalone interpolation expression".into(),
+                        span: expr.span,
+                    });
+                }
                 parts.push(StringPart::Expr(expr));
             }
             _ => {
