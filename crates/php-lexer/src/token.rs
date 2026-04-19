@@ -1,233 +1,442 @@
+/// All token types produced by the PHP lexer.
+///
+/// The variants are grouped by category in source order; the `#[repr(u8)]`
+/// guarantees a compact discriminant layout used by [`TokenKind::is_assignment_op`].
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum TokenKind {
-    // --- Literals ---
-    // Float: scientific notation (with or without decimal)
+    // -------------------------------------------------------------------------
+    // Literals
+    // -------------------------------------------------------------------------
+    /// Float in scientific notation: `1e10`, `1.5e-3`, `1E+10`.
     FloatLiteral,
 
-    // Float: decimal with digits on both sides
+    /// Float with digits on both sides of the decimal point: `1.5`, `0.0`.
     FloatLiteralSimple,
 
-    // Float: decimal starting with dot (.0)
+    /// Float starting with a leading dot: `.5`, `.001`.
     FloatLiteralLeadingDot,
 
+    /// Hexadecimal integer literal: `0x1A`, `0xFF`.
     HexIntLiteral,
 
+    /// Binary integer literal: `0b1010`, `0B0011`.
     BinIntLiteral,
 
+    /// Octal integer literal in the new `0o` prefix form: `0o17` (PHP 8.1+).
     OctIntLiteralNew,
 
+    /// Octal integer literal in the legacy leading-zero form: `017`.
     OctIntLiteral,
 
+    /// Decimal integer literal: `0`, `42`, `1_000_000`.
     IntLiteral,
 
-    // String literals (with optional binary prefix b/B)
+    /// Single-quoted string literal: `'hello'`. Optional `b`/`B` prefix allowed.
     SingleQuotedString,
 
+    /// Double-quoted string literal: `"hello $name"`. Triggers interpolation processing.
     DoubleQuotedString,
 
+    /// Backtick string (shell execution): `` `ls -la` ``.
     BacktickString,
 
-    // --- Variables ---
+    // -------------------------------------------------------------------------
+    // Variables
+    // -------------------------------------------------------------------------
+    /// A `$`-prefixed variable name: `$foo`, `$myVar`.
     Variable,
+
+    /// A bare `$` not followed by a valid identifier start (variable-variable prefix).
     Dollar,
 
-    // --- Identifiers (keywords resolved from these) ---
+    // -------------------------------------------------------------------------
+    // Identifiers
+    // -------------------------------------------------------------------------
+    /// A bare identifier or keyword that has not yet been resolved.
+    /// PHP keywords are case-insensitive and are resolved from this token.
     Identifier,
 
-    // --- Operators ---
+    // -------------------------------------------------------------------------
+    // Arithmetic operators
+    // -------------------------------------------------------------------------
+    /// `+`
     Plus,
+    /// `-`
     Minus,
+    /// `*`
     Star,
+    /// `/`
     Slash,
+    /// `%`
     Percent,
+    /// `**` — exponentiation.
     StarStar,
+    /// `.` — string concatenation.
     Dot,
 
+    // -------------------------------------------------------------------------
+    // Assignment operators
+    // -------------------------------------------------------------------------
+    // NOTE: Equals..=CoalesceEquals must remain contiguous; is_assignment_op relies on this.
+    /// `=`
     Equals,
+    /// `+=`
     PlusEquals,
+    /// `-=`
     MinusEquals,
+    /// `*=`
     StarEquals,
+    /// `/=`
     SlashEquals,
+    /// `%=`
     PercentEquals,
+    /// `**=`
     StarStarEquals,
+    /// `.=`
     DotEquals,
+    /// `&=`
     AmpersandEquals,
+    /// `|=`
     PipeEquals,
+    /// `^=`
     CaretEquals,
+    /// `<<=`
     ShiftLeftEquals,
+    /// `>>=`
     ShiftRightEquals,
+    /// `??=`
     CoalesceEquals,
 
+    // -------------------------------------------------------------------------
+    // Comparison operators
+    // -------------------------------------------------------------------------
+    /// `==` — loose equality.
     EqualsEquals,
+    /// `!=` or `<>` — loose inequality.
     BangEquals,
+    /// `===` — strict equality.
     EqualsEqualsEquals,
+    /// `!==` — strict inequality.
     BangEqualsEquals,
+    /// `<`
     LessThan,
+    /// `>`
     GreaterThan,
+    /// `<=`
     LessThanEquals,
+    /// `>=`
     GreaterThanEquals,
+    /// `<=>` — spaceship / three-way comparison.
     Spaceship,
 
+    // -------------------------------------------------------------------------
+    // Logical / bitwise operators
+    // -------------------------------------------------------------------------
+    /// `&&` — short-circuit boolean AND.
     AmpersandAmpersand,
+    /// `||` — short-circuit boolean OR.
     PipePipe,
+    /// `!` — boolean NOT.
     Bang,
 
+    /// `&` — bitwise AND (also reference marker in declarations).
     Ampersand,
+    /// `|` — bitwise OR.
     Pipe,
+    /// `^` — bitwise XOR.
     Caret,
+    /// `~` — bitwise NOT.
     Tilde,
+    /// `<<` — left bit-shift.
     ShiftLeft,
+    /// `>>` — right bit-shift.
     ShiftRight,
 
+    // -------------------------------------------------------------------------
+    // Increment / decrement
+    // -------------------------------------------------------------------------
+    /// `++`
     PlusPlus,
+    /// `--`
     MinusMinus,
 
+    // -------------------------------------------------------------------------
+    // Other operators
+    // -------------------------------------------------------------------------
+    /// `?` — ternary operator or nullable type-hint prefix.
     Question,
+    /// `??` — null coalescing.
     QuestionQuestion,
+    /// `:` — ternary separator, named argument separator, or return type separator.
     Colon,
 
+    /// `=>` — key-value separator in arrays and `match` arms.
     FatArrow,
 
+    /// `|>` — pipe operator (PHP 8.5+).
     PipeArrow,
 
-    // --- Delimiters ---
+    // -------------------------------------------------------------------------
+    // Delimiters & punctuation
+    // -------------------------------------------------------------------------
+    /// `(`
     LeftParen,
+    /// `)`
     RightParen,
+    /// `[`
     LeftBracket,
+    /// `]`
     RightBracket,
+    /// `{`
     LeftBrace,
+    /// `}`
     RightBrace,
+    /// `;`
     Semicolon,
+    /// `,`
     Comma,
 
+    /// `::` — static access separator.
     DoubleColon,
 
+    /// `->` — object property / method access.
     Arrow,
 
+    /// `?->` — nullsafe property / method access.
     NullsafeArrow,
 
+    /// `\` — namespace separator.
     Backslash,
 
+    /// `@` — error-suppression operator.
     At,
 
+    /// `#[` — attribute syntax opener.
     HashBracket,
 
+    /// `...` — splat / variadic operator.
     Ellipsis,
 
-    // --- Keywords (resolved from Identifier) ---
+    // -------------------------------------------------------------------------
+    // Keywords (resolved from Identifier at lex time)
+    // -------------------------------------------------------------------------
+    /// `if`
     If,
+    /// `else`
     Else,
+    /// `elseif`
     ElseIf,
+    /// `while`
     While,
+    /// `do`
     Do,
+    /// `for`
     For,
+    /// `foreach`
     Foreach,
+    /// `as`
     As,
+    /// `function`
     Function,
+    /// `return`
     Return,
+    /// `echo`
     Echo,
+    /// `print`
     Print,
+    /// `true`
     True,
+    /// `false`
     False,
+    /// `null`
     Null,
+    /// `and` — low-precedence boolean AND.
     And,
+    /// `or` — low-precedence boolean OR.
     Or,
+    /// `xor` — low-precedence boolean XOR.
     Xor,
+    /// `break`
     Break,
+    /// `continue`
     Continue,
+    /// `switch`
     Switch,
+    /// `case`
     Case,
+    /// `default`
     Default,
+    /// `endif` — alternative `if` syntax terminator.
     EndIf,
+    /// `endwhile` — alternative `while` syntax terminator.
     EndWhile,
+    /// `endfor` — alternative `for` syntax terminator.
     EndFor,
+    /// `endforeach` — alternative `foreach` syntax terminator.
     EndForeach,
+    /// `throw`
     Throw,
+    /// `try`
     Try,
+    /// `catch`
     Catch,
+    /// `finally`
     Finally,
+    /// `instanceof`
     Instanceof,
+    /// `array` — as a keyword (e.g. `array(1, 2)` or `array` type hint).
     Array,
+    /// `list` — destructuring construct: `list($a, $b) = ...`.
     List,
+    /// `goto`
     Goto,
+    /// `declare`
     Declare,
+    /// `unset`
     Unset,
+    /// `global`
     Global,
+    /// `enddeclare` — alternative `declare` syntax terminator.
     EndDeclare,
+    /// `endswitch` — alternative `switch` syntax terminator.
     EndSwitch,
+    /// `isset`
     Isset,
+    /// `empty`
     Empty,
+    /// `include`
     Include,
+    /// `include_once`
     IncludeOnce,
+    /// `require`
     Require,
+    /// `require_once`
     RequireOnce,
+    /// `eval`
     Eval,
+    /// `exit`
     Exit,
+    /// `die` — alias for `exit`.
     Die,
+    /// `clone`
     Clone,
+
     // OOP keywords
+    /// `new`
     New,
+    /// `class`
     Class,
+    /// `abstract`
     Abstract,
+    /// `final`
     Final,
+    /// `interface`
     Interface,
+    /// `trait`
     Trait,
+    /// `extends`
     Extends,
+    /// `implements`
     Implements,
+    /// `public`
     Public,
+    /// `protected`
     Protected,
+    /// `private`
     Private,
+    /// `static`
     Static,
+    /// `const`
     Const,
+    /// `fn` — arrow function keyword.
     Fn_,
+    /// `match` — match expression keyword (PHP 8.0+).
     Match_,
+    /// `namespace`
     Namespace,
+    /// `use`
     Use,
+    /// `readonly` (PHP 8.1+).
     Readonly,
+    /// `enum` (PHP 8.1+).
     Enum_,
+    /// `yield`
     Yield_,
+    /// `from` — used in `yield from`.
     From,
+    /// `self`
     Self_,
+    /// `parent`
     Parent_,
-    // Magic constants
+
+    // -------------------------------------------------------------------------
+    // Magic constants (resolved from Identifier at lex time)
+    // -------------------------------------------------------------------------
+    /// `__CLASS__`
     MagicClass,
+    /// `__DIR__`
     MagicDir,
+    /// `__FILE__`
     MagicFile,
+    /// `__FUNCTION__`
     MagicFunction,
+    /// `__LINE__`
     MagicLine,
+    /// `__METHOD__`
     MagicMethod,
+    /// `__NAMESPACE__`
     MagicNamespace,
+    /// `__TRAIT__`
     MagicTrait,
+    /// `__PROPERTY__` (PHP 8.4+)
     MagicProperty,
+    /// `__halt_compiler` — stops the parser; remaining bytes are raw data.
     HaltCompiler,
 
-    // --- PHP tags ---
+    // -------------------------------------------------------------------------
+    // PHP tags & template output
+    // -------------------------------------------------------------------------
+    /// `<?php` or `<?=` opening tag.
     OpenTag,
 
+    /// `?>` closing tag; switches the lexer back to inline-HTML mode.
     CloseTag,
 
-    // Inline HTML (produced by Lexer wrapper)
+    /// Raw HTML text between PHP tags (produced by the `Lexer` wrapper, not the inner scanner).
     InlineHtml,
 
-    // Heredoc/Nowdoc (produced by Lexer wrapper)
+    // -------------------------------------------------------------------------
+    // Heredoc / Nowdoc (produced by Lexer wrapper)
+    // -------------------------------------------------------------------------
+    /// `<<<LABEL … LABEL;` — heredoc string (supports interpolation).
     Heredoc,
+    /// `<<<'LABEL' … LABEL;` — nowdoc string (no interpolation).
     Nowdoc,
 
-    // Invalid numeric literal (e.g. 1_0_0_ with trailing underscore)
+    // -------------------------------------------------------------------------
+    // Error tokens
+    // -------------------------------------------------------------------------
+    /// An invalid numeric literal, e.g. `1_000_` (trailing underscore).
+    /// The lexer emits this token and records a [`LexerError`](crate::LexerError) for it.
     InvalidNumericLiteral,
 
-    // Comments (yielded by the lexer; filtered out by the parser into a side-table)
-    /// `// …` single-line slash comment
+    // -------------------------------------------------------------------------
+    // Comments (filtered into a side-table by the parser)
+    // -------------------------------------------------------------------------
+    /// `// …` single-line slash comment.
     LineComment,
-    /// `# …` single-line hash comment
+    /// `# …` single-line hash comment.
     HashComment,
-    /// `/* … */` block comment
+    /// `/* … */` block comment.
     BlockComment,
-    /// `/** … */` doc-block comment
+    /// `/** … */` doc-block comment (first non-whitespace char after `/*` is `*`).
     DocComment,
 
-    // End of file
+    // -------------------------------------------------------------------------
+    // End of input
+    // -------------------------------------------------------------------------
+    /// Sentinel token emitted once all source bytes have been consumed.
     Eof,
 }
 

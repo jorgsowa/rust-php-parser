@@ -233,9 +233,13 @@ impl<'arena, 'src> serde::Serialize for Name<'arena, 'src> {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 pub enum NameKind {
+    /// A bare identifier with no namespace separator: `Foo`, `strlen`.
     Unqualified,
+    /// A name with at least one internal `\` but no leading backslash: `Foo\Bar`.
     Qualified,
+    /// A name with a leading `\`: `\Foo\Bar`.
     FullyQualified,
+    /// A name starting with the `namespace` keyword: `namespace\Foo`.
     Relative,
 }
 
@@ -244,25 +248,45 @@ pub enum NameKind {
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 pub enum BuiltinType {
+    /// `int` — integer scalar type.
     Int,
+    /// `integer` — alias for `int`, accepted in type casts.
     Integer,
+    /// `float` — floating-point scalar type.
     Float,
+    /// `double` — alias for `float`, accepted in type casts.
     Double,
+    /// `string` — string scalar type.
     String,
+    /// `bool` — boolean scalar type.
     Bool,
+    /// `boolean` — alias for `bool`, accepted in type casts.
     Boolean,
+    /// `void` — return-only type indicating no value is returned.
     Void,
+    /// `never` — return-only type for functions that never return normally (PHP 8.1+).
     Never,
+    /// `mixed` — top type; accepts any value.
     Mixed,
+    /// `object` — any object instance.
     Object,
+    /// `iterable` — `array` or `Traversable` (deprecated in PHP 8.2; use `array|Traversable`).
     Iterable,
+    /// `callable` — any callable value.
     Callable,
+    /// `array` — any PHP array.
     Array,
+    /// `self` — refers to the class in which the type hint appears.
     Self_,
+    /// `parent` — refers to the parent class of the class in which the type hint appears.
     Parent_,
+    /// `static` — late-static-bound type; the class on which the method was called.
     Static,
+    /// `null` — the null type; only valid in union types.
     Null,
+    /// `true` — the literal boolean `true` (PHP 8.2+).
     True,
+    /// `false` — the literal boolean `false`.
     False,
 }
 
@@ -310,11 +334,15 @@ pub struct TypeHint<'arena, 'src> {
 /// Serialises identically to `Named` so all existing snapshots remain unchanged.
 #[derive(Debug)]
 pub enum TypeHintKind<'arena, 'src> {
+    /// A user-defined or qualified class name: `Foo`, `\Ns\Bar`.
     Named(Name<'arena, 'src>),
-    /// Built-in type keyword — serialises as `Named` for snapshot compatibility.
+    /// Built-in type keyword (`int`, `string`, `bool`, `self`, …) — serialises as `Named` for snapshot compatibility.
     Keyword(BuiltinType, Span),
+    /// Nullable type: `?T` — equivalent to `T|null`.
     Nullable(&'arena TypeHint<'arena, 'src>),
+    /// Union type: `A|B|C` (PHP 8.0+).
     Union(ArenaVec<'arena, TypeHint<'arena, 'src>>),
+    /// Intersection type: `A&B` (PHP 8.1+).
     Intersection(ArenaVec<'arena, TypeHint<'arena, 'src>>),
 }
 
@@ -594,8 +622,11 @@ pub struct CatchClause<'arena, 'src> {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 pub enum Visibility {
+    /// `public` — accessible from anywhere.
     Public,
+    /// `protected` — accessible within the class and its subclasses.
     Protected,
+    /// `private` — accessible only within the declaring class.
     Private,
 }
 
@@ -650,14 +681,19 @@ pub struct PropertyDecl<'arena, 'src> {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 pub enum PropertyHookKind {
+    /// `get` hook — called when the property is read.
     Get,
+    /// `set` hook — called when the property is written; receives the incoming value as `$value`.
     Set,
 }
 
 #[derive(Debug, Serialize)]
 pub enum PropertyHookBody<'arena, 'src> {
+    /// `{ stmts }` — a full statement block.
     Block(ArenaVec<'arena, Stmt<'arena, 'src>>),
+    /// `=> expr` — short-form expression body.
     Expression(Expr<'arena, 'src>),
+    /// No body — the hook is declared abstract (on an abstract class or interface).
     Abstract,
 }
 
@@ -767,9 +803,13 @@ pub struct EnumMember<'arena, 'src> {
 
 #[derive(Debug, Serialize)]
 pub enum EnumMemberKind<'arena, 'src> {
+    /// An enum case: `case Foo;` or `case Foo = 'foo';` (backed enum).
     Case(EnumCase<'arena, 'src>),
+    /// A method defined inside the enum body.
     Method(MethodDecl<'arena, 'src>),
+    /// A constant defined inside the enum body: `const X = 1;`.
     ClassConst(ClassConstDecl<'arena, 'src>),
+    /// A trait use inside the enum body: `use SomeTrait;`.
     TraitUse(TraitUseDecl<'arena, 'src>),
 }
 
@@ -794,7 +834,9 @@ pub struct NamespaceDecl<'arena, 'src> {
 
 #[derive(Debug, Serialize)]
 pub enum NamespaceBody<'arena, 'src> {
+    /// `namespace Foo { … }` — braced form; the statements are scoped to this namespace.
     Braced(ArenaVec<'arena, Stmt<'arena, 'src>>),
+    /// `namespace Foo;` — simple form; all subsequent statements until the next `namespace` or EOF are in scope.
     Simple,
 }
 
@@ -812,8 +854,11 @@ pub struct UseDecl<'arena, 'src> {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 pub enum UseKind {
+    /// `use Foo\Bar` — imports a class, interface, trait, or enum.
     Normal,
+    /// `use function Foo\bar` — imports a function.
     Function,
+    /// `use const Foo\BAR` — imports a constant.
     Const,
 }
 
@@ -1089,34 +1134,55 @@ impl<'arena, 'src> Expr<'arena, 'src> {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 pub enum CastKind {
+    /// `(int)` or `(integer)` cast.
     Int,
+    /// `(float)`, `(double)`, or `(real)` cast.
     Float,
+    /// `(string)` cast.
     String,
+    /// `(bool)` or `(boolean)` cast.
     Bool,
+    /// `(array)` cast.
     Array,
+    /// `(object)` cast.
     Object,
+    /// `(unset)` cast — deprecated; casts to `null`.
     Unset,
+    /// `(void)` cast — non-standard; treated as discarding the value.
     Void,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 pub enum IncludeKind {
+    /// `include 'file.php'` — emits a warning if the file is not found.
     Include,
+    /// `include_once 'file.php'` — like `include`, but skipped if the file has already been included.
     IncludeOnce,
+    /// `require 'file.php'` — fatal error if the file is not found.
     Require,
+    /// `require_once 'file.php'` — like `require`, but skipped if the file has already been included.
     RequireOnce,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 pub enum MagicConstKind {
+    /// `__CLASS__` — name of the current class, or empty string outside a class.
     Class,
+    /// `__DIR__` — directory of the current file.
     Dir,
+    /// `__FILE__` — absolute path of the current file.
     File,
+    /// `__FUNCTION__` — name of the current function or closure.
     Function,
+    /// `__LINE__` — current line number in the source file.
     Line,
+    /// `__METHOD__` — name of the current method including its class: `ClassName::methodName`.
     Method,
+    /// `__NAMESPACE__` — name of the current namespace, or empty string in the global namespace.
     Namespace,
+    /// `__TRAIT__` — name of the current trait, or empty string outside a trait.
     Trait,
+    /// `__PROPERTY__` — name of the current property inside a property hook (PHP 8.4+).
     Property,
 }
 
@@ -1133,19 +1199,33 @@ pub struct AssignExpr<'arena, 'src> {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 pub enum AssignOp {
+    /// `=`
     Assign,
+    /// `+=`
     Plus,
+    /// `-=`
     Minus,
+    /// `*=`
     Mul,
+    /// `/=`
     Div,
+    /// `%=`
     Mod,
+    /// `**=`
     Pow,
+    /// `.=`
     Concat,
+    /// `&=`
     BitwiseAnd,
+    /// `|=`
     BitwiseOr,
+    /// `^=`
     BitwiseXor,
+    /// `<<=`
     ShiftLeft,
+    /// `>>=`
     ShiftRight,
+    /// `??=`
     Coalesce,
 }
 
@@ -1158,33 +1238,61 @@ pub struct BinaryExpr<'arena, 'src> {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 pub enum BinaryOp {
+    /// `+`
     Add,
+    /// `-`
     Sub,
+    /// `*`
     Mul,
+    /// `/`
     Div,
+    /// `%`
     Mod,
+    /// `**`
     Pow,
+    /// `.` — string concatenation.
     Concat,
+    /// `==` — loose equality (type-coercing).
     Equal,
+    /// `!=` or `<>` — loose inequality.
     NotEqual,
+    /// `===` — strict equality (type and value).
     Identical,
+    /// `!==` — strict inequality.
     NotIdentical,
+    /// `<`
     Less,
+    /// `>`
     Greater,
+    /// `<=`
     LessOrEqual,
+    /// `>=`
     GreaterOrEqual,
+    /// `<=>` — spaceship / three-way comparison; returns -1, 0, or 1.
     Spaceship,
+    /// `&&` — short-circuit boolean AND (higher precedence than `and`).
     BooleanAnd,
+    /// `||` — short-circuit boolean OR (higher precedence than `or`).
     BooleanOr,
+    /// `&` — bitwise AND.
     BitwiseAnd,
+    /// `|` — bitwise OR.
     BitwiseOr,
+    /// `^` — bitwise XOR.
     BitwiseXor,
+    /// `<<` — left bit-shift.
     ShiftLeft,
+    /// `>>` — right bit-shift.
     ShiftRight,
+    /// `and` — boolean AND (lower precedence than `&&`).
     LogicalAnd,
+    /// `or` — boolean OR (lower precedence than `||`).
     LogicalOr,
+    /// `xor` — boolean XOR.
     LogicalXor,
+    /// `instanceof` — type-check operator; `$x instanceof Foo`.
     Instanceof,
+    /// `|>` — pipe operator (PHP 8.5+); passes the left operand as the first argument of the right callable.
     Pipe,
 }
 
@@ -1196,11 +1304,17 @@ pub struct UnaryPrefixExpr<'arena, 'src> {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 pub enum UnaryPrefixOp {
+    /// `-expr` — arithmetic negation.
     Negate,
+    /// `+expr` — unary plus (no-op for numbers, promotes to numeric).
     Plus,
+    /// `!expr` — boolean NOT.
     BooleanNot,
+    /// `~expr` — bitwise NOT.
     BitwiseNot,
+    /// `++$x` — pre-increment; increments then returns the new value.
     PreIncrement,
+    /// `--$x` — pre-decrement; decrements then returns the new value.
     PreDecrement,
 }
 
@@ -1212,7 +1326,9 @@ pub struct UnaryPostfixExpr<'arena, 'src> {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 pub enum UnaryPostfixOp {
+    /// `$x++` — post-increment; returns the current value then increments.
     PostIncrement,
+    /// `$x--` — post-decrement; returns the current value then decrements.
     PostDecrement,
 }
 
@@ -1375,6 +1491,8 @@ pub enum CallableCreateKind<'arena, 'src> {
 
 #[derive(Debug, Serialize)]
 pub enum StringPart<'arena, 'src> {
+    /// A plain text segment of an interpolated string or heredoc.
     Literal(&'arena str),
+    /// An embedded expression: `$var`, `{$expr}`, or `${var}`.
     Expr(Expr<'arena, 'src>),
 }

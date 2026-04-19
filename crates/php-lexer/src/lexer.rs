@@ -50,10 +50,14 @@ static IS_PHP_WHITESPACE: [bool; 256] = make_whitespace_table();
 static IS_IDENT_START: [bool; 256] = make_ident_start_table();
 static IS_IDENT_CONTINUE: [bool; 256] = make_ident_continue_table();
 
+/// Discriminant for [`LexerError`] — describes what kind of lexer failure occurred.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum LexerErrorKind {
+    /// The lexer reached end-of-file inside a string literal without finding the closing delimiter.
     UnterminatedString,
+    /// The source file exceeds the maximum supported size (2^32 bytes).
     FileTooLarge,
+    /// Any other lexer-level error (e.g. unterminated block comment, invalid numeric literal).
     Other,
 }
 
