@@ -202,18 +202,6 @@ Quick rules:
 
 ---
 
-## Pull Request Process
-
-1. Branch off `main`.
-2. Add or update tests — every parser change should have a corresponding `.phpt` fixture.
-3. Run `cargo test`, `cargo clippy`, and `cargo fmt --check` locally.
-4. Open a PR against `main` with a clear description of what changed and why.
-5. The PR description should reference any related issues.
-
-CI runs tests against PHP 8.2, 8.3, 8.4, and 8.5. If you add a fixture using newer syntax, make sure `===config===` with `min_php=X.Y` is set so older CI PHP versions skip the `php -l` check.
-
----
-
 ## Performance
 
 Performance-sensitive changes should be benchmarked before and after:

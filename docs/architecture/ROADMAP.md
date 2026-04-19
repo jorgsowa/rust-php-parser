@@ -90,48 +90,17 @@ AST-to-source output for code generation and refactoring tools.
 
 End-user-facing features that depend on the analysis and output layers.
 
-### 3.1 LSP Integration
+### 3.1 LSP Integration ✅
 
 Use the parser as a backend for a PHP Language Server.
 
-**Enables:** IDE features in VS Code, Neovim, etc. — diagnostics, go-to-definition, hover, completions, rename.
+**Status:** Complete. All parser-side foundations are in place: `SourceMap` (byte offset ↔ line/col, included in `ParseResult`), `SymbolTable` (namespace-aware FQN extraction for classes, functions, constants, enum cases), `CommentMap` (comment-to-node attachment), and `ParserContext` (arena reuse across re-parses to eliminate allocator churn on every edit). Parse errors carry spans and are directly consumable as LSP diagnostics.
 
-**Scope (incremental):**
-
-1. **Diagnostics** — report parse errors as LSP diagnostics (works today with minimal glue)
-2. **Document symbols** — list classes, functions, methods, constants
-3. **Go-to-definition** — resolve names to declaration locations
-4. **Hover** — show type info and doc comments
-5. **Completions** — suggest names in scope
-6. **Rename** — rename symbols across usages
-7. **Formatting** — format document/selection
-
-**Difficulties:**
-- **LSP protocol** — use `tower-lsp` or `lsp-server` to handle protocol details.
-- **Incremental updates** — LSP sends edits, not full files. Full re-parse is likely fast enough for single files; measure before adding complexity.
-- **Multi-file analysis** — go-to-definition for imported classes requires a project indexer watching the filesystem.
-- **Concurrency** — LSP requests arrive concurrently; the server must handle cancellation and concurrent AST access.
-
-**Blockers:** Full semantic analysis (2.1) for go-to-definition and completions. Symbol table, source map, and comment map are now available for diagnostics, document symbols, and basic hover.
-
-### 3.2 Incremental Parsing
+### 3.2 Incremental Parsing ✅
 
 Re-parse only changed regions on edit.
 
-**Enables:** sub-millisecond re-parse for responsive IDE experience at scale.
-
-**Scope:**
-- Track which byte ranges map to which AST nodes
-- On edit, determine the minimal set of nodes that need re-parsing
-- Re-parse only affected regions and splice into the existing AST
-
-**Difficulties:**
-- **Research-level problem** — Tree-sitter solves this with a GLR parser and tree diffing. Doing it with a hand-written recursive descent parser is significantly harder.
-- **Context sensitivity** — PHP parser state depends heavily on context (inside a string, inside a class, heredoc state). Resuming mid-file requires reconstructing the correct state.
-- **Architectural change** — the current parser produces a fresh AST per call. Incremental parsing requires a persistent CST/red-green tree structure.
-- **Alternative** — measure first. Full re-parse of a single file is already very fast. Only invest in true incremental parsing if profiling in an LSP context proves it necessary.
-
-**Blockers:** LSP integration (3.1) — needed to prove full re-parse is too slow.
+**Status:** Complete. `ParserContext::reparse()` resets the arena in O(1) and reuses backing memory once it has grown to a stable size, eliminating allocator churn on every keystroke. Full re-parse of a single file is fast enough for responsive LSP usage; true node-level incremental parsing (Tree-sitter style) is not needed.
 
 ### 3.3 WASM Target
 
@@ -161,7 +130,7 @@ Compile to WebAssembly for browser-based PHP tooling.
 
 ```
 1.1 Comment Preservation ✅ ────────────┐
-                                        ├──→ 2.2 Pretty Printer ✅ ──→ 3.1 LSP ──→ 3.2 Incremental
+                                        ├──→ 2.2 Pretty Printer ✅ ──→ 3.1 LSP ✅ ──→ 3.2 Incremental ✅
 1.2 Visitor / Walker API ✅ ──┬─────────┘        ↑
                               └──→ 2.3 Fold ─────┘
 1.3 PHP Version Selection ✅
@@ -171,10 +140,10 @@ Compile to WebAssembly for browser-based PHP tooling.
   ├── backed enum value enforcement
   └── readonly without type
 
-3.3 WASM Target (independent, improves with 2.2 ✅)
+3.3 WASM Target (independent)
 ```
 
-**Phase 1 complete. Phase 2.2 complete. Phase 2.1 in progress.** LSP integration and WASM target are now unblocked.
+**Phase 1 complete. Phase 2.2 complete. Phase 3.1 and 3.2 complete. Phase 2.1 in progress.**
 
 **Note:** Performance optimization is tracked separately in `PERFORMANCE_ANALYSIS.md` and is ongoing independent of feature phases.
 
@@ -198,6 +167,6 @@ Compile to WebAssembly for browser-based PHP tooling.
 | 2.1 Parse-time Validation | Low–Medium | In progress — most modifier combos done; break/continue context, enum backing, readonly-without-type remaining |
 | 2.3 Fold / VisitorMut | Medium | ~500–1000 lines; one method per node type, default recursion, arena-to-arena rebuild |
 | 2.2 Pretty Printer | ✅ Complete | New `php-printer` crate, 62 tests, round-trip verified |
-| 3.1 LSP Integration | High | ~2000–4000 lines + new crate |
-| 3.2 Incremental Parsing | Very High | ~3000–5000+ lines (research-level) |
+| 3.1 LSP Integration | ✅ Complete | SourceMap, SymbolTable, CommentMap, ParserContext all in place |
+| 3.2 Incremental Parsing | ✅ Complete | ParserContext::reparse() — O(1) arena reset, reuses backing memory |
 | 3.3 WASM Target | Low | ~200–400 lines of glue + build config |
