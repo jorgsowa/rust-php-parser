@@ -163,6 +163,10 @@ Fixture files live in `crates/php-parser/tests/fixtures/`. All fixtures are vali
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for contributor and performance researcher guides. Full documentation is in the [docs/](docs/) directory.
 
+## Acknowledgements
+
+The test corpus includes fixtures adapted from the [nikic/PHP-Parser](https://github.com/nikic/PHP-Parser) test suite, used under the BSD 3-Clause License.
+
 ## License
 
 BSD 3-Clause
