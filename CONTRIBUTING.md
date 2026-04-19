@@ -13,9 +13,8 @@ cargo bench                          # benchmarks
 ## For Contributors
 
 1. Review [docs/architecture/ROADMAP.md](docs/architecture/ROADMAP.md) for project vision
-2. Check [docs/architecture/FEATURE_ROADMAP.md](docs/architecture/FEATURE_ROADMAP.md) for planned work
-3. Read [docs/development/ERRORS.md](docs/development/ERRORS.md) for error types and fixture conventions
-4. Check [docs/analysis/COVERAGE_REPORT.md](docs/analysis/COVERAGE_REPORT.md) for test coverage gaps
+2. Read [docs/development/ERRORS.md](docs/development/ERRORS.md) for error types and fixture conventions
+3. Check [docs/analysis/COVERAGE_REPORT.md](docs/analysis/COVERAGE_REPORT.md) for test coverage gaps
 
 ## For Performance Researchers
 
