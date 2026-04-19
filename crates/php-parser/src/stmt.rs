@@ -2472,6 +2472,14 @@ pub fn parse_class_members<'arena, 'src>(
             } else {
                 parser.alloc_vec()
             };
+            if is_readonly {
+                if let Some(hook) = hooks.first() {
+                    parser.error(ParseError::Forbidden {
+                        message: "A readonly property cannot declare hooks".into(),
+                        span: hook.span,
+                    });
+                }
+            }
             let span = Span::new(member_start, parser.previous_end());
             members.push(ClassMember {
                 kind: ClassMemberKind::Property(PropertyDecl {
