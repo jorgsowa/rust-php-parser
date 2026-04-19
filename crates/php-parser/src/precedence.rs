@@ -1,3 +1,20 @@
+//! Operator binding powers for the Pratt parser.
+//!
+//! Each infix operator is assigned a `(left_bp, right_bp)` pair:
+//! - **Left-associative**: `right_bp = left_bp + 1` — the parser reduces the current op
+//!   before consuming the next one at the same level (e.g. `+` is `(35, 36)`).
+//! - **Right-associative**: `right_bp = left_bp - 1` — the parser keeps consuming rightward
+//!   before reducing (e.g. `**` is `(60, 59)`).
+//! - **Non-associative**: assigned left-associative binding powers in the table but enforced
+//!   externally via the "chain group" logic in `expr.rs` (see [`nonassoc_chain_level_for_token`]).
+//!
+//! Assignment (`=`, `+=`, …), ternary (`?:`), and null-coalesce (`??`) are **not** in the
+//! infix table — they are handled by dedicated special cases in the parser using
+//! [`ASSIGNMENT_BP`], [`TERNARY_BP`], and [`NULL_COALESCE_LEFT_BP`].
+//!
+//! Values mirror PHP's operator-precedence table:
+//! <https://www.php.net/manual/en/language.operators.precedence.php>
+
 use php_lexer::TokenKind;
 
 /// Binding power for Pratt parsing. Returns (left_bp, right_bp).
