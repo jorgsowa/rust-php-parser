@@ -10,6 +10,19 @@ UPDATE_FIXTURES=1 cargo test         # regenerate expected AST/errors in .phpt f
 cargo bench                          # benchmarks
 ```
 
+## Testing
+
+```sh
+cargo test --test integration   # all .phpt fixture tests (including corpus)
+cargo test --test php_syntax    # validate fixtures via php -l
+cargo test --test malformed_php # error recovery and diagnostics
+cargo test --test visitor       # visitor and scope-aware traversal
+```
+
+Fixture files live in `crates/php-parser/tests/fixtures/`. All fixtures are validated against `php -l` in CI across PHP 8.2–8.5. Fixtures using version-gated syntax must include `===config===` with `min_php=X.Y`.
+
+The project includes a corpus of test fixtures adapted from the [nikic/PHP-Parser](https://github.com/nikic/PHP-Parser) test suite.
+
 ## For Contributors
 
 1. Review [docs/architecture/ROADMAP.md](docs/architecture/ROADMAP.md) for project vision
