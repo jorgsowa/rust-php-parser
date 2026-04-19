@@ -96,10 +96,9 @@ static::factory();
                 }
               },
               "method": {
-                "parts": [
-                  "create"
-                ],
-                "kind": "Unqualified",
+                "kind": {
+                  "Identifier": "create"
+                },
                 "span": {
                   "start": 37,
                   "end": 43
@@ -170,10 +169,9 @@ static::factory();
                 }
               },
               "method": {
-                "parts": [
-                  "__construct"
-                ],
-                "kind": "Unqualified",
+                "kind": {
+                  "Identifier": "__construct"
+                },
                 "span": {
                   "start": 65,
                   "end": 76
@@ -208,10 +206,9 @@ static::factory();
                 }
               },
               "method": {
-                "parts": [
-                  "factory"
-                ],
-                "kind": "Unqualified",
+                "kind": {
+                  "Identifier": "factory"
+                },
                 "span": {
                   "start": 88,
                   "end": 95

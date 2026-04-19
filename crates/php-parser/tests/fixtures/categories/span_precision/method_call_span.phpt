@@ -133,10 +133,9 @@ Foo::bar(1);
                 }
               },
               "method": {
-                "parts": [
-                  "bar"
-                ],
-                "kind": "Unqualified",
+                "kind": {
+                  "Identifier": "bar"
+                },
                 "span": {
                   "start": 46,
                   "end": 49

@@ -33,10 +33,9 @@ min_php=8.1
                       }
                     },
                     "method": {
-                      "parts": [
-                        "suspend"
-                      ],
-                      "kind": "Unqualified",
+                      "kind": {
+                        "Identifier": "suspend"
+                      },
                       "span": {
                         "start": 20,
                         "end": 27

@@ -592,22 +592,18 @@ pub fn parse_expr_bp<'arena, 'src>(
                     };
 
                 if parser.check(TokenKind::LeftParen) {
-                    let method = Name::Simple {
-                        value: member_name,
+                    let method = parser.alloc(Expr {
+                        kind: ExprKind::Identifier(NameStr::Src(member_name)),
                         span: member_span,
-                    };
+                    });
                     match parse_arg_list_or_callable(parser) {
                         ArgListResult::CallableMarker => {
-                            let method_expr = parser.alloc(Expr {
-                                kind: ExprKind::Identifier(NameStr::Src(member_name)),
-                                span: member_span,
-                            });
                             let span = Span::new(lhs.span.start, parser.previous_end());
                             lhs = Expr {
                                 kind: ExprKind::CallableCreate(CallableCreateExpr {
                                     kind: CallableCreateKind::StaticMethod {
                                         class: parser.alloc(lhs),
-                                        method: method_expr,
+                                        method,
                                     },
                                 }),
                                 span,

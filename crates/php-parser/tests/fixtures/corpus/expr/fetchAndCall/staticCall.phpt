@@ -34,10 +34,9 @@ $a['b']::c();
                 }
               },
               "method": {
-                "parts": [
-                  "b"
-                ],
-                "kind": "Unqualified",
+                "kind": {
+                  "Identifier": "b"
+                },
                 "span": {
                   "start": 36,
                   "end": 37
@@ -310,10 +309,9 @@ $a['b']::c();
                       }
                     },
                     "method": {
-                      "parts": [
-                        "b"
-                      ],
-                      "kind": "Unqualified",
+                      "kind": {
+                        "Identifier": "b"
+                      },
                       "span": {
                         "start": 122,
                         "end": 123
@@ -364,10 +362,9 @@ $a['b']::c();
                 }
               },
               "method": {
-                "parts": [
-                  "b"
-                ],
-                "kind": "Unqualified",
+                "kind": {
+                  "Identifier": "b"
+                },
                 "span": {
                   "start": 166,
                   "end": 167
@@ -402,10 +399,9 @@ $a['b']::c();
                 }
               },
               "method": {
-                "parts": [
-                  "b"
-                ],
-                "kind": "Unqualified",
+                "kind": {
+                  "Identifier": "b"
+                },
                 "span": {
                   "start": 175,
                   "end": 176
@@ -448,10 +444,9 @@ $a['b']::c();
                 }
               },
               "method": {
-                "parts": [
-                  "b"
-                ],
-                "kind": "Unqualified",
+                "kind": {
+                  "Identifier": "b"
+                },
                 "span": {
                   "start": 188,
                   "end": 189
@@ -505,10 +500,9 @@ $a['b']::c();
                 }
               },
               "method": {
-                "parts": [
-                  "c"
-                ],
-                "kind": "Unqualified",
+                "kind": {
+                  "Identifier": "c"
+                },
                 "span": {
                   "start": 202,
                   "end": 203

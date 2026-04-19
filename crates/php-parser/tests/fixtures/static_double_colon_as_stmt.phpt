@@ -57,10 +57,9 @@ static::class;
                 }
               },
               "method": {
-                "parts": [
-                  "method"
-                ],
-                "kind": "Unqualified",
+                "kind": {
+                  "Identifier": "method"
+                },
                 "span": {
                   "start": 29,
                   "end": 35

@@ -164,10 +164,9 @@ isset($a, $b, );
                 }
               },
               "method": {
-                "parts": [
-                  "bar"
-                ],
-                "kind": "Unqualified",
+                "kind": {
+                  "Identifier": "bar"
+                },
                 "span": {
                   "start": 48,
                   "end": 51

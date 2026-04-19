@@ -547,10 +547,9 @@ class Foo {
                 }
               },
               "method": {
-                "parts": [
-                  "list"
-                ],
-                "kind": "Unqualified",
+                "kind": {
+                  "Identifier": "list"
+                },
                 "span": {
                   "start": 443,
                   "end": 447
@@ -585,10 +584,9 @@ class Foo {
                 }
               },
               "method": {
-                "parts": [
-                  "protected"
-                ],
-                "kind": "Unqualified",
+                "kind": {
+                  "Identifier": "protected"
+                },
                 "span": {
                   "start": 457,
                   "end": 466

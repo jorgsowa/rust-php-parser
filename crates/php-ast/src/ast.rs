@@ -1282,7 +1282,7 @@ pub struct StaticAccessExpr<'arena, 'src> {
 #[derive(Debug, Serialize)]
 pub struct StaticMethodCallExpr<'arena, 'src> {
     pub class: &'arena Expr<'arena, 'src>,
-    pub method: Name<'arena, 'src>,
+    pub method: &'arena Expr<'arena, 'src>,
     pub args: ArenaVec<'arena, Arg<'arena, 'src>>,
 }
 

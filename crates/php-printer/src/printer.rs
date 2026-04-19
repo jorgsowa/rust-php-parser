@@ -688,7 +688,7 @@ impl Printer {
             ExprKind::StaticMethodCall(call) => {
                 self.print_expr(call.class, PREC_PRIMARY);
                 self.w("::");
-                self.w(call.method.to_string_repr().as_ref());
+                self.print_expr(call.method, PREC_PRIMARY);
                 self.w("(");
                 self.print_args(&call.args);
                 self.w(")");
