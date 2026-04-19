@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2026-04-19
+
+### Added
+
+- `visit_name()` hook and `walk_name()` free function in the `Visitor` trait — fully backwards compatible; all existing visitors compile unchanged (`php-ast`, #226).
+- `ParserContext` struct with `reparse()` / `reparse_versioned()` methods for arena reuse across re-parses. Resets the bump arena in O(1) before each parse, reducing allocator churn in LSP servers that re-parse on every keystroke (`php-rs-parser`, #221).
+
+### Changed (breaking)
+
+- `StaticMethodCall` / `StaticMethodCallExpr` now covers only static dispatch (`Foo::bar()`). Dynamic dispatch (`Class::$method()`) is a new `StaticDynMethodCall` / `StaticDynMethodCallExpr` variant. Match arms that previously handled dynamic dispatch via `StaticMethodCall` must be updated (`php-ast`, #225).
+
+### Fixed
+
+- Visitor now traverses `TraitUse` adaptations (`php-ast`, #223).
+- Risky `unwrap()` in trait alias parsing replaced with proper error handling (`php-rs-parser`, #219).
+- Empty index in string interpolation (`$$arr[]`) now emits a parse error instead of silently producing a malformed AST (`php-rs-parser`, #218).
+- Malformed Unicode escape sequences now emit parse errors (`php-rs-parser`, #217).
+- Invalid assignment targets (e.g. `1 = $x`) now emit parse errors (`php-rs-parser`, #216).
+- Non-associative chain detection restricted to same-precedence operators; mixed-precedence chains no longer trigger a false error (`php-rs-parser`, #215).
+- Property hook parameter counts validated; mismatched arity now emits a parse error (`php-rs-parser`, #214).
+- Invalid heredoc/nowdoc body indentation now emits a parse error (`php-rs-parser`, #212).
+
+---
+
 ## [0.7.0] - 2026-04-17
 
 ### Added
