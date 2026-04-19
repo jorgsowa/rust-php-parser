@@ -802,7 +802,9 @@ fn parse_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
     parser.expect_closing(TokenKind::RightParen, open_span);
 
     if parser.eat(TokenKind::Colon).is_some() {
+        parser.loop_depth += 1;
         let stmts = parse_stmts_until_end(parser, &[TokenKind::EndWhile]);
+        parser.loop_depth -= 1;
         parser.expect(TokenKind::EndWhile);
         parser.expect(TokenKind::Semicolon);
         let span = Span::new(start, parser.previous_end());
@@ -816,7 +818,9 @@ fn parse_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
         };
     }
 
+    parser.loop_depth += 1;
     let body_stmt = parse_stmt_or_block(parser);
+    parser.loop_depth -= 1;
     let body = parser.alloc(body_stmt);
     let span = Span::new(start, body.span.end);
     Stmt {
@@ -830,7 +834,9 @@ fn parse_do_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
 
     let start = parser.start_span();
     parser.advance();
+    parser.loop_depth += 1;
     let body_stmt = parse_stmt_or_block(parser);
+    parser.loop_depth -= 1;
     let body = parser.alloc(body_stmt);
     parser.expect(TokenKind::While);
     let open = parser.expect(TokenKind::LeftParen);
@@ -860,7 +866,9 @@ fn parse_for<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
     parser.expect_closing(TokenKind::RightParen, open_span);
 
     if parser.eat(TokenKind::Colon).is_some() {
+        parser.loop_depth += 1;
         let stmts = parse_stmts_until_end(parser, &[TokenKind::EndFor]);
+        parser.loop_depth -= 1;
         parser.expect(TokenKind::EndFor);
         parser.expect(TokenKind::Semicolon);
         let span = Span::new(start, parser.previous_end());
@@ -879,7 +887,9 @@ fn parse_for<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
         };
     }
 
+    parser.loop_depth += 1;
     let body_stmt = parse_stmt_or_block(parser);
+    parser.loop_depth -= 1;
     let body = parser.alloc(body_stmt);
     let span = Span::new(start, body.span.end);
     Stmt {
@@ -939,7 +949,9 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
     parser.expect_closing(TokenKind::RightParen, open_span);
 
     if parser.eat(TokenKind::Colon).is_some() {
+        parser.loop_depth += 1;
         let stmts = parse_stmts_until_end(parser, &[TokenKind::EndForeach]);
+        parser.loop_depth -= 1;
         parser.expect(TokenKind::EndForeach);
         parser.expect(TokenKind::Semicolon);
         let span = Span::new(start, parser.previous_end());
@@ -958,7 +970,9 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
         };
     }
 
+    parser.loop_depth += 1;
     let body_stmt = parse_stmt_or_block(parser);
+    parser.loop_depth -= 1;
     let body = parser.alloc(body_stmt);
     let span = Span::new(start, body.span.end);
     Stmt {
@@ -1014,6 +1028,8 @@ fn parse_function<'arena, 'src>(
     // March 2026: reduce from 16 to 4 for smaller initial allocation
     // Most functions have 4-10 statements; large functions grow efficiently
     let mut body = parser.alloc_vec_with_capacity(4);
+    let saved_loop_depth = parser.loop_depth;
+    parser.loop_depth = 0;
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
         body.push(parse_stmt(parser));
@@ -1021,6 +1037,7 @@ fn parse_function<'arena, 'src>(
             parser.advance();
         }
     }
+    parser.loop_depth = saved_loop_depth;
     parser.expect_closing(TokenKind::RightBrace, open_brace_span);
     let end = parser.previous_end();
     let span = Span::new(start, end);
@@ -1275,12 +1292,14 @@ fn parse_optional_visibility(parser: &mut Parser) -> Option<Visibility> {
 
 fn parse_break<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
+    let kw_span = parser.current_span();
     parser.advance();
     let expr = if !parser.check(TokenKind::Semicolon) {
         Some(expr::parse_expr(parser))
     } else {
         None
     };
+    validate_break_continue(parser, "break", parser.loop_depth, &expr, kw_span);
     parser.expect_semicolon("break statement");
     let span = Span::new(start, parser.previous_end());
     Stmt {
@@ -1291,17 +1310,63 @@ fn parse_break<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
 
 fn parse_continue<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
+    let kw_span = parser.current_span();
     parser.advance();
     let expr = if !parser.check(TokenKind::Semicolon) {
         Some(expr::parse_expr(parser))
     } else {
         None
     };
+    validate_break_continue(parser, "continue", parser.loop_depth, &expr, kw_span);
     parser.expect_semicolon("continue statement");
     let span = Span::new(start, parser.previous_end());
     Stmt {
         kind: StmtKind::Continue(expr.map(|e| parser.alloc(e))),
         span,
+    }
+}
+
+fn validate_break_continue<'arena, 'src>(
+    parser: &mut Parser<'arena, 'src>,
+    kw: &'static str,
+    loop_depth: u32,
+    expr: &Option<Expr<'arena, 'src>>,
+    span: Span,
+) {
+    use php_ast::ExprKind;
+
+    match expr {
+        None => {
+            // Implicit level 1
+            if loop_depth == 0 {
+                parser.error(ParseError::Forbidden {
+                    message: format!("Cannot '{}' 1 level", kw).into(),
+                    span,
+                });
+            }
+        }
+        Some(e) => {
+            if let ExprKind::Int(n) = e.kind {
+                if n <= 0 {
+                    parser.error(ParseError::Forbidden {
+                        message: format!("'{}' operator accepts only positive integers", kw).into(),
+                        span,
+                    });
+                } else if n as u32 > loop_depth {
+                    let levels = if n == 1 {
+                        "1 level".to_string()
+                    } else {
+                        format!("{} levels", n)
+                    };
+                    parser.error(ParseError::Forbidden {
+                        message: format!("Cannot '{}' {}", kw, levels).into(),
+                        span,
+                    });
+                }
+            }
+            // Non-integer expressions: PHP rejects these at compile time too,
+            // but that is covered by the php_syntax test (php -l).
+        }
     }
 }
 
@@ -1334,6 +1399,7 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
     };
     let mut cases = parser.alloc_vec_with_capacity(8);
 
+    parser.loop_depth += 1;
     while !end_tokens.contains(&parser.current_kind()) && !parser.check(TokenKind::Eof) {
         let case_start = parser.start_span();
         let value = if parser.eat(TokenKind::Case).is_some() {
@@ -1366,6 +1432,8 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
             span: Span::new(case_start, parser.previous_end()),
         });
     }
+
+    parser.loop_depth -= 1;
 
     if alt_syntax {
         parser.expect(TokenKind::EndSwitch);
@@ -2391,6 +2459,8 @@ pub fn parse_class_members<'arena, 'src>(
             let body = if parser.check(TokenKind::LeftBrace) {
                 parser.expect(TokenKind::LeftBrace);
                 let mut stmts = parser.alloc_vec_with_capacity(16);
+                let saved_loop_depth = parser.loop_depth;
+                parser.loop_depth = 0;
                 while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
                     let span_before = parser.current_span();
                     stmts.push(parse_stmt(parser));
@@ -2398,6 +2468,7 @@ pub fn parse_class_members<'arena, 'src>(
                         parser.advance();
                     }
                 }
+                parser.loop_depth = saved_loop_depth;
                 parser.expect(TokenKind::RightBrace);
                 Some(stmts)
             } else {
@@ -2871,6 +2942,8 @@ fn parse_enum<'arena, 'src>(
             let body = if parser.check(TokenKind::LeftBrace) {
                 parser.expect(TokenKind::LeftBrace);
                 let mut stmts = parser.alloc_vec_with_capacity(16);
+                let saved_loop_depth = parser.loop_depth;
+                parser.loop_depth = 0;
                 while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
                     let span_before = parser.current_span();
                     stmts.push(parse_stmt(parser));
@@ -2878,6 +2951,7 @@ fn parse_enum<'arena, 'src>(
                         parser.advance();
                     }
                 }
+                parser.loop_depth = saved_loop_depth;
                 parser.expect(TokenKind::RightBrace);
                 Some(stmts)
             } else {

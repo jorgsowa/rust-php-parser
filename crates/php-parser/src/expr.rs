@@ -2156,6 +2156,8 @@ fn parse_closure<'arena, 'src>(
     // body
     parser.expect(TokenKind::LeftBrace);
     let mut body = parser.alloc_vec_with_capacity(16);
+    let saved_loop_depth = parser.loop_depth;
+    parser.loop_depth = 0;
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
         body.push(stmt::parse_stmt(parser));
@@ -2163,6 +2165,7 @@ fn parse_closure<'arena, 'src>(
             parser.advance();
         }
     }
+    parser.loop_depth = saved_loop_depth;
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
 

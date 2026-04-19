@@ -23,9 +23,11 @@ expected ';', found 'const'
 expected ';', found 'break'
 expected expression
 expected ';' after break statement
+Cannot 'break' 2 levels
 expected ';' after break statement
 expected expression
 expected ';' after continue statement
+Cannot 'continue' 2 levels
 expected ';' after continue statement
 expected expression
 expected ';' after return statement

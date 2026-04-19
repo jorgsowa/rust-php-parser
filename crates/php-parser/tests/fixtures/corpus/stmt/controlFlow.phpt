@@ -14,6 +14,11 @@ throw $e;
 
 label:
 goto label;
+===errors===
+Cannot 'break' 1 level
+Cannot 'break' 2 levels
+Cannot 'continue' 1 level
+Cannot 'continue' 2 levels
 ===ast===
 {
   "stmts": [

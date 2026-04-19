@@ -19,6 +19,9 @@ pub struct Parser<'arena, 'src> {
     pub depth: u32,
     /// Expression nesting depth — guards against stack overflow on deeply nested input
     pub(crate) expr_depth: u32,
+    /// Loop/switch nesting depth — tracks valid break/continue targets.
+    /// Resets to 0 when crossing a function/method/closure boundary.
+    pub(crate) loop_depth: u32,
     tokens: Vec<Token>,
     /// Index of NEXT token in the tokens array (current = tokens[pos - 1])
     pos: usize,
@@ -100,6 +103,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             comments,
             depth: 0,
             expr_depth: 0,
+            loop_depth: 0,
             version,
         }
     }
@@ -185,6 +189,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             comments,
             depth: 0,
             expr_depth: 0,
+            loop_depth: 0,
             version,
         }
     }
