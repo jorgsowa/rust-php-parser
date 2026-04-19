@@ -8,7 +8,7 @@ class Foo {
     }
 }
 ===errors===
-A readonly property cannot declare a set hook
+A readonly property cannot declare hooks
 ===ast===
 {
   "stmts": [

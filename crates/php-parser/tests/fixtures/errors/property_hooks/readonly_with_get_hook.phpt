@@ -7,6 +7,8 @@ class Foo {
         get { return $this->bar; }
     }
 }
+===errors===
+A readonly property cannot declare hooks
 ===ast===
 {
   "stmts": [

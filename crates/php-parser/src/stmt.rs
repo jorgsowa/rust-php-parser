@@ -2473,10 +2473,10 @@ pub fn parse_class_members<'arena, 'src>(
                 parser.alloc_vec()
             };
             if is_readonly {
-                if let Some(set_hook) = hooks.iter().find(|h| h.kind == PropertyHookKind::Set) {
+                if let Some(hook) = hooks.first() {
                     parser.error(ParseError::Forbidden {
-                        message: "A readonly property cannot declare a set hook".into(),
-                        span: set_hook.span,
+                        message: "A readonly property cannot declare hooks".into(),
+                        span: hook.span,
                     });
                 }
             }
