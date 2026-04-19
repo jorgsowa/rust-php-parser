@@ -155,11 +155,13 @@ Fixture files live in `crates/php-parser/tests/fixtures/`. All fixtures are vali
 
 ## Documentation
 
-Full documentation is in the [docs/](docs/) directory:
-- **[docs/INDEX.md](docs/INDEX.md)** — Documentation index
-- **[docs/architecture/](docs/architecture/)** — Design and roadmap
-- **[docs/performance/](docs/performance/)** — Performance analysis and profiling
-- **[docs/development/CHANGELOG.md](docs/development/CHANGELOG.md)** — Release history
+### For external tool consumers (LSPs, linters, static analyzers)
+1. This file — public API entry points (`parse`, `parse_versioned`, `ParserContext`)
+2. `php-ast/src/visitor.rs` module doc — `Visitor` vs `ScopeVisitor` distinction
+3. [`crates/php-parser/src/diagnostics.rs`](crates/php-parser/src/diagnostics.rs) — `ParseError` variants
+4. [docs/development/ERRORS.md](docs/development/ERRORS.md) — error recovery behavior
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contributor and performance researcher guides. Full documentation is in the [docs/](docs/) directory.
 
 ## License
 
