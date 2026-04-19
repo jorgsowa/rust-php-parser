@@ -1,4 +1,10 @@
 ===source===
-<?php continue 3;
+<?php for (;;) { for (;;) { for (;;) { continue 3; } } }
 ===print===
-continue 3;
+for (; ; ) {
+    for (; ; ) {
+        for (; ; ) {
+            continue 3;
+        }
+    }
+}
