@@ -165,7 +165,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for contributor and performance researche
 
 ## Acknowledgements
 
-Test corpus fixtures were adapted from [nikic/PHP-Parser](https://github.com/nikic/PHP-Parser). Thanks to Nikita Popov and contributors.
+Inspired by and indebted to [nikic/PHP-Parser](https://github.com/nikic/PHP-Parser) — test corpus fixtures were adapted from its test suite. Thanks to Nikita Popov and contributors.
 
 ## License
 
