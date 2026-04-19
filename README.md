@@ -108,6 +108,10 @@ This parser is optimised for **modern PHP applications with full typing** (PHP 7
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for build instructions, testing, and contributor guides. Full documentation is in the [docs/](docs/) directory.
 
+## Acknowledgements
+
+Inspired by and indebted to [nikic/PHP-Parser](https://github.com/nikic/PHP-Parser) — test corpus fixtures were adapted from its test suite. Thanks to the PHP community contributors.
+
 ## License
 
 BSD 3-Clause
