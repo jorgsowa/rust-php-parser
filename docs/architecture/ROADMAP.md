@@ -2,6 +2,8 @@
 
 This roadmap covers feature development and tracks ongoing performance optimization work.
 
+**Current status:** Phase 1 complete. Phase 2.2 (Pretty Printer) complete. Phase 2.1 (Semantic Analysis) in progress — symbol table, source map, and comment map done; scope tracking and name resolution remaining.
+
 **Performance work** (completed optimizations, remaining opportunities, and detailed analysis) is documented in [`PERFORMANCE_ANALYSIS.md`](./PERFORMANCE_ANALYSIS.md).
 
 ---
@@ -24,7 +26,7 @@ Trait-based AST traversal for analysis and transformation passes.
 
 **Status:** Complete. `Visitor` trait with `ControlFlow<()>` return for early termination and subtree skipping. Visit methods for all node types: statements, expressions, params, args, class/enum members, property hooks, type hints, attributes, catch clauses, match arms, closure use vars. Corresponding `walk_*` free functions for each. Walks type hints (including union/intersection/nullable), attributes, and declare directives that were previously skipped.
 
-**Remaining:** `VisitorMut`/`Fold` for AST transformations is deferred — arena allocation (`&'arena`) makes in-place mutation of pointer-behind fields unsound. A `Fold` that rebuilds nodes into a new arena is the correct approach but requires a separate design.
+**Remaining:** `VisitorMut`/`Fold` for AST transformations is tracked separately (see 2.3 below) — arena allocation (`&'arena`) makes in-place mutation of pointer-behind fields unsound. A `Fold` that rebuilds nodes into a new arena is the correct approach but requires a separate design.
 
 **Blockers:** None.
 
@@ -40,33 +42,43 @@ Configure the target PHP version to control which syntax is accepted and which e
 
 Builds on Phase 1 infrastructure.
 
-### 2.1 Semantic Analysis (in progress)
+### 2.1 Parse-time Validation (in progress)
 
-Scope tracking, name resolution, and type checking as a separate pass over the AST.
+Structural error checks that can be performed during or immediately after parsing, using only syntactic context — no name resolution or type information required.
 
-**Enables:** real compile-error detection, IDE features (go-to-definition, find-references), refactoring safety.
+**Already implemented:**
+- `abstract final` on classes and methods
+- Duplicate modifiers (`static`, `abstract`, `final`, `readonly`)
+- Multiple visibility modifiers on a single member
+- `static readonly` property combination
+- Positional argument after named argument
+- `class` keyword as an enum case name
 
-**Scope (each sub-feature is independently useful):**
+**Remaining:**
+- **`break`/`continue` outside loop/switch** — emit a parse error when these appear at the top level or inside a function/class body with no enclosing loop or switch; requires tracking loop nesting depth in the parser
+- **Backed enum case value enforcement** — a backed enum (`enum E: int`) must have `= value` on every case; a pure enum must not; detectable from the enum declaration header alone
+- **`readonly` property without a type** — PHP requires a type hint on every `readonly` property; emittable as a parse error at the declaration site
 
-1. **Symbol table** ✅ — collect all declarations (functions, classes, interfaces, traits, enums, constants) with namespace-aware FQNs, member collection (methods, properties, class constants, enum cases), `use` import tracking, offset-based lookup, and basic name resolution
-2. **Source map** ✅ — byte-offset spans to 0-based line/column positions (and back) with O(log n) lookup per query
-3. **Comment mapping** ✅ — attach comments to AST nodes by span proximity (leading comments to following statements, trailing comments collected separately)
-4. **Scope tracking** — resolve variable visibility (`global`, `static`, closure `use`, function scope boundaries)
-5. **Name resolution** — resolve `use` aliases, qualified names, `self`/`parent`/`static` to their declarations (basic `use` resolution exists in symbol table)
-6. **Type inference** — propagate types through assignments, returns, and expressions
-7. **Compile-error detection** — duplicate declarations, `break` outside loop, abstract method in non-abstract class, etc.
-8. **Type checking** — validate argument types, return types, property types against declarations
-
-**Difficulties:**
-- **Scope is enormous** — full semantic analysis is effectively building a PHP compiler frontend. Symbol table and source map are now complete; scope tracking and full name resolution are next.
-- **PHP's dynamic nature** — `$$var`, `extract()`, `compact()`, `new $className` make static analysis fundamentally incomplete. The analyzer must be sound but incomplete.
-- **Autoloading** — single-file analysis cannot resolve cross-file references without a project-level index. Major architectural decision: single-file vs. project-wide.
-- **Standard library** — type information for 5000+ built-in functions requires a stubs database (phpstorm-stubs or php-src).
-- **Trait resolution** — `insteadof` and `as` create complex method resolution orders.
-
-**Blockers:** None. Visitor API (1.2) and Comment preservation (1.1) are both complete.
+**Blockers:** None.
 
 ### 2.2 Pretty Printer ✅
+
+### 2.3 Fold / VisitorMut
+
+AST transformation via a `Fold` trait that rebuilds nodes into a new arena.
+
+**Enables:** code transformations (e.g., removing dead code, rewriting deprecated syntax, macro expansion), tooling that needs to produce a modified AST.
+
+**Scope:**
+- A `Fold` trait with a method per node type that returns an owned rebuilt node
+- Each method has a default implementation that recurses and rebuilds unchanged
+- Implementations override only the nodes they need to transform
+- Output lands in a fresh arena; the input arena is read-only
+
+**Why not `VisitorMut`:**
+Arena allocation (`&'arena T`) means all pointers into the arena share the arena's lifetime. In-place mutation of pointer-behind fields would require unsafe aliasing. A `Fold` that reads from one arena and writes to another is sound.
+
+**Blockers:** None.
 
 AST-to-source output for code generation and refactoring tools.
 
@@ -150,18 +162,19 @@ Compile to WebAssembly for browser-based PHP tooling.
 ```
 1.1 Comment Preservation ✅ ────────────┐
                                         ├──→ 2.2 Pretty Printer ✅ ──→ 3.1 LSP ──→ 3.2 Incremental
-1.2 Visitor / Walker API ✅ ──┬─────────┘                               ↑
-                              └──→ 2.1 Semantic Analysis (in progress) ─┘
-1.3 PHP Version Selection ✅       ├── symbol table ✅
-                                   ├── source map ✅
-                                   ├── comment map ✅
-                                   ├── scope tracking
-                                   └── full name resolution
+1.2 Visitor / Walker API ✅ ──┬─────────┘        ↑
+                              └──→ 2.3 Fold ─────┘
+1.3 PHP Version Selection ✅
 
-3.3 WASM Target (independent, improves with 2.2)
+2.1 Parse-time Validation (in progress, independent)
+  ├── break/continue outside loop
+  ├── backed enum value enforcement
+  └── readonly without type
+
+3.3 WASM Target (independent, improves with 2.2 ✅)
 ```
 
-**Phase 1 complete. Phase 2.2 complete. Phase 2.1 in progress** (symbol table, source map, comment map done). LSP integration and WASM target are now unblocked.
+**Phase 1 complete. Phase 2.2 complete. Phase 2.1 in progress.** LSP integration and WASM target are now unblocked.
 
 **Note:** Performance optimization is tracked separately in `PERFORMANCE_ANALYSIS.md` and is ongoing independent of feature phases.
 
@@ -171,6 +184,9 @@ Compile to WebAssembly for browser-based PHP tooling.
 - **Public API documentation** — rustdoc added to public API surface
 - **Dependency cleanup** — replaced `lazy_static` with `std::sync::OnceLock`
 - **LSP foundations** — `source_map` (byte offset ↔ line/col), `comment_map` (comment-to-node attachment), `symbol_table` (declaration extraction with FQN resolution) added to `php-ast`
+- **`php-printer` crate** — full AST-to-PHP pretty printer published to crates.io
+- **WordPress corpus** — 14,000+ real-world PHP files parse with zero errors; regression suite added
+- **Performance analysis** — corpus analysis across Laravel, Symfony, WordPress; arena/allocation tuning documented
 
 ### Complexity Estimates
 
@@ -179,7 +195,8 @@ Compile to WebAssembly for browser-based PHP tooling.
 | 1.1 Comment Preservation | ✅ Complete | Includes PHPDoc parser + Psalm/PHPStan annotations |
 | 1.2 Visitor / Walker API | ✅ Complete | ControlFlow support, type hints, attributes, 13 visit methods |
 | 1.3 PHP Version Selection | ✅ Complete | Full version gating for all version-specific syntax |
-| 2.1 Semantic Analysis | Very High | In progress — symbol table, source map, comment map done (~1000 lines); scope tracking + full name resolution remaining (~2000–4000 lines) |
+| 2.1 Parse-time Validation | Low–Medium | In progress — most modifier combos done; break/continue context, enum backing, readonly-without-type remaining |
+| 2.3 Fold / VisitorMut | Medium | ~500–1000 lines; one method per node type, default recursion, arena-to-arena rebuild |
 | 2.2 Pretty Printer | ✅ Complete | New `php-printer` crate, 62 tests, round-trip verified |
 | 3.1 LSP Integration | High | ~2000–4000 lines + new crate |
 | 3.2 Incremental Parsing | Very High | ~3000–5000+ lines (research-level) |
