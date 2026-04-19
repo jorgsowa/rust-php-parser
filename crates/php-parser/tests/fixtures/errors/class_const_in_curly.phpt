@@ -1,5 +1,7 @@
 ===source===
 <?php $x = "{$obj::CONST}";
+===errors===
+class constant access is not valid as a standalone interpolation expression
 ===ast===
 {
   "stmts": [
