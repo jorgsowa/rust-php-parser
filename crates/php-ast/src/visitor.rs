@@ -105,6 +105,10 @@ pub trait Visitor<'arena, 'src> {
 // Walk functions
 // =============================================================================
 
+/// Calls [`Visitor::visit_name`] on `name`.
+///
+/// The default [`Visitor::visit_name`] is a leaf — it does nothing and returns
+/// `Continue(())`. Override it if you need to inspect name nodes.
 pub fn walk_name<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     name: &Name<'arena, 'src>,
@@ -112,6 +116,21 @@ pub fn walk_name<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor.visit_name(name)
 }
 
+/// Visits every top-level statement in `program` by calling [`Visitor::visit_stmt`].
+///
+/// This is the entry point for a full-file traversal. Call it from
+/// [`Visitor::visit_program`] (which is the default) or drive it directly:
+///
+/// ```
+/// # use php_ast::visitor::{Visitor, walk_program};
+/// # use php_ast::ast::*;
+/// # use std::ops::ControlFlow;
+/// # struct V;
+/// # impl<'a, 'b> Visitor<'a, 'b> for V {}
+/// # fn example<'a, 'b>(v: &mut V, program: &Program<'a, 'b>) {
+/// walk_program(v, program);
+/// # }
+/// ```
 pub fn walk_program<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     program: &Program<'arena, 'src>,
@@ -122,6 +141,10 @@ pub fn walk_program<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     ControlFlow::Continue(())
 }
 
+/// Dispatches `stmt` to the appropriate child visitors based on its [`StmtKind`].
+///
+/// Call this from [`Visitor::visit_stmt`] to recurse into a statement's children.
+/// Omit the call to skip the subtree entirely.
 pub fn walk_stmt<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     stmt: &Stmt<'arena, 'src>,
@@ -309,6 +332,10 @@ pub fn walk_stmt<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     ControlFlow::Continue(())
 }
 
+/// Dispatches `expr` to the appropriate child visitors based on its [`ExprKind`].
+///
+/// Call this from [`Visitor::visit_expr`] to recurse into an expression's children.
+/// Omit the call to skip the subtree entirely.
 pub fn walk_expr<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     expr: &Expr<'arena, 'src>,
@@ -522,6 +549,7 @@ pub fn walk_expr<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     ControlFlow::Continue(())
 }
 
+/// Visits a function/method parameter's attributes, type hint, default expression, and property hooks.
 pub fn walk_param<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     param: &Param<'arena, 'src>,
@@ -539,6 +567,7 @@ pub fn walk_param<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     ControlFlow::Continue(())
 }
 
+/// Visits the value expression of a call argument.
 pub fn walk_arg<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     arg: &Arg<'arena, 'src>,
@@ -546,6 +575,7 @@ pub fn walk_arg<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor.visit_expr(&arg.value)
 }
 
+/// Dispatches a class member (property, method, constant, or trait use) to its child visitors.
 pub fn walk_class_member<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     member: &ClassMember<'arena, 'src>,
@@ -567,6 +597,7 @@ pub fn walk_class_member<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     ControlFlow::Continue(())
 }
 
+/// Visits a property hook's attributes, parameters, and body statements or expression.
 pub fn walk_property_hook<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     hook: &PropertyHook<'arena, 'src>,
@@ -589,6 +620,7 @@ pub fn walk_property_hook<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     ControlFlow::Continue(())
 }
 
+/// Dispatches an enum member (case, method, constant, or trait use) to its child visitors.
 pub fn walk_enum_member<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     member: &EnumMember<'arena, 'src>,
@@ -613,6 +645,7 @@ pub fn walk_enum_member<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     ControlFlow::Continue(())
 }
 
+/// Visits the inner types of a type hint (recursing into nullable, union, and intersection).
 pub fn walk_type_hint<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     type_hint: &TypeHint<'arena, 'src>,
@@ -634,6 +667,7 @@ pub fn walk_type_hint<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     ControlFlow::Continue(())
 }
 
+/// Visits an attribute's name and argument expressions.
 pub fn walk_attribute<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     attribute: &Attribute<'arena, 'src>,
@@ -645,6 +679,7 @@ pub fn walk_attribute<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     ControlFlow::Continue(())
 }
 
+/// Visits a catch clause's caught type names and body statements.
 pub fn walk_catch_clause<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     catch: &CatchClause<'arena, 'src>,
@@ -658,6 +693,7 @@ pub fn walk_catch_clause<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     ControlFlow::Continue(())
 }
 
+/// Visits a match arm's condition expressions (if any) and body expression.
 pub fn walk_match_arm<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     arm: &MatchArm<'arena, 'src>,
@@ -670,6 +706,7 @@ pub fn walk_match_arm<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor.visit_expr(&arm.body)
 }
 
+/// Visits a trait use declaration's trait names and adaptations (`insteadof`, `as`).
 pub fn walk_trait_use<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     trait_use: &TraitUseDecl<'arena, 'src>,
