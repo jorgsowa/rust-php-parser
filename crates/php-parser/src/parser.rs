@@ -773,34 +773,21 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         // Use TypeHintKind::Keyword — 1-byte enum discriminant instead of Cow<str>.
         if self.check(TokenKind::Identifier) {
             let text = self.current_text();
-            let builtin = if text.eq_ignore_ascii_case("int") {
-                Some(BuiltinType::Int)
-            } else if text.eq_ignore_ascii_case("integer") {
-                Some(BuiltinType::Integer)
-            } else if text.eq_ignore_ascii_case("float") {
-                Some(BuiltinType::Float)
-            } else if text.eq_ignore_ascii_case("double") {
-                Some(BuiltinType::Double)
-            } else if text.eq_ignore_ascii_case("string") {
-                Some(BuiltinType::String)
-            } else if text.eq_ignore_ascii_case("bool") {
-                Some(BuiltinType::Bool)
-            } else if text.eq_ignore_ascii_case("boolean") {
-                Some(BuiltinType::Boolean)
-            } else if text.eq_ignore_ascii_case("void") {
-                Some(BuiltinType::Void)
-            } else if text.eq_ignore_ascii_case("never") {
-                Some(BuiltinType::Never)
-            } else if text.eq_ignore_ascii_case("mixed") {
-                Some(BuiltinType::Mixed)
-            } else if text.eq_ignore_ascii_case("object") {
-                Some(BuiltinType::Object)
-            } else if text.eq_ignore_ascii_case("iterable") {
-                Some(BuiltinType::Iterable)
-            } else if text.eq_ignore_ascii_case("callable") {
-                Some(BuiltinType::Callable)
-            } else {
-                None
+            let builtin = match text.to_ascii_lowercase().as_str() {
+                "int" => Some(BuiltinType::Int),
+                "integer" => Some(BuiltinType::Integer),
+                "float" => Some(BuiltinType::Float),
+                "double" => Some(BuiltinType::Double),
+                "string" => Some(BuiltinType::String),
+                "bool" => Some(BuiltinType::Bool),
+                "boolean" => Some(BuiltinType::Boolean),
+                "void" => Some(BuiltinType::Void),
+                "never" => Some(BuiltinType::Never),
+                "mixed" => Some(BuiltinType::Mixed),
+                "object" => Some(BuiltinType::Object),
+                "iterable" => Some(BuiltinType::Iterable),
+                "callable" => Some(BuiltinType::Callable),
+                _ => None,
             };
             if let Some(builtin) = builtin {
                 let token = self.advance();
