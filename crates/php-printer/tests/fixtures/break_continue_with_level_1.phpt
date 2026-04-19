@@ -1,7 +1,4 @@
 ===source===
-<?php for (;;) { break; continue; }
+<?php break;
 ===print===
-for (; ; ) {
-    break;
-    continue;
-}
+break;

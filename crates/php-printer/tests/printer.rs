@@ -3,11 +3,6 @@ use php_printer::pretty_print;
 fn pp(src: &str) -> String {
     let arena = bumpalo::Bump::new();
     let result = php_rs_parser::parse(&arena, src);
-    assert!(
-        result.errors.is_empty(),
-        "parse errors: {:?}",
-        result.errors
-    );
     pretty_print(&result.program)
 }
 

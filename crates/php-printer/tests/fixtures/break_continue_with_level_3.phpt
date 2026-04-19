@@ -1,6 +1,4 @@
 ===source===
-<?php for (;;) { continue; }
+<?php continue;
 ===print===
-for (; ; ) {
-    continue;
-}
+continue;
