@@ -117,10 +117,7 @@ fn parse_assign_continuation<'arena, 'src>(
         });
     }
     let op_token = parser.advance();
-    let by_ref = op_token.kind == TokenKind::Equals && parser.check(TokenKind::Ampersand);
-    if by_ref {
-        parser.advance();
-    }
+    let by_ref = op_token.kind == TokenKind::Equals && parser.eat(TokenKind::Ampersand).is_some();
     let op = match op_token.kind {
         TokenKind::Equals => AssignOp::Assign,
         TokenKind::PlusEquals => AssignOp::Plus,
@@ -392,10 +389,8 @@ pub fn parse_expr_bp<'arena, 'src>(
             }
             let op_token = parser.advance();
 
-            let by_ref = op_token.kind == TokenKind::Equals && parser.check(TokenKind::Ampersand);
-            if by_ref {
-                parser.advance(); // consume &
-            }
+            let by_ref =
+                op_token.kind == TokenKind::Equals && parser.eat(TokenKind::Ampersand).is_some();
 
             let op = match op_token.kind {
                 TokenKind::Equals => AssignOp::Assign,
@@ -2657,10 +2652,7 @@ fn parse_array_element<'arena, 'src>(
     let unpack = parser.eat(TokenKind::Ellipsis).is_some();
 
     // Handle &$var (by-ref value, not unpack)
-    let by_ref_value = !unpack && parser.check(TokenKind::Ampersand) && {
-        parser.advance();
-        true
-    };
+    let by_ref_value = !unpack && parser.eat(TokenKind::Ampersand).is_some();
 
     instrument::record_parse_expr_array_first();
     let first_expr = parse_expr(parser);
@@ -2668,10 +2660,7 @@ fn parse_array_element<'arena, 'src>(
     if !unpack && !by_ref_value && parser.eat(TokenKind::FatArrow).is_some() {
         // key => [&]value
         instrument::record_parse_array_element_with_arrow();
-        let by_ref = parser.check(TokenKind::Ampersand) && {
-            parser.advance();
-            true
-        };
+        let by_ref = parser.eat(TokenKind::Ampersand).is_some();
         instrument::record_parse_expr_array_second();
         let value = parse_expr(parser);
         let elem_span = Span::new(elem_start, value.span.end);
@@ -2749,8 +2738,7 @@ fn parse_list_element<'arena, 'src>(
     let elem_start = parser.start_span();
 
     // Handle &$var (by-reference)
-    if parser.check(TokenKind::Ampersand) {
-        parser.advance();
+    if parser.eat(TokenKind::Ampersand).is_some() {
         let value = parse_expr(parser);
         let elem_span = Span::new(elem_start, value.span.end);
         return ArrayElement {
@@ -2766,10 +2754,7 @@ fn parse_list_element<'arena, 'src>(
 
     if parser.eat(TokenKind::FatArrow).is_some() {
         // key => [&]value
-        let by_ref = parser.check(TokenKind::Ampersand) && {
-            parser.advance();
-            true
-        };
+        let by_ref = parser.eat(TokenKind::Ampersand).is_some();
         let value = parse_expr(parser);
         let elem_span = Span::new(elem_start, value.span.end);
         ArrayElement {
