@@ -782,9 +782,8 @@ fn visits_class_extends_and_implements() {
         |_src, program| {
             let mut v = NameCollector::default();
             let _ = v.visit_program(program);
-            assert!(v.names.contains(&"Bar".to_string()));
-            assert!(v.names.contains(&"Baz".to_string()));
-            assert!(v.names.contains(&"Qux".to_string()));
+            // Exact: extends first, then implements in order. No other names in this snippet.
+            assert_eq!(v.names, vec!["Bar", "Baz", "Qux"]);
         },
     );
 }
@@ -794,22 +793,28 @@ fn visits_interface_extends() {
     with_parsed("<?php interface A extends B, C {}", |_src, program| {
         let mut v = NameCollector::default();
         let _ = v.visit_program(program);
-        assert!(v.names.contains(&"B".to_string()));
-        assert!(v.names.contains(&"C".to_string()));
+        assert_eq!(v.names, vec!["B", "C"]);
     });
 }
 
 #[test]
-fn visits_enum_scalar_type_and_implements() {
-    with_parsed(
-        "<?php enum Status: string implements Stringable { case Active = 'active'; }",
-        |_src, program| {
-            let mut v = NameCollector::default();
-            let _ = v.visit_program(program);
-            assert!(v.names.contains(&"string".to_string()));
-            assert!(v.names.contains(&"Stringable".to_string()));
-        },
-    );
+fn visits_enum_scalar_type() {
+    // Split from implements so each path is independently verified.
+    with_parsed("<?php enum E: string {}", |_src, program| {
+        let mut v = NameCollector::default();
+        let _ = v.visit_program(program);
+        // "string" must come from scalar_type — no other names in this snippet.
+        assert_eq!(v.names, vec!["string"]);
+    });
+}
+
+#[test]
+fn visits_enum_implements() {
+    with_parsed("<?php enum E implements Countable {}", |_src, program| {
+        let mut v = NameCollector::default();
+        let _ = v.visit_program(program);
+        assert_eq!(v.names, vec!["Countable"]);
+    });
 }
 
 #[test]
@@ -819,8 +824,7 @@ fn visits_catch_clause_types() {
         |_src, program| {
             let mut v = NameCollector::default();
             let _ = v.visit_program(program);
-            assert!(v.names.contains(&"RuntimeException".to_string()));
-            assert!(v.names.contains(&"LogicException".to_string()));
+            assert_eq!(v.names, vec!["RuntimeException", "LogicException"]);
         },
     );
 }
@@ -832,8 +836,7 @@ fn visits_trait_use_names() {
         |_src, program| {
             let mut v = NameCollector::default();
             let _ = v.visit_program(program);
-            assert!(v.names.contains(&"Loggable".to_string()));
-            assert!(v.names.contains(&"Serializable".to_string()));
+            assert_eq!(v.names, vec!["Loggable", "Serializable"]);
         },
     );
 }
@@ -845,8 +848,7 @@ fn visits_attribute_names() {
         |_src, program| {
             let mut v = NameCollector::default();
             let _ = v.visit_program(program);
-            assert!(v.names.contains(&"Route".to_string()));
-            assert!(v.names.contains(&"Middleware\\Auth".to_string()));
+            assert_eq!(v.names, vec!["Route", "Middleware\\Auth"]);
         },
     );
 }
@@ -858,8 +860,8 @@ fn visits_named_type_hints() {
         |_src, program| {
             let mut v = NameCollector::default();
             let _ = v.visit_program(program);
-            assert!(v.names.contains(&"App\\Request".to_string()));
-            assert!(v.names.contains(&"App\\Response".to_string()));
+            // param type hint first, then return type.
+            assert_eq!(v.names, vec!["App\\Request", "App\\Response"]);
         },
     );
 }
@@ -871,8 +873,7 @@ fn visits_use_statement_names() {
         |_src, program| {
             let mut v = NameCollector::default();
             let _ = v.visit_program(program);
-            assert!(v.names.contains(&"App\\Http\\Request".to_string()));
-            assert!(v.names.contains(&"App\\Http\\Response".to_string()));
+            assert_eq!(v.names, vec!["App\\Http\\Request", "App\\Http\\Response"]);
         },
     );
 }
