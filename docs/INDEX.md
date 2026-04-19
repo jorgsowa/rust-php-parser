@@ -77,7 +77,6 @@ The parser supports **PHP 5.3–8.4** syntax with excellent coverage:
 - ✅ All expression types (45 variants)
 - ✅ All statement types (34 variants)
 - ✅ Attributes, union types, match expressions, readonly, DNF types
-- ⚠️ Missing: Comment preservation, visitor API, version gating (planned in FEATURE_ROADMAP.md)
 
 ---
 
@@ -99,6 +98,13 @@ The parser supports **PHP 5.3–8.4** syntax with excellent coverage:
 2. Read [CORPUS_ANALYSIS_MARCH2026.md](performance/CORPUS_ANALYSIS_MARCH2026.md) for corpus metrics
 3. Check [MEMORY_OPTIMIZATION_MARCH2026.md](performance/MEMORY_OPTIMIZATION_MARCH2026.md) for tuning details
 4. Review [OPTIMIZATION_ATTEMPT_MARCH2026.md](performance/OPTIMIZATION_ATTEMPT_MARCH2026.md) for lessons learned
+
+### For External Tool Consumers (LSPs, linters, static analyzers)
+1. Read [../README.md](../README.md) for the public API entry points (`parse`, `parse_versioned`, `ParserContext`)
+2. Read [ARCHITECTURE.md](architecture/ARCHITECTURE.md) for the lifetime model, arena allocation, and comment separation design
+3. Read the `php-ast/src/visitor.rs` module doc for the `Visitor` vs `ScopeVisitor` distinction
+4. Read [`diagnostics.rs`](../crates/php-parser/src/diagnostics.rs) for how to interpret `ParseError` variants
+5. Check [ERRORS.md](development/ERRORS.md) for error recovery behavior
 
 ---
 
