@@ -6,6 +6,19 @@ use php_ast::ast::*;
 use php_ast::visitor::{self, walk_trait_use, Scope, ScopeVisitor, ScopeWalker, Visitor};
 use std::ops::ControlFlow;
 
+/// Collects all Name nodes seen during traversal as string representations.
+#[derive(Default)]
+struct NameCollector {
+    names: Vec<String>,
+}
+
+impl<'arena, 'src> Visitor<'arena, 'src> for NameCollector {
+    fn visit_name(&mut self, name: &Name<'arena, 'src>) -> ControlFlow<()> {
+        self.names.push(name.to_string_repr().to_string());
+        ControlFlow::Continue(())
+    }
+}
+
 /// Parse PHP source and run a callback with the resulting program.
 /// Keeps the arena alive for the duration of the callback.
 fn with_parsed<F: for<'arena, 'src> FnOnce(&'src str, &Program<'arena, 'src>)>(src: &str, f: F) {
@@ -754,6 +767,112 @@ fn scope_visitor_visits_trait_adaptations() {
             let c = walker.into_inner();
             assert_eq!(c.adaptation_count, 2);
             assert_eq!(c.class_names, vec![Some("Foo".into()), Some("Foo".into())]);
+        },
+    );
+}
+
+// =============================================================================
+// visit_name tests
+// =============================================================================
+
+#[test]
+fn visits_class_extends_and_implements() {
+    with_parsed(
+        "<?php class Foo extends Bar implements Baz, Qux {}",
+        |_src, program| {
+            let mut v = NameCollector::default();
+            let _ = v.visit_program(program);
+            assert!(v.names.contains(&"Bar".to_string()));
+            assert!(v.names.contains(&"Baz".to_string()));
+            assert!(v.names.contains(&"Qux".to_string()));
+        },
+    );
+}
+
+#[test]
+fn visits_interface_extends() {
+    with_parsed("<?php interface A extends B, C {}", |_src, program| {
+        let mut v = NameCollector::default();
+        let _ = v.visit_program(program);
+        assert!(v.names.contains(&"B".to_string()));
+        assert!(v.names.contains(&"C".to_string()));
+    });
+}
+
+#[test]
+fn visits_enum_scalar_type_and_implements() {
+    with_parsed(
+        "<?php enum Status: string implements Stringable { case Active = 'active'; }",
+        |_src, program| {
+            let mut v = NameCollector::default();
+            let _ = v.visit_program(program);
+            assert!(v.names.contains(&"string".to_string()));
+            assert!(v.names.contains(&"Stringable".to_string()));
+        },
+    );
+}
+
+#[test]
+fn visits_catch_clause_types() {
+    with_parsed(
+        "<?php try { foo(); } catch (RuntimeException|LogicException $e) { bar(); }",
+        |_src, program| {
+            let mut v = NameCollector::default();
+            let _ = v.visit_program(program);
+            assert!(v.names.contains(&"RuntimeException".to_string()));
+            assert!(v.names.contains(&"LogicException".to_string()));
+        },
+    );
+}
+
+#[test]
+fn visits_trait_use_names() {
+    with_parsed(
+        "<?php class Foo { use Loggable, Serializable; }",
+        |_src, program| {
+            let mut v = NameCollector::default();
+            let _ = v.visit_program(program);
+            assert!(v.names.contains(&"Loggable".to_string()));
+            assert!(v.names.contains(&"Serializable".to_string()));
+        },
+    );
+}
+
+#[test]
+fn visits_attribute_names() {
+    with_parsed(
+        "<?php #[Route('/api')] #[Middleware\\Auth] function handler(): void {}",
+        |_src, program| {
+            let mut v = NameCollector::default();
+            let _ = v.visit_program(program);
+            assert!(v.names.contains(&"Route".to_string()));
+            assert!(v.names.contains(&"Middleware\\Auth".to_string()));
+        },
+    );
+}
+
+#[test]
+fn visits_named_type_hints() {
+    with_parsed(
+        "<?php function foo(App\\Request $req): App\\Response {}",
+        |_src, program| {
+            let mut v = NameCollector::default();
+            let _ = v.visit_program(program);
+            assert!(v.names.contains(&"App\\Request".to_string()));
+            assert!(v.names.contains(&"App\\Response".to_string()));
+        },
+    );
+}
+
+#[test]
+fn visits_use_statement_names() {
+    with_parsed(
+        "<?php use App\\Http\\Request; use App\\Http\\Response as Resp;",
+        |_src, program| {
+            let mut v = NameCollector::default();
+            let _ = v.visit_program(program);
+            assert!(v.names.contains(&"App\\Http\\Request".to_string()));
+            assert!(v.names.contains(&"App\\Http\\Response".to_string()));
         },
     );
 }
