@@ -4,7 +4,7 @@ min_php=8.4
 <?php
 class Test {
     final public $prop;
-    readonly $prop;
+    readonly int $prop;
     private static $prop;
 }
 ===ast===
@@ -48,14 +48,31 @@ class Test {
                   "set_visibility": null,
                   "is_static": false,
                   "is_readonly": true,
-                  "type_hint": null,
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "int"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 56,
+                          "end": 59
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 56,
+                      "end": 59
+                    }
+                  },
                   "default": null,
                   "attributes": []
                 }
               },
               "span": {
                 "start": 47,
-                "end": 61
+                "end": 65
               }
             },
             {
@@ -72,8 +89,8 @@ class Test {
                 }
               },
               "span": {
-                "start": 67,
-                "end": 87
+                "start": 71,
+                "end": 91
               }
             }
           ],
@@ -82,13 +99,13 @@ class Test {
       },
       "span": {
         "start": 6,
-        "end": 90
+        "end": 94
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 90
+    "end": 94
   }
 }
 ===php_error===

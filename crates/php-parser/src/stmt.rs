@@ -1157,6 +1157,14 @@ pub fn parse_param_list<'arena, 'src>(
             None
         };
 
+        // Readonly promoted property must have a type
+        if is_readonly && visibility.is_some() && type_hint.is_none() {
+            parser.error(ParseError::Forbidden {
+                message: "readonly promoted property must have type".into(),
+                span: Span::new(param_start, parser.previous_end()),
+            });
+        }
+
         // by-ref
         let by_ref = parser.eat(TokenKind::Ampersand).is_some();
 
@@ -2544,6 +2552,12 @@ pub fn parse_class_members<'arena, 'src>(
                 parser.alloc_vec()
             };
             if is_readonly {
+                if type_hint.is_none() {
+                    parser.error(ParseError::Forbidden {
+                        message: "readonly property must have type".into(),
+                        span: Span::new(member_start, parser.previous_end()),
+                    });
+                }
                 if let Some(hook) = hooks.first() {
                     parser.error(ParseError::Forbidden {
                         message: "A readonly property cannot declare hooks".into(),

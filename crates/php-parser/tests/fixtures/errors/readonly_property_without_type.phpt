@@ -1,7 +1,9 @@
 ===source===
-<?php class C { readonly readonly $a; }
+<?php
+class Foo {
+    public readonly $bar;
+}
 ===errors===
-duplicate modifier 'readonly'
 readonly property must have type
 ===ast===
 {
@@ -9,7 +11,7 @@ readonly property must have type
     {
       "kind": {
         "Class": {
-          "name": "C",
+          "name": "Foo",
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -21,8 +23,8 @@ readonly property must have type
             {
               "kind": {
                 "Property": {
-                  "name": "a",
-                  "visibility": null,
+                  "name": "bar",
+                  "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
                   "is_readonly": true,
@@ -32,8 +34,8 @@ readonly property must have type
                 }
               },
               "span": {
-                "start": 16,
-                "end": 36
+                "start": 22,
+                "end": 42
               }
             }
           ],
@@ -42,14 +44,14 @@ readonly property must have type
       },
       "span": {
         "start": 6,
-        "end": 39
+        "end": 45
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 39
+    "end": 45
   }
 }
 ===php_error===
-PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input code on line 1
+PHP Fatal error:  Readonly property Foo::$bar must have type in Standard input code on line 3
