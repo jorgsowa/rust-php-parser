@@ -2,6 +2,7 @@
 <?php enum Status { case Active = ; } function use_status() { return Status::Active; }
 ===errors===
 expected expression
+Case Active of pure enum Status must not have a value
 ===ast===
 {
   "stmts": [

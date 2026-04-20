@@ -2815,21 +2815,43 @@ fn parse_enum<'arena, 'src>(
                     span,
                 });
             }
-            let case_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-                text
-            } else {
-                parser.error(ParseError::Expected {
-                    expected: "case name".into(),
-                    found: parser.current_kind(),
-                    span: parser.current_span(),
-                });
-                "<error>"
-            };
-            let value = if parser.eat(TokenKind::Equals).is_some() {
+            let (case_name, case_name_span) =
+                if let Some((text, span)) = parser.eat_identifier_or_keyword() {
+                    (text, span)
+                } else {
+                    let span = parser.current_span();
+                    parser.error(ParseError::Expected {
+                        expected: "case name".into(),
+                        found: parser.current_kind(),
+                        span,
+                    });
+                    ("<error>", span)
+                };
+            let equals_token = parser.eat(TokenKind::Equals);
+            let value = if equals_token.is_some() {
                 Some(expr::parse_expr(parser))
             } else {
                 None
             };
+            if scalar_type.is_some() && value.is_none() {
+                parser.error(ParseError::Forbidden {
+                    message: format!(
+                        "Case {} of backed enum {} must have a value",
+                        case_name, name
+                    )
+                    .into(),
+                    span: case_name_span,
+                });
+            } else if scalar_type.is_none() && value.is_some() {
+                parser.error(ParseError::Forbidden {
+                    message: format!(
+                        "Case {} of pure enum {} must not have a value",
+                        case_name, name
+                    )
+                    .into(),
+                    span: equals_token.unwrap().span,
+                });
+            }
             parser.expect(TokenKind::Semicolon);
             let span = Span::new(member_start, parser.previous_end());
             members.push(EnumMember {

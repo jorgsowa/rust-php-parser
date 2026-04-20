@@ -8,6 +8,8 @@ enum Suit: string
     case Clubs = 'C';
     case Spades = 'S';
 }
+===errors===
+Case Diamonds of backed enum Suit must have a value
 ===ast===
 {
   "stmts": [
