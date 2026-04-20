@@ -2,6 +2,7 @@
 <?php class A { readonly readonly $x; }
 ===errors===
 duplicate modifier 'readonly'
+readonly property must have type
 ===ast===
 {
   "stmts": [
