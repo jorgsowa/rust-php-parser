@@ -1,5 +1,5 @@
 ===config===
-min_php=8.5
+max_php=8.4
 ===source===
 <?php
 class Foo {
@@ -77,4 +77,4 @@ readonly promoted property must have type
   }
 }
 ===php_error===
-PHP Fatal error:  Readonly property Foo::$x must have type in Standard input code on line 4
+PHP Fatal error:  Readonly property Foo::$x must have type in Standard input code on line 3
