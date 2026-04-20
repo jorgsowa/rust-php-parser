@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-04-20
+
+### Added
+
+- Backed enum cases (`enum E: int`) now require a value; pure enum cases now reject values. Both emit `ParseError::Forbidden` pointing to the missing or unwanted `=` token (`php-rs-parser`, #269).
+- `readonly` properties and constructor-promoted parameters without a type hint now emit `ParseError::Forbidden` (`php-rs-parser`, #268).
+- `break` and `continue` outside a loop or `switch` now emit a parse error; numeric level arguments are validated against the current loop depth (`php-rs-parser`, #265).
+
+### Tests
+
+- Span coverage fixtures added for `const` statement declarations (`php-rs-parser`, #267).
+- Span coverage fixtures added for first-class callable expressions (`php-rs-parser`, #266).
+
+### Documentation
+
+- CONTRIBUTING guide improved and ROADMAP restructured (#264).
+- Acknowledgements section added for nikic/PHP-Parser and the PHP community (#254).
+- README reorganized for clarity and audience separation (#253).
+- `docs/INDEX.md` navigation path for tool consumers updated (#250).
+
+---
+
 ## [0.8.1] - 2026-04-19
 
 ### Fixed
