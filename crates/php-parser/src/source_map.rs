@@ -54,10 +54,8 @@ impl SourceMap {
     /// Build an index from the given source text.
     pub fn new(source: &str) -> Self {
         let mut line_starts = vec![0u32];
-        for (i, byte) in source.bytes().enumerate() {
-            if byte == b'\n' {
-                line_starts.push((i + 1) as u32);
-            }
+        for pos in memchr::memchr_iter(b'\n', source.as_bytes()) {
+            line_starts.push((pos + 1) as u32);
         }
         Self { line_starts }
     }

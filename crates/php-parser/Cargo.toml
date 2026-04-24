@@ -18,6 +18,7 @@ php-lexer = { workspace = true }
 miette = { workspace = true }
 thiserror = { workspace = true }
 bumpalo = { workspace = true }
+memchr = { workspace = true }
 
 [dev-dependencies]
 serde = { workspace = true }
