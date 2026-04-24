@@ -313,6 +313,7 @@ pub fn record_parse_attribute() {
 // ==================== MEMORY ALLOCATION METRICS ====================
 
 /// Record an ArenaVec allocation with size info
+#[cfg(feature = "instrument")]
 #[inline]
 pub fn record_arena_vec_allocation(_capacity: usize) {
     #[cfg(feature = "instrument")]
@@ -325,6 +326,7 @@ pub fn record_arena_vec_allocation(_capacity: usize) {
 }
 
 /// Record an arena.alloc call
+#[cfg(feature = "instrument")]
 #[inline]
 pub fn record_arena_alloc() {
     #[cfg(feature = "instrument")]
@@ -336,6 +338,7 @@ pub fn record_arena_alloc() {
 }
 
 /// Record wasted capacity in ArenaVec (allocated but not used)
+#[cfg(feature = "instrument")]
 #[inline]
 pub fn record_arena_vec_waste(_wasted_bytes: usize) {
     #[cfg(feature = "instrument")]
@@ -347,6 +350,7 @@ pub fn record_arena_vec_waste(_wasted_bytes: usize) {
 }
 
 /// Record an empty ArenaVec that was allocated
+#[cfg(feature = "instrument")]
 #[inline]
 pub fn record_arena_vec_empty() {
     #[cfg(feature = "instrument")]
