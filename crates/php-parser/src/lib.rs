@@ -74,6 +74,10 @@ pub struct ParseResult<'arena, 'src> {
     pub comments: Vec<Comment<'src>>,
     /// Parse errors and diagnostics. Empty on a successful parse.
     pub errors: Vec<ParseError>,
+    /// `true` when the error list was capped at the internal limit and further
+    /// errors were silently dropped. Callers that need a complete error list
+    /// (e.g. linters) should treat this as an incomplete result.
+    pub errors_truncated: bool,
     /// Pre-computed line index for resolving byte offsets in [`Span`](php_ast::Span)
     /// to line/column positions. Use [`SourceMap::offset_to_line_col`] or
     /// [`SourceMap::span_to_line_col`] to convert.
@@ -91,11 +95,13 @@ pub fn parse<'arena, 'src>(
 ) -> ParseResult<'arena, 'src> {
     let mut parser = parser::Parser::new(arena, source);
     let program = parser.parse_program();
+    let errors_truncated = parser.errors_truncated();
     ParseResult {
         source,
         program,
         comments: parser.take_comments(),
         errors: parser.into_errors(),
+        errors_truncated,
         source_map: SourceMap::new(source),
     }
 }
@@ -112,11 +118,13 @@ pub fn parse_versioned<'arena, 'src>(
 ) -> ParseResult<'arena, 'src> {
     let mut parser = parser::Parser::with_version(arena, source, version);
     let program = parser.parse_program();
+    let errors_truncated = parser.errors_truncated();
     ParseResult {
         source,
         program,
         comments: parser.take_comments(),
         errors: parser.into_errors(),
+        errors_truncated,
         source_map: SourceMap::new(source),
     }
 }

@@ -416,6 +416,10 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
     }
 
+    pub fn errors_truncated(&self) -> bool {
+        self.errors.len() >= MAX_ERRORS
+    }
+
     pub fn errors_mut(&mut self) -> &mut Vec<ParseError> {
         &mut self.errors
     }
