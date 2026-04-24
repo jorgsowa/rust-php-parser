@@ -811,7 +811,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         // Use TypeHintKind::Keyword — 1-byte enum discriminant instead of Cow<str>.
         if self.check(TokenKind::Identifier) {
             let text = self.current_text();
-            let builtin = match text.to_ascii_lowercase().as_str() {
+            let lower_owned;
+            let lower = if text.bytes().all(|b| !b.is_ascii_uppercase()) {
+                text
+            } else {
+                lower_owned = text.to_ascii_lowercase();
+                lower_owned.as_str()
+            };
+            let builtin = match lower {
                 "int" => Some(BuiltinType::Int),
                 "integer" => Some(BuiltinType::Integer),
                 "float" => Some(BuiltinType::Float),

@@ -1753,8 +1753,10 @@ fn is_simple_variable<'arena, 'src>(expr: &Expr<'arena, 'src>) -> bool {
 
 /// Check if a name is a reserved special class name (self, parent, static, readonly)
 fn is_reserved_class_name(name: &str) -> bool {
-    let lower = name.to_ascii_lowercase();
-    matches!(lower.as_str(), "self" | "parent" | "static" | "readonly")
+    name.eq_ignore_ascii_case("self")
+        || name.eq_ignore_ascii_case("parent")
+        || name.eq_ignore_ascii_case("static")
+        || name.eq_ignore_ascii_case("readonly")
 }
 
 /// Validate a name used in extends/implements is not self/parent/static

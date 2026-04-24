@@ -332,7 +332,13 @@ fn parse_single_tag<'src>(line: &'src str) -> Option<PhpDocTag<'src>> {
         None => (line, None),
     };
 
-    let tag_lower = tag_name.to_ascii_lowercase();
+    let tag_lower_owned;
+    let tag_lower: &str = if tag_name.bytes().all(|b| !b.is_ascii_uppercase()) {
+        tag_name
+    } else {
+        tag_lower_owned = tag_name.to_ascii_lowercase();
+        &tag_lower_owned
+    };
 
     // Handle psalm-*/phpstan-* prefixed tags that map to standard tags
     let effective = tag_lower
@@ -340,7 +346,7 @@ fn parse_single_tag<'src>(line: &'src str) -> Option<PhpDocTag<'src>> {
         .or_else(|| tag_lower.strip_prefix("phpstan-"));
 
     // Check for tool-specific tags first, then fall through to standard tags
-    match tag_lower.as_str() {
+    match tag_lower {
         // Psalm/PHPStan-specific tags (no standard equivalent)
         "psalm-assert"
         | "phpstan-assert"
@@ -383,7 +389,7 @@ fn parse_single_tag<'src>(line: &'src str) -> Option<PhpDocTag<'src>> {
             }
         }
         // Standard tags (also matched via psalm-*/phpstan-* prefix)
-        _ => match effective.unwrap_or(tag_lower.as_str()) {
+        _ => match effective.unwrap_or(tag_lower) {
             "param" => Some(parse_param_tag(body)),
             "return" | "returns" => Some(parse_return_tag(body)),
             "var" => Some(parse_var_tag(body)),
