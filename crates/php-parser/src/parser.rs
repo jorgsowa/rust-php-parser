@@ -39,7 +39,7 @@ pub struct Parser<'arena, 'src> {
 }
 
 impl<'arena, 'src> Parser<'arena, 'src> {
-    /// Create a parser targeting the latest supported PHP version (8.4).
+    /// Create a parser targeting the latest supported PHP version (8.5).
     pub fn new(arena: &'arena bumpalo::Bump, source: &'src str) -> Self {
         Self::with_version(arena, source, PhpVersion::default())
     }
