@@ -221,16 +221,27 @@ pub fn parse_expr_bp<'arena, 'src>(
                 if TERNARY_BP < min_bp {
                     break;
                 }
-                // PHP 8.0+: unparenthesized ternary chaining is a fatal parse error.
-                // Pattern B: `a ? b : c ? d : e` — LHS is already a ternary.
-                if parser.version >= PhpVersion::Php80 && matches!(lhs.kind, ExprKind::Ternary(_)) {
-                    let span = parser.current_span();
-                    parser.error(ParseError::Forbidden {
-                        message: "Unparenthesized `a ? b : c ? d : e` is not supported. \
-                                  Use parentheses to make the order explicit."
-                            .into(),
-                        span,
-                    });
+                // PHP 8.0+: unparenthesized `a ? b : c ? d : e` is a fatal parse error,
+                // but chains of short ternaries (`a ?: b ?: c`) remain valid because `?:`
+                // is left-associative and unambiguous.
+                //
+                // So: fire the error when LHS is an already-parsed ternary UNLESS both the
+                // LHS ternary and the incoming ternary are short (then_expr=None and next
+                // token after `?` is `:`).
+                if parser.version >= PhpVersion::Php80 {
+                    if let ExprKind::Ternary(lhs_tern) = &lhs.kind {
+                        let lhs_is_short = lhs_tern.then_expr.is_none();
+                        let incoming_is_short = parser.peek_kind() == Some(TokenKind::Colon);
+                        if !(lhs_is_short && incoming_is_short) {
+                            let span = parser.current_span();
+                            parser.error(ParseError::Forbidden {
+                                message: "Unparenthesized `a ? b : c ? d : e` is not supported. \
+                                          Use parentheses to make the order explicit."
+                                    .into(),
+                                span,
+                            });
+                        }
+                    }
                 }
                 parser.advance(); // consume ?
 
@@ -239,17 +250,6 @@ pub fn parse_expr_bp<'arena, 'src>(
                     None
                 } else {
                     let e = parse_expr_bp(parser, 0);
-                    // PHP 8.0+: Pattern A: `a ? b ? c : d : e` — then branch is an
-                    // unparenthesized ternary (Parenthesized wrapping is fine).
-                    if parser.version >= PhpVersion::Php80 && matches!(e.kind, ExprKind::Ternary(_))
-                    {
-                        parser.error(ParseError::Forbidden {
-                            message: "Unparenthesized `a ? b ? c : d : e` is not supported. \
-                                  Use parentheses to make the order explicit."
-                                .into(),
-                            span: e.span,
-                        });
-                    }
                     Some(parser.alloc(e))
                 };
 
@@ -663,7 +663,7 @@ pub fn parse_expr_bp<'arena, 'src>(
 
         // Curly brace array/string access: $a{'b'} (deprecated PHP 7.x syntax)
         if kind == TokenKind::LeftBrace {
-            if 44u8 < min_bp {
+            if 44u8 < min_bp || parser.no_brace_subscript {
                 break;
             }
             parser.advance(); // consume {
@@ -753,7 +753,15 @@ pub fn parse_expr_bp<'arena, 'src>(
                     op_token.kind
                 )
             });
-            let rhs = parse_expr_bp(parser, right_bp);
+            // PHP grammar quirk: assignment escapes rightward through every binary operator.
+            // e.g. `$a && $b = $c`   →  `$a && ($b = $c)`
+            //      `$a + $b + $c = 5` → `$a + $b + ($c = 5)`
+            // parse_expr_bp with right_bp > ASSIGNMENT_BP won't consume the assignment,
+            // so we explicitly apply it here (same pattern as the `??` branch above).
+            let mut rhs = parse_expr_bp(parser, right_bp);
+            if parser.current_kind().is_assignment_op() {
+                rhs = parse_assign_continuation(parser, rhs);
+            }
             let span = lhs.span.merge(rhs.span);
             lhs = Expr {
                 kind: ExprKind::Binary(BinaryExpr {
@@ -880,6 +888,24 @@ fn parse_member_name<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr
             let inner = parse_expr(parser);
             parser.expect(TokenKind::RightBrace);
             inner
+        }
+        // Dynamic: $obj->${expr} — variable-variable as member name.
+        // Also bare $obj->$$var chain.
+        TokenKind::Dollar => {
+            let start = parser.start_span();
+            parser.advance(); // consume $
+            let inner = if parser.eat(TokenKind::LeftBrace).is_some() {
+                let e = parse_expr(parser);
+                parser.expect(TokenKind::RightBrace);
+                e
+            } else {
+                parse_atom(parser)
+            };
+            let span = Span::new(start, parser.previous_end());
+            Expr {
+                kind: ExprKind::VariableVariable(parser.alloc(inner)),
+                span,
+            }
         }
         _ => {
             let span = parser.current_span();
@@ -1454,7 +1480,7 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                 // $$var or $$$var — parse_atom handles recursion
                 parse_atom(parser)
             };
-            let span = Span::new(token.span.start, inner.span.end);
+            let span = Span::new(token.span.start, parser.previous_end());
             Expr {
                 kind: ExprKind::VariableVariable(parser.alloc(inner)),
                 span,
@@ -1502,6 +1528,20 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
             Expr {
                 kind: ExprKind::Identifier(ident),
                 span: Span::new(start, name.span().end),
+            }
+        }
+
+        // `enum` as an identifier — valid in any expression position where a name is
+        // expected (e.g. `Enum::class`, `Enum::someMethod()`, `new Enum`, `Enum()`).
+        // The statement-level enum declaration is handled earlier in stmt.rs; by the
+        // time we reach a primary expression, `enum` refers to a user-named symbol.
+        TokenKind::Enum_ => {
+            let token = parser.advance();
+            let src = parser.source;
+            let text = &src[token.span.start as usize..token.span.end as usize];
+            Expr {
+                kind: ExprKind::Identifier(NameStr::Src(text)),
+                span: token.span,
             }
         }
 
@@ -1766,7 +1806,21 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
         // clone — unary prefix, clone($obj), clone($obj, [...]) (PHP 8.5), or user function
         TokenKind::Clone => {
             let token = parser.advance();
-            if parser.check(TokenKind::LeftParen) {
+            // Distinguish `clone (cast) $x` (unary prefix with cast operand) from
+            // `clone(args)` (function-call / first-class-callable form). A `(` that
+            // starts a cast is followed by a cast keyword and a `)`.
+            let looks_like_cast = parser.check(TokenKind::LeftParen)
+                && matches!(
+                    parser.peek_kind(),
+                    Some(TokenKind::Identifier) | Some(TokenKind::Array) | Some(TokenKind::Unset)
+                )
+                && parser.peek2_kind() == Some(TokenKind::RightParen)
+                && parser.peek_text().is_some_and(|t| {
+                    CAST_KEYWORDS
+                        .iter()
+                        .any(|(kw, _)| kw.eq_ignore_ascii_case(t))
+                });
+            if !looks_like_cast && parser.check(TokenKind::LeftParen) {
                 let src = parser.source;
                 let name_text =
                     NameStr::Src(&src[token.span.start as usize..token.span.end as usize]);
@@ -1850,7 +1904,10 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
                     }
                 }
             } else {
-                let operand = parse_expr_bp(parser, 41);
+                let mut operand = parse_expr_bp(parser, 41);
+                if parser.current_kind().is_assignment_op() {
+                    operand = parse_assign_continuation(parser, operand);
+                }
                 let span = token.span.merge(operand.span);
                 Expr {
                     kind: ExprKind::Clone(parser.alloc(operand)),
@@ -2071,6 +2128,23 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
                 span: t.span,
             }
         }
+        TokenKind::Dollar => {
+            // new $$varVar() or new ${expr}()
+            let token = parser.advance();
+            let inner = if parser.check(TokenKind::LeftBrace) {
+                parser.advance();
+                let expr = parse_expr(parser);
+                parser.expect(TokenKind::RightBrace);
+                expr
+            } else {
+                parse_atom(parser)
+            };
+            let span = Span::new(token.span.start, parser.previous_end());
+            Expr {
+                kind: ExprKind::VariableVariable(parser.alloc(inner)),
+                span,
+            }
+        }
         TokenKind::LeftParen => {
             // new (expr)() - dynamic class name from expression (PHP 8.1+)
             let paren_start = parser.start_span();
@@ -2118,7 +2192,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
 // Closure expression: function($x) use($y) { }
 // =============================================================================
 
-fn parse_closure<'arena, 'src>(
+pub(crate) fn parse_closure<'arena, 'src>(
     parser: &mut Parser<'arena, 'src>,
     is_static: bool,
     start: u32,
@@ -2209,7 +2283,7 @@ fn parse_closure_use_list<'arena, 'src>(
 // Arrow function: fn($x) => expr
 // =============================================================================
 
-fn parse_arrow_function<'arena, 'src>(
+pub(crate) fn parse_arrow_function<'arena, 'src>(
     parser: &mut Parser<'arena, 'src>,
     is_static: bool,
     start: u32,

@@ -277,9 +277,16 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
         TokenKind::Interface => parse_interface(parser, parser.alloc_vec()),
         TokenKind::Trait => parse_trait(parser, parser.alloc_vec()),
         TokenKind::Enum_ => {
-            let span = parser.current_span();
-            parser.require_version(PhpVersion::Php81, "enums", span);
-            parse_enum(parser, parser.alloc_vec())
+            // `enum` introduces an enum declaration only when followed by an identifier
+            // (the enum name). In any other position — `Enum::class`, `Enum()`,
+            // `new Enum`, etc. — it's an ordinary name referring to a class/function.
+            if matches!(parser.peek_kind(), Some(TokenKind::Identifier)) {
+                let span = parser.current_span();
+                parser.require_version(PhpVersion::Php81, "enums", span);
+                parse_enum(parser, parser.alloc_vec())
+            } else {
+                parse_expression_stmt(parser)
+            }
         }
         TokenKind::Namespace => {
             // namespace\ is a relative name (expression), not a namespace declaration
@@ -317,7 +324,40 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
 
 /// Parse a statement preceded by attributes.
 fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
+    let attr_start = parser.start_span();
     let attributes = parser.parse_attributes();
+
+    // Anonymous closure / arrow fn / static closure used as an expression
+    // statement: `#[A] function() {};`, `#[A] fn() => 42;`,
+    // `#[A] static function() {};`, `#[A] static fn() => ...;`.
+    // A function whose next token is `(` or `&(` is a closure, not a
+    // declaration.
+    let is_closure_start = match parser.current_kind() {
+        TokenKind::Function => matches!(
+            parser.peek_kind(),
+            Some(TokenKind::LeftParen) | Some(TokenKind::Ampersand)
+        ),
+        TokenKind::Fn_ => true,
+        TokenKind::Static => matches!(
+            parser.peek_kind(),
+            Some(TokenKind::Function) | Some(TokenKind::Fn_)
+        ),
+        _ => false,
+    };
+    if is_closure_start {
+        let is_static = parser.eat(TokenKind::Static).is_some();
+        let expr = if parser.check(TokenKind::Function) {
+            expr::parse_closure(parser, is_static, attr_start, attributes)
+        } else {
+            expr::parse_arrow_function(parser, is_static, attr_start, attributes)
+        };
+        parser.expect_semicolon("expression statement");
+        let span = Span::new(attr_start, parser.previous_end());
+        return Stmt {
+            kind: StmtKind::Expression(parser.alloc(expr)),
+            span,
+        };
+    }
 
     // Now dispatch based on what follows
     let stmt = match parser.current_kind() {
@@ -727,7 +767,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
         };
 
         parser.expect(TokenKind::EndIf);
-        parser.expect(TokenKind::Semicolon);
+        parser.expect_semicolon(TokenKind::EndIf);
         let span = Span::new(start, parser.previous_end());
 
         return Stmt {
@@ -806,7 +846,7 @@ fn parse_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
         let stmts = parse_stmts_until_end(parser, &[TokenKind::EndWhile]);
         parser.loop_depth -= 1;
         parser.expect(TokenKind::EndWhile);
-        parser.expect(TokenKind::Semicolon);
+        parser.expect_semicolon(TokenKind::EndWhile);
         let span = Span::new(start, parser.previous_end());
         let body = parser.alloc(Stmt {
             kind: StmtKind::Block(stmts),
@@ -870,7 +910,7 @@ fn parse_for<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
         let stmts = parse_stmts_until_end(parser, &[TokenKind::EndFor]);
         parser.loop_depth -= 1;
         parser.expect(TokenKind::EndFor);
-        parser.expect(TokenKind::Semicolon);
+        parser.expect_semicolon(TokenKind::EndFor);
         let span = Span::new(start, parser.previous_end());
         let body = parser.alloc(Stmt {
             kind: StmtKind::Block(stmts),
@@ -953,7 +993,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
         let stmts = parse_stmts_until_end(parser, &[TokenKind::EndForeach]);
         parser.loop_depth -= 1;
         parser.expect(TokenKind::EndForeach);
-        parser.expect(TokenKind::Semicolon);
+        parser.expect_semicolon(TokenKind::EndForeach);
         let span = Span::new(start, parser.previous_end());
         let body = parser.alloc(Stmt {
             kind: StmtKind::Block(stmts),
@@ -1094,55 +1134,86 @@ pub fn parse_param_list<'arena, 'src>(
         // Optional parameter attributes
         let param_attrs = parser.parse_attributes();
 
-        // Optional visibility (constructor promotion) — PHP 8.0+
-        let visibility = parse_optional_visibility(parser);
-        if visibility.is_some() {
-            let span = Span::new(param_start, parser.previous_end());
-            parser.require_version(PhpVersion::Php80, "constructor property promotion", span);
-        }
-
-        // Check for asymmetric visibility: public private(set) in promoted properties — PHP 8.4+
-        let set_visibility = if visibility.is_some()
-            && matches!(
-                parser.current_kind(),
-                TokenKind::Public | TokenKind::Protected | TokenKind::Private
-            )
-            && parser.peek_kind() == Some(TokenKind::LeftParen)
-        {
-            let set_vis = match parser.current_kind() {
-                TokenKind::Public => Visibility::Public,
-                TokenKind::Protected => Visibility::Protected,
-                _ => Visibility::Private,
-            };
-            let span = Span::new(param_start, parser.previous_end());
-            parser.require_version(PhpVersion::Php84, "asymmetric visibility", span);
-            parser.advance(); // consume second visibility
-            parser.advance(); // consume (
-            if parser.current_text() == "set" {
-                parser.advance(); // consume "set"
+        // Optional modifiers for promoted properties: visibility, asymmetric
+        // set-visibility, `final`, and `readonly` — PHP accepts them in any
+        // order (e.g. `readonly protected`, `final public`, `public readonly`).
+        let mut visibility: Option<Visibility> = None;
+        let mut set_visibility: Option<Visibility> = None;
+        let mut is_final = false;
+        let mut is_readonly = false;
+        loop {
+            match parser.current_kind() {
+                TokenKind::Public | TokenKind::Protected | TokenKind::Private => {
+                    let vis = match parser.current_kind() {
+                        TokenKind::Public => Visibility::Public,
+                        TokenKind::Protected => Visibility::Protected,
+                        _ => Visibility::Private,
+                    };
+                    // Asymmetric visibility: `public(set)` / `private(set)` / `protected(set)`.
+                    // Disambiguate from a visibility followed by a parenthesized DNF type
+                    // hint (`private (A&B)|null $x`) by requiring the literal token `set`
+                    // inside the parens.
+                    if parser.peek_kind() == Some(TokenKind::LeftParen)
+                        && parser.peek2_text() == Some("set")
+                    {
+                        let span = Span::new(param_start, parser.previous_end());
+                        parser.require_version(PhpVersion::Php84, "asymmetric visibility", span);
+                        if set_visibility.is_some() {
+                            parser.error(ParseError::Forbidden {
+                                message: "cannot use multiple set-visibility modifiers".into(),
+                                span: Span::new(param_start, parser.previous_end()),
+                            });
+                        }
+                        parser.advance(); // consume visibility keyword
+                        parser.advance(); // consume (
+                        if parser.current_text() == "set" {
+                            parser.advance(); // consume "set"
+                        }
+                        parser.expect(TokenKind::RightParen);
+                        set_visibility = Some(vis);
+                    } else {
+                        let span = parser.current_span();
+                        parser.require_version(
+                            PhpVersion::Php80,
+                            "constructor property promotion",
+                            span,
+                        );
+                        if visibility.is_some() {
+                            parser.error(ParseError::Forbidden {
+                                message: "cannot use multiple visibility modifiers".into(),
+                                span: Span::new(param_start, parser.previous_end()),
+                            });
+                        }
+                        parser.advance();
+                        visibility = Some(vis);
+                    }
+                }
+                TokenKind::Final => {
+                    let span = parser.current_span();
+                    parser.require_version(PhpVersion::Php85, "final promoted properties", span);
+                    if is_final {
+                        parser.error(ParseError::Forbidden {
+                            message: "duplicate modifier 'final'".into(),
+                            span,
+                        });
+                    }
+                    parser.advance();
+                    is_final = true;
+                }
+                TokenKind::Readonly => {
+                    let span = parser.current_span();
+                    parser.require_version(PhpVersion::Php81, "readonly parameters", span);
+                    if is_readonly {
+                        parser.error(ParseError::Forbidden {
+                            message: "duplicate modifier 'readonly'".into(),
+                            span,
+                        });
+                    }
+                    parser.advance();
+                    is_readonly = true;
+                }
+                _ => break,
             }
-            parser.expect(TokenKind::RightParen);
-            Some(set_vis)
-        } else {
-            None
-        };
-
-        // Optional final (PHP 8.5+ promoted property modifier)
-        let final_token = parser
-            .check(TokenKind::Final)
-            .then(|| parser.current_span());
-        let is_final = parser.eat(TokenKind::Final).is_some();
-        if let Some(span) = final_token {
-            parser.require_version(PhpVersion::Php85, "final promoted properties", span);
-        }
-
-        // Optional readonly — PHP 8.1+
-        let readonly_token = parser
-            .check(TokenKind::Readonly)
-            .then(|| parser.current_span());
-        let is_readonly = parser.eat(TokenKind::Readonly).is_some();
-        if let Some(span) = readonly_token {
-            parser.require_version(PhpVersion::Php81, "readonly parameters", span);
         }
 
         // Optional type hint
@@ -1178,11 +1249,10 @@ pub fn parse_param_list<'arena, 'src>(
             .unwrap_or("<error>");
 
         let default = if parser.eat(TokenKind::Equals).is_some() {
-            // Use restricted binding power for promoted properties with potential hooks.
-            // BP 45 prevents `{` from being parsed as curly-brace array access (BP 44),
-            // so the hook block `{ get => ...; }` isn't consumed as part of the default.
             if visibility.is_some() {
-                Some(expr::parse_expr_bp(parser, 45))
+                // Suppress `{` subscript so a following hook block `{ get => ...; }`
+                // is not consumed as part of the default expression.
+                Some(parser.with_no_brace_subscript(expr::parse_expr))
             } else {
                 Some(expr::parse_expr(parser))
             }
@@ -1274,24 +1344,6 @@ fn try_parse_simple_param_fastpath_minimal<'arena, 'src>(
         hooks: parser.alloc_vec(),
         span: Span::new(param_start, name_span_end),
     })
-}
-
-fn parse_optional_visibility(parser: &mut Parser) -> Option<Visibility> {
-    match parser.current_kind() {
-        TokenKind::Public => {
-            parser.advance();
-            Some(Visibility::Public)
-        }
-        TokenKind::Protected => {
-            parser.advance();
-            Some(Visibility::Protected)
-        }
-        TokenKind::Private => {
-            parser.advance();
-            Some(Visibility::Private)
-        }
-        _ => None,
-    }
 }
 
 // =============================================================================
@@ -1445,7 +1497,7 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
 
     if alt_syntax {
         parser.expect(TokenKind::EndSwitch);
-        parser.expect(TokenKind::Semicolon);
+        parser.expect_semicolon(TokenKind::EndSwitch);
     } else {
         parser.expect(TokenKind::RightBrace);
     }
@@ -1613,7 +1665,7 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
     } else if parser.eat(TokenKind::Colon).is_some() {
         let stmts = parse_stmts_until_end(parser, &[TokenKind::EndDeclare]);
         parser.expect(TokenKind::EndDeclare);
-        parser.expect(TokenKind::Semicolon);
+        parser.expect_semicolon(TokenKind::EndDeclare);
         Some(parser.alloc(Stmt {
             kind: StmtKind::Block(stmts),
             span: Span::new(start, parser.previous_end()),
@@ -2530,7 +2582,9 @@ pub fn parse_class_members<'arena, 'src>(
             let prop_name = parser.variable_name(var_token);
 
             let default = if parser.eat(TokenKind::Equals).is_some() {
-                Some(expr::parse_expr(parser))
+                // Suppress `{` subscript so a following hook block `{ get => ...; }`
+                // is not consumed as part of the default expression.
+                Some(parser.with_no_brace_subscript(expr::parse_expr))
             } else {
                 None
             };

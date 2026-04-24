@@ -32,6 +32,10 @@ pub struct Parser<'arena, 'src> {
     comments: Vec<Comment<'src>>,
     /// PHP version being targeted — used for version-specific error reporting.
     pub version: PhpVersion,
+    /// When true, the `{` curly-brace subscript operator is suppressed in the Pratt loop.
+    /// Used when parsing property/parameter default values so that a following hook block
+    /// `{ get => ...; }` is not consumed as part of the default expression.
+    pub(crate) no_brace_subscript: bool,
 }
 
 impl<'arena, 'src> Parser<'arena, 'src> {
@@ -105,6 +109,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             expr_depth: 0,
             loop_depth: 0,
             version,
+            no_brace_subscript: false,
         }
     }
 
@@ -191,6 +196,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             expr_depth: 0,
             loop_depth: 0,
             version,
+            no_brace_subscript: false,
         }
     }
 
@@ -323,7 +329,10 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
     /// Expect a semicolon or `?>` close tag (which acts as an implicit semicolon in PHP).
     /// Does NOT consume `?>` — it stays in the stream for the main loop to handle.
-    pub fn expect_semicolon(&mut self, after: &'static str) -> Option<Token> {
+    /// `after` feeds the diagnostic label; pass a `TokenKind` when the preceding
+    /// construct is a single keyword (e.g. `TokenKind::EndForeach`) or a string
+    /// literal for multi-word contexts (e.g. `"echo statement"`).
+    pub fn expect_semicolon(&mut self, after: impl std::fmt::Display) -> Option<Token> {
         if self.check(TokenKind::Semicolon) {
             Some(self.advance())
         } else if self.check(TokenKind::CloseTag) {
@@ -332,11 +341,22 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         } else {
             self.error(ParseError::ExpectedAfter {
                 expected: "';'".into(),
-                after: after.into(),
+                after: format!("{}", after).into(),
                 span: self.current_span(),
             });
             None
         }
+    }
+
+    /// Run `f` with `no_brace_subscript` temporarily set to `true`, then restore
+    /// the previous value. Used to parse property/parameter default expressions
+    /// without consuming a following `{ get => ...; }` hook block as subscript.
+    pub(crate) fn with_no_brace_subscript<R>(&mut self, f: impl FnOnce(&mut Self) -> R) -> R {
+        let prev = self.no_brace_subscript;
+        self.no_brace_subscript = true;
+        let result = f(self);
+        self.no_brace_subscript = prev;
+        result
     }
 
     /// Expect a closing delimiter, reporting where the opening was.
@@ -376,6 +396,13 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     #[inline]
     pub fn peek_text(&mut self) -> Option<&'src str> {
         let token = &self.tokens[self.pos];
+        Some(&self.source[token.span.start as usize..token.span.end as usize])
+    }
+
+    /// Get the text of the token two tokens ahead of current.
+    #[inline]
+    pub fn peek2_text(&mut self) -> Option<&'src str> {
+        let token = &self.tokens[self.pos + 1];
         Some(&self.source[token.span.start as usize..token.span.end as usize])
     }
 
@@ -525,6 +552,12 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 | TokenKind::Continue
                 | TokenKind::Goto
                 | TokenKind::Declare
+                | TokenKind::EndDeclare
+                | TokenKind::EndFor
+                | TokenKind::EndForeach
+                | TokenKind::EndIf
+                | TokenKind::EndSwitch
+                | TokenKind::EndWhile
                 | TokenKind::Unset
                 | TokenKind::Global
                 | TokenKind::Clone
@@ -892,6 +925,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             | TokenKind::False
             | TokenKind::LeftParen => true,
             TokenKind::Identifier => true,
+            // `enum` is a semi-reserved keyword — as a type hint it refers to a
+            // user-defined class named `Enum` (common in Magento / GraphQL libs).
+            TokenKind::Enum_ => true,
             TokenKind::Namespace => {
                 // namespace\Foo is a type
                 matches!(self.peek_kind(), Some(TokenKind::Backslash))

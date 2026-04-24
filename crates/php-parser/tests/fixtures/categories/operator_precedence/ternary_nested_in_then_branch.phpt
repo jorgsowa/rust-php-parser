@@ -1,9 +1,6 @@
-===config===
-min_php=8.0
 ===source===
-<?php $x = true ? 1 : 2 ? 3 : 4;
-===errors===
-Unparenthesized `a ? b : c ? d : e` is not supported. Use parentheses to make the order explicit.
+<?php
+$a = $x ? $y ? 1 : 2 : 3;
 ===ast===
 {
   "stmts": [
@@ -14,7 +11,7 @@ Unparenthesized `a ? b : c ? d : e` is not supported. Use parentheses to make th
             "Assign": {
               "target": {
                 "kind": {
-                  "Variable": "x"
+                  "Variable": "a"
                 },
                 "span": {
                   "start": 6,
@@ -27,14 +24,23 @@ Unparenthesized `a ? b : c ? d : e` is not supported. Use parentheses to make th
                   "Ternary": {
                     "condition": {
                       "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 13
+                      }
+                    },
+                    "then_expr": {
+                      "kind": {
                         "Ternary": {
                           "condition": {
                             "kind": {
-                              "Bool": true
+                              "Variable": "y"
                             },
                             "span": {
-                              "start": 11,
-                              "end": 15
+                              "start": 16,
+                              "end": 18
                             }
                           },
                           "then_expr": {
@@ -42,8 +48,8 @@ Unparenthesized `a ? b : c ? d : e` is not supported. Use parentheses to make th
                               "Int": 1
                             },
                             "span": {
-                              "start": 18,
-                              "end": 19
+                              "start": 21,
+                              "end": 22
                             }
                           },
                           "else_expr": {
@@ -51,60 +57,49 @@ Unparenthesized `a ? b : c ? d : e` is not supported. Use parentheses to make th
                               "Int": 2
                             },
                             "span": {
-                              "start": 22,
-                              "end": 23
+                              "start": 25,
+                              "end": 26
                             }
                           }
                         }
                       },
                       "span": {
-                        "start": 11,
-                        "end": 23
-                      }
-                    },
-                    "then_expr": {
-                      "kind": {
-                        "Int": 3
-                      },
-                      "span": {
-                        "start": 26,
-                        "end": 27
+                        "start": 16,
+                        "end": 26
                       }
                     },
                     "else_expr": {
                       "kind": {
-                        "Int": 4
+                        "Int": 3
                       },
                       "span": {
-                        "start": 30,
-                        "end": 31
+                        "start": 29,
+                        "end": 30
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 11,
-                  "end": 31
+                  "end": 30
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 31
+            "end": 30
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 32
+        "end": 31
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 32
+    "end": 31
   }
 }
-===php_error===
-PHP Fatal error:  Unparenthesized `a ? b : c ? d : e` is not supported. Use either `(a ? b : c) ? d : e` or `a ? b : (c ? d : e)` in Standard input code on line 1

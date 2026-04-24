@@ -1,5 +1,5 @@
 ===source===
-<?php ${$obj->name} = 'x';
+<?php $a = clone $b = $c;
 ===ast===
 {
   "stmts": [
@@ -10,66 +10,67 @@
             "Assign": {
               "target": {
                 "kind": {
-                  "VariableVariable": {
-                    "kind": {
-                      "PropertyAccess": {
-                        "object": {
-                          "kind": {
-                            "Variable": "obj"
-                          },
-                          "span": {
-                            "start": 8,
-                            "end": 12
-                          }
-                        },
-                        "property": {
-                          "kind": {
-                            "Identifier": "name"
-                          },
-                          "span": {
-                            "start": 14,
-                            "end": 18
-                          }
-                        }
-                      }
-                    },
-                    "span": {
-                      "start": 8,
-                      "end": 18
-                    }
-                  }
+                  "Variable": "a"
                 },
                 "span": {
                   "start": 6,
-                  "end": 19
+                  "end": 8
                 }
               },
               "op": "Assign",
               "value": {
                 "kind": {
-                  "String": "x"
+                  "Clone": {
+                    "kind": {
+                      "Assign": {
+                        "target": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 17,
+                            "end": 19
+                          }
+                        },
+                        "op": "Assign",
+                        "value": {
+                          "kind": {
+                            "Variable": "c"
+                          },
+                          "span": {
+                            "start": 22,
+                            "end": 24
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 17,
+                      "end": 24
+                    }
+                  }
                 },
                 "span": {
-                  "start": 22,
-                  "end": 25
+                  "start": 11,
+                  "end": 24
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 25
+            "end": 24
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 26
+        "end": 25
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 26
+    "end": 25
   }
 }

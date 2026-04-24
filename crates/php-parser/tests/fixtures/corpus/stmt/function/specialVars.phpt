@@ -40,7 +40,7 @@ function a() {
                     },
                     "span": {
                       "start": 37,
-                      "end": 42
+                      "end": 43
                     }
                   },
                   {

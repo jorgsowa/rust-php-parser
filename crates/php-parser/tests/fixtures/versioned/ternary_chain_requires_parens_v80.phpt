@@ -106,3 +106,5 @@ Unparenthesized `a ? b : c ? d : e` is not supported. Use parentheses to make th
     "end": 32
   }
 }
+===php_error===
+PHP Fatal error:  Unparenthesized `a ? b : c ? d : e` is not supported. Use either `(a ? b : c) ? d : e` or `a ? b : (c ? d : e)` in Standard input code on line 1

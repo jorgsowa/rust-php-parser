@@ -144,7 +144,7 @@ echo $$obj->prop;
                 },
                 "span": {
                   "start": 29,
-                  "end": 38
+                  "end": 39
                 }
               },
               "op": "Assign",

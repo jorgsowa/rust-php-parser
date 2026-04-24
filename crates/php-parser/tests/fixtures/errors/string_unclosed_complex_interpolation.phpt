@@ -3,7 +3,9 @@ min_php=8.4
 ===source===
 <?php $s = "text {$incomplete";
 ===errors===
+unterminated string literal
 unclosed '{' in string interpolation
+expected ';' after expression
 ===ast===
 {
   "stmts": [
@@ -43,14 +45,14 @@ unclosed '{' in string interpolation
                 },
                 "span": {
                   "start": 11,
-                  "end": 30
+                  "end": 31
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 30
+            "end": 31
           }
         }
       },

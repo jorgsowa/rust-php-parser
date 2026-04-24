@@ -249,3 +249,5 @@ Chaining non-associative operators requires explicit parentheses.
     "end": 62
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "<" in Standard input code on line 2

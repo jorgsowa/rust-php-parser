@@ -154,41 +154,14 @@ class Test {
                     },
                     {
                       "name": "f",
-                      "type_hint": {
-                        "kind": {
-                          "Intersection": [
-                            {
-                              "kind": {
-                                "Named": {
-                                  "parts": [
-                                    "set"
-                                  ],
-                                  "kind": "Unqualified",
-                                  "span": {
-                                    "start": 221,
-                                    "end": 224
-                                  }
-                                }
-                              },
-                              "span": {
-                                "start": 221,
-                                "end": 224
-                              }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 220,
-                          "end": 225
-                        }
-                      },
+                      "type_hint": null,
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
                       "is_readonly": false,
                       "is_final": false,
-                      "visibility": "Protected",
-                      "set_visibility": null,
+                      "visibility": null,
+                      "set_visibility": "Protected",
                       "attributes": [],
                       "span": {
                         "start": 211,
