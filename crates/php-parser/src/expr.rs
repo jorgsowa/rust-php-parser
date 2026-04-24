@@ -1917,66 +1917,30 @@ fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena
         }
 
         // Magic constants
-        TokenKind::MagicClass => {
+        TokenKind::MagicClass
+        | TokenKind::MagicDir
+        | TokenKind::MagicFile
+        | TokenKind::MagicFunction
+        | TokenKind::MagicLine
+        | TokenKind::MagicMethod
+        | TokenKind::MagicNamespace
+        | TokenKind::MagicTrait
+        | TokenKind::MagicProperty => {
             let t = parser.advance();
+            let magic_kind = match t.kind {
+                TokenKind::MagicClass => MagicConstKind::Class,
+                TokenKind::MagicDir => MagicConstKind::Dir,
+                TokenKind::MagicFile => MagicConstKind::File,
+                TokenKind::MagicFunction => MagicConstKind::Function,
+                TokenKind::MagicLine => MagicConstKind::Line,
+                TokenKind::MagicMethod => MagicConstKind::Method,
+                TokenKind::MagicNamespace => MagicConstKind::Namespace,
+                TokenKind::MagicTrait => MagicConstKind::Trait,
+                TokenKind::MagicProperty => MagicConstKind::Property,
+                _ => unreachable!(),
+            };
             Expr {
-                kind: ExprKind::MagicConst(MagicConstKind::Class),
-                span: t.span,
-            }
-        }
-        TokenKind::MagicDir => {
-            let t = parser.advance();
-            Expr {
-                kind: ExprKind::MagicConst(MagicConstKind::Dir),
-                span: t.span,
-            }
-        }
-        TokenKind::MagicFile => {
-            let t = parser.advance();
-            Expr {
-                kind: ExprKind::MagicConst(MagicConstKind::File),
-                span: t.span,
-            }
-        }
-        TokenKind::MagicFunction => {
-            let t = parser.advance();
-            Expr {
-                kind: ExprKind::MagicConst(MagicConstKind::Function),
-                span: t.span,
-            }
-        }
-        TokenKind::MagicLine => {
-            let t = parser.advance();
-            Expr {
-                kind: ExprKind::MagicConst(MagicConstKind::Line),
-                span: t.span,
-            }
-        }
-        TokenKind::MagicMethod => {
-            let t = parser.advance();
-            Expr {
-                kind: ExprKind::MagicConst(MagicConstKind::Method),
-                span: t.span,
-            }
-        }
-        TokenKind::MagicNamespace => {
-            let t = parser.advance();
-            Expr {
-                kind: ExprKind::MagicConst(MagicConstKind::Namespace),
-                span: t.span,
-            }
-        }
-        TokenKind::MagicTrait => {
-            let t = parser.advance();
-            Expr {
-                kind: ExprKind::MagicConst(MagicConstKind::Trait),
-                span: t.span,
-            }
-        }
-        TokenKind::MagicProperty => {
-            let t = parser.advance();
-            Expr {
-                kind: ExprKind::MagicConst(MagicConstKind::Property),
+                kind: ExprKind::MagicConst(magic_kind),
                 span: t.span,
             }
         }
