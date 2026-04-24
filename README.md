@@ -1,6 +1,6 @@
 # Rust PHP Parser
 
-A fast, fault-tolerant PHP parser written in Rust. Produces a full typed AST with source spans, recovers from syntax errors, and covers PHP 8.0–8.5 syntax.
+A fast, fault-tolerant PHP parser written in Rust. Produces a full typed AST with source spans, recovers from syntax errors, and covers PHP 7.4–8.5 syntax.
 
 ## Quick Start
 
