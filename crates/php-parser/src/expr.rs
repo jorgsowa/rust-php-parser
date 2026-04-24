@@ -784,95 +784,16 @@ pub fn parse_expr_bp<'arena, 'src>(
 
 /// Parse a member name after -> or ?->. Accepts identifiers and semi-reserved keywords.
 fn parse_member_name<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
-    // Single match dispatch: the compiler emits a jump table so the common
-    // case (plain Identifier) costs one load + one branch rather than the
-    // previous three sequential check() calls.
+    // Plain identifier or any keyword PHP allows as a member name.
+    if parser.check(TokenKind::Identifier) || parser.is_semi_reserved_keyword() {
+        let token = parser.advance();
+        let text = &parser.source[token.span.start as usize..token.span.end as usize];
+        return Expr {
+            kind: ExprKind::Identifier(NameStr::Src(text)),
+            span: token.span,
+        };
+    }
     match parser.current_kind() {
-        // Most common: plain identifier or any keyword usable as a member name.
-        TokenKind::Identifier
-        | TokenKind::Class
-        | TokenKind::Abstract
-        | TokenKind::Final
-        | TokenKind::Interface
-        | TokenKind::Trait
-        | TokenKind::Extends
-        | TokenKind::Implements
-        | TokenKind::Public
-        | TokenKind::Protected
-        | TokenKind::Private
-        | TokenKind::Static
-        | TokenKind::Const
-        | TokenKind::Fn_
-        | TokenKind::Match_
-        | TokenKind::Namespace
-        | TokenKind::Use
-        | TokenKind::Readonly
-        | TokenKind::Enum_
-        | TokenKind::From
-        | TokenKind::Self_
-        | TokenKind::Parent_
-        | TokenKind::New
-        | TokenKind::Yield_
-        | TokenKind::Throw
-        | TokenKind::Try
-        | TokenKind::Catch
-        | TokenKind::Finally
-        | TokenKind::Instanceof
-        | TokenKind::Array
-        | TokenKind::List
-        | TokenKind::Switch
-        | TokenKind::Case
-        | TokenKind::Default
-        | TokenKind::If
-        | TokenKind::Else
-        | TokenKind::ElseIf
-        | TokenKind::While
-        | TokenKind::Do
-        | TokenKind::For
-        | TokenKind::Foreach
-        | TokenKind::As
-        | TokenKind::Function
-        | TokenKind::Return
-        | TokenKind::Echo
-        | TokenKind::Print
-        | TokenKind::Break
-        | TokenKind::Continue
-        | TokenKind::Goto
-        | TokenKind::Declare
-        | TokenKind::Unset
-        | TokenKind::Global
-        | TokenKind::Clone
-        | TokenKind::Isset
-        | TokenKind::Empty
-        | TokenKind::Include
-        | TokenKind::IncludeOnce
-        | TokenKind::Require
-        | TokenKind::RequireOnce
-        | TokenKind::Eval
-        | TokenKind::Exit
-        | TokenKind::Die
-        | TokenKind::True
-        | TokenKind::False
-        | TokenKind::Null
-        | TokenKind::And
-        | TokenKind::Or
-        | TokenKind::Xor
-        | TokenKind::MagicClass
-        | TokenKind::MagicDir
-        | TokenKind::MagicFile
-        | TokenKind::MagicFunction
-        | TokenKind::MagicLine
-        | TokenKind::MagicMethod
-        | TokenKind::MagicNamespace
-        | TokenKind::MagicTrait
-        | TokenKind::MagicProperty => {
-            let token = parser.advance();
-            let text = &parser.source[token.span.start as usize..token.span.end as usize];
-            Expr {
-                kind: ExprKind::Identifier(NameStr::Src(text)),
-                span: token.span,
-            }
-        }
         // Dynamic: $obj->$var
         TokenKind::Variable => {
             let token = parser.advance();
