@@ -1,7 +1,7 @@
 use php_ast::*;
 use php_lexer::TokenKind;
 
-use crate::diagnostics::ParseError;
+use crate::diagnostics::{ParseError, ERROR_PLACEHOLDER};
 use crate::expr;
 use crate::instrument;
 use crate::parser::Parser;
@@ -1049,7 +1049,7 @@ fn parse_function<'arena, 'src>(
             found: parser.current_kind(),
             span: parser.current_span(),
         });
-        "<error>"
+        ERROR_PLACEHOLDER
     };
 
     let open_paren = parser.expect(TokenKind::LeftParen);
@@ -1246,7 +1246,7 @@ pub fn parse_param_list<'arena, 'src>(
         let name_span_end = name_token.as_ref().map(|t| t.span.end);
         let name: &str = name_token
             .map(|t| parser.variable_name(t))
-            .unwrap_or("<error>");
+            .unwrap_or(ERROR_PLACEHOLDER);
 
         let default = if parser.eat(TokenKind::Equals).is_some() {
             if visibility.is_some() {
@@ -1628,7 +1628,7 @@ fn parse_goto<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena
     let src = parser.source;
     let name: &str = name_token
         .map(|t| &src[t.span.start as usize..t.span.end as usize])
-        .unwrap_or("<error>");
+        .unwrap_or(ERROR_PLACEHOLDER);
     parser.expect(TokenKind::Semicolon);
     let span = Span::new(start, parser.previous_end());
     Stmt {
@@ -1792,7 +1792,7 @@ fn parse_class<'arena, 'src>(
             found: parser.current_kind(),
             span: parser.current_span(),
         });
-        ("<error>", parser.current_span())
+        (ERROR_PLACEHOLDER, parser.current_span())
     };
 
     if is_reserved_class_name(name) {
@@ -1879,7 +1879,7 @@ fn parse_trait_adaptations<'arena, 'src>(
                     span,
                 });
                 Name::Simple {
-                    value: "<error>",
+                    value: ERROR_PLACEHOLDER,
                     span,
                 }
             };
@@ -2439,7 +2439,7 @@ pub fn parse_class_members<'arena, 'src>(
                         found: parser.current_kind(),
                         span,
                     });
-                    "<error>"
+                    ERROR_PLACEHOLDER
                 };
                 parser.expect(TokenKind::Equals);
                 let value = expr::parse_expr(parser);
@@ -2505,7 +2505,7 @@ pub fn parse_class_members<'arena, 'src>(
                     found: parser.current_kind(),
                     span: parser.current_span(),
                 });
-                "<error>"
+                ERROR_PLACEHOLDER
             };
 
             parser.expect(TokenKind::LeftParen);
@@ -2719,7 +2719,7 @@ fn parse_interface<'arena, 'src>(
             found: parser.current_kind(),
             span: parser.current_span(),
         });
-        ("<error>", parser.current_span())
+        (ERROR_PLACEHOLDER, parser.current_span())
     };
 
     if is_reserved_class_name(name) {
@@ -2773,7 +2773,7 @@ fn parse_trait<'arena, 'src>(
             found: parser.current_kind(),
             span: parser.current_span(),
         });
-        "<error>"
+        ERROR_PLACEHOLDER
     };
 
     parser.expect(TokenKind::LeftBrace);
@@ -2808,7 +2808,7 @@ fn parse_enum<'arena, 'src>(
             found: parser.current_kind(),
             span: parser.current_span(),
         });
-        "<error>"
+        ERROR_PLACEHOLDER
     };
 
     // Backed enum: enum Foo: string
@@ -2881,7 +2881,7 @@ fn parse_enum<'arena, 'src>(
                         found: parser.current_kind(),
                         span,
                     });
-                    ("<error>", span)
+                    (ERROR_PLACEHOLDER, span)
                 };
             let equals_token = parser.eat(TokenKind::Equals);
             let value = if equals_token.is_some() {
@@ -2984,7 +2984,7 @@ fn parse_enum<'arena, 'src>(
                     found: parser.current_kind(),
                     span: parser.current_span(),
                 });
-                "<error>"
+                ERROR_PLACEHOLDER
             };
             parser.expect(TokenKind::Equals);
             let value = expr::parse_expr(parser);
@@ -3018,7 +3018,7 @@ fn parse_enum<'arena, 'src>(
             let method_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
                 text
             } else {
-                "<error>"
+                ERROR_PLACEHOLDER
             };
 
             parser.expect(TokenKind::LeftParen);
@@ -3354,7 +3354,7 @@ fn parse_const_with_attrs<'arena, 'src>(
                 found: parser.current_kind(),
                 span: parser.current_span(),
             });
-            "<error>"
+            ERROR_PLACEHOLDER
         };
         parser.expect(TokenKind::Equals);
         let value = expr::parse_expr(parser);
@@ -3436,7 +3436,7 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
         let var_token = parser.expect(TokenKind::Variable);
         let name: &str = var_token
             .map(|t| parser.variable_name(t))
-            .unwrap_or("<error>");
+            .unwrap_or(ERROR_PLACEHOLDER);
 
         let default = if parser.eat(TokenKind::Equals).is_some() {
             Some(expr::parse_expr(parser))

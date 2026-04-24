@@ -1,7 +1,7 @@
 use php_ast::*;
 use php_lexer::{Lexer, LexerErrorKind, Token, TokenKind};
 
-use crate::diagnostics::ParseError;
+use crate::diagnostics::{ParseError, ERROR_PLACEHOLDER};
 use crate::expr;
 use crate::instrument;
 use crate::stmt;
@@ -629,7 +629,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     found: self.current_kind(),
                     span: self.current_span(),
                 });
-                ("<error>", self.current_span())
+                (ERROR_PLACEHOLDER, self.current_span())
             };
 
         // Fast path: single unqualified identifier (the common case, ~95% of names).

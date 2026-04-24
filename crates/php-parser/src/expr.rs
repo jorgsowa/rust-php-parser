@@ -3,7 +3,7 @@ use std::borrow::Cow;
 use php_ast::*;
 use php_lexer::TokenKind;
 
-use crate::diagnostics::ParseError;
+use crate::diagnostics::{ParseError, ERROR_PLACEHOLDER};
 use crate::instrument;
 use crate::parser::{Parser, MAX_DEPTH};
 use crate::precedence::{self, ASSIGNMENT_BP, NULL_COALESCE_LEFT_BP, TERNARY_BP};
@@ -583,7 +583,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                             found: parser.current_kind(),
                             span,
                         });
-                        ("<error>", span)
+                        (ERROR_PLACEHOLDER, span)
                     };
 
                 if parser.check(TokenKind::LeftParen) {
