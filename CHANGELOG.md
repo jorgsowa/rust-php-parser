@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.1] - 2026-04-24
+
+### Fixed
+
+- Parser stress-test corpus regressions across alternative syntax, attributes, clone/cast operands, dynamic member access, heredoc contexts, and semi-reserved end-keywords (`php-rs-parser`).
+- Lexer handling of edge cases uncovered by stress testing (`php-lexer`).
+
+### Documentation
+
+- PHP 7.4 listed among supported versions.
+
+---
+
 ## [0.9.0] - 2026-04-20
 
 ### Added
