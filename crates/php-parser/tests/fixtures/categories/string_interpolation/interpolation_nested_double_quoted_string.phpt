@@ -1,9 +1,6 @@
 ===source===
-<?php $s = "text ${$var";
-===errors===
-unterminated string literal
-unclosed '${' in string interpolation
-expected ';' after expression
+<?php
+$x = "URI: {$_SERVER["REQUEST_URI"]}";
 ===ast===
 {
   "stmts": [
@@ -14,7 +11,7 @@ expected ';' after expression
             "Assign": {
               "target": {
                 "kind": {
-                  "Variable": "s"
+                  "Variable": "x"
                 },
                 "span": {
                   "start": 6,
@@ -26,24 +23,35 @@ expected ';' after expression
                 "kind": {
                   "InterpolatedString": [
                     {
-                      "Literal": "text "
+                      "Literal": "URI: "
                     },
                     {
                       "Expr": {
                         "kind": {
-                          "VariableVariable": {
-                            "kind": {
-                              "Variable": "var"
+                          "ArrayAccess": {
+                            "array": {
+                              "kind": {
+                                "Variable": "_SERVER"
+                              },
+                              "span": {
+                                "start": 18,
+                                "end": 26
+                              }
                             },
-                            "span": {
-                              "start": 19,
-                              "end": 23
+                            "index": {
+                              "kind": {
+                                "String": "REQUEST_URI"
+                              },
+                              "span": {
+                                "start": 27,
+                                "end": 40
+                              }
                             }
                           }
                         },
                         "span": {
-                          "start": 17,
-                          "end": 25
+                          "start": 18,
+                          "end": 41
                         }
                       }
                     }
@@ -51,27 +59,25 @@ expected ';' after expression
                 },
                 "span": {
                   "start": 11,
-                  "end": 25
+                  "end": 43
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 25
+            "end": 43
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 25
+        "end": 44
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 25
+    "end": 44
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected double-quote mark in Standard input code on line 1

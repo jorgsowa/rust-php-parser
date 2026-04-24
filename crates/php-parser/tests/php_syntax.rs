@@ -4,6 +4,12 @@ use std::io::Write;
 mod common;
 
 /// Returns true if the installed PHP is >= min.
+///
+/// `(8, 0)` (and anything below) is always met: the project floor is PHP 8.0,
+/// and `build.rs` only emits `php_min_81..php_min_85` cfg flags. Returning
+/// `false` from the catch-all would silently skip fixtures with
+/// `min_php=8.0` (e.g. `versioned/ternary_chaining_rejected_v80.phpt`) from
+/// the `php -l` suite.
 fn php_version_met(min: (u32, u32)) -> bool {
     // Named constants prevent Clippy from folding cfg!() values into bool literals.
     const V81: bool = cfg!(php_min_81);
@@ -12,6 +18,7 @@ fn php_version_met(min: (u32, u32)) -> bool {
     const V84: bool = cfg!(php_min_84);
     const V85: bool = cfg!(php_min_85);
     match min {
+        (major, minor) if (major, minor) <= (8, 0) => true,
         (8, 1) => V81,
         (8, 2) => V82,
         (8, 3) => V83,
@@ -22,13 +29,20 @@ fn php_version_met(min: (u32, u32)) -> bool {
 }
 
 /// Returns true if the installed PHP version is strictly greater than `max`.
+///
+/// The project floor is PHP 8.0, so any `max` below 8.0 (e.g. `max_php=7.4`
+/// on `versioned/real_cast_allowed_in_74_v74.phpt`) is always exceeded.
+/// `max_php=8.0` is exceeded iff the installed PHP is at least 8.1, etc.
 fn php_version_exceeded(max: (u32, u32)) -> bool {
     // Named constants prevent Clippy from folding cfg!() values into bool literals.
+    const V81: bool = cfg!(php_min_81);
     const V82: bool = cfg!(php_min_82);
     const V83: bool = cfg!(php_min_83);
     const V84: bool = cfg!(php_min_84);
     const V85: bool = cfg!(php_min_85);
     match max {
+        (major, _) if major < 8 => true,
+        (8, 0) => V81,
         (8, 1) => V82,
         (8, 2) => V83,
         (8, 3) => V84,

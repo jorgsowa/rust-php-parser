@@ -112,6 +112,78 @@ fn is_ident_continue(b: u8) -> bool {
     IS_IDENT_CONTINUE[b as usize]
 }
 
+/// Scan past a balanced `{ ... }` that starts at `p` (pointing at `{`).
+/// Used to skip `{$...}` complex interpolation inside double-quoted strings and
+/// heredocs, where the expression body may itself contain nested strings.
+/// Returns the byte index immediately after the matching `}`; on EOF returns
+/// `bytes.len()` so the caller's unterminated-string branch fires.
+fn skip_complex_interp(bytes: &[u8], mut p: usize) -> usize {
+    debug_assert!(bytes.get(p) == Some(&b'{'));
+    let mut depth = 0i32;
+    while p < bytes.len() {
+        match bytes[p] {
+            b'{' => {
+                depth += 1;
+                p += 1;
+            }
+            b'}' => {
+                depth -= 1;
+                p += 1;
+                if depth == 0 {
+                    return p;
+                }
+            }
+            b'\\' => {
+                p += 1;
+                if p < bytes.len() {
+                    p += 1;
+                }
+            }
+            b'"' => p = skip_nested_dquoted(bytes, p),
+            b'\'' => p = skip_nested_squoted(bytes, p),
+            _ => p += 1,
+        }
+    }
+    p
+}
+
+fn skip_nested_dquoted(bytes: &[u8], mut p: usize) -> usize {
+    debug_assert!(bytes.get(p) == Some(&b'"'));
+    p += 1;
+    while p < bytes.len() {
+        match bytes[p] {
+            b'\\' => {
+                p += 1;
+                if p < bytes.len() {
+                    p += 1;
+                }
+            }
+            b'"' => return p + 1,
+            b'{' if bytes.get(p + 1) == Some(&b'$') => p = skip_complex_interp(bytes, p),
+            _ => p += 1,
+        }
+    }
+    p
+}
+
+fn skip_nested_squoted(bytes: &[u8], mut p: usize) -> usize {
+    debug_assert!(bytes.get(p) == Some(&b'\''));
+    p += 1;
+    while p < bytes.len() {
+        match bytes[p] {
+            b'\\' => {
+                p += 1;
+                if p < bytes.len() {
+                    p += 1;
+                }
+            }
+            b'\'' => return p + 1,
+            _ => p += 1,
+        }
+    }
+    p
+}
+
 impl<'src> Lexer<'src> {
     pub fn new(source: &'src str) -> Self {
         debug_assert!(
@@ -686,6 +758,11 @@ impl<'src> Lexer<'src> {
             self.pos = start + 2;
             return self.tok(TokenKind::LessThanEquals, start);
         }
+        // `<>` is a legacy alternative spelling of `!=` (still supported by PHP).
+        if self.check_at(1, b'>') {
+            self.pos = start + 2;
+            return self.tok(TokenKind::BangEquals, start);
+        }
         if self.check_at(1, b'?') {
             let bytes = self.source.as_bytes();
             if bytes.len() >= self.pos + 5
@@ -757,31 +834,34 @@ impl<'src> Lexer<'src> {
         }
         p += 1; // skip opening "
         loop {
-            match memchr2(b'\\', b'"', &bytes[p..]) {
-                None => {
-                    self.errors.push(LexerError {
-                        kind: LexerErrorKind::UnterminatedString,
-                        message: "unterminated string literal".to_string(),
-                        span: Span::new(start as u32, self.source.len() as u32),
-                    });
-                    self.pos = self.source.len();
-                    return self.tok(TokenKind::DoubleQuotedString, start);
-                }
-                Some(offset) => {
-                    p += offset;
-                    match bytes[p] {
-                        b'\\' => {
-                            p += 1;
-                            if p < bytes.len() {
-                                p += 1;
-                            }
-                        }
-                        _ => {
-                            // b'"'
-                            p += 1;
-                            break;
-                        }
+            if p >= bytes.len() {
+                self.errors.push(LexerError {
+                    kind: LexerErrorKind::UnterminatedString,
+                    message: "unterminated string literal".to_string(),
+                    span: Span::new(start as u32, self.source.len() as u32),
+                });
+                self.pos = self.source.len();
+                return self.tok(TokenKind::DoubleQuotedString, start);
+            }
+            match bytes[p] {
+                b'\\' => {
+                    p += 1;
+                    if p < bytes.len() {
+                        p += 1;
                     }
+                }
+                b'"' => {
+                    p += 1;
+                    break;
+                }
+                // `{$...}` is PHP's complex expression interpolation. The expression
+                // inside may contain nested strings, so skip over the matching `}`
+                // using a balanced-brace scan that respects string quoting.
+                b'{' if p + 1 < bytes.len() && bytes[p + 1] == b'$' => {
+                    p = skip_complex_interp(bytes, p);
+                }
+                _ => {
+                    p += 1;
                 }
             }
         }
@@ -1165,15 +1245,17 @@ impl<'src> Lexer<'src> {
             let line = &body[line_start..line_end];
             let trimmed_line = line.trim_start_matches([' ', '\t']);
 
-            // Check if this line is just the label (optionally followed by ; , ) or whitespace).
-            // PHP 7.3+ flexible heredoc allows the closing marker to be followed by , or )
-            // so that heredoc can appear in function argument lists and array literals.
-            if trimmed_line == label
-                || trimmed_line.starts_with(label)
-                    && trimmed_line[label.len()..]
-                        .trim_start_matches([';', ',', ')'])
-                        .trim()
-                        .is_empty()
+            // PHP 7.3+ flexible heredoc: the closing marker is the label (optionally
+            // indented) followed by any non-identifier character. PHP ends the label
+            // at the first byte that isn't in `[A-Za-z0-9_\x80-\xff]`, so whitespace,
+            // `;`, `,`, `)`, `]`, operators, etc. all close the label cleanly.
+            if trimmed_line.len() >= label.len()
+                && &trimmed_line.as_bytes()[..label.len()] == label.as_bytes()
+                && !trimmed_line
+                    .as_bytes()
+                    .get(label.len())
+                    .copied()
+                    .is_some_and(is_ident_continue)
             {
                 end_marker_pos = line_start;
                 break;

@@ -1,9 +1,6 @@
-===config===
-min_php=8.0
 ===source===
-<?php $x = true ? 1 : 2 ? 3 : 4;
-===errors===
-Unparenthesized `a ? b : c ? d : e` is not supported. Use parentheses to make the order explicit.
+<?php
+$a = $w ?: $x ?: $y ?: $z;
 ===ast===
 {
   "stmts": [
@@ -14,7 +11,7 @@ Unparenthesized `a ? b : c ? d : e` is not supported. Use parentheses to make th
             "Assign": {
               "target": {
                 "kind": {
-                  "Variable": "x"
+                  "Variable": "a"
                 },
                 "span": {
                   "start": 6,
@@ -30,53 +27,57 @@ Unparenthesized `a ? b : c ? d : e` is not supported. Use parentheses to make th
                         "Ternary": {
                           "condition": {
                             "kind": {
-                              "Bool": true
+                              "Ternary": {
+                                "condition": {
+                                  "kind": {
+                                    "Variable": "w"
+                                  },
+                                  "span": {
+                                    "start": 11,
+                                    "end": 13
+                                  }
+                                },
+                                "then_expr": null,
+                                "else_expr": {
+                                  "kind": {
+                                    "Variable": "x"
+                                  },
+                                  "span": {
+                                    "start": 17,
+                                    "end": 19
+                                  }
+                                }
+                              }
                             },
                             "span": {
                               "start": 11,
-                              "end": 15
-                            }
-                          },
-                          "then_expr": {
-                            "kind": {
-                              "Int": 1
-                            },
-                            "span": {
-                              "start": 18,
                               "end": 19
                             }
                           },
+                          "then_expr": null,
                           "else_expr": {
                             "kind": {
-                              "Int": 2
+                              "Variable": "y"
                             },
                             "span": {
-                              "start": 22,
-                              "end": 23
+                              "start": 23,
+                              "end": 25
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 11,
-                        "end": 23
+                        "end": 25
                       }
                     },
-                    "then_expr": {
-                      "kind": {
-                        "Int": 3
-                      },
-                      "span": {
-                        "start": 26,
-                        "end": 27
-                      }
-                    },
+                    "then_expr": null,
                     "else_expr": {
                       "kind": {
-                        "Int": 4
+                        "Variable": "z"
                       },
                       "span": {
-                        "start": 30,
+                        "start": 29,
                         "end": 31
                       }
                     }
@@ -106,5 +107,3 @@ Unparenthesized `a ? b : c ? d : e` is not supported. Use parentheses to make th
     "end": 32
   }
 }
-===php_error===
-PHP Fatal error:  Unparenthesized `a ? b : c ? d : e` is not supported. Use either `(a ? b : c) ? d : e` or `a ? b : (c ? d : e)` in Standard input code on line 1

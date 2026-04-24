@@ -266,21 +266,21 @@ $d = $class::${'prop_' . $name};
                       },
                       "span": {
                         "start": 94,
-                        "end": 111
+                        "end": 112
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 86,
-                  "end": 111
+                  "end": 112
                 }
               }
             }
           },
           "span": {
             "start": 81,
-            "end": 111
+            "end": 112
           }
         }
       },

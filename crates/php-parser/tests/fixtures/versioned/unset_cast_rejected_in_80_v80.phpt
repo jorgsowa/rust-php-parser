@@ -41,3 +41,5 @@ the (unset) cast is no longer supported
     "end": 16
   }
 }
+===php_error===
+PHP Fatal error:  The (unset) cast is no longer supported in Standard input code on line 1

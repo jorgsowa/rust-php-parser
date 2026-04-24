@@ -9,21 +9,21 @@ Cannot use expression as assignment target.
       "kind": {
         "Expression": {
           "kind": {
-            "Assign": {
-              "target": {
+            "Binary": {
+              "left": {
                 "kind": {
-                  "Binary": {
-                    "left": {
-                      "kind": {
-                        "Int": 1
-                      },
-                      "span": {
-                        "start": 6,
-                        "end": 7
-                      }
-                    },
-                    "op": "Add",
-                    "right": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 6,
+                  "end": 7
+                }
+              },
+              "op": "Add",
+              "right": {
+                "kind": {
+                  "Assign": {
+                    "target": {
                       "kind": {
                         "Int": 2
                       },
@@ -31,21 +31,21 @@ Cannot use expression as assignment target.
                         "start": 10,
                         "end": 11
                       }
+                    },
+                    "op": "Assign",
+                    "value": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 14,
+                        "end": 16
+                      }
                     }
                   }
                 },
                 "span": {
-                  "start": 6,
-                  "end": 11
-                }
-              },
-              "op": "Assign",
-              "value": {
-                "kind": {
-                  "Variable": "x"
-                },
-                "span": {
-                  "start": 14,
+                  "start": 10,
                   "end": 16
                 }
               }
