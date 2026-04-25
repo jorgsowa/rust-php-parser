@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.2] - 2026-04-25
+
+### Fixed
+
+- Leading-zero and negative-zero indices in simple string interpolation (`$arr[00]`, `$arr[07]`, `$arr[-0]`) are now correctly classified as string keys instead of `Int(0)`, matching PHP's tokenizer behaviour (`php-rs-parser`).
+
+---
+
 ## [0.9.1] - 2026-04-24
 
 ### Fixed
