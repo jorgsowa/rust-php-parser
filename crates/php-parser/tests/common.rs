@@ -7,6 +7,7 @@
 /// All other section contents (`===errors===`, `===ast===`, `===php_error===`) are
 /// left for each test binary to extract directly from the original content, since
 /// different test binaries need different subsets.
+#[allow(dead_code)]
 pub fn parse_fixture(content: &str) -> (Option<(u32, u32)>, &str) {
     let parse_ver = |val: &str| -> Option<(u32, u32)> {
         val.split_once('.')
@@ -47,4 +48,30 @@ pub fn parse_fixture(content: &str) -> (Option<(u32, u32)>, &str) {
     };
 
     (min_php, source)
+}
+
+/// Recursively collect all `.phpt` files under `dir`.
+#[allow(dead_code)]
+pub fn collect_phpt_files(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
+    let mut paths = Vec::new();
+    for entry in std::fs::read_dir(dir).unwrap().filter_map(|e| e.ok()) {
+        let path = entry.path();
+        if path.is_dir() {
+            paths.extend(collect_phpt_files(&path));
+        } else if path.extension().is_some_and(|ext| ext == "phpt") {
+            paths.push(path);
+        }
+    }
+    paths
+}
+
+/// Format all parse errors as a newline-separated string.
+#[allow(dead_code)]
+pub fn format_errors(result: &php_rs_parser::ParseResult) -> String {
+    result
+        .errors
+        .iter()
+        .map(|e| e.to_string())
+        .collect::<Vec<_>>()
+        .join("\n")
 }

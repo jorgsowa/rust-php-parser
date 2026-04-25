@@ -17,14 +17,7 @@ fn php_version(v: (u32, u32)) -> php_rs_parser::PhpVersion {
     }
 }
 
-fn format_errors(result: &php_rs_parser::ParseResult) -> String {
-    result
-        .errors
-        .iter()
-        .map(|e| e.to_string())
-        .collect::<Vec<_>>()
-        .join("\n")
-}
+use common::{collect_phpt_files, format_errors};
 
 /// Rewrite the `===errors===` and `===ast===` sections of a fixture file.
 /// Preserves any existing `===php_error===` section that follows.
@@ -62,20 +55,6 @@ fn update_fixture(path: &str, errors: &str, new_ast: &str) {
 // =============================================================================
 // Fixture file tests
 // =============================================================================
-
-/// Recursively collect all `.phpt` files under `dir`.
-fn collect_phpt_files(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
-    let mut paths = Vec::new();
-    for entry in std::fs::read_dir(dir).unwrap().filter_map(|e| e.ok()) {
-        let path = entry.path();
-        if path.is_dir() {
-            paths.extend(collect_phpt_files(&path));
-        } else if path.extension().is_some_and(|ext| ext == "phpt") {
-            paths.push(path);
-        }
-    }
-    paths
-}
 
 /// Parse every `.phpt` file in `tests/fixtures/` (recursive).
 /// Handles both clean-parse and error-expected fixtures, as well as version-specific ones.

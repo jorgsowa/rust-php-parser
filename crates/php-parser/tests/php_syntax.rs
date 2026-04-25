@@ -2,6 +2,7 @@ use std::io::Write;
 
 #[path = "common.rs"]
 mod common;
+use common::collect_phpt_files;
 
 /// Returns true if the installed PHP is >= min.
 ///
@@ -89,20 +90,6 @@ fn php_lint(code: &str) -> std::process::Output {
         .write_all(code.as_bytes())
         .unwrap();
     child.wait_with_output().unwrap()
-}
-
-/// Recursively collect all `.phpt` files under `dir`.
-fn collect_phpt_files(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
-    let mut paths = Vec::new();
-    for entry in std::fs::read_dir(dir).unwrap().filter_map(|e| e.ok()) {
-        let path = entry.path();
-        if path.is_dir() {
-            paths.extend(collect_phpt_files(&path));
-        } else if path.extension().is_some_and(|ext| ext == "phpt") {
-            paths.push(path);
-        }
-    }
-    paths
 }
 
 /// Parse `max_php` from the `===config===` section of a fixture, if present.

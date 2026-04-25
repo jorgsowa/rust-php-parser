@@ -3,14 +3,9 @@
 //! All other error-case tests live in `tests/fixtures/errors/*.phpt` and are
 //! run automatically by `integration::fixtures()`.
 
-fn format_errors(result: &php_rs_parser::ParseResult) -> String {
-    result
-        .errors
-        .iter()
-        .map(|e| e.to_string())
-        .collect::<Vec<_>>()
-        .join("\n")
-}
+#[path = "common.rs"]
+mod common;
+use common::format_errors;
 
 /// Run a test on a large thread stack to avoid stack overflow on deeply nested input.
 fn with_large_stack<F: FnOnce() + Send + 'static>(f: F) {
