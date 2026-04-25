@@ -7,22 +7,11 @@ use crate::instrument;
 use crate::parser::Parser;
 use crate::version::PhpVersion;
 
-fn class_modifier_error<'arena, 'src>(
-    parser: &mut Parser<'arena, 'src>,
-    start: u32,
-) -> Stmt<'arena, 'src> {
-    let span = Span::new(start, parser.previous_end());
-    parser.error(ParseError::Expected {
-        expected: "'class'".into(),
-        found: parser.current_kind(),
-        span,
-    });
-    parser.synchronize();
-    Stmt {
-        kind: StmtKind::Error,
-        span,
-    }
-}
+mod class;
+mod enum_decl;
+mod trait_use;
+
+pub use class::{parse_class_members, parse_name_list};
 
 /// Parse a single statement.
 pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
@@ -115,12 +104,14 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
         TokenKind::Unset => parse_unset(parser),
         TokenKind::Global => parse_global(parser),
         // OOP keywords
-        TokenKind::Class => parse_class(parser, ClassModifiers::default(), parser.alloc_vec()),
+        TokenKind::Class => {
+            class::parse_class(parser, ClassModifiers::default(), parser.alloc_vec())
+        }
         TokenKind::Abstract => {
             let start = parser.start_span();
             parser.advance();
             if parser.check(TokenKind::Class) {
-                parse_class(
+                class::parse_class(
                     parser,
                     ClassModifiers {
                         is_abstract: true,
@@ -135,7 +126,7 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
                 let span = parser.current_span();
                 parser.require_version(PhpVersion::Php84, "abstract readonly class", span);
                 parser.advance(); // consume 'readonly'
-                parse_class(
+                class::parse_class(
                     parser,
                     ClassModifiers {
                         is_abstract: true,
@@ -152,7 +143,7 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
                     span: Span::new(start, parser.previous_end()),
                 });
                 if parser.check(TokenKind::Class) {
-                    parse_class(
+                    class::parse_class(
                         parser,
                         ClassModifiers {
                             is_abstract: true,
@@ -173,7 +164,7 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
             let start = parser.start_span();
             parser.advance();
             if parser.check(TokenKind::Class) {
-                parse_class(
+                class::parse_class(
                     parser,
                     ClassModifiers {
                         is_final: true,
@@ -186,7 +177,7 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
                 parser.require_version(PhpVersion::Php82, "readonly class", span);
                 parser.advance();
                 if parser.check(TokenKind::Class) {
-                    parse_class(
+                    class::parse_class(
                         parser,
                         ClassModifiers {
                             is_final: true,
@@ -206,7 +197,7 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
                     span: Span::new(start, parser.previous_end()),
                 });
                 if parser.check(TokenKind::Class) {
-                    parse_class(
+                    class::parse_class(
                         parser,
                         ClassModifiers {
                             is_abstract: true,
@@ -227,7 +218,7 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
                 let span = parser.current_span();
                 parser.require_version(PhpVersion::Php82, "readonly class", span);
                 parser.advance(); // consume 'readonly'
-                parse_class(
+                class::parse_class(
                     parser,
                     ClassModifiers {
                         is_readonly: true,
@@ -243,7 +234,7 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
                 parser.require_version(PhpVersion::Php82, "readonly class", span);
                 parser.advance(); // consume 'readonly'
                 parser.advance(); // consume 'final'
-                parse_class(
+                class::parse_class(
                     parser,
                     ClassModifiers {
                         is_final: true,
@@ -260,7 +251,7 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
                 parser.require_version(PhpVersion::Php84, "abstract readonly class", span);
                 parser.advance(); // consume 'readonly'
                 parser.advance(); // consume 'abstract'
-                parse_class(
+                class::parse_class(
                     parser,
                     ClassModifiers {
                         is_abstract: true,
@@ -274,8 +265,8 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
                 parse_expression_stmt(parser)
             }
         }
-        TokenKind::Interface => parse_interface(parser, parser.alloc_vec()),
-        TokenKind::Trait => parse_trait(parser, parser.alloc_vec()),
+        TokenKind::Interface => class::parse_interface(parser, parser.alloc_vec()),
+        TokenKind::Trait => class::parse_trait(parser, parser.alloc_vec()),
         TokenKind::Enum_ => {
             // `enum` introduces an enum declaration only when followed by an identifier
             // (the enum name). In any other position — `Enum::class`, `Enum()`,
@@ -283,7 +274,7 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
             if matches!(parser.peek_kind(), Some(TokenKind::Identifier)) {
                 let span = parser.current_span();
                 parser.require_version(PhpVersion::Php81, "enums", span);
-                parse_enum(parser, parser.alloc_vec())
+                enum_decl::parse_enum(parser, parser.alloc_vec())
             } else {
                 parse_expression_stmt(parser)
             }
@@ -319,6 +310,23 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
             }
         }
         _ => parse_expression_stmt(parser),
+    }
+}
+
+fn class_modifier_error<'arena, 'src>(
+    parser: &mut Parser<'arena, 'src>,
+    start: u32,
+) -> Stmt<'arena, 'src> {
+    let span = Span::new(start, parser.previous_end());
+    parser.error(ParseError::Expected {
+        expected: "'class'".into(),
+        found: parser.current_kind(),
+        span,
+    });
+    parser.synchronize();
+    Stmt {
+        kind: StmtKind::Error,
+        span,
     }
 }
 
@@ -362,12 +370,14 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
     // Now dispatch based on what follows
     let stmt = match parser.current_kind() {
         TokenKind::Function => return parse_function(parser, attributes),
-        TokenKind::Class => return parse_class(parser, ClassModifiers::default(), attributes),
+        TokenKind::Class => {
+            return class::parse_class(parser, ClassModifiers::default(), attributes)
+        }
         TokenKind::Abstract => {
             let start = parser.start_span();
             parser.advance();
             if parser.check(TokenKind::Class) {
-                return parse_class(
+                return class::parse_class(
                     parser,
                     ClassModifiers {
                         is_abstract: true,
@@ -382,7 +392,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 let span = parser.current_span();
                 parser.require_version(PhpVersion::Php84, "abstract readonly class", span);
                 parser.advance(); // consume 'readonly'
-                return parse_class(
+                return class::parse_class(
                     parser,
                     ClassModifiers {
                         is_abstract: true,
@@ -398,7 +408,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     span: Span::new(start, parser.previous_end()),
                 });
                 if parser.check(TokenKind::Class) {
-                    return parse_class(
+                    return class::parse_class(
                         parser,
                         ClassModifiers {
                             is_abstract: true,
@@ -418,7 +428,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             let start = parser.start_span();
             parser.advance();
             if parser.check(TokenKind::Class) {
-                parse_class(
+                class::parse_class(
                     parser,
                     ClassModifiers {
                         is_final: true,
@@ -430,7 +440,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 let span = parser.current_span();
                 parser.require_version(PhpVersion::Php82, "readonly class", span);
                 parser.advance();
-                parse_class(
+                class::parse_class(
                     parser,
                     ClassModifiers {
                         is_final: true,
@@ -446,7 +456,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     span: Span::new(start, parser.previous_end()),
                 });
                 if parser.check(TokenKind::Class) {
-                    parse_class(
+                    class::parse_class(
                         parser,
                         ClassModifiers {
                             is_abstract: true,
@@ -467,7 +477,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             parser.advance();
             if parser.check(TokenKind::Class) {
                 parser.require_version(PhpVersion::Php82, "readonly class", readonly_span);
-                parse_class(
+                class::parse_class(
                     parser,
                     ClassModifiers {
                         is_readonly: true,
@@ -480,7 +490,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 // `readonly final class` — same as `final readonly class`
                 parser.require_version(PhpVersion::Php82, "readonly class", readonly_span);
                 parser.advance(); // consume 'final'
-                return parse_class(
+                return class::parse_class(
                     parser,
                     ClassModifiers {
                         is_final: true,
@@ -495,7 +505,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 // `readonly abstract class` — valid in PHP 8.4
                 parser.require_version(PhpVersion::Php84, "abstract readonly class", readonly_span);
                 parser.advance(); // consume 'abstract'
-                return parse_class(
+                return class::parse_class(
                     parser,
                     ClassModifiers {
                         is_abstract: true,
@@ -518,12 +528,12 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 }
             }
         }
-        TokenKind::Interface => return parse_interface(parser, attributes),
-        TokenKind::Trait => return parse_trait(parser, attributes),
+        TokenKind::Interface => return class::parse_interface(parser, attributes),
+        TokenKind::Trait => return class::parse_trait(parser, attributes),
         TokenKind::Enum_ => {
             let span = parser.current_span();
             parser.require_version(PhpVersion::Php81, "enums", span);
-            return parse_enum(parser, attributes);
+            return enum_decl::parse_enum(parser, attributes);
         }
         TokenKind::Const => {
             // Attributes on top-level constants require PHP 8.5.
@@ -1268,7 +1278,7 @@ pub fn parse_param_list<'arena, 'src>(
 
         // Constructor promotion hooks: if this param has visibility and next token is {
         let hooks = if visibility.is_some() && parser.check(TokenKind::LeftBrace) {
-            parse_property_hooks(parser)
+            class::parse_property_hooks(parser)
         } else {
             parser.alloc_vec()
         };
@@ -1745,1404 +1755,6 @@ fn is_simple_variable<'arena, 'src>(expr: &Expr<'arena, 'src>) -> bool {
         &expr.kind,
         ExprKind::Variable(_) | ExprKind::VariableVariable(_)
     )
-}
-
-// =============================================================================
-// Class declaration
-// =============================================================================
-
-/// Check if a name is a reserved special class name (self, parent, static, readonly)
-fn is_reserved_class_name(name: &str) -> bool {
-    name.eq_ignore_ascii_case("self")
-        || name.eq_ignore_ascii_case("parent")
-        || name.eq_ignore_ascii_case("static")
-        || name.eq_ignore_ascii_case("readonly")
-}
-
-/// Validate a name used in extends/implements is not self/parent/static
-fn validate_class_ref<'arena, 'src>(
-    parser: &'_ mut Parser<'arena, 'src>,
-    name: &Name<'arena, 'src>,
-) {
-    if let Name::Simple { value, span } = name {
-        if is_reserved_class_name(value) {
-            parser.error(ParseError::Forbidden {
-                message: format!("cannot use '{}' as class name", value).into(),
-                span: *span,
-            });
-        }
-    }
-}
-
-fn parse_class<'arena, 'src>(
-    parser: &'_ mut Parser<'arena, 'src>,
-    modifiers: ClassModifiers,
-    attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
-) -> Stmt<'arena, 'src> {
-    instrument::record_parse_class();
-
-    let start = parser.start_span();
-    parser.advance(); // consume 'class'
-
-    let (name, name_span) = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
-        (text, span)
-    } else {
-        parser.error(ParseError::Expected {
-            expected: "class name".into(),
-            found: parser.current_kind(),
-            span: parser.current_span(),
-        });
-        (ERROR_PLACEHOLDER, parser.current_span())
-    };
-
-    if is_reserved_class_name(name) {
-        parser.error(ParseError::Forbidden {
-            message: format!("cannot use '{}' as class name", name).into(),
-            span: name_span,
-        });
-    }
-
-    let extends = if parser.eat(TokenKind::Extends).is_some() {
-        let n = parser.parse_name();
-        validate_class_ref(parser, &n);
-        Some(n)
-    } else {
-        None
-    };
-
-    let implements = if parser.eat(TokenKind::Implements).is_some() {
-        let names = parse_name_list(parser);
-        for n in names.iter() {
-            validate_class_ref(parser, n);
-        }
-        names
-    } else {
-        parser.alloc_vec()
-    };
-
-    parser.expect(TokenKind::LeftBrace);
-    let members = parse_class_members(parser, false);
-    parser.expect(TokenKind::RightBrace);
-    let end = parser.previous_end();
-    let doc_comment = parser.take_doc_comment(start);
-
-    Stmt {
-        kind: StmtKind::Class(parser.alloc(ClassDecl {
-            name: Some(name),
-            modifiers,
-            extends,
-            implements,
-            members,
-            attributes,
-            doc_comment,
-        })),
-        span: Span::new(start, end),
-    }
-}
-
-pub fn parse_name_list<'arena, 'src>(
-    parser: &'_ mut Parser<'arena, 'src>,
-) -> ArenaVec<'arena, Name<'arena, 'src>> {
-    let mut names = parser.alloc_vec();
-    names.push(parser.parse_name());
-    while parser.eat(TokenKind::Comma).is_some() {
-        if parser.check(TokenKind::LeftBrace) || parser.check(TokenKind::Semicolon) {
-            break;
-        } // trailing comma
-        names.push(parser.parse_name());
-    }
-    names
-}
-
-/// Parse trait adaptation block: `{ A::foo insteadof B; foo as bar; ... }`
-/// Called after consuming `{`.
-fn parse_trait_adaptations<'arena, 'src>(
-    parser: &'_ mut Parser<'arena, 'src>,
-) -> ArenaVec<'arena, TraitAdaptation<'arena, 'src>> {
-    let mut adaptations = parser.alloc_vec();
-    while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
-        let start = parser.start_span();
-
-        // Parse the method reference: either `method` or `TraitName::method`
-        // First, parse a name (could be trait name or bare method name)
-        let first_name = parser.parse_name();
-
-        if parser.eat(TokenKind::DoubleColon).is_some() {
-            // Qualified: TraitName::method
-            let method = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
-                Name::Simple { value: text, span }
-            } else {
-                let span = parser.current_span();
-                parser.error(ParseError::Expected {
-                    expected: "method name".into(),
-                    found: parser.current_kind(),
-                    span,
-                });
-                Name::Simple {
-                    value: ERROR_PLACEHOLDER,
-                    span,
-                }
-            };
-
-            // Check for `insteadof` or `as`
-            if parser.check(TokenKind::Identifier) && parser.current_text() == "insteadof" {
-                parser.advance(); // consume `insteadof`
-                let mut insteadof = {
-                    let mut _v = parser.alloc_vec_with_capacity(1);
-                    _v.push(parser.parse_name());
-                    _v
-                };
-                while parser.eat(TokenKind::Comma).is_some() {
-                    if parser.check(TokenKind::Semicolon) {
-                        break;
-                    } // trailing comma
-                    insteadof.push(parser.parse_name());
-                }
-                parser.expect(TokenKind::Semicolon);
-                let span = Span::new(start, parser.previous_end());
-                adaptations.push(TraitAdaptation {
-                    kind: TraitAdaptationKind::Precedence {
-                        trait_name: first_name,
-                        method,
-                        insteadof,
-                    },
-                    span,
-                });
-            } else if parser.eat(TokenKind::As).is_some() {
-                // Alias: TraitName::method as [visibility] [newName];
-                let (new_modifier, new_name) = parse_alias_rhs(parser);
-                parser.expect(TokenKind::Semicolon);
-                let span = Span::new(start, parser.previous_end());
-                adaptations.push(TraitAdaptation {
-                    kind: TraitAdaptationKind::Alias {
-                        trait_name: Some(first_name),
-                        method,
-                        new_modifier,
-                        new_name,
-                    },
-                    span,
-                });
-            } else {
-                let span = parser.current_span();
-                parser.error(ParseError::Expected {
-                    expected: "'insteadof' or 'as'".into(),
-                    found: parser.current_kind(),
-                    span,
-                });
-                parser.advance();
-            }
-        } else if parser.eat(TokenKind::As).is_some() {
-            // Unqualified alias: `method as [visibility] [newName];`
-            // first_name already is the method Name — use it directly.
-            let (new_modifier, new_name) = parse_alias_rhs(parser);
-            parser.expect(TokenKind::Semicolon);
-            let span = Span::new(start, parser.previous_end());
-            adaptations.push(TraitAdaptation {
-                kind: TraitAdaptationKind::Alias {
-                    trait_name: None,
-                    method: first_name,
-                    new_modifier,
-                    new_name,
-                },
-                span,
-            });
-        } else {
-            let span = parser.current_span();
-            parser.error(ParseError::Expected {
-                expected: "'::' or 'as'".into(),
-                found: parser.current_kind(),
-                span,
-            });
-            parser.advance();
-        }
-    }
-    parser.expect(TokenKind::RightBrace);
-    adaptations
-}
-
-/// Parse the right-hand side of an `as` alias: `[visibility] [newName]`
-fn parse_alias_rhs<'arena, 'src>(
-    parser: &'_ mut Parser<'arena, 'src>,
-) -> (Option<Visibility>, Option<Name<'arena, 'src>>) {
-    let new_modifier = match parser.current_kind() {
-        TokenKind::Public => {
-            parser.advance();
-            Some(Visibility::Public)
-        }
-        TokenKind::Protected => {
-            parser.advance();
-            Some(Visibility::Protected)
-        }
-        TokenKind::Private => {
-            parser.advance();
-            Some(Visibility::Private)
-        }
-        _ => None,
-    };
-
-    // New name (optional if visibility was given)
-    let new_name = parser
-        .eat_identifier_or_keyword()
-        .map(|(text, span)| Name::Simple { value: text, span });
-
-    (new_modifier, new_name)
-}
-
-/// Parse property hooks: `{ get { ... } set(Type $value) { ... } }`
-fn parse_property_hooks<'arena, 'src>(
-    parser: &'_ mut Parser<'arena, 'src>,
-) -> ArenaVec<'arena, PropertyHook<'arena, 'src>> {
-    let open = parser.expect(TokenKind::LeftBrace);
-    let open_span = open.map(|t| t.span).unwrap_or(parser.current_span());
-
-    let mut hooks = parser.alloc_vec();
-    let mut seen_get = false;
-    let mut seen_set = false;
-
-    while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
-        let hook_start = parser.start_span();
-
-        // Parse optional attributes
-        let hook_attrs = parser.parse_attributes();
-
-        // Parse optional modifiers
-        let mut is_final = false;
-        let mut by_ref = false;
-
-        loop {
-            match parser.current_kind() {
-                TokenKind::Final => {
-                    parser.advance();
-                    is_final = true;
-                }
-                TokenKind::Ampersand => {
-                    parser.advance();
-                    by_ref = true;
-                    break;
-                }
-                // Error: invalid modifiers on hooks
-                TokenKind::Public
-                | TokenKind::Protected
-                | TokenKind::Private
-                | TokenKind::Abstract
-                | TokenKind::Static
-                | TokenKind::Readonly => {
-                    let span = parser.current_span();
-                    parser.error(ParseError::Expected {
-                        expected: "'get' or 'set'".into(),
-                        found: parser.current_kind(),
-                        span,
-                    });
-                    parser.advance();
-                }
-                _ => break,
-            }
-        }
-
-        // Expect "get" or "set" identifier (contextual keywords)
-        let kind = if parser.check(TokenKind::Identifier) {
-            match parser.current_text() {
-                "get" => {
-                    parser.advance();
-                    PropertyHookKind::Get
-                }
-                "set" => {
-                    parser.advance();
-                    PropertyHookKind::Set
-                }
-                _ => {
-                    // Invalid hook name - error recovery
-                    let span = parser.current_span();
-                    parser.error(ParseError::Expected {
-                        expected: "'get' or 'set'".into(),
-                        found: parser.current_kind(),
-                        span,
-                    });
-                    // Skip until ; or } for recovery
-                    while !parser.check(TokenKind::Semicolon)
-                        && !parser.check(TokenKind::RightBrace)
-                        && !parser.check(TokenKind::Eof)
-                    {
-                        parser.advance();
-                    }
-                    parser.eat(TokenKind::Semicolon);
-                    continue;
-                }
-            }
-        } else {
-            // Not an identifier at all - error recovery
-            let span = parser.current_span();
-            parser.error(ParseError::Expected {
-                expected: "'get' or 'set'".into(),
-                found: parser.current_kind(),
-                span,
-            });
-            // Skip until ; or } for recovery
-            while !parser.check(TokenKind::Semicolon)
-                && !parser.check(TokenKind::RightBrace)
-                && !parser.check(TokenKind::Eof)
-            {
-                parser.advance();
-            }
-            parser.eat(TokenKind::Semicolon);
-            continue;
-        };
-
-        // Parse optional (params) for set hooks
-        let params = if parser.check(TokenKind::LeftParen) {
-            let paren_span = parser.current_span();
-            parser.advance();
-            let p = parse_param_list(parser);
-            parser.expect(TokenKind::RightParen);
-
-            // Validate parameter counts against hook kind
-            match kind {
-                PropertyHookKind::Get => {
-                    if !p.is_empty() {
-                        parser.error(ParseError::Forbidden {
-                            message: "get hook must not have a parameter list".into(),
-                            span: paren_span,
-                        });
-                    }
-                }
-                PropertyHookKind::Set => {
-                    if p.len() != 1 {
-                        parser.error(ParseError::Forbidden {
-                            message: "set hook must have exactly one parameter".into(),
-                            span: paren_span,
-                        });
-                    }
-                }
-            }
-
-            p
-        } else {
-            parser.alloc_vec()
-        };
-
-        // Parse body: { stmts } | => expr; | ;
-        let body = if parser.check(TokenKind::LeftBrace) {
-            let open_brace = parser.expect(TokenKind::LeftBrace);
-            let brace_span = open_brace.map(|t| t.span).unwrap_or(parser.current_span());
-            let mut stmts = parser.alloc_vec_with_capacity(8);
-            while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
-                let span_before = parser.current_span();
-                stmts.push(parse_stmt(parser));
-                if parser.current_span() == span_before {
-                    parser.advance();
-                }
-            }
-            parser.expect_closing(TokenKind::RightBrace, brace_span);
-            PropertyHookBody::Block(stmts)
-        } else if parser.eat(TokenKind::FatArrow).is_some() {
-            let e = expr::parse_expr(parser);
-            parser.expect(TokenKind::Semicolon);
-            PropertyHookBody::Expression(e)
-        } else {
-            parser.expect(TokenKind::Semicolon);
-            PropertyHookBody::Abstract
-        };
-
-        // Check for duplicate hook kinds
-        match kind {
-            PropertyHookKind::Get => {
-                if seen_get {
-                    parser.error(ParseError::Forbidden {
-                        message: "duplicate 'get' hook".into(),
-                        span: Span::new(hook_start, parser.previous_end()),
-                    });
-                }
-                seen_get = true;
-            }
-            PropertyHookKind::Set => {
-                if seen_set {
-                    parser.error(ParseError::Forbidden {
-                        message: "duplicate 'set' hook".into(),
-                        span: Span::new(hook_start, parser.previous_end()),
-                    });
-                }
-                seen_set = true;
-            }
-        }
-
-        let hook_span = Span::new(hook_start, parser.previous_end());
-        hooks.push(PropertyHook {
-            kind,
-            body,
-            is_final,
-            by_ref,
-            params,
-            attributes: hook_attrs,
-            span: hook_span,
-        });
-    }
-
-    parser.expect_closing(TokenKind::RightBrace, open_span);
-    hooks
-}
-
-struct ClassMemberModifiers {
-    visibility: Option<Visibility>,
-    set_visibility: Option<Visibility>,
-    is_static: bool,
-    is_abstract: bool,
-    is_final: bool,
-    is_readonly: bool,
-}
-
-pub fn parse_class_members<'arena, 'src>(
-    parser: &'_ mut Parser<'arena, 'src>,
-    in_interface: bool,
-) -> ArenaVec<'arena, ClassMember<'arena, 'src>> {
-    // March 2026: reduce from 16 to 4 for class members
-    // Most classes have 3-10 members; larger classes grow efficiently
-    let mut members = parser.alloc_vec_with_capacity(4);
-    while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
-        if parser.check(TokenKind::Semicolon) {
-            parser.advance();
-            continue;
-        }
-
-        let member_start = parser.start_span();
-        let member_attrs = parser.parse_attributes();
-
-        if parser.check(TokenKind::Use) {
-            let _ = member_attrs;
-            members.push(parse_trait_use_member(parser, member_start));
-            continue;
-        }
-
-        let mods = parse_class_member_modifiers(parser, member_start);
-
-        // Detect unknown modifier: bare identifier before $variable with no modifiers set.
-        if mods.visibility.is_none()
-            && !mods.is_static
-            && !mods.is_abstract
-            && !mods.is_final
-            && !mods.is_readonly
-            && parser.check(TokenKind::Identifier)
-            && parser.peek_kind() == Some(TokenKind::Variable)
-        {
-            let span = parser.current_span();
-            parser.error(ParseError::Expected {
-                expected: "modifier".into(),
-                found: parser.current_kind(),
-                span,
-            });
-        }
-
-        if parser.check(TokenKind::Const) {
-            parse_class_const_member(parser, &mut members, member_attrs, member_start, &mods);
-            continue;
-        }
-
-        if parser.check(TokenKind::Function) {
-            members.push(parse_method_member(
-                parser,
-                member_attrs,
-                member_start,
-                &mods,
-                in_interface,
-            ));
-            continue;
-        }
-
-        let type_hint = if parser.could_be_type_hint() && !parser.check(TokenKind::Variable) {
-            Some(parser.parse_type_hint())
-        } else {
-            None
-        };
-
-        if parser.check(TokenKind::Variable) {
-            parse_property_member(
-                parser,
-                &mut members,
-                member_attrs,
-                member_start,
-                &mods,
-                type_hint,
-            );
-            continue;
-        }
-
-        parser.advance();
-    }
-    members
-}
-
-fn parse_trait_use_member<'arena, 'src>(
-    parser: &'_ mut Parser<'arena, 'src>,
-    member_start: u32,
-) -> ClassMember<'arena, 'src> {
-    parser.advance(); // consume `use`
-    let mut traits = parser.alloc_vec_with_capacity(2);
-    traits.push(parser.parse_name());
-    while parser.eat(TokenKind::Comma).is_some() {
-        if parser.check(TokenKind::Semicolon) || parser.check(TokenKind::LeftBrace) {
-            break; // trailing comma
-        }
-        traits.push(parser.parse_name());
-    }
-    let adaptations = if parser.check(TokenKind::LeftBrace) {
-        parser.advance();
-        parse_trait_adaptations(parser)
-    } else {
-        parser.expect(TokenKind::Semicolon);
-        parser.alloc_vec()
-    };
-    let span = Span::new(member_start, parser.previous_end());
-    ClassMember {
-        kind: ClassMemberKind::TraitUse(TraitUseDecl {
-            traits,
-            adaptations,
-        }),
-        span,
-    }
-}
-
-fn parse_class_member_modifiers<'arena, 'src>(
-    parser: &'_ mut Parser<'arena, 'src>,
-    member_start: u32,
-) -> ClassMemberModifiers {
-    let mut visibility = None;
-    let mut set_visibility = None;
-    let mut asym_vis_span: Option<Span> = None;
-    let mut is_static = false;
-    let mut is_abstract = false;
-    let mut is_final = false;
-    let mut is_readonly = false;
-
-    // Handle `var` keyword (PHP4 style, equivalent to public)
-    if parser.check(TokenKind::Identifier) && parser.current_text() == "var" {
-        parser.advance();
-        visibility = Some(Visibility::Public);
-    }
-
-    loop {
-        match parser.current_kind() {
-            TokenKind::Public | TokenKind::Protected | TokenKind::Private => {
-                let vis = match parser.current_kind() {
-                    TokenKind::Public => Visibility::Public,
-                    TokenKind::Protected => Visibility::Protected,
-                    _ => Visibility::Private,
-                };
-                parser.advance();
-
-                if visibility.is_none() {
-                    visibility = Some(vis);
-                    // Look ahead for second visibility keyword followed by ( (asymmetric visibility)
-                    if matches!(
-                        parser.current_kind(),
-                        TokenKind::Public | TokenKind::Protected | TokenKind::Private
-                    ) && parser.peek_kind() == Some(TokenKind::LeftParen)
-                    {
-                        let set_vis = match parser.current_kind() {
-                            TokenKind::Public => Visibility::Public,
-                            TokenKind::Protected => Visibility::Protected,
-                            _ => Visibility::Private,
-                        };
-                        // Save span; emit version check after loop when is_static is known.
-                        asym_vis_span = Some(Span::new(member_start, parser.previous_end()));
-                        parser.advance(); // consume second visibility
-                        parser.advance(); // consume (
-                        if parser.current_text() == "set" {
-                            parser.advance(); // consume "set"
-                        }
-                        parser.expect(TokenKind::RightParen);
-                        set_visibility = Some(set_vis);
-                    }
-                } else if parser.check(TokenKind::LeftParen) {
-                    // Already have visibility; this is set_visibility with (set)
-                    // Save span for deferred version check after is_static is known.
-                    asym_vis_span = Some(Span::new(member_start, parser.previous_end()));
-                    parser.advance(); // consume (
-                    if parser.current_text() == "set" {
-                        parser.advance(); // consume "set"
-                    }
-                    parser.expect(TokenKind::RightParen);
-                    set_visibility = Some(vis);
-                } else {
-                    parser.error(ParseError::Forbidden {
-                        message: "cannot use multiple visibility modifiers".into(),
-                        span: Span::new(member_start, parser.previous_end()),
-                    });
-                }
-            }
-            TokenKind::Static => {
-                if is_static {
-                    parser.error(ParseError::Forbidden {
-                        message: "duplicate modifier 'static'".into(),
-                        span: Span::new(member_start, parser.previous_end()),
-                    });
-                }
-                parser.advance();
-                is_static = true;
-            }
-            TokenKind::Abstract => {
-                if is_abstract {
-                    parser.error(ParseError::Forbidden {
-                        message: "duplicate modifier 'abstract'".into(),
-                        span: Span::new(member_start, parser.previous_end()),
-                    });
-                }
-                parser.advance();
-                is_abstract = true;
-            }
-            TokenKind::Final => {
-                if is_final {
-                    parser.error(ParseError::Forbidden {
-                        message: "duplicate modifier 'final'".into(),
-                        span: Span::new(member_start, parser.previous_end()),
-                    });
-                }
-                parser.advance();
-                is_final = true;
-            }
-            TokenKind::Readonly => {
-                if is_readonly {
-                    parser.error(ParseError::Forbidden {
-                        message: "duplicate modifier 'readonly'".into(),
-                        span: Span::new(member_start, parser.previous_end()),
-                    });
-                }
-                let span = parser.current_span();
-                parser.require_version(PhpVersion::Php81, "readonly properties", span);
-                parser.advance();
-                is_readonly = true;
-            }
-            _ => break,
-        }
-    }
-
-    if is_abstract && is_final {
-        parser.error(ParseError::Forbidden {
-            message: "cannot use 'abstract' and 'final' together".into(),
-            span: Span::new(member_start, parser.previous_end()),
-        });
-    }
-    if is_static && is_readonly {
-        parser.error(ParseError::Forbidden {
-            message: "static properties cannot be readonly".into(),
-            span: Span::new(member_start, parser.previous_end()),
-        });
-    }
-
-    // Emit version check now that is_static is known.
-    // Static asymmetric visibility requires PHP 8.5; instance requires PHP 8.4.
-    if let Some(span) = asym_vis_span {
-        if is_static {
-            parser.require_version(
-                PhpVersion::Php85,
-                "asymmetric visibility on static properties",
-                span,
-            );
-        } else {
-            parser.require_version(PhpVersion::Php84, "asymmetric visibility", span);
-        }
-    }
-
-    ClassMemberModifiers {
-        visibility,
-        set_visibility,
-        is_static,
-        is_abstract,
-        is_final,
-        is_readonly,
-    }
-}
-
-fn parse_class_const_member<'arena, 'src>(
-    parser: &'_ mut Parser<'arena, 'src>,
-    members: &mut ArenaVec<'arena, ClassMember<'arena, 'src>>,
-    member_attrs: ArenaVec<'arena, Attribute<'arena, 'src>>,
-    member_start: u32,
-    mods: &ClassMemberModifiers,
-) {
-    if mods.is_static {
-        parser.error(ParseError::Forbidden {
-            message: "cannot use 'static' as constant modifier".into(),
-            span: parser.current_span(),
-        });
-    }
-    if mods.is_abstract {
-        parser.error(ParseError::Forbidden {
-            message: "cannot use 'abstract' as constant modifier".into(),
-            span: parser.current_span(),
-        });
-    }
-    if mods.is_readonly {
-        parser.error(ParseError::Forbidden {
-            message: "cannot use 'readonly' as constant modifier".into(),
-            span: parser.current_span(),
-        });
-    }
-    parser.advance(); // consume `const`
-
-    // Check for typed constant: if what follows looks like a type hint
-    // and is NOT immediately followed by `=`, it's a typed constant (PHP 8.3+)
-    let const_type = if parser.could_be_type_hint()
-        && !parser.check(TokenKind::Variable)
-        && parser.peek_kind() != Some(TokenKind::Equals)
-        && parser.peek_kind() != Some(TokenKind::Comma)
-    {
-        let span = parser.current_span();
-        parser.require_version(PhpVersion::Php83, "typed class constants", span);
-        Some(parser.parse_type_hint())
-    } else {
-        None
-    };
-
-    let mut const_items = parser.alloc_vec();
-    loop {
-        let const_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-            text
-        } else {
-            let span = parser.current_span();
-            parser.error(ParseError::Expected {
-                expected: "constant name".into(),
-                found: parser.current_kind(),
-                span,
-            });
-            ERROR_PLACEHOLDER
-        };
-        parser.expect(TokenKind::Equals);
-        let value = expr::parse_expr(parser);
-        const_items.push((const_name, value));
-        if parser.eat(TokenKind::Comma).is_none() {
-            break;
-        }
-        if parser.check(TokenKind::Semicolon) {
-            break; // trailing comma
-        }
-    }
-    parser.expect(TokenKind::Semicolon);
-    let span = Span::new(member_start, parser.previous_end());
-    if !member_attrs.is_empty() && const_items.len() > 1 {
-        parser.error(ParseError::Forbidden {
-            message: "cannot use attributes on multi-constant declaration".into(),
-            span,
-        });
-    }
-    // Allocate the type hint into the arena so all items can share a reference
-    let shared_type_hint: Option<&'arena _> = const_type.map(|th| parser.alloc(th));
-    let mut const_iter = const_items.into_iter();
-    if let Some((first_name, first_value)) = const_iter.next() {
-        members.push(ClassMember {
-            kind: ClassMemberKind::ClassConst(ClassConstDecl {
-                name: first_name,
-                visibility: mods.visibility,
-                type_hint: shared_type_hint,
-                value: first_value,
-                attributes: member_attrs,
-                doc_comment: parser.take_doc_comment(member_start),
-            }),
-            span,
-        });
-        for (rest_name, rest_value) in const_iter {
-            members.push(ClassMember {
-                kind: ClassMemberKind::ClassConst(ClassConstDecl {
-                    name: rest_name,
-                    visibility: mods.visibility,
-                    type_hint: shared_type_hint,
-                    value: rest_value,
-                    attributes: parser.alloc_vec(),
-                    doc_comment: None,
-                }),
-                span,
-            });
-        }
-    }
-}
-
-fn parse_method_member<'arena, 'src>(
-    parser: &'_ mut Parser<'arena, 'src>,
-    member_attrs: ArenaVec<'arena, Attribute<'arena, 'src>>,
-    member_start: u32,
-    mods: &ClassMemberModifiers,
-    in_interface: bool,
-) -> ClassMember<'arena, 'src> {
-    parser.advance(); // consume `function`
-    let by_ref = parser.eat(TokenKind::Ampersand).is_some();
-    let method_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-        text
-    } else {
-        parser.error(ParseError::Expected {
-            expected: "method name".into(),
-            found: parser.current_kind(),
-            span: parser.current_span(),
-        });
-        ERROR_PLACEHOLDER
-    };
-
-    parser.expect(TokenKind::LeftParen);
-    let params = parse_param_list(parser);
-    parser.expect(TokenKind::RightParen);
-
-    let return_type = if parser.eat(TokenKind::Colon).is_some() {
-        Some(parser.parse_type_hint())
-    } else {
-        None
-    };
-
-    let body = if parser.check(TokenKind::LeftBrace) {
-        parser.expect(TokenKind::LeftBrace);
-        let mut stmts = parser.alloc_vec_with_capacity(16);
-        let saved_loop_depth = parser.loop_depth;
-        parser.loop_depth = 0;
-        while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
-            let span_before = parser.current_span();
-            stmts.push(parse_stmt(parser));
-            if parser.current_span() == span_before {
-                parser.advance();
-            }
-        }
-        parser.loop_depth = saved_loop_depth;
-        parser.expect(TokenKind::RightBrace);
-        Some(stmts)
-    } else {
-        parser.expect(TokenKind::Semicolon);
-        None
-    };
-
-    if mods.is_abstract && body.is_some() {
-        parser.error(ParseError::Forbidden {
-            message: "abstract method cannot contain a body".into(),
-            span: Span::new(member_start, parser.previous_end()),
-        });
-    }
-    if in_interface && body.is_some() {
-        parser.error(ParseError::Forbidden {
-            message: "interface method cannot contain a body".into(),
-            span: Span::new(member_start, parser.previous_end()),
-        });
-    }
-
-    let span = Span::new(member_start, parser.previous_end());
-    ClassMember {
-        kind: ClassMemberKind::Method(MethodDecl {
-            name: method_name,
-            visibility: mods.visibility,
-            is_static: mods.is_static,
-            is_abstract: mods.is_abstract,
-            is_final: mods.is_final,
-            by_ref,
-            params,
-            return_type,
-            body,
-            attributes: member_attrs,
-            doc_comment: parser.take_doc_comment(member_start),
-        }),
-        span,
-    }
-}
-
-fn parse_property_member<'arena, 'src>(
-    parser: &'_ mut Parser<'arena, 'src>,
-    members: &mut ArenaVec<'arena, ClassMember<'arena, 'src>>,
-    member_attrs: ArenaVec<'arena, Attribute<'arena, 'src>>,
-    member_start: u32,
-    mods: &ClassMemberModifiers,
-    type_hint: Option<TypeHint<'arena, 'src>>,
-) {
-    let var_token = parser.advance();
-    let prop_name = parser.variable_name(var_token);
-
-    let default = if parser.eat(TokenKind::Equals).is_some() {
-        // Suppress `{` subscript so a following hook block `{ get => ...; }`
-        // is not consumed as part of the default expression.
-        Some(parser.with_no_brace_subscript(expr::parse_expr))
-    } else {
-        None
-    };
-
-    // Property hooks: { get { ... } set { ... } } — PHP 8.4+
-    let had_hooks_block = parser.check(TokenKind::LeftBrace);
-    // abstract is only valid on properties with hooks (abstract property hooks, PHP 8.4+)
-    if mods.is_abstract && !had_hooks_block {
-        parser.error(ParseError::Forbidden {
-            message: "properties cannot be abstract".into(),
-            span: Span::new(member_start, parser.previous_end()),
-        });
-    }
-    let hooks = if had_hooks_block {
-        let span = parser.current_span();
-        parser.require_version(PhpVersion::Php84, "property hooks", span);
-        parse_property_hooks(parser)
-    } else {
-        parser.alloc_vec()
-    };
-    if mods.is_readonly {
-        if type_hint.is_none() {
-            parser.error(ParseError::Forbidden {
-                message: "readonly property must have type".into(),
-                span: Span::new(member_start, parser.previous_end()),
-            });
-        }
-        if let Some(hook) = hooks.first() {
-            parser.error(ParseError::Forbidden {
-                message: "A readonly property cannot declare hooks".into(),
-                span: hook.span,
-            });
-        }
-    }
-    let span = Span::new(member_start, parser.previous_end());
-    members.push(ClassMember {
-        kind: ClassMemberKind::Property(PropertyDecl {
-            name: prop_name,
-            visibility: mods.visibility,
-            set_visibility: mods.set_visibility,
-            is_static: mods.is_static,
-            is_readonly: mods.is_readonly,
-            type_hint,
-            default,
-            attributes: member_attrs,
-            hooks,
-            doc_comment: parser.take_doc_comment(member_start),
-        }),
-        span,
-    });
-
-    if had_hooks_block {
-        // Property with hooks block — no comma separation or semicolon needed
-    } else if parser.eat(TokenKind::Comma).is_some() {
-        while parser.check(TokenKind::Variable) {
-            let var_token = parser.advance();
-            let pname = parser.variable_name(var_token);
-
-            let pdefault = if parser.eat(TokenKind::Equals).is_some() {
-                Some(expr::parse_expr(parser))
-            } else {
-                None
-            };
-
-            let phooks = if parser.check(TokenKind::LeftBrace) {
-                parser.error(ParseError::Forbidden {
-                    message: "cannot have hooks on comma-separated property".into(),
-                    span: parser.current_span(),
-                });
-                parse_property_hooks(parser)
-            } else {
-                parser.alloc_vec()
-            };
-            let pspan = Span::new(member_start, parser.previous_end());
-            members.push(ClassMember {
-                kind: ClassMemberKind::Property(PropertyDecl {
-                    name: pname,
-                    visibility: None,
-                    set_visibility: None,
-                    is_static: mods.is_static,
-                    is_readonly: mods.is_readonly,
-                    type_hint: None,
-                    default: pdefault,
-                    attributes: parser.alloc_vec(),
-                    hooks: phooks,
-                    doc_comment: None,
-                }),
-                span: pspan,
-            });
-
-            if parser.eat(TokenKind::Comma).is_none() {
-                break;
-            }
-        }
-        if !parser.check(TokenKind::RightBrace) {
-            parser.expect(TokenKind::Semicolon);
-        }
-    } else {
-        parser.expect(TokenKind::Semicolon);
-    }
-}
-
-// =============================================================================
-// Interface / Trait / Enum
-// =============================================================================
-
-fn parse_interface<'arena, 'src>(
-    parser: &'_ mut Parser<'arena, 'src>,
-    attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
-) -> Stmt<'arena, 'src> {
-    instrument::record_parse_class();
-
-    let start = parser.start_span();
-    parser.advance();
-    let (name, name_span) = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
-        (text, span)
-    } else {
-        parser.error(ParseError::Expected {
-            expected: "interface name".into(),
-            found: parser.current_kind(),
-            span: parser.current_span(),
-        });
-        (ERROR_PLACEHOLDER, parser.current_span())
-    };
-
-    if is_reserved_class_name(name) {
-        parser.error(ParseError::Forbidden {
-            message: format!("cannot use '{}' as interface name", name).into(),
-            span: name_span,
-        });
-    }
-
-    let extends = if parser.eat(TokenKind::Extends).is_some() {
-        let names = parse_name_list(parser);
-        for n in names.iter() {
-            validate_class_ref(parser, n);
-        }
-        names
-    } else {
-        parser.alloc_vec()
-    };
-
-    parser.expect(TokenKind::LeftBrace);
-    let members = parse_class_members(parser, true);
-    parser.expect(TokenKind::RightBrace);
-    let end = parser.previous_end();
-    let doc_comment = parser.take_doc_comment(start);
-
-    Stmt {
-        kind: StmtKind::Interface(parser.alloc(InterfaceDecl {
-            name,
-            extends,
-            members,
-            attributes,
-            doc_comment,
-        })),
-        span: Span::new(start, end),
-    }
-}
-
-fn parse_trait<'arena, 'src>(
-    parser: &'_ mut Parser<'arena, 'src>,
-    attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
-) -> Stmt<'arena, 'src> {
-    instrument::record_parse_class();
-
-    let start = parser.start_span();
-    parser.advance();
-    let name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-        text
-    } else {
-        parser.error(ParseError::Expected {
-            expected: "trait name".into(),
-            found: parser.current_kind(),
-            span: parser.current_span(),
-        });
-        ERROR_PLACEHOLDER
-    };
-
-    parser.expect(TokenKind::LeftBrace);
-    let members = parse_class_members(parser, false);
-    parser.expect(TokenKind::RightBrace);
-    let end = parser.previous_end();
-    let doc_comment = parser.take_doc_comment(start);
-
-    Stmt {
-        kind: StmtKind::Trait(parser.alloc(TraitDecl {
-            name,
-            members,
-            attributes,
-            doc_comment,
-        })),
-        span: Span::new(start, end),
-    }
-}
-
-fn parse_enum<'arena, 'src>(
-    parser: &'_ mut Parser<'arena, 'src>,
-    attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
-) -> Stmt<'arena, 'src> {
-    let start = parser.start_span();
-    parser.advance(); // consume 'enum'
-
-    let name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-        text
-    } else {
-        parser.error(ParseError::Expected {
-            expected: "enum name".into(),
-            found: parser.current_kind(),
-            span: parser.current_span(),
-        });
-        ERROR_PLACEHOLDER
-    };
-
-    // Backed enum: enum Foo: string
-    let scalar_type = if parser.eat(TokenKind::Colon).is_some() {
-        Some(parser.parse_name())
-    } else {
-        None
-    };
-
-    let implements = if parser.eat(TokenKind::Implements).is_some() {
-        parse_name_list(parser)
-    } else {
-        parser.alloc_vec()
-    };
-
-    parser.expect(TokenKind::LeftBrace);
-
-    let mut members = parser.alloc_vec_with_capacity(4);
-    while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
-        if parser.check(TokenKind::Semicolon) {
-            parser.advance();
-            continue;
-        }
-        let member_attrs = parser.parse_attributes();
-        let member_start = parser.start_span();
-
-        // Trait use
-        if parser.check(TokenKind::Use) {
-            parser.advance();
-            let mut traits = parser.alloc_vec();
-            traits.push(parser.parse_name());
-            while parser.eat(TokenKind::Comma).is_some() {
-                traits.push(parser.parse_name());
-            }
-            let adaptations = if parser.check(TokenKind::LeftBrace) {
-                parser.advance();
-                parse_trait_adaptations(parser)
-            } else {
-                parser.expect(TokenKind::Semicolon);
-                parser.alloc_vec()
-            };
-            let span = Span::new(member_start, parser.previous_end());
-            members.push(EnumMember {
-                kind: EnumMemberKind::TraitUse(TraitUseDecl {
-                    traits,
-                    adaptations,
-                }),
-                span,
-            });
-            continue;
-        }
-
-        // Enum case
-        if parser.check(TokenKind::Case) {
-            parser.advance();
-            if parser.check(TokenKind::Class) {
-                let span = parser.current_span();
-                parser.error(ParseError::Forbidden {
-                    message: "'class' cannot be used as an enum case name".into(),
-                    span,
-                });
-            }
-            let (case_name, case_name_span) =
-                if let Some((text, span)) = parser.eat_identifier_or_keyword() {
-                    (text, span)
-                } else {
-                    let span = parser.current_span();
-                    parser.error(ParseError::Expected {
-                        expected: "case name".into(),
-                        found: parser.current_kind(),
-                        span,
-                    });
-                    (ERROR_PLACEHOLDER, span)
-                };
-            let equals_token = parser.eat(TokenKind::Equals);
-            let value = if equals_token.is_some() {
-                Some(expr::parse_expr(parser))
-            } else {
-                None
-            };
-            if scalar_type.is_some() && value.is_none() {
-                parser.error(ParseError::Forbidden {
-                    message: format!(
-                        "Case {} of backed enum {} must have a value",
-                        case_name, name
-                    )
-                    .into(),
-                    span: case_name_span,
-                });
-            } else if scalar_type.is_none() && value.is_some() {
-                parser.error(ParseError::Forbidden {
-                    message: format!(
-                        "Case {} of pure enum {} must not have a value",
-                        case_name, name
-                    )
-                    .into(),
-                    span: equals_token.unwrap().span,
-                });
-            }
-            parser.expect(TokenKind::Semicolon);
-            let span = Span::new(member_start, parser.previous_end());
-            members.push(EnumMember {
-                kind: EnumMemberKind::Case(EnumCase {
-                    name: case_name,
-                    value,
-                    attributes: member_attrs,
-                    doc_comment: parser.take_doc_comment(member_start),
-                }),
-                span,
-            });
-            continue;
-        }
-
-        // Parse modifiers for methods/consts
-        let mut visibility = None;
-        let mut is_static = false;
-        let mut is_abstract = false;
-        let mut is_final = false;
-
-        loop {
-            match parser.current_kind() {
-                TokenKind::Public => {
-                    parser.advance();
-                    visibility = Some(Visibility::Public);
-                }
-                TokenKind::Protected => {
-                    parser.advance();
-                    visibility = Some(Visibility::Protected);
-                }
-                TokenKind::Private => {
-                    parser.advance();
-                    visibility = Some(Visibility::Private);
-                }
-                TokenKind::Static => {
-                    parser.advance();
-                    is_static = true;
-                }
-                TokenKind::Abstract => {
-                    parser.advance();
-                    is_abstract = true;
-                }
-                TokenKind::Final => {
-                    parser.advance();
-                    is_final = true;
-                }
-                _ => break,
-            }
-        }
-
-        // Const
-        if parser.check(TokenKind::Const) {
-            parser.advance();
-
-            // PHP 8.3: typed enum constants — e.g. `public const string MODE = 'fit'`
-            let const_type = if parser.could_be_type_hint()
-                && !parser.check(TokenKind::Variable)
-                && parser.peek_kind() != Some(TokenKind::Equals)
-                && parser.peek_kind() != Some(TokenKind::Comma)
-            {
-                let span = parser.current_span();
-                parser.require_version(PhpVersion::Php83, "typed enum constants", span);
-                let th = parser.parse_type_hint();
-                Some(parser.alloc(th))
-            } else {
-                None
-            };
-
-            let const_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-                text
-            } else {
-                parser.error(ParseError::Expected {
-                    expected: "constant name".into(),
-                    found: parser.current_kind(),
-                    span: parser.current_span(),
-                });
-                ERROR_PLACEHOLDER
-            };
-            parser.expect(TokenKind::Equals);
-            let value = expr::parse_expr(parser);
-            parser.expect(TokenKind::Semicolon);
-            let span = Span::new(member_start, parser.previous_end());
-            members.push(EnumMember {
-                kind: EnumMemberKind::ClassConst(ClassConstDecl {
-                    name: const_name,
-                    visibility,
-                    type_hint: const_type,
-                    value,
-                    attributes: member_attrs,
-                    doc_comment: parser.take_doc_comment(member_start),
-                }),
-                span,
-            });
-            continue;
-        }
-
-        // Method
-        if parser.check(TokenKind::Function) {
-            if is_abstract {
-                parser.error(ParseError::Forbidden {
-                    message: "enum methods cannot be abstract".into(),
-                    span: Span::new(member_start, parser.previous_end()),
-                });
-            }
-
-            parser.advance();
-            let by_ref = parser.eat(TokenKind::Ampersand).is_some();
-            let method_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-                text
-            } else {
-                ERROR_PLACEHOLDER
-            };
-
-            parser.expect(TokenKind::LeftParen);
-            let params = parse_param_list(parser);
-            parser.expect(TokenKind::RightParen);
-
-            let return_type = if parser.eat(TokenKind::Colon).is_some() {
-                Some(parser.parse_type_hint())
-            } else {
-                None
-            };
-
-            let body = if parser.check(TokenKind::LeftBrace) {
-                parser.expect(TokenKind::LeftBrace);
-                let mut stmts = parser.alloc_vec_with_capacity(16);
-                let saved_loop_depth = parser.loop_depth;
-                parser.loop_depth = 0;
-                while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
-                    let span_before = parser.current_span();
-                    stmts.push(parse_stmt(parser));
-                    if parser.current_span() == span_before {
-                        parser.advance();
-                    }
-                }
-                parser.loop_depth = saved_loop_depth;
-                parser.expect(TokenKind::RightBrace);
-                Some(stmts)
-            } else {
-                parser.expect(TokenKind::Semicolon);
-                None
-            };
-
-            let span = Span::new(member_start, parser.previous_end());
-            members.push(EnumMember {
-                kind: EnumMemberKind::Method(MethodDecl {
-                    name: method_name,
-                    visibility,
-                    is_static,
-                    is_abstract,
-                    is_final,
-                    by_ref,
-                    params,
-                    return_type,
-                    body,
-                    attributes: member_attrs,
-                    doc_comment: parser.take_doc_comment(member_start),
-                }),
-                span,
-            });
-            continue;
-        }
-
-        // Unknown — skip
-        parser.advance();
-    }
-
-    parser.expect(TokenKind::RightBrace);
-    let end = parser.previous_end();
-    let doc_comment = parser.take_doc_comment(start);
-    Stmt {
-        kind: StmtKind::Enum(parser.alloc(EnumDecl {
-            name,
-            scalar_type,
-            implements,
-            members,
-            attributes,
-            doc_comment,
-        })),
-        span: Span::new(start, end),
-    }
 }
 
 // =============================================================================
