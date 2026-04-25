@@ -29,142 +29,8 @@ pub fn parse_interpolated_parts<'arena, 'src>(
     while i < len {
         match bytes[i] {
             b'\\' => {
-                // Materialise an owned buffer for this run if not already done.
                 let buf = owned.get_or_insert_with(|| inner[literal_start..i].to_string());
-                if i + 1 < len {
-                    let next = bytes[i + 1];
-                    match next {
-                        b'$' => {
-                            buf.push('$');
-                            i += 2;
-                        }
-                        b'\\' => {
-                            buf.push('\\');
-                            i += 2;
-                        }
-                        b'n' => {
-                            buf.push('\n');
-                            i += 2;
-                        }
-                        b'r' => {
-                            buf.push('\r');
-                            i += 2;
-                        }
-                        b't' => {
-                            buf.push('\t');
-                            i += 2;
-                        }
-                        b'v' => {
-                            buf.push('\x0B');
-                            i += 2;
-                        }
-                        b'e' => {
-                            buf.push('\x1B');
-                            i += 2;
-                        }
-                        b'f' => {
-                            buf.push('\x0C');
-                            i += 2;
-                        }
-                        b'"' => {
-                            buf.push('"');
-                            i += 2;
-                        }
-                        b'x' | b'X' => {
-                            // Hex escape: \xNN
-                            i += 2;
-                            let start = i;
-                            while i < len && i - start < 2 && bytes[i].is_ascii_hexdigit() {
-                                i += 1;
-                            }
-                            if i > start {
-                                if let Ok(val) = u8::from_str_radix(&inner[start..i], 16) {
-                                    buf.push(val as char);
-                                }
-                            } else {
-                                buf.push('\\');
-                                buf.push('x');
-                            }
-                        }
-                        b'u' => {
-                            // Unicode escape: \u{HHHH} — PHP 7.0+
-                            let escape_start = i;
-                            i += 2;
-                            if i < len && bytes[i] == b'{' {
-                                i += 1; // skip {
-                                let start = i;
-                                while i < len && bytes[i].is_ascii_hexdigit() {
-                                    i += 1;
-                                }
-                                if i < len && bytes[i] == b'}' {
-                                    let hex = &inner[start..i];
-                                    i += 1; // skip }
-                                    let span = Span::new(
-                                        base_offset + escape_start as u32,
-                                        base_offset + i as u32,
-                                    );
-                                    if hex.is_empty() {
-                                        errors.push(ParseError::Forbidden {
-                                            message: "Invalid UTF-8 codepoint escape sequence: empty code point".into(),
-                                            span,
-                                        });
-                                    } else if let Ok(codepoint) = u32::from_str_radix(hex, 16) {
-                                        if let Some(c) = char::from_u32(codepoint) {
-                                            buf.push(c);
-                                        } else {
-                                            errors.push(ParseError::Forbidden {
-                                                message: "Invalid UTF-8 codepoint escape sequence: Codepoint too large".into(),
-                                                span,
-                                            });
-                                        }
-                                    }
-                                } else {
-                                    // Invalid hex content (e.g. \u{ZZZZ}) — scan to closing } for recovery
-                                    while i < len
-                                        && bytes[i] != b'}'
-                                        && bytes[i] != b'"'
-                                        && bytes[i] != b'\n'
-                                    {
-                                        i += 1;
-                                    }
-                                    if i < len && bytes[i] == b'}' {
-                                        i += 1; // skip }
-                                    }
-                                    errors.push(ParseError::Forbidden {
-                                        message: "Invalid UTF-8 codepoint escape sequence".into(),
-                                        span: Span::new(
-                                            base_offset + escape_start as u32,
-                                            base_offset + i as u32,
-                                        ),
-                                    });
-                                }
-                            } else {
-                                buf.push('\\');
-                                buf.push('u');
-                            }
-                        }
-                        b'0'..=b'7' => {
-                            // Octal escape: \NNN (up to 3 digits)
-                            let start = i + 1;
-                            i += 1;
-                            while i < len && i - start < 3 && bytes[i] >= b'0' && bytes[i] <= b'7' {
-                                i += 1;
-                            }
-                            if let Ok(val) = u8::from_str_radix(&inner[start..i], 8) {
-                                buf.push(val as char);
-                            }
-                        }
-                        _ => {
-                            // Unknown escape: keep as-is
-                            buf.push('\\');
-                            buf.push(next as char);
-                            i += 2;
-                        }
-                    }
-                } else {
-                    buf.push('\\');
-                    i += 1;
-                }
+                i = decode_escape_at(bytes, inner, i, buf, errors, base_offset, true);
             }
             b'$' => {
                 // Deprecated ${varname} syntax (PHP < 8.2): ${ ... }
@@ -511,134 +377,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
     while i < len {
         match bytes[i] {
             b'\\' => {
-                // Escape sequences
-                if i + 1 < len {
-                    let next = bytes[i + 1];
-                    match next {
-                        b'$' => {
-                            literal.push('$');
-                            i += 2;
-                        }
-                        b'\\' => {
-                            literal.push('\\');
-                            i += 2;
-                        }
-                        b'n' => {
-                            literal.push('\n');
-                            i += 2;
-                        }
-                        b'r' => {
-                            literal.push('\r');
-                            i += 2;
-                        }
-                        b't' => {
-                            literal.push('\t');
-                            i += 2;
-                        }
-                        b'v' => {
-                            literal.push('\x0B');
-                            i += 2;
-                        }
-                        b'e' => {
-                            literal.push('\x1B');
-                            i += 2;
-                        }
-                        b'f' => {
-                            literal.push('\x0C');
-                            i += 2;
-                        }
-                        b'"' => {
-                            literal.push('"');
-                            i += 2;
-                        }
-                        b'x' | b'X' => {
-                            i += 2;
-                            let start = i;
-                            while i < len && i - start < 2 && bytes[i].is_ascii_hexdigit() {
-                                i += 1;
-                            }
-                            if i > start {
-                                if let Ok(val) = u8::from_str_radix(&raw_body[start..i], 16) {
-                                    literal.push(val as char);
-                                }
-                            } else {
-                                literal.push('\\');
-                                literal.push('x');
-                            }
-                        }
-                        b'u' => {
-                            // Unicode escape: \u{HHHH} — PHP 7.0+
-                            let escape_start = i;
-                            i += 2;
-                            if i < len && bytes[i] == b'{' {
-                                i += 1; // skip {
-                                let start = i;
-                                while i < len && bytes[i].is_ascii_hexdigit() {
-                                    i += 1;
-                                }
-                                if i < len && bytes[i] == b'}' {
-                                    let hex = &raw_body[start..i];
-                                    i += 1; // skip }
-                                    let span = Span::new(
-                                        body_offset + escape_start as u32,
-                                        body_offset + i as u32,
-                                    );
-                                    if hex.is_empty() {
-                                        errors.push(ParseError::Forbidden {
-                                            message: "Invalid UTF-8 codepoint escape sequence: empty code point".into(),
-                                            span,
-                                        });
-                                    } else if let Ok(codepoint) = u32::from_str_radix(hex, 16) {
-                                        if let Some(c) = char::from_u32(codepoint) {
-                                            literal.push(c);
-                                        } else {
-                                            errors.push(ParseError::Forbidden {
-                                                message: "Invalid UTF-8 codepoint escape sequence: Codepoint too large".into(),
-                                                span,
-                                            });
-                                        }
-                                    }
-                                } else {
-                                    // Invalid hex content (e.g. \u{ZZZZ}) — scan to closing } for recovery
-                                    while i < len && bytes[i] != b'}' && bytes[i] != b'\n' {
-                                        i += 1;
-                                    }
-                                    if i < len && bytes[i] == b'}' {
-                                        i += 1; // skip }
-                                    }
-                                    errors.push(ParseError::Forbidden {
-                                        message: "Invalid UTF-8 codepoint escape sequence".into(),
-                                        span: Span::new(
-                                            body_offset + escape_start as u32,
-                                            body_offset + i as u32,
-                                        ),
-                                    });
-                                }
-                            } else {
-                                literal.push('\\');
-                                literal.push('u');
-                            }
-                        }
-                        b'0'..=b'7' => {
-                            let start = i + 1;
-                            i += 1;
-                            while i < len && i - start < 3 && bytes[i] >= b'0' && bytes[i] <= b'7' {
-                                i += 1;
-                            }
-                            if let Ok(val) = u8::from_str_radix(&raw_body[start..i], 8) {
-                                literal.push(val as char);
-                            }
-                        }
-                        _ => {
-                            literal.push('\\');
-                            literal.push(next as char);
-                            i += 2;
-                        }
-                    }
-                } else {
-                    literal.push('\\');
-                    i += 1;
-                }
+                i = decode_escape_at(bytes, raw_body, i, &mut literal, errors, body_offset, false);
             }
             b'\n' => {
                 // Preserve the newline in the literal, then skip the indent on the next line
@@ -807,6 +546,150 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
 
     parts
 }
+/// Decode one backslash escape at `bytes[i]` (`bytes[i]` must be `b'\\'`).
+/// Returns the new position after the escape.
+/// `text` is the `&str` whose bytes are `bytes`.
+/// `stop_at_dquote`: when true, the malformed `\u{…}` recovery also stops at `"`.
+fn decode_escape_at(
+    bytes: &[u8],
+    text: &str,
+    i: usize,
+    out: &mut String,
+    errors: &mut Vec<ParseError>,
+    span_base: u32,
+    stop_at_dquote: bool,
+) -> usize {
+    let len = bytes.len();
+    if i + 1 >= len {
+        out.push('\\');
+        return i + 1;
+    }
+    let next = bytes[i + 1];
+    match next {
+        b'$' => {
+            out.push('$');
+            i + 2
+        }
+        b'\\' => {
+            out.push('\\');
+            i + 2
+        }
+        b'n' => {
+            out.push('\n');
+            i + 2
+        }
+        b'r' => {
+            out.push('\r');
+            i + 2
+        }
+        b't' => {
+            out.push('\t');
+            i + 2
+        }
+        b'v' => {
+            out.push('\x0B');
+            i + 2
+        }
+        b'e' => {
+            out.push('\x1B');
+            i + 2
+        }
+        b'f' => {
+            out.push('\x0C');
+            i + 2
+        }
+        b'"' => {
+            out.push('"');
+            i + 2
+        }
+        b'x' | b'X' => {
+            let mut j = i + 2;
+            let start = j;
+            while j < len && j - start < 2 && bytes[j].is_ascii_hexdigit() {
+                j += 1;
+            }
+            if j > start {
+                if let Ok(val) = u8::from_str_radix(&text[start..j], 16) {
+                    out.push(val as char);
+                }
+            } else {
+                out.push('\\');
+                out.push('x');
+            }
+            j
+        }
+        b'u' => {
+            let escape_start = i;
+            let mut j = i + 2;
+            if j < len && bytes[j] == b'{' {
+                j += 1;
+                let start = j;
+                while j < len && bytes[j].is_ascii_hexdigit() {
+                    j += 1;
+                }
+                if j < len && bytes[j] == b'}' {
+                    let hex = &text[start..j];
+                    j += 1;
+                    let span = Span::new(span_base + escape_start as u32, span_base + j as u32);
+                    if hex.is_empty() {
+                        errors.push(ParseError::Forbidden {
+                            message: "Invalid UTF-8 codepoint escape sequence: empty code point"
+                                .into(),
+                            span,
+                        });
+                    } else if let Ok(codepoint) = u32::from_str_radix(hex, 16) {
+                        if let Some(c) = char::from_u32(codepoint) {
+                            out.push(c);
+                        } else {
+                            errors.push(ParseError::Forbidden {
+                                message:
+                                    "Invalid UTF-8 codepoint escape sequence: Codepoint too large"
+                                        .into(),
+                                span,
+                            });
+                        }
+                    }
+                } else {
+                    while j < len
+                        && bytes[j] != b'}'
+                        && bytes[j] != b'\n'
+                        && !(stop_at_dquote && bytes[j] == b'"')
+                    {
+                        j += 1;
+                    }
+                    if j < len && bytes[j] == b'}' {
+                        j += 1;
+                    }
+                    errors.push(ParseError::Forbidden {
+                        message: "Invalid UTF-8 codepoint escape sequence".into(),
+                        span: Span::new(span_base + escape_start as u32, span_base + j as u32),
+                    });
+                }
+            } else {
+                out.push('\\');
+                out.push('u');
+            }
+            j
+        }
+        b'0'..=b'7' => {
+            let start = i + 1;
+            let mut j = i + 1;
+            while j < len && j - start < 3 && bytes[j] >= b'0' && bytes[j] <= b'7' {
+                j += 1;
+            }
+            if let Ok(val) = u8::from_str_radix(&text[start..j], 8) {
+                out.push(val as char);
+            }
+            j
+        }
+        _ => {
+            out.push('\\');
+            out.push(next as char);
+            i + 2
+        }
+    }
+}
+
 /// Check if a string inner content contains interpolation (unescaped $)
 pub fn has_interpolation(inner: &str) -> bool {
     let bytes = inner.as_bytes();
