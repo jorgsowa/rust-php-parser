@@ -1,5 +1,5 @@
 use php_ast::*;
-use php_lexer::{Lexer, LexerErrorKind, Token, TokenKind};
+use php_lexer::{Lexer, LexerError, LexerErrorKind, Token, TokenKind};
 
 use crate::diagnostics::{ParseError, ERROR_PLACEHOLDER};
 use crate::expr;
@@ -9,6 +9,30 @@ use crate::version::PhpVersion;
 
 const MAX_ERRORS: usize = 100;
 pub(crate) const MAX_DEPTH: u32 = 50;
+
+fn comment_kind(kind: TokenKind) -> CommentKind {
+    match kind {
+        TokenKind::LineComment => CommentKind::Line,
+        TokenKind::HashComment => CommentKind::Hash,
+        TokenKind::BlockComment => CommentKind::Block,
+        TokenKind::DocComment => CommentKind::Doc,
+        _ => unreachable!(
+            "is_comment() returned true for non-comment token {:?}",
+            kind
+        ),
+    }
+}
+
+fn lex_error_to_parse_error(e: LexerError) -> ParseError {
+    if e.kind == LexerErrorKind::UnterminatedString {
+        ParseError::UnterminatedString { span: e.span }
+    } else {
+        ParseError::Forbidden {
+            message: e.message.into(),
+            span: e.span,
+        }
+    }
+}
 
 pub struct Parser<'arena, 'src> {
     current: Token,
@@ -59,18 +83,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         for tok in all_tokens {
             if tok.kind.is_comment() {
                 let text = &source[tok.span.start as usize..tok.span.end as usize];
-                let kind = match tok.kind {
-                    TokenKind::LineComment => CommentKind::Line,
-                    TokenKind::HashComment => CommentKind::Hash,
-                    TokenKind::BlockComment => CommentKind::Block,
-                    TokenKind::DocComment => CommentKind::Doc,
-                    _ => unreachable!(
-                        "is_comment() returned true for non-comment token {:?}",
-                        tok.kind
-                    ),
-                };
                 comments.push(Comment {
-                    kind,
+                    kind: comment_kind(tok.kind),
                     text,
                     span: tok.span,
                 });
@@ -82,18 +96,10 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         // Seed current with the first token and pos with 1
         let current = tokens.first().copied().unwrap_or_else(|| Token::eof(0));
 
-        // Convert lexer errors to parser errors
-        let mut errors: Vec<ParseError> = Vec::new();
-        for e in lex_errors {
-            errors.push(if e.kind == LexerErrorKind::UnterminatedString {
-                ParseError::UnterminatedString { span: e.span }
-            } else {
-                ParseError::Forbidden {
-                    message: e.message.into(),
-                    span: e.span,
-                }
-            });
-        }
+        let mut errors: Vec<ParseError> = lex_errors
+            .into_iter()
+            .map(lex_error_to_parse_error)
+            .collect();
         errors.truncate(MAX_ERRORS);
 
         Self {
@@ -130,25 +136,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         // Lex all tokens from this position, separating comments from regular tokens
         let mut tokens = Vec::new();
         let mut comments: Vec<Comment<'src>> = Vec::new();
-        let mut errors: Vec<ParseError> = Vec::new();
 
         loop {
             let tok = lexer.next_token();
             let is_eof = tok.kind == TokenKind::Eof;
             if tok.kind.is_comment() {
                 let text = &source[tok.span.start as usize..tok.span.end as usize];
-                let kind = match tok.kind {
-                    TokenKind::LineComment => CommentKind::Line,
-                    TokenKind::HashComment => CommentKind::Hash,
-                    TokenKind::BlockComment => CommentKind::Block,
-                    TokenKind::DocComment => CommentKind::Doc,
-                    _ => unreachable!(
-                        "is_comment() returned true for non-comment token {:?}",
-                        tok.kind
-                    ),
-                };
                 comments.push(Comment {
-                    kind,
+                    kind: comment_kind(tok.kind),
                     text,
                     span: tok.span,
                 });
@@ -164,17 +159,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         let eof_span = tokens.last().unwrap().span;
         tokens.push(Token::new(TokenKind::Eof, eof_span));
 
-        // Collect all lexer errors
-        for e in lexer.errors {
-            errors.push(if e.kind == LexerErrorKind::UnterminatedString {
-                ParseError::UnterminatedString { span: e.span }
-            } else {
-                ParseError::Forbidden {
-                    message: e.message.into(),
-                    span: e.span,
-                }
-            });
-        }
+        let mut errors: Vec<ParseError> = lexer
+            .errors
+            .into_iter()
+            .map(lex_error_to_parse_error)
+            .collect();
         errors.truncate(MAX_ERRORS);
 
         // Seed current with the first token
