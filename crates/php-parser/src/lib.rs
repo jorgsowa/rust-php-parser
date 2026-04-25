@@ -49,7 +49,6 @@
 pub mod diagnostics;
 pub(crate) mod expr;
 pub mod instrument;
-pub(crate) mod interpolation;
 pub(crate) mod parser;
 pub mod phpdoc;
 pub(crate) mod precedence;
