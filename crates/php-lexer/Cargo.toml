@@ -14,3 +14,6 @@ readme = "../../README.md"
 [dependencies]
 php-ast = { workspace = true }
 memchr = { workspace = true }
+
+[dev-dependencies]
+php-ast = { workspace = true }
