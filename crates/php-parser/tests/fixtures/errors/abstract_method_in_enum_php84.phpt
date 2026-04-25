@@ -1,4 +1,5 @@
 ===config===
+min_php=8.4
 max_php=8.4
 ===source===
 <?php enum Status { abstract public function label(): string; }
