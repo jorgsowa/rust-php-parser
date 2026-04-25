@@ -317,7 +317,7 @@ B"$A";
                       },
                       "index": {
                         "kind": {
-                          "Int": 0
+                          "String": "000"
                         },
                         "span": {
                           "start": 83,

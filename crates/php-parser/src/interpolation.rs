@@ -724,6 +724,10 @@ fn is_var_char(b: u8) -> bool {
 /// Parse an array index from simple string interpolation: `$arr[expr]`.
 /// Handles integers (including negative like `-1`), `$variable` references,
 /// and bare string keys (e.g. `$arr[key]`).
+///
+/// PHP's integer-index rule is stricter than Rust's `parse::<i64>()`:
+/// only `"0"` or `[1-9][0-9]*` are valid positive indices, and `-[1-9][0-9]*`
+/// for negative. Forms like `"-0"`, `"00"`, `"07"` are string keys.
 fn parse_simple_index<'arena, 'src>(
     arena: &'arena bumpalo::Bump,
     source: &'src str,
@@ -732,18 +736,21 @@ fn parse_simple_index<'arena, 'src>(
     idx_end: u32,
 ) -> Expr<'arena, 'src> {
     let span = Span::new(idx_offset, idx_end);
-    // Integer index, including negative (e.g. -1)
-    if let Ok(num) = idx_str.parse::<i64>() {
-        return Expr {
-            kind: ExprKind::Int(num),
-            span,
-        };
-    }
-    // Negative integer written as `-N`
+    // Negative integer: must be `-` followed by [1-9][0-9]* (no leading zero, no "-0")
     if let Some(digits) = idx_str.strip_prefix('-') {
-        if let Ok(num) = digits.parse::<i64>() {
+        if is_php_interp_nonzero_int(digits) {
+            if let Ok(num) = digits.parse::<i64>() {
+                return Expr {
+                    kind: ExprKind::Int(-num),
+                    span,
+                };
+            }
+        }
+    // Positive integer: "0" or [1-9][0-9]*
+    } else if is_php_interp_int(idx_str) {
+        if let Ok(num) = idx_str.parse::<i64>() {
             return Expr {
-                kind: ExprKind::Int(-num),
+                kind: ExprKind::Int(num),
                 span,
             };
         }
@@ -757,12 +764,35 @@ fn parse_simple_index<'arena, 'src>(
             span,
         };
     }
-    // Bare string key (e.g. $arr[key])
+    // Bare string key (e.g. $arr[key], $arr[-0], $arr[00])
     let key_start = idx_offset as usize;
     let key_end = idx_end as usize;
     Expr {
         kind: ExprKind::String(arena.alloc_str(&source[key_start..key_end])),
         span,
+    }
+}
+
+/// Returns true if `s` is a valid PHP simple-interpolation positive integer: `"0"` or `[1-9][0-9]*`.
+/// Rejects leading-zero forms like `"00"` or `"07"` which PHP treats as string keys.
+fn is_php_interp_int(s: &str) -> bool {
+    match s.as_bytes() {
+        [b'0'] => true,
+        [first, rest @ ..] if *first >= b'1' && *first <= b'9' => {
+            rest.iter().all(|b| b.is_ascii_digit())
+        }
+        _ => false,
+    }
+}
+
+/// Returns true if `s` is a valid PHP simple-interpolation nonzero integer: `[1-9][0-9]*`.
+/// Used for the digits after `-`; `-0` is a string key in PHP, not an integer.
+fn is_php_interp_nonzero_int(s: &str) -> bool {
+    match s.as_bytes() {
+        [first, rest @ ..] if *first >= b'1' && *first <= b'9' => {
+            rest.iter().all(|b| b.is_ascii_digit())
+        }
+        _ => false,
     }
 }
 
