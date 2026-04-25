@@ -98,8 +98,23 @@ fn parse_assign_continuation<'arena, 'src>(
     lhs: Expr<'arena, 'src>,
 ) -> Expr<'arena, 'src> {
     debug_assert!(parser.current_kind().is_assignment_op());
-    if !is_valid_assignment_target(&lhs.kind) {
-        let span = parser.current_span();
+    let span = parser.current_span();
+    // PHP rejects pre/post-increment/decrement as an assignment target at parse time.
+    if matches!(
+        lhs.kind,
+        ExprKind::UnaryPrefix(UnaryPrefixExpr {
+            op: UnaryPrefixOp::PreIncrement | UnaryPrefixOp::PreDecrement,
+            ..
+        }) | ExprKind::UnaryPostfix(UnaryPostfixExpr {
+            op: UnaryPostfixOp::PostIncrement | UnaryPostfixOp::PostDecrement,
+            ..
+        })
+    ) {
+        parser.error(ParseError::Forbidden {
+            message: "Cannot use increment/decrement as an assignment target.".into(),
+            span,
+        });
+    } else if !is_valid_assignment_target(&lhs.kind) {
         parser.error(ParseError::Forbidden {
             message: "Cannot use expression as assignment target.".into(),
             span,
@@ -340,79 +355,45 @@ pub fn parse_expr_bp<'arena, 'src>(
                 true
             }
 
+            // Null coalescing operator (produces NullCoalesce node, not Binary)
+            TokenKind::QuestionQuestion => {
+                if NULL_COALESCE_LEFT_BP < min_bp {
+                    break;
+                }
+                parser.advance();
+                // PHP grammar quirk: the right operand of ?? can contain assignment but not
+                // unparenthesized ternary.  Use TERNARY_BP + 1 to block ternary, then
+                // explicitly consume any following assignment operator.
+                // e.g. `$a ?? $b = $c`  →  `$a ?? ($b = $c)`
+                // e.g. `$a ?? $b ? $c : $d`  →  `($a ?? $b) ? $c : $d`
+                let mut rhs = parse_expr_bp(parser, TERNARY_BP + 1);
+                if parser.current_kind().is_assignment_op() {
+                    rhs = parse_assign_continuation(parser, rhs);
+                }
+                let span = lhs.span.merge(rhs.span);
+                lhs = Expr {
+                    kind: ExprKind::NullCoalesce(NullCoalesceExpr {
+                        left: parser.alloc(lhs),
+                        right: parser.alloc(rhs),
+                    }),
+                    span,
+                };
+                true
+            }
+
+            // Assignment operators (right-associative)
+            _ if kind.is_assignment_op() => {
+                if ASSIGNMENT_BP < min_bp {
+                    break;
+                }
+                lhs = parse_assign_continuation(parser, lhs);
+                true
+            }
+
             _ => false,
         };
 
         if should_continue {
-            continue;
-        }
-
-        // Assignment operators (right-associative, special handling)
-        if kind.is_assignment_op() {
-            if ASSIGNMENT_BP < min_bp {
-                break;
-            }
-            // PHP rejects pre/post-increment/decrement as an assignment target at parse time.
-            // e.g. `++$x = 1` and `$x++ = 1` → syntax error (same as PHP).
-            if matches!(
-                lhs.kind,
-                ExprKind::UnaryPrefix(UnaryPrefixExpr {
-                    op: UnaryPrefixOp::PreIncrement | UnaryPrefixOp::PreDecrement,
-                    ..
-                }) | ExprKind::UnaryPostfix(UnaryPostfixExpr {
-                    op: UnaryPostfixOp::PostIncrement | UnaryPostfixOp::PostDecrement,
-                    ..
-                })
-            ) {
-                let span = parser.current_span();
-                parser.error(ParseError::Forbidden {
-                    message: "Cannot use increment/decrement as an assignment target.".into(),
-                    span,
-                });
-            } else if !is_valid_assignment_target(&lhs.kind) {
-                let span = parser.current_span();
-                parser.error(ParseError::Forbidden {
-                    message: "Cannot use expression as assignment target.".into(),
-                    span,
-                });
-            }
-            let op_token = parser.advance();
-
-            let by_ref =
-                op_token.kind == TokenKind::Equals && parser.eat(TokenKind::Ampersand).is_some();
-
-            let op = match op_token.kind {
-                TokenKind::Equals => AssignOp::Assign,
-                TokenKind::PlusEquals => AssignOp::Plus,
-                TokenKind::MinusEquals => AssignOp::Minus,
-                TokenKind::StarEquals => AssignOp::Mul,
-                TokenKind::SlashEquals => AssignOp::Div,
-                TokenKind::PercentEquals => AssignOp::Mod,
-                TokenKind::StarStarEquals => AssignOp::Pow,
-                TokenKind::DotEquals => AssignOp::Concat,
-                TokenKind::AmpersandEquals => AssignOp::BitwiseAnd,
-                TokenKind::PipeEquals => AssignOp::BitwiseOr,
-                TokenKind::CaretEquals => AssignOp::BitwiseXor,
-                TokenKind::ShiftLeftEquals => AssignOp::ShiftLeft,
-                TokenKind::ShiftRightEquals => AssignOp::ShiftRight,
-                TokenKind::CoalesceEquals => AssignOp::Coalesce,
-                _ => unreachable!(
-                    "is_assignment_op() guarantees one of the listed variants, got {:?}",
-                    kind
-                ),
-            };
-            // Right-associative: parse RHS with same bp
-            let rhs = parse_expr_bp(parser, ASSIGNMENT_BP);
-            let span = lhs.span.merge(rhs.span);
-            lhs = Expr {
-                kind: ExprKind::Assign(AssignExpr {
-                    target: parser.alloc(lhs),
-                    op,
-                    value: parser.alloc(rhs),
-                    by_ref,
-                }),
-                span,
-            };
             continue;
         }
 
@@ -680,32 +661,6 @@ pub fn parse_expr_bp<'arena, 'src>(
                 break;
             }
             lhs = parse_function_call(parser, lhs);
-            continue;
-        }
-
-        // Null coalescing operator (produces NullCoalesce node, not Binary)
-        if kind == TokenKind::QuestionQuestion {
-            if NULL_COALESCE_LEFT_BP < min_bp {
-                break;
-            }
-            parser.advance();
-            // PHP grammar quirk: the right operand of ?? can contain assignment but not
-            // unparenthesized ternary.  Use TERNARY_BP + 1 to block ternary, then
-            // explicitly consume any following assignment operator.
-            // e.g. `$a ?? $b = $c`  →  `$a ?? ($b = $c)`
-            // e.g. `$a ?? $b ? $c : $d`  →  `($a ?? $b) ? $c : $d`
-            let mut rhs = parse_expr_bp(parser, TERNARY_BP + 1);
-            if parser.current_kind().is_assignment_op() {
-                rhs = parse_assign_continuation(parser, rhs);
-            }
-            let span = lhs.span.merge(rhs.span);
-            lhs = Expr {
-                kind: ExprKind::NullCoalesce(NullCoalesceExpr {
-                    left: parser.alloc(lhs),
-                    right: parser.alloc(rhs),
-                }),
-                span,
-            };
             continue;
         }
 
