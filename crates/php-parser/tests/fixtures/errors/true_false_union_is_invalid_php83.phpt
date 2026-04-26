@@ -1,4 +1,5 @@
 ===config===
+min_php=8.2
 max_php=8.3
 ===source===
 <?php function f(): true|false {}

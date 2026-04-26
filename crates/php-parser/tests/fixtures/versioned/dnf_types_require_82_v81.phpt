@@ -1,5 +1,6 @@
 ===config===
 min_php=8.1
+max_php=8.1
 ===source===
 <?php function f((A&B)|C $x) {}
 ===errors===
@@ -119,3 +120,5 @@ min_php=8.1
     "end": 31
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 1

@@ -1,3 +1,5 @@
+===config===
+min_php=8.2
 ===source===
 <?php
 function f((A&B)|C|null $x): (X&Y)|(P&Q)|null {

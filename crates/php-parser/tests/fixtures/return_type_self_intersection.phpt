@@ -1,3 +1,5 @@
+===config===
+min_php=8.2
 ===source===
 <?php function foo(): (self&Stringable) {}
 ===ast===

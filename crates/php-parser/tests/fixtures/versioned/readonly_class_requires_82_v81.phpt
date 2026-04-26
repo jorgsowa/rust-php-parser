@@ -1,5 +1,6 @@
 ===config===
 min_php=8.1
+max_php=8.1
 ===source===
 <?php readonly class Foo { public string $bar; }
 ===errors===
@@ -69,3 +70,5 @@ min_php=8.1
     "end": 48
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "readonly", expecting end of file in Standard input code on line 1

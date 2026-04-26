@@ -1,20 +1,20 @@
 ===config===
 min_php=8.2
+max_php=8.2
 ===source===
-<?php
-
-final readonly class A {
-}
+<?php abstract readonly class Foo {}
+===errors===
+'abstract readonly class' requires PHP 8.4 or higher (targeting PHP 8.2)
 ===ast===
 {
   "stmts": [
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": "Foo",
           "modifiers": {
-            "is_abstract": false,
-            "is_final": true,
+            "is_abstract": true,
+            "is_final": false,
             "is_readonly": true
           },
           "extends": null,
@@ -24,13 +24,13 @@ final readonly class A {
         }
       },
       "span": {
-        "start": 22,
-        "end": 33
+        "start": 24,
+        "end": 36
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 33
+    "end": 36
   }
 }

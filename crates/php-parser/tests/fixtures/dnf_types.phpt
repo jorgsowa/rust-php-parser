@@ -1,3 +1,5 @@
+===config===
+min_php=8.2
 ===source===
 <?php
 function foo((A&B)|C $x): (X&Y)|Z {
