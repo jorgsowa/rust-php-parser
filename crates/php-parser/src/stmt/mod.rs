@@ -2008,8 +2008,9 @@ fn parse_const_with_attrs<'arena, 'src>(
     parser.advance(); // consume 'const'
 
     let mut items = parser.alloc_vec();
-    // Attributes apply to the first item only.
+    // Attributes and doc comment apply to the first item only.
     let mut pending_attrs = Some(attributes);
+    let mut pending_doc = parser.take_doc_comment(start);
     loop {
         let item_start = parser.start_span();
         let const_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
@@ -2026,11 +2027,13 @@ fn parse_const_with_attrs<'arena, 'src>(
         let value = expr::parse_expr(parser);
         let item_span = Span::new(item_start, value.span.end);
         let item_attrs = pending_attrs.take().unwrap_or_else(|| parser.alloc_vec());
+        let doc_comment = pending_doc.take();
         items.push(ConstItem {
             name: const_name,
             value,
             attributes: item_attrs,
             span: item_span,
+            doc_comment,
         });
 
         if parser.eat(TokenKind::Comma).is_none() {

@@ -877,6 +877,8 @@ pub struct ConstItem<'arena, 'src> {
     pub value: Expr<'arena, 'src>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     pub span: Span,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 #[derive(Debug, Serialize)]
