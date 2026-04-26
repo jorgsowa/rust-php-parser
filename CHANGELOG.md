@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.4] - 2026-04-26
+
+### Added
+
+- `is_final: bool` field on `ClassConstDecl` — the `final` modifier on class and enum constants (PHP 8.1+) was previously accepted by the modifier-parsing loop but dropped before reaching the AST. Now captured in both class and enum const parsers and emitted by the printer (`php-ast`, `php-rs-parser`, `php-printer`).
+
+### Fixed
+
+- Printer wraps intersection types nested inside union types (DNF) in parentheses, e.g. `(A&B)|null`; previously it emitted invalid PHP (`php-printer`).
+- Printer placed `new class(args) extends Base { body }` constructor arguments after the body; arguments are now emitted between `class` and the `extends`/`implements` clauses (`php-printer`).
+- Printer routed heredoc literal segments through the double-quoted-string escaper, which collapsed multi-line heredocs onto one line by converting real newlines to `\n`. A dedicated heredoc escaper now only escapes `\` and `$` (`php-printer`).
+
+### Changed
+
+- Internal: `crates/php-ast/src/ast.rs` (1,498 lines) split into an `ast/` module directory across `names`, `exprs`, `stmts`, `decls`, `misc`. No public API changes (`php-ast`, #246).
+- Internal: `crates/php-printer/src/printer.rs` (1,662 lines) split into a `printer/` module directory across `stmts`, `decls`, `exprs`, `types`, `helpers`. No public API changes (`php-printer`, #247).
+
+### Tests
+
+- 30 new printer fixtures covering heredoc/nowdoc, shell_exec, declare, trait-use adaptations, property hooks (PHP 8.4), asymmetric visibility, DNF types, pipe operator (PHP 8.5), `clone(..., [...])` (PHP 8.5), array destructuring, anonymous classes with constructor args, typed class constants, switch fallthrough, multi-use imports, and other previously-untested AST nodes (`php-printer`).
+
+---
+
 ## [0.9.3] - 2026-04-26
 
 ### Added
