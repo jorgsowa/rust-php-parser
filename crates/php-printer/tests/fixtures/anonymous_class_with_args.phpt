@@ -3,10 +3,10 @@
     public function f() { return 1; }
 };
 ===print===
-$obj = new class extends Base implements I1, I2
+$obj = new class('a', 1) extends Base implements I1, I2
 {
     public function f()
     {
         return 1;
     }
-}('a', 1);
+};

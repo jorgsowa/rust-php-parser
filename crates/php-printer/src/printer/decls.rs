@@ -40,6 +40,38 @@ impl Printer {
         self.print_class_body(&class.members);
     }
 
+    pub(crate) fn print_anonymous_class(&mut self, class: &ClassDecl, args: &[Arg]) {
+        if class.modifiers.is_abstract {
+            self.w("abstract ");
+        }
+        if class.modifiers.is_final {
+            self.w("final ");
+        }
+        if class.modifiers.is_readonly {
+            self.w("readonly ");
+        }
+        self.w("class");
+        if !args.is_empty() {
+            self.w("(");
+            self.print_args(args);
+            self.w(")");
+        }
+        if let Some(extends) = &class.extends {
+            self.w(" extends ");
+            self.print_name(extends);
+        }
+        if !class.implements.is_empty() {
+            self.w(" implements ");
+            for (i, name) in class.implements.iter().enumerate() {
+                if i > 0 {
+                    self.w(", ");
+                }
+                self.print_name(name);
+            }
+        }
+        self.print_class_body(&class.members);
+    }
+
     pub(crate) fn print_class_header(&mut self, class: &ClassDecl) {
         if class.modifiers.is_abstract {
             self.w("abstract ");

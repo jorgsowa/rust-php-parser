@@ -33,6 +33,23 @@ pub(crate) fn escape_single_quoted(s: &str) -> String {
     out
 }
 
+/// Escape a literal segment of a heredoc body.
+///
+/// Heredocs preserve real newlines, and `"` needs no escape, but `\` and `$`
+/// must still be escaped to prevent unintended escape sequences and variable
+/// interpolation.
+pub(crate) fn escape_heredoc(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    for ch in s.chars() {
+        match ch {
+            '\\' => out.push_str("\\\\"),
+            '$' => out.push_str("\\$"),
+            _ => out.push(ch),
+        }
+    }
+    out
+}
+
 pub(crate) fn escape_double_quoted(s: &str) -> String {
     let mut out = String::with_capacity(s.len());
     for ch in s.chars() {

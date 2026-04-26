@@ -5,5 +5,6 @@ world
 EOT;
 ===print===
 $x = <<<EOT
-hello $name\nworld
+hello $name
+world
 EOT;

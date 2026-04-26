@@ -55,7 +55,7 @@ impl Printer {
                 self.w("<<<");
                 self.w(label);
                 self.newline();
-                self.print_string_parts(parts);
+                self.print_heredoc_parts(parts);
                 self.newline();
                 self.w(label);
             }
@@ -212,11 +212,15 @@ impl Printer {
             }
             ExprKind::New(new_expr) => {
                 self.w("new ");
-                self.print_expr(new_expr.class, PREC_PRIMARY);
-                if !new_expr.args.is_empty() {
-                    self.w("(");
-                    self.print_args(&new_expr.args);
-                    self.w(")");
+                if let ExprKind::AnonymousClass(class) = &new_expr.class.kind {
+                    self.print_anonymous_class(class, &new_expr.args);
+                } else {
+                    self.print_expr(new_expr.class, PREC_PRIMARY);
+                    if !new_expr.args.is_empty() {
+                        self.w("(");
+                        self.print_args(&new_expr.args);
+                        self.w(")");
+                    }
                 }
             }
             ExprKind::PropertyAccess(access) => {
@@ -481,17 +485,30 @@ impl Printer {
         for part in parts.iter() {
             match part {
                 StringPart::Literal(s) => self.w(&escape_double_quoted(s)),
-                StringPart::Expr(expr) => match &expr.kind {
-                    ExprKind::Variable(name) => {
-                        self.w("$");
-                        self.w(name.as_str());
-                    }
-                    _ => {
-                        self.w("{");
-                        self.print_expr(expr, PREC_LOWEST);
-                        self.w("}");
-                    }
-                },
+                StringPart::Expr(expr) => self.print_string_part_expr(expr),
+            }
+        }
+    }
+
+    fn print_heredoc_parts(&mut self, parts: &[StringPart]) {
+        for part in parts.iter() {
+            match part {
+                StringPart::Literal(s) => self.w(&escape_heredoc(s)),
+                StringPart::Expr(expr) => self.print_string_part_expr(expr),
+            }
+        }
+    }
+
+    fn print_string_part_expr(&mut self, expr: &Expr) {
+        match &expr.kind {
+            ExprKind::Variable(name) => {
+                self.w("$");
+                self.w(name.as_str());
+            }
+            _ => {
+                self.w("{");
+                self.print_expr(expr, PREC_LOWEST);
+                self.w("}");
             }
         }
     }
