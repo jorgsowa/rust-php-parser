@@ -46,4 +46,4 @@ max_php=8.1
   }
 }
 ===php_error===
-PHP Fatal error:  false can not be used as a standalone type in Standard input code on line 1
+PHP Fatal error:  False can not be used as a standalone type in Standard input code on line 1
