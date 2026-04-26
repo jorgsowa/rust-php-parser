@@ -25,6 +25,7 @@ cannot use multiple visibility modifiers
                 "ClassConst": {
                   "name": "X",
                   "visibility": "Public",
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1

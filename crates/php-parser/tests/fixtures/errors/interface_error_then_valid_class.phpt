@@ -16,6 +16,7 @@ expected expression
                 "ClassConst": {
                   "name": "X",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": "Error",
                     "span": {

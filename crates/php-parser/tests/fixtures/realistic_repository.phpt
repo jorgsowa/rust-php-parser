@@ -1090,6 +1090,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                 "ClassConst": {
                   "name": "PER_PAGE",
                   "visibility": "Public",
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 25

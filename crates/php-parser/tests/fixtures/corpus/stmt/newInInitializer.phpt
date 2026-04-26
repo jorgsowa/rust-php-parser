@@ -160,6 +160,7 @@ class Bar {
                 "ClassConst": {
                   "name": "C",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "New": {

@@ -68,6 +68,7 @@ abstract class Complete {
                 "ClassConst": {
                   "name": "MAX",
                   "visibility": "Public",
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 100
@@ -90,6 +91,7 @@ abstract class Complete {
                 "ClassConst": {
                   "name": "MIN",
                   "visibility": "Protected",
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 0

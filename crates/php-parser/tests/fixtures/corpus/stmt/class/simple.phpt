@@ -64,6 +64,7 @@ class A extends B implements C, D {
                 "ClassConst": {
                   "name": "A",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "String": "B"
@@ -86,6 +87,7 @@ class A extends B implements C, D {
                 "ClassConst": {
                   "name": "C",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "String": "D"

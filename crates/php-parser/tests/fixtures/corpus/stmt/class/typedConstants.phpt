@@ -28,6 +28,7 @@ class Test {
                 "ClassConst": {
                   "name": "X",
                   "visibility": null,
+                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -68,6 +69,7 @@ class Test {
                 "ClassConst": {
                   "name": "Y",
                   "visibility": "Private",
+                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -108,6 +110,7 @@ class Test {
                 "ClassConst": {
                   "name": "Z",
                   "visibility": "Private",
+                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -148,6 +151,7 @@ class Test {
                 "ClassConst": {
                   "name": "ARRAY",
                   "visibility": null,
+                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -188,6 +192,7 @@ class Test {
                 "ClassConst": {
                   "name": "FOO",
                   "visibility": null,
+                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Union": [

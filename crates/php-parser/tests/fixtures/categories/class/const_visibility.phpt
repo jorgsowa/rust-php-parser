@@ -20,6 +20,7 @@
                 "ClassConst": {
                   "name": "A",
                   "visibility": "Public",
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1
@@ -42,6 +43,7 @@
                 "ClassConst": {
                   "name": "B",
                   "visibility": "Protected",
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 2
@@ -64,6 +66,7 @@
                 "ClassConst": {
                   "name": "C",
                   "visibility": "Private",
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 3
