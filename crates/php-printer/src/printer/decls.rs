@@ -261,6 +261,9 @@ impl Printer {
     fn print_class_const(&mut self, cc: &ClassConstDecl) {
         self.print_doc_comment(&cc.doc_comment);
         self.print_attributes(&cc.attributes);
+        if cc.is_final {
+            self.w("final ");
+        }
         if let Some(vis) = &cc.visibility {
             self.w(visibility_str(*vis));
             self.w(" ");

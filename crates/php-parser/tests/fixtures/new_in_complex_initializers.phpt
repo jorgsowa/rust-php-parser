@@ -215,6 +215,7 @@ class Config {
                 "ClassConst": {
                   "name": "DEFAULT",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "New": {

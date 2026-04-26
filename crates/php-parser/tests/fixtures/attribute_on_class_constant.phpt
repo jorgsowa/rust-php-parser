@@ -20,6 +20,7 @@
                 "ClassConst": {
                   "name": "FOO",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1

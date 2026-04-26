@@ -373,6 +373,7 @@ class A {
                                           "ClassConst": {
                                             "name": "A",
                                             "visibility": null,
+                                            "is_final": false,
                                             "value": {
                                               "kind": {
                                                 "String": "B"

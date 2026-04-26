@@ -22,6 +22,7 @@ min_php=8.3
                 "ClassConst": {
                   "name": "NAME",
                   "visibility": "Public",
+                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Named": {

@@ -199,6 +199,7 @@ $g = fn($x = new Foo()) => $x;
                 "ClassConst": {
                   "name": "C",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "New": {

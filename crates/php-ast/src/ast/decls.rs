@@ -141,6 +141,7 @@ pub struct MethodDecl<'arena, 'src> {
 pub struct ClassConstDecl<'arena, 'src> {
     pub name: &'src str,
     pub visibility: Option<Visibility>,
+    pub is_final: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_hint: Option<&'arena TypeHint<'arena, 'src>>,
     pub value: Expr<'arena, 'src>,

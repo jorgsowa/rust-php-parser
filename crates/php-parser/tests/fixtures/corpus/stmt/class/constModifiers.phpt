@@ -28,6 +28,7 @@ class Foo {
                 "ClassConst": {
                   "name": "A",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1
@@ -50,6 +51,7 @@ class Foo {
                 "ClassConst": {
                   "name": "B",
                   "visibility": "Public",
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 2
@@ -72,6 +74,7 @@ class Foo {
                 "ClassConst": {
                   "name": "C",
                   "visibility": "Protected",
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 3
@@ -94,6 +97,7 @@ class Foo {
                 "ClassConst": {
                   "name": "D",
                   "visibility": "Private",
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 4
@@ -116,6 +120,7 @@ class Foo {
                 "ClassConst": {
                   "name": "E",
                   "visibility": null,
+                  "is_final": true,
                   "value": {
                     "kind": {
                       "Int": 5

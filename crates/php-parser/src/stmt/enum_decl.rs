@@ -207,6 +207,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                 kind: EnumMemberKind::ClassConst(ClassConstDecl {
                     name: const_name,
                     visibility,
+                    is_final,
                     type_hint: const_type,
                     value,
                     attributes: member_attrs,

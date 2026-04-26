@@ -265,6 +265,7 @@ for ($a, ; $b, ; $c, );
                 "ClassConst": {
                   "name": "A",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 42

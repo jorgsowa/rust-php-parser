@@ -25,6 +25,7 @@ max_php=8.2
                 "ClassConst": {
                   "name": "NAME",
                   "visibility": "Public",
+                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Named": {

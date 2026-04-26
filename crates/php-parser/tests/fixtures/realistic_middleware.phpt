@@ -2152,6 +2152,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                 "ClassConst": {
                   "name": "MAX_REQUESTS",
                   "visibility": "Private",
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 100
@@ -2174,6 +2175,7 @@ class RateLimitMiddleware implements MiddlewareInterface
                 "ClassConst": {
                   "name": "WINDOW_SECONDS",
                   "visibility": "Private",
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 60

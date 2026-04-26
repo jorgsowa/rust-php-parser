@@ -103,6 +103,7 @@ enum Status: string implements Loggable, Serializable {
                 "ClassConst": {
                   "name": "DEFAULT",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "ClassConstAccess": {

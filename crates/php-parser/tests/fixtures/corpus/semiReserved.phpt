@@ -186,6 +186,7 @@ class Foo {
                 "ClassConst": {
                   "name": "TRAIT",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 3
@@ -208,6 +209,7 @@ class Foo {
                 "ClassConst": {
                   "name": "FINAL",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 4
@@ -230,6 +232,7 @@ class Foo {
                 "ClassConst": {
                   "name": "__CLASS__",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1
@@ -252,6 +255,7 @@ class Foo {
                 "ClassConst": {
                   "name": "__TRAIT__",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 2
@@ -274,6 +278,7 @@ class Foo {
                 "ClassConst": {
                   "name": "__FUNCTION__",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 3
@@ -296,6 +301,7 @@ class Foo {
                 "ClassConst": {
                   "name": "__METHOD__",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 4
@@ -318,6 +324,7 @@ class Foo {
                 "ClassConst": {
                   "name": "__LINE__",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 5
@@ -340,6 +347,7 @@ class Foo {
                 "ClassConst": {
                   "name": "__FILE__",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 6
@@ -362,6 +370,7 @@ class Foo {
                 "ClassConst": {
                   "name": "__DIR__",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 7
@@ -384,6 +393,7 @@ class Foo {
                 "ClassConst": {
                   "name": "__NAMESPACE__",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 8

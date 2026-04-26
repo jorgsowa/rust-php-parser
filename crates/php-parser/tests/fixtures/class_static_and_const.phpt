@@ -28,6 +28,7 @@ class Config {
                 "ClassConst": {
                   "name": "VERSION",
                   "visibility": "Public",
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "String": "1.0"
@@ -50,6 +51,7 @@ class Config {
                 "ClassConst": {
                   "name": "DEBUG",
                   "visibility": "Private",
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Bool": false

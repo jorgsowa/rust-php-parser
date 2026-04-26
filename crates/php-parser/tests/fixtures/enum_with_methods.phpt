@@ -136,6 +136,7 @@ enum Suit: string implements HasColor {
                 "ClassConst": {
                   "name": "COUNT",
                   "visibility": null,
+                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 4

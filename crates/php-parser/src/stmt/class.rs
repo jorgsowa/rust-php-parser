@@ -657,6 +657,7 @@ fn parse_class_const_member<'arena, 'src>(
             kind: ClassMemberKind::ClassConst(ClassConstDecl {
                 name: first_name,
                 visibility: mods.visibility,
+                is_final: mods.is_final,
                 type_hint: shared_type_hint,
                 value: first_value,
                 attributes: member_attrs,
@@ -669,6 +670,7 @@ fn parse_class_const_member<'arena, 'src>(
                 kind: ClassMemberKind::ClassConst(ClassConstDecl {
                     name: rest_name,
                     visibility: mods.visibility,
+                    is_final: mods.is_final,
                     type_hint: shared_type_hint,
                     value: rest_value,
                     attributes: parser.alloc_vec(),
