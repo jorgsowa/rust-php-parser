@@ -294,12 +294,15 @@ impl Printer {
             StmtKind::Namespace(ns) => self.print_namespace(ns),
             StmtKind::Use(use_decl) => self.print_use(use_decl),
             StmtKind::Const(items) => {
+                if let Some(first) = items.first() {
+                    self.print_doc_comment(&first.doc_comment);
+                    self.print_attributes(&first.attributes);
+                }
                 self.w("const ");
                 for (i, item) in items.iter().enumerate() {
                     if i > 0 {
                         self.w(", ");
                     }
-                    self.print_attributes(&item.attributes);
                     self.w(item.name);
                     self.w(" = ");
                     self.print_expr(&item.value, PREC_LOWEST);
