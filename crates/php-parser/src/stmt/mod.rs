@@ -14,6 +14,14 @@ mod trait_use;
 pub use class::{parse_class_members, parse_name_list};
 
 /// Parse a single statement.
+///
+/// # Stack depth
+///
+/// This is a recursive-descent parser: every nested block, `if`/`while`/`for` body, and similar
+/// construct recurses through `parse_stmt`. Rust does not grow the stack automatically, so callers
+/// running the parser on a thread with a very small stack (e.g. a custom rayon pool) and
+/// pathologically deep input may observe a stack overflow. Use
+/// [`std::thread::Builder::stack_size`] to set a larger stack when needed.
 pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     instrument::record_parse_stmt();
 
