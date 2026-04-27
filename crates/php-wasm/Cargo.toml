@@ -1,0 +1,21 @@
+[package]
+name = "php-wasm"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "WebAssembly bindings for the PHP parser and printer"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+php-rs-parser = { workspace = true }
+php-printer = { workspace = true }
+bumpalo = { workspace = true }
+wasm-bindgen = "0.2"
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde-wasm-bindgen = "0.6"
