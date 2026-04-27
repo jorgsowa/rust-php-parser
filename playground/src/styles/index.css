@@ -298,6 +298,84 @@ body::after {
   overflow-y: auto;
 }
 
+/* Panel header actions (right-aligned button group) */
+.panel-header-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+}
+
+/* Wrap / Unwrap all buttons */
+.jt-btn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-3);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s, background 0.12s;
+}
+
+.jt-btn:hover {
+  border-color: var(--accent-muted);
+  color: var(--text);
+}
+
+.jt-btn--active {
+  border-color: rgba(232, 148, 58, .4);
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+/* JSON tree colours */
+.jt-root { white-space: normal; }
+.jt-root > div { white-space: pre; }
+
+.jt-key   { color: var(--text-2); }
+.jt-punct { color: var(--text-3); }
+.jt-str   { color: var(--ok); }
+.jt-num   { color: var(--text); }
+.jt-kw    { color: var(--accent); }
+.jt-null  { color: var(--text-3); }
+
+/* Collapsible tree node toggle (all compound nodes) */
+.jt-toggle {
+  cursor: pointer;
+  color: var(--text-2);
+  user-select: none;
+  transition: color 0.1s;
+}
+
+.jt-toggle:hover { color: var(--accent); }
+
+.jt-toggle--open { color: var(--text-3); }
+.jt-toggle--open:hover { color: var(--accent); }
+
+/* Span-specific collapsed style */
+.jt-span {
+  color: var(--accent);
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px dashed rgba(232, 148, 58, .45);
+  transition: color 0.1s, border-color 0.1s;
+}
+
+.jt-span:hover {
+  color: var(--text);
+  border-bottom-color: rgba(240, 230, 216, .45);
+}
+
+.jt-span--on {
+  color: var(--accent);
+  border-bottom-style: solid;
+}
+
 /* Formatted / AST code output */
 .out-code {
   font-family: var(--font-mono);
