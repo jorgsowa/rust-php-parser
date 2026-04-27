@@ -2,6 +2,8 @@
 
 A fast, fault-tolerant PHP parser written in Rust. Produces a full typed AST with source spans, recovers from syntax errors, and covers PHP 7.4–8.5 syntax.
 
+**[Try the interactive playground →](https://jorgsowa.github.io/rust-php-parser/)**
+
 ## Quick Start
 
 ```rust

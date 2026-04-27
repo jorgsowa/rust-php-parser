@@ -160,7 +160,7 @@ export default function App() {
         {parserVersion && (
           <a
             className="statusbar-item statusbar-link"
-            href={`https://github.com/jorgsowa/rust-php-parser/releases/tag/${parserVersion}`}
+            href={`https://github.com/jorgsowa/rust-php-parser/releases/tag/v${parserVersion}`}
             target="_blank"
             rel="noreferrer"
             title="Release notes"
