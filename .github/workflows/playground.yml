@@ -11,8 +11,6 @@ on:
       - 'crates/php-printer/**'
       - 'playground/**'
       - '.github/workflows/playground.yml'
-  release:
-    types: [published]
   workflow_dispatch:
 
 permissions:
