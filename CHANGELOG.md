@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.5] - 2026-04-27
+
+### Added
+
+- Interactive WebAssembly playground deployed to GitHub Pages — parse and format PHP in the browser, powered by the Rust parser compiled to WASM (`php-wasm`).
+- New `php-wasm` crate: `wasm-bindgen` bindings exposing `parse()`, `format()`, `parser_version()`, and `build_commit()` to JavaScript.
+- GitHub Actions workflow (`playground.yml`) that builds the WASM package with `wasm-pack` and deploys the playground on every push to `main` that touches parser or playground files.
+
+### Fixed
+
+- Playground statusbar version link pointed to `releases/tag/0.9.x` (missing `v` prefix); corrected to `releases/tag/v0.9.x` to match the actual tag format (`playground`).
+
+### Documentation
+
+- Added playground link to the top of `README.md`.
+- `parse_stmt` stack-depth behaviour documented in source (`php-rs-parser`).
+
+---
+
 ## [0.9.4] - 2026-04-26
 
 ### Added

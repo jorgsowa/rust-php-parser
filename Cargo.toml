@@ -17,7 +17,7 @@ members = [
 ]
 
 [workspace.package]
-version = "0.9.4"
+version = "0.9.5"
 edition = "2021"
 license = "BSD-3-Clause"
 authors = ["jorgsowa"]
