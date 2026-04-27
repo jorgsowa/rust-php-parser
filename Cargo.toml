@@ -17,7 +17,7 @@ members = [
 ]
 
 [workspace.package]
-version = "0.9.5"
+version = "0.9.6"
 edition = "2021"
 license = "BSD-3-Clause"
 authors = ["jorgsowa"]
@@ -25,10 +25,10 @@ repository = "https://github.com/jorgsowa/rust-php-parser"
 homepage = "https://github.com/jorgsowa/rust-php-parser"
 
 [workspace.dependencies]
-php-ast = { path = "crates/php-ast", version = "0.9.5" }
-php-lexer = { path = "crates/php-lexer", version = "0.9.5" }
-php-rs-parser = { path = "crates/php-parser", version = "0.9.5" }
-php-printer = { path = "crates/php-printer", version = "0.9.5" }
+php-ast = { path = "crates/php-ast", version = "0.9.6" }
+php-lexer = { path = "crates/php-lexer", version = "0.9.6" }
+php-rs-parser = { path = "crates/php-parser", version = "0.9.6" }
+php-printer = { path = "crates/php-printer", version = "0.9.6" }
 miette = { version = "7", features = ["fancy"] }
 thiserror = "2"
 serde = { version = "1", features = ["derive"] }
