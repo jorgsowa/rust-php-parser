@@ -13,6 +13,7 @@ members = [
     "crates/php-lexer",
     "crates/php-parser",
     "crates/php-printer",
+    "crates/php-wasm",
 ]
 
 [workspace.package]
@@ -32,7 +33,7 @@ miette = { version = "7", features = ["fancy"] }
 thiserror = "2"
 serde = { version = "1", features = ["derive"] }
 insta = "1"
-serde_json = "1"
+serde_json = { version = "1" }
 criterion = { version = "0.8", features = ["html_reports"] }
 walkdir = "2"
 mimalloc = { version = "0.1", default-features = false }

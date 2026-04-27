@@ -1,0 +1,31 @@
+{
+  "name": "php-playground",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@codemirror/commands": "^6.7.1",
+    "@codemirror/lang-php": "^6.0.1",
+    "@codemirror/language": "^6.10.8",
+    "@codemirror/search": "^6.5.9",
+    "@codemirror/state": "^6.5.2",
+    "@codemirror/view": "^6.36.3",
+    "@lezer/highlight": "^1.2.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.7",
+    "vite-plugin-top-level-await": "^1.4.4",
+    "vite-plugin-wasm": "^3.4.1"
+  }
+}
