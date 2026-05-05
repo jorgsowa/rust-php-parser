@@ -140,6 +140,7 @@ pub(super) fn parse_enum<'arena, 'src>(
         let mut is_static = false;
         let mut is_abstract = false;
         let mut is_final = false;
+        let mut is_readonly = false;
 
         loop {
             match parser.current_kind() {
@@ -167,12 +168,42 @@ pub(super) fn parse_enum<'arena, 'src>(
                     parser.advance();
                     is_final = true;
                 }
+                TokenKind::Readonly => {
+                    parser.advance();
+                    is_readonly = true;
+                }
                 _ => break,
             }
         }
 
         // Const
         if parser.check(TokenKind::Const) {
+            if is_static {
+                parser.error(ParseError::Forbidden {
+                    message: "cannot use 'static' as constant modifier".into(),
+                    span: parser.current_span(),
+                });
+            }
+            if is_abstract {
+                parser.error(ParseError::Forbidden {
+                    message: "cannot use 'abstract' as constant modifier".into(),
+                    span: parser.current_span(),
+                });
+            }
+            if is_readonly {
+                parser.error(ParseError::Forbidden {
+                    message: "cannot use 'readonly' as constant modifier".into(),
+                    span: parser.current_span(),
+                });
+            }
+            if is_final && visibility == Some(Visibility::Private) {
+                parser.error(ParseError::Forbidden {
+                    message:
+                        "Private constant cannot be final as it is not visible to other classes"
+                            .into(),
+                    span: parser.current_span(),
+                });
+            }
             parser.advance();
 
             // PHP 8.3: typed enum constants — e.g. `public const string MODE = 'fit'`
