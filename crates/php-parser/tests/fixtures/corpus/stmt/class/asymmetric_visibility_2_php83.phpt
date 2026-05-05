@@ -7,6 +7,9 @@ class Test {
     private(set) private(set) $x;
     private(set) public(set) $x;
 }
+===errors===
+expected class member, found 'private'
+expected class member, found 'public'
 ===ast===
 {
   "stmts": [
@@ -26,7 +29,7 @@ class Test {
               "kind": {
                 "Property": {
                   "name": "x",
-                  "visibility": null,
+                  "visibility": "Private",
                   "set_visibility": null,
                   "is_static": false,
                   "is_readonly": false,
@@ -63,7 +66,7 @@ class Test {
                 }
               },
               "span": {
-                "start": 43,
+                "start": 36,
                 "end": 51
               }
             },
@@ -71,7 +74,7 @@ class Test {
               "kind": {
                 "Property": {
                   "name": "x",
-                  "visibility": null,
+                  "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
                   "is_readonly": false,
@@ -108,7 +111,7 @@ class Test {
                 }
               },
               "span": {
-                "start": 76,
+                "start": 70,
                 "end": 84
               }
             }

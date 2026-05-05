@@ -1,3 +1,5 @@
+===config===
+min_php=8.1
 ===source===
 <?php
 function a(): int|void {}

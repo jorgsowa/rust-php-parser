@@ -1,13 +1,19 @@
 ===config===
-min_php=8.1
+min_php=8.3
 ===source===
 <?php
-enum Status: string {
+enum Status {
+    @invalid1
     case Active;
-    case Inactive = 'inactive';
+    @invalid2
+    case Inactive;
+    @invalid3
+    case Pending;
 }
 ===errors===
-Case Active of backed enum Status must have a value
+expected enum member, found '@'
+expected enum member, found '@'
+expected enum member, found '@'
 ===ast===
 {
   "stmts": [
@@ -15,16 +21,7 @@ Case Active of backed enum Status must have a value
       "kind": {
         "Enum": {
           "name": "Status",
-          "scalar_type": {
-            "parts": [
-              "string"
-            ],
-            "kind": "Unqualified",
-            "span": {
-              "start": 19,
-              "end": 25
-            }
-          },
+          "scalar_type": null,
           "implements": [],
           "members": [
             {
@@ -36,29 +33,34 @@ Case Active of backed enum Status must have a value
                 }
               },
               "span": {
-                "start": 32,
-                "end": 44
+                "start": 38,
+                "end": 50
               }
             },
             {
               "kind": {
                 "Case": {
                   "name": "Inactive",
-                  "value": {
-                    "kind": {
-                      "String": "inactive"
-                    },
-                    "span": {
-                      "start": 65,
-                      "end": 75
-                    }
-                  },
+                  "value": null,
                   "attributes": []
                 }
               },
               "span": {
-                "start": 49,
-                "end": 76
+                "start": 69,
+                "end": 83
+              }
+            },
+            {
+              "kind": {
+                "Case": {
+                  "name": "Pending",
+                  "value": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 102,
+                "end": 115
               }
             }
           ],
@@ -67,14 +69,14 @@ Case Active of backed enum Status must have a value
       },
       "span": {
         "start": 6,
-        "end": 78
+        "end": 117
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 78
+    "end": 117
   }
 }
 ===php_error===
-PHP Fatal error:  Case Active of backed enum Status must have a value in Standard input code on line 3
+PHP Parse error:  syntax error, unexpected token "@", expecting "function" in Standard input code on line 3

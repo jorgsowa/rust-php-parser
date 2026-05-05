@@ -2,6 +2,7 @@
 <?php class function while;
 ===errors===
 expected '{', found 'while'
+expected class member, found 'while'
 expected '}', found end of file
 ===ast===
 {

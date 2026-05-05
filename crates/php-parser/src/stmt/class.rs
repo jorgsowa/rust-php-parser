@@ -391,7 +391,12 @@ pub fn parse_class_members<'arena, 'src>(
             continue;
         }
 
-        parser.advance();
+        parser.error(ParseError::Expected {
+            expected: "class member".into(),
+            found: parser.current_kind(),
+            span: parser.current_span(),
+        });
+        parser.synchronize_class_body();
     }
     members
 }
