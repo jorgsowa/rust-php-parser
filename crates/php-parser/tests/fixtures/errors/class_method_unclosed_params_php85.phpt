@@ -1,5 +1,5 @@
 ===config===
-min_php=8.5
+min_php=8.4
 ===source===
 <?php
 class Foo {

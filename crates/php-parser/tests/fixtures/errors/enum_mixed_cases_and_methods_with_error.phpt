@@ -1,5 +1,5 @@
 ===config===
-min_php=8.1
+min_php=8.3
 ===source===
 <?php
 enum Status {

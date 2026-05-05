@@ -1,6 +1,6 @@
 ===config===
 min_php=8.1
-max_php=8.4
+max_php=8.3
 ===source===
 <?php
 class Foo {
@@ -183,4 +183,4 @@ expected ')', found '{'
   }
 }
 ===php_error===
-PHP Parse error:  syntax error, unexpected "{", expecting ")" in Standard input code on line 3
+PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard input code on line 3

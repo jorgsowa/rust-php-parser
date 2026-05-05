@@ -1,6 +1,6 @@
 ===config===
 min_php=8.1
-max_php=8.4
+max_php=8.2
 ===source===
 <?php
 interface Logger {
