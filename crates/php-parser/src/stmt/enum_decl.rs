@@ -196,6 +196,14 @@ pub(super) fn parse_enum<'arena, 'src>(
                     span: parser.current_span(),
                 });
             }
+            if is_final && visibility == Some(Visibility::Private) {
+                parser.error(ParseError::Forbidden {
+                    message:
+                        "Private constant cannot be final as it is not visible to other classes"
+                            .into(),
+                    span: parser.current_span(),
+                });
+            }
             parser.advance();
 
             // PHP 8.3: typed enum constants — e.g. `public const string MODE = 'fit'`
