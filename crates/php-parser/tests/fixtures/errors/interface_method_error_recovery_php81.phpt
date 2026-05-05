@@ -1,11 +1,12 @@
 ===config===
-min_php=8.4
+min_php=8.1
+max_php=8.1
 ===source===
 <?php
-trait LoggerTrait {
-    public function log(string $msg): void { echo $msg; }
+interface Logger {
+    public function log(string $msg): void;
     @invalid
-    public function error(string $msg): void { echo "ERROR: " . $msg; }
+    public function error(string $msg): void;
 }
 ===errors===
 expected class member, found '@'
@@ -14,8 +15,9 @@ expected class member, found '@'
   "stmts": [
     {
       "kind": {
-        "Trait": {
-          "name": "LoggerTrait",
+        "Interface": {
+          "name": "Logger",
+          "extends": [],
           "members": [
             {
               "kind": {
@@ -37,14 +39,14 @@ expected class member, found '@'
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 50,
-                              "end": 56
+                              "start": 49,
+                              "end": 55
                             }
                           }
                         },
                         "span": {
-                          "start": 50,
-                          "end": 56
+                          "start": 49,
+                          "end": 55
                         }
                       },
                       "default": null,
@@ -56,8 +58,8 @@ expected class member, found '@'
                       "set_visibility": null,
                       "attributes": [],
                       "span": {
-                        "start": 50,
-                        "end": 61
+                        "start": 49,
+                        "end": 60
                       }
                     }
                   ],
@@ -69,43 +71,23 @@ expected class member, found '@'
                         ],
                         "kind": "Unqualified",
                         "span": {
-                          "start": 64,
-                          "end": 68
+                          "start": 63,
+                          "end": 67
                         }
                       }
                     },
                     "span": {
-                      "start": 64,
-                      "end": 68
+                      "start": 63,
+                      "end": 67
                     }
                   },
-                  "body": [
-                    {
-                      "kind": {
-                        "Echo": [
-                          {
-                            "kind": {
-                              "Variable": "msg"
-                            },
-                            "span": {
-                              "start": 76,
-                              "end": 80
-                            }
-                          }
-                        ]
-                      },
-                      "span": {
-                        "start": 71,
-                        "end": 81
-                      }
-                    }
-                  ],
+                  "body": null,
                   "attributes": []
                 }
               },
               "span": {
-                "start": 30,
-                "end": 83
+                "start": 29,
+                "end": 68
               }
             },
             {
@@ -128,14 +110,14 @@ expected class member, found '@'
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 123,
-                              "end": 129
+                              "start": 108,
+                              "end": 114
                             }
                           }
                         },
                         "span": {
-                          "start": 123,
-                          "end": 129
+                          "start": 108,
+                          "end": 114
                         }
                       },
                       "default": null,
@@ -147,8 +129,8 @@ expected class member, found '@'
                       "set_visibility": null,
                       "attributes": [],
                       "span": {
-                        "start": 123,
-                        "end": 134
+                        "start": 108,
+                        "end": 119
                       }
                     }
                   ],
@@ -160,63 +142,23 @@ expected class member, found '@'
                         ],
                         "kind": "Unqualified",
                         "span": {
-                          "start": 137,
-                          "end": 141
+                          "start": 122,
+                          "end": 126
                         }
                       }
                     },
                     "span": {
-                      "start": 137,
-                      "end": 141
+                      "start": 122,
+                      "end": 126
                     }
                   },
-                  "body": [
-                    {
-                      "kind": {
-                        "Echo": [
-                          {
-                            "kind": {
-                              "Binary": {
-                                "left": {
-                                  "kind": {
-                                    "String": "ERROR: "
-                                  },
-                                  "span": {
-                                    "start": 149,
-                                    "end": 158
-                                  }
-                                },
-                                "op": "Concat",
-                                "right": {
-                                  "kind": {
-                                    "Variable": "msg"
-                                  },
-                                  "span": {
-                                    "start": 161,
-                                    "end": 165
-                                  }
-                                }
-                              }
-                            },
-                            "span": {
-                              "start": 149,
-                              "end": 165
-                            }
-                          }
-                        ]
-                      },
-                      "span": {
-                        "start": 144,
-                        "end": 166
-                      }
-                    }
-                  ],
+                  "body": null,
                   "attributes": []
                 }
               },
               "span": {
-                "start": 101,
-                "end": 168
+                "start": 86,
+                "end": 127
               }
             }
           ],
@@ -225,13 +167,13 @@ expected class member, found '@'
       },
       "span": {
         "start": 6,
-        "end": 170
+        "end": 129
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 170
+    "end": 129
   }
 }
 ===php_error===

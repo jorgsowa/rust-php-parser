@@ -1,5 +1,6 @@
 ===config===
-min_php=8.4
+min_php=8.1
+max_php=8.1
 ===source===
 <?php
 trait LoggerTrait {

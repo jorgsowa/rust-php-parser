@@ -1,5 +1,6 @@
 ===config===
-min_php=8.4
+min_php=8.2
+max_php=8.3
 ===source===
 <?php
 trait LoggerTrait {
@@ -235,4 +236,4 @@ expected class member, found '@'
   }
 }
 ===php_error===
-PHP Parse error:  syntax error, unexpected token "@", expecting "function" in Standard input code on line 4
+PHP Parse error:  syntax error, unexpected token "@", expecting "function" or "const" in Standard input code on line 4
