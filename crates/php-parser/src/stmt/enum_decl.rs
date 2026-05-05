@@ -316,8 +316,12 @@ pub(super) fn parse_enum<'arena, 'src>(
             continue;
         }
 
-        // Unknown — skip
-        parser.advance();
+        parser.error(ParseError::Expected {
+            expected: "enum member".into(),
+            found: parser.current_kind(),
+            span: parser.current_span(),
+        });
+        parser.synchronize_enum_body();
     }
 
     parser.expect(TokenKind::RightBrace);

@@ -485,6 +485,64 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
     }
 
+    /// Recover to the next class-body anchor token.
+    /// Used when a class/interface/trait member fails to parse.
+    pub fn synchronize_class_body(&mut self) {
+        loop {
+            match self.current_kind() {
+                TokenKind::Eof
+                | TokenKind::RightBrace
+                | TokenKind::Public
+                | TokenKind::Protected
+                | TokenKind::Private
+                | TokenKind::Static
+                | TokenKind::Abstract
+                | TokenKind::Final
+                | TokenKind::Readonly
+                | TokenKind::Function
+                | TokenKind::Const
+                | TokenKind::HashBracket => break,
+                TokenKind::Semicolon => {
+                    self.advance();
+                    break;
+                }
+                _ => {
+                    self.advance();
+                }
+            }
+        }
+    }
+
+    /// Recover to the next enum-body anchor token.
+    /// Used when an enum member fails to parse.
+    pub fn synchronize_enum_body(&mut self) {
+        loop {
+            match self.current_kind() {
+                TokenKind::Eof
+                | TokenKind::RightBrace
+                | TokenKind::Case
+                | TokenKind::Public
+                | TokenKind::Protected
+                | TokenKind::Private
+                | TokenKind::Static
+                | TokenKind::Abstract
+                | TokenKind::Final
+                | TokenKind::Readonly
+                | TokenKind::Function
+                | TokenKind::Const
+                | TokenKind::Use
+                | TokenKind::HashBracket => break,
+                TokenKind::Semicolon => {
+                    self.advance();
+                    break;
+                }
+                _ => {
+                    self.advance();
+                }
+            }
+        }
+    }
+
     // =========================================================================
     // Top-level parsing
     // =========================================================================
