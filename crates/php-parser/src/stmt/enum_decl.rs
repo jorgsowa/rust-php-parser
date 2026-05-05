@@ -173,6 +173,18 @@ pub(super) fn parse_enum<'arena, 'src>(
 
         // Const
         if parser.check(TokenKind::Const) {
+            if is_static {
+                parser.error(ParseError::Forbidden {
+                    message: "cannot use 'static' as constant modifier".into(),
+                    span: parser.current_span(),
+                });
+            }
+            if is_abstract {
+                parser.error(ParseError::Forbidden {
+                    message: "cannot use 'abstract' as constant modifier".into(),
+                    span: parser.current_span(),
+                });
+            }
             parser.advance();
 
             // PHP 8.3: typed enum constants — e.g. `public const string MODE = 'fit'`
