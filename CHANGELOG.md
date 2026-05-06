@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.7] - 2026-05-06
+
+### Added
+
+- Context-aware anchor sets for error recovery — parser now maintains contextual error recovery anchors to improve diagnostics in various syntactic contexts (issue #276) (`php-rs-parser`).
+
+### Fixed
+
+- Declaration docblocks are now preserved during parsing instead of being dropped (`php-rs-parser`).
+- Parse errors for invalid names now emit `ExprKind::Error` instead of `Identifier("<error>")`, improving error diagnostics (`php-rs-parser`).
+- `Name::Error` variant added for synthesized error names during error recovery (`php-ast`, `php-rs-parser`).
+- Enum constant validation: private enum constants now properly reject the `final` modifier (`php-rs-parser`).
+- Enum constant validation: static and abstract modifiers on enum constants now properly validated (`php-rs-parser`).
+- PHP version-specific error message handling aligned across all PHP 8.1–8.5 error recovery fixtures (`php-rs-parser`).
+
+### Changed
+
+- Internal refactoring: `ERROR_PLACEHOLDER` string literals replaced with typed `Ident` at declaration name sites (`php-rs-parser`).
+
+### Tests
+
+- Comprehensive enum constant parser and printer coverage (`php-rs-parser`, `php-printer`).
+- Expression span edge-case fixtures from parser audit (`php-rs-parser`).
+- Version-specific interface and trait error recovery fixtures for PHP 8.1–8.5 coverage (`php-rs-parser`).
+- Comprehensive error recovery fixtures for various syntactic contexts (issue #276) (`php-rs-parser`).
+
+---
+
 ## [0.9.6] - 2026-04-27
 
 ### Added
