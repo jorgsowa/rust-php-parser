@@ -11,7 +11,7 @@ expected variable, found ')'
           "name": "f",
           "params": [
             {
-              "name": "<error>",
+              "name": null,
               "type_hint": {
                 "kind": {
                   "Union": [

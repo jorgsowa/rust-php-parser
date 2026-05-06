@@ -13,7 +13,7 @@ impl Printer {
         if func.by_ref {
             self.w("&");
         }
-        self.w(func.name);
+        self.w(func.name.or_error());
         self.w("(");
         self.print_params(&func.params);
         self.w(")");
@@ -85,7 +85,7 @@ impl Printer {
         self.w("class");
         if let Some(name) = class.name {
             self.w(" ");
-            self.w(name);
+            self.w(name.or_error());
         }
         if let Some(extends) = &class.extends {
             self.w(" extends ");
@@ -152,7 +152,7 @@ impl Printer {
         if method.by_ref {
             self.w("&");
         }
-        self.w(method.name);
+        self.w(method.name.or_error());
         self.w("(");
         self.print_params(&method.params);
         self.w(")");
@@ -198,7 +198,7 @@ impl Printer {
             self.w(" ");
         }
         self.w("$");
-        self.w(prop.name);
+        self.w(prop.name.or_error());
         if let Some(default) = &prop.default {
             self.w(" = ");
             self.print_expr(default, PREC_LOWEST);
@@ -273,7 +273,7 @@ impl Printer {
             self.print_type_hint(th);
             self.w(" ");
         }
-        self.w(cc.name);
+        self.w(cc.name.or_error());
         self.w(" = ");
         self.print_expr(&cc.value, PREC_LOWEST);
         self.w(";");
@@ -347,7 +347,7 @@ impl Printer {
         self.print_doc_comment(&iface.doc_comment);
         self.print_attributes(&iface.attributes);
         self.w("interface ");
-        self.w(iface.name);
+        self.w(iface.name.or_error());
         if !iface.extends.is_empty() {
             self.w(" extends ");
             for (i, name) in iface.extends.iter().enumerate() {
@@ -364,7 +364,7 @@ impl Printer {
         self.print_doc_comment(&trait_decl.doc_comment);
         self.print_attributes(&trait_decl.attributes);
         self.w("trait ");
-        self.w(trait_decl.name);
+        self.w(trait_decl.name.or_error());
         self.print_class_body(&trait_decl.members);
     }
 
@@ -372,7 +372,7 @@ impl Printer {
         self.print_doc_comment(&enum_decl.doc_comment);
         self.print_attributes(&enum_decl.attributes);
         self.w("enum ");
-        self.w(enum_decl.name);
+        self.w(enum_decl.name.or_error());
         if let Some(scalar) = &enum_decl.scalar_type {
             self.w(": ");
             self.print_name(scalar);
@@ -412,7 +412,7 @@ impl Printer {
                 self.print_doc_comment(&case.doc_comment);
                 self.print_attributes(&case.attributes);
                 self.w("case ");
-                self.w(case.name);
+                self.w(case.name.or_error());
                 if let Some(val) = &case.value {
                     self.w(" = ");
                     self.print_expr(val, PREC_LOWEST);
@@ -456,7 +456,7 @@ impl Printer {
                 self.w("&");
             }
             self.w("$");
-            self.w(param.name);
+            self.w(param.name.or_error());
             if let Some(default) = &param.default {
                 self.w(" = ");
                 self.print_expr(default, PREC_LOWEST);

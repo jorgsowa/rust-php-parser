@@ -278,10 +278,22 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     pub fn variable_name(&self, token: Token) -> &'src str {
         let start = token.span.start as usize;
         let end = token.span.end as usize;
-        if start < end {
+        if start + 1 < end {
             &self.source[start + 1..end]
         } else {
             ""
+        }
+    }
+
+    /// Like [`variable_name`] but returns an [`Ident`] — empty/zero-length
+    /// inputs yield [`Ident::ERROR`].
+    #[inline]
+    pub fn variable_ident(&self, token: Token) -> Ident<'src> {
+        let s = self.variable_name(token);
+        if s.is_empty() {
+            Ident::ERROR
+        } else {
+            Ident::name(s)
         }
     }
 

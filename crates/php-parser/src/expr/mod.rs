@@ -1,7 +1,7 @@
 use php_ast::*;
 use php_lexer::TokenKind;
 
-use crate::diagnostics::{ParseError, ERROR_PLACEHOLDER};
+use crate::diagnostics::ParseError;
 use crate::instrument;
 use crate::parser::{Parser, MAX_DEPTH};
 use crate::precedence::{self, ASSIGNMENT_BP, NULL_COALESCE_LEFT_BP, TERNARY_BP};
@@ -547,13 +547,18 @@ pub fn parse_expr_bp<'arena, 'src>(
                     if let Some(result) = parser.eat_identifier_or_keyword() {
                         result
                     } else {
-                        let span = parser.current_span();
+                        let err_span = parser.current_span();
                         parser.error(ParseError::Expected {
                             expected: "identifier".into(),
                             found: parser.current_kind(),
-                            span,
+                            span: err_span,
                         });
-                        (ERROR_PLACEHOLDER, span)
+                        let span = Span::new(lhs.span.start, err_span.end);
+                        lhs = Expr {
+                            kind: ExprKind::Error,
+                            span,
+                        };
+                        continue;
                     };
 
                 if parser.check(TokenKind::LeftParen) {

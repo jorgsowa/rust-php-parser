@@ -31,7 +31,7 @@ expected variable, found ')'
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "<error>",
+                      "name": null,
                       "type_hint": {
                         "kind": {
                           "Named": {

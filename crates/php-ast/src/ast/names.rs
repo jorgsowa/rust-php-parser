@@ -6,6 +6,112 @@ use crate::Span;
 
 use super::ArenaVec;
 
+/// A bare identifier — the kind that names a function, class, parameter,
+/// enum case, etc. Distinct from [`Name`], which represents possibly-qualified
+/// names.
+///
+/// Memory layout is identical to `&'src str` (16 bytes); `Option<Ident>` is
+/// also 16 bytes via the standard pointer niche. The "error" state — produced
+/// during error recovery when no identifier was found in the source — is
+/// represented by an empty string slice, which cannot occur for a real PHP
+/// identifier (the lexer rejects empty matches).
+///
+/// Use [`Ident::name`] / [`Ident::ERROR`] to construct, [`Ident::as_str`] to
+/// extract a real name, [`Ident::is_error`] to test for the error state.
+/// Serialises as a JSON string for real names and `null` for the error state.
+#[repr(transparent)]
+#[derive(Clone, Copy)]
+pub struct Ident<'src>(&'src str);
+
+impl<'src> Ident<'src> {
+    /// Sentinel for "no identifier was parsed" — same memory layout as a real
+    /// `Ident`, distinguished by the empty-string interior.
+    pub const ERROR: Self = Self("");
+
+    /// Construct an identifier from a non-empty source slice.
+    /// Empty input is rejected in debug builds — use [`Ident::ERROR`] instead.
+    #[inline]
+    pub fn name(s: &'src str) -> Self {
+        debug_assert!(!s.is_empty(), "Ident::name() called with empty string");
+        Self(s)
+    }
+
+    /// Returns `Some(s)` for a real identifier, `None` for the error state.
+    #[inline]
+    pub fn as_str(&self) -> Option<&'src str> {
+        if self.0.is_empty() {
+            None
+        } else {
+            Some(self.0)
+        }
+    }
+
+    /// Returns `true` if this identifier was synthesised during error recovery.
+    #[inline]
+    pub fn is_error(&self) -> bool {
+        self.0.is_empty()
+    }
+
+    /// Returns the inner string, or `"<error>"` for the error state.
+    /// Useful when constructing diagnostic messages.
+    #[inline]
+    pub fn or_error(&self) -> &'src str {
+        if self.0.is_empty() {
+            "<error>"
+        } else {
+            self.0
+        }
+    }
+}
+
+impl<'src> std::fmt::Debug for Ident<'src> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        if self.0.is_empty() {
+            f.write_str("Ident::ERROR")
+        } else {
+            f.debug_tuple("Ident").field(&self.0).finish()
+        }
+    }
+}
+
+impl<'src> std::fmt::Display for Ident<'src> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.or_error())
+    }
+}
+
+impl<'src> serde::Serialize for Ident<'src> {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+        if self.0.is_empty() {
+            s.serialize_none()
+        } else {
+            s.serialize_str(self.0)
+        }
+    }
+}
+
+impl<'src> PartialEq<&str> for Ident<'src> {
+    fn eq(&self, other: &&str) -> bool {
+        !self.0.is_empty() && self.0 == *other
+    }
+}
+
+#[cfg(test)]
+mod ident_layout_tests {
+    use super::Ident;
+
+    /// `Ident` is `#[repr(transparent)]` over `&str`; this test guards the
+    /// invariant so the size never accidentally regresses.
+    #[test]
+    fn ident_has_same_size_as_str_slice() {
+        assert_eq!(std::mem::size_of::<Ident>(), std::mem::size_of::<&str>());
+        assert_eq!(
+            std::mem::size_of::<Option<Ident>>(),
+            std::mem::size_of::<Option<&str>>()
+        );
+    }
+}
+
 /// A PHP name (identifier, qualified name, fully-qualified name, or relative name).
 ///
 /// The `Simple` variant is the fast path for the common case (~95%) of single

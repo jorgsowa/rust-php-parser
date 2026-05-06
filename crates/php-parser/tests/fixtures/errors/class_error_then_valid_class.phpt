@@ -24,7 +24,7 @@ expected ';', found '}'
             {
               "kind": {
                 "Method": {
-                  "name": "<error>",
+                  "name": null,
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -32,7 +32,7 @@ expected ';', found '}'
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "<error>",
+                      "name": null,
                       "type_hint": null,
                       "default": null,
                       "by_ref": false,

@@ -1,7 +1,7 @@
 use php_ast::*;
 use php_lexer::TokenKind;
 
-use crate::diagnostics::{ParseError, ERROR_PLACEHOLDER};
+use crate::diagnostics::ParseError;
 use crate::expr;
 use crate::parser::Parser;
 use crate::version::PhpVersion;
@@ -14,14 +14,14 @@ pub(super) fn parse_enum<'arena, 'src>(
     parser.advance(); // consume 'enum'
 
     let name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-        text
+        Ident::name(text)
     } else {
         parser.error(ParseError::Expected {
             expected: "enum name".into(),
             found: parser.current_kind(),
             span: parser.current_span(),
         });
-        ERROR_PLACEHOLDER
+        Ident::ERROR
     };
 
     // Backed enum: enum Foo: string
@@ -86,7 +86,7 @@ pub(super) fn parse_enum<'arena, 'src>(
             }
             let (case_name, case_name_span) =
                 if let Some((text, span)) = parser.eat_identifier_or_keyword() {
-                    (text, span)
+                    (Ident::name(text), span)
                 } else {
                     let span = parser.current_span();
                     parser.error(ParseError::Expected {
@@ -94,7 +94,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                         found: parser.current_kind(),
                         span,
                     });
-                    (ERROR_PLACEHOLDER, span)
+                    (Ident::ERROR, span)
                 };
             let equals_token = parser.eat(TokenKind::Equals);
             let value = if equals_token.is_some() {
@@ -221,14 +221,14 @@ pub(super) fn parse_enum<'arena, 'src>(
             };
 
             let const_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-                text
+                Ident::name(text)
             } else {
                 parser.error(ParseError::Expected {
                     expected: "constant name".into(),
                     found: parser.current_kind(),
                     span: parser.current_span(),
                 });
-                ERROR_PLACEHOLDER
+                Ident::ERROR
             };
             parser.expect(TokenKind::Equals);
             let value = expr::parse_expr(parser);
@@ -261,9 +261,9 @@ pub(super) fn parse_enum<'arena, 'src>(
             parser.advance();
             let by_ref = parser.eat(TokenKind::Ampersand).is_some();
             let method_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-                text
+                Ident::name(text)
             } else {
-                ERROR_PLACEHOLDER
+                Ident::ERROR
             };
 
             parser.expect(TokenKind::LeftParen);

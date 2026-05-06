@@ -8,7 +8,7 @@ expected class name, found '{'
     {
       "kind": {
         "Class": {
-          "name": "<error>",
+          "name": null,
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

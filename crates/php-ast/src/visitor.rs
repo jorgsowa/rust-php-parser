@@ -1039,34 +1039,36 @@ impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> Visitor<'arena, 'src> for Scop
         self.inner.visit_stmt(stmt, &self.scope)?;
         match &stmt.kind {
             StmtKind::Function(func) => {
-                let prev_fn = self.scope.function_name.replace(func.name);
+                let prev_fn = std::mem::replace(&mut self.scope.function_name, func.name.as_str());
                 walk_stmt(self, stmt)?;
                 self.scope.function_name = prev_fn;
             }
             StmtKind::Class(class) => {
                 let prev_class = self.scope.class_name;
                 let prev_fn = self.scope.function_name.take();
-                self.scope.class_name = class.name;
+                self.scope.class_name = class.name.and_then(|n| n.as_str());
                 walk_stmt(self, stmt)?;
                 self.scope.class_name = prev_class;
                 self.scope.function_name = prev_fn;
             }
             StmtKind::Interface(iface) => {
-                let prev_class = self.scope.class_name.replace(iface.name);
+                let prev_class = std::mem::replace(&mut self.scope.class_name, iface.name.as_str());
                 let prev_fn = self.scope.function_name.take();
                 walk_stmt(self, stmt)?;
                 self.scope.class_name = prev_class;
                 self.scope.function_name = prev_fn;
             }
             StmtKind::Trait(trait_decl) => {
-                let prev_class = self.scope.class_name.replace(trait_decl.name);
+                let prev_class =
+                    std::mem::replace(&mut self.scope.class_name, trait_decl.name.as_str());
                 let prev_fn = self.scope.function_name.take();
                 walk_stmt(self, stmt)?;
                 self.scope.class_name = prev_class;
                 self.scope.function_name = prev_fn;
             }
             StmtKind::Enum(enum_decl) => {
-                let prev_class = self.scope.class_name.replace(enum_decl.name);
+                let prev_class =
+                    std::mem::replace(&mut self.scope.class_name, enum_decl.name.as_str());
                 let prev_fn = self.scope.function_name.take();
                 walk_stmt(self, stmt)?;
                 self.scope.class_name = prev_class;
@@ -1126,7 +1128,7 @@ impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> Visitor<'arena, 'src> for Scop
     fn visit_class_member(&mut self, member: &ClassMember<'arena, 'src>) -> ControlFlow<()> {
         self.inner.visit_class_member(member, &self.scope)?;
         if let ClassMemberKind::Method(method) = &member.kind {
-            let prev_fn = self.scope.function_name.replace(method.name);
+            let prev_fn = std::mem::replace(&mut self.scope.function_name, method.name.as_str());
             walk_class_member(self, member)?;
             self.scope.function_name = prev_fn;
         } else {
@@ -1138,7 +1140,7 @@ impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> Visitor<'arena, 'src> for Scop
     fn visit_enum_member(&mut self, member: &EnumMember<'arena, 'src>) -> ControlFlow<()> {
         self.inner.visit_enum_member(member, &self.scope)?;
         if let EnumMemberKind::Method(method) = &member.kind {
-            let prev_fn = self.scope.function_name.replace(method.name);
+            let prev_fn = std::mem::replace(&mut self.scope.function_name, method.name.as_str());
             walk_enum_member(self, member)?;
             self.scope.function_name = prev_fn;
         } else {
@@ -1357,7 +1359,7 @@ mod tests {
             span: Span::DUMMY,
         });
         let func = arena.alloc(FunctionDecl {
-            name: "foo",
+            name: Ident::name("foo"),
             params: ArenaVec::new_in(&arena),
             body: func_body,
             return_type: None,

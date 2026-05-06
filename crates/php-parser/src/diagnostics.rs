@@ -3,9 +3,6 @@ use php_lexer::TokenKind;
 use std::borrow::Cow;
 use thiserror::Error;
 
-/// Placeholder name used in recovered AST nodes when the real name could not be parsed.
-pub(crate) const ERROR_PLACEHOLDER: &str = "<error>";
-
 /// A parse error or diagnostic emitted during parsing.
 ///
 /// The parser recovers from all errors and always produces a complete AST,

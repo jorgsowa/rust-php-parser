@@ -47,7 +47,7 @@ unclosed ''}'' opened at Span { start: 171, end: 176 }
           "name": "foo",
           "params": [
             {
-              "name": "<error>",
+              "name": null,
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -148,7 +148,7 @@ unclosed ''}'' opened at Span { start: 171, end: 176 }
               }
             },
             {
-              "name": "<error>",
+              "name": null,
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -216,7 +216,7 @@ unclosed ''}'' opened at Span { start: 171, end: 176 }
           "name": "foo",
           "params": [
             {
-              "name": "<error>",
+              "name": null,
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -267,7 +267,7 @@ unclosed ''}'' opened at Span { start: 171, end: 176 }
           "name": "foo",
           "params": [
             {
-              "name": "<error>",
+              "name": null,
               "type_hint": null,
               "default": null,
               "by_ref": true,
@@ -318,7 +318,7 @@ unclosed ''}'' opened at Span { start: 171, end: 176 }
           "name": "foo",
           "params": [
             {
-              "name": "<error>",
+              "name": null,
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -375,7 +375,7 @@ unclosed ''}'' opened at Span { start: 171, end: 176 }
                           "by_ref": false,
                           "params": [
                             {
-                              "name": "<error>",
+                              "name": null,
                               "type_hint": {
                                 "kind": {
                                   "Named": {
@@ -436,7 +436,7 @@ unclosed ''}'' opened at Span { start: 171, end: 176 }
                       "by_ref": false,
                       "params": [
                         {
-                          "name": "<error>",
+                          "name": null,
                           "type_hint": {
                             "kind": {
                               "Named": {

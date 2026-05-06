@@ -25,38 +25,17 @@ expected identifier, found ')'
                 {
                   "name": null,
                   "value": {
-                    "kind": {
-                      "ClassConstAccess": {
-                        "class": {
-                          "kind": {
-                            "Identifier": "Bar"
-                          },
-                          "span": {
-                            "start": 11,
-                            "end": 14
-                          }
-                        },
-                        "member": {
-                          "kind": {
-                            "Identifier": "<error>"
-                          },
-                          "span": {
-                            "start": 16,
-                            "end": 17
-                          }
-                        }
-                      }
-                    },
+                    "kind": "Error",
                     "span": {
                       "start": 11,
-                      "end": 16
+                      "end": 17
                     }
                   },
                   "unpack": false,
                   "by_ref": false,
                   "span": {
                     "start": 11,
-                    "end": 16
+                    "end": 17
                   }
                 }
               ]
