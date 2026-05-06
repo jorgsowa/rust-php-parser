@@ -82,11 +82,13 @@ pub(super) fn parse_class<'arena, 'src>(
         parser.alloc_vec()
     };
 
+    // Capture docblock before parsing body (members must not steal it)
+    let doc_comment = parser.take_doc_comment(start);
+
     parser.expect(TokenKind::LeftBrace);
     let members = parse_class_members(parser, false);
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
-    let doc_comment = parser.take_doc_comment(start);
 
     Stmt {
         kind: StmtKind::Class(parser.alloc(ClassDecl {
@@ -930,11 +932,13 @@ pub(super) fn parse_interface<'arena, 'src>(
         parser.alloc_vec()
     };
 
+    // Capture docblock before parsing body (members must not steal it)
+    let doc_comment = parser.take_doc_comment(start);
+
     parser.expect(TokenKind::LeftBrace);
     let members = parse_class_members(parser, true);
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
-    let doc_comment = parser.take_doc_comment(start);
 
     Stmt {
         kind: StmtKind::Interface(parser.alloc(InterfaceDecl {
@@ -967,11 +971,13 @@ pub(super) fn parse_trait<'arena, 'src>(
         Ident::ERROR
     };
 
+    // Capture docblock before parsing body (members must not steal it)
+    let doc_comment = parser.take_doc_comment(start);
+
     parser.expect(TokenKind::LeftBrace);
     let members = parse_class_members(parser, false);
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
-    let doc_comment = parser.take_doc_comment(start);
 
     Stmt {
         kind: StmtKind::Trait(parser.alloc(TraitDecl {

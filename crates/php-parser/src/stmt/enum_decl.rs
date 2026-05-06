@@ -37,6 +37,9 @@ pub(super) fn parse_enum<'arena, 'src>(
         parser.alloc_vec()
     };
 
+    // Capture docblock before parsing body (members must not steal it)
+    let doc_comment = parser.take_doc_comment(start);
+
     parser.expect(TokenKind::LeftBrace);
 
     let mut members = parser.alloc_vec_with_capacity(4);
@@ -326,7 +329,6 @@ pub(super) fn parse_enum<'arena, 'src>(
 
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
-    let doc_comment = parser.take_doc_comment(start);
     Stmt {
         kind: StmtKind::Enum(parser.alloc(EnumDecl {
             name,
