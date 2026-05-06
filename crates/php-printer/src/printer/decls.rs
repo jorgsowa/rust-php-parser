@@ -499,7 +499,8 @@ impl Printer {
                     self.newline();
                     self.write_indent();
                 }
-                self.w(line.trim_end());
+                let trimmed = if i == 0 { line.trim_end() } else { line.trim() };
+                self.w(trimmed);
             }
             self.newline();
             self.write_indent();
