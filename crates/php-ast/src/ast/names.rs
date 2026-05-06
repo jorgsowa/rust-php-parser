@@ -64,12 +64,13 @@ impl<'arena, 'src> Name<'arena, 'src> {
         match self {
             Self::Simple { value, .. } => value,
             Self::Complex { span, .. } => &src[span.start as usize..span.end as usize],
-            Self::Error { .. } => "<error>",
+            Self::Error { .. } => "",
         }
     }
 
     /// Joins all parts with `\` and prepends `\` if fully qualified.
     /// Returns `Cow::Borrowed` for simple names (zero allocation).
+    /// Returns an empty `Cow::Borrowed("")` for `Name::Error`.
     #[inline]
     pub fn to_string_repr(&self) -> Cow<'src, str> {
         match self {
@@ -82,18 +83,19 @@ impl<'arena, 'src> Name<'arena, 'src> {
                     Cow::Owned(joined)
                 }
             }
-            Self::Error { .. } => Cow::Borrowed("<error>"),
+            Self::Error { .. } => Cow::Borrowed(""),
         }
     }
 
     /// Joins all parts with `\` without any leading backslash.
     /// Returns `Cow::Borrowed` for simple names (zero allocation).
+    /// Returns an empty `Cow::Borrowed("")` for `Name::Error`.
     #[inline]
     pub fn join_parts(&self) -> Cow<'src, str> {
         match self {
             Self::Simple { value, .. } => Cow::Borrowed(value),
             Self::Complex { parts, .. } => Cow::Owned(parts.join("\\")),
-            Self::Error { .. } => Cow::Borrowed("<error>"),
+            Self::Error { .. } => Cow::Borrowed(""),
         }
     }
 
