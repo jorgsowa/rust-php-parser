@@ -14,6 +14,10 @@ use super::ArenaVec;
 ///
 /// The `Complex` variant handles qualified (`Foo\Bar`), fully-qualified (`\Foo\Bar`),
 /// and relative (`namespace\Foo`) names.
+///
+/// The `Error` variant is synthesised during error recovery when the parser
+/// expected a name but found none. It carries only a span so consumers can
+/// distinguish it from any user-written name.
 pub enum Name<'arena, 'src> {
     /// Single unqualified identifier — no `ArenaVec` allocation.
     /// `&'src str` instead of `Cow` since this is always a borrowed slice of the source.
@@ -24,13 +28,17 @@ pub enum Name<'arena, 'src> {
         kind: NameKind,
         span: Span,
     },
+    /// Synthesised during error recovery when no real name could be parsed.
+    /// Distinguishable from any user-written name; visitors and tools can
+    /// explicitly skip or flag these.
+    Error { span: Span },
 }
 
 impl<'arena, 'src> Name<'arena, 'src> {
     #[inline]
     pub fn span(&self) -> Span {
         match self {
-            Self::Simple { span, .. } | Self::Complex { span, .. } => *span,
+            Self::Simple { span, .. } | Self::Complex { span, .. } | Self::Error { span } => *span,
         }
     }
 
@@ -39,6 +47,7 @@ impl<'arena, 'src> Name<'arena, 'src> {
         match self {
             Self::Simple { .. } => NameKind::Unqualified,
             Self::Complex { kind, .. } => *kind,
+            Self::Error { .. } => NameKind::Error,
         }
     }
 
@@ -55,6 +64,7 @@ impl<'arena, 'src> Name<'arena, 'src> {
         match self {
             Self::Simple { value, .. } => value,
             Self::Complex { span, .. } => &src[span.start as usize..span.end as usize],
+            Self::Error { .. } => "<error>",
         }
     }
 
@@ -72,6 +82,7 @@ impl<'arena, 'src> Name<'arena, 'src> {
                     Cow::Owned(joined)
                 }
             }
+            Self::Error { .. } => Cow::Borrowed("<error>"),
         }
     }
 
@@ -82,6 +93,7 @@ impl<'arena, 'src> Name<'arena, 'src> {
         match self {
             Self::Simple { value, .. } => Cow::Borrowed(value),
             Self::Complex { parts, .. } => Cow::Owned(parts.join("\\")),
+            Self::Error { .. } => Cow::Borrowed("<error>"),
         }
     }
 
@@ -92,6 +104,7 @@ impl<'arena, 'src> Name<'arena, 'src> {
         match self {
             Self::Simple { value, .. } => std::slice::from_ref(value),
             Self::Complex { parts, .. } => parts,
+            Self::Error { .. } => &[],
         }
     }
 }
@@ -111,6 +124,14 @@ impl<'arena, 'src> std::fmt::Debug for Name<'arena, 'src> {
                 .field("kind", kind)
                 .field("span", span)
                 .finish(),
+            Self::Error { span } => {
+                let empty: [&str; 0] = [];
+                f.debug_struct("Name")
+                    .field("parts", &empty)
+                    .field("kind", &NameKind::Error)
+                    .field("span", span)
+                    .finish()
+            }
         }
     }
 }
@@ -130,6 +151,12 @@ impl<'arena, 'src> serde::Serialize for Name<'arena, 'src> {
                 st.serialize_field("kind", kind)?;
                 st.serialize_field("span", span)?;
             }
+            Self::Error { span } => {
+                let empty: [&str; 0] = [];
+                st.serialize_field("parts", &empty[..])?;
+                st.serialize_field("kind", &NameKind::Error)?;
+                st.serialize_field("span", span)?;
+            }
         }
         st.end()
     }
@@ -145,6 +172,8 @@ pub enum NameKind {
     FullyQualified,
     /// A name starting with the `namespace` keyword: `namespace\Foo`.
     Relative,
+    /// Synthesised during error recovery — no real name was present in the source.
+    Error,
 }
 
 /// PHP built-in type keyword — zero-cost alternative to `Name::Simple` for the

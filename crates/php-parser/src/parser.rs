@@ -1,7 +1,7 @@
 use php_ast::*;
 use php_lexer::{Lexer, LexerError, LexerErrorKind, Token, TokenKind};
 
-use crate::diagnostics::{ParseError, ERROR_PLACEHOLDER};
+use crate::diagnostics::ParseError;
 use crate::expr;
 use crate::instrument;
 use crate::stmt;
@@ -675,12 +675,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             if let Some((text, span)) = self.eat_identifier_or_keyword() {
                 (text, span)
             } else {
+                let err_span = self.current_span();
                 self.error(ParseError::Expected {
                     expected: "identifier".into(),
                     found: self.current_kind(),
-                    span: self.current_span(),
+                    span: err_span,
                 });
-                (ERROR_PLACEHOLDER, self.current_span())
+                let span = Span::new(start, err_span.end);
+                return Name::Error { span };
             };
 
         // Fast path: single unqualified identifier (the common case, ~95% of names).

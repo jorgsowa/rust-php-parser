@@ -17,10 +17,8 @@ expected identifier, found '{'
           "extends": null,
           "implements": [
             {
-              "parts": [
-                "<error>"
-              ],
-              "kind": "Unqualified",
+              "parts": [],
+              "kind": "Error",
               "span": {
                 "start": 28,
                 "end": 29

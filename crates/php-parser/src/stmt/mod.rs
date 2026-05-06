@@ -1918,6 +1918,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                             cp.push(p);
                         }
                     }
+                    Name::Error { .. } => {}
                 }
                 cp
             };

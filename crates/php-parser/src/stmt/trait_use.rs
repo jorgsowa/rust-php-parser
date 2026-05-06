@@ -1,7 +1,7 @@
 use php_ast::*;
 use php_lexer::TokenKind;
 
-use crate::diagnostics::{ParseError, ERROR_PLACEHOLDER};
+use crate::diagnostics::ParseError;
 use crate::parser::Parser;
 
 /// Parse trait adaptation block: `{ A::foo insteadof B; foo as bar; ... }`
@@ -28,10 +28,7 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
                     found: parser.current_kind(),
                     span,
                 });
-                Name::Simple {
-                    value: ERROR_PLACEHOLDER,
-                    span,
-                }
+                Name::Error { span }
             };
 
             // Check for `insteadof` or `as`

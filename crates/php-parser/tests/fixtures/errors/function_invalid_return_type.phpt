@@ -14,10 +14,8 @@ expected identifier, found '{'
           "return_type": {
             "kind": {
               "Named": {
-                "parts": [
-                  "<error>"
-                ],
-                "kind": "Unqualified",
+                "parts": [],
+                "kind": "Error",
                 "span": {
                   "start": 23,
                   "end": 24
