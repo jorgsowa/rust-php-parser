@@ -1,7 +1,7 @@
 use php_ast::*;
 use php_lexer::TokenKind;
 
-use crate::diagnostics::{ParseError, ERROR_PLACEHOLDER};
+use crate::diagnostics::ParseError;
 use crate::expr;
 use crate::instrument;
 use crate::parser::Parser;
@@ -45,21 +45,23 @@ pub(super) fn parse_class<'arena, 'src>(
     parser.advance(); // consume 'class'
 
     let (name, name_span) = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
-        (text, span)
+        (Ident::name(text), span)
     } else {
         parser.error(ParseError::Expected {
             expected: "class name".into(),
             found: parser.current_kind(),
             span: parser.current_span(),
         });
-        (ERROR_PLACEHOLDER, parser.current_span())
+        (Ident::ERROR, parser.current_span())
     };
 
-    if is_reserved_class_name(name) {
-        parser.error(ParseError::Forbidden {
-            message: format!("cannot use '{}' as class name", name).into(),
-            span: name_span,
-        });
+    if let Some(text) = name.as_str() {
+        if is_reserved_class_name(text) {
+            parser.error(ParseError::Forbidden {
+                message: format!("cannot use '{}' as class name", text).into(),
+                span: name_span,
+            });
+        }
     }
 
     let extends = if parser.eat(TokenKind::Extends).is_some() {
@@ -80,11 +82,13 @@ pub(super) fn parse_class<'arena, 'src>(
         parser.alloc_vec()
     };
 
+    // Capture docblock before parsing body (members must not steal it)
+    let doc_comment = parser.take_doc_comment(start);
+
     parser.expect(TokenKind::LeftBrace);
     let members = parse_class_members(parser, false);
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
-    let doc_comment = parser.take_doc_comment(start);
 
     Stmt {
         kind: StmtKind::Class(parser.alloc(ClassDecl {
@@ -626,7 +630,7 @@ fn parse_class_const_member<'arena, 'src>(
     let mut const_items = parser.alloc_vec();
     loop {
         let const_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-            text
+            Ident::name(text)
         } else {
             let span = parser.current_span();
             parser.error(ParseError::Expected {
@@ -634,7 +638,7 @@ fn parse_class_const_member<'arena, 'src>(
                 found: parser.current_kind(),
                 span,
             });
-            ERROR_PLACEHOLDER
+            Ident::ERROR
         };
         parser.expect(TokenKind::Equals);
         let value = expr::parse_expr(parser);
@@ -697,14 +701,14 @@ fn parse_method_member<'arena, 'src>(
     parser.advance(); // consume `function`
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
     let method_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-        text
+        Ident::name(text)
     } else {
         parser.error(ParseError::Expected {
             expected: "method name".into(),
             found: parser.current_kind(),
             span: parser.current_span(),
         });
-        ERROR_PLACEHOLDER
+        Ident::ERROR
     };
 
     parser.expect(TokenKind::LeftParen);
@@ -778,7 +782,7 @@ fn parse_property_member<'arena, 'src>(
     type_hint: Option<TypeHint<'arena, 'src>>,
 ) {
     let var_token = parser.advance();
-    let prop_name = parser.variable_name(var_token);
+    let prop_name = parser.variable_ident(var_token);
 
     let default = if parser.eat(TokenKind::Equals).is_some() {
         // Suppress `{` subscript so a following hook block `{ get => ...; }`
@@ -840,7 +844,7 @@ fn parse_property_member<'arena, 'src>(
     } else if parser.eat(TokenKind::Comma).is_some() {
         while parser.check(TokenKind::Variable) {
             let var_token = parser.advance();
-            let pname = parser.variable_name(var_token);
+            let pname = parser.variable_ident(var_token);
 
             let pdefault = if parser.eat(TokenKind::Equals).is_some() {
                 Some(expr::parse_expr(parser))
@@ -899,21 +903,23 @@ pub(super) fn parse_interface<'arena, 'src>(
     let start = parser.start_span();
     parser.advance();
     let (name, name_span) = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
-        (text, span)
+        (Ident::name(text), span)
     } else {
         parser.error(ParseError::Expected {
             expected: "interface name".into(),
             found: parser.current_kind(),
             span: parser.current_span(),
         });
-        (ERROR_PLACEHOLDER, parser.current_span())
+        (Ident::ERROR, parser.current_span())
     };
 
-    if is_reserved_class_name(name) {
-        parser.error(ParseError::Forbidden {
-            message: format!("cannot use '{}' as interface name", name).into(),
-            span: name_span,
-        });
+    if let Some(text) = name.as_str() {
+        if is_reserved_class_name(text) {
+            parser.error(ParseError::Forbidden {
+                message: format!("cannot use '{}' as interface name", text).into(),
+                span: name_span,
+            });
+        }
     }
 
     let extends = if parser.eat(TokenKind::Extends).is_some() {
@@ -926,11 +932,13 @@ pub(super) fn parse_interface<'arena, 'src>(
         parser.alloc_vec()
     };
 
+    // Capture docblock before parsing body (members must not steal it)
+    let doc_comment = parser.take_doc_comment(start);
+
     parser.expect(TokenKind::LeftBrace);
     let members = parse_class_members(parser, true);
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
-    let doc_comment = parser.take_doc_comment(start);
 
     Stmt {
         kind: StmtKind::Interface(parser.alloc(InterfaceDecl {
@@ -953,21 +961,23 @@ pub(super) fn parse_trait<'arena, 'src>(
     let start = parser.start_span();
     parser.advance();
     let name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-        text
+        Ident::name(text)
     } else {
         parser.error(ParseError::Expected {
             expected: "trait name".into(),
             found: parser.current_kind(),
             span: parser.current_span(),
         });
-        ERROR_PLACEHOLDER
+        Ident::ERROR
     };
+
+    // Capture docblock before parsing body (members must not steal it)
+    let doc_comment = parser.take_doc_comment(start);
 
     parser.expect(TokenKind::LeftBrace);
     let members = parse_class_members(parser, false);
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
-    let doc_comment = parser.take_doc_comment(start);
 
     Stmt {
         kind: StmtKind::Trait(parser.alloc(TraitDecl {

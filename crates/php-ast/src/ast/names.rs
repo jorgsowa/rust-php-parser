@@ -6,6 +6,112 @@ use crate::Span;
 
 use super::ArenaVec;
 
+/// A bare identifier — the kind that names a function, class, parameter,
+/// enum case, etc. Distinct from [`Name`], which represents possibly-qualified
+/// names.
+///
+/// Memory layout is identical to `&'src str` (16 bytes); `Option<Ident>` is
+/// also 16 bytes via the standard pointer niche. The "error" state — produced
+/// during error recovery when no identifier was found in the source — is
+/// represented by an empty string slice, which cannot occur for a real PHP
+/// identifier (the lexer rejects empty matches).
+///
+/// Use [`Ident::name`] / [`Ident::ERROR`] to construct, [`Ident::as_str`] to
+/// extract a real name, [`Ident::is_error`] to test for the error state.
+/// Serialises as a JSON string for real names and `null` for the error state.
+#[repr(transparent)]
+#[derive(Clone, Copy)]
+pub struct Ident<'src>(&'src str);
+
+impl<'src> Ident<'src> {
+    /// Sentinel for "no identifier was parsed" — same memory layout as a real
+    /// `Ident`, distinguished by the empty-string interior.
+    pub const ERROR: Self = Self("");
+
+    /// Construct an identifier from a non-empty source slice.
+    /// Empty input is rejected in debug builds — use [`Ident::ERROR`] instead.
+    #[inline]
+    pub fn name(s: &'src str) -> Self {
+        debug_assert!(!s.is_empty(), "Ident::name() called with empty string");
+        Self(s)
+    }
+
+    /// Returns `Some(s)` for a real identifier, `None` for the error state.
+    #[inline]
+    pub fn as_str(&self) -> Option<&'src str> {
+        if self.0.is_empty() {
+            None
+        } else {
+            Some(self.0)
+        }
+    }
+
+    /// Returns `true` if this identifier was synthesised during error recovery.
+    #[inline]
+    pub fn is_error(&self) -> bool {
+        self.0.is_empty()
+    }
+
+    /// Returns the inner string, or `"<error>"` for the error state.
+    /// Useful when constructing diagnostic messages.
+    #[inline]
+    pub fn or_error(&self) -> &'src str {
+        if self.0.is_empty() {
+            "<error>"
+        } else {
+            self.0
+        }
+    }
+}
+
+impl<'src> std::fmt::Debug for Ident<'src> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        if self.0.is_empty() {
+            f.write_str("Ident::ERROR")
+        } else {
+            f.debug_tuple("Ident").field(&self.0).finish()
+        }
+    }
+}
+
+impl<'src> std::fmt::Display for Ident<'src> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.or_error())
+    }
+}
+
+impl<'src> serde::Serialize for Ident<'src> {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+        if self.0.is_empty() {
+            s.serialize_none()
+        } else {
+            s.serialize_str(self.0)
+        }
+    }
+}
+
+impl<'src> PartialEq<&str> for Ident<'src> {
+    fn eq(&self, other: &&str) -> bool {
+        !self.0.is_empty() && self.0 == *other
+    }
+}
+
+#[cfg(test)]
+mod ident_layout_tests {
+    use super::Ident;
+
+    /// `Ident` is `#[repr(transparent)]` over `&str`; this test guards the
+    /// invariant so the size never accidentally regresses.
+    #[test]
+    fn ident_has_same_size_as_str_slice() {
+        assert_eq!(std::mem::size_of::<Ident>(), std::mem::size_of::<&str>());
+        assert_eq!(
+            std::mem::size_of::<Option<Ident>>(),
+            std::mem::size_of::<Option<&str>>()
+        );
+    }
+}
+
 /// A PHP name (identifier, qualified name, fully-qualified name, or relative name).
 ///
 /// The `Simple` variant is the fast path for the common case (~95%) of single
@@ -14,6 +120,10 @@ use super::ArenaVec;
 ///
 /// The `Complex` variant handles qualified (`Foo\Bar`), fully-qualified (`\Foo\Bar`),
 /// and relative (`namespace\Foo`) names.
+///
+/// The `Error` variant is synthesised during error recovery when the parser
+/// expected a name but found none. It carries only a span so consumers can
+/// distinguish it from any user-written name.
 pub enum Name<'arena, 'src> {
     /// Single unqualified identifier — no `ArenaVec` allocation.
     /// `&'src str` instead of `Cow` since this is always a borrowed slice of the source.
@@ -24,13 +134,17 @@ pub enum Name<'arena, 'src> {
         kind: NameKind,
         span: Span,
     },
+    /// Synthesised during error recovery when no real name could be parsed.
+    /// Distinguishable from any user-written name; visitors and tools can
+    /// explicitly skip or flag these.
+    Error { span: Span },
 }
 
 impl<'arena, 'src> Name<'arena, 'src> {
     #[inline]
     pub fn span(&self) -> Span {
         match self {
-            Self::Simple { span, .. } | Self::Complex { span, .. } => *span,
+            Self::Simple { span, .. } | Self::Complex { span, .. } | Self::Error { span } => *span,
         }
     }
 
@@ -39,6 +153,7 @@ impl<'arena, 'src> Name<'arena, 'src> {
         match self {
             Self::Simple { .. } => NameKind::Unqualified,
             Self::Complex { kind, .. } => *kind,
+            Self::Error { .. } => NameKind::Error,
         }
     }
 
@@ -55,11 +170,13 @@ impl<'arena, 'src> Name<'arena, 'src> {
         match self {
             Self::Simple { value, .. } => value,
             Self::Complex { span, .. } => &src[span.start as usize..span.end as usize],
+            Self::Error { .. } => "",
         }
     }
 
     /// Joins all parts with `\` and prepends `\` if fully qualified.
     /// Returns `Cow::Borrowed` for simple names (zero allocation).
+    /// Returns an empty `Cow::Borrowed("")` for `Name::Error`.
     #[inline]
     pub fn to_string_repr(&self) -> Cow<'src, str> {
         match self {
@@ -72,16 +189,19 @@ impl<'arena, 'src> Name<'arena, 'src> {
                     Cow::Owned(joined)
                 }
             }
+            Self::Error { .. } => Cow::Borrowed(""),
         }
     }
 
     /// Joins all parts with `\` without any leading backslash.
     /// Returns `Cow::Borrowed` for simple names (zero allocation).
+    /// Returns an empty `Cow::Borrowed("")` for `Name::Error`.
     #[inline]
     pub fn join_parts(&self) -> Cow<'src, str> {
         match self {
             Self::Simple { value, .. } => Cow::Borrowed(value),
             Self::Complex { parts, .. } => Cow::Owned(parts.join("\\")),
+            Self::Error { .. } => Cow::Borrowed(""),
         }
     }
 
@@ -92,6 +212,7 @@ impl<'arena, 'src> Name<'arena, 'src> {
         match self {
             Self::Simple { value, .. } => std::slice::from_ref(value),
             Self::Complex { parts, .. } => parts,
+            Self::Error { .. } => &[],
         }
     }
 }
@@ -111,6 +232,14 @@ impl<'arena, 'src> std::fmt::Debug for Name<'arena, 'src> {
                 .field("kind", kind)
                 .field("span", span)
                 .finish(),
+            Self::Error { span } => {
+                let empty: [&str; 0] = [];
+                f.debug_struct("Name")
+                    .field("parts", &empty)
+                    .field("kind", &NameKind::Error)
+                    .field("span", span)
+                    .finish()
+            }
         }
     }
 }
@@ -130,6 +259,12 @@ impl<'arena, 'src> serde::Serialize for Name<'arena, 'src> {
                 st.serialize_field("kind", kind)?;
                 st.serialize_field("span", span)?;
             }
+            Self::Error { span } => {
+                let empty: [&str; 0] = [];
+                st.serialize_field("parts", &empty[..])?;
+                st.serialize_field("kind", &NameKind::Error)?;
+                st.serialize_field("span", span)?;
+            }
         }
         st.end()
     }
@@ -145,6 +280,8 @@ pub enum NameKind {
     FullyQualified,
     /// A name starting with the `namespace` keyword: `namespace\Foo`.
     Relative,
+    /// Synthesised during error recovery — no real name was present in the source.
+    Error,
 }
 
 /// PHP built-in type keyword — zero-cost alternative to `Name::Simple` for the

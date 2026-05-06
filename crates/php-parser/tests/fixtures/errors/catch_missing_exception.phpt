@@ -15,10 +15,8 @@ expected ')', found '{'
             {
               "types": [
                 {
-                  "parts": [
-                    "<error>"
-                  ],
-                  "kind": "Unqualified",
+                  "parts": [],
+                  "kind": "Error",
                   "span": {
                     "start": 20,
                     "end": 21

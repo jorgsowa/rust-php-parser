@@ -12,10 +12,8 @@ expected identifier, found ';'
           "uses": [
             {
               "name": {
-                "parts": [
-                  "<error>"
-                ],
-                "kind": "Unqualified",
+                "parts": [],
+                "kind": "Error",
                 "span": {
                   "start": 10,
                   "end": 11

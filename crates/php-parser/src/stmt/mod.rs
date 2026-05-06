@@ -1,7 +1,7 @@
 use php_ast::*;
 use php_lexer::TokenKind;
 
-use crate::diagnostics::{ParseError, ERROR_PLACEHOLDER};
+use crate::diagnostics::ParseError;
 use crate::expr;
 use crate::instrument;
 use crate::parser::Parser;
@@ -1060,14 +1060,14 @@ fn parse_function<'arena, 'src>(
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
 
     let name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-        text
+        Ident::name(text)
     } else {
         parser.error(ParseError::Expected {
             expected: "function name".into(),
             found: parser.current_kind(),
             span: parser.current_span(),
         });
-        ERROR_PLACEHOLDER
+        Ident::ERROR
     };
 
     let open_paren = parser.expect(TokenKind::LeftParen);
@@ -1262,9 +1262,9 @@ pub fn parse_param_list<'arena, 'src>(
 
         let name_token = parser.expect(TokenKind::Variable);
         let name_span_end = name_token.as_ref().map(|t| t.span.end);
-        let name: &str = name_token
-            .map(|t| parser.variable_name(t))
-            .unwrap_or(ERROR_PLACEHOLDER);
+        let name = name_token
+            .map(|t| parser.variable_ident(t))
+            .unwrap_or(Ident::ERROR);
 
         let default = if parser.eat(TokenKind::Equals).is_some() {
             if visibility.is_some() {
@@ -1346,7 +1346,7 @@ fn try_parse_simple_param_fastpath_minimal<'arena, 'src>(
     // Safe to fast path. Now consume the tokens.
     let name_token = parser.advance();
     let name_span_end = name_token.span.end;
-    let name: &str = parser.variable_name(name_token);
+    let name = parser.variable_ident(name_token);
 
     Some(Param {
         name,
@@ -1644,9 +1644,9 @@ fn parse_goto<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena
     parser.advance();
     let name_token = parser.expect(TokenKind::Identifier);
     let src = parser.source;
-    let name: &str = name_token
-        .map(|t| &src[t.span.start as usize..t.span.end as usize])
-        .unwrap_or(ERROR_PLACEHOLDER);
+    let name = name_token
+        .map(|t| Ident::name(&src[t.span.start as usize..t.span.end as usize]))
+        .unwrap_or(Ident::ERROR);
     parser.expect(TokenKind::Semicolon);
     let span = Span::new(start, parser.previous_end());
     Stmt {
@@ -1918,6 +1918,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                             cp.push(p);
                         }
                     }
+                    Name::Error { .. } => {}
                 }
                 cp
             };
@@ -2022,14 +2023,14 @@ fn parse_const_with_attrs<'arena, 'src>(
     loop {
         let item_start = parser.start_span();
         let const_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-            text
+            Ident::name(text)
         } else {
             parser.error(ParseError::Expected {
                 expected: "constant name".into(),
                 found: parser.current_kind(),
                 span: parser.current_span(),
             });
-            ERROR_PLACEHOLDER
+            Ident::ERROR
         };
         parser.expect(TokenKind::Equals);
         let value = expr::parse_expr(parser);
@@ -2111,9 +2112,9 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
     loop {
         let var_start = parser.start_span();
         let var_token = parser.expect(TokenKind::Variable);
-        let name: &str = var_token
-            .map(|t| parser.variable_name(t))
-            .unwrap_or(ERROR_PLACEHOLDER);
+        let name = var_token
+            .map(|t| parser.variable_ident(t))
+            .unwrap_or(Ident::ERROR);
 
         let default = if parser.eat(TokenKind::Equals).is_some() {
             Some(expr::parse_expr(parser))

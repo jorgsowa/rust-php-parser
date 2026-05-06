@@ -19,6 +19,7 @@ impl Printer {
                     self.w(part);
                 }
             }
+            Name::Error { .. } => self.w("<error>"),
         }
     }
 

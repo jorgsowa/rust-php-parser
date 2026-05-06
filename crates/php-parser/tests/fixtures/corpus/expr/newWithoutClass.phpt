@@ -14,9 +14,7 @@ expected identifier, found ';'
           "kind": {
             "New": {
               "class": {
-                "kind": {
-                  "Identifier": "<error>"
-                },
+                "kind": "Error",
                 "span": {
                   "start": 9,
                   "end": 10

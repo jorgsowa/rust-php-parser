@@ -126,7 +126,7 @@ impl Printer {
             }
             StmtKind::Goto(label) => {
                 self.w("goto ");
-                self.w(label);
+                self.w(label.or_error());
                 self.w(";");
             }
             StmtKind::Label(label) => {
@@ -183,7 +183,7 @@ impl Printer {
                     if i > 0 {
                         self.w(", ");
                     }
-                    self.w(item.name);
+                    self.w(item.name.or_error());
                     self.w(" = ");
                     self.print_expr(&item.value, PREC_LOWEST);
                 }
@@ -196,7 +196,7 @@ impl Printer {
                         self.w(", ");
                     }
                     self.w("$");
-                    self.w(var.name);
+                    self.w(var.name.or_error());
                     if let Some(default) = &var.default {
                         self.w(" = ");
                         self.print_expr(default, PREC_LOWEST);

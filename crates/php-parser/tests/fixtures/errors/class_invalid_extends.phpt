@@ -15,10 +15,8 @@ expected identifier, found '{'
             "is_readonly": false
           },
           "extends": {
-            "parts": [
-              "<error>"
-            ],
-            "kind": "Unqualified",
+            "parts": [],
+            "kind": "Error",
             "span": {
               "start": 25,
               "end": 26

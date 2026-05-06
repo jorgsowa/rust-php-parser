@@ -3,8 +3,8 @@ use serde::Serialize;
 use crate::Span;
 
 use super::{
-    ArenaVec, Attribute, ClassDecl, Comment, EnumDecl, Expr, FunctionDecl, InterfaceDecl, Name,
-    TraitDecl,
+    ArenaVec, Attribute, ClassDecl, Comment, EnumDecl, Expr, FunctionDecl, Ident, InterfaceDecl,
+    Name, TraitDecl,
 };
 
 #[derive(Debug, Serialize)]
@@ -55,7 +55,7 @@ pub enum StmtKind<'arena, 'src> {
     Switch(&'arena SwitchStmt<'arena, 'src>),
 
     /// Goto statement
-    Goto(&'src str),
+    Goto(Ident<'src>),
 
     /// Label statement
     Label(&'arena str),
@@ -230,7 +230,7 @@ pub struct UseItem<'arena, 'src> {
 
 #[derive(Debug, Serialize)]
 pub struct ConstItem<'arena, 'src> {
-    pub name: &'src str,
+    pub name: Ident<'src>,
     pub value: Expr<'arena, 'src>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     pub span: Span,
@@ -240,7 +240,7 @@ pub struct ConstItem<'arena, 'src> {
 
 #[derive(Debug, Serialize)]
 pub struct StaticVar<'arena, 'src> {
-    pub name: &'src str,
+    pub name: Ident<'src>,
     pub default: Option<Expr<'arena, 'src>>,
     pub span: Span,
 }

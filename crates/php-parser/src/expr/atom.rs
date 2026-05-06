@@ -634,13 +634,21 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         TokenKind::Backslash => {
             let start = parser.start_span();
             let name = parser.parse_name();
-            let ident = match name.to_string_repr() {
-                Cow::Borrowed(s) => NameStr::Src(s),
-                Cow::Owned(ref s) => NameStr::Arena(parser.arena.alloc_str(s)),
-            };
-            Expr {
-                kind: ExprKind::Identifier(ident),
-                span: Span::new(start, name.span().end),
+            let span = Span::new(start, name.span().end);
+            if matches!(name, Name::Error { .. }) {
+                Expr {
+                    kind: ExprKind::Error,
+                    span,
+                }
+            } else {
+                let ident = match name.to_string_repr() {
+                    Cow::Borrowed(s) => NameStr::Src(s),
+                    Cow::Owned(ref s) => NameStr::Arena(parser.arena.alloc_str(s)),
+                };
+                Expr {
+                    kind: ExprKind::Identifier(ident),
+                    span,
+                }
             }
         }
 
@@ -1062,12 +1070,20 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         TokenKind::Namespace if parser.peek_kind() == Some(TokenKind::Backslash) => {
             let start = parser.start_span();
             let name = parser.parse_name();
-            let text = parser
-                .arena
-                .alloc_str(&format!("namespace\\{}", name.join_parts()));
-            Expr {
-                kind: ExprKind::Identifier(NameStr::Arena(text)),
-                span: Span::new(start, name.span().end),
+            let span = Span::new(start, name.span().end);
+            if matches!(name, Name::Error { .. }) {
+                Expr {
+                    kind: ExprKind::Error,
+                    span,
+                }
+            } else {
+                let text = parser
+                    .arena
+                    .alloc_str(&format!("namespace\\{}", name.join_parts()));
+                Expr {
+                    kind: ExprKind::Identifier(NameStr::Arena(text)),
+                    span,
+                }
             }
         }
         TokenKind::Namespace => {
@@ -1237,13 +1253,21 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         _ => {
             // Parse as a name (possibly qualified)
             let name = parser.parse_name();
-            let ident = match name.to_string_repr() {
-                Cow::Borrowed(s) => NameStr::Src(s),
-                Cow::Owned(ref s) => NameStr::Arena(parser.arena.alloc_str(s)),
-            };
-            Expr {
-                kind: ExprKind::Identifier(ident),
-                span: name.span(),
+            let span = name.span();
+            if matches!(name, Name::Error { .. }) {
+                Expr {
+                    kind: ExprKind::Error,
+                    span,
+                }
+            } else {
+                let ident = match name.to_string_repr() {
+                    Cow::Borrowed(s) => NameStr::Src(s),
+                    Cow::Owned(ref s) => NameStr::Arena(parser.arena.alloc_str(s)),
+                };
+                Expr {
+                    kind: ExprKind::Identifier(ident),
+                    span,
+                }
             }
         }
     };

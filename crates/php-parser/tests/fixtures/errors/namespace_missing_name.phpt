@@ -9,10 +9,8 @@ expected identifier, found ';'
       "kind": {
         "Namespace": {
           "name": {
-            "parts": [
-              "<error>"
-            ],
-            "kind": "Unqualified",
+            "parts": [],
+            "kind": "Error",
             "span": {
               "start": 15,
               "end": 16

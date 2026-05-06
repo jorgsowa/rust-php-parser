@@ -2,11 +2,11 @@ use serde::Serialize;
 
 use crate::Span;
 
-use super::{ArenaVec, Attribute, Comment, Expr, Name, Stmt, TypeHint};
+use super::{ArenaVec, Attribute, Comment, Expr, Ident, Name, Stmt, TypeHint};
 
 #[derive(Debug, Serialize)]
 pub struct FunctionDecl<'arena, 'src> {
-    pub name: &'src str,
+    pub name: Ident<'src>,
     pub params: ArenaVec<'arena, Param<'arena, 'src>>,
     pub body: ArenaVec<'arena, Stmt<'arena, 'src>>,
     pub return_type: Option<TypeHint<'arena, 'src>>,
@@ -18,7 +18,7 @@ pub struct FunctionDecl<'arena, 'src> {
 
 #[derive(Debug, Serialize)]
 pub struct Param<'arena, 'src> {
-    pub name: &'src str,
+    pub name: Ident<'src>,
     pub type_hint: Option<TypeHint<'arena, 'src>>,
     pub default: Option<Expr<'arena, 'src>>,
     pub by_ref: bool,
@@ -45,7 +45,7 @@ pub enum Visibility {
 
 #[derive(Debug, Serialize)]
 pub struct ClassDecl<'arena, 'src> {
-    pub name: Option<&'src str>,
+    pub name: Option<Ident<'src>>,
     pub modifiers: ClassModifiers,
     pub extends: Option<Name<'arena, 'src>>,
     pub implements: ArenaVec<'arena, Name<'arena, 'src>>,
@@ -78,7 +78,7 @@ pub enum ClassMemberKind<'arena, 'src> {
 
 #[derive(Debug, Serialize)]
 pub struct PropertyDecl<'arena, 'src> {
-    pub name: &'src str,
+    pub name: Ident<'src>,
     pub visibility: Option<Visibility>,
     pub set_visibility: Option<Visibility>,
     pub is_static: bool,
@@ -123,7 +123,7 @@ pub struct PropertyHook<'arena, 'src> {
 
 #[derive(Debug, Serialize)]
 pub struct MethodDecl<'arena, 'src> {
-    pub name: &'src str,
+    pub name: Ident<'src>,
     pub visibility: Option<Visibility>,
     pub is_static: bool,
     pub is_abstract: bool,
@@ -139,7 +139,7 @@ pub struct MethodDecl<'arena, 'src> {
 
 #[derive(Debug, Serialize)]
 pub struct ClassConstDecl<'arena, 'src> {
-    pub name: &'src str,
+    pub name: Ident<'src>,
     pub visibility: Option<Visibility>,
     pub is_final: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -181,7 +181,7 @@ pub enum TraitAdaptationKind<'arena, 'src> {
 
 #[derive(Debug, Serialize)]
 pub struct InterfaceDecl<'arena, 'src> {
-    pub name: &'src str,
+    pub name: Ident<'src>,
     pub extends: ArenaVec<'arena, Name<'arena, 'src>>,
     pub members: ArenaVec<'arena, ClassMember<'arena, 'src>>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
@@ -191,7 +191,7 @@ pub struct InterfaceDecl<'arena, 'src> {
 
 #[derive(Debug, Serialize)]
 pub struct TraitDecl<'arena, 'src> {
-    pub name: &'src str,
+    pub name: Ident<'src>,
     pub members: ArenaVec<'arena, ClassMember<'arena, 'src>>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -200,7 +200,7 @@ pub struct TraitDecl<'arena, 'src> {
 
 #[derive(Debug, Serialize)]
 pub struct EnumDecl<'arena, 'src> {
-    pub name: &'src str,
+    pub name: Ident<'src>,
     pub scalar_type: Option<Name<'arena, 'src>>,
     pub implements: ArenaVec<'arena, Name<'arena, 'src>>,
     pub members: ArenaVec<'arena, EnumMember<'arena, 'src>>,
@@ -229,7 +229,7 @@ pub enum EnumMemberKind<'arena, 'src> {
 
 #[derive(Debug, Serialize)]
 pub struct EnumCase<'arena, 'src> {
-    pub name: &'src str,
+    pub name: Ident<'src>,
     pub value: Option<Expr<'arena, 'src>>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     #[serde(skip_serializing_if = "Option::is_none")]
