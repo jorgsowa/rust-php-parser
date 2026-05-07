@@ -34,26 +34,16 @@ expected class member, found 'public'
                   "is_readonly": false,
                   "type_hint": {
                     "kind": {
-                      "Intersection": [
-                        {
-                          "kind": {
-                            "Named": {
-                              "parts": [
-                                "set"
-                              ],
-                              "kind": "Unqualified",
-                              "span": {
-                                "start": 44,
-                                "end": 47
-                              }
-                            }
-                          },
-                          "span": {
-                            "start": 44,
-                            "end": 47
-                          }
+                      "Named": {
+                        "parts": [
+                          "set"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 44,
+                          "end": 47
                         }
-                      ]
+                      }
                     },
                     "span": {
                       "start": 43,
@@ -79,26 +69,16 @@ expected class member, found 'public'
                   "is_readonly": false,
                   "type_hint": {
                     "kind": {
-                      "Intersection": [
-                        {
-                          "kind": {
-                            "Named": {
-                              "parts": [
-                                "set"
-                              ],
-                              "kind": "Unqualified",
-                              "span": {
-                                "start": 77,
-                                "end": 80
-                              }
-                            }
-                          },
-                          "span": {
-                            "start": 77,
-                            "end": 80
-                          }
+                      "Named": {
+                        "parts": [
+                          "set"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 77,
+                          "end": 80
                         }
-                      ]
+                      }
                     },
                     "span": {
                       "start": 76,

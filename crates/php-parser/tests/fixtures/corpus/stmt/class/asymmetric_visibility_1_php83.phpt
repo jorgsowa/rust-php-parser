@@ -75,26 +75,16 @@ class Test {
                   "is_readonly": false,
                   "type_hint": {
                     "kind": {
-                      "Intersection": [
-                        {
-                          "kind": {
-                            "Named": {
-                              "parts": [
-                                "set"
-                              ],
-                              "kind": "Unqualified",
-                              "span": {
-                                "start": 93,
-                                "end": 96
-                              }
-                            }
-                          },
-                          "span": {
-                            "start": 93,
-                            "end": 96
-                          }
+                      "Named": {
+                        "parts": [
+                          "set"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 93,
+                          "end": 96
                         }
-                      ]
+                      }
                     },
                     "span": {
                       "start": 92,

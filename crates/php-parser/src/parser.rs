@@ -830,41 +830,249 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     end = t.span.end;
                     types.push(t);
                 }
-                let span = Span::new(start, end);
-                return TypeHint {
-                    kind: TypeHintKind::Intersection(types),
-                    span,
-                };
+
+                // Check if there's a union after this intersection (DNF: A&B|C&D)
+                if self.check(TokenKind::Pipe) {
+                    self.require_version(PhpVersion::Php82, "DNF types", Span::new(start, end));
+                    let intersection_span = Span::new(start, end);
+                    let intersection = TypeHint {
+                        kind: TypeHintKind::Intersection(types),
+                        span: intersection_span,
+                    };
+                    let mut union_members = self.alloc_vec_one(intersection);
+                    end = intersection_span.end;
+
+                    while self.eat(TokenKind::Pipe).is_some() {
+                        // Parse the next union member (could be an intersection or simple type)
+                        let member_start = self.start_span();
+                        let member = self.parse_simple_type();
+                        let mut member_types = self.alloc_vec_one(member);
+
+                        // Check if this union member is an intersection
+                        while self.check(TokenKind::Ampersand) {
+                            let peek = self.peek_kind();
+                            let looks_like_type = matches!(
+                                peek,
+                                Some(
+                                    TokenKind::Identifier
+                                        | TokenKind::Backslash
+                                        | TokenKind::Self_
+                                        | TokenKind::Parent_
+                                        | TokenKind::Static
+                                        | TokenKind::Namespace
+                                        | TokenKind::Array
+                                )
+                            );
+                            if !looks_like_type {
+                                break;
+                            }
+                            self.eat(TokenKind::Ampersand);
+                            member_types.push(self.parse_simple_type());
+                        }
+
+                        if member_types.len() > 1 {
+                            let mspan = Span::new(member_start, self.previous_end());
+                            union_members.push(TypeHint {
+                                kind: TypeHintKind::Intersection(member_types),
+                                span: mspan,
+                            });
+                        } else {
+                            union_members.push(member_types.into_iter().next().unwrap());
+                        }
+                        end = self.previous_end();
+                    }
+
+                    return TypeHint {
+                        kind: TypeHintKind::Union(union_members),
+                        span: Span::new(start, end),
+                    };
+                } else {
+                    // Just an intersection, no union
+                    let span = Span::new(start, end);
+                    return TypeHint {
+                        kind: TypeHintKind::Intersection(types),
+                        span,
+                    };
+                }
             }
         }
 
         first
     }
 
-    /// Parse a type element: either a simple type or a parenthesized intersection `(A&B)`.
+    /// Parse a type element: either a simple type or a parenthesized type (intersection, union, or mixed DNF).
     fn parse_type_element(&mut self) -> TypeHint<'arena, 'src> {
         if self.check(TokenKind::LeftParen) {
             let start = self.start_span();
-            self.require_version(
-                PhpVersion::Php81,
-                "intersection types",
-                Span::new(start, start + 1),
-            );
             self.advance(); // consume (
-            let first_type = self.parse_simple_type();
-            let mut types = self.alloc_vec_one(first_type);
-            while self.eat(TokenKind::Ampersand).is_some() {
-                types.push(self.parse_simple_type());
-            }
+
+            // Parse the content inside parentheses.
+            // This can be:
+            // - A simple type: (A)
+            // - An intersection: (A&B)
+            // - A union: (A|B) or (A&B|C) (DNF)
+            let result = self.parse_parenthesized_type();
+
             self.expect(TokenKind::RightParen);
             let end = self.previous_end();
             let span = Span::new(start, end);
-            TypeHint {
-                kind: TypeHintKind::Intersection(types),
-                span,
+
+            // Return the type, adjusting span
+            match result.kind {
+                TypeHintKind::Intersection(types) => {
+                    // For parenthesized intersections, require PHP 8.1
+                    if types.len() > 1 {
+                        self.require_version(PhpVersion::Php81, "intersection types", span);
+                    }
+                    TypeHint {
+                        kind: TypeHintKind::Intersection(types),
+                        span,
+                    }
+                }
+                TypeHintKind::Union(types) => {
+                    // For parenthesized unions, require PHP 8.2
+                    self.require_version(PhpVersion::Php82, "parenthesized union types", span);
+                    TypeHint {
+                        kind: TypeHintKind::Union(types),
+                        span,
+                    }
+                }
+                _ => TypeHint {
+                    kind: result.kind,
+                    span,
+                },
             }
         } else {
             self.parse_simple_type()
+        }
+    }
+
+    /// Parse the content inside parentheses in a type context.
+    /// Handles unions (A|B) and intersections (A&B) with proper precedence.
+    fn parse_parenthesized_type(&mut self) -> TypeHint<'arena, 'src> {
+        let start = self.start_span();
+
+        // Parse first simple type
+        let first_type = self.parse_simple_type();
+
+        // Check what comes next: & for intersection, | for union, or ) for single type
+        if self.check(TokenKind::Ampersand) {
+            // Parse intersection: A&B&C
+            self.advance(); // consume &
+            let mut types = self.alloc_vec_one(first_type);
+            types.push(self.parse_simple_type());
+
+            while self.check(TokenKind::Ampersand) && !self.check(TokenKind::Pipe) {
+                self.advance(); // consume &
+                types.push(self.parse_simple_type());
+            }
+
+            // Check if there are union operators after the intersection
+            if self.check(TokenKind::Pipe) {
+                // This is a DNF type: (A&B|C)
+                self.advance(); // consume |
+
+                // Wrap the first intersection member
+                let ispan = Span::new(start, self.previous_end());
+                let mut union_members = self.alloc_vec_one(TypeHint {
+                    kind: TypeHintKind::Intersection(types),
+                    span: ispan,
+                });
+
+                // Parse rest of union
+                loop {
+                    // Parse next union member (could be an intersection or single type)
+                    let member_start = self.start_span();
+                    let member_type = self.parse_simple_type();
+
+                    if self.check(TokenKind::Ampersand) {
+                        // This member is an intersection
+                        self.advance();
+                        let mut member_types = self.alloc_vec_one(member_type);
+                        member_types.push(self.parse_simple_type());
+
+                        while self.check(TokenKind::Ampersand) && !self.check(TokenKind::Pipe) {
+                            self.advance();
+                            member_types.push(self.parse_simple_type());
+                        }
+
+                        let mspan = Span::new(member_start, self.previous_end());
+                        union_members.push(TypeHint {
+                            kind: TypeHintKind::Intersection(member_types),
+                            span: mspan,
+                        });
+                    } else {
+                        // Single type
+                        union_members.push(member_type);
+                    }
+
+                    if !self.check(TokenKind::Pipe) {
+                        break;
+                    }
+                    self.advance(); // consume |
+                }
+
+                let end = self.previous_end();
+                TypeHint {
+                    kind: TypeHintKind::Union(union_members),
+                    span: Span::new(start, end),
+                }
+            } else {
+                // Just a parenthesized intersection
+                let end = self.previous_end();
+                TypeHint {
+                    kind: TypeHintKind::Intersection(types),
+                    span: Span::new(start, end),
+                }
+            }
+        } else if self.check(TokenKind::Pipe) {
+            // Parse union: A|B|C or (A|B|C) where A is single types
+            self.advance(); // consume |
+            let mut union_members = self.alloc_vec_one(first_type);
+
+            loop {
+                let member_start = self.start_span();
+                let member_type = self.parse_simple_type();
+
+                if self.check(TokenKind::Ampersand) {
+                    // This member is an intersection
+                    self.advance();
+                    let mut member_types = self.alloc_vec_one(member_type);
+                    member_types.push(self.parse_simple_type());
+
+                    while self.check(TokenKind::Ampersand) && !self.check(TokenKind::Pipe) {
+                        self.advance();
+                        member_types.push(self.parse_simple_type());
+                    }
+
+                    let mspan = Span::new(member_start, self.previous_end());
+                    union_members.push(TypeHint {
+                        kind: TypeHintKind::Intersection(member_types),
+                        span: mspan,
+                    });
+                } else {
+                    // Single type
+                    union_members.push(member_type);
+                }
+
+                if !self.check(TokenKind::Pipe) {
+                    break;
+                }
+                self.advance(); // consume |
+            }
+
+            let end = self.previous_end();
+            TypeHint {
+                kind: TypeHintKind::Union(union_members),
+                span: Span::new(start, end),
+            }
+        } else {
+            // Just a single type wrapped in parentheses
+            let end = self.previous_end();
+            TypeHint {
+                kind: first_type.kind,
+                span: Span::new(start, end),
+            }
         }
     }
 
