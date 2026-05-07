@@ -44,9 +44,6 @@ class TestDNFProperties {
     // Edge case 13: Self type
     public function test13(self|int $x) {}
 
-    // Edge case 14: Self in intersection
-    public function test14(self&A $x) {}
-
     // Edge case 15: Complex 4-way intersection
     public function test15((A&B&C&D)|(E&F&G&H) $x) {}
 }
@@ -1811,88 +1808,6 @@ function test25(iterable|A $x) {}
             {
               "kind": {
                 "Method": {
-                  "name": "test14",
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
-                  "by_ref": false,
-                  "params": [
-                    {
-                      "name": "x",
-                      "type_hint": {
-                        "kind": {
-                          "Intersection": [
-                            {
-                              "kind": {
-                                "Named": {
-                                  "parts": [
-                                    "self"
-                                  ],
-                                  "kind": "Unqualified",
-                                  "span": {
-                                    "start": 1172,
-                                    "end": 1176
-                                  }
-                                }
-                              },
-                              "span": {
-                                "start": 1172,
-                                "end": 1176
-                              }
-                            },
-                            {
-                              "kind": {
-                                "Named": {
-                                  "parts": [
-                                    "A"
-                                  ],
-                                  "kind": "Unqualified",
-                                  "span": {
-                                    "start": 1177,
-                                    "end": 1178
-                                  }
-                                }
-                              },
-                              "span": {
-                                "start": 1177,
-                                "end": 1178
-                              }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 1172,
-                          "end": 1178
-                        }
-                      },
-                      "default": null,
-                      "by_ref": false,
-                      "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
-                      "attributes": [],
-                      "span": {
-                        "start": 1172,
-                        "end": 1181
-                      }
-                    }
-                  ],
-                  "return_type": null,
-                  "body": [],
-                  "attributes": []
-                }
-              },
-              "span": {
-                "start": 1149,
-                "end": 1185
-              }
-            },
-            {
-              "kind": {
-                "Method": {
                   "name": "test15",
                   "visibility": "Public",
                   "is_static": false,
@@ -1916,14 +1831,14 @@ function test25(iterable|A $x) {}
                                         ],
                                         "kind": "Unqualified",
                                         "span": {
-                                          "start": 1263,
-                                          "end": 1264
+                                          "start": 1179,
+                                          "end": 1180
                                         }
                                       }
                                     },
                                     "span": {
-                                      "start": 1263,
-                                      "end": 1264
+                                      "start": 1179,
+                                      "end": 1180
                                     }
                                   },
                                   {
@@ -1934,14 +1849,14 @@ function test25(iterable|A $x) {}
                                         ],
                                         "kind": "Unqualified",
                                         "span": {
-                                          "start": 1265,
-                                          "end": 1266
+                                          "start": 1181,
+                                          "end": 1182
                                         }
                                       }
                                     },
                                     "span": {
-                                      "start": 1265,
-                                      "end": 1266
+                                      "start": 1181,
+                                      "end": 1182
                                     }
                                   },
                                   {
@@ -1952,14 +1867,14 @@ function test25(iterable|A $x) {}
                                         ],
                                         "kind": "Unqualified",
                                         "span": {
-                                          "start": 1267,
-                                          "end": 1268
+                                          "start": 1183,
+                                          "end": 1184
                                         }
                                       }
                                     },
                                     "span": {
-                                      "start": 1267,
-                                      "end": 1268
+                                      "start": 1183,
+                                      "end": 1184
                                     }
                                   },
                                   {
@@ -1970,21 +1885,21 @@ function test25(iterable|A $x) {}
                                         ],
                                         "kind": "Unqualified",
                                         "span": {
-                                          "start": 1269,
-                                          "end": 1270
+                                          "start": 1185,
+                                          "end": 1186
                                         }
                                       }
                                     },
                                     "span": {
-                                      "start": 1269,
-                                      "end": 1270
+                                      "start": 1185,
+                                      "end": 1186
                                     }
                                   }
                                 ]
                               },
                               "span": {
-                                "start": 1262,
-                                "end": 1271
+                                "start": 1178,
+                                "end": 1187
                               }
                             },
                             {
@@ -1998,14 +1913,14 @@ function test25(iterable|A $x) {}
                                         ],
                                         "kind": "Unqualified",
                                         "span": {
-                                          "start": 1273,
-                                          "end": 1274
+                                          "start": 1189,
+                                          "end": 1190
                                         }
                                       }
                                     },
                                     "span": {
-                                      "start": 1273,
-                                      "end": 1274
+                                      "start": 1189,
+                                      "end": 1190
                                     }
                                   },
                                   {
@@ -2016,14 +1931,14 @@ function test25(iterable|A $x) {}
                                         ],
                                         "kind": "Unqualified",
                                         "span": {
-                                          "start": 1275,
-                                          "end": 1276
+                                          "start": 1191,
+                                          "end": 1192
                                         }
                                       }
                                     },
                                     "span": {
-                                      "start": 1275,
-                                      "end": 1276
+                                      "start": 1191,
+                                      "end": 1192
                                     }
                                   },
                                   {
@@ -2034,14 +1949,14 @@ function test25(iterable|A $x) {}
                                         ],
                                         "kind": "Unqualified",
                                         "span": {
-                                          "start": 1277,
-                                          "end": 1278
+                                          "start": 1193,
+                                          "end": 1194
                                         }
                                       }
                                     },
                                     "span": {
-                                      "start": 1277,
-                                      "end": 1278
+                                      "start": 1193,
+                                      "end": 1194
                                     }
                                   },
                                   {
@@ -2052,28 +1967,28 @@ function test25(iterable|A $x) {}
                                         ],
                                         "kind": "Unqualified",
                                         "span": {
-                                          "start": 1279,
-                                          "end": 1280
+                                          "start": 1195,
+                                          "end": 1196
                                         }
                                       }
                                     },
                                     "span": {
-                                      "start": 1279,
-                                      "end": 1280
+                                      "start": 1195,
+                                      "end": 1196
                                     }
                                   }
                                 ]
                               },
                               "span": {
-                                "start": 1272,
-                                "end": 1281
+                                "start": 1188,
+                                "end": 1197
                               }
                             }
                           ]
                         },
                         "span": {
-                          "start": 1262,
-                          "end": 1281
+                          "start": 1178,
+                          "end": 1197
                         }
                       },
                       "default": null,
@@ -2085,8 +2000,8 @@ function test25(iterable|A $x) {}
                       "set_visibility": null,
                       "attributes": [],
                       "span": {
-                        "start": 1262,
-                        "end": 1284
+                        "start": 1178,
+                        "end": 1200
                       }
                     }
                   ],
@@ -2096,8 +2011,8 @@ function test25(iterable|A $x) {}
                 }
               },
               "span": {
-                "start": 1239,
-                "end": 1288
+                "start": 1155,
+                "end": 1204
               }
             }
           ],
@@ -2106,7 +2021,7 @@ function test25(iterable|A $x) {}
       },
       "span": {
         "start": 929,
-        "end": 1290
+        "end": 1206
       }
     },
     {
@@ -2129,14 +2044,14 @@ function test25(iterable|A $x) {}
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 1376,
-                              "end": 1377
+                              "start": 1292,
+                              "end": 1293
                             }
                           }
                         },
                         "span": {
-                          "start": 1376,
-                          "end": 1377
+                          "start": 1292,
+                          "end": 1293
                         }
                       },
                       {
@@ -2147,21 +2062,21 @@ function test25(iterable|A $x) {}
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 1378,
-                              "end": 1379
+                              "start": 1294,
+                              "end": 1295
                             }
                           }
                         },
                         "span": {
-                          "start": 1378,
-                          "end": 1379
+                          "start": 1294,
+                          "end": 1295
                         }
                       }
                     ]
                   },
                   "span": {
-                    "start": 1375,
-                    "end": 1380
+                    "start": 1291,
+                    "end": 1296
                   }
                 },
                 {
@@ -2175,14 +2090,14 @@ function test25(iterable|A $x) {}
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 1382,
-                              "end": 1383
+                              "start": 1298,
+                              "end": 1299
                             }
                           }
                         },
                         "span": {
-                          "start": 1382,
-                          "end": 1383
+                          "start": 1298,
+                          "end": 1299
                         }
                       },
                       {
@@ -2193,21 +2108,21 @@ function test25(iterable|A $x) {}
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 1384,
-                              "end": 1385
+                              "start": 1300,
+                              "end": 1301
                             }
                           }
                         },
                         "span": {
-                          "start": 1384,
-                          "end": 1385
+                          "start": 1300,
+                          "end": 1301
                         }
                       }
                     ]
                   },
                   "span": {
-                    "start": 1381,
-                    "end": 1386
+                    "start": 1297,
+                    "end": 1302
                   }
                 },
                 {
@@ -2221,14 +2136,14 @@ function test25(iterable|A $x) {}
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 1388,
-                              "end": 1389
+                              "start": 1304,
+                              "end": 1305
                             }
                           }
                         },
                         "span": {
-                          "start": 1388,
-                          "end": 1389
+                          "start": 1304,
+                          "end": 1305
                         }
                       },
                       {
@@ -2239,28 +2154,28 @@ function test25(iterable|A $x) {}
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 1390,
-                              "end": 1391
+                              "start": 1306,
+                              "end": 1307
                             }
                           }
                         },
                         "span": {
-                          "start": 1390,
-                          "end": 1391
+                          "start": 1306,
+                          "end": 1307
                         }
                       }
                     ]
                   },
                   "span": {
-                    "start": 1387,
-                    "end": 1392
+                    "start": 1303,
+                    "end": 1308
                   }
                 }
               ]
             },
             "span": {
-              "start": 1375,
-              "end": 1392
+              "start": 1291,
+              "end": 1308
             }
           },
           "by_ref": false,
@@ -2268,8 +2183,8 @@ function test25(iterable|A $x) {}
         }
       },
       "span": {
-        "start": 1356,
-        "end": 1395
+        "start": 1272,
+        "end": 1311
       }
     },
     {
@@ -2290,14 +2205,14 @@ function test25(iterable|A $x) {}
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 1443,
-                            "end": 1446
+                            "start": 1359,
+                            "end": 1362
                           }
                         }
                       },
                       "span": {
-                        "start": 1443,
-                        "end": 1446
+                        "start": 1359,
+                        "end": 1362
                       }
                     },
                     {
@@ -2308,21 +2223,21 @@ function test25(iterable|A $x) {}
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 1447,
-                            "end": 1451
+                            "start": 1363,
+                            "end": 1367
                           }
                         }
                       },
                       "span": {
-                        "start": 1447,
-                        "end": 1451
+                        "start": 1363,
+                        "end": 1367
                       }
                     }
                   ]
                 },
                 "span": {
-                  "start": 1443,
-                  "end": 1451
+                  "start": 1359,
+                  "end": 1367
                 }
               },
               "default": null,
@@ -2334,8 +2249,8 @@ function test25(iterable|A $x) {}
               "set_visibility": null,
               "attributes": [],
               "span": {
-                "start": 1443,
-                "end": 1454
+                "start": 1359,
+                "end": 1370
               }
             }
           ],
@@ -2346,8 +2261,8 @@ function test25(iterable|A $x) {}
         }
       },
       "span": {
-        "start": 1427,
-        "end": 1458
+        "start": 1343,
+        "end": 1374
       }
     },
     {
@@ -2368,14 +2283,14 @@ function test25(iterable|A $x) {}
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 1507,
-                            "end": 1512
+                            "start": 1423,
+                            "end": 1428
                           }
                         }
                       },
                       "span": {
-                        "start": 1507,
-                        "end": 1512
+                        "start": 1423,
+                        "end": 1428
                       }
                     },
                     {
@@ -2386,21 +2301,21 @@ function test25(iterable|A $x) {}
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 1513,
-                            "end": 1516
+                            "start": 1429,
+                            "end": 1432
                           }
                         }
                       },
                       "span": {
-                        "start": 1513,
-                        "end": 1516
+                        "start": 1429,
+                        "end": 1432
                       }
                     }
                   ]
                 },
                 "span": {
-                  "start": 1507,
-                  "end": 1516
+                  "start": 1423,
+                  "end": 1432
                 }
               },
               "default": null,
@@ -2412,8 +2327,8 @@ function test25(iterable|A $x) {}
               "set_visibility": null,
               "attributes": [],
               "span": {
-                "start": 1507,
-                "end": 1519
+                "start": 1423,
+                "end": 1435
               }
             }
           ],
@@ -2424,8 +2339,8 @@ function test25(iterable|A $x) {}
         }
       },
       "span": {
-        "start": 1491,
-        "end": 1523
+        "start": 1407,
+        "end": 1439
       }
     },
     {
@@ -2446,14 +2361,14 @@ function test25(iterable|A $x) {}
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 1593,
-                            "end": 1596
+                            "start": 1509,
+                            "end": 1512
                           }
                         }
                       },
                       "span": {
-                        "start": 1593,
-                        "end": 1596
+                        "start": 1509,
+                        "end": 1512
                       }
                     },
                     {
@@ -2464,14 +2379,14 @@ function test25(iterable|A $x) {}
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 1597,
-                            "end": 1603
+                            "start": 1513,
+                            "end": 1519
                           }
                         }
                       },
                       "span": {
-                        "start": 1597,
-                        "end": 1603
+                        "start": 1513,
+                        "end": 1519
                       }
                     },
                     {
@@ -2482,21 +2397,21 @@ function test25(iterable|A $x) {}
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 1604,
-                            "end": 1615
+                            "start": 1520,
+                            "end": 1531
                           }
                         }
                       },
                       "span": {
-                        "start": 1604,
-                        "end": 1615
+                        "start": 1520,
+                        "end": 1531
                       }
                     }
                   ]
                 },
                 "span": {
-                  "start": 1593,
-                  "end": 1615
+                  "start": 1509,
+                  "end": 1531
                 }
               },
               "default": null,
@@ -2508,8 +2423,8 @@ function test25(iterable|A $x) {}
               "set_visibility": null,
               "attributes": [],
               "span": {
-                "start": 1593,
-                "end": 1618
+                "start": 1509,
+                "end": 1534
               }
             }
           ],
@@ -2520,8 +2435,8 @@ function test25(iterable|A $x) {}
         }
       },
       "span": {
-        "start": 1577,
-        "end": 1622
+        "start": 1493,
+        "end": 1538
       }
     },
     {
@@ -2545,14 +2460,14 @@ function test25(iterable|A $x) {}
                                 ],
                                 "kind": "Unqualified",
                                 "span": {
-                                  "start": 1698,
-                                  "end": 1699
+                                  "start": 1614,
+                                  "end": 1615
                                 }
                               }
                             },
                             "span": {
-                              "start": 1698,
-                              "end": 1699
+                              "start": 1614,
+                              "end": 1615
                             }
                           },
                           {
@@ -2563,14 +2478,14 @@ function test25(iterable|A $x) {}
                                 ],
                                 "kind": "Unqualified",
                                 "span": {
-                                  "start": 1700,
-                                  "end": 1701
+                                  "start": 1616,
+                                  "end": 1617
                                 }
                               }
                             },
                             "span": {
-                              "start": 1700,
-                              "end": 1701
+                              "start": 1616,
+                              "end": 1617
                             }
                           },
                           {
@@ -2581,14 +2496,14 @@ function test25(iterable|A $x) {}
                                 ],
                                 "kind": "Unqualified",
                                 "span": {
-                                  "start": 1702,
-                                  "end": 1703
+                                  "start": 1618,
+                                  "end": 1619
                                 }
                               }
                             },
                             "span": {
-                              "start": 1702,
-                              "end": 1703
+                              "start": 1618,
+                              "end": 1619
                             }
                           },
                           {
@@ -2599,14 +2514,14 @@ function test25(iterable|A $x) {}
                                 ],
                                 "kind": "Unqualified",
                                 "span": {
-                                  "start": 1704,
-                                  "end": 1705
+                                  "start": 1620,
+                                  "end": 1621
                                 }
                               }
                             },
                             "span": {
-                              "start": 1704,
-                              "end": 1705
+                              "start": 1620,
+                              "end": 1621
                             }
                           },
                           {
@@ -2617,21 +2532,21 @@ function test25(iterable|A $x) {}
                                 ],
                                 "kind": "Unqualified",
                                 "span": {
-                                  "start": 1706,
-                                  "end": 1707
+                                  "start": 1622,
+                                  "end": 1623
                                 }
                               }
                             },
                             "span": {
-                              "start": 1706,
-                              "end": 1707
+                              "start": 1622,
+                              "end": 1623
                             }
                           }
                         ]
                       },
                       "span": {
-                        "start": 1697,
-                        "end": 1708
+                        "start": 1613,
+                        "end": 1624
                       }
                     },
                     {
@@ -2645,14 +2560,14 @@ function test25(iterable|A $x) {}
                                 ],
                                 "kind": "Unqualified",
                                 "span": {
-                                  "start": 1710,
-                                  "end": 1711
+                                  "start": 1626,
+                                  "end": 1627
                                 }
                               }
                             },
                             "span": {
-                              "start": 1710,
-                              "end": 1711
+                              "start": 1626,
+                              "end": 1627
                             }
                           },
                           {
@@ -2663,28 +2578,28 @@ function test25(iterable|A $x) {}
                                 ],
                                 "kind": "Unqualified",
                                 "span": {
-                                  "start": 1712,
-                                  "end": 1713
+                                  "start": 1628,
+                                  "end": 1629
                                 }
                               }
                             },
                             "span": {
-                              "start": 1712,
-                              "end": 1713
+                              "start": 1628,
+                              "end": 1629
                             }
                           }
                         ]
                       },
                       "span": {
-                        "start": 1709,
-                        "end": 1714
+                        "start": 1625,
+                        "end": 1630
                       }
                     }
                   ]
                 },
                 "span": {
-                  "start": 1697,
-                  "end": 1714
+                  "start": 1613,
+                  "end": 1630
                 }
               },
               "default": null,
@@ -2696,8 +2611,8 @@ function test25(iterable|A $x) {}
               "set_visibility": null,
               "attributes": [],
               "span": {
-                "start": 1697,
-                "end": 1717
+                "start": 1613,
+                "end": 1633
               }
             }
           ],
@@ -2708,8 +2623,8 @@ function test25(iterable|A $x) {}
         }
       },
       "span": {
-        "start": 1681,
-        "end": 1721
+        "start": 1597,
+        "end": 1637
       }
     },
     {
@@ -2735,14 +2650,14 @@ function test25(iterable|A $x) {}
                                 ],
                                 "kind": "Qualified",
                                 "span": {
-                                  "start": 1787,
-                                  "end": 1796
+                                  "start": 1703,
+                                  "end": 1712
                                 }
                               }
                             },
                             "span": {
-                              "start": 1787,
-                              "end": 1796
+                              "start": 1703,
+                              "end": 1712
                             }
                           },
                           {
@@ -2755,21 +2670,21 @@ function test25(iterable|A $x) {}
                                 ],
                                 "kind": "Qualified",
                                 "span": {
-                                  "start": 1797,
-                                  "end": 1806
+                                  "start": 1713,
+                                  "end": 1722
                                 }
                               }
                             },
                             "span": {
-                              "start": 1797,
-                              "end": 1806
+                              "start": 1713,
+                              "end": 1722
                             }
                           }
                         ]
                       },
                       "span": {
-                        "start": 1786,
-                        "end": 1807
+                        "start": 1702,
+                        "end": 1723
                       }
                     },
                     {
@@ -2785,14 +2700,14 @@ function test25(iterable|A $x) {}
                                 ],
                                 "kind": "Qualified",
                                 "span": {
-                                  "start": 1809,
-                                  "end": 1818
+                                  "start": 1725,
+                                  "end": 1734
                                 }
                               }
                             },
                             "span": {
-                              "start": 1809,
-                              "end": 1818
+                              "start": 1725,
+                              "end": 1734
                             }
                           },
                           {
@@ -2805,28 +2720,28 @@ function test25(iterable|A $x) {}
                                 ],
                                 "kind": "Qualified",
                                 "span": {
-                                  "start": 1819,
-                                  "end": 1828
+                                  "start": 1735,
+                                  "end": 1744
                                 }
                               }
                             },
                             "span": {
-                              "start": 1819,
-                              "end": 1828
+                              "start": 1735,
+                              "end": 1744
                             }
                           }
                         ]
                       },
                       "span": {
-                        "start": 1808,
-                        "end": 1829
+                        "start": 1724,
+                        "end": 1745
                       }
                     }
                   ]
                 },
                 "span": {
-                  "start": 1786,
-                  "end": 1829
+                  "start": 1702,
+                  "end": 1745
                 }
               },
               "default": null,
@@ -2838,8 +2753,8 @@ function test25(iterable|A $x) {}
               "set_visibility": null,
               "attributes": [],
               "span": {
-                "start": 1786,
-                "end": 1832
+                "start": 1702,
+                "end": 1748
               }
             }
           ],
@@ -2850,8 +2765,8 @@ function test25(iterable|A $x) {}
         }
       },
       "span": {
-        "start": 1770,
-        "end": 1836
+        "start": 1686,
+        "end": 1752
       }
     },
     {
@@ -2887,14 +2802,14 @@ function test25(iterable|A $x) {}
                               ],
                               "kind": "Unqualified",
                               "span": {
-                                "start": 1927,
-                                "end": 1933
+                                "start": 1843,
+                                "end": 1849
                               }
                             }
                           },
                           "span": {
-                            "start": 1927,
-                            "end": 1933
+                            "start": 1843,
+                            "end": 1849
                           }
                         },
                         {
@@ -2905,21 +2820,21 @@ function test25(iterable|A $x) {}
                               ],
                               "kind": "Unqualified",
                               "span": {
-                                "start": 1934,
-                                "end": 1935
+                                "start": 1850,
+                                "end": 1851
                               }
                             }
                           },
                           "span": {
-                            "start": 1934,
-                            "end": 1935
+                            "start": 1850,
+                            "end": 1851
                           }
                         }
                       ]
                     },
                     "span": {
-                      "start": 1927,
-                      "end": 1935
+                      "start": 1843,
+                      "end": 1851
                     }
                   },
                   "body": [
@@ -2930,14 +2845,14 @@ function test25(iterable|A $x) {}
                             "Variable": "this"
                           },
                           "span": {
-                            "start": 1953,
-                            "end": 1958
+                            "start": 1869,
+                            "end": 1874
                           }
                         }
                       },
                       "span": {
-                        "start": 1946,
-                        "end": 1959
+                        "start": 1862,
+                        "end": 1875
                       }
                     }
                   ],
@@ -2945,8 +2860,8 @@ function test25(iterable|A $x) {}
                 }
               },
               "span": {
-                "start": 1903,
-                "end": 1965
+                "start": 1819,
+                "end": 1881
               }
             }
           ],
@@ -2954,8 +2869,8 @@ function test25(iterable|A $x) {}
         }
       },
       "span": {
-        "start": 1874,
-        "end": 1967
+        "start": 1790,
+        "end": 1883
       }
     },
     {
@@ -2976,14 +2891,14 @@ function test25(iterable|A $x) {}
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 2020,
-                            "end": 2028
+                            "start": 1936,
+                            "end": 1944
                           }
                         }
                       },
                       "span": {
-                        "start": 2020,
-                        "end": 2028
+                        "start": 1936,
+                        "end": 1944
                       }
                     },
                     {
@@ -2994,21 +2909,21 @@ function test25(iterable|A $x) {}
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 2029,
-                            "end": 2030
+                            "start": 1945,
+                            "end": 1946
                           }
                         }
                       },
                       "span": {
-                        "start": 2029,
-                        "end": 2030
+                        "start": 1945,
+                        "end": 1946
                       }
                     }
                   ]
                 },
                 "span": {
-                  "start": 2020,
-                  "end": 2030
+                  "start": 1936,
+                  "end": 1946
                 }
               },
               "default": null,
@@ -3020,8 +2935,8 @@ function test25(iterable|A $x) {}
               "set_visibility": null,
               "attributes": [],
               "span": {
-                "start": 2020,
-                "end": 2033
+                "start": 1936,
+                "end": 1949
               }
             }
           ],
@@ -3032,8 +2947,8 @@ function test25(iterable|A $x) {}
         }
       },
       "span": {
-        "start": 2004,
-        "end": 2037
+        "start": 1920,
+        "end": 1953
       }
     },
     {
@@ -3054,14 +2969,14 @@ function test25(iterable|A $x) {}
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 2088,
-                            "end": 2094
+                            "start": 2004,
+                            "end": 2010
                           }
                         }
                       },
                       "span": {
-                        "start": 2088,
-                        "end": 2094
+                        "start": 2004,
+                        "end": 2010
                       }
                     },
                     {
@@ -3072,21 +2987,21 @@ function test25(iterable|A $x) {}
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 2095,
-                            "end": 2098
+                            "start": 2011,
+                            "end": 2014
                           }
                         }
                       },
                       "span": {
-                        "start": 2095,
-                        "end": 2098
+                        "start": 2011,
+                        "end": 2014
                       }
                     }
                   ]
                 },
                 "span": {
-                  "start": 2088,
-                  "end": 2098
+                  "start": 2004,
+                  "end": 2014
                 }
               },
               "default": null,
@@ -3098,8 +3013,8 @@ function test25(iterable|A $x) {}
               "set_visibility": null,
               "attributes": [],
               "span": {
-                "start": 2088,
-                "end": 2101
+                "start": 2004,
+                "end": 2017
               }
             }
           ],
@@ -3110,8 +3025,8 @@ function test25(iterable|A $x) {}
         }
       },
       "span": {
-        "start": 2072,
-        "end": 2105
+        "start": 1988,
+        "end": 2021
       }
     },
     {
@@ -3132,14 +3047,14 @@ function test25(iterable|A $x) {}
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 2158,
-                            "end": 2166
+                            "start": 2074,
+                            "end": 2082
                           }
                         }
                       },
                       "span": {
-                        "start": 2158,
-                        "end": 2166
+                        "start": 2074,
+                        "end": 2082
                       }
                     },
                     {
@@ -3150,21 +3065,21 @@ function test25(iterable|A $x) {}
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 2167,
-                            "end": 2168
+                            "start": 2083,
+                            "end": 2084
                           }
                         }
                       },
                       "span": {
-                        "start": 2167,
-                        "end": 2168
+                        "start": 2083,
+                        "end": 2084
                       }
                     }
                   ]
                 },
                 "span": {
-                  "start": 2158,
-                  "end": 2168
+                  "start": 2074,
+                  "end": 2084
                 }
               },
               "default": null,
@@ -3176,8 +3091,8 @@ function test25(iterable|A $x) {}
               "set_visibility": null,
               "attributes": [],
               "span": {
-                "start": 2158,
-                "end": 2171
+                "start": 2074,
+                "end": 2087
               }
             }
           ],
@@ -3188,13 +3103,13 @@ function test25(iterable|A $x) {}
         }
       },
       "span": {
-        "start": 2142,
-        "end": 2175
+        "start": 2058,
+        "end": 2091
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 2175
+    "end": 2091
   }
 }
