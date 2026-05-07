@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.8] - 2026-05-07
+
+### Added
+
+- Support for parenthesized unions in type hints (e.g., `(A|B)`) — parser now accepts parenthesized unions in parameter types, return types, and property types for better type expression flexibility (`php-rs-parser`).
+- Comprehensive test coverage for DNF (Disjunctive Normal Form) edge cases and parenthesized type combinations (`php-rs-parser`).
+
+---
+
 ## [0.9.7] - 2026-05-06
 
 ### Added
