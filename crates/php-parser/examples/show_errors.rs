@@ -31,9 +31,9 @@ fn dump(path: &Path) {
         if let Some(src_line) = contents.lines().nth(line.saturating_sub(1)) {
             println!("    > {}", src_line.trim_end());
             let mut caret = String::from("    > ");
-            caret.extend(std::iter::repeat(' ').take(col.saturating_sub(1)));
+            caret.extend(std::iter::repeat_n(' ', col.saturating_sub(1)));
             let len = (span.end - span.start).max(1) as usize;
-            caret.extend(std::iter::repeat('^').take(len.min(80)));
+            caret.extend(std::iter::repeat_n('^', len.min(80)));
             println!("{}", caret);
         }
     }

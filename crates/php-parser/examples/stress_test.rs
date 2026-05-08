@@ -135,14 +135,14 @@ fn run_corpus(name: &str, corpus_path: &Path) -> CorpusReport {
 
         if slowest.len() < 10 {
             slowest.push((file_path.clone(), elapsed, contents.len()));
-            slowest.sort_by(|a, b| b.1.cmp(&a.1));
+            slowest.sort_by_key(|entry| std::cmp::Reverse(entry.1));
         } else if elapsed > slowest.last().map(|s| s.1).unwrap_or(0) {
             slowest.pop();
             slowest.push((file_path.clone(), elapsed, contents.len()));
-            slowest.sort_by(|a, b| b.1.cmp(&a.1));
+            slowest.sort_by_key(|entry| std::cmp::Reverse(entry.1));
         }
 
-        if files % 1000 == 0 {
+        if files.is_multiple_of(1000) {
             eprint!(".");
         }
     }
