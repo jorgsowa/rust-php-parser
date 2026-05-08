@@ -1335,6 +1335,7 @@ pub(crate) fn parse_closure<'arena, 'src>(
     let mut body = parser.alloc_vec_with_capacity(16);
     let saved_loop_depth = parser.loop_depth;
     parser.loop_depth = 0;
+    parser.function_depth += 1;
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
         body.push(stmt::parse_stmt(parser));
@@ -1342,6 +1343,7 @@ pub(crate) fn parse_closure<'arena, 'src>(
             parser.advance();
         }
     }
+    parser.function_depth -= 1;
     parser.loop_depth = saved_loop_depth;
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
@@ -1408,7 +1410,9 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
     };
 
     parser.expect(TokenKind::FatArrow);
+    parser.function_depth += 1;
     let body = parse_expr(parser);
+    parser.function_depth -= 1;
     let span = Span::new(start, body.span.end);
 
     Expr {
@@ -1501,6 +1505,13 @@ fn parse_match_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
 fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'yield'
+
+    if parser.function_depth == 0 {
+        parser.error(ParseError::Forbidden {
+            message: "'yield' can only be used inside a function".into(),
+            span: Span::new(start, parser.previous_end()),
+        });
+    }
 
     // yield from expr
     if parser.check(TokenKind::From) {
@@ -1688,7 +1699,14 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
     let unpack = parser.eat(TokenKind::Ellipsis).is_some();
 
     // Check for by-reference: &$var (call-time pass-by-ref, removed in PHP 7.0)
+    let by_ref_span = parser.current_span();
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
+    if by_ref {
+        parser.error(ParseError::Forbidden {
+            message: "call-time pass-by-reference is not allowed".into(),
+            span: by_ref_span,
+        });
+    }
 
     let value = parse_expr(parser);
     let span = Span::new(start, value.span.end);

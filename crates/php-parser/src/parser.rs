@@ -46,6 +46,9 @@ pub struct Parser<'arena, 'src> {
     /// Loop/switch nesting depth — tracks valid break/continue targets.
     /// Resets to 0 when crossing a function/method/closure boundary.
     pub(crate) loop_depth: u32,
+    /// Function/method/closure nesting depth — tracks valid yield context.
+    /// Incremented when entering a function/method/closure, decremented when exiting.
+    pub(crate) function_depth: u32,
     tokens: Vec<Token>,
     /// Index of NEXT token in the tokens array (current = tokens[pos - 1])
     pos: usize,
@@ -114,6 +117,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             depth: 0,
             expr_depth: 0,
             loop_depth: 0,
+            function_depth: 0,
             version,
             no_brace_subscript: false,
         }
@@ -184,6 +188,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             depth: 0,
             expr_depth: 0,
             loop_depth: 0,
+            function_depth: 0,
             version,
             no_brace_subscript: false,
         }

@@ -1088,6 +1088,7 @@ fn parse_function<'arena, 'src>(
     let mut body = parser.alloc_vec_with_capacity(4);
     let saved_loop_depth = parser.loop_depth;
     parser.loop_depth = 0;
+    parser.function_depth += 1;
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
         body.push(parse_stmt(parser));
@@ -1095,6 +1096,7 @@ fn parse_function<'arena, 'src>(
             parser.advance();
         }
     }
+    parser.function_depth -= 1;
     parser.loop_depth = saved_loop_depth;
     parser.expect_closing(TokenKind::RightBrace, open_brace_span);
     let end = parser.previous_end();
@@ -2202,6 +2204,16 @@ fn parse_expression_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             kind: StmtKind::Error,
             span: Span::new(start, parser.previous_end()),
         };
+    }
+
+    // Check for invalid array append syntax: $arr[] cannot be used as a bare statement
+    if let ExprKind::ArrayAccess(array_access) = &expr.kind {
+        if array_access.index.is_none() {
+            parser.error(ParseError::Forbidden {
+                message: "cannot use [] for reading".into(),
+                span: expr.span,
+            });
+        }
     }
 
     parser.expect_semicolon("expression");

@@ -1,5 +1,5 @@
 ===source===
-<?php f(&$a);
+<?php sort(&$arr);
 ===errors===
 call-time pass-by-reference is not allowed
 ===ast===
@@ -12,11 +12,11 @@ call-time pass-by-reference is not allowed
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "f"
+                  "Identifier": "sort"
                 },
                 "span": {
                   "start": 6,
-                  "end": 7
+                  "end": 10
                 }
               },
               "args": [
@@ -24,18 +24,18 @@ call-time pass-by-reference is not allowed
                   "name": null,
                   "value": {
                     "kind": {
-                      "Variable": "a"
+                      "Variable": "arr"
                     },
                     "span": {
-                      "start": 9,
-                      "end": 11
+                      "start": 12,
+                      "end": 16
                     }
                   },
                   "unpack": false,
                   "by_ref": true,
                   "span": {
-                    "start": 8,
-                    "end": 11
+                    "start": 11,
+                    "end": 16
                   }
                 }
               ]
@@ -43,20 +43,18 @@ call-time pass-by-reference is not allowed
           },
           "span": {
             "start": 6,
-            "end": 12
+            "end": 17
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 13
+        "end": 18
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 13
+    "end": 18
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "&" in Standard input code on line 1

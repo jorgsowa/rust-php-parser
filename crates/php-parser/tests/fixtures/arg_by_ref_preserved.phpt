@@ -1,5 +1,7 @@
 ===source===
 <?php f(&$a);
+===errors===
+call-time pass-by-reference is not allowed
 ===ast===
 {
   "stmts": [

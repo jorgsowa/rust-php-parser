@@ -6,6 +6,8 @@ f($a);
 f($a, $b);
 f(&$a);
 f($a, ...$b);
+===errors===
+call-time pass-by-reference is not allowed
 ===ast===
 {
   "stmts": [

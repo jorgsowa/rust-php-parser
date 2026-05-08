@@ -726,6 +726,7 @@ fn parse_method_member<'arena, 'src>(
         let mut stmts = parser.alloc_vec_with_capacity(16);
         let saved_loop_depth = parser.loop_depth;
         parser.loop_depth = 0;
+        parser.function_depth += 1;
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
             stmts.push(super::parse_stmt(parser));
@@ -733,6 +734,7 @@ fn parse_method_member<'arena, 'src>(
                 parser.advance();
             }
         }
+        parser.function_depth -= 1;
         parser.loop_depth = saved_loop_depth;
         parser.expect(TokenKind::RightBrace);
         Some(stmts)
