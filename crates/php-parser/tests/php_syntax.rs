@@ -1,4 +1,6 @@
+use rayon::prelude::*;
 use std::io::Write;
+use std::sync::Mutex;
 
 #[path = "common.rs"]
 mod common;
@@ -153,27 +155,27 @@ fn fixture_files_are_valid_php() {
     let mut paths = collect_phpt_files(&dir);
     paths.sort();
 
-    let mut failures: Vec<String> = Vec::new();
+    let failures = Mutex::new(Vec::new());
 
-    for path in paths {
+    paths.par_iter().for_each(|path| {
         let label = path
             .strip_prefix(&dir)
             .unwrap()
             .to_string_lossy()
             .to_string();
-        let src = std::fs::read_to_string(&path).unwrap();
+        let src = std::fs::read_to_string(path).unwrap();
         let (min_php, source) = common::parse_fixture(&src);
         let max_php = parse_max_php(&src);
         let php_error = parse_php_error(&src);
 
         if let Some(min) = min_php {
             if !php_version_met(min) {
-                continue;
+                return;
             }
         }
         if let Some(max) = max_php {
             if php_version_exceeded(max) {
-                continue;
+                return;
             }
         }
 
@@ -182,14 +184,17 @@ fn fixture_files_are_valid_php() {
         if let Some(expected) = &php_error {
             // Fixture declares PHP must reject it — assert it fails and message matches.
             if out.status.success() {
-                failures.push(format!("{label}: expected php -l to fail but it passed"));
-                continue;
+                failures
+                    .lock()
+                    .unwrap()
+                    .push(format!("{label}: expected php -l to fail but it passed"));
+                return;
             }
             let actual = strip_stack_trace(String::from_utf8_lossy(&out.stderr).trim());
             if update {
                 update_fixture_php_error(path.to_str().unwrap(), &actual);
             } else if normalize_quotes(&actual) != normalize_quotes(&strip_stack_trace(expected)) {
-                failures.push(format!(
+                failures.lock().unwrap().push(format!(
                     "{label}:\n  expected: {expected}\n  actual:   {actual}"
                 ));
             }
@@ -200,17 +205,21 @@ fn fixture_files_are_valid_php() {
                 if update {
                     update_fixture_php_error(path.to_str().unwrap(), &actual);
                 } else {
-                    failures.push(format!("{label}:\n  {actual}"));
+                    failures
+                        .lock()
+                        .unwrap()
+                        .push(format!("{label}:\n  {actual}"));
                 }
             }
         }
-    }
+    });
 
-    if !failures.is_empty() {
+    let f = failures.into_inner().unwrap();
+    if !f.is_empty() {
         panic!(
             "php -l check failed for {} fixture(s):\n\n{}",
-            failures.len(),
-            failures.join("\n\n")
+            f.len(),
+            f.join("\n\n")
         );
     }
 }

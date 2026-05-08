@@ -1,5 +1,8 @@
 mod common;
 
+use rayon::prelude::*;
+use std::sync::Mutex;
+
 fn to_json(program: &php_ast::Program) -> String {
     serde_json::to_string_pretty(program).unwrap()
 }
@@ -65,9 +68,15 @@ fn fixtures() {
     paths.sort();
 
     let update = std::env::var("UPDATE_FIXTURES").is_ok();
-    for path in paths {
-        let rel = path.strip_prefix(&dir).unwrap().to_string_lossy();
-        let content = std::fs::read_to_string(&path).unwrap();
+    let failures = Mutex::new(Vec::new());
+
+    paths.par_iter().for_each(|path| {
+        let rel = path
+            .strip_prefix(&dir)
+            .unwrap()
+            .to_string_lossy()
+            .to_string();
+        let content = std::fs::read_to_string(path).unwrap();
         let (min_php, source) = common::parse_fixture(&content);
         let arena = bumpalo::Bump::new();
 
@@ -79,16 +88,21 @@ fn fixtures() {
 
         let expect_errors = content.contains("===errors===\n");
         if expect_errors {
-            assert!(
-                !result.errors.is_empty(),
-                "expected parse errors in {rel} but got none"
-            );
+            if result.errors.is_empty() {
+                failures
+                    .lock()
+                    .unwrap()
+                    .push(format!("expected parse errors in {rel} but got none"));
+                return;
+            }
         } else {
-            assert!(
-                result.errors.is_empty(),
-                "unexpected parse errors in {rel}: {:?}",
-                result.errors
-            );
+            if !result.errors.is_empty() {
+                failures.lock().unwrap().push(format!(
+                    "unexpected parse errors in {rel}: {:?}",
+                    result.errors
+                ));
+                return;
+            }
         }
 
         let expected_errors: Option<String> = content.find("===errors===\n").and_then(|e| {
@@ -104,7 +118,13 @@ fn fixtures() {
 
         if let Some(expected) = &expected_errors {
             let actual = format_errors(&result);
-            assert_eq!(actual, *expected, "error messages mismatch in {rel}");
+            if actual != *expected {
+                failures.lock().unwrap().push(format!(
+                    "error messages mismatch in {rel}\nexpected:\n{}\nactual:\n{}",
+                    expected, actual
+                ));
+                return;
+            }
         }
 
         let actual = to_json(&result.program);
@@ -117,9 +137,25 @@ fn fixtures() {
                 let end = after.find("===php_error===\n").unwrap_or(after.len());
                 after[..end].trim_end_matches('\n').to_string()
             });
-            let expected =
-                expected_ast.unwrap_or_else(|| panic!("missing ===ast=== section in {rel}"));
-            assert_eq!(actual, expected, "AST mismatch in {rel}");
+            let expected = match expected_ast {
+                Some(e) => e,
+                None => {
+                    failures
+                        .lock()
+                        .unwrap()
+                        .push(format!("missing ===ast=== section in {rel}"));
+                    return;
+                }
+            };
+            if actual != expected {
+                failures.lock().unwrap().push(format!(
+                    "AST mismatch in {rel}\nexpected:\n{}\nactual:\n{}",
+                    expected, actual
+                ));
+            }
         }
-    }
+    });
+
+    let f = failures.into_inner().unwrap();
+    assert!(f.is_empty(), "fixture test failure(s):\n{}", f.join("\n\n"));
 }

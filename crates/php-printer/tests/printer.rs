@@ -1,4 +1,6 @@
 use php_printer::pretty_print_with_comments;
+use rayon::prelude::*;
+use std::sync::Mutex;
 
 fn pp(src: &str) -> String {
     let arena = bumpalo::Bump::new();
@@ -65,8 +67,14 @@ fn fixtures() {
     let mut paths = collect_phpt_files(&dir);
     paths.sort();
 
-    for path in &paths {
-        let rel = path.strip_prefix(&dir).unwrap().to_string_lossy();
+    let failures = Mutex::new(Vec::new());
+
+    paths.par_iter().for_each(|path| {
+        let rel = path
+            .strip_prefix(&dir)
+            .unwrap()
+            .to_string_lossy()
+            .to_string();
         let content = std::fs::read_to_string(path).unwrap();
         let fixture = parse_printer_fixture(&content);
 
@@ -79,11 +87,13 @@ fn fixtures() {
             );
             std::fs::write(path, new_content).unwrap();
         } else {
-            assert_eq!(
-                actual, fixture.expected,
-                "output mismatch in {rel}\nsource: {}\nexpected: {}\nactual:   {actual}",
-                fixture.source, fixture.expected
-            );
+            if actual != fixture.expected {
+                failures.lock().unwrap().push(format!(
+                    "output mismatch in {rel}\nsource: {}\nexpected: {}\nactual:   {actual}",
+                    fixture.source, fixture.expected
+                ));
+                return;
+            }
         }
 
         // Also verify round-trip stability
@@ -92,11 +102,19 @@ fn fixtures() {
         let source = format!("<?php {first}");
         let result = php_rs_parser::parse(&arena, &source);
         let second = pretty_print_with_comments(&result.program, result.source, &result.comments);
-        assert_eq!(
-            first, second,
-            "round-trip mismatch in {rel}\nfirst:  {first}\nsecond: {second}"
-        );
-    }
+        if first != second {
+            failures.lock().unwrap().push(format!(
+                "round-trip mismatch in {rel}\nfirst:  {first}\nsecond: {second}"
+            ));
+        }
+    });
+
+    let f = failures.into_inner().unwrap();
+    assert!(
+        f.is_empty(),
+        "printer fixture failures:\n{}",
+        f.join("\n\n")
+    );
 }
 
 // =============================================================================
@@ -171,23 +189,26 @@ fn php_version(major: u32, minor: u32) -> php_rs_parser::PhpVersion {
 
 #[test]
 fn parser_corpus_round_trip() {
+    use std::sync::atomic::{AtomicUsize, Ordering};
+    use std::sync::Arc;
+
     let parser_fixtures =
         std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../php-parser/tests/fixtures");
 
     let mut paths = collect_phpt_files(&parser_fixtures);
     paths.sort();
 
-    let mut failures: Vec<String> = Vec::new();
-    let mut checked = 0usize;
-    let mut skipped = 0usize;
+    let failures = Mutex::new(Vec::new());
+    let checked = Arc::new(AtomicUsize::new(0));
+    let skipped = Arc::new(AtomicUsize::new(0));
 
-    for path in &paths {
+    paths.par_iter().for_each(|path| {
         let content = std::fs::read_to_string(path).unwrap();
         let header = parse_parser_fixture_header(&content);
 
         if header.has_errors {
-            skipped += 1;
-            continue;
+            skipped.fetch_add(1, Ordering::Relaxed);
+            return;
         }
 
         let rel = path.strip_prefix(&parser_fixtures).unwrap();
@@ -212,20 +233,23 @@ fn parser_corpus_round_trip() {
         };
 
         if first_print != second_print {
-            failures.push(format!(
+            failures.lock().unwrap().push(format!(
                 "FAIL {}\n  first:  {first_print}\n  second: {second_print}",
                 rel.display()
             ));
         }
-        checked += 1;
-    }
+        checked.fetch_add(1, Ordering::Relaxed);
+    });
 
-    eprintln!("parser_corpus_round_trip: {checked} checked, {skipped} skipped");
+    let checked_val = checked.load(Ordering::Relaxed);
+    let skipped_val = skipped.load(Ordering::Relaxed);
+    eprintln!("parser_corpus_round_trip: {checked_val} checked, {skipped_val} skipped");
+    let f = failures.into_inner().unwrap();
     assert!(
-        failures.is_empty(),
+        f.is_empty(),
         "{} round-trip failure(s):\n{}",
-        failures.len(),
-        failures.join("\n\n")
+        f.len(),
+        f.join("\n\n")
     );
 }
 
