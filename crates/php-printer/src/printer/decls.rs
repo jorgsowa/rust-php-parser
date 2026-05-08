@@ -28,6 +28,7 @@ impl<'src> Printer<'src> {
             self.newline();
             self.print_stmts(&func.body, true);
             self.newline();
+            self.flush_leading_comments(stmt.span.end);
             self.write_indent();
         } else {
             self.flush_leading_comments(stmt.span.end);
@@ -117,16 +118,16 @@ impl<'src> Printer<'src> {
             self.newline();
             self.indent();
             for (i, member) in members.iter().enumerate() {
-                self.flush_leading_comments(member.span.start);
-                if i > 0 {
+                if i > 0 && !self.has_comments_before(member.span.start) {
                     self.newline();
                 }
+                self.flush_leading_comments(member.span.start);
                 self.write_indent();
                 self.print_class_member(member);
                 self.newline();
             }
-            self.dedent();
             self.flush_leading_comments(closing_offset);
+            self.dedent();
             self.write_indent();
         }
         self.w("}");
@@ -135,13 +136,13 @@ impl<'src> Printer<'src> {
     fn print_class_member(&mut self, member: &ClassMember) {
         match &member.kind {
             ClassMemberKind::Property(prop) => self.print_property(prop),
-            ClassMemberKind::Method(method) => self.print_method(method),
+            ClassMemberKind::Method(method) => self.print_method(method, member.span.end),
             ClassMemberKind::ClassConst(cc) => self.print_class_const(cc),
             ClassMemberKind::TraitUse(tu) => self.print_trait_use(tu),
         }
     }
 
-    pub(crate) fn print_method(&mut self, method: &MethodDecl) {
+    pub(crate) fn print_method(&mut self, method: &MethodDecl, span_end: u32) {
         self.print_doc_comment(&method.doc_comment);
         self.print_attributes(&method.attributes);
         if method.is_abstract {
@@ -177,6 +178,7 @@ impl<'src> Printer<'src> {
                 self.newline();
                 self.print_stmts(body, true);
                 self.newline();
+                self.flush_leading_comments(span_end);
                 self.write_indent();
             }
             self.w("}");
@@ -430,7 +432,7 @@ impl<'src> Printer<'src> {
                 }
                 self.w(";");
             }
-            EnumMemberKind::Method(method) => self.print_method(method),
+            EnumMemberKind::Method(method) => self.print_method(method, member.span.end),
             EnumMemberKind::ClassConst(cc) => self.print_class_const(cc),
             EnumMemberKind::TraitUse(tu) => self.print_trait_use(tu),
         }

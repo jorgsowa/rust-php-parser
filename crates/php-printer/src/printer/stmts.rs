@@ -105,26 +105,27 @@ impl<'src> Printer<'src> {
                 self.print_expr(&sw.expr, PREC_LOWEST);
                 self.w(") {");
                 self.newline();
+                self.indent();
                 for case in sw.cases.iter() {
                     self.flush_leading_comments(case.span.start);
                     self.write_indent();
                     if let Some(val) = &case.value {
-                        self.indent();
                         self.w("case ");
                         self.print_expr(val, PREC_LOWEST);
                         self.w(":");
                     } else {
-                        self.indent();
                         self.w("default:");
                     }
                     if !case.body.is_empty() {
                         self.newline();
+                        self.indent();
                         self.print_stmts(&case.body, false);
+                        self.dedent();
                     }
                     self.newline();
-                    self.dedent();
                 }
                 self.flush_leading_comments(stmt.span.end);
+                self.dedent();
                 self.write_indent();
                 self.w("}");
             }
@@ -244,20 +245,28 @@ impl<'src> Printer<'src> {
     }
 
     fn print_try_catch(&mut self, tc: &TryCatchStmt, stmt: &Stmt) {
+        let try_end = tc
+            .catches
+            .first()
+            .map(|c| c.span.start)
+            .unwrap_or(stmt.span.end);
         self.w("try {");
         if !tc.body.is_empty() {
             self.newline();
-            self.print_stmts(&tc.body, true);
+            self.indent();
+            self.print_stmts(&tc.body, false);
             self.newline();
+            self.flush_leading_comments(try_end);
+            self.dedent();
             self.write_indent();
         } else {
-            self.flush_leading_comments(stmt.span.end);
+            self.flush_leading_comments(try_end);
         }
         self.w("}");
         for catch in tc.catches.iter() {
             self.w(" catch (");
-            for (i, ty) in catch.types.iter().enumerate() {
-                if i > 0 {
+            for (j, ty) in catch.types.iter().enumerate() {
+                if j > 0 {
                     self.w("|");
                 }
                 self.print_name(ty);
@@ -269,11 +278,14 @@ impl<'src> Printer<'src> {
             self.w(") {");
             if !catch.body.is_empty() {
                 self.newline();
-                self.print_stmts(&catch.body, true);
+                self.indent();
+                self.print_stmts(&catch.body, false);
                 self.newline();
+                self.flush_leading_comments(catch.span.end);
+                self.dedent();
                 self.write_indent();
             } else {
-                self.flush_leading_comments(stmt.span.end);
+                self.flush_leading_comments(catch.span.end);
             }
             self.w("}");
         }
@@ -281,8 +293,11 @@ impl<'src> Printer<'src> {
             self.w(" finally {");
             if !finally.is_empty() {
                 self.newline();
-                self.print_stmts(finally, true);
+                self.indent();
+                self.print_stmts(finally, false);
                 self.newline();
+                self.flush_leading_comments(stmt.span.end);
+                self.dedent();
                 self.write_indent();
             } else {
                 self.flush_leading_comments(stmt.span.end);
@@ -296,8 +311,11 @@ impl<'src> Printer<'src> {
             self.w("{");
             if !stmts.is_empty() {
                 self.newline();
-                self.print_stmts(stmts, true);
+                self.indent();
+                self.print_stmts(stmts, false);
                 self.newline();
+                self.flush_leading_comments(stmt.span.end);
+                self.dedent();
                 self.write_indent();
             } else {
                 self.flush_leading_comments(stmt.span.end);
@@ -328,8 +346,11 @@ impl<'src> Printer<'src> {
                 self.w(" {");
                 if !stmts.is_empty() {
                     self.newline();
-                    self.print_stmts(stmts, true);
+                    self.indent();
+                    self.print_stmts(stmts, false);
                     self.newline();
+                    self.flush_leading_comments(stmt.span.end);
+                    self.dedent();
                     self.write_indent();
                 } else {
                     self.flush_leading_comments(stmt.span.end);

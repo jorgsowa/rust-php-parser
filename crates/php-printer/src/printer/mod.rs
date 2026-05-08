@@ -194,6 +194,12 @@ impl<'src> Printer<'src> {
             .any(|c| c.span.start > from && c.span.start < to)
     }
 
+    pub(crate) fn has_comments_before(&self, offset: u32) -> bool {
+        self.comments[self.comment_cursor..]
+            .iter()
+            .any(|c| c.span.start < offset)
+    }
+
     // =========================================================================
     // Top-level
     // =========================================================================
