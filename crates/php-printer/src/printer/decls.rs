@@ -462,11 +462,11 @@ impl<'src> Printer<'src> {
                 self.print_type_hint(th);
                 self.w(" ");
             }
-            if param.variadic {
-                self.w("...");
-            }
             if param.by_ref {
                 self.w("&");
+            }
+            if param.variadic {
+                self.w("...");
             }
             self.w("$");
             self.w(param.name.or_error());
