@@ -73,11 +73,29 @@ jobs:
           key: ${{ matrix.php-version }}
 
       - name: Run tests
-        run: cargo test --lib && cargo test --test integration && cargo test --test printer
+        run: cargo test --lib && cargo test --test integration
+
+  printer:
+    name: Printer Tests
+    needs: php-syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Run printer tests
+        run: cargo test --test printer
 
   coverage:
     name: Coverage
-    needs: test
+    needs: [test, printer]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
