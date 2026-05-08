@@ -221,11 +221,9 @@ impl<'src> Printer<'src> {
                     self.print_anonymous_class(class, &new_expr.args, new_expr.class.span.end);
                 } else {
                     self.print_expr(new_expr.class, PREC_PRIMARY);
-                    if !new_expr.args.is_empty() {
-                        self.w("(");
-                        self.print_args(&new_expr.args);
-                        self.w(")");
-                    }
+                    self.w("(");
+                    self.print_args(&new_expr.args);
+                    self.w(")");
                 }
             }
             ExprKind::PropertyAccess(access) => {
