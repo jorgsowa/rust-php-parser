@@ -2,7 +2,7 @@ use php_ast::ast::*;
 
 use super::Printer;
 
-impl Printer {
+impl<'src> Printer<'src> {
     pub(crate) fn print_name(&mut self, name: &Name) {
         match name {
             Name::Simple { value, .. } => self.w(value),

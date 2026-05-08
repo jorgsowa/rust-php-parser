@@ -14,7 +14,7 @@ mod printer;
 
 pub use printer::{Indent, PrinterConfig};
 
-use php_ast::Program;
+use php_ast::{Comment, Program};
 
 /// Pretty-print a program's statements (without `<?php` header).
 pub fn pretty_print(program: &Program) -> String {
@@ -32,6 +32,27 @@ pub fn pretty_print_file(program: &Program) -> String {
 /// Pretty-print with custom configuration.
 pub fn pretty_print_with_config(program: &Program, config: &PrinterConfig) -> String {
     let mut p = printer::Printer::new(config);
+    p.print_program(program);
+    p.into_output()
+}
+
+/// Pretty-print with all comments preserved.
+pub fn pretty_print_with_comments<'src>(
+    program: &Program<'_, 'src>,
+    source: &'src str,
+    comments: &'src [Comment<'src>],
+) -> String {
+    pretty_print_with_comments_and_config(program, source, comments, &PrinterConfig::default())
+}
+
+/// Pretty-print with all comments preserved and custom configuration.
+pub fn pretty_print_with_comments_and_config<'src>(
+    program: &Program<'_, 'src>,
+    source: &'src str,
+    comments: &'src [Comment<'src>],
+    config: &PrinterConfig,
+) -> String {
+    let mut p = printer::Printer::with_comments(config, source, comments);
     p.print_program(program);
     p.into_output()
 }

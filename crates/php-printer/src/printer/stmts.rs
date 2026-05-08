@@ -4,7 +4,7 @@ use crate::precedence::*;
 
 use super::{Printer, MAX_DEPTH};
 
-impl Printer {
+impl<'src> Printer<'src> {
     pub(crate) fn print_stmt(&mut self, stmt: &Stmt) {
         self.depth += 1;
         if self.depth > MAX_DEPTH {
@@ -42,6 +42,8 @@ impl Printer {
                     self.print_stmts(stmts, true);
                     self.newline();
                     self.write_indent();
+                } else {
+                    self.flush_leading_comments(stmt.span.end);
                 }
                 self.w("}");
             }
@@ -81,7 +83,7 @@ impl Printer {
                 self.print_expr(&dw.condition, PREC_LOWEST);
                 self.w(");");
             }
-            StmtKind::Function(func) => self.print_function(func),
+            StmtKind::Function(func) => self.print_function(func, stmt),
             StmtKind::Break(expr) => {
                 self.w("break");
                 if let Some(e) = expr {
@@ -104,6 +106,7 @@ impl Printer {
                 self.w(") {");
                 self.newline();
                 for case in sw.cases.iter() {
+                    self.flush_leading_comments(case.span.start);
                     self.write_indent();
                     if let Some(val) = &case.value {
                         self.indent();
@@ -121,6 +124,7 @@ impl Printer {
                     self.newline();
                     self.dedent();
                 }
+                self.flush_leading_comments(stmt.span.end);
                 self.write_indent();
                 self.w("}");
             }
@@ -161,17 +165,17 @@ impl Printer {
                 self.print_expr(expr, PREC_LOWEST);
                 self.w(";");
             }
-            StmtKind::TryCatch(tc) => self.print_try_catch(tc),
+            StmtKind::TryCatch(tc) => self.print_try_catch(tc, stmt),
             StmtKind::Global(exprs) => {
                 self.w("global ");
                 self.print_comma_separated_exprs(exprs);
                 self.w(";");
             }
-            StmtKind::Class(class) => self.print_class(class),
-            StmtKind::Interface(iface) => self.print_interface(iface),
-            StmtKind::Trait(trait_decl) => self.print_trait(trait_decl),
-            StmtKind::Enum(enum_decl) => self.print_enum(enum_decl),
-            StmtKind::Namespace(ns) => self.print_namespace(ns),
+            StmtKind::Class(class) => self.print_class(class, stmt),
+            StmtKind::Interface(iface) => self.print_interface(iface, stmt),
+            StmtKind::Trait(trait_decl) => self.print_trait(trait_decl, stmt),
+            StmtKind::Enum(enum_decl) => self.print_enum(enum_decl, stmt),
+            StmtKind::Namespace(ns) => self.print_namespace(ns, stmt),
             StmtKind::Use(use_decl) => self.print_use(use_decl),
             StmtKind::Const(items) => {
                 if let Some(first) = items.first() {
@@ -239,13 +243,15 @@ impl Printer {
         }
     }
 
-    fn print_try_catch(&mut self, tc: &TryCatchStmt) {
+    fn print_try_catch(&mut self, tc: &TryCatchStmt, stmt: &Stmt) {
         self.w("try {");
         if !tc.body.is_empty() {
             self.newline();
             self.print_stmts(&tc.body, true);
             self.newline();
             self.write_indent();
+        } else {
+            self.flush_leading_comments(stmt.span.end);
         }
         self.w("}");
         for catch in tc.catches.iter() {
@@ -266,6 +272,8 @@ impl Printer {
                 self.print_stmts(&catch.body, true);
                 self.newline();
                 self.write_indent();
+            } else {
+                self.flush_leading_comments(stmt.span.end);
             }
             self.w("}");
         }
@@ -276,6 +284,8 @@ impl Printer {
                 self.print_stmts(finally, true);
                 self.newline();
                 self.write_indent();
+            } else {
+                self.flush_leading_comments(stmt.span.end);
             }
             self.w("}");
         }
@@ -289,6 +299,8 @@ impl Printer {
                 self.print_stmts(stmts, true);
                 self.newline();
                 self.write_indent();
+            } else {
+                self.flush_leading_comments(stmt.span.end);
             }
             self.w("}");
         } else {
@@ -300,11 +312,12 @@ impl Printer {
             self.newline();
             self.dedent();
             self.write_indent();
+            self.flush_leading_comments(stmt.span.end);
             self.w("}");
         }
     }
 
-    fn print_namespace(&mut self, ns: &NamespaceDecl) {
+    fn print_namespace(&mut self, ns: &NamespaceDecl, stmt: &Stmt) {
         self.w("namespace");
         if let Some(name) = &ns.name {
             self.w(" ");
@@ -318,6 +331,8 @@ impl Printer {
                     self.print_stmts(stmts, true);
                     self.newline();
                     self.write_indent();
+                } else {
+                    self.flush_leading_comments(stmt.span.end);
                 }
                 self.w("}");
             }

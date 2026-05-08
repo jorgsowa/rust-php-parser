@@ -5,7 +5,7 @@ use crate::precedence::*;
 use super::helpers::*;
 use super::{Printer, MAX_DEPTH};
 
-impl Printer {
+impl<'src> Printer<'src> {
     pub(crate) fn print_expr(&mut self, expr: &Expr, parent_prec: i8) {
         self.depth += 1;
         if self.depth > MAX_DEPTH {
@@ -213,7 +213,7 @@ impl Printer {
             ExprKind::New(new_expr) => {
                 self.w("new ");
                 if let ExprKind::AnonymousClass(class) = &new_expr.class.kind {
-                    self.print_anonymous_class(class, &new_expr.args);
+                    self.print_anonymous_class(class, &new_expr.args, new_expr.class.span.end);
                 } else {
                     self.print_expr(new_expr.class, PREC_PRIMARY);
                     if !new_expr.args.is_empty() {
@@ -315,7 +315,7 @@ impl Printer {
             }
             ExprKind::AnonymousClass(class) => {
                 self.print_class_header(class);
-                self.print_class_body(&class.members);
+                self.print_class_body(&class.members, expr.span.end);
             }
             ExprKind::CallableCreate(cc) => match &cc.kind {
                 CallableCreateKind::Function(name) => {
@@ -463,21 +463,56 @@ impl Printer {
     }
 
     fn print_array_elements(&mut self, elements: &[ArrayElement]) {
-        for (i, elem) in elements.iter().enumerate() {
-            if i > 0 {
-                self.w(", ");
+        if elements.is_empty() {
+            return;
+        }
+        let multi_line = elements.len() > 1
+            && self.has_comments_between(
+                elements[0].span.start,
+                elements[elements.len() - 1].span.end,
+            );
+        if multi_line {
+            self.newline();
+            self.indent();
+            for (i, elem) in elements.iter().enumerate() {
+                self.flush_leading_comments(elem.span.start);
+                self.write_indent();
+                if elem.unpack {
+                    self.w("...");
+                }
+                if let Some(key) = &elem.key {
+                    self.print_expr(key, PREC_LOWEST);
+                    self.w(" => ");
+                }
+                if elem.by_ref {
+                    self.w("&");
+                }
+                self.print_expr(&elem.value, PREC_LOWEST);
+                self.w(",");
+                if i < elements.len() - 1 {
+                    self.newline();
+                }
             }
-            if elem.unpack {
-                self.w("...");
+            self.newline();
+            self.dedent();
+            self.write_indent();
+        } else {
+            for (i, elem) in elements.iter().enumerate() {
+                if i > 0 {
+                    self.w(", ");
+                }
+                if elem.unpack {
+                    self.w("...");
+                }
+                if let Some(key) = &elem.key {
+                    self.print_expr(key, PREC_LOWEST);
+                    self.w(" => ");
+                }
+                if elem.by_ref {
+                    self.w("&");
+                }
+                self.print_expr(&elem.value, PREC_LOWEST);
             }
-            if let Some(key) = &elem.key {
-                self.print_expr(key, PREC_LOWEST);
-                self.w(" => ");
-            }
-            if elem.by_ref {
-                self.w("&");
-            }
-            self.print_expr(&elem.value, PREC_LOWEST);
         }
     }
 

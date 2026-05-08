@@ -5,8 +5,8 @@ use crate::precedence::*;
 use super::helpers::*;
 use super::Printer;
 
-impl Printer {
-    pub(crate) fn print_function(&mut self, func: &FunctionDecl) {
+impl<'src> Printer<'src> {
+    pub(crate) fn print_function(&mut self, func: &FunctionDecl, stmt: &Stmt) {
         self.print_doc_comment(&func.doc_comment);
         self.print_attributes(&func.attributes);
         self.w("function ");
@@ -29,18 +29,25 @@ impl Printer {
             self.print_stmts(&func.body, true);
             self.newline();
             self.write_indent();
+        } else {
+            self.flush_leading_comments(stmt.span.end);
         }
         self.w("}");
     }
 
-    pub(crate) fn print_class(&mut self, class: &ClassDecl) {
+    pub(crate) fn print_class(&mut self, class: &ClassDecl, stmt: &Stmt) {
         self.print_doc_comment(&class.doc_comment);
         self.print_attributes(&class.attributes);
         self.print_class_header(class);
-        self.print_class_body(&class.members);
+        self.print_class_body(&class.members, stmt.span.end);
     }
 
-    pub(crate) fn print_anonymous_class(&mut self, class: &ClassDecl, args: &[Arg]) {
+    pub(crate) fn print_anonymous_class(
+        &mut self,
+        class: &ClassDecl,
+        args: &[Arg],
+        closing_offset: u32,
+    ) {
         if class.modifiers.is_abstract {
             self.w("abstract ");
         }
@@ -69,7 +76,7 @@ impl Printer {
                 self.print_name(name);
             }
         }
-        self.print_class_body(&class.members);
+        self.print_class_body(&class.members, closing_offset);
     }
 
     pub(crate) fn print_class_header(&mut self, class: &ClassDecl) {
@@ -102,7 +109,7 @@ impl Printer {
         }
     }
 
-    pub(crate) fn print_class_body(&mut self, members: &[ClassMember]) {
+    pub(crate) fn print_class_body(&mut self, members: &[ClassMember], closing_offset: u32) {
         self.newline();
         self.write_indent();
         self.w("{");
@@ -110,6 +117,7 @@ impl Printer {
             self.newline();
             self.indent();
             for (i, member) in members.iter().enumerate() {
+                self.flush_leading_comments(member.span.start);
                 if i > 0 {
                     self.newline();
                 }
@@ -118,6 +126,7 @@ impl Printer {
                 self.newline();
             }
             self.dedent();
+            self.flush_leading_comments(closing_offset);
             self.write_indent();
         }
         self.w("}");
@@ -343,7 +352,7 @@ impl Printer {
         }
     }
 
-    pub(crate) fn print_interface(&mut self, iface: &InterfaceDecl) {
+    pub(crate) fn print_interface(&mut self, iface: &InterfaceDecl, stmt: &Stmt) {
         self.print_doc_comment(&iface.doc_comment);
         self.print_attributes(&iface.attributes);
         self.w("interface ");
@@ -357,18 +366,18 @@ impl Printer {
                 self.print_name(name);
             }
         }
-        self.print_class_body(&iface.members);
+        self.print_class_body(&iface.members, stmt.span.end);
     }
 
-    pub(crate) fn print_trait(&mut self, trait_decl: &TraitDecl) {
+    pub(crate) fn print_trait(&mut self, trait_decl: &TraitDecl, stmt: &Stmt) {
         self.print_doc_comment(&trait_decl.doc_comment);
         self.print_attributes(&trait_decl.attributes);
         self.w("trait ");
         self.w(trait_decl.name.or_error());
-        self.print_class_body(&trait_decl.members);
+        self.print_class_body(&trait_decl.members, stmt.span.end);
     }
 
-    pub(crate) fn print_enum(&mut self, enum_decl: &EnumDecl) {
+    pub(crate) fn print_enum(&mut self, enum_decl: &EnumDecl, stmt: &Stmt) {
         self.print_doc_comment(&enum_decl.doc_comment);
         self.print_attributes(&enum_decl.attributes);
         self.w("enum ");
@@ -393,6 +402,7 @@ impl Printer {
             self.newline();
             self.indent();
             for (i, member) in enum_decl.members.iter().enumerate() {
+                self.flush_leading_comments(member.span.start);
                 if i > 0 {
                     self.newline();
                 }
@@ -401,6 +411,7 @@ impl Printer {
                 self.newline();
             }
             self.dedent();
+            self.flush_leading_comments(stmt.span.end);
             self.write_indent();
         }
         self.w("}");

@@ -1,19 +1,9 @@
-use php_printer::pretty_print;
+use php_printer::pretty_print_with_comments;
 
 fn pp(src: &str) -> String {
     let arena = bumpalo::Bump::new();
     let result = php_rs_parser::parse(&arena, src);
-    pretty_print(&result.program)
-}
-
-/// Parse, print, re-parse, print again — output must be identical.
-fn round_trip(src: &str) {
-    let first = pp(src);
-    let second = pp(&format!("<?php {first}"));
-    assert_eq!(
-        first, second,
-        "round-trip mismatch:\nfirst:  {first}\nsecond: {second}"
-    );
+    pretty_print_with_comments(&result.program, result.source, &result.comments)
 }
 
 /// Parse a printer fixture file.
@@ -97,7 +87,15 @@ fn fixtures() {
         }
 
         // Also verify round-trip stability
-        round_trip(&fixture.source);
+        let first = pp(&fixture.source);
+        let arena = bumpalo::Bump::new();
+        let source = format!("<?php {first}");
+        let result = php_rs_parser::parse(&arena, &source);
+        let second = pretty_print_with_comments(&result.program, result.source, &result.comments);
+        assert_eq!(
+            first, second,
+            "round-trip mismatch in {rel}\nfirst:  {first}\nsecond: {second}"
+        );
     }
 }
 
