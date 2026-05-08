@@ -304,8 +304,12 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                         }
                     } else {
                         // Decode the next UTF-8 character from the remaining slice
+                        // Loop invariant: i < bytes.len(), so rest is non-empty
                         let rest = &inner[i..];
-                        let ch = rest.chars().next().unwrap();
+                        let ch = rest
+                            .chars()
+                            .next()
+                            .expect("loop condition i < bytes.len() guarantees non-empty slice");
                         decoded.push(ch);
                         i += ch.len_utf8();
                     }

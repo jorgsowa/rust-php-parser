@@ -1322,7 +1322,11 @@ pub fn lex_all(source: &str) -> (Vec<Token>, Vec<LexerError>) {
 
     // Push a second Eof sentinel so peek2 on the last real token is safe.
     // This allows the parser to do `self.tokens[self.pos + 1].kind` without bounds checking.
-    let eof_span = tokens.last().unwrap().span;
+    // The Eof token from the lexer is always added to tokens before the loop exits
+    let eof_span = tokens
+        .last()
+        .expect("tokens guaranteed to contain at least the Eof token from lexer")
+        .span;
     tokens.push(Token::new(TokenKind::Eof, eof_span));
 
     let errors = lexer.errors;

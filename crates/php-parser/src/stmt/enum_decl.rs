@@ -115,13 +115,17 @@ pub(super) fn parse_enum<'arena, 'src>(
                     span: case_name_span,
                 });
             } else if scalar_type.is_none() && value.is_some() {
+                // If value.is_some(), then equals_token must be Some since value is only set when equals_token.is_some()
+                let span = equals_token
+                    .expect("value.is_some() guarantees equals_token.is_some()")
+                    .span;
                 parser.error(ParseError::Forbidden {
                     message: format!(
                         "Case {} of pure enum {} must not have a value",
                         case_name, name
                     )
                     .into(),
-                    span: equals_token.unwrap().span,
+                    span,
                 });
             }
             parser.expect(TokenKind::Semicolon);

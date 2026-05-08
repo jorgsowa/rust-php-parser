@@ -160,7 +160,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
 
         // Add a second Eof sentinel for safe peek2
-        let eof_span = tokens.last().unwrap().span;
+        // The Eof token from the lexer is always added to tokens before the loop exits
+        let eof_span = tokens
+            .last()
+            .expect("tokens guaranteed to contain at least the Eof token from lexer")
+            .span;
         tokens.push(Token::new(TokenKind::Eof, eof_span));
 
         let mut errors: Vec<ParseError> = lexer
@@ -882,7 +886,13 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                                 span: mspan,
                             });
                         } else {
-                            union_members.push(member_types.into_iter().next().unwrap());
+                            // member_types initialized with alloc_vec_one(member), guaranteed to have exactly 1 element
+                            union_members.push(
+                                member_types
+                                    .into_iter()
+                                    .next()
+                                    .expect("member_types has 1 element"),
+                            );
                         }
                         end = self.previous_end();
                     }
