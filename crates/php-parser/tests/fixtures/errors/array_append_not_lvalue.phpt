@@ -39,3 +39,5 @@ cannot use [] for reading
     "end": 13
   }
 }
+===php_error===
+PHP Fatal error:  Cannot use [] for reading in Standard input code on line 1
