@@ -93,6 +93,9 @@ jobs:
       - name: Run printer tests
         run: cargo test --test printer
 
+      - name: Validate printer output with php -l
+        run: ./scripts/validate-printer-output.sh
+
   coverage:
     name: Coverage
     needs: [test, printer]
