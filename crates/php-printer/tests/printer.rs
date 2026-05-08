@@ -169,63 +169,8 @@ fn php_version(major: u32, minor: u32) -> php_rs_parser::PhpVersion {
     }
 }
 
-/// Fixtures with known printer bugs. Skipped until the underlying issues are fixed.
-///
-/// Categories:
-/// - dnf: DNF intersection types (`A&B|C`) need parenthesisation in printed output
-/// - inline_html: inline HTML inside function/block bodies emits a spurious extra `;`
-/// - phpdoc: PHPDoc re-indent drifts on each round-trip inside class bodies
-/// - halt_compiler: missing newline after `__halt_compiler();` data payload
-/// - dynamic: `$obj->($expr)` dynamic property/method access not yet printable
-/// - misc: assorted unimplemented or partially-supported printer features
 const KNOWN_FAILURES: &[&str] = &[
-    // dnf
-    "categories/type_hints/dnf_complex.phpt",
-    "categories/type_hints/dnf_multi_groups.phpt",
-    "categories/type_hints/dnf_property_type.phpt",
-    "categories/type_hints/dnf_return_type.phpt",
-    "categories/type_hints/dnf_triple_groups.phpt",
-    "complex_dnf_type.phpt",
-    "corpus/stmt/function/disjointNormalFormTypes.phpt",
-    "dnf_type_union_of_intersections.phpt",
-    "dnf_type_with_null.phpt",
-    "dnf_types.phpt",
-    "dnf_types_complex.phpt",
-    "versioned/dnf_types_require_82_v82.phpt",
-    // inline_html
-    "inline_html_comment_in_function_body.phpt",
-    "inline_html_in_function_body.phpt",
-    "inline_html_multiple_segments_in_function.phpt",
-    "no_hang/catch_body.phpt",
-    "no_hang/closure_body.phpt",
-    "no_hang/enum_method_body.phpt",
-    "no_hang/finally_body.phpt",
-    "no_hang/function_body.phpt",
-    "no_hang/method_body.phpt",
-    "no_hang/namespace_braced.phpt",
-    "no_hang/namespace_global_braced.phpt",
-    "no_hang/property_hook_body.phpt",
-    "no_hang/try_body.phpt",
-    // phpdoc
-    "categories/phpdoc/assert_type_alias.phpt",
-    "categories/phpdoc/phpdoc_psalm_phpstan.phpt",
-    "categories/phpdoc/property_var_deprecated.phpt",
-    "categories/phpdoc/psalm_phpstan_annotations.phpt",
-    "categories/phpdoc/pure_immutable_readonly.phpt",
-    "categories/phpdoc/template_generics.phpt",
-    // halt_compiler
-    "corpus/stmt/haltCompiler_1.phpt",
-    "corpus/stmt/namespace/outsideStmt_1.phpt",
-    "halt_compiler_close_tag.phpt",
-    // dynamic
-    "categories/dynamic_access/dynamic_prop_expr.phpt",
-    "dynamic_method_call.phpt",
-    "dynamic_property_access.phpt",
-    "corpus/expr/fetchAndCall/objectAccess.phpt",
-    // misc
-    "categories/destructuring/list_shorthand_only_commas.phpt",
     "categories/string_interpolation/unicode_escape_in_heredoc.phpt",
-    "corpus/expr/arrayDestructuring.phpt",
     "corpus/expr/newDeref.phpt",
     "corpus/expr/shellExec.phpt",
     "corpus/formattingAttributes.phpt",
@@ -233,14 +178,11 @@ const KNOWN_FAILURES: &[&str] = &[
     "corpus/scalar/encapsedString.phpt",
     "corpus/scalar/unicodeEscape_3.phpt",
     "corpus/stmt/function/variadic.phpt",
-    "versioned/const_attributes_require_85_v85.phpt",
+    "corpus/stmt/haltCompiler_1.phpt",
+    "corpus/stmt/namespace/outsideStmt_1.phpt",
+    "halt_compiler_close_tag.phpt",
 ];
 
-/// Verify that every error-free parser fixture survives a print → re-parse → re-print
-/// round trip (i.e. the printer produces stable output).
-///
-/// Fixtures listed in `KNOWN_FAILURES` are skipped; remove entries from that list
-/// as the underlying printer bugs are fixed.
 #[test]
 fn parser_corpus_round_trip() {
     let parser_fixtures =

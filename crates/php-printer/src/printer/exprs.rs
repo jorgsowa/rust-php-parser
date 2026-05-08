@@ -226,17 +226,35 @@ impl<'src> Printer<'src> {
             ExprKind::PropertyAccess(access) => {
                 self.print_expr(access.object, PREC_PRIMARY);
                 self.w("->");
-                self.print_expr(access.property, PREC_PRIMARY);
+                if self.needs_braces_for_property(&access.property.kind) {
+                    self.w("{");
+                    self.print_expr(access.property, PREC_LOWEST);
+                    self.w("}");
+                } else {
+                    self.print_expr(access.property, PREC_PRIMARY);
+                }
             }
             ExprKind::NullsafePropertyAccess(access) => {
                 self.print_expr(access.object, PREC_PRIMARY);
                 self.w("?->");
-                self.print_expr(access.property, PREC_PRIMARY);
+                if self.needs_braces_for_property(&access.property.kind) {
+                    self.w("{");
+                    self.print_expr(access.property, PREC_LOWEST);
+                    self.w("}");
+                } else {
+                    self.print_expr(access.property, PREC_PRIMARY);
+                }
             }
             ExprKind::MethodCall(call) => {
                 self.print_expr(call.object, PREC_PRIMARY);
                 self.w("->");
-                self.print_expr(call.method, PREC_PRIMARY);
+                if self.needs_braces_for_property(&call.method.kind) {
+                    self.w("{");
+                    self.print_expr(call.method, PREC_LOWEST);
+                    self.w("}");
+                } else {
+                    self.print_expr(call.method, PREC_PRIMARY);
+                }
                 self.w("(");
                 self.print_args(&call.args);
                 self.w(")");
@@ -244,7 +262,13 @@ impl<'src> Printer<'src> {
             ExprKind::NullsafeMethodCall(call) => {
                 self.print_expr(call.object, PREC_PRIMARY);
                 self.w("?->");
-                self.print_expr(call.method, PREC_PRIMARY);
+                if self.needs_braces_for_property(&call.method.kind) {
+                    self.w("{");
+                    self.print_expr(call.method, PREC_LOWEST);
+                    self.w("}");
+                } else {
+                    self.print_expr(call.method, PREC_PRIMARY);
+                }
                 self.w("(");
                 self.print_args(&call.args);
                 self.w(")");
@@ -512,6 +536,9 @@ impl<'src> Printer<'src> {
                     self.w("&");
                 }
                 self.print_expr(&elem.value, PREC_LOWEST);
+                if i == elements.len() - 1 && matches!(elem.value.kind, ExprKind::Omit) {
+                    self.w(",");
+                }
             }
         }
     }
@@ -546,6 +573,13 @@ impl<'src> Printer<'src> {
                 self.w("}");
             }
         }
+    }
+
+    fn needs_braces_for_property(&self, expr: &ExprKind) -> bool {
+        !matches!(
+            expr,
+            ExprKind::Variable(_) | ExprKind::Identifier(_) | ExprKind::VariableVariable(_)
+        )
     }
 
     fn print_string_literal(&mut self, s: &str) {

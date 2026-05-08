@@ -213,7 +213,16 @@ impl<'src> Printer<'src> {
         if indent {
             self.indent();
         }
+        let mut prev_was_inline_html = false;
         for (i, stmt) in stmts.iter().enumerate() {
+            let is_nop = matches!(stmt.kind, php_ast::ast::StmtKind::Nop);
+            let is_inline_html = matches!(stmt.kind, php_ast::ast::StmtKind::InlineHtml(_));
+
+            if is_nop && prev_was_inline_html {
+                prev_was_inline_html = is_inline_html;
+                continue;
+            }
+
             if i > 0 {
                 self.newline();
             }
@@ -225,6 +234,8 @@ impl<'src> Printer<'src> {
             self.print_stmt(stmt);
             let next_start = stmts.get(i + 1).map(|s| s.span.start).unwrap_or(u32::MAX);
             self.flush_trailing_comments(stmt.span.end.saturating_sub(1), next_start);
+
+            prev_was_inline_html = is_inline_html;
         }
         if indent {
             self.dedent();
