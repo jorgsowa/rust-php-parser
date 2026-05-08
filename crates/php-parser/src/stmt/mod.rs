@@ -2088,8 +2088,9 @@ fn parse_halt_compiler<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> St
         });
     }
 
-    // Everything after __halt_compiler(); is raw data
-    let current_pos = parser.current_span().start as usize;
+    // Everything after the terminator is raw data. Use previous_end() to capture
+    // the position right after the terminator, preserving any whitespace.
+    let current_pos = parser.previous_end() as usize;
     let remaining = &parser.source[current_pos..];
 
     // Advance to EOF so the parser stops

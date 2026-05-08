@@ -26,7 +26,7 @@ unclosed ''}'' opened at Span { start: 16, end: 17 }
               "Block": [
                 {
                   "kind": {
-                    "HaltCompiler": "}"
+                    "HaltCompiler": "\n}"
                   },
                   "span": {
                     "start": 22,

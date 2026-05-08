@@ -24,7 +24,7 @@
     },
     {
       "kind": {
-        "HaltCompiler": "raw data here"
+        "HaltCompiler": " raw data here"
       },
       "span": {
         "start": 21,

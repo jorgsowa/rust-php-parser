@@ -56,7 +56,7 @@ Foo
     },
     {
       "kind": {
-        "HaltCompiler": "Foo"
+        "HaltCompiler": "\nFoo"
       },
       "span": {
         "start": 43,
