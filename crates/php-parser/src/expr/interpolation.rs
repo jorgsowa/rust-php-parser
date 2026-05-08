@@ -713,6 +713,25 @@ pub fn has_interpolation(inner: &str) -> bool {
     false
 }
 
+/// Process escape sequences in a heredoc string without interpolation.
+pub fn process_heredoc_escapes(inner: &str) -> String {
+    let bytes = inner.as_bytes();
+    let len = bytes.len();
+    let mut i = 0;
+    let mut out = String::with_capacity(len);
+    let mut errors = Vec::new();
+
+    while i < len {
+        if bytes[i] == b'\\' {
+            i = decode_escape_at(bytes, inner, i, &mut out, &mut errors, 0, false);
+        } else {
+            out.push(bytes[i] as char);
+            i += 1;
+        }
+    }
+    out
+}
+
 fn is_var_start(b: u8) -> bool {
     b.is_ascii_alphabetic() || b == b'_' || b >= 0x80
 }

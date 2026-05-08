@@ -169,17 +169,6 @@ fn php_version(major: u32, minor: u32) -> php_rs_parser::PhpVersion {
     }
 }
 
-const KNOWN_FAILURES: &[&str] = &[
-    "categories/string_interpolation/unicode_escape_in_heredoc.phpt",
-    "corpus/expr/newDeref.phpt",
-    "corpus/expr/shellExec.phpt",
-    "corpus/formattingAttributes.phpt",
-    "corpus/scalar/docString.phpt",
-    "corpus/scalar/encapsedString.phpt",
-    "corpus/scalar/unicodeEscape_3.phpt",
-    "corpus/stmt/function/variadic.phpt",
-];
-
 #[test]
 fn parser_corpus_round_trip() {
     let parser_fixtures =
@@ -202,12 +191,6 @@ fn parser_corpus_round_trip() {
         }
 
         let rel = path.strip_prefix(&parser_fixtures).unwrap();
-        let rel_str = rel.to_string_lossy().replace('\\', "/");
-        if KNOWN_FAILURES.contains(&rel_str.as_str()) {
-            skipped += 1;
-            continue;
-        }
-
         let source = extract_parser_fixture_source(&content, &header);
 
         let first_print = {

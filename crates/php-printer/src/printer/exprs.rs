@@ -47,9 +47,14 @@ impl<'src> Printer<'src> {
             }
             ExprKind::String(s) => self.print_string_literal(s),
             ExprKind::InterpolatedString(parts) => {
-                self.w("\"");
-                self.print_string_parts(parts);
-                self.w("\"");
+                if parts.is_empty() {
+                    // Empty string — use single quotes for consistency
+                    self.w("''");
+                } else {
+                    self.w("\"");
+                    self.print_string_parts(parts);
+                    self.w("\"");
+                }
             }
             ExprKind::Heredoc { label, parts } => {
                 self.w("<<<");

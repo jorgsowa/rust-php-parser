@@ -503,8 +503,9 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     }
                 }
             } else {
-                // No interpolation — build the (possibly de-indented) literal body string
-                let body_str = if !indent.is_empty() {
+                // No interpolation — build the (possibly de-indented) body string,
+                // then process escape sequences
+                let de_indented = if !indent.is_empty() {
                     raw_body
                         .lines()
                         .map(|line| line.strip_prefix(&indent).unwrap_or(line))
@@ -513,6 +514,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 } else {
                     raw_body.to_string()
                 };
+                let body_str = super::interpolation::process_heredoc_escapes(&de_indented);
                 let mut parts = parser.alloc_vec_with_capacity(1);
                 parts.push(StringPart::Literal(parser.arena.alloc_str(&body_str)));
                 Expr {
