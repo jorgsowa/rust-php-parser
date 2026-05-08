@@ -26,7 +26,7 @@ EOT;
                     "label": "EOT",
                     "parts": [
                       {
-                        "Literal": "\\u{41}"
+                        "Literal": "A"
                       }
                     ]
                   }

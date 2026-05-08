@@ -374,7 +374,7 @@ list($x) = $y;
               "label": "ABC",
               "parts": [
                 {
-                  "Literal": "foo\\nbar"
+                  "Literal": "foo\nbar"
                 }
               ]
             }
@@ -398,7 +398,7 @@ list($x) = $y;
               "label": "ABC",
               "parts": [
                 {
-                  "Literal": "foo\\nbar"
+                  "Literal": "foo\nbar"
                 }
               ]
             }

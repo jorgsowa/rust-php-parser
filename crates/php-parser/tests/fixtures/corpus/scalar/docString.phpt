@@ -105,7 +105,7 @@ EOS;
               "label": "EOS",
               "parts": [
                 {
-                  "Literal": "Test '\" \\$a \\n"
+                  "Literal": "Test '\" $a \n"
                 }
               ]
             }
