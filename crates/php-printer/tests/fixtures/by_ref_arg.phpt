@@ -1,4 +1,7 @@
 ===source===
-<?php sort(&$arr);
+<?php function test(&$x) { sort($x); }
 ===print===
-sort(&$arr);
+function test(&$x)
+{
+    sort($x);
+}

@@ -1,4 +1,4 @@
 ===source===
-<?php $arr[];
+<?php $arr[] = $x;
 ===print===
-$arr[];
+$arr[] = $x;

@@ -1,4 +1,6 @@
 ===source===
-<?php continue;
+<?php while(true) { continue; }
 ===print===
-continue;
+while (true) {
+    continue;
+}

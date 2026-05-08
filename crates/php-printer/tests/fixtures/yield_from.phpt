@@ -1,4 +1,7 @@
 ===source===
-<?php yield from $gen;
+<?php function f() { yield from $gen; }
 ===print===
-yield from $gen;
+function f()
+{
+    yield from $gen;
+}

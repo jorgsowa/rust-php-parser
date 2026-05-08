@@ -1,4 +1,8 @@
 ===source===
-<?php break 2;
+<?php while(true) { while(true) { break 2; } }
 ===print===
-break 2;
+while (true) {
+    while (true) {
+        break 2;
+    }
+}

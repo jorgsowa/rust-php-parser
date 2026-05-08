@@ -1,4 +1,7 @@
 ===source===
-<?php yield;
+<?php function f() { yield; }
 ===print===
-yield;
+function f()
+{
+    yield;
+}

@@ -7,10 +7,30 @@ trap "rm -rf $TEMP_DIR" EXIT
 
 failed=0
 
+# Get installed PHP version
+PHP_VERSION=$(php --version | head -1 | grep -oE '[0-9]+\.[0-9]+' | head -1)
+
 for fixture in "$FIXTURES_DIR"/*.phpt; do
+    # Check for skip marker in config
+    if grep -q "^skip_php_validate=1" "$fixture" 2>/dev/null; then
+        echo "⊘ $(basename "$fixture") (skipped per config)"
+        continue
+    fi
+
+    # Extract min_php from config section if present
+    min_php=$(sed -n '/^===config===/,/^===/p' "$fixture" | grep "^min_php=" | head -1 | cut -d= -f2)
+    if [ -n "$min_php" ]; then
+        # Compare versions: skip if installed version is older
+        if [ "$(printf '%s\n' "$min_php" "$PHP_VERSION" | sort -V | head -n1)" = "$min_php" ] && [ "$min_php" != "$PHP_VERSION" ]; then
+            echo "⊘ $(basename "$fixture") (requires PHP $min_php, have $PHP_VERSION)"
+            continue
+        fi
+    fi
+
     # Extract the ===print=== section
-    if ! output=$(sed -n '/^===print===/,/^$/p' "$fixture" | tail -n +2 | sed '$ d'); then
-        echo "⚠ Warning: no ===print=== section in $(basename "$fixture"), skipping"
+    output=$(awk '/^===print===/{flag=1;next}/^===/{flag=0}flag' "$fixture")
+    if [ -z "$output" ]; then
+        echo "⚠ Warning: empty ===print=== section in $(basename "$fixture"), skipping"
         continue
     fi
 

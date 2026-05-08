@@ -1,4 +1,10 @@
 ===source===
-<?php continue 3;
+<?php while(true) { while(true) { while(true) { continue 3; } } }
 ===print===
-continue 3;
+while (true) {
+    while (true) {
+        while (true) {
+            continue 3;
+        }
+    }
+}
