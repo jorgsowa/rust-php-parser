@@ -70,7 +70,7 @@ impl<'src> Printer<'src> {
             }
             ExprKind::ShellExec(parts) => {
                 self.w("`");
-                self.print_string_parts(parts);
+                self.print_backtick_parts(parts);
                 self.w("`");
             }
             ExprKind::Bool(b) => self.w(if *b { "true" } else { "false" }),
@@ -547,6 +547,15 @@ impl<'src> Printer<'src> {
         for part in parts.iter() {
             match part {
                 StringPart::Literal(s) => self.w(&escape_double_quoted(s)),
+                StringPart::Expr(expr) => self.print_string_part_expr(expr),
+            }
+        }
+    }
+
+    fn print_backtick_parts(&mut self, parts: &[StringPart]) {
+        for part in parts.iter() {
+            match part {
+                StringPart::Literal(s) => self.w(&escape_shell_exec(s)),
                 StringPart::Expr(expr) => self.print_string_part_expr(expr),
             }
         }

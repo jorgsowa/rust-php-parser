@@ -69,6 +69,45 @@ pub(crate) fn escape_double_quoted(s: &str) -> String {
     out
 }
 
+/// Escape a literal segment of a backtick shell execution string.
+///
+/// Backticks handle escapes differently than double-quoted strings. Only `\\` and `\$`
+/// are recognized escapes. To include a backtick in the literal, it must appear as `\``
+/// where the backslash doesn't form a recognized escape, so both characters are treated
+/// as literals by the parser.
+pub(crate) fn escape_shell_exec(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    let mut chars = s.chars().peekable();
+
+    while let Some(ch) = chars.next() {
+        match ch {
+            '\\' => {
+                // Check if next char is backtick - if so, output as-is to create `\`` escape
+                if chars.peek() == Some(&'`') {
+                    out.push('\\');
+                    out.push('`');
+                    chars.next(); // consume the backtick
+                } else {
+                    // Otherwise escape the backslash normally
+                    out.push_str("\\\\");
+                }
+            }
+            '$' => {
+                out.push_str("\\$");
+            }
+            '`' => {
+                // Backtick on its own - must escape as `\``
+                out.push('\\');
+                out.push('`');
+            }
+            _ => {
+                out.push(ch);
+            }
+        }
+    }
+    out
+}
+
 pub(crate) fn binary_op_str(op: BinaryOp) -> &'static str {
     match op {
         BinaryOp::Add => "+",

@@ -170,7 +170,6 @@ fn php_version(major: u32, minor: u32) -> php_rs_parser::PhpVersion {
 }
 
 const KNOWN_FAILURES: &[&str] = &[
-    "backtick_consecutive_escapes.phpt",
     "categories/string_interpolation/unicode_escape_in_heredoc.phpt",
     "corpus/expr/newDeref.phpt",
     "corpus/expr/shellExec.phpt",
