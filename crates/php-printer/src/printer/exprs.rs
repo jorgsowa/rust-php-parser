@@ -547,10 +547,21 @@ impl<'src> Printer<'src> {
     }
 
     fn print_string_parts(&mut self, parts: &[StringPart]) {
+        let mut last_literal_ends_with_brace = false;
         for part in parts.iter() {
             match part {
-                StringPart::Literal(s) => self.w(&escape_double_quoted(s)),
-                StringPart::Expr(expr) => self.print_string_part_expr(expr),
+                StringPart::Literal(s) => {
+                    self.w(&escape_double_quoted(s));
+                    last_literal_ends_with_brace = s.ends_with('{');
+                }
+                StringPart::Expr(expr) => {
+                    if last_literal_ends_with_brace {
+                        self.print_string_part_expr_with_braces(expr);
+                    } else {
+                        self.print_string_part_expr(expr);
+                    }
+                    last_literal_ends_with_brace = false;
+                }
             }
         }
     }
@@ -585,6 +596,20 @@ impl<'src> Printer<'src> {
                 self.w("}");
             }
         }
+    }
+
+    fn print_string_part_expr_with_braces(&mut self, expr: &Expr) {
+        self.w("{");
+        match &expr.kind {
+            ExprKind::Variable(name) => {
+                self.w("$");
+                self.w(name.as_str());
+            }
+            _ => {
+                self.print_expr(expr, PREC_LOWEST);
+            }
+        }
+        self.w("}");
     }
 
     fn needs_braces_for_property(&self, expr: &ExprKind) -> bool {

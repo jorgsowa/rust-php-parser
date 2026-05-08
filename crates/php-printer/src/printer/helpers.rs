@@ -37,13 +37,15 @@ pub(crate) fn escape_single_quoted(s: &str) -> String {
 ///
 /// Heredocs preserve real newlines, and `"` needs no escape, but `\` and `$`
 /// must still be escaped to prevent unintended escape sequences and variable
-/// interpolation.
+/// interpolation. Carriage returns must be escaped as `\r` to avoid parser
+/// confusion with line endings.
 pub(crate) fn escape_heredoc(s: &str) -> String {
     let mut out = String::with_capacity(s.len());
     for ch in s.chars() {
         match ch {
             '\\' => out.push_str("\\\\"),
             '$' => out.push_str("\\$"),
+            '\r' => out.push_str("\\r"),
             _ => out.push(ch),
         }
     }
