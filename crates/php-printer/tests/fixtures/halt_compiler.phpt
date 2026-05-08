@@ -4,4 +4,5 @@ __halt_compiler();
 trailing data here
 ===print===
 echo 'before';
-__halt_compiler();trailing data here
+__halt_compiler();
+trailing data here
