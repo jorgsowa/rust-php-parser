@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.0] - 2026-05-09
+
+### Added
+
+- Enhanced parser validation for constructor promotion modifiers — explicitly rejects multiple modifiers on promoted parameters in anonymous classes and refines `readonly` validation on properties (`php-rs-parser`).
+- Improved error diagnostics with proper error context in recovery paths — error recovery now preserves more meaningful context for debugging (`php-rs-parser`).
+- CI validation: printer output now validated against `php -l` to ensure round-trip output is syntactically valid PHP (`php-parser`).
+- Comprehensive printer edge-case coverage including `new` expressions with empty arguments, property hooks, DNF types, pipe operator expressions, and clone with list arguments (`php-printer`).
+
+### Fixed
+
+- Parser validates parenthesized arrow functions in pipe operator (`|>`) expressions — prevents invalid syntax like `|> ($x) => $x` (`php-rs-parser`).
+- Parser now rejects invalid PHP constructs during parsing rather than silently accepting them and potentially dropping AST nodes (`php-rs-parser`).
+- Control characters in heredoc/nowdoc and braces in string interpolation now properly escaped in printer output (`php-printer`).
+- Variadic parameter modifiers now print in correct order (`&` before `...`) to match PHP syntax (`php-printer`).
+- Printer now always emits parentheses for `new` expressions, ensuring valid PHP output in all contexts (`php-printer`).
+- Property hooks printer fixture updated with valid PHP syntax and edge cases (`php-printer`).
+
+### Changed
+
+- All `.unwrap()` calls replaced with `.expect()` with documented invariants explaining why panic is guaranteed not to occur (`php-parser`).
+- Clippy warnings in example binaries resolved (`php-parser`).
+- Test fixtures now include `===php_error===` sections where appropriate to validate against PHP's own syntax validation (`php-parser`).
+- Fixture test runner parallelized with `rayon` for faster test execution (`php-parser`).
+
+### Documentation
+
+- Added inline documentation explaining dead-code suppressions in test utilities (`php-parser/tests/common.rs`).
+- Parser recursion depth limits and error recovery behavior documented in source (`php-rs-parser`).
+
+### Tests
+
+- Comprehensive edge cases for variadic parameter modifiers (`php-rs-parser`).
+- Printer fixtures expanded to cover `new` expressions, property hooks, and DNF type combinations (`php-printer`).
+
+---
+
 ## [0.9.8] - 2026-05-07
 
 ### Added
