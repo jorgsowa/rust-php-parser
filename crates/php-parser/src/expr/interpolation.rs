@@ -84,6 +84,9 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                         let name_start = i;
                         while i < len && is_var_char(bytes[i]) {
                             i += 1;
+                            while i < len && is_utf8_continuation(bytes[i]) {
+                                i += 1;
+                            }
                         }
                         let var_name: &'src str =
                             &source[base_offset as usize + name_start..base_offset as usize + i];
@@ -161,6 +164,9 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                     let name_start = i;
                     while i < len && is_var_char(bytes[i]) {
                         i += 1;
+                        while i < len && is_utf8_continuation(bytes[i]) {
+                            i += 1;
+                        }
                     }
                     let var_name: &'src str =
                         &source[base_offset as usize + name_start..base_offset as usize + i];
@@ -179,6 +185,9 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                             let pname_start = i;
                             while i < len && is_var_char(bytes[i]) {
                                 i += 1;
+                                while i < len && is_utf8_continuation(bytes[i]) {
+                                    i += 1;
+                                }
                             }
                             let prop_name: &'src str = &source
                                 [base_offset as usize + pname_start..base_offset as usize + i];
@@ -399,6 +408,9 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                     let name_start = i;
                     while i < len && is_var_char(bytes[i]) {
                         i += 1;
+                        while i < len && is_utf8_continuation(bytes[i]) {
+                            i += 1;
+                        }
                     }
                     // raw_body is &'src str so we can borrow directly
                     let var_name: &'src str = &raw_body[name_start..i];
@@ -416,6 +428,9 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                             let pname_start = i;
                             while i < len && is_var_char(bytes[i]) {
                                 i += 1;
+                                while i < len && is_utf8_continuation(bytes[i]) {
+                                    i += 1;
+                                }
                             }
                             let prop_name: &'src str = &raw_body[pname_start..i];
                             let prop_span =
@@ -733,11 +748,15 @@ pub fn process_heredoc_escapes(inner: &str) -> String {
 }
 
 fn is_var_start(b: u8) -> bool {
-    b.is_ascii_alphabetic() || b == b'_' || b >= 0x80
+    b.is_ascii_alphabetic() || b == b'_' || (0xC0..=0xF7).contains(&b)
 }
 
 fn is_var_char(b: u8) -> bool {
-    b.is_ascii_alphanumeric() || b == b'_' || b >= 0x80
+    b.is_ascii_alphanumeric() || b == b'_' || (0xC0..=0xF7).contains(&b)
+}
+
+fn is_utf8_continuation(b: u8) -> bool {
+    (b & 0xC0) == 0x80
 }
 
 /// Parse an array index from simple string interpolation: `$arr[expr]`.
