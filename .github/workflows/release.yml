@@ -1,0 +1,193 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+env:
+  CARGO_TERM_COLOR: always
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+
+      - name: Clippy
+        run: cargo clippy --workspace -- -D warnings
+
+  php-syntax:
+    name: PHP Syntax (${{ matrix.php-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.1', '8.2', '8.3', '8.4', '8.5']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.php-version }}
+
+      - name: Check PHP syntax in tests
+        run: cargo test --test php_syntax
+
+  test:
+    name: Test (PHP ${{ matrix.php-version }})
+    needs: php-syntax
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.1', '8.2', '8.3', '8.4', '8.5']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.php-version }}
+
+      - name: Run tests
+        run: cargo test --lib && cargo test --test integration
+
+  printer:
+    name: Printer Tests
+    needs: php-syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Run printer tests
+        run: cargo test --test printer
+
+      - name: Validate printer output with php -l
+        run: ./scripts/validate-printer-output.sh
+
+  publish:
+    name: Publish to crates.io
+    needs: [lint, test, printer]
+    runs-on: ubuntu-latest
+    environment: crates-io
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Verify tag matches workspace version
+        run: |
+          TAG_VERSION="${GITHUB_REF#refs/tags/v}"
+          CARGO_VERSION=$(grep '^version' Cargo.toml | head -1 | sed 's/.*= *"\(.*\)"/\1/')
+          echo "Tag version:   $TAG_VERSION"
+          echo "Cargo version: $CARGO_VERSION"
+          if [ "$TAG_VERSION" != "$CARGO_VERSION" ]; then
+            echo "ERROR: Tag v$TAG_VERSION does not match Cargo.toml version $CARGO_VERSION"
+            exit 1
+          fi
+
+      - name: Publish php-ast
+        run: cargo publish -p php-ast --locked
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+
+      - name: Wait for crates.io to index php-ast
+        run: sleep 20
+
+      - name: Publish php-lexer
+        run: cargo publish -p php-lexer --locked
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+
+      - name: Wait for crates.io to index php-lexer
+        run: sleep 20
+
+      - name: Publish php-rs-parser
+        run: cargo publish -p php-rs-parser --locked
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+
+      - name: Wait for crates.io to index php-rs-parser
+        run: sleep 20
+
+      - name: Publish php-printer
+        run: cargo publish -p php-printer --locked
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+
+  release:
+    name: Create GitHub Release
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
+
+      - name: Extract CHANGELOG section
+        id: notes
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          NOTES=$(awk -v ver="$VERSION" '
+            $0 ~ "^## \\["ver"\\]" { flag=1; next }
+            /^## \[/               { flag=0 }
+            flag
+          ' CHANGELOG.md | sed '/^---[[:space:]]*$/d' | sed -e '/./,$!d' -e :a -e '/^\n*$/{$d;N;ba}')
+          if [ -z "$NOTES" ]; then
+            echo "ERROR: No CHANGELOG section found for version $VERSION"
+            exit 1
+          fi
+          {
+            echo "NOTES<<RELEASE_NOTES_EOF"
+            echo "$NOTES"
+            echo "RELEASE_NOTES_EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub release
+        run: |
+          gh release create "v${{ steps.version.outputs.VERSION }}" \
+            --title "v${{ steps.version.outputs.VERSION }}" \
+            --notes "${{ steps.notes.outputs.NOTES }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
