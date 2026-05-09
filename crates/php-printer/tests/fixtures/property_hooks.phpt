@@ -7,7 +7,28 @@
         }
     }
 
-    public string $email { get; set; }
+    public string $email {
+        get { return $this->email; }
+        set { $this->email = $value; }
+    }
+
+    public string $description {
+        get => $this->description;
+        set { $this->description = $value; }
+    }
+
+    public string $status = 'active' {
+        get => strtoupper($this->status);
+    }
+
+    public int $count {
+        get { return $this->count; }
+        set { $this->count = max(0, $value); }
+    }
+
+    public string $fullName {
+        get => $this->firstName . ' ' . $this->lastName;
+    }
 }
 ===print===
 class User
@@ -20,7 +41,35 @@ class User
     }
 
     public string $email {
-        get;
-        set;
+        get {
+            return $this->email;
+        }
+        set {
+            $this->email = $value;
+        }
+    }
+
+    public string $description {
+        get => $this->description;
+        set {
+            $this->description = $value;
+        }
+    }
+
+    public string $status = 'active' {
+        get => strtoupper($this->status);
+    }
+
+    public int $count {
+        get {
+            return $this->count;
+        }
+        set {
+            $this->count = max(0, $value);
+        }
+    }
+
+    public string $fullName {
+        get => $this->firstName . ' ' . $this->lastName;
     }
 }
