@@ -1,0 +1,1050 @@
+export interface NodeField {
+  name: string
+  type: string
+  description: string
+  optional?: boolean
+}
+
+export interface AstNode {
+  id: string
+  category: 'statement' | 'expression' | 'declaration' | 'type' | 'helper'
+  name: string
+  description: string
+  phpExample: string
+  fields?: NodeField[]
+  phpVersion?: string
+}
+
+export const astNodes: AstNode[] = [
+  // ========== STATEMENTS ==========
+  {
+    id: 'stmt-echo',
+    category: 'statement',
+    name: 'Echo',
+    description: 'Output one or more values',
+    phpExample: `<?php\necho 'Hello', ' ', $name;`,
+    fields: [
+      { name: 'exprs', type: 'Vec<Expr>', description: 'Values to output' }
+    ]
+  },
+  {
+    id: 'stmt-return',
+    category: 'statement',
+    name: 'Return',
+    description: 'Return from a function or method',
+    phpExample: `<?php\nfunction add($a, $b) {\n  return $a + $b;\n}`,
+    fields: [
+      { name: 'value', type: 'Option<Expr>', description: 'Return value', optional: true }
+    ]
+  },
+  {
+    id: 'stmt-if',
+    category: 'statement',
+    name: 'If',
+    description: 'Conditional statement with if/elseif/else branches',
+    phpExample: `<?php\nif ($x > 0) {\n  echo 'positive';\n} elseif ($x < 0) {\n  echo 'negative';\n} else {\n  echo 'zero';\n}`,
+    fields: [
+      { name: 'condition', type: 'Expr', description: 'Condition to evaluate' },
+      { name: 'then_branch', type: 'Stmt', description: 'Statement when condition is true' },
+      { name: 'elseif_branches', type: 'Vec<ElseIfBranch>', description: 'Elseif branches' },
+      { name: 'else_branch', type: 'Option<Stmt>', description: 'Else statement', optional: true }
+    ]
+  },
+  {
+    id: 'stmt-while',
+    category: 'statement',
+    name: 'While',
+    description: 'While loop',
+    phpExample: `<?php\nwhile ($x > 0) {\n  echo $x;\n  $x--;\n}`,
+    fields: [
+      { name: 'condition', type: 'Expr', description: 'Loop condition' },
+      { name: 'body', type: 'Stmt', description: 'Loop body' }
+    ]
+  },
+  {
+    id: 'stmt-for',
+    category: 'statement',
+    name: 'For',
+    description: 'For loop with init/condition/update',
+    phpExample: `<?php\nfor ($i = 0; $i < 10; $i++) {\n  echo $i;\n}`,
+    fields: [
+      { name: 'init', type: 'Vec<Expr>', description: 'Initialization expressions' },
+      { name: 'condition', type: 'Vec<Expr>', description: 'Loop conditions' },
+      { name: 'update', type: 'Vec<Expr>', description: 'Update expressions' },
+      { name: 'body', type: 'Stmt', description: 'Loop body' }
+    ]
+  },
+  {
+    id: 'stmt-foreach',
+    category: 'statement',
+    name: 'Foreach',
+    description: 'Foreach loop over an array or iterable',
+    phpExample: `<?php\nforeach ($arr as $key => $value) {\n  echo $key . ': ' . $value;\n}`,
+    fields: [
+      { name: 'expr', type: 'Expr', description: 'Expression to iterate' },
+      { name: 'key', type: 'Option<Expr>', description: 'Key variable', optional: true },
+      { name: 'value', type: 'Expr', description: 'Value variable' },
+      { name: 'body', type: 'Stmt', description: 'Loop body' }
+    ]
+  },
+  {
+    id: 'stmt-do-while',
+    category: 'statement',
+    name: 'DoWhile',
+    description: 'Do-while loop (executes at least once)',
+    phpExample: `<?php\ndo {\n  echo $x;\n  $x--;\n} while ($x > 0);`,
+    fields: [
+      { name: 'body', type: 'Stmt', description: 'Loop body' },
+      { name: 'condition', type: 'Expr', description: 'Loop condition' }
+    ]
+  },
+  {
+    id: 'stmt-switch',
+    category: 'statement',
+    name: 'Switch',
+    description: 'Switch statement with cases and default',
+    phpExample: `<?php\nswitch ($x) {\n  case 1:\n    echo 'one';\n    break;\n  default:\n    echo 'other';\n}`,
+    fields: [
+      { name: 'expr', type: 'Expr', description: 'Value to switch on' },
+      { name: 'cases', type: 'Vec<SwitchCase>', description: 'Switch cases' }
+    ]
+  },
+  {
+    id: 'stmt-break',
+    category: 'statement',
+    name: 'Break',
+    description: 'Break from loop or switch',
+    phpExample: `<?php\nwhile (true) {\n  if ($done) break 2;\n}`,
+    fields: [
+      { name: 'level', type: 'Option<Expr>', description: 'Number of levels to break', optional: true }
+    ]
+  },
+  {
+    id: 'stmt-continue',
+    category: 'statement',
+    name: 'Continue',
+    description: 'Continue to next iteration of loop',
+    phpExample: `<?php\nfor ($i = 0; $i < 10; $i++) {\n  if ($i % 2 == 0) continue;\n  echo $i;\n}`,
+    fields: [
+      { name: 'level', type: 'Option<Expr>', description: 'Number of levels to continue', optional: true }
+    ]
+  },
+  {
+    id: 'stmt-function',
+    category: 'statement',
+    name: 'Function',
+    description: 'Function declaration',
+    phpExample: `<?php\nfunction greet($name): string {\n  return 'Hello, ' . $name;\n}`,
+    fields: [
+      { name: 'name', type: 'Ident', description: 'Function name' },
+      { name: 'params', type: 'Vec<Param>', description: 'Function parameters' },
+      { name: 'body', type: 'Vec<Stmt>', description: 'Function body' },
+      { name: 'return_type', type: 'Option<TypeHint>', description: 'Return type', optional: true }
+    ]
+  },
+  {
+    id: 'stmt-class',
+    category: 'statement',
+    name: 'Class',
+    description: 'Class declaration',
+    phpExample: `<?php\nclass Animal {\n  public string $name;\n  public function speak(): void {}\n}`,
+    fields: [
+      { name: 'name', type: 'Ident', description: 'Class name' },
+      { name: 'extends', type: 'Option<Name>', description: 'Parent class', optional: true },
+      { name: 'implements', type: 'Vec<Name>', description: 'Interfaces' },
+      { name: 'members', type: 'Vec<ClassMember>', description: 'Properties, methods, constants' }
+    ]
+  },
+  {
+    id: 'stmt-interface',
+    category: 'statement',
+    name: 'Interface',
+    description: 'Interface declaration',
+    phpExample: `<?php\ninterface Drawable {\n  public function draw(): void;\n}`,
+    fields: [
+      { name: 'name', type: 'Ident', description: 'Interface name' },
+      { name: 'extends', type: 'Vec<Name>', description: 'Parent interfaces' },
+      { name: 'members', type: 'Vec<ClassMember>', description: 'Methods' }
+    ]
+  },
+  {
+    id: 'stmt-trait',
+    category: 'statement',
+    name: 'Trait',
+    description: 'Trait declaration',
+    phpExample: `<?php\ntrait Logger {\n  public function log($msg) { echo $msg; }\n}`,
+    fields: [
+      { name: 'name', type: 'Ident', description: 'Trait name' },
+      { name: 'members', type: 'Vec<ClassMember>', description: 'Methods' }
+    ]
+  },
+  {
+    id: 'stmt-enum',
+    category: 'statement',
+    name: 'Enum',
+    description: 'Enumeration declaration (PHP 8.1+)',
+    phpExample: `<?php\nenum Status: string {\n  case Active = 'active';\n  case Inactive = 'inactive';\n}`,
+    phpVersion: '8.1+',
+    fields: [
+      { name: 'name', type: 'Ident', description: 'Enum name' },
+      { name: 'scalar_type', type: 'Option<Name>', description: 'Backing type (int or string)', optional: true },
+      { name: 'members', type: 'Vec<EnumMember>', description: 'Cases and methods' }
+    ]
+  },
+  {
+    id: 'stmt-namespace',
+    category: 'statement',
+    name: 'Namespace',
+    description: 'Namespace declaration',
+    phpExample: `<?php\nnamespace App\\Controllers;\n\nclass Home {}`,
+    fields: [
+      { name: 'name', type: 'Option<Name>', description: 'Namespace name', optional: true },
+      { name: 'body', type: 'NamespaceBody', description: 'Namespace contents' }
+    ]
+  },
+  {
+    id: 'stmt-use',
+    category: 'statement',
+    name: 'Use',
+    description: 'Use (import) statement',
+    phpExample: `<?php\nuse App\\Models\\User;\nuse function Helper\\debug;`,
+    fields: [
+      { name: 'kind', type: 'UseKind', description: 'Type of use (Normal, Function, Const)' },
+      { name: 'uses', type: 'Vec<UseItem>', description: 'Imported items' }
+    ]
+  },
+  {
+    id: 'stmt-const',
+    category: 'statement',
+    name: 'Const',
+    description: 'Global constant declaration',
+    phpExample: `<?php\nconst MAX_SIZE = 100;\nconst DB_HOST = 'localhost';`,
+    fields: [
+      { name: 'items', type: 'Vec<ConstItem>', description: 'Constant declarations' }
+    ]
+  },
+  {
+    id: 'stmt-throw',
+    category: 'statement',
+    name: 'Throw',
+    description: 'Throw an exception',
+    phpExample: `<?php\nthrow new Exception('Something went wrong');`,
+    fields: [
+      { name: 'exception', type: 'Expr', description: 'Exception to throw' }
+    ]
+  },
+  {
+    id: 'stmt-try-catch',
+    category: 'statement',
+    name: 'TryCatch',
+    description: 'Try-catch-finally block',
+    phpExample: `<?php\ntry {\n  $x = 1 / 0;\n} catch (DivisionByZeroError $e) {\n  echo $e->getMessage();\n} finally {\n  echo 'Done';\n}`,
+    fields: [
+      { name: 'body', type: 'Vec<Stmt>', description: 'Try block' },
+      { name: 'catches', type: 'Vec<CatchClause>', description: 'Catch clauses' },
+      { name: 'finally', type: 'Option<Vec<Stmt>>', description: 'Finally block', optional: true }
+    ]
+  },
+  {
+    id: 'stmt-global',
+    category: 'statement',
+    name: 'Global',
+    description: 'Declare global variables',
+    phpExample: `<?php\n$x = 1;\n\nfunction test() {\n  global $x;\n  $x = 2;\n}`,
+    fields: [
+      { name: 'vars', type: 'Vec<Expr>', description: 'Variables to declare global' }
+    ]
+  },
+  {
+    id: 'stmt-static-var',
+    category: 'statement',
+    name: 'StaticVar',
+    description: 'Static variable declaration',
+    phpExample: `<?php\nfunction counter() {\n  static $count = 0;\n  return ++$count;\n}`,
+    fields: [
+      { name: 'vars', type: 'Vec<StaticVar>', description: 'Static variables' }
+    ]
+  },
+  {
+    id: 'stmt-declare',
+    category: 'statement',
+    name: 'Declare',
+    description: 'Declare directives like strict_types',
+    phpExample: `<?php\ndeclare(strict_types=1);\ndeclare(ticks=1) {}`,
+    fields: [
+      { name: 'directives', type: 'Vec<(Name, Expr)>', description: 'Directives' },
+      { name: 'body', type: 'Option<Stmt>', description: 'Declare body', optional: true }
+    ]
+  },
+  {
+    id: 'stmt-unset',
+    category: 'statement',
+    name: 'Unset',
+    description: 'Unset variables',
+    phpExample: `<?php\nunset($a, $b, $arr[$key]);`,
+    fields: [
+      { name: 'vars', type: 'Vec<Expr>', description: 'Variables to unset' }
+    ]
+  },
+  {
+    id: 'stmt-goto',
+    category: 'statement',
+    name: 'Goto',
+    description: 'Go to label',
+    phpExample: `<?php\ngoto end;\necho 'skipped';\nend:\necho 'done';`,
+    fields: [
+      { name: 'label', type: 'Ident', description: 'Target label' }
+    ]
+  },
+  {
+    id: 'stmt-label',
+    category: 'statement',
+    name: 'Label',
+    description: 'Label definition',
+    phpExample: `<?php\nloop:\necho 'label';\ngoto loop;`,
+    fields: [
+      { name: 'name', type: 'string', description: 'Label name' }
+    ]
+  },
+  {
+    id: 'stmt-block',
+    category: 'statement',
+    name: 'Block',
+    description: 'Block of statements',
+    phpExample: `<?php\n{\n  $x = 1;\n  echo $x;\n}`,
+    fields: [
+      { name: 'stmts', type: 'Vec<Stmt>', description: 'Statements in block' }
+    ]
+  },
+  {
+    id: 'stmt-nop',
+    category: 'statement',
+    name: 'Nop',
+    description: 'Empty statement (;)',
+    phpExample: `<?php\n;`,
+    fields: []
+  },
+  {
+    id: 'stmt-inline-html',
+    category: 'statement',
+    name: 'InlineHtml',
+    description: 'Inline HTML outside <?php ... ?>',
+    phpExample: `<?php echo 'PHP'; ?>\nThis is HTML`,
+    fields: [
+      { name: 'html', type: 'string', description: 'HTML content' }
+    ]
+  },
+
+  // ========== EXPRESSIONS ==========
+  {
+    id: 'expr-variable',
+    category: 'expression',
+    name: 'Variable',
+    description: 'Variable reference',
+    phpExample: `<?php\n$name = 'Alice';\necho $name;`,
+    fields: [
+      { name: 'name', type: 'string', description: 'Variable name (without $)' }
+    ]
+  },
+  {
+    id: 'expr-variable-variable',
+    category: 'expression',
+    name: 'VariableVariable',
+    description: 'Variable variable (dynamic variable names)',
+    phpExample: `<?php\n$var = 'hello';\n$$var = 'world';\necho $hello;\n$$$nested = 'deep';`,
+    fields: [
+      { name: 'expr', type: 'Expr', description: 'Expression to resolve to variable name' }
+    ]
+  },
+  {
+    id: 'expr-int',
+    category: 'expression',
+    name: 'Int',
+    description: 'Integer literal',
+    phpExample: `<?php\n$x = 42;\n$hex = 0xFF;\n$bin = 0b1010;`,
+    fields: [
+      { name: 'value', type: 'i64', description: 'Integer value' }
+    ]
+  },
+  {
+    id: 'expr-float',
+    category: 'expression',
+    name: 'Float',
+    description: 'Float literal',
+    phpExample: `<?php\n$pi = 3.14;\n$exp = 1.5e3;`,
+    fields: [
+      { name: 'value', type: 'f64', description: 'Float value' }
+    ]
+  },
+  {
+    id: 'expr-string',
+    category: 'expression',
+    name: 'String',
+    description: 'String literal',
+    phpExample: `<?php\n$str = 'hello';\n$str2 = "world";`,
+    fields: [
+      { name: 'value', type: 'string', description: 'String content' }
+    ]
+  },
+  {
+    id: 'expr-interpolated-string',
+    category: 'expression',
+    name: 'InterpolatedString',
+    description: 'Double-quoted string with variable interpolation',
+    phpExample: `<?php\n$name = 'Alice';\necho "Hello $name";\necho "Result: {$obj->prop}";`,
+    fields: [
+      { name: 'parts', type: 'Vec<StringPart>', description: 'String parts (literals and expressions)' }
+    ]
+  },
+  {
+    id: 'expr-heredoc',
+    category: 'expression',
+    name: 'Heredoc',
+    description: 'Heredoc string with interpolation',
+    phpExample: `<?php\n$name = 'Alice';\n$str = <<<EOT\nHello $name\nEOT;`,
+    fields: [
+      { name: 'label', type: 'string', description: 'Heredoc label' },
+      { name: 'parts', type: 'Vec<StringPart>', description: 'String parts' }
+    ]
+  },
+  {
+    id: 'expr-nowdoc',
+    category: 'expression',
+    name: 'Nowdoc',
+    description: 'Nowdoc string (no interpolation)',
+    phpExample: `<?php\n$str = <<<'EOT'\nLiteral $text\nEOT;`,
+    fields: [
+      { name: 'label', type: 'string', description: 'Nowdoc label' },
+      { name: 'value', type: 'string', description: 'String content' }
+    ]
+  },
+  {
+    id: 'expr-bool',
+    category: 'expression',
+    name: 'Bool',
+    description: 'Boolean literal',
+    phpExample: `<?php\n$yes = true;\n$no = false;`,
+    fields: [
+      { name: 'value', type: 'bool', description: 'Boolean value' }
+    ]
+  },
+  {
+    id: 'expr-null',
+    category: 'expression',
+    name: 'Null',
+    description: 'Null literal',
+    phpExample: `<?php\n$value = null;`,
+    fields: []
+  },
+  {
+    id: 'expr-assign',
+    category: 'expression',
+    name: 'Assign',
+    description: 'Assignment and compound assignments',
+    phpExample: `<?php\n$x = 10;\n$x += 5;\n$str .= '!';\n$result ??= $default;`,
+    fields: [
+      { name: 'target', type: 'Expr', description: 'Assignment target' },
+      { name: 'op', type: 'AssignOp', description: 'Assignment operator (=, +=, .=, etc)' },
+      { name: 'value', type: 'Expr', description: 'Value to assign' }
+    ]
+  },
+  {
+    id: 'expr-binary',
+    category: 'expression',
+    name: 'Binary',
+    description: 'Binary operation',
+    phpExample: `<?php\n$sum = $a + $b;\n$cmp = $x <=> $y;\n$obj instanceof MyClass;`,
+    fields: [
+      { name: 'left', type: 'Expr', description: 'Left operand' },
+      { name: 'op', type: 'BinaryOp', description: 'Binary operator' },
+      { name: 'right', type: 'Expr', description: 'Right operand' }
+    ]
+  },
+  {
+    id: 'expr-unary-prefix',
+    category: 'expression',
+    name: 'UnaryPrefix',
+    description: 'Prefix unary operation',
+    phpExample: `<?php\n$neg = -$x;\n$not = !$flag;\n$inc = ++$counter;`,
+    fields: [
+      { name: 'op', type: 'UnaryPrefixOp', description: 'Operator (-, !, ++, --)' },
+      { name: 'operand', type: 'Expr', description: 'Operand' }
+    ]
+  },
+  {
+    id: 'expr-unary-postfix',
+    category: 'expression',
+    name: 'UnaryPostfix',
+    description: 'Postfix unary operation',
+    phpExample: `<?php\n$x++;\n$y--;`,
+    fields: [
+      { name: 'operand', type: 'Expr', description: 'Operand' },
+      { name: 'op', type: 'UnaryPostfixOp', description: 'Operator (++, --)' }
+    ]
+  },
+  {
+    id: 'expr-ternary',
+    category: 'expression',
+    name: 'Ternary',
+    description: 'Ternary conditional operator',
+    phpExample: `<?php\n$result = $x > 0 ? 'positive' : 'non-positive';\n$short = $x ?: 'default';`,
+    fields: [
+      { name: 'condition', type: 'Expr', description: 'Condition' },
+      { name: 'then_expr', type: 'Option<Expr>', description: 'Then expression', optional: true },
+      { name: 'else_expr', type: 'Expr', description: 'Else expression' }
+    ]
+  },
+  {
+    id: 'expr-null-coalesce',
+    category: 'expression',
+    name: 'NullCoalesce',
+    description: 'Null coalescing operator',
+    phpExample: `<?php\n$name = $var ?? $default;\n$value = $a ?? $b ?? $c;`,
+    fields: [
+      { name: 'left', type: 'Expr', description: 'First expression' },
+      { name: 'right', type: 'Expr', description: 'Default expression' }
+    ]
+  },
+  {
+    id: 'expr-function-call',
+    category: 'expression',
+    name: 'FunctionCall',
+    description: 'Function call',
+    phpExample: `<?php\nstrlen('test');\narray_map(fn($x) => $x * 2, $arr);`,
+    fields: [
+      { name: 'name', type: 'Expr', description: 'Function name' },
+      { name: 'args', type: 'Vec<Arg>', description: 'Arguments' }
+    ]
+  },
+  {
+    id: 'expr-array',
+    category: 'expression',
+    name: 'Array',
+    description: 'Array literal',
+    phpExample: `<?php\n[1, 2, 3];\n['a' => 1, 'b' => 2];\n[...$items];`,
+    fields: [
+      { name: 'elements', type: 'Vec<ArrayElement>', description: 'Array elements' }
+    ]
+  },
+  {
+    id: 'expr-array-access',
+    category: 'expression',
+    name: 'ArrayAccess',
+    description: 'Array element access',
+    phpExample: `<?php\n$arr[0];\n$arr['key'];\n$arr[];`,
+    fields: [
+      { name: 'array', type: 'Expr', description: 'Array expression' },
+      { name: 'index', type: 'Option<Expr>', description: 'Index (None for append)', optional: true }
+    ]
+  },
+  {
+    id: 'expr-omit',
+    category: 'expression',
+    name: 'Omit',
+    description: 'Omitted array element (skipped slot)',
+    phpExample: `<?php\n[$a, , $c];\nlist($x, , $z) = [1, 2, 3];`,
+    fields: []
+  },
+  {
+    id: 'expr-cast',
+    category: 'expression',
+    name: 'Cast',
+    description: 'Type cast',
+    phpExample: `<?php\n(int)$x;\n(string)$val;\n(array)$obj;`,
+    fields: [
+      { name: 'kind', type: 'CastKind', description: 'Cast type (int, string, array, etc)' },
+      { name: 'operand', type: 'Expr', description: 'Expression to cast' }
+    ]
+  },
+  {
+    id: 'expr-parenthesized',
+    category: 'expression',
+    name: 'Parenthesized',
+    description: 'Expression wrapped in parentheses',
+    phpExample: `<?php\n$result = ($a + $b) * $c;\n$value = ($x);`,
+    fields: [
+      { name: 'expr', type: 'Expr', description: 'Wrapped expression' }
+    ]
+  },
+  {
+    id: 'expr-isset',
+    category: 'expression',
+    name: 'Isset',
+    description: 'Check if variables are set',
+    phpExample: `<?php\nisset($var);\nisset($arr['key'], $obj->prop);`,
+    fields: [
+      { name: 'vars', type: 'Vec<Expr>', description: 'Variables to check' }
+    ]
+  },
+  {
+    id: 'expr-empty',
+    category: 'expression',
+    name: 'Empty',
+    description: 'Check if variable is empty',
+    phpExample: `<?php\nempty($var);\nif (empty($str)) {}`,
+    fields: [
+      { name: 'var', type: 'Expr', description: 'Variable to check' }
+    ]
+  },
+  {
+    id: 'expr-clone',
+    category: 'expression',
+    name: 'Clone',
+    description: 'Clone an object',
+    phpExample: `<?php\n$copy = clone $original;`,
+    fields: [
+      { name: 'object', type: 'Expr', description: 'Object to clone' }
+    ]
+  },
+  {
+    id: 'expr-clone-with',
+    category: 'expression',
+    name: 'CloneWith',
+    description: 'Clone with property overrides (PHP 8.5+)',
+    phpExample: `<?php\n$obj2 = clone($obj, prop: $value);`,
+    phpVersion: '8.5+',
+    fields: [
+      { name: 'object', type: 'Expr', description: 'Object to clone' },
+      { name: 'properties', type: 'Expr', description: 'Property overrides' }
+    ]
+  },
+  {
+    id: 'expr-new',
+    category: 'expression',
+    name: 'New',
+    description: 'Create new object instance',
+    phpExample: `<?php\nnew DateTime('now');\nnew MyClass($arg);`,
+    fields: [
+      { name: 'class', type: 'Expr', description: 'Class name' },
+      { name: 'args', type: 'Vec<Arg>', description: 'Constructor arguments' }
+    ]
+  },
+  {
+    id: 'expr-anonymous-class',
+    category: 'expression',
+    name: 'AnonymousClass',
+    description: 'Anonymous class instance (inline class definition)',
+    phpExample: `<?php\n$obj = new class extends Base implements Interface {\n  public function method() {}\n};`,
+    fields: [
+      { name: 'class', type: 'ClassDecl', description: 'Anonymous class declaration' }
+    ]
+  },
+  {
+    id: 'expr-property-access',
+    category: 'expression',
+    name: 'PropertyAccess',
+    description: 'Object property access',
+    phpExample: `<?php\n$obj->name;\n$obj->{'dynamic'};`,
+    fields: [
+      { name: 'object', type: 'Expr', description: 'Object' },
+      { name: 'property', type: 'Expr', description: 'Property name' }
+    ]
+  },
+  {
+    id: 'expr-nullsafe-property',
+    category: 'expression',
+    name: 'NullsafePropertyAccess',
+    description: 'Nullsafe property access (PHP 8.0+)',
+    phpExample: `<?php\n$obj?->prop;\n$result = $user?->profile?->name;`,
+    phpVersion: '8.0+',
+    fields: [
+      { name: 'object', type: 'Expr', description: 'Object' },
+      { name: 'property', type: 'Expr', description: 'Property name' }
+    ]
+  },
+  {
+    id: 'expr-method-call',
+    category: 'expression',
+    name: 'MethodCall',
+    description: 'Object method call',
+    phpExample: `<?php\n$obj->method($arg);\n$obj->{'dynamic'}();`,
+    fields: [
+      { name: 'object', type: 'Expr', description: 'Object' },
+      { name: 'method', type: 'Expr', description: 'Method name' },
+      { name: 'args', type: 'Vec<Arg>', description: 'Arguments' }
+    ]
+  },
+  {
+    id: 'expr-nullsafe-method',
+    category: 'expression',
+    name: 'NullsafeMethodCall',
+    description: 'Nullsafe method call (PHP 8.0+)',
+    phpExample: `<?php\n$obj?->method($arg);\n$result = $user?->getProfile()?->getName();`,
+    phpVersion: '8.0+',
+    fields: [
+      { name: 'object', type: 'Expr', description: 'Object' },
+      { name: 'method', type: 'Expr', description: 'Method name' },
+      { name: 'args', type: 'Vec<Arg>', description: 'Arguments' }
+    ]
+  },
+  {
+    id: 'expr-static-property',
+    category: 'expression',
+    name: 'StaticPropertyAccess',
+    description: 'Static property access',
+    phpExample: `<?php\nMyClass::$property;`,
+    fields: [
+      { name: 'class', type: 'Expr', description: 'Class name' },
+      { name: 'property', type: 'Expr', description: 'Property name' }
+    ]
+  },
+  {
+    id: 'expr-static-method',
+    category: 'expression',
+    name: 'StaticMethodCall',
+    description: 'Static method call',
+    phpExample: `<?php\nMyClass::method($arg);\nMyClass::class;`,
+    fields: [
+      { name: 'class', type: 'Expr', description: 'Class name' },
+      { name: 'method', type: 'Expr', description: 'Method name' },
+      { name: 'args', type: 'Vec<Arg>', description: 'Arguments' }
+    ]
+  },
+  {
+    id: 'expr-class-const',
+    category: 'expression',
+    name: 'ClassConstAccess',
+    description: 'Class constant access',
+    phpExample: `<?php\nMyClass::VERSION;\nMyClass::MY_CONST;`,
+    fields: [
+      { name: 'class', type: 'Expr', description: 'Class name' },
+      { name: 'constant', type: 'Expr', description: 'Constant name' }
+    ]
+  },
+  {
+    id: 'expr-closure',
+    category: 'expression',
+    name: 'Closure',
+    description: 'Anonymous function (closure)',
+    phpExample: `<?php\n$add = function($a, $b) use ($multiplier) {\n  return ($a + $b) * $multiplier;\n};`,
+    fields: [
+      { name: 'is_static', type: 'bool', description: 'Is static closure' },
+      { name: 'by_ref', type: 'bool', description: 'Returns by reference' },
+      { name: 'params', type: 'Vec<Param>', description: 'Parameters' },
+      { name: 'use_vars', type: 'Vec<ClosureUseVar>', description: 'Use variables' },
+      { name: 'return_type', type: 'Option<TypeHint>', description: 'Return type', optional: true },
+      { name: 'body', type: 'Vec<Stmt>', description: 'Function body' }
+    ]
+  },
+  {
+    id: 'expr-arrow-function',
+    category: 'expression',
+    name: 'ArrowFunction',
+    description: 'Arrow function (short closure, PHP 7.4+)',
+    phpExample: `<?php\n$square = fn($x) => $x * $x;\n$filter = fn($item) => $item['active'] ?? false;`,
+    phpVersion: '7.4+',
+    fields: [
+      { name: 'is_static', type: 'bool', description: 'Is static' },
+      { name: 'by_ref', type: 'bool', description: 'Returns by reference' },
+      { name: 'params', type: 'Vec<Param>', description: 'Parameters' },
+      { name: 'return_type', type: 'Option<TypeHint>', description: 'Return type', optional: true },
+      { name: 'body', type: 'Expr', description: 'Function body (expression)' }
+    ]
+  },
+  {
+    id: 'expr-match',
+    category: 'expression',
+    name: 'Match',
+    description: 'Match expression (PHP 8.0+)',
+    phpExample: `<?php\n$result = match($status) {\n  'active' => 'Running',\n  'paused' => 'Paused',\n  default => 'Unknown'\n};`,
+    phpVersion: '8.0+',
+    fields: [
+      { name: 'subject', type: 'Expr', description: 'Expression to match' },
+      { name: 'arms', type: 'Vec<MatchArm>', description: 'Match arms' }
+    ]
+  },
+  {
+    id: 'expr-yield',
+    category: 'expression',
+    name: 'Yield',
+    description: 'Yield value from generator',
+    phpExample: `<?php\nfunction gen() {\n  yield 1;\n  yield 'key' => 2;\n  yield from [3, 4];\n}`,
+    fields: [
+      { name: 'key', type: 'Option<Expr>', description: 'Key for yield', optional: true },
+      { name: 'value', type: 'Option<Expr>', description: 'Value to yield', optional: true },
+      { name: 'is_from', type: 'bool', description: 'Is yield from' }
+    ]
+  },
+  {
+    id: 'expr-callable-create',
+    category: 'expression',
+    name: 'CallableCreate',
+    description: 'Callable creation expression (first-class callables)',
+    phpExample: `<?php\n$func = strlen(...);\n$method = $obj->method(...);\n$static = MyClass::staticMethod(...);`,
+    fields: [
+      { name: 'kind', type: 'CallableCreateKind', description: 'Type of callable (function, method, static)' }
+    ]
+  },
+  {
+    id: 'expr-throw',
+    category: 'expression',
+    name: 'ThrowExpr',
+    description: 'Throw expression (PHP 8.0+)',
+    phpExample: `<?php\n$x = $value ?? throw new InvalidArgumentException();`,
+    phpVersion: '8.0+',
+    fields: [
+      { name: 'exception', type: 'Expr', description: 'Exception to throw' }
+    ]
+  },
+  {
+    id: 'expr-print',
+    category: 'expression',
+    name: 'Print',
+    description: 'Print construct',
+    phpExample: `<?php\nprint 'Hello';\nprint($name);`,
+    fields: [
+      { name: 'value', type: 'Expr', description: 'Value to print' }
+    ]
+  },
+  {
+    id: 'expr-error-suppress',
+    category: 'expression',
+    name: 'ErrorSuppress',
+    description: 'Error suppression operator (@)',
+    phpExample: `<?php\n@file_get_contents('missing.txt');\n@$arr['key'];`,
+    fields: [
+      { name: 'operand', type: 'Expr', description: 'Expression to suppress' }
+    ]
+  },
+  {
+    id: 'expr-include',
+    category: 'expression',
+    name: 'Include',
+    description: 'Include/require files',
+    phpExample: `<?php\ninclude 'header.php';\nrequire_once 'config.php';`,
+    fields: [
+      { name: 'kind', type: 'IncludeKind', description: 'Include/require/once variant' },
+      { name: 'file', type: 'Expr', description: 'File path' }
+    ]
+  },
+  {
+    id: 'expr-eval',
+    category: 'expression',
+    name: 'Eval',
+    description: 'Evaluate PHP code',
+    phpExample: `<?php\neval('echo "Hello";');`,
+    fields: [
+      { name: 'code', type: 'Expr', description: 'Code to evaluate' }
+    ]
+  },
+  {
+    id: 'expr-exit',
+    category: 'expression',
+    name: 'Exit',
+    description: 'Exit/die construct',
+    phpExample: `<?php\nexit('Error message');\ndie(1);`,
+    fields: [
+      { name: 'value', type: 'Option<Expr>', description: 'Exit code or message', optional: true }
+    ]
+  },
+  {
+    id: 'expr-magic-const',
+    category: 'expression',
+    name: 'MagicConst',
+    description: 'Magic constant (__LINE__, __FILE__, etc)',
+    phpExample: `<?php\necho __LINE__;\necho __FILE__;\necho __DIR__;`,
+    fields: [
+      { name: 'kind', type: 'MagicConstKind', description: 'Magic constant type' }
+    ]
+  },
+  {
+    id: 'expr-shell-exec',
+    category: 'expression',
+    name: 'ShellExec',
+    description: 'Shell execution (backticks)',
+    phpExample: `<?php\n$output = \`ls -la\`;\necho \`date\`;`,
+    fields: [
+      { name: 'parts', type: 'Vec<StringPart>', description: 'Command parts' }
+    ]
+  },
+
+  // ========== DECLARATIONS ==========
+  {
+    id: 'decl-param',
+    category: 'declaration',
+    name: 'Param',
+    description: 'Function/method parameter',
+    phpExample: `<?php\nfunction foo(string $name, int $age = 0, &$ref = null) {}`,
+    fields: [
+      { name: 'name', type: 'Ident', description: 'Parameter name' },
+      { name: 'type_hint', type: 'Option<TypeHint>', description: 'Type hint', optional: true },
+      { name: 'default', type: 'Option<Expr>', description: 'Default value', optional: true },
+      { name: 'by_ref', type: 'bool', description: 'Passed by reference' },
+      { name: 'variadic', type: 'bool', description: 'Variadic (...$args)' }
+    ]
+  },
+  {
+    id: 'decl-property',
+    category: 'declaration',
+    name: 'PropertyDecl',
+    description: 'Class property',
+    phpExample: `<?php\npublic string $name = 'default';\nprivate readonly int $id;`,
+    fields: [
+      { name: 'name', type: 'Ident', description: 'Property name' },
+      { name: 'visibility', type: 'Visibility', description: 'public/protected/private' },
+      { name: 'is_static', type: 'bool', description: 'Is static' },
+      { name: 'is_readonly', type: 'bool', description: 'Is readonly' },
+      { name: 'type_hint', type: 'Option<TypeHint>', description: 'Type hint', optional: true },
+      { name: 'default', type: 'Option<Expr>', description: 'Default value', optional: true }
+    ]
+  },
+  {
+    id: 'decl-method',
+    category: 'declaration',
+    name: 'MethodDecl',
+    description: 'Class method',
+    phpExample: `<?php\npublic function getValue(): string { return 'value'; }\nabstract protected function validate();`,
+    fields: [
+      { name: 'name', type: 'Ident', description: 'Method name' },
+      { name: 'visibility', type: 'Option<Visibility>', description: 'Visibility', optional: true },
+      { name: 'is_static', type: 'bool', description: 'Is static' },
+      { name: 'is_abstract', type: 'bool', description: 'Is abstract' },
+      { name: 'is_final', type: 'bool', description: 'Is final' },
+      { name: 'params', type: 'Vec<Param>', description: 'Parameters' },
+      { name: 'return_type', type: 'Option<TypeHint>', description: 'Return type', optional: true },
+      { name: 'body', type: 'Option<Vec<Stmt>>', description: 'Method body', optional: true }
+    ]
+  },
+  {
+    id: 'decl-property-hook',
+    category: 'declaration',
+    name: 'PropertyHook',
+    description: 'Property hook - get/set (PHP 8.4+)',
+    phpExample: `<?php\npublic string $value {\n  get => strtoupper($this->_value);\n  set(string $v) { $this->_value = $v; }\n}`,
+    phpVersion: '8.4+',
+    fields: [
+      { name: 'kind', type: 'PropertyHookKind', description: 'Get or Set' },
+      { name: 'body', type: 'PropertyHookBody', description: 'Hook implementation' },
+      { name: 'is_final', type: 'bool', description: 'Is final' },
+      { name: 'by_ref', type: 'bool', description: 'Returns by reference (get only)' },
+      { name: 'params', type: 'Vec<Param>', description: 'Parameters (set only)' }
+    ]
+  },
+  {
+    id: 'decl-class-const',
+    category: 'declaration',
+    name: 'ClassConstDecl',
+    description: 'Class constant',
+    phpExample: `<?php\nconst VERSION = '1.0';\nfinal protected const DEFAULT = 0;`,
+    fields: [
+      { name: 'name', type: 'Ident', description: 'Constant name' },
+      { name: 'visibility', type: 'Option<Visibility>', description: 'Visibility', optional: true },
+      { name: 'is_final', type: 'bool', description: 'Is final' },
+      { name: 'type_hint', type: 'Option<TypeHint>', description: 'Type hint', optional: true },
+      { name: 'value', type: 'Expr', description: 'Constant value' }
+    ]
+  },
+  {
+    id: 'decl-enum-case',
+    category: 'declaration',
+    name: 'EnumCase',
+    description: 'Enum case',
+    phpExample: `<?php\nenum Color {\n  case Red;\n  case Green = 'green';\n}`,
+    fields: [
+      { name: 'name', type: 'Ident', description: 'Case name' },
+      { name: 'value', type: 'Option<Expr>', description: 'Case value (backed enums)', optional: true }
+    ]
+  },
+
+  // ========== TYPES ==========
+  {
+    id: 'type-nullable',
+    category: 'type',
+    name: 'Nullable',
+    description: 'Nullable type (?T)',
+    phpExample: `<?php\nfunction getName(): ?string { return null; }`,
+    fields: [
+      { name: 'type', type: 'TypeHint', description: 'Wrapped type' }
+    ]
+  },
+  {
+    id: 'type-union',
+    category: 'type',
+    name: 'Union',
+    description: 'Union type (A|B, PHP 8.0+)',
+    phpExample: `<?php\nfunction getValue(): int|string|null { }`,
+    phpVersion: '8.0+',
+    fields: [
+      { name: 'types', type: 'Vec<TypeHint>', description: 'Union member types' }
+    ]
+  },
+  {
+    id: 'type-intersection',
+    category: 'type',
+    name: 'Intersection',
+    description: 'Intersection type (A&B, PHP 8.1+)',
+    phpExample: `<?php\nfunction process(Countable&ArrayAccess $data) { }`,
+    phpVersion: '8.1+',
+    fields: [
+      { name: 'types', type: 'Vec<TypeHint>', description: 'Intersection member types' }
+    ]
+  },
+  {
+    id: 'type-named',
+    category: 'type',
+    name: 'Named',
+    description: 'Named type (class/interface name)',
+    phpExample: `<?php\nfunction save(User $user): void { }`,
+    fields: [
+      { name: 'name', type: 'Name', description: 'Type name (with namespace)' }
+    ]
+  },
+  {
+    id: 'type-builtin',
+    category: 'type',
+    name: 'BuiltinType',
+    description: 'Built-in type keyword',
+    phpExample: `<?php\nfunction test(int $x, array $arr, mixed $value): string { }`,
+    fields: [
+      { name: 'type', type: 'string', description: 'Type keyword (int, string, mixed, etc)' }
+    ]
+  },
+
+  // ========== HELPERS ==========
+  {
+    id: 'helper-arg',
+    category: 'helper',
+    name: 'Arg',
+    description: 'Function/method argument',
+    phpExample: `<?php\nfoo($a, $b, name: $c, ...spread);`,
+    fields: [
+      { name: 'name', type: 'Option<Name>', description: 'Named argument name', optional: true },
+      { name: 'value', type: 'Expr', description: 'Argument value' },
+      { name: 'unpack', type: 'bool', description: 'Is spread argument (...)' },
+      { name: 'by_ref', type: 'bool', description: 'Passed by reference (&)' }
+    ]
+  },
+  {
+    id: 'helper-attribute',
+    category: 'helper',
+    name: 'Attribute',
+    description: 'Attribute/annotation',
+    phpExample: `<?php\n#[Route('/path')]\n#[Deprecated('Use newFunc')]\nfunction handler() {}`,
+    fields: [
+      { name: 'name', type: 'Name', description: 'Attribute name' },
+      { name: 'args', type: 'Vec<Arg>', description: 'Attribute arguments' }
+    ]
+  },
+  {
+    id: 'helper-span',
+    category: 'helper',
+    name: 'Span',
+    description: 'Source code location (start and end byte offsets)',
+    phpExample: `<?php\n// Every AST node has a Span indicating where in the source it appears`,
+    fields: [
+      { name: 'start', type: 'u32', description: 'Start byte offset' },
+      { name: 'end', type: 'u32', description: 'End byte offset' }
+    ]
+  },
+  {
+    id: 'helper-name',
+    category: 'helper',
+    name: 'Name',
+    description: 'Namespace-qualified name',
+    phpExample: `<?php\nuse App\\Models\\User;\nclass Post extends BaseModel {}`,
+    fields: [
+      { name: 'parts', type: 'Vec<string>', description: 'Name parts (e.g., ["App", "Models", "User"])' },
+      { name: 'kind', type: 'NameKind', description: 'Qualified, FullyQualified, Relative, etc' }
+    ]
+  }
+]

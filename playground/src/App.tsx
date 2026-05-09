@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { loadPhpWasm, type ParseResult } from './php_wasm'
 import { Toolbar, type PhpVersion, type WasmStatus } from './components/Toolbar'
-import { EditorPane } from './components/EditorPane'
+import { EditorPane, type EditorHandle } from './components/EditorPane'
 import { AstPane } from './components/AstPane'
 import { FormattedPane } from './components/FormattedPane'
+import { DocsPage } from './components/docs/DocsPage'
 
 const INITIAL_CODE = `<?php
 
@@ -41,6 +42,8 @@ enum Status: string {
 echo Status::Active->label();
 `
 
+type Page = 'playground' | 'docs'
+
 export default function App() {
   const [code, setCode]             = useState(INITIAL_CODE)
   const [version, setVersion]       = useState<PhpVersion>('8.4')
@@ -48,12 +51,14 @@ export default function App() {
   const [wasmStatus, setWasmStatus]       = useState<WasmStatus>('loading')
   const [parserVersion, setParserVersion] = useState<string>('')
   const [buildCommit, setBuildCommit]     = useState<string>('')
+  const [page, setPage]             = useState<Page>('playground')
 
   // Two dividers: left edge of divider 1 and divider 2, as % of workspace width
   const [div1, setDiv1] = useState(33)
   const [div2, setDiv2] = useState(66)
 
   const workspaceRef = useRef<HTMLDivElement>(null)
+  const editorRef = useRef<EditorHandle>(null)
   const debounceRef  = useRef<ReturnType<typeof setTimeout> | null>(null)
   const codeRef      = useRef(code)
   const versionRef   = useRef(version)
@@ -115,6 +120,11 @@ export default function App() {
   const onDiv1Down = makeDividerDrag(1, setDiv1, () => div2)
   const onDiv2Down = makeDividerDrag(2, setDiv2, () => div1)
 
+  const handleVisualize = useCallback((exampleCode: string) => {
+    editorRef.current?.loadCode(exampleCode)
+    setPage('playground')
+  }, [])
+
   const errorCount = output?.errors.length ?? 0
 
   const col1 = div1
@@ -123,11 +133,17 @@ export default function App() {
 
   return (
     <div className="app">
-      <Toolbar version={version} onVersionChange={setVersion} wasmStatus={wasmStatus} />
+      <Toolbar
+        version={version}
+        onVersionChange={setVersion}
+        wasmStatus={wasmStatus}
+        page={page}
+        onPageChange={setPage}
+      />
 
-      <div className="workspace" ref={workspaceRef}>
+      <div className="workspace" ref={workspaceRef} style={{ display: page === 'playground' ? 'flex' : 'none' }}>
         <div className="pane" style={{ width: `${col1}%` }}>
-          <EditorPane initialValue={INITIAL_CODE} onChange={setCode} />
+          <EditorPane ref={editorRef} initialValue={INITIAL_CODE} onChange={setCode} />
         </div>
 
         <div className="divider" onMouseDown={onDiv1Down} role="separator" />
@@ -142,6 +158,8 @@ export default function App() {
           <FormattedPane output={output} />
         </div>
       </div>
+
+      {page === 'docs' && <DocsPage onVisualize={handleVisualize} />}
 
       <div className="statusbar">
         <span className="statusbar-item">PHP {version}</span>

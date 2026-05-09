@@ -1,11 +1,14 @@
 export const PHP_VERSIONS = ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5'] as const
 export type PhpVersion = (typeof PHP_VERSIONS)[number]
 export type WasmStatus = 'loading' | 'ready' | 'mock'
+export type Page = 'playground' | 'docs'
 
 interface Props {
   version: PhpVersion
   onVersionChange: (v: PhpVersion) => void
   wasmStatus: WasmStatus
+  page: Page
+  onPageChange: (p: Page) => void
 }
 
 const WASM_LABEL: Record<WasmStatus, string> = {
@@ -14,13 +17,30 @@ const WASM_LABEL: Record<WasmStatus, string> = {
   mock:    'mock',
 }
 
-export function Toolbar({ version, onVersionChange, wasmStatus }: Props) {
+export function Toolbar({ version, onVersionChange, wasmStatus, page, onPageChange }: Props) {
   return (
     <header className="toolbar">
       <div className="toolbar-brand">
         <span className="brand-logo">php</span>
         <span className="brand-sep">/</span>
         <span className="brand-sub">parser playground</span>
+      </div>
+
+      <div className="toolbar-nav">
+        <button
+          className={`nav-tab ${page === 'playground' ? 'active' : ''}`}
+          onClick={() => onPageChange('playground')}
+          title="Interactive playground"
+        >
+          Playground
+        </button>
+        <button
+          className={`nav-tab ${page === 'docs' ? 'active' : ''}`}
+          onClick={() => onPageChange('docs')}
+          title="AST node reference"
+        >
+          Docs
+        </button>
       </div>
 
       <div className="toolbar-controls">
