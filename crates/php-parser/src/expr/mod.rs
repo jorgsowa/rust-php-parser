@@ -711,6 +711,15 @@ pub fn parse_expr_bp<'arena, 'src>(
             if parser.current_kind().is_assignment_op() {
                 rhs = parse_assign_continuation(parser, rhs);
             }
+            // Check if pipe operator has unparenthesized arrow function on RHS
+            if op == BinaryOp::Pipe && matches!(rhs.kind, ExprKind::ArrowFunction(_)) {
+                parser.error(ParseError::Forbidden {
+                    message:
+                        "arrow function on the right side of pipe operator must be parenthesized"
+                            .into(),
+                    span: rhs.span,
+                });
+            }
             let span = lhs.span.merge(rhs.span);
             lhs = Expr {
                 kind: ExprKind::Binary(BinaryExpr {

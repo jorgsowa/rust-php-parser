@@ -1,4 +1,4 @@
 ===source===
-<?php $r = $value |> 'strtoupper' |> fn($s) => trim($s);
+<?php $r = $value |> 'strtoupper' |> (fn($s) => trim($s));
 ===print===
-$r = $value |> 'strtoupper' |> fn($s) => trim($s);
+$r = $value |> 'strtoupper' |> (fn($s) => trim($s));
