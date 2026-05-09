@@ -143,6 +143,12 @@ fn parse_assign_continuation<'arena, 'src>(
         ),
     };
     let rhs = parse_expr_bp(parser, ASSIGNMENT_BP);
+    if by_ref && matches!(rhs.kind, ExprKind::New(..)) {
+        parser.error(ParseError::Forbidden {
+            message: "Cannot use by-reference assignment with 'new' expression".into(),
+            span: rhs.span,
+        });
+    }
     let span = lhs.span.merge(rhs.span);
     Expr {
         kind: ExprKind::Assign(AssignExpr {
