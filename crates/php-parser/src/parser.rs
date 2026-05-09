@@ -751,6 +751,13 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         if self.eat(TokenKind::Question).is_some() {
             let inner = self.parse_simple_type();
             let span = Span::new(start, inner.span.end);
+            // Validate that mixed is not used with nullable
+            if let TypeHintKind::Keyword(BuiltinType::Mixed, _) = &inner.kind {
+                self.error(ParseError::Forbidden {
+                    message: "mixed cannot be used with nullable type".into(),
+                    span: inner.span,
+                });
+            }
             return TypeHint {
                 kind: TypeHintKind::Nullable(self.alloc(inner)),
                 span,
@@ -794,6 +801,19 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     if let Some(msg) = msg {
                         self.error(ParseError::Forbidden {
                             message: msg.into(),
+                            span: ty.span,
+                        });
+                    }
+                }
+            }
+            // Check for duplicate types in union
+            let mut seen_types: std::collections::HashSet<String> =
+                std::collections::HashSet::new();
+            for ty in types.iter() {
+                if let Some(type_str) = self.type_hint_to_string(ty) {
+                    if !seen_types.insert(type_str.clone()) {
+                        self.error(ParseError::Forbidden {
+                            message: format!("Duplicate type '{}' in union type", type_str).into(),
                             span: ty.span,
                         });
                     }
@@ -843,6 +863,15 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 // Check if there's a union after this intersection (DNF: A&B|C&D)
                 if self.check(TokenKind::Pipe) {
                     self.require_version(PhpVersion::Php82, "DNF types", Span::new(start, end));
+                    // Validate that mixed is not used in intersection types
+                    for ty in types.iter() {
+                        if let TypeHintKind::Keyword(BuiltinType::Mixed, _) = &ty.kind {
+                            self.error(ParseError::Forbidden {
+                                message: "mixed cannot be used in intersection types".into(),
+                                span: ty.span,
+                            });
+                        }
+                    }
                     let intersection_span = Span::new(start, end);
                     let intersection = TypeHint {
                         kind: TypeHintKind::Intersection(types),
@@ -904,6 +933,15 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 } else {
                     // Just an intersection, no union
                     let span = Span::new(start, end);
+                    // Validate that mixed is not used in intersection types
+                    for ty in types.iter() {
+                        if let TypeHintKind::Keyword(BuiltinType::Mixed, _) = &ty.kind {
+                            self.error(ParseError::Forbidden {
+                                message: "mixed cannot be used in intersection types".into(),
+                                span: ty.span,
+                            });
+                        }
+                    }
                     return TypeHint {
                         kind: TypeHintKind::Intersection(types),
                         span,
@@ -913,6 +951,54 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
 
         first
+    }
+
+    /// Convert a type hint to a string representation for comparison purposes.
+    fn type_hint_to_string(&self, ty: &TypeHint<'arena, 'src>) -> Option<String> {
+        match &ty.kind {
+            TypeHintKind::Keyword(builtin, _) => {
+                let name = match builtin {
+                    BuiltinType::Int => "int",
+                    BuiltinType::Integer => "integer",
+                    BuiltinType::Float => "float",
+                    BuiltinType::Double => "double",
+                    BuiltinType::String => "string",
+                    BuiltinType::Bool => "bool",
+                    BuiltinType::Boolean => "boolean",
+                    BuiltinType::Void => "void",
+                    BuiltinType::Never => "never",
+                    BuiltinType::Mixed => "mixed",
+                    BuiltinType::Object => "object",
+                    BuiltinType::Iterable => "iterable",
+                    BuiltinType::Callable => "callable",
+                    BuiltinType::Array => "array",
+                    BuiltinType::Self_ => "self",
+                    BuiltinType::Parent_ => "parent",
+                    BuiltinType::Static => "static",
+                    BuiltinType::Null => "null",
+                    BuiltinType::True => "true",
+                    BuiltinType::False => "false",
+                };
+                Some(name.to_string())
+            }
+            TypeHintKind::Named(name) => match name {
+                Name::Simple { value, .. } => Some(value.to_string()),
+                Name::Complex { parts, kind, .. } => {
+                    let prefix = match kind {
+                        NameKind::Unqualified | NameKind::Qualified => "",
+                        NameKind::FullyQualified => "\\",
+                        NameKind::Relative => "namespace\\",
+                        NameKind::Error => return None,
+                    };
+                    let joined = parts.iter().copied().collect::<Vec<_>>().join("\\");
+                    Some(format!("{}{}", prefix, joined))
+                }
+                Name::Error { .. } => None,
+            },
+            TypeHintKind::Nullable(_) | TypeHintKind::Union(_) | TypeHintKind::Intersection(_) => {
+                None
+            }
+        }
     }
 
     /// Parse a type element: either a simple type or a parenthesized type (intersection, union, or mixed DNF).
@@ -985,6 +1071,15 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             // Check if there are union operators after the intersection
             if self.check(TokenKind::Pipe) {
                 // This is a DNF type: (A&B|C)
+                // Validate that mixed is not used in intersection types
+                for ty in types.iter() {
+                    if let TypeHintKind::Keyword(BuiltinType::Mixed, _) = &ty.kind {
+                        self.error(ParseError::Forbidden {
+                            message: "mixed cannot be used in intersection types".into(),
+                            span: ty.span,
+                        });
+                    }
+                }
                 self.advance(); // consume |
 
                 // Wrap the first intersection member
@@ -1011,6 +1106,15 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                             member_types.push(self.parse_simple_type());
                         }
 
+                        // Validate that mixed is not used in intersection types
+                        for ty in member_types.iter() {
+                            if let TypeHintKind::Keyword(BuiltinType::Mixed, _) = &ty.kind {
+                                self.error(ParseError::Forbidden {
+                                    message: "mixed cannot be used in intersection types".into(),
+                                    span: ty.span,
+                                });
+                            }
+                        }
                         let mspan = Span::new(member_start, self.previous_end());
                         union_members.push(TypeHint {
                             kind: TypeHintKind::Intersection(member_types),
@@ -1034,6 +1138,15 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 }
             } else {
                 // Just a parenthesized intersection
+                // Validate that mixed is not used in intersection types
+                for ty in types.iter() {
+                    if let TypeHintKind::Keyword(BuiltinType::Mixed, _) = &ty.kind {
+                        self.error(ParseError::Forbidden {
+                            message: "mixed cannot be used in intersection types".into(),
+                            span: ty.span,
+                        });
+                    }
+                }
                 let end = self.previous_end();
                 TypeHint {
                     kind: TypeHintKind::Intersection(types),
@@ -1060,6 +1173,15 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                         member_types.push(self.parse_simple_type());
                     }
 
+                    // Validate that mixed is not used in intersection types
+                    for ty in member_types.iter() {
+                        if let TypeHintKind::Keyword(BuiltinType::Mixed, _) = &ty.kind {
+                            self.error(ParseError::Forbidden {
+                                message: "mixed cannot be used in intersection types".into(),
+                                span: ty.span,
+                            });
+                        }
+                    }
                     let mspan = Span::new(member_start, self.previous_end());
                     union_members.push(TypeHint {
                         kind: TypeHintKind::Intersection(member_types),

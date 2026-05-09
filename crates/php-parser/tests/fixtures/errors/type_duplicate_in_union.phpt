@@ -1,18 +1,22 @@
+===config===
+min_php=8.0
+
 ===source===
-<?php function f(int|string|int): int {}
+<?php
+function foo(int|int|string $x) { }
+
 ===errors===
 Duplicate type 'int' in union type
-expected variable, found ')'
 ===ast===
 {
   "stmts": [
     {
       "kind": {
         "Function": {
-          "name": "f",
+          "name": "foo",
           "params": [
             {
-              "name": null,
+              "name": "x",
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -24,32 +28,14 @@ expected variable, found ')'
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 17,
-                            "end": 20
+                            "start": 19,
+                            "end": 22
                           }
                         }
                       },
                       "span": {
-                        "start": 17,
-                        "end": 20
-                      }
-                    },
-                    {
-                      "kind": {
-                        "Named": {
-                          "parts": [
-                            "string"
-                          ],
-                          "kind": "Unqualified",
-                          "span": {
-                            "start": 21,
-                            "end": 27
-                          }
-                        }
-                      },
-                      "span": {
-                        "start": 21,
-                        "end": 27
+                        "start": 19,
+                        "end": 22
                       }
                     },
                     {
@@ -60,21 +46,39 @@ expected variable, found ')'
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 28,
-                            "end": 31
+                            "start": 23,
+                            "end": 26
                           }
                         }
                       },
                       "span": {
-                        "start": 28,
-                        "end": 31
+                        "start": 23,
+                        "end": 26
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Named": {
+                          "parts": [
+                            "string"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 27,
+                            "end": 33
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 27,
+                        "end": 33
                       }
                     }
                   ]
                 },
                 "span": {
-                  "start": 17,
-                  "end": 31
+                  "start": 19,
+                  "end": 33
                 }
               },
               "default": null,
@@ -86,44 +90,27 @@ expected variable, found ')'
               "set_visibility": null,
               "attributes": [],
               "span": {
-                "start": 17,
-                "end": 31
+                "start": 19,
+                "end": 36
               }
             }
           ],
           "body": [],
-          "return_type": {
-            "kind": {
-              "Named": {
-                "parts": [
-                  "int"
-                ],
-                "kind": "Unqualified",
-                "span": {
-                  "start": 34,
-                  "end": 37
-                }
-              }
-            },
-            "span": {
-              "start": 34,
-              "end": 37
-            }
-          },
+          "return_type": null,
           "by_ref": false,
           "attributes": []
         }
       },
       "span": {
         "start": 6,
-        "end": 40
+        "end": 41
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 40
+    "end": 41
   }
 }
 ===php_error===
-PHP Parse error:  syntax error, unexpected token ")", expecting variable in Standard input code on line 1
+PHP Fatal error:  Duplicate type int is redundant in Standard input code on line 2
