@@ -1,3 +1,5 @@
+===config===
+max_php=8.3
 ===source===
 <?php
 $a =& new B;
