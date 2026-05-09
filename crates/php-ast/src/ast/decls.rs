@@ -137,6 +137,24 @@ pub struct MethodDecl<'arena, 'src> {
     pub doc_comment: Option<Comment<'src>>,
 }
 
+impl<'arena, 'src> MethodDecl<'arena, 'src> {
+    pub fn is_valid(&self) -> bool {
+        // Abstract methods must not have a body
+        !(self.is_abstract && self.body.is_some())
+    }
+
+    #[cfg(debug_assertions)]
+    pub fn assert_valid(&self) {
+        assert!(
+            self.is_valid(),
+            "invalid method: abstract method cannot have a body"
+        );
+    }
+
+    #[cfg(not(debug_assertions))]
+    pub fn assert_valid(&self) {}
+}
+
 #[derive(Debug, Serialize)]
 pub struct ClassConstDecl<'arena, 'src> {
     pub name: Ident<'src>,

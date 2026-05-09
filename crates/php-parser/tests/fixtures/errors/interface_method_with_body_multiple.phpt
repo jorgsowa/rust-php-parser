@@ -22,25 +22,7 @@ interface method cannot contain a body
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
-                  "body": [
-                    {
-                      "kind": {
-                        "Return": {
-                          "kind": {
-                            "Int": 1
-                          },
-                          "span": {
-                            "start": 53,
-                            "end": 54
-                          }
-                        }
-                      },
-                      "span": {
-                        "start": 46,
-                        "end": 55
-                      }
-                    }
-                  ],
+                  "body": null,
                   "attributes": []
                 }
               },

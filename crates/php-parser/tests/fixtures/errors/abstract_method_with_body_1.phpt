@@ -28,27 +28,7 @@ abstract method cannot contain a body
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
-                  "body": [
-                    {
-                      "kind": {
-                        "Echo": [
-                          {
-                            "kind": {
-                              "String": "body"
-                            },
-                            "span": {
-                              "start": 58,
-                              "end": 64
-                            }
-                          }
-                        ]
-                      },
-                      "span": {
-                        "start": 53,
-                        "end": 65
-                      }
-                    }
-                  ],
+                  "body": null,
                   "attributes": []
                 }
               },

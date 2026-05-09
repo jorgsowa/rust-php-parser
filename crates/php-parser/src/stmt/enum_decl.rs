@@ -283,7 +283,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                 None
             };
 
-            let body = if parser.check(TokenKind::LeftBrace) {
+            let mut body = if parser.check(TokenKind::LeftBrace) {
                 parser.expect(TokenKind::LeftBrace);
                 let mut stmts = parser.alloc_vec_with_capacity(16);
                 let saved_loop_depth = parser.loop_depth;
@@ -302,6 +302,11 @@ pub(super) fn parse_enum<'arena, 'src>(
                 parser.expect(TokenKind::Semicolon);
                 None
             };
+
+            // Discard body if abstract to maintain AST invariant
+            if is_abstract && body.is_some() {
+                body = None;
+            }
 
             let span = Span::new(member_start, parser.previous_end());
             members.push(EnumMember {

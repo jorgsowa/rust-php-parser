@@ -74,7 +74,7 @@ abstract method cannot contain a body
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
-                  "body": [],
+                  "body": null,
                   "attributes": []
                 }
               },

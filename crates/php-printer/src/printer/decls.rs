@@ -143,6 +143,10 @@ impl<'src> Printer<'src> {
     }
 
     pub(crate) fn print_method(&mut self, method: &MethodDecl, span_end: u32) {
+        debug_assert!(
+            method.is_valid(),
+            "invalid method: abstract method cannot have a body"
+        );
         self.print_doc_comment(&method.doc_comment);
         self.print_attributes(&method.attributes);
         if method.is_abstract {

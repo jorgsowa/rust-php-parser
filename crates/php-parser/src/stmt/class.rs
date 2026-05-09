@@ -721,7 +721,7 @@ fn parse_method_member<'arena, 'src>(
         None
     };
 
-    let body = if parser.check(TokenKind::LeftBrace) {
+    let mut body = if parser.check(TokenKind::LeftBrace) {
         parser.expect(TokenKind::LeftBrace);
         let mut stmts = parser.alloc_vec_with_capacity(16);
         let saved_loop_depth = parser.loop_depth;
@@ -748,12 +748,16 @@ fn parse_method_member<'arena, 'src>(
             message: "abstract method cannot contain a body".into(),
             span: Span::new(member_start, parser.previous_end()),
         });
+        // Discard the body to maintain AST invariant
+        body = None;
     }
     if in_interface && body.is_some() {
         parser.error(ParseError::Forbidden {
             message: "interface method cannot contain a body".into(),
             span: Span::new(member_start, parser.previous_end()),
         });
+        // Discard the body to maintain AST invariant
+        body = None;
     }
 
     let span = Span::new(member_start, parser.previous_end());

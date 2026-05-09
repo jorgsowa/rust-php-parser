@@ -22,27 +22,7 @@ interface method cannot contain a body
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
-                  "body": [
-                    {
-                      "kind": {
-                        "Echo": [
-                          {
-                            "kind": {
-                              "String": "body"
-                            },
-                            "span": {
-                              "start": 51,
-                              "end": 57
-                            }
-                          }
-                        ]
-                      },
-                      "span": {
-                        "start": 46,
-                        "end": 58
-                      }
-                    }
-                  ],
+                  "body": null,
                   "attributes": []
                 }
               },

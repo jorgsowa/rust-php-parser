@@ -45,25 +45,7 @@ abstract method cannot contain a body
                       "end": 65
                     }
                   },
-                  "body": [
-                    {
-                      "kind": {
-                        "Return": {
-                          "kind": {
-                            "String": ""
-                          },
-                          "span": {
-                            "start": 75,
-                            "end": 77
-                          }
-                        }
-                      },
-                      "span": {
-                        "start": 68,
-                        "end": 78
-                      }
-                    }
-                  ],
+                  "body": null,
                   "attributes": []
                 }
               },
