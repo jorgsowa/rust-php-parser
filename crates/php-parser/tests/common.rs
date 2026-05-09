@@ -7,6 +7,12 @@
 /// All other section contents (`===errors===`, `===ast===`, `===php_error===`) are
 /// left for each test binary to extract directly from the original content, since
 /// different test binaries need different subsets.
+///
+/// Note: This function appears unused in some test binaries (e.g., visitor.rs)
+/// because `common.rs` is compiled separately into each test binary. The
+/// `#[allow(dead_code)]` suppression allows shared test utilities to coexist
+/// even when not used by every test binary. This function is actually used by
+/// `integration.rs` and `php_syntax.rs`.
 #[allow(dead_code)]
 pub fn parse_fixture(content: &str) -> (Option<(u32, u32)>, &str) {
     let parse_ver = |val: &str| -> Option<(u32, u32)> {
@@ -51,6 +57,12 @@ pub fn parse_fixture(content: &str) -> (Option<(u32, u32)>, &str) {
 }
 
 /// Recursively collect all `.phpt` files under `dir`.
+///
+/// Note: This function appears unused in some test binaries (e.g., malformed_php.rs)
+/// because `common.rs` is compiled separately into each test binary. The
+/// `#[allow(dead_code)]` suppression allows shared test utilities to coexist
+/// even when not used by every test binary. This function is actually used by
+/// `integration.rs` and `php_syntax.rs`.
 #[allow(dead_code)]
 pub fn collect_phpt_files(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
     let mut paths = Vec::new();
@@ -66,6 +78,12 @@ pub fn collect_phpt_files(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
 }
 
 /// Format all parse errors as a newline-separated string.
+///
+/// Note: This function appears unused in some test binaries (e.g., php_syntax.rs)
+/// because `common.rs` is compiled separately into each test binary. The
+/// `#[allow(dead_code)]` suppression allows shared test utilities to coexist
+/// even when not used by every test binary. This function is actually used by
+/// `integration.rs` and `malformed_php.rs`.
 #[allow(dead_code)]
 pub fn format_errors(result: &php_rs_parser::ParseResult) -> String {
     result
