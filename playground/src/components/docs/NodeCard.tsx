@@ -27,21 +27,78 @@ export function NodeCard({ node, nodeLink }: Props) {
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;')
 
-    // Highlight the main keyword when title is hovered
+    // Highlight the main keyword(s) when title is hovered
     if (node.keywordInExample && showKeywordHighlight) {
-      const keyword = node.keywordInExample
-      const regex = new RegExp(`\\b${keyword}\\b`, 'g')
-      code = code.replace(regex, `<mark class="keyword">${keyword}</mark>`)
+      const keywords = Array.isArray(node.keywordInExample)
+        ? node.keywordInExample
+        : [node.keywordInExample]
+      keywords.forEach(keyword => {
+        // HTML-escape the keyword to match the already-escaped code
+        let htmlEscapedKeyword = keyword
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;')
+        const escapedKeyword = htmlEscapedKeyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        const isSymbol = /^[{}\[\]()@<>?|#]$/.test(keyword) || /^(<{2,}|>{2,})$/.test(keyword)
+        const pattern = isSymbol ? escapedKeyword : `\\b${escapedKeyword}\\b`
+        const regex = new RegExp(pattern, 'g')
+        code = code.replace(regex, `<mark class="keyword">${htmlEscapedKeyword}</mark>`)
+      })
     }
 
     // Highlight field-specific patterns if a field is hovered
     if (highlightedKeyword && node.fieldHighlights && node.fieldHighlights[highlightedKeyword]) {
       const patterns = node.fieldHighlights[highlightedKeyword]
+      // Collect all matches with positions to avoid overlapping highlights
+      const matches: Array<{ start: number; end: number; pattern: string; htmlEscaped: string }> = []
+
       patterns.forEach(pattern => {
+        // HTML-escape the pattern to match the already-escaped code
+        let htmlEscapedPattern = pattern
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;')
         // Escape special regex characters in the pattern
-        const escapedPattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        const escapedPattern = htmlEscapedPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
         const regex = new RegExp(escapedPattern, 'g')
-        code = code.replace(regex, `<mark class="field-highlight">${pattern}</mark>`)
+
+        let match
+        while ((match = regex.exec(code)) !== null) {
+          matches.push({
+            start: match.index,
+            end: match.index + match[0].length,
+            pattern: pattern,
+            htmlEscaped: htmlEscapedPattern
+          })
+        }
+      })
+
+      // Sort by position and length (longest first at same position) to handle overlaps
+      matches.sort((a, b) => {
+        if (a.start !== b.start) return a.start - b.start
+        return (b.end - b.start) - (a.end - a.start)
+      })
+
+      // Remove overlapping matches (keep longer ones)
+      const nonOverlapping = matches.filter((match, i) => {
+        for (let j = 0; j < i; j++) {
+          const other = matches[j]
+          if (other.start <= match.start && match.end <= other.end) {
+            return false // This match overlaps with a longer one
+          }
+        }
+        return true
+      })
+
+      // Apply highlights in reverse order to preserve positions
+      nonOverlapping.reverse().forEach(match => {
+        code = code.slice(0, match.start) +
+               `<mark class="field-highlight">${match.htmlEscaped}</mark>` +
+               code.slice(match.end)
       })
     }
 
@@ -59,11 +116,7 @@ export function NodeCard({ node, nodeLink }: Props) {
       onClick={nodeLink ? handleCardClick : undefined}
     >
       <div className="node-header">
-        <h3
-          className="node-name"
-          onMouseEnter={() => setShowKeywordHighlight(true)}
-          onMouseLeave={() => setShowKeywordHighlight(false)}
-        >
+        <h3 className="node-name">
           {node.name}
         </h3>
         <div className="node-meta">
@@ -78,6 +131,21 @@ export function NodeCard({ node, nodeLink }: Props) {
       <div className="node-example">
         {renderExampleWithHighlight()}
       </div>
+
+      {node.keywordInExample && (
+        <div
+          className="node-keyword"
+          onMouseEnter={() => setShowKeywordHighlight(true)}
+          onMouseLeave={() => setShowKeywordHighlight(false)}
+        >
+          <span className="keyword-label">Keyword:</span>
+          <code className="keyword-code">
+            {Array.isArray(node.keywordInExample)
+              ? node.keywordInExample.join(' / ')
+              : node.keywordInExample}
+          </code>
+        </div>
+      )}
 
       {node.fields && node.fields.length > 0 && (
         <div className="node-fields">

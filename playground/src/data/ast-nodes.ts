@@ -13,7 +13,7 @@ export interface AstNode {
   phpExample: string
   fields?: NodeField[]
   phpVersion?: string
-  keywordInExample?: string
+  keywordInExample?: string | string[]
   fieldHighlights?: Record<string, string[]>
 }
 
@@ -24,10 +24,10 @@ export const astNodes: AstNode[] = [
     group: 'Control Flow',
     name: 'Block',
     description: 'Block of statements',
-    phpExample: `<?php\n{\n  $x = 1;\n  echo $x;\n}`,
-    keywordInExample: 'block',
+    phpExample: `{\n  $x = 1;\n  echo $x;\n}`,
+    keywordInExample: ['{', '}'],
     fieldHighlights: {
-      stmts: ['$x = 1', 'echo $x']
+      stmts: ['$x = 1;', 'echo $x;']
     },
     fields: [
       { name: 'stmts', type: 'Vec<Stmt>', description: 'Statements in block' }
@@ -38,7 +38,7 @@ export const astNodes: AstNode[] = [
     group: 'Control Flow',
     name: 'Break',
     description: 'Break from loop or switch',
-    phpExample: `<?php\nwhile (true) {\n  if ($done) break 2;\n}`,
+    phpExample: `while (true) {\n  if ($done) break;\n}\n\nfor ($i = 0; $i < 5; $i++) {\n  while (true) {\n    if ($done) break 2;\n  }\n}`,
     keywordInExample: 'break',
     fieldHighlights: {
       level: ['2']
@@ -52,13 +52,15 @@ export const astNodes: AstNode[] = [
     group: 'Define Code',
     name: 'Class',
     description: 'Class declaration',
-    phpExample: `<?php\nclass Animal extends Base implements Countable {\n  public string $name;\n  public function speak(): void {}\n}`,
+    phpExample: `#[Entity]\nfinal class Animal extends Base implements Countable {\n  public string $name;\n  public function speak(): void {}\n}`,
     keywordInExample: 'class',
     fieldHighlights: {
       name: ['Animal'],
-      extends: ['Base'],
-      implements: ['Countable'],
-      members: ['public string $name', 'public function speak']
+      modifiers: ['final'],
+      extends: ['extends Base'],
+      implements: ['implements Countable'],
+      members: ['public string $name;', 'public function speak(): void {}'],
+      attributes: ['#[Entity]']
     },
     fields: [
       { name: 'name', type: 'Ident', description: 'Class name' },
@@ -74,7 +76,7 @@ export const astNodes: AstNode[] = [
     group: 'Define Code',
     name: 'Const',
     description: 'Global constant declaration',
-    phpExample: `<?php\nconst MAX_SIZE = 100;\nconst DB_HOST = DB_DEFAULT_HOST;`,
+    phpExample: `const MAX_SIZE = 100;\nconst DB_HOST = DB_DEFAULT_HOST;`,
     keywordInExample: 'const',
     fieldHighlights: {
       items: ['MAX_SIZE = 100', 'DB_HOST = DB_DEFAULT_HOST']
@@ -88,10 +90,10 @@ export const astNodes: AstNode[] = [
     group: 'Control Flow',
     name: 'Continue',
     description: 'Continue to next iteration of loop',
-    phpExample: `<?php\nfor ($i = 0; $i != 10; $i++) {\n  if ($i % 2 == 0) continue;\n  echo $i;\n}`,
+    phpExample: `for ($i = 0; $i != 10; $i++) {\n  if ($i < 0) continue;\n  echo $i;\n}\n\nfor ($i = 0; $i != 10; $i++) {\n  while (true) {\n    if ($done) continue 2;\n  }\n}`,
     keywordInExample: 'continue',
     fieldHighlights: {
-      level: ['continue']
+      level: ['2']
     },
     fields: [
       { name: 'level', type: 'Option<Expr>', description: 'Number of levels to continue', optional: true }
@@ -102,7 +104,7 @@ export const astNodes: AstNode[] = [
     group: 'Define Code',
     name: 'Declare',
     description: 'Declare directives like strict_types',
-    phpExample: `<?php\ndeclare(strict_types=1);\ndeclare(ticks=1) {}`,
+    phpExample: `declare(strict_types=1);\ndeclare(ticks=1) {}`,
     keywordInExample: 'declare',
     fieldHighlights: {
       directives: ['strict_types=1', 'ticks=1'],
@@ -118,10 +120,10 @@ export const astNodes: AstNode[] = [
     group: 'Control Flow',
     name: 'DoWhile',
     description: 'Do-while loop (executes at least once)',
-    phpExample: `<?php\ndo {\n  echo $x;\n  $x--;\n} while ($x != 0);`,
-    keywordInExample: 'do',
+    phpExample: `do {\n  echo $x;\n  $x--;\n} while ($x != 0);`,
+    keywordInExample: ['do', 'while'],
     fieldHighlights: {
-      body: ['echo $x', '$x--'],
+      body: ['echo $x;', '$x--;'],
       condition: ['$x != 0']
     },
     fields: [
@@ -134,11 +136,10 @@ export const astNodes: AstNode[] = [
     group: 'Output/Communication',
     name: 'Echo',
     description: 'Output one or more values',
-    phpExample: `<?php\necho $greeting, $name, PHP_EOL;`,
+    phpExample: `echo $greeting, $name, PHP_EOL;\necho "done";`,
     keywordInExample: 'echo',
     fieldHighlights: {
-      keyword: ['echo'],
-      exprs: ['$greeting', '$name', 'PHP_EOL']
+      exprs: ['$greeting', '$name', 'PHP_EOL', '"done"']
     },
     fields: [
       { name: 'exprs', type: 'Vec<Expr>', description: 'Values to output' }
@@ -149,13 +150,14 @@ export const astNodes: AstNode[] = [
     group: 'Define Code',
     name: 'Enum',
     description: 'Enumeration declaration (PHP 8.1+)',
-    phpExample: `<?php\nenum Status: string {\n  case Active = STATUS_ACTIVE;\n  case Inactive = STATUS_INACTIVE;\n}`,
+    phpExample: `enum Status: string implements Countable {\n  case Active = STATUS_ACTIVE;\n  case Inactive = STATUS_INACTIVE;\n}`,
     phpVersion: '8.1+',
     keywordInExample: 'enum',
     fieldHighlights: {
       name: ['Status'],
       scalar_type: ['string'],
-      members: ['case Active', 'case Inactive']
+      implements: ['implements Countable'],
+      members: ['case Active = STATUS_ACTIVE;', 'case Inactive = STATUS_INACTIVE;']
     },
     fields: [
       { name: 'name', type: 'Ident', description: 'Enum name' },
@@ -169,13 +171,13 @@ export const astNodes: AstNode[] = [
     group: 'Control Flow',
     name: 'For',
     description: 'For loop with init/condition/update',
-    phpExample: `<?php\nfor ($i = 0; $i != 10; $i++) {\n  echo $i;\n}`,
+    phpExample: `for ($i = 0; $i != 10; $i++) {\n  echo $i;\n}`,
     keywordInExample: 'for',
     fieldHighlights: {
       init: ['$i = 0'],
       condition: ['$i != 10'],
       update: ['$i++'],
-      body: ['echo $i']
+      body: ['echo $i;']
     },
     fields: [
       { name: 'init', type: 'Vec<Expr>', description: 'Initialization expressions' },
@@ -189,7 +191,7 @@ export const astNodes: AstNode[] = [
     group: 'Control Flow',
     name: 'Foreach',
     description: 'Foreach loop over an array or iterable',
-    phpExample: `<?php\nforeach ($arr as $key => $value) {\n  echo $key;\n  echo $value;\n}`,
+    phpExample: `foreach ($arr as $key => $value) {\n  echo $key;\n  echo $value;\n}`,
     keywordInExample: 'foreach',
     fieldHighlights: {
       expr: ['$arr'],
@@ -209,13 +211,15 @@ export const astNodes: AstNode[] = [
     group: 'Define Code',
     name: 'Function',
     description: 'Function declaration',
-    phpExample: `<?php\nfunction greet($name): string {\n  return $name;\n}`,
+    phpExample: `#[Route('/api')]\nfunction &greet(string $name): string {\n  return $name;\n}`,
     keywordInExample: 'function',
     fieldHighlights: {
       name: ['greet'],
-      params: ['$name'],
+      by_ref: ['&'],
+      params: ['string $name'],
       return_type: ['string'],
-      body: ['return $name']
+      body: ['return $name'],
+      attributes: ['#[Route(\'/api\')]']
     },
     fields: [
       { name: 'name', type: 'Ident', description: 'Function name' },
@@ -231,10 +235,10 @@ export const astNodes: AstNode[] = [
     group: 'Define Code',
     name: 'Global',
     description: 'Declare global variables',
-    phpExample: `<?php\n$x = 1;\n\nfunction test() {\n  global $x;\n  $x = 2;\n}`,
+    phpExample: `function test() {\n  global $counter, $name;\n}`,
     keywordInExample: 'global',
     fieldHighlights: {
-      vars: ['$x']
+      vars: ['$counter', '$name']
     },
     fields: [
       { name: 'vars', type: 'Vec<Expr>', description: 'Variables to declare global' }
@@ -245,7 +249,7 @@ export const astNodes: AstNode[] = [
     group: 'Define Code',
     name: 'Goto',
     description: 'Go to label',
-    phpExample: `<?php\ngoto end;\necho $skipped;\nend:\necho $done;`,
+    phpExample: `goto end;\necho $skipped;\nend:\necho $done;`,
     keywordInExample: 'goto',
     fieldHighlights: {
       label: ['end']
@@ -259,7 +263,7 @@ export const astNodes: AstNode[] = [
     group: 'Define Code',
     name: 'HaltCompiler',
     description: '__halt_compiler() — everything after is raw data ignored by PHP',
-    phpExample: `<?php\n__halt_compiler();\nThis data is ignored by PHP.`,
+    phpExample: `__halt_compiler();\nThis data is ignored by PHP.`,
     keywordInExample: '__halt_compiler',
     fieldHighlights: {
       data: ['This data is ignored by PHP.']
@@ -273,13 +277,13 @@ export const astNodes: AstNode[] = [
     group: 'Control Flow',
     name: 'If',
     description: 'Conditional statement with if/elseif/else branches',
-    phpExample: `<?php\nif ($x == 1) {\n  echo $positive;\n} elseif ($x == 2) {\n  echo $negative;\n} else {\n  echo $zero;\n}`,
+    phpExample: `if ($x == 1) {\n  echo $positive;\n} elseif ($x == 2) {\n  echo $negative;\n} else {\n  echo $zero;\n}`,
     keywordInExample: 'if',
     fieldHighlights: {
       condition: ['$x == 1'],
-      then_branch: ['echo $positive'],
-      elseif_branches: ['elseif ($x == 2)'],
-      else_branch: ['echo $zero']
+      then_branch: ['{\n  echo $positive;\n}'],
+      elseif_branches: ['elseif ($x == 2) {\n  echo $negative;\n}'],
+      else_branch: ['else {\n  echo $zero;\n}']
     },
     fields: [
       { name: 'condition', type: 'Expr', description: 'Condition to evaluate' },
@@ -294,7 +298,6 @@ export const astNodes: AstNode[] = [
     name: 'InlineHtml',
     description: 'Inline HTML outside <?php ... ?>',
     phpExample: `<?php echo $php; ?>\nThis is HTML`,
-    keywordInExample: 'echo',
     fieldHighlights: {
       html: ['This is HTML']
     },
@@ -307,12 +310,12 @@ export const astNodes: AstNode[] = [
     group: 'Define Code',
     name: 'Interface',
     description: 'Interface declaration',
-    phpExample: `<?php\ninterface Drawable extends Countable {\n  public function draw(): void;\n}`,
+    phpExample: `interface Drawable extends Countable {\n  public function draw(): void;\n}`,
     keywordInExample: 'interface',
     fieldHighlights: {
       name: ['Drawable'],
-      extends: ['Countable'],
-      members: ['public function draw']
+      extends: ['extends Countable'],
+      members: ['public function draw(): void;']
     },
     fields: [
       { name: 'name', type: 'Ident', description: 'Interface name' },
@@ -324,9 +327,8 @@ export const astNodes: AstNode[] = [
     id: 'stmt-label',
     group: 'Define Code',
     name: 'Label',
-    description: 'Label definition',
-    phpExample: `<?php\nloop:\necho $label;\ngoto loop;`,
-    keywordInExample: 'label',
+    description: 'Target point for goto statements',
+    phpExample: `loop:\necho $counter;\ngoto loop;`,
     fieldHighlights: {
       name: ['loop']
     },
@@ -339,11 +341,11 @@ export const astNodes: AstNode[] = [
     group: 'Define Code',
     name: 'Namespace',
     description: 'Namespace declaration',
-    phpExample: `<?php\nnamespace App\\Controllers;\n\nclass Home {}`,
+    phpExample: `namespace App\\Utils {\n  function helper() {}\n  class Helper {}\n}\n\nnamespace {\n  $x = 1;\n}\n`,
     keywordInExample: 'namespace',
     fieldHighlights: {
-      name: ['App\\\\Controllers'],
-      body: ['class Home']
+      name: ['App\\Utils'],
+      body: ['function helper() {}', 'class Helper {}', '$x = 1;']
     },
     fields: [
       { name: 'name', type: 'Option<Name>', description: 'Namespace name', optional: true },
@@ -355,7 +357,7 @@ export const astNodes: AstNode[] = [
     group: 'Define Code',
     name: 'Nop',
     description: 'Empty statement (;)',
-    phpExample: `<?php\n;`,
+    phpExample: `;`,
     fields: []
   },
   {
@@ -363,7 +365,7 @@ export const astNodes: AstNode[] = [
     group: 'Control Flow',
     name: 'Return',
     description: 'Return from a function or method',
-    phpExample: `<?php\nfunction add($a, $b) {\n  return $a + $b;\n}`,
+    phpExample: `function add($a, $b) {\n  return $a + $b;\n}`,
     keywordInExample: 'return',
     fieldHighlights: {
       keyword: ['return'],
@@ -378,10 +380,10 @@ export const astNodes: AstNode[] = [
     group: 'Define Code',
     name: 'StaticVar',
     description: 'Static variable declaration',
-    phpExample: `<?php\nfunction counter() {\n  static $count = 0;\n  return ++$count;\n}`,
+    phpExample: `function counter() {\n  static $count = 0, $max = 100;\n  return ++$count;\n}`,
     keywordInExample: 'static',
     fieldHighlights: {
-      vars: ['$count = 0']
+      vars: ['$count = 0', '$max = 100']
     },
     fields: [
       { name: 'vars', type: 'Vec<StaticVar>', description: 'Static variables' }
@@ -392,11 +394,11 @@ export const astNodes: AstNode[] = [
     group: 'Control Flow',
     name: 'Switch',
     description: 'Switch statement with cases and default',
-    phpExample: `<?php\nswitch ($x) {\n  case 1:\n    echo $x;\n    break;\n  default:\n    echo $default;\n}`,
+    phpExample: `switch ($x) {\n  case 1:\n    $found = true;\n    break;\n  default:\n    echo $default;\n}`,
     keywordInExample: 'switch',
     fieldHighlights: {
       expr: ['$x'],
-      cases: ['case 1', 'default']
+      cases: ['case 1:\n    $found = true;\n    break;', 'default:\n    echo $default;']
     },
     fields: [
       { name: 'expr', type: 'Expr', description: 'Value to switch on' },
@@ -408,10 +410,10 @@ export const astNodes: AstNode[] = [
     group: 'Control Flow',
     name: 'Throw',
     description: 'Throw an exception',
-    phpExample: `<?php\nthrow new RuntimeException($message);`,
+    phpExample: `try {\n  if ($invalid) {\n    throw new InvalidArgumentException($reason);\n  }\n} catch (InvalidArgumentException $e) {\n  echo $e->getMessage();\n}`,
     keywordInExample: 'throw',
     fieldHighlights: {
-      exception: ['new RuntimeException($message)']
+      exception: ['new InvalidArgumentException($reason)']
     },
     fields: [
       { name: 'exception', type: 'Expr', description: 'Exception to throw' }
@@ -422,15 +424,15 @@ export const astNodes: AstNode[] = [
     group: 'Define Code',
     name: 'Trait',
     description: 'Trait declaration',
-    phpExample: `<?php\ntrait Logger {\n  public function log($msg) { echo $msg; }\n}`,
+    phpExample: `trait Logger {\n  private string $name;\n\n  public function log($msg) { echo $msg; }\n}`,
     keywordInExample: 'trait',
     fieldHighlights: {
       name: ['Logger'],
-      members: ['public function log']
+      members: ['private string $name;', 'public function log($msg) { echo $msg; }']
     },
     fields: [
       { name: 'name', type: 'Ident', description: 'Trait name' },
-      { name: 'members', type: 'Vec<ClassMember>', description: 'Methods' }
+      { name: 'members', type: 'Vec<ClassMember>', description: 'Methods and properties' }
     ]
   },
   {
@@ -438,12 +440,12 @@ export const astNodes: AstNode[] = [
     group: 'Control Flow',
     name: 'TryCatch',
     description: 'Try-catch-finally block',
-    phpExample: `<?php\ntry {\n  $x = 1 / 0;\n} catch (DivisionByZeroError $e) {\n  echo $e->getMessage();\n} finally {\n  echo $done;\n}`,
+    phpExample: `try {\n  $x = 1 / 0;\n} catch (DivisionByZeroError $e) {\n  echo $e->getMessage();\n} catch (Exception $e) {\n  echo "Error";\n} finally {\n  echo $done;\n}`,
     keywordInExample: 'try',
     fieldHighlights: {
       body: ['$x = 1 / 0'],
-      catches: ['catch (DivisionByZeroError $e)'],
-      finally: ['echo $done']
+      catches: ['catch (DivisionByZeroError $e) {\n  echo $e->getMessage();\n}', 'catch (Exception $e) {\n  echo "Error";\n}'],
+      finally: ['finally {\n  echo $done;\n}']
     },
     fields: [
       { name: 'body', type: 'Vec<Stmt>', description: 'Try block' },
@@ -455,10 +457,10 @@ export const astNodes: AstNode[] = [
     id: 'stmt-unset',
     name: 'Unset',
     description: 'Unset variables',
-    phpExample: `<?php\nunset($a, $b, $arr[$key]);`,
+    phpExample: `unset($a, $b, $arr[$key]);`,
     keywordInExample: 'unset',
     fieldHighlights: {
-      vars: ['$a', '$b', '$arr[$key]']
+      vars: ['$a,', '$b,', '$arr[$key]']
     },
     fields: [
       { name: 'vars', type: 'Vec<Expr>', description: 'Variables to unset' }
@@ -469,11 +471,11 @@ export const astNodes: AstNode[] = [
     group: 'Define Code',
     name: 'Use',
     description: 'Use (import) statement',
-    phpExample: `<?php\nuse App\\Models\\User;\nuse function Helper\\debug;`,
+    phpExample: `use App\\Models\\User;\nuse function Helper\\debug;\nuse const DB\\HOST;`,
     keywordInExample: 'use',
     fieldHighlights: {
-      kind: ['use function'],
-      uses: ['App\\\\Models\\\\User', 'Helper\\\\debug']
+      kind: ['function', 'const'],
+      uses: ['App\\Models\\User', 'Helper\\debug', 'DB\\HOST']
     },
     fields: [
       { name: 'kind', type: 'UseKind', description: 'Type of use (Normal, Function, Const)' },
@@ -485,11 +487,11 @@ export const astNodes: AstNode[] = [
     group: 'Control Flow',
     name: 'While',
     description: 'While loop',
-    phpExample: `<?php\nwhile ($x != 0) {\n  echo $x;\n  $x--;\n}`,
+    phpExample: `while ($x != 0) {\n  echo $x;\n  $x--;\n}`,
     keywordInExample: 'while',
     fieldHighlights: {
       condition: ['$x != 0'],
-      body: ['echo $x', '$x--']
+      body: ['echo $x;', '$x--;']
     },
     fields: [
       { name: 'condition', type: 'Expr', description: 'Loop condition' },
@@ -502,13 +504,17 @@ export const astNodes: AstNode[] = [
     group: 'Class/Object Operations',
     name: 'AnonymousClass',
     description: 'Anonymous class instance (inline class definition)',
-    phpExample: `<?php\n$obj = new class extends Base implements Countable {\n  public function method() {}\n};`,
+    phpExample: `new class extends Base implements Countable {\n  private string $value;\n\n  public function method() {}\n}`,
     keywordInExample: 'class',
     fieldHighlights: {
-      class: ['extends Base implements Countable', 'public function method']
+      extends: ['extends Base'],
+      implements: ['implements Countable'],
+      members: ['private string $value;', 'public function method() {}']
     },
     fields: [
-      { name: 'class', type: 'ClassDecl', description: 'Anonymous class declaration' }
+      { name: 'extends', type: 'Option<Name>', description: 'Parent class', optional: true },
+      { name: 'implements', type: 'Vec<Name>', description: 'Interfaces' },
+      { name: 'members', type: 'Vec<ClassMember>', description: 'Properties and methods' }
     ]
   },
   {
@@ -516,10 +522,10 @@ export const astNodes: AstNode[] = [
     group: 'Variables & Values',
     name: 'Array',
     description: 'Array literal',
-    phpExample: `<?php\n[1, 2, 3];\n[$key => $val, $key2 => $val2];\n[...$items];`,
+    phpExample: `[1, 2, 3];\n[$a => $x, $b => $y];\narray(...$items);`,
     keywordInExample: 'array',
     fieldHighlights: {
-      elements: ['1', '2', '3', '$key => $val', '$key2 => $val2', '...$items']
+      elements: ['1', '2', '3', '$a => $x', '$b => $y', '...$items']
     },
     fields: [
       { name: 'elements', type: 'Vec<ArrayElement>', description: 'Array elements' }
@@ -530,7 +536,7 @@ export const astNodes: AstNode[] = [
     group: 'Operations',
     name: 'ArrayAccess',
     description: 'Array element access',
-    phpExample: `<?php\n$arr[0];\n$arr[$key];\n$arr[];`,
+    phpExample: `$arr[0];\n$arr[$key];\n$arr[];`,
     fieldHighlights: {
       array: ['$arr'],
       index: ['0', '$key']
@@ -545,12 +551,16 @@ export const astNodes: AstNode[] = [
     group: 'Function/Method Calls',
     name: 'ArrowFunction',
     description: 'Arrow function (short closure, PHP 7.4+)',
-    phpExample: `<?php\n$square = fn($x) => $x * $x;\n$double = fn($n) => $n * 2;`,
+    phpExample: `#[Pure]\nstatic fn&(int $x): int => $x * $x;\nfn($a, $b): string => $a . $b;`,
     phpVersion: '7.4+',
-    keywordInExample: 'arrow',
+    keywordInExample: 'fn',
     fieldHighlights: {
-      params: ['$x', '$n'],
-      body: ['$x * $x', '$n * 2']
+      is_static: ['static'],
+      by_ref: ['&'],
+      params: ['int $x', '$a, $b'],
+      return_type: ['int', 'string'],
+      body: ['$x * $x', '$a . $b'],
+      attributes: ['#[Pure]']
     },
     fields: [
       { name: 'is_static', type: 'bool', description: 'Is static' },
@@ -566,11 +576,12 @@ export const astNodes: AstNode[] = [
     group: 'Operations',
     name: 'Assign',
     description: 'Assignment and compound assignments',
-    phpExample: `<?php\n$x = 10;\n$x += 5;\n$result ??= $default;`,
+    phpExample: `$x = 10;\n$x += 5;\n$ref =& $original;\n$result ??= $default;`,
     fieldHighlights: {
-      target: ['$x', '$result'],
-      op: ['+=', '??='],
-      value: ['10', '5', '$default']
+      target: ['$x', '$ref', '$result'],
+      op: ['+=', '=&', '??='],
+      value: ['10', '5', '$original', '$default'],
+      by_ref: ['=&']
     },
     fields: [
       { name: 'target', type: 'Expr', description: 'Assignment target' },
@@ -584,11 +595,10 @@ export const astNodes: AstNode[] = [
     group: 'Operations',
     name: 'Binary',
     description: 'Binary operation',
-    phpExample: `<?php\n$sum = $a + $b;\n$cmp = $x <=> $y;\n$obj instanceof MyClass;`,
-    keywordInExample: 'instanceof',
+    phpExample: `$sum = $a + $b;\n$cmp = $x <=> $y;\n$obj instanceof MyClass;`,
     fieldHighlights: {
       left: ['$a', '$x', '$obj'],
-      op: ['+', 'instanceof'],
+      op: ['+', '<=>', 'instanceof'],
       right: ['$b', '$y', 'MyClass']
     },
     fields: [
@@ -602,8 +612,8 @@ export const astNodes: AstNode[] = [
     group: 'Variables & Values',
     name: 'Bool',
     description: 'Boolean literal',
-    phpExample: `<?php\n$yes = true;\n$no = false;`,
-    keywordInExample: 'true',
+    phpExample: `$yes = true;\n$no = false;`,
+    keywordInExample: ['true', 'false'],
     fieldHighlights: {
       value: ['true', 'false']
     },
@@ -616,7 +626,7 @@ export const astNodes: AstNode[] = [
     group: 'Function/Method Calls',
     name: 'CallableCreate',
     description: 'Callable creation expression (first-class callables)',
-    phpExample: `<?php\n$func = strlen(...);\n$method = $obj->method(...);\n$static = MyClass::staticMethod(...);`,
+    phpExample: `$func = strlen(...);\n$method = $obj->method(...);\n$static = MyClass::staticMethod(...);`,
     phpVersion: '8.1+',
     fieldHighlights: {
       kind: ['strlen(...)', '$obj->method(...)', 'MyClass::staticMethod(...)']
@@ -630,8 +640,7 @@ export const astNodes: AstNode[] = [
     group: 'Operations',
     name: 'Cast',
     description: 'Type cast',
-    phpExample: `<?php\n(int)$x;\n(string)$val;\n(array)$obj;`,
-    keywordInExample: 'cast',
+    phpExample: `(int)$x;\n(string)$val;\n(array)$obj;`,
     fieldHighlights: {
       kind: ['(int)', '(string)', '(array)'],
       operand: ['$x', '$val', '$obj']
@@ -646,8 +655,7 @@ export const astNodes: AstNode[] = [
     group: 'Class/Object Operations',
     name: 'ClassConstAccess',
     description: 'Class constant access',
-    phpExample: `<?php\nMyClass::VERSION;\nMyClass::MY_CONST;`,
-    keywordInExample: 'const',
+    phpExample: `MyClass::VERSION;\nMyClass::MY_CONST;`,
     fieldHighlights: {
       class: ['MyClass'],
       member: ['VERSION', 'MY_CONST']
@@ -662,12 +670,11 @@ export const astNodes: AstNode[] = [
     group: 'Class/Object Operations',
     name: 'ClassConstAccessDynamic',
     description: 'Dynamic class constant access (Foo::{expr})',
-    phpExample: `<?php\n$const = $version;\nFoo::{$const};`,
+    phpExample: `$const = $version;\nFoo::{$const};`,
     phpVersion: '8.3+',
-    keywordInExample: 'const',
     fieldHighlights: {
       class: ['Foo'],
-      member: ['$const']
+      member: ['{$const}']
     },
     fields: [
       { name: 'class', type: 'Expr', description: 'Class name' },
@@ -679,7 +686,7 @@ export const astNodes: AstNode[] = [
     group: 'Class/Object Operations',
     name: 'Clone',
     description: 'Clone an object',
-    phpExample: `<?php\n$copy = clone $original;`,
+    phpExample: `$copy = clone $original;`,
     keywordInExample: 'clone',
     fieldHighlights: {
       object: ['$original']
@@ -693,16 +700,16 @@ export const astNodes: AstNode[] = [
     group: 'Class/Object Operations',
     name: 'CloneWith',
     description: 'Clone with property overrides (PHP 8.5+)',
-    phpExample: `<?php\n$obj2 = clone($obj, prop: $value);`,
+    phpExample: `clone($obj, id: $newId, status: "active");`,
     phpVersion: '8.5+',
     keywordInExample: 'clone',
     fieldHighlights: {
       object: ['$obj'],
-      properties: ['prop: $value']
+      properties: ['id: $newId', 'status: "active"']
     },
     fields: [
       { name: 'object', type: 'Expr', description: 'Object to clone' },
-      { name: 'properties', type: 'Expr', description: 'Property overrides' }
+      { name: 'properties', type: 'Vec<PropertyPair>', description: 'Property overrides' }
     ]
   },
   {
@@ -710,12 +717,16 @@ export const astNodes: AstNode[] = [
     group: 'Function/Method Calls',
     name: 'Closure',
     description: 'Anonymous function (closure)',
-    phpExample: `<?php\n$add = function($a, $b) use ($multiplier) {\n  return ($a + $b) * $multiplier;\n};`,
+    phpExample: `#[Pure]\nstatic function&(int $a, int $b) use (&$multiplier): float {\n  return ($a + $b) * $multiplier;\n}`,
     keywordInExample: 'function',
     fieldHighlights: {
-      params: ['$a', '$b'],
-      use_vars: ['$multiplier'],
-      body: ['return ($a + $b) * $multiplier']
+      is_static: ['static'],
+      by_ref: ['&'],
+      params: ['int $a', 'int $b'],
+      use_vars: ['use (&$multiplier)'],
+      return_type: ['float'],
+      body: ['return ($a + $b) * $multiplier;'],
+      attributes: ['#[Pure]']
     },
     fields: [
       { name: 'is_static', type: 'bool', description: 'Is static closure' },
@@ -732,7 +743,7 @@ export const astNodes: AstNode[] = [
     group: 'Other Expressions',
     name: 'Empty',
     description: 'Check if variable is empty',
-    phpExample: `<?php\nempty($var);\nif (empty($str)) {}`,
+    phpExample: `empty($var);\nif (empty($str)) {}`,
     keywordInExample: 'empty',
     fieldHighlights: {
       var: ['$var', '$str']
@@ -746,8 +757,8 @@ export const astNodes: AstNode[] = [
     group: 'Other Expressions',
     name: 'ErrorSuppress',
     description: 'Error suppression operator (@)',
-    phpExample: `<?php\n@file_get_contents($path);\n@$arr[$key];`,
-    keywordInExample: 'suppress',
+    phpExample: `@file_get_contents($path);\n@$arr[$key];`,
+    keywordInExample: '@',
     fieldHighlights: {
       operand: ['file_get_contents($path)', '$arr[$key]']
     },
@@ -760,7 +771,7 @@ export const astNodes: AstNode[] = [
     group: 'Other Expressions',
     name: 'Eval',
     description: 'Evaluate PHP code',
-    phpExample: `<?php\neval($code);`,
+    phpExample: `eval($code);`,
     keywordInExample: 'eval',
     fieldHighlights: {
       code: ['$code']
@@ -774,8 +785,8 @@ export const astNodes: AstNode[] = [
     group: 'Output/Communication',
     name: 'Exit',
     description: 'Exit/die construct',
-    phpExample: `<?php\nexit($message);\ndie(1);`,
-    keywordInExample: 'exit',
+    phpExample: `exit($message);\ndie(1);`,
+    keywordInExample: ['exit', 'die'],
     fieldHighlights: {
       value: ['$message', '1']
     },
@@ -788,8 +799,7 @@ export const astNodes: AstNode[] = [
     group: 'Variables & Values',
     name: 'Float',
     description: 'Float literal',
-    phpExample: `<?php\n$pi = 3.14;\n$exp = 1.5e3;`,
-    keywordInExample: 'float',
+    phpExample: `$pi = 3.14;\n$exp = 1.5e3;`,
     fieldHighlights: {
       value: ['3.14', '1.5e3']
     },
@@ -802,8 +812,7 @@ export const astNodes: AstNode[] = [
     group: 'Function/Method Calls',
     name: 'FunctionCall',
     description: 'Function call',
-    phpExample: `<?php\nstrlen($str);\narray_map(fn($x) => $x * 2, $arr);`,
-    keywordInExample: 'function',
+    phpExample: `strlen($str);\narray_map(fn($x) => $x * 2, $arr);`,
     fieldHighlights: {
       name: ['strlen', 'array_map'],
       args: ['$str', 'fn($x) => $x * 2', '$arr']
@@ -818,15 +827,15 @@ export const astNodes: AstNode[] = [
     group: 'Variables & Values',
     name: 'Heredoc',
     description: 'Heredoc string with interpolation',
-    phpExample: `<?php\n$name = $alice;\n$str = <<<EOT\nHello $name\nEOT;`,
-    keywordInExample: 'EOT',
+    phpExample: `$str = <<<EOT\n  Hello $name!\nEOT;\n\n$msg = <<<'EOD'\n  Static text\nEOD;`,
+    keywordInExample: '<<<',
     fieldHighlights: {
-      label: ['EOT'],
-      parts: ['$name']
+      label: ['EOT', 'EOD'],
+      parts: ['Hello ', '$name', '!', 'Static text']
     },
     fields: [
       { name: 'label', type: 'string', description: 'Heredoc label' },
-      { name: 'parts', type: 'Vec<StringPart>', description: 'String parts' }
+      { name: 'parts', type: 'Vec<StringPart>', description: 'String parts (text and variables)' }
     ]
   },
   {
@@ -834,7 +843,7 @@ export const astNodes: AstNode[] = [
     group: 'Variables & Values',
     name: 'Identifier',
     description: 'Bare name used as an expression (function name in a call, class name, etc.)',
-    phpExample: `<?php\nstrlen($str);\nMyClass::method();`,
+    phpExample: `strlen($str);\nMyClass::method();`,
     keywordInExample: 'strlen',
     fieldHighlights: {
       name: ['strlen', 'MyClass']
@@ -848,11 +857,10 @@ export const astNodes: AstNode[] = [
     group: 'Other Expressions',
     name: 'Include',
     description: 'Include/require files',
-    phpExample: `<?php\ninclude $header;\nrequire_once $config;`,
-    keywordInExample: 'include',
+    phpExample: `include $header;\ninclude_once $once;\nrequire $config;\nrequire_once $loader;`,
     fieldHighlights: {
-      kind: ['include', 'require_once'],
-      file: ['$header', '$config']
+      kind: ['include_once', 'include', 'require_once', 'require'],
+      file: ['$header', '$once', '$config', '$loader']
     },
     fields: [
       { name: 'kind', type: 'IncludeKind', description: 'Include/require/once variant' },
@@ -864,8 +872,7 @@ export const astNodes: AstNode[] = [
     group: 'Variables & Values',
     name: 'Int',
     description: 'Integer literal',
-    phpExample: `<?php\n$x = 42;\n$hex = 0xFF;\n$bin = 0b1010;`,
-    keywordInExample: 'int',
+    phpExample: `$x = 42;\n$hex = 0xFF;\n$bin = 0b1010;`,
     fieldHighlights: {
       value: ['42', '0xFF', '0b1010']
     },
@@ -878,10 +885,9 @@ export const astNodes: AstNode[] = [
     group: 'Variables & Values',
     name: 'InterpolatedString',
     description: 'Double-quoted string with variable interpolation',
-    phpExample: `<?php\n$name = $alice;\necho "Hello $name";\necho "Result: {$obj->prop}";`,
-    keywordInExample: 'echo',
+    phpExample: `"Hello $name";\n"Result: {$obj->prop}";`,
     fieldHighlights: {
-      parts: ['$name', '$obj->prop']
+      parts: ['Hello ', '$name', 'Result: ', '$obj->prop']
     },
     fields: [
       { name: 'parts', type: 'Vec<StringPart>', description: 'String parts (literals and expressions)' }
@@ -892,7 +898,7 @@ export const astNodes: AstNode[] = [
     group: 'Other Expressions',
     name: 'Isset',
     description: 'Check if variables are set',
-    phpExample: `<?php\nisset($var);\nisset($arr[$key], $obj->prop);`,
+    phpExample: `isset($var);\nisset($arr[$key], $obj->prop);`,
     keywordInExample: 'isset',
     fieldHighlights: {
       vars: ['$var', '$arr[$key]', '$obj->prop']
@@ -906,10 +912,10 @@ export const astNodes: AstNode[] = [
     group: 'Variables & Values',
     name: 'MagicConst',
     description: 'Magic constant (__LINE__, __FILE__, etc)',
-    phpExample: `<?php\necho __LINE__;\necho __FILE__;\necho __DIR__;`,
-    keywordInExample: '__LINE__',
+    phpExample: `__LINE__;\n__FILE__;\n__DIR__;\n__FUNCTION__;\n__CLASS__;\n__TRAIT__;\n__METHOD__;\n__NAMESPACE__;`,
+    keywordInExample: ['__LINE__', '__FILE__', '__DIR__', '__FUNCTION__', '__CLASS__', '__TRAIT__', '__METHOD__', '__NAMESPACE__'],
     fieldHighlights: {
-      kind: ['__LINE__', '__FILE__', '__DIR__']
+      kind: ['__LINE__', '__FILE__', '__DIR__', '__FUNCTION__', '__CLASS__', '__TRAIT__', '__METHOD__', '__NAMESPACE__']
     },
     fields: [
       { name: 'kind', type: 'MagicConstKind', description: 'Magic constant type' }
@@ -920,7 +926,7 @@ export const astNodes: AstNode[] = [
     group: 'Other Expressions',
     name: 'Match',
     description: 'Match expression (PHP 8.0+)',
-    phpExample: `<?php\n$result = match($status) {\n  STATUS_ACTIVE => $running,\n  STATUS_PAUSED => $paused,\n  default => $unknown\n};`,
+    phpExample: `$result = match($status) {\n  STATUS_ACTIVE => $running,\n  STATUS_PAUSED => $paused,\n  default => $unknown\n};`,
     phpVersion: '8.0+',
     keywordInExample: 'match',
     fieldHighlights: {
@@ -937,12 +943,11 @@ export const astNodes: AstNode[] = [
     group: 'Class/Object Operations',
     name: 'MethodCall',
     description: 'Object method call',
-    phpExample: `<?php\n$obj->method($arg);\n$obj->compute($x);`,
-    keywordInExample: 'method',
+    phpExample: `$obj->method($arg);\n$obj->compute($x, $y);`,
     fieldHighlights: {
       object: ['$obj'],
       method: ['method', 'compute'],
-      args: ['$arg', '$x']
+      args: ['$arg', '$x', '$y']
     },
     fields: [
       { name: 'object', type: 'Expr', description: 'Object' },
@@ -955,7 +960,7 @@ export const astNodes: AstNode[] = [
     group: 'Class/Object Operations',
     name: 'New',
     description: 'Create new object instance',
-    phpExample: `<?php\nnew DateTime($now);\nnew MyClass($arg);`,
+    phpExample: `new DateTime($now);\nnew MyClass($arg);`,
     keywordInExample: 'new',
     fieldHighlights: {
       class: ['DateTime', 'MyClass'],
@@ -971,8 +976,8 @@ export const astNodes: AstNode[] = [
     group: 'Variables & Values',
     name: 'Nowdoc',
     description: 'Nowdoc string (no interpolation)',
-    phpExample: `<?php\n$str = <<<'EOT'\nLiteral $text\nEOT;`,
-    keywordInExample: 'EOT',
+    phpExample: `$str = <<<'EOT'\nLiteral $text\nEOT;`,
+    keywordInExample: '<<<',
     fieldHighlights: {
       label: ['EOT'],
       value: ['Literal $text']
@@ -987,7 +992,7 @@ export const astNodes: AstNode[] = [
     group: 'Variables & Values',
     name: 'Null',
     description: 'Null literal',
-    phpExample: `<?php\n$value = null;`,
+    phpExample: `$value = null;`,
     keywordInExample: 'null',
     fields: []
   },
@@ -996,8 +1001,7 @@ export const astNodes: AstNode[] = [
     group: 'Operations',
     name: 'NullCoalesce',
     description: 'Null coalescing operator',
-    phpExample: `<?php\n$name = $var ?? $default;\n$value = $a ?? $b ?? $c;`,
-    keywordInExample: 'coalesce',
+    phpExample: `$name = $var ?? $default;\n$value = $a ?? $b ?? $c;`,
     fieldHighlights: {
       left: ['$var', '$a'],
       right: ['$default', '$b ?? $c']
@@ -1012,9 +1016,8 @@ export const astNodes: AstNode[] = [
     group: 'Class/Object Operations',
     name: 'NullsafeMethodCall',
     description: 'Nullsafe method call (PHP 8.0+)',
-    phpExample: `<?php\n$obj?->method($arg);\n$result = $user?->getProfile()?->getName();`,
+    phpExample: `$obj?->method($arg);\n$result = $user?->getProfile()?->getName();`,
     phpVersion: '8.0+',
-    keywordInExample: 'method',
     fieldHighlights: {
       object: ['$obj', '$user'],
       method: ['method', 'getProfile', 'getName'],
@@ -1031,9 +1034,8 @@ export const astNodes: AstNode[] = [
     group: 'Class/Object Operations',
     name: 'NullsafePropertyAccess',
     description: 'Nullsafe property access (PHP 8.0+)',
-    phpExample: `<?php\n$obj?->prop;\n$result = $user?->profile?->name;`,
+    phpExample: `$obj?->prop;\n$result = $user?->profile?->name;`,
     phpVersion: '8.0+',
-    keywordInExample: 'property',
     fieldHighlights: {
       object: ['$obj', '$user'],
       property: ['prop', 'profile', 'name']
@@ -1048,8 +1050,7 @@ export const astNodes: AstNode[] = [
     group: 'Other Expressions',
     name: 'Omit',
     description: 'Omitted array element (skipped slot)',
-    phpExample: `<?php\n[$a, , $c];\nlist($x, , $z) = [1, 2, 3];`,
-    keywordInExample: 'list',
+    phpExample: `[$a, , $c];\nlist($first, , $last) = ["John", "M", "Doe"];`,
     fields: []
   },
   {
@@ -1057,7 +1058,7 @@ export const astNodes: AstNode[] = [
     group: 'Operations',
     name: 'Parenthesized',
     description: 'Expression wrapped in parentheses',
-    phpExample: `<?php\n$result = ($a + $b) * $c;\n$value = ($x);`,
+    phpExample: `$result = ($a + $b) * $c;\n$value = ($x);`,
     fieldHighlights: {
       expr: ['$a + $b', '$x']
     },
@@ -1070,7 +1071,7 @@ export const astNodes: AstNode[] = [
     group: 'Output/Communication',
     name: 'Print',
     description: 'Print construct',
-    phpExample: `<?php\nprint $greeting;\nprint($name);`,
+    phpExample: `print $greeting;\nprint($name);`,
     keywordInExample: 'print',
     fieldHighlights: {
       value: ['$greeting', '$name']
@@ -1084,8 +1085,7 @@ export const astNodes: AstNode[] = [
     group: 'Class/Object Operations',
     name: 'PropertyAccess',
     description: 'Object property access',
-    phpExample: `<?php\n$obj->name;\n$obj->count;`,
-    keywordInExample: 'property',
+    phpExample: `$obj->name;\n$obj->count;`,
     fieldHighlights: {
       object: ['$obj'],
       property: ['name', 'count']
@@ -1100,8 +1100,7 @@ export const astNodes: AstNode[] = [
     group: 'Other Expressions',
     name: 'ShellExec',
     description: 'Shell execution (backticks)',
-    phpExample: `<?php\n$output = \`ls -la\`;\necho \`date\`;`,
-    keywordInExample: 'echo',
+    phpExample: `$output = \`ls -la\`;\necho \`date\`;`,
     fieldHighlights: {
       parts: ['ls -la', 'date']
     },
@@ -1114,8 +1113,7 @@ export const astNodes: AstNode[] = [
     group: 'Class/Object Operations',
     name: 'StaticDynMethodCall',
     description: 'Dynamic static method call (Class::$method(args))',
-    phpExample: `<?php\nMyClass::$method($arg);`,
-    keywordInExample: 'static',
+    phpExample: `MyClass::$method($arg);`,
     fieldHighlights: {
       class: ['MyClass'],
       method: ['$method'],
@@ -1132,8 +1130,7 @@ export const astNodes: AstNode[] = [
     group: 'Class/Object Operations',
     name: 'StaticMethodCall',
     description: 'Static method call',
-    phpExample: `<?php\nMyClass::method($arg);\nMyClass::compute($x);`,
-    keywordInExample: 'static',
+    phpExample: `MyClass::method($arg);\nMyClass::compute($x);`,
     fieldHighlights: {
       class: ['MyClass'],
       method: ['method', 'compute'],
@@ -1150,8 +1147,7 @@ export const astNodes: AstNode[] = [
     group: 'Class/Object Operations',
     name: 'StaticPropertyAccess',
     description: 'Static property access',
-    phpExample: `<?php\nMyClass::$property;\nMyClass::$count;`,
-    keywordInExample: 'static',
+    phpExample: `MyClass::$property;\nMyClass::$count;`,
     fieldHighlights: {
       class: ['MyClass'],
       member: ['$property', '$count']
@@ -1166,8 +1162,7 @@ export const astNodes: AstNode[] = [
     group: 'Class/Object Operations',
     name: 'StaticPropertyAccessDynamic',
     description: 'Dynamic static property access (A::$$b)',
-    phpExample: `<?php\n$prop = $name;\nMyClass::$$prop;`,
-    keywordInExample: 'static',
+    phpExample: `$prop = $name;\nMyClass::$$prop;`,
     fieldHighlights: {
       class: ['MyClass'],
       member: ['$$prop']
@@ -1182,7 +1177,7 @@ export const astNodes: AstNode[] = [
     group: 'Variables & Values',
     name: 'String',
     description: 'String literal (single-quoted or non-interpolated double-quoted)',
-    phpExample: `<?php\n$str = 'hello world';\n$str2 = "goodbye";`,
+    phpExample: `$str = 'hello world';\n$str2 = "goodbye";`,
     fieldHighlights: {
       value: ['hello world', 'goodbye']
     },
@@ -1195,8 +1190,7 @@ export const astNodes: AstNode[] = [
     group: 'Operations',
     name: 'Ternary',
     description: 'Ternary conditional operator',
-    phpExample: `<?php\n$result = $x != 0 ? $positive : $nonPositive;\n$short = $x ?: $default;`,
-    keywordInExample: 'ternary',
+    phpExample: `$result = $x != 0 ? $positive : $nonPositive;\n$short = $x ?: $default;`,
     fieldHighlights: {
       condition: ['$x != 0', '$x'],
       then_expr: ['$positive'],
@@ -1213,7 +1207,7 @@ export const astNodes: AstNode[] = [
     group: 'Other Expressions',
     name: 'ThrowExpr',
     description: 'Throw expression (PHP 8.0+)',
-    phpExample: `<?php\n$x = $value ?? throw new InvalidArgumentException($msg);`,
+    phpExample: `$x = $value ?? throw new InvalidArgumentException($msg);`,
     phpVersion: '8.0+',
     keywordInExample: 'throw',
     fieldHighlights: {
@@ -1228,10 +1222,9 @@ export const astNodes: AstNode[] = [
     group: 'Operations',
     name: 'UnaryPostfix',
     description: 'Postfix unary operation',
-    phpExample: `<?php\n$x++;\n$y--;`,
+    phpExample: `$x++;\n$y--;`,
     fieldHighlights: {
-      operand: ['$x', '$y'],
-      op: ['$x++', '$y--']
+      op: ['++', '--']
     },
     fields: [
       { name: 'operand', type: 'Expr', description: 'Operand' },
@@ -1243,10 +1236,9 @@ export const astNodes: AstNode[] = [
     group: 'Operations',
     name: 'UnaryPrefix',
     description: 'Prefix unary operation',
-    phpExample: `<?php\n$neg = -$x;\n$not = !$flag;\n$inc = ++$counter;`,
+    phpExample: `$neg = -$x;\n$not = !$flag;\n$inc = ++$counter;`,
     fieldHighlights: {
-      op: ['-$x', '!$flag', '++$counter'],
-      operand: ['$x', '$flag', '$counter']
+      op: ['-', '!', '++']
     },
     fields: [
       { name: 'op', type: 'UnaryPrefixOp', description: 'Operator (-, !, ++, --)' },
@@ -1258,8 +1250,7 @@ export const astNodes: AstNode[] = [
     group: 'Variables & Values',
     name: 'Variable',
     description: 'Variable reference',
-    phpExample: `<?php\n$name = $value;\necho $name;`,
-    keywordInExample: 'variable',
+    phpExample: `$name = $value;\necho $name;`,
     fieldHighlights: {
       name: ['$name', '$value']
     },
@@ -1272,10 +1263,9 @@ export const astNodes: AstNode[] = [
     group: 'Variables & Values',
     name: 'VariableVariable',
     description: 'Variable variable (dynamic variable names)',
-    phpExample: `<?php\n$var = $hello;\n$$var = $world;\necho $hello;`,
-    keywordInExample: 'variable',
+    phpExample: `$var = $hello;\n$$var = $world;\necho $hello;`,
     fieldHighlights: {
-      expr: ['$var', '$$var']
+      expr: ['$$var']
     },
     fields: [
       { name: 'expr', type: 'Expr', description: 'Expression to resolve to variable name' }
@@ -1286,7 +1276,7 @@ export const astNodes: AstNode[] = [
     group: 'Operations',
     name: 'Yield',
     description: 'Yield value from generator',
-    phpExample: `<?php\nfunction gen() {\n  yield 1;\n  yield $key => 2;\n  yield from $items;\n}`,
+    phpExample: `function gen() {\n  yield 1;\n  yield $key => 2;\n  yield from $items;\n}`,
     keywordInExample: 'yield',
     fieldHighlights: {
       key: ['$key'],
@@ -1305,12 +1295,13 @@ export const astNodes: AstNode[] = [
     group: 'Declarations',
     name: 'ClassConstDecl',
     description: 'Class constant',
-    phpExample: `<?php\nconst VERSION = 1;\nfinal protected const DEFAULT_VAL = 0;`,
+    phpExample: `class Config {\n  const VERSION: int = 1;\n  protected final const DEFAULT_VAL: int = 0;\n}`,
     keywordInExample: 'const',
     fieldHighlights: {
       name: ['VERSION', 'DEFAULT_VAL'],
       visibility: ['protected'],
       is_final: ['final'],
+      type_hint: ['int'],
       value: ['1', '0']
     },
     fields: [
@@ -1326,7 +1317,7 @@ export const astNodes: AstNode[] = [
     group: 'Declarations',
     name: 'EnumCase',
     description: 'Enum case',
-    phpExample: `<?php\nenum Color {\n  case Red;\n  case Green = GREEN_VALUE;\n}`,
+    phpExample: `enum Color {\n  case Red;\n  case Green = GREEN_VALUE;\n}`,
     keywordInExample: 'case',
     fieldHighlights: {
       name: ['Red', 'Green'],
@@ -1342,15 +1333,17 @@ export const astNodes: AstNode[] = [
     group: 'Declarations',
     name: 'MethodDecl',
     description: 'Class method',
-    phpExample: `<?php\npublic function getValue(): string { return $value; }\nabstract protected function validate();`,
-    keywordInExample: 'method',
+    phpExample: `class User {\n  public function &getValue(): string { return $this->value; }\n  abstract protected function validate();\n  final public static function create(int $id): self { return new User(); }\n}`,
     fieldHighlights: {
-      name: ['getValue', 'validate'],
+      name: ['getValue', 'validate', 'create'],
       visibility: ['public', 'protected'],
       is_abstract: ['abstract'],
-      params: [],
-      return_type: ['string'],
-      body: ['return $value']
+      is_static: ['static'],
+      is_final: ['final'],
+      by_ref: ['&'],
+      params: ['int $id'],
+      return_type: ['string', 'self'],
+      body: ['return $this->value;', 'return new User();']
     },
     fields: [
       { name: 'name', type: 'Ident', description: 'Method name' },
@@ -1369,14 +1362,19 @@ export const astNodes: AstNode[] = [
     group: 'Declarations',
     name: 'Param',
     description: 'Function/method parameter',
-    phpExample: `<?php\nfunction foo(string $name, int $age = 0, &$ref = null, ...$rest) {}`,
-    keywordInExample: 'function',
+    phpExample: `class User {\n  function __construct(\n    #[Trim] string $name,\n    protected private(set) string $email {\n      get => $this->_email;\n      set(mixed $v) { $this->_email = $v; }\n    },\n    public final readonly int $age = 0,\n    &$ref = null,\n    ...$rest\n  ) {}\n}`,
     fieldHighlights: {
-      name: ['$name', '$age', '$ref', '$rest'],
-      type_hint: ['string', 'int'],
+      name: ['$name', '$email', '$age', '$ref', '$rest'],
+      type_hint: ['string', 'int', 'mixed'],
       default: ['0', 'null'],
-      by_ref: ['&$ref'],
-      variadic: ['...$rest']
+      by_ref: ['&'],
+      variadic: ['...'],
+      visibility: ['protected', 'public'],
+      set_visibility: ['private(set)'],
+      is_readonly: ['readonly'],
+      is_final: ['final'],
+      attributes: ['#[Trim]'],
+      hooks: ['get => $this->_email;', 'set(mixed $v) { $this->_email = $v; }']
     },
     fields: [
       { name: 'name', type: 'Ident', description: 'Parameter name' },
@@ -1397,14 +1395,15 @@ export const astNodes: AstNode[] = [
     group: 'Declarations',
     name: 'PropertyDecl',
     description: 'Class property',
-    phpExample: `<?php\npublic string $name = $default;\nprivate readonly int $id;`,
-    keywordInExample: 'property',
+    phpExample: `class User {\n  public string $name = "John";\n  public static int $counter = 0;\n  protected readonly bool $verified;\n  public private(set) string $email;\n}`,
     fieldHighlights: {
-      name: ['$name', '$id'],
-      visibility: ['public', 'private'],
+      visibility: ['public', 'protected'],
+      is_static: ['static'],
+      type_hint: ['string', 'int', 'bool'],
+      name: ['$name', '$counter', '$verified', '$email'],
+      default: ['"John"', '0'],
       is_readonly: ['readonly'],
-      type_hint: ['string', 'int'],
-      default: ['$default']
+      set_visibility: ['private(set)']
     },
     fields: [
       { name: 'name', type: 'Ident', description: 'Property name' },
@@ -1421,13 +1420,14 @@ export const astNodes: AstNode[] = [
     group: 'Declarations',
     name: 'PropertyHook',
     description: 'Property hook - get/set (PHP 8.4+)',
-    phpExample: `<?php\npublic string $value {\n  get => strtoupper($this->_value);\n  set(string $v) { $this->_value = $v; }\n}`,
+    phpExample: `class User {\n  public string $value {\n    final get &=> $this->_value;\n    final set(string $newValue) { $this->_value = $newValue; }\n  }\n}`,
     phpVersion: '8.4+',
-    keywordInExample: 'hook',
     fieldHighlights: {
       kind: ['get', 'set'],
-      body: ['strtoupper($this->_value)', '$this->_value = $v'],
-      params: ['$v']
+      is_final: ['final'],
+      by_ref: ['&'],
+      params: ['string $newValue'],
+      body: ['$this->_value', '{ $this->_value = $newValue; }']
     },
     fields: [
       { name: 'kind', type: 'PropertyHookKind', description: 'Get or Set' },
@@ -1443,8 +1443,7 @@ export const astNodes: AstNode[] = [
     group: 'Types',
     name: 'BuiltinType',
     description: 'Built-in type keyword',
-    phpExample: `<?php\nfunction test(int $x, array $arr, mixed $value): string { }`,
-    keywordInExample: 'builtin',
+    phpExample: `function test(int $x, array $arr, mixed $value): string { }`,
     fieldHighlights: {
       type: ['int', 'array', 'mixed', 'string']
     },
@@ -1457,11 +1456,11 @@ export const astNodes: AstNode[] = [
     group: 'Types',
     name: 'Intersection',
     description: 'Intersection type (A&B, PHP 8.1+)',
-    phpExample: `<?php\nfunction process(Countable&ArrayAccess $data) { }`,
+    phpExample: `function process(Countable&ArrayAccess $data) { }`,
     phpVersion: '8.1+',
-    keywordInExample: 'intersection',
+    keywordInExample: '&',
     fieldHighlights: {
-      types: ['Countable&ArrayAccess']
+      types: ['Countable', 'ArrayAccess']
     },
     fields: [
       { name: 'types', type: 'Vec<TypeHint>', description: 'Intersection member types' }
@@ -1472,8 +1471,7 @@ export const astNodes: AstNode[] = [
     group: 'Types',
     name: 'Named',
     description: 'Named type (class/interface name)',
-    phpExample: `<?php\nfunction save(User $user): void { }`,
-    keywordInExample: 'named',
+    phpExample: `function save(User $user): void { }`,
     fieldHighlights: {
       name: ['User']
     },
@@ -1486,10 +1484,10 @@ export const astNodes: AstNode[] = [
     group: 'Types',
     name: 'Nullable',
     description: 'Nullable type (?T)',
-    phpExample: `<?php\nfunction getName(): ?string { return null; }`,
-    keywordInExample: 'nullable',
+    phpExample: `function getName(): ?string { return null; }`,
+    keywordInExample: '?',
     fieldHighlights: {
-      type: ['?string']
+      type: ['string']
     },
     fields: [
       { name: 'type', type: 'TypeHint', description: 'Wrapped type' }
@@ -1500,11 +1498,11 @@ export const astNodes: AstNode[] = [
     group: 'Types',
     name: 'Union',
     description: 'Union type (A|B, PHP 8.0+)',
-    phpExample: `<?php\nfunction getValue(): int|string|null { }`,
+    phpExample: `function getValue(): int|string|null { }`,
     phpVersion: '8.0+',
-    keywordInExample: 'union',
+    keywordInExample: '|',
     fieldHighlights: {
-      types: ['int|string|null']
+      types: ['int', 'string', 'null']
     },
     fields: [
       { name: 'types', type: 'Vec<TypeHint>', description: 'Union member types' }
@@ -1516,11 +1514,12 @@ export const astNodes: AstNode[] = [
     group: 'Components',
     name: 'Arg',
     description: 'Function/method argument',
-    phpExample: `<?php\nfoo($a, $b, name: $c, ...$spread);`,
+    phpExample: `foo($a, $b, name: $c, &$ref, ...$spread);`,
     fieldHighlights: {
       name: ['name'],
-      value: ['$a', '$b', '$c', '$spread'],
-      unpack: ['...$spread']
+      value: ['$a', '$b', '$c', '$ref', '$spread'],
+      by_ref: ['&'],
+      unpack: ['...']
     },
     fields: [
       { name: 'name', type: 'Option<Name>', description: 'Named argument name', optional: true },
@@ -1534,11 +1533,12 @@ export const astNodes: AstNode[] = [
     group: 'Components',
     name: 'ArrayElement',
     description: 'A single element in an array literal',
-    phpExample: `<?php\n[$val, $key => $val2, ...$spread];`,
+    phpExample: `[$val, $key => $val2, &$ref, ...$spread];`,
     fieldHighlights: {
       key: ['$key'],
-      value: ['$val', '$val2', '$spread'],
-      unpack: ['...$spread']
+      value: ['$val', '$val2', '$ref', '$spread'],
+      by_ref: ['&'],
+      unpack: ['...']
     },
     fields: [
       { name: 'key', type: 'Option<Expr>', description: 'Array key', optional: true },
@@ -1552,8 +1552,8 @@ export const astNodes: AstNode[] = [
     group: 'Components',
     name: 'Attribute',
     description: 'Attribute/annotation',
-    phpExample: `<?php\n#[Route($path)]\n#[Deprecated($msg)]\nfunction handler() {}`,
-    keywordInExample: 'attribute',
+    phpExample: `#[Route($path)]\n#[Deprecated($msg)]\nfunction handler() {}`,
+    keywordInExample: '#',
     fieldHighlights: {
       name: ['Route', 'Deprecated'],
       args: ['$path', '$msg']
@@ -1568,12 +1568,12 @@ export const astNodes: AstNode[] = [
     group: 'Components',
     name: 'CatchClause',
     description: 'A single catch in try-catch',
-    phpExample: `<?php\ntry {\n  throw new RuntimeException();\n} catch (RuntimeException $e) {\n  echo $e;\n}`,
+    phpExample: `try {\n  throw new Exception();\n} catch (RuntimeException $e) {\n  throw new LogException('error');\n}`,
     keywordInExample: 'catch',
     fieldHighlights: {
       types: ['RuntimeException'],
       var: ['$e'],
-      body: ['echo $e']
+      body: ['throw new LogException(\'error\');']
     },
     fields: [
       { name: 'types', type: 'Vec<Name>', description: 'Caught exception types' },
@@ -1586,10 +1586,11 @@ export const astNodes: AstNode[] = [
     group: 'Components',
     name: 'ClosureUseVar',
     description: 'A variable captured by a closure',
-    phpExample: `<?php\n$multiplier = 3;\n$fn = function($x) use ($multiplier) {\n  return $x * $multiplier;\n};`,
+    phpExample: `$counter = 0;\n$fn = function() use (&$counter) {\n  $counter++;\n};`,
     keywordInExample: 'use',
     fieldHighlights: {
-      name: ['$multiplier']
+      name: ['&$counter'],
+      by_ref: ['&']
     },
     fields: [
       { name: 'name', type: 'string', description: 'Variable name' },
@@ -1601,11 +1602,12 @@ export const astNodes: AstNode[] = [
     group: 'Components',
     name: 'ConstItem',
     description: 'A single constant in a const statement',
-    phpExample: `<?php\nconst MAX_SIZE = 100;\nconst DB_HOST = DB_DEFAULT_HOST;`,
+    phpExample: `const MAX_SIZE = 100;\n#[Deprecated]\nconst DB_HOST = DB_DEFAULT_HOST;`,
     keywordInExample: 'const',
     fieldHighlights: {
       name: ['MAX_SIZE', 'DB_HOST'],
-      value: ['100', 'DB_DEFAULT_HOST']
+      value: ['100', 'DB_DEFAULT_HOST'],
+      attributes: ['#[Deprecated]']
     },
     fields: [
       { name: 'name', type: 'Ident', description: 'Constant name' },
@@ -1618,11 +1620,11 @@ export const astNodes: AstNode[] = [
     group: 'Components',
     name: 'ElseIfBranch',
     description: 'A single elseif branch in an if statement',
-    phpExample: `<?php\nif ($x == 1) {\n  echo $x;\n} elseif ($x == 2) {\n  echo 0;\n}`,
+    phpExample: `if ($x == 1) {\n  echo $x;\n} elseif ($x == 2) {\n  echo 0;\n}`,
     keywordInExample: 'elseif',
     fieldHighlights: {
       condition: ['$x == 2'],
-      body: ['echo 0']
+      body: ['echo 0;']
     },
     fields: [
       { name: 'condition', type: 'Expr', description: 'Branch condition' },
@@ -1634,10 +1636,9 @@ export const astNodes: AstNode[] = [
     group: 'Components',
     name: 'MatchArm',
     description: 'A single arm in a match expression',
-    phpExample: `<?php\nmatch($x) {\n  1, 2 => $small,\n  default => $other\n};`,
-    keywordInExample: 'default',
+    phpExample: `match($x) {\n  1, 2 => $small,\n  default => $other\n};`,
     fieldHighlights: {
-      conditions: ['1', '2'],
+      conditions: ['1', '2', 'default'],
       body: ['$small', '$other']
     },
     fields: [
@@ -1650,11 +1651,9 @@ export const astNodes: AstNode[] = [
     group: 'Components',
     name: 'Name',
     description: 'Namespace-qualified name',
-    phpExample: `<?php\nuse App\\Models\\User;\nclass Post extends BaseModel {}`,
-    keywordInExample: 'use',
+    phpExample: `use App\\Models\\User;\nclass Post extends \\App\\Models\\BaseModel implements Countable {}`,
     fieldHighlights: {
-      parts: ['App\\\\Models\\\\User', 'BaseModel'],
-      kind: ['Unqualified', 'Qualified', 'FullyQualified']
+      parts: ['App\\Models\\User', '\\App\\Models\\BaseModel', 'Countable']
     },
     fields: [
       { name: 'parts', type: 'Vec<string>', description: 'Name parts (e.g., ["App", "Models", "User"])' },
@@ -1666,10 +1665,10 @@ export const astNodes: AstNode[] = [
     group: 'Components',
     name: 'Program',
     description: 'Root AST node containing all top-level statements',
-    phpExample: `<?php\n$x = 1;\necho $x;`,
+    phpExample: `$x = 1;\necho $x;`,
     keywordInExample: 'echo',
     fieldHighlights: {
-      stmts: ['$x = 1', 'echo $x']
+      stmts: ['$x = 1;', 'echo $x;']
     },
     fields: [
       { name: 'stmts', type: 'Vec<Stmt>', description: 'Top-level statements' }
@@ -1680,7 +1679,7 @@ export const astNodes: AstNode[] = [
     group: 'Components',
     name: 'Span',
     description: 'Source code location (start and end byte offsets)',
-    phpExample: `<?php\n// Every AST node has a Span indicating where in the source it appears`,
+    phpExample: `// Every AST node has a Span indicating where in the source it appears`,
     fieldHighlights: {
       start: ['start'],
       end: ['end']
@@ -1695,7 +1694,7 @@ export const astNodes: AstNode[] = [
     group: 'Components',
     name: 'StaticVar',
     description: 'A single static variable declaration',
-    phpExample: `<?php\nfunction counter() {\n  static $count = 0;\n  return ++$count;\n}`,
+    phpExample: `function counter() {\n  static $count = 0;\n  return ++$count;\n}`,
     keywordInExample: 'static',
     fieldHighlights: {
       name: ['$count'],
@@ -1711,7 +1710,7 @@ export const astNodes: AstNode[] = [
     group: 'Components',
     name: 'StringPart',
     description: 'A part of an interpolated string (literal text or embedded expression)',
-    phpExample: `<?php\n$name = $alice;\necho "Hello $name, you are {$age} old";`,
+    phpExample: `$name = $alice;\necho "Hello $name, you are {$age} old";`,
     keywordInExample: 'echo',
     fieldHighlights: {
       kind: ['Hello ', '$name', '$age', ' old']
@@ -1725,8 +1724,8 @@ export const astNodes: AstNode[] = [
     group: 'Components',
     name: 'SwitchCase',
     description: 'A single case in a switch statement',
-    phpExample: `<?php\nswitch ($x) {\n  case 1:\n    echo $x;\n    break;\n  default:\n    break;\n}`,
-    keywordInExample: 'case',
+    phpExample: `switch ($x) {\n  case 1:\n    echo $x;\n    break;\n  default:\n    break;\n}`,
+    keywordInExample: ['case', 'default'],
     fieldHighlights: {
       value: ['1'],
       body: ['echo $x', 'break']
@@ -1741,7 +1740,7 @@ export const astNodes: AstNode[] = [
     group: 'Components',
     name: 'TraitUseDecl',
     description: 'use Trait; inside a class body',
-    phpExample: `<?php\nclass MyClass {\n  use TraitA, TraitB {\n    TraitA::foo insteadof TraitB;\n  }\n}`,
+    phpExample: `class MyClass {\n  use TraitA, TraitB {\n    TraitA::foo insteadof TraitB;\n  }\n}`,
     keywordInExample: 'use',
     fieldHighlights: {
       traits: ['TraitA', 'TraitB'],
@@ -1757,10 +1756,10 @@ export const astNodes: AstNode[] = [
     group: 'Components',
     name: 'UseItem',
     description: 'A single imported name in a use statement',
-    phpExample: `<?php\nuse App\\Models\\User;\nuse App\\Http\\Controller as Ctrl;`,
+    phpExample: `use App\\Models\\User;\nuse App\\Http\\Controller as Ctrl;`,
     keywordInExample: 'use',
     fieldHighlights: {
-      name: ['App\\\\Models\\\\User', 'App\\\\Http\\\\Controller'],
+      name: ['App\\Models\\User', 'App\\Http\\Controller'],
       alias: ['Ctrl']
     },
     fields: [
