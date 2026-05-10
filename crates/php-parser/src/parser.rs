@@ -49,6 +49,9 @@ pub struct Parser<'arena, 'src> {
     /// Function/method/closure nesting depth — tracks valid yield context.
     /// Incremented when entering a function/method/closure, decremented when exiting.
     pub(crate) function_depth: u32,
+    /// True only when parsing the parameter list of a `__construct` method.
+    /// Used to reject `readonly` parameters outside constructors.
+    pub(crate) in_constructor: bool,
     tokens: Vec<Token>,
     /// Index of NEXT token in the tokens array (current = tokens[pos - 1])
     pos: usize,
@@ -118,6 +121,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             expr_depth: 0,
             loop_depth: 0,
             function_depth: 0,
+            in_constructor: false,
             version,
             no_brace_subscript: false,
         }
@@ -193,6 +197,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             expr_depth: 0,
             loop_depth: 0,
             function_depth: 0,
+            in_constructor: false,
             version,
             no_brace_subscript: false,
         }

@@ -1,14 +1,14 @@
 ===source===
-<?php function match() {}
+<?php function yield() {}
 ===errors===
-cannot use 'match' as function name; it is reserved
+cannot use 'yield' as function name; it is reserved
 ===ast===
 {
   "stmts": [
     {
       "kind": {
         "Function": {
-          "name": "match",
+          "name": "yield",
           "params": [],
           "body": [],
           "return_type": null,
@@ -28,4 +28,4 @@ cannot use 'match' as function name; it is reserved
   }
 }
 ===php_error===
-PHP Parse error:  syntax error, unexpected token "match", expecting "(" in Standard input code on line 1
+PHP Parse error:  syntax error, unexpected token "yield", expecting "(" in Standard input code on line 1

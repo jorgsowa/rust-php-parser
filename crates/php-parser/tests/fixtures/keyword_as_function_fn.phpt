@@ -1,5 +1,7 @@
 ===source===
 <?php function fn() {}
+===errors===
+cannot use 'fn' as function name; it is reserved
 ===ast===
 {
   "stmts": [

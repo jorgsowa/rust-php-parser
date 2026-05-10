@@ -1,5 +1,7 @@
 ===source===
 <?php function die(string|int $status = 0): never {}
+===errors===
+cannot use 'die' as function name; it is reserved
 ===ast===
 {
   "stmts": [

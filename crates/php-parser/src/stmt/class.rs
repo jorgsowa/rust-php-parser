@@ -712,7 +712,10 @@ fn parse_method_member<'arena, 'src>(
     };
 
     parser.expect(TokenKind::LeftParen);
+    let was_in_constructor = parser.in_constructor;
+    parser.in_constructor = method_name.as_str() == Some("__construct");
     let params = super::parse_param_list(parser);
+    parser.in_constructor = was_in_constructor;
     parser.expect(TokenKind::RightParen);
 
     let return_type = if parser.eat(TokenKind::Colon).is_some() {

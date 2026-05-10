@@ -213,6 +213,12 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         TokenKind::OctIntLiteral => {
             let token = parser.advance();
             let text = &parser.source()[token.span.start as usize..token.span.end as usize];
+            if text.as_bytes()[1..].iter().any(|&b| b == b'8' || b == b'9') {
+                parser.error(ParseError::Forbidden {
+                    message: "Invalid numeric literal".into(),
+                    span: token.span,
+                });
+            }
             match parse_int_no_alloc(&text.as_bytes()[1..], 8) {
                 Some(value) => Expr {
                     kind: ExprKind::Int(value),

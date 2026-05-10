@@ -1059,7 +1059,25 @@ fn parse_function<'arena, 'src>(
 
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
 
-    let name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
+    let name_token_kind = parser.current_kind();
+    let name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
+        if !matches!(
+            name_token_kind,
+            TokenKind::Identifier
+                | TokenKind::Null
+                | TokenKind::True
+                | TokenKind::False
+                | TokenKind::Readonly
+                | TokenKind::Enum_
+                | TokenKind::From
+                | TokenKind::Self_
+                | TokenKind::Parent_
+        ) {
+            parser.error(ParseError::Forbidden {
+                message: format!("cannot use '{}' as function name; it is reserved", text).into(),
+                span,
+            });
+        }
         Ident::name(text)
     } else {
         parser.error(ParseError::Expected {
@@ -1223,6 +1241,13 @@ pub fn parse_param_list<'arena, 'src>(
                 TokenKind::Readonly => {
                     let span = parser.current_span();
                     parser.require_version(PhpVersion::Php81, "readonly parameters", span);
+                    if !parser.in_constructor {
+                        parser.error(ParseError::Forbidden {
+                            message: "Cannot declare promoted property outside a constructor"
+                                .into(),
+                            span,
+                        });
+                    }
                     if is_readonly {
                         parser.error(ParseError::Forbidden {
                             message: "duplicate modifier 'readonly'".into(),

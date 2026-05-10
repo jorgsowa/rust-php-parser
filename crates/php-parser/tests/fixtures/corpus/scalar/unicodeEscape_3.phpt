@@ -1,6 +1,8 @@
 ===source===
 <?php
 "\u{FFFFFFFFFFFFFFFF}";
+===errors===
+Invalid UTF-8 codepoint escape sequence: Codepoint too large
 ===ast===
 {
   "stmts": [

@@ -15,6 +15,7 @@ clone(object: $x, [ "foo" => $foo, "bar" => $bar ]);
 clone(...["object" => $x, "withProperties" => [ "foo" => $foo, "bar" => $bar ]]);
 clone(...);
 ===errors===
+cannot use 'clone' as function name; it is reserved
 cannot use positional argument after named argument
 ===ast===
 {

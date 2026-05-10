@@ -4,6 +4,9 @@
 function exit(string|int $status = 0): never {}
 
 function die(string|int $status = 0): never {}
+===errors===
+cannot use 'exit' as function name; it is reserved
+cannot use 'die' as function name; it is reserved
 ===ast===
 {
   "stmts": [

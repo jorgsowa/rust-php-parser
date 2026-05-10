@@ -1,7 +1,9 @@
 ===config===
 min_php=8.1
 ===source===
-<?php class Foo { function __construct(readonly string $x) {} }
+<?php class Foo { function bar(public readonly string $x) {} }
+===errors===
+Cannot declare promoted property outside a constructor
 ===ast===
 {
   "stmts": [
@@ -20,7 +22,7 @@ min_php=8.1
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": "bar",
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": false,
@@ -37,14 +39,14 @@ min_php=8.1
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 48,
-                              "end": 54
+                              "start": 47,
+                              "end": 53
                             }
                           }
                         },
                         "span": {
-                          "start": 48,
-                          "end": 54
+                          "start": 47,
+                          "end": 53
                         }
                       },
                       "default": null,
@@ -52,12 +54,12 @@ min_php=8.1
                       "variadic": false,
                       "is_readonly": true,
                       "is_final": false,
-                      "visibility": null,
+                      "visibility": "Public",
                       "set_visibility": null,
                       "attributes": [],
                       "span": {
-                        "start": 39,
-                        "end": 57
+                        "start": 31,
+                        "end": 56
                       }
                     }
                   ],
@@ -68,7 +70,7 @@ min_php=8.1
               },
               "span": {
                 "start": 18,
-                "end": 61
+                "end": 60
               }
             }
           ],
@@ -77,12 +79,14 @@ min_php=8.1
       },
       "span": {
         "start": 6,
-        "end": 63
+        "end": 62
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 63
+    "end": 62
   }
 }
+===php_error===
+PHP Fatal error:  Cannot declare promoted property outside a constructor in Standard input code on line 1

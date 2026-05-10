@@ -2,6 +2,8 @@
 min_php=8.1
 ===source===
 <?php function foo(readonly string $x) {}
+===errors===
+Cannot declare promoted property outside a constructor
 ===ast===
 {
   "stmts": [

@@ -1,7 +1,6 @@
 ===source===
-<?php 0778; 019; 09;
+<?php 08; 09;
 ===errors===
-Invalid numeric literal
 Invalid numeric literal
 Invalid numeric literal
 ===ast===
@@ -11,34 +10,17 @@ Invalid numeric literal
       "kind": {
         "Expression": {
           "kind": {
-            "Int": 63
+            "Int": 0
           },
           "span": {
             "start": 6,
-            "end": 10
+            "end": 8
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 11
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Int": 1
-          },
-          "span": {
-            "start": 12,
-            "end": 15
-          }
-        }
-      },
-      "span": {
-        "start": 12,
-        "end": 16
+        "end": 9
       }
     },
     {
@@ -48,20 +30,20 @@ Invalid numeric literal
             "Int": 0
           },
           "span": {
-            "start": 17,
-            "end": 19
+            "start": 10,
+            "end": 12
           }
         }
       },
       "span": {
-        "start": 17,
-        "end": 20
+        "start": 10,
+        "end": 13
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 20
+    "end": 13
   }
 }
 ===php_error===

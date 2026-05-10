@@ -1,5 +1,7 @@
 ===source===
 <?php function clone(object $object): object {}
+===errors===
+cannot use 'clone' as function name; it is reserved
 ===ast===
 {
   "stmts": [

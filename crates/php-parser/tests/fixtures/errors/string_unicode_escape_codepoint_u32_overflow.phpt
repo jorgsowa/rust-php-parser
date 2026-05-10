@@ -1,8 +1,7 @@
 ===source===
-<?php
-0787;
+<?php "\u{FFFFFFFFFFFFFFFF}";
 ===errors===
-Invalid numeric literal
+Invalid UTF-8 codepoint escape sequence: Codepoint too large
 ===ast===
 {
   "stmts": [
@@ -10,24 +9,24 @@ Invalid numeric literal
       "kind": {
         "Expression": {
           "kind": {
-            "Int": 63
+            "InterpolatedString": []
           },
           "span": {
             "start": 6,
-            "end": 10
+            "end": 28
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 11
+        "end": 29
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 11
+    "end": 29
   }
 }
 ===php_error===
-PHP Parse error:  Invalid numeric literal in Standard input code on line 2
+PHP Parse error:  Invalid UTF-8 codepoint escape sequence: Codepoint too large in Standard input code on line 1

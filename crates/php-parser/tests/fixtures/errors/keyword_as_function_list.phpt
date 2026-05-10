@@ -1,14 +1,14 @@
 ===source===
-<?php function match() {}
+<?php function list() {}
 ===errors===
-cannot use 'match' as function name; it is reserved
+cannot use 'list' as function name; it is reserved
 ===ast===
 {
   "stmts": [
     {
       "kind": {
         "Function": {
-          "name": "match",
+          "name": "list",
           "params": [],
           "body": [],
           "return_type": null,
@@ -18,14 +18,14 @@ cannot use 'match' as function name; it is reserved
       },
       "span": {
         "start": 6,
-        "end": 25
+        "end": 24
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 25
+    "end": 24
   }
 }
 ===php_error===
-PHP Parse error:  syntax error, unexpected token "match", expecting "(" in Standard input code on line 1
+PHP Parse error:  syntax error, unexpected token "list", expecting "(" in Standard input code on line 1
