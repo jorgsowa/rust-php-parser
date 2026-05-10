@@ -62,9 +62,11 @@ export const astNodes: AstNode[] = [
     },
     fields: [
       { name: 'name', type: 'Ident', description: 'Class name' },
+      { name: 'modifiers', type: 'ClassModifiers', description: 'Modifiers (abstract, final, readonly)' },
       { name: 'extends', type: 'Option<Name>', description: 'Parent class', optional: true },
       { name: 'implements', type: 'Vec<Name>', description: 'Interfaces' },
-      { name: 'members', type: 'Vec<ClassMember>', description: 'Properties, methods, constants' }
+      { name: 'members', type: 'Vec<ClassMember>', description: 'Properties, methods, constants' },
+      { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' }
     ]
   },
   {
@@ -107,7 +109,7 @@ export const astNodes: AstNode[] = [
       body: ['{}']
     },
     fields: [
-      { name: 'directives', type: 'Vec<(Name, Expr)>', description: 'Directives' },
+      { name: 'directives', type: 'Vec<(str, Expr)>', description: 'Directives' },
       { name: 'body', type: 'Option<Stmt>', description: 'Declare body', optional: true }
     ]
   },
@@ -158,6 +160,7 @@ export const astNodes: AstNode[] = [
     fields: [
       { name: 'name', type: 'Ident', description: 'Enum name' },
       { name: 'scalar_type', type: 'Option<Name>', description: 'Backing type (int or string)', optional: true },
+      { name: 'implements', type: 'Vec<Name>', description: 'Implemented interfaces' },
       { name: 'members', type: 'Vec<EnumMember>', description: 'Cases and methods' }
     ]
   },
@@ -216,9 +219,11 @@ export const astNodes: AstNode[] = [
     },
     fields: [
       { name: 'name', type: 'Ident', description: 'Function name' },
+      { name: 'by_ref', type: 'bool', description: 'Returns by reference (&function)' },
       { name: 'params', type: 'Vec<Param>', description: 'Function parameters' },
       { name: 'body', type: 'Vec<Stmt>', description: 'Function body' },
-      { name: 'return_type', type: 'Option<TypeHint>', description: 'Return type', optional: true }
+      { name: 'return_type', type: 'Option<TypeHint>', description: 'Return type', optional: true },
+      { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' }
     ]
   },
   {
@@ -289,7 +294,7 @@ export const astNodes: AstNode[] = [
     name: 'InlineHtml',
     description: 'Inline HTML outside <?php ... ?>',
     phpExample: `<?php echo $php; ?>\nThis is HTML`,
-    keywordInExample: 'InlineHtml',
+    keywordInExample: 'echo',
     fieldHighlights: {
       html: ['This is HTML']
     },
@@ -351,7 +356,6 @@ export const astNodes: AstNode[] = [
     name: 'Nop',
     description: 'Empty statement (;)',
     phpExample: `<?php\n;`,
-    keywordInExample: 'nop',
     fields: []
   },
   {
@@ -528,7 +532,6 @@ export const astNodes: AstNode[] = [
     name: 'ArrayAccess',
     description: 'Array element access',
     phpExample: `<?php\n$arr[0];\n$arr[$key];\n$arr[];`,
-    keywordInExample: 'access',
     fieldHighlights: {
       array: ['$arr'],
       index: ['0', '$key']
@@ -555,7 +558,8 @@ export const astNodes: AstNode[] = [
       { name: 'by_ref', type: 'bool', description: 'Returns by reference' },
       { name: 'params', type: 'Vec<Param>', description: 'Parameters' },
       { name: 'return_type', type: 'Option<TypeHint>', description: 'Return type', optional: true },
-      { name: 'body', type: 'Expr', description: 'Function body (expression)' }
+      { name: 'body', type: 'Expr', description: 'Function body (expression)' },
+      { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' }
     ]
   },
   {
@@ -564,7 +568,6 @@ export const astNodes: AstNode[] = [
     name: 'Assign',
     description: 'Assignment and compound assignments',
     phpExample: `<?php\n$x = 10;\n$x += 5;\n$result ??= $default;`,
-    keywordInExample: 'null',
     fieldHighlights: {
       target: ['$x', '$result'],
       op: ['+=', '??='],
@@ -573,7 +576,8 @@ export const astNodes: AstNode[] = [
     fields: [
       { name: 'target', type: 'Expr', description: 'Assignment target' },
       { name: 'op', type: 'AssignOp', description: 'Assignment operator (=, +=, .=, etc)' },
-      { name: 'value', type: 'Expr', description: 'Value to assign' }
+      { name: 'value', type: 'Expr', description: 'Value to assign' },
+      { name: 'by_ref', type: 'bool', description: 'Reference assignment ($a =& $b)' }
     ]
   },
   {
@@ -582,7 +586,7 @@ export const astNodes: AstNode[] = [
     name: 'Binary',
     description: 'Binary operation',
     phpExample: `<?php\n$sum = $a + $b;\n$cmp = $x <=> $y;\n$obj instanceof MyClass;`,
-    keywordInExample: 'binary',
+    keywordInExample: 'instanceof',
     fieldHighlights: {
       left: ['$a', '$x', '$obj'],
       op: ['+', 'instanceof'],
@@ -614,7 +618,7 @@ export const astNodes: AstNode[] = [
     name: 'CallableCreate',
     description: 'Callable creation expression (first-class callables)',
     phpExample: `<?php\n$func = strlen(...);\n$method = $obj->method(...);\n$static = MyClass::staticMethod(...);`,
-    keywordInExample: 'callable',
+    phpVersion: '8.1+',
     fieldHighlights: {
       kind: ['strlen(...)', '$obj->method(...)', 'MyClass::staticMethod(...)']
     },
@@ -647,11 +651,11 @@ export const astNodes: AstNode[] = [
     keywordInExample: 'const',
     fieldHighlights: {
       class: ['MyClass'],
-      constant: ['VERSION', 'MY_CONST']
+      member: ['VERSION', 'MY_CONST']
     },
     fields: [
       { name: 'class', type: 'Expr', description: 'Class name' },
-      { name: 'constant', type: 'Expr', description: 'Constant name' }
+      { name: 'member', type: 'Expr', description: 'Constant name' }
     ]
   },
   {
@@ -660,6 +664,7 @@ export const astNodes: AstNode[] = [
     name: 'ClassConstAccessDynamic',
     description: 'Dynamic class constant access (Foo::{expr})',
     phpExample: `<?php\n$const = $version;\nFoo::{$const};`,
+    phpVersion: '8.3+',
     keywordInExample: 'const',
     fieldHighlights: {
       class: ['Foo'],
@@ -719,7 +724,8 @@ export const astNodes: AstNode[] = [
       { name: 'params', type: 'Vec<Param>', description: 'Parameters' },
       { name: 'use_vars', type: 'Vec<ClosureUseVar>', description: 'Use variables' },
       { name: 'return_type', type: 'Option<TypeHint>', description: 'Return type', optional: true },
-      { name: 'body', type: 'Vec<Stmt>', description: 'Function body' }
+      { name: 'body', type: 'Vec<Stmt>', description: 'Function body' },
+      { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' }
     ]
   },
   {
@@ -814,7 +820,7 @@ export const astNodes: AstNode[] = [
     name: 'Heredoc',
     description: 'Heredoc string with interpolation',
     phpExample: `<?php\n$name = $alice;\n$str = <<<EOT\nHello $name\nEOT;`,
-    keywordInExample: 'heredoc',
+    keywordInExample: 'EOT',
     fieldHighlights: {
       label: ['EOT'],
       parts: ['$name']
@@ -830,7 +836,7 @@ export const astNodes: AstNode[] = [
     name: 'Identifier',
     description: 'Bare name used as an expression (function name in a call, class name, etc.)',
     phpExample: `<?php\nstrlen($str);\nMyClass::method();`,
-    keywordInExample: 'identifier',
+    keywordInExample: 'strlen',
     fieldHighlights: {
       name: ['strlen', 'MyClass']
     },
@@ -874,7 +880,7 @@ export const astNodes: AstNode[] = [
     name: 'InterpolatedString',
     description: 'Double-quoted string with variable interpolation',
     phpExample: `<?php\n$name = $alice;\necho "Hello $name";\necho "Result: {$obj->prop}";`,
-    keywordInExample: 'interpolated',
+    keywordInExample: 'echo',
     fieldHighlights: {
       parts: ['$name', '$obj->prop']
     },
@@ -902,7 +908,7 @@ export const astNodes: AstNode[] = [
     name: 'MagicConst',
     description: 'Magic constant (__LINE__, __FILE__, etc)',
     phpExample: `<?php\necho __LINE__;\necho __FILE__;\necho __DIR__;`,
-    keywordInExample: 'magic',
+    keywordInExample: '__LINE__',
     fieldHighlights: {
       kind: ['__LINE__', '__FILE__', '__DIR__']
     },
@@ -967,7 +973,7 @@ export const astNodes: AstNode[] = [
     name: 'Nowdoc',
     description: 'Nowdoc string (no interpolation)',
     phpExample: `<?php\n$str = <<<'EOT'\nLiteral $text\nEOT;`,
-    keywordInExample: 'nowdoc',
+    keywordInExample: 'EOT',
     fieldHighlights: {
       label: ['EOT'],
       value: ['Literal $text']
@@ -1044,7 +1050,7 @@ export const astNodes: AstNode[] = [
     name: 'Omit',
     description: 'Omitted array element (skipped slot)',
     phpExample: `<?php\n[$a, , $c];\nlist($x, , $z) = [1, 2, 3];`,
-    keywordInExample: 'omit',
+    keywordInExample: 'list',
     fields: []
   },
   {
@@ -1053,7 +1059,6 @@ export const astNodes: AstNode[] = [
     name: 'Parenthesized',
     description: 'Expression wrapped in parentheses',
     phpExample: `<?php\n$result = ($a + $b) * $c;\n$value = ($x);`,
-    keywordInExample: 'parens',
     fieldHighlights: {
       expr: ['$a + $b', '$x']
     },
@@ -1097,7 +1102,7 @@ export const astNodes: AstNode[] = [
     name: 'ShellExec',
     description: 'Shell execution (backticks)',
     phpExample: `<?php\n$output = \`ls -la\`;\necho \`date\`;`,
-    keywordInExample: 'shell',
+    keywordInExample: 'echo',
     fieldHighlights: {
       parts: ['ls -la', 'date']
     },
@@ -1150,11 +1155,11 @@ export const astNodes: AstNode[] = [
     keywordInExample: 'static',
     fieldHighlights: {
       class: ['MyClass'],
-      property: ['$property', '$count']
+      member: ['$property', '$count']
     },
     fields: [
       { name: 'class', type: 'Expr', description: 'Class name' },
-      { name: 'property', type: 'Expr', description: 'Property name' }
+      { name: 'member', type: 'Expr', description: 'Property name' }
     ]
   },
   {
@@ -1177,11 +1182,10 @@ export const astNodes: AstNode[] = [
     id: 'expr-string',
     category: 'expression',
     name: 'String',
-    description: 'String literal',
-    phpExample: `<?php\n$str = $hello;\n$str2 = $world;`,
-    keywordInExample: 'string',
+    description: 'String literal (single-quoted or non-interpolated double-quoted)',
+    phpExample: `<?php\n$str = 'hello world';\n$str2 = "goodbye";`,
     fieldHighlights: {
-      value: ['$str', '$str2']
+      value: ['hello world', 'goodbye']
     },
     fields: [
       { name: 'value', type: 'string', description: 'String content' }
@@ -1226,7 +1230,6 @@ export const astNodes: AstNode[] = [
     name: 'UnaryPostfix',
     description: 'Postfix unary operation',
     phpExample: `<?php\n$x++;\n$y--;`,
-    keywordInExample: 'postfix',
     fieldHighlights: {
       operand: ['$x', '$y'],
       op: ['$x++', '$y--']
@@ -1242,7 +1245,6 @@ export const astNodes: AstNode[] = [
     name: 'UnaryPrefix',
     description: 'Prefix unary operation',
     phpExample: `<?php\n$neg = -$x;\n$not = !$flag;\n$inc = ++$counter;`,
-    keywordInExample: 'unary',
     fieldHighlights: {
       op: ['-$x', '!$flag', '++$counter'],
       operand: ['$x', '$flag', '$counter']
@@ -1357,6 +1359,7 @@ export const astNodes: AstNode[] = [
       { name: 'is_static', type: 'bool', description: 'Is static' },
       { name: 'is_abstract', type: 'bool', description: 'Is abstract' },
       { name: 'is_final', type: 'bool', description: 'Is final' },
+      { name: 'by_ref', type: 'bool', description: 'Returns by reference (&method)' },
       { name: 'params', type: 'Vec<Param>', description: 'Parameters' },
       { name: 'return_type', type: 'Option<TypeHint>', description: 'Return type', optional: true },
       { name: 'body', type: 'Option<Vec<Stmt>>', description: 'Method body', optional: true }
@@ -1367,21 +1370,27 @@ export const astNodes: AstNode[] = [
     category: 'declaration',
     name: 'Param',
     description: 'Function/method parameter',
-    phpExample: `<?php\nfunction foo(string $name, int $age = 0, &$ref = null) {}`,
-    keywordInExample: 'param',
+    phpExample: `<?php\nfunction foo(string $name, int $age = 0, &$ref = null, ...$rest) {}`,
+    keywordInExample: 'function',
     fieldHighlights: {
-      name: ['$name', '$age', '$ref'],
+      name: ['$name', '$age', '$ref', '$rest'],
       type_hint: ['string', 'int'],
       default: ['0', 'null'],
       by_ref: ['&$ref'],
-      variadic: []
+      variadic: ['...$rest']
     },
     fields: [
       { name: 'name', type: 'Ident', description: 'Parameter name' },
       { name: 'type_hint', type: 'Option<TypeHint>', description: 'Type hint', optional: true },
       { name: 'default', type: 'Option<Expr>', description: 'Default value', optional: true },
       { name: 'by_ref', type: 'bool', description: 'Passed by reference' },
-      { name: 'variadic', type: 'bool', description: 'Variadic (...$args)' }
+      { name: 'variadic', type: 'bool', description: 'Variadic (...$args)' },
+      { name: 'visibility', type: 'Option<Visibility>', description: 'Constructor promotion visibility', optional: true },
+      { name: 'set_visibility', type: 'Option<Visibility>', description: 'Asymmetric set visibility (PHP 8.4+)', optional: true },
+      { name: 'is_readonly', type: 'bool', description: 'Readonly promoted property (PHP 8.1+)' },
+      { name: 'is_final', type: 'bool', description: 'Final promoted property (PHP 8.4+)' },
+      { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' },
+      { name: 'hooks', type: 'Vec<PropertyHook>', description: 'Property hooks on promoted parameter (PHP 8.4+)' }
     ]
   },
   {
@@ -1400,7 +1409,8 @@ export const astNodes: AstNode[] = [
     },
     fields: [
       { name: 'name', type: 'Ident', description: 'Property name' },
-      { name: 'visibility', type: 'Visibility', description: 'public/protected/private' },
+      { name: 'visibility', type: 'Option<Visibility>', description: 'public/protected/private', optional: true },
+      { name: 'set_visibility', type: 'Option<Visibility>', description: 'Asymmetric set visibility (PHP 8.4+)', optional: true },
       { name: 'is_static', type: 'bool', description: 'Is static' },
       { name: 'is_readonly', type: 'bool', description: 'Is readonly' },
       { name: 'type_hint', type: 'Option<TypeHint>', description: 'Type hint', optional: true },
@@ -1508,7 +1518,6 @@ export const astNodes: AstNode[] = [
     name: 'Arg',
     description: 'Function/method argument',
     phpExample: `<?php\nfoo($a, $b, name: $c, ...$spread);`,
-    keywordInExample: 'arg',
     fieldHighlights: {
       name: ['name'],
       value: ['$a', '$b', '$c', '$spread'],
@@ -1527,7 +1536,6 @@ export const astNodes: AstNode[] = [
     name: 'ArrayElement',
     description: 'A single element in an array literal',
     phpExample: `<?php\n[$val, $key => $val2, ...$spread];`,
-    keywordInExample: 'element',
     fieldHighlights: {
       key: ['$key'],
       value: ['$val', '$val2', '$spread'],
@@ -1628,7 +1636,7 @@ export const astNodes: AstNode[] = [
     name: 'MatchArm',
     description: 'A single arm in a match expression',
     phpExample: `<?php\nmatch($x) {\n  1, 2 => $small,\n  default => $other\n};`,
-    keywordInExample: 'arm',
+    keywordInExample: 'default',
     fieldHighlights: {
       conditions: ['1', '2'],
       body: ['$small', '$other']
@@ -1644,10 +1652,10 @@ export const astNodes: AstNode[] = [
     name: 'Name',
     description: 'Namespace-qualified name',
     phpExample: `<?php\nuse App\\Models\\User;\nclass Post extends BaseModel {}`,
-    keywordInExample: 'name',
+    keywordInExample: 'use',
     fieldHighlights: {
       parts: ['App\\\\Models\\\\User', 'BaseModel'],
-      kind: ['use', 'extends']
+      kind: ['Unqualified', 'Qualified', 'FullyQualified']
     },
     fields: [
       { name: 'parts', type: 'Vec<string>', description: 'Name parts (e.g., ["App", "Models", "User"])' },
@@ -1660,7 +1668,7 @@ export const astNodes: AstNode[] = [
     name: 'Program',
     description: 'Root AST node containing all top-level statements',
     phpExample: `<?php\n$x = 1;\necho $x;`,
-    keywordInExample: 'program',
+    keywordInExample: 'echo',
     fieldHighlights: {
       stmts: ['$x = 1', 'echo $x']
     },
@@ -1674,7 +1682,6 @@ export const astNodes: AstNode[] = [
     name: 'Span',
     description: 'Source code location (start and end byte offsets)',
     phpExample: `<?php\n// Every AST node has a Span indicating where in the source it appears`,
-    keywordInExample: 'span',
     fieldHighlights: {
       start: ['start'],
       end: ['end']
@@ -1706,7 +1713,7 @@ export const astNodes: AstNode[] = [
     name: 'StringPart',
     description: 'A part of an interpolated string (literal text or embedded expression)',
     phpExample: `<?php\n$name = $alice;\necho "Hello $name, you are {$age} old";`,
-    keywordInExample: 'part',
+    keywordInExample: 'echo',
     fieldHighlights: {
       kind: ['Hello ', '$name', '$age', ' old']
     },
