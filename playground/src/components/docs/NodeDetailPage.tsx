@@ -1,13 +1,15 @@
 import { useState } from 'react'
 import { astNodes } from '../../data/ast-nodes'
 import { NodeCard } from './NodeCard'
+import type { PhpVersion } from '../Toolbar'
 
 interface Props {
+  version: PhpVersion
   nodeId: string
   onVisualize: (code: string) => void
 }
 
-export function NodeDetailPage({ nodeId, onVisualize }: Props) {
+export function NodeDetailPage({ version, nodeId, onVisualize }: Props) {
   const node = astNodes.find(n => n.id === nodeId)
   const [copied, setCopied] = useState(false)
 

@@ -4,11 +4,12 @@ import { JsonTree, type TreeState } from './JsonTree'
 
 interface Props {
   output: ParseResult | null
+  onHighlight?: (span: { start: number; end: number } | null) => void
 }
 
 type Mode = 'default' | 'all-wrapped' | 'all-unwrapped'
 
-export function AstPane({ output }: Props) {
+export function AstPane({ output, onHighlight }: Props) {
   const [mode, setMode]           = useState<Mode>('default')
   const [exceptions, setExceptions] = useState<Set<string>>(new Set())
 
@@ -28,7 +29,8 @@ export function AstPane({ output }: Props) {
         return next
       })
     },
-  }), [mode, exceptions])
+    onHighlight,
+  }), [mode, exceptions, onHighlight])
 
   const wrapAll   = () => { setMode('all-wrapped');   setExceptions(new Set()) }
   const unwrapAll = () => { setMode('all-unwrapped'); setExceptions(new Set()) }

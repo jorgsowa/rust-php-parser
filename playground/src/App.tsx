@@ -131,6 +131,8 @@ export default function App() {
   const col2 = div2 - div1
   const col3 = 100 - div2
 
+  const [astHighlight, setAstHighlight] = useState<{ start: number; end: number } | null>(null)
+
   return (
     <div className="app">
       <Toolbar
@@ -142,13 +144,13 @@ export default function App() {
 
       <div className="workspace" ref={workspaceRef} style={{ display: route.page === 'playground' ? 'flex' : 'none' }}>
         <div className="pane" style={{ width: `${col1}%` }}>
-          <EditorPane ref={editorRef} initialValue={INITIAL_CODE} onChange={setCode} />
+          <EditorPane ref={editorRef} initialValue={INITIAL_CODE} onChange={setCode} highlight={astHighlight} />
         </div>
 
         <div className="divider" onMouseDown={onDiv1Down} role="separator" />
 
         <div className="pane" style={{ width: `${col2}%` }}>
-          <AstPane output={output} />
+          <AstPane output={output} onHighlight={setAstHighlight} />
         </div>
 
         <div className="divider" onMouseDown={onDiv2Down} role="separator" />
@@ -158,8 +160,8 @@ export default function App() {
         </div>
       </div>
 
-      {route.page === 'docs' && <DocsPage onVisualize={handleVisualize} />}
-      {route.page === 'docs-node' && <NodeDetailPage nodeId={route.nodeId} onVisualize={handleVisualize} />}
+      {route.page === 'docs' && <DocsPage version={version} onVisualize={handleVisualize} />}
+      {route.page === 'docs-node' && <NodeDetailPage version={version} nodeId={route.nodeId} onVisualize={handleVisualize} />}
 
       <div className="statusbar">
         <span className="statusbar-item">PHP {version}</span>

@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 export interface TreeState {
   isExpanded: (path: string, isSpan: boolean) => boolean
   onToggle: (path: string) => void
+  onHighlight?: (span: { start: number; end: number } | null) => void
 }
 
 type Line = { indent: number; content: ReactNode }
@@ -59,6 +60,7 @@ function buildLines(
   path: string,
   key?: string,
   comma?: boolean,
+  parentSpan?: { start: number; end: number },
 ): Line[] {
   const K = key != null
     ? <><span className="jt-key">{key}</span><span className="jt-punct">: </span></>
@@ -80,18 +82,20 @@ function buildLines(
   // Span objects — special collapsed form
   if (isSpanObj(value)) {
     const expanded = state.isExpanded(path, true)
+    const onMouseEnter = () => state.onHighlight?.(value)
+    const onMouseLeave = () => state.onHighlight?.(null)
     if (!expanded) {
       return [{
         indent,
         content: (
-          <>{K}<span className="jt-span" onClick={toggle} title="Unwrap span">
+          <>{K}<span className="jt-span" onClick={toggle} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} title="Unwrap span">
             span({value.start}..{value.end})
           </span>{C}</>
         ),
       }]
     }
     return [
-      { indent, content: <>{K}<span className="jt-span jt-span--on" onClick={toggle} title="Wrap span">▾ span</span><span className="jt-punct"> {'{'}</span></> },
+      { indent, content: <>{K}<span className="jt-span jt-span--on" onClick={toggle} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} title="Wrap span">▾ span</span><span className="jt-punct"> {'{'}</span></> },
       { indent: indent + 1, content: <><span className="jt-key">start</span><span className="jt-punct">: </span><span className="jt-num">{value.start}</span><span className="jt-punct">,</span></> },
       { indent: indent + 1, content: <><span className="jt-key">end</span><span className="jt-punct">: </span><span className="jt-num">{value.end}</span></> },
       { indent, content: <><span className="jt-punct">{'}'}</span>{C}</> },
@@ -115,7 +119,7 @@ function buildLines(
       content: <>{K}<Chevron label="" onClick={toggle} /><span className="jt-punct">[</span></>,
     }]
     value.forEach((item, i) => {
-      lines.push(...buildLines(item, indent + 1, state, `${path}.${i}`, undefined, i < value.length - 1))
+      lines.push(...buildLines(item, indent + 1, state, `${path}.${i}`, undefined, i < value.length - 1, parentSpan))
     })
     lines.push({ indent, content: <><span className="jt-punct">]</span>{C}</> })
     return lines
@@ -131,18 +135,28 @@ function buildLines(
   const expanded = state.isExpanded(path, false)
   const label = summary(obj)
 
+  // Extract span from this node if present
+  const nodeSpan = isSpanObj(obj.span) ? (obj.span as { start: number; end: number }) : undefined
+  const onNodeMouseEnter = nodeSpan ? () => state.onHighlight?.(nodeSpan) : undefined
+  const onNodeMouseLeave = nodeSpan ? () => state.onHighlight?.(null) : undefined
+
   if (!expanded) {
+    const content = nodeSpan
+      ? <span onMouseEnter={onNodeMouseEnter} onMouseLeave={onNodeMouseLeave}>{K}<Collapsed label={label} bracket="{ … }" onClick={toggle} />{C}</span>
+      : <>{K}<Collapsed label={label} bracket="{ … }" onClick={toggle} />{C}</>
     return [{
       indent,
-      content: <>{K}<Collapsed label={label} bracket="{ … }" onClick={toggle} />{C}</>,
+      content,
     }]
   }
   const lines: Line[] = [{
     indent,
-    content: <>{K}<Chevron label={label} onClick={toggle} /><span className="jt-punct"> {'{'}</span></>,
+    content: nodeSpan
+      ? <span onMouseEnter={onNodeMouseEnter} onMouseLeave={onNodeMouseLeave}>{K}<Chevron label={label} onClick={toggle} /><span className="jt-punct"> {'{'}</span></span>
+      : <>{K}<Chevron label={label} onClick={toggle} /><span className="jt-punct"> {'{'}</span></>,
   }]
   entries.forEach(([k, v], i) => {
-    lines.push(...buildLines(v, indent + 1, state, `${path}.${k}`, k, i < entries.length - 1))
+    lines.push(...buildLines(v, indent + 1, state, `${path}.${k}`, k, i < entries.length - 1, nodeSpan))
   })
   lines.push({ indent, content: <><span className="jt-punct">{'}'}</span>{C}</> })
   return lines

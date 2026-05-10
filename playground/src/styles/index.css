@@ -130,6 +130,7 @@ body::after {
   cursor: pointer;
   transition: color 0.15s, background 0.15s;
   border-radius: var(--radius);
+  text-decoration: none;
 }
 
 .nav-tab:hover {
@@ -257,6 +258,12 @@ body::after {
 }
 
 .editor-wrap .cm-editor { height: 100%; }
+
+.cm-highlight-span {
+  background: rgba(232, 148, 58, 0.3);
+  box-shadow: inset 0 0 0 1px rgba(232, 148, 58, 0.4);
+  border-radius: 2px;
+}
 
 /* ── Output panels ──────────────────────────────────────────────────────── */
 .panel {

@@ -1,8 +1,10 @@
 import { useState, useMemo } from 'react'
 import { astNodes, type AstNode } from '../../data/ast-nodes'
 import { NodeCard } from './NodeCard'
+import type { PhpVersion } from '../Toolbar'
 
 interface Props {
+  version: PhpVersion
   onVisualize: (code: string) => void
 }
 
@@ -16,12 +18,20 @@ const CATEGORY_LABELS: Record<Category, string> = {
   helper: 'Helpers'
 }
 
-export function DocsPage({ onVisualize }: Props) {
+export function DocsPage({ version, onVisualize }: Props) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
 
   const filteredNodes = useMemo(() => {
     let filtered = astNodes
+
+    // Filter by PHP version
+    filtered = filtered.filter(node => {
+      if (!node.phpVersion) return true
+      const nodeMinVersion = parseFloat(node.phpVersion)
+      const currentVersion = parseFloat(version)
+      return currentVersion >= nodeMinVersion
+    })
 
     if (selectedCategory) {
       filtered = filtered.filter(node => node.category === selectedCategory)
@@ -37,7 +47,7 @@ export function DocsPage({ onVisualize }: Props) {
     }
 
     return filtered
-  }, [searchTerm, selectedCategory])
+  }, [searchTerm, selectedCategory, version])
 
   const categories: Category[] = ['statement', 'expression', 'declaration', 'type', 'helper']
   const categoryCounts = useMemo(() => {
