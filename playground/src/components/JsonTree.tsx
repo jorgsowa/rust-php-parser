@@ -137,7 +137,7 @@ function buildLines(
     const [singleKey, singleValue] = entries[0]
     // Only unwrap if it's not a span object itself
     if (singleKey !== 'start' && singleKey !== 'end') {
-      return buildLines(singleValue, indent, state, `${path}.${singleKey}`, key, comma, parentSpan)
+      return buildLines(singleValue, indent, state, `${path}.${singleKey}`, undefined, comma, parentSpan)
     }
   }
 
