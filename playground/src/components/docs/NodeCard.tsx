@@ -4,9 +4,10 @@ import { type AstNode } from '../../data/ast-nodes'
 interface Props {
   node: AstNode
   onVisualize: (code: string) => void
+  nodeLink?: string
 }
 
-export function NodeCard({ node, onVisualize }: Props) {
+export function NodeCard({ node, onVisualize, nodeLink }: Props) {
   const [highlightedKeyword, setHighlightedKeyword] = useState<string | null>(null)
   const [showKeywordHighlight, setShowKeywordHighlight] = useState(false)
 
@@ -54,13 +55,25 @@ export function NodeCard({ node, onVisualize }: Props) {
   return (
     <div className="node-card">
       <div className="node-header">
-        <h3
-          className="node-name"
-          onMouseEnter={() => setShowKeywordHighlight(true)}
-          onMouseLeave={() => setShowKeywordHighlight(false)}
-        >
-          {node.name}
-        </h3>
+        {nodeLink ? (
+          <a
+            href={nodeLink}
+            className="node-name node-name-link"
+            onMouseEnter={() => setShowKeywordHighlight(true)}
+            onMouseLeave={() => setShowKeywordHighlight(false)}
+            title={`View ${node.name} details`}
+          >
+            {node.name}
+          </a>
+        ) : (
+          <h3
+            className="node-name"
+            onMouseEnter={() => setShowKeywordHighlight(true)}
+            onMouseLeave={() => setShowKeywordHighlight(false)}
+          >
+            {node.name}
+          </h3>
+        )}
         <div className="node-meta">
           {node.phpVersion && (
             <span className="node-version">{node.phpVersion}</span>

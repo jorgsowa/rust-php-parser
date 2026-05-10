@@ -863,6 +863,122 @@ body::after {
   text-decoration: none;
 }
 
+/* ── Node name link ──────────────────────────────────────────────────────── */
+.node-name-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s;
+}
+
+.node-name-link:hover {
+  color: var(--accent);
+}
+
+/* ── Docs detail page ────────────────────────────────────────────────────── */
+.page-docs-detail {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+.docs-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+}
+
+.docs-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  color: var(--text-2);
+  text-decoration: none;
+  border-radius: var(--radius);
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.docs-back-link:hover {
+  color: var(--text);
+  background: var(--bg-elevated);
+  border-color: var(--border);
+}
+
+.docs-copy-link-btn {
+  padding: 8px 12px;
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.docs-copy-link-btn:hover {
+  background: var(--accent-glow);
+  border-color: var(--accent);
+}
+
+.docs-detail-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.docs-detail-card {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.docs-detail-card .node-card {
+  border: none;
+  background: transparent;
+}
+
+.docs-detail-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-panel);
+}
+
+.docs-nav-prev,
+.docs-nav-next {
+  padding: 8px 12px;
+  color: var(--text-2);
+  text-decoration: none;
+  border-radius: var(--radius);
+  transition: all 0.2s;
+  border: 1px solid var(--border);
+}
+
+.docs-nav-prev:hover,
+.docs-nav-next:hover {
+  color: var(--text);
+  background: var(--bg-elevated);
+  border-color: var(--accent);
+}
+
+.docs-nav-prev {
+  margin-right: auto;
+}
+
+.docs-nav-next {
+  margin-left: auto;
+}
 
 /* ── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 720px) {

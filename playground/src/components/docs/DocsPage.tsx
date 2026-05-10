@@ -111,6 +111,7 @@ export function DocsPage({ onVisualize }: Props) {
                 key={node.id}
                 node={node}
                 onVisualize={onVisualize}
+                nodeLink={`#docs/${node.id}`}
               />
             ))}
           </div>

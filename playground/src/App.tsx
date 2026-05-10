@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { loadPhpWasm, type ParseResult } from './php_wasm'
+import { useRoute } from './router'
 import { Toolbar, type PhpVersion, type WasmStatus } from './components/Toolbar'
 import { EditorPane, type EditorHandle } from './components/EditorPane'
 import { AstPane } from './components/AstPane'
 import { FormattedPane } from './components/FormattedPane'
 import { DocsPage } from './components/docs/DocsPage'
+import { NodeDetailPage } from './components/docs/NodeDetailPage'
 
 const INITIAL_CODE = `<?php
 
@@ -42,8 +44,6 @@ enum Status: string {
 echo Status::Active->label();
 `
 
-type Page = 'playground' | 'docs'
-
 export default function App() {
   const [code, setCode]             = useState(INITIAL_CODE)
   const [version, setVersion]       = useState<PhpVersion>('8.4')
@@ -51,7 +51,7 @@ export default function App() {
   const [wasmStatus, setWasmStatus]       = useState<WasmStatus>('loading')
   const [parserVersion, setParserVersion] = useState<string>('')
   const [buildCommit, setBuildCommit]     = useState<string>('')
-  const [page, setPage]             = useState<Page>('playground')
+  const [route, navigate]           = useRoute()
 
   // Two dividers: left edge of divider 1 and divider 2, as % of workspace width
   const [div1, setDiv1] = useState(33)
@@ -122,8 +122,8 @@ export default function App() {
 
   const handleVisualize = useCallback((exampleCode: string) => {
     editorRef.current?.loadCode(exampleCode)
-    setPage('playground')
-  }, [])
+    navigate({ page: 'playground' })
+  }, [navigate])
 
   const errorCount = output?.errors.length ?? 0
 
@@ -137,11 +137,10 @@ export default function App() {
         version={version}
         onVersionChange={setVersion}
         wasmStatus={wasmStatus}
-        page={page}
-        onPageChange={setPage}
+        route={route}
       />
 
-      <div className="workspace" ref={workspaceRef} style={{ display: page === 'playground' ? 'flex' : 'none' }}>
+      <div className="workspace" ref={workspaceRef} style={{ display: route.page === 'playground' ? 'flex' : 'none' }}>
         <div className="pane" style={{ width: `${col1}%` }}>
           <EditorPane ref={editorRef} initialValue={INITIAL_CODE} onChange={setCode} />
         </div>
@@ -159,7 +158,8 @@ export default function App() {
         </div>
       </div>
 
-      {page === 'docs' && <DocsPage onVisualize={handleVisualize} />}
+      {route.page === 'docs' && <DocsPage onVisualize={handleVisualize} />}
+      {route.page === 'docs-node' && <NodeDetailPage nodeId={route.nodeId} onVisualize={handleVisualize} />}
 
       <div className="statusbar">
         <span className="statusbar-item">PHP {version}</span>
