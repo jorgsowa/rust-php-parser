@@ -1,30 +1,44 @@
 import { useState, useMemo } from 'react'
-import { astNodes, type AstNode } from '../../data/ast-nodes'
+import { astNodes } from '../../data/ast-nodes'
 import { NodeCard } from './NodeCard'
+import type { PhpVersion } from '../Toolbar'
 
 interface Props {
-  onVisualize: (code: string) => void
+  version: PhpVersion
 }
 
-type Category = 'statement' | 'expression' | 'declaration' | 'type' | 'helper'
+const SEMANTIC_GROUPS = [
+  'Control Flow',
+  'Define Code',
+  'Output/Communication',
+  'Variables & Values',
+  'Operations',
+  'Function/Method Calls',
+  'Class/Object Operations',
+  'Declarations',
+  'Types',
+  'Other Expressions',
+  'Components'
+]
 
-const CATEGORY_LABELS: Record<Category, string> = {
-  statement: 'Statements',
-  expression: 'Expressions',
-  declaration: 'Declarations',
-  type: 'Types',
-  helper: 'Helpers'
-}
-
-export function DocsPage({ onVisualize }: Props) {
+export function DocsPage({ version }: Props) {
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
+  const [selectedGroups, setSelectedGroups] = useState<Set<string>>(new Set())
 
   const filteredNodes = useMemo(() => {
     let filtered = astNodes
 
-    if (selectedCategory) {
-      filtered = filtered.filter(node => node.category === selectedCategory)
+    // Filter by PHP version
+    filtered = filtered.filter(node => {
+      if (!node.phpVersion) return true
+      const nodeMinVersion = parseFloat(node.phpVersion)
+      const currentVersion = parseFloat(version)
+      return currentVersion >= nodeMinVersion
+    })
+
+    // Filter by groups (if any selected, only show those; if none selected, show all)
+    if (selectedGroups.size > 0) {
+      filtered = filtered.filter(node => selectedGroups.has(node.group))
     }
 
     if (searchTerm.trim()) {
@@ -37,22 +51,26 @@ export function DocsPage({ onVisualize }: Props) {
     }
 
     return filtered
-  }, [searchTerm, selectedCategory])
+  }, [searchTerm, selectedGroups, version])
 
-  const categories: Category[] = ['statement', 'expression', 'declaration', 'type', 'helper']
-  const categoryCounts = useMemo(() => {
-    const counts: Record<Category, number> = {
-      statement: 0,
-      expression: 0,
-      declaration: 0,
-      type: 0,
-      helper: 0
-    }
+
+  const groupCounts = useMemo(() => {
+    const counts: Record<string, number> = {}
     astNodes.forEach(node => {
-      counts[node.category]++
+      counts[node.group] = (counts[node.group] || 0) + 1
     })
     return counts
   }, [])
+
+  const toggleGroup = (group: string) => {
+    const newGroups = new Set(selectedGroups)
+    if (newGroups.has(group)) {
+      newGroups.delete(group)
+    } else {
+      newGroups.add(group)
+    }
+    setSelectedGroups(newGroups)
+  }
 
   return (
     <div className="page-docs">
@@ -71,22 +89,26 @@ export function DocsPage({ onVisualize }: Props) {
           aria-label="Search AST nodes"
         />
 
-        <div className="docs-category-tabs">
-          <button
-            className={`category-tab ${selectedCategory === null ? 'active' : ''}`}
-            onClick={() => setSelectedCategory(null)}
-          >
-            All ({astNodes.length})
-          </button>
-          {categories.map(cat => (
+        <div className="docs-group-filters">
+          <div className="group-filter-label">Filter by group:</div>
+          <div className="group-filter-buttons">
             <button
-              key={cat}
-              className={`category-tab ${selectedCategory === cat ? 'active' : ''}`}
-              onClick={() => setSelectedCategory(cat)}
+              className={`group-filter-btn ${selectedGroups.size === 0 ? 'active' : ''}`}
+              onClick={() => setSelectedGroups(new Set())}
             >
-              {CATEGORY_LABELS[cat]} ({categoryCounts[cat]})
+              All ({astNodes.length})
             </button>
-          ))}
+            {SEMANTIC_GROUPS.map(group => (
+              <button
+                key={group}
+                className={`group-filter-btn ${selectedGroups.has(group) ? 'active' : ''}`}
+                onClick={() => toggleGroup(group)}
+                title={`${group} (${groupCounts[group] || 0})`}
+              >
+                {group} ({groupCounts[group] || 0})
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -98,7 +120,7 @@ export function DocsPage({ onVisualize }: Props) {
               className="docs-reset-btn"
               onClick={() => {
                 setSearchTerm('')
-                setSelectedCategory(null)
+                setSelectedGroups(new Set())
               }}
             >
               Clear filters
@@ -110,7 +132,6 @@ export function DocsPage({ onVisualize }: Props) {
               <NodeCard
                 key={node.id}
                 node={node}
-                onVisualize={onVisualize}
                 nodeLink={`#docs/${node.id}`}
               />
             ))}

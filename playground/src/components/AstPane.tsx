@@ -4,21 +4,18 @@ import { JsonTree, type TreeState } from './JsonTree'
 
 interface Props {
   output: ParseResult | null
+  onHighlight?: (span: { start: number; end: number } | null) => void
 }
 
-type Mode = 'default' | 'all-wrapped' | 'all-unwrapped'
+type Mode = 'expanded' | 'collapsed'
 
-export function AstPane({ output }: Props) {
-  const [mode, setMode]           = useState<Mode>('default')
-  const [exceptions, setExceptions] = useState<Set<string>>(new Set())
+export function AstPane({ output, onHighlight }: Props) {
+  const [mode, setMode]               = useState<Mode>('expanded')
+  const [exceptions, setExceptions]   = useState<Set<string>>(new Set())
 
   const state = useMemo<TreeState>(() => ({
-    isExpanded(path, isSpan) {
-      switch (mode) {
-        case 'default':      return isSpan ? exceptions.has(path) : !exceptions.has(path)
-        case 'all-wrapped':  return exceptions.has(path)
-        case 'all-unwrapped': return !exceptions.has(path)
-      }
+    isExpanded(path) {
+      return mode === 'expanded' ? !exceptions.has(path) : exceptions.has(path)
     },
     onToggle(path) {
       setExceptions(prev => {
@@ -28,21 +25,22 @@ export function AstPane({ output }: Props) {
         return next
       })
     },
-  }), [mode, exceptions])
+    onHighlight,
+  }), [mode, exceptions, onHighlight])
 
-  const wrapAll   = () => { setMode('all-wrapped');   setExceptions(new Set()) }
-  const unwrapAll = () => { setMode('all-unwrapped'); setExceptions(new Set()) }
+  const collapseAll = () => { setMode('collapsed'); setExceptions(new Set()) }
+  const expandAll   = () => { setMode('expanded');  setExceptions(new Set()) }
 
-  const wrapActive   = mode === 'all-wrapped'   && exceptions.size === 0
-  const unwrapActive = mode === 'all-unwrapped' && exceptions.size === 0
+  const collapseActive = mode === 'collapsed' && exceptions.size === 0
+  const expandActive   = mode === 'expanded'  && exceptions.size === 0
 
   return (
     <div className="panel">
       <div className="panel-header">
         <span>AST</span>
         <div className="panel-header-actions">
-          <button className={`jt-btn${wrapActive   ? ' jt-btn--active' : ''}`} onClick={wrapAll}>wrap all</button>
-          <button className={`jt-btn${unwrapActive ? ' jt-btn--active' : ''}`} onClick={unwrapAll}>unwrap all</button>
+          <button className={`jt-btn${collapseActive ? ' jt-btn--active' : ''}`} onClick={collapseAll}>wrap all</button>
+          <button className={`jt-btn${expandActive   ? ' jt-btn--active' : ''}`} onClick={expandAll}>unwrap all</button>
         </div>
       </div>
       <div className="panel-body">

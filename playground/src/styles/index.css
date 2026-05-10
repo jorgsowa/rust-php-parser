@@ -130,6 +130,7 @@ body::after {
   cursor: pointer;
   transition: color 0.15s, background 0.15s;
   border-radius: var(--radius);
+  text-decoration: none;
 }
 
 .nav-tab:hover {
@@ -209,9 +210,32 @@ body::after {
 /* ── Workspace ──────────────────────────────────────────────────────────── */
 .workspace {
   display: flex;
+  flex-direction: column;
   flex: 1;
   overflow: hidden;
   position: relative;
+}
+
+.workspace-panes {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.workspace-errors {
+  flex-shrink: 0;
+  border-top: 1px solid var(--border);
+  max-height: 40%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.workspace-error-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
 }
 
 .pane {
@@ -257,6 +281,12 @@ body::after {
 }
 
 .editor-wrap .cm-editor { height: 100%; }
+
+.cm-highlight-span {
+  background: rgba(232, 148, 58, 0.3);
+  box-shadow: inset 0 0 0 1px rgba(232, 148, 58, 0.4);
+  border-radius: 2px;
+}
 
 /* ── Output panels ──────────────────────────────────────────────────────── */
 .panel {
@@ -373,7 +403,7 @@ body::after {
 .jt-kw    { color: var(--accent); }
 .jt-null  { color: var(--text-3); }
 
-/* Collapsible tree node toggle (all compound nodes) */
+/* Collapsible tree node toggle (AST nodes and arrays only) */
 .jt-toggle {
   cursor: pointer;
   color: var(--text-2);
@@ -386,23 +416,23 @@ body::after {
 .jt-toggle--open { color: var(--text-3); }
 .jt-toggle--open:hover { color: var(--accent); }
 
-/* Span-specific collapsed style */
-.jt-span {
+/* Enum variant type label (always visible, never toggled) */
+.jt-variant {
   color: var(--accent);
-  cursor: pointer;
+}
+
+/* Span — always compact inline, hover shows source range highlight */
+.jt-span {
+  color: var(--text-2);
+  cursor: crosshair;
   user-select: none;
-  border-bottom: 1px dashed rgba(232, 148, 58, .45);
-  transition: color 0.1s, border-color 0.1s;
+  border-bottom: 1px dashed rgba(232, 148, 58, .4);
+  transition: color 0.1s, border-bottom-color 0.1s;
 }
 
 .jt-span:hover {
-  color: var(--text);
-  border-bottom-color: rgba(240, 230, 216, .45);
-}
-
-.jt-span--on {
   color: var(--accent);
-  border-bottom-style: solid;
+  border-bottom-color: rgba(232, 148, 58, .8);
 }
 
 /* Formatted / AST code output */
@@ -572,19 +602,33 @@ body::after {
   box-shadow: 0 0 0 2px var(--accent-dim);
 }
 
-.docs-category-tabs {
+.docs-group-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.group-filter-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-2);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.group-filter-buttons {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.category-tab {
+.group-filter-btn {
   appearance: none;
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   color: var(--text-3);
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   padding: 6px 12px;
   border-radius: var(--radius);
@@ -592,12 +636,12 @@ body::after {
   transition: all 0.12s;
 }
 
-.category-tab:hover {
+.group-filter-btn:hover {
   border-color: var(--accent-muted);
   color: var(--text);
 }
 
-.category-tab.active {
+.group-filter-btn.active {
   background: rgba(232, 148, 58, 0.15);
   border-color: rgba(232, 148, 58, 0.4);
   color: var(--accent);
@@ -645,7 +689,7 @@ body::after {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 0;
 }
 
 /* ── Node Card ──────────────────────────────────────────────────────────── */
@@ -665,6 +709,10 @@ body::after {
   background: linear-gradient(135deg, var(--bg-elevated) 0%, rgba(232, 148, 58, 0.02) 100%);
 }
 
+.node-card--clickable {
+  cursor: pointer;
+}
+
 .node-header {
   display: flex;
   align-items: flex-start;
@@ -679,12 +727,6 @@ body::after {
   color: var(--accent);
   margin: 0;
   line-height: 1.4;
-  cursor: pointer;
-  transition: opacity 0.15s;
-}
-
-.node-name:hover {
-  opacity: 0.8;
 }
 
 .node-meta {
@@ -708,26 +750,25 @@ body::after {
 
 .node-visualize-btn {
   appearance: none;
-  background: transparent;
-  border: 1px solid rgba(232, 148, 58, 0.3);
+  background: var(--accent-dim);
+  border: 1px solid var(--border);
   color: var(--accent);
-  font-size: 13px;
+  font-family: var(--font-mono);
+  font-size: 12px;
   font-weight: 600;
-  width: 28px;
-  height: 28px;
+  padding: 8px 12px;
   border-radius: var(--radius);
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  transition: all 0.12s;
-  flex-shrink: 0;
+  gap: 6px;
+  white-space: nowrap;
+  transition: all 0.2s;
 }
 
 .node-visualize-btn:hover {
-  background: rgba(232, 148, 58, 0.15);
+  background: var(--accent-glow);
   border-color: var(--accent);
-  transform: scale(1.05);
 }
 
 .node-description {
@@ -770,6 +811,41 @@ body::after {
   padding-top: 12px;
 }
 
+.node-keyword {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 8px;
+  background: rgba(232, 148, 58, 0.08);
+  border: 1px solid rgba(232, 148, 58, 0.2);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.node-keyword:hover {
+  background: rgba(232, 148, 58, 0.15);
+  border-color: rgba(232, 148, 58, 0.35);
+}
+
+.keyword-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.keyword-code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  background: transparent;
+  padding: 0;
+}
+
 .fields-title {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -796,14 +872,16 @@ body::after {
   align-items: baseline;
   gap: 6px;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
   padding: 4px;
   border-radius: var(--radius);
   margin: -4px;
+  border: 1px solid transparent;
 }
 
 .field-item:hover {
   background: rgba(232, 148, 58, 0.08);
+  border-color: rgba(232, 148, 58, 0.25);
 }
 
 .field-item:hover .field-name {
@@ -863,18 +941,6 @@ body::after {
   text-decoration: none;
 }
 
-/* ── Node name link ──────────────────────────────────────────────────────── */
-.node-name-link {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.2s;
-}
-
-.node-name-link:hover {
-  color: var(--accent);
-}
-
 /* ── Docs detail page ────────────────────────────────────────────────────── */
 .page-docs-detail {
   display: flex;
@@ -888,10 +954,28 @@ body::after {
 .docs-detail-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 16px 24px;
+  padding: 12px 24px;
   border-bottom: 1px solid var(--border);
   gap: 12px;
+  flex-wrap: wrap;
+}
+
+.docs-detail-nav-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.docs-nav-placeholder {
+  display: inline-block;
+}
+
+.docs-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
 }
 
 .docs-back-link {
@@ -946,23 +1030,24 @@ body::after {
   background: transparent;
 }
 
-.docs-detail-nav {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px 24px;
-  border-top: 1px solid var(--border);
-  background: var(--bg-panel);
+.docs-detail-card .example-code {
+  max-height: none;
+  overflow-y: visible;
 }
 
 .docs-nav-prev,
 .docs-nav-next {
-  padding: 8px 12px;
+  padding: 6px 10px;
   color: var(--text-2);
   text-decoration: none;
   border-radius: var(--radius);
   transition: all 0.2s;
   border: 1px solid var(--border);
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
 }
 
 .docs-nav-prev:hover,
@@ -970,14 +1055,6 @@ body::after {
   color: var(--text);
   background: var(--bg-elevated);
   border-color: var(--accent);
-}
-
-.docs-nav-prev {
-  margin-right: auto;
-}
-
-.docs-nav-next {
-  margin-left: auto;
 }
 
 /* ── Responsive ─────────────────────────────────────────────────────────── */
