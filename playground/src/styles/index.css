@@ -811,6 +811,41 @@ body::after {
   padding-top: 12px;
 }
 
+.node-keyword {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 8px;
+  background: rgba(232, 148, 58, 0.08);
+  border: 1px solid rgba(232, 148, 58, 0.2);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.node-keyword:hover {
+  background: rgba(232, 148, 58, 0.15);
+  border-color: rgba(232, 148, 58, 0.35);
+}
+
+.keyword-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.keyword-code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  background: transparent;
+  padding: 0;
+}
+
 .fields-title {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -837,14 +872,16 @@ body::after {
   align-items: baseline;
   gap: 6px;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
   padding: 4px;
   border-radius: var(--radius);
   margin: -4px;
+  border: 1px solid transparent;
 }
 
 .field-item:hover {
   background: rgba(232, 148, 58, 0.08);
+  border-color: rgba(232, 148, 58, 0.25);
 }
 
 .field-item:hover .field-name {
@@ -991,6 +1028,11 @@ body::after {
 .docs-detail-card .node-card {
   border: none;
   background: transparent;
+}
+
+.docs-detail-card .example-code {
+  max-height: none;
+  overflow-y: visible;
 }
 
 .docs-nav-prev,

@@ -59,7 +59,7 @@ export function NodeDetailPage({ nodeId, onVisualize }: Props) {
         <div className="docs-detail-actions">
           <button
             className="node-visualize-btn"
-            onClick={() => onVisualize(node.phpExample)}
+            onClick={() => onVisualize(`<?php\n${node.phpExample}`)}
             title="Load this example in the playground"
           >
             ▶ Try it
