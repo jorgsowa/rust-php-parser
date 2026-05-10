@@ -1,15 +1,12 @@
 import { useState } from 'react'
 import { astNodes } from '../../data/ast-nodes'
 import { NodeCard } from './NodeCard'
-import type { PhpVersion } from '../Toolbar'
-
 interface Props {
-  version: PhpVersion
   nodeId: string
   onVisualize: (code: string) => void
 }
 
-export function NodeDetailPage({ version, nodeId, onVisualize }: Props) {
+export function NodeDetailPage({ nodeId, onVisualize }: Props) {
   const node = astNodes.find(n => n.id === nodeId)
   const [copied, setCopied] = useState(false)
 
@@ -41,32 +38,46 @@ export function NodeDetailPage({ version, nodeId, onVisualize }: Props) {
     <div className="page-docs-detail">
       <div className="docs-detail-header">
         <a href="#docs" className="docs-back-link">← Back to docs</a>
-        <button
-          className="docs-copy-link-btn"
-          onClick={handleCopyLink}
-          title="Copy shareable link"
-        >
-          {copied ? '✓ Copied' : '🔗 Copy link'}
-        </button>
+
+        <div className="docs-detail-nav-inline">
+          {prevNode ? (
+            <a href={`#docs/${prevNode.id}`} className="docs-nav-prev">
+              ← {prevNode.name}
+            </a>
+          ) : (
+            <span className="docs-nav-placeholder" />
+          )}
+          {nextNode ? (
+            <a href={`#docs/${nextNode.id}`} className="docs-nav-next">
+              {nextNode.name} →
+            </a>
+          ) : (
+            <span className="docs-nav-placeholder" />
+          )}
+        </div>
+
+        <div className="docs-detail-actions">
+          <button
+            className="node-visualize-btn"
+            onClick={() => onVisualize(node.phpExample)}
+            title="Load this example in the playground"
+          >
+            ▶ Try it
+          </button>
+          <button
+            className="docs-copy-link-btn"
+            onClick={handleCopyLink}
+            title="Copy shareable link"
+          >
+            {copied ? '✓ Copied' : '🔗 Copy link'}
+          </button>
+        </div>
       </div>
 
       <div className="docs-detail-content">
         <div className="docs-detail-card">
-          <NodeCard node={node} onVisualize={onVisualize} />
+          <NodeCard node={node} />
         </div>
-      </div>
-
-      <div className="docs-detail-nav">
-        {prevNode && (
-          <a href={`#docs/${prevNode.id}`} className="docs-nav-prev">
-            ← {prevNode.name}
-          </a>
-        )}
-        {nextNode && (
-          <a href={`#docs/${nextNode.id}`} className="docs-nav-next">
-            {nextNode.name} →
-          </a>
-        )}
       </div>
     </div>
   )

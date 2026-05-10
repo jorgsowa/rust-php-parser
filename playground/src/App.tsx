@@ -160,8 +160,8 @@ export default function App() {
         </div>
       </div>
 
-      {route.page === 'docs' && <DocsPage version={version} onVisualize={handleVisualize} />}
-      {route.page === 'docs-node' && <NodeDetailPage version={version} nodeId={route.nodeId} onVisualize={handleVisualize} />}
+      {route.page === 'docs' && <DocsPage version={version} />}
+      {route.page === 'docs-node' && <NodeDetailPage nodeId={route.nodeId} onVisualize={handleVisualize} />}
 
       <div className="statusbar">
         <span className="statusbar-item">PHP {version}</span>

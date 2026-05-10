@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 
 export interface TreeState {
-  isExpanded: (path: string, isSpan: boolean) => boolean
+  isExpanded: (path: string) => boolean
   onToggle: (path: string) => void
   onHighlight?: (span: { start: number; end: number } | null) => void
 }
@@ -20,26 +20,30 @@ function isSpanObj(val: unknown): val is { start: number; end: number } {
   )
 }
 
-// Returns a short label for a collapsed compound value.
-function summary(value: unknown): string {
-  if (Array.isArray(value)) return String(value.length)
-  if (!value || typeof value !== 'object') return ''
-  const obj = value as Record<string, unknown>
-  const keys = Object.keys(obj)
-  // Single-key enum variant wrapper: { VariantName: … }
-  if (keys.length === 1) return keys[0]
-  // AST node: { kind: { VariantName: … }, span: … }
-  const kind = obj.kind
-  if (kind && typeof kind === 'object' && !Array.isArray(kind)) {
-    const kk = Object.keys(kind as object)
-    if (kk.length === 1) return kk[0]
-  }
-  return ''
+function isAstNode(val: unknown): val is Record<string, unknown> {
+  if (!val || typeof val !== 'object' || Array.isArray(val)) return false
+  const obj = val as Record<string, unknown>
+  // Require both a PascalCase-variant kind field AND a span — plain structs
+  // like Program { stmts, span } or Arg { ..., span } have no kind and must
+  // fall through to the plain-object path instead.
+  return getVariantInfo(obj.kind) !== null && isSpanObj(obj.span)
+}
+
+function isPascalCase(key: string): boolean {
+  const c = key.charCodeAt(0)
+  return c >= 65 && c <= 90
+}
+
+function getVariantInfo(kind: unknown): { name: string; data: unknown } | null {
+  if (!kind || typeof kind !== 'object' || Array.isArray(kind)) return null
+  const keys = Object.keys(kind as object)
+  if (keys.length !== 1 || !isPascalCase(keys[0])) return null
+  return { name: keys[0], data: (kind as Record<string, unknown>)[keys[0]] }
 }
 
 function Collapsed({ label, bracket, onClick }: { label: string; bracket: string; onClick: () => void }) {
   return (
-    <span className="jt-toggle" onClick={onClick} title="Unwrap">
+    <span className="jt-toggle" onClick={onClick} title="Expand">
       ▸{label ? ` ${label} ` : ' '}{bracket}
     </span>
   )
@@ -47,7 +51,7 @@ function Collapsed({ label, bracket, onClick }: { label: string; bracket: string
 
 function Chevron({ label, onClick }: { label: string; onClick: () => void }) {
   return (
-    <span className="jt-toggle jt-toggle--open" onClick={onClick} title="Wrap">
+    <span className="jt-toggle jt-toggle--open" onClick={onClick} title="Collapse">
       ▾{label ? ` ${label}` : ''}
     </span>
   )
@@ -60,12 +64,12 @@ function buildLines(
   path: string,
   key?: string,
   comma?: boolean,
-  parentSpan?: { start: number; end: number },
 ): Line[] {
   const K = key != null
     ? <><span className="jt-key">{key}</span><span className="jt-punct">: </span></>
     : null
   const C = comma ? <span className="jt-punct">,</span> : null
+  const toggle = () => state.onToggle(path)
 
   // Primitives
   if (value === null)
@@ -77,95 +81,157 @@ function buildLines(
   if (typeof value === 'string')
     return [{ indent, content: <>{K}<span className="jt-str">"{value}"</span>{C}</> }]
 
-  const toggle = () => state.onToggle(path)
-
-  // Span objects — special collapsed form
+  // Span — always compact inline with hover-to-highlight, no toggle
   if (isSpanObj(value)) {
-    const expanded = state.isExpanded(path, true)
-    const onMouseEnter = () => state.onHighlight?.(value)
-    const onMouseLeave = () => state.onHighlight?.(null)
-    if (!expanded) {
-      return [{
-        indent,
-        content: (
-          <>{K}<span className="jt-span" onClick={toggle} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} title="Unwrap span">
-            span({value.start}..{value.end})
-          </span>{C}</>
-        ),
-      }]
-    }
-    return [
-      { indent, content: <>{K}<span className="jt-span jt-span--on" onClick={toggle} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} title="Wrap span">▾ span</span><span className="jt-punct"> {'{'}</span></> },
-      { indent: indent + 1, content: <><span className="jt-key">start</span><span className="jt-punct">: </span><span className="jt-num">{value.start}</span><span className="jt-punct">,</span></> },
-      { indent: indent + 1, content: <><span className="jt-key">end</span><span className="jt-punct">: </span><span className="jt-num">{value.end}</span></> },
-      { indent, content: <><span className="jt-punct">{'}'}</span>{C}</> },
-    ]
+    const span = value
+    return [{
+      indent,
+      content: (
+        <>{K}<span
+          className="jt-span"
+          onMouseEnter={() => state.onHighlight?.(span)}
+          onMouseLeave={() => state.onHighlight?.(null)}
+        >{span.start}..{span.end}</span>{C}</>
+      ),
+    }]
   }
 
-  // Arrays
+  // Arrays — collapsible
   if (Array.isArray(value)) {
     if (value.length === 0)
       return [{ indent, content: <>{K}<span className="jt-punct">[]</span>{C}</> }]
-
-    const expanded = state.isExpanded(path, false)
+    const expanded = state.isExpanded(path)
     if (!expanded) {
       return [{
         indent,
-        content: <>{K}<Collapsed label={summary(value)} bracket={`[${value.length}]`} onClick={toggle} />{C}</>,
+        content: <>{K}<Collapsed label="" bracket={`[${value.length}]`} onClick={toggle} />{C}</>,
       }]
     }
-    const lines: Line[] = [{
-      indent,
-      content: <>{K}<Chevron label="" onClick={toggle} /><span className="jt-punct">[</span></>,
-    }]
+    const lines: Line[] = [{ indent, content: <>{K}<Chevron label="" onClick={toggle} /><span className="jt-punct">[</span></> }]
     value.forEach((item, i) => {
-      lines.push(...buildLines(item, indent + 1, state, `${path}.${i}`, undefined, i < value.length - 1, parentSpan))
+      lines.push(...buildLines(item, indent + 1, state, `${path}.${i}`, undefined, i < value.length - 1))
     })
     lines.push({ indent, content: <><span className="jt-punct">]</span>{C}</> })
     return lines
   }
 
-  // Objects
   const obj = value as Record<string, unknown>
   const entries = Object.entries(obj)
 
   if (entries.length === 0)
     return [{ indent, content: <>{K}<span className="jt-punct">{'{}'}</span>{C}</> }]
 
-  // For single-key enums (e.g., { "Function": {...} }), skip the key wrapper and show the value directly
-  if (entries.length === 1) {
-    const [singleKey, singleValue] = entries[0]
-    // Only unwrap if it's not a span object itself
-    if (singleKey !== 'start' && singleKey !== 'end') {
-      return buildLines(singleValue, indent, state, `${path}.${singleKey}`, undefined, comma, parentSpan)
+  // AST node: object with a span field — collapsible, flattens kind.Variant fields
+  if (isAstNode(obj)) {
+    const span = obj.span as { start: number; end: number }
+    const variant = getVariantInfo(obj.kind)
+    const label = variant?.name ?? ''
+    const expanded = state.isExpanded(path)
+    const onEnter = () => state.onHighlight?.(span)
+    const onLeave = () => state.onHighlight?.(null)
+
+    if (!expanded) {
+      return [{
+        indent,
+        content: (
+          <span onMouseEnter={onEnter} onMouseLeave={onLeave}>
+            {K}<Collapsed label={label} bracket="{ … }" onClick={toggle} />{C}
+          </span>
+        ),
+      }]
     }
-  }
 
-  const expanded = state.isExpanded(path, false)
-  const label = summary(obj)
-
-  // Extract span from this node if present
-  const nodeSpan = isSpanObj(obj.span) ? (obj.span as { start: number; end: number }) : undefined
-  const onNodeMouseEnter = nodeSpan ? () => state.onHighlight?.(nodeSpan) : undefined
-  const onNodeMouseLeave = nodeSpan ? () => state.onHighlight?.(null) : undefined
-
-  if (!expanded) {
-    const content = nodeSpan
-      ? <span onMouseEnter={onNodeMouseEnter} onMouseLeave={onNodeMouseLeave}>{K}<Collapsed label={label} bracket="{ … }" onClick={toggle} />{C}</span>
-      : <>{K}<Collapsed label={label} bracket="{ … }" onClick={toggle} />{C}</>
-    return [{
+    const lines: Line[] = [{
       indent,
-      content,
+      content: (
+        <span onMouseEnter={onEnter} onMouseLeave={onLeave}>
+          {K}<Chevron label={label} onClick={toggle} /><span className="jt-punct"> {'{'}</span>
+        </span>
+      ),
     }]
+
+    // variant is guaranteed non-null by isAstNode
+    const { name: varName, data } = variant!
+    if (data && typeof data === 'object' && !Array.isArray(data)) {
+      // Object variant: flatten its fields directly into the node body.
+      // Skip `span` — the outer node's span is always shown last and the
+      // variant data's span would create a confusing duplicate.
+      const variantEntries = Object.entries(data as Record<string, unknown>)
+        .filter(([k]) => k !== 'span')
+      variantEntries.forEach(([k, v], i) => {
+        const hasMore = i < variantEntries.length - 1
+        lines.push(...buildLines(v, indent + 1, state, `${path}.kind.${varName}.${k}`, k, hasMore || true))
+      })
+    } else if (data !== undefined && data !== null) {
+      // Primitive or array variant value — show without key, span follows
+      lines.push(...buildLines(data, indent + 1, state, `${path}.kind.${varName}`, undefined, true))
+    }
+    // Unit variant (no data): nothing between label and span
+
+    // Any extra outer fields besides kind and span (rare in practice)
+    entries.filter(([k]) => k !== 'kind' && k !== 'span').forEach(([k, v]) => {
+      lines.push(...buildLines(v, indent + 1, state, `${path}.${k}`, k, true))
+    })
+
+    // Span always last, no trailing comma
+    lines.push(...buildLines(span, indent + 1, state, `${path}.span`, 'span', false))
+    lines.push({ indent, content: <><span className="jt-punct">{'}'}</span>{C}</> })
+    return lines
   }
-  const lines: Line[] = [{
-    indent,
-    content: nodeSpan
-      ? <span onMouseEnter={onNodeMouseEnter} onMouseLeave={onNodeMouseLeave}>{K}<Chevron label={label} onClick={toggle} /><span className="jt-punct"> {'{'}</span></span>
-      : <>{K}<Chevron label={label} onClick={toggle} /><span className="jt-punct"> {'{'}</span></>,
-  }]
+
+  // Single-key PascalCase enum variant — always expanded, key shown as type label
+  if (entries.length === 1 && isPascalCase(entries[0][0])) {
+    const [variantName, variantVal] = entries[0]
+    const variantPath = `${path}.${variantName}`
+
+    if (variantVal === null || typeof variantVal !== 'object') {
+      // Primitive associated value: Variant("x")
+      let primContent: ReactNode = null
+      if (variantVal === null) primContent = <span className="jt-null">null</span>
+      else if (typeof variantVal === 'boolean') primContent = <span className="jt-kw">{String(variantVal)}</span>
+      else if (typeof variantVal === 'number') primContent = <span className="jt-num">{variantVal}</span>
+      else if (typeof variantVal === 'string') primContent = <span className="jt-str">"{variantVal}"</span>
+      return [{
+        indent,
+        content: <>{K}<span className="jt-variant">{variantName}</span><span className="jt-punct">(</span>{primContent}<span className="jt-punct">)</span>{C}</>,
+      }]
+    }
+
+    if (Array.isArray(variantVal)) {
+      if (variantVal.length === 0)
+        return [{ indent, content: <>{K}<span className="jt-variant">{variantName}</span><span className="jt-punct"> []</span>{C}</> }]
+      const expanded = state.isExpanded(variantPath)
+      const toggleV = () => state.onToggle(variantPath)
+      if (!expanded) {
+        return [{
+          indent,
+          content: <>{K}<span className="jt-variant">{variantName}</span>{' '}<Collapsed label="" bracket={`[${variantVal.length}]`} onClick={toggleV} />{C}</>,
+        }]
+      }
+      const lines: Line[] = [{ indent, content: <>{K}<span className="jt-variant">{variantName}</span>{' '}<Chevron label="" onClick={toggleV} /><span className="jt-punct">[</span></> }]
+      variantVal.forEach((item, i) => {
+        lines.push(...buildLines(item, indent + 1, state, `${variantPath}.${i}`, undefined, i < variantVal.length - 1))
+      })
+      lines.push({ indent, content: <><span className="jt-punct">]</span>{C}</> })
+      return lines
+    }
+
+    // Object associated value — always expanded
+    const variantEntries = Object.entries(variantVal as Record<string, unknown>)
+    if (variantEntries.length === 0)
+      return [{ indent, content: <>{K}<span className="jt-variant">{variantName}</span><span className="jt-punct"> {'{}'}</span>{C}</> }]
+    const lines: Line[] = [{ indent, content: <>{K}<span className="jt-variant">{variantName}</span><span className="jt-punct"> {'{'}</span></> }]
+    variantEntries.forEach(([k, v], i) => {
+      lines.push(...buildLines(v, indent + 1, state, `${variantPath}.${k}`, k, i < variantEntries.length - 1))
+    })
+    lines.push({ indent, content: <><span className="jt-punct">{'}'}</span>{C}</> })
+    return lines
+  }
+
+  // Plain object — always expanded, no toggle
+  const lines: Line[] = [{ indent, content: <>{K}<span className="jt-punct">{'{'}</span></> }]
   entries.forEach(([k, v], i) => {
-    lines.push(...buildLines(v, indent + 1, state, `${path}.${k}`, k, i < entries.length - 1, nodeSpan))
+    lines.push(...buildLines(v, indent + 1, state, `${path}.${k}`, k, i < entries.length - 1))
   })
   lines.push({ indent, content: <><span className="jt-punct">{'}'}</span>{C}</> })
   return lines

@@ -380,7 +380,7 @@ body::after {
 .jt-kw    { color: var(--accent); }
 .jt-null  { color: var(--text-3); }
 
-/* Collapsible tree node toggle (all compound nodes) */
+/* Collapsible tree node toggle (AST nodes and arrays only) */
 .jt-toggle {
   cursor: pointer;
   color: var(--text-2);
@@ -393,23 +393,23 @@ body::after {
 .jt-toggle--open { color: var(--text-3); }
 .jt-toggle--open:hover { color: var(--accent); }
 
-/* Span-specific collapsed style */
-.jt-span {
+/* Enum variant type label (always visible, never toggled) */
+.jt-variant {
   color: var(--accent);
-  cursor: pointer;
+}
+
+/* Span — always compact inline, hover shows source range highlight */
+.jt-span {
+  color: var(--text-2);
+  cursor: crosshair;
   user-select: none;
-  border-bottom: 1px dashed rgba(232, 148, 58, .45);
-  transition: color 0.1s, border-color 0.1s;
+  border-bottom: 1px dashed rgba(232, 148, 58, .4);
+  transition: color 0.1s, border-bottom-color 0.1s;
 }
 
 .jt-span:hover {
-  color: var(--text);
-  border-bottom-color: rgba(240, 230, 216, .45);
-}
-
-.jt-span--on {
   color: var(--accent);
-  border-bottom-style: solid;
+  border-bottom-color: rgba(232, 148, 58, .8);
 }
 
 /* Formatted / AST code output */
@@ -672,6 +672,10 @@ body::after {
   background: linear-gradient(135deg, var(--bg-elevated) 0%, rgba(232, 148, 58, 0.02) 100%);
 }
 
+.node-card--clickable {
+  cursor: pointer;
+}
+
 .node-header {
   display: flex;
   align-items: flex-start;
@@ -686,12 +690,6 @@ body::after {
   color: var(--accent);
   margin: 0;
   line-height: 1.4;
-  cursor: pointer;
-  transition: opacity 0.15s;
-}
-
-.node-name:hover {
-  opacity: 0.8;
 }
 
 .node-meta {
@@ -715,26 +713,25 @@ body::after {
 
 .node-visualize-btn {
   appearance: none;
-  background: transparent;
-  border: 1px solid rgba(232, 148, 58, 0.3);
+  background: var(--accent-dim);
+  border: 1px solid var(--border);
   color: var(--accent);
-  font-size: 13px;
+  font-family: var(--font-mono);
+  font-size: 12px;
   font-weight: 600;
-  width: 28px;
-  height: 28px;
+  padding: 8px 12px;
   border-radius: var(--radius);
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  transition: all 0.12s;
-  flex-shrink: 0;
+  gap: 6px;
+  white-space: nowrap;
+  transition: all 0.2s;
 }
 
 .node-visualize-btn:hover {
-  background: rgba(232, 148, 58, 0.15);
+  background: var(--accent-glow);
   border-color: var(--accent);
-  transform: scale(1.05);
 }
 
 .node-description {
@@ -870,18 +867,6 @@ body::after {
   text-decoration: none;
 }
 
-/* ── Node name link ──────────────────────────────────────────────────────── */
-.node-name-link {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.2s;
-}
-
-.node-name-link:hover {
-  color: var(--accent);
-}
-
 /* ── Docs detail page ────────────────────────────────────────────────────── */
 .page-docs-detail {
   display: flex;
@@ -895,10 +880,28 @@ body::after {
 .docs-detail-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 16px 24px;
+  padding: 12px 24px;
   border-bottom: 1px solid var(--border);
   gap: 12px;
+  flex-wrap: wrap;
+}
+
+.docs-detail-nav-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.docs-nav-placeholder {
+  display: inline-block;
+}
+
+.docs-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
 }
 
 .docs-back-link {
@@ -953,23 +956,19 @@ body::after {
   background: transparent;
 }
 
-.docs-detail-nav {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px 24px;
-  border-top: 1px solid var(--border);
-  background: var(--bg-panel);
-}
-
 .docs-nav-prev,
 .docs-nav-next {
-  padding: 8px 12px;
+  padding: 6px 10px;
   color: var(--text-2);
   text-decoration: none;
   border-radius: var(--radius);
   transition: all 0.2s;
   border: 1px solid var(--border);
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
 }
 
 .docs-nav-prev:hover,
@@ -977,14 +976,6 @@ body::after {
   color: var(--text);
   background: var(--bg-elevated);
   border-color: var(--accent);
-}
-
-.docs-nav-prev {
-  margin-right: auto;
-}
-
-.docs-nav-next {
-  margin-left: auto;
 }
 
 /* ── Responsive ─────────────────────────────────────────────────────────── */

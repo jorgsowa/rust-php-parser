@@ -3,16 +3,17 @@ import { type AstNode } from '../../data/ast-nodes'
 
 interface Props {
   node: AstNode
-  onVisualize: (code: string) => void
   nodeLink?: string
 }
 
-export function NodeCard({ node, onVisualize, nodeLink }: Props) {
+export function NodeCard({ node, nodeLink }: Props) {
   const [highlightedKeyword, setHighlightedKeyword] = useState<string | null>(null)
   const [showKeywordHighlight, setShowKeywordHighlight] = useState(false)
 
-  const handleVisualize = () => {
-    onVisualize(node.phpExample)
+  const handleCardClick = () => {
+    if (nodeLink) {
+      window.location.hash = nodeLink.replace(/^#/, '')
+    }
   }
 
   const renderExampleWithHighlight = () => {
@@ -53,39 +54,22 @@ export function NodeCard({ node, onVisualize, nodeLink }: Props) {
   }
 
   return (
-    <div className="node-card">
+    <div
+      className={`node-card${nodeLink ? ' node-card--clickable' : ''}`}
+      onClick={nodeLink ? handleCardClick : undefined}
+    >
       <div className="node-header">
-        {nodeLink ? (
-          <a
-            href={nodeLink}
-            className="node-name node-name-link"
-            onMouseEnter={() => setShowKeywordHighlight(true)}
-            onMouseLeave={() => setShowKeywordHighlight(false)}
-            title={`View ${node.name} details`}
-          >
-            {node.name}
-          </a>
-        ) : (
-          <h3
-            className="node-name"
-            onMouseEnter={() => setShowKeywordHighlight(true)}
-            onMouseLeave={() => setShowKeywordHighlight(false)}
-          >
-            {node.name}
-          </h3>
-        )}
+        <h3
+          className="node-name"
+          onMouseEnter={() => setShowKeywordHighlight(true)}
+          onMouseLeave={() => setShowKeywordHighlight(false)}
+        >
+          {node.name}
+        </h3>
         <div className="node-meta">
           {node.phpVersion && (
             <span className="node-version">{node.phpVersion}</span>
           )}
-          <button
-            className="node-visualize-btn"
-            onClick={handleVisualize}
-            title="Load this example in the playground"
-            aria-label={`Visualize ${node.name} in playground`}
-          >
-            ▶
-          </button>
         </div>
       </div>
 
@@ -103,8 +87,9 @@ export function NodeCard({ node, onVisualize, nodeLink }: Props) {
               <li
                 key={idx}
                 className="field-item"
-                onMouseEnter={() => setHighlightedKeyword(field.name)}
+                onMouseEnter={e => { e.stopPropagation(); setHighlightedKeyword(field.name) }}
                 onMouseLeave={() => setHighlightedKeyword(null)}
+                onClick={e => e.stopPropagation()}
               >
                 <span className="field-name">{field.name}</span>
                 <span className="field-type">{field.type}</span>

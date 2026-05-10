@@ -1,11 +1,10 @@
 import { useState, useMemo } from 'react'
-import { astNodes, type AstNode } from '../../data/ast-nodes'
+import { astNodes } from '../../data/ast-nodes'
 import { NodeCard } from './NodeCard'
 import type { PhpVersion } from '../Toolbar'
 
 interface Props {
   version: PhpVersion
-  onVisualize: (code: string) => void
 }
 
 type Category = 'statement' | 'expression' | 'declaration' | 'type' | 'helper'
@@ -18,7 +17,7 @@ const CATEGORY_LABELS: Record<Category, string> = {
   helper: 'Helpers'
 }
 
-export function DocsPage({ version, onVisualize }: Props) {
+export function DocsPage({ version }: Props) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
 
@@ -120,7 +119,6 @@ export function DocsPage({ version, onVisualize }: Props) {
               <NodeCard
                 key={node.id}
                 node={node}
-                onVisualize={onVisualize}
                 nodeLink={`#docs/${node.id}`}
               />
             ))}
