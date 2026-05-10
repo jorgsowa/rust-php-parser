@@ -291,9 +291,21 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                             i += 1;
                             while i < len && bytes[i] != quote {
                                 if bytes[i] == b'\\' {
-                                    i += 1; // skip escaped char
+                                    i += 1; // skip backslash
+                                            // Skip the escaped character, which may be multi-byte UTF-8
+                                    if i < len {
+                                        if bytes[i] < 0x80 {
+                                            i += 1;
+                                        } else {
+                                            i += 1; // skip first byte of multi-byte
+                                            while i < len && is_utf8_continuation(bytes[i]) {
+                                                i += 1;
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    i += 1;
                                 }
-                                i += 1;
                             }
                             if i < len {
                                 i += 1; // skip closing quote
@@ -690,6 +702,13 @@ fn decode_escape_at(
                                 span,
                             });
                         }
+                    } else {
+                        // hex value overflows u32 (e.g. \u{FFFFFFFFFFFFFFFF})
+                        errors.push(ParseError::Forbidden {
+                            message: "Invalid UTF-8 codepoint escape sequence: Codepoint too large"
+                                .into(),
+                            span,
+                        });
                     }
                 } else {
                     while j < len
@@ -726,8 +745,19 @@ fn decode_escape_at(
         }
         _ => {
             out.push('\\');
-            out.push(next as char);
-            i + 2
+            // The character after the backslash might be multi-byte UTF-8
+            if next < 0x80 {
+                out.push(next as char);
+                i + 2
+            } else {
+                // Read the entire multi-byte sequence and push it
+                let mut j = i + 2;
+                while j < len && is_utf8_continuation(bytes[j]) {
+                    j += 1;
+                }
+                out.push_str(&text[i + 1..j]);
+                j
+            }
         }
     }
 }
@@ -735,19 +765,28 @@ fn decode_escape_at(
 /// Check if a string inner content contains interpolation (unescaped $)
 pub fn has_interpolation(inner: &str) -> bool {
     let bytes = inner.as_bytes();
+    let len = bytes.len();
     let mut i = 0;
-    while i < bytes.len() {
+    while i < len {
         if bytes[i] == b'\\' {
-            i += 2; // skip escape
+            // Skip the backslash and the escaped character (which might be multi-byte)
+            i += 1;
+            if i < len {
+                if bytes[i] < 0x80 {
+                    i += 1;
+                } else {
+                    i += 1; // skip first byte of multi-byte
+                    while i < len && is_utf8_continuation(bytes[i]) {
+                        i += 1;
+                    }
+                }
+            }
             continue;
         }
-        if bytes[i] == b'$'
-            && i + 1 < bytes.len()
-            && (is_var_start(bytes[i + 1]) || bytes[i + 1] == b'{')
-        {
+        if bytes[i] == b'$' && i + 1 < len && (is_var_start(bytes[i + 1]) || bytes[i + 1] == b'{') {
             return true;
         }
-        if bytes[i] == b'{' && i + 1 < bytes.len() && bytes[i + 1] == b'$' {
+        if bytes[i] == b'{' && i + 1 < len && bytes[i + 1] == b'$' {
             return true;
         }
         i += 1;
