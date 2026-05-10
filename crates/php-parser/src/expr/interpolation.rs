@@ -748,11 +748,11 @@ pub fn process_heredoc_escapes(inner: &str) -> String {
 }
 
 fn is_var_start(b: u8) -> bool {
-    b.is_ascii_alphabetic() || b == b'_' || (0xC0..=0xF7).contains(&b)
+    b.is_ascii_alphabetic() || b == b'_' || (0xC2..=0xF4).contains(&b)
 }
 
 fn is_var_char(b: u8) -> bool {
-    b.is_ascii_alphanumeric() || b == b'_' || (0xC0..=0xF7).contains(&b)
+    b.is_ascii_alphanumeric() || b == b'_' || (0xC2..=0xF4).contains(&b)
 }
 
 fn is_utf8_continuation(b: u8) -> bool {
