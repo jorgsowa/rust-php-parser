@@ -7,19 +7,23 @@ interface Props {
   version: PhpVersion
 }
 
-type Category = 'statement' | 'expression' | 'declaration' | 'type' | 'helper'
-
-const CATEGORY_LABELS: Record<Category, string> = {
-  statement: 'Statements',
-  expression: 'Expressions',
-  declaration: 'Declarations',
-  type: 'Types',
-  helper: 'Helpers'
-}
+const SEMANTIC_GROUPS = [
+  'Control Flow',
+  'Define Code',
+  'Output/Communication',
+  'Variables & Values',
+  'Operations',
+  'Function/Method Calls',
+  'Class/Object Operations',
+  'Declarations',
+  'Types',
+  'Other Expressions',
+  'Helpers'
+]
 
 export function DocsPage({ version }: Props) {
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
+  const [selectedGroups, setSelectedGroups] = useState<Set<string>>(new Set())
 
   const filteredNodes = useMemo(() => {
     let filtered = astNodes
@@ -32,8 +36,9 @@ export function DocsPage({ version }: Props) {
       return currentVersion >= nodeMinVersion
     })
 
-    if (selectedCategory) {
-      filtered = filtered.filter(node => node.category === selectedCategory)
+    // Filter by groups (if any selected, only show those; if none selected, show all)
+    if (selectedGroups.size > 0) {
+      filtered = filtered.filter(node => selectedGroups.has(node.group))
     }
 
     if (searchTerm.trim()) {
@@ -46,22 +51,39 @@ export function DocsPage({ version }: Props) {
     }
 
     return filtered
-  }, [searchTerm, selectedCategory, version])
+  }, [searchTerm, selectedGroups, version])
 
-  const categories: Category[] = ['statement', 'expression', 'declaration', 'type', 'helper']
-  const categoryCounts = useMemo(() => {
-    const counts: Record<Category, number> = {
-      statement: 0,
-      expression: 0,
-      declaration: 0,
-      type: 0,
-      helper: 0
-    }
+  const groupedNodes = useMemo(() => {
+    const grouped: Record<string, typeof astNodes> = {}
+    filteredNodes.forEach(node => {
+      if (!grouped[node.group]) grouped[node.group] = []
+      grouped[node.group].push(node)
+    })
+    return grouped
+  }, [filteredNodes])
+
+  const groupCounts = useMemo(() => {
+    const counts: Record<string, number> = {}
     astNodes.forEach(node => {
-      counts[node.category]++
+      counts[node.group] = (counts[node.group] || 0) + 1
     })
     return counts
   }, [])
+
+  const toggleGroup = (group: string) => {
+    const newGroups = new Set(selectedGroups)
+    if (newGroups.has(group)) {
+      newGroups.delete(group)
+    } else {
+      newGroups.add(group)
+    }
+    setSelectedGroups(newGroups)
+  }
+
+  const clearFilters = () => {
+    setSearchTerm('')
+    setSelectedGroups(new Set())
+  }
 
   return (
     <div className="page-docs">
@@ -80,22 +102,25 @@ export function DocsPage({ version }: Props) {
           aria-label="Search AST nodes"
         />
 
-        <div className="docs-category-tabs">
-          <button
-            className={`category-tab ${selectedCategory === null ? 'active' : ''}`}
-            onClick={() => setSelectedCategory(null)}
-          >
-            All ({astNodes.length})
-          </button>
-          {categories.map(cat => (
-            <button
-              key={cat}
-              className={`category-tab ${selectedCategory === cat ? 'active' : ''}`}
-              onClick={() => setSelectedCategory(cat)}
-            >
-              {CATEGORY_LABELS[cat]} ({categoryCounts[cat]})
+        <div className="docs-group-filters">
+          <div className="group-filter-label">Filter by group:</div>
+          <div className="group-filter-buttons">
+            {SEMANTIC_GROUPS.map(group => (
+              <button
+                key={group}
+                className={`group-filter-btn ${selectedGroups.has(group) ? 'active' : ''}`}
+                onClick={() => toggleGroup(group)}
+                title={`${group} (${groupCounts[group] || 0})`}
+              >
+                {group} ({groupCounts[group] || 0})
+              </button>
+            ))}
+          </div>
+          {selectedGroups.size > 0 && (
+            <button className="docs-reset-filters-btn" onClick={clearFilters}>
+              Clear filters
             </button>
-          ))}
+          )}
         </div>
       </div>
 
@@ -103,25 +128,31 @@ export function DocsPage({ version }: Props) {
         {filteredNodes.length === 0 ? (
           <div className="docs-empty">
             <p>No nodes found matching your search.</p>
-            <button
-              className="docs-reset-btn"
-              onClick={() => {
-                setSearchTerm('')
-                setSelectedCategory(null)
-              }}
-            >
+            <button className="docs-reset-btn" onClick={clearFilters}>
               Clear filters
             </button>
           </div>
         ) : (
-          <div className="node-grid">
-            {filteredNodes.map(node => (
-              <NodeCard
-                key={node.id}
-                node={node}
-                nodeLink={`#docs/${node.id}`}
-              />
-            ))}
+          <div className="docs-grouped">
+            {SEMANTIC_GROUPS.map(groupName => {
+              const groupNodes = groupedNodes[groupName] || []
+              if (groupNodes.length === 0) return null
+
+              return (
+                <div key={groupName} className="docs-group-section">
+                  <h2 className="docs-group-title">{groupName}</h2>
+                  <div className="node-grid">
+                    {groupNodes.map(node => (
+                      <NodeCard
+                        key={node.id}
+                        node={node}
+                        nodeLink={`#docs/${node.id}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )
+            })}
           </div>
         )}
       </div>

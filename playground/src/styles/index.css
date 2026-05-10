@@ -602,19 +602,33 @@ body::after {
   box-shadow: 0 0 0 2px var(--accent-dim);
 }
 
-.docs-category-tabs {
+.docs-group-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.group-filter-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-2);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.group-filter-buttons {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.category-tab {
+.group-filter-btn {
   appearance: none;
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   color: var(--text-3);
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   padding: 6px 12px;
   border-radius: var(--radius);
@@ -622,15 +636,35 @@ body::after {
   transition: all 0.12s;
 }
 
-.category-tab:hover {
+.group-filter-btn:hover {
   border-color: var(--accent-muted);
   color: var(--text);
 }
 
-.category-tab.active {
+.group-filter-btn.active {
   background: rgba(232, 148, 58, 0.15);
   border-color: rgba(232, 148, 58, 0.4);
   color: var(--accent);
+}
+
+.docs-reset-filters-btn {
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.12s;
+  text-decoration: underline;
+  text-decoration-color: var(--text-3);
+  text-underline-offset: 3px;
+}
+
+.docs-reset-filters-btn:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
 }
 
 .docs-results {
@@ -671,11 +705,34 @@ body::after {
   border-color: var(--accent);
 }
 
+.docs-grouped {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.docs-group-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.docs-group-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--accent);
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: -0.01em;
+}
+
 .node-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 0;
 }
 
 /* ── Node Card ──────────────────────────────────────────────────────────── */
