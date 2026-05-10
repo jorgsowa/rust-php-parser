@@ -162,7 +162,7 @@ export default function App() {
           </div>
         </div>
 
-        {output?.errors && output.errors.length > 0 && (
+        {route.page === 'playground' && output?.errors && output.errors.length > 0 && (
           <div className="workspace-errors">
             <ErrorPanel output={output} variant="workspace" />
           </div>
