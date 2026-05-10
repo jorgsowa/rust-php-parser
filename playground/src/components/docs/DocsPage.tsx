@@ -53,14 +53,6 @@ export function DocsPage({ version }: Props) {
     return filtered
   }, [searchTerm, selectedGroups, version])
 
-  const groupedNodes = useMemo(() => {
-    const grouped: Record<string, typeof astNodes> = {}
-    filteredNodes.forEach(node => {
-      if (!grouped[node.group]) grouped[node.group] = []
-      grouped[node.group].push(node)
-    })
-    return grouped
-  }, [filteredNodes])
 
   const groupCounts = useMemo(() => {
     const counts: Record<string, number> = {}
@@ -133,26 +125,14 @@ export function DocsPage({ version }: Props) {
             </button>
           </div>
         ) : (
-          <div className="docs-grouped">
-            {SEMANTIC_GROUPS.map(groupName => {
-              const groupNodes = groupedNodes[groupName] || []
-              if (groupNodes.length === 0) return null
-
-              return (
-                <div key={groupName} className="docs-group-section">
-                  <h2 className="docs-group-title">{groupName}</h2>
-                  <div className="node-grid">
-                    {groupNodes.map(node => (
-                      <NodeCard
-                        key={node.id}
-                        node={node}
-                        nodeLink={`#docs/${node.id}`}
-                      />
-                    ))}
-                  </div>
-                </div>
-              )
-            })}
+          <div className="node-grid">
+            {filteredNodes.map(node => (
+              <NodeCard
+                key={node.id}
+                node={node}
+                nodeLink={`#docs/${node.id}`}
+              />
+            ))}
           </div>
         )}
       </div>

@@ -705,29 +705,6 @@ body::after {
   border-color: var(--accent);
 }
 
-.docs-grouped {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
-
-.docs-group-section {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.docs-group-title {
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 500;
-  color: var(--accent);
-  margin: 0;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-  letter-spacing: -0.01em;
-}
-
 .node-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
