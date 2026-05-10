@@ -90,6 +90,13 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                         }
                         let var_name: &'src str =
                             &source[base_offset as usize + name_start..base_offset as usize + i];
+                        if var_name.is_empty() {
+                            errors.push(ParseError::Forbidden {
+                                message: "empty variable name in '${...}' string interpolation"
+                                    .into(),
+                                span: Span::new(var_offset, base_offset + i as u32 + 1),
+                            });
+                        }
                         let mut expr = Expr {
                             kind: ExprKind::Variable(NameStr::Src(var_name)),
                             span: Span::new(
