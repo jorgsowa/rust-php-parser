@@ -49,24 +49,9 @@ export function FormattedPane({ output }: Props) {
 
   return (
     <div className="panel">
-      <div className="panel-header">
-        Formatted
-        {errors.length > 0 && (
-          <span className="panel-header-badge">{errors.length} error{errors.length !== 1 ? 's' : ''}</span>
-        )}
-      </div>
-      <div className="panel-body panel-body--split">
-        <div ref={wrapRef} className="panel-section panel-section--grow editor-wrap" />
-        {errors.length > 0 && (
-          <div className="panel-section panel-section--errors">
-            {errors.map((err, i) => (
-              <div key={i} className="err-item">
-                <div className="err-msg">{err.message}</div>
-                <div className="err-loc">offset {err.start}–{err.end}</div>
-              </div>
-            ))}
-          </div>
-        )}
+      <div className="panel-header">Formatted</div>
+      <div className="panel-body">
+        <div ref={wrapRef} className="editor-wrap" />
       </div>
     </div>
   )
