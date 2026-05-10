@@ -5,6 +5,7 @@ import { Toolbar, type PhpVersion, type WasmStatus } from './components/Toolbar'
 import { EditorPane, type EditorHandle } from './components/EditorPane'
 import { AstPane } from './components/AstPane'
 import { FormattedPane } from './components/FormattedPane'
+import { ErrorPanel } from './components/ErrorPanel'
 import { DocsPage } from './components/docs/DocsPage'
 import { NodeDetailPage } from './components/docs/NodeDetailPage'
 
@@ -143,21 +144,29 @@ export default function App() {
       />
 
       <div className="workspace" ref={workspaceRef} style={{ display: route.page === 'playground' ? 'flex' : 'none' }}>
-        <div className="pane" style={{ width: `${col1}%` }}>
-          <EditorPane ref={editorRef} initialValue={INITIAL_CODE} onChange={setCode} highlight={astHighlight} />
+        <div className="workspace-panes">
+          <div className="pane" style={{ width: `${col1}%` }}>
+            <EditorPane ref={editorRef} initialValue={INITIAL_CODE} onChange={setCode} highlight={astHighlight} />
+          </div>
+
+          <div className="divider" onMouseDown={onDiv1Down} role="separator" />
+
+          <div className="pane" style={{ width: `${col2}%` }}>
+            <AstPane output={output} onHighlight={setAstHighlight} />
+          </div>
+
+          <div className="divider" onMouseDown={onDiv2Down} role="separator" />
+
+          <div className="pane" style={{ width: `${col3}%` }}>
+            <FormattedPane output={output} />
+          </div>
         </div>
 
-        <div className="divider" onMouseDown={onDiv1Down} role="separator" />
-
-        <div className="pane" style={{ width: `${col2}%` }}>
-          <AstPane output={output} onHighlight={setAstHighlight} />
-        </div>
-
-        <div className="divider" onMouseDown={onDiv2Down} role="separator" />
-
-        <div className="pane" style={{ width: `${col3}%` }}>
-          <FormattedPane output={output} />
-        </div>
+        {output?.errors && output.errors.length > 0 && (
+          <div className="workspace-errors">
+            <ErrorPanel output={output} variant="workspace" />
+          </div>
+        )}
       </div>
 
       {route.page === 'docs' && <DocsPage version={version} />}

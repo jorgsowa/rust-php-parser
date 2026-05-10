@@ -210,9 +210,32 @@ body::after {
 /* ── Workspace ──────────────────────────────────────────────────────────── */
 .workspace {
   display: flex;
+  flex-direction: column;
   flex: 1;
   overflow: hidden;
   position: relative;
+}
+
+.workspace-panes {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.workspace-errors {
+  flex-shrink: 0;
+  border-top: 1px solid var(--border);
+  max-height: 40%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.workspace-error-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
 }
 
 .pane {
