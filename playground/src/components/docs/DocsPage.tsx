@@ -18,7 +18,7 @@ const SEMANTIC_GROUPS = [
   'Declarations',
   'Types',
   'Other Expressions',
-  'Helpers'
+  'Components'
 ]
 
 export function DocsPage({ version }: Props) {
@@ -72,11 +72,6 @@ export function DocsPage({ version }: Props) {
     setSelectedGroups(newGroups)
   }
 
-  const clearFilters = () => {
-    setSearchTerm('')
-    setSelectedGroups(new Set())
-  }
-
   return (
     <div className="page-docs">
       <div className="docs-header">
@@ -97,6 +92,12 @@ export function DocsPage({ version }: Props) {
         <div className="docs-group-filters">
           <div className="group-filter-label">Filter by group:</div>
           <div className="group-filter-buttons">
+            <button
+              className={`group-filter-btn ${selectedGroups.size === 0 ? 'active' : ''}`}
+              onClick={() => setSelectedGroups(new Set())}
+            >
+              All ({astNodes.length})
+            </button>
             {SEMANTIC_GROUPS.map(group => (
               <button
                 key={group}
@@ -108,11 +109,6 @@ export function DocsPage({ version }: Props) {
               </button>
             ))}
           </div>
-          {selectedGroups.size > 0 && (
-            <button className="docs-reset-filters-btn" onClick={clearFilters}>
-              Clear filters
-            </button>
-          )}
         </div>
       </div>
 
@@ -120,7 +116,13 @@ export function DocsPage({ version }: Props) {
         {filteredNodes.length === 0 ? (
           <div className="docs-empty">
             <p>No nodes found matching your search.</p>
-            <button className="docs-reset-btn" onClick={clearFilters}>
+            <button
+              className="docs-reset-btn"
+              onClick={() => {
+                setSearchTerm('')
+                setSelectedGroups(new Set())
+              }}
+            >
               Clear filters
             </button>
           </div>

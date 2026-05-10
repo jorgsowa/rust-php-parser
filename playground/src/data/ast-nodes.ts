@@ -1513,7 +1513,7 @@ export const astNodes: AstNode[] = [
   // ========== HELPERS ==========
   {
     id: 'helper-arg',
-    group: 'Helpers',
+    group: 'Components',
     name: 'Arg',
     description: 'Function/method argument',
     phpExample: `<?php\nfoo($a, $b, name: $c, ...$spread);`,
@@ -1531,7 +1531,7 @@ export const astNodes: AstNode[] = [
   },
   {
     id: 'helper-array-element',
-    group: 'Helpers',
+    group: 'Components',
     name: 'ArrayElement',
     description: 'A single element in an array literal',
     phpExample: `<?php\n[$val, $key => $val2, ...$spread];`,
@@ -1549,7 +1549,7 @@ export const astNodes: AstNode[] = [
   },
   {
     id: 'helper-attribute',
-    group: 'Helpers',
+    group: 'Components',
     name: 'Attribute',
     description: 'Attribute/annotation',
     phpExample: `<?php\n#[Route($path)]\n#[Deprecated($msg)]\nfunction handler() {}`,
@@ -1565,7 +1565,7 @@ export const astNodes: AstNode[] = [
   },
   {
     id: 'helper-catch-clause',
-    group: 'Helpers',
+    group: 'Components',
     name: 'CatchClause',
     description: 'A single catch in try-catch',
     phpExample: `<?php\ntry {\n  throw new RuntimeException();\n} catch (RuntimeException $e) {\n  echo $e;\n}`,
@@ -1583,7 +1583,7 @@ export const astNodes: AstNode[] = [
   },
   {
     id: 'helper-closure-use-var',
-    group: 'Helpers',
+    group: 'Components',
     name: 'ClosureUseVar',
     description: 'A variable captured by a closure',
     phpExample: `<?php\n$multiplier = 3;\n$fn = function($x) use ($multiplier) {\n  return $x * $multiplier;\n};`,
@@ -1598,7 +1598,7 @@ export const astNodes: AstNode[] = [
   },
   {
     id: 'helper-const-item',
-    group: 'Helpers',
+    group: 'Components',
     name: 'ConstItem',
     description: 'A single constant in a const statement',
     phpExample: `<?php\nconst MAX_SIZE = 100;\nconst DB_HOST = DB_DEFAULT_HOST;`,
@@ -1615,7 +1615,7 @@ export const astNodes: AstNode[] = [
   },
   {
     id: 'helper-elseif-branch',
-    group: 'Helpers',
+    group: 'Components',
     name: 'ElseIfBranch',
     description: 'A single elseif branch in an if statement',
     phpExample: `<?php\nif ($x == 1) {\n  echo $x;\n} elseif ($x == 2) {\n  echo 0;\n}`,
@@ -1631,7 +1631,7 @@ export const astNodes: AstNode[] = [
   },
   {
     id: 'helper-match-arm',
-    group: 'Helpers',
+    group: 'Components',
     name: 'MatchArm',
     description: 'A single arm in a match expression',
     phpExample: `<?php\nmatch($x) {\n  1, 2 => $small,\n  default => $other\n};`,
@@ -1647,7 +1647,7 @@ export const astNodes: AstNode[] = [
   },
   {
     id: 'helper-name',
-    group: 'Helpers',
+    group: 'Components',
     name: 'Name',
     description: 'Namespace-qualified name',
     phpExample: `<?php\nuse App\\Models\\User;\nclass Post extends BaseModel {}`,
@@ -1663,7 +1663,7 @@ export const astNodes: AstNode[] = [
   },
   {
     id: 'helper-program',
-    group: 'Helpers',
+    group: 'Components',
     name: 'Program',
     description: 'Root AST node containing all top-level statements',
     phpExample: `<?php\n$x = 1;\necho $x;`,
@@ -1677,7 +1677,7 @@ export const astNodes: AstNode[] = [
   },
   {
     id: 'helper-span',
-    group: 'Helpers',
+    group: 'Components',
     name: 'Span',
     description: 'Source code location (start and end byte offsets)',
     phpExample: `<?php\n// Every AST node has a Span indicating where in the source it appears`,
@@ -1692,7 +1692,7 @@ export const astNodes: AstNode[] = [
   },
   {
     id: 'helper-static-var',
-    group: 'Helpers',
+    group: 'Components',
     name: 'StaticVar',
     description: 'A single static variable declaration',
     phpExample: `<?php\nfunction counter() {\n  static $count = 0;\n  return ++$count;\n}`,
@@ -1708,7 +1708,7 @@ export const astNodes: AstNode[] = [
   },
   {
     id: 'helper-string-part',
-    group: 'Helpers',
+    group: 'Components',
     name: 'StringPart',
     description: 'A part of an interpolated string (literal text or embedded expression)',
     phpExample: `<?php\n$name = $alice;\necho "Hello $name, you are {$age} old";`,
@@ -1722,7 +1722,7 @@ export const astNodes: AstNode[] = [
   },
   {
     id: 'helper-switch-case',
-    group: 'Helpers',
+    group: 'Components',
     name: 'SwitchCase',
     description: 'A single case in a switch statement',
     phpExample: `<?php\nswitch ($x) {\n  case 1:\n    echo $x;\n    break;\n  default:\n    break;\n}`,
@@ -1738,7 +1738,7 @@ export const astNodes: AstNode[] = [
   },
   {
     id: 'helper-trait-use-decl',
-    group: 'Helpers',
+    group: 'Components',
     name: 'TraitUseDecl',
     description: 'use Trait; inside a class body',
     phpExample: `<?php\nclass MyClass {\n  use TraitA, TraitB {\n    TraitA::foo insteadof TraitB;\n  }\n}`,
@@ -1754,7 +1754,7 @@ export const astNodes: AstNode[] = [
   },
   {
     id: 'helper-use-item',
-    group: 'Helpers',
+    group: 'Components',
     name: 'UseItem',
     description: 'A single imported name in a use statement',
     phpExample: `<?php\nuse App\\Models\\User;\nuse App\\Http\\Controller as Ctrl;`,

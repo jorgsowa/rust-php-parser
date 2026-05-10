@@ -647,26 +647,6 @@ body::after {
   color: var(--accent);
 }
 
-.docs-reset-filters-btn {
-  appearance: none;
-  background: transparent;
-  border: none;
-  color: var(--text-3);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  padding: 0;
-  cursor: pointer;
-  transition: color 0.12s;
-  text-decoration: underline;
-  text-decoration-color: var(--text-3);
-  text-underline-offset: 3px;
-}
-
-.docs-reset-filters-btn:hover {
-  color: var(--accent);
-  text-decoration-color: var(--accent);
-}
-
 .docs-results {
   min-height: 200px;
 }
