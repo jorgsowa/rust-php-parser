@@ -455,6 +455,7 @@ export const astNodes: AstNode[] = [
   },
   {
     id: 'stmt-unset',
+    group: 'Control Flow',
     name: 'Unset',
     description: 'Unset variables',
     phpExample: `unset($a, $b, $arr[$key]);`,
