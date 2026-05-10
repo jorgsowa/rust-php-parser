@@ -1881,6 +1881,11 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             });
         }
         let prefix_parts = first_name.parts_slice();
+        // Track seen local names per UseKind — PHP allows e.g. `Normal D` and `Const D`
+        // to coexist, but rejects two `Normal D` items within the same group.
+        let mut seen_normal: std::collections::HashSet<&str> = std::collections::HashSet::new();
+        let mut seen_function: std::collections::HashSet<&str> = std::collections::HashSet::new();
+        let mut seen_const: std::collections::HashSet<&str> = std::collections::HashSet::new();
         loop {
             if parser.check(TokenKind::RightBrace) {
                 break;
@@ -1905,6 +1910,9 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                     span: sub_name.span(),
                 });
             }
+
+            // Save the last segment before sub_name is moved into combined_parts.
+            let sub_last_part = sub_name.parts_slice().last().copied().unwrap_or("");
 
             // Combine prefix with sub-name
             let combined_parts = {
@@ -1944,6 +1952,24 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             };
 
             let use_span = Span::new(sub_start, parser.previous_end());
+            let local_name = alias.unwrap_or(sub_last_part);
+            let effective_kind = item_kind.unwrap_or(kind);
+            let seen = match effective_kind {
+                UseKind::Normal => &mut seen_normal,
+                UseKind::Function => &mut seen_function,
+                UseKind::Const => &mut seen_const,
+            };
+            if !local_name.is_empty() && !seen.insert(local_name) {
+                parser.error(ParseError::Forbidden {
+                    message: format!(
+                        "cannot import {} as {} because the name is already in use",
+                        combined_name.parts_slice().join("\\"),
+                        local_name
+                    )
+                    .into(),
+                    span: use_span,
+                });
+            }
             uses.push(UseItem {
                 name: combined_name,
                 alias,
