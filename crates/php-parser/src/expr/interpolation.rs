@@ -337,9 +337,20 @@ pub fn parse_interpolated_parts<'arena, 'src>(
             _ => {
                 // Regular character — push to owned buffer only if we're already materialised.
                 if let Some(ref mut buf) = owned {
-                    buf.push(bytes[i] as char);
+                    if bytes[i] < 0x80 {
+                        buf.push(bytes[i] as char);
+                        i += 1;
+                    } else {
+                        let seq_start = i;
+                        i += 1;
+                        while i < len && is_utf8_continuation(bytes[i]) {
+                            i += 1;
+                        }
+                        buf.push_str(&inner[seq_start..i]);
+                    }
+                } else {
+                    i += 1;
                 }
-                i += 1;
             }
         }
     }
@@ -556,8 +567,17 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                 parts.push(StringPart::Expr(expr));
             }
             _ => {
-                literal.push(bytes[i] as char);
-                i += 1;
+                if bytes[i] < 0x80 {
+                    literal.push(bytes[i] as char);
+                    i += 1;
+                } else {
+                    let seq_start = i;
+                    i += 1;
+                    while i < len && is_utf8_continuation(bytes[i]) {
+                        i += 1;
+                    }
+                    literal.push_str(&raw_body[seq_start..i]);
+                }
             }
         }
     }
@@ -746,9 +766,16 @@ pub fn process_heredoc_escapes(inner: &str) -> String {
     while i < len {
         if bytes[i] == b'\\' {
             i = decode_escape_at(bytes, inner, i, &mut out, &mut errors, 0, false);
-        } else {
+        } else if bytes[i] < 0x80 {
             out.push(bytes[i] as char);
             i += 1;
+        } else {
+            let seq_start = i;
+            i += 1;
+            while i < len && is_utf8_continuation(bytes[i]) {
+                i += 1;
+            }
+            out.push_str(&inner[seq_start..i]);
         }
     }
     out

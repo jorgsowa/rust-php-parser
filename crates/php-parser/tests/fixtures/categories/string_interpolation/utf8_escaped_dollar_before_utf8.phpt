@@ -47,7 +47,7 @@ echo "Not a var: \$переменная is escaped";
         "Echo": [
           {
             "kind": {
-              "String": "Not a var: $Ð¿ÐµÑÐµÐ¼ÐµÐ½Ð½Ð°Ñ is escaped"
+              "String": "Not a var: $переменная is escaped"
             },
             "span": {
               "start": 44,
