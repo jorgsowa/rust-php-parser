@@ -135,6 +135,9 @@ function buildLines(
   const expanded = state.isExpanded(path, false)
   const label = summary(obj)
 
+  // Only show label if it's meaningful (more than one key or key is not "kind")
+  const showLabel = entries.length !== 1 || key !== 'kind'
+
   // Extract span from this node if present
   const nodeSpan = isSpanObj(obj.span) ? (obj.span as { start: number; end: number }) : undefined
   const onNodeMouseEnter = nodeSpan ? () => state.onHighlight?.(nodeSpan) : undefined
@@ -142,8 +145,8 @@ function buildLines(
 
   if (!expanded) {
     const content = nodeSpan
-      ? <span onMouseEnter={onNodeMouseEnter} onMouseLeave={onNodeMouseLeave}>{K}<Collapsed label={label} bracket="{ … }" onClick={toggle} />{C}</span>
-      : <>{K}<Collapsed label={label} bracket="{ … }" onClick={toggle} />{C}</>
+      ? <span onMouseEnter={onNodeMouseEnter} onMouseLeave={onNodeMouseLeave}>{K}<Collapsed label={showLabel ? label : ''} bracket="{ … }" onClick={toggle} />{C}</span>
+      : <>{K}<Collapsed label={showLabel ? label : ''} bracket="{ … }" onClick={toggle} />{C}</>
     return [{
       indent,
       content,
@@ -152,8 +155,8 @@ function buildLines(
   const lines: Line[] = [{
     indent,
     content: nodeSpan
-      ? <span onMouseEnter={onNodeMouseEnter} onMouseLeave={onNodeMouseLeave}>{K}<Chevron label={label} onClick={toggle} /><span className="jt-punct"> {'{'}</span></span>
-      : <>{K}<Chevron label={label} onClick={toggle} /><span className="jt-punct"> {'{'}</span></>,
+      ? <span onMouseEnter={onNodeMouseEnter} onMouseLeave={onNodeMouseLeave}>{K}<Chevron label={showLabel ? label : ''} onClick={toggle} /><span className="jt-punct"> {'{'}</span></span>
+      : <>{K}<Chevron label={showLabel ? label : ''} onClick={toggle} /><span className="jt-punct"> {'{'}</span></>,
   }]
   entries.forEach(([k, v], i) => {
     lines.push(...buildLines(v, indent + 1, state, `${path}.${k}`, k, i < entries.length - 1, nodeSpan))
