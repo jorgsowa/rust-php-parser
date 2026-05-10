@@ -4,8 +4,14 @@ use crate::Span;
 
 use super::{is_false, ArenaVec, Arg, Attribute, ClassDecl, Param, Stmt, TypeHint};
 
-/// A name string that originates either from the source buffer (`&'src str`) or was
-/// constructed in the arena (`&'arena str`).
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
+enum NameStrInner<'arena, 'src> {
+    Src(&'src str),
+    Arena(&'arena str),
+}
+
+/// A name string from either the source buffer or the bump arena. Use [`as_str`](NameStr::as_str)
+/// or `Deref` to get the string value — the allocation origin is an internal parser detail.
 ///
 /// Using this as the payload for both `ExprKind::Variable` and `ExprKind::Identifier`
 /// gives them the same binding type, so or-patterns compile natively:
@@ -19,19 +25,38 @@ use super::{is_false, ArenaVec, Arg, Attribute, ClassDecl, Param, Stmt, TypeHint
 /// # }
 /// ```
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
-pub enum NameStr<'arena, 'src> {
-    /// Borrowed directly from the source buffer.
-    Src(&'src str),
-    /// Allocated in the bump arena (e.g. a joined qualified name).
-    Arena(&'arena str),
-}
+pub struct NameStr<'arena, 'src>(NameStrInner<'arena, 'src>);
 
 impl<'arena, 'src> NameStr<'arena, 'src> {
+    /// Borrowed directly from the source buffer.
+    #[doc(hidden)]
+    #[inline]
+    pub fn __src(s: &'src str) -> Self {
+        Self(NameStrInner::Src(s))
+    }
+
+    /// Allocated in the bump arena (e.g. a joined qualified name or a keyword).
+    #[doc(hidden)]
+    #[inline]
+    pub fn __arena(s: &'arena str) -> Self {
+        Self(NameStrInner::Arena(s))
+    }
+
+    /// Returns the arena slice if this value was arena-allocated, otherwise `None`.
+    /// Used internally to avoid re-allocating strings already in the arena.
+    #[doc(hidden)]
+    #[inline]
+    pub fn __into_arena_str(self) -> Option<&'arena str> {
+        match self.0 {
+            NameStrInner::Arena(s) => Some(s),
+            NameStrInner::Src(_) => None,
+        }
+    }
+
     #[inline]
     pub fn as_str(&self) -> &str {
-        match self {
-            NameStr::Src(s) => s,
-            NameStr::Arena(s) => s,
+        match self.0 {
+            NameStrInner::Src(s) | NameStrInner::Arena(s) => s,
         }
     }
 }
