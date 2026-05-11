@@ -10,18 +10,16 @@
   "description": null,
   "tags": [
     {
-      "kind": {
-        "TypeAlias": {
-          "name": "UserId",
-          "ty": {
-            "kind": {
-              "Named": "positive-int"
-            },
-            "span": {
-              "start": 28,
-              "end": 40
-            }
+      "name": "psalm-type",
+      "body": {
+        "segments": [
+          {
+            "Text": "UserId = positive-int"
           }
+        ],
+        "span": {
+          "start": 19,
+          "end": 40
         }
       },
       "span": {
@@ -30,9 +28,16 @@
       }
     },
     {
-      "kind": {
-        "Suppress": {
-          "rules": "InvalidReturnType"
+      "name": "psalm-suppress",
+      "body": {
+        "segments": [
+          {
+            "Text": "InvalidReturnType"
+          }
+        ],
+        "span": {
+          "start": 60,
+          "end": 77
         }
       },
       "span": {
@@ -41,11 +46,8 @@
       }
     },
     {
-      "kind": {
-        "Suppress": {
-          "rules": ""
-        }
-      },
+      "name": "phpstan-ignore-next-line",
+      "body": null,
       "span": {
         "start": 81,
         "end": 108

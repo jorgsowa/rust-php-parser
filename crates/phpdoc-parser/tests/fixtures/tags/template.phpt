@@ -9,18 +9,16 @@
   "description": null,
   "tags": [
     {
-      "kind": {
-        "Template": {
-          "name": "T",
-          "bound": {
-            "kind": {
-              "Named": "\\Countable"
-            },
-            "span": {
-              "start": 22,
-              "end": 32
-            }
+      "name": "template",
+      "body": {
+        "segments": [
+          {
+            "Text": "T of \\Countable"
           }
+        ],
+        "span": {
+          "start": 17,
+          "end": 32
         }
       },
       "span": {
@@ -29,10 +27,16 @@
       }
     },
     {
-      "kind": {
-        "TemplateCovariant": {
-          "name": "U",
-          "bound": null
+      "name": "template-covariant",
+      "body": {
+        "segments": [
+          {
+            "Text": "U"
+          }
+        ],
+        "span": {
+          "start": 56,
+          "end": 57
         }
       },
       "span": {

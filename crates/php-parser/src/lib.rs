@@ -50,7 +50,7 @@ pub mod diagnostics;
 pub(crate) mod expr;
 pub mod instrument;
 pub(crate) mod parser;
-pub use php_phpdoc as phpdoc;
+pub use phpdoc_parser as phpdoc;
 pub(crate) mod precedence;
 pub mod source_map;
 pub(crate) mod stmt;
