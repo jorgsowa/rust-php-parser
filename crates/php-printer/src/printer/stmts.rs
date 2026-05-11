@@ -18,14 +18,14 @@ impl<'src> Printer<'src> {
 
     fn print_stmt_inner(&mut self, stmt: &Stmt) {
         // Re-enter PHP mode lazily: emit <?php before the first PHP statement after HTML.
-        if self.in_html_mode && !matches!(&stmt.kind, StmtKind::InlineHtml(_)) {
+        let is_inline_html = matches!(&stmt.kind, StmtKind::InlineHtml(_));
+        if self.in_html_mode && !is_inline_html {
             self.w("<?php");
             self.newline();
             self.write_indent();
             self.in_html_mode = false;
-            self.has_php_content = false;
-        }
-        if !matches!(&stmt.kind, StmtKind::InlineHtml(_)) {
+            self.has_php_content = true;
+        } else if !is_inline_html {
             self.has_php_content = true;
         }
         match &stmt.kind {
@@ -50,8 +50,7 @@ impl<'src> Printer<'src> {
                 self.w("{");
                 if !stmts.is_empty() {
                     self.newline();
-                    self.print_stmts(stmts, true);
-                    self.ensure_php_mode();
+                    self.print_stmts_ensure_php(stmts, true);
                     self.newline();
                     self.write_indent();
                 } else {
@@ -67,7 +66,6 @@ impl<'src> Printer<'src> {
                     self.w("):");
                     self.print_alt_section(w.body);
                     self.w("endwhile;");
-                    self.has_php_content = true;
                 } else {
                     self.w(") ");
                     self.print_block_or_stmt(w.body);
@@ -84,7 +82,6 @@ impl<'src> Printer<'src> {
                     self.w("):");
                     self.print_alt_section(f.body);
                     self.w("endfor;");
-                    self.has_php_content = true;
                 } else {
                     self.w(") ");
                     self.print_block_or_stmt(f.body);
@@ -103,7 +100,6 @@ impl<'src> Printer<'src> {
                     self.w("):");
                     self.print_alt_section(f.body);
                     self.w("endforeach;");
-                    self.has_php_content = true;
                 } else {
                     self.w(") ");
                     self.print_block_or_stmt(f.body);
@@ -166,7 +162,6 @@ impl<'src> Printer<'src> {
                 self.write_indent();
                 if sw.uses_alternative {
                     self.w("endswitch;");
-                    self.has_php_content = true;
                 } else {
                     self.w("}");
                 }
@@ -196,7 +191,6 @@ impl<'src> Printer<'src> {
                         self.w(":");
                         self.print_alt_section(body);
                         self.w("enddeclare;");
-                        self.has_php_content = true;
                     }
                     (Some(body), false) => {
                         self.w(" ");
@@ -281,6 +275,11 @@ impl<'src> Printer<'src> {
         }
     }
 
+    pub(crate) fn print_stmts_ensure_php(&mut self, stmts: &[Stmt], indent: bool) {
+        self.print_stmts(stmts, indent);
+        self.ensure_php_mode();
+    }
+
     fn print_if(&mut self, if_stmt: &IfStmt) {
         if if_stmt.uses_alternative {
             self.w("if (");
@@ -298,7 +297,6 @@ impl<'src> Printer<'src> {
                 self.print_alt_section(else_branch);
             }
             self.w("endif;");
-            self.has_php_content = true;
         } else {
             self.w("if (");
             self.print_expr(&if_stmt.condition, PREC_LOWEST);
@@ -323,13 +321,9 @@ impl<'src> Printer<'src> {
         if let StmtKind::Block(stmts) = &body.kind {
             self.newline();
             self.indent();
-            self.print_stmts(stmts, false);
-            // If the body ended in HTML mode, re-enter PHP inline (same line as last HTML)
+            // If the body ends in HTML mode, re-enter PHP inline (same line as last HTML)
             // so the caller's closing keyword (endif, endforeach, etc.) is valid PHP.
-            if self.in_html_mode {
-                self.w("<?php");
-                self.in_html_mode = false;
-            }
+            self.print_stmts_ensure_php(stmts, false);
             self.newline();
             self.dedent();
             self.write_indent();
@@ -346,8 +340,7 @@ impl<'src> Printer<'src> {
         if !tc.body.is_empty() {
             self.newline();
             self.indent();
-            self.print_stmts(&tc.body, false);
-            self.ensure_php_mode();
+            self.print_stmts_ensure_php(&tc.body, false);
             self.newline();
             self.flush_leading_comments(try_end);
             self.dedent();
@@ -372,8 +365,7 @@ impl<'src> Printer<'src> {
             if !catch.body.is_empty() {
                 self.newline();
                 self.indent();
-                self.print_stmts(&catch.body, false);
-                self.ensure_php_mode();
+                self.print_stmts_ensure_php(&catch.body, false);
                 self.newline();
                 self.flush_leading_comments(catch.span.end);
                 self.dedent();
@@ -388,8 +380,7 @@ impl<'src> Printer<'src> {
             if !finally.is_empty() {
                 self.newline();
                 self.indent();
-                self.print_stmts(finally, false);
-                self.ensure_php_mode();
+                self.print_stmts_ensure_php(finally, false);
                 self.newline();
                 self.flush_leading_comments(stmt.span.end);
                 self.dedent();
@@ -407,8 +398,7 @@ impl<'src> Printer<'src> {
             if !stmts.is_empty() {
                 self.newline();
                 self.indent();
-                self.print_stmts(stmts, false);
-                self.ensure_php_mode();
+                self.print_stmts_ensure_php(stmts, false);
                 self.newline();
                 self.flush_leading_comments(stmt.span.end);
                 self.dedent();

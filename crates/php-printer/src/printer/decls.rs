@@ -26,8 +26,7 @@ impl<'src> Printer<'src> {
         self.w("{");
         if !func.body.is_empty() {
             self.newline();
-            self.print_stmts(&func.body, true);
-            self.ensure_php_mode();
+            self.print_stmts_ensure_php(&func.body, true);
             self.newline();
             self.flush_leading_comments(stmt.span.end);
             self.write_indent();
@@ -177,8 +176,7 @@ impl<'src> Printer<'src> {
             self.w("{");
             if !body.is_empty() {
                 self.newline();
-                self.print_stmts(body, true);
-                self.ensure_php_mode();
+                self.print_stmts_ensure_php(body, true);
                 self.newline();
                 self.flush_leading_comments(span_end);
                 self.write_indent();
@@ -251,8 +249,7 @@ impl<'src> Printer<'src> {
                     self.w(" {");
                     if !stmts.is_empty() {
                         self.newline();
-                        self.print_stmts(stmts, true);
-                        self.ensure_php_mode();
+                        self.print_stmts_ensure_php(stmts, true);
                         self.newline();
                         self.write_indent();
                     }
