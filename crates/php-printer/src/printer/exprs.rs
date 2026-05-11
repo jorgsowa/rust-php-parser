@@ -407,6 +407,7 @@ impl<'src> Printer<'src> {
         if !closure.body.is_empty() {
             self.newline();
             self.print_stmts(&closure.body, true);
+            self.ensure_php_mode();
             self.newline();
             self.write_indent();
         }

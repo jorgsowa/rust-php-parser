@@ -7,4 +7,4 @@ foreach ($items as $item):
     echo $item;
     ?></li><?php
 endforeach;
-?></ul><?php
+?></ul>

@@ -28,8 +28,8 @@ pub fn pretty_print(program: &Program) -> String {
 /// the HTML is emitted as-is — no `<?php` header is prepended.
 pub fn pretty_print_file(program: &Program) -> String {
     let starts_with_html = matches!(
-        program.stmts.first().map(|s| &s.kind),
-        Some(php_ast::ast::StmtKind::InlineHtml(_))
+        program.stmts.first().map(|s| (s.span.start, &s.kind)),
+        Some((0, php_ast::ast::StmtKind::InlineHtml(_)))
     );
     let body = pretty_print(program);
     if starts_with_html {

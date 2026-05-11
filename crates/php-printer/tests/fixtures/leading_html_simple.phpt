@@ -3,4 +3,4 @@
 ===print===
 <html><?php
 echo 1;
-?></html><?php
+?></html>

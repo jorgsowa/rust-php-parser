@@ -60,6 +60,9 @@ pub(crate) struct Printer<'src> {
     /// True when the printer is currently outside a PHP block (file started with HTML).
     /// Controls whether `?>` is emitted before InlineHtml nodes.
     in_html_mode: bool,
+    /// True when at least one PHP statement has been emitted in the current PHP block.
+    /// `?>` is only emitted when this is true — empty `<?php ?>` blocks are suppressed.
+    has_php_content: bool,
 }
 
 impl<'src> Printer<'src> {
@@ -85,6 +88,7 @@ impl<'src> Printer<'src> {
             comments,
             comment_cursor: 0,
             in_html_mode: false,
+            has_php_content: false,
         }
     }
 
@@ -94,6 +98,18 @@ impl<'src> Printer<'src> {
 
     pub(crate) fn w(&mut self, s: &str) {
         self.output.push_str(s);
+    }
+
+    /// Re-enter PHP mode if currently in HTML mode.
+    /// Call this after `print_stmts` and before emitting any PHP-syntax token
+    /// (closing brace, `endforeach`, etc.) that must appear inside a PHP block.
+    /// Emits `<?php` on the same line as the preceding HTML content.
+    pub(crate) fn ensure_php_mode(&mut self) {
+        if self.in_html_mode {
+            self.w("<?php");
+            self.in_html_mode = false;
+            self.has_php_content = true;
+        }
     }
 
     pub(crate) fn newline(&mut self) {
@@ -210,8 +226,8 @@ impl<'src> Printer<'src> {
 
     pub fn print_program(&mut self, program: &php_ast::ast::Program) {
         if matches!(
-            program.stmts.first().map(|s| &s.kind),
-            Some(php_ast::ast::StmtKind::InlineHtml(_))
+            program.stmts.first().map(|s| (s.span.start, &s.kind)),
+            Some((0, php_ast::ast::StmtKind::InlineHtml(_)))
         ) {
             self.in_html_mode = true;
         }
@@ -233,14 +249,18 @@ impl<'src> Printer<'src> {
                 continue;
             }
 
-            if i > 0 {
+            // When transitioning out of HTML mode the <?php + newline + indent
+            // is emitted by print_stmt_inner, so skip the normal separators here.
+            if i > 0 && !self.in_html_mode {
                 self.newline();
-            }
-            if i > 0 && helpers::is_declaration(&stmt.kind) {
-                self.newline();
+                if helpers::is_declaration(&stmt.kind) {
+                    self.newline();
+                }
             }
             self.flush_leading_comments(stmt.span.start);
-            self.write_indent();
+            if !self.in_html_mode {
+                self.write_indent();
+            }
             self.print_stmt(stmt);
             let next_start = stmts.get(i + 1).map(|s| s.span.start).unwrap_or(u32::MAX);
             self.flush_trailing_comments(stmt.span.end.saturating_sub(1), next_start);
