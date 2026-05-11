@@ -70,8 +70,6 @@ cargo fmt --check
 
 ## Architecture Overview
 
-See [docs/architecture/ROADMAP.md](docs/architecture/ROADMAP.md) for the project roadmap and feature dependency graph.
-
 Key design decisions:
 
 - **Arena allocation** — AST nodes are bump-allocated via `bumpalo`. The arena lifetime `'arena` threads through the entire AST. This gives excellent allocation performance but makes in-place mutation of pointer-behind fields unsound (see Visitor section below).
@@ -131,7 +129,7 @@ crates/php-printer/tests/fixtures/
 
 ### Adding a new test
 
-1. Create a `.phpt` file in the appropriate directory (see [docs/development/ERRORS.md](docs/development/ERRORS.md) for the `errors/` vs `categories/` decision table).
+1. Create a `.phpt` file in the appropriate directory (see the decision table below).
 2. Add `===source===` with the PHP code you want to test.
 3. Run `UPDATE_FIXTURES=1 cargo test` — this generates `===ast===`, `===errors===`, and `===php_error===` automatically.
 4. Review the generated output. If the AST looks correct, commit the fixture.
@@ -170,7 +168,7 @@ For complex new syntax, read an existing feature (e.g., match expressions in `ex
 
 ## Visitor API
 
-See [docs/usage/VISITOR.md](docs/usage/VISITOR.md) for the full Visitor API reference.
+See [`crates/php-ast/src/visitor.rs`](crates/php-ast/src/visitor.rs) for the full Visitor API reference.
 
 The `Visitor` trait uses `ControlFlow<()>` returns so implementations can short-circuit traversal:
 - Return `Continue(())` to continue
@@ -182,7 +180,7 @@ The `Visitor` trait uses `ControlFlow<()>` returns so implementations can short-
 
 ## Error System
 
-See [docs/development/ERRORS.md](docs/development/ERRORS.md) for the full list of `ParseError` variants and when to emit each one.
+See [`crates/php-parser/src/diagnostics.rs`](crates/php-parser/src/diagnostics.rs) for the full list of `ParseError` variants and when to emit each one.
 
 Quick rules:
 - Emit `ParseError::UnexpectedToken` for tokens that cannot appear in the current parse context.
@@ -210,21 +208,14 @@ Performance-sensitive changes should be benchmarked before and after:
 cargo bench
 ```
 
-Read the performance docs before making optimization changes:
-
-1. [docs/performance/PERFORMANCE_ANALYSIS.md](docs/performance/PERFORMANCE_ANALYSIS.md) — overview and methodology
-2. [docs/performance/CORPUS_ANALYSIS_MARCH2026.md](docs/performance/CORPUS_ANALYSIS_MARCH2026.md) — real-world corpus metrics (Laravel, Symfony, WordPress)
-3. [docs/performance/MEMORY_OPTIMIZATION_MARCH2026.md](docs/performance/MEMORY_OPTIMIZATION_MARCH2026.md) — allocation tuning details
-4. [docs/performance/OPTIMIZATION_ATTEMPT_MARCH2026.md](docs/performance/OPTIMIZATION_ATTEMPT_MARCH2026.md) — lessons learned, including failed approaches
-
 **Key lesson:** profiling showed the lazy lexer with peeking slots outperforms a pre-lexed array approach. A branch-elimination change without profiling evidence caused a 13–125% regression. Measure first.
 
 ---
 
 ## Where to Get Help
 
-- **Roadmap and architecture:** [docs/architecture/ROADMAP.md](docs/architecture/ROADMAP.md)
-- **Error types:** [docs/development/ERRORS.md](docs/development/ERRORS.md)
-- **Visitor API:** [docs/usage/VISITOR.md](docs/usage/VISITOR.md)
-- **Test coverage:** [docs/analysis/COVERAGE_REPORT.md](docs/analysis/COVERAGE_REPORT.md)
+- **AST node types:** [`docs.rs/php-ast/ast`](https://docs.rs/php-ast/latest/php_ast/ast/index.html)
+- **Full API reference:** [`docs.rs/php-rs-parser`](https://docs.rs/php-rs-parser), [`docs.rs/php-ast`](https://docs.rs/php-ast), [`docs.rs/php-lexer`](https://docs.rs/php-lexer), [`docs.rs/php-printer`](https://docs.rs/php-printer)
+- **Error types:** [`crates/php-parser/src/diagnostics.rs`](crates/php-parser/src/diagnostics.rs)
+- **Visitor API:** [`crates/php-ast/src/visitor.rs`](crates/php-ast/src/visitor.rs)
 - **GitHub Issues** — open an issue if you're unsure where to start or want to discuss a design before writing code
