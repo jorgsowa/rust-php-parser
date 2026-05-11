@@ -102,7 +102,8 @@ switch ($a): ; endswitch;
               "end": 123
             }
           },
-          "cases": []
+          "cases": [],
+          "uses_alternative": true
         }
       },
       "span": {
@@ -142,7 +143,8 @@ switch ($a): ; endswitch;
               "end": 187
             }
           },
-          "cases": []
+          "cases": [],
+          "uses_alternative": true
         }
       },
       "span": {

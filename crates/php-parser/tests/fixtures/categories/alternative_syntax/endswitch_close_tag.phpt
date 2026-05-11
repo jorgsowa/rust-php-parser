@@ -61,7 +61,8 @@
                 "end": 41
               }
             }
-          ]
+          ],
+          "uses_alternative": true
         }
       },
       "span": {

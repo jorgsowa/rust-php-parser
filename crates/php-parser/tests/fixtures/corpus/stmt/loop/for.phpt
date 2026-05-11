@@ -234,7 +234,8 @@ endfor;
               "start": 168,
               "end": 185
             }
-          }
+          },
+          "uses_alternative": true
         }
       },
       "span": {

@@ -33,7 +33,8 @@
               "start": 6,
               "end": 38
             }
-          }
+          },
+          "uses_alternative": true
         }
       },
       "span": {

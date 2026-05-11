@@ -51,8 +51,14 @@ impl<'src> Printer<'src> {
             StmtKind::While(w) => {
                 self.w("while (");
                 self.print_expr(&w.condition, PREC_LOWEST);
-                self.w(") ");
-                self.print_block_or_stmt(w.body);
+                if w.uses_alternative {
+                    self.w("):");
+                    self.print_alt_section(w.body);
+                    self.w("endwhile;");
+                } else {
+                    self.w(") ");
+                    self.print_block_or_stmt(w.body);
+                }
             }
             StmtKind::For(f) => {
                 self.w("for (");
@@ -61,8 +67,14 @@ impl<'src> Printer<'src> {
                 self.print_comma_separated_exprs(&f.condition);
                 self.w("; ");
                 self.print_comma_separated_exprs(&f.update);
-                self.w(") ");
-                self.print_block_or_stmt(f.body);
+                if f.uses_alternative {
+                    self.w("):");
+                    self.print_alt_section(f.body);
+                    self.w("endfor;");
+                } else {
+                    self.w(") ");
+                    self.print_block_or_stmt(f.body);
+                }
             }
             StmtKind::Foreach(f) => {
                 self.w("foreach (");
@@ -73,8 +85,14 @@ impl<'src> Printer<'src> {
                     self.w(" => ");
                 }
                 self.print_expr(&f.value, PREC_LOWEST);
-                self.w(") ");
-                self.print_block_or_stmt(f.body);
+                if f.uses_alternative {
+                    self.w("):");
+                    self.print_alt_section(f.body);
+                    self.w("endforeach;");
+                } else {
+                    self.w(") ");
+                    self.print_block_or_stmt(f.body);
+                }
             }
             StmtKind::DoWhile(dw) => {
                 self.w("do ");
@@ -103,7 +121,11 @@ impl<'src> Printer<'src> {
             StmtKind::Switch(sw) => {
                 self.w("switch (");
                 self.print_expr(&sw.expr, PREC_LOWEST);
-                self.w(") {");
+                if sw.uses_alternative {
+                    self.w("):");
+                } else {
+                    self.w(") {");
+                }
                 self.newline();
                 self.indent();
                 for case in sw.cases.iter() {
@@ -127,7 +149,11 @@ impl<'src> Printer<'src> {
                 self.flush_leading_comments(stmt.span.end);
                 self.dedent();
                 self.write_indent();
-                self.w("}");
+                if sw.uses_alternative {
+                    self.w("endswitch;");
+                } else {
+                    self.w("}");
+                }
             }
             StmtKind::Goto(label) => {
                 self.w("goto ");
@@ -149,11 +175,19 @@ impl<'src> Printer<'src> {
                     self.print_expr(val, PREC_LOWEST);
                 }
                 self.w(")");
-                if let Some(body) = decl.body {
-                    self.w(" ");
-                    self.print_block_or_stmt(body);
-                } else {
-                    self.w(";");
+                match (decl.body, decl.uses_alternative) {
+                    (Some(body), true) => {
+                        self.w(":");
+                        self.print_alt_section(body);
+                        self.w("enddeclare;");
+                    }
+                    (Some(body), false) => {
+                        self.w(" ");
+                        self.print_block_or_stmt(body);
+                    }
+                    (None, _) => {
+                        self.w(";");
+                    }
                 }
             }
             StmtKind::Unset(exprs) => {
@@ -217,9 +251,12 @@ impl<'src> Printer<'src> {
                 self.w(";");
             }
             StmtKind::InlineHtml(html) => {
-                self.w("?>");
+                if !self.in_html_mode {
+                    self.w("?>");
+                }
                 self.w(html);
                 self.w("<?php");
+                self.in_html_mode = false;
             }
             StmtKind::Error => {
                 self.w("/* error */");
@@ -228,19 +265,50 @@ impl<'src> Printer<'src> {
     }
 
     fn print_if(&mut self, if_stmt: &IfStmt) {
-        self.w("if (");
-        self.print_expr(&if_stmt.condition, PREC_LOWEST);
-        self.w(") ");
-        self.print_block_or_stmt(if_stmt.then_branch);
-        for elseif in if_stmt.elseif_branches.iter() {
-            self.w(" elseif (");
-            self.print_expr(&elseif.condition, PREC_LOWEST);
+        if if_stmt.uses_alternative {
+            self.w("if (");
+            self.print_expr(&if_stmt.condition, PREC_LOWEST);
+            self.w("):");
+            self.print_alt_section(if_stmt.then_branch);
+            for elseif in if_stmt.elseif_branches.iter() {
+                self.w("elseif (");
+                self.print_expr(&elseif.condition, PREC_LOWEST);
+                self.w("):");
+                self.print_alt_section(&elseif.body);
+            }
+            if let Some(else_branch) = &if_stmt.else_branch {
+                self.w("else:");
+                self.print_alt_section(else_branch);
+            }
+            self.w("endif;");
+        } else {
+            self.w("if (");
+            self.print_expr(&if_stmt.condition, PREC_LOWEST);
             self.w(") ");
-            self.print_block_or_stmt(&elseif.body);
+            self.print_block_or_stmt(if_stmt.then_branch);
+            for elseif in if_stmt.elseif_branches.iter() {
+                self.w(" elseif (");
+                self.print_expr(&elseif.condition, PREC_LOWEST);
+                self.w(") ");
+                self.print_block_or_stmt(&elseif.body);
+            }
+            if let Some(else_branch) = &if_stmt.else_branch {
+                self.w(" else ");
+                self.print_block_or_stmt(else_branch);
+            }
         }
-        if let Some(else_branch) = &if_stmt.else_branch {
-            self.w(" else ");
-            self.print_block_or_stmt(else_branch);
+    }
+
+    /// Print a Block's statements indented, without braces — for alternative syntax bodies.
+    /// Leaves output positioned at the start of the next line at the current indent level.
+    fn print_alt_section(&mut self, body: &Stmt) {
+        if let StmtKind::Block(stmts) = &body.kind {
+            self.newline();
+            self.indent();
+            self.print_stmts(stmts, false);
+            self.newline();
+            self.dedent();
+            self.write_indent();
         }
     }
 

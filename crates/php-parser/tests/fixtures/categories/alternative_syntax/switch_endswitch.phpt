@@ -89,7 +89,8 @@
                 "end": 68
               }
             }
-          ]
+          ],
+          "uses_alternative": true
         }
       },
       "span": {

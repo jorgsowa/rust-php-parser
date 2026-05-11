@@ -423,7 +423,8 @@ endforeach;
               "start": 281,
               "end": 312
             }
-          }
+          },
+          "uses_alternative": true
         }
       },
       "span": {

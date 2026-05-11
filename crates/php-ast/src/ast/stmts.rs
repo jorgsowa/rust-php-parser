@@ -7,6 +7,10 @@ use super::{
     Name, TraitDecl,
 };
 
+fn is_false(b: &bool) -> bool {
+    !b
+}
+
 #[derive(Debug, Serialize)]
 pub struct Stmt<'arena, 'src> {
     pub kind: StmtKind<'arena, 'src>,
@@ -118,6 +122,8 @@ pub struct IfStmt<'arena, 'src> {
     pub then_branch: &'arena Stmt<'arena, 'src>,
     pub elseif_branches: ArenaVec<'arena, ElseIfBranch<'arena, 'src>>,
     pub else_branch: Option<&'arena Stmt<'arena, 'src>>,
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub uses_alternative: bool,
 }
 
 #[derive(Debug, Serialize)]
@@ -131,6 +137,8 @@ pub struct ElseIfBranch<'arena, 'src> {
 pub struct WhileStmt<'arena, 'src> {
     pub condition: Expr<'arena, 'src>,
     pub body: &'arena Stmt<'arena, 'src>,
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub uses_alternative: bool,
 }
 
 #[derive(Debug, Serialize)]
@@ -139,6 +147,8 @@ pub struct ForStmt<'arena, 'src> {
     pub condition: ArenaVec<'arena, Expr<'arena, 'src>>,
     pub update: ArenaVec<'arena, Expr<'arena, 'src>>,
     pub body: &'arena Stmt<'arena, 'src>,
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub uses_alternative: bool,
 }
 
 #[derive(Debug, Serialize)]
@@ -147,6 +157,8 @@ pub struct ForeachStmt<'arena, 'src> {
     pub key: Option<Expr<'arena, 'src>>,
     pub value: Expr<'arena, 'src>,
     pub body: &'arena Stmt<'arena, 'src>,
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub uses_alternative: bool,
 }
 
 #[derive(Debug, Serialize)]
@@ -159,6 +171,8 @@ pub struct DoWhileStmt<'arena, 'src> {
 pub struct SwitchStmt<'arena, 'src> {
     pub expr: Expr<'arena, 'src>,
     pub cases: ArenaVec<'arena, SwitchCase<'arena, 'src>>,
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub uses_alternative: bool,
 }
 
 #[derive(Debug, Serialize)]
@@ -201,6 +215,8 @@ pub enum NamespaceBody<'arena, 'src> {
 pub struct DeclareStmt<'arena, 'src> {
     pub directives: ArenaVec<'arena, (&'src str, Expr<'arena, 'src>)>,
     pub body: Option<&'arena Stmt<'arena, 'src>>,
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub uses_alternative: bool,
 }
 
 #[derive(Debug, Serialize)]

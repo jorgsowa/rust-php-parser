@@ -56,7 +56,8 @@ endwhile;
               "start": 22,
               "end": 43
             }
-          }
+          },
+          "uses_alternative": true
         }
       },
       "span": {

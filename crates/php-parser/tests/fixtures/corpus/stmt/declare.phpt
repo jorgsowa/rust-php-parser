@@ -139,7 +139,8 @@ enddeclare;
               "start": 69,
               "end": 104
             }
-          }
+          },
+          "uses_alternative": true
         }
       },
       "span": {

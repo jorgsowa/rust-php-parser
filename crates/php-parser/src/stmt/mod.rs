@@ -794,6 +794,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
                 then_branch,
                 elseif_branches,
                 else_branch,
+                uses_alternative: true,
             })),
             span,
         };
@@ -840,6 +841,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
             then_branch,
             elseif_branches,
             else_branch,
+            uses_alternative: false,
         })),
         span,
     }
@@ -871,7 +873,11 @@ fn parse_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
             span,
         });
         return Stmt {
-            kind: StmtKind::While(parser.alloc(WhileStmt { condition, body })),
+            kind: StmtKind::While(parser.alloc(WhileStmt {
+                condition,
+                body,
+                uses_alternative: true,
+            })),
             span,
         };
     }
@@ -882,7 +888,11 @@ fn parse_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
     let body = parser.alloc(body_stmt);
     let span = Span::new(start, body.span.end);
     Stmt {
-        kind: StmtKind::While(parser.alloc(WhileStmt { condition, body })),
+        kind: StmtKind::While(parser.alloc(WhileStmt {
+            condition,
+            body,
+            uses_alternative: false,
+        })),
         span,
     }
 }
@@ -940,6 +950,7 @@ fn parse_for<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                 condition,
                 update,
                 body,
+                uses_alternative: true,
             })),
             span,
         };
@@ -956,6 +967,7 @@ fn parse_for<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             condition,
             update,
             body,
+            uses_alternative: false,
         })),
         span,
     }
@@ -1023,6 +1035,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
                 key,
                 value,
                 body,
+                uses_alternative: true,
             })),
             span,
         };
@@ -1039,6 +1052,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
             key,
             value,
             body,
+            uses_alternative: false,
         })),
         span,
     }
@@ -1552,6 +1566,7 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
         kind: StmtKind::Switch(parser.alloc(SwitchStmt {
             expr: switch_expr,
             cases,
+            uses_alternative: alt_syntax,
         })),
         span,
     }
@@ -1704,27 +1719,30 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
     }
     parser.expect(TokenKind::RightParen);
 
-    let body = if parser.check(TokenKind::Semicolon) {
+    let (body, uses_alternative) = if parser.check(TokenKind::Semicolon) {
         parser.advance();
-        None
+        (None, false)
     } else if parser.eat(TokenKind::Colon).is_some() {
         let stmts = parse_stmts_until_end(parser, &[TokenKind::EndDeclare]);
         parser.expect(TokenKind::EndDeclare);
         parser.expect_semicolon(TokenKind::EndDeclare);
-        Some(parser.alloc(Stmt {
+        let block = parser.alloc(Stmt {
             kind: StmtKind::Block(stmts),
             span: Span::new(start, parser.previous_end()),
-        }))
+        });
+        (Some(block), true)
     } else {
-        {
-            let s = parse_stmt_or_block(parser);
-            Some(parser.alloc(s))
-        }
+        let s = parse_stmt_or_block(parser);
+        (Some(parser.alloc(s)), false)
     };
 
     let span = Span::new(start, parser.previous_end());
     Stmt {
-        kind: StmtKind::Declare(parser.alloc(DeclareStmt { directives, body })),
+        kind: StmtKind::Declare(parser.alloc(DeclareStmt {
+            directives,
+            body,
+            uses_alternative,
+        })),
         span,
     }
 }

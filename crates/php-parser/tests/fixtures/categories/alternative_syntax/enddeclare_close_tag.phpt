@@ -38,7 +38,8 @@
               "start": 6,
               "end": 46
             }
-          }
+          },
+          "uses_alternative": true
         }
       },
       "span": {

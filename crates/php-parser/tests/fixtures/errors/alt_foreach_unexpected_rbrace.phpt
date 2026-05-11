@@ -64,7 +64,8 @@ expected expression
               "start": 6,
               "end": 52
             }
-          }
+          },
+          "uses_alternative": true
         }
       },
       "span": {

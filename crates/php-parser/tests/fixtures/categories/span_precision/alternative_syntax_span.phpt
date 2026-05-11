@@ -57,7 +57,8 @@ endforeach;
             }
           },
           "elseif_branches": [],
-          "else_branch": null
+          "else_branch": null,
+          "uses_alternative": true
         }
       },
       "span": {
@@ -105,7 +106,8 @@ endforeach;
               "start": 34,
               "end": 67
             }
-          }
+          },
+          "uses_alternative": true
         }
       },
       "span": {
@@ -228,7 +230,8 @@ endforeach;
               "start": 68,
               "end": 116
             }
-          }
+          },
+          "uses_alternative": true
         }
       },
       "span": {
@@ -286,7 +289,8 @@ endforeach;
               "start": 117,
               "end": 162
             }
-          }
+          },
+          "uses_alternative": true
         }
       },
       "span": {

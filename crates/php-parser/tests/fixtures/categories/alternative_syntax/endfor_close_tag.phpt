@@ -108,7 +108,8 @@
               "start": 6,
               "end": 49
             }
-          }
+          },
+          "uses_alternative": true
         }
       },
       "span": {

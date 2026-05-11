@@ -214,7 +214,8 @@ if ($a): endif; // without else
               "start": 100,
               "end": 155
             }
-          }
+          },
+          "uses_alternative": true
         }
       },
       "span": {
@@ -244,7 +245,8 @@ if ($a): endif; // without else
             }
           },
           "elseif_branches": [],
-          "else_branch": null
+          "else_branch": null,
+          "uses_alternative": true
         }
       },
       "span": {

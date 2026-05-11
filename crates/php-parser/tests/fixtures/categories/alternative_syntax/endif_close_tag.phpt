@@ -35,7 +35,8 @@
             }
           },
           "elseif_branches": [],
-          "else_branch": null
+          "else_branch": null,
+          "uses_alternative": true
         }
       },
       "span": {

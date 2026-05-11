@@ -48,7 +48,8 @@
               "start": 6,
               "end": 48
             }
-          }
+          },
+          "uses_alternative": true
         }
       },
       "span": {

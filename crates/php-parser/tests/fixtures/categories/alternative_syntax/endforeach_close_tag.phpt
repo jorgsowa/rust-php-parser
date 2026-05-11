@@ -53,7 +53,8 @@
               "start": 6,
               "end": 54
             }
-          }
+          },
+          "uses_alternative": true
         }
       },
       "span": {

@@ -97,10 +97,20 @@ fn fixtures() {
         }
 
         // Also verify round-trip stability
-        let first = pp(&fixture.source);
-        let arena = bumpalo::Bump::new();
-        let source = format!("<?php {first}");
-        let result = php_rs_parser::parse(&arena, &source);
+        let arena1 = bumpalo::Bump::new();
+        let result1 = php_rs_parser::parse(&arena1, &fixture.source);
+        let first = pretty_print_with_comments(&result1.program, result1.source, &result1.comments);
+        let starts_with_html = matches!(
+            result1.program.stmts.first().map(|s| &s.kind),
+            Some(php_ast::ast::StmtKind::InlineHtml(_))
+        );
+        let round_trip_src = if starts_with_html {
+            first.clone()
+        } else {
+            format!("<?php {first}")
+        };
+        let arena2 = bumpalo::Bump::new();
+        let result = php_rs_parser::parse(&arena2, &round_trip_src);
         let second = pretty_print_with_comments(&result.program, result.source, &result.comments);
         if first != second {
             failures.lock().unwrap().push(format!(
@@ -214,7 +224,7 @@ fn parser_corpus_round_trip() {
         let rel = path.strip_prefix(&parser_fixtures).unwrap();
         let source = extract_parser_fixture_source(&content, &header);
 
-        let first_print = {
+        let (first_print, starts_with_html) = {
             let arena = bumpalo::Bump::new();
             let result = match header.min_php {
                 Some((maj, min)) => {
@@ -222,12 +232,20 @@ fn parser_corpus_round_trip() {
                 }
                 None => php_rs_parser::parse(&arena, source),
             };
-            php_printer::pretty_print(&result.program)
+            let html = matches!(
+                result.program.stmts.first().map(|s| &s.kind),
+                Some(php_ast::ast::StmtKind::InlineHtml(_))
+            );
+            (php_printer::pretty_print(&result.program), html)
         };
 
         let second_print = {
             let arena = bumpalo::Bump::new();
-            let reprinted = format!("<?php {first_print}");
+            let reprinted = if starts_with_html {
+                first_print.clone()
+            } else {
+                format!("<?php {first_print}")
+            };
             let result = php_rs_parser::parse(&arena, &reprinted);
             php_printer::pretty_print(&result.program)
         };

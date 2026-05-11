@@ -57,6 +57,9 @@ pub(crate) struct Printer<'src> {
     pub(crate) depth: usize,
     comments: &'src [Comment<'src>],
     comment_cursor: usize,
+    /// True when the printer is currently outside a PHP block (file started with HTML).
+    /// Controls whether `?>` is emitted before InlineHtml nodes.
+    in_html_mode: bool,
 }
 
 impl<'src> Printer<'src> {
@@ -81,6 +84,7 @@ impl<'src> Printer<'src> {
             depth: 0,
             comments,
             comment_cursor: 0,
+            in_html_mode: false,
         }
     }
 
@@ -205,6 +209,12 @@ impl<'src> Printer<'src> {
     // =========================================================================
 
     pub fn print_program(&mut self, program: &php_ast::ast::Program) {
+        if matches!(
+            program.stmts.first().map(|s| &s.kind),
+            Some(php_ast::ast::StmtKind::InlineHtml(_))
+        ) {
+            self.in_html_mode = true;
+        }
         self.print_stmts(&program.stmts, false);
         self.flush_remaining_comments();
     }

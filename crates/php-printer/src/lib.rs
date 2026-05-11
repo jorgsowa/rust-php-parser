@@ -21,12 +21,27 @@ pub fn pretty_print(program: &Program) -> String {
     pretty_print_with_config(program, &PrinterConfig::default())
 }
 
-/// Pretty-print a complete PHP file (prepends `<?php\n\n`).
+/// Pretty-print a complete PHP file.
+///
+/// For programs that start with PHP code, prepends `<?php\n\n`.
+/// For programs that start with inline HTML (i.e. the file begins outside a PHP block),
+/// the HTML is emitted as-is — no `<?php` header is prepended.
 pub fn pretty_print_file(program: &Program) -> String {
-    let mut out = String::from("<?php\n\n");
-    out.push_str(&pretty_print(program));
-    out.push('\n');
-    out
+    let starts_with_html = matches!(
+        program.stmts.first().map(|s| &s.kind),
+        Some(php_ast::ast::StmtKind::InlineHtml(_))
+    );
+    let body = pretty_print(program);
+    if starts_with_html {
+        let mut out = body;
+        out.push('\n');
+        out
+    } else {
+        let mut out = String::from("<?php\n\n");
+        out.push_str(&body);
+        out.push('\n');
+        out
+    }
 }
 
 /// Pretty-print with custom configuration.
