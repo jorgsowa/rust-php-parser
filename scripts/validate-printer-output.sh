@@ -34,10 +34,9 @@ for fixture in "$FIXTURES_DIR"/*.phpt; do
         continue
     fi
 
-    # Create temp file with <?php prefix
+    # Create temp file; the print section already includes <?php
     temp_file="$TEMP_DIR/$(basename "$fixture" .phpt).php"
-    echo "<?php" > "$temp_file"
-    echo "$output" >> "$temp_file"
+    echo "$output" > "$temp_file"
 
     # Run php -l
     if ! php -l "$temp_file" > /dev/null 2>&1; then
