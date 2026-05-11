@@ -98,7 +98,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                             });
                         }
                         let mut expr = Expr {
-                            kind: ExprKind::Variable(NameStr::Src(var_name)),
+                            kind: ExprKind::Variable(NameStr::__src(var_name)),
                             span: Span::new(
                                 base_offset + name_start as u32,
                                 base_offset + i as u32,
@@ -180,7 +180,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                     let var_offset = base_offset + var_start as u32;
 
                     let mut expr = Expr {
-                        kind: ExprKind::Variable(NameStr::Src(var_name)),
+                        kind: ExprKind::Variable(NameStr::__src(var_name)),
                         span: Span::new(var_offset, base_offset + i as u32),
                     };
 
@@ -205,7 +205,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                                 kind: ExprKind::PropertyAccess(PropertyAccessExpr {
                                     object: arena.alloc(expr),
                                     property: arena.alloc(Expr {
-                                        kind: ExprKind::Identifier(NameStr::Src(prop_name)),
+                                        kind: ExprKind::Identifier(NameStr::__src(prop_name)),
                                         span: prop_span,
                                     }),
                                 }),
@@ -447,7 +447,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                     let var_offset = body_offset + var_start as u32;
 
                     let mut expr = Expr {
-                        kind: ExprKind::Variable(NameStr::Src(var_name)),
+                        kind: ExprKind::Variable(NameStr::__src(var_name)),
                         span: Span::new(var_offset, body_offset + i as u32),
                     };
 
@@ -470,7 +470,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                                 kind: ExprKind::PropertyAccess(PropertyAccessExpr {
                                     object: arena.alloc(expr),
                                     property: arena.alloc(Expr {
-                                        kind: ExprKind::Identifier(NameStr::Src(prop_name)),
+                                        kind: ExprKind::Identifier(NameStr::__src(prop_name)),
                                         span: prop_span,
                                     }),
                                 }),
@@ -871,7 +871,7 @@ fn parse_simple_index<'arena, 'src>(
         let name_start = idx_offset as usize + 1;
         let name_end = idx_offset as usize + idx_str.len();
         return Expr {
-            kind: ExprKind::Variable(NameStr::Src(&source[name_start..name_end])),
+            kind: ExprKind::Variable(NameStr::__src(&source[name_start..name_end])),
             span,
         };
     }

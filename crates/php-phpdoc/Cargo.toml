@@ -1,0 +1,22 @@
+[package]
+name = "php-phpdoc"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "PHPDoc comment parser with structured type AST and span tracking"
+
+[dependencies]
+php-ast = { workspace = true }
+serde    = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }
+walkdir    = { workspace = true }
+rayon      = { workspace = true }
+
+[[test]]
+name = "fixtures"
+path = "tests/fixtures.rs"

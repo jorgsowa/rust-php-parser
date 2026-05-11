@@ -421,7 +421,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                 if parser.check(TokenKind::LeftParen) {
                     // Dynamic static method call: Class::$method()
                     let method = parser.alloc(Expr {
-                        kind: ExprKind::Variable(NameStr::Src(var_name)),
+                        kind: ExprKind::Variable(NameStr::__src(var_name)),
                         span: var_span,
                     });
                     match parse_arg_list_or_callable(parser) {
@@ -454,7 +454,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                 } else {
                     // Static property: Class::$prop
                     let member = parser.alloc(Expr {
-                        kind: ExprKind::Identifier(NameStr::Src(var_name)),
+                        kind: ExprKind::Identifier(NameStr::__src(var_name)),
                         span: var_span,
                     });
                     let span = Span::new(lhs.span.start, var_span.end);
@@ -541,7 +541,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                     kind: ExprKind::ClassConstAccess(StaticAccessExpr {
                         class: parser.alloc(lhs),
                         member: parser.alloc(Expr {
-                            kind: ExprKind::Identifier(NameStr::Src("class")),
+                            kind: ExprKind::Identifier(NameStr::__src("class")),
                             span: token.span,
                         }),
                     }),
@@ -569,7 +569,7 @@ pub fn parse_expr_bp<'arena, 'src>(
 
                 if parser.check(TokenKind::LeftParen) {
                     let method = parser.alloc(Expr {
-                        kind: ExprKind::Identifier(NameStr::Src(member_name)),
+                        kind: ExprKind::Identifier(NameStr::__src(member_name)),
                         span: member_span,
                     });
                     match parse_arg_list_or_callable(parser) {
@@ -602,7 +602,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                 } else {
                     // Class constant
                     let member = parser.alloc(Expr {
-                        kind: ExprKind::Identifier(NameStr::Src(member_name)),
+                        kind: ExprKind::Identifier(NameStr::__src(member_name)),
                         span: member_span,
                     });
                     let span = Span::new(lhs.span.start, parser.previous_end());
@@ -753,7 +753,7 @@ fn parse_member_name<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr
         let token = parser.advance();
         let text = &parser.source[token.span.start as usize..token.span.end as usize];
         return Expr {
-            kind: ExprKind::Identifier(NameStr::Src(text)),
+            kind: ExprKind::Identifier(NameStr::__src(text)),
             span: token.span,
         };
     }
@@ -763,7 +763,7 @@ fn parse_member_name<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr
             let token = parser.advance();
             let name = parser.variable_name(token);
             Expr {
-                kind: ExprKind::Variable(NameStr::Src(name)),
+                kind: ExprKind::Variable(NameStr::__src(name)),
                 span: token.span,
             }
         }
