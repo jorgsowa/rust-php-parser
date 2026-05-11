@@ -225,11 +225,16 @@ impl<'src> Printer<'src> {
     // =========================================================================
 
     pub fn print_program(&mut self, program: &php_ast::ast::Program) {
-        if matches!(
+        let html_first = matches!(
             program.stmts.first().map(|s| (s.span.start, &s.kind)),
             Some((0, php_ast::ast::StmtKind::InlineHtml(_)))
-        ) {
+        );
+        if html_first {
             self.in_html_mode = true;
+        } else if !program.stmts.is_empty() {
+            self.w("<?php");
+            self.newline();
+            self.has_php_content = true;
         }
         self.print_stmts(&program.stmts, false);
         self.flush_remaining_comments();

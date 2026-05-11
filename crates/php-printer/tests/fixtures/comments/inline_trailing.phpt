@@ -3,6 +3,7 @@
 $x = 1; // inline comment
 echo $x;
 ===print===
+<?php
 $x = 1;
 // inline comment
 echo $x;

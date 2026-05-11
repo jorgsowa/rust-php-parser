@@ -31,6 +31,7 @@
     }
 }
 ===print===
+<?php
 class User
 {
     public string $name {

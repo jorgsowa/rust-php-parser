@@ -58,6 +58,7 @@ Line3: $c
 EOS;
 
 ===print===
+<?php
 // Heredoc with simple content
 <<<EOS
 Hello World

@@ -11,6 +11,7 @@ try {
     // comment in finally
 }
 ===print===
+<?php
 try {
     echo 1;
     // comment in try

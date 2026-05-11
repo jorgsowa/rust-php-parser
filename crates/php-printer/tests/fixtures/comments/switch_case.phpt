@@ -11,6 +11,7 @@ switch ($x) {
         echo 2;
 }
 ===print===
+<?php
 switch ($x) {
     // comment before case
     case 1:

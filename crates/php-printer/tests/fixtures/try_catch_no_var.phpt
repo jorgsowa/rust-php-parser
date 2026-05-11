@@ -7,6 +7,7 @@
     rethrow();
 }
 ===print===
+<?php
 try {
     risky();
 } catch (RuntimeException) {

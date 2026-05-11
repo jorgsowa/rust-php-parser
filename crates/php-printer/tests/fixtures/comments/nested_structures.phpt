@@ -8,6 +8,7 @@ if ($x) {
     }
 }
 ===print===
+<?php
 if ($x) {
     // comment in if
     while ($y) {

@@ -5,6 +5,7 @@
     public function set(string $email) {}
 }
 ===print===
+<?php
 class User
 {
     public private(set) string $name;

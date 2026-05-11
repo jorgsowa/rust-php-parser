@@ -8,6 +8,7 @@
     }
 }
 ===print===
+<?php
 class C
 {
     use A, B {

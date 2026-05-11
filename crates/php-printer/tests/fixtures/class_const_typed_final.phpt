@@ -6,6 +6,7 @@
     final const PLAIN = 1;
 }
 ===print===
+<?php
 class C
 {
     final public const string FOO = 'x';

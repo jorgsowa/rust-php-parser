@@ -14,6 +14,7 @@ enum Suit: string
     }
 }
 ===print===
+<?php
 enum Suit: string
 {
     case Hearts = 'H';

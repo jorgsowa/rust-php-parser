@@ -10,6 +10,7 @@ try {
     echo 4;
 }
 ===print===
+<?php
 try {
     echo 1;
     // comment in try

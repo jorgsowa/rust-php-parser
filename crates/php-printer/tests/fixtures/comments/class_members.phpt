@@ -10,6 +10,7 @@ class Foo {
     // comment after method
 }
 ===print===
+<?php
 class Foo
 {
     // comment before property

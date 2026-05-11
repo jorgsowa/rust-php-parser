@@ -100,22 +100,10 @@ fn fixtures() {
         let arena1 = bumpalo::Bump::new();
         let result1 = php_rs_parser::parse(&arena1, &fixture.source);
         let first = pretty_print_with_comments(&result1.program, result1.source, &result1.comments);
-        let starts_with_html = matches!(
-            result1
-                .program
-                .stmts
-                .first()
-                .map(|s| (s.span.start, &s.kind)),
-            Some((0, php_ast::ast::StmtKind::InlineHtml(_)))
-        );
-        let round_trip_src = if starts_with_html || first.trim_start().starts_with('<') {
-            first.clone()
-        } else {
-            format!("<?php {first}")
-        };
         let arena2 = bumpalo::Bump::new();
-        let result = php_rs_parser::parse(&arena2, &round_trip_src);
-        let second = pretty_print_with_comments(&result.program, result.source, &result.comments);
+        let result2 = php_rs_parser::parse(&arena2, &first);
+        let second =
+            pretty_print_with_comments(&result2.program, result2.source, &result2.comments);
         if first != second {
             failures.lock().unwrap().push(format!(
                 "round-trip mismatch in {rel}\nfirst:  {first}\nsecond: {second}"
@@ -228,7 +216,7 @@ fn parser_corpus_round_trip() {
         let rel = path.strip_prefix(&parser_fixtures).unwrap();
         let source = extract_parser_fixture_source(&content, &header);
 
-        let (first_print, starts_with_html) = {
+        let first_print = {
             let arena = bumpalo::Bump::new();
             let result = match header.min_php {
                 Some((maj, min)) => {
@@ -236,25 +224,12 @@ fn parser_corpus_round_trip() {
                 }
                 None => php_rs_parser::parse(&arena, source),
             };
-            let html = matches!(
-                result
-                    .program
-                    .stmts
-                    .first()
-                    .map(|s| (s.span.start, &s.kind)),
-                Some((0, php_ast::ast::StmtKind::InlineHtml(_)))
-            );
-            (php_printer::pretty_print(&result.program), html)
+            php_printer::pretty_print(&result.program)
         };
 
         let second_print = {
             let arena = bumpalo::Bump::new();
-            let reprinted = if starts_with_html || first_print.trim_start().starts_with('<') {
-                first_print.clone()
-            } else {
-                format!("<?php {first_print}")
-            };
-            let result = php_rs_parser::parse(&arena, &reprinted);
+            let result = php_rs_parser::parse(&arena, &first_print);
             php_printer::pretty_print(&result.program)
         };
 
@@ -288,5 +263,5 @@ fn pretty_print_file() {
     let arena = bumpalo::Bump::new();
     let result = php_rs_parser::parse(&arena, "<?php echo 'hello';");
     let output = php_printer::pretty_print_file(&result.program);
-    assert_eq!(output, "<?php\n\necho 'hello';\n");
+    assert_eq!(output, "<?php\necho 'hello';\n");
 }

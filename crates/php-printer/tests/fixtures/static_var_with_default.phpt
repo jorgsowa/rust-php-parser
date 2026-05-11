@@ -4,6 +4,7 @@
     return ++$count;
 }
 ===print===
+<?php
 function counter()
 {
     static $count = 0, $start, $list = [1, 2, 3];

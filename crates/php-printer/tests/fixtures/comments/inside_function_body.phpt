@@ -6,6 +6,7 @@ function foo() {
     echo 2;
 }
 ===print===
+<?php
 function foo()
 {
     echo 1;

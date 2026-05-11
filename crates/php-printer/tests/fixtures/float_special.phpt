@@ -4,6 +4,7 @@ $tiny = 1e-400;
 $nan = NAN;
 $inf = INF;
 ===print===
+<?php
 $big = \INF;
 $tiny = 0.0;
 $nan = NAN;
