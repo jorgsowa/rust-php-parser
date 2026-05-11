@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.0] - 2026-05-11
+
+### Added
+
+- `pretty_print` and all printer variants now emit `<?php\n` at the start of PHP-first programs, making the output valid standalone PHP (`php-printer`).
+- `pretty_print_file` simplified to `pretty_print` + trailing newline — no longer duplicates the `<?php` header logic (`php-printer`).
+
+### Fixed
+
+- Printer correctly emits `?>` before inline HTML following alternative-syntax closing keywords (`endforeach`, `endfor`, `endwhile`, `endif`, `endswitch`, `enddeclare`) — previously the `has_php_content` flag was left `false` after the loop body, suppressing the close tag (`php-printer`).
+- Printer no longer emits a spurious trailing `<?php` after the last inline HTML node in a file (`php-printer`).
+- Printer suppresses `?>` for empty `<?php ?>` blocks that produce no PHP output (`php-printer`).
+- Round-trip stability verified across the full parser corpus — `pretty_print(parse(pretty_print(parse(src))))` is always identical to `pretty_print(parse(src))` (`php-printer`).
+
+### Changed
+
+- `phpdoc-parser` crate replaced with a structural-only implementation that parses PHPDoc blocks without external dependencies (`phpdoc-parser`).
+- README expanded with full API coverage; `docs/` directory removed in favour of inline documentation.
+
+---
+
 ## [0.10.1] - 2026-05-09
 
 ### Fixed
