@@ -147,12 +147,12 @@ jobs:
       - name: Wait for crates.io to index php-lexer
         run: sleep 20
 
-      - name: Publish php-phpdoc
-        run: cargo publish -p php-phpdoc --locked
+      - name: Publish phpdoc-parser
+        run: cargo publish -p phpdoc-parser --locked
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
 
-      - name: Wait for crates.io to index php-phpdoc
+      - name: Wait for crates.io to index phpdoc-parser
         run: sleep 20
 
       - name: Publish php-rs-parser
