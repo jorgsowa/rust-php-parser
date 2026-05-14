@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.0] - 2026-05-14
+
+### Added
+
+- `Fold` trait for arena-to-arena AST transformations — enables efficient rewriting of AST nodes with the bump arena as the target allocation context (`php-ast`).
+- Printer now preserves blank lines from source in switch cases and enum members, maintaining semantic formatting hints from the original code (`php-printer`).
+
+### Fixed
+
+- Printer now correctly tracks `has_php_content` state across blank lines, preventing spurious `<?php` tags from being emitted (`php-printer`).
+
+---
+
 ## [0.11.1] - 2026-05-12
 
 ### Changed
