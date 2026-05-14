@@ -12,7 +12,7 @@ jobs:
     name: Benchmark
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 1
 
@@ -41,7 +41,7 @@ jobs:
       - name: Restore criterion baseline
         id: restore-baseline
         if: github.event_name == 'pull_request'
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: target/criterion
           key: criterion-baseline-${{ runner.os }}-main-${{ github.sha }}
@@ -94,7 +94,7 @@ jobs:
       # PR restore step picks up the latest one.
       - name: Save criterion baseline
         if: steps.bench-main.outcome == 'success'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: target/criterion
           key: criterion-baseline-${{ runner.os }}-main-${{ github.sha }}
@@ -103,7 +103,7 @@ jobs:
       # artifact for manual inspection.
       - name: Upload benchmark report
         if: steps.bench-main.outcome == 'success'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: criterion-report-${{ github.sha }}
           path: target/criterion
