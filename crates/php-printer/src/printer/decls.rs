@@ -410,10 +410,14 @@ impl<'src> Printer<'src> {
             self.newline();
             self.indent();
             for (i, member) in enum_decl.members.iter().enumerate() {
-                self.flush_leading_comments(member.span.start);
-                if i > 0 {
-                    self.newline();
+                if i > 0 && !self.has_comments_before(member.span.start) {
+                    let prev_end = enum_decl.members[i - 1].span.end;
+                    let blank = self.blank_lines_between(prev_end, member.span.start).max(1);
+                    for _ in 0..blank {
+                        self.newline();
+                    }
                 }
+                self.flush_leading_comments(member.span.start);
                 self.write_indent();
                 self.print_enum_member(member);
                 self.newline();
