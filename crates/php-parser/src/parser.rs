@@ -857,6 +857,15 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             if looks_like_type {
                 let span = self.current_span();
                 self.require_version(PhpVersion::Php81, "intersection types", span);
+
+                // Check for invalid outer-form DNF: (A|B)&C
+                if let TypeHintKind::Union(_) = &first.kind {
+                    self.error(ParseError::Forbidden {
+                        message: "Type declarations cannot be union types, use DNF syntax (A&B)|C instead".into(),
+                        span: first.span,
+                    });
+                }
+
                 let mut end = first.span.end;
                 let mut types = self.alloc_vec_one(first);
                 while self.eat(TokenKind::Ampersand).is_some() {
