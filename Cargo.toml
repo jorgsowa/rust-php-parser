@@ -41,5 +41,5 @@ walkdir = "2"
 mimalloc = { version = "0.1", default-features = false }
 memchr = "2"
 bumpalo = { version = "3", features = ["collections"] }
-pprof = { version = "0.13", features = ["flamegraph", "criterion"] }
+pprof = { version = "0.15", features = ["flamegraph", "criterion"] }
 rayon = "1"
