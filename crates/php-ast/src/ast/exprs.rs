@@ -53,6 +53,17 @@ impl<'arena, 'src> NameStr<'arena, 'src> {
         }
     }
 
+    /// Returns the source slice if this value was borrowed from the source buffer, otherwise `None`.
+    /// Used by the fold infrastructure to preserve source-borrowed strings without re-allocation.
+    #[doc(hidden)]
+    #[inline]
+    pub fn __into_src_str(self) -> Option<&'src str> {
+        match self.0 {
+            NameStrInner::Src(s) => Some(s),
+            NameStrInner::Arena(_) => None,
+        }
+    }
+
     #[inline]
     pub fn as_str(&self) -> &str {
         match self.0 {

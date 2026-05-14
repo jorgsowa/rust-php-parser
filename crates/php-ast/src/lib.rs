@@ -29,6 +29,7 @@
 //! ```
 
 pub mod ast;
+pub mod fold;
 pub mod span;
 pub mod visitor;
 
