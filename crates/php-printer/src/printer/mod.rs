@@ -10,6 +10,8 @@ use php_ast::Comment;
 pub struct PrinterConfig {
     pub indent: Indent,
     pub newline: &'static str,
+    /// Maximum blank lines preserved between statements. 0 normalizes all blank lines away.
+    pub blank_lines_upper_bound: usize,
 }
 
 /// Indentation style.
@@ -23,6 +25,7 @@ impl Default for PrinterConfig {
         Self {
             indent: Indent::Spaces(4),
             newline: "\n",
+            blank_lines_upper_bound: 1,
         }
     }
 }
@@ -54,7 +57,9 @@ pub(crate) struct Printer<'src> {
     indent_level: usize,
     indent_str: &'static str,
     nl: &'static str,
+    blank_lines_upper_bound: usize,
     pub(crate) depth: usize,
+    source: &'src str,
     comments: &'src [Comment<'src>],
     comment_cursor: usize,
     /// True when the printer is currently outside a PHP block (file started with HTML).
@@ -72,7 +77,7 @@ impl<'src> Printer<'src> {
 
     pub fn with_comments(
         config: &PrinterConfig,
-        _source: &'src str,
+        source: &'src str,
         comments: &'src [Comment<'src>],
     ) -> Self {
         let indent_str = match config.indent {
@@ -84,7 +89,9 @@ impl<'src> Printer<'src> {
             indent_level: 0,
             indent_str,
             nl: config.newline,
+            blank_lines_upper_bound: config.blank_lines_upper_bound,
             depth: 0,
+            source,
             comments,
             comment_cursor: 0,
             in_html_mode: false,
@@ -128,6 +135,30 @@ impl<'src> Printer<'src> {
 
     pub(crate) fn dedent(&mut self) {
         self.indent_level = self.indent_level.saturating_sub(1);
+    }
+
+    /// Count blank lines in source between two byte offsets, capped at `blank_lines_upper_bound`.
+    /// Returns 0 when no source is available (e.g. `pretty_print` without source).
+    pub(crate) fn blank_lines_between(&self, from: u32, to: u32) -> usize {
+        if self.source.is_empty() || from >= to {
+            return 0;
+        }
+        let from = from as usize;
+        let to = (to as usize).min(self.source.len());
+        let newlines = self.source.as_bytes()[from..to]
+            .iter()
+            .filter(|&&b| b == b'\n')
+            .count();
+        newlines.saturating_sub(1).min(self.blank_lines_upper_bound)
+    }
+
+    /// Return the start offset of the first not-yet-emitted comment whose span
+    /// starts before `before_offset`, or `None` if there is no such comment.
+    pub(crate) fn first_pending_comment_before(&self, before_offset: u32) -> Option<u32> {
+        self.comments[self.comment_cursor..]
+            .iter()
+            .find(|c| c.span.start < before_offset)
+            .map(|c| c.span.start)
     }
 
     // =========================================================================
@@ -259,8 +290,25 @@ impl<'src> Printer<'src> {
             // When transitioning out of HTML mode the <?php + newline + indent
             // is emitted by print_stmt_inner, so skip the normal separators here.
             if i > 0 && !self.in_html_mode {
+                let decl_min =
+                    if helpers::is_declaration(&stmt.kind) && self.blank_lines_upper_bound > 0 {
+                        1
+                    } else {
+                        0
+                    };
+                let blank = if !self.source.is_empty() {
+                    let prev_end = stmts[i - 1].span.end;
+                    // Stop at the first pending comment before this statement so that
+                    // newlines inside the comment text aren't mistaken for blank lines.
+                    let scan_to = self
+                        .first_pending_comment_before(stmt.span.start)
+                        .unwrap_or(stmt.span.start);
+                    self.blank_lines_between(prev_end, scan_to).max(decl_min)
+                } else {
+                    decl_min
+                };
                 self.newline();
-                if helpers::is_declaration(&stmt.kind) {
+                for _ in 0..blank {
                     self.newline();
                 }
             }

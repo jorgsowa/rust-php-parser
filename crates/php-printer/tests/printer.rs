@@ -1,35 +1,49 @@
-use php_printer::pretty_print_with_comments;
+use php_printer::{pretty_print_with_comments_and_config, PrinterConfig};
 use rayon::prelude::*;
 use std::sync::Mutex;
-
-fn pp(src: &str) -> String {
-    let arena = bumpalo::Bump::new();
-    let result = php_rs_parser::parse(&arena, src);
-    pretty_print_with_comments(&result.program, result.source, &result.comments)
-}
 
 /// Parse a printer fixture file.
 ///
 /// Format:
 /// ```text
+/// ===config===          (optional)
+/// blank_lines_upper_bound=0
+/// no_source=true
 /// ===source===
 /// <?php ...
 /// ===print===
 /// expected output
 /// ```
 struct PrinterFixture {
+    /// Raw config block (without the `===config===\n` header), empty string if absent.
+    raw_config: String,
     source: String,
     expected: String,
+    config: PrinterConfig,
+    /// When true, source is not passed to the printer (tests the no-source fallback).
+    no_source: bool,
 }
 
 fn parse_printer_fixture(content: &str) -> PrinterFixture {
-    let after_source = content
+    let (raw_config, rest) = if let Some(after) = content.strip_prefix("===config===\n") {
+        let end = after
+            .find("===source===\n")
+            .expect("fixture must have ===source===");
+        (
+            after[..end].trim_end_matches('\n').to_string(),
+            &after[end..],
+        )
+    } else {
+        (String::new(), content)
+    };
+
+    let after_source = rest
         .strip_prefix("===source===\n")
-        .expect("fixture must start with ===source===");
+        .expect("fixture must have ===source===");
 
     let print_pos = after_source
         .find("===print===\n")
-        .expect("fixture must have ===print=== section");
+        .expect("fixture must have ===print===");
 
     let source = after_source[..print_pos]
         .strip_suffix('\n')
@@ -37,9 +51,22 @@ fn parse_printer_fixture(content: &str) -> PrinterFixture {
     let expected = &after_source[print_pos + "===print===\n".len()..];
     let expected = expected.strip_suffix('\n').unwrap_or(expected);
 
+    let mut config = PrinterConfig::default();
+    let mut no_source = false;
+    for line in raw_config.lines() {
+        if let Some(val) = line.strip_prefix("blank_lines_upper_bound=") {
+            config.blank_lines_upper_bound = val.parse().expect("invalid blank_lines_upper_bound");
+        } else if line == "no_source=true" {
+            no_source = true;
+        }
+    }
+
     PrinterFixture {
+        raw_config,
         source: source.to_string(),
         expected: expected.to_string(),
+        config,
+        no_source,
     }
 }
 
@@ -78,12 +105,30 @@ fn fixtures() {
         let content = std::fs::read_to_string(path).unwrap();
         let fixture = parse_printer_fixture(&content);
 
-        let actual = pp(&fixture.source);
+        let actual = {
+            let arena = bumpalo::Bump::new();
+            let result = php_rs_parser::parse(&arena, &fixture.source);
+            if fixture.no_source {
+                php_printer::pretty_print_with_config(&result.program, &fixture.config)
+            } else {
+                pretty_print_with_comments_and_config(
+                    &result.program,
+                    result.source,
+                    &result.comments,
+                    &fixture.config,
+                )
+            }
+        };
 
         if update {
+            let config_block = if fixture.raw_config.is_empty() {
+                String::new()
+            } else {
+                format!("===config===\n{}\n", fixture.raw_config)
+            };
             let new_content = format!(
-                "===source===\n{}\n===print===\n{}\n",
-                fixture.source, actual
+                "{}===source===\n{}\n===print===\n{}\n",
+                config_block, fixture.source, actual
             );
             std::fs::write(path, new_content).unwrap();
         } else {
@@ -99,11 +144,28 @@ fn fixtures() {
         // Also verify round-trip stability
         let arena1 = bumpalo::Bump::new();
         let result1 = php_rs_parser::parse(&arena1, &fixture.source);
-        let first = pretty_print_with_comments(&result1.program, result1.source, &result1.comments);
+        let first = if fixture.no_source {
+            php_printer::pretty_print_with_config(&result1.program, &fixture.config)
+        } else {
+            pretty_print_with_comments_and_config(
+                &result1.program,
+                result1.source,
+                &result1.comments,
+                &fixture.config,
+            )
+        };
         let arena2 = bumpalo::Bump::new();
         let result2 = php_rs_parser::parse(&arena2, &first);
-        let second =
-            pretty_print_with_comments(&result2.program, result2.source, &result2.comments);
+        let second = if fixture.no_source {
+            php_printer::pretty_print_with_config(&result2.program, &fixture.config)
+        } else {
+            pretty_print_with_comments_and_config(
+                &result2.program,
+                result2.source,
+                &result2.comments,
+                &fixture.config,
+            )
+        };
         if first != second {
             failures.lock().unwrap().push(format!(
                 "round-trip mismatch in {rel}\nfirst:  {first}\nsecond: {second}"

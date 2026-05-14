@@ -139,7 +139,17 @@ impl<'src> Printer<'src> {
                 }
                 self.newline();
                 self.indent();
-                for case in sw.cases.iter() {
+                for (i, case) in sw.cases.iter().enumerate() {
+                    if i > 0 {
+                        let prev_end = sw.cases[i - 1].span.end;
+                        let scan_to = self
+                            .first_pending_comment_before(case.span.start)
+                            .unwrap_or(case.span.start);
+                        let blank = self.blank_lines_between(prev_end, scan_to);
+                        for _ in 0..blank {
+                            self.newline();
+                        }
+                    }
                     self.flush_leading_comments(case.span.start);
                     self.write_indent();
                     if let Some(val) = &case.value {
