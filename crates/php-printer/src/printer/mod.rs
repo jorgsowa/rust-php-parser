@@ -290,6 +290,12 @@ impl<'src> Printer<'src> {
             // When transitioning out of HTML mode the <?php + newline + indent
             // is emitted by print_stmt_inner, so skip the normal separators here.
             if i > 0 && !self.in_html_mode {
+                let decl_min =
+                    if helpers::is_declaration(&stmt.kind) && self.blank_lines_upper_bound > 0 {
+                        1
+                    } else {
+                        0
+                    };
                 let blank = if !self.source.is_empty() {
                     let prev_end = stmts[i - 1].span.end;
                     // Stop at the first pending comment before this statement so that
@@ -297,19 +303,9 @@ impl<'src> Printer<'src> {
                     let scan_to = self
                         .first_pending_comment_before(stmt.span.start)
                         .unwrap_or(stmt.span.start);
-                    let from_source = self.blank_lines_between(prev_end, scan_to);
-                    // Declarations always get at least one blank line for visual separation.
-                    from_source.max(if helpers::is_declaration(&stmt.kind) {
-                        1
-                    } else {
-                        0
-                    })
+                    self.blank_lines_between(prev_end, scan_to).max(decl_min)
                 } else {
-                    if helpers::is_declaration(&stmt.kind) {
-                        1
-                    } else {
-                        0
-                    }
+                    decl_min
                 };
                 self.newline();
                 for _ in 0..blank {
