@@ -119,7 +119,13 @@ impl<'src> Printer<'src> {
             self.indent();
             for (i, member) in members.iter().enumerate() {
                 if i > 0 && !self.has_comments_before(member.span.start) {
-                    self.newline();
+                    // Always at least one blank line between members; preserve more from source.
+                    let blank = self
+                        .blank_lines_between(members[i - 1].span.end, member.span.start)
+                        .max(1);
+                    for _ in 0..blank {
+                        self.newline();
+                    }
                 }
                 self.flush_leading_comments(member.span.start);
                 self.write_indent();
