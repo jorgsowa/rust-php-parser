@@ -56,7 +56,8 @@ pub fn parse(source: &str, version: Option<String>) -> Result<JsValue, JsError> 
         .collect();
 
     let ast = serde_json::to_value(&result.program).unwrap_or(serde_json::Value::Null);
-    let formatted = php_printer::pretty_print(&result.program);
+    let formatted =
+        php_printer::pretty_print_with_comments(&result.program, source, &result.comments);
 
     let output = ParseOutput {
         ast,
@@ -72,7 +73,7 @@ pub fn parse(source: &str, version: Option<String>) -> Result<JsValue, JsError> 
 pub fn format(source: &str) -> String {
     let arena = bumpalo::Bump::new();
     let result = php_rs_parser::parse(&arena, source);
-    php_printer::pretty_print(&result.program)
+    php_printer::pretty_print_with_comments(&result.program, source, &result.comments)
 }
 
 /// Crate version from Cargo.toml, e.g. `"0.9.4"`.
