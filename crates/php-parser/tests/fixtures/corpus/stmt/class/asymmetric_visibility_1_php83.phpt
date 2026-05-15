@@ -69,28 +69,11 @@ class Test {
               "kind": {
                 "Property": {
                   "name": "c",
-                  "visibility": "Protected",
-                  "set_visibility": null,
+                  "visibility": null,
+                  "set_visibility": "Protected",
                   "is_static": false,
                   "is_readonly": false,
-                  "type_hint": {
-                    "kind": {
-                      "Named": {
-                        "parts": [
-                          "set"
-                        ],
-                        "kind": "Unqualified",
-                        "span": {
-                          "start": 93,
-                          "end": 96
-                        }
-                      }
-                    },
-                    "span": {
-                      "start": 92,
-                      "end": 97
-                    }
-                  },
+                  "type_hint": null,
                   "default": null,
                   "attributes": []
                 }

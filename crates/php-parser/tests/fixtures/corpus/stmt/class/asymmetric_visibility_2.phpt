@@ -7,8 +7,8 @@ class Test {
     private(set) public(set) $x;
 }
 ===errors===
-expected class member, found 'private'
-expected class member, found 'public'
+cannot use multiple set-visibility modifiers
+cannot use multiple set-visibility modifiers
 ===ast===
 {
   "stmts": [
@@ -28,34 +28,17 @@ expected class member, found 'public'
               "kind": {
                 "Property": {
                   "name": "x",
-                  "visibility": "Private",
-                  "set_visibility": null,
+                  "visibility": null,
+                  "set_visibility": "Private",
                   "is_static": false,
                   "is_readonly": false,
-                  "type_hint": {
-                    "kind": {
-                      "Named": {
-                        "parts": [
-                          "set"
-                        ],
-                        "kind": "Unqualified",
-                        "span": {
-                          "start": 44,
-                          "end": 47
-                        }
-                      }
-                    },
-                    "span": {
-                      "start": 43,
-                      "end": 48
-                    }
-                  },
+                  "type_hint": null,
                   "default": null,
                   "attributes": []
                 }
               },
               "span": {
-                "start": 36,
+                "start": 23,
                 "end": 51
               }
             },
@@ -63,34 +46,17 @@ expected class member, found 'public'
               "kind": {
                 "Property": {
                   "name": "x",
-                  "visibility": "Public",
-                  "set_visibility": null,
+                  "visibility": null,
+                  "set_visibility": "Public",
                   "is_static": false,
                   "is_readonly": false,
-                  "type_hint": {
-                    "kind": {
-                      "Named": {
-                        "parts": [
-                          "set"
-                        ],
-                        "kind": "Unqualified",
-                        "span": {
-                          "start": 77,
-                          "end": 80
-                        }
-                      }
-                    },
-                    "span": {
-                      "start": 76,
-                      "end": 81
-                    }
-                  },
+                  "type_hint": null,
                   "default": null,
                   "attributes": []
                 }
               },
               "span": {
-                "start": 70,
+                "start": 57,
                 "end": 84
               }
             }

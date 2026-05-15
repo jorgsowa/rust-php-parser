@@ -346,6 +346,7 @@ pub fn parse_class_members<'arena, 'src>(
 
         // Detect unknown modifier: bare identifier before $variable with no modifiers set.
         if mods.visibility.is_none()
+            && mods.set_visibility.is_none()
             && !mods.is_static
             && !mods.is_abstract
             && !mods.is_final
@@ -464,30 +465,57 @@ fn parse_class_member_modifiers<'arena, 'src>(
                 parser.advance();
 
                 if visibility.is_none() {
-                    visibility = Some(vis);
-                    // Look ahead for second visibility keyword followed by ( (asymmetric visibility)
-                    if matches!(
-                        parser.current_kind(),
-                        TokenKind::Public | TokenKind::Protected | TokenKind::Private
-                    ) && parser.peek_kind() == Some(TokenKind::LeftParen)
-                    {
-                        let set_vis = match parser.current_kind() {
-                            TokenKind::Public => Visibility::Public,
-                            TokenKind::Protected => Visibility::Protected,
-                            _ => Visibility::Private,
-                        };
-                        // Save span; emit version check after loop when is_static is known.
+                    if parser.check(TokenKind::LeftParen) && parser.peek_text() == Some("set") {
+                        // Single-keyword asymmetric visibility: e.g. private(set)
+                        // Get visibility is implicitly public (visibility stays None).
+                        if set_visibility.is_some() {
+                            parser.error(ParseError::Forbidden {
+                                message: "cannot use multiple set-visibility modifiers".into(),
+                                span: Span::new(member_start, parser.previous_end()),
+                            });
+                        }
                         asym_vis_span = Some(Span::new(member_start, parser.previous_end()));
-                        parser.advance(); // consume second visibility
                         parser.advance(); // consume (
                         if parser.current_text() == "set" {
                             parser.advance(); // consume "set"
                         }
                         parser.expect(TokenKind::RightParen);
-                        set_visibility = Some(set_vis);
+                        set_visibility = Some(vis);
+                    } else {
+                        visibility = Some(vis);
+                        // Look ahead for two-keyword form: e.g. public private(set)
+                        if matches!(
+                            parser.current_kind(),
+                            TokenKind::Public | TokenKind::Protected | TokenKind::Private
+                        ) && parser.peek_kind() == Some(TokenKind::LeftParen)
+                            && parser.peek2_text() == Some("set")
+                        {
+                            let set_vis = match parser.current_kind() {
+                                TokenKind::Public => Visibility::Public,
+                                TokenKind::Protected => Visibility::Protected,
+                                _ => Visibility::Private,
+                            };
+                            // Save span; emit version check after loop when is_static is known.
+                            asym_vis_span = Some(Span::new(member_start, parser.previous_end()));
+                            parser.advance(); // consume second visibility
+                            parser.advance(); // consume (
+                            if parser.current_text() == "set" {
+                                parser.advance(); // consume "set"
+                            }
+                            parser.expect(TokenKind::RightParen);
+                            set_visibility = Some(set_vis);
+                        }
                     }
-                } else if parser.check(TokenKind::LeftParen) {
-                    // Already have visibility; this is set_visibility with (set)
+                } else if parser.check(TokenKind::LeftParen) && parser.peek_text() == Some("set") {
+                    // Two-keyword form where get-visibility was set in a prior iteration:
+                    // e.g. the second modifier in `public private(set)` when the first
+                    // iteration didn't consume it via the two-keyword lookahead.
+                    if set_visibility.is_some() {
+                        parser.error(ParseError::Forbidden {
+                            message: "cannot use multiple set-visibility modifiers".into(),
+                            span: Span::new(member_start, parser.previous_end()),
+                        });
+                    }
                     // Save span for deferred version check after is_static is known.
                     asym_vis_span = Some(Span::new(member_start, parser.previous_end()));
                     parser.advance(); // consume (
