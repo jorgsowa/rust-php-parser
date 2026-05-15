@@ -3,3 +3,6 @@ Cargo.lock
 *.swp
 *.swo
 .DS_Store
+
+# PHP project corpora (downloaded locally, not committed)
+/crates/php-parser/benches/corpus/

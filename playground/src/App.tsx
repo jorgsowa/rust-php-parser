@@ -8,6 +8,7 @@ import { FormattedPane } from './components/FormattedPane'
 import { ErrorPanel } from './components/ErrorPanel'
 import { DocsPage } from './components/docs/DocsPage'
 import { NodeDetailPage } from './components/docs/NodeDetailPage'
+import { ComparePage } from './components/compare/ComparePage'
 
 const INITIAL_CODE = `<?php
 
@@ -171,6 +172,7 @@ export default function App() {
 
       {route.page === 'docs' && <DocsPage version={version} />}
       {route.page === 'docs-node' && <NodeDetailPage nodeId={route.nodeId} onVisualize={handleVisualize} />}
+      {route.page === 'compare' && <ComparePage />}
 
       <div className="statusbar">
         <span className="statusbar-item">PHP {version}</span>

@@ -41,6 +41,13 @@ export function Toolbar({ version, onVersionChange, wasmStatus, route }: Props) 
         >
           Docs
         </a>
+        <a
+          href="#compare"
+          className={`nav-tab ${route.page === 'compare' ? 'active' : ''}`}
+          title="Compare AST usage across popular PHP projects"
+        >
+          Compare
+        </a>
       </div>
 
       <div className="toolbar-controls">

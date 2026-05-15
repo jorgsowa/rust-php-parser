@@ -4,6 +4,7 @@ export type Route =
   | { page: 'playground' }
   | { page: 'docs' }
   | { page: 'docs-node'; nodeId: string }
+  | { page: 'compare' }
 
 function parseHash(hash: string): Route {
   // Remove leading '#'
@@ -15,6 +16,10 @@ function parseHash(hash: string): Route {
 
   if (path === 'docs') {
     return { page: 'docs' }
+  }
+
+  if (path === 'compare') {
+    return { page: 'compare' }
   }
 
   if (path.startsWith('docs/')) {
@@ -35,6 +40,8 @@ export function routeToHash(route: Route): string {
       return '#docs'
     case 'docs-node':
       return `#docs/${route.nodeId}`
+    case 'compare':
+      return '#compare'
   }
 }
 

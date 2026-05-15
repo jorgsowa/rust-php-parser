@@ -15,6 +15,7 @@ members = [
     "crates/phpdoc-parser",
     "crates/php-printer",
     "crates/php-wasm",
+    "tools/ast-stats",
 ]
 
 [workspace.package]
