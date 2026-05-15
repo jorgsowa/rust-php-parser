@@ -175,6 +175,36 @@ walker.walk(&result.program);
 
 Use plain `Visitor` when you don't need namespace/class/function context.
 
+### AST transformation (Fold)
+
+`Fold` is the transformation counterpart of `Visitor`. Where `Visitor` reads a tree in place, `Fold` rebuilds it — reading from an input arena and writing into a new output arena. This is the correct design for arena-allocated ASTs: in-place mutation would break the arena lifetime invariant.
+
+Implement `Fold` and override only the node types you want to change. All other nodes are rebuilt identically by the default implementations:
+
+```rust
+use bumpalo::Bump;
+use php_ast::fold::{Fold, fold_expr};
+use php_ast::ast::*;
+
+struct NegateInts;
+
+impl<'src> Fold<'src> for NegateInts {
+    fn fold_expr<'new>(&mut self, arena: &'new Bump, expr: &Expr<'_, 'src>) -> Expr<'new, 'src> {
+        if let ExprKind::Int(n) = expr.kind {
+            return Expr { kind: ExprKind::Int(-n), span: expr.span };
+        }
+        fold_expr(self, arena, expr)
+    }
+}
+
+let src_arena = Bump::new();
+let result = php_rs_parser::parse(&src_arena, "<?php $x = 1;");
+
+let out_arena = Bump::new();
+let transformed = NegateInts.fold_program(&out_arena, &result.program);
+// `transformed` lives in `out_arena`; `result` and `src_arena` can be dropped independently
+```
+
 ### PHPDoc parser
 
 PHPDoc comments are parsed into a structured AST via `php_rs_parser::phpdoc::parse()`. Tag bodies are exposed as raw text — the parser does not interpret type expressions, letting you apply your own type parser:

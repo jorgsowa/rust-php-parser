@@ -68,8 +68,25 @@ pub struct ParseResult<'arena, 'src> {
     pub source: &'src str,
     /// The parsed AST. Always produced, even when errors are present.
     pub program: Program<'arena, 'src>,
-    /// All comments found in the source, in source order.
-    /// Comments are not attached to AST nodes; callers can map them by span.
+    /// All comments found in the source, in source order, **except** `/** */`
+    /// doc-block comments that are immediately attached to a declaration.
+    ///
+    /// When the parser encounters a `/** */` comment directly before a
+    /// function, class, method, property, constant, or enum case, it removes
+    /// that comment from this list and stores it in the declaration node's
+    /// `doc_comment` field instead. The two collections are therefore
+    /// **disjoint**: iterating both without deduplication will double-count
+    /// nothing, but iterating only one will miss the other's entries.
+    ///
+    /// To process every comment in the file, visit both:
+    ///
+    /// ```ignore
+    /// for comment in &result.comments { /* line/hash/block + unattached docs */ }
+    /// // doc comments on declarations are on each node's doc_comment field
+    /// ```
+    ///
+    /// Or use [`php_ast::visitor::walk_comments`] with a [`Visitor`] that also
+    /// overrides the declaration visit methods.
     pub comments: Vec<Comment<'src>>,
     /// Parse errors and diagnostics. Empty on a successful parse.
     pub errors: Vec<ParseError>,

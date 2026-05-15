@@ -99,6 +99,14 @@ pub trait Visitor<'arena, 'src> {
     fn visit_name(&mut self, _name: &Name<'arena, 'src>) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+
+    /// Called for each comment when driven by [`walk_comments`].
+    ///
+    /// Comments live in [`ParseResult::comments`](php_rs_parser::ParseResult::comments)
+    /// separately from AST nodes. Use [`walk_comments`] to drive this hook.
+    fn visit_comment(&mut self, _comment: &Comment<'src>) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
 }
 
 // =============================================================================
@@ -114,6 +122,28 @@ pub fn walk_name<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     name: &Name<'arena, 'src>,
 ) -> ControlFlow<()> {
     visitor.visit_name(name)
+}
+
+/// Calls [`Visitor::visit_comment`] for each comment in `comments`.
+///
+/// Comments are stored separately from the AST in
+/// `ParseResult::comments` — this function is the bridge.
+/// Call it alongside [`walk_program`] to cover the full source:
+///
+/// ```ignore
+/// walk_comments(&mut visitor, &result.comments)?;
+/// visitor.visit_program(&result.program)?;
+/// ```
+///
+/// Order (before vs. after the program walk) is up to the caller.
+pub fn walk_comments<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
+    visitor: &mut V,
+    comments: &[Comment<'src>],
+) -> ControlFlow<()> {
+    for comment in comments {
+        visitor.visit_comment(comment)?;
+    }
+    ControlFlow::Continue(())
 }
 
 /// Visits every top-level statement in `program` by calling [`Visitor::visit_stmt`].
@@ -961,6 +991,10 @@ pub trait ScopeVisitor<'arena, 'src> {
     ) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+
+    fn visit_comment(&mut self, _comment: &Comment<'src>, _scope: &Scope<'src>) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
 }
 
 /// Drives a [`ScopeVisitor`] over an AST, maintaining [`Scope`] automatically.
@@ -1198,6 +1232,10 @@ impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> Visitor<'arena, 'src> for Scop
         adaptation: &TraitAdaptation<'arena, 'src>,
     ) -> ControlFlow<()> {
         self.inner.visit_trait_adaptation(adaptation, &self.scope)
+    }
+
+    fn visit_comment(&mut self, comment: &Comment<'src>) -> ControlFlow<()> {
+        self.inner.visit_comment(comment, &self.scope)
     }
 }
 

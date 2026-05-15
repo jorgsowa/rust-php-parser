@@ -12,6 +12,12 @@ pub struct FunctionDecl<'arena, 'src> {
     pub return_type: Option<TypeHint<'arena, 'src>>,
     pub by_ref: bool,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+    /// The immediately preceding `/** */` doc-block, if any.
+    ///
+    /// When present, this comment is **removed** from
+    /// [`ParseResult::comments`](php_rs_parser::ParseResult::comments) — the
+    /// two collections are disjoint. All other comment forms (line, hash,
+    /// block) remain in `ParseResult::comments` regardless of position.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment<'src>>,
 }

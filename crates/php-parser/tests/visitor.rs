@@ -3,7 +3,9 @@
 //! the visitor reaches all expected nodes.
 
 use php_ast::ast::*;
-use php_ast::visitor::{self, walk_trait_use, Scope, ScopeVisitor, ScopeWalker, Visitor};
+use php_ast::visitor::{
+    self, walk_comments, walk_trait_use, Scope, ScopeVisitor, ScopeWalker, Visitor,
+};
 use std::ops::ControlFlow;
 
 /// Collects all Name nodes seen during traversal as string representations.
@@ -876,4 +878,61 @@ fn visits_use_statement_names() {
             assert_eq!(v.names, vec!["App\\Http\\Request", "App\\Http\\Response"]);
         },
     );
+}
+
+#[test]
+fn walk_comments_visits_all_non_attached_comments() {
+    // Doc comment on the function is attached to the declaration node and
+    // removed from result.comments. The other two comments remain there.
+    let src =
+        "<?php // line comment\n/** @param int $x */\nfunction foo(int $x) {}\n# hash comment";
+    let arena = bumpalo::Bump::new();
+    let result = php_rs_parser::parse(&arena, src);
+    assert!(result.errors.is_empty());
+
+    struct CommentCollector {
+        kinds: Vec<CommentKind>,
+    }
+    impl<'arena, 'src> Visitor<'arena, 'src> for CommentCollector {
+        fn visit_comment(&mut self, comment: &Comment<'src>) -> ControlFlow<()> {
+            self.kinds.push(comment.kind);
+            ControlFlow::Continue(())
+        }
+    }
+
+    let mut v = CommentCollector { kinds: vec![] };
+    let _ = walk_comments(&mut v, &result.comments);
+
+    // The doc comment is attached to the function decl, not in result.comments.
+    assert_eq!(v.kinds, vec![CommentKind::Line, CommentKind::Hash]);
+}
+
+#[test]
+fn scope_walker_delegates_visit_comment() {
+    let src = "<?php // top-level comment\nclass Foo { public function bar() {} }";
+    let arena = bumpalo::Bump::new();
+    let result = php_rs_parser::parse(&arena, src);
+    assert!(result.errors.is_empty());
+
+    struct ScopeCommentCollector<'src> {
+        seen: Vec<(&'src str, Option<&'src str>)>,
+    }
+    impl<'arena, 'src> ScopeVisitor<'arena, 'src> for ScopeCommentCollector<'src> {
+        fn visit_comment(
+            &mut self,
+            comment: &Comment<'src>,
+            scope: &Scope<'src>,
+        ) -> ControlFlow<()> {
+            self.seen.push((comment.text, scope.class_name));
+            ControlFlow::Continue(())
+        }
+    }
+
+    let mut walker = ScopeWalker::new(result.source, ScopeCommentCollector { seen: vec![] });
+    let _ = walk_comments(&mut walker, &result.comments);
+
+    let inner = walker.into_inner();
+    assert_eq!(inner.seen.len(), 1);
+    assert_eq!(inner.seen[0].0, "// top-level comment");
+    assert_eq!(inner.seen[0].1, None);
 }
