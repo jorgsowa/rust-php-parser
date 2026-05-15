@@ -1,6 +1,5 @@
 ===config===
-min_php=8.1
-max_php=8.4
+min_php=8.5
 ===source===
 <?php
 function test(
@@ -398,4 +397,4 @@ class Test {
   }
 }
 ===php_error===
-PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 3
+PHP Parse error:  syntax error, unexpected variable "$x", expecting "|" in Standard input code on line 3
