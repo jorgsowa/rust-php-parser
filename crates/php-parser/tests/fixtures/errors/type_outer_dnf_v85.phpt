@@ -1,10 +1,9 @@
 ===config===
-min_php=8.2
-max_php=8.4
+min_php=8.5
 
 ===source===
 <?php
-function foo((A|B|C)&D $x) { }
+function foo((Foo|Bar)&Baz $x) { }
 
 ===errors===
 Type declarations cannot be union types, use DNF syntax (A&B)|C instead
@@ -28,35 +27,17 @@ Type declarations cannot be union types, use DNF syntax (A&B)|C instead
                             "kind": {
                               "Named": {
                                 "parts": [
-                                  "A"
+                                  "Foo"
                                 ],
                                 "kind": "Unqualified",
                                 "span": {
                                   "start": 20,
-                                  "end": 21
-                                }
-                              }
-                            },
-                            "span": {
-                              "start": 20,
-                              "end": 21
-                            }
-                          },
-                          {
-                            "kind": {
-                              "Named": {
-                                "parts": [
-                                  "B"
-                                ],
-                                "kind": "Unqualified",
-                                "span": {
-                                  "start": 22,
                                   "end": 23
                                 }
                               }
                             },
                             "span": {
-                              "start": 22,
+                              "start": 20,
                               "end": 23
                             }
                           },
@@ -64,50 +45,50 @@ Type declarations cannot be union types, use DNF syntax (A&B)|C instead
                             "kind": {
                               "Named": {
                                 "parts": [
-                                  "C"
+                                  "Bar"
                                 ],
                                 "kind": "Unqualified",
                                 "span": {
                                   "start": 24,
-                                  "end": 25
+                                  "end": 27
                                 }
                               }
                             },
                             "span": {
                               "start": 24,
-                              "end": 25
+                              "end": 27
                             }
                           }
                         ]
                       },
                       "span": {
                         "start": 19,
-                        "end": 26
+                        "end": 28
                       }
                     },
                     {
                       "kind": {
                         "Named": {
                           "parts": [
-                            "D"
+                            "Baz"
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 27,
-                            "end": 28
+                            "start": 29,
+                            "end": 32
                           }
                         }
                       },
                       "span": {
-                        "start": 27,
-                        "end": 28
+                        "start": 29,
+                        "end": 32
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 19,
-                  "end": 28
+                  "end": 32
                 }
               },
               "default": null,
@@ -120,7 +101,7 @@ Type declarations cannot be union types, use DNF syntax (A&B)|C instead
               "attributes": [],
               "span": {
                 "start": 19,
-                "end": 31
+                "end": 35
               }
             }
           ],
@@ -132,14 +113,14 @@ Type declarations cannot be union types, use DNF syntax (A&B)|C instead
       },
       "span": {
         "start": 6,
-        "end": 36
+        "end": 40
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 36
+    "end": 40
   }
 }
 ===php_error===
-PHP Parse error:  syntax error, unexpected token "|", expecting amp in Standard input code on line 2
+PHP Parse error:  syntax error, unexpected token "|", expecting token "&" in Standard input code on line 2

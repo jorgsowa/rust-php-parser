@@ -1,5 +1,6 @@
 ===config===
 min_php=8.2
+max_php=8.4
 
 ===source===
 <?php
@@ -123,4 +124,4 @@ Type declarations cannot be union types, use DNF syntax (A&B)|C instead
   }
 }
 ===php_error===
-PHP Parse error:  syntax error, unexpected token "|", expecting token "&" in Standard input code on line 2
+PHP Parse error:  syntax error, unexpected token "|", expecting amp in Standard input code on line 2
