@@ -1113,6 +1113,8 @@ fn parse_function<'arena, 'src>(
         None
     };
 
+    let doc_comment = parser.take_doc_comment(start);
+
     let open_brace = parser.expect(TokenKind::LeftBrace);
     let open_brace_span = open_brace.map(|t| t.span).unwrap_or(parser.current_span());
     // March 2026: reduce from 16 to 4 for smaller initial allocation
@@ -1133,7 +1135,6 @@ fn parse_function<'arena, 'src>(
     parser.expect_closing(TokenKind::RightBrace, open_brace_span);
     let end = parser.previous_end();
     let span = Span::new(start, end);
-    let doc_comment = parser.take_doc_comment(start);
 
     Stmt {
         kind: StmtKind::Function(parser.alloc(FunctionDecl {

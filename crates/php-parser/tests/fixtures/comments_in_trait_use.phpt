@@ -44,7 +44,7 @@ class CommentAfterName {
     Trait2 /* before brace */ {
       // inside body
       Trait1::method1 insteadof Trait2;
-    };
+    }
 }
 
 // Multiple comment blocks before adaptation
@@ -78,7 +78,7 @@ $anon = new class {
     Trait2 {
       // insteadof
       Trait1::method1 insteadof Trait2;
-    };
+    }
 };
 
 // Multiple trait use blocks with comments
@@ -644,7 +644,7 @@ class Precedence {
       },
       "span": {
         "start": 823,
-        "end": 1005
+        "end": 1004
       }
     },
     {
@@ -669,8 +669,8 @@ class Precedence {
                       ],
                       "kind": "Unqualified",
                       "span": {
-                        "start": 1089,
-                        "end": 1095
+                        "start": 1088,
+                        "end": 1094
                       }
                     }
                   ],
@@ -684,8 +684,8 @@ class Precedence {
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 1172,
-                              "end": 1178
+                              "start": 1171,
+                              "end": 1177
                             }
                           },
                           "method": {
@@ -694,8 +694,8 @@ class Precedence {
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 1180,
-                              "end": 1187
+                              "start": 1179,
+                              "end": 1186
                             }
                           },
                           "new_modifier": "Protected",
@@ -703,16 +703,16 @@ class Precedence {
                         }
                       },
                       "span": {
-                        "start": 1172,
-                        "end": 1201
+                        "start": 1171,
+                        "end": 1200
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 1085,
-                "end": 1205
+                "start": 1084,
+                "end": 1204
               }
             }
           ],
@@ -720,8 +720,8 @@ class Precedence {
         }
       },
       "span": {
-        "start": 1052,
-        "end": 1207
+        "start": 1051,
+        "end": 1206
       }
     },
     {
@@ -740,16 +740,16 @@ class Precedence {
                       "Int": 1
                     },
                     "span": {
-                      "start": 1305,
-                      "end": 1306
+                      "start": 1304,
+                      "end": 1305
                     }
                   },
                   "attributes": []
                 }
               },
               "span": {
-                "start": 1294,
-                "end": 1307
+                "start": 1293,
+                "end": 1306
               }
             },
             {
@@ -763,16 +763,16 @@ class Precedence {
                       "Int": 2
                     },
                     "span": {
-                      "start": 1337,
-                      "end": 1338
+                      "start": 1336,
+                      "end": 1337
                     }
                   },
                   "attributes": []
                 }
               },
               "span": {
-                "start": 1326,
-                "end": 1339
+                "start": 1325,
+                "end": 1338
               }
             },
             {
@@ -791,8 +791,8 @@ class Precedence {
                 }
               },
               "span": {
-                "start": 1358,
-                "end": 1381
+                "start": 1357,
+                "end": 1380
               }
             },
             {
@@ -811,25 +811,17 @@ class Precedence {
                 }
               },
               "span": {
-                "start": 1398,
-                "end": 1421
+                "start": 1397,
+                "end": 1420
               }
             }
           ],
-          "attributes": [],
-          "doc_comment": {
-            "kind": "Doc",
-            "text": "/**\n     * Doc comment\n     */",
-            "span": {
-              "start": 1102,
-              "end": 1132
-            }
-          }
+          "attributes": []
         }
       },
       "span": {
-        "start": 1257,
-        "end": 1423
+        "start": 1256,
+        "end": 1422
       }
     },
     {
@@ -842,8 +834,8 @@ class Precedence {
                   "Variable": "anon"
                 },
                 "span": {
-                  "start": 1471,
-                  "end": 1476
+                  "start": 1470,
+                  "end": 1475
                 }
               },
               "op": "Assign",
@@ -872,8 +864,8 @@ class Precedence {
                                       ],
                                       "kind": "Unqualified",
                                       "span": {
-                                        "start": 1513,
-                                        "end": 1519
+                                        "start": 1512,
+                                        "end": 1518
                                       }
                                     },
                                     {
@@ -882,8 +874,8 @@ class Precedence {
                                       ],
                                       "kind": "Unqualified",
                                       "span": {
-                                        "start": 1539,
-                                        "end": 1545
+                                        "start": 1538,
+                                        "end": 1544
                                       }
                                     }
                                   ],
@@ -897,8 +889,8 @@ class Precedence {
                                             ],
                                             "kind": "Unqualified",
                                             "span": {
-                                              "start": 1573,
-                                              "end": 1579
+                                              "start": 1572,
+                                              "end": 1578
                                             }
                                           },
                                           "method": {
@@ -907,8 +899,8 @@ class Precedence {
                                             ],
                                             "kind": "Unqualified",
                                             "span": {
-                                              "start": 1581,
-                                              "end": 1588
+                                              "start": 1580,
+                                              "end": 1587
                                             }
                                           },
                                           "insteadof": [
@@ -918,24 +910,24 @@ class Precedence {
                                               ],
                                               "kind": "Unqualified",
                                               "span": {
-                                                "start": 1599,
-                                                "end": 1605
+                                                "start": 1598,
+                                                "end": 1604
                                               }
                                             }
                                           ]
                                         }
                                       },
                                       "span": {
-                                        "start": 1573,
-                                        "end": 1606
+                                        "start": 1572,
+                                        "end": 1605
                                       }
                                     }
                                   ]
                                 }
                               },
                               "span": {
-                                "start": 1493,
-                                "end": 1612
+                                "start": 1492,
+                                "end": 1611
                               }
                             }
                           ],
@@ -943,29 +935,29 @@ class Precedence {
                         }
                       },
                       "span": {
-                        "start": 1479,
-                        "end": 1615
+                        "start": 1478,
+                        "end": 1613
                       }
                     },
                     "args": []
                   }
                 },
                 "span": {
-                  "start": 1479,
-                  "end": 1615
+                  "start": 1478,
+                  "end": 1613
                 }
               }
             }
           },
           "span": {
-            "start": 1471,
-            "end": 1615
+            "start": 1470,
+            "end": 1613
           }
         }
       },
       "span": {
-        "start": 1471,
-        "end": 1616
+        "start": 1470,
+        "end": 1614
       }
     },
     {
@@ -990,8 +982,8 @@ class Precedence {
                       ],
                       "kind": "Unqualified",
                       "span": {
-                        "start": 1690,
-                        "end": 1696
+                        "start": 1688,
+                        "end": 1694
                       }
                     }
                   ],
@@ -999,8 +991,8 @@ class Precedence {
                 }
               },
               "span": {
-                "start": 1686,
-                "end": 1697
+                "start": 1684,
+                "end": 1695
               }
             },
             {
@@ -1013,8 +1005,8 @@ class Precedence {
                       ],
                       "kind": "Unqualified",
                       "span": {
-                        "start": 1732,
-                        "end": 1738
+                        "start": 1730,
+                        "end": 1736
                       }
                     }
                   ],
@@ -1028,8 +1020,8 @@ class Precedence {
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 1757,
-                              "end": 1763
+                              "start": 1755,
+                              "end": 1761
                             }
                           },
                           "method": {
@@ -1038,8 +1030,8 @@ class Precedence {
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 1765,
-                              "end": 1771
+                              "start": 1763,
+                              "end": 1769
                             }
                           },
                           "new_modifier": "Private",
@@ -1047,16 +1039,16 @@ class Precedence {
                         }
                       },
                       "span": {
-                        "start": 1757,
-                        "end": 1783
+                        "start": 1755,
+                        "end": 1781
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 1728,
-                "end": 1787
+                "start": 1726,
+                "end": 1785
               }
             }
           ],
@@ -1064,8 +1056,8 @@ class Precedence {
         }
       },
       "span": {
-        "start": 1661,
-        "end": 1789
+        "start": 1659,
+        "end": 1787
       }
     },
     {
@@ -1090,8 +1082,8 @@ class Precedence {
                       ],
                       "kind": "Unqualified",
                       "span": {
-                        "start": 1855,
-                        "end": 1861
+                        "start": 1853,
+                        "end": 1859
                       }
                     },
                     {
@@ -1100,8 +1092,8 @@ class Precedence {
                       ],
                       "kind": "Unqualified",
                       "span": {
-                        "start": 1863,
-                        "end": 1869
+                        "start": 1861,
+                        "end": 1867
                       }
                     },
                     {
@@ -1110,8 +1102,8 @@ class Precedence {
                       ],
                       "kind": "Unqualified",
                       "span": {
-                        "start": 1871,
-                        "end": 1877
+                        "start": 1869,
+                        "end": 1875
                       }
                     }
                   ],
@@ -1125,8 +1117,8 @@ class Precedence {
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 1901,
-                              "end": 1907
+                              "start": 1899,
+                              "end": 1905
                             }
                           },
                           "method": {
@@ -1135,8 +1127,8 @@ class Precedence {
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 1909,
-                              "end": 1915
+                              "start": 1907,
+                              "end": 1913
                             }
                           },
                           "insteadof": [
@@ -1146,8 +1138,8 @@ class Precedence {
                               ],
                               "kind": "Unqualified",
                               "span": {
-                                "start": 1926,
-                                "end": 1932
+                                "start": 1924,
+                                "end": 1930
                               }
                             },
                             {
@@ -1156,16 +1148,16 @@ class Precedence {
                               ],
                               "kind": "Unqualified",
                               "span": {
-                                "start": 1934,
-                                "end": 1940
+                                "start": 1932,
+                                "end": 1938
                               }
                             }
                           ]
                         }
                       },
                       "span": {
-                        "start": 1901,
-                        "end": 1941
+                        "start": 1899,
+                        "end": 1939
                       }
                     },
                     {
@@ -1177,8 +1169,8 @@ class Precedence {
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 1967,
-                              "end": 1973
+                              "start": 1965,
+                              "end": 1971
                             }
                           },
                           "method": {
@@ -1187,8 +1179,8 @@ class Precedence {
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 1975,
-                              "end": 1980
+                              "start": 1973,
+                              "end": 1978
                             }
                           },
                           "new_modifier": null,
@@ -1198,23 +1190,23 @@ class Precedence {
                             ],
                             "kind": "Unqualified",
                             "span": {
-                              "start": 1984,
-                              "end": 1995
+                              "start": 1982,
+                              "end": 1993
                             }
                           }
                         }
                       },
                       "span": {
-                        "start": 1967,
-                        "end": 1996
+                        "start": 1965,
+                        "end": 1994
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 1851,
-                "end": 2000
+                "start": 1849,
+                "end": 1998
               }
             }
           ],
@@ -1222,13 +1214,13 @@ class Precedence {
         }
       },
       "span": {
-        "start": 1830,
-        "end": 2002
+        "start": 1828,
+        "end": 2000
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 2002
+    "end": 2000
   }
 }

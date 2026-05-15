@@ -724,6 +724,8 @@ fn parse_method_member<'arena, 'src>(
         None
     };
 
+    let doc_comment = parser.take_doc_comment(member_start);
+
     let body = if parser.check(TokenKind::LeftBrace) {
         parser.expect(TokenKind::LeftBrace);
         let mut stmts = parser.alloc_vec_with_capacity(16);
@@ -772,7 +774,7 @@ fn parse_method_member<'arena, 'src>(
             return_type,
             body,
             attributes: member_attrs,
-            doc_comment: parser.take_doc_comment(member_start),
+            doc_comment,
         }),
         span,
     }
