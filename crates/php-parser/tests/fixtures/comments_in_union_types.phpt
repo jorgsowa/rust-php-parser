@@ -1,22 +1,21 @@
 ===config===
-min_php=8.4
+min_php=8.0
 ===source===
 <?php
-function test1(
+function test(
     string /* before pipe */ | int $x,
-    float | /* after pipe */ int $y,
-    (Countable & /* in intersection */ Traversable) | bool $z
-): string /* return type */ | null {
+    float | /* after pipe */ int $y
+): string | null {
     return null;
 }
 
 class Test {
-    private string /* prop */ | int $prop;
+    private string | int $prop;
 
     public function method(
-        Countable /* comment */ & Traversable $param
-    ): (Countable & Traversable) /* intersection comment */ | null {
-        return null;
+        string /* param */ | int $param
+    ): string | /* return union */ int {
+        return $param;
     }
 }
 ===ast===
@@ -25,7 +24,7 @@ class Test {
     {
       "kind": {
         "Function": {
-          "name": "test1",
+          "name": "test",
           "params": [
             {
               "name": "x",
@@ -40,14 +39,14 @@ class Test {
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 26,
-                            "end": 32
+                            "start": 25,
+                            "end": 31
                           }
                         }
                       },
                       "span": {
-                        "start": 26,
-                        "end": 32
+                        "start": 25,
+                        "end": 31
                       }
                     },
                     {
@@ -58,21 +57,21 @@ class Test {
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 53,
-                            "end": 56
+                            "start": 52,
+                            "end": 55
                           }
                         }
                       },
                       "span": {
-                        "start": 53,
-                        "end": 56
+                        "start": 52,
+                        "end": 55
                       }
                     }
                   ]
                 },
                 "span": {
-                  "start": 26,
-                  "end": 56
+                  "start": 25,
+                  "end": 55
                 }
               },
               "default": null,
@@ -84,8 +83,8 @@ class Test {
               "set_visibility": null,
               "attributes": [],
               "span": {
-                "start": 26,
-                "end": 59
+                "start": 25,
+                "end": 58
               }
             },
             {
@@ -101,14 +100,14 @@ class Test {
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 65,
-                            "end": 70
+                            "start": 64,
+                            "end": 69
                           }
                         }
                       },
                       "span": {
-                        "start": 65,
-                        "end": 70
+                        "start": 64,
+                        "end": 69
                       }
                     },
                     {
@@ -119,21 +118,21 @@ class Test {
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 90,
-                            "end": 93
+                            "start": 89,
+                            "end": 92
                           }
                         }
                       },
                       "span": {
-                        "start": 90,
-                        "end": 93
+                        "start": 89,
+                        "end": 92
                       }
                     }
                   ]
                 },
                 "span": {
-                  "start": 65,
-                  "end": 93
+                  "start": 64,
+                  "end": 92
                 }
               },
               "default": null,
@@ -145,97 +144,8 @@ class Test {
               "set_visibility": null,
               "attributes": [],
               "span": {
-                "start": 65,
-                "end": 96
-              }
-            },
-            {
-              "name": "z",
-              "type_hint": {
-                "kind": {
-                  "Union": [
-                    {
-                      "kind": {
-                        "Intersection": [
-                          {
-                            "kind": {
-                              "Named": {
-                                "parts": [
-                                  "Countable"
-                                ],
-                                "kind": "Unqualified",
-                                "span": {
-                                  "start": 103,
-                                  "end": 112
-                                }
-                              }
-                            },
-                            "span": {
-                              "start": 103,
-                              "end": 112
-                            }
-                          },
-                          {
-                            "kind": {
-                              "Named": {
-                                "parts": [
-                                  "Traversable"
-                                ],
-                                "kind": "Unqualified",
-                                "span": {
-                                  "start": 137,
-                                  "end": 148
-                                }
-                              }
-                            },
-                            "span": {
-                              "start": 137,
-                              "end": 148
-                            }
-                          }
-                        ]
-                      },
-                      "span": {
-                        "start": 102,
-                        "end": 149
-                      }
-                    },
-                    {
-                      "kind": {
-                        "Named": {
-                          "parts": [
-                            "bool"
-                          ],
-                          "kind": "Unqualified",
-                          "span": {
-                            "start": 152,
-                            "end": 156
-                          }
-                        }
-                      },
-                      "span": {
-                        "start": 152,
-                        "end": 156
-                      }
-                    }
-                  ]
-                },
-                "span": {
-                  "start": 102,
-                  "end": 156
-                }
-              },
-              "default": null,
-              "by_ref": false,
-              "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
-              "attributes": [],
-              "span": {
-                "start": 102,
-                "end": 159
+                "start": 64,
+                "end": 95
               }
             }
           ],
@@ -245,14 +155,14 @@ class Test {
                 "Return": {
                   "kind": "Null",
                   "span": {
-                    "start": 208,
-                    "end": 212
+                    "start": 126,
+                    "end": 130
                   }
                 }
               },
               "span": {
-                "start": 201,
-                "end": 213
+                "start": 119,
+                "end": 131
               }
             }
           ],
@@ -267,14 +177,14 @@ class Test {
                       ],
                       "kind": "Unqualified",
                       "span": {
-                        "start": 163,
-                        "end": 169
+                        "start": 99,
+                        "end": 105
                       }
                     }
                   },
                   "span": {
-                    "start": 163,
-                    "end": 169
+                    "start": 99,
+                    "end": 105
                   }
                 },
                 {
@@ -285,21 +195,21 @@ class Test {
                       ],
                       "kind": "Unqualified",
                       "span": {
-                        "start": 190,
-                        "end": 194
+                        "start": 108,
+                        "end": 112
                       }
                     }
                   },
                   "span": {
-                    "start": 190,
-                    "end": 194
+                    "start": 108,
+                    "end": 112
                   }
                 }
               ]
             },
             "span": {
-              "start": 163,
-              "end": 194
+              "start": 99,
+              "end": 112
             }
           },
           "by_ref": false,
@@ -308,7 +218,7 @@ class Test {
       },
       "span": {
         "start": 6,
-        "end": 215
+        "end": 133
       }
     },
     {
@@ -342,14 +252,14 @@ class Test {
                               ],
                               "kind": "Unqualified",
                               "span": {
-                                "start": 242,
-                                "end": 248
+                                "start": 160,
+                                "end": 166
                               }
                             }
                           },
                           "span": {
-                            "start": 242,
-                            "end": 248
+                            "start": 160,
+                            "end": 166
                           }
                         },
                         {
@@ -360,21 +270,21 @@ class Test {
                               ],
                               "kind": "Unqualified",
                               "span": {
-                                "start": 262,
-                                "end": 265
+                                "start": 169,
+                                "end": 172
                               }
                             }
                           },
                           "span": {
-                            "start": 262,
-                            "end": 265
+                            "start": 169,
+                            "end": 172
                           }
                         }
                       ]
                     },
                     "span": {
-                      "start": 242,
-                      "end": 265
+                      "start": 160,
+                      "end": 172
                     }
                   },
                   "default": null,
@@ -382,8 +292,8 @@ class Test {
                 }
               },
               "span": {
-                "start": 234,
-                "end": 271
+                "start": 152,
+                "end": 178
               }
             },
             {
@@ -400,48 +310,48 @@ class Test {
                       "name": "param",
                       "type_hint": {
                         "kind": {
-                          "Intersection": [
+                          "Union": [
                             {
                               "kind": {
                                 "Named": {
                                   "parts": [
-                                    "Countable"
+                                    "string"
                                   ],
                                   "kind": "Unqualified",
                                   "span": {
-                                    "start": 310,
-                                    "end": 319
+                                    "start": 217,
+                                    "end": 223
                                   }
                                 }
                               },
                               "span": {
-                                "start": 310,
-                                "end": 319
+                                "start": 217,
+                                "end": 223
                               }
                             },
                             {
                               "kind": {
                                 "Named": {
                                   "parts": [
-                                    "Traversable"
+                                    "int"
                                   ],
                                   "kind": "Unqualified",
                                   "span": {
-                                    "start": 336,
-                                    "end": 347
+                                    "start": 238,
+                                    "end": 241
                                   }
                                 }
                               },
                               "span": {
-                                "start": 336,
-                                "end": 347
+                                "start": 238,
+                                "end": 241
                               }
                             }
                           ]
                         },
                         "span": {
-                          "start": 310,
-                          "end": 347
+                          "start": 217,
+                          "end": 241
                         }
                       },
                       "default": null,
@@ -453,8 +363,8 @@ class Test {
                       "set_visibility": null,
                       "attributes": [],
                       "span": {
-                        "start": 310,
-                        "end": 354
+                        "start": 217,
+                        "end": 248
                       }
                     }
                   ],
@@ -463,89 +373,63 @@ class Test {
                       "Union": [
                         {
                           "kind": {
-                            "Intersection": [
-                              {
-                                "kind": {
-                                  "Named": {
-                                    "parts": [
-                                      "Countable"
-                                    ],
-                                    "kind": "Unqualified",
-                                    "span": {
-                                      "start": 363,
-                                      "end": 372
-                                    }
-                                  }
-                                },
-                                "span": {
-                                  "start": 363,
-                                  "end": 372
-                                }
-                              },
-                              {
-                                "kind": {
-                                  "Named": {
-                                    "parts": [
-                                      "Traversable"
-                                    ],
-                                    "kind": "Unqualified",
-                                    "span": {
-                                      "start": 375,
-                                      "end": 386
-                                    }
-                                  }
-                                },
-                                "span": {
-                                  "start": 375,
-                                  "end": 386
-                                }
+                            "Named": {
+                              "parts": [
+                                "string"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 256,
+                                "end": 262
                               }
-                            ]
+                            }
                           },
                           "span": {
-                            "start": 362,
-                            "end": 387
+                            "start": 256,
+                            "end": 262
                           }
                         },
                         {
                           "kind": {
                             "Named": {
                               "parts": [
-                                "null"
+                                "int"
                               ],
                               "kind": "Unqualified",
                               "span": {
-                                "start": 417,
-                                "end": 421
+                                "start": 284,
+                                "end": 287
                               }
                             }
                           },
                           "span": {
-                            "start": 417,
-                            "end": 421
+                            "start": 284,
+                            "end": 287
                           }
                         }
                       ]
                     },
                     "span": {
-                      "start": 362,
-                      "end": 421
+                      "start": 256,
+                      "end": 287
                     }
                   },
                   "body": [
                     {
                       "kind": {
                         "Return": {
-                          "kind": "Null",
+                          "kind": {
+                            "Variable": "param"
+                          },
                           "span": {
-                            "start": 439,
-                            "end": 443
+                            "start": 305,
+                            "end": 311
                           }
                         }
                       },
                       "span": {
-                        "start": 432,
-                        "end": 444
+                        "start": 298,
+                        "end": 312
                       }
                     }
                   ],
@@ -553,8 +437,8 @@ class Test {
                 }
               },
               "span": {
-                "start": 278,
-                "end": 450
+                "start": 185,
+                "end": 318
               }
             }
           ],
@@ -562,13 +446,13 @@ class Test {
         }
       },
       "span": {
-        "start": 217,
-        "end": 452
+        "start": 135,
+        "end": 320
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 452
+    "end": 320
   }
 }
