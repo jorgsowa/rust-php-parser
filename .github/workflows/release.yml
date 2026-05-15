@@ -182,29 +182,22 @@ jobs:
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
 
       - name: Extract CHANGELOG section
-        id: notes
         run: |
           VERSION="${{ steps.version.outputs.VERSION }}"
-          NOTES=$(awk -v ver="$VERSION" '
+          awk -v ver="$VERSION" '
             $0 ~ "^## \\["ver"\\]" { flag=1; next }
             /^## \[/               { flag=0 }
             flag
-          ' CHANGELOG.md | sed '/^---[[:space:]]*$/d' | sed -e '/./,$!d' -e :a -e '/^\n*$/{$d;N;ba}')
-          if [ -z "$NOTES" ]; then
+          ' CHANGELOG.md | sed '/^---[[:space:]]*$/d' | sed -e '/./,$!d' -e :a -e '/^\n*$/{$d;N;ba}' > release-notes.txt
+          if [ ! -s release-notes.txt ]; then
             echo "ERROR: No CHANGELOG section found for version $VERSION"
             exit 1
           fi
-          {
-            echo "NOTES<<RELEASE_NOTES_EOF"
-            echo "$NOTES"
-            echo "RELEASE_NOTES_EOF"
-          } >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub release
         run: |
           gh release create "v${{ steps.version.outputs.VERSION }}" \
             --title "v${{ steps.version.outputs.VERSION }}" \
-            --notes "$RELEASE_NOTES"
+            --notes-file release-notes.txt
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_NOTES: ${{ steps.notes.outputs.NOTES }}
