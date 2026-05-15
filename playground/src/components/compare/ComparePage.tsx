@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { Select } from '../Select'
 import rawStats from '../../data/project-stats.json'
 import { astNodes } from '../../data/ast-nodes'
 
@@ -100,35 +101,37 @@ function ProjectInfoPopover({ project }: { project: ProjectStats }) {
         </svg>
       </span>
       <div className="cmp-info-popover">
-        <div className="cmp-info-name">{project.name}</div>
-        {desc && <p className="cmp-info-desc">{desc}</p>}
-        <div className="cmp-info-divider" />
-        <div className="cmp-info-row">
-          <span className="cmp-info-label">Version</span>
-          <span className="cmp-info-value">{project.version}</span>
-        </div>
-        <div className="cmp-info-row">
-          <span className="cmp-info-label">Repository</span>
-          <a className="cmp-info-link" href={project.repo} target="_blank" rel="noreferrer">
-            {project.repo.replace('https://github.com/', '')}
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{marginLeft: '3px', verticalAlign: 'middle'}}>
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-              <polyline points="15 3 21 3 21 9"/>
-              <line x1="10" y1="14" x2="21" y2="3"/>
-            </svg>
-          </a>
-        </div>
-        <div className="cmp-info-row">
-          <span className="cmp-info-label">Scanned directories</span>
-          <ul className="cmp-info-dir-list">
-            {project.scanned_dirs.map(d => (
-              <li key={d}><code>{d}/</code></li>
-            ))}
-          </ul>
-        </div>
-        <div className="cmp-info-row">
-          <span className="cmp-info-label">Coverage</span>
-          <span className="cmp-info-value">{formatNum(project.files)} PHP files · {formatNum(project.total_nodes)} nodes</span>
+        <div className="cmp-info-popover-inner">
+          <div className="cmp-info-name">{project.name}</div>
+          {desc && <p className="cmp-info-desc">{desc}</p>}
+          <div className="cmp-info-divider" />
+          <div className="cmp-info-row">
+            <span className="cmp-info-label">Version</span>
+            <span className="cmp-info-value">{project.version}</span>
+          </div>
+          <div className="cmp-info-row">
+            <span className="cmp-info-label">Repository</span>
+            <a className="cmp-info-link" href={project.repo} target="_blank" rel="noreferrer">
+              {project.repo.replace('https://github.com/', '')}
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{marginLeft: '3px', verticalAlign: 'middle'}}>
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+            </a>
+          </div>
+          <div className="cmp-info-row">
+            <span className="cmp-info-label">Scanned directories</span>
+            <ul className="cmp-info-dir-list">
+              {project.scanned_dirs.map(d => (
+                <li key={d}><code>{d}/</code></li>
+              ))}
+            </ul>
+          </div>
+          <div className="cmp-info-row">
+            <span className="cmp-info-label">Coverage</span>
+            <span className="cmp-info-value">{formatNum(project.files)} PHP files · {formatNum(project.total_nodes)} nodes</span>
+          </div>
         </div>
       </div>
     </div>
@@ -195,31 +198,26 @@ export function ComparePage() {
   return (
     <div className="page-compare">
       <div className="cmp-header">
-        <h1 className="cmp-title">AST Node Comparison</h1>
+        <h1 className="cmp-title">Project Stats</h1>
         <p className="cmp-subtitle">
-          How does the PHP parser see {left.name} vs {right.name}?
+          AST node usage in {left.name} vs {right.name}.
           Real statistics from {formatNum(left.files + right.files)} library PHP files — tests and templates excluded.
         </p>
       </div>
 
       <div className="cmp-selectors">
         <div className="cmp-project-card cmp-project-left">
-          <div className="cmp-project-label">Project A</div>
-          <div className="cmp-select-row">
-            <div className="cmp-select-wrap cmp-select-wrap--left">
-              <select
-                className="cmp-select"
-                value={leftSlug}
-                onChange={e => setLeftSlug(e.target.value)}
-              >
-                {PROJECTS.map(p => (
-                  <option key={p.slug} value={p.slug}>{p.name}</option>
-                ))}
-              </select>
-              <span className="cmp-select-arrow">▾</span>
-            </div>
+          <div className="cmp-card-header">
+            <div className="cmp-project-label">Project A</div>
             <ProjectInfoPopover project={left} />
           </div>
+          <Select
+            className="cmp-select--left"
+            value={leftSlug}
+            onChange={setLeftSlug}
+            options={PROJECTS.map(p => ({ value: p.slug, label: p.name }))}
+            aria-label="Project A"
+          />
           <div className="cmp-project-stats">
             <span className="cmp-stat"><strong>{formatNum(left.files)}</strong> library files</span>
             <span className="cmp-stat"><strong>{formatNum(left.total_nodes)}</strong> nodes</span>
@@ -229,22 +227,17 @@ export function ComparePage() {
         <div className="cmp-vs">vs</div>
 
         <div className="cmp-project-card cmp-project-right">
-          <div className="cmp-project-label">Project B</div>
-          <div className="cmp-select-row">
-            <div className="cmp-select-wrap cmp-select-wrap--right">
-              <select
-                className="cmp-select"
-                value={rightSlug}
-                onChange={e => setRightSlug(e.target.value)}
-              >
-                {PROJECTS.map(p => (
-                  <option key={p.slug} value={p.slug}>{p.name}</option>
-                ))}
-              </select>
-              <span className="cmp-select-arrow">▾</span>
-            </div>
+          <div className="cmp-card-header">
+            <div className="cmp-project-label">Project B</div>
             <ProjectInfoPopover project={right} />
           </div>
+          <Select
+            className="cmp-select--right"
+            value={rightSlug}
+            onChange={setRightSlug}
+            options={PROJECTS.map(p => ({ value: p.slug, label: p.name }))}
+            aria-label="Project B"
+          />
           <div className="cmp-project-stats">
             <span className="cmp-stat"><strong>{formatNum(right.files)}</strong> library files</span>
             <span className="cmp-stat"><strong>{formatNum(right.total_nodes)}</strong> nodes</span>

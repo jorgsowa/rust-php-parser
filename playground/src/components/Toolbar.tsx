@@ -1,4 +1,5 @@
 import { type Route } from '../router'
+import { Select } from './Select'
 
 export const PHP_VERSIONS = ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5'] as const
 export type PhpVersion = (typeof PHP_VERSIONS)[number]
@@ -44,9 +45,9 @@ export function Toolbar({ version, onVersionChange, wasmStatus, route }: Props) 
         <a
           href="#compare"
           className={`nav-tab ${route.page === 'compare' ? 'active' : ''}`}
-          title="Compare AST usage across popular PHP projects"
+          title="Project Stats — AST node usage across popular PHP projects"
         >
-          Compare
+          Project Stats
         </a>
       </div>
 
@@ -64,16 +65,13 @@ export function Toolbar({ version, onVersionChange, wasmStatus, route }: Props) 
           </svg>
         </a>
 
-        <select
+        <Select
           className="version-select"
           value={version}
-          onChange={e => onVersionChange(e.target.value as PhpVersion)}
+          onChange={v => onVersionChange(v as PhpVersion)}
           aria-label="PHP version"
-        >
-          {PHP_VERSIONS.map(v => (
-            <option key={v} value={v}>PHP {v}</option>
-          ))}
-        </select>
+          options={PHP_VERSIONS.map(v => ({ value: v, label: `PHP ${v}` }))}
+        />
 
         <span className={`wasm-pill ${wasmStatus}`} title={
           wasmStatus === 'ready'   ? 'Rust parser running in WebAssembly' :
