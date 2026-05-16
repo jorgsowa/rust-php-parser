@@ -1,11 +1,11 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php
 namespace A {}
 declare(ticks=1);
 foo();
 namespace B {}
+===errors===
+No code may exist outside of namespace {}
 ===ast===
 {
   "stmts": [

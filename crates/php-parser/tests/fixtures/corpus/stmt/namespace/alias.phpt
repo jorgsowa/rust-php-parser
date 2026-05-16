@@ -1,5 +1,3 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php
 
@@ -16,6 +14,7 @@ use function foo\bar;
 use function foo\bar as baz;
 use const foo\BAR;
 use const foo\BAR as BAZ;
+===errors===
 ===ast===
 {
   "stmts": [

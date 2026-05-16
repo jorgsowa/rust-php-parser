@@ -1,9 +1,9 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php
 namespace A {}
 echo 1;
+===errors===
+No code may exist outside of namespace {}
 ===ast===
 {
   "stmts": [

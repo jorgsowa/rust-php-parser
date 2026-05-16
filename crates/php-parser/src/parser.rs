@@ -1500,6 +1500,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             }
         }
 
+        self.validate_namespace_layout(&stmts);
+
         let span = if stmts.is_empty() {
             Span::new(start, self.current.span.end)
         } else {
@@ -1514,5 +1516,94 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         };
 
         Program { stmts, span }
+    }
+
+    /// Enforce PHP's program-level namespace rules:
+    /// 1. **Bracketed vs. unbracketed cannot mix** — once a `namespace X { … }`
+    ///    appears, an unbracketed `namespace Y;` (and vice versa) is fatal.
+    /// 2. **No nesting** — a braced namespace body may not contain another
+    ///    namespace declaration.
+    /// 3. **No code outside braced namespaces** — once braced namespaces are
+    ///    in use, any non-namespace, non-declare statement at the top level
+    ///    is fatal.
+    /// 4. **Namespace declarations must come first** — only `declare(…);` and
+    ///    inline HTML may precede the first namespace declaration in the file.
+    fn validate_namespace_layout(&mut self, stmts: &[Stmt<'arena, 'src>]) {
+        // Pass 1: classify each top-level statement.
+        #[derive(Clone, Copy, PartialEq)]
+        enum NsKind {
+            Braced,
+            Unbraced,
+        }
+        let mut first_ns: Option<(NsKind, Span)> = None;
+        let mut saw_non_ns_before_first_ns: Option<Span> = None;
+        let mut saw_code_after_braced: Option<Span> = None;
+
+        for stmt in stmts {
+            let is_ns = matches!(stmt.kind, StmtKind::Namespace(_));
+            let is_skippable = matches!(
+                stmt.kind,
+                StmtKind::Declare(_)
+                    | StmtKind::InlineHtml(_)
+                    | StmtKind::Nop
+                    | StmtKind::HaltCompiler(_)
+            );
+
+            if let StmtKind::Namespace(decl) = stmt.kind {
+                let kind = match decl.body {
+                    php_ast::NamespaceBody::Braced(_) => NsKind::Braced,
+                    php_ast::NamespaceBody::Simple => NsKind::Unbraced,
+                };
+                if let Some((prev_kind, prev_span)) = first_ns {
+                    if prev_kind != kind {
+                        self.error(ParseError::Forbidden {
+                            message: "Cannot mix bracketed namespace declarations with unbracketed namespace declarations".into(),
+                            span: stmt.span,
+                        });
+                        let _ = prev_span;
+                    }
+                } else {
+                    first_ns = Some((kind, stmt.span));
+                    if let Some(noncode_span) = saw_non_ns_before_first_ns {
+                        self.error(ParseError::Forbidden {
+                            message: "Namespace declaration statement has to be the very first statement or after any declare call in the script".into(),
+                            span: noncode_span,
+                        });
+                    }
+                }
+            } else if !is_skippable {
+                if first_ns.is_none() {
+                    saw_non_ns_before_first_ns.get_or_insert(stmt.span);
+                } else if matches!(first_ns, Some((NsKind::Braced, _)))
+                    && saw_code_after_braced.is_none()
+                {
+                    saw_code_after_braced = Some(stmt.span);
+                }
+            }
+            let _ = is_ns;
+        }
+
+        if let Some(span) = saw_code_after_braced {
+            self.error(ParseError::Forbidden {
+                message: "No code may exist outside of namespace {}".into(),
+                span,
+            });
+        }
+
+        // Pass 2: nested namespace inside any braced body.
+        for stmt in stmts {
+            if let StmtKind::Namespace(decl) = stmt.kind {
+                if let php_ast::NamespaceBody::Braced(inner) = &decl.body {
+                    for s in inner.iter() {
+                        if matches!(s.kind, StmtKind::Namespace(_)) {
+                            self.error(ParseError::Forbidden {
+                                message: "Namespace declarations cannot be nested".into(),
+                                span: s.span,
+                            });
+                        }
+                    }
+                }
+            }
+        }
     }
 }

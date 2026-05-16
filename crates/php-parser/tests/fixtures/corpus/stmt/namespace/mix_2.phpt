@@ -1,5 +1,3 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php
 namespace A {
@@ -8,6 +6,9 @@ namespace A {
 echo 2;
 namespace B;
 echo 3;
+===errors===
+Cannot mix bracketed namespace declarations with unbracketed namespace declarations
+No code may exist outside of namespace {}
 ===ast===
 {
   "stmts": [

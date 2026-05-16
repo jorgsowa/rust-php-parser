@@ -1,5 +1,3 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php
 namespace A {
@@ -7,6 +5,8 @@ namespace A {
 
     }
 }
+===errors===
+Namespace declarations cannot be nested
 ===ast===
 {
   "stmts": [

@@ -1,10 +1,10 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php
 echo 1;
 echo 2;
 namespace A;
+===errors===
+Namespace declaration statement has to be the very first statement or after any declare call in the script
 ===ast===
 {
   "stmts": [
