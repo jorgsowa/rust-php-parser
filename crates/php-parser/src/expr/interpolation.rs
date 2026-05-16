@@ -213,9 +213,8 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                             };
                         }
                     }
-
-                    // Check for [index] (simple array access)
-                    if i < len && bytes[i] == b'[' {
+                    // Check for [index] (simple array access, only when no ->prop was consumed)
+                    else if i < len && bytes[i] == b'[' {
                         let bracket_start = i;
                         i += 1; // skip [
                                 // Find the matching ]
@@ -477,9 +476,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                                 span,
                             };
                         }
-                    }
-
-                    if i < len && bytes[i] == b'[' {
+                    } else if i < len && bytes[i] == b'[' {
                         let bracket_start = i;
                         i += 1; // skip [
                         let idx_start = i;
