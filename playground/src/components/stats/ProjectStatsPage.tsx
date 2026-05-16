@@ -406,7 +406,7 @@ export function ProjectStatsPage({ slug }: Props) {
 
         {/* Right: stats table */}
         <div className="project-stats-main">
-          <div className="project-stats-info">
+          <div className="project-stats-toolbar">
             <span className="cmp-stat">
               <strong>{formatNum(activeFiles)}</strong> files
             </span>
@@ -418,9 +418,6 @@ export function ProjectStatsPage({ slug }: Props) {
                 <code>{selectedDir}/</code>
               </span>
             )}
-          </div>
-
-          <div className="cmp-controls">
             <input
               className="cmp-filter"
               type="text"

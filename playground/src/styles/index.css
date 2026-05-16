@@ -1754,6 +1754,27 @@ body::after {
   color: var(--text-3);
 }
 
+.project-stats-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 13px;
+  color: var(--text-3);
+  flex-wrap: nowrap;
+  padding: 12px 0;
+}
+
+.project-stats-toolbar .cmp-filter {
+  flex: 1;
+  min-width: 0;
+  width: auto;
+}
+
+.project-stats-toolbar .cmp-count {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .project-stats-dir code {
   font-size: 11px;
   color: var(--text-3);
@@ -1822,7 +1843,7 @@ body::after {
 }
 
 .dir-tree {
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .dir-tree-item {
