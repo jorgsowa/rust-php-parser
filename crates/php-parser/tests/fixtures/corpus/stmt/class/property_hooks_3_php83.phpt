@@ -8,6 +8,7 @@ class Test {
     }
 }
 ===errors===
+get hook of property must not have a parameter list
 ===ast===
 {
   "stmts": [

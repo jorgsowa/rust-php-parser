@@ -15,6 +15,10 @@ class Test {
     ) {}
 }
 ===errors===
+Property with asymmetric visibility must have type
+Property with asymmetric visibility must have type
+Visibility of property must not be weaker than set visibility
+Property with asymmetric visibility must have type
 ===ast===
 {
   "stmts": [

@@ -7,6 +7,8 @@ class Test {
     public function __construct(public $prop2 {}) {}
 }
 ===errors===
+Property hook list must not be empty
+Property hook list must not be empty
 ===ast===
 {
   "stmts": [
