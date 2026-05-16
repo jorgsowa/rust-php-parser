@@ -356,7 +356,7 @@ export function ProjectStatsPage({ slug }: Props) {
     return (
       <div className="page-project-stats">
         <div className="project-stats-header">
-          <a className="project-stats-back" href="#stats">← All projects</a>
+          <a className="project-stats-back" href="#stats">← Project comparison</a>
         </div>
         <div className="project-stats-loading">Loading…</div>
       </div>
@@ -367,7 +367,7 @@ export function ProjectStatsPage({ slug }: Props) {
     return (
       <div className="page-project-stats">
         <div className="project-stats-header">
-          <a className="project-stats-back" href="#stats">← All projects</a>
+          <a className="project-stats-back" href="#stats">← Project comparison</a>
           <h1 className="cmp-title">Project not found</h1>
         </div>
       </div>
@@ -377,7 +377,7 @@ export function ProjectStatsPage({ slug }: Props) {
   return (
     <div className="page-project-stats">
       <div className="project-stats-header">
-        <a className="project-stats-back" href="#stats">← All projects</a>
+        <a className="project-stats-back" href="#stats">← Project comparison</a>
         <div className="project-stats-title-row">
           <h1 className="project-stats-name">{project.name}</h1>
           <span className="project-stats-version">{project.version}</span>
