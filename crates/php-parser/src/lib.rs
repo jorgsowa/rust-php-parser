@@ -4,6 +4,25 @@
 //! tree, recovering from syntax errors so that downstream tools always receive
 //! a complete AST.
 //!
+//! # Semantic-rejection responsibility
+//!
+//! The parser is fault-tolerant: it always produces an AST and reports every
+//! error it can identify before recovering. Its semantic-rejection
+//! responsibility is defined externally:
+//!
+//! > **For any input, the parser emits at least one diagnostic iff `php -l`
+//! > would reject that input at the configured target PHP version.**
+//!
+//! Flow-sensitive checks — cross-file resolution, unused variables, dead code,
+//! type-mismatched returns — are out of scope and belong in a later semantic
+//! layer. Checks decidable from one declaration, one parameter list, one
+//! modifier set, or one declaration loop are in scope and use
+//! [`diagnostics::ParseError::Forbidden`].
+//!
+//! The `===php_error===` section in `tests/fixtures/**/*.phpt` records `php -l`
+//! output; the fixture runner enforces the rule above by failing CI when PHP
+//! rejects an input that the parser silently accepts.
+//!
 //! # Quick start
 //!
 //! ```
