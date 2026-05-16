@@ -1,6 +1,7 @@
+===description===
+PHP: ($a + $b) . ($c + $d). Diagnostic: + above .
 ===source===
 <?php
-// PHP: ($a + $b) . ($c + $d). Diagnostic: + above .
 $a + $b . $c + $d;
 ===ast===
 {
@@ -18,8 +19,8 @@ $a + $b . $c + $d;
                         "Variable": "a"
                       },
                       "span": {
-                        "start": 59,
-                        "end": 61
+                        "start": 6,
+                        "end": 8
                       }
                     },
                     "op": "Add",
@@ -28,15 +29,15 @@ $a + $b . $c + $d;
                         "Variable": "b"
                       },
                       "span": {
-                        "start": 64,
-                        "end": 66
+                        "start": 11,
+                        "end": 13
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 59,
-                  "end": 66
+                  "start": 6,
+                  "end": 13
                 }
               },
               "op": "Concat",
@@ -48,8 +49,8 @@ $a + $b . $c + $d;
                         "Variable": "c"
                       },
                       "span": {
-                        "start": 69,
-                        "end": 71
+                        "start": 16,
+                        "end": 18
                       }
                     },
                     "op": "Add",
@@ -58,33 +59,33 @@ $a + $b . $c + $d;
                         "Variable": "d"
                       },
                       "span": {
-                        "start": 74,
-                        "end": 76
+                        "start": 21,
+                        "end": 23
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 69,
-                  "end": 76
+                  "start": 16,
+                  "end": 23
                 }
               }
             }
           },
           "span": {
-            "start": 59,
-            "end": 76
+            "start": 6,
+            "end": 23
           }
         }
       },
       "span": {
-        "start": 59,
-        "end": 77
+        "start": 6,
+        "end": 24
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 77
+    "end": 24
   }
 }

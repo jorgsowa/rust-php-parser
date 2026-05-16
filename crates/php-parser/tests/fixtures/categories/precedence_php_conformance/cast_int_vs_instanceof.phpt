@@ -1,6 +1,7 @@
+===description===
+PHP: ((int)$a) instanceof Foo. Cast binds tighter than instanceof.
 ===source===
 <?php
-// PHP: ((int)$a) instanceof Foo. Cast binds tighter than instanceof.
 (int)$a instanceof Foo;
 ===ast===
 {
@@ -19,15 +20,15 @@
                         "Variable": "a"
                       },
                       "span": {
-                        "start": 81,
-                        "end": 83
+                        "start": 11,
+                        "end": 13
                       }
                     }
                   ]
                 },
                 "span": {
-                  "start": 76,
-                  "end": 83
+                  "start": 6,
+                  "end": 13
                 }
               },
               "op": "Instanceof",
@@ -36,26 +37,26 @@
                   "Identifier": "Foo"
                 },
                 "span": {
-                  "start": 95,
-                  "end": 98
+                  "start": 25,
+                  "end": 28
                 }
               }
             }
           },
           "span": {
-            "start": 76,
-            "end": 98
+            "start": 6,
+            "end": 28
           }
         }
       },
       "span": {
-        "start": 76,
-        "end": 99
+        "start": 6,
+        "end": 29
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 99
+    "end": 29
   }
 }

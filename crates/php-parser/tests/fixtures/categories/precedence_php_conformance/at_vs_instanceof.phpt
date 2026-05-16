@@ -1,6 +1,7 @@
+===description===
+PHP: (@$a) instanceof Foo. @ is at the high unary tier (with ~ and casts), above instanceof.
 ===source===
 <?php
-// PHP: (@$a) instanceof Foo. @ is at the high unary tier (with ~ and casts), above instanceof.
 @$a instanceof Foo;
 ===ast===
 {
@@ -17,14 +18,14 @@
                       "Variable": "a"
                     },
                     "span": {
-                      "start": 103,
-                      "end": 105
+                      "start": 7,
+                      "end": 9
                     }
                   }
                 },
                 "span": {
-                  "start": 102,
-                  "end": 105
+                  "start": 6,
+                  "end": 9
                 }
               },
               "op": "Instanceof",
@@ -33,26 +34,26 @@
                   "Identifier": "Foo"
                 },
                 "span": {
-                  "start": 117,
-                  "end": 120
+                  "start": 21,
+                  "end": 24
                 }
               }
             }
           },
           "span": {
-            "start": 102,
-            "end": 120
+            "start": 6,
+            "end": 24
           }
         }
       },
       "span": {
-        "start": 102,
-        "end": 121
+        "start": 6,
+        "end": 25
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 121
+    "end": 25
   }
 }

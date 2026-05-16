@@ -1,6 +1,7 @@
+===description===
+PHP: -(2 ** 3) = -8. ** binds tighter than unary minus.
 ===source===
 <?php
-// PHP: -(2 ** 3) = -8. ** binds tighter than unary minus.
 -2 ** 3;
 ===ast===
 {
@@ -19,8 +20,8 @@
                         "Int": 2
                       },
                       "span": {
-                        "start": 66,
-                        "end": 67
+                        "start": 7,
+                        "end": 8
                       }
                     },
                     "op": "Pow",
@@ -29,33 +30,33 @@
                         "Int": 3
                       },
                       "span": {
-                        "start": 71,
-                        "end": 72
+                        "start": 12,
+                        "end": 13
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 66,
-                  "end": 72
+                  "start": 7,
+                  "end": 13
                 }
               }
             }
           },
           "span": {
-            "start": 65,
-            "end": 72
+            "start": 6,
+            "end": 13
           }
         }
       },
       "span": {
-        "start": 65,
-        "end": 73
+        "start": 6,
+        "end": 14
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 73
+    "end": 14
   }
 }

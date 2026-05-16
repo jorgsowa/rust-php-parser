@@ -1,6 +1,7 @@
+===description===
+PHP: (int)((string)$a). Casts stack right-associatively.
 ===source===
 <?php
-// PHP: (int)((string)$a). Casts stack right-associatively.
 (int)(string)$a;
 ===ast===
 {
@@ -20,33 +21,33 @@
                         "Variable": "a"
                       },
                       "span": {
-                        "start": 79,
-                        "end": 81
+                        "start": 19,
+                        "end": 21
                       }
                     }
                   ]
                 },
                 "span": {
-                  "start": 71,
-                  "end": 81
+                  "start": 11,
+                  "end": 21
                 }
               }
             ]
           },
           "span": {
-            "start": 66,
-            "end": 81
+            "start": 6,
+            "end": 21
           }
         }
       },
       "span": {
-        "start": 66,
-        "end": 82
+        "start": 6,
+        "end": 22
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 82
+    "end": 22
   }
 }

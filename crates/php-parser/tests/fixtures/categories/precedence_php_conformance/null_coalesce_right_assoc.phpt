@@ -1,6 +1,7 @@
+===description===
+PHP: $a ?? ($b ?? $c). Right-associative.
 ===source===
 <?php
-// PHP: $a ?? ($b ?? $c). Right-associative.
 $a ?? $b ?? $c;
 ===ast===
 {
@@ -15,8 +16,8 @@ $a ?? $b ?? $c;
                   "Variable": "a"
                 },
                 "span": {
-                  "start": 51,
-                  "end": 53
+                  "start": 6,
+                  "end": 8
                 }
               },
               "right": {
@@ -27,8 +28,8 @@ $a ?? $b ?? $c;
                         "Variable": "b"
                       },
                       "span": {
-                        "start": 57,
-                        "end": 59
+                        "start": 12,
+                        "end": 14
                       }
                     },
                     "right": {
@@ -36,33 +37,33 @@ $a ?? $b ?? $c;
                         "Variable": "c"
                       },
                       "span": {
-                        "start": 63,
-                        "end": 65
+                        "start": 18,
+                        "end": 20
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 57,
-                  "end": 65
+                  "start": 12,
+                  "end": 20
                 }
               }
             }
           },
           "span": {
-            "start": 51,
-            "end": 65
+            "start": 6,
+            "end": 20
           }
         }
       },
       "span": {
-        "start": 51,
-        "end": 66
+        "start": 6,
+        "end": 21
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 66
+    "end": 21
   }
 }

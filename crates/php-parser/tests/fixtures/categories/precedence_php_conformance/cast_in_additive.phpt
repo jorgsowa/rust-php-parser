@@ -1,6 +1,7 @@
+===description===
+PHP: ((int)$a) + ((string)$b). Casts bind to immediate operand.
 ===source===
 <?php
-// PHP: ((int)$a) + ((string)$b). Casts bind to immediate operand.
 (int)$a + (string)$b;
 ===ast===
 {
@@ -19,15 +20,15 @@
                         "Variable": "a"
                       },
                       "span": {
-                        "start": 78,
-                        "end": 80
+                        "start": 11,
+                        "end": 13
                       }
                     }
                   ]
                 },
                 "span": {
-                  "start": 73,
-                  "end": 80
+                  "start": 6,
+                  "end": 13
                 }
               },
               "op": "Add",
@@ -40,33 +41,33 @@
                         "Variable": "b"
                       },
                       "span": {
-                        "start": 91,
-                        "end": 93
+                        "start": 24,
+                        "end": 26
                       }
                     }
                   ]
                 },
                 "span": {
-                  "start": 83,
-                  "end": 93
+                  "start": 16,
+                  "end": 26
                 }
               }
             }
           },
           "span": {
-            "start": 73,
-            "end": 93
+            "start": 6,
+            "end": 26
           }
         }
       },
       "span": {
-        "start": 73,
-        "end": 94
+        "start": 6,
+        "end": 27
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 94
+    "end": 27
   }
 }

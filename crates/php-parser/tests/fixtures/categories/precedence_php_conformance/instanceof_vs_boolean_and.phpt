@@ -1,6 +1,7 @@
+===description===
+PHP: ($a instanceof Foo) && ($b instanceof Bar).
 ===source===
 <?php
-// PHP: ($a instanceof Foo) && ($b instanceof Bar).
 $a instanceof Foo && $b instanceof Bar;
 ===ast===
 {
@@ -18,8 +19,8 @@ $a instanceof Foo && $b instanceof Bar;
                         "Variable": "a"
                       },
                       "span": {
-                        "start": 58,
-                        "end": 60
+                        "start": 6,
+                        "end": 8
                       }
                     },
                     "op": "Instanceof",
@@ -28,15 +29,15 @@ $a instanceof Foo && $b instanceof Bar;
                         "Identifier": "Foo"
                       },
                       "span": {
-                        "start": 72,
-                        "end": 75
+                        "start": 20,
+                        "end": 23
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 58,
-                  "end": 75
+                  "start": 6,
+                  "end": 23
                 }
               },
               "op": "BooleanAnd",
@@ -48,8 +49,8 @@ $a instanceof Foo && $b instanceof Bar;
                         "Variable": "b"
                       },
                       "span": {
-                        "start": 79,
-                        "end": 81
+                        "start": 27,
+                        "end": 29
                       }
                     },
                     "op": "Instanceof",
@@ -58,33 +59,33 @@ $a instanceof Foo && $b instanceof Bar;
                         "Identifier": "Bar"
                       },
                       "span": {
-                        "start": 93,
-                        "end": 96
+                        "start": 41,
+                        "end": 44
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 79,
-                  "end": 96
+                  "start": 27,
+                  "end": 44
                 }
               }
             }
           },
           "span": {
-            "start": 58,
-            "end": 96
+            "start": 6,
+            "end": 44
           }
         }
       },
       "span": {
-        "start": 58,
-        "end": 97
+        "start": 6,
+        "end": 45
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 97
+    "end": 45
   }
 }

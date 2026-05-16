@@ -1,6 +1,7 @@
+===description===
+PHP: ($a instanceof Foo) < 5. instanceof above comparison.
 ===source===
 <?php
-// PHP: ($a instanceof Foo) < 5. instanceof above comparison.
 $a instanceof Foo < 5;
 ===ast===
 {
@@ -18,8 +19,8 @@ $a instanceof Foo < 5;
                         "Variable": "a"
                       },
                       "span": {
-                        "start": 68,
-                        "end": 70
+                        "start": 6,
+                        "end": 8
                       }
                     },
                     "op": "Instanceof",
@@ -28,15 +29,15 @@ $a instanceof Foo < 5;
                         "Identifier": "Foo"
                       },
                       "span": {
-                        "start": 82,
-                        "end": 85
+                        "start": 20,
+                        "end": 23
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 68,
-                  "end": 85
+                  "start": 6,
+                  "end": 23
                 }
               },
               "op": "Less",
@@ -45,26 +46,26 @@ $a instanceof Foo < 5;
                   "Int": 5
                 },
                 "span": {
-                  "start": 88,
-                  "end": 89
+                  "start": 26,
+                  "end": 27
                 }
               }
             }
           },
           "span": {
-            "start": 68,
-            "end": 89
+            "start": 6,
+            "end": 27
           }
         }
       },
       "span": {
-        "start": 68,
-        "end": 90
+        "start": 6,
+        "end": 28
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 90
+    "end": 28
   }
 }

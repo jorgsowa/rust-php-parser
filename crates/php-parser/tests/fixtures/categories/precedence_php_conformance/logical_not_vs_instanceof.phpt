@@ -1,6 +1,7 @@
+===description===
+PHP: !($a instanceof Foo). ! is BELOW instanceof (exception to unary tier).
 ===source===
 <?php
-// PHP: !($a instanceof Foo). ! is BELOW instanceof (exception to unary tier).
 !$a instanceof Foo;
 ===ast===
 {
@@ -19,8 +20,8 @@
                         "Variable": "a"
                       },
                       "span": {
-                        "start": 86,
-                        "end": 88
+                        "start": 7,
+                        "end": 9
                       }
                     },
                     "op": "Instanceof",
@@ -29,33 +30,33 @@
                         "Identifier": "Foo"
                       },
                       "span": {
-                        "start": 100,
-                        "end": 103
+                        "start": 21,
+                        "end": 24
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 86,
-                  "end": 103
+                  "start": 7,
+                  "end": 24
                 }
               }
             }
           },
           "span": {
-            "start": 85,
-            "end": 103
+            "start": 6,
+            "end": 24
           }
         }
       },
       "span": {
-        "start": 85,
-        "end": 104
+        "start": 6,
+        "end": 25
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 104
+    "end": 25
   }
 }

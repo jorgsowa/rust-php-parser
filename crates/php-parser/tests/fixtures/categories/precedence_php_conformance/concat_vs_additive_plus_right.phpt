@@ -1,6 +1,7 @@
+===description===
+PHP: 1 . (2 + 3) = "15". + binds tighter than concat.
 ===source===
 <?php
-// PHP: 1 . (2 + 3) = "15". + binds tighter than concat.
 1 . 2 + 3;
 ===ast===
 {
@@ -15,8 +16,8 @@
                   "Int": 1
                 },
                 "span": {
-                  "start": 63,
-                  "end": 64
+                  "start": 6,
+                  "end": 7
                 }
               },
               "op": "Concat",
@@ -28,8 +29,8 @@
                         "Int": 2
                       },
                       "span": {
-                        "start": 67,
-                        "end": 68
+                        "start": 10,
+                        "end": 11
                       }
                     },
                     "op": "Add",
@@ -38,33 +39,33 @@
                         "Int": 3
                       },
                       "span": {
-                        "start": 71,
-                        "end": 72
+                        "start": 14,
+                        "end": 15
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 67,
-                  "end": 72
+                  "start": 10,
+                  "end": 15
                 }
               }
             }
           },
           "span": {
-            "start": 63,
-            "end": 72
+            "start": 6,
+            "end": 15
           }
         }
       },
       "span": {
-        "start": 63,
-        "end": 73
+        "start": 6,
+        "end": 16
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 73
+    "end": 16
   }
 }

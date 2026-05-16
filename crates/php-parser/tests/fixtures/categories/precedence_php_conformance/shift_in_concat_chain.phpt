@@ -1,6 +1,7 @@
+===description===
+PHP: "a" . (1 << 3) . "b".
 ===source===
 <?php
-// PHP: "a" . (1 << 3) . "b".
 "a" . 1 << 3 . "b";
 ===ast===
 {
@@ -18,8 +19,8 @@
                         "String": "a"
                       },
                       "span": {
-                        "start": 36,
-                        "end": 39
+                        "start": 6,
+                        "end": 9
                       }
                     },
                     "op": "Concat",
@@ -31,8 +32,8 @@
                               "Int": 1
                             },
                             "span": {
-                              "start": 42,
-                              "end": 43
+                              "start": 12,
+                              "end": 13
                             }
                           },
                           "op": "ShiftLeft",
@@ -41,22 +42,22 @@
                               "Int": 3
                             },
                             "span": {
-                              "start": 47,
-                              "end": 48
+                              "start": 17,
+                              "end": 18
                             }
                           }
                         }
                       },
                       "span": {
-                        "start": 42,
-                        "end": 48
+                        "start": 12,
+                        "end": 18
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 36,
-                  "end": 48
+                  "start": 6,
+                  "end": 18
                 }
               },
               "op": "Concat",
@@ -65,26 +66,26 @@
                   "String": "b"
                 },
                 "span": {
-                  "start": 51,
-                  "end": 54
+                  "start": 21,
+                  "end": 24
                 }
               }
             }
           },
           "span": {
-            "start": 36,
-            "end": 54
+            "start": 6,
+            "end": 24
           }
         }
       },
       "span": {
-        "start": 36,
-        "end": 55
+        "start": 6,
+        "end": 25
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 55
+    "end": 25
   }
 }

@@ -1,6 +1,7 @@
+===description===
+PHP: ($a ** $b) instanceof Foo. ** is highest binary op.
 ===source===
 <?php
-// PHP: ($a ** $b) instanceof Foo. ** is highest binary op.
 $a ** $b instanceof Foo;
 ===ast===
 {
@@ -18,8 +19,8 @@ $a ** $b instanceof Foo;
                         "Variable": "a"
                       },
                       "span": {
-                        "start": 66,
-                        "end": 68
+                        "start": 6,
+                        "end": 8
                       }
                     },
                     "op": "Pow",
@@ -28,15 +29,15 @@ $a ** $b instanceof Foo;
                         "Variable": "b"
                       },
                       "span": {
-                        "start": 72,
-                        "end": 74
+                        "start": 12,
+                        "end": 14
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 66,
-                  "end": 74
+                  "start": 6,
+                  "end": 14
                 }
               },
               "op": "Instanceof",
@@ -45,26 +46,26 @@ $a ** $b instanceof Foo;
                   "Identifier": "Foo"
                 },
                 "span": {
-                  "start": 86,
-                  "end": 89
+                  "start": 26,
+                  "end": 29
                 }
               }
             }
           },
           "span": {
-            "start": 66,
-            "end": 89
+            "start": 6,
+            "end": 29
           }
         }
       },
       "span": {
-        "start": 66,
-        "end": 90
+        "start": 6,
+        "end": 30
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 90
+    "end": 30
   }
 }

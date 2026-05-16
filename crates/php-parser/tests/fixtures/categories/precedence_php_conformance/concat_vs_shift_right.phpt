@@ -1,6 +1,7 @@
+===description===
+PHP: "x" . (16 >> 2).
 ===source===
 <?php
-// PHP: "x" . (16 >> 2).
 "x" . 16 >> 2;
 ===ast===
 {
@@ -15,8 +16,8 @@
                   "String": "x"
                 },
                 "span": {
-                  "start": 31,
-                  "end": 34
+                  "start": 6,
+                  "end": 9
                 }
               },
               "op": "Concat",
@@ -28,8 +29,8 @@
                         "Int": 16
                       },
                       "span": {
-                        "start": 37,
-                        "end": 39
+                        "start": 12,
+                        "end": 14
                       }
                     },
                     "op": "ShiftRight",
@@ -38,33 +39,33 @@
                         "Int": 2
                       },
                       "span": {
-                        "start": 43,
-                        "end": 44
+                        "start": 18,
+                        "end": 19
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 37,
-                  "end": 44
+                  "start": 12,
+                  "end": 19
                 }
               }
             }
           },
           "span": {
-            "start": 31,
-            "end": 44
+            "start": 6,
+            "end": 19
           }
         }
       },
       "span": {
-        "start": 31,
-        "end": 45
+        "start": 6,
+        "end": 20
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 45
+    "end": 20
   }
 }

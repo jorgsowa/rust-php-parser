@@ -1,6 +1,7 @@
+===description===
+PHP: (clone $a) instanceof Box. clone binds tighter than instanceof (clone is highest non-primary).
 ===source===
 <?php
-// PHP: (clone $a) instanceof Box. clone binds tighter than instanceof (clone is highest non-primary).
 clone $a instanceof Box;
 ===ast===
 {
@@ -17,14 +18,14 @@ clone $a instanceof Box;
                       "Variable": "a"
                     },
                     "span": {
-                      "start": 115,
-                      "end": 117
+                      "start": 12,
+                      "end": 14
                     }
                   }
                 },
                 "span": {
-                  "start": 109,
-                  "end": 117
+                  "start": 6,
+                  "end": 14
                 }
               },
               "op": "Instanceof",
@@ -33,26 +34,26 @@ clone $a instanceof Box;
                   "Identifier": "Box"
                 },
                 "span": {
-                  "start": 129,
-                  "end": 132
+                  "start": 26,
+                  "end": 29
                 }
               }
             }
           },
           "span": {
-            "start": 109,
-            "end": 132
+            "start": 6,
+            "end": 29
           }
         }
       },
       "span": {
-        "start": 109,
-        "end": 133
+        "start": 6,
+        "end": 30
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 133
+    "end": 30
   }
 }

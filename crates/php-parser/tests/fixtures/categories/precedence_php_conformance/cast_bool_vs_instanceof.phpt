@@ -1,6 +1,7 @@
+===description===
+PHP: ((bool)$a) instanceof Foo.
 ===source===
 <?php
-// PHP: ((bool)$a) instanceof Foo.
 (bool)$a instanceof Foo;
 ===ast===
 {
@@ -19,15 +20,15 @@
                         "Variable": "a"
                       },
                       "span": {
-                        "start": 47,
-                        "end": 49
+                        "start": 12,
+                        "end": 14
                       }
                     }
                   ]
                 },
                 "span": {
-                  "start": 41,
-                  "end": 49
+                  "start": 6,
+                  "end": 14
                 }
               },
               "op": "Instanceof",
@@ -36,26 +37,26 @@
                   "Identifier": "Foo"
                 },
                 "span": {
-                  "start": 61,
-                  "end": 64
+                  "start": 26,
+                  "end": 29
                 }
               }
             }
           },
           "span": {
-            "start": 41,
-            "end": 64
+            "start": 6,
+            "end": 29
           }
         }
       },
       "span": {
-        "start": 41,
-        "end": 65
+        "start": 6,
+        "end": 30
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 65
+    "end": 30
   }
 }

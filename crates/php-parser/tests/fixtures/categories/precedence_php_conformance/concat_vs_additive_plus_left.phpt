@@ -1,6 +1,7 @@
+===description===
+PHP: (1 + 2) . 3 = "33". + binds tighter than concat (currently same level, accidentally correct).
 ===source===
 <?php
-// PHP: (1 + 2) . 3 = "33". + binds tighter than concat (currently same level, accidentally correct).
 1 + 2 . 3;
 ===ast===
 {
@@ -18,8 +19,8 @@
                         "Int": 1
                       },
                       "span": {
-                        "start": 108,
-                        "end": 109
+                        "start": 6,
+                        "end": 7
                       }
                     },
                     "op": "Add",
@@ -28,15 +29,15 @@
                         "Int": 2
                       },
                       "span": {
-                        "start": 112,
-                        "end": 113
+                        "start": 10,
+                        "end": 11
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 108,
-                  "end": 113
+                  "start": 6,
+                  "end": 11
                 }
               },
               "op": "Concat",
@@ -45,26 +46,26 @@
                   "Int": 3
                 },
                 "span": {
-                  "start": 116,
-                  "end": 117
+                  "start": 14,
+                  "end": 15
                 }
               }
             }
           },
           "span": {
-            "start": 108,
-            "end": 117
+            "start": 6,
+            "end": 15
           }
         }
       },
       "span": {
-        "start": 108,
-        "end": 118
+        "start": 6,
+        "end": 16
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 118
+    "end": 16
   }
 }

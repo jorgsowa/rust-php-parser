@@ -1,6 +1,7 @@
+===description===
+PHP: clone ($a->b). Member access has highest precedence after primary.
 ===source===
 <?php
-// PHP: clone ($a->b). Member access has highest precedence after primary.
 clone $a->b;
 ===ast===
 {
@@ -17,8 +18,8 @@ clone $a->b;
                       "Variable": "a"
                     },
                     "span": {
-                      "start": 87,
-                      "end": 89
+                      "start": 12,
+                      "end": 14
                     }
                   },
                   "property": {
@@ -26,32 +27,32 @@ clone $a->b;
                       "Identifier": "b"
                     },
                     "span": {
-                      "start": 91,
-                      "end": 92
+                      "start": 16,
+                      "end": 17
                     }
                   }
                 }
               },
               "span": {
-                "start": 87,
-                "end": 92
+                "start": 12,
+                "end": 17
               }
             }
           },
           "span": {
-            "start": 81,
-            "end": 92
+            "start": 6,
+            "end": 17
           }
         }
       },
       "span": {
-        "start": 81,
-        "end": 93
+        "start": 6,
+        "end": 18
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 93
+    "end": 18
   }
 }

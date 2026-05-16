@@ -1,6 +1,7 @@
+===description===
+PHP: (-$a) instanceof Foo. - binds tighter than instanceof.
 ===source===
 <?php
-// PHP: (-$a) instanceof Foo. - binds tighter than instanceof.
 -$a instanceof Foo;
 ===ast===
 {
@@ -19,15 +20,15 @@
                         "Variable": "a"
                       },
                       "span": {
-                        "start": 70,
-                        "end": 72
+                        "start": 7,
+                        "end": 9
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 69,
-                  "end": 72
+                  "start": 6,
+                  "end": 9
                 }
               },
               "op": "Instanceof",
@@ -36,26 +37,26 @@
                   "Identifier": "Foo"
                 },
                 "span": {
-                  "start": 84,
-                  "end": 87
+                  "start": 21,
+                  "end": 24
                 }
               }
             }
           },
           "span": {
-            "start": 69,
-            "end": 87
+            "start": 6,
+            "end": 24
           }
         }
       },
       "span": {
-        "start": 69,
-        "end": 88
+        "start": 6,
+        "end": 25
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 88
+    "end": 25
   }
 }

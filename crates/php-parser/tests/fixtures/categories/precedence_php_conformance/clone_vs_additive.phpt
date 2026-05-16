@@ -1,7 +1,8 @@
+===description===
+PHP: (clone $a) + 1. clone binds tighter than +.
+STATUS: parser correct (clone uses bp 41 > + bp 35). Pinned.
 ===source===
 <?php
-// PHP: (clone $a) + 1. clone binds tighter than +.
-// STATUS: parser correct (clone uses bp 41 > + bp 35). Pinned.
 clone $a + 1;
 ===ast===
 {
@@ -18,14 +19,14 @@ clone $a + 1;
                       "Variable": "a"
                     },
                     "span": {
-                      "start": 128,
-                      "end": 130
+                      "start": 12,
+                      "end": 14
                     }
                   }
                 },
                 "span": {
-                  "start": 122,
-                  "end": 130
+                  "start": 6,
+                  "end": 14
                 }
               },
               "op": "Add",
@@ -34,26 +35,26 @@ clone $a + 1;
                   "Int": 1
                 },
                 "span": {
-                  "start": 133,
-                  "end": 134
+                  "start": 17,
+                  "end": 18
                 }
               }
             }
           },
           "span": {
-            "start": 122,
-            "end": 134
+            "start": 6,
+            "end": 18
           }
         }
       },
       "span": {
-        "start": 122,
-        "end": 135
+        "start": 6,
+        "end": 19
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 135
+    "end": 19
   }
 }

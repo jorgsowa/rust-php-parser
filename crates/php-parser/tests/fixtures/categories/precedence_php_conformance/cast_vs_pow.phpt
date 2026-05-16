@@ -1,7 +1,8 @@
+===description===
+PHP: (int)($a ** 2). ** binds tighter than cast.
+STATUS: parser correct (cast operand parse uses bp 41, ** has left_bp 60). Pinned.
 ===source===
 <?php
-// PHP: (int)($a ** 2). ** binds tighter than cast.
-// STATUS: parser correct (cast operand parse uses bp 41, ** has left_bp 60). Pinned.
 (int)$a ** 2;
 ===ast===
 {
@@ -20,8 +21,8 @@
                         "Variable": "a"
                       },
                       "span": {
-                        "start": 149,
-                        "end": 151
+                        "start": 11,
+                        "end": 13
                       }
                     },
                     "op": "Pow",
@@ -30,33 +31,33 @@
                         "Int": 2
                       },
                       "span": {
-                        "start": 155,
-                        "end": 156
+                        "start": 17,
+                        "end": 18
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 149,
-                  "end": 156
+                  "start": 11,
+                  "end": 18
                 }
               }
             ]
           },
           "span": {
-            "start": 144,
-            "end": 156
+            "start": 6,
+            "end": 18
           }
         }
       },
       "span": {
-        "start": 144,
-        "end": 157
+        "start": 6,
+        "end": 19
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 157
+    "end": 19
   }
 }

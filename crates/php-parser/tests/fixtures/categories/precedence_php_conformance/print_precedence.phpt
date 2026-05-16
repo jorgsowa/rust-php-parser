@@ -1,7 +1,8 @@
+===description===
+PHP: print (1 + 2). print is below +.
+STATUS: parser uses ASSIGNMENT_BP (8) for print operand, which is below + (35). Pinned.
 ===source===
 <?php
-// PHP: print (1 + 2). print is below +.
-// STATUS: parser uses ASSIGNMENT_BP (8) for print operand, which is below + (35). Pinned.
 print 1 + 2;
 ===ast===
 {
@@ -18,8 +19,8 @@ print 1 + 2;
                       "Int": 1
                     },
                     "span": {
-                      "start": 144,
-                      "end": 145
+                      "start": 12,
+                      "end": 13
                     }
                   },
                   "op": "Add",
@@ -28,32 +29,32 @@ print 1 + 2;
                       "Int": 2
                     },
                     "span": {
-                      "start": 148,
-                      "end": 149
+                      "start": 16,
+                      "end": 17
                     }
                   }
                 }
               },
               "span": {
-                "start": 144,
-                "end": 149
+                "start": 12,
+                "end": 17
               }
             }
           },
           "span": {
-            "start": 138,
-            "end": 149
+            "start": 6,
+            "end": 17
           }
         }
       },
       "span": {
-        "start": 138,
-        "end": 150
+        "start": 6,
+        "end": 18
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 150
+    "end": 18
   }
 }

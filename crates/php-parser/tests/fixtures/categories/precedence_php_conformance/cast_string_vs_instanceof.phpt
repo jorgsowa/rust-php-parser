@@ -1,6 +1,7 @@
+===description===
+PHP: ((string)$a) instanceof Foo.
 ===source===
 <?php
-// PHP: ((string)$a) instanceof Foo.
 (string)$a instanceof Foo;
 ===ast===
 {
@@ -19,15 +20,15 @@
                         "Variable": "a"
                       },
                       "span": {
-                        "start": 51,
-                        "end": 53
+                        "start": 14,
+                        "end": 16
                       }
                     }
                   ]
                 },
                 "span": {
-                  "start": 43,
-                  "end": 53
+                  "start": 6,
+                  "end": 16
                 }
               },
               "op": "Instanceof",
@@ -36,26 +37,26 @@
                   "Identifier": "Foo"
                 },
                 "span": {
-                  "start": 65,
-                  "end": 68
+                  "start": 28,
+                  "end": 31
                 }
               }
             }
           },
           "span": {
-            "start": 43,
-            "end": 68
+            "start": 6,
+            "end": 31
           }
         }
       },
       "span": {
-        "start": 43,
-        "end": 69
+        "start": 6,
+        "end": 32
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 69
+    "end": 32
   }
 }

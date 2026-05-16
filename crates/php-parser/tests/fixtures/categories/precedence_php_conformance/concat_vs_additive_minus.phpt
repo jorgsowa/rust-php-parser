@@ -1,6 +1,7 @@
+===description===
+PHP: "x" . ($a - 1).
 ===source===
 <?php
-// PHP: "x" . ($a - 1).
 "x" . $a - 1;
 ===ast===
 {
@@ -15,8 +16,8 @@
                   "String": "x"
                 },
                 "span": {
-                  "start": 30,
-                  "end": 33
+                  "start": 6,
+                  "end": 9
                 }
               },
               "op": "Concat",
@@ -28,8 +29,8 @@
                         "Variable": "a"
                       },
                       "span": {
-                        "start": 36,
-                        "end": 38
+                        "start": 12,
+                        "end": 14
                       }
                     },
                     "op": "Sub",
@@ -38,33 +39,33 @@
                         "Int": 1
                       },
                       "span": {
-                        "start": 41,
-                        "end": 42
+                        "start": 17,
+                        "end": 18
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 36,
-                  "end": 42
+                  "start": 12,
+                  "end": 18
                 }
               }
             }
           },
           "span": {
-            "start": 30,
-            "end": 42
+            "start": 6,
+            "end": 18
           }
         }
       },
       "span": {
-        "start": 30,
-        "end": 43
+        "start": 6,
+        "end": 19
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 43
+    "end": 19
   }
 }

@@ -1,6 +1,7 @@
+===description===
+PHP: (1 << 2) . "3" = "43". Shift binds tighter than concat.
 ===source===
 <?php
-// PHP: (1 << 2) . "3" = "43". Shift binds tighter than concat.
 1 << 2 . "3";
 ===ast===
 {
@@ -18,8 +19,8 @@
                         "Int": 1
                       },
                       "span": {
-                        "start": 70,
-                        "end": 71
+                        "start": 6,
+                        "end": 7
                       }
                     },
                     "op": "ShiftLeft",
@@ -28,15 +29,15 @@
                         "Int": 2
                       },
                       "span": {
-                        "start": 75,
-                        "end": 76
+                        "start": 11,
+                        "end": 12
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 70,
-                  "end": 76
+                  "start": 6,
+                  "end": 12
                 }
               },
               "op": "Concat",
@@ -45,26 +46,26 @@
                   "String": "3"
                 },
                 "span": {
-                  "start": 79,
-                  "end": 82
+                  "start": 15,
+                  "end": 18
                 }
               }
             }
           },
           "span": {
-            "start": 70,
-            "end": 82
+            "start": 6,
+            "end": 18
           }
         }
       },
       "span": {
-        "start": 70,
-        "end": 83
+        "start": 6,
+        "end": 19
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 83
+    "end": 19
   }
 }

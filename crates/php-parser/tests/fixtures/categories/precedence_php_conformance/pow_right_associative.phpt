@@ -1,6 +1,7 @@
+===description===
+PHP: 2 ** (3 ** 2) = 512. ** is right-associative.
 ===source===
 <?php
-// PHP: 2 ** (3 ** 2) = 512. ** is right-associative.
 2 ** 3 ** 2;
 ===ast===
 {
@@ -15,8 +16,8 @@
                   "Int": 2
                 },
                 "span": {
-                  "start": 60,
-                  "end": 61
+                  "start": 6,
+                  "end": 7
                 }
               },
               "op": "Pow",
@@ -28,8 +29,8 @@
                         "Int": 3
                       },
                       "span": {
-                        "start": 65,
-                        "end": 66
+                        "start": 11,
+                        "end": 12
                       }
                     },
                     "op": "Pow",
@@ -38,33 +39,33 @@
                         "Int": 2
                       },
                       "span": {
-                        "start": 70,
-                        "end": 71
+                        "start": 16,
+                        "end": 17
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 65,
-                  "end": 71
+                  "start": 11,
+                  "end": 17
                 }
               }
             }
           },
           "span": {
-            "start": 60,
-            "end": 71
+            "start": 6,
+            "end": 17
           }
         }
       },
       "span": {
-        "start": 60,
-        "end": 72
+        "start": 6,
+        "end": 18
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 72
+    "end": 18
   }
 }
