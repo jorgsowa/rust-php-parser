@@ -299,8 +299,14 @@ fn process_project(
     version: &str,
     base: &Path,
     src_dirs: &[&str],
+    test_dirs: &[&str],
 ) -> ProjectStats {
-    let abs_dirs: Vec<std::path::PathBuf> = src_dirs.iter().map(|d| base.join(d)).collect();
+    let abs_dirs: Vec<std::path::PathBuf> = src_dirs
+        .iter()
+        .chain(test_dirs.iter())
+        .map(|d| base.join(d))
+        .filter(|d| d.exists())
+        .collect();
     let dir_refs: Vec<&Path> = abs_dirs.iter().map(|p| p.as_path()).collect();
     let all_files = collect_php_files(&dir_refs);
 
@@ -428,6 +434,7 @@ struct ProjectDef {
     repo: &'static str,
     version: &'static str,
     src_dirs: &'static [&'static str],
+    test_dirs: &'static [&'static str],
 }
 
 fn projects() -> Vec<ProjectDef> {
@@ -438,6 +445,7 @@ fn projects() -> Vec<ProjectDef> {
             repo: "https://github.com/laravel/framework",
             version: "v13.9.0",
             src_dirs: &["src/Illuminate"],
+            test_dirs: &["tests"],
         },
         ProjectDef {
             name: "Symfony",
@@ -445,6 +453,7 @@ fn projects() -> Vec<ProjectDef> {
             repo: "https://github.com/symfony/symfony",
             version: "v8.1.0-BETA2",
             src_dirs: &["src/Symfony"],
+            test_dirs: &[],
         },
         ProjectDef {
             name: "WordPress",
@@ -452,6 +461,7 @@ fn projects() -> Vec<ProjectDef> {
             repo: "https://github.com/WordPress/WordPress",
             version: "6.9.4",
             src_dirs: &["wp-includes", "wp-admin/includes"],
+            test_dirs: &[],
         },
         ProjectDef {
             name: "Drupal",
@@ -459,6 +469,7 @@ fn projects() -> Vec<ProjectDef> {
             repo: "https://github.com/drupal/drupal",
             version: "11.x",
             src_dirs: &["core/lib/Drupal"],
+            test_dirs: &["core/tests"],
         },
         ProjectDef {
             name: "PHPUnit",
@@ -466,6 +477,7 @@ fn projects() -> Vec<ProjectDef> {
             repo: "https://github.com/sebastianbergmann/phpunit",
             version: "v13.1.10",
             src_dirs: &["src"],
+            test_dirs: &[],
         },
         ProjectDef {
             name: "Composer",
@@ -473,6 +485,7 @@ fn projects() -> Vec<ProjectDef> {
             repo: "https://github.com/composer/composer",
             version: "v2.9.8",
             src_dirs: &["src"],
+            test_dirs: &[],
         },
         ProjectDef {
             name: "CodeIgniter 4",
@@ -480,6 +493,7 @@ fn projects() -> Vec<ProjectDef> {
             repo: "https://github.com/codeigniter4/CodeIgniter4",
             version: "v4.7.2",
             src_dirs: &["system"],
+            test_dirs: &[],
         },
         ProjectDef {
             name: "Doctrine ORM",
@@ -487,6 +501,7 @@ fn projects() -> Vec<ProjectDef> {
             repo: "https://github.com/doctrine/orm",
             version: "v3.6.5",
             src_dirs: &["src"],
+            test_dirs: &[],
         },
         ProjectDef {
             name: "Yii2",
@@ -494,6 +509,7 @@ fn projects() -> Vec<ProjectDef> {
             repo: "https://github.com/yiisoft/yii2",
             version: "2.0.55",
             src_dirs: &["framework"],
+            test_dirs: &["tests"],
         },
         ProjectDef {
             name: "CakePHP",
@@ -501,6 +517,7 @@ fn projects() -> Vec<ProjectDef> {
             repo: "https://github.com/cakephp/cakephp",
             version: "v5.3.5",
             src_dirs: &["src"],
+            test_dirs: &["tests"],
         },
     ]
 }
@@ -532,7 +549,15 @@ fn main() {
             eprintln!("[{}] corpus not found at {:?}, skipping", p.slug, base);
             continue;
         }
-        let stats = process_project(p.name, p.slug, p.repo, p.version, &base, p.src_dirs);
+        let stats = process_project(
+            p.name,
+            p.slug,
+            p.repo,
+            p.version,
+            &base,
+            p.src_dirs,
+            p.test_dirs,
+        );
 
         // Write full per-project file (includes dir_stats).
         let per_project_path = out_dir.join(format!("project-stats-{}.json", p.slug));
