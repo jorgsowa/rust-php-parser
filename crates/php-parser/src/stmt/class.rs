@@ -823,6 +823,10 @@ fn parse_method_member<'arena, 'src>(
         });
     }
 
+    if let (Some(rt), Some(b)) = (&return_type, &body) {
+        super::check_returns_against_type(parser, b, rt);
+    }
+
     // __construct cannot declare a return type or be static. PHP errors:
     // "Method A::__construct() cannot declare a return type" / "cannot be static".
     if method_name.as_str() == Some("__construct") {

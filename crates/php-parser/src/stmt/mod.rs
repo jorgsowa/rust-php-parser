@@ -1136,6 +1136,10 @@ fn parse_function<'arena, 'src>(
     let end = parser.previous_end();
     let span = Span::new(start, end);
 
+    if let Some(rt) = &return_type {
+        check_returns_against_type(parser, &body, rt);
+    }
+
     Stmt {
         kind: StmtKind::Function(parser.alloc(FunctionDecl {
             name,
@@ -1148,6 +1152,95 @@ fn parse_function<'arena, 'src>(
         })),
         span,
     }
+}
+
+/// Classifies a return-type annotation for `void`/`never` validity checks.
+/// Returns `Some(true)` for `void`, `Some(false)` for `never`; `None` otherwise.
+/// Conservative on union/intersection/nullable: only matches atomic occurrences.
+fn classify_void_or_never<'arena, 'src>(rt: &TypeHint<'arena, 'src>) -> Option<bool> {
+    match &rt.kind {
+        TypeHintKind::Keyword(BuiltinType::Void, _) => Some(true),
+        TypeHintKind::Keyword(BuiltinType::Never, _) => Some(false),
+        _ => None,
+    }
+}
+
+/// Walks `body` and emits a diagnostic for every `return` statement that
+/// violates `void` ("must not return a value") or `never` ("must not return")
+/// semantics. Recurses through control-flow nesting (`if`, `while`, …) but
+/// stops at nested function-like declarations so their returns are not
+/// attributed to the enclosing function.
+pub(crate) fn check_returns_against_type<'arena, 'src>(
+    parser: &mut Parser<'arena, 'src>,
+    body: &[Stmt<'arena, 'src>],
+    return_type: &TypeHint<'arena, 'src>,
+) {
+    let Some(is_void) = classify_void_or_never(return_type) else {
+        return;
+    };
+    fn walk<'arena, 'src>(
+        parser: &mut Parser<'arena, 'src>,
+        stmts: &[Stmt<'arena, 'src>],
+        is_void: bool,
+    ) {
+        for stmt in stmts {
+            match &stmt.kind {
+                StmtKind::Return(value) => {
+                    if is_void {
+                        if value.is_some() {
+                            parser.error(ParseError::Forbidden {
+                                message: "A void function must not return a value".into(),
+                                span: stmt.span,
+                            });
+                        }
+                    } else {
+                        // never
+                        parser.error(ParseError::Forbidden {
+                            message: "A never-returning function must not return".into(),
+                            span: stmt.span,
+                        });
+                    }
+                }
+                StmtKind::Block(b) => walk(parser, b, is_void),
+                StmtKind::If(if_) => {
+                    walk(parser, std::slice::from_ref(if_.then_branch), is_void);
+                    for eb in if_.elseif_branches.iter() {
+                        walk(parser, std::slice::from_ref(&eb.body), is_void);
+                    }
+                    if let Some(eb) = if_.else_branch {
+                        walk(parser, std::slice::from_ref(eb), is_void);
+                    }
+                }
+                StmtKind::While(w) => walk(parser, std::slice::from_ref(w.body), is_void),
+                StmtKind::DoWhile(d) => walk(parser, std::slice::from_ref(d.body), is_void),
+                StmtKind::For(f) => walk(parser, std::slice::from_ref(f.body), is_void),
+                StmtKind::Foreach(f) => walk(parser, std::slice::from_ref(f.body), is_void),
+                StmtKind::Switch(s) => {
+                    for c in s.cases.iter() {
+                        walk(parser, &c.body, is_void);
+                    }
+                }
+                StmtKind::TryCatch(t) => {
+                    walk(parser, &t.body, is_void);
+                    for c in t.catches.iter() {
+                        walk(parser, &c.body, is_void);
+                    }
+                    if let Some(fin) = &t.finally {
+                        walk(parser, fin, is_void);
+                    }
+                }
+                // Do NOT descend into nested function-like declarations:
+                // their returns are scoped to themselves.
+                StmtKind::Function(_)
+                | StmtKind::Class(_)
+                | StmtKind::Interface(_)
+                | StmtKind::Trait(_)
+                | StmtKind::Enum(_) => {}
+                _ => {}
+            }
+        }
+    }
+    walk(parser, body, is_void);
 }
 
 pub fn parse_param_list<'arena, 'src>(
