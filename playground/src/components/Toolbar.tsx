@@ -25,6 +25,7 @@ export function Toolbar({ version, onVersionChange, wasmStatus, route }: Props) 
         <span className="brand-logo">php</span>
         <span className="brand-sep">/</span>
         <span className="brand-sub">parser playground</span>
+
       </div>
 
       <div className="toolbar-nav">

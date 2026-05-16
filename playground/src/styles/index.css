@@ -113,6 +113,14 @@ body::after {
   text-transform: uppercase;
 }
 
+.brand-title {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
 .toolbar-nav {
   display: flex;
   gap: 2px;
@@ -1217,25 +1225,38 @@ body::after {
   gap: 4px;
 }
 
-.cmp-project-page-link {
+/* Select + View button row */
+.cmp-select-row {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.cmp-select-row .custom-select {
+  flex: 1;
+  min-width: 0;
+}
+
+.cmp-project-page-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
+  padding: 0 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
   color: var(--text-3);
-  opacity: 0.5;
-  transition: opacity 0.15s, color 0.15s;
-  line-height: 1;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color 0.12s, border-color 0.12s, background 0.12s;
+  flex-shrink: 0;
 }
 
-.cmp-project-page-link:hover {
-  opacity: 1;
+.cmp-project-page-btn:hover {
   color: var(--accent);
-}
-
-/* Full-width selects inside the project cards */
-.cmp-project-card .custom-select {
-  display: block;
-  width: 100%;
+  border-color: var(--accent-muted);
+  background: var(--accent-dim);
 }
 
 /* Info button + popover */

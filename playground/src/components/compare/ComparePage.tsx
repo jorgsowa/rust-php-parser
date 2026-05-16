@@ -226,40 +226,30 @@ export function ComparePage() {
 
   return (
     <div className="page-compare">
-      <div className="cmp-header">
-        <h1 className="cmp-title">Project Stats</h1>
-        <p className="cmp-subtitle">
-          AST node usage in {left.name} vs {right.name}.
-          Real statistics from {formatNum(left.files + right.files)} library PHP files — tests and templates excluded.
-        </p>
-      </div>
-
       <div className="cmp-selectors">
         <div className="cmp-project-card cmp-project-left">
           <div className="cmp-card-header">
             <div className="cmp-project-label">Project A</div>
             <div className="cmp-card-actions">
-              <a
-                className="cmp-project-page-link"
-                href={routeToHash({ page: 'stats-project', slug: leftSlug })}
-                title={`View ${left.name} stats`}
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                  <polyline points="15 3 21 3 21 9"/>
-                  <line x1="10" y1="14" x2="21" y2="3"/>
-                </svg>
-              </a>
               <ProjectInfoPopover project={left} />
             </div>
           </div>
-          <Select
-            className="cmp-select--left"
-            value={leftSlug}
-            onChange={setLeftSlug}
-            options={PROJECTS.map(p => ({ value: p.slug, label: p.name }))}
-            aria-label="Project A"
-          />
+          <div className="cmp-select-row">
+            <Select
+              className="cmp-select--left"
+              value={leftSlug}
+              onChange={setLeftSlug}
+              options={PROJECTS.map(p => ({ value: p.slug, label: p.name }))}
+              aria-label="Project A"
+            />
+            <a
+              className="cmp-project-page-btn"
+              href={routeToHash({ page: 'stats-project', slug: leftSlug })}
+              title={`View ${left.name} stats`}
+            >
+              View
+            </a>
+          </div>
           <div className="cmp-project-stats">
             <span className="cmp-stat"><strong>{formatNum(left.files)}</strong> library files</span>
             <span className="cmp-stat"><strong>{formatNum(left.total_nodes)}</strong> nodes</span>
@@ -272,27 +262,25 @@ export function ComparePage() {
           <div className="cmp-card-header">
             <div className="cmp-project-label">Project B</div>
             <div className="cmp-card-actions">
-              <a
-                className="cmp-project-page-link"
-                href={routeToHash({ page: 'stats-project', slug: rightSlug })}
-                title={`View ${right.name} stats`}
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                  <polyline points="15 3 21 3 21 9"/>
-                  <line x1="10" y1="14" x2="21" y2="3"/>
-                </svg>
-              </a>
               <ProjectInfoPopover project={right} />
             </div>
           </div>
-          <Select
-            className="cmp-select--right"
-            value={rightSlug}
-            onChange={setRightSlug}
-            options={PROJECTS.map(p => ({ value: p.slug, label: p.name }))}
-            aria-label="Project B"
-          />
+          <div className="cmp-select-row">
+            <Select
+              className="cmp-select--right"
+              value={rightSlug}
+              onChange={setRightSlug}
+              options={PROJECTS.map(p => ({ value: p.slug, label: p.name }))}
+              aria-label="Project B"
+            />
+            <a
+              className="cmp-project-page-btn"
+              href={routeToHash({ page: 'stats-project', slug: rightSlug })}
+              title={`View ${right.name} stats`}
+            >
+              View
+            </a>
+          </div>
           <div className="cmp-project-stats">
             <span className="cmp-stat"><strong>{formatNum(right.files)}</strong> library files</span>
             <span className="cmp-stat"><strong>{formatNum(right.total_nodes)}</strong> nodes</span>
