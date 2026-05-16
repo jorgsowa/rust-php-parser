@@ -133,6 +133,24 @@ impl<'a, 'src> Visitor<'a, 'src> for NodeCounter {
     }
 }
 
+fn is_test_path(path: &Path) -> bool {
+    path.components().any(|c| {
+        matches!(
+            c.as_os_str().to_str(),
+            Some(
+                "Tests"
+                    | "tests"
+                    | "Fixtures"
+                    | "fixtures"
+                    | "spec"
+                    | "Spec"
+                    | "Resources"
+                    | "resources"
+            )
+        )
+    })
+}
+
 fn collect_php_files(dirs: &[&Path]) -> Vec<std::path::PathBuf> {
     let mut files = Vec::new();
     for dir in dirs {
@@ -146,6 +164,7 @@ fn collect_php_files(dirs: &[&Path]) -> Vec<std::path::PathBuf> {
             .filter(|e| {
                 e.file_type().is_file()
                     && e.path().extension().and_then(|s| s.to_str()) == Some("php")
+                    && !is_test_path(e.path())
             })
             .map(|e| e.path().to_path_buf());
         files.extend(iter);
