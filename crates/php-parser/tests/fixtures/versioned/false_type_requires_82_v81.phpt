@@ -1,9 +1,10 @@
 ===config===
-expect_parser_silent=true
 min_php=8.1
 max_php=8.1
 ===source===
 <?php function f(): false {}
+===errors===
+'false as standalone type' requires PHP 8.2 or higher (targeting PHP 8.1)
 ===ast===
 {
   "stmts": [

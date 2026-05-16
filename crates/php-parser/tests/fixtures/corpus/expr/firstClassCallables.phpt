@@ -1,5 +1,3 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php
 foo(...);
@@ -11,6 +9,8 @@ $this?->foo(...);
 
 #[Foo(...)]
 function foo() {}
+===errors===
+Cannot create Closure as attribute argument
 ===ast===
 {
   "stmts": [

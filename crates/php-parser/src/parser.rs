@@ -976,6 +976,21 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             }
         }
 
+        // Standalone `null` / `false` require PHP 8.2. (`true` is already
+        // 8.2-only via parse_type_element; both union and standalone uses
+        // produce the same diagnostic there.)
+        if let TypeHintKind::Keyword(builtin, span) = &first.kind {
+            match builtin {
+                BuiltinType::Null => {
+                    self.require_version(PhpVersion::Php82, "null as standalone type", *span);
+                }
+                BuiltinType::False => {
+                    self.require_version(PhpVersion::Php82, "false as standalone type", *span);
+                }
+                _ => {}
+            }
+        }
+
         first
     }
 
@@ -1400,7 +1415,18 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 let name = self.parse_name();
 
                 let args = if self.check(TokenKind::LeftParen) {
-                    crate::expr::parse_arg_list(self)
+                    let paren_start = self.current_span().start;
+                    match crate::expr::parse_arg_list_or_callable(self) {
+                        crate::expr::ArgListResult::Args(args) => args,
+                        crate::expr::ArgListResult::CallableMarker => {
+                            // PHP: "Cannot create Closure as attribute argument".
+                            self.error(ParseError::Forbidden {
+                                message: "Cannot create Closure as attribute argument".into(),
+                                span: Span::new(paren_start, self.previous_end()),
+                            });
+                            self.alloc_vec()
+                        }
+                    }
                 } else {
                     self.alloc_vec()
                 };

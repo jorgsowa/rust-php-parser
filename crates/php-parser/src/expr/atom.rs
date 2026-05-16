@@ -30,7 +30,7 @@ const CAST_KEYWORDS: &[(&str, CastKind)] = &[
 ];
 
 /// Result of parsing an argument list — either regular args or a `(...)` callable marker.
-pub(super) enum ArgListResult<'arena, 'src> {
+pub(crate) enum ArgListResult<'arena, 'src> {
     Args(ArenaVec<'arena, Arg<'arena, 'src>>),
     CallableMarker,
 }
@@ -1648,7 +1648,7 @@ fn isset_target_valid(kind: &ExprKind<'_, '_>) -> bool {
 // =============================================================================
 
 /// Parse an argument list `(arg, arg, ...)` or detect `(...)` first-class callable syntax.
-pub(super) fn parse_arg_list_or_callable<'arena, 'src>(
+pub(crate) fn parse_arg_list_or_callable<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
 ) -> ArgListResult<'arena, 'src> {
     parser.advance(); // consume (
@@ -1691,16 +1691,6 @@ pub(super) fn parse_arg_list_or_callable<'arena, 'src>(
 
     parser.expect(TokenKind::RightParen);
     ArgListResult::Args(args)
-}
-
-/// Parse an argument list: `(arg, arg, ...)`
-pub fn parse_arg_list<'arena, 'src>(
-    parser: &'_ mut Parser<'arena, 'src>,
-) -> ArenaVec<'arena, Arg<'arena, 'src>> {
-    match parse_arg_list_or_callable(parser) {
-        ArgListResult::Args(args) => args,
-        ArgListResult::CallableMarker => parser.alloc_vec(), // fallback — shouldn't reach here in normal use
-    }
 }
 
 fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 'src> {

@@ -13,10 +13,11 @@ mod atom;
 pub(crate) mod interpolation;
 
 // Re-exports so external callers' paths don't change
-pub use atom::parse_arg_list;
-pub(crate) use atom::{parse_arrow_function, parse_closure};
+pub(crate) use atom::{
+    parse_arg_list_or_callable, parse_arrow_function, parse_closure, ArgListResult,
+};
 
-use atom::{parse_arg_list_or_callable, parse_atom, parse_function_call, ArgListResult};
+use atom::{parse_atom, parse_function_call};
 
 /// Returns the "chain group" binding power for a non-associative token, if applicable.
 ///
