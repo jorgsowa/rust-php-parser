@@ -4,7 +4,9 @@ use php_lexer::TokenKind;
 use crate::diagnostics::ParseError;
 use crate::instrument;
 use crate::parser::{Parser, MAX_DEPTH};
-use crate::precedence::{self, ASSIGNMENT_BP, NULL_COALESCE_LEFT_BP, TERNARY_BP};
+use crate::precedence::{
+    self, ASSIGNMENT_BP, MEMBER_ACCESS_BP, NULL_COALESCE_LEFT_BP, SCOPE_RESOLUTION_BP, TERNARY_BP,
+};
 use crate::version::PhpVersion;
 
 mod atom;
@@ -286,7 +288,7 @@ pub fn parse_expr_bp<'arena, 'src>(
 
             // Arrow operators (property/method access)
             TokenKind::Arrow | TokenKind::NullsafeArrow => {
-                if 44u8 < min_bp {
+                if MEMBER_ACCESS_BP < min_bp {
                     break;
                 }
                 let is_nullsafe = kind == TokenKind::NullsafeArrow;
@@ -407,7 +409,7 @@ pub fn parse_expr_bp<'arena, 'src>(
         // bp=90: must parse through the bp=45 gate used by promoted-property defaults
         // (which only intends to block `{}` curly-brace subscript access, bp=44).
         if kind == TokenKind::DoubleColon {
-            if 90u8 < min_bp {
+            if SCOPE_RESOLUTION_BP < min_bp {
                 break;
             }
             parser.advance(); // consume ::
@@ -620,7 +622,7 @@ pub fn parse_expr_bp<'arena, 'src>(
 
         // Array access: $arr[index]
         if kind == TokenKind::LeftBracket {
-            if 44u8 < min_bp {
+            if MEMBER_ACCESS_BP < min_bp {
                 break;
             }
             parser.advance(); // consume [
@@ -644,7 +646,7 @@ pub fn parse_expr_bp<'arena, 'src>(
 
         // Curly brace array/string access: $a{'b'} (deprecated PHP 7.x syntax)
         if kind == TokenKind::LeftBrace {
-            if 44u8 < min_bp || parser.no_brace_subscript {
+            if MEMBER_ACCESS_BP < min_bp || parser.no_brace_subscript {
                 break;
             }
             parser.advance(); // consume {
@@ -668,7 +670,7 @@ pub fn parse_expr_bp<'arena, 'src>(
 
         // Function call: name(args)
         if kind == TokenKind::LeftParen {
-            if 44u8 < min_bp {
+            if MEMBER_ACCESS_BP < min_bp {
                 break;
             }
             lhs = parse_function_call(parser, lhs);

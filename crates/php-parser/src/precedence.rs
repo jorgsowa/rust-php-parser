@@ -159,6 +159,17 @@ pub const TERNARY_BP: u8 = 10;
 /// `parse_assign_continuation`.
 pub const NULL_COALESCE_LEFT_BP: u8 = 14;
 
+/// Postfix member access binding power for `->`, `?->`, `[`, `{`, and `(` (call).
+/// Above postfix `++`/`--` (43) and below `instanceof` (45). Used as the gate that
+/// promoted-property default expressions raise to suppress curly-brace subscripts
+/// while still allowing normal member access.
+pub const MEMBER_ACCESS_BP: u8 = 44;
+
+/// Scope-resolution `::` binding power. Higher than `**` (60) so it stays untouched
+/// by the `bp=45` gate used for promoted-property defaults (which only intends to
+/// block the `{}` curly-brace subscript at [`MEMBER_ACCESS_BP`]).
+pub const SCOPE_RESOLUTION_BP: u8 = 90;
+
 #[cfg(test)]
 mod tests {
     use super::*;
