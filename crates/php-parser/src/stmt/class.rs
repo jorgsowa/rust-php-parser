@@ -790,6 +790,23 @@ fn parse_method_member<'arena, 'src>(
         });
     }
 
+    // __construct cannot declare a return type or be static. PHP errors:
+    // "Method A::__construct() cannot declare a return type" / "cannot be static".
+    if method_name.as_str() == Some("__construct") {
+        if let Some(rt) = &return_type {
+            parser.error(ParseError::Forbidden {
+                message: "Method __construct() cannot declare a return type".into(),
+                span: rt.span,
+            });
+        }
+        if mods.is_static {
+            parser.error(ParseError::Forbidden {
+                message: "Method __construct() cannot be static".into(),
+                span: Span::new(member_start, parser.previous_end()),
+            });
+        }
+    }
+
     let span = Span::new(member_start, parser.previous_end());
     ClassMember {
         kind: ClassMemberKind::Method(MethodDecl {
