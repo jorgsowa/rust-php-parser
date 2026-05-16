@@ -9,7 +9,6 @@ import { ErrorPanel } from './components/ErrorPanel'
 import { DocsPage } from './components/docs/DocsPage'
 import { NodeDetailPage } from './components/docs/NodeDetailPage'
 import { ComparePage } from './components/compare/ComparePage'
-import { StatsIndexPage } from './components/stats/StatsIndexPage'
 import { ProjectStatsPage } from './components/stats/ProjectStatsPage'
 
 const INITIAL_CODE = `<?php
@@ -176,8 +175,7 @@ export default function App() {
         <div className="page-content">
           {route.page === 'docs' && <DocsPage version={version} />}
           {route.page === 'docs-node' && <NodeDetailPage nodeId={route.nodeId} onVisualize={handleVisualize} />}
-          {route.page === 'compare' && <ComparePage />}
-          {route.page === 'stats' && <StatsIndexPage />}
+          {route.page === 'stats' && <ComparePage />}
           {route.page === 'stats-project' && <ProjectStatsPage slug={route.slug} />}
         </div>
       )}

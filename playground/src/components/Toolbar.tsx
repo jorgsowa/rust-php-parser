@@ -45,7 +45,7 @@ export function Toolbar({ version, onVersionChange, wasmStatus, route }: Props) 
         </a>
         <a
           href="#stats"
-          className={`nav-tab ${route.page === 'stats' || route.page === 'stats-project' || route.page === 'compare' ? 'active' : ''}`}
+          className={`nav-tab ${route.page === 'stats' || route.page === 'stats-project' ? 'active' : ''}`}
           title="Project Stats — AST node usage across popular PHP projects"
         >
           Project Stats
