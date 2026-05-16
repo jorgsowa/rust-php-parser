@@ -241,7 +241,6 @@ fn collect_php_files(dirs: &[&Path]) -> Vec<std::path::PathBuf> {
             .filter(|e| {
                 e.file_type().is_some_and(|ft| ft.is_file())
                     && e.path().extension().and_then(|s| s.to_str()) == Some("php")
-                    && !is_test_path(e.path())
             })
             .map(|e| e.path().to_path_buf());
         files.extend(iter);
@@ -303,13 +302,25 @@ fn process_project(
 ) -> ProjectStats {
     let abs_dirs: Vec<std::path::PathBuf> = src_dirs.iter().map(|d| base.join(d)).collect();
     let dir_refs: Vec<&Path> = abs_dirs.iter().map(|p| p.as_path()).collect();
-    let files = collect_php_files(&dir_refs);
-    let file_count = files.len() as u64;
-    eprintln!("[{slug}] found {} PHP files in {:?}", file_count, src_dirs);
+    let all_files = collect_php_files(&dir_refs);
 
-    // Group files by their parent directory (relative to project base).
+    // Non-test files drive global stats; all files drive per-directory stats.
+    let prod_files: Vec<_> = all_files
+        .iter()
+        .filter(|p| !is_test_path(p))
+        .cloned()
+        .collect();
+    let file_count = prod_files.len() as u64;
+    eprintln!(
+        "[{slug}] found {} PHP files ({} incl. tests) in {:?}",
+        file_count,
+        all_files.len(),
+        src_dirs
+    );
+
+    // Group ALL files (including test dirs) by parent directory.
     let mut groups: HashMap<String, Vec<std::path::PathBuf>> = HashMap::new();
-    for file in &files {
+    for file in &all_files {
         let parent = file.parent().unwrap_or(file);
         let rel = parent
             .strip_prefix(base)
@@ -319,8 +330,8 @@ fn process_project(
         groups.entry(rel).or_default().push(file.clone());
     }
 
-    // Count aggregate (parallel across all files).
-    let merged = count_file_list(&files);
+    // Global aggregate counts only non-test files.
+    let merged = count_file_list(&prod_files);
     let total_nodes = merged.total_nodes();
     let nodes = merged.counts;
 
