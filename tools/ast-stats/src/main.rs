@@ -4,12 +4,12 @@ use std::path::Path;
 use std::sync::Mutex;
 
 use bumpalo::Bump;
+use ignore::WalkBuilder;
 use php_ast::ast::*;
 use php_ast::visitor::{walk_class_member, walk_expr, walk_param, walk_stmt, Visitor};
 use php_rs_parser::parse;
 use rayon::prelude::*;
 use serde::Serialize;
-use walkdir::WalkDir;
 
 #[derive(Default)]
 struct NodeCounter {
@@ -234,12 +234,12 @@ fn collect_php_files(dirs: &[&Path]) -> Vec<std::path::PathBuf> {
         if !dir.exists() {
             continue;
         }
-        let iter = WalkDir::new(dir)
+        let iter = WalkBuilder::new(dir)
             .follow_links(false)
-            .into_iter()
+            .build()
             .filter_map(|e| e.ok())
             .filter(|e| {
-                e.file_type().is_file()
+                e.file_type().is_some_and(|ft| ft.is_file())
                     && e.path().extension().and_then(|s| s.to_str()) == Some("php")
                     && !is_test_path(e.path())
             })
@@ -348,13 +348,13 @@ fn process_project(
             if !dir.exists() {
                 continue;
             }
-            for entry in WalkDir::new(dir)
+            for entry in WalkBuilder::new(dir)
                 .follow_links(false)
-                .min_depth(1)
-                .into_iter()
+                .build()
                 .filter_map(|e| e.ok())
+                .filter(|e| e.depth() > 0)
             {
-                if entry.file_type().is_dir() {
+                if entry.file_type().is_some_and(|ft| ft.is_dir()) {
                     let rel = entry
                         .path()
                         .strip_prefix(base)
