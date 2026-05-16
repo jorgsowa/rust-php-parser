@@ -250,6 +250,13 @@ fn collect_php_files(dirs: &[&Path]) -> Vec<std::path::PathBuf> {
 }
 
 #[derive(Serialize)]
+struct DirStats {
+    files: u64,
+    total_nodes: u64,
+    nodes: HashMap<&'static str, u64>,
+}
+
+#[derive(Serialize)]
 struct ProjectStats {
     name: String,
     slug: String,
@@ -259,6 +266,28 @@ struct ProjectStats {
     files: u64,
     total_nodes: u64,
     nodes: HashMap<&'static str, u64>,
+    /// Per-directory stats keyed by directory path relative to project base.
+    /// Each entry covers only files whose parent directory matches the key exactly.
+    /// Clients aggregate ancestors by prefix-summing descendants.
+    dir_stats: HashMap<String, DirStats>,
+}
+
+fn count_file_list(files: &[std::path::PathBuf]) -> NodeCounter {
+    let merged = Mutex::new(NodeCounter::default());
+    files.par_iter().for_each(|path| {
+        let src = match std::fs::read_to_string(path) {
+            Ok(s) => s,
+            Err(_) => return,
+        };
+        let arena = Bump::new();
+        let result = parse(&arena, &src);
+        if result.errors.is_empty() {
+            let mut counter = NodeCounter::default();
+            let _ = counter.visit_program(&result.program);
+            merged.lock().unwrap().merge(counter);
+        }
+    });
+    merged.into_inner().unwrap()
 }
 
 fn process_project(
@@ -275,27 +304,44 @@ fn process_project(
     let file_count = files.len() as u64;
     eprintln!("[{slug}] found {} PHP files in {:?}", file_count, src_dirs);
 
-    let merged = Mutex::new(NodeCounter::default());
+    // Group files by their parent directory (relative to project base).
+    let mut groups: HashMap<String, Vec<std::path::PathBuf>> = HashMap::new();
+    for file in &files {
+        let parent = file.parent().unwrap_or(file);
+        let rel = parent
+            .strip_prefix(base)
+            .unwrap_or(parent)
+            .to_string_lossy()
+            .replace('\\', "/");
+        groups.entry(rel).or_default().push(file.clone());
+    }
 
-    files.par_iter().for_each(|path| {
-        let src = match std::fs::read_to_string(path) {
-            Ok(s) => s,
-            Err(_) => return,
-        };
-        let arena = Bump::new();
-        let result = parse(&arena, &src);
-        if result.errors.is_empty() {
-            let mut counter = NodeCounter::default();
-            let _ = counter.visit_program(&result.program);
-            merged.lock().unwrap().merge(counter);
-        }
-    });
-
-    let merged = merged.into_inner().unwrap();
+    // Count aggregate (parallel across all files).
+    let merged = count_file_list(&files);
     let total_nodes = merged.total_nodes();
     let nodes = merged.counts;
 
-    eprintln!("[{slug}] done — {total_nodes} nodes");
+    // Count per directory (parallel across dirs, sequential within each dir group).
+    let dir_stats: HashMap<String, DirStats> = groups
+        .into_iter()
+        .map(|(dir_key, dir_files)| {
+            let counter = count_file_list(&dir_files);
+            let total = counter.total_nodes();
+            (
+                dir_key,
+                DirStats {
+                    files: dir_files.len() as u64,
+                    total_nodes: total,
+                    nodes: counter.counts,
+                },
+            )
+        })
+        .collect();
+
+    eprintln!(
+        "[{slug}] done — {total_nodes} nodes, {} dirs",
+        dir_stats.len()
+    );
 
     ProjectStats {
         name: name.to_string(),
@@ -306,6 +352,7 @@ fn process_project(
         files: file_count,
         total_nodes,
         nodes,
+        dir_stats,
     }
 }
 
@@ -429,19 +476,45 @@ fn main() {
         return;
     }
 
+    let out_dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../playground/src/data");
+
     let all = projects();
-    let mut stats: Vec<ProjectStats> = Vec::new();
+    let mut summaries: Vec<serde_json::Value> = Vec::new();
 
     for p in &all {
         let base = corpus.join(p.slug);
-        if base.exists() {
-            stats.push(process_project(
-                p.name, p.slug, p.repo, p.version, &base, p.src_dirs,
-            ));
-        } else {
+        if !base.exists() {
             eprintln!("[{}] corpus not found at {:?}, skipping", p.slug, base);
+            continue;
         }
+        let stats = process_project(p.name, p.slug, p.repo, p.version, &base, p.src_dirs);
+
+        // Write full per-project file (includes dir_stats).
+        let per_project_path = out_dir.join(format!("project-stats-{}.json", p.slug));
+        let json = serde_json::to_string_pretty(&stats).unwrap();
+        std::fs::write(&per_project_path, &json).unwrap_or_else(|e| {
+            eprintln!("failed to write {:?}: {e}", per_project_path);
+        });
+        eprintln!("[{}] wrote {:?}", p.slug, per_project_path);
+
+        // Build summary entry (no dir_stats — kept lean for the index page).
+        summaries.push(serde_json::json!({
+            "name": stats.name,
+            "slug": stats.slug,
+            "repo": stats.repo,
+            "version": stats.version,
+            "scanned_dirs": stats.scanned_dirs,
+            "files": stats.files,
+            "total_nodes": stats.total_nodes,
+            "nodes": stats.nodes,
+        }));
     }
 
-    println!("{}", serde_json::to_string_pretty(&stats).unwrap());
+    // Write summary (project-stats.json) used by the index page and compare page.
+    let summary_path = out_dir.join("project-stats.json");
+    let summary_json = serde_json::to_string_pretty(&summaries).unwrap();
+    std::fs::write(&summary_path, &summary_json).unwrap_or_else(|e| {
+        eprintln!("failed to write {:?}: {e}", summary_path);
+    });
+    eprintln!("wrote {:?}", summary_path);
 }
