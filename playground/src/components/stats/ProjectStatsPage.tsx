@@ -407,6 +407,13 @@ export function ProjectStatsPage({ slug }: Props) {
         {/* Right: stats table */}
         <div className="project-stats-main">
           <div className="project-stats-toolbar">
+            <input
+              className="cmp-filter"
+              type="text"
+              placeholder="Filter node types…"
+              value={filter}
+              onChange={e => setFilter(e.target.value)}
+            />
             <span className="cmp-stat">
               <strong>{formatNum(activeFiles)}</strong> files
             </span>
@@ -418,13 +425,6 @@ export function ProjectStatsPage({ slug }: Props) {
                 <code>{selectedDir}/</code>
               </span>
             )}
-            <input
-              className="cmp-filter"
-              type="text"
-              placeholder="Filter node types…"
-              value={filter}
-              onChange={e => setFilter(e.target.value)}
-            />
             <span className="cmp-count">{rows.length} node types</span>
           </div>
 
