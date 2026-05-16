@@ -234,6 +234,12 @@ export function ComparePage() {
               <ProjectInfoPopover project={left} />
             </div>
           </div>
+          <a
+            className="cmp-project-name-link"
+            href={routeToHash({ page: 'stats-project', slug: leftSlug })}
+          >
+            {left.name}
+          </a>
           <div className="cmp-select-row">
             <Select
               className="cmp-select--left"
@@ -242,13 +248,6 @@ export function ComparePage() {
               options={PROJECTS.map(p => ({ value: p.slug, label: p.name }))}
               aria-label="Project A"
             />
-            <a
-              className="cmp-project-page-btn"
-              href={routeToHash({ page: 'stats-project', slug: leftSlug })}
-              title={`View ${left.name} stats`}
-            >
-              View
-            </a>
           </div>
           <div className="cmp-project-stats">
             <span className="cmp-stat"><strong>{formatNum(left.files)}</strong> library files</span>
@@ -265,6 +264,12 @@ export function ComparePage() {
               <ProjectInfoPopover project={right} />
             </div>
           </div>
+          <a
+            className="cmp-project-name-link"
+            href={routeToHash({ page: 'stats-project', slug: rightSlug })}
+          >
+            {right.name}
+          </a>
           <div className="cmp-select-row">
             <Select
               className="cmp-select--right"
@@ -273,13 +278,6 @@ export function ComparePage() {
               options={PROJECTS.map(p => ({ value: p.slug, label: p.name }))}
               aria-label="Project B"
             />
-            <a
-              className="cmp-project-page-btn"
-              href={routeToHash({ page: 'stats-project', slug: rightSlug })}
-              title={`View ${right.name} stats`}
-            >
-              View
-            </a>
           </div>
           <div className="cmp-project-stats">
             <span className="cmp-stat"><strong>{formatNum(right.files)}</strong> library files</span>
