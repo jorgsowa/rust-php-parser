@@ -8,6 +8,7 @@ use crate::precedence::{
     self, ASSIGNMENT_BP, MEMBER_ACCESS_BP, NULL_COALESCE_LEFT_BP, SCOPE_RESOLUTION_BP, TERNARY_BP,
 };
 use crate::version::PhpVersion;
+use php_ast::span::Span;
 
 mod atom;
 pub(crate) mod interpolation;
@@ -86,6 +87,52 @@ fn is_valid_assignment_target(kind: &ExprKind<'_, '_>) -> bool {
 /// (`Array`) recurses; everything else falls back to the lvalue rule.
 fn is_valid_destructure_element(kind: &ExprKind<'_, '_>) -> bool {
     matches!(kind, ExprKind::Omit) || is_valid_assignment_target(kind)
+}
+
+/// True if the array-literal at `span` was written with `list(...)` syntax
+/// rather than the short `[...]` form. Determined by the first source byte
+/// at the span start.
+fn is_list_syntax(source: &str, span: Span) -> bool {
+    source
+        .as_bytes()
+        .get(span.start as usize)
+        .map(|b| b.eq_ignore_ascii_case(&b'l'))
+        .unwrap_or(false)
+}
+
+/// Walk the destructure target (top-level `Array(_)`) and report mixing of
+/// `list(...)` and `[...]` syntax — PHP fatals "Cannot mix [] and list()".
+fn check_mixed_list_short_syntax<'arena, 'src>(
+    parser: &mut Parser<'arena, 'src>,
+    lhs: &Expr<'arena, 'src>,
+) {
+    let ExprKind::Array(_) = lhs.kind else {
+        return;
+    };
+    let outer_is_list = is_list_syntax(parser.source(), lhs.span);
+    fn walk<'arena, 'src>(
+        parser: &mut Parser<'arena, 'src>,
+        expr: &Expr<'arena, 'src>,
+        outer_is_list: bool,
+    ) {
+        if let ExprKind::Array(elems) = &expr.kind {
+            if is_list_syntax(parser.source(), expr.span) != outer_is_list {
+                parser.error(ParseError::Forbidden {
+                    message: "Cannot mix [] and list()".into(),
+                    span: expr.span,
+                });
+                return;
+            }
+            for el in elems.iter() {
+                walk(parser, &el.value, outer_is_list);
+            }
+        }
+    }
+    if let ExprKind::Array(elems) = &lhs.kind {
+        for el in elems.iter() {
+            walk(parser, &el.value, outer_is_list);
+        }
+    }
 }
 
 /// True if the LHS is an `ArrayAccess` chain whose outermost base is a
@@ -175,6 +222,7 @@ fn parse_assign_continuation<'arena, 'src>(
             }
         }
     }
+    check_mixed_list_short_syntax(parser, &lhs);
     let op_token = parser.advance();
     let by_ref = op_token.kind == TokenKind::Equals && parser.eat(TokenKind::Ampersand).is_some();
     let op = match op_token.kind {
