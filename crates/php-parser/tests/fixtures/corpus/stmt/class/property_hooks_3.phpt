@@ -1,5 +1,4 @@
 ===config===
-expect_parser_silent=true
 min_php=8.4
 ===source===
 <?php
@@ -8,6 +7,8 @@ class Test {
         get() => 42;
     }
 }
+===errors===
+get hook of property must not have a parameter list
 ===ast===
 {
   "stmts": [

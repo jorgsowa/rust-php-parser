@@ -7,6 +7,7 @@ class Test {
 }
 ===errors===
 expected 'get' or 'set', found identifier
+Property hook list must not be empty
 ===ast===
 {
   "stmts": [

@@ -8,7 +8,7 @@ class Foo {
     }
 }
 ===errors===
-get hook must not have a parameter list
+get hook of property must not have a parameter list
 ===ast===
 {
   "stmts": [

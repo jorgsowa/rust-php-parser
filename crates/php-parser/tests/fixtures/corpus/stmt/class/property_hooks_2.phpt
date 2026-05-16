@@ -1,5 +1,4 @@
 ===config===
-expect_parser_silent=true
 min_php=8.4
 ===source===
 <?php
@@ -7,6 +6,9 @@ class Test {
     public $prop {}
     public function __construct(public $prop2 {}) {}
 }
+===errors===
+Property hook list must not be empty
+Property hook list must not be empty
 ===ast===
 {
   "stmts": [

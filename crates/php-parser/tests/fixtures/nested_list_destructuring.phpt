@@ -1,8 +1,9 @@
+===config===
+expect_parser_silent=true
 ===source===
 <?php
 list($a, [[$b, $c]]) = [[1, [2, 3]]];
 [$x, [$y, $z]] = $data;
-===errors===
 ===ast===
 {
   "stmts": [

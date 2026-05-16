@@ -1,5 +1,4 @@
 ===config===
-expect_parser_silent=true
 max_php=8.3
 ===source===
 <?php
@@ -7,6 +6,7 @@ class Test {
     public $prop {}
     public function __construct(public $prop2 {}) {}
 }
+===errors===
 ===ast===
 {
   "stmts": [

@@ -233,15 +233,15 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
             let p = super::parse_param_list(parser);
             parser.expect(TokenKind::RightParen);
 
-            // Validate parameter counts against hook kind
+            // Validate parameter counts against hook kind.
+            // PHP rejects a parameter list on `get` regardless of contents —
+            // `get()` is fatal — and requires exactly one parameter for `set`.
             match kind {
                 PropertyHookKind::Get => {
-                    if !p.is_empty() {
-                        parser.error(ParseError::Forbidden {
-                            message: "get hook must not have a parameter list".into(),
-                            span: paren_span,
-                        });
-                    }
+                    parser.error(ParseError::Forbidden {
+                        message: "get hook of property must not have a parameter list".into(),
+                        span: paren_span,
+                    });
                 }
                 PropertyHookKind::Set => {
                     if p.len() != 1 {
@@ -316,6 +316,12 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
     }
 
     parser.expect_closing(TokenKind::RightBrace, open_span);
+    if hooks.is_empty() {
+        parser.error(ParseError::Forbidden {
+            message: "Property hook list must not be empty".into(),
+            span: open_span,
+        });
+    }
     hooks
 }
 
