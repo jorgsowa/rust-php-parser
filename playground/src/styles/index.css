@@ -1499,15 +1499,62 @@ body::after {
   background: var(--bg-hover);
 }
 
+.cmp-row--expandable {
+  cursor: pointer;
+}
+
+.cmp-row--open {
+  background: rgba(232, 148, 58, 0.04);
+}
+
+.cmp-row--child {
+  background: rgba(0, 0, 0, 0.15);
+  border-bottom-color: transparent;
+}
+
+.cmp-row--child:last-child,
+.cmp-row--child + :not(.cmp-row--child) {
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.cmp-row--child:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.cmp-expand-icon {
+  display: inline-block;
+  width: 14px;
+  font-size: 10px;
+  color: var(--text-3);
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.cmp-row--expandable:hover .cmp-expand-icon {
+  color: var(--accent-muted);
+}
+
 .cmp-td-name {
   padding: 9px 14px;
   vertical-align: middle;
 }
 
+.cmp-row--child .cmp-td-name {
+  padding-left: 28px;
+}
+
 .cmp-node-name {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 2px;
   color: var(--accent);
   font-weight: 500;
+}
+
+.cmp-child-name {
+  color: var(--text-2);
+  font-weight: 400;
+  font-size: 0.85em;
 }
 
 .cmp-node-desc {

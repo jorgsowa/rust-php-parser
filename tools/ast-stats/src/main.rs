@@ -122,17 +122,21 @@ impl<'a, 'src> Visitor<'a, 'src> for NodeCounter {
             }
             ExprKind::Closure(c) => {
                 self.bump("Closure");
+                // mutually exclusive: static > use > plain
                 if c.is_static {
                     self.bump("Closure (static)");
-                }
-                if !c.use_vars.is_empty() {
+                } else if !c.use_vars.is_empty() {
                     self.bump("Closure (use)");
+                } else {
+                    self.bump("Closure (plain)");
                 }
             }
             ExprKind::ArrowFunction(f) => {
                 self.bump("ArrowFunction");
                 if f.is_static {
                     self.bump("ArrowFunction (static)");
+                } else {
+                    self.bump("ArrowFunction (plain)");
                 }
             }
             ExprKind::Match(_) => self.bump("Match"),
@@ -150,32 +154,32 @@ impl<'a, 'src> Visitor<'a, 'src> for NodeCounter {
         match &member.kind {
             ClassMemberKind::Property(prop) => {
                 self.bump("Property");
-                if prop.is_readonly {
-                    self.bump("Property (readonly)");
-                }
-                if prop.is_static {
-                    self.bump("Property (static)");
-                }
-                if prop.type_hint.is_some() {
-                    self.bump("Property (typed)");
-                }
+                // mutually exclusive: hooked > readonly > static > typed > plain
                 if !prop.hooks.is_empty() {
                     self.bump("Property (hooked)");
+                } else if prop.is_readonly {
+                    self.bump("Property (readonly)");
+                } else if prop.is_static {
+                    self.bump("Property (static)");
+                } else if prop.type_hint.is_some() {
+                    self.bump("Property (typed)");
+                } else {
+                    self.bump("Property (plain)");
                 }
             }
             ClassMemberKind::Method(method) => {
                 self.bump("Method");
-                if method.is_static {
-                    self.bump("Method (static)");
-                }
+                // mutually exclusive: abstract > final > static > typed > plain
                 if method.is_abstract {
                     self.bump("Method (abstract)");
-                }
-                if method.is_final {
+                } else if method.is_final {
                     self.bump("Method (final)");
-                }
-                if method.return_type.is_some() {
+                } else if method.is_static {
+                    self.bump("Method (static)");
+                } else if method.return_type.is_some() {
                     self.bump("Method (typed return)");
+                } else {
+                    self.bump("Method (plain)");
                 }
             }
             ClassMemberKind::ClassConst(_) => {
@@ -190,17 +194,17 @@ impl<'a, 'src> Visitor<'a, 'src> for NodeCounter {
 
     fn visit_param(&mut self, param: &Param<'a, 'src>) -> ControlFlow<()> {
         self.bump("Param");
+        // mutually exclusive: promoted > readonly > variadic > typed > plain
         if param.visibility.is_some() {
             self.bump("Param (promoted)");
-        }
-        if param.is_readonly {
+        } else if param.is_readonly {
             self.bump("Param (readonly)");
-        }
-        if param.variadic {
+        } else if param.variadic {
             self.bump("Param (variadic)");
-        }
-        if param.type_hint.is_some() {
+        } else if param.type_hint.is_some() {
             self.bump("Param (typed)");
+        } else {
+            self.bump("Param (plain)");
         }
         walk_param(self, param)
     }

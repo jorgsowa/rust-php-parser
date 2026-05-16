@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { Select } from '../Select'
 import rawStats from '../../data/project-stats.json'
 import { astNodes } from '../../data/ast-nodes'
@@ -89,6 +89,10 @@ function formatNum(n: number): string {
   return n.toLocaleString()
 }
 
+const CHILD_RE = /^(.+) \([^)]+\)$/
+const isChildKey = (key: string) => CHILD_RE.test(key)
+const parentKey = (key: string) => key.replace(/ \([^)]+\)$/, '')
+
 function ProjectInfoPopover({ project }: { project: ProjectStats }) {
   const desc = PROJECT_DESC[project.slug] ?? ''
   return (
@@ -149,39 +153,63 @@ export function ComparePage() {
   const [sortKey, setSortKey] = useState<SortKey>('left')
   const [sortDesc, setSortDesc] = useState(true)
   const [filter, setFilter] = useState('')
+  const [expanded, setExpanded] = useState<Set<string>>(new Set())
 
   const left = PROJECTS.find(p => p.slug === leftSlug)!
   const right = PROJECTS.find(p => p.slug === rightSlug)!
 
-  const allNodeTypes = useMemo(() => {
-    const keys = new Set([...Object.keys(left.nodes), ...Object.keys(right.nodes)])
-    return Array.from(keys)
+  const toggle = useCallback((key: string) => {
+    setExpanded(prev => {
+      const next = new Set(prev)
+      next.has(key) ? next.delete(key) : next.add(key)
+      return next
+    })
+  }, [])
+
+  const makeRow = useCallback((k: string) => ({
+    key: k,
+    leftCount: left.nodes[k] ?? 0,
+    rightCount: right.nodes[k] ?? 0,
+    leftPct: (left.nodes[k] ?? 0) / left.total_nodes,
+    rightPct: (right.nodes[k] ?? 0) / right.total_nodes,
+    diff: ((right.nodes[k] ?? 0) / right.total_nodes) - ((left.nodes[k] ?? 0) / left.total_nodes),
+  }), [left, right])
+
+  // All keys split into parents and children
+  const { parentRows, childMap } = useMemo(() => {
+    const allKeys = new Set([...Object.keys(left.nodes), ...Object.keys(right.nodes)])
+    const parents: string[] = []
+    const children = new Map<string, string[]>()
+
+    allKeys.forEach(k => {
+      if (isChildKey(k)) {
+        const p = parentKey(k)
+        if (!children.has(p)) children.set(p, [])
+        children.get(p)!.push(k)
+      } else {
+        parents.push(k)
+      }
+    })
+
+    return { parentRows: parents, childMap: children }
   }, [left, right])
 
   const rows = useMemo(() => {
-    return allNodeTypes
-      .filter(k => !filter || k.toLowerCase().includes(filter.toLowerCase()))
-      .map(k => ({
-        key: k,
-        leftCount: left.nodes[k] ?? 0,
-        rightCount: right.nodes[k] ?? 0,
-        leftPct: (left.nodes[k] ?? 0) / left.total_nodes,
-        rightPct: (right.nodes[k] ?? 0) / right.total_nodes,
-        diff: ((right.nodes[k] ?? 0) / right.total_nodes) - ((left.nodes[k] ?? 0) / left.total_nodes),
-      }))
+    const query = filter.toLowerCase()
+    return parentRows
+      .filter(k => !query || k.toLowerCase().includes(query) ||
+        (childMap.get(k) ?? []).some(c => c.toLowerCase().includes(query)))
+      .map(makeRow)
       .sort((a, b) => {
-        let va = 0, vb = 0
-        if (sortKey === 'name') { va = a.key < b.key ? -1 : 1; vb = 0 }
-        else if (sortKey === 'left') { va = a.leftPct; vb = b.leftPct }
-        else if (sortKey === 'right') { va = a.rightPct; vb = b.rightPct }
-        else if (sortKey === 'diff') { va = Math.abs(a.diff); vb = Math.abs(b.diff) }
-        if (sortKey === 'name') return sortDesc ? -va : va
+        if (sortKey === 'name') return sortDesc ? (b.key < a.key ? -1 : 1) : (a.key < b.key ? -1 : 1)
+        const va = sortKey === 'left' ? a.leftPct : sortKey === 'right' ? a.rightPct : Math.abs(a.diff)
+        const vb = sortKey === 'left' ? b.leftPct : sortKey === 'right' ? b.rightPct : Math.abs(b.diff)
         return sortDesc ? vb - va : va - vb
       })
-  }, [allNodeTypes, left, right, sortKey, sortDesc, filter])
+  }, [parentRows, childMap, makeRow, sortKey, sortDesc, filter])
 
   const maxPct = useMemo(
-    () => Math.max(...rows.map(r => Math.max(r.leftPct, r.rightPct))),
+    () => Math.max(...rows.map(r => Math.max(r.leftPct, r.rightPct)), 0.001),
     [rows]
   )
 
@@ -276,49 +304,57 @@ export function ComparePage() {
           </thead>
           <tbody>
             {rows.map(row => {
-              const leftWidth = maxPct > 0 ? (row.leftPct / maxPct) * 100 : 0
-              const rightWidth = maxPct > 0 ? (row.rightPct / maxPct) * 100 : 0
+              const leftWidth = (row.leftPct / maxPct) * 100
+              const rightWidth = (row.rightPct / maxPct) * 100
               const diffSign = row.diff > 0 ? 'more' : row.diff < 0 ? 'less' : 'same'
               const diffPct = (Math.abs(row.diff) * 100).toFixed(2)
               const desc = NODE_DESCRIPTIONS[row.key]
-              return (
-                <tr key={row.key} className="cmp-row" title={desc}>
+              const children = childMap.get(row.key)
+              const hasChildren = children && children.length > 0
+              const isOpen = expanded.has(row.key)
+
+              return [
+                <tr
+                  key={row.key}
+                  className={`cmp-row${hasChildren ? ' cmp-row--expandable' : ''}${isOpen ? ' cmp-row--open' : ''}`}
+                  onClick={hasChildren ? () => toggle(row.key) : undefined}
+                  title={desc}
+                >
                   <td className="cmp-td-name">
                     <span className="cmp-node-name">
-                    {row.key}
-                    {DOC_LINKS[row.key] && (
-                      <a
-                        className="cmp-doc-link"
-                        href={DOC_LINKS[row.key]}
-                        title={`View ${row.key} in docs`}
-                        onClick={e => e.stopPropagation()}
-                      >
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                          <polyline points="15 3 21 3 21 9"/>
-                          <line x1="10" y1="14" x2="21" y2="3"/>
-                        </svg>
-                      </a>
-                    )}
-                  </span>
+                      {hasChildren && (
+                        <span className="cmp-expand-icon" aria-hidden="true">
+                          {isOpen ? '▾' : '▸'}
+                        </span>
+                      )}
+                      {row.key}
+                      {DOC_LINKS[row.key] && (
+                        <a
+                          className="cmp-doc-link"
+                          href={DOC_LINKS[row.key]}
+                          title={`View ${row.key} in docs`}
+                          onClick={e => e.stopPropagation()}
+                        >
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                            <polyline points="15 3 21 3 21 9"/>
+                            <line x1="10" y1="14" x2="21" y2="3"/>
+                          </svg>
+                        </a>
+                      )}
+                    </span>
                     {desc && <span className="cmp-node-desc">{desc}</span>}
                   </td>
                   <td className="cmp-td-bar">
                     <div className="cmp-bar-wrap">
-                      <div
-                        className="cmp-bar cmp-bar-left"
-                        style={{ width: `${leftWidth}%` }}
-                      />
+                      <div className="cmp-bar cmp-bar-left" style={{ width: `${leftWidth}%` }} />
                     </div>
                     <span className="cmp-bar-label">{pct(row.leftCount, left.total_nodes)}</span>
                     <span className="cmp-bar-abs">{formatNum(row.leftCount)}</span>
                   </td>
                   <td className="cmp-td-bar">
                     <div className="cmp-bar-wrap">
-                      <div
-                        className="cmp-bar cmp-bar-right"
-                        style={{ width: `${rightWidth}%` }}
-                      />
+                      <div className="cmp-bar cmp-bar-right" style={{ width: `${rightWidth}%` }} />
                     </div>
                     <span className="cmp-bar-label">{pct(row.rightCount, right.total_nodes)}</span>
                     <span className="cmp-bar-abs">{formatNum(row.rightCount)}</span>
@@ -326,8 +362,46 @@ export function ComparePage() {
                   <td className={`cmp-td-diff cmp-diff-${diffSign}`}>
                     {row.diff === 0 ? '—' : `${row.diff > 0 ? '+' : '−'}${diffPct}%`}
                   </td>
-                </tr>
-              )
+                </tr>,
+
+                ...(isOpen && children ? children
+                  .map(makeRow)
+                  .sort((a, b) => b.leftPct - a.leftPct)
+                  .map(child => {
+                    // bars relative to parent total
+                    const cLeftW = row.leftCount > 0 ? (child.leftCount / row.leftCount) * 100 : 0
+                    const cRightW = row.rightCount > 0 ? (child.rightCount / row.rightCount) * 100 : 0
+                    const label = child.key.replace(/^.+? \(/, '(')
+                    const cDiff = row.rightCount > 0 && row.leftCount > 0
+                      ? (child.rightCount / row.rightCount) - (child.leftCount / row.leftCount)
+                      : 0
+                    const cDiffSign = cDiff > 0 ? 'more' : cDiff < 0 ? 'less' : 'same'
+                    return (
+                      <tr key={child.key} className="cmp-row cmp-row--child">
+                        <td className="cmp-td-name">
+                          <span className="cmp-node-name cmp-child-name">{label}</span>
+                        </td>
+                        <td className="cmp-td-bar">
+                          <div className="cmp-bar-wrap">
+                            <div className="cmp-bar cmp-bar-left" style={{ width: `${cLeftW}%` }} />
+                          </div>
+                          <span className="cmp-bar-label">{pct(child.leftCount, row.leftCount)}</span>
+                          <span className="cmp-bar-abs">{formatNum(child.leftCount)}</span>
+                        </td>
+                        <td className="cmp-td-bar">
+                          <div className="cmp-bar-wrap">
+                            <div className="cmp-bar cmp-bar-right" style={{ width: `${cRightW}%` }} />
+                          </div>
+                          <span className="cmp-bar-label">{pct(child.rightCount, row.rightCount)}</span>
+                          <span className="cmp-bar-abs">{formatNum(child.rightCount)}</span>
+                        </td>
+                        <td className={`cmp-td-diff cmp-diff-${cDiffSign}`}>
+                          {cDiff === 0 ? '—' : `${cDiff > 0 ? '+' : '−'}${(Math.abs(cDiff) * 100).toFixed(1)}%`}
+                        </td>
+                      </tr>
+                    )
+                  }) : [])
+              ]
             })}
           </tbody>
         </table>
