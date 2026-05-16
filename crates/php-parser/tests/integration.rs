@@ -95,11 +95,35 @@ fn fixtures() {
                     .push(format!("expected parse errors in {rel} but got none"));
                 return;
             }
-        } else {
-            if !result.errors.is_empty() {
+        } else if !result.errors.is_empty() {
+            failures.lock().unwrap().push(format!(
+                "unexpected parse errors in {rel}: {:?}",
+                result.errors
+            ));
+            return;
+        }
+
+        // Closure check: the parser is documented to emit at least one
+        // diagnostic for every input `php -l` rejects. A non-empty
+        // ===php_error=== section means `php -l` rejects; if the parser
+        // produced no diagnostics, that's a consistency gap.
+        //
+        // Fixtures may opt out with `expect_parser_silent=true` in
+        // ===config===, marking the gap as known-but-not-yet-fixed.
+        if !expect_errors && content.contains("===php_error===\n") {
+            let opted_out = content
+                .split("===source===\n")
+                .next()
+                .map(|header| header.contains("expect_parser_silent=true"))
+                .unwrap_or(false);
+            let php_error_present = content
+                .find("===php_error===\n")
+                .map(|p| !content[p + "===php_error===\n".len()..].trim().is_empty())
+                .unwrap_or(false);
+            if !opted_out && php_error_present && result.errors.is_empty() {
                 failures.lock().unwrap().push(format!(
-                    "unexpected parse errors in {rel}: {:?}",
-                    result.errors
+                    "closure-check failure in {rel}: php -l rejects this input but the parser emitted no diagnostics. \
+                     Either add a parser check (preferred) or add `expect_parser_silent=true` to ===config=== to mark this as a known gap."
                 ));
                 return;
             }

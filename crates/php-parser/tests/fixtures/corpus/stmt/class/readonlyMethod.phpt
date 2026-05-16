@@ -1,4 +1,5 @@
 ===config===
+expect_parser_silent=true
 min_php=8.3
 ===source===
 <?php class A { readonly function foo() {} }

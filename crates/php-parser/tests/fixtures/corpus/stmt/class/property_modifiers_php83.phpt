@@ -1,4 +1,5 @@
 ===config===
+expect_parser_silent=true
 min_php=8.3
 max_php=8.3
 ===source===
