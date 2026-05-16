@@ -1,5 +1,4 @@
 ===config===
-expect_parser_silent=true
 min_php=8.4
 ===source===
 <?php
@@ -15,6 +14,11 @@ class Test {
         protected(set) $f,
     ) {}
 }
+===errors===
+Property with asymmetric visibility must have type
+Property with asymmetric visibility must have type
+Visibility of property must not be weaker than set visibility
+Property with asymmetric visibility must have type
 ===ast===
 {
   "stmts": [

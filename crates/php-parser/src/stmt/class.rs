@@ -12,6 +12,18 @@ use crate::version::PhpVersion;
 // =============================================================================
 
 /// Check if a name is a reserved special class name (self, parent, static, readonly)
+/// Rank of a visibility for the asymmetric-visibility comparison.
+/// Higher rank = wider audience (public > protected > private). Set
+/// visibility may not be wider than get visibility — i.e. set_rank must be
+/// >= get_rank.
+fn visibility_rank(v: php_ast::Visibility) -> u8 {
+    match v {
+        php_ast::Visibility::Private => 0,
+        php_ast::Visibility::Protected => 1,
+        php_ast::Visibility::Public => 2,
+    }
+}
+
 fn is_reserved_class_name(name: &str) -> bool {
     matches!(
         name.to_ascii_lowercase().as_str(),
@@ -936,6 +948,22 @@ fn parse_property_member<'arena, 'src>(
     } else {
         parser.alloc_vec()
     };
+    if mods.set_visibility.is_some() && type_hint.is_none() {
+        parser.error(ParseError::Forbidden {
+            message: "Property with asymmetric visibility must have type".into(),
+            span: Span::new(member_start, parser.previous_end()),
+        });
+    }
+    // PHP rule: set visibility must be EQUAL OR NARROWER than get visibility.
+    // `private public(set)` is invalid because public-set widens beyond private-get.
+    if let (Some(get_vis), Some(set_vis)) = (mods.visibility, mods.set_visibility) {
+        if visibility_rank(set_vis) > visibility_rank(get_vis) {
+            parser.error(ParseError::Forbidden {
+                message: "Visibility of property must not be weaker than set visibility".into(),
+                span: Span::new(member_start, parser.previous_end()),
+            });
+        }
+    }
     if mods.is_static && !hooks.is_empty() {
         parser.error(ParseError::Forbidden {
             message: "Cannot declare hooks for static property".into(),

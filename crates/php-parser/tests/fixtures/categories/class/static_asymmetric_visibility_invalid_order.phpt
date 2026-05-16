@@ -1,8 +1,9 @@
 ===config===
-expect_parser_silent=true
 min_php=8.5
 ===source===
 <?php class Foo { private public(set) static int $count = 0; }
+===errors===
+Visibility of property must not be weaker than set visibility
 ===ast===
 {
   "stmts": [

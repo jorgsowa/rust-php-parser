@@ -8,7 +8,9 @@ class Test {
 }
 ===errors===
 cannot use multiple set-visibility modifiers
+Property with asymmetric visibility must have type
 cannot use multiple set-visibility modifiers
+Property with asymmetric visibility must have type
 Cannot redeclare property $x
 ===ast===
 {
