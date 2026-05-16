@@ -843,6 +843,12 @@ fn parse_property_member<'arena, 'src>(
     } else {
         parser.alloc_vec()
     };
+    if mods.is_static && !hooks.is_empty() {
+        parser.error(ParseError::Forbidden {
+            message: "Cannot declare hooks for static property".into(),
+            span: Span::new(member_start, parser.previous_end()),
+        });
+    }
     if mods.is_readonly {
         if type_hint.is_none() {
             parser.error(ParseError::Forbidden {
