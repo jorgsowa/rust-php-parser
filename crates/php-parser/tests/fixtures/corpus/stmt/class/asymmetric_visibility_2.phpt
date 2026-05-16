@@ -9,6 +9,7 @@ class Test {
 ===errors===
 cannot use multiple set-visibility modifiers
 cannot use multiple set-visibility modifiers
+Cannot redeclare property $x
 ===ast===
 {
   "stmts": [

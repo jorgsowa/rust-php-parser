@@ -1,8 +1,9 @@
 ===config===
-expect_parser_silent=true
 max_php=8.2
 ===source===
 <?php class A { readonly function foo() {} }
+===errors===
+Cannot use the readonly modifier on a method
 ===ast===
 {
   "stmts": [

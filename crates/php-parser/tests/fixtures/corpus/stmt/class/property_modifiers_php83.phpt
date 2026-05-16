@@ -1,5 +1,4 @@
 ===config===
-expect_parser_silent=true
 min_php=8.3
 max_php=8.3
 ===source===
@@ -9,6 +8,10 @@ class Test {
     readonly int $prop;
     private static $prop;
 }
+===errors===
+Cannot use the final modifier on a property
+Cannot redeclare property $prop
+Cannot redeclare property $prop
 ===ast===
 {
   "stmts": [

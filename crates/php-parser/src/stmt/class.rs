@@ -338,6 +338,8 @@ pub fn parse_class_members<'arena, 'src>(
     // Track method names (case-insensitive) to detect redeclarations.
     // PHP rejects with "Cannot redeclare A::f()".
     let mut seen_methods: std::collections::HashSet<String> = std::collections::HashSet::new();
+    // Track property names (case-sensitive) for "Cannot redeclare A::$prop".
+    let mut seen_properties: std::collections::HashSet<String> = std::collections::HashSet::new();
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         if parser.check(TokenKind::Semicolon) {
             parser.advance();
@@ -403,6 +405,7 @@ pub fn parse_class_members<'arena, 'src>(
         };
 
         if parser.check(TokenKind::Variable) {
+            let before = members.len();
             parse_property_member(
                 parser,
                 &mut members,
@@ -412,6 +415,20 @@ pub fn parse_class_members<'arena, 'src>(
                 type_hint,
                 in_interface,
             );
+            // Comma-separated declarations may add multiple property members
+            // (`public int $a, $b`); check each one.
+            for m in members.iter().skip(before) {
+                if let ClassMemberKind::Property(decl) = &m.kind {
+                    if let Some(name) = decl.name.as_str() {
+                        if !seen_properties.insert(name.to_string()) {
+                            parser.error(ParseError::Forbidden {
+                                message: format!("Cannot redeclare property ${}", name).into(),
+                                span: m.span,
+                            });
+                        }
+                    }
+                }
+            }
             continue;
         }
 
@@ -807,6 +824,12 @@ fn parse_method_member<'arena, 'src>(
             span: Span::new(member_start, parser.previous_end()),
         });
     }
+    if mods.is_readonly {
+        parser.error(ParseError::Forbidden {
+            message: "Cannot use the readonly modifier on a method".into(),
+            span: Span::new(member_start, parser.previous_end()),
+        });
+    }
 
     // `final private` method — PHP warns (does not fatal):
     // "Private methods cannot be final as they are never overridden by other classes".
@@ -916,6 +939,12 @@ fn parse_property_member<'arena, 'src>(
     if in_interface && hooks.is_empty() {
         parser.error(ParseError::Forbidden {
             message: "Interfaces may only include hooked properties".into(),
+            span: Span::new(member_start, parser.previous_end()),
+        });
+    }
+    if mods.is_final {
+        parser.error(ParseError::Forbidden {
+            message: "Cannot use the final modifier on a property".into(),
             span: Span::new(member_start, parser.previous_end()),
         });
     }
