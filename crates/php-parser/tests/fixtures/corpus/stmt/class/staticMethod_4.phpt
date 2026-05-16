@@ -1,7 +1,7 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php class A { static function __CONSTRUCT() {} }
+===errors===
+Method __CONSTRUCT() cannot be static
 ===ast===
 {
   "stmts": [

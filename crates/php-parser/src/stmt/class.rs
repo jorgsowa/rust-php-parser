@@ -836,11 +836,19 @@ fn parse_method_member<'arena, 'src>(
                 span: rt.span,
             });
         }
-        if mods.is_static {
-            parser.error(ParseError::Forbidden {
-                message: "Method __construct() cannot be static".into(),
-                span: Span::new(member_start, parser.previous_end()),
-            });
+    }
+    // __construct / __destruct / __clone cannot be static (case-insensitive).
+    // PHP emits "Method A::__destruct() cannot be static" preserving the
+    // declared casing (e.g. "__cLoNe" → "__cLoNe()").
+    if mods.is_static {
+        if let Some(name) = method_name.as_str() {
+            let lower = name.to_ascii_lowercase();
+            if matches!(lower.as_str(), "__construct" | "__destruct" | "__clone") {
+                parser.error(ParseError::Forbidden {
+                    message: format!("Method {}() cannot be static", name).into(),
+                    span: Span::new(member_start, parser.previous_end()),
+                });
+            }
         }
     }
 
