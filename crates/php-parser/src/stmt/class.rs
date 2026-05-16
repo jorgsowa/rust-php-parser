@@ -808,6 +808,21 @@ fn parse_method_member<'arena, 'src>(
         });
     }
 
+    // `final private` method — PHP warns (does not fatal):
+    // "Private methods cannot be final as they are never overridden by other classes".
+    // Excluded: __construct (which has its own semantics around final).
+    if mods.is_final
+        && mods.visibility == Some(Visibility::Private)
+        && method_name.as_str() != Some("__construct")
+    {
+        parser.error(ParseError::ForbiddenWarning {
+            message:
+                "Private methods cannot be final as they are never overridden by other classes"
+                    .into(),
+            span: Span::new(member_start, parser.previous_end()),
+        });
+    }
+
     // __construct cannot declare a return type or be static. PHP errors:
     // "Method A::__construct() cannot declare a return type" / "cannot be static".
     if method_name.as_str() == Some("__construct") {
