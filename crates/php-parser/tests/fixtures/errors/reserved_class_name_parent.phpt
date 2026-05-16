@@ -3,7 +3,7 @@ min_php=8.4
 ===source===
 <?php class parent {}
 ===errors===
-cannot use 'parent' as class name
+Cannot use 'parent' as a class name as it is reserved
 ===ast===
 {
   "stmts": [

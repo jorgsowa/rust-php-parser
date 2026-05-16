@@ -1,15 +1,18 @@
+===description===
+PHP rejects type-name aliases (int, string, void, etc.) as class names with
+"Cannot use 'string' as a class name as it is reserved".
 ===source===
 <?php
-class ReadOnly {}
+class string {}
 ===errors===
-Cannot use 'ReadOnly' as a class name as it is reserved
+Cannot use 'string' as a class name as it is reserved
 ===ast===
 {
   "stmts": [
     {
       "kind": {
         "Class": {
-          "name": "ReadOnly",
+          "name": "string",
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -23,14 +26,14 @@ Cannot use 'ReadOnly' as a class name as it is reserved
       },
       "span": {
         "start": 6,
-        "end": 23
+        "end": 21
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 23
+    "end": 21
   }
 }
 ===php_error===
-PHP Parse error:  syntax error, unexpected token "readonly", expecting identifier in Standard input code on line 2
+PHP Fatal error:  Cannot use 'string' as a class name as it is reserved in Standard input code on line 3

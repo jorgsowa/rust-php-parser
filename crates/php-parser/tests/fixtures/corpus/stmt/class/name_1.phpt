@@ -3,7 +3,7 @@ min_php=8.4
 ===source===
 <?php class self {}
 ===errors===
-cannot use 'self' as class name
+Cannot use 'self' as a class name as it is reserved
 ===ast===
 {
   "stmts": [

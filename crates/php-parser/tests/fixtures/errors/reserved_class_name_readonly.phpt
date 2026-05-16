@@ -1,7 +1,7 @@
 ===source===
 <?php class readonly {}
 ===errors===
-cannot use 'readonly' as class name
+Cannot use 'readonly' as a class name as it is reserved
 ===ast===
 {
   "stmts": [

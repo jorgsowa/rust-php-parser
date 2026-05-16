@@ -13,10 +13,17 @@ use crate::version::PhpVersion;
 
 /// Check if a name is a reserved special class name (self, parent, static, readonly)
 fn is_reserved_class_name(name: &str) -> bool {
-    name.eq_ignore_ascii_case("self")
-        || name.eq_ignore_ascii_case("parent")
-        || name.eq_ignore_ascii_case("static")
-        || name.eq_ignore_ascii_case("readonly")
+    matches!(
+        name.to_ascii_lowercase().as_str(),
+        // self / parent / static / readonly: meta-names that PHP rejects as
+        // class identifiers in declarations and extends/implements lists.
+        "self" | "parent" | "static" | "readonly"
+            // PHP's reserved type names — invalid as class names anywhere
+            // ("Cannot use 'string' as a class name as it is reserved").
+            | "int" | "float" | "bool" | "string" | "true" | "false" | "null"
+            | "void" | "iterable" | "object" | "mixed" | "never" | "array"
+            | "numeric" | "resource"
+    )
 }
 
 /// Validate a name used in extends/implements is not self/parent/static
@@ -58,7 +65,7 @@ pub(super) fn parse_class<'arena, 'src>(
     if let Some(text) = name.as_str() {
         if is_reserved_class_name(text) {
             parser.error(ParseError::Forbidden {
-                message: format!("cannot use '{}' as class name", text).into(),
+                message: format!("Cannot use '{}' as a class name as it is reserved", text).into(),
                 span: name_span,
             });
         }
