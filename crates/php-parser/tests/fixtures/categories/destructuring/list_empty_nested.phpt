@@ -1,7 +1,7 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php list(list()) = $arr;
+===errors===
+Cannot use empty list
 ===ast===
 {
   "stmts": [

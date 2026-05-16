@@ -1949,6 +1949,19 @@ fn parse_list_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'
     let end = parser.previous_end();
     let span = Span::new(start, end);
 
+    // PHP fatals on `list()` / `list(,,)` with no real targets:
+    // "Cannot use empty list".
+    if elements.is_empty()
+        || elements
+            .iter()
+            .all(|e| matches!(e.value.kind, ExprKind::Omit))
+    {
+        parser.error(ParseError::Forbidden {
+            message: "Cannot use empty list".into(),
+            span,
+        });
+    }
+
     Expr {
         kind: ExprKind::Array(elements),
         span,

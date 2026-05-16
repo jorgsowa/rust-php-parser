@@ -122,6 +122,16 @@ fn parse_assign_continuation<'arena, 'src>(
             span,
         });
     }
+    // Short-list destructure: `[, , ,] = …` — PHP fatals on "Cannot use empty list"
+    // when every element is omitted (or the array has no elements at all).
+    if let ExprKind::Array(elems) = &lhs.kind {
+        if elems.is_empty() || elems.iter().all(|e| matches!(e.value.kind, ExprKind::Omit)) {
+            parser.error(ParseError::Forbidden {
+                message: "Cannot use empty list".into(),
+                span: lhs.span,
+            });
+        }
+    }
     let op_token = parser.advance();
     let by_ref = op_token.kind == TokenKind::Equals && parser.eat(TokenKind::Ampersand).is_some();
     let op = match op_token.kind {
