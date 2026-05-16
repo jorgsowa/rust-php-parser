@@ -1,11 +1,11 @@
 ===description===
 PHP rejects type-name aliases (int, string, void, etc.) as class names with
-"Cannot use 'string' as a class name as it is reserved".
+"Cannot use "string" as a class name as it is reserved".
 ===source===
 <?php
 class string {}
 ===errors===
-Cannot use 'string' as a class name as it is reserved
+Cannot use "string" as a class name as it is reserved
 ===ast===
 {
   "stmts": [
@@ -36,4 +36,4 @@ Cannot use 'string' as a class name as it is reserved
   }
 }
 ===php_error===
-PHP Fatal error:  Cannot use 'string' as a class name as it is reserved in Standard input code on line 3
+PHP Fatal error:  Cannot use "string" as a class name as it is reserved in Standard input code on line 2

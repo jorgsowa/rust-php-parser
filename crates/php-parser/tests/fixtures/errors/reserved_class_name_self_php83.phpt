@@ -3,7 +3,7 @@ max_php=8.3
 ===source===
 <?php class self {}
 ===errors===
-Cannot use 'self' as a class name as it is reserved
+Cannot use "self" as a class name as it is reserved
 ===ast===
 {
   "stmts": [

@@ -3,7 +3,7 @@ max_php=8.3
 ===source===
 <?php class parent {}
 ===errors===
-Cannot use 'parent' as a class name as it is reserved
+Cannot use "parent" as a class name as it is reserved
 ===ast===
 {
   "stmts": [

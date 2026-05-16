@@ -65,7 +65,8 @@ pub(super) fn parse_class<'arena, 'src>(
     if let Some(text) = name.as_str() {
         if is_reserved_class_name(text) {
             parser.error(ParseError::Forbidden {
-                message: format!("Cannot use '{}' as a class name as it is reserved", text).into(),
+                message: format!("Cannot use \"{}\" as a class name as it is reserved", text)
+                    .into(),
                 span: name_span,
             });
         }
@@ -334,6 +335,9 @@ pub fn parse_class_members<'arena, 'src>(
     // March 2026: reduce from 16 to 4 for class members
     // Most classes have 3-10 members; larger classes grow efficiently
     let mut members = parser.alloc_vec_with_capacity(4);
+    // Track method names (case-insensitive) to detect redeclarations.
+    // PHP rejects with "Cannot redeclare A::f()".
+    let mut seen_methods: std::collections::HashSet<String> = std::collections::HashSet::new();
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         if parser.check(TokenKind::Semicolon) {
             parser.advance();
@@ -375,13 +379,20 @@ pub fn parse_class_members<'arena, 'src>(
         }
 
         if parser.check(TokenKind::Function) {
-            members.push(parse_method_member(
-                parser,
-                member_attrs,
-                member_start,
-                &mods,
-                in_interface,
-            ));
+            let member =
+                parse_method_member(parser, member_attrs, member_start, &mods, in_interface);
+            if let ClassMemberKind::Method(decl) = &member.kind {
+                if let Some(name) = decl.name.as_str() {
+                    let key = name.to_ascii_lowercase();
+                    if !seen_methods.insert(key) {
+                        parser.error(ParseError::Forbidden {
+                            message: format!("Cannot redeclare method {}()", name).into(),
+                            span: member.span,
+                        });
+                    }
+                }
+            }
+            members.push(member);
             continue;
         }
 

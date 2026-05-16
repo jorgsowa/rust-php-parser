@@ -1,7 +1,7 @@
 ===source===
 <?php class static {}
 ===errors===
-Cannot use 'static' as a class name as it is reserved
+Cannot use "static" as a class name as it is reserved
 ===ast===
 {
   "stmts": [
