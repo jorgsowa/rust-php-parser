@@ -1,5 +1,3 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php
 
@@ -8,6 +6,8 @@ expect_parser_silent=true
 "foo$bar"->length();
 (clone $obj)->b[0](1);
 [0, 1][0] = 1;
+===errors===
+Cannot use temporary expression in write context
 ===ast===
 {
   "stmts": [

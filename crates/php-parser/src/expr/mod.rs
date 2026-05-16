@@ -88,6 +88,25 @@ fn is_valid_destructure_element(kind: &ExprKind<'_, '_>) -> bool {
     matches!(kind, ExprKind::Omit) || is_valid_assignment_target(kind)
 }
 
+/// True if the LHS is an `ArrayAccess` chain whose outermost base is a
+/// statically-known temporary (e.g. array literal `[0,1][0] = …`). PHP
+/// rejects these with "Cannot use temporary expression in write context".
+fn is_temporary_write_target(kind: &ExprKind<'_, '_>) -> bool {
+    let mut cur = kind;
+    let mut saw_access = false;
+    loop {
+        match cur {
+            ExprKind::ArrayAccess(a) => {
+                saw_access = true;
+                cur = &a.array.kind;
+            }
+            ExprKind::Parenthesized(inner) => cur = &inner.kind,
+            _ => break,
+        }
+    }
+    saw_access && matches!(cur, ExprKind::Array(_))
+}
+
 /// Parse an assignment operator and its RHS, treating `lhs` as the assignment target.
 ///
 /// PHP grammar quirk: assignment operators bind tighter than prefix unary operators,
@@ -123,6 +142,11 @@ fn parse_assign_continuation<'arena, 'src>(
         parser.error(ParseError::Forbidden {
             message: "Cannot use increment/decrement as an assignment target.".into(),
             span,
+        });
+    } else if is_temporary_write_target(&lhs.kind) {
+        parser.error(ParseError::Forbidden {
+            message: "Cannot use temporary expression in write context".into(),
+            span: lhs.span,
         });
     } else if !is_valid_assignment_target(&lhs.kind) {
         parser.error(ParseError::Forbidden {
