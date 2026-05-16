@@ -393,13 +393,14 @@ export function ProjectStatsPage({ slug }: Props) {
         <div className="project-stats-sidebar">
           <div className="dir-tree-label">Directories</div>
           <div className="dir-tree">
-            {dirTree && (
+            {dirTree && dirTree.children.map(child => (
               <DirTreeNode
-                node={dirTree}
+                key={child.path}
+                node={child}
                 selected={selectedDir}
                 onSelect={setSelectedDir}
               />
-            )}
+            ))}
           </div>
         </div>
 
