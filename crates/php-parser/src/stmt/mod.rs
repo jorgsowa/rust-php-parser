@@ -1435,6 +1435,15 @@ pub fn parse_param_list<'arena, 'src>(
             None
         };
 
+        // PHP rejects variadic parameters with default values:
+        // "Variadic parameter cannot have a default value".
+        if variadic && default.is_some() {
+            parser.error(ParseError::Forbidden {
+                message: "Variadic parameter cannot have a default value".into(),
+                span: Span::new(param_start, parser.previous_end()),
+            });
+        }
+
         let param_end = default
             .as_ref()
             .map(|e| e.span.end)
@@ -1633,6 +1642,7 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
         &[TokenKind::RightBrace]
     };
     let mut cases = parser.alloc_vec_with_capacity(8);
+    let mut seen_default_span: Option<Span> = None;
 
     parser.loop_depth += 1;
     while !end_tokens.contains(&parser.current_kind()) && !parser.check(TokenKind::Eof) {
@@ -1643,7 +1653,16 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
                 parser.expect(TokenKind::Semicolon);
             }
             Some(v)
-        } else if parser.eat(TokenKind::Default).is_some() {
+        } else if let Some(default_tok) = parser.eat(TokenKind::Default) {
+            // PHP rejects "Switch statements may only contain one default clause".
+            if seen_default_span.is_some() {
+                parser.error(ParseError::Forbidden {
+                    message: "Switch statements may only contain one default clause".into(),
+                    span: default_tok.span,
+                });
+            } else {
+                seen_default_span = Some(default_tok.span);
+            }
             if parser.eat(TokenKind::Colon).is_none() {
                 parser.expect(TokenKind::Semicolon);
             }

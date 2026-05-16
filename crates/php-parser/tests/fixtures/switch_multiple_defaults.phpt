@@ -1,7 +1,7 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php switch ($x) { default: break; case 1: break; default: break; }
+===errors===
+Switch statements may only contain one default clause
 ===ast===
 {
   "stmts": [

@@ -799,6 +799,20 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             }
             parser.expect(TokenKind::RightParen);
             let end = parser.previous_end();
+            // PHP rejects non-lvalue arguments to isset with
+            // "Cannot use isset() on the result of an expression
+            //  (you can use \"null !== expression\" instead)".
+            // Parenthesised variables are allowed (e.g. isset(($a))).
+            for e in exprs.iter() {
+                if !isset_target_valid(&e.kind) {
+                    parser.error(ParseError::Forbidden {
+                        message: "Cannot use isset() on the result of an expression \
+                                  (you can use \"null !== expression\" instead)"
+                            .into(),
+                        span: e.span,
+                    });
+                }
+            }
             Expr {
                 kind: ExprKind::Isset(exprs),
                 span: Span::new(start, end),
@@ -1613,6 +1627,23 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
 }
 
 // =============================================================================
+/// Returns true if `kind` is a valid argument to `isset()` — i.e. an lvalue
+/// reference (variable, array/property access). PHP rejects expressions like
+/// `isset(1 + 1)` with a fatal at parse-time. Parenthesised lvalues are
+/// accepted (`isset(($a))`).
+fn isset_target_valid(kind: &ExprKind<'_, '_>) -> bool {
+    matches!(
+        kind,
+        ExprKind::Variable(_)
+            | ExprKind::VariableVariable(_)
+            | ExprKind::ArrayAccess(_)
+            | ExprKind::PropertyAccess(_)
+            | ExprKind::NullsafePropertyAccess(_)
+            | ExprKind::StaticPropertyAccess(_)
+            | ExprKind::StaticPropertyAccessDynamic { .. }
+    ) || matches!(kind, ExprKind::Parenthesized(inner) if isset_target_valid(&inner.kind))
+}
+
 // Argument list parsing
 // =============================================================================
 

@@ -1,11 +1,11 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php
 // This is legal.
 isset(($a), (($b)));
 // This is illegal, but not a syntax error.
 isset(1 + 1);
+===errors===
+Cannot use isset() on the result of an expression (you can use "null !== expression" instead)
 ===ast===
 {
   "stmts": [

@@ -1,8 +1,8 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php
 function foo(...$foo = []) {}
+===errors===
+Variadic parameter cannot have a default value
 ===ast===
 {
   "stmts": [
