@@ -1,5 +1,3 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php
 function foo($x = new Foo(), $y = new Bar(1, 2)) {}
@@ -20,6 +18,10 @@ function qux() {}
 
 $f = function ($x = new Foo()) {};
 $g = fn($x = new Foo()) => $x;
+===errors===
+New expressions are not supported in this context
+New expressions are not supported in this context
+New expressions are not supported in this context
 ===ast===
 {
   "stmts": [

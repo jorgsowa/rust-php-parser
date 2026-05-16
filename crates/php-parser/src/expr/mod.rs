@@ -89,6 +89,40 @@ fn is_valid_destructure_element(kind: &ExprKind<'_, '_>) -> bool {
     matches!(kind, ExprKind::Omit) || is_valid_assignment_target(kind)
 }
 
+/// Find the first `new` expression inside an initializer that PHP rejects
+/// at compile time (class/global const value, property default, static
+/// variable initializer). Returns `None` if there is no offending `new`.
+///
+/// `new` is allowed in function-parameter defaults and attribute arguments
+/// — those sites must not call this helper.
+///
+/// The walk skips closure and arrow-function bodies because they introduce
+/// their own context (a closure-typed constant is permitted as long as the
+/// closure is `static`; the closure body has its own scope).
+pub(crate) fn find_new_in_initializer<'arena, 'src>(expr: &Expr<'arena, 'src>) -> Option<Span> {
+    use php_ast::visitor::{walk_expr, Visitor};
+    use std::ops::ControlFlow;
+
+    struct NewFinder {
+        found: Option<Span>,
+    }
+    impl<'arena, 'src> Visitor<'arena, 'src> for NewFinder {
+        fn visit_expr(&mut self, expr: &Expr<'arena, 'src>) -> ControlFlow<()> {
+            match &expr.kind {
+                ExprKind::New(_) => {
+                    self.found = Some(expr.span);
+                    ControlFlow::Break(())
+                }
+                ExprKind::Closure(_) | ExprKind::ArrowFunction(_) => ControlFlow::Continue(()),
+                _ => walk_expr(self, expr),
+            }
+        }
+    }
+    let mut finder = NewFinder { found: None };
+    let _ = finder.visit_expr(expr);
+    finder.found
+}
+
 /// True if the array-literal at `span` was written with `list(...)` syntax
 /// rather than the short `[...]` form. Determined by the first source byte
 /// at the span start.

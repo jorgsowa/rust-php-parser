@@ -1,5 +1,3 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php
 
@@ -14,6 +12,11 @@ class Bar {
     const C = new Foo;
     public $prop = new Foo;
 }
+===errors===
+New expressions are not supported in this context
+New expressions are not supported in this context
+New expressions are not supported in this context
+New expressions are not supported in this context
 ===ast===
 {
   "stmts": [

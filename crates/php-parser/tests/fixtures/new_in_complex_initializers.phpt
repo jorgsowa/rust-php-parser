@@ -1,5 +1,3 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php
 function foo(
@@ -10,6 +8,8 @@ function foo(
 class Config {
     const DEFAULT = new Settings(debug: false);
 }
+===errors===
+New expressions are not supported in this context
 ===ast===
 {
   "stmts": [
