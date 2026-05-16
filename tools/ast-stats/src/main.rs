@@ -5,7 +5,7 @@ use std::sync::Mutex;
 
 use bumpalo::Bump;
 use php_ast::ast::*;
-use php_ast::visitor::{walk_expr, walk_stmt, Visitor};
+use php_ast::visitor::{walk_class_member, walk_expr, walk_param, walk_stmt, Visitor};
 use php_rs_parser::parse;
 use rayon::prelude::*;
 use serde::Serialize;
@@ -13,21 +13,21 @@ use walkdir::WalkDir;
 
 #[derive(Default)]
 struct NodeCounter {
-    stmts: HashMap<&'static str, u64>,
-    exprs: HashMap<&'static str, u64>,
+    counts: HashMap<&'static str, u64>,
 }
 
 impl NodeCounter {
+    fn bump(&mut self, key: &'static str) {
+        *self.counts.entry(key).or_insert(0) += 1;
+    }
+
     fn total_nodes(&self) -> u64 {
-        self.stmts.values().sum::<u64>() + self.exprs.values().sum::<u64>()
+        self.counts.values().sum()
     }
 
     fn merge(&mut self, other: NodeCounter) {
-        for (k, v) in other.stmts {
-            *self.stmts.entry(k).or_insert(0) += v;
-        }
-        for (k, v) in other.exprs {
-            *self.exprs.entry(k).or_insert(0) += v;
+        for (k, v) in other.counts {
+            *self.counts.entry(k).or_insert(0) += v;
         }
     }
 }
@@ -68,68 +68,141 @@ impl<'a, 'src> Visitor<'a, 'src> for NodeCounter {
             StmtKind::Nop => "Nop",
             StmtKind::Error => "Error",
         };
-        *self.stmts.entry(name).or_insert(0) += 1;
+        self.bump(name);
         walk_stmt(self, stmt)
     }
 
     fn visit_expr(&mut self, expr: &Expr<'a, 'src>) -> ControlFlow<()> {
-        let name = match &expr.kind {
-            ExprKind::Int(_) => "Int",
-            ExprKind::Float(_) => "Float",
-            ExprKind::String(_) => "String",
-            ExprKind::InterpolatedString(_) => "InterpolatedString",
-            ExprKind::Heredoc { .. } => "Heredoc",
-            ExprKind::Nowdoc { .. } => "Nowdoc",
-            ExprKind::ShellExec(_) => "ShellExec",
-            ExprKind::Bool(_) => "Bool",
-            ExprKind::Null => "Null",
-            ExprKind::Variable(_) => "Variable",
-            ExprKind::VariableVariable(_) => "VariableVariable",
-            ExprKind::Identifier(_) => "Identifier",
-            ExprKind::Assign(_) => "Assign",
-            ExprKind::Binary(_) => "Binary",
-            ExprKind::UnaryPrefix(_) => "UnaryPrefix",
-            ExprKind::UnaryPostfix(_) => "UnaryPostfix",
-            ExprKind::Ternary(_) => "Ternary",
-            ExprKind::NullCoalesce(_) => "NullCoalesce",
-            ExprKind::FunctionCall(_) => "FunctionCall",
-            ExprKind::Array(_) => "Array",
-            ExprKind::ArrayAccess(_) => "ArrayAccess",
-            ExprKind::Print(_) => "Print",
-            ExprKind::Parenthesized(_) => "Parenthesized",
-            ExprKind::Cast(_, _) => "Cast",
-            ExprKind::ErrorSuppress(_) => "ErrorSuppress",
-            ExprKind::Isset(_) => "Isset",
-            ExprKind::Empty(_) => "Empty",
-            ExprKind::Include(_, _) => "Include",
-            ExprKind::Eval(_) => "Eval",
-            ExprKind::Exit(_) => "Exit",
-            ExprKind::MagicConst(_) => "MagicConst",
-            ExprKind::Clone(_) => "Clone",
-            ExprKind::CloneWith(_, _) => "CloneWith",
-            ExprKind::New(_) => "New",
-            ExprKind::PropertyAccess(_) => "PropertyAccess",
-            ExprKind::NullsafePropertyAccess(_) => "NullsafePropertyAccess",
-            ExprKind::MethodCall(_) => "MethodCall",
-            ExprKind::NullsafeMethodCall(_) => "NullsafeMethodCall",
-            ExprKind::StaticPropertyAccess(_) => "StaticPropertyAccess",
-            ExprKind::StaticMethodCall(_) => "StaticMethodCall",
-            ExprKind::StaticDynMethodCall(_) => "StaticDynMethodCall",
-            ExprKind::ClassConstAccess(_) => "ClassConstAccess",
-            ExprKind::ClassConstAccessDynamic { .. } => "ClassConstAccessDynamic",
-            ExprKind::StaticPropertyAccessDynamic { .. } => "StaticPropertyAccessDynamic",
-            ExprKind::Closure(_) => "Closure",
-            ExprKind::ArrowFunction(_) => "ArrowFunction",
-            ExprKind::Match(_) => "Match",
-            ExprKind::Yield(_) => "Yield",
-            ExprKind::ThrowExpr(_) => "ThrowExpr",
-            ExprKind::AnonymousClass(_) => "AnonymousClass",
-            ExprKind::CallableCreate(_) => "CallableCreate",
-            ExprKind::Omit => "Omit",
-            ExprKind::Error => "Error",
-        };
-        *self.exprs.entry(name).or_insert(0) += 1;
+        match &expr.kind {
+            ExprKind::Int(_) => self.bump("Int"),
+            ExprKind::Float(_) => self.bump("Float"),
+            ExprKind::String(_) => self.bump("String"),
+            ExprKind::InterpolatedString(_) => self.bump("InterpolatedString"),
+            ExprKind::Heredoc { .. } => self.bump("Heredoc"),
+            ExprKind::Nowdoc { .. } => self.bump("Nowdoc"),
+            ExprKind::ShellExec(_) => self.bump("ShellExec"),
+            ExprKind::Bool(_) => self.bump("Bool"),
+            ExprKind::Null => self.bump("Null"),
+            ExprKind::Variable(_) => self.bump("Variable"),
+            ExprKind::VariableVariable(_) => self.bump("VariableVariable"),
+            ExprKind::Identifier(_) => self.bump("Identifier"),
+            ExprKind::Assign(_) => self.bump("Assign"),
+            ExprKind::Binary(_) => self.bump("Binary"),
+            ExprKind::UnaryPrefix(_) => self.bump("UnaryPrefix"),
+            ExprKind::UnaryPostfix(_) => self.bump("UnaryPostfix"),
+            ExprKind::Ternary(_) => self.bump("Ternary"),
+            ExprKind::NullCoalesce(_) => self.bump("NullCoalesce"),
+            ExprKind::FunctionCall(_) => self.bump("FunctionCall"),
+            ExprKind::Array(_) => self.bump("Array"),
+            ExprKind::ArrayAccess(_) => self.bump("ArrayAccess"),
+            ExprKind::Print(_) => self.bump("Print"),
+            ExprKind::Parenthesized(_) => self.bump("Parenthesized"),
+            ExprKind::Cast(_, _) => self.bump("Cast"),
+            ExprKind::ErrorSuppress(_) => self.bump("ErrorSuppress"),
+            ExprKind::Isset(_) => self.bump("Isset"),
+            ExprKind::Empty(_) => self.bump("Empty"),
+            ExprKind::Include(_, _) => self.bump("Include"),
+            ExprKind::Eval(_) => self.bump("Eval"),
+            ExprKind::Exit(_) => self.bump("Exit"),
+            ExprKind::MagicConst(_) => self.bump("MagicConst"),
+            ExprKind::Clone(_) => self.bump("Clone"),
+            ExprKind::CloneWith(_, _) => self.bump("CloneWith"),
+            ExprKind::New(_) => self.bump("New"),
+            ExprKind::PropertyAccess(_) => self.bump("PropertyAccess"),
+            ExprKind::NullsafePropertyAccess(_) => self.bump("NullsafePropertyAccess"),
+            ExprKind::MethodCall(_) => self.bump("MethodCall"),
+            ExprKind::NullsafeMethodCall(_) => self.bump("NullsafeMethodCall"),
+            ExprKind::StaticPropertyAccess(_) => self.bump("StaticPropertyAccess"),
+            ExprKind::StaticMethodCall(_) => self.bump("StaticMethodCall"),
+            ExprKind::StaticDynMethodCall(_) => self.bump("StaticDynMethodCall"),
+            ExprKind::ClassConstAccess(_) => self.bump("ClassConstAccess"),
+            ExprKind::ClassConstAccessDynamic { .. } => self.bump("ClassConstAccessDynamic"),
+            ExprKind::StaticPropertyAccessDynamic { .. } => {
+                self.bump("StaticPropertyAccessDynamic")
+            }
+            ExprKind::Closure(c) => {
+                self.bump("Closure");
+                if c.is_static {
+                    self.bump("Closure (static)");
+                }
+                if !c.use_vars.is_empty() {
+                    self.bump("Closure (use)");
+                }
+            }
+            ExprKind::ArrowFunction(f) => {
+                self.bump("ArrowFunction");
+                if f.is_static {
+                    self.bump("ArrowFunction (static)");
+                }
+            }
+            ExprKind::Match(_) => self.bump("Match"),
+            ExprKind::Yield(_) => self.bump("Yield"),
+            ExprKind::ThrowExpr(_) => self.bump("ThrowExpr"),
+            ExprKind::AnonymousClass(_) => self.bump("AnonymousClass"),
+            ExprKind::CallableCreate(_) => self.bump("CallableCreate"),
+            ExprKind::Omit => self.bump("Omit"),
+            ExprKind::Error => self.bump("Error"),
+        }
         walk_expr(self, expr)
+    }
+
+    fn visit_class_member(&mut self, member: &ClassMember<'a, 'src>) -> ControlFlow<()> {
+        match &member.kind {
+            ClassMemberKind::Property(prop) => {
+                self.bump("Property");
+                if prop.is_readonly {
+                    self.bump("Property (readonly)");
+                }
+                if prop.is_static {
+                    self.bump("Property (static)");
+                }
+                if prop.type_hint.is_some() {
+                    self.bump("Property (typed)");
+                }
+                if !prop.hooks.is_empty() {
+                    self.bump("Property (hooked)");
+                }
+            }
+            ClassMemberKind::Method(method) => {
+                self.bump("Method");
+                if method.is_static {
+                    self.bump("Method (static)");
+                }
+                if method.is_abstract {
+                    self.bump("Method (abstract)");
+                }
+                if method.is_final {
+                    self.bump("Method (final)");
+                }
+                if method.return_type.is_some() {
+                    self.bump("Method (typed return)");
+                }
+            }
+            ClassMemberKind::ClassConst(_) => {
+                self.bump("ClassConst");
+            }
+            ClassMemberKind::TraitUse(_) => {
+                self.bump("TraitUse");
+            }
+        }
+        walk_class_member(self, member)
+    }
+
+    fn visit_param(&mut self, param: &Param<'a, 'src>) -> ControlFlow<()> {
+        self.bump("Param");
+        if param.visibility.is_some() {
+            self.bump("Param (promoted)");
+        }
+        if param.is_readonly {
+            self.bump("Param (readonly)");
+        }
+        if param.variadic {
+            self.bump("Param (variadic)");
+        }
+        if param.type_hint.is_some() {
+            self.bump("Param (typed)");
+        }
+        walk_param(self, param)
     }
 }
 
@@ -216,10 +289,7 @@ fn process_project(
 
     let merged = merged.into_inner().unwrap();
     let total_nodes = merged.total_nodes();
-
-    let mut nodes: HashMap<&'static str, u64> = HashMap::new();
-    nodes.extend(merged.stmts);
-    nodes.extend(merged.exprs);
+    let nodes = merged.counts;
 
     eprintln!("[{slug}] done — {total_nodes} nodes");
 
