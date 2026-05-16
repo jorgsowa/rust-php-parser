@@ -4,8 +4,7 @@ foo(...);
 $this->foo(...);
 A::foo(...);
 
-// These are invalid, but accepted on the parser level.
-new Foo(...);
+// `$this?->foo(...)` is rejected at runtime by PHP but accepted at parse level.
 $this?->foo(...);
 
 #[Foo(...)]
@@ -126,34 +125,6 @@ function foo() {}
       "kind": {
         "Expression": {
           "kind": {
-            "New": {
-              "class": {
-                "kind": {
-                  "Identifier": "Foo"
-                },
-                "span": {
-                  "start": 107,
-                  "end": 110
-                }
-              },
-              "args": []
-            }
-          },
-          "span": {
-            "start": 103,
-            "end": 115
-          }
-        }
-      },
-      "span": {
-        "start": 103,
-        "end": 116
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
             "CallableCreate": {
               "kind": {
                 "NullsafeMethod": {
@@ -162,8 +133,8 @@ function foo() {}
                       "Variable": "this"
                     },
                     "span": {
-                      "start": 117,
-                      "end": 122
+                      "start": 128,
+                      "end": 133
                     }
                   },
                   "method": {
@@ -171,8 +142,8 @@ function foo() {}
                       "Identifier": "foo"
                     },
                     "span": {
-                      "start": 125,
-                      "end": 128
+                      "start": 136,
+                      "end": 139
                     }
                   }
                 }
@@ -180,14 +151,14 @@ function foo() {}
             }
           },
           "span": {
-            "start": 117,
-            "end": 133
+            "start": 128,
+            "end": 144
           }
         }
       },
       "span": {
-        "start": 117,
-        "end": 134
+        "start": 128,
+        "end": 145
       }
     },
     {
@@ -206,29 +177,29 @@ function foo() {}
                 ],
                 "kind": "Unqualified",
                 "span": {
-                  "start": 138,
-                  "end": 141
+                  "start": 149,
+                  "end": 152
                 }
               },
               "args": [],
               "span": {
-                "start": 138,
-                "end": 146
+                "start": 149,
+                "end": 157
               }
             }
           ]
         }
       },
       "span": {
-        "start": 148,
-        "end": 165
+        "start": 159,
+        "end": 176
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 165
+    "end": 176
   }
 }
 ===php_error===
-PHP Fatal error:  Cannot create Closure for new expression in Standard input code on line 7
+PHP Fatal error:  Cannot create Closure as attribute argument in Standard input code on line 10

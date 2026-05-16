@@ -1152,9 +1152,20 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         }
         parser.advance(); // consume 'class'
 
-        // Optional constructor args (before extends/implements)
+        // Optional constructor args (before extends/implements).
+        // `new class(...)` rejects first-class callable syntax (PHP fatal).
         let args = if parser.check(TokenKind::LeftParen) {
-            parse_arg_list(parser)
+            let paren_start = parser.current_span().start;
+            match parse_arg_list_or_callable(parser) {
+                ArgListResult::Args(args) => args,
+                ArgListResult::CallableMarker => {
+                    parser.error(ParseError::Forbidden {
+                        message: "Cannot create Closure for new expression".into(),
+                        span: Span::new(paren_start, parser.previous_end()),
+                    });
+                    parser.alloc_vec()
+                }
+            }
         } else {
             parser.alloc_vec()
         };
@@ -1285,9 +1296,20 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         }
     };
 
-    // Optional argument list
+    // Optional argument list. `new Foo(...)` is rejected: PHP forbids first-class
+    // callable syntax in `new` expressions ("Cannot create Closure for new expression").
     let args = if parser.check(TokenKind::LeftParen) {
-        parse_arg_list(parser)
+        let paren_start = parser.current_span().start;
+        match parse_arg_list_or_callable(parser) {
+            ArgListResult::Args(args) => args,
+            ArgListResult::CallableMarker => {
+                parser.error(ParseError::Forbidden {
+                    message: "Cannot create Closure for new expression".into(),
+                    span: Span::new(paren_start, parser.previous_end()),
+                });
+                parser.alloc_vec()
+            }
+        }
     } else {
         parser.alloc_vec()
     };
