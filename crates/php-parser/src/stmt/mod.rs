@@ -1194,9 +1194,12 @@ pub fn parse_param_list<'arena, 'src>(
         let mut set_visibility: Option<Visibility> = None;
         let mut is_final = false;
         let mut is_readonly = false;
+        let mut first_modifier_span: Option<Span> = None;
         loop {
+            let current_span = parser.current_span();
             match parser.current_kind() {
                 TokenKind::Public | TokenKind::Protected | TokenKind::Private => {
+                    first_modifier_span.get_or_insert(current_span);
                     let vis = match parser.current_kind() {
                         TokenKind::Public => Visibility::Public,
                         TokenKind::Protected => Visibility::Protected,
@@ -1242,37 +1245,46 @@ pub fn parse_param_list<'arena, 'src>(
                     }
                 }
                 TokenKind::Final => {
-                    let span = parser.current_span();
-                    parser.require_version(PhpVersion::Php85, "final promoted properties", span);
+                    first_modifier_span.get_or_insert(current_span);
+                    parser.require_version(
+                        PhpVersion::Php85,
+                        "final promoted properties",
+                        current_span,
+                    );
                     if is_final {
                         parser.error(ParseError::Forbidden {
                             message: "duplicate modifier 'final'".into(),
-                            span,
+                            span: current_span,
                         });
                     }
                     parser.advance();
                     is_final = true;
                 }
                 TokenKind::Readonly => {
-                    let span = parser.current_span();
-                    parser.require_version(PhpVersion::Php81, "readonly parameters", span);
-                    if !parser.in_constructor {
-                        parser.error(ParseError::Forbidden {
-                            message: "Cannot declare promoted property outside a constructor"
-                                .into(),
-                            span,
-                        });
-                    }
+                    first_modifier_span.get_or_insert(current_span);
+                    parser.require_version(PhpVersion::Php81, "readonly parameters", current_span);
                     if is_readonly {
                         parser.error(ParseError::Forbidden {
                             message: "duplicate modifier 'readonly'".into(),
-                            span,
+                            span: current_span,
                         });
                     }
                     parser.advance();
                     is_readonly = true;
                 }
                 _ => break,
+            }
+        }
+
+        // Any modifier above promotes the param to a property — only valid
+        // inside __construct. PHP rejects this with
+        // "Cannot declare promoted property outside a constructor".
+        if let Some(span) = first_modifier_span {
+            if !parser.in_constructor {
+                parser.error(ParseError::Forbidden {
+                    message: "Cannot declare promoted property outside a constructor".into(),
+                    span,
+                });
             }
         }
 
