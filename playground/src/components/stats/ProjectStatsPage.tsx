@@ -16,6 +16,7 @@ interface ProjectData {
   files: number
   total_nodes: number
   nodes: Record<string, number>
+  all_dirs: string[]
   dir_stats: Record<string, DirStats>
 }
 
@@ -90,60 +91,59 @@ function pct(n: number, total: number): string {
 // ── Directory tree ────────────────────────────────────────────────────────────
 
 interface TreeNode {
-  name: string      // last path segment
-  path: string      // full path from project root
+  name: string
+  path: string
   children: TreeNode[]
-  files: number     // files in this dir AND all descendants
+  files: number       // PHP files in this dir and all PHP-containing descendants
   total_nodes: number
+  hasPhp: boolean     // true if this dir or any descendant contains PHP files
 }
 
-function buildTree(dirStats: Record<string, DirStats>): TreeNode {
-  const root: TreeNode = { name: '(all)', path: '', children: [], files: 0, total_nodes: 0 }
+function buildTree(dirStats: Record<string, DirStats>, allDirs: string[]): TreeNode {
+  const root: TreeNode = { name: '(all)', path: '', children: [], files: 0, total_nodes: 0, hasPhp: false }
 
-  for (const [path, ds] of Object.entries(dirStats)) {
-    const parts = path.split('/')
+  function getOrCreate(parts: string[], upTo: number): TreeNode {
     let node = root
-    for (let i = 0; i < parts.length; i++) {
+    for (let i = 0; i < upTo; i++) {
       const seg = parts[i]
       let child = node.children.find(c => c.name === seg)
       if (!child) {
-        child = { name: seg, path: parts.slice(0, i + 1).join('/'), children: [], files: 0, total_nodes: 0 }
+        child = { name: seg, path: parts.slice(0, i + 1).join('/'), children: [], files: 0, total_nodes: 0, hasPhp: false }
         node.children.push(child)
       }
       node = child
     }
-    // Leaf node matches the exact path — accumulate on ancestors too
-    node.files += ds.files
-    node.total_nodes += ds.total_nodes
+    return node
   }
 
-  // Propagate files/total_nodes upward from leaves to root
-  function propagate(n: TreeNode) {
+  // Insert every known directory into the tree (union of all_dirs + dir_stats keys)
+  const allPaths = new Set([...allDirs, ...Object.keys(dirStats)])
+  for (const path of allPaths) {
+    const parts = path.split('/')
+    for (let i = 1; i <= parts.length; i++) getOrCreate(parts, i)
+  }
+
+  // Stamp direct PHP file counts onto the nodes that have them
+  for (const [path, ds] of Object.entries(dirStats)) {
+    const node = getOrCreate(path.split('/'), path.split('/').length)
+    node.files = ds.files
+    node.total_nodes = ds.total_nodes
+  }
+
+  // Propagate hasPhp and aggregate file counts bottom-up
+  function propagate(n: TreeNode): void {
+    for (const c of n.children) propagate(c)
+    if (n.files > 0) n.hasPhp = true
     for (const c of n.children) {
-      propagate(c)
-      if (n.path !== '') {
-        // Only propagate into intermediate nodes (root already has leaf data via the loop above)
-        // Actually re-do this cleanly: zero out and re-sum
-      }
-    }
-  }
-
-  // Clean re-sum: zero all non-leaf counts, then sum leaves up
-  function zero(n: TreeNode) {
-    // Keep leaf values; zero out nodes that have children (they'll be recomputed)
-    if (n.children.length > 0) {
-      n.files = 0
-      n.total_nodes = 0
-      for (const c of n.children) {
-        zero(c)
+      if (c.hasPhp) {
+        n.hasPhp = true
         n.files += c.files
         n.total_nodes += c.total_nodes
       }
     }
   }
-  zero(root)
+  propagate(root)
 
-  // Sort children by name
   function sortChildren(n: TreeNode) {
     n.children.sort((a, b) => a.name.localeCompare(b.name))
     n.children.forEach(sortChildren)
@@ -195,30 +195,44 @@ interface DirTreeProps {
   depth?: number
 }
 
+const TEST_RE = /^tests?$|^specs?$|^__tests__$/i
+
+function isTestDir(name: string): boolean {
+  return TEST_RE.test(name)
+}
+
 function DirTreeNode({ node, selected, onSelect, depth = 0 }: DirTreeProps) {
   const [open, setOpen] = useState(depth < 2)
   const isSelected = node.path === selected
   const hasChildren = node.children.length > 0
+  const { hasPhp } = node
+  const isTest = isTestDir(node.name)
+
+  let rowClass = 'dir-tree-row'
+  if (isSelected) rowClass += ' dir-tree-row--selected'
+  if (!hasPhp) rowClass += ' dir-tree-row--empty'
+  if (isTest) rowClass += ' dir-tree-row--test'
 
   return (
     <div className="dir-tree-item">
       <div
-        className={`dir-tree-row${isSelected ? ' dir-tree-row--selected' : ''}`}
+        className={rowClass}
         style={{ paddingLeft: `${depth * 14 + 8}px` }}
         onClick={() => {
-          onSelect(node.path)
-          if (hasChildren) setOpen(o => !o)
+          if (hasPhp) onSelect(node.path)
+          if (hasChildren && hasPhp) setOpen(o => !o)
         }}
       >
-        {hasChildren ? (
+        {hasChildren && hasPhp ? (
           <span className="dir-tree-chevron">{open ? '▾' : '▸'}</span>
         ) : (
           <span className="dir-tree-chevron dir-tree-chevron--leaf" />
         )}
         <span className="dir-tree-name">{node.name}</span>
-        <span className="dir-tree-count">{formatNum(node.files)}</span>
+        {isTest && <span className="dir-tree-badge dir-tree-badge--test">test</span>}
+        {hasPhp && <span className="dir-tree-count">{formatNum(node.files)}</span>}
       </div>
-      {open && hasChildren && (
+      {open && hasChildren && hasPhp && (
         <div className="dir-tree-children">
           {node.children.map(child => (
             <DirTreeNode
@@ -288,7 +302,7 @@ export function ProjectStatsPage({ slug }: Props) {
     return aggregateFiles(selectedDir, project.dir_stats)
   }, [project, selectedDir])
 
-  const dirTree = useMemo(() => project ? buildTree(project.dir_stats) : null, [project])
+  const dirTree = useMemo(() => project ? buildTree(project.dir_stats, project.all_dirs ?? []) : null, [project])
 
   const { parentRows, childMap } = useMemo(() => {
     const parents: string[] = []

@@ -1797,7 +1797,7 @@ body::after {
 }
 
 .project-stats-sidebar {
-  width: 220px;
+  width: 280px;
   flex-shrink: 0;
   border-right: 1px solid var(--border);
   overflow-y: auto;
@@ -1884,6 +1884,35 @@ body::after {
   font-size: 10px;
   color: var(--text-3);
   flex-shrink: 0;
+}
+
+/* Empty dirs (no PHP files) — greyed out, non-interactive */
+.dir-tree-row--empty {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* Test directories */
+.dir-tree-row--test .dir-tree-name {
+  color: var(--text-3);
+}
+
+.dir-tree-badge {
+  font-size: 9px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 1px 4px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+
+.dir-tree-badge--test {
+  color: #7a9fbf;
+  background: rgba(100, 160, 210, 0.12);
+  border: 1px solid rgba(100, 160, 210, 0.25);
 }
 
 /* ── Responsive ─────────────────────────────────────────────────────────── */

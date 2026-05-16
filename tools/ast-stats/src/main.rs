@@ -266,6 +266,9 @@ struct ProjectStats {
     files: u64,
     total_nodes: u64,
     nodes: HashMap<&'static str, u64>,
+    /// All directories found under scanned_dirs (relative to project base), sorted.
+    /// Includes directories excluded from PHP collection (tests, fixtures, resources).
+    all_dirs: Vec<String>,
     /// Per-directory stats keyed by directory path relative to project base.
     /// Each entry covers only files whose parent directory matches the key exactly.
     /// Clients aggregate ancestors by prefix-summing descendants.
@@ -338,9 +341,39 @@ fn process_project(
         })
         .collect();
 
+    // Collect every directory under the scanned roots, including excluded ones.
+    let all_dirs: Vec<String> = {
+        let mut dirs = std::collections::BTreeSet::new();
+        for dir in &abs_dirs {
+            if !dir.exists() {
+                continue;
+            }
+            for entry in WalkDir::new(dir)
+                .follow_links(false)
+                .min_depth(1)
+                .into_iter()
+                .filter_map(|e| e.ok())
+            {
+                if entry.file_type().is_dir() {
+                    let rel = entry
+                        .path()
+                        .strip_prefix(base)
+                        .unwrap_or(entry.path())
+                        .to_string_lossy()
+                        .replace('\\', "/");
+                    if !rel.is_empty() {
+                        dirs.insert(rel);
+                    }
+                }
+            }
+        }
+        dirs.into_iter().collect()
+    };
+
     eprintln!(
-        "[{slug}] done — {total_nodes} nodes, {} dirs",
-        dir_stats.len()
+        "[{slug}] done — {total_nodes} nodes, {} php dirs, {} total dirs",
+        dir_stats.len(),
+        all_dirs.len(),
     );
 
     ProjectStats {
@@ -352,6 +385,7 @@ fn process_project(
         files: file_count,
         total_nodes,
         nodes,
+        all_dirs,
         dir_stats,
     }
 }
