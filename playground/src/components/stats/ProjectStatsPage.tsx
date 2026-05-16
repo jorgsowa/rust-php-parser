@@ -1,5 +1,14 @@
 import { useState, useMemo, useCallback, useEffect } from 'react'
 import { astNodes } from '../../data/ast-nodes'
+import { routeToHash } from '../../router'
+import rawStats from '../../data/project-stats.json'
+
+interface ProjectSummary {
+  name: string
+  slug: string
+}
+
+const ALL_PROJECTS: ProjectSummary[] = rawStats as unknown as ProjectSummary[]
 
 interface DirStats {
   files: number
@@ -389,7 +398,23 @@ export function ProjectStatsPage({ slug }: Props) {
       </div>
 
       <div className="project-stats-body">
-        {/* Left: directory tree */}
+        {/* Projects list */}
+        <div className="project-stats-projects">
+          <div className="dir-tree-label">Projects</div>
+          <nav className="project-nav">
+            {ALL_PROJECTS.map(p => (
+              <a
+                key={p.slug}
+                className={`project-nav-item${p.slug === slug ? ' project-nav-item--active' : ''}`}
+                href={routeToHash({ page: 'stats-project', slug: p.slug })}
+              >
+                {p.name}
+              </a>
+            ))}
+          </nav>
+        </div>
+
+        {/* Directory tree */}
         <div className="project-stats-sidebar">
           <div className="dir-tree-label">Directories</div>
           <div className="dir-tree">

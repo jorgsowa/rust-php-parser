@@ -1805,7 +1805,7 @@ body::after {
   border-radius: 4px;
 }
 
-/* ── Project stats two-panel layout ─────────────────────────────────────── */
+/* ── Project stats three-panel layout ───────────────────────────────────── */
 .project-stats-body {
   display: flex;
   gap: 0;
@@ -1814,6 +1814,43 @@ body::after {
   min-height: 0;
   overflow: hidden;
   margin: 0 -48px;
+}
+
+.project-stats-projects {
+  width: 180px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding-bottom: 24px;
+  padding-left: 48px;
+}
+
+.project-nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.project-nav-item {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--text-2);
+  text-decoration: none;
+  padding: 5px 12px;
+  border-radius: var(--radius);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.12s, background 0.12s;
+}
+
+.project-nav-item:hover {
+  color: var(--text);
+  background: var(--bg-elevated);
+}
+
+.project-nav-item--active {
+  color: var(--accent);
+  font-weight: 600;
 }
 
 .project-stats-sidebar {
