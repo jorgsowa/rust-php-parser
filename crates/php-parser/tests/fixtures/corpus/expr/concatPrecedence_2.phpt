@@ -15,35 +15,35 @@
                   "Binary": {
                     "left": {
                       "kind": {
-                        "Binary": {
-                          "left": {
-                            "kind": {
-                              "Int": 1
-                            },
-                            "span": {
-                              "start": 6,
-                              "end": 7
-                            }
-                          },
-                          "op": "Add",
-                          "right": {
-                            "kind": {
-                              "Int": 2
-                            },
-                            "span": {
-                              "start": 10,
-                              "end": 11
-                            }
-                          }
-                        }
+                        "Int": 1
                       },
                       "span": {
                         "start": 6,
-                        "end": 11
+                        "end": 7
                       }
                     },
-                    "op": "Concat",
+                    "op": "Add",
                     "right": {
+                      "kind": {
+                        "Int": 2
+                      },
+                      "span": {
+                        "start": 10,
+                        "end": 11
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 6,
+                  "end": 11
+                }
+              },
+              "op": "Concat",
+              "right": {
+                "kind": {
+                  "Binary": {
+                    "left": {
                       "kind": {
                         "Int": 3
                       },
@@ -51,21 +51,21 @@
                         "start": 14,
                         "end": 15
                       }
+                    },
+                    "op": "Add",
+                    "right": {
+                      "kind": {
+                        "Int": 4
+                      },
+                      "span": {
+                        "start": 18,
+                        "end": 19
+                      }
                     }
                   }
                 },
                 "span": {
-                  "start": 6,
-                  "end": 15
-                }
-              },
-              "op": "Add",
-              "right": {
-                "kind": {
-                  "Int": 4
-                },
-                "span": {
-                  "start": 18,
+                  "start": 14,
                   "end": 19
                 }
               }
@@ -102,47 +102,47 @@
                     "op": "ShiftLeft",
                     "right": {
                       "kind": {
-                        "Binary": {
-                          "left": {
-                            "kind": {
-                              "Int": 2
-                            },
-                            "span": {
-                              "start": 26,
-                              "end": 27
-                            }
-                          },
-                          "op": "Concat",
-                          "right": {
-                            "kind": {
-                              "Int": 3
-                            },
-                            "span": {
-                              "start": 30,
-                              "end": 31
-                            }
-                          }
-                        }
+                        "Int": 2
                       },
                       "span": {
                         "start": 26,
-                        "end": 31
+                        "end": 27
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 21,
-                  "end": 31
+                  "end": 27
                 }
               },
-              "op": "ShiftLeft",
+              "op": "Concat",
               "right": {
                 "kind": {
-                  "Int": 4
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Int": 3
+                      },
+                      "span": {
+                        "start": 30,
+                        "end": 31
+                      }
+                    },
+                    "op": "ShiftLeft",
+                    "right": {
+                      "kind": {
+                        "Int": 4
+                      },
+                      "span": {
+                        "start": 35,
+                        "end": 36
+                      }
+                    }
+                  }
                 },
                 "span": {
-                  "start": 35,
+                  "start": 30,
                   "end": 36
                 }
               }

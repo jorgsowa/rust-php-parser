@@ -1,5 +1,5 @@
 ===source===
-<?php 1 << 2 . 3 << 4;
+<?php 1 + 2 . 3 + 4;
 ===ast===
 {
   "stmts": [
@@ -20,69 +20,69 @@
                         "end": 7
                       }
                     },
-                    "op": "ShiftLeft",
+                    "op": "Add",
                     "right": {
                       "kind": {
-                        "Binary": {
-                          "left": {
-                            "kind": {
-                              "Int": 2
-                            },
-                            "span": {
-                              "start": 11,
-                              "end": 12
-                            }
-                          },
-                          "op": "Concat",
-                          "right": {
-                            "kind": {
-                              "Int": 3
-                            },
-                            "span": {
-                              "start": 15,
-                              "end": 16
-                            }
-                          }
-                        }
+                        "Int": 2
                       },
                       "span": {
-                        "start": 11,
-                        "end": 16
+                        "start": 10,
+                        "end": 11
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 6,
-                  "end": 16
+                  "end": 11
                 }
               },
-              "op": "ShiftLeft",
+              "op": "Concat",
               "right": {
                 "kind": {
-                  "Int": 4
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Int": 3
+                      },
+                      "span": {
+                        "start": 14,
+                        "end": 15
+                      }
+                    },
+                    "op": "Add",
+                    "right": {
+                      "kind": {
+                        "Int": 4
+                      },
+                      "span": {
+                        "start": 18,
+                        "end": 19
+                      }
+                    }
+                  }
                 },
                 "span": {
-                  "start": 20,
-                  "end": 21
+                  "start": 14,
+                  "end": 19
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 21
+            "end": 19
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 22
+        "end": 20
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 22
+    "end": 20
   }
 }

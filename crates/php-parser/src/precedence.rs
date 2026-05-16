@@ -100,12 +100,14 @@ const fn build_bp_table() -> [Option<(u8, u8)>; 256] {
     // Pipe operator (left-associative)
     table[TokenKind::PipeArrow as u8 as usize] = Some((29, 30));
 
-    // Shift (below concat/additive per PHP 8 precedence table)
-    table[TokenKind::ShiftLeft as u8 as usize] = Some((31, 32));
-    table[TokenKind::ShiftRight as u8 as usize] = Some((31, 32));
+    // Concat (PHP 8: below shift)
+    table[TokenKind::Dot as u8 as usize] = Some((31, 32));
 
-    // String concatenation and additive (same level per PHP 8)
-    table[TokenKind::Dot as u8 as usize] = Some((35, 36));
+    // Shift (PHP 8: above concat, below additive)
+    table[TokenKind::ShiftLeft as u8 as usize] = Some((33, 34));
+    table[TokenKind::ShiftRight as u8 as usize] = Some((33, 34));
+
+    // Additive (above shift per PHP 8)
     table[TokenKind::Plus as u8 as usize] = Some((35, 36));
     table[TokenKind::Minus as u8 as usize] = Some((35, 36));
 
@@ -114,7 +116,7 @@ const fn build_bp_table() -> [Option<(u8, u8)>; 256] {
     table[TokenKind::Slash as u8 as usize] = Some((37, 38));
     table[TokenKind::Percent as u8 as usize] = Some((37, 38));
 
-    // instanceof (nonassoc) — above prefix unary (right_bp 41), below ** (left_bp 60)
+    // instanceof (nonassoc) — above `!` (41), below high-tier prefix unary (47)
     table[TokenKind::Instanceof as u8 as usize] = Some((45, 46));
 
     // Exponentiation (right-associative) — highest binary precedence
@@ -128,13 +130,23 @@ const fn build_bp_table() -> [Option<(u8, u8)>; 256] {
 #[inline(always)]
 pub fn prefix_binding_power(kind: TokenKind) -> Option<u8> {
     match kind {
-        TokenKind::Minus | TokenKind::Plus => Some(41),
-        TokenKind::Bang => Some(41),
-        TokenKind::Tilde => Some(41),
-        TokenKind::PlusPlus | TokenKind::MinusMinus => Some(41),
+        // `!` (boolean not) is the only prefix unary BELOW instanceof per PHP.
+        TokenKind::Bang => Some(LOW_PREFIX_BP),
+        // All other prefix unaries (+u, -u, ~, ++, --, casts, @, clone) sit
+        // ABOVE instanceof per PHP's precedence table.
+        TokenKind::Minus | TokenKind::Plus => Some(HIGH_PREFIX_BP),
+        TokenKind::Tilde => Some(HIGH_PREFIX_BP),
+        TokenKind::PlusPlus | TokenKind::MinusMinus => Some(HIGH_PREFIX_BP),
         _ => None,
     }
 }
+
+/// Right binding power for `!` (boolean not) — below `instanceof` per PHP.
+pub const LOW_PREFIX_BP: u8 = 41;
+
+/// Right binding power for high-tier prefix unaries (+u, -u, ~, ++, --,
+/// (cast), @, clone) — above `instanceof` (45/46), below `**` (60).
+pub const HIGH_PREFIX_BP: u8 = 47;
 
 /// Returns the postfix binding power for a token, or None if it's not a postfix operator.
 /// Returns (left_bp, ()).
@@ -163,7 +175,7 @@ pub const NULL_COALESCE_LEFT_BP: u8 = 14;
 /// Above postfix `++`/`--` (43) and below `instanceof` (45). Used as the gate that
 /// promoted-property default expressions raise to suppress curly-brace subscripts
 /// while still allowing normal member access.
-pub const MEMBER_ACCESS_BP: u8 = 44;
+pub const MEMBER_ACCESS_BP: u8 = 50;
 
 /// Scope-resolution `::` binding power. Higher than `**` (60) so it stays untouched
 /// by the `bp=45` gate used for promoted-property defaults (which only intends to
@@ -233,28 +245,51 @@ mod tests {
     }
 
     #[test]
-    fn test_current_parser_concat_same_level_as_additive() {
-        // Documents current parser state. Diverges from PHP 8+, which places
-        // `+`/`-` strictly above `.`. See
-        // tests/fixtures/categories/precedence_php_conformance/concat_vs_additive_*.
-        let (dot_left, dot_right) = infix_binding_power(TokenKind::Dot).unwrap();
-        let (plus_left, plus_right) = infix_binding_power(TokenKind::Plus).unwrap();
-        let (minus_left, minus_right) = infix_binding_power(TokenKind::Minus).unwrap();
-        assert_eq!((dot_left, dot_right), (plus_left, plus_right));
-        assert_eq!((dot_left, dot_right), (minus_left, minus_right));
+    fn test_additive_higher_than_concat() {
+        // PHP 8: `"x" . $a - 1` → `"x" . ($a - 1)`. Additive binds tighter.
+        let (_, concat_right) = infix_binding_power(TokenKind::Dot).unwrap();
+        let (plus_left, _) = infix_binding_power(TokenKind::Plus).unwrap();
+        let (minus_left, _) = infix_binding_power(TokenKind::Minus).unwrap();
+        assert!(plus_left > concat_right);
+        assert!(minus_left > concat_right);
     }
 
     #[test]
-    fn test_current_parser_shift_lower_than_concat_and_additive() {
-        // Documents current parser state. For `+`/`-` this matches PHP. For
-        // `.` this DIVERGES from PHP 8+, which places `<<`/`>>` above `.`
-        // (e.g. `1 << 2 . "3"` yields `"43"`, proving shift binds tighter).
-        // See tests/fixtures/categories/precedence_php_conformance/concat_vs_shift_*.
+    fn test_shift_higher_than_concat() {
+        // PHP 8: `1 << 2 . "3"` → `(1 << 2) . "3"`. Shift binds tighter than concat.
+        let (_, concat_right) = infix_binding_power(TokenKind::Dot).unwrap();
+        let (shift_left, _) = infix_binding_power(TokenKind::ShiftLeft).unwrap();
+        assert!(shift_left > concat_right);
+    }
+
+    #[test]
+    fn test_additive_higher_than_shift() {
+        // PHP 8: additive sits ABOVE shift in the precedence table.
         let (_, shift_right) = infix_binding_power(TokenKind::ShiftLeft).unwrap();
-        let (concat_left, _) = infix_binding_power(TokenKind::Dot).unwrap();
         let (plus_left, _) = infix_binding_power(TokenKind::Plus).unwrap();
-        assert!(concat_left > shift_right);
         assert!(plus_left > shift_right);
+    }
+
+    #[test]
+    fn test_high_prefix_above_instanceof() {
+        // PHP: `~$a instanceof Foo` → `(~$a) instanceof Foo`.
+        let (inst_left, _) = infix_binding_power(TokenKind::Instanceof).unwrap();
+        assert!(HIGH_PREFIX_BP > inst_left);
+    }
+
+    #[test]
+    fn test_boolean_not_below_instanceof() {
+        // PHP: `!$b instanceof Foo` → `!($b instanceof Foo)`. `!` is the only
+        // prefix unary BELOW instanceof.
+        let (inst_left, _) = infix_binding_power(TokenKind::Instanceof).unwrap();
+        assert!(LOW_PREFIX_BP < inst_left);
+    }
+
+    #[test]
+    fn test_member_access_above_high_prefix() {
+        // PHP: `clone $a->b` → `clone ($a->b)`. Member access still binds
+        // inside high-tier prefix unaries.
+        const { assert!(MEMBER_ACCESS_BP > HIGH_PREFIX_BP) }
     }
 
     #[test]
@@ -268,11 +303,7 @@ mod tests {
     #[test]
     fn test_instanceof_higher_than_logical_not() {
         // PHP: `!$b instanceof Foo` → `!($b instanceof Foo)`. The `!` operator
-        // is the only prefix unary BELOW `instanceof` per PHP's grammar; the
-        // others (`~`, `+`, `-`, `++`, `--`, casts, `@`, `clone`) are above.
-        // The current parser lumps all prefix unaries at bp=41 — this matches
-        // PHP only for `!`; see precedence_php_conformance/ for the divergent
-        // cases.
+        // is the only prefix unary BELOW `instanceof` per PHP's grammar.
         let prefix_right_bp = prefix_binding_power(TokenKind::Bang).unwrap();
         let (inst_left, _) = infix_binding_power(TokenKind::Instanceof).unwrap();
         assert!(inst_left > prefix_right_bp);

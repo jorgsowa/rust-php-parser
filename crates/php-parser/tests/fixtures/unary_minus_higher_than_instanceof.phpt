@@ -7,12 +7,12 @@
       "kind": {
         "Expression": {
           "kind": {
-            "UnaryPrefix": {
-              "op": "Negate",
-              "operand": {
+            "Binary": {
+              "left": {
                 "kind": {
-                  "Binary": {
-                    "left": {
+                  "UnaryPrefix": {
+                    "op": "Negate",
+                    "operand": {
                       "kind": {
                         "Variable": "b"
                       },
@@ -20,21 +20,21 @@
                         "start": 7,
                         "end": 9
                       }
-                    },
-                    "op": "Instanceof",
-                    "right": {
-                      "kind": {
-                        "Identifier": "Foo"
-                      },
-                      "span": {
-                        "start": 21,
-                        "end": 24
-                      }
                     }
                   }
                 },
                 "span": {
-                  "start": 7,
+                  "start": 6,
+                  "end": 9
+                }
+              },
+              "op": "Instanceof",
+              "right": {
+                "kind": {
+                  "Identifier": "Foo"
+                },
+                "span": {
+                  "start": 21,
                   "end": 24
                 }
               }

@@ -117,8 +117,8 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
     // @ error suppression (prefix, high precedence)
     if kind == TokenKind::At {
         let token = parser.advance();
-        let mut operand = parse_expr_bp(parser, 41); // same as other prefix unary
-                                                     // PHP grammar quirk: assignment binds tighter than @
+        let mut operand = parse_expr_bp(parser, precedence::HIGH_PREFIX_BP);
+        // PHP grammar quirk: assignment binds tighter than @
         if parser.current_kind().is_assignment_op() {
             operand = parse_assign_continuation(parser, operand);
         }
@@ -1052,7 +1052,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     }
                 }
             } else {
-                let mut operand = parse_expr_bp(parser, 41);
+                let mut operand = parse_expr_bp(parser, precedence::HIGH_PREFIX_BP);
                 if parser.current_kind().is_assignment_op() {
                     operand = parse_assign_continuation(parser, operand);
                 }
@@ -2088,7 +2088,7 @@ fn try_parse_cast<'arena, 'src>(
         });
     }
 
-    let mut operand = parse_expr_bp(parser, 41);
+    let mut operand = parse_expr_bp(parser, precedence::HIGH_PREFIX_BP);
     // PHP grammar quirk: assignment binds tighter than casts.
     if parser.current_kind().is_assignment_op() {
         operand = parse_assign_continuation(parser, operand);
