@@ -233,8 +233,10 @@ mod tests {
     }
 
     #[test]
-    fn test_concat_same_level_as_additive() {
-        // PHP 8: `.` and `+`/`-` share the same precedence level
+    fn test_current_parser_concat_same_level_as_additive() {
+        // Documents current parser state. Diverges from PHP 8+, which places
+        // `+`/`-` strictly above `.`. See
+        // tests/fixtures/categories/precedence_php_conformance/concat_vs_additive_*.
         let (dot_left, dot_right) = infix_binding_power(TokenKind::Dot).unwrap();
         let (plus_left, plus_right) = infix_binding_power(TokenKind::Plus).unwrap();
         let (minus_left, minus_right) = infix_binding_power(TokenKind::Minus).unwrap();
@@ -243,8 +245,11 @@ mod tests {
     }
 
     #[test]
-    fn test_shift_lower_than_concat_and_additive() {
-        // PHP 8: `<<`/`>>` bind less tightly than `.`, `+`, `-`
+    fn test_current_parser_shift_lower_than_concat_and_additive() {
+        // Documents current parser state. For `+`/`-` this matches PHP. For
+        // `.` this DIVERGES from PHP 8+, which places `<<`/`>>` above `.`
+        // (e.g. `1 << 2 . "3"` yields `"43"`, proving shift binds tighter).
+        // See tests/fixtures/categories/precedence_php_conformance/concat_vs_shift_*.
         let (_, shift_right) = infix_binding_power(TokenKind::ShiftLeft).unwrap();
         let (concat_left, _) = infix_binding_power(TokenKind::Dot).unwrap();
         let (plus_left, _) = infix_binding_power(TokenKind::Plus).unwrap();
@@ -261,10 +266,14 @@ mod tests {
     }
 
     #[test]
-    fn test_instanceof_higher_than_prefix_unary() {
-        // PHP: `-$b instanceof Foo` → `-($b instanceof Foo)`
-        // prefix_binding_power returns the right_bp; instanceof left_bp must exceed it
-        let prefix_right_bp = prefix_binding_power(TokenKind::Minus).unwrap();
+    fn test_instanceof_higher_than_logical_not() {
+        // PHP: `!$b instanceof Foo` → `!($b instanceof Foo)`. The `!` operator
+        // is the only prefix unary BELOW `instanceof` per PHP's grammar; the
+        // others (`~`, `+`, `-`, `++`, `--`, casts, `@`, `clone`) are above.
+        // The current parser lumps all prefix unaries at bp=41 — this matches
+        // PHP only for `!`; see precedence_php_conformance/ for the divergent
+        // cases.
+        let prefix_right_bp = prefix_binding_power(TokenKind::Bang).unwrap();
         let (inst_left, _) = infix_binding_power(TokenKind::Instanceof).unwrap();
         assert!(inst_left > prefix_right_bp);
     }
