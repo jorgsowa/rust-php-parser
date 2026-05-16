@@ -392,6 +392,7 @@ pub fn parse_class_members<'arena, 'src>(
                 member_start,
                 &mods,
                 type_hint,
+                in_interface,
             );
             continue;
         }
@@ -815,6 +816,7 @@ fn parse_property_member<'arena, 'src>(
     member_start: u32,
     mods: &ClassMemberModifiers,
     type_hint: Option<TypeHint<'arena, 'src>>,
+    in_interface: bool,
 ) {
     let var_token = parser.advance();
     let prop_name = parser.variable_ident(var_token);
@@ -846,6 +848,12 @@ fn parse_property_member<'arena, 'src>(
     if mods.is_static && !hooks.is_empty() {
         parser.error(ParseError::Forbidden {
             message: "Cannot declare hooks for static property".into(),
+            span: Span::new(member_start, parser.previous_end()),
+        });
+    }
+    if in_interface && hooks.is_empty() {
+        parser.error(ParseError::Forbidden {
+            message: "Interfaces may only include hooked properties".into(),
             span: Span::new(member_start, parser.previous_end()),
         });
     }
