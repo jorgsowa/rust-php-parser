@@ -80,6 +80,13 @@ fn is_valid_assignment_target(kind: &ExprKind<'_, '_>) -> bool {
     }
 }
 
+/// True if a destructuring-element value is itself a writable target.
+/// `Omit` (the gap slot in `[$a, , $c]`) is allowed; nested destructuring
+/// (`Array`) recurses; everything else falls back to the lvalue rule.
+fn is_valid_destructure_element(kind: &ExprKind<'_, '_>) -> bool {
+    matches!(kind, ExprKind::Omit) || is_valid_assignment_target(kind)
+}
+
 /// Parse an assignment operator and its RHS, treating `lhs` as the assignment target.
 ///
 /// PHP grammar quirk: assignment operators bind tighter than prefix unary operators,
@@ -130,6 +137,17 @@ fn parse_assign_continuation<'arena, 'src>(
                 message: "Cannot use empty list".into(),
                 span: lhs.span,
             });
+        }
+        // Each non-omitted element must itself be a writable target. PHP
+        // rejects e.g. `[null, $b] = …` and `list(1 + 1) = …` with
+        // "Assignments can only happen to writable values".
+        for el in elems.iter() {
+            if !is_valid_destructure_element(&el.value.kind) {
+                parser.error(ParseError::Forbidden {
+                    message: "Assignments can only happen to writable values".into(),
+                    span: el.value.span,
+                });
+            }
         }
     }
     let op_token = parser.advance();

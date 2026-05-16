@@ -1,5 +1,3 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php
 
@@ -7,6 +5,8 @@ expect_parser_silent=true
 list(($a), ((($b)))) = $x;
 // This is illegal, but not a syntax error.
 list(1 + 1) = $x;
+===errors===
+Assignments can only happen to writable values
 ===ast===
 {
   "stmts": [

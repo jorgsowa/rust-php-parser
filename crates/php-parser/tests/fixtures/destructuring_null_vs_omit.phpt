@@ -1,7 +1,7 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php [$a, null, $c] = $arr;
+===errors===
+Assignments can only happen to writable values
 ===ast===
 {
   "stmts": [
