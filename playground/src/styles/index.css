@@ -149,18 +149,6 @@ body::after {
   gap: 8px;
 }
 
-/* GitHub link */
-.gh-link {
-  display: flex;
-  align-items: center;
-  color: var(--text-3);
-  text-decoration: none;
-  padding: 4px;
-  border-radius: var(--radius);
-  transition: color 0.15s;
-}
-
-.gh-link:hover { color: var(--accent); }
 
 /* ── Custom Select ───────────────────────────────────────────────────────── */
 .custom-select {
@@ -1216,11 +1204,32 @@ body::after {
 .cmp-project-left .cmp-project-label { color: var(--accent-muted); }
 .cmp-project-right .cmp-project-label { color: #3a7a5e; }
 
-/* Card header: label left, info icon right */
+/* Card header: label left, actions right */
 .cmp-card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.cmp-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cmp-project-page-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-3);
+  opacity: 0.5;
+  transition: opacity 0.15s, color 0.15s;
+  line-height: 1;
+}
+
+.cmp-project-page-link:hover {
+  opacity: 1;
+  color: var(--accent);
 }
 
 /* Full-width selects inside the project cards */
@@ -1627,78 +1636,26 @@ body::after {
 
 /* ── Stats Index Page ───────────────────────────────────────────────────── */
 .page-stats-index {
-  padding: 40px 48px;
-  max-width: 1200px;
-  margin: 0 auto;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }
 
-.stats-index-header {
-  margin-bottom: 36px;
+.page-stats-index .page-compare {
+  overflow: visible;
+  flex: none;
+  max-width: none;
 }
 
-.stats-index-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
-}
 
-.stats-index-card {
+/* ── Page content wrapper (non-playground pages) ────────────────────────── */
+.page-content {
+  flex: 1 0 0;
+  min-height: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 20px;
-  background: var(--bg-2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  text-decoration: none;
-  color: inherit;
-  transition: border-color 0.15s, background 0.15s;
-}
-
-.stats-index-card:hover {
-  border-color: var(--accent-muted);
-  background: rgba(232, 148, 58, 0.04);
-}
-
-.stats-index-card-name {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-1);
-}
-
-.stats-index-card-version {
-  font-size: 11px;
-  font-family: var(--mono);
-  color: var(--text-3);
-  margin-top: -4px;
-}
-
-.stats-index-card-desc {
-  font-size: 12px;
-  color: var(--text-2);
-  line-height: 1.5;
-  margin: 4px 0 0;
-  flex: 1;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.stats-index-card-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 8px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
-  font-size: 12px;
-  color: var(--text-3);
-}
-
-.stats-index-card-meta strong {
-  color: var(--text-1);
-  font-weight: 600;
 }
 
 /* ── Project Stats Page ─────────────────────────────────────────────────── */
@@ -1707,7 +1664,8 @@ body::after {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  height: calc(100vh - 88px); /* toolbar + statusbar */
+  flex: 1;
+  min-height: 0;
 }
 
 .project-stats-header {

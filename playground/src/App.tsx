@@ -172,11 +172,15 @@ export default function App() {
         )}
       </div>
 
-      {route.page === 'docs' && <DocsPage version={version} />}
-      {route.page === 'docs-node' && <NodeDetailPage nodeId={route.nodeId} onVisualize={handleVisualize} />}
-      {route.page === 'compare' && <ComparePage />}
-      {route.page === 'stats' && <StatsIndexPage />}
-      {route.page === 'stats-project' && <ProjectStatsPage slug={route.slug} />}
+      {route.page !== 'playground' && (
+        <div className="page-content">
+          {route.page === 'docs' && <DocsPage version={version} />}
+          {route.page === 'docs-node' && <NodeDetailPage nodeId={route.nodeId} onVisualize={handleVisualize} />}
+          {route.page === 'compare' && <ComparePage />}
+          {route.page === 'stats' && <StatsIndexPage />}
+          {route.page === 'stats-project' && <ProjectStatsPage slug={route.slug} />}
+        </div>
+      )}
 
       <div className="statusbar">
         <span className="statusbar-item">PHP {version}</span>
@@ -191,7 +195,9 @@ export default function App() {
           </span>
         )}
         <span className="statusbar-spacer" />
-        <span className="statusbar-item">{code.split('\n').length} lines</span>
+        {route.page === 'playground' && (
+          <span className="statusbar-item">{code.split('\n').length} lines</span>
+        )}
         {parserVersion && (
           <a
             className="statusbar-item statusbar-link"

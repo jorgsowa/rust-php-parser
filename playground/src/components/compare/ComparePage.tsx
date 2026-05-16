@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from 'react'
 import { Select } from '../Select'
 import rawStats from '../../data/project-stats.json'
 import { astNodes } from '../../data/ast-nodes'
+import { routeToHash } from '../../router'
 
 interface ProjectStats {
   name: string
@@ -237,7 +238,20 @@ export function ComparePage() {
         <div className="cmp-project-card cmp-project-left">
           <div className="cmp-card-header">
             <div className="cmp-project-label">Project A</div>
-            <ProjectInfoPopover project={left} />
+            <div className="cmp-card-actions">
+              <a
+                className="cmp-project-page-link"
+                href={routeToHash({ page: 'stats-project', slug: leftSlug })}
+                title={`View ${left.name} stats`}
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+              </a>
+              <ProjectInfoPopover project={left} />
+            </div>
           </div>
           <Select
             className="cmp-select--left"
@@ -257,7 +271,20 @@ export function ComparePage() {
         <div className="cmp-project-card cmp-project-right">
           <div className="cmp-card-header">
             <div className="cmp-project-label">Project B</div>
-            <ProjectInfoPopover project={right} />
+            <div className="cmp-card-actions">
+              <a
+                className="cmp-project-page-link"
+                href={routeToHash({ page: 'stats-project', slug: rightSlug })}
+                title={`View ${right.name} stats`}
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+              </a>
+              <ProjectInfoPopover project={right} />
+            </div>
           </div>
           <Select
             className="cmp-select--right"
