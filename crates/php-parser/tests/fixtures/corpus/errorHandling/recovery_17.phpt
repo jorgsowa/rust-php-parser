@@ -36,6 +36,8 @@ expected ';' after echo statement
 expected ';', found 'throw'
 expected ';' after throw statement
 expected ';', found end of file
+The use statement with non-compound name 'A' has no effect
+The use statement with non-compound name 'a' has no effect
 ===ast===
 {
   "stmts": [

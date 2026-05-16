@@ -3,6 +3,7 @@
 ===errors===
 expected identifier, found 'static'
 expected ';', found 'static'
+The use statement with non-compound name 'C' has no effect
 ===ast===
 {
   "stmts": [

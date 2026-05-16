@@ -28,6 +28,8 @@ static $a, ;
 echo $a, ;
 
 for ($a, ; $b, ; $c, );
+===errors===
+The use statement with non-compound name 'A' has no effect
 ===ast===
 {
   "stmts": [

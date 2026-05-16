@@ -3,6 +3,7 @@
 ===errors===
 expected identifier, found 'parent'
 expected ';', found 'parent'
+The use statement with non-compound name 'B' has no effect
 ===ast===
 {
   "stmts": [

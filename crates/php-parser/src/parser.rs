@@ -1631,5 +1631,82 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 }
             }
         }
+
+        // Pass 3: `use` statement diagnostics — non-compound name warnings and
+        // duplicate alias detection (per UseKind scope, per top-level / per
+        // braced namespace body).
+        self.validate_use_scope(stmts);
+        for stmt in stmts {
+            if let StmtKind::Namespace(decl) = stmt.kind {
+                if let php_ast::NamespaceBody::Braced(inner) = &decl.body {
+                    self.validate_use_scope(inner);
+                }
+            }
+        }
+    }
+
+    fn validate_use_scope(&mut self, stmts: &[Stmt<'arena, 'src>]) {
+        use std::collections::HashSet;
+        // Intra-statement duplicates (incl. group-use) are caught at parse time
+        // in `parse_use_items`; this pass closes the cross-statement gap and
+        // emits non-compound-name warnings.
+        let mut seen: HashSet<(u8, &'src str)> = HashSet::new();
+        for stmt in stmts {
+            let StmtKind::Use(decl) = &stmt.kind else {
+                continue;
+            };
+            let mut added_this_stmt: HashSet<(u8, &'src str)> = HashSet::new();
+            for item in decl.uses.iter() {
+                let item_kind = item.kind.unwrap_or(decl.kind);
+                let kind_tag: u8 = match item_kind {
+                    php_ast::UseKind::Normal => 0,
+                    php_ast::UseKind::Function => 1,
+                    php_ast::UseKind::Const => 2,
+                };
+                let parts = item.name.parts_slice();
+                let effective_alias = item
+                    .alias
+                    .unwrap_or_else(|| parts.last().copied().unwrap_or(""));
+                if item.alias.is_none() && parts.len() == 1 {
+                    self.error(ParseError::ForbiddenWarning {
+                        message: format!(
+                            "The use statement with non-compound name '{}' has no effect",
+                            effective_alias
+                        )
+                        .into(),
+                        span: item.span,
+                    });
+                }
+                if !effective_alias.is_empty()
+                    && seen.contains(&(kind_tag, effective_alias))
+                    && added_this_stmt.insert((kind_tag, effective_alias))
+                {
+                    let full = item.name.join_parts();
+                    self.error(ParseError::Forbidden {
+                        message: format!(
+                            "Cannot use {} as {} because the name is already in use",
+                            full, effective_alias
+                        )
+                        .into(),
+                        span: item.span,
+                    });
+                }
+            }
+            for item in decl.uses.iter() {
+                let item_kind = item.kind.unwrap_or(decl.kind);
+                let kind_tag: u8 = match item_kind {
+                    php_ast::UseKind::Normal => 0,
+                    php_ast::UseKind::Function => 1,
+                    php_ast::UseKind::Const => 2,
+                };
+                let parts = item.name.parts_slice();
+                let effective_alias = item
+                    .alias
+                    .unwrap_or_else(|| parts.last().copied().unwrap_or(""));
+                if !effective_alias.is_empty() {
+                    seen.insert((kind_tag, effective_alias));
+                }
+            }
+        }
     }
 }

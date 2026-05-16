@@ -1,5 +1,3 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php
 
@@ -16,6 +14,10 @@ use function foo\bar;
 use function foo\bar as baz;
 use const foo\BAR;
 use const foo\BAR as BAZ;
+===errors===
+The use statement with non-compound name 'J' has no effect
+The use statement with non-compound name 'A' has no effect
+Cannot use A as B because the name is already in use
 ===ast===
 {
   "stmts": [

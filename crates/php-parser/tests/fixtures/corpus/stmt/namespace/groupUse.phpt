@@ -1,5 +1,3 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php
 use A\{B};
@@ -8,6 +6,11 @@ use \A\B\{C\D, E};
 use function A\{b\c, d};
 use const \A\{B\C, D};
 use A\B\{C\D, function b\c, const D};
+===errors===
+Cannot use A\B\C\D as D because the name is already in use
+Cannot use A\B\C\D as D because the name is already in use
+Cannot use A\B\b\c as c because the name is already in use
+Cannot use A\B\D as D because the name is already in use
 ===ast===
 {
   "stmts": [

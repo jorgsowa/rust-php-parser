@@ -3,6 +3,7 @@
 ===errors===
 expected identifier, found 'self'
 expected ';', found 'self'
+The use statement with non-compound name 'A' has no effect
 ===ast===
 {
   "stmts": [
