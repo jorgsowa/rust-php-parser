@@ -4,6 +4,10 @@
 /// the Rust parse target version and the minimum PHP version for `php -l` gating.
 /// `source` is the PHP code between `===source===` and the next section marker.
 ///
+/// An optional `===description===` section may appear before `===source===` and
+/// contains free-form prose ignored by the runner — use it to document why a
+/// fixture exists, what PHP grouping it pins, or known divergences.
+///
 /// All other section contents (`===errors===`, `===ast===`, `===php_error===`) are
 /// left for each test binary to extract directly from the original content, since
 /// different test binaries need different subsets.
@@ -22,19 +26,29 @@ pub fn parse_fixture(content: &str) -> (Option<(u32, u32)>, &str) {
 
     let mut min_php = None;
 
-    let rest = if let Some(rest) = content.strip_prefix("===config===\n") {
-        let source_marker = rest.find("===source===\n").unwrap_or(rest.len());
-        for line in rest[..source_marker].lines() {
+    // Anything before ===source=== is header (===config=== and/or ===description===).
+    // Only ===config=== is interpreted; the rest is ignored.
+    let source_marker = "===source===\n";
+    let source_pos = content.find(source_marker).unwrap_or(content.len());
+    let header = &content[..source_pos];
+
+    if let Some(cfg_start) = header.find("===config===\n") {
+        let after_cfg = &header[cfg_start + "===config===\n".len()..];
+        // Config extends until the next ===section=== marker within the header
+        // (e.g. ===description===) or to end of header.
+        let cfg_end = after_cfg
+            .find("\n===")
+            .map(|p| p + 1)
+            .unwrap_or(after_cfg.len());
+        for line in after_cfg[..cfg_end].lines() {
             if let Some(val) = line.strip_prefix("min_php=") {
                 min_php = parse_ver(val);
             }
         }
-        &rest[source_marker..]
-    } else {
-        content
-    };
+    }
 
-    let after_source = rest.strip_prefix("===source===\n").unwrap_or(rest);
+    let rest = &content[source_pos..];
+    let after_source = rest.strip_prefix(source_marker).unwrap_or(rest);
 
     // Source ends at the earliest of ===errors=== or ===ast=== (or EOF).
     // One trailing '\n' is stripped because it is the newline before the marker,
