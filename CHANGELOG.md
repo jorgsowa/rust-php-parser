@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.2] - 2026-05-16
+
+### Added
+
+- Project stats playground expanded from 10 to 50 open-source PHP projects with per-directory breakdown and expandable node-variant rows.
+- Per-project stats pages with interactive directory tree navigation.
+- AST node comparison page for side-by-side project analysis.
+
+### Fixed
+
+- Parser no longer consumes `[index]` after `->prop` in string interpolation (`php-rs-parser`).
+- Parser now correctly handles single-keyword asymmetric visibility (`private(set)`) (`php-rs-parser`).
+
+---
+
 ## [0.12.1] - 2026-05-15
 
 ### Added
