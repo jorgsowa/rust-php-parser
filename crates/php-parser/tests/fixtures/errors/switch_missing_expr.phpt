@@ -3,6 +3,7 @@
 ===errors===
 expected '(', found '{'
 expected expression
+Array and string offset access syntax with curly braces is no longer supported
 unclosed '')'' opened at Span { start: 13, end: 14 }
 expected '{', found end of file
 expected '}', found end of file

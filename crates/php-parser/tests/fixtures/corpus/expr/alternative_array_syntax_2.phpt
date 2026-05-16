@@ -1,5 +1,4 @@
 ===config===
-expect_parser_silent=true
 min_php=8.4
 ===source===
 <?php
@@ -13,6 +12,16 @@ A{0};
 A::B{0};
 new $array{'className'};
 new $a->b{'c'}();
+===errors===
+Array and string offset access syntax with curly braces is no longer supported
+Array and string offset access syntax with curly braces is no longer supported
+Array and string offset access syntax with curly braces is no longer supported
+Array and string offset access syntax with curly braces is no longer supported
+Array and string offset access syntax with curly braces is no longer supported
+Array and string offset access syntax with curly braces is no longer supported
+Array and string offset access syntax with curly braces is no longer supported
+Array and string offset access syntax with curly braces is no longer supported
+Array and string offset access syntax with curly braces is no longer supported
 ===ast===
 {
   "stmts": [

@@ -673,11 +673,12 @@ pub fn parse_expr_bp<'arena, 'src>(
             continue;
         }
 
-        // Curly brace array/string access: $a{'b'} (deprecated PHP 7.x syntax)
+        // Curly brace array/string access: $a{'b'} — removed in PHP 8.0.
         if kind == TokenKind::LeftBrace {
             if MEMBER_ACCESS_BP < min_bp || parser.no_brace_subscript {
                 break;
             }
+            let brace_span = parser.current_span();
             parser.advance(); // consume {
             let index = if parser.check(TokenKind::RightBrace) {
                 None
@@ -686,6 +687,12 @@ pub fn parse_expr_bp<'arena, 'src>(
                 Some(parser.alloc(e))
             };
             parser.expect(TokenKind::RightBrace);
+            parser.error(ParseError::Forbidden {
+                message:
+                    "Array and string offset access syntax with curly braces is no longer supported"
+                        .into(),
+                span: brace_span,
+            });
             let span = Span::new(lhs.span.start, parser.previous_end());
             lhs = Expr {
                 kind: ExprKind::ArrayAccess(ArrayAccessExpr {

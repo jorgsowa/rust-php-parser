@@ -6,6 +6,7 @@ if ($x > 1 {
 ===errors===
 expected expression
 expected '}', found 'echo'
+Array and string offset access syntax with curly braces is no longer supported
 unclosed '')'' opened at Span { start: 9, end: 10 }
 expected expression
 ===ast===

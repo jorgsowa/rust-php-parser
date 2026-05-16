@@ -2,6 +2,7 @@
 <?php if ( { }
 ===errors===
 expected expression
+Array and string offset access syntax with curly braces is no longer supported
 unclosed '')'' opened at Span { start: 9, end: 10 }
 expected statement
 ===ast===

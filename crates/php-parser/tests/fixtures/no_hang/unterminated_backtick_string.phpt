@@ -5,6 +5,7 @@ unterminated string literal
 expected ']', found variable
 expected ';' after expression
 expected '}', found end of file
+Array and string offset access syntax with curly braces is no longer supported
 expected ';' after expression
 ===ast===
 {
