@@ -3,6 +3,15 @@ use php_lexer::TokenKind;
 use std::borrow::Cow;
 use thiserror::Error;
 
+/// Diagnostic severity. Mirrors `php -l`'s split between fatal errors and
+/// warnings (e.g. `final private method` is a PHP warning, not a fatal).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum Severity {
+    #[default]
+    Error,
+    Warning,
+}
+
 /// A parse error or diagnostic emitted during parsing.
 ///
 /// The parser recovers from all errors and always produces a complete AST,
@@ -51,9 +60,17 @@ pub enum ParseError {
     },
 
     /// A construct that is syntactically valid but semantically forbidden
-    /// (e.g. `(unset)` cast, deprecated syntax).
+    /// (e.g. `(unset)` cast, deprecated syntax). Equivalent to a PHP fatal.
     #[error("{message}")]
     Forbidden {
+        message: Cow<'static, str>,
+        span: Span,
+    },
+
+    /// A construct PHP only warns about (e.g. `final private` method). Treated
+    /// as a non-fatal diagnostic; `severity()` returns [`Severity::Warning`].
+    #[error("{message}")]
+    ForbiddenWarning {
         message: Cow<'static, str>,
         span: Span,
     },
@@ -81,7 +98,17 @@ impl ParseError {
             | ParseError::ExpectedAfter { span, .. }
             | ParseError::UnclosedDelimiter { span, .. }
             | ParseError::Forbidden { span, .. }
+            | ParseError::ForbiddenWarning { span, .. }
             | ParseError::VersionTooLow { span, .. } => *span,
+        }
+    }
+
+    /// Returns the diagnostic severity. Currently only [`ParseError::ForbiddenWarning`]
+    /// is at warning level; every other variant is an error.
+    pub fn severity(&self) -> Severity {
+        match self {
+            ParseError::ForbiddenWarning { .. } => Severity::Warning,
+            _ => Severity::Error,
         }
     }
 }
