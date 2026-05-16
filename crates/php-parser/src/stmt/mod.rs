@@ -1365,6 +1365,16 @@ pub fn parse_param_list<'arena, 'src>(
                     parser.advance();
                     is_readonly = true;
                 }
+                // `static` is not a valid parameter modifier — PHP fatals with
+                // "Cannot use the static modifier on a parameter". Consume it
+                // so subsequent type-hint / variable parsing isn't derailed.
+                TokenKind::Static => {
+                    parser.error(ParseError::Forbidden {
+                        message: "Cannot use the static modifier on a parameter".into(),
+                        span: current_span,
+                    });
+                    parser.advance();
+                }
                 _ => break,
             }
         }
