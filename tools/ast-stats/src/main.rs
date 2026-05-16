@@ -439,6 +439,7 @@ struct ProjectDef {
 
 fn projects() -> Vec<ProjectDef> {
     vec![
+        // ── Original 10 ──────────────────────────────────────────────────────
         ProjectDef {
             name: "Laravel Framework",
             slug: "laravel",
@@ -519,6 +520,334 @@ fn projects() -> Vec<ProjectDef> {
             src_dirs: &["src"],
             test_dirs: &["tests"],
         },
+        // ── Frameworks ───────────────────────────────────────────────────────
+        ProjectDef {
+            name: "Slim Framework",
+            slug: "slim",
+            repo: "https://github.com/slimphp/Slim",
+            version: "4.15.1",
+            src_dirs: &["Slim"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Laminas MVC",
+            slug: "laminas-mvc",
+            repo: "https://github.com/laminas/laminas-mvc",
+            version: "3.8.0",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Lumen",
+            slug: "lumen",
+            repo: "https://github.com/laravel/lumen-framework",
+            version: "v11.2.0",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Nette Application",
+            slug: "nette",
+            repo: "https://github.com/nette/application",
+            version: "v3.2.9",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Flight PHP",
+            slug: "flight",
+            repo: "https://github.com/flightphp/core",
+            version: "v3.18.1",
+            src_dirs: &["flight"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "API Platform",
+            slug: "api-platform",
+            repo: "https://github.com/api-platform/core",
+            version: "v4.3.5",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        // ── CMS / E-commerce ─────────────────────────────────────────────────
+        ProjectDef {
+            name: "Joomla CMS",
+            slug: "joomla",
+            repo: "https://github.com/joomla/joomla-cms",
+            version: "6.1.0",
+            src_dirs: &["libraries"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "TYPO3",
+            slug: "typo3",
+            repo: "https://github.com/TYPO3/typo3",
+            version: "v14.3.1",
+            src_dirs: &["typo3/sysext"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Concrete CMS",
+            slug: "concrete",
+            repo: "https://github.com/concretecms/concretecms",
+            version: "9.5.0",
+            src_dirs: &["concrete/src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Magento 2",
+            slug: "magento",
+            repo: "https://github.com/magento/magento2",
+            version: "2.4.9",
+            src_dirs: &["app/code/Magento", "lib/internal/Magento"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "PrestaShop",
+            slug: "prestashop",
+            repo: "https://github.com/PrestaShop/PrestaShop",
+            version: "9.1.1",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "WooCommerce",
+            slug: "woocommerce",
+            repo: "https://github.com/woocommerce/woocommerce",
+            version: "10.7.0",
+            src_dirs: &["plugins/woocommerce/src", "plugins/woocommerce/includes"],
+            test_dirs: &[],
+        },
+        // ── ORM / Database ───────────────────────────────────────────────────
+        ProjectDef {
+            name: "Cycle ORM",
+            slug: "cycle-orm",
+            repo: "https://github.com/cycle/orm",
+            version: "v2.16.0",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "RedBeanPHP",
+            slug: "redbean",
+            repo: "https://github.com/gabordemooij/redbean",
+            version: "v5.7.5",
+            src_dirs: &["RedBeanPHP"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Prophecy",
+            slug: "prophecy",
+            repo: "https://github.com/phpspec/prophecy",
+            version: "v1.22.0",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Doctrine DBAL",
+            slug: "doctrine-dbal",
+            repo: "https://github.com/doctrine/dbal",
+            version: "4.4.3",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        // ── Testing ──────────────────────────────────────────────────────────
+        ProjectDef {
+            name: "Pest PHP",
+            slug: "pest",
+            repo: "https://github.com/pestphp/pest",
+            version: "v4.7.0",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Behat",
+            slug: "behat",
+            repo: "https://github.com/Behat/Behat",
+            version: "v3.31.0",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Mockery",
+            slug: "mockery",
+            repo: "https://github.com/mockery/mockery",
+            version: "1.6.12",
+            src_dirs: &["library/Mockery"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Codeception",
+            slug: "codeception",
+            repo: "https://github.com/Codeception/Codeception",
+            version: "5.3.5",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "ParaTest",
+            slug: "paratest",
+            repo: "https://github.com/paratestphp/paratest",
+            version: "v7.22.4",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        // ── Static Analysis / Dev Tools ───────────────────────────────────────
+        ProjectDef {
+            name: "PHPStan",
+            slug: "phpstan",
+            repo: "https://github.com/phpstan/phpstan-src",
+            version: "2.1.17",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Psalm",
+            slug: "psalm",
+            repo: "https://github.com/vimeo/psalm",
+            version: "6.16.1",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "PHP_CodeSniffer",
+            slug: "phpcs",
+            repo: "https://github.com/squizlabs/PHP_CodeSniffer",
+            version: "3.7.2",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "PHP-CS-Fixer",
+            slug: "php-cs-fixer",
+            repo: "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer",
+            version: "v3.70.0",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Rector",
+            slug: "rector",
+            repo: "https://github.com/rectorphp/rector-src",
+            version: "v0.8.8",
+            src_dirs: &["src", "rules"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "PHP-Parser",
+            slug: "php-parser",
+            repo: "https://github.com/nikic/PHP-Parser",
+            version: "v5.7.0",
+            src_dirs: &["lib"],
+            test_dirs: &[],
+        },
+        // ── HTTP / Async ──────────────────────────────────────────────────────
+        ProjectDef {
+            name: "Guzzle",
+            slug: "guzzle",
+            repo: "https://github.com/guzzle/guzzle",
+            version: "7.10.0",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "ReactPHP HTTP",
+            slug: "reactphp",
+            repo: "https://github.com/reactphp/http",
+            version: "v1.11.0",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Amp",
+            slug: "amphp",
+            repo: "https://github.com/amphp/amp",
+            version: "v3.1.1",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "League OAuth2 Server",
+            slug: "oauth2-server",
+            repo: "https://github.com/thephpleague/oauth2-server",
+            version: "9.3.0",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        // ── Templating ───────────────────────────────────────────────────────
+        ProjectDef {
+            name: "Twig",
+            slug: "twig",
+            repo: "https://github.com/twigphp/Twig",
+            version: "v3.24.0",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Illuminate View (Blade)",
+            slug: "blade",
+            repo: "https://github.com/illuminate/view",
+            version: "v13.9.0",
+            src_dirs: &["."],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Plates",
+            slug: "plates",
+            repo: "https://github.com/thephpleague/plates",
+            version: "v3.6.0",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        // ── Utility Libraries ─────────────────────────────────────────────────
+        ProjectDef {
+            name: "Carbon",
+            slug: "carbon",
+            repo: "https://github.com/briannesbitt/Carbon",
+            version: "3.11.4",
+            src_dirs: &["src/Carbon"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Monolog",
+            slug: "monolog",
+            repo: "https://github.com/Seldaek/monolog",
+            version: "3.10.0",
+            src_dirs: &["src/Monolog"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Flysystem",
+            slug: "flysystem",
+            repo: "https://github.com/thephpleague/flysystem",
+            version: "3.16.0",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "PHPMailer",
+            slug: "phpmailer",
+            repo: "https://github.com/PHPMailer/PHPMailer",
+            version: "v7.1.0",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Faker",
+            slug: "faker",
+            repo: "https://github.com/FakerPHP/Faker",
+            version: "v1.24.1",
+            src_dirs: &["src/Faker"],
+            test_dirs: &[],
+        },
+        ProjectDef {
+            name: "Spatie Laravel Data",
+            slug: "laravel-data",
+            repo: "https://github.com/spatie/laravel-data",
+            version: "4.23.0",
+            src_dirs: &["src"],
+            test_dirs: &[],
+        },
     ]
 }
 
@@ -528,9 +857,16 @@ fn main() {
         Path::new(env!("CARGO_MANIFEST_DIR")).join("../../crates/php-parser/benches/corpus");
 
     if args.get(1).map(|s| s.as_str()) == Some("--find-errors") {
-        let slug = args.get(2).map(|s| s.as_str()).unwrap_or("laravel");
+        let slug = args.get(2).map(|s| s.as_str()).unwrap_or("--all");
         let all = projects();
-        if let Some(p) = all.iter().find(|p| p.slug == slug) {
+        if slug == "--all" {
+            for p in &all {
+                let base = corpus.join(p.slug);
+                if base.exists() {
+                    find_errors(&base, p.slug, p.src_dirs);
+                }
+            }
+        } else if let Some(p) = all.iter().find(|p| p.slug == slug) {
             find_errors(&corpus.join(slug), slug, p.src_dirs);
         } else {
             eprintln!("unknown slug: {slug}");

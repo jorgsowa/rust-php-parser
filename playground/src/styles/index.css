@@ -1157,8 +1157,35 @@ body::after {
 
 .cmp-header {
   display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.cmp-hero {
+  display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.cmp-subtitle-link {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.cmp-subtitle-link:hover {
+  text-decoration: underline;
+}
+
+.cmp-docs-link {
+  font-size: 13px;
+  color: var(--text-3);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.cmp-docs-link:hover {
+  color: var(--accent);
 }
 
 .cmp-title {

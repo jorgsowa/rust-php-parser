@@ -72,16 +72,63 @@ const NODE_DESCRIPTIONS: Record<string, string> = {
 }
 
 const PROJECT_DESC: Record<string, string> = {
-  laravel:      'Full-stack web framework with expressive syntax. Powers a large share of the PHP ecosystem with its elegant ORM, routing, and service container.',
-  symfony:      'Enterprise-grade component library and full-stack framework. Many PHP frameworks (Laravel, Drupal, Shopware) are built on Symfony components.',
-  wordpress:    'The world\'s most widely deployed CMS. Powers ~43% of all websites. Core ships a large amount of procedural PHP alongside modern OOP.',
-  drupal:       'Content management framework aimed at complex, structured content sites. Known for its powerful entity system and hook-based architecture.',
-  phpunit:      'The de-facto standard testing framework for PHP. Pioneered test-driven development in the PHP community; its patterns shaped the entire ecosystem.',
-  composer:     'Dependency manager for PHP — the equivalent of npm or Cargo. Nearly every modern PHP project relies on it to manage packages via Packagist.',
-  codeigniter:  'Lightweight MVC framework with a small footprint and minimal configuration. Popular for building simple, fast web applications.',
+  // Frameworks & CMS
+  laravel:        'Full-stack web framework with expressive syntax. Powers a large share of the PHP ecosystem with its elegant ORM, routing, and service container.',
+  symfony:        'Enterprise-grade component library and full-stack framework. Many PHP frameworks (Laravel, Drupal, Shopware) are built on Symfony components.',
+  wordpress:      'The world\'s most widely deployed CMS. Powers ~43% of all websites. Core ships a large amount of procedural PHP alongside modern OOP.',
+  drupal:         'Content management framework aimed at complex, structured content sites. Known for its powerful entity system and hook-based architecture.',
+  codeigniter:    'Lightweight MVC framework with a small footprint and minimal configuration. Popular for building simple, fast web applications.',
+  yii2:           'High-performance PHP framework with built-in caching, security, and scaffolding. Popular in Asia and enterprise environments.',
+  cakephp:        'Convention-over-configuration MVC framework. One of the oldest PHP frameworks still actively maintained, known for rapid application development.',
+  lumen:          'Micro-framework built on Laravel components, optimised for building fast JSON APIs and microservices with minimal overhead.',
+  slim:           'Minimalist PSR-7 micro-framework for routing HTTP requests to closures or controller methods. Widely used for lightweight REST APIs.',
+  flight:         'Extremely lightweight single-file PHP framework. Designed for simplicity; the entire core fits in one class with no dependencies.',
+  'laminas-mvc':  'MVC layer of the Laminas Project (successor to Zend Framework). Enterprise-oriented, highly modular, and PSR-compliant throughout.',
+  nette:          'Czech-originated framework focused on elegance and security. Known for its Latte template engine and robust form and DI components.',
+  joomla:         'Feature-rich open-source CMS and application framework. Second most-used CMS after WordPress, with a powerful extension ecosystem.',
+  concrete:       'CMS and web application framework with an in-context editing UI. Used for marketing and content sites requiring a visual page builder.',
+  prestashop:     'Open-source e-commerce platform used by tens of thousands of online stores worldwide. Ships a large, module-driven PHP codebase.',
+  typo3:          'Enterprise CMS used across European public-sector and corporate sites. Noted for fine-grained access control and a deep extension API.',
+  magento:        'Enterprise e-commerce platform now part of Adobe Commerce. One of the largest PHP codebases; heavy use of dependency injection and plugins.',
+  woocommerce:    'WordPress plugin that turns any WP site into a full-featured online store. The most widely installed e-commerce solution on the web.',
+  // ORM / Database
   'doctrine-orm': 'Object-relational mapper built on the Data Mapper pattern. Provides a database abstraction layer used heavily in Symfony and other frameworks.',
-  yii2:         'High-performance PHP framework with built-in caching, security, and scaffolding. Popular in Asia and enterprise environments.',
-  cakephp:      'Convention-over-configuration MVC framework. One of the oldest PHP frameworks still actively maintained, known for rapid application development.',
+  'doctrine-dbal': 'Database abstraction layer underneath Doctrine ORM. Provides a unified API over PDO with schema introspection and query building.',
+  'cycle-orm':    'DataMapper ORM for PHP 8 with first-class support for async runtimes (ReactPHP, Swoole). Designed for the Spiral Framework ecosystem.',
+  redbean:        'Zero-configuration ORM that creates and alters database tables on the fly. Aimed at rapid prototyping; no schema definition required.',
+  // Testing
+  phpunit:        'The de-facto standard testing framework for PHP. Pioneered test-driven development in the PHP community; its patterns shaped the entire ecosystem.',
+  pest:           'Elegant testing framework built on PHPUnit with a functional API inspired by Jest. Emphasises expressiveness and minimal boilerplate.',
+  behat:          'Behaviour-Driven Development framework for PHP. Scenarios are written in Gherkin (plain English) and matched to PHP step definitions.',
+  codeception:    'Full-stack testing framework covering unit, functional, and acceptance tests. Supports Selenium, REST APIs, and database assertions out of the box.',
+  mockery:        'Flexible mock-object library for PHPUnit and other test runners. Provides an expressive, fluent API for setting up stubs and expectations.',
+  prophecy:       'Object prophecy/mocking library originally developed for PhpSpec. Favours a describe-then-verify style rather than expect-then-run.',
+  paratest:       'Parallel test runner for PHPUnit. Splits the test suite across multiple processes to reduce total CI execution time.',
+  // Static analysis & dev tools
+  phpstan:        'Static analysis tool that finds bugs without running the code. Understands generics, conditional return types, and PHPDoc annotations.',
+  psalm:          'Static analysis and type-checking tool from Vimeo. Emphasises correctness over speed; offers taint analysis for security auditing.',
+  rector:         'Automated refactoring tool powered by static analysis. Applies rule-based transformations to upgrade code or enforce coding standards.',
+  phpcs:          'Tokeniser-based coding standard checker. Enforces PSR-1, PSR-2, PSR-12, and custom rulesets; integrates with most editors and CI pipelines.',
+  'php-cs-fixer': 'Automatically fixes code style violations. Complements phpcs by applying fixes rather than just reporting them.',
+  'php-parser':   'PHP parser written in PHP, developed by Nikita Popov. Powers many static analysis and refactoring tools including Rector and PHPStan.',
+  composer:       'Dependency manager for PHP — the equivalent of npm or Cargo. Nearly every modern PHP project relies on it to manage packages via Packagist.',
+  'api-platform': 'API framework built on Symfony for building REST and GraphQL APIs. Drives schema generation, serialisation, validation, and OpenAPI docs from PHP attributes.',
+  // HTTP / async
+  guzzle:         'Full-featured HTTP client with middleware, promises, and async support. The most widely used HTTP client library in the PHP ecosystem.',
+  reactphp:       'Event-driven, non-blocking I/O library for PHP. Enables asynchronous networking using an event loop modelled after Node.js.',
+  amphp:          'Async framework based on fibers (PHP 8.1+). Provides coroutine-style concurrency without callbacks; used for high-throughput services.',
+  'oauth2-server': 'Standards-compliant OAuth 2.0 authorisation server library. Implements the full RFC 6749 grant flow suite with a clean interface.',
+  // Templating
+  twig:           'Fast, secure, flexible template engine for PHP, originally created for Symfony. Compiles templates to optimised PHP classes.',
+  blade:          'Laravel\'s built-in template engine. Compiles to plain PHP; supports template inheritance, components, and slots with near-zero overhead.',
+  plates:         'Native PHP template system with zero compilation step. Provides layout inheritance and template escaping without a custom syntax.',
+  // Utility libraries
+  'laravel-data': 'Laravel package for creating rich data objects with built-in validation, transformation, and TypeScript type generation.',
+  carbon:         'Fluent date/time library extending PHP\'s DateTime. Provides natural-language manipulation, human-readable diffs, and localisation.',
+  monolog:        'PSR-3 logging library with handlers for files, databases, Slack, Sentry, and more. The standard logging solution across the PHP ecosystem.',
+  flysystem:      'Filesystem abstraction layer with adapters for local disk, S3, FTP, SFTP, and more. Used by Laravel\'s Storage facade under the hood.',
+  faker:          'Library for generating realistic fake data — names, addresses, lorem ipsum, and hundreds of other locales and formatters.',
+  phpmailer:      'The most popular library for sending email from PHP. Supports SMTP, OAuth, HTML/plain-text messages, attachments, and inline images.',
 }
 
 type SortKey = 'name' | 'left' | 'right' | 'diff'
@@ -226,6 +273,19 @@ export function ComparePage() {
 
   return (
     <div className="page-compare">
+      <div className="cmp-header">
+        <div className="cmp-hero">
+          <h1 className="cmp-title">Project Stats</h1>
+          <p className="cmp-subtitle">
+            Compare AST node usage across popular open-source PHP projects. See which constructs
+            dominate real-world codebases — or drill into a single project to explore{' '}
+            <a className="cmp-subtitle-link" href={routeToHash({ page: 'stats-project', slug: 'laravel' })}>
+              node distribution per directory
+            </a>.
+          </p>
+        </div>
+        <a className="cmp-docs-link" href="#docs">AST Documentation →</a>
+      </div>
       <div className="cmp-selectors">
         <div className="cmp-project-card cmp-project-left">
           <div className="cmp-card-header">
