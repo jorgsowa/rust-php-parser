@@ -5,6 +5,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.13.0] - 2026-05-17
+
+### Added
+
+- `ParseError::ForbiddenWarning` variant and `severity()` method on `ParseError` — non-fatal diagnostics for constructs that PHP itself treats as warnings rather than hard errors (`php-rs-parser`).
+
+### Fixed
+
+- Parser rejects incompatible `set`-hook parameter types (`php-rs-parser`).
+- Parser rejects `void` cast in value-consuming (expression) context (`php-rs-parser`).
+- Parser rejects standalone parenthesized intersection types (`php-rs-parser`).
+- Parser rejects `new` in constant, property, and static-variable initializers (`php-rs-parser`).
+- Parser rejects curly-brace array/string offset access (`$a{'b'}`) (`php-rs-parser`).
+- Parser rejects mixing `list()` and `[]` in destructuring (`php-rs-parser`).
+- Parser rejects empty `list()` / `[, ,]` destructuring (`php-rs-parser`).
+- Parser rejects non-writable destructure targets (`php-rs-parser`).
+- Parser rejects temporary expression in write context (`php-rs-parser`).
+- Parser rejects `return` value in `void`/`never` functions (`php-rs-parser`).
+- Parser rejects `new ClassName(...)` first-class callable syntax (`php-rs-parser`).
+- Parser rejects property hooks on static properties (`php-rs-parser`).
+- Parser rejects empty property hook list and `get` with any parameters (`php-rs-parser`).
+- Parser rejects non-hooked properties in interfaces (`php-rs-parser`).
+- Parser enforces asymmetric visibility rules: type required, `set` visibility cannot be wider than `get` (`php-rs-parser`).
+- Parser rejects `final` modifier on properties and `readonly` modifier on methods (`php-rs-parser`).
+- Parser rejects duplicate property declarations (`php-rs-parser`).
+- Parser rejects return type and `static` modifier on `__construct` (`php-rs-parser`).
+- Parser rejects `static` modifier on `__destruct` and `__clone` (`php-rs-parser`).
+- Parser rejects `static` modifier on parameters (`php-rs-parser`).
+- Parser rejects promoted property modifiers outside `__construct` (`php-rs-parser`).
+- Parser rejects duplicate methods and enum cases (`php-rs-parser`).
+- Parser rejects reserved type names (`int`, `string`, etc.) as class names (`php-rs-parser`).
+- Parser rejects standalone `null`/`false` types below PHP 8.2 and `Closure` in attribute arguments (`php-rs-parser`).
+- Parser enforces program-level namespace layout rules (`php-rs-parser`).
+- Parser rejects multiple `default` arms in `switch`, variadic parameters with default values, and `isset(expr)` with non-variable arguments (`php-rs-parser`).
+- Operator precedence aligned with PHP 8 — three additional opt-out gaps closed (`php-rs-parser`).
+- Parser warns on non-compound `use` names and detects cross-statement duplicate imports (`php-rs-parser`).
+- Parser warns on `final private` methods (`php-rs-parser`).
+- Playground project dropdown stays open while scrolling the list (`playground`).
+- `ast-stats` tool counts files with warnings-only as parsed; only hard errors are skipped (`ast-stats`).
+
+---
+
 ## [0.12.2] - 2026-05-16
 
 ### Added
