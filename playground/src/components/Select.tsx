@@ -52,7 +52,10 @@ export function Select({ options, value, onChange, className = '', 'aria-label':
         setOpen(false)
       }
     }
-    const closeOnScroll = () => setOpen(false)
+    const closeOnScroll = (e: Event) => {
+      if (listRef.current && listRef.current.contains(e.target as Node)) return
+      setOpen(false)
+    }
     document.addEventListener('mousedown', close)
     window.addEventListener('scroll', closeOnScroll, true)
     return () => {
