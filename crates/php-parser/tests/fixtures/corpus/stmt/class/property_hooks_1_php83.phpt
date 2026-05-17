@@ -26,6 +26,7 @@ class Test {
 'property hooks' requires PHP 8.4 or higher (targeting PHP 8.3)
 'property hooks' requires PHP 8.4 or higher (targeting PHP 8.3)
 'property hooks' requires PHP 8.4 or higher (targeting PHP 8.3)
+Type of parameter $value of hook set must be compatible with property type
 ===ast===
 {
   "stmts": [

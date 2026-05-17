@@ -977,6 +977,26 @@ fn parse_property_member<'arena, 'src>(
             });
         }
     }
+    // Set-hook parameter type must be compatible with property type.
+    // If the property has no type, the set-hook parameter must also have no type.
+    if type_hint.is_none() {
+        for hook in hooks.iter() {
+            if hook.kind == PropertyHookKind::Set {
+                if let Some(param) = hook.params.first() {
+                    if param.type_hint.is_some() {
+                        parser.error(ParseError::Forbidden {
+                            message: format!(
+                                "Type of parameter ${} of hook set must be compatible with property type",
+                                param.name
+                            )
+                            .into(),
+                            span: hook.span,
+                        });
+                    }
+                }
+            }
+        }
+    }
     if mods.is_static && !hooks.is_empty() {
         parser.error(ParseError::Forbidden {
             message: "Cannot declare hooks for static property".into(),

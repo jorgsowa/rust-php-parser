@@ -1,5 +1,4 @@
 ===config===
-expect_parser_silent=true
 min_php=8.4
 ===source===
 <?php
@@ -21,6 +20,8 @@ class Test {
         set(string $value) { }
     }
 }
+===errors===
+Type of parameter $value of hook set must be compatible with property type
 ===ast===
 {
   "stmts": [
