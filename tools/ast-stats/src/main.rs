@@ -283,7 +283,11 @@ fn count_file_list(files: &[std::path::PathBuf]) -> NodeCounter {
         };
         let arena = Bump::new();
         let result = parse(&arena, &src);
-        if result.errors.is_empty() {
+        if !result
+            .errors
+            .iter()
+            .any(|e| e.severity() == php_rs_parser::diagnostics::Severity::Error)
+        {
             let mut counter = NodeCounter::default();
             let _ = counter.visit_program(&result.program);
             merged.lock().unwrap().merge(counter);
