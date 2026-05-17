@@ -1,7 +1,7 @@
-===config===
-expect_parser_silent=true
 ===source===
 <?php static;
+===errors===
+Cannot use 'static' as a standalone expression
 ===ast===
 {
   "stmts": [

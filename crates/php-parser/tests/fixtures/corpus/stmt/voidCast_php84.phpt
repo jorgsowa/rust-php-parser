@@ -1,5 +1,5 @@
 ===config===
-expect_parser_silent=true
+min_php=8.4
 max_php=8.4
 ===source===
 <?php
@@ -13,6 +13,13 @@ for ((void)a(); $b; (void)$c) {
 
 // PHP does not allow this, but the parser accepts it.
 $x = (void) $y;
+===errors===
+'void cast' requires PHP 8.5 or higher (targeting PHP 8.4)
+'void cast' requires PHP 8.5 or higher (targeting PHP 8.4)
+'void cast' requires PHP 8.5 or higher (targeting PHP 8.4)
+'void cast' requires PHP 8.5 or higher (targeting PHP 8.4)
+'void cast' requires PHP 8.5 or higher (targeting PHP 8.4)
+'void cast' requires PHP 8.5 or higher (targeting PHP 8.4)
 ===ast===
 {
   "stmts": [

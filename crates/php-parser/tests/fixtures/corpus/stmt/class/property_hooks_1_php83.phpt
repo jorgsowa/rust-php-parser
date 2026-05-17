@@ -1,5 +1,5 @@
 ===config===
-expect_parser_silent=true
+min_php=8.3
 max_php=8.3
 ===source===
 <?php
@@ -21,6 +21,11 @@ class Test {
         set(string $value) { }
     }
 }
+===errors===
+'property hooks' requires PHP 8.4 or higher (targeting PHP 8.3)
+'property hooks' requires PHP 8.4 or higher (targeting PHP 8.3)
+'property hooks' requires PHP 8.4 or higher (targeting PHP 8.3)
+'property hooks' requires PHP 8.4 or higher (targeting PHP 8.3)
 ===ast===
 {
   "stmts": [

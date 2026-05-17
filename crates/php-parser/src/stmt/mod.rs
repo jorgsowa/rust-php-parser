@@ -303,6 +303,23 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
             let next = parser.peek_kind();
             if matches!(next, Some(TokenKind::Variable)) {
                 parse_static_var(parser)
+            } else if matches!(next, Some(TokenKind::Semicolon)) {
+                // `static;` is not valid — PHP expects `::` after standalone `static`.
+                let start = parser.start_span();
+                let token = parser.advance(); // consume 'static'
+                parser.error(ParseError::Forbidden {
+                    message: "Cannot use 'static' as a standalone expression".into(),
+                    span: token.span,
+                });
+                parser.expect_semicolon("expression");
+                let span = Span::new(start, parser.previous_end());
+                Stmt {
+                    kind: StmtKind::Expression(parser.alloc(Expr {
+                        kind: ExprKind::Identifier(NameStr::__arena("static")),
+                        span: token.span,
+                    })),
+                    span,
+                }
             } else {
                 parse_expression_stmt(parser)
             }
