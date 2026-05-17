@@ -1,8 +1,9 @@
 ===config===
-expect_parser_silent=true
 min_php=8.5
 ===source===
 <?php (void)(void)$x;
+===errors===
+(void) cast cannot be used in an expression context
 ===ast===
 {
   "stmts": [

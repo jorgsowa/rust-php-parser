@@ -20,6 +20,7 @@ $x = (void) $y;
 'void cast' requires PHP 8.5 or higher (targeting PHP 8.4)
 'void cast' requires PHP 8.5 or higher (targeting PHP 8.4)
 'void cast' requires PHP 8.5 or higher (targeting PHP 8.4)
+(void) cast cannot be used in an expression context
 ===ast===
 {
   "stmts": [

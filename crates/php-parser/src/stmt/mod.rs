@@ -2449,10 +2449,70 @@ fn parse_expression_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         }
     }
 
+    // A void cast is invalid in a position where its result is consumed as a value.
+    // Valid: `(void)foo();` (statement), `(void)$a or $b;` (logical-op left).
+    // Invalid: `$x = (void)$y;`, `(void)1 + 2;`, `(void)(void)$x;`.
+    if let Some(span) = check_void_cast_stmt_expr(&expr) {
+        parser.error(ParseError::Forbidden {
+            message: "(void) cast cannot be used in an expression context".into(),
+            span,
+        });
+    }
+
     parser.expect_semicolon("expression");
     let span = Span::new(start, parser.previous_end());
     Stmt {
         kind: StmtKind::Expression(parser.alloc(expr)),
         span,
     }
+}
+
+/// Check for a void cast used as a value in an expression-statement context.
+/// At statement level, `(void)expr` is valid; as an operand of a logical-OR/AND
+/// chain it is also valid. Returns the span of a misused void cast, or None.
+fn check_void_cast_stmt_expr<'arena, 'src>(
+    expr: &Expr<'arena, 'src>,
+) -> Option<php_ast::span::Span> {
+    match &expr.kind {
+        ExprKind::Cast(CastKind::Void, inner) => find_void_cast_used_as_value(inner),
+        ExprKind::Binary(b)
+            if matches!(
+                b.op,
+                BinaryOp::LogicalOr
+                    | BinaryOp::LogicalAnd
+                    | BinaryOp::BooleanOr
+                    | BinaryOp::BooleanAnd
+                    | BinaryOp::LogicalXor
+            ) =>
+        {
+            check_void_cast_stmt_expr(b.left).or_else(|| find_void_cast_used_as_value(b.right))
+        }
+        _ => find_void_cast_used_as_value(expr),
+    }
+}
+
+/// Walk an expression subtree and return the span of the first void cast found.
+fn find_void_cast_used_as_value<'arena, 'src>(
+    expr: &Expr<'arena, 'src>,
+) -> Option<php_ast::span::Span> {
+    use php_ast::visitor::{walk_expr, Visitor};
+    use std::ops::ControlFlow;
+
+    struct VoidFinder {
+        found: Option<php_ast::span::Span>,
+    }
+    impl<'a, 's> Visitor<'a, 's> for VoidFinder {
+        fn visit_expr(&mut self, expr: &Expr<'a, 's>) -> ControlFlow<()> {
+            if matches!(expr.kind, ExprKind::Cast(CastKind::Void, _)) {
+                self.found = Some(expr.span);
+                ControlFlow::Break(())
+            } else {
+                walk_expr(self, expr)
+            }
+        }
+    }
+
+    let mut finder = VoidFinder { found: None };
+    let _ = finder.visit_expr(expr);
+    finder.found
 }
