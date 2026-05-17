@@ -991,6 +991,19 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             }
         }
 
+        // A parenthesized intersection `(A&B)` is only valid as part of a DNF union
+        // `(A&B)|C`. A standalone `(A&B)` without a following `|` is rejected by PHP.
+        // If `first` is an Intersection here, it must have come from `parse_type_element`'s
+        // parenthesized branch (parse_simple_type never produces Intersection).
+        if let TypeHintKind::Intersection(_) = &first.kind {
+            self.error(ParseError::Forbidden {
+                message:
+                    "A parenthesized intersection type can only be used as part of a union type"
+                        .into(),
+                span: first.span,
+            });
+        }
+
         first
     }
 

@@ -1,8 +1,9 @@
 ===config===
-expect_parser_silent=true
 min_php=8.2
 ===source===
 <?php function foo(): (self&Stringable) {}
+===errors===
+A parenthesized intersection type can only be used as part of a union type
 ===ast===
 {
   "stmts": [

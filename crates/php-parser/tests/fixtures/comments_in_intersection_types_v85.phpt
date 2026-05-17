@@ -1,5 +1,4 @@
 ===config===
-expect_parser_silent=true
 min_php=8.5
 ===source===
 <?php
@@ -18,6 +17,8 @@ class Test {
         return $param;
     }
 }
+===errors===
+A parenthesized intersection type can only be used as part of a union type
 ===ast===
 {
   "stmts": [
