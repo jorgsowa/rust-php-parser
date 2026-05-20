@@ -10,7 +10,9 @@ A fast, fault-tolerant PHP parser written in Rust. Produces a full typed AST wit
 [dependencies]
 php-rs-parser = "*"
 php-ast = "*"          # AST types and Visitor trait
-bumpalo = "*"          # arena allocator
+
+# Needed when using parse_arena(), the Visitor/Fold traits, or the printer
+bumpalo = "*"
 
 # Optional
 php-printer = "*"      # pretty-print AST back to PHP source
@@ -21,8 +23,7 @@ php-printer = "*"      # pretty-print AST back to PHP source
 ```rust
 use php_rs_parser::parse;
 
-let arena = bumpalo::Bump::new();
-let result = parse(&arena, "<?php echo 'Hello, world!';");
+let result = parse("<?php echo 'Hello, world!';");
 
 println!("{:#?}", result.program);
 
@@ -34,21 +35,13 @@ for err in &result.errors {
 let pos = result.source_map.offset_to_line_col(6);
 ```
 
-### Arena lifetime
-
-Every AST node is bump-allocated into `bumpalo::Bump`. The `'arena` lifetime on `ParseResult` borrows from the arena, so **the arena must outlive any reference into the AST**. Drop the arena to free all nodes at once:
-
-```rust
-let arena = bumpalo::Bump::new();
-let result = parse(&arena, "<?php $x = 1;");
-// use result...
-drop(result);
-drop(arena); // frees all AST memory in one shot
-```
+`parse` returns a [`ParseResult`] with no lifetime parameters — the AST is fully owned and can be stored anywhere.
 
 ## API Reference
 
-- **`parse()` / `parse_versioned()`** — main parser entry points; see [`docs.rs/php-rs-parser`](https://docs.rs/php-rs-parser)
+- **`parse()` / `parse_versioned()`** — main entry points; return a fully-owned `ParseResult` with no lifetime parameters. See [`docs.rs/php-rs-parser`](https://docs.rs/php-rs-parser)
+- **`parse_arena()` / `parse_arena_versioned()`** — arena-allocated variants for LSP servers and hot paths; return `ArenaParseResult<'arena, 'src>`
+- **`ParserContext`** — reusable context for repeated re-parses; wraps the arena API
 - **`Visitor` / `ScopeVisitor`** — AST traversal traits; see [`docs.rs/php-ast`](https://docs.rs/php-ast) for the visitor infrastructure
 - **`ParseError` variants** — see [`crates/php-parser/src/diagnostics.rs`](crates/php-parser/src/diagnostics.rs) for all variants and recovery behavior
 - **AST node types** — see [`docs.rs/php-ast/ast`](https://docs.rs/php-ast/latest/php_ast/ast/index.html) for the full set of statement, expression, and declaration nodes
@@ -62,9 +55,7 @@ The parser targets PHP 8.5 by default. Use `parse_versioned()` to target an earl
 ```rust
 use php_rs_parser::{parse_versioned, PhpVersion};
 
-let arena = bumpalo::Bump::new();
 let result = parse_versioned(
-    &arena,
     "<?php enum Status { case Active; }",
     PhpVersion::Php80,
 );
@@ -78,20 +69,33 @@ Supported versions: `Php74`, `Php80`, `Php81`, `Php82`, `Php83`, `Php84`, `Php85
 
 | Field | Type | Description |
 |---|---|---|
-| `program` | `Program` | The parsed AST. Always present, even when errors exist. |
+| `program` | `php_ast::owned::Program` | The parsed AST. Always present, even when errors exist. |
 | `errors` | `Vec<ParseError>` | Parse errors and diagnostics. Empty on success. |
 | `errors_truncated` | `bool` | `true` when the error list was capped. Treat the result as incomplete (relevant for linters). |
-| `source` | `&str` | The original source text. Slice spans directly: `&result.source[span.start as usize..span.end as usize]`. |
-| `comments` | `Vec<Comment>` | All comments in source order. Comments are **not** attached to AST nodes — map them to adjacent nodes by comparing spans. |
+| `source` | `String` | The original source text. Slice spans directly: `&result.source[span.start as usize..span.end as usize]`. |
+| `comments` | `Vec<php_ast::owned::Comment>` | All comments in source order. Comments are **not** attached to AST nodes — map them to adjacent nodes by comparing spans. |
 | `source_map` | `SourceMap` | Pre-computed line index. Use `offset_to_line_col(offset)` to convert byte offsets to `(line, col)`. |
+
+### Multi-file cache
+
+`ParseResult` has no lifetime parameters — store it directly in a `HashMap`, send it across threads, or hold it in a struct:
+
+```rust
+use std::collections::HashMap;
+use std::path::PathBuf;
+use php_rs_parser::{parse, ParseResult};
+
+let mut cache: HashMap<PathBuf, ParseResult> = HashMap::new();
+cache.insert(PathBuf::from("a.php"), parse("<?php echo 1;"));
+cache.insert(PathBuf::from("b.php"), parse("<?php echo 2;"));
+```
 
 ### Error recovery
 
 The parser never fails — it always produces a complete AST. When it cannot parse a statement, it emits a `ParseError` and inserts a `StmtKind::Error` node as a placeholder so the tree is structurally intact:
 
 ```rust
-let arena = bumpalo::Bump::new();
-let result = parse(&arena, "<?php function f() { $ }");
+let result = php_rs_parser::parse("<?php function f() { $ }");
 
 assert!(!result.errors.is_empty());  // parse error reported
 assert!(!result.program.stmts.is_empty()); // AST still produced
@@ -100,7 +104,7 @@ assert!(!result.program.stmts.is_empty()); // AST still produced
 
 ### Re-parsing (LSP / editor use)
 
-Use `ParserContext` when parsing the same document repeatedly (e.g. on every keystroke). It reuses the backing arena memory in O(1), avoiding allocator churn:
+Use `ParserContext` when parsing the same document repeatedly (e.g. on every keystroke). It reuses the backing arena memory in O(1), avoiding allocator churn. The returned `ArenaParseResult` borrows from the context's arena — drop it before the next re-parse:
 
 ```rust
 let mut ctx = php_rs_parser::ParserContext::new();
@@ -114,6 +118,17 @@ assert!(result.errors.is_empty());
 ```
 
 `reparse_versioned` is also available for targeting a specific PHP version.
+
+### Arena API
+
+When integrating with the printer or visitor (which take arena-allocated types), use `parse_arena` directly:
+
+```rust
+let arena = bumpalo::Bump::new();
+let result = php_rs_parser::parse_arena(&arena, "<?php echo 1;");
+// result.program is Program<'_, '_> — works with the printer and visitor traits
+let output = php_printer::pretty_print(&result.program);
+```
 
 ### Visitor API
 
@@ -167,7 +182,7 @@ impl<'arena, 'src> ScopeVisitor<'arena, 'src> for MethodCollector {
 }
 
 let arena = bumpalo::Bump::new();
-let result = parse(&arena, "<?php class Foo { function bar() {} }");
+let result = php_rs_parser::parse_arena(&arena, "<?php class Foo { function bar() {} }");
 let mut walker = ScopeWalker::new(result.source, MethodCollector { methods: vec![] });
 walker.walk(&result.program);
 // walker.into_inner().methods == ["Foo::bar"]
@@ -198,7 +213,7 @@ impl<'src> Fold<'src> for NegateInts {
 }
 
 let src_arena = Bump::new();
-let result = php_rs_parser::parse(&src_arena, "<?php $x = 1;");
+let result = php_rs_parser::parse_arena(&src_arena, "<?php $x = 1;");
 
 let out_arena = Bump::new();
 let transformed = NegateInts.fold_program(&out_arena, &result.program);
@@ -223,9 +238,9 @@ for param in find_tags(&doc, "param") {
 
 ```rust
 let arena = bumpalo::Bump::new();
-let result = php_rs_parser::parse(&arena, "<?php echo 1 + 2;");
+let result = php_rs_parser::parse_arena(&arena, "<?php echo 1 + 2;");
 let output = php_printer::pretty_print(&result.program);
-// output == "echo 1 + 2;"
+// output == "<?php\necho 1 + 2;"
 ```
 
 Use `pretty_print_file` to produce a complete file with a `<?php\n\n` prefix and trailing newline.
@@ -256,7 +271,7 @@ Four crates, one workspace:
 | Crate | crates.io | Purpose |
 |-------|-----------|---------|
 | **php-lexer** | [![crates.io](https://img.shields.io/crates/v/php-lexer)](https://crates.io/crates/php-lexer) | Hand-written tokenizer with handling for strings, heredoc/nowdoc, and inline HTML |
-| **php-ast** | [![crates.io](https://img.shields.io/crates/v/php-ast)](https://crates.io/crates/php-ast) | AST type definitions, `Visitor` trait, `ScopeVisitor` trait |
+| **php-ast** | [![crates.io](https://img.shields.io/crates/v/php-ast)](https://crates.io/crates/php-ast) | AST type definitions, `Visitor` trait, `ScopeVisitor` trait, owned (lifetime-free) AST types |
 | **php-rs-parser** | [![crates.io](https://img.shields.io/crates/v/php-rs-parser)](https://crates.io/crates/php-rs-parser) | Pratt-based recursive descent parser with panic-mode error recovery, PHPDoc parser, source map |
 | **php-printer** | [![crates.io](https://img.shields.io/crates/v/php-printer)](https://crates.io/crates/php-printer) | Pretty printer — converts an AST back to PHP source |
 

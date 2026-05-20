@@ -107,7 +107,7 @@ fn fixtures() {
 
         let actual = {
             let arena = bumpalo::Bump::new();
-            let result = php_rs_parser::parse(&arena, &fixture.source);
+            let result = php_rs_parser::parse_arena(&arena, &fixture.source);
             if fixture.no_source {
                 php_printer::pretty_print_with_config(&result.program, &fixture.config)
             } else {
@@ -143,7 +143,7 @@ fn fixtures() {
 
         // Also verify round-trip stability
         let arena1 = bumpalo::Bump::new();
-        let result1 = php_rs_parser::parse(&arena1, &fixture.source);
+        let result1 = php_rs_parser::parse_arena(&arena1, &fixture.source);
         let first = if fixture.no_source {
             php_printer::pretty_print_with_config(&result1.program, &fixture.config)
         } else {
@@ -155,7 +155,7 @@ fn fixtures() {
             )
         };
         let arena2 = bumpalo::Bump::new();
-        let result2 = php_rs_parser::parse(&arena2, &first);
+        let result2 = php_rs_parser::parse_arena(&arena2, &first);
         let second = if fixture.no_source {
             php_printer::pretty_print_with_config(&result2.program, &fixture.config)
         } else {
@@ -282,16 +282,16 @@ fn parser_corpus_round_trip() {
             let arena = bumpalo::Bump::new();
             let result = match header.min_php {
                 Some((maj, min)) => {
-                    php_rs_parser::parse_versioned(&arena, source, php_version(maj, min))
+                    php_rs_parser::parse_arena_versioned(&arena, source, php_version(maj, min))
                 }
-                None => php_rs_parser::parse(&arena, source),
+                None => php_rs_parser::parse_arena(&arena, source),
             };
             php_printer::pretty_print(&result.program)
         };
 
         let second_print = {
             let arena = bumpalo::Bump::new();
-            let result = php_rs_parser::parse(&arena, &first_print);
+            let result = php_rs_parser::parse_arena(&arena, &first_print);
             php_printer::pretty_print(&result.program)
         };
 
@@ -323,7 +323,7 @@ fn parser_corpus_round_trip() {
 #[test]
 fn pretty_print_file() {
     let arena = bumpalo::Bump::new();
-    let result = php_rs_parser::parse(&arena, "<?php echo 'hello';");
+    let result = php_rs_parser::parse_arena(&arena, "<?php echo 'hello';");
     let output = php_printer::pretty_print_file(&result.program);
     assert_eq!(output, "<?php\necho 'hello';\n");
 }

@@ -7,7 +7,7 @@ use bumpalo::Bump;
 use ignore::WalkBuilder;
 use php_ast::ast::*;
 use php_ast::visitor::{walk_class_member, walk_expr, walk_param, walk_stmt, Visitor};
-use php_rs_parser::parse;
+use php_rs_parser::parse_arena as parse;
 use rayon::prelude::*;
 use serde::Serialize;
 

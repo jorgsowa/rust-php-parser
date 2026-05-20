@@ -25,7 +25,7 @@ impl<'arena, 'src> Visitor<'arena, 'src> for NameCollector {
 /// Keeps the arena alive for the duration of the callback.
 fn with_parsed<F: for<'arena, 'src> FnOnce(&'src str, &Program<'arena, 'src>)>(src: &str, f: F) {
     let arena = bumpalo::Bump::new();
-    let result = php_rs_parser::parse(&arena, src);
+    let result = php_rs_parser::parse_arena(&arena, src);
     assert!(
         result.errors.is_empty(),
         "parse errors: {:?}",
@@ -887,7 +887,7 @@ fn walk_comments_visits_all_non_attached_comments() {
     let src =
         "<?php // line comment\n/** @param int $x */\nfunction foo(int $x) {}\n# hash comment";
     let arena = bumpalo::Bump::new();
-    let result = php_rs_parser::parse(&arena, src);
+    let result = php_rs_parser::parse_arena(&arena, src);
     assert!(result.errors.is_empty());
 
     struct CommentCollector {
@@ -911,7 +911,7 @@ fn walk_comments_visits_all_non_attached_comments() {
 fn scope_walker_delegates_visit_comment() {
     let src = "<?php // top-level comment\nclass Foo { public function bar() {} }";
     let arena = bumpalo::Bump::new();
-    let result = php_rs_parser::parse(&arena, src);
+    let result = php_rs_parser::parse_arena(&arena, src);
     assert!(result.errors.is_empty());
 
     struct ScopeCommentCollector<'src> {

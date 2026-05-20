@@ -933,14 +933,14 @@ mod tests {
     #[test]
     fn indented_heredoc_simple_var() {
         let arena = bumpalo::Bump::new();
-        let result = crate::parse(&arena, "<?php\n$x = <<<END\n    Hello $name!\n    END;\n");
+        let result = crate::parse_arena(&arena, "<?php\n$x = <<<END\n    Hello $name!\n    END;\n");
         assert!(result.errors.is_empty(), "{:?}", result.errors);
     }
 
     #[test]
     fn indented_heredoc_complex_interpolation() {
         let arena = bumpalo::Bump::new();
-        let result = crate::parse(
+        let result = crate::parse_arena(
             &arena,
             "<?php\n$x = <<<END\n    Hello {$obj->name}!\n    END;\n",
         );
@@ -950,7 +950,7 @@ mod tests {
     #[test]
     fn indented_heredoc_multiline_interpolation() {
         let arena = bumpalo::Bump::new();
-        let result = crate::parse(
+        let result = crate::parse_arena(
             &arena,
             "<?php\n$x = <<<END\n    Line 1 {$a}\n    Line 2 {$b}\n    END;\n",
         );
@@ -960,7 +960,8 @@ mod tests {
     #[test]
     fn indented_nowdoc() {
         let arena = bumpalo::Bump::new();
-        let result = crate::parse(&arena, "<?php\n$x = <<<'END'\n    Hello world!\n    END;\n");
+        let result =
+            crate::parse_arena(&arena, "<?php\n$x = <<<'END'\n    Hello world!\n    END;\n");
         assert!(result.errors.is_empty(), "{:?}", result.errors);
     }
 }

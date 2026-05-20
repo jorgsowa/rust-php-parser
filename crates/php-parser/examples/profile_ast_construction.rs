@@ -38,7 +38,7 @@ fn main() {
         let arena = bumpalo::Bump::with_capacity(src.len() * 5);
 
         let start = std::time::Instant::now();
-        let _ast = php_rs_parser::parse(&arena, src);
+        let _ast = php_rs_parser::parse_arena(&arena, src);
         let elapsed = start.elapsed();
         total_parse_time += elapsed;
 

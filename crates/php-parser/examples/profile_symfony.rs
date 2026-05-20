@@ -42,7 +42,7 @@ fn main() {
     for iteration in 0..30 {
         for src in &sources {
             let arena = bumpalo::Bump::with_capacity(src.len() * 5);
-            let _ = php_rs_parser::parse(&arena, src);
+            let _ = php_rs_parser::parse_arena(&arena, src);
         }
         if (iteration + 1) % 5 == 0 {
             println!("  Iteration {} / 30", iteration + 1);

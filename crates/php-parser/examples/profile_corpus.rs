@@ -56,7 +56,7 @@ fn analyze_corpus(base: &str, corpus_name: &str) {
         match std::fs::read_to_string(path) {
             Ok(contents) => {
                 total_bytes += contents.len() as u64;
-                php_rs_parser::parse(&arena, &contents);
+                php_rs_parser::parse_arena(&arena, &contents);
                 file_count += 1;
 
                 // Progress indicator

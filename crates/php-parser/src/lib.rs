@@ -26,8 +26,7 @@
 //! # Quick start
 //!
 //! ```
-//! let arena = bumpalo::Bump::new();
-//! let result = php_rs_parser::parse(&arena, "<?php echo 'hello';");
+//! let result = php_rs_parser::parse("<?php echo 'hello';");
 //! assert!(result.errors.is_empty());
 //! ```
 //!
@@ -38,21 +37,32 @@
 //! [`diagnostics::ParseError::VersionTooLow`] diagnostic is emitted.
 //!
 //! ```
-//! let arena = bumpalo::Bump::new();
 //! let result = php_rs_parser::parse_versioned(
-//!     &arena,
 //!     "<?php enum Status { case Active; }",
 //!     php_rs_parser::PhpVersion::Php80,
 //! );
 //! assert!(!result.errors.is_empty()); // enums require PHP 8.1
 //! ```
 //!
-//! # Reusing arenas across re-parses (LSP usage)
+//! # Multi-file cache
 //!
-//! Use [`ParserContext`] to avoid allocator churn when the same document is
-//! re-parsed on every edit. The context owns a `bumpalo::Bump` arena and resets
-//! it in O(1) before each parse, reusing the backing memory once it has grown
-//! to a stable size.
+//! [`parse`] returns a [`ParseResult`] with no lifetime parameters — fully
+//! owned, storable in a `HashMap`, sendable across threads.
+//!
+//! ```
+//! use std::collections::HashMap;
+//! use std::path::PathBuf;
+//!
+//! let mut cache: HashMap<PathBuf, php_rs_parser::ParseResult> = HashMap::new();
+//! cache.insert(PathBuf::from("a.php"), php_rs_parser::parse("<?php echo 1;"));
+//! ```
+//!
+//! # Arena API (LSP / hot-path usage)
+//!
+//! Use [`parse_arena`] / [`ParserContext`] when you need maximum throughput
+//! and can manage the arena lifetime yourself. The returned
+//! [`ArenaParseResult`] borrows from both the arena and the source string —
+//! no allocation copying occurs.
 //!
 //! ```
 //! let mut ctx = php_rs_parser::ParserContext::new();
@@ -76,12 +86,67 @@ pub(crate) mod stmt;
 pub mod version;
 
 use diagnostics::ParseError;
-use php_ast::{Comment, Program};
+use php_ast::owned::Comment as OwnedComment;
+use php_ast::{owned::to_owned_program, Comment, Program};
 use source_map::SourceMap;
 pub use version::PhpVersion;
 
-/// The result of parsing a PHP source string.
-pub struct ParseResult<'arena, 'src> {
+/// Lifetime-free result of parsing a PHP source string.
+///
+/// This is the primary return type of [`parse`] and [`parse_versioned`]. The
+/// AST is fully owned (`Box<str>`, `Box<[T]>`) so it can be stored in a
+/// `HashMap`, sent across threads, or cached alongside other data without
+/// fighting the borrow checker.
+///
+/// Use [`parse_arena`] or [`ParserContext`] when you need the arena-allocated
+/// form for maximum throughput in tight loops or LSP re-parse scenarios.
+pub struct ParseResult {
+    /// The original source text, owned.
+    pub source: String,
+    /// The parsed AST, fully owned with no lifetime parameters.
+    pub program: php_ast::owned::Program,
+    /// All comments found in the source, in source order. Doc-block comments
+    /// attached to a declaration are stored in the declaration node's
+    /// `doc_comment` field, not here.
+    pub comments: Vec<php_ast::owned::Comment>,
+    /// Parse errors and diagnostics. Empty on a successful parse.
+    pub errors: Vec<ParseError>,
+    /// `true` when the error list was capped and further errors were dropped.
+    pub errors_truncated: bool,
+    /// Pre-computed line index for span-to-line/column resolution.
+    pub source_map: SourceMap,
+}
+
+impl ParseResult {
+    fn from_arena_result(result: ArenaParseResult<'_, '_>) -> Self {
+        let program = to_owned_program(&result.program);
+        let comments = result
+            .comments
+            .iter()
+            .map(|c| OwnedComment {
+                kind: c.kind,
+                text: c.text.into(),
+                span: c.span,
+            })
+            .collect();
+        Self {
+            source: result.source.to_owned(),
+            program,
+            comments,
+            errors: result.errors,
+            errors_truncated: result.errors_truncated,
+            source_map: result.source_map,
+        }
+    }
+}
+
+/// Arena-allocated result of parsing a PHP source string.
+///
+/// Returned by [`parse_arena`], [`parse_arena_versioned`], and
+/// [`ParserContext::reparse`]. Both the AST and the source text are borrowed,
+/// so this type has two lifetime parameters. Use [`ParseResult`] (from
+/// [`parse`]) when you need an owned, lifetime-free result.
+pub struct ArenaParseResult<'arena, 'src> {
     /// The original source text. Useful for extracting text from spans
     /// via `&result.source[span.start as usize..span.end as usize]`.
     pub source: &'src str,
@@ -117,17 +182,46 @@ pub struct ParseResult<'arena, 'src> {
 
 /// Parse PHP `source` using the latest supported PHP version (currently 8.5).
 ///
+/// Returns a fully-owned [`ParseResult`] with no lifetime parameters. The
+/// internal arena is created, used, and converted within this call.
+///
+/// Use [`parse_arena`] when you need the raw arena-allocated AST for maximum
+/// throughput (no allocation copying).
+pub fn parse(source: &str) -> ParseResult {
+    let arena = bumpalo::Bump::new();
+    ParseResult::from_arena_result(parse_arena(&arena, source))
+}
+
+/// Parse `source` targeting the given PHP `version`.
+///
+/// Syntax that requires a higher version than `version` is still parsed and
+/// included in the AST, but a [`diagnostics::ParseError::VersionTooLow`] error
+/// is also emitted so callers can report it to the user.
+///
+/// Returns a fully-owned [`ParseResult`]. Use [`parse_arena_versioned`] for the
+/// arena form.
+pub fn parse_versioned(source: &str, version: PhpVersion) -> ParseResult {
+    let arena = bumpalo::Bump::new();
+    ParseResult::from_arena_result(parse_arena_versioned(&arena, source, version))
+}
+
+/// Parse PHP `source` using the latest supported PHP version, returning an
+/// arena-allocated [`ArenaParseResult`].
+///
 /// The `arena` is used for all AST allocations, giving callers control over
-/// memory lifetime. The returned [`ParseResult`] borrows from both the arena
-/// and the source string.
-pub fn parse<'arena, 'src>(
+/// memory lifetime. The returned result borrows from both the arena and the
+/// source string.
+///
+/// Prefer [`parse`] unless you are managing the arena yourself for performance
+/// reasons (e.g. LSP re-parsing with [`ParserContext`]).
+pub fn parse_arena<'arena, 'src>(
     arena: &'arena bumpalo::Bump,
     source: &'src str,
-) -> ParseResult<'arena, 'src> {
+) -> ArenaParseResult<'arena, 'src> {
     let mut parser = parser::Parser::new(arena, source);
     let program = parser.parse_program();
     let errors_truncated = parser.errors_truncated();
-    ParseResult {
+    ArenaParseResult {
         source,
         program,
         comments: parser.take_comments(),
@@ -137,20 +231,20 @@ pub fn parse<'arena, 'src>(
     }
 }
 
-/// Parse `source` targeting the given PHP `version`.
+/// Parse `source` targeting the given PHP `version`, returning an
+/// arena-allocated [`ArenaParseResult`].
 ///
-/// Syntax that requires a higher version than `version` is still parsed and
-/// included in the AST, but a [`diagnostics::ParseError::VersionTooLow`] error
-/// is also emitted so callers can report it to the user.
-pub fn parse_versioned<'arena, 'src>(
+/// See [`parse_arena`] for arena lifetime semantics and [`parse_versioned`] for
+/// version-gating behaviour.
+pub fn parse_arena_versioned<'arena, 'src>(
     arena: &'arena bumpalo::Bump,
     source: &'src str,
     version: PhpVersion,
-) -> ParseResult<'arena, 'src> {
+) -> ArenaParseResult<'arena, 'src> {
     let mut parser = parser::Parser::with_version(arena, source, version);
     let program = parser.parse_program();
     let errors_truncated = parser.errors_truncated();
-    ParseResult {
+    ArenaParseResult {
         source,
         program,
         comments: parser.take_comments(),
@@ -168,7 +262,7 @@ pub fn parse_versioned<'arena, 'src>(
 /// largest document seen, subsequent parses reuse the backing memory without
 /// any new allocations.
 ///
-/// The Rust lifetime system enforces safety: the returned [`ParseResult`]
+/// The Rust lifetime system enforces safety: the returned [`ArenaParseResult`]
 /// borrows from `self`, so the borrow checker prevents calling [`reparse`] or
 /// [`reparse_versioned`] again while the previous result is still alive.
 ///
@@ -201,13 +295,13 @@ impl ParserContext {
 
     /// Reset the arena and parse `source` using PHP 8.5 (the latest version).
     ///
-    /// The previous [`ParseResult`] **must be dropped** before calling this
-    /// method. The borrow checker enforces this: the returned result borrows
-    /// `self` for the duration of its lifetime, so a second call while the
-    /// first result is still live is a compile-time error.
-    pub fn reparse<'a, 'src>(&'a mut self, source: &'src str) -> ParseResult<'a, 'src> {
+    /// The previous [`ArenaParseResult`] **must be dropped** before calling
+    /// this method. The borrow checker enforces this: the returned result
+    /// borrows `self` for the duration of its lifetime, so a second call while
+    /// the first result is still live is a compile-time error.
+    pub fn reparse<'a, 'src>(&'a mut self, source: &'src str) -> ArenaParseResult<'a, 'src> {
         self.arena.reset();
-        parse(&self.arena, source)
+        parse_arena(&self.arena, source)
     }
 
     /// Reset the arena and parse `source` targeting the given PHP `version`.
@@ -217,9 +311,9 @@ impl ParserContext {
         &'a mut self,
         source: &'src str,
         version: PhpVersion,
-    ) -> ParseResult<'a, 'src> {
+    ) -> ArenaParseResult<'a, 'src> {
         self.arena.reset();
-        parse_versioned(&self.arena, source, version)
+        parse_arena_versioned(&self.arena, source, version)
     }
 }
 

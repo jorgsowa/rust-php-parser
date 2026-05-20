@@ -40,7 +40,7 @@ pub fn parse(source: &str, version: Option<String>) -> Result<JsValue, JsError> 
         .unwrap_or(php_rs_parser::PhpVersion::Php85);
 
     let arena = bumpalo::Bump::new();
-    let result = php_rs_parser::parse_versioned(&arena, source, php_version);
+    let result = php_rs_parser::parse_arena_versioned(&arena, source, php_version);
 
     let errors: Vec<WasmError> = result
         .errors
@@ -72,7 +72,7 @@ pub fn parse(source: &str, version: Option<String>) -> Result<JsValue, JsError> 
 #[wasm_bindgen]
 pub fn format(source: &str) -> String {
     let arena = bumpalo::Bump::new();
-    let result = php_rs_parser::parse(&arena, source);
+    let result = php_rs_parser::parse_arena(&arena, source);
     php_printer::pretty_print_with_comments(&result.program, source, &result.comments)
 }
 

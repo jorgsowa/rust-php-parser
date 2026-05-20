@@ -2,9 +2,7 @@ use rayon::prelude::*;
 use std::io::Write;
 use std::sync::Mutex;
 
-#[path = "common.rs"]
-mod common;
-use common::collect_phpt_files;
+use crate::common::collect_phpt_files;
 
 /// Returns true if the installed PHP is >= min.
 ///
@@ -164,7 +162,7 @@ fn fixture_files_are_valid_php() {
             .to_string_lossy()
             .to_string();
         let src = std::fs::read_to_string(path).unwrap();
-        let (min_php, source) = common::parse_fixture(&src);
+        let (min_php, source) = crate::common::parse_fixture(&src);
         let max_php = parse_max_php(&src);
         let php_error = parse_php_error(&src);
 

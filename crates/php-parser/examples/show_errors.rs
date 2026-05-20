@@ -21,7 +21,7 @@ fn dump(path: &Path) {
     };
     println!("=== {} ({} bytes) ===", path.display(), contents.len());
     let arena = bumpalo::Bump::new();
-    let r = php_rs_parser::parse(&arena, &contents);
+    let r = php_rs_parser::parse_arena(&arena, &contents);
     for e in &r.errors {
         let span = e.span();
         let (line, col) = line_col(&contents, span.start as usize);

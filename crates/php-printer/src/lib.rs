@@ -4,7 +4,7 @@
 //!
 //! ```
 //! let arena = bumpalo::Bump::new();
-//! let result = php_rs_parser::parse(&arena, "<?php echo 1 + 2;");
+//! let result = php_rs_parser::parse_arena(&arena, "<?php echo 1 + 2;");
 //! let output = php_printer::pretty_print(&result.program);
 //! assert_eq!(output, "<?php\necho 1 + 2;");
 //! ```

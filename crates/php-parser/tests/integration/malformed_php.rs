@@ -1,16 +1,18 @@
 //! Programmatic tests that cannot be expressed as static fixture files.
 //!
 //! All other error-case tests live in `tests/fixtures/errors/*.phpt` and are
-//! run automatically by `integration::fixtures()`.
+//! run automatically by `fixtures()`.
 
-#[path = "common.rs"]
-mod common;
-use common::format_errors;
+use crate::common::format_errors;
 
 /// Run a test on a large thread stack to avoid stack overflow on deeply nested input.
 fn with_large_stack<F: FnOnce() + Send + 'static>(f: F) {
+    with_stack(16 * 1024 * 1024, f);
+}
+
+fn with_stack<F: FnOnce() + Send + 'static>(bytes: usize, f: F) {
     std::thread::Builder::new()
-        .stack_size(16 * 1024 * 1024)
+        .stack_size(bytes)
         .spawn(f)
         .unwrap()
         .join()
@@ -19,7 +21,7 @@ fn with_large_stack<F: FnOnce() + Send + 'static>(f: F) {
 
 fn assert_has_errors(code: &str) {
     let arena = bumpalo::Bump::new();
-    let result = php_rs_parser::parse(&arena, code);
+    let result = php_rs_parser::parse_arena(&arena, code);
     assert!(
         !result.errors.is_empty(),
         "expected parse errors but got none for: {}...",
@@ -27,9 +29,18 @@ fn assert_has_errors(code: &str) {
     );
 }
 
+fn assert_has_errors_owned(code: &str) {
+    let result = php_rs_parser::parse(code);
+    assert!(
+        !result.errors.is_empty(),
+        "(owned) expected parse errors but got none for: {}...",
+        &code[..code.len().min(80)]
+    );
+}
+
 fn assert_depth_exceeded(code: &str) {
     let arena = bumpalo::Bump::new();
-    let result = php_rs_parser::parse(&arena, code);
+    let result = php_rs_parser::parse_arena(&arena, code);
     let msgs = format_errors(&result);
     assert!(
         msgs.contains("maximum expression nesting depth exceeded"),
@@ -37,13 +48,41 @@ fn assert_depth_exceeded(code: &str) {
     );
 }
 
+fn assert_depth_exceeded_owned(code: &str) {
+    let result = php_rs_parser::parse(code);
+    let msgs = result
+        .errors
+        .iter()
+        .map(|e| e.to_string())
+        .collect::<Vec<_>>()
+        .join("\n");
+    assert!(
+        msgs.contains("maximum expression nesting depth exceeded"),
+        "(owned) expected depth-limit error, got:\n{msgs}"
+    );
+}
+
 fn assert_no_errors(code: &str) {
     let arena = bumpalo::Bump::new();
-    let result = php_rs_parser::parse(&arena, code);
+    let result = php_rs_parser::parse_arena(&arena, code);
     assert!(
         result.errors.is_empty(),
         "unexpected errors: {}",
         format_errors(&result)
+    );
+}
+
+fn assert_no_errors_owned(code: &str) {
+    let result = php_rs_parser::parse(code);
+    assert!(
+        result.errors.is_empty(),
+        "(owned) unexpected errors: {}",
+        result
+            .errors
+            .iter()
+            .map(|e| e.to_string())
+            .collect::<Vec<_>>()
+            .join("\n")
     );
 }
 
@@ -59,9 +98,21 @@ fn deeply_nested_arrays_hit_depth_limit() {
 }
 
 #[test]
+fn deeply_nested_arrays_hit_depth_limit_owned() {
+    let nested = format!("<?php {}{};", "[".repeat(75), "]".repeat(75));
+    with_large_stack(move || assert_depth_exceeded_owned(&nested));
+}
+
+#[test]
 fn deeply_nested_parens_hit_depth_limit() {
     let nested = format!("<?php {}{};", "(".repeat(75), ")".repeat(75));
     with_large_stack(move || assert_depth_exceeded(&nested));
+}
+
+#[test]
+fn deeply_nested_parens_hit_depth_limit_owned() {
+    let nested = format!("<?php {}{};", "(".repeat(75), ")".repeat(75));
+    with_large_stack(move || assert_depth_exceeded_owned(&nested));
 }
 
 #[test]
@@ -75,6 +126,15 @@ fn deeply_nested_ternary_hit_depth_limit() {
 }
 
 #[test]
+fn deeply_nested_ternary_hit_depth_limit_owned() {
+    let nested = format!(
+        "<?php {};",
+        "$x ? ".repeat(75).to_string() + "1" + &" : 1".repeat(75)
+    );
+    with_large_stack(move || assert_depth_exceeded_owned(&nested));
+}
+
+#[test]
 fn deeply_nested_binary_ops_hit_depth_limit() {
     // $x + ($x + ($x + ... ))
     let nested = format!("<?php {}{};", "($x + ".repeat(75), ")".repeat(75));
@@ -82,10 +142,22 @@ fn deeply_nested_binary_ops_hit_depth_limit() {
 }
 
 #[test]
+fn deeply_nested_binary_ops_hit_depth_limit_owned() {
+    let nested = format!("<?php {}{};", "($x + ".repeat(75), ")".repeat(75));
+    with_large_stack(move || assert_depth_exceeded_owned(&nested));
+}
+
+#[test]
 fn deeply_nested_function_calls_hit_depth_limit() {
     // f(f(f(f(...))))
     let nested = format!("<?php {}{};", "f(".repeat(75), ")".repeat(75));
     with_large_stack(move || assert_depth_exceeded(&nested));
+}
+
+#[test]
+fn deeply_nested_function_calls_hit_depth_limit_owned() {
+    let nested = format!("<?php {}{};", "f(".repeat(75), ")".repeat(75));
+    with_large_stack(move || assert_depth_exceeded_owned(&nested));
 }
 
 #[test]
@@ -97,6 +169,14 @@ fn deeply_nested_match_hit_depth_limit() {
     with_large_stack(move || assert_depth_exceeded(&nested));
 }
 
+#[test]
+fn deeply_nested_match_hit_depth_limit_owned() {
+    let open = "match(".repeat(75);
+    let close = ") { default => 1 }".repeat(75);
+    let nested = format!("<?php {open}1{close};");
+    with_large_stack(move || assert_depth_exceeded_owned(&nested));
+}
+
 // ============================================================================
 // LARGE INPUT / REPETITIVE PATTERNS
 // Ensures the parser handles high volume without panicking or hanging.
@@ -106,8 +186,14 @@ fn deeply_nested_match_hit_depth_limit() {
 fn many_sequential_statements() {
     let code = format!("<?php {}", "$x = 1;\n".repeat(10_000));
     let arena = bumpalo::Bump::new();
-    let result = php_rs_parser::parse(&arena, &code);
+    let result = php_rs_parser::parse_arena(&arena, &code);
     assert!(result.errors.is_empty());
+}
+
+#[test]
+fn many_sequential_statements_owned() {
+    let code = format!("<?php {}", "$x = 1;\n".repeat(10_000));
+    assert_no_errors_owned(&code);
 }
 
 #[test]
@@ -119,10 +205,25 @@ fn very_long_concatenation_chain() {
 }
 
 #[test]
+fn very_long_concatenation_chain_owned() {
+    let parts: Vec<&str> = (0..5_000).map(|_| "\"a\"").collect();
+    let code = format!("<?php echo {};", parts.join(" . "));
+    // owned conversion recurses through a 5 000-deep binary-op tree; needs extra stack
+    with_stack(64 * 1024 * 1024, move || assert_no_errors_owned(&code));
+}
+
+#[test]
 fn many_function_parameters() {
     let params: Vec<String> = (0..500).map(|i| format!("$p{i}")).collect();
     let code = format!("<?php function f({}) {{}}", params.join(", "));
     assert_no_errors(&code);
+}
+
+#[test]
+fn many_function_parameters_owned() {
+    let params: Vec<String> = (0..500).map(|i| format!("$p{i}")).collect();
+    let code = format!("<?php function f({}) {{}}", params.join(", "));
+    assert_no_errors_owned(&code);
 }
 
 #[test]
@@ -133,6 +234,13 @@ fn many_array_elements() {
 }
 
 #[test]
+fn many_array_elements_owned() {
+    let elements: Vec<String> = (0..5_000).map(|i| i.to_string()).collect();
+    let code = format!("<?php [{}];", elements.join(", "));
+    assert_no_errors_owned(&code);
+}
+
+#[test]
 fn many_match_arms() {
     let arms: Vec<String> = (0..500).map(|i| format!("{i} => {i}")).collect();
     let code = format!("<?php match($x) {{ {} }};", arms.join(", "));
@@ -140,10 +248,24 @@ fn many_match_arms() {
 }
 
 #[test]
+fn many_match_arms_owned() {
+    let arms: Vec<String> = (0..500).map(|i| format!("{i} => {i}")).collect();
+    let code = format!("<?php match($x) {{ {} }};", arms.join(", "));
+    assert_no_errors_owned(&code);
+}
+
+#[test]
 fn many_method_chains() {
     let chain = "->m()".repeat(1_000);
     let code = format!("<?php $obj{chain};");
     assert_no_errors(&code);
+}
+
+#[test]
+fn many_method_chains_owned() {
+    let chain = "->m()".repeat(1_000);
+    let code = format!("<?php $obj{chain};");
+    with_large_stack(move || assert_no_errors_owned(&code));
 }
 
 #[test]
@@ -155,6 +277,15 @@ fn many_class_members() {
     assert_no_errors(&code);
 }
 
+#[test]
+fn many_class_members_owned() {
+    let members: Vec<String> = (0..500)
+        .map(|i| format!("public int $p{i} = {i};"))
+        .collect();
+    let code = format!("<?php class C {{ {} }}", members.join("\n"));
+    assert_no_errors_owned(&code);
+}
+
 // ============================================================================
 // NULL BYTES
 // Cannot be expressed in .phpt fixture files.
@@ -163,6 +294,11 @@ fn many_class_members() {
 #[test]
 fn null_bytes_in_source() {
     assert_has_errors("<?php $x = \0;");
+}
+
+#[test]
+fn null_bytes_in_source_owned() {
+    assert_has_errors_owned("<?php $x = \0;");
 }
 
 // ============================================================================
@@ -178,7 +314,15 @@ fn fuzz_crash_repro_double_quoted_multibyte_end() {
     let data = b"\x3c\x3f\x3c\x3f\x70\x68\x70\x20\x63\x6c\x61\x73\x12\x24\x78\x22\x68\x65\x20\x3d\x20\x5b\x74\x70\x68\x70\x20\xd7\x87";
     if let Ok(src) = std::str::from_utf8(data) {
         let arena = bumpalo::Bump::new();
-        let _ = php_rs_parser::parse(&arena, src);
+        let _ = php_rs_parser::parse_arena(&arena, src);
+    }
+}
+
+#[test]
+fn fuzz_crash_repro_double_quoted_multibyte_end_owned() {
+    let data = b"\x3c\x3f\x3c\x3f\x70\x68\x70\x20\x63\x6c\x61\x73\x12\x24\x78\x22\x68\x65\x20\x3d\x20\x5b\x74\x70\x68\x70\x20\xd7\x87";
+    if let Ok(src) = std::str::from_utf8(data) {
+        let _ = php_rs_parser::parse(src);
     }
 }
 
@@ -188,7 +332,13 @@ fn unterminated_double_quoted_ends_with_3byte_char() {
     // "世 — opening quote, then the first 2 of 3 bytes of 世 (0xE4 0xB8 0x96)
     let src = "<?php \"世\u{4E16}";
     let arena = bumpalo::Bump::new();
-    let _ = php_rs_parser::parse(&arena, src);
+    let _ = php_rs_parser::parse_arena(&arena, src);
+}
+
+#[test]
+fn unterminated_double_quoted_ends_with_3byte_char_owned() {
+    let src = "<?php \"世\u{4E16}";
+    let _ = php_rs_parser::parse(src);
 }
 
 /// Unterminated single-quoted string ending with a 2-byte UTF-8 character.
@@ -196,11 +346,17 @@ fn unterminated_double_quoted_ends_with_3byte_char() {
 fn unterminated_single_quoted_ends_with_multibyte_char() {
     let src = "<?php 'héllo"; // unterminated, ends with 'o' but has 2-byte é
     let arena = bumpalo::Bump::new();
-    let _ = php_rs_parser::parse(&arena, src);
+    let _ = php_rs_parser::parse_arena(&arena, src);
     // Variant: last char is the multi-byte one
     let src2 = "<?php 'hé"; // unterminated, last char is 2-byte é
     let arena2 = bumpalo::Bump::new();
-    let _ = php_rs_parser::parse(&arena2, src2);
+    let _ = php_rs_parser::parse_arena(&arena2, src2);
+}
+
+#[test]
+fn unterminated_single_quoted_ends_with_multibyte_char_owned() {
+    let _ = php_rs_parser::parse("<?php 'héllo");
+    let _ = php_rs_parser::parse("<?php 'hé");
 }
 
 /// Unterminated backtick string ending with a 2-byte UTF-8 character.
@@ -208,7 +364,12 @@ fn unterminated_single_quoted_ends_with_multibyte_char() {
 fn unterminated_backtick_ends_with_multibyte_char() {
     let src = "<?php `cmd é"; // unterminated backtick, last char is 2-byte
     let arena = bumpalo::Bump::new();
-    let _ = php_rs_parser::parse(&arena, src);
+    let _ = php_rs_parser::parse_arena(&arena, src);
+}
+
+#[test]
+fn unterminated_backtick_ends_with_multibyte_char_owned() {
+    let _ = php_rs_parser::parse("<?php `cmd é");
 }
 
 /// b-prefixed double-quoted string, unterminated, ending with multi-byte char.
@@ -216,5 +377,10 @@ fn unterminated_backtick_ends_with_multibyte_char() {
 fn unterminated_b_prefixed_double_quoted_ends_with_multibyte_char() {
     let src = "<?php b\"héllo"; // b-prefix, unterminated
     let arena = bumpalo::Bump::new();
-    let _ = php_rs_parser::parse(&arena, src);
+    let _ = php_rs_parser::parse_arena(&arena, src);
+}
+
+#[test]
+fn unterminated_b_prefixed_double_quoted_ends_with_multibyte_char_owned() {
+    let _ = php_rs_parser::parse("<?php b\"héllo");
 }

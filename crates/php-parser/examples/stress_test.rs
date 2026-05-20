@@ -108,7 +108,7 @@ fn run_corpus(name: &str, corpus_path: &Path) -> CorpusReport {
         let file_start = Instant::now();
         let result = catch_unwind(AssertUnwindSafe(|| {
             let arena = bumpalo::Bump::with_capacity(contents.len() * 5);
-            let r = php_rs_parser::parse(&arena, &contents);
+            let r = php_rs_parser::parse_arena(&arena, &contents);
             let first = r.errors.first().map(|e| format!("{}", e));
             (r.errors.len(), first)
         }));

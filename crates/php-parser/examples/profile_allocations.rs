@@ -61,7 +61,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let arena = bumpalo::Bump::with_capacity(src.len() * 5);
 
         // Parse the source
-        let _ = php_rs_parser::parse(&arena, src);
+        let _ = php_rs_parser::parse_arena(&arena, src);
 
         // Measure actual bytes used
         let used = arena.allocated_bytes();

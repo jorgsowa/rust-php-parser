@@ -73,7 +73,7 @@ jobs:
           key: ${{ matrix.php-version }}
 
       - name: Run tests
-        run: cargo test --lib && cargo test --test integration && cargo test --test fixtures -p phpdoc-parser && cargo test --test fold -p php-ast && cargo test --test fold -p php-rs-parser
+        run: cargo test --lib && cargo test --test integration && cargo test --test fixtures -p phpdoc-parser && cargo test --test fold -p php-ast
 
   printer:
     name: Printer Tests

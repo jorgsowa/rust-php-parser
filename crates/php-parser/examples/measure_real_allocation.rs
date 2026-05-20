@@ -56,7 +56,7 @@ fn analyze_corpus(base: &str, corpus_name: &str) {
             // Allocate arena with 5x pre-allocation (our current setting)
             let arena = bumpalo::Bump::with_capacity((source_size as usize) * 5);
             // Parse the file
-            let _ = php_rs_parser::parse(&arena, &contents);
+            let _ = php_rs_parser::parse_arena(&arena, &contents);
 
             let after = arena.allocated_bytes() as u64;
             let arena_size = after;

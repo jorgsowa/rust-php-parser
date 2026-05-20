@@ -72,7 +72,7 @@ fn analyze_patterns() {
         let arena = bumpalo::Bump::with_capacity(4096); // Start small to see growth
         let before = arena.allocated_bytes();
 
-        let _ = php_rs_parser::parse(&arena, code);
+        let _ = php_rs_parser::parse_arena(&arena, code);
 
         let after = arena.allocated_bytes();
         let allocated = after - before;
