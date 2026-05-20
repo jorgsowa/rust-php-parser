@@ -302,9 +302,8 @@ fn null_bytes_in_source_owned() {
 }
 
 // ============================================================================
-// UNTERMINATED STRINGS ENDING WITH MULTI-BYTE UTF-8 CHARACTERS
-// Slicing &str by byte index panics when the index lands inside a multi-byte
-// character (non-char boundary). These tests cover each string-literal kind.
+// FUZZ CRASH REPROS
+// Binary byte sequences that cannot be expressed in .phpt fixture files.
 // ============================================================================
 
 /// Original fuzzer crash: unterminated double-quoted string whose last bytes
@@ -324,63 +323,4 @@ fn fuzz_crash_repro_double_quoted_multibyte_end_owned() {
     if let Ok(src) = std::str::from_utf8(data) {
         let _ = php_rs_parser::parse(src);
     }
-}
-
-/// Unterminated double-quoted string ending mid-3-byte character (U+4E16 世).
-#[test]
-fn unterminated_double_quoted_ends_with_3byte_char() {
-    // "世 — opening quote, then the first 2 of 3 bytes of 世 (0xE4 0xB8 0x96)
-    let src = "<?php \"世\u{4E16}";
-    let arena = bumpalo::Bump::new();
-    let _ = php_rs_parser::parse_arena(&arena, src);
-}
-
-#[test]
-fn unterminated_double_quoted_ends_with_3byte_char_owned() {
-    let src = "<?php \"世\u{4E16}";
-    let _ = php_rs_parser::parse(src);
-}
-
-/// Unterminated single-quoted string ending with a 2-byte UTF-8 character.
-#[test]
-fn unterminated_single_quoted_ends_with_multibyte_char() {
-    let src = "<?php 'héllo"; // unterminated, ends with 'o' but has 2-byte é
-    let arena = bumpalo::Bump::new();
-    let _ = php_rs_parser::parse_arena(&arena, src);
-    // Variant: last char is the multi-byte one
-    let src2 = "<?php 'hé"; // unterminated, last char is 2-byte é
-    let arena2 = bumpalo::Bump::new();
-    let _ = php_rs_parser::parse_arena(&arena2, src2);
-}
-
-#[test]
-fn unterminated_single_quoted_ends_with_multibyte_char_owned() {
-    let _ = php_rs_parser::parse("<?php 'héllo");
-    let _ = php_rs_parser::parse("<?php 'hé");
-}
-
-/// Unterminated backtick string ending with a 2-byte UTF-8 character.
-#[test]
-fn unterminated_backtick_ends_with_multibyte_char() {
-    let src = "<?php `cmd é"; // unterminated backtick, last char is 2-byte
-    let arena = bumpalo::Bump::new();
-    let _ = php_rs_parser::parse_arena(&arena, src);
-}
-
-#[test]
-fn unterminated_backtick_ends_with_multibyte_char_owned() {
-    let _ = php_rs_parser::parse("<?php `cmd é");
-}
-
-/// b-prefixed double-quoted string, unterminated, ending with multi-byte char.
-#[test]
-fn unterminated_b_prefixed_double_quoted_ends_with_multibyte_char() {
-    let src = "<?php b\"héllo"; // b-prefix, unterminated
-    let arena = bumpalo::Bump::new();
-    let _ = php_rs_parser::parse_arena(&arena, src);
-}
-
-#[test]
-fn unterminated_b_prefixed_double_quoted_ends_with_multibyte_char_owned() {
-    let _ = php_rs_parser::parse("<?php b\"héllo");
 }
