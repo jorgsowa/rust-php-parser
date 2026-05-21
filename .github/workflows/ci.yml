@@ -49,7 +49,7 @@ jobs:
           key: ${{ matrix.php-version }}
 
       - name: Check PHP syntax in tests
-        run: cargo test --test integration -- php_syntax::
+        run: cargo test --test php_syntax
 
   test:
     name: Test (PHP ${{ matrix.php-version }})
@@ -73,7 +73,7 @@ jobs:
           key: ${{ matrix.php-version }}
 
       - name: Run tests
-        run: cargo test --lib && cargo test --test integration && cargo test --test fixtures -p phpdoc-parser && cargo test --test fold -p php-ast
+        run: cargo test --lib && cargo test --test integration && cargo test --test lexer -p php-lexer && cargo test --test fixtures -p phpdoc-parser && cargo test --test fold -p php-ast
 
   printer:
     name: Printer Tests

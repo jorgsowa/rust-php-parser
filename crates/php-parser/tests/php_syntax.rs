@@ -2,17 +2,65 @@ use rayon::prelude::*;
 use std::io::Write;
 use std::sync::Mutex;
 
-use crate::common::collect_phpt_files;
+fn collect_phpt_files(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
+    let mut paths = Vec::new();
+    for entry in std::fs::read_dir(dir).unwrap().filter_map(|e| e.ok()) {
+        let path = entry.path();
+        if path.is_dir() {
+            paths.extend(collect_phpt_files(&path));
+        } else if path.extension().is_some_and(|ext| ext == "phpt") {
+            paths.push(path);
+        }
+    }
+    paths
+}
 
-/// Returns true if the installed PHP is >= min.
-///
-/// `(8, 0)` (and anything below) is always met: the project floor is PHP 8.0,
-/// and `build.rs` only emits `php_min_81..php_min_85` cfg flags. Returning
-/// `false` from the catch-all would silently skip fixtures with
-/// `min_php=8.0` (e.g. `versioned/ternary_chaining_rejected_v80.phpt`) from
-/// the `php -l` suite.
+fn parse_fixture(content: &str) -> (Option<(u32, u32)>, &str) {
+    let parse_ver = |val: &str| -> Option<(u32, u32)> {
+        val.split_once('.')
+            .and_then(|(a, b)| Some((a.parse().ok()?, b.parse().ok()?)))
+    };
+
+    let mut min_php = None;
+
+    let source_marker = "===source===\n";
+    let source_pos = content.find(source_marker).unwrap_or(content.len());
+    let header = &content[..source_pos];
+
+    if let Some(cfg_start) = header.find("===config===\n") {
+        let after_cfg = &header[cfg_start + "===config===\n".len()..];
+        let cfg_end = after_cfg
+            .find("\n===")
+            .map(|p| p + 1)
+            .unwrap_or(after_cfg.len());
+        for line in after_cfg[..cfg_end].lines() {
+            if let Some(val) = line.strip_prefix("min_php=") {
+                min_php = parse_ver(val);
+            }
+        }
+    }
+
+    let rest = &content[source_pos..];
+    let after_source = rest.strip_prefix(source_marker).unwrap_or(rest);
+
+    let errors_pos = after_source.find("===errors===\n");
+    let ast_pos = after_source.find("===ast===\n");
+    let source_raw = match (errors_pos, ast_pos) {
+        (Some(e), Some(a)) => &after_source[..e.min(a)],
+        (Some(e), None) => &after_source[..e],
+        (None, Some(a)) => &after_source[..a],
+        (None, None) => after_source,
+    };
+    let source = if errors_pos.is_none() && ast_pos.is_none() {
+        source_raw
+    } else {
+        source_raw.strip_suffix('\n').unwrap_or(source_raw)
+    };
+
+    (min_php, source)
+}
+
 fn php_version_met(min: (u32, u32)) -> bool {
-    // Named constants prevent Clippy from folding cfg!() values into bool literals.
     const V81: bool = cfg!(php_min_81);
     const V82: bool = cfg!(php_min_82);
     const V83: bool = cfg!(php_min_83);
@@ -29,13 +77,7 @@ fn php_version_met(min: (u32, u32)) -> bool {
     }
 }
 
-/// Returns true if the installed PHP version is strictly greater than `max`.
-///
-/// The project floor is PHP 8.0, so any `max` below 8.0 (e.g. `max_php=7.4`
-/// on `versioned/real_cast_allowed_in_74_v74.phpt`) is always exceeded.
-/// `max_php=8.0` is exceeded iff the installed PHP is at least 8.1, etc.
 fn php_version_exceeded(max: (u32, u32)) -> bool {
-    // Named constants prevent Clippy from folding cfg!() values into bool literals.
     const V81: bool = cfg!(php_min_81);
     const V82: bool = cfg!(php_min_82);
     const V83: bool = cfg!(php_min_83);
@@ -52,9 +94,6 @@ fn php_version_exceeded(max: (u32, u32)) -> bool {
     }
 }
 
-/// Strip any trailing "Stack trace:\n#N {main}" block that PHP 8.5 appends to
-/// fatal-error output. Stored `===php_error===` values contain only the error
-/// line itself, so trimming the actual output keeps the comparison version-agnostic.
 fn strip_stack_trace(s: &str) -> String {
     let mut lines: Vec<&str> = s.lines().collect();
     while let Some(last) = lines.last() {
@@ -67,10 +106,6 @@ fn strip_stack_trace(s: &str) -> String {
     lines.join("\n")
 }
 
-/// Normalize identifier quote style in PHP error messages.
-/// PHP versions differ in whether they use single or double quotes around
-/// identifiers (e.g. `"static"` vs `'static'`). Normalizing to double quotes
-/// before comparing keeps the check version-agnostic.
 fn normalize_quotes(s: &str) -> String {
     s.replace('\'', "\"")
 }
@@ -92,7 +127,6 @@ fn php_lint(code: &str) -> std::process::Output {
     child.wait_with_output().unwrap()
 }
 
-/// Parse `max_php` from the `===config===` section of a fixture, if present.
 fn parse_max_php(content: &str) -> Option<(u32, u32)> {
     let parse_ver = |val: &str| -> Option<(u32, u32)> {
         val.split_once('.')
@@ -108,7 +142,6 @@ fn parse_max_php(content: &str) -> Option<(u32, u32)> {
     None
 }
 
-/// Extract the `===php_error===` section from fixture content, if present.
 fn parse_php_error(content: &str) -> Option<String> {
     content.find("===php_error===\n").map(|p| {
         let after = &content[p + "===php_error===\n".len()..];
@@ -116,16 +149,13 @@ fn parse_php_error(content: &str) -> Option<String> {
     })
 }
 
-/// Rewrite (or add) the `===php_error===` section of a fixture file.
 fn update_fixture_php_error(path: &str, actual: &str) {
     let content =
         std::fs::read_to_string(path).unwrap_or_else(|e| panic!("failed to read {path}: {e}"));
 
     let new_content = if let Some(p) = content.find("===php_error===\n") {
-        // Replace the existing section.
         format!("{}===php_error===\n{}\n", &content[..p], actual)
     } else {
-        // Append a new section.
         format!(
             "{}\n===php_error===\n{}\n",
             content.trim_end_matches('\n'),
@@ -136,14 +166,6 @@ fn update_fixture_php_error(path: &str, actual: &str) {
     std::fs::write(path, new_content).unwrap_or_else(|e| panic!("failed to write {path}: {e}"));
 }
 
-/// Validates every `.phpt` fixture file through `php -l`.
-///
-/// - Fixtures with `===php_error===`: asserts `php -l` rejects them and that the stderr
-///   matches the stored expected error. Run `UPDATE_FIXTURES=1 cargo test` to populate or
-///   refresh `===php_error===` sections.
-/// - All other fixtures: asserts `php -l` accepts them.
-///
-/// `===errors===` is about the Rust parser only and does not affect this test.
 #[cfg_attr(not(php_available), ignore)]
 #[test]
 fn fixture_files_are_valid_php() {
@@ -162,7 +184,7 @@ fn fixture_files_are_valid_php() {
             .to_string_lossy()
             .to_string();
         let src = std::fs::read_to_string(path).unwrap();
-        let (min_php, source) = crate::common::parse_fixture(&src);
+        let (min_php, source) = parse_fixture(&src);
         let max_php = parse_max_php(&src);
         let php_error = parse_php_error(&src);
 
@@ -180,7 +202,6 @@ fn fixture_files_are_valid_php() {
         let out = php_lint(source);
 
         if let Some(expected) = &php_error {
-            // Fixture declares PHP must reject it — assert it fails and message matches.
             if out.status.success() {
                 failures
                     .lock()
@@ -197,7 +218,6 @@ fn fixture_files_are_valid_php() {
                 ));
             }
         } else {
-            // No ===php_error=== — PHP must accept.
             if !out.status.success() {
                 let actual = strip_stack_trace(String::from_utf8_lossy(&out.stderr).trim());
                 if update {
