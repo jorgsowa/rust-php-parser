@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.14.0] - 2026-05-21
+
+### Added
+
+- Owned (lifetime-free) parse API: `parse()` and `parse_versioned()` return a fully-owned `ParseResult` with no lifetime parameters; existing arena API is now `parse_arena()` / `parse_arena_versioned()` (`php-rs-parser`).
+- `php_ast::owned` module — every AST type mirrored with `Box<str>` / `Box<[T]>` instead of arena references; JSON serialisation is byte-for-byte identical to arena types (`php-ast`).
+- `OwnedVisitor`, `OwnedScopeVisitor`, `OwnedScopeWalker`, and `walk_owned_*` free functions for traversing owned ASTs without managing lifetimes (`php-ast`).
+- `FoldOwned` trait and `fold_owned_*` free functions for transforming owned ASTs; identity defaults rebuild the tree identically (`php-ast`).
+- `pretty_print_owned`, `pretty_print_owned_file`, and related helpers for printing owned ASTs directly — converts owned→arena via a short-lived bump arena internally (`php-printer`).
+- `ParserContext::reparse_owned` and `reparse_owned_versioned` for lifetime-free re-parses (`php-rs-parser`).
+
+---
+
 ## [0.13.0] - 2026-05-17
 
 ### Added
