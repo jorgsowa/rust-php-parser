@@ -19,6 +19,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
+          targets: wasm32-unknown-unknown
 
       - uses: Swatinem/rust-cache@v2
 
@@ -27,6 +28,9 @@ jobs:
 
       - name: Clippy
         run: cargo clippy --workspace --tests -- -D warnings
+
+      - name: Build WASM crate
+        run: cargo build -p php-wasm --target wasm32-unknown-unknown
 
   php-syntax:
     name: PHP Syntax (${{ matrix.php-version }})
@@ -72,8 +76,23 @@ jobs:
         with:
           key: ${{ matrix.php-version }}
 
-      - name: Run tests
-        run: cargo test --lib && cargo test --test integration && cargo test --test lexer -p php-lexer && cargo test --test fixtures -p phpdoc-parser && cargo test --test fold -p php-ast
+      - name: Unit tests
+        run: cargo test --lib
+
+      - name: Doc tests
+        run: cargo test --doc --workspace
+
+      - name: Integration tests
+        run: cargo test --test integration
+
+      - name: Lexer tests
+        run: cargo test --test lexer -p php-lexer
+
+      - name: PHPDoc parser tests
+        run: cargo test --test fixtures -p phpdoc-parser
+
+      - name: AST fold tests
+        run: cargo test --test fold -p php-ast
 
   printer:
     name: Printer Tests
@@ -102,6 +121,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
 
       - uses: dtolnay/rust-toolchain@stable
         with:
