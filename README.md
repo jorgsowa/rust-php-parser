@@ -9,13 +9,11 @@ A fast, fault-tolerant PHP parser written in Rust. Produces a full typed AST wit
 ```toml
 [dependencies]
 php-rs-parser = "*"
-php-ast = "*"          # AST types and Visitor trait
-
-# Needed when using parse_arena(), the Visitor/Fold traits, or the printer
-bumpalo = "*"
+php-ast = "*"          # AST types and visitor/fold traits
 
 # Optional
 php-printer = "*"      # pretty-print AST back to PHP source
+bumpalo = "*"          # only needed when using parse_arena() directly
 ```
 
 ## Quick Start
@@ -41,8 +39,11 @@ let pos = result.source_map.offset_to_line_col(6);
 
 - **`parse()` / `parse_versioned()`** — main entry points; return a fully-owned `ParseResult` with no lifetime parameters. See [`docs.rs/php-rs-parser`](https://docs.rs/php-rs-parser)
 - **`parse_arena()` / `parse_arena_versioned()`** — arena-allocated variants for LSP servers and hot paths; return `ArenaParseResult<'arena, 'src>`
-- **`ParserContext`** — reusable context for repeated re-parses; wraps the arena API
-- **`Visitor` / `ScopeVisitor`** — AST traversal traits; see [`docs.rs/php-ast`](https://docs.rs/php-ast) for the visitor infrastructure
+- **`ParserContext`** — reusable context for repeated re-parses; `reparse_owned()` returns a lifetime-free `ParseResult`, `reparse()` returns the arena form
+- **`OwnedVisitor` / `OwnedScopeVisitor`** — traverse a `ParseResult` AST with no arena involved; see `php_ast::owned::visitor`
+- **`FoldOwned`** — transform a `ParseResult` AST into a new owned AST; see `php_ast::owned::fold`
+- **`Visitor` / `ScopeVisitor`** — arena-form traversal traits; see [`docs.rs/php-ast`](https://docs.rs/php-ast)
+- **`Fold`** — arena-form transformation trait; reads one arena, writes another
 - **`ParseError` variants** — see [`crates/php-parser/src/diagnostics.rs`](crates/php-parser/src/diagnostics.rs) for all variants and recovery behavior
 - **AST node types** — see [`docs.rs/php-ast/ast`](https://docs.rs/php-ast/latest/php_ast/ast/index.html) for the full set of statement, expression, and declaration nodes
 
@@ -104,11 +105,22 @@ assert!(!result.program.stmts.is_empty()); // AST still produced
 
 ### Re-parsing (LSP / editor use)
 
-Use `ParserContext` when parsing the same document repeatedly (e.g. on every keystroke). It reuses the backing arena memory in O(1), avoiding allocator churn. The returned `ArenaParseResult` borrows from the context's arena — drop it before the next re-parse:
+Use `ParserContext` when parsing the same document repeatedly (e.g. on every keystroke). It reuses the backing arena memory in O(1), avoiding allocator churn.
+
+`reparse_owned()` returns a fully-owned `ParseResult` — no lifetimes, no `drop` discipline required:
 
 ```rust
 let mut ctx = php_rs_parser::ParserContext::new();
 
+let a = ctx.reparse_owned("<?php echo 1;");
+let b = ctx.reparse_owned("<?php echo 2;"); // a can stay alive
+assert!(a.errors.is_empty());
+assert!(b.errors.is_empty());
+```
+
+`reparse()` returns an `ArenaParseResult` that borrows from the context arena. The borrow checker prevents calling `reparse` again while that result is alive — drop it first:
+
+```rust
 let result = ctx.reparse("<?php echo 1;");
 assert!(result.errors.is_empty());
 drop(result); // must be dropped before the next reparse
@@ -117,22 +129,73 @@ let result = ctx.reparse("<?php echo 2;");
 assert!(result.errors.is_empty());
 ```
 
-`reparse_versioned` is also available for targeting a specific PHP version.
+`reparse_versioned` and `reparse_owned_versioned` are also available for targeting a specific PHP version.
 
-### Arena API
+### Visitor API (owned)
 
-When integrating with the printer or visitor (which take arena-allocated types), use `parse_arena` directly:
+`OwnedVisitor` works directly on a `ParseResult` — no arena, no lifetime parameters. Override only the node types you care about:
 
 ```rust
-let arena = bumpalo::Bump::new();
-let result = php_rs_parser::parse_arena(&arena, "<?php echo 1;");
-// result.program is Program<'_, '_> — works with the printer and visitor traits
-let output = php_printer::pretty_print(&result.program);
+use php_ast::owned::visitor::{OwnedVisitor, walk_owned_expr};
+use php_ast::owned::{Expr, ExprKind};
+use std::ops::ControlFlow;
+
+struct VarCounter { count: usize }
+
+impl OwnedVisitor for VarCounter {
+    fn visit_expr(&mut self, expr: &Expr) -> ControlFlow<()> {
+        if matches!(&expr.kind, ExprKind::Variable(_)) {
+            self.count += 1;
+        }
+        walk_owned_expr(self, expr)
+    }
+}
+
+let result = php_rs_parser::parse("<?php $x = $y + $z;");
+let mut v = VarCounter { count: 0 };
+v.visit_program(&result.program);
+assert_eq!(v.count, 3);
 ```
 
-### Visitor API
+Return `ControlFlow::Break(())` to stop traversal early. Return `ControlFlow::Continue(())` without calling `walk_owned_*` to skip a subtree.
 
-Implement `Visitor` to walk the AST depth-first. Override only the node types you care about; the default implementations recurse into children automatically.
+#### Scope-aware owned traversal
+
+Use `OwnedScopeVisitor` + `OwnedScopeWalker` when you need to know **which namespace, class, or function** you are currently inside:
+
+```rust
+use php_ast::owned::visitor::{OwnedScopeVisitor, OwnedScopeWalker, OwnedScope};
+use php_ast::owned::{ClassMember, ClassMemberKind};
+use std::ops::ControlFlow;
+
+struct MethodCollector { methods: Vec<String> }
+
+impl OwnedScopeVisitor for MethodCollector {
+    fn visit_class_member(
+        &mut self,
+        member: &ClassMember,
+        scope: &OwnedScope,
+    ) -> ControlFlow<()> {
+        if let ClassMemberKind::Method(m) = &member.kind {
+            self.methods.push(format!(
+                "{}::{}",
+                scope.class_name.as_deref().unwrap_or("<anon>"),
+                m.name,
+            ));
+        }
+        ControlFlow::Continue(())
+    }
+}
+
+let result = php_rs_parser::parse("<?php class Foo { function bar() {} }");
+let mut walker = OwnedScopeWalker::new(MethodCollector { methods: vec![] });
+walker.walk(&result.program);
+// walker.into_inner().methods == ["Foo::bar"]
+```
+
+### Visitor API (arena)
+
+Use the arena `Visitor` when you need maximum throughput and manage the arena lifetime yourself:
 
 ```rust
 use php_ast::visitor::{Visitor, walk_expr};
@@ -151,11 +214,7 @@ impl<'arena, 'src> Visitor<'arena, 'src> for VarCounter {
 }
 ```
 
-Return `ControlFlow::Break(())` to stop traversal early. Return `ControlFlow::Continue(())` without calling `walk_*` to skip a subtree.
-
-### Scope-aware traversal
-
-Use `ScopeVisitor` + `ScopeWalker` when your visitor needs to know **which namespace, class, or function** it is currently inside. Every visit method receives a `Scope` with that context:
+Use `ScopeVisitor` + `ScopeWalker` for scope-aware arena traversal:
 
 ```rust
 use php_ast::visitor::{ScopeVisitor, ScopeWalker, Scope};
@@ -188,13 +247,33 @@ walker.walk(&result.program);
 // walker.into_inner().methods == ["Foo::bar"]
 ```
 
-Use plain `Visitor` when you don't need namespace/class/function context.
+### AST transformation — FoldOwned
 
-### AST transformation (Fold)
+`FoldOwned` transforms a `ParseResult` AST into a new owned AST. Override only the node types you want to change; all others are rebuilt identically:
 
-`Fold` is the transformation counterpart of `Visitor`. Where `Visitor` reads a tree in place, `Fold` rebuilds it — reading from an input arena and writing into a new output arena. This is the correct design for arena-allocated ASTs: in-place mutation would break the arena lifetime invariant.
+```rust
+use php_ast::owned::fold::{FoldOwned, fold_owned_expr};
+use php_ast::owned::{Expr, ExprKind};
 
-Implement `Fold` and override only the node types you want to change. All other nodes are rebuilt identically by the default implementations:
+struct NegateInts;
+
+impl FoldOwned for NegateInts {
+    fn fold_expr(&mut self, expr: &Expr) -> Expr {
+        if let ExprKind::Int(n) = &expr.kind {
+            return Expr { kind: ExprKind::Int(-n), span: expr.span };
+        }
+        fold_owned_expr(self, expr)
+    }
+}
+
+let result = php_rs_parser::parse("<?php $x = 1;");
+let transformed = NegateInts.fold_program(&result.program);
+// transformed is a new owned::Program with all integers negated
+```
+
+### AST transformation — Fold (arena)
+
+`Fold` is the arena-form transformation trait. It reads from one arena and writes into a new output arena — the correct design for arena-allocated ASTs where in-place mutation would break lifetime invariants:
 
 ```rust
 use bumpalo::Bump;
@@ -236,18 +315,29 @@ for param in find_tags(&doc, "param") {
 
 ### Pretty printer
 
+`pretty_print_owned` works directly on a `ParseResult` — no arena needed:
+
+```rust
+let result = php_rs_parser::parse("<?php echo 1 + 2;");
+let output = php_printer::pretty_print_owned(&result.program);
+// output == "<?php\necho 1 + 2;"
+```
+
+Use `pretty_print_owned_file` to append a trailing newline. Use `pretty_print_owned_with_config` for custom indentation.
+
+When using the arena API (e.g. inside an LSP handler that already holds an `ArenaParseResult`), use the arena-form functions directly to avoid an extra conversion:
+
 ```rust
 let arena = bumpalo::Bump::new();
 let result = php_rs_parser::parse_arena(&arena, "<?php echo 1 + 2;");
 let output = php_printer::pretty_print(&result.program);
-// output == "<?php\necho 1 + 2;"
 ```
-
-Use `pretty_print_file` to produce a complete file with a `<?php\n\n` prefix and trailing newline.
 
 To preserve comments in the output, use `pretty_print_with_comments`:
 
 ```rust
+let arena = bumpalo::Bump::new();
+let result = php_rs_parser::parse_arena(&arena, "<?php // comment\necho 1;");
 let output = php_printer::pretty_print_with_comments(
     &result.program,
     result.source,
@@ -261,7 +351,7 @@ To customise indentation or newlines, pass a `PrinterConfig`:
 use php_printer::{PrinterConfig, Indent};
 
 let config = PrinterConfig { indent: Indent::Spaces(2), ..Default::default() };
-let output = php_printer::pretty_print_with_config(&result.program, &config);
+let output = php_printer::pretty_print_owned_with_config(&result.program, &config);
 ```
 
 ## Architecture
@@ -271,11 +361,21 @@ Four crates, one workspace:
 | Crate | crates.io | Purpose |
 |-------|-----------|---------|
 | **php-lexer** | [![crates.io](https://img.shields.io/crates/v/php-lexer)](https://crates.io/crates/php-lexer) | Hand-written tokenizer with handling for strings, heredoc/nowdoc, and inline HTML |
-| **php-ast** | [![crates.io](https://img.shields.io/crates/v/php-ast)](https://crates.io/crates/php-ast) | AST type definitions, `Visitor` trait, `ScopeVisitor` trait, owned (lifetime-free) AST types |
+| **php-ast** | [![crates.io](https://img.shields.io/crates/v/php-ast)](https://crates.io/crates/php-ast) | AST type definitions; arena `Visitor`/`ScopeVisitor`/`Fold` traits; owned (lifetime-free) `OwnedVisitor`/`OwnedScopeVisitor`/`FoldOwned` traits |
 | **php-rs-parser** | [![crates.io](https://img.shields.io/crates/v/php-rs-parser)](https://crates.io/crates/php-rs-parser) | Pratt-based recursive descent parser with panic-mode error recovery, PHPDoc parser, source map |
-| **php-printer** | [![crates.io](https://img.shields.io/crates/v/php-printer)](https://crates.io/crates/php-printer) | Pretty printer — converts an AST back to PHP source |
+| **php-printer** | [![crates.io](https://img.shields.io/crates/v/php-printer)](https://crates.io/crates/php-printer) | Pretty printer — converts an AST back to PHP source; supports both arena and owned AST |
 
-Source flows through `Lexer → Parser → arena-allocated AST nodes`. The lexer is lazy (tokens produced on demand with peeking slots); the parser is Pratt-based recursive descent with panic-mode error recovery.
+Source flows through `Lexer → Parser → arena-allocated AST nodes`. The lexer is lazy (tokens produced on demand with peeking slots); the parser is Pratt-based recursive descent with panic-mode error recovery. The owned AST (`php_ast::owned`) provides lifetime-free mirrors of every node type, enabling storage and manipulation without arena lifetime constraints.
+
+**When to use the arena API vs. the owned API:**
+
+| Use case | Recommended API |
+|---|---|
+| One-shot parsing, CLI tools, batch processing | `parse()` → `ParseResult` (owned) |
+| Store results in `HashMap`, send across threads | `parse()` → `ParseResult` (owned) |
+| Walk or transform a `ParseResult` | `OwnedVisitor` / `FoldOwned` |
+| LSP server, repeated re-parses | `ParserContext::reparse_owned()` or `reparse()` |
+| Maximum throughput, arena lifetime under your control | `parse_arena()` → arena `Visitor` / `Fold` |
 
 ## Performance
 

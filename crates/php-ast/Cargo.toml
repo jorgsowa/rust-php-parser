@@ -14,3 +14,6 @@ readme = "../../README.md"
 [dependencies]
 serde = { workspace = true }
 bumpalo = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }

@@ -315,6 +315,28 @@ impl ParserContext {
         self.arena.reset();
         parse_arena_versioned(&self.arena, source, version)
     }
+
+    /// Reset the arena and parse `source`, returning a fully-owned [`ParseResult`].
+    ///
+    /// Unlike [`reparse`](ParserContext::reparse), the returned result has no
+    /// lifetime parameters and can be stored anywhere. The arena is reused for
+    /// the parse but the output is immediately converted to owned types, so
+    /// there is no borrow on `self` after this call returns.
+    pub fn reparse_owned(&mut self, source: &str) -> ParseResult {
+        self.arena.reset();
+        ParseResult::from_arena_result(parse_arena(&self.arena, source))
+    }
+
+    /// Reset the arena and parse `source` targeting the given PHP `version`,
+    /// returning a fully-owned [`ParseResult`].
+    ///
+    /// See [`reparse_owned`](ParserContext::reparse_owned) for ownership notes
+    /// and [`reparse_versioned`](ParserContext::reparse_versioned) for version
+    /// semantics.
+    pub fn reparse_owned_versioned(&mut self, source: &str, version: PhpVersion) -> ParseResult {
+        self.arena.reset();
+        ParseResult::from_arena_result(parse_arena_versioned(&self.arena, source, version))
+    }
 }
 
 impl Default for ParserContext {
