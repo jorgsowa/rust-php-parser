@@ -944,6 +944,16 @@ pub fn to_owned_expr(expr: &arena_ast::Expr<'_, '_>) -> Expr {
     owned_expr(expr)
 }
 
+/// Convert an arena-allocated [`Name`](crate::ast::Name) into a [`Name`].
+pub fn to_owned_name(name: &arena_ast::Name<'_, '_>) -> Name {
+    owned_name(name)
+}
+
+/// Convert an arena-allocated [`TypeHint`](crate::ast::TypeHint) into a [`TypeHint`].
+pub fn to_owned_type_hint(hint: &arena_ast::TypeHint<'_, '_>) -> TypeHint {
+    owned_type_hint(hint)
+}
+
 fn owned_expr(expr: &arena_ast::Expr<'_, '_>) -> Expr {
     Expr {
         kind: owned_expr_kind(&expr.kind),

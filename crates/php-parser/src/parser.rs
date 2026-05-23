@@ -1648,23 +1648,39 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         // Pass 3: `use` statement diagnostics — non-compound name warnings and
         // duplicate alias detection (per UseKind scope, per top-level / per
         // braced namespace body).
-        self.validate_use_scope(stmts);
+        self.validate_use_scope(stmts, None);
         for stmt in stmts {
             if let StmtKind::Namespace(decl) = stmt.kind {
                 if let php_ast::NamespaceBody::Braced(inner) = &decl.body {
-                    self.validate_use_scope(inner);
+                    self.validate_use_scope(inner, decl.name.as_ref());
                 }
             }
         }
     }
 
-    fn validate_use_scope(&mut self, stmts: &[Stmt<'arena, 'src>]) {
+    fn validate_use_scope(
+        &mut self,
+        stmts: &[Stmt<'arena, 'src>],
+        namespace: Option<&php_ast::Name<'arena, 'src>>,
+    ) {
         use std::collections::HashSet;
         // Intra-statement duplicates (incl. group-use) are caught at parse time
         // in `parse_use_items`; this pass closes the cross-statement gap and
         // emits non-compound-name warnings.
         let mut seen: HashSet<(u8, &'src str)> = HashSet::new();
+        let mut current_namespace: Option<&php_ast::Name<'arena, 'src>> = namespace;
+
         for stmt in stmts {
+            // For top-level calls, track when we enter an unbraced namespace.
+            if namespace.is_none() {
+                if let StmtKind::Namespace(decl) = stmt.kind {
+                    if matches!(decl.body, php_ast::NamespaceBody::Simple) {
+                        current_namespace = decl.name.as_ref();
+                    }
+                    continue;
+                }
+            }
+
             let StmtKind::Use(decl) = &stmt.kind else {
                 continue;
             };
@@ -1680,7 +1696,13 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 let effective_alias = item
                     .alias
                     .unwrap_or_else(|| parts.last().copied().unwrap_or(""));
-                if item.alias.is_none() && parts.len() == 1 {
+                // Warn only if it's a non-compound name and we're in global scope.
+                // Global scope = namespace is None (passed from top-level call).
+                if item.alias.is_none()
+                    && parts.len() == 1
+                    && namespace.is_none()
+                    && current_namespace.is_none()
+                {
                     self.error(ParseError::ForbiddenWarning {
                         message: format!(
                             "The use statement with non-compound name '{}' has no effect",
