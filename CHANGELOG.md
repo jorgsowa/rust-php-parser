@@ -5,11 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.15.0] - 2026-05-28
+
+### Added
+
+- `Block` AST node and `StmtKind::Block`; always-braced bodies (function, method, closure, try/catch/finally, braced namespace, property-hook block) now hold a `Block`, so "this body is a block" is enforced by the type rather than an out-of-band invariant (`php-ast`).
+- `ClassBody`/`EnumBody`/`SwitchBody` wrappers and brace/keyword offset fields (`else_kw_start`, `finally_kw_start`, match brace, trait-use adaptations brace). Position data is `#[serde(skip)]` and `Block` is `#[serde(transparent)]`, so serialized AST is unchanged (`php-ast`).
+- `visit_block`, `fold_block`, `owned_block`, and `av_block` to thread `Block` through both visitors, both folds, and the owned↔arena conversions (`php-ast`).
 
 ### Fixed
 
-- Multiline `@tag` bodies now join continuation lines with a newline instead of a space, so a type expression and its description stay on separate lines (e.g. `@var T` followed by an indented description) and callers can split them on the boundary (`phpdoc-parser`).
+- Printer preserves a comment that sits immediately before `{`, `else`, `finally`, or the `while` of a do-while (and other braced/keyword positions) instead of dropping or misplacing it (`php-printer`).
+- Multiline `@tag` bodies now join continuation lines with a newline instead of a space, so a type expression and its description stay on separate lines (e.g. `@var T` followed by an indented description) and consumers of `body_text`/`text_content` can split them on the boundary (`phpdoc-parser`).
+
+---
 
 ## [0.14.1] - 2026-05-23
 
