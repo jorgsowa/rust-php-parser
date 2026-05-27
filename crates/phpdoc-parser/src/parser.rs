@@ -232,15 +232,15 @@ fn parse_tags(lines: &[CleanLine]) -> Vec<PhpDocTag> {
 // Text builders
 // =============================================================================
 
-/// How a [`PhpDocTextBuilder`] treats blank source lines.
+/// What blank source lines mean to a [`PhpDocTextBuilder`].
 #[derive(Clone, Copy)]
 enum BlankLinePolicy {
-    /// Drop blank lines entirely — no separator, no break. Used for tag bodies,
-    /// which are a single logical value with no paragraph structure.
-    Drop,
-    /// Keep blank lines as line boundaries, so consecutive blanks become `\n\n`
-    /// paragraph breaks. Used for descriptions.
-    Keep,
+    /// Blank lines carry no meaning — dropped entirely, no separator or break.
+    /// Used for tag bodies, which are a single logical value with no paragraphs.
+    Insignificant,
+    /// A blank line is a paragraph separator, so consecutive blanks become `\n\n`.
+    /// Used for descriptions.
+    ParagraphBreak,
 }
 
 /// Accumulates trimmed source lines into a single [`PhpDocText`].
@@ -276,7 +276,7 @@ impl PhpDocTextBuilder {
         let trimmed = text.trim();
 
         if trimmed.is_empty() {
-            if let BlankLinePolicy::Keep = self.blank_policy {
+            if let BlankLinePolicy::ParagraphBreak = self.blank_policy {
                 if self.started {
                     push_text(&mut self.segments, "\n");
                 }
@@ -320,7 +320,7 @@ fn tag_body_to_text(
     first_piece: Option<(&str, u32)>,
     continuation: &[&CleanLine],
 ) -> Option<PhpDocText> {
-    let mut builder = PhpDocTextBuilder::new(BlankLinePolicy::Drop);
+    let mut builder = PhpDocTextBuilder::new(BlankLinePolicy::Insignificant);
     if let Some((text, base)) = first_piece {
         builder.push_line(text, base);
     }
@@ -334,7 +334,7 @@ fn tag_body_to_text(
 ///
 /// Lines are joined with `\n`; blank lines produce `\n\n` paragraph breaks.
 fn description_to_text(lines: &[&CleanLine]) -> Option<PhpDocText> {
-    let mut builder = PhpDocTextBuilder::new(BlankLinePolicy::Keep);
+    let mut builder = PhpDocTextBuilder::new(BlankLinePolicy::ParagraphBreak);
     for line in lines {
         builder.push_line(&line.text, line.base_offset);
     }
