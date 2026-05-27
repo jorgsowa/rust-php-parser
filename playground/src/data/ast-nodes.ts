@@ -68,7 +68,8 @@ export const astNodes: AstNode[] = [
       { name: 'extends', type: 'Option<Name>', description: 'Parent class', optional: true },
       { name: 'implements', type: 'Vec<Name>', description: 'Interfaces' },
       { name: 'members', type: 'Vec<ClassMember>', description: 'Properties, methods, constants' },
-      { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' }
+      { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
     ]
   },
   {
@@ -163,7 +164,9 @@ export const astNodes: AstNode[] = [
       { name: 'name', type: 'Ident', description: 'Enum name' },
       { name: 'scalar_type', type: 'Option<Name>', description: 'Backing type (int or string)', optional: true },
       { name: 'implements', type: 'Vec<Name>', description: 'Implemented interfaces' },
-      { name: 'members', type: 'Vec<EnumMember>', description: 'Cases and methods' }
+      { name: 'members', type: 'Vec<EnumMember>', description: 'Cases and methods' },
+      { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
     ]
   },
   {
@@ -225,9 +228,10 @@ export const astNodes: AstNode[] = [
       { name: 'name', type: 'Ident', description: 'Function name' },
       { name: 'by_ref', type: 'bool', description: 'Returns by reference (&function)' },
       { name: 'params', type: 'Vec<Param>', description: 'Function parameters' },
-      { name: 'body', type: 'Vec<Stmt>', description: 'Function body' },
+      { name: 'body', type: 'Block', description: 'Function body' },
       { name: 'return_type', type: 'Option<TypeHint>', description: 'Return type', optional: true },
-      { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' }
+      { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
     ]
   },
   {
@@ -320,7 +324,9 @@ export const astNodes: AstNode[] = [
     fields: [
       { name: 'name', type: 'Ident', description: 'Interface name' },
       { name: 'extends', type: 'Vec<Name>', description: 'Parent interfaces' },
-      { name: 'members', type: 'Vec<ClassMember>', description: 'Methods' }
+      { name: 'members', type: 'Vec<ClassMember>', description: 'Methods' },
+      { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
     ]
   },
   {
@@ -432,7 +438,9 @@ export const astNodes: AstNode[] = [
     },
     fields: [
       { name: 'name', type: 'Ident', description: 'Trait name' },
-      { name: 'members', type: 'Vec<ClassMember>', description: 'Methods and properties' }
+      { name: 'members', type: 'Vec<ClassMember>', description: 'Methods and properties' },
+      { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
     ]
   },
   {
@@ -448,9 +456,9 @@ export const astNodes: AstNode[] = [
       finally: ['finally {\n  echo $done;\n}']
     },
     fields: [
-      { name: 'body', type: 'Vec<Stmt>', description: 'Try block' },
+      { name: 'body', type: 'Block', description: 'Try block' },
       { name: 'catches', type: 'Vec<CatchClause>', description: 'Catch clauses' },
-      { name: 'finally', type: 'Option<Vec<Stmt>>', description: 'Finally block', optional: true }
+      { name: 'finally', type: 'Option<Block>', description: 'Finally block', optional: true }
     ]
   },
   {
@@ -513,9 +521,13 @@ export const astNodes: AstNode[] = [
       members: ['private string $value;', 'public function method() {}']
     },
     fields: [
+      { name: 'name', type: 'Option<Ident>', description: 'Class name (always None for anonymous class expressions)', optional: true },
+      { name: 'modifiers', type: 'ClassModifiers', description: 'Class modifiers (readonly, etc.)' },
       { name: 'extends', type: 'Option<Name>', description: 'Parent class', optional: true },
       { name: 'implements', type: 'Vec<Name>', description: 'Interfaces' },
-      { name: 'members', type: 'Vec<ClassMember>', description: 'Properties and methods' }
+      { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' },
+      { name: 'members', type: 'Vec<ClassMember>', description: 'Properties and methods' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
     ]
   },
   {
@@ -701,16 +713,16 @@ export const astNodes: AstNode[] = [
     group: 'Class/Object Operations',
     name: 'CloneWith',
     description: 'Clone with property overrides (PHP 8.5+)',
-    phpExample: `clone($obj, id: $newId, status: "active");`,
+    phpExample: `clone($obj, ['id' => $newId, 'status' => "active"]);`,
     phpVersion: '8.5+',
     keywordInExample: 'clone',
     fieldHighlights: {
       object: ['$obj'],
-      properties: ['id: $newId', 'status: "active"']
+      with: ["['id' => $newId, 'status' => \"active\"]"]
     },
     fields: [
       { name: 'object', type: 'Expr', description: 'Object to clone' },
-      { name: 'properties', type: 'Vec<PropertyPair>', description: 'Property overrides' }
+      { name: 'with', type: 'Expr', description: 'Array of property overrides' }
     ]
   },
   {
@@ -735,7 +747,7 @@ export const astNodes: AstNode[] = [
       { name: 'params', type: 'Vec<Param>', description: 'Parameters' },
       { name: 'use_vars', type: 'Vec<ClosureUseVar>', description: 'Use variables' },
       { name: 'return_type', type: 'Option<TypeHint>', description: 'Return type', optional: true },
-      { name: 'body', type: 'Vec<Stmt>', description: 'Function body' },
+      { name: 'body', type: 'Block', description: 'Function body' },
       { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' }
     ]
   },
@@ -913,10 +925,10 @@ export const astNodes: AstNode[] = [
     group: 'Variables & Values',
     name: 'MagicConst',
     description: 'Magic constant (__LINE__, __FILE__, etc)',
-    phpExample: `__LINE__;\n__FILE__;\n__DIR__;\n__FUNCTION__;\n__CLASS__;\n__TRAIT__;\n__METHOD__;\n__NAMESPACE__;`,
-    keywordInExample: ['__LINE__', '__FILE__', '__DIR__', '__FUNCTION__', '__CLASS__', '__TRAIT__', '__METHOD__', '__NAMESPACE__'],
+    phpExample: `__LINE__;\n__FILE__;\n__DIR__;\n__FUNCTION__;\n__CLASS__;\n__TRAIT__;\n__METHOD__;\n__NAMESPACE__;\n// Inside a property hook (PHP 8.4+):\n__PROPERTY__;`,
+    keywordInExample: ['__LINE__', '__FILE__', '__DIR__', '__FUNCTION__', '__CLASS__', '__TRAIT__', '__METHOD__', '__NAMESPACE__', '__PROPERTY__'],
     fieldHighlights: {
-      kind: ['__LINE__', '__FILE__', '__DIR__', '__FUNCTION__', '__CLASS__', '__TRAIT__', '__METHOD__', '__NAMESPACE__']
+      kind: ['__LINE__', '__FILE__', '__DIR__', '__FUNCTION__', '__CLASS__', '__TRAIT__', '__METHOD__', '__NAMESPACE__', '__PROPERTY__']
     },
     fields: [
       { name: 'kind', type: 'MagicConstKind', description: 'Magic constant type' }
@@ -1310,7 +1322,9 @@ export const astNodes: AstNode[] = [
       { name: 'visibility', type: 'Option<Visibility>', description: 'Visibility', optional: true },
       { name: 'is_final', type: 'bool', description: 'Is final' },
       { name: 'type_hint', type: 'Option<TypeHint>', description: 'Type hint', optional: true },
-      { name: 'value', type: 'Expr', description: 'Constant value' }
+      { name: 'value', type: 'Expr', description: 'Constant value' },
+      { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
     ]
   },
   {
@@ -1326,7 +1340,9 @@ export const astNodes: AstNode[] = [
     },
     fields: [
       { name: 'name', type: 'Ident', description: 'Case name' },
-      { name: 'value', type: 'Option<Expr>', description: 'Case value (backed enums)', optional: true }
+      { name: 'value', type: 'Option<Expr>', description: 'Case value (backed enums)', optional: true },
+      { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
     ]
   },
   {
@@ -1355,7 +1371,9 @@ export const astNodes: AstNode[] = [
       { name: 'by_ref', type: 'bool', description: 'Returns by reference (&method)' },
       { name: 'params', type: 'Vec<Param>', description: 'Parameters' },
       { name: 'return_type', type: 'Option<TypeHint>', description: 'Return type', optional: true },
-      { name: 'body', type: 'Option<Vec<Stmt>>', description: 'Method body', optional: true }
+      { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' },
+      { name: 'body', type: 'Option<Block>', description: 'Method body (None for abstract/interface methods)', optional: true },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
     ]
   },
   {
@@ -1413,7 +1431,10 @@ export const astNodes: AstNode[] = [
       { name: 'is_static', type: 'bool', description: 'Is static' },
       { name: 'is_readonly', type: 'bool', description: 'Is readonly' },
       { name: 'type_hint', type: 'Option<TypeHint>', description: 'Type hint', optional: true },
-      { name: 'default', type: 'Option<Expr>', description: 'Default value', optional: true }
+      { name: 'default', type: 'Option<Expr>', description: 'Default value', optional: true },
+      { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' },
+      { name: 'hooks', type: 'Vec<PropertyHook>', description: 'Property hooks (PHP 8.4+)' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
     ]
   },
   {
@@ -1432,10 +1453,11 @@ export const astNodes: AstNode[] = [
     },
     fields: [
       { name: 'kind', type: 'PropertyHookKind', description: 'Get or Set' },
-      { name: 'body', type: 'PropertyHookBody', description: 'Hook implementation' },
+      { name: 'body', type: 'PropertyHookBody', description: 'Hook implementation (Block, Expression, or Abstract)' },
       { name: 'is_final', type: 'bool', description: 'Is final' },
       { name: 'by_ref', type: 'bool', description: 'Returns by reference (get only)' },
-      { name: 'params', type: 'Vec<Param>', description: 'Parameters (set only)' }
+      { name: 'params', type: 'Vec<Param>', description: 'Parameters (set only)' },
+      { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' }
     ]
   },
   // ========== TYPES ==========
@@ -1579,7 +1601,7 @@ export const astNodes: AstNode[] = [
     fields: [
       { name: 'types', type: 'Vec<Name>', description: 'Caught exception types' },
       { name: 'var', type: 'Option<string>', description: 'Catch variable name', optional: true },
-      { name: 'body', type: 'Vec<Stmt>', description: 'Catch block' }
+      { name: 'body', type: 'Block', description: 'Catch block' }
     ]
   },
   {
@@ -1613,7 +1635,8 @@ export const astNodes: AstNode[] = [
     fields: [
       { name: 'name', type: 'Ident', description: 'Constant name' },
       { name: 'value', type: 'Expr', description: 'Constant value' },
-      { name: 'attributes', type: 'Vec<Attribute>', description: 'Attributes' }
+      { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
     ]
   },
   {

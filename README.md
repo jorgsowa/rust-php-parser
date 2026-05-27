@@ -29,8 +29,10 @@ for err in &result.errors {
     println!("error at {:?}: {}", err.span(), err);
 }
 
-// Resolve byte offsets to line/column
+// Resolve byte offsets to 0-based line/column
 let pos = result.source_map.offset_to_line_col(6);
+// pos.to_one_based() → (line, col) for diagnostics
+// result.source_map.span_to_line_col(span) → LineColSpan { start, end }
 ```
 
 `parse` returns a [`ParseResult`] with no lifetime parameters — the AST is fully owned and can be stored anywhere.
@@ -41,10 +43,10 @@ let pos = result.source_map.offset_to_line_col(6);
 |---|---|---|
 | `program` | `php_ast::owned::Program` | The parsed AST. Always present, even when errors exist. |
 | `errors` | `Vec<ParseError>` | Parse errors and diagnostics. Empty on success. |
-| `errors_truncated` | `bool` | `true` when the error list was capped. |
-| `source` | `String` | The original source text. Slice spans: `&result.source[span.start as usize..span.end as usize]`. |
-| `comments` | `Vec<php_ast::owned::Comment>` | All comments in source order, not attached to AST nodes. |
-| `source_map` | `SourceMap` | Pre-computed line index for `offset_to_line_col`. |
+| `errors_truncated` | `bool` | `true` when the error list was capped and further errors were dropped. |
+| `source` | `String` | The original source text. Slice a span: `&result.source[span.start as usize..span.end as usize]`. |
+| `comments` | `Vec<php_ast::owned::Comment>` | All comments in source order. Does not include `/** */` doc-block comments attached to a declaration — those are in the declaration node's `doc_comment` field. The two collections are disjoint. |
+| `source_map` | `SourceMap` | Pre-computed line index. `offset_to_line_col(offset)` and `span_to_line_col(span)` both return 0-based `LineCol`. Call `.to_one_based()` for human-readable 1-based positions. |
 
 ## Usage
 
@@ -77,7 +79,9 @@ assert!(!result.program.stmts.is_empty());
 
 ### Re-parsing (LSP / editor use)
 
-`ParserContext` reuses the backing arena in O(1) across repeated parses. `reparse_owned()` returns a fully-owned `ParseResult`:
+`ParserContext` resets its backing arena in O(1) between parses instead of reallocating. Two variants are available:
+
+- `reparse_owned()` — returns a fully-owned `ParseResult` with no lifetime parameters; previous results stay alive:
 
 ```rust
 let mut ctx = php_rs_parser::ParserContext::new();
@@ -85,7 +89,15 @@ let a = ctx.reparse_owned("<?php echo 1;");
 let b = ctx.reparse_owned("<?php echo 2;"); // a stays alive
 ```
 
-`reparse_versioned` and `reparse_owned_versioned` are also available.
+- `reparse()` — returns an arena-allocated `ArenaParseResult` that borrows from `ctx`; the previous result **must be dropped** before calling again:
+
+```rust
+let result = ctx.reparse("<?php echo 1;");
+drop(result); // required before next reparse
+let result = ctx.reparse("<?php echo 2;");
+```
+
+Versioned forms `reparse_versioned` and `reparse_owned_versioned` are also available.
 
 ### Visitor API
 
@@ -114,11 +126,13 @@ assert_eq!(v.count, 3);
 
 Return `ControlFlow::Break(())` to stop early. Return `ControlFlow::Continue(())` without calling `walk_owned_*` to skip a subtree.
 
-Use `OwnedScopeVisitor` + `OwnedScopeWalker` when you need to know which namespace, class, or function you are currently inside — every visit method receives an `OwnedScope`. See [`docs.rs/php-ast`](https://docs.rs/php-ast) for details.
+Use `OwnedScopeVisitor` + `OwnedScopeWalker` when you need to know which namespace, class, or function you are currently inside — every visit method receives an `OwnedScope` with the current namespace, class name, and function/method name. See [`docs.rs/php-ast`](https://docs.rs/php-ast) for details.
+
+For arena-allocated ASTs from `parse_arena()`, use the `Visitor`/`ScopeVisitor` traits from `php_ast::visitor` instead. `ScopeWalker::new` requires passing the source string (`result.source`) for zero-alloc namespace tracking.
 
 ### AST transformation
 
-`FoldOwned` rebuilds the AST, letting you transform specific nodes. Override only what you need; all other nodes are rebuilt identically:
+`FoldOwned` rebuilds the owned AST, letting you transform specific nodes. Override only what you need; all other nodes are rebuilt identically:
 
 ```rust
 use php_ast::owned::{FoldOwned, fold_owned_expr, Expr, ExprKind};
@@ -138,6 +152,8 @@ let result = php_rs_parser::parse("<?php $x = 1;");
 let transformed = NegateInts.fold_program(&result.program);
 ```
 
+For arena-allocated ASTs from `parse_arena()`, use the `Fold<'src>` trait from `php_ast::fold`. It reads from a source arena and writes into a destination arena, leaving the source unchanged.
+
 ### Pretty printer
 
 ```rust
@@ -155,7 +171,7 @@ let config = PrinterConfig { indent: Indent::Spaces(2), ..Default::default() };
 let output = php_printer::pretty_print_owned_with_config(&result.program, &config);
 ```
 
-To preserve comments:
+To preserve comments, pass the source and comment list from `ParseResult`:
 
 ```rust
 let output = php_printer::pretty_print_owned_with_comments(
@@ -165,20 +181,58 @@ let output = php_printer::pretty_print_owned_with_comments(
 );
 ```
 
+Both variants accept an optional `PrinterConfig`:
+- `pretty_print_owned_with_comments_and_config` — comments + custom config
+- `pretty_print_with_comments` / `pretty_print_with_comments_and_config` — arena equivalents for use with `parse_arena()`
+
 ### PHPDoc parser
 
+The `phpdoc_parser` crate (re-exported as `php_rs_parser::phpdoc`) parses `/** */` doc-block comments into a structured AST. It is tag-agnostic — tag bodies are exposed as raw text so callers can apply their own type parsers.
+
 ```rust
-use php_rs_parser::phpdoc::{parse, find_tags, body_text};
+use php_rs_parser::phpdoc::{parse, find_tag, find_tags, body_text, text_content, inline_tags};
 
 let doc = parse("/** @param int $x The value\n * @return bool */");
-for param in find_tags(&doc, "param") {
+
+// Find the first @param tag
+if let Some(param) = find_tag(&doc, "param") {
     println!("{}", body_text(&param.body).unwrap_or_default()); // "int $x The value"
+}
+
+// Iterate all @param tags
+for param in find_tags(&doc, "param") {
+    let body = body_text(&param.body).unwrap_or_default();
+}
+
+// Reconstruct full text of the summary (including inline tags)
+if let Some(summary) = &doc.summary {
+    let text = text_content(summary);
+    // Inline {@link ...} and {@see ...} tags are included as {@name body}
+    for tag in inline_tags(summary) {
+        println!("inline tag: {}", tag.name);
+    }
 }
 ```
 
+Doc-block comments attached to a declaration (`function`, `class`, `method`, `property`, `const`, enum `case`) are stored in the declaration node's `doc_comment` field in the AST and are not present in `ParseResult::comments`. Use `php_rs_parser::phpdoc::parse(comment.text)` to parse them.
+
 ### Arena API
 
-For maximum throughput or when you already hold an `ArenaParseResult` (e.g. inside an LSP hot path), use `parse_arena()` and the arena-form `Visitor` / `Fold` / `pretty_print` functions. See [`docs.rs/php-ast`](https://docs.rs/php-ast) for the arena visitor and fold traits.
+When you already hold an `ArenaParseResult` (e.g. inside an LSP hot path), use `parse_arena()` directly:
+
+```rust
+let arena = bumpalo::Bump::new();
+let result = php_rs_parser::parse_arena(&arena, "<?php echo 1;");
+let output = php_printer::pretty_print(&result.program);
+// With comments:
+let output = php_printer::pretty_print_with_comments(
+    &result.program,
+    result.source,
+    &result.comments,
+);
+```
+
+The arena-form `Visitor`, `ScopeVisitor`, and `Fold<'src>` traits operate directly on `Program<'arena, 'src>` without any conversion. See [`docs.rs/php-ast`](https://docs.rs/php-ast) for the full arena visitor and fold API.
 
 ## Architecture
 
@@ -186,22 +240,23 @@ For maximum throughput or when you already hold an `ArenaParseResult` (e.g. insi
 |-------|-----------|---------|
 | **php-lexer** | [![crates.io](https://img.shields.io/crates/v/php-lexer)](https://crates.io/crates/php-lexer) | Hand-written tokenizer with handling for strings, heredoc/nowdoc, and inline HTML |
 | **php-ast** | [![crates.io](https://img.shields.io/crates/v/php-ast)](https://crates.io/crates/php-ast) | AST type definitions; arena `Visitor`/`ScopeVisitor`/`Fold` traits; owned `OwnedVisitor`/`OwnedScopeVisitor`/`FoldOwned` traits |
-| **php-rs-parser** | [![crates.io](https://img.shields.io/crates/v/php-rs-parser)](https://crates.io/crates/php-rs-parser) | Pratt-based recursive descent parser with panic-mode error recovery, PHPDoc parser, source map |
+| **php-rs-parser** | [![crates.io](https://img.shields.io/crates/v/php-rs-parser)](https://crates.io/crates/php-rs-parser) | Pratt-based recursive descent parser with panic-mode error recovery, source map; re-exports `phpdoc-parser` as `php_rs_parser::phpdoc` |
+| **phpdoc-parser** | [![crates.io](https://img.shields.io/crates/v/phpdoc-parser)](https://crates.io/crates/phpdoc-parser) | Standalone structural PHPDoc block parser — tag-agnostic, no external dependencies |
 | **php-printer** | [![crates.io](https://img.shields.io/crates/v/php-printer)](https://crates.io/crates/php-printer) | Pretty printer — converts AST back to PHP source; supports both arena and owned AST |
 
 Source flows through `Lexer → Parser → arena-allocated AST nodes`. The lexer is lazy (tokens produced on demand with peeking slots); the parser is Pratt-based recursive descent with panic-mode error recovery. The owned AST (`php_ast::owned`) provides lifetime-free mirrors of every node type for storage and manipulation without arena lifetime constraints.
 
 ## Performance
 
-**The fastest full-featured PHP parser.** Optimised for modern PHP applications with full typing (PHP 7.4+, 8.x). For comparative benchmarks against other PHP parsers see [php-parser-benchmark](https://github.com/jorgsowa/php-parser-benchmark).
+Optimised for full-typing PHP 7.4+ and 8.x codebases. For comparative benchmarks against other PHP parsers see [php-parser-benchmark](https://github.com/jorgsowa/php-parser-benchmark).
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for build instructions, testing, and contributor guides.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for build instructions, testing, and the contributor guide.
 
 ## Acknowledgements
 
-Inspired by and indebted to [nikic/PHP-Parser](https://github.com/nikic/PHP-Parser) — test corpus fixtures were adapted from its test suite. Thanks to the PHP community contributors.
+Built on the shoulders of [nikic/PHP-Parser](https://github.com/nikic/PHP-Parser) — test corpus fixtures were adapted from its test suite. Thanks to the PHP community contributors.
 
 ## License
 
