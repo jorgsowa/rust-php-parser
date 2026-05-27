@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- Multiline `@tag` bodies now join continuation lines with a newline instead of a space, so a type expression and its description stay on separate lines (e.g. `@var T` followed by an indented description) and callers can split them on the boundary (`phpdoc-parser`).
+
 ## [0.14.1] - 2026-05-23
 
 ### Fixed

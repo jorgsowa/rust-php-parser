@@ -232,91 +232,113 @@ fn parse_tags(lines: &[CleanLine]) -> Vec<PhpDocTag> {
 // Text builders
 // =============================================================================
 
+/// How a [`PhpDocTextBuilder`] treats blank source lines.
+#[derive(Clone, Copy)]
+enum BlankLinePolicy {
+    /// Drop blank lines entirely — no separator, no break. Used for tag bodies,
+    /// which are a single logical value with no paragraph structure.
+    Drop,
+    /// Keep blank lines as line boundaries, so consecutive blanks become `\n\n`
+    /// paragraph breaks. Used for descriptions.
+    Keep,
+}
+
+/// Accumulates trimmed source lines into a single [`PhpDocText`].
+///
+/// Each non-blank line is trimmed, scanned for `{@inline}` tags at its own true
+/// source offset (so spans stay accurate across lines), and appended after a `\n`
+/// separator. The running [`Span`] covers the first through last non-blank line.
+/// Blank-line handling is governed by [`BlankLinePolicy`].
+struct PhpDocTextBuilder {
+    segments: Vec<TextSegment>,
+    span_start: Option<u32>,
+    span_end: u32,
+    blank_policy: BlankLinePolicy,
+    /// Whether any line has been pushed yet — controls the leading separator so
+    /// the first line never gets a `\n` in front of it.
+    started: bool,
+}
+
+impl PhpDocTextBuilder {
+    fn new(blank_policy: BlankLinePolicy) -> Self {
+        Self {
+            segments: Vec::new(),
+            span_start: None,
+            span_end: 0,
+            blank_policy,
+            started: false,
+        }
+    }
+
+    /// Push one source line. `text` is the raw (untrimmed) line and `base` is the
+    /// source offset of its first byte.
+    fn push_line(&mut self, text: &str, base: u32) {
+        let trimmed = text.trim();
+
+        if trimmed.is_empty() {
+            if let BlankLinePolicy::Keep = self.blank_policy {
+                if self.started {
+                    push_text(&mut self.segments, "\n");
+                }
+                self.started = true;
+            }
+            return;
+        }
+
+        if self.started {
+            push_text(&mut self.segments, "\n");
+        }
+        self.started = true;
+
+        let leading = (text.len() - text.trim_start().len()) as u32;
+        let content_offset = base + leading;
+        if self.span_start.is_none() {
+            self.span_start = Some(content_offset);
+        }
+        self.span_end = content_offset + trimmed.len() as u32;
+        merge_into(
+            &mut self.segments,
+            text_from_str(trimmed, content_offset).segments,
+        );
+    }
+
+    fn build(self) -> Option<PhpDocText> {
+        self.span_start.map(|start| PhpDocText {
+            segments: self.segments,
+            span: Span::new(start, self.span_end),
+        })
+    }
+}
+
 /// Build a [`PhpDocText`] for a `@tag` body.
 ///
 /// `first_piece` is `Some((text, base_offset))` for the text on the `@tag` line
-/// itself (after the tag name). Continuation lines follow. Pieces are joined with
-/// a single space; each piece is scanned for inline tags at its own true offset,
-/// so spans are accurate even on multi-line tag bodies.
+/// itself (after the tag name); continuation lines follow. Lines are joined with
+/// a newline, preserving line boundaries so callers can separate a type
+/// expression from its description (e.g. `@var T\nThe description`).
 fn tag_body_to_text(
     first_piece: Option<(&str, u32)>,
     continuation: &[&CleanLine],
 ) -> Option<PhpDocText> {
-    let mut segments: Vec<TextSegment> = Vec::new();
-    let mut span_start: Option<u32> = None;
-    let mut span_end: u32 = 0;
-
+    let mut builder = PhpDocTextBuilder::new(BlankLinePolicy::Drop);
     if let Some((text, base)) = first_piece {
-        let trimmed = text.trim();
-        if !trimmed.is_empty() {
-            let leading = (text.len() - text.trim_start().len()) as u32;
-            let real_base = base + leading;
-            span_start = Some(real_base);
-            span_end = real_base + trimmed.len() as u32;
-            merge_into(&mut segments, text_from_str(trimmed, real_base).segments);
-        }
+        builder.push_line(text, base);
     }
-
     for line in continuation {
-        let trimmed = line.text.trim();
-        if trimmed.is_empty() {
-            continue;
-        }
-        let leading = (line.text.len() - line.text.trim_start().len()) as u32;
-        let real_base = line.base_offset + leading;
-
-        if span_start.is_none() {
-            span_start = Some(real_base);
-        }
-        span_end = real_base + trimmed.len() as u32;
-
-        if !segments.is_empty() {
-            push_text(&mut segments, " ");
-        }
-        merge_into(&mut segments, text_from_str(trimmed, real_base).segments);
+        builder.push_line(&line.text, line.base_offset);
     }
-
-    span_start.map(|start| PhpDocText {
-        segments,
-        span: Span::new(start, span_end),
-    })
+    builder.build()
 }
 
 /// Build a [`PhpDocText`] for a description (multi-line prose after the summary).
 ///
 /// Lines are joined with `\n`; blank lines produce `\n\n` paragraph breaks.
-/// Each non-blank line is scanned for inline tags at its own true offset.
 fn description_to_text(lines: &[&CleanLine]) -> Option<PhpDocText> {
-    let mut segments: Vec<TextSegment> = Vec::new();
-    let mut span_start: Option<u32> = None;
-    let mut span_end: u32 = 0;
-
-    for (i, line) in lines.iter().enumerate() {
-        let trimmed = line.text.trim();
-
-        if i > 0 {
-            push_text(&mut segments, "\n");
-        }
-
-        if trimmed.is_empty() {
-            continue;
-        }
-
-        let leading = (line.text.len() - line.text.trim_start().len()) as u32;
-        let real_base = line.base_offset + leading;
-
-        if span_start.is_none() {
-            span_start = Some(real_base);
-        }
-        span_end = real_base + trimmed.len() as u32;
-
-        merge_into(&mut segments, text_from_str(trimmed, real_base).segments);
+    let mut builder = PhpDocTextBuilder::new(BlankLinePolicy::Keep);
+    for line in lines {
+        builder.push_line(&line.text, line.base_offset);
     }
-
-    span_start.map(|start| PhpDocText {
-        segments,
-        span: Span::new(start, span_end),
-    })
+    builder.build()
 }
 
 /// Append `text` to the last `Text` segment, or push a new one.
