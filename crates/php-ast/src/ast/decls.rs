@@ -2,13 +2,13 @@ use serde::Serialize;
 
 use crate::Span;
 
-use super::{ArenaVec, Attribute, Comment, Expr, Ident, Name, Stmt, TypeHint};
+use super::{ArenaVec, Attribute, Block, Comment, Expr, Ident, Name, TypeHint};
 
 #[derive(Debug, Serialize)]
 pub struct FunctionDecl<'arena, 'src> {
     pub name: Ident<'src>,
     pub params: ArenaVec<'arena, Param<'arena, 'src>>,
-    pub body: ArenaVec<'arena, Stmt<'arena, 'src>>,
+    pub body: &'arena Block<'arena, 'src>,
     pub return_type: Option<TypeHint<'arena, 'src>>,
     pub by_ref: bool,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
@@ -50,12 +50,21 @@ pub enum Visibility {
 }
 
 #[derive(Debug, Serialize)]
+pub struct ClassBody<'arena, 'src> {
+    pub members: ArenaVec<'arena, ClassMember<'arena, 'src>>,
+    /// Span covering `{` to `}` of the body.
+    #[serde(skip)]
+    pub span: Span,
+}
+
+#[derive(Debug, Serialize)]
 pub struct ClassDecl<'arena, 'src> {
     pub name: Option<Ident<'src>>,
     pub modifiers: ClassModifiers,
     pub extends: Option<Name<'arena, 'src>>,
     pub implements: ArenaVec<'arena, Name<'arena, 'src>>,
-    pub members: ArenaVec<'arena, ClassMember<'arena, 'src>>,
+    #[serde(flatten)]
+    pub body: ClassBody<'arena, 'src>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment<'src>>,
@@ -109,7 +118,7 @@ pub enum PropertyHookKind {
 #[derive(Debug, Serialize)]
 pub enum PropertyHookBody<'arena, 'src> {
     /// `{ stmts }` — a full statement block.
-    Block(ArenaVec<'arena, Stmt<'arena, 'src>>),
+    Block(&'arena Block<'arena, 'src>),
     /// `=> expr` — short-form expression body.
     Expression(Expr<'arena, 'src>),
     /// No body — the hook is declared abstract (on an abstract class or interface).
@@ -137,7 +146,8 @@ pub struct MethodDecl<'arena, 'src> {
     pub by_ref: bool,
     pub params: ArenaVec<'arena, Param<'arena, 'src>>,
     pub return_type: Option<TypeHint<'arena, 'src>>,
-    pub body: Option<ArenaVec<'arena, Stmt<'arena, 'src>>>,
+    /// `None` for an abstract/interface method.
+    pub body: Option<&'arena Block<'arena, 'src>>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment<'src>>,
@@ -160,6 +170,9 @@ pub struct ClassConstDecl<'arena, 'src> {
 pub struct TraitUseDecl<'arena, 'src> {
     pub traits: ArenaVec<'arena, Name<'arena, 'src>>,
     pub adaptations: ArenaVec<'arena, TraitAdaptation<'arena, 'src>>,
+    /// Start byte offset of the `{` that opens the adaptations block; `None` when there are no adaptations.
+    #[serde(skip)]
+    pub adaptations_brace_start: Option<u32>,
 }
 
 #[derive(Debug, Serialize)]
@@ -189,7 +202,8 @@ pub enum TraitAdaptationKind<'arena, 'src> {
 pub struct InterfaceDecl<'arena, 'src> {
     pub name: Ident<'src>,
     pub extends: ArenaVec<'arena, Name<'arena, 'src>>,
-    pub members: ArenaVec<'arena, ClassMember<'arena, 'src>>,
+    #[serde(flatten)]
+    pub body: ClassBody<'arena, 'src>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment<'src>>,
@@ -198,10 +212,19 @@ pub struct InterfaceDecl<'arena, 'src> {
 #[derive(Debug, Serialize)]
 pub struct TraitDecl<'arena, 'src> {
     pub name: Ident<'src>,
-    pub members: ArenaVec<'arena, ClassMember<'arena, 'src>>,
+    #[serde(flatten)]
+    pub body: ClassBody<'arena, 'src>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment<'src>>,
+}
+
+#[derive(Debug, Serialize)]
+pub struct EnumBody<'arena, 'src> {
+    pub members: ArenaVec<'arena, EnumMember<'arena, 'src>>,
+    /// Span covering `{` to `}` of the body.
+    #[serde(skip)]
+    pub span: Span,
 }
 
 #[derive(Debug, Serialize)]
@@ -209,7 +232,8 @@ pub struct EnumDecl<'arena, 'src> {
     pub name: Ident<'src>,
     pub scalar_type: Option<Name<'arena, 'src>>,
     pub implements: ArenaVec<'arena, Name<'arena, 'src>>,
-    pub members: ArenaVec<'arena, EnumMember<'arena, 'src>>,
+    #[serde(flatten)]
+    pub body: EnumBody<'arena, 'src>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment<'src>>,

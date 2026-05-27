@@ -105,6 +105,7 @@ pub(super) fn parse_class<'arena, 'src>(
     // Capture docblock before parsing body (members must not steal it)
     let doc_comment = parser.take_doc_comment(start);
 
+    let brace_start = parser.start_span();
     parser.expect(TokenKind::LeftBrace);
     let members = parse_class_members(parser, false);
     parser.expect(TokenKind::RightBrace);
@@ -116,7 +117,10 @@ pub(super) fn parse_class<'arena, 'src>(
             modifiers,
             extends,
             implements,
-            members,
+            body: ClassBody {
+                members,
+                span: Span::new(brace_start, end),
+            },
             attributes,
             doc_comment,
         })),
@@ -283,7 +287,11 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
                 }
             }
             parser.expect_closing(TokenKind::RightBrace, brace_span);
-            PropertyHookBody::Block(stmts)
+            let block_end = parser.previous_end();
+            PropertyHookBody::Block(parser.alloc(Block {
+                stmts,
+                span: Span::new(brace_span.start, block_end),
+            }))
         } else if parser.eat(TokenKind::FatArrow).is_some() {
             let e = expr::parse_expr(parser);
             parser.expect(TokenKind::Semicolon);
@@ -473,18 +481,21 @@ fn parse_trait_use_member<'arena, 'src>(
         }
         traits.push(parser.parse_name());
     }
-    let adaptations = if parser.check(TokenKind::LeftBrace) {
+    let (adaptations, adaptations_brace_start) = if parser.check(TokenKind::LeftBrace) {
+        let brace_start = parser.start_span();
         parser.advance();
-        super::trait_use::parse_trait_adaptations(parser)
+        let adaptations = super::trait_use::parse_trait_adaptations(parser);
+        (adaptations, Some(brace_start))
     } else {
         parser.expect(TokenKind::Semicolon);
-        parser.alloc_vec()
+        (parser.alloc_vec(), None)
     };
     let span = Span::new(member_start, parser.previous_end());
     ClassMember {
         kind: ClassMemberKind::TraitUse(TraitUseDecl {
             traits,
             adaptations,
+            adaptations_brace_start,
         }),
         span,
     }
@@ -815,6 +826,7 @@ fn parse_method_member<'arena, 'src>(
     let doc_comment = parser.take_doc_comment(member_start);
 
     let body = if parser.check(TokenKind::LeftBrace) {
+        let brace_start = parser.start_span();
         parser.expect(TokenKind::LeftBrace);
         let mut stmts = parser.alloc_vec_with_capacity(16);
         let saved_loop_depth = parser.loop_depth;
@@ -830,7 +842,11 @@ fn parse_method_member<'arena, 'src>(
         parser.function_depth -= 1;
         parser.loop_depth = saved_loop_depth;
         parser.expect(TokenKind::RightBrace);
-        Some(stmts)
+        let block_end = parser.previous_end();
+        Some(parser.alloc(Block {
+            stmts,
+            span: Span::new(brace_start, block_end),
+        }))
     } else {
         parser.expect(TokenKind::Semicolon);
         None
@@ -870,7 +886,7 @@ fn parse_method_member<'arena, 'src>(
         });
     }
 
-    if let (Some(rt), Some(b)) = (&return_type, &body) {
+    if let (Some(rt), Some(b)) = (&return_type, body) {
         super::check_returns_against_type(parser, b, rt);
     }
 
@@ -1142,6 +1158,7 @@ pub(super) fn parse_interface<'arena, 'src>(
     // Capture docblock before parsing body (members must not steal it)
     let doc_comment = parser.take_doc_comment(start);
 
+    let brace_start = parser.start_span();
     parser.expect(TokenKind::LeftBrace);
     let members = parse_class_members(parser, true);
     parser.expect(TokenKind::RightBrace);
@@ -1151,7 +1168,10 @@ pub(super) fn parse_interface<'arena, 'src>(
         kind: StmtKind::Interface(parser.alloc(InterfaceDecl {
             name,
             extends,
-            members,
+            body: ClassBody {
+                members,
+                span: Span::new(brace_start, end),
+            },
             attributes,
             doc_comment,
         })),
@@ -1181,6 +1201,7 @@ pub(super) fn parse_trait<'arena, 'src>(
     // Capture docblock before parsing body (members must not steal it)
     let doc_comment = parser.take_doc_comment(start);
 
+    let brace_start = parser.start_span();
     parser.expect(TokenKind::LeftBrace);
     let members = parse_class_members(parser, false);
     parser.expect(TokenKind::RightBrace);
@@ -1189,7 +1210,10 @@ pub(super) fn parse_trait<'arena, 'src>(
     Stmt {
         kind: StmtKind::Trait(parser.alloc(TraitDecl {
             name,
-            members,
+            body: ClassBody {
+                members,
+                span: Span::new(brace_start, end),
+            },
             attributes,
             doc_comment,
         })),

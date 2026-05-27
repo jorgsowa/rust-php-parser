@@ -51,6 +51,10 @@ pub trait OwnedVisitor {
         walk_owned_stmt(self, stmt)
     }
 
+    fn visit_block(&mut self, block: &Block) -> ControlFlow<()> {
+        walk_owned_block(self, block)
+    }
+
     fn visit_expr(&mut self, expr: &Expr) -> ControlFlow<()> {
         walk_owned_expr(self, expr)
     }
@@ -149,6 +153,16 @@ pub fn walk_owned_program<V: OwnedVisitor + ?Sized>(
 }
 
 /// Dispatches `stmt` to the appropriate child visitors based on its [`StmtKind`].
+pub fn walk_owned_block<V: OwnedVisitor + ?Sized>(
+    visitor: &mut V,
+    block: &Block,
+) -> ControlFlow<()> {
+    for stmt in block.stmts.iter() {
+        visitor.visit_stmt(stmt)?;
+    }
+    ControlFlow::Continue(())
+}
+
 pub fn walk_owned_stmt<V: OwnedVisitor + ?Sized>(visitor: &mut V, stmt: &Stmt) -> ControlFlow<()> {
     match &stmt.kind {
         StmtKind::Expression(expr) => {
@@ -164,10 +178,8 @@ pub fn walk_owned_stmt<V: OwnedVisitor + ?Sized>(visitor: &mut V, stmt: &Stmt) -
                 visitor.visit_expr(expr)?;
             }
         }
-        StmtKind::Block(stmts) => {
-            for stmt in stmts.iter() {
-                visitor.visit_stmt(stmt)?;
-            }
+        StmtKind::Block(block) => {
+            visitor.visit_block(block)?;
         }
         StmtKind::If(if_stmt) => {
             visitor.visit_expr(&if_stmt.condition)?;
@@ -210,9 +222,7 @@ pub fn walk_owned_stmt<V: OwnedVisitor + ?Sized>(visitor: &mut V, stmt: &Stmt) -
         }
         StmtKind::Function(func) => {
             walk_owned_function_like(visitor, &func.attributes, &func.params, &func.return_type)?;
-            for stmt in func.body.iter() {
-                visitor.visit_stmt(stmt)?;
-            }
+            visitor.visit_block(&func.body)?;
         }
         StmtKind::Break(expr) | StmtKind::Continue(expr) => {
             if let Some(expr) = expr {
@@ -221,7 +231,7 @@ pub fn walk_owned_stmt<V: OwnedVisitor + ?Sized>(visitor: &mut V, stmt: &Stmt) -
         }
         StmtKind::Switch(switch_stmt) => {
             visitor.visit_expr(&switch_stmt.expr)?;
-            for case in switch_stmt.cases.iter() {
+            for case in switch_stmt.body.cases.iter() {
                 if let Some(value) = &case.value {
                     visitor.visit_expr(value)?;
                 }
@@ -234,16 +244,12 @@ pub fn walk_owned_stmt<V: OwnedVisitor + ?Sized>(visitor: &mut V, stmt: &Stmt) -
             visitor.visit_expr(expr)?;
         }
         StmtKind::TryCatch(tc) => {
-            for stmt in tc.body.iter() {
-                visitor.visit_stmt(stmt)?;
-            }
+            visitor.visit_block(&tc.body)?;
             for catch in tc.catches.iter() {
                 visitor.visit_catch_clause(catch)?;
             }
             if let Some(finally) = &tc.finally {
-                for stmt in finally.iter() {
-                    visitor.visit_stmt(stmt)?;
-                }
+                visitor.visit_block(finally)?;
             }
         }
         StmtKind::Declare(decl) => {
@@ -267,7 +273,7 @@ pub fn walk_owned_stmt<V: OwnedVisitor + ?Sized>(visitor: &mut V, stmt: &Stmt) -
             for name in class.implements.iter() {
                 visitor.visit_name(name)?;
             }
-            for member in class.members.iter() {
+            for member in class.body.members.iter() {
                 visitor.visit_class_member(member)?;
             }
         }
@@ -276,13 +282,13 @@ pub fn walk_owned_stmt<V: OwnedVisitor + ?Sized>(visitor: &mut V, stmt: &Stmt) -
             for name in iface.extends.iter() {
                 visitor.visit_name(name)?;
             }
-            for member in iface.members.iter() {
+            for member in iface.body.members.iter() {
                 visitor.visit_class_member(member)?;
             }
         }
         StmtKind::Trait(trait_decl) => {
             walk_owned_attributes(visitor, &trait_decl.attributes)?;
-            for member in trait_decl.members.iter() {
+            for member in trait_decl.body.members.iter() {
                 visitor.visit_class_member(member)?;
             }
         }
@@ -294,15 +300,13 @@ pub fn walk_owned_stmt<V: OwnedVisitor + ?Sized>(visitor: &mut V, stmt: &Stmt) -
             for name in enum_decl.implements.iter() {
                 visitor.visit_name(name)?;
             }
-            for member in enum_decl.members.iter() {
+            for member in enum_decl.body.members.iter() {
                 visitor.visit_enum_member(member)?;
             }
         }
         StmtKind::Namespace(ns) => {
-            if let NamespaceBody::Braced(stmts) = &ns.body {
-                for stmt in stmts.iter() {
-                    visitor.visit_stmt(stmt)?;
-                }
+            if let NamespaceBody::Braced(block) = &ns.body {
+                visitor.visit_block(block)?;
             }
         }
         StmtKind::Const(items) => {
@@ -469,9 +473,7 @@ pub fn walk_owned_expr<V: OwnedVisitor + ?Sized>(visitor: &mut V, expr: &Expr) -
             for use_var in closure.use_vars.iter() {
                 visitor.visit_closure_use_var(use_var)?;
             }
-            for stmt in closure.body.iter() {
-                visitor.visit_stmt(stmt)?;
-            }
+            visitor.visit_block(&closure.body)?;
         }
         ExprKind::ArrowFunction(arrow) => {
             walk_owned_function_like(
@@ -501,7 +503,7 @@ pub fn walk_owned_expr<V: OwnedVisitor + ?Sized>(visitor: &mut V, expr: &Expr) -
         }
         ExprKind::AnonymousClass(class) => {
             walk_owned_attributes(visitor, &class.attributes)?;
-            for member in class.members.iter() {
+            for member in class.body.members.iter() {
                 visitor.visit_class_member(member)?;
             }
         }
@@ -604,10 +606,8 @@ pub fn walk_owned_property_hook<V: OwnedVisitor + ?Sized>(
         visitor.visit_param(param)?;
     }
     match &hook.body {
-        PropertyHookBody::Block(stmts) => {
-            for stmt in stmts.iter() {
-                visitor.visit_stmt(stmt)?;
-            }
+        PropertyHookBody::Block(block) => {
+            visitor.visit_block(block)?;
         }
         PropertyHookBody::Expression(expr) => {
             visitor.visit_expr(expr)?;
@@ -684,9 +684,7 @@ pub fn walk_owned_catch_clause<V: OwnedVisitor + ?Sized>(
     for ty in catch.types.iter() {
         visitor.visit_name(ty)?;
     }
-    for stmt in catch.body.iter() {
-        visitor.visit_stmt(stmt)?;
-    }
+    visitor.visit_block(&catch.body)?;
     ControlFlow::Continue(())
 }
 
@@ -748,9 +746,7 @@ fn walk_owned_method_decl<V: OwnedVisitor + ?Sized>(
         &method.return_type,
     )?;
     if let Some(body) = &method.body {
-        for stmt in body.iter() {
-            visitor.visit_stmt(stmt)?;
-        }
+        visitor.visit_block(body)?;
     }
     ControlFlow::Continue(())
 }
@@ -1157,6 +1153,13 @@ mod tests {
         }
     }
 
+    fn block_of(stmts: impl IntoIterator<Item = Stmt>) -> Box<Block> {
+        Box::new(Block {
+            stmts: stmts.into_iter().collect(),
+            span: Span::DUMMY,
+        })
+    }
+
     fn program(stmts: impl IntoIterator<Item = Stmt>) -> Program {
         Program {
             stmts: stmts.into_iter().collect(),
@@ -1231,7 +1234,7 @@ mod tests {
             kind: StmtKind::Function(Box::new(FunctionDecl {
                 name: Some(Box::from("foo")),
                 params: Box::from([]),
-                body: [expr_stmt(inner)].into_iter().collect(),
+                body: block_of([expr_stmt(inner)]),
                 return_type: None,
                 by_ref: false,
                 attributes: Box::from([]),
@@ -1276,7 +1279,7 @@ mod tests {
                 by_ref: false,
                 params: Box::from([]),
                 return_type: None,
-                body: Some([expr_stmt(dummy_var("x"))].into_iter().collect()),
+                body: Some(block_of([expr_stmt(dummy_var("x"))])),
                 attributes: Box::from([]),
                 doc_comment: None,
             }),
@@ -1288,7 +1291,10 @@ mod tests {
                 modifiers: crate::ast::ClassModifiers::default(),
                 extends: None,
                 implements: Box::from([]),
-                members: [method].into_iter().collect(),
+                body: ClassBody {
+                    members: [method].into_iter().collect(),
+                    span: Span::DUMMY,
+                },
                 attributes: Box::from([]),
                 doc_comment: None,
             })),

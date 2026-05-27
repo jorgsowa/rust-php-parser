@@ -192,12 +192,21 @@ pub struct Stmt {
     pub span: Span,
 }
 
+/// Owned mirror of [`crate::ast::Block`] — a brace-delimited statement block.
+#[derive(Debug, Clone, Serialize)]
+#[serde(transparent)]
+pub struct Block {
+    pub stmts: Box<[Stmt]>,
+    #[serde(skip)]
+    pub span: Span,
+}
+
 #[derive(Debug, Clone, Serialize)]
 pub enum StmtKind {
     Expression(Box<Expr>),
     Echo(Box<[Expr]>),
     Return(Option<Box<Expr>>),
-    Block(Box<[Stmt]>),
+    Block(Box<Block>),
     If(Box<IfStmt>),
     While(Box<WhileStmt>),
     For(Box<ForStmt>),
@@ -234,6 +243,8 @@ pub struct IfStmt {
     pub then_branch: Box<Stmt>,
     pub elseif_branches: Box<[ElseIfBranch]>,
     pub else_branch: Option<Box<Stmt>>,
+    #[serde(skip)]
+    pub else_kw_start: Option<u32>,
     #[serde(default, skip_serializing_if = "is_false")]
     pub uses_alternative: bool,
 }
@@ -280,9 +291,17 @@ pub struct DoWhileStmt {
 }
 
 #[derive(Debug, Clone, Serialize)]
+pub struct SwitchBody {
+    pub cases: Box<[SwitchCase]>,
+    #[serde(skip)]
+    pub span: Span,
+}
+
+#[derive(Debug, Clone, Serialize)]
 pub struct SwitchStmt {
     pub expr: Expr,
-    pub cases: Box<[SwitchCase]>,
+    #[serde(flatten)]
+    pub body: SwitchBody,
     #[serde(default, skip_serializing_if = "is_false")]
     pub uses_alternative: bool,
 }
@@ -296,16 +315,18 @@ pub struct SwitchCase {
 
 #[derive(Debug, Clone, Serialize)]
 pub struct TryCatchStmt {
-    pub body: Box<[Stmt]>,
+    pub body: Box<Block>,
     pub catches: Box<[CatchClause]>,
-    pub finally: Option<Box<[Stmt]>>,
+    pub finally: Option<Box<Block>>,
+    #[serde(skip)]
+    pub finally_kw_start: Option<u32>,
 }
 
 #[derive(Debug, Clone, Serialize)]
 pub struct CatchClause {
     pub types: Box<[Name]>,
     pub var: Option<Box<str>>,
-    pub body: Box<[Stmt]>,
+    pub body: Box<Block>,
     pub span: Span,
 }
 
@@ -317,7 +338,7 @@ pub struct NamespaceDecl {
 
 #[derive(Debug, Clone, Serialize)]
 pub enum NamespaceBody {
-    Braced(Box<[Stmt]>),
+    Braced(Box<Block>),
     Simple,
 }
 
@@ -549,7 +570,7 @@ pub struct ClosureExpr {
     pub params: Box<[Param]>,
     pub use_vars: Box<[ClosureUseVar]>,
     pub return_type: Option<TypeHint>,
-    pub body: Box<[Stmt]>,
+    pub body: Box<Block>,
     pub attributes: Box<[Attribute]>,
 }
 
@@ -574,6 +595,8 @@ pub struct ArrowFunctionExpr {
 pub struct MatchExpr {
     pub subject: Box<Expr>,
     pub arms: Box<[MatchArm]>,
+    #[serde(skip)]
+    pub brace_start: u32,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -626,7 +649,7 @@ pub enum StringPart {
 pub struct FunctionDecl {
     pub name: Ident,
     pub params: Box<[Param]>,
-    pub body: Box<[Stmt]>,
+    pub body: Box<Block>,
     pub return_type: Option<TypeHint>,
     pub by_ref: bool,
     pub attributes: Box<[Attribute]>,
@@ -652,12 +675,20 @@ pub struct Param {
 }
 
 #[derive(Debug, Clone, Serialize)]
+pub struct ClassBody {
+    pub members: Box<[ClassMember]>,
+    #[serde(skip)]
+    pub span: Span,
+}
+
+#[derive(Debug, Clone, Serialize)]
 pub struct ClassDecl {
     pub name: Option<Ident>,
     pub modifiers: ClassModifiers,
     pub extends: Option<Name>,
     pub implements: Box<[Name]>,
-    pub members: Box<[ClassMember]>,
+    #[serde(flatten)]
+    pub body: ClassBody,
     pub attributes: Box<[Attribute]>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
@@ -706,7 +737,7 @@ pub struct PropertyHook {
 
 #[derive(Debug, Clone, Serialize)]
 pub enum PropertyHookBody {
-    Block(Box<[Stmt]>),
+    Block(Box<Block>),
     Expression(Expr),
     Abstract,
 }
@@ -721,7 +752,7 @@ pub struct MethodDecl {
     pub by_ref: bool,
     pub params: Box<[Param]>,
     pub return_type: Option<TypeHint>,
-    pub body: Option<Box<[Stmt]>>,
+    pub body: Option<Box<Block>>,
     pub attributes: Box<[Attribute]>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
@@ -744,6 +775,8 @@ pub struct ClassConstDecl {
 pub struct TraitUseDecl {
     pub traits: Box<[Name]>,
     pub adaptations: Box<[TraitAdaptation]>,
+    #[serde(skip)]
+    pub adaptations_brace_start: Option<u32>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -771,7 +804,8 @@ pub enum TraitAdaptationKind {
 pub struct InterfaceDecl {
     pub name: Ident,
     pub extends: Box<[Name]>,
-    pub members: Box<[ClassMember]>,
+    #[serde(flatten)]
+    pub body: ClassBody,
     pub attributes: Box<[Attribute]>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
@@ -780,10 +814,18 @@ pub struct InterfaceDecl {
 #[derive(Debug, Clone, Serialize)]
 pub struct TraitDecl {
     pub name: Ident,
-    pub members: Box<[ClassMember]>,
+    #[serde(flatten)]
+    pub body: ClassBody,
     pub attributes: Box<[Attribute]>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct EnumBody {
+    pub members: Box<[EnumMember]>,
+    #[serde(skip)]
+    pub span: Span,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -791,7 +833,8 @@ pub struct EnumDecl {
     pub name: Ident,
     pub scalar_type: Option<Name>,
     pub implements: Box<[Name]>,
-    pub members: Box<[EnumMember]>,
+    #[serde(flatten)]
+    pub body: EnumBody,
     pub attributes: Box<[Attribute]>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
@@ -1133,7 +1176,7 @@ fn owned_expr_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
                 .collect::<Vec<_>>()
                 .into_boxed_slice(),
             return_type: c.return_type.as_ref().map(owned_type_hint),
-            body: owned_stmts(&c.body),
+            body: Box::new(owned_block(c.body)),
             attributes: owned_attrs(&c.attributes),
         })),
         arena_ast::ExprKind::ArrowFunction(f) => {
@@ -1158,6 +1201,7 @@ fn owned_expr_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
                 })
                 .collect::<Vec<_>>()
                 .into_boxed_slice(),
+            brace_start: m.brace_start,
         }),
         arena_ast::ExprKind::ThrowExpr(e) => ExprKind::ThrowExpr(Box::new(owned_expr(e))),
         arena_ast::ExprKind::Yield(y) => ExprKind::Yield(YieldExpr {
@@ -1227,8 +1271,8 @@ fn owned_hook(h: &arena_ast::PropertyHook<'_, '_>) -> PropertyHook {
     PropertyHook {
         kind: h.kind,
         body: match &h.body {
-            arena_ast::PropertyHookBody::Block(stmts) => {
-                PropertyHookBody::Block(owned_stmts(stmts))
+            arena_ast::PropertyHookBody::Block(block) => {
+                PropertyHookBody::Block(Box::new(owned_block(block)))
             }
             arena_ast::PropertyHookBody::Expression(e) => {
                 PropertyHookBody::Expression(owned_expr(e))
@@ -1264,6 +1308,13 @@ pub fn to_owned_stmt(stmt: &arena_ast::Stmt<'_, '_>) -> Stmt {
     owned_stmt(stmt)
 }
 
+fn owned_block(block: &arena_ast::Block<'_, '_>) -> Block {
+    Block {
+        stmts: owned_stmts(&block.stmts),
+        span: block.span,
+    }
+}
+
 fn owned_stmt(stmt: &arena_ast::Stmt<'_, '_>) -> Stmt {
     Stmt {
         kind: owned_stmt_kind(&stmt.kind),
@@ -1276,7 +1327,7 @@ fn owned_stmt_kind(k: &arena_ast::StmtKind<'_, '_>) -> StmtKind {
         arena_ast::StmtKind::Expression(e) => StmtKind::Expression(Box::new(owned_expr(e))),
         arena_ast::StmtKind::Echo(exprs) => StmtKind::Echo(owned_exprs(exprs)),
         arena_ast::StmtKind::Return(e) => StmtKind::Return(e.map(|e| Box::new(owned_expr(e)))),
-        arena_ast::StmtKind::Block(stmts) => StmtKind::Block(owned_stmts(stmts)),
+        arena_ast::StmtKind::Block(block) => StmtKind::Block(Box::new(owned_block(block))),
         arena_ast::StmtKind::If(s) => StmtKind::If(Box::new(IfStmt {
             condition: owned_expr(&s.condition),
             then_branch: Box::new(owned_stmt(s.then_branch)),
@@ -1291,6 +1342,7 @@ fn owned_stmt_kind(k: &arena_ast::StmtKind<'_, '_>) -> StmtKind {
                 .collect::<Vec<_>>()
                 .into_boxed_slice(),
             else_branch: s.else_branch.map(|b| Box::new(owned_stmt(b))),
+            else_kw_start: s.else_kw_start,
             uses_alternative: s.uses_alternative,
         })),
         arena_ast::StmtKind::While(s) => StmtKind::While(Box::new(WhileStmt {
@@ -1321,16 +1373,20 @@ fn owned_stmt_kind(k: &arena_ast::StmtKind<'_, '_>) -> StmtKind {
         arena_ast::StmtKind::Continue(e) => StmtKind::Continue(e.map(|e| Box::new(owned_expr(e)))),
         arena_ast::StmtKind::Switch(s) => StmtKind::Switch(Box::new(SwitchStmt {
             expr: owned_expr(&s.expr),
-            cases: s
-                .cases
-                .iter()
-                .map(|c| SwitchCase {
-                    value: c.value.as_ref().map(owned_expr),
-                    body: owned_stmts(&c.body),
-                    span: c.span,
-                })
-                .collect::<Vec<_>>()
-                .into_boxed_slice(),
+            body: SwitchBody {
+                cases: s
+                    .body
+                    .cases
+                    .iter()
+                    .map(|c| SwitchCase {
+                        value: c.value.as_ref().map(owned_expr),
+                        body: owned_stmts(&c.body),
+                        span: c.span,
+                    })
+                    .collect::<Vec<_>>()
+                    .into_boxed_slice(),
+                span: s.body.span,
+            },
             uses_alternative: s.uses_alternative,
         })),
         arena_ast::StmtKind::Goto(ident) => StmtKind::Goto(owned_ident(*ident)),
@@ -1348,7 +1404,7 @@ fn owned_stmt_kind(k: &arena_ast::StmtKind<'_, '_>) -> StmtKind {
         arena_ast::StmtKind::Unset(exprs) => StmtKind::Unset(owned_exprs(exprs)),
         arena_ast::StmtKind::Throw(e) => StmtKind::Throw(Box::new(owned_expr(e))),
         arena_ast::StmtKind::TryCatch(t) => StmtKind::TryCatch(Box::new(TryCatchStmt {
-            body: owned_stmts(&t.body),
+            body: Box::new(owned_block(t.body)),
             catches: t
                 .catches
                 .iter()
@@ -1360,12 +1416,13 @@ fn owned_stmt_kind(k: &arena_ast::StmtKind<'_, '_>) -> StmtKind {
                         .collect::<Vec<_>>()
                         .into_boxed_slice(),
                     var: c.var.map(Box::from),
-                    body: owned_stmts(&c.body),
+                    body: Box::new(owned_block(c.body)),
                     span: c.span,
                 })
                 .collect::<Vec<_>>()
                 .into_boxed_slice(),
-            finally: t.finally.as_ref().map(|stmts| owned_stmts(stmts)),
+            finally: t.finally.map(|f| Box::new(owned_block(f))),
+            finally_kw_start: t.finally_kw_start,
         })),
         arena_ast::StmtKind::Global(exprs) => StmtKind::Global(owned_exprs(exprs)),
         arena_ast::StmtKind::Class(cls) => StmtKind::Class(Box::new(owned_class_decl(cls))),
@@ -1377,8 +1434,8 @@ fn owned_stmt_kind(k: &arena_ast::StmtKind<'_, '_>) -> StmtKind {
         arena_ast::StmtKind::Namespace(ns) => StmtKind::Namespace(Box::new(NamespaceDecl {
             name: ns.name.as_ref().map(owned_name),
             body: match &ns.body {
-                arena_ast::NamespaceBody::Braced(stmts) => {
-                    NamespaceBody::Braced(owned_stmts(stmts))
+                arena_ast::NamespaceBody::Braced(block) => {
+                    NamespaceBody::Braced(Box::new(owned_block(block)))
                 }
                 arena_ast::NamespaceBody::Simple => NamespaceBody::Simple,
             },
@@ -1431,7 +1488,7 @@ fn owned_function_decl(f: &arena_ast::FunctionDecl<'_, '_>) -> FunctionDecl {
     FunctionDecl {
         name: owned_ident(f.name),
         params: owned_params(&f.params),
-        body: owned_stmts(&f.body),
+        body: Box::new(owned_block(f.body)),
         return_type: f.return_type.as_ref().map(owned_type_hint),
         by_ref: f.by_ref,
         attributes: owned_attrs(&f.attributes),
@@ -1463,7 +1520,7 @@ fn owned_class_member(m: &arena_ast::ClassMember<'_, '_>) -> ClassMember {
                 by_ref: m.by_ref,
                 params: owned_params(&m.params),
                 return_type: m.return_type.as_ref().map(owned_type_hint),
-                body: m.body.as_ref().map(|stmts| owned_stmts(stmts)),
+                body: m.body.map(|b| Box::new(owned_block(b))),
                 attributes: owned_attrs(&m.attributes),
                 doc_comment: owned_opt_comment(&m.doc_comment),
             }),
@@ -1540,6 +1597,7 @@ fn owned_trait_use(t: &arena_ast::TraitUseDecl<'_, '_>) -> TraitUseDecl {
             })
             .collect::<Vec<_>>()
             .into_boxed_slice(),
+        adaptations_brace_start: t.adaptations_brace_start,
     }
 }
 
@@ -1557,7 +1615,10 @@ fn owned_class_decl(cls: &arena_ast::ClassDecl<'_, '_>) -> ClassDecl {
             .map(owned_name)
             .collect::<Vec<_>>()
             .into_boxed_slice(),
-        members: owned_class_members(&cls.members),
+        body: ClassBody {
+            members: owned_class_members(&cls.body.members),
+            span: cls.body.span,
+        },
         attributes: owned_attrs(&cls.attributes),
         doc_comment: owned_opt_comment(&cls.doc_comment),
     }
@@ -1572,7 +1633,10 @@ fn owned_interface_decl(iface: &arena_ast::InterfaceDecl<'_, '_>) -> InterfaceDe
             .map(owned_name)
             .collect::<Vec<_>>()
             .into_boxed_slice(),
-        members: owned_class_members(&iface.members),
+        body: ClassBody {
+            members: owned_class_members(&iface.body.members),
+            span: iface.body.span,
+        },
         attributes: owned_attrs(&iface.attributes),
         doc_comment: owned_opt_comment(&iface.doc_comment),
     }
@@ -1581,7 +1645,10 @@ fn owned_interface_decl(iface: &arena_ast::InterfaceDecl<'_, '_>) -> InterfaceDe
 fn owned_trait_decl(tr: &arena_ast::TraitDecl<'_, '_>) -> TraitDecl {
     TraitDecl {
         name: owned_ident(tr.name),
-        members: owned_class_members(&tr.members),
+        body: ClassBody {
+            members: owned_class_members(&tr.body.members),
+            span: tr.body.span,
+        },
         attributes: owned_attrs(&tr.attributes),
         doc_comment: owned_opt_comment(&tr.doc_comment),
     }
@@ -1597,41 +1664,47 @@ fn owned_enum_decl(en: &arena_ast::EnumDecl<'_, '_>) -> EnumDecl {
             .map(owned_name)
             .collect::<Vec<_>>()
             .into_boxed_slice(),
-        members: en
-            .members
-            .iter()
-            .map(|m| EnumMember {
-                kind: match &m.kind {
-                    arena_ast::EnumMemberKind::Case(c) => EnumMemberKind::Case(EnumCase {
-                        name: owned_ident(c.name),
-                        value: c.value.as_ref().map(owned_expr),
-                        attributes: owned_attrs(&c.attributes),
-                        doc_comment: owned_opt_comment(&c.doc_comment),
-                    }),
-                    arena_ast::EnumMemberKind::Method(m) => EnumMemberKind::Method(MethodDecl {
-                        name: owned_ident(m.name),
-                        visibility: m.visibility,
-                        is_static: m.is_static,
-                        is_abstract: m.is_abstract,
-                        is_final: m.is_final,
-                        by_ref: m.by_ref,
-                        params: owned_params(&m.params),
-                        return_type: m.return_type.as_ref().map(owned_type_hint),
-                        body: m.body.as_ref().map(|stmts| owned_stmts(stmts)),
-                        attributes: owned_attrs(&m.attributes),
-                        doc_comment: owned_opt_comment(&m.doc_comment),
-                    }),
-                    arena_ast::EnumMemberKind::ClassConst(c) => {
-                        EnumMemberKind::ClassConst(owned_class_const(c))
-                    }
-                    arena_ast::EnumMemberKind::TraitUse(t) => {
-                        EnumMemberKind::TraitUse(owned_trait_use(t))
-                    }
-                },
-                span: m.span,
-            })
-            .collect::<Vec<_>>()
-            .into_boxed_slice(),
+        body: EnumBody {
+            members: en
+                .body
+                .members
+                .iter()
+                .map(|m| EnumMember {
+                    kind: match &m.kind {
+                        arena_ast::EnumMemberKind::Case(c) => EnumMemberKind::Case(EnumCase {
+                            name: owned_ident(c.name),
+                            value: c.value.as_ref().map(owned_expr),
+                            attributes: owned_attrs(&c.attributes),
+                            doc_comment: owned_opt_comment(&c.doc_comment),
+                        }),
+                        arena_ast::EnumMemberKind::Method(m) => {
+                            EnumMemberKind::Method(MethodDecl {
+                                name: owned_ident(m.name),
+                                visibility: m.visibility,
+                                is_static: m.is_static,
+                                is_abstract: m.is_abstract,
+                                is_final: m.is_final,
+                                by_ref: m.by_ref,
+                                params: owned_params(&m.params),
+                                return_type: m.return_type.as_ref().map(owned_type_hint),
+                                body: m.body.map(|b| Box::new(owned_block(b))),
+                                attributes: owned_attrs(&m.attributes),
+                                doc_comment: owned_opt_comment(&m.doc_comment),
+                            })
+                        }
+                        arena_ast::EnumMemberKind::ClassConst(c) => {
+                            EnumMemberKind::ClassConst(owned_class_const(c))
+                        }
+                        arena_ast::EnumMemberKind::TraitUse(t) => {
+                            EnumMemberKind::TraitUse(owned_trait_use(t))
+                        }
+                    },
+                    span: m.span,
+                })
+                .collect::<Vec<_>>()
+                .into_boxed_slice(),
+            span: en.body.span,
+        },
         attributes: owned_attrs(&en.attributes),
         doc_comment: owned_opt_comment(&en.doc_comment),
     }
@@ -2016,7 +2089,7 @@ fn av_expr_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
                 v
             },
             return_type: c.return_type.as_ref().map(|t| av_type_hint(arena, t)),
-            body: av_stmts(arena, &c.body),
+            body: &*arena.alloc(av_block(arena, &c.body)),
             attributes: av_attrs(arena, &c.attributes),
         })),
         ExprKind::ArrowFunction(f) => {
@@ -2042,6 +2115,7 @@ fn av_expr_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
                 }
                 v
             },
+            brace_start: m.brace_start,
         }),
         ExprKind::ThrowExpr(e) => arena_ast::ExprKind::ThrowExpr(arena.alloc(av_expr(arena, e))),
         ExprKind::Yield(y) => arena_ast::ExprKind::Yield(arena_ast::YieldExpr {
@@ -2116,8 +2190,8 @@ fn av_hook<'a>(arena: &'a bumpalo::Bump, h: &PropertyHook) -> arena_ast::Propert
     arena_ast::PropertyHook {
         kind: h.kind,
         body: match &h.body {
-            PropertyHookBody::Block(stmts) => {
-                arena_ast::PropertyHookBody::Block(av_stmts(arena, stmts))
+            PropertyHookBody::Block(block) => {
+                arena_ast::PropertyHookBody::Block(arena.alloc(av_block(arena, block)))
             }
             PropertyHookBody::Expression(e) => {
                 arena_ast::PropertyHookBody::Expression(av_expr(arena, e))
@@ -2161,6 +2235,13 @@ fn av_stmts<'a>(
     v
 }
 
+fn av_block<'a>(arena: &'a bumpalo::Bump, block: &Block) -> arena_ast::Block<'a, 'a> {
+    arena_ast::Block {
+        stmts: av_stmts(arena, &block.stmts),
+        span: block.span,
+    }
+}
+
 fn av_stmt_kind<'a>(arena: &'a bumpalo::Bump, k: &StmtKind) -> arena_ast::StmtKind<'a, 'a> {
     match k {
         StmtKind::Expression(e) => arena_ast::StmtKind::Expression(arena.alloc(av_expr(arena, e))),
@@ -2168,7 +2249,7 @@ fn av_stmt_kind<'a>(arena: &'a bumpalo::Bump, k: &StmtKind) -> arena_ast::StmtKi
         StmtKind::Return(e) => {
             arena_ast::StmtKind::Return(e.as_ref().map(|e| &*arena.alloc(av_expr(arena, e))))
         }
-        StmtKind::Block(stmts) => arena_ast::StmtKind::Block(av_stmts(arena, stmts)),
+        StmtKind::Block(block) => arena_ast::StmtKind::Block(arena.alloc(av_block(arena, block))),
         StmtKind::If(s) => arena_ast::StmtKind::If(
             arena.alloc(arena_ast::IfStmt {
                 condition: av_expr(arena, &s.condition),
@@ -2189,6 +2270,7 @@ fn av_stmt_kind<'a>(arena: &'a bumpalo::Bump, k: &StmtKind) -> arena_ast::StmtKi
                     .else_branch
                     .as_ref()
                     .map(|b| &*arena.alloc(av_stmt(arena, b))),
+                else_kw_start: s.else_kw_start,
                 uses_alternative: s.uses_alternative,
             }),
         ),
@@ -2226,16 +2308,19 @@ fn av_stmt_kind<'a>(arena: &'a bumpalo::Bump, k: &StmtKind) -> arena_ast::StmtKi
         }
         StmtKind::Switch(s) => arena_ast::StmtKind::Switch(arena.alloc(arena_ast::SwitchStmt {
             expr: av_expr(arena, &s.expr),
-            cases: {
-                let mut v = arena_ast::ArenaVec::with_capacity_in(s.cases.len(), arena);
-                for c in s.cases.iter() {
-                    v.push(arena_ast::SwitchCase {
+            body: {
+                let mut cases = arena_ast::ArenaVec::with_capacity_in(s.body.cases.len(), arena);
+                for c in s.body.cases.iter() {
+                    cases.push(arena_ast::SwitchCase {
                         value: c.value.as_ref().map(|vl| av_expr(arena, vl)),
                         body: av_stmts(arena, &c.body),
                         span: c.span,
                     });
                 }
-                v
+                arena_ast::SwitchBody {
+                    cases,
+                    span: s.body.span,
+                }
             },
             uses_alternative: s.uses_alternative,
         })),
@@ -2254,9 +2339,9 @@ fn av_stmt_kind<'a>(arena: &'a bumpalo::Bump, k: &StmtKind) -> arena_ast::StmtKi
         })),
         StmtKind::Unset(exprs) => arena_ast::StmtKind::Unset(av_exprs(arena, exprs)),
         StmtKind::Throw(e) => arena_ast::StmtKind::Throw(arena.alloc(av_expr(arena, e))),
-        StmtKind::TryCatch(t) => {
-            arena_ast::StmtKind::TryCatch(arena.alloc(arena_ast::TryCatchStmt {
-                body: av_stmts(arena, &t.body),
+        StmtKind::TryCatch(t) => arena_ast::StmtKind::TryCatch(
+            arena.alloc(arena_ast::TryCatchStmt {
+                body: arena.alloc(av_block(arena, &t.body)),
                 catches: {
                     let mut v = arena_ast::ArenaVec::with_capacity_in(t.catches.len(), arena);
                     for c in t.catches.iter() {
@@ -2267,15 +2352,19 @@ fn av_stmt_kind<'a>(arena: &'a bumpalo::Bump, k: &StmtKind) -> arena_ast::StmtKi
                         v.push(arena_ast::CatchClause {
                             types,
                             var: c.var.as_deref().map(|s| av_str(arena, s)),
-                            body: av_stmts(arena, &c.body),
+                            body: arena.alloc(av_block(arena, &c.body)),
                             span: c.span,
                         });
                     }
                     v
                 },
-                finally: t.finally.as_ref().map(|stmts| av_stmts(arena, stmts)),
-            }))
-        }
+                finally: t
+                    .finally
+                    .as_deref()
+                    .map(|f| &*arena.alloc(av_block(arena, f))),
+                finally_kw_start: t.finally_kw_start,
+            }),
+        ),
         StmtKind::Global(exprs) => arena_ast::StmtKind::Global(av_exprs(arena, exprs)),
         StmtKind::Class(cls) => arena_ast::StmtKind::Class(arena.alloc(av_class_decl(arena, cls))),
         StmtKind::Interface(iface) => {
@@ -2287,8 +2376,8 @@ fn av_stmt_kind<'a>(arena: &'a bumpalo::Bump, k: &StmtKind) -> arena_ast::StmtKi
             arena_ast::StmtKind::Namespace(arena.alloc(arena_ast::NamespaceDecl {
                 name: ns.name.as_ref().map(|n| av_name(arena, n)),
                 body: match &ns.body {
-                    NamespaceBody::Braced(stmts) => {
-                        arena_ast::NamespaceBody::Braced(av_stmts(arena, stmts))
+                    NamespaceBody::Braced(block) => {
+                        arena_ast::NamespaceBody::Braced(&*arena.alloc(av_block(arena, block)))
                     }
                     NamespaceBody::Simple => arena_ast::NamespaceBody::Simple,
                 },
@@ -2347,7 +2436,7 @@ fn av_function_decl<'a>(
     arena_ast::FunctionDecl {
         name: av_ident(arena, &f.name),
         params: av_params(arena, &f.params),
-        body: av_stmts(arena, &f.body),
+        body: &*arena.alloc(av_block(arena, &f.body)),
         return_type: f.return_type.as_ref().map(|t| av_type_hint(arena, t)),
         by_ref: f.by_ref,
         attributes: av_attrs(arena, &f.attributes),
@@ -2385,7 +2474,7 @@ fn av_class_member<'a>(
                     by_ref: m.by_ref,
                     params: av_params(arena, &m.params),
                     return_type: m.return_type.as_ref().map(|t| av_type_hint(arena, t)),
-                    body: m.body.as_ref().map(|stmts| av_stmts(arena, stmts)),
+                    body: m.body.as_deref().map(|b| &*arena.alloc(av_block(arena, b))),
                     attributes: av_attrs(arena, &m.attributes),
                     doc_comment: av_opt_comment(arena, &m.doc_comment),
                 })
@@ -2472,6 +2561,7 @@ fn av_trait_use<'a>(arena: &'a bumpalo::Bump, t: &TraitUseDecl) -> arena_ast::Tr
     arena_ast::TraitUseDecl {
         traits,
         adaptations,
+        adaptations_brace_start: t.adaptations_brace_start,
     }
 }
 
@@ -2485,7 +2575,10 @@ fn av_class_decl<'a>(arena: &'a bumpalo::Bump, cls: &ClassDecl) -> arena_ast::Cl
         modifiers: cls.modifiers.clone(),
         extends: cls.extends.as_ref().map(|n| av_name(arena, n)),
         implements,
-        members: av_class_members(arena, &cls.members),
+        body: arena_ast::ClassBody {
+            members: av_class_members(arena, &cls.body.members),
+            span: cls.body.span,
+        },
         attributes: av_attrs(arena, &cls.attributes),
         doc_comment: av_opt_comment(arena, &cls.doc_comment),
     }
@@ -2502,7 +2595,10 @@ fn av_interface_decl<'a>(
     arena_ast::InterfaceDecl {
         name: av_ident(arena, &iface.name),
         extends,
-        members: av_class_members(arena, &iface.members),
+        body: arena_ast::ClassBody {
+            members: av_class_members(arena, &iface.body.members),
+            span: iface.body.span,
+        },
         attributes: av_attrs(arena, &iface.attributes),
         doc_comment: av_opt_comment(arena, &iface.doc_comment),
     }
@@ -2511,7 +2607,10 @@ fn av_interface_decl<'a>(
 fn av_trait_decl<'a>(arena: &'a bumpalo::Bump, tr: &TraitDecl) -> arena_ast::TraitDecl<'a, 'a> {
     arena_ast::TraitDecl {
         name: av_ident(arena, &tr.name),
-        members: av_class_members(arena, &tr.members),
+        body: arena_ast::ClassBody {
+            members: av_class_members(arena, &tr.body.members),
+            span: tr.body.span,
+        },
         attributes: av_attrs(arena, &tr.attributes),
         doc_comment: av_opt_comment(arena, &tr.doc_comment),
     }
@@ -2522,8 +2621,8 @@ fn av_enum_decl<'a>(arena: &'a bumpalo::Bump, en: &EnumDecl) -> arena_ast::EnumD
     for n in en.implements.iter() {
         implements.push(av_name(arena, n));
     }
-    let mut members = arena_ast::ArenaVec::with_capacity_in(en.members.len(), arena);
-    for m in en.members.iter() {
+    let mut members = arena_ast::ArenaVec::with_capacity_in(en.body.members.len(), arena);
+    for m in en.body.members.iter() {
         members.push(arena_ast::EnumMember {
             kind: match &m.kind {
                 EnumMemberKind::Case(c) => arena_ast::EnumMemberKind::Case(arena_ast::EnumCase {
@@ -2542,7 +2641,7 @@ fn av_enum_decl<'a>(arena: &'a bumpalo::Bump, en: &EnumDecl) -> arena_ast::EnumD
                         by_ref: m.by_ref,
                         params: av_params(arena, &m.params),
                         return_type: m.return_type.as_ref().map(|t| av_type_hint(arena, t)),
-                        body: m.body.as_ref().map(|stmts| av_stmts(arena, stmts)),
+                        body: m.body.as_deref().map(|b| &*arena.alloc(av_block(arena, b))),
                         attributes: av_attrs(arena, &m.attributes),
                         doc_comment: av_opt_comment(arena, &m.doc_comment),
                     })
@@ -2561,7 +2660,10 @@ fn av_enum_decl<'a>(arena: &'a bumpalo::Bump, en: &EnumDecl) -> arena_ast::EnumD
         name: av_ident(arena, &en.name),
         scalar_type: en.scalar_type.as_ref().map(|n| av_name(arena, n)),
         implements,
-        members,
+        body: arena_ast::EnumBody {
+            members,
+            span: en.body.span,
+        },
         attributes: av_attrs(arena, &en.attributes),
         doc_comment: av_opt_comment(arena, &en.doc_comment),
     }

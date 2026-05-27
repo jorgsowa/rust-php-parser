@@ -2,7 +2,7 @@ use serde::Serialize;
 
 use crate::Span;
 
-use super::{is_false, ArenaVec, Arg, Attribute, ClassDecl, Param, Stmt, TypeHint};
+use super::{is_false, ArenaVec, Arg, Attribute, Block, ClassDecl, Param, TypeHint};
 
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
 enum NameStrInner<'arena, 'src> {
@@ -566,7 +566,7 @@ pub struct ClosureExpr<'arena, 'src> {
     pub params: ArenaVec<'arena, Param<'arena, 'src>>,
     pub use_vars: ArenaVec<'arena, ClosureUseVar<'src>>,
     pub return_type: Option<TypeHint<'arena, 'src>>,
-    pub body: ArenaVec<'arena, Stmt<'arena, 'src>>,
+    pub body: &'arena Block<'arena, 'src>,
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
 }
 
@@ -591,6 +591,9 @@ pub struct ArrowFunctionExpr<'arena, 'src> {
 pub struct MatchExpr<'arena, 'src> {
     pub subject: &'arena Expr<'arena, 'src>,
     pub arms: ArenaVec<'arena, MatchArm<'arena, 'src>>,
+    /// Start byte offset of the `{` in `match (...) {`.
+    #[serde(skip)]
+    pub brace_start: u32,
 }
 
 #[derive(Debug, Serialize)]

@@ -6,7 +6,7 @@ use super::helpers::*;
 use super::Printer;
 
 impl<'src> Printer<'src> {
-    pub(crate) fn print_function(&mut self, func: &FunctionDecl, stmt: &Stmt) {
+    pub(crate) fn print_function(&mut self, func: &FunctionDecl) {
         self.print_doc_comment(&func.doc_comment);
         self.print_attributes(&func.attributes);
         self.w("function ");
@@ -21,34 +21,21 @@ impl<'src> Printer<'src> {
             self.w(": ");
             self.print_type_hint(ret);
         }
-        self.newline();
-        self.write_indent();
-        self.w("{");
-        if !func.body.is_empty() {
+        if !self.flush_gap_comments_before(func.body.span.start) {
             self.newline();
-            self.print_stmts_ensure_php(&func.body, true);
-            self.newline();
-            self.flush_leading_comments(stmt.span.end);
             self.write_indent();
-        } else {
-            self.flush_leading_comments(stmt.span.end);
         }
-        self.w("}");
+        self.print_block(func.body);
     }
 
-    pub(crate) fn print_class(&mut self, class: &ClassDecl, stmt: &Stmt) {
+    pub(crate) fn print_class(&mut self, class: &ClassDecl) {
         self.print_doc_comment(&class.doc_comment);
         self.print_attributes(&class.attributes);
         self.print_class_header(class);
-        self.print_class_body(&class.members, stmt.span.end);
+        self.print_class_body(&class.body);
     }
 
-    pub(crate) fn print_anonymous_class(
-        &mut self,
-        class: &ClassDecl,
-        args: &[Arg],
-        closing_offset: u32,
-    ) {
+    pub(crate) fn print_anonymous_class(&mut self, class: &ClassDecl, args: &[Arg]) {
         if class.modifiers.is_abstract {
             self.w("abstract ");
         }
@@ -77,7 +64,7 @@ impl<'src> Printer<'src> {
                 self.print_name(name);
             }
         }
-        self.print_class_body(&class.members, closing_offset);
+        self.print_class_body(&class.body);
     }
 
     pub(crate) fn print_class_header(&mut self, class: &ClassDecl) {
@@ -110,18 +97,20 @@ impl<'src> Printer<'src> {
         }
     }
 
-    pub(crate) fn print_class_body(&mut self, members: &[ClassMember], closing_offset: u32) {
-        self.newline();
-        self.write_indent();
+    pub(crate) fn print_class_body(&mut self, body: &ClassBody) {
+        if !self.flush_gap_comments_before(body.span.start) {
+            self.newline();
+            self.write_indent();
+        }
         self.w("{");
-        if !members.is_empty() {
+        if !body.members.is_empty() {
             self.newline();
             self.indent();
-            for (i, member) in members.iter().enumerate() {
+            for (i, member) in body.members.iter().enumerate() {
                 if i > 0 && !self.has_comments_before(member.span.start) {
                     // Always at least one blank line between members; preserve more from source.
                     let blank = self
-                        .blank_lines_between(members[i - 1].span.end, member.span.start)
+                        .blank_lines_between(body.members[i - 1].span.end, member.span.start)
                         .max(1);
                     for _ in 0..blank {
                         self.newline();
@@ -132,7 +121,7 @@ impl<'src> Printer<'src> {
                 self.print_class_member(member);
                 self.newline();
             }
-            self.flush_leading_comments(closing_offset);
+            self.flush_leading_comments(body.span.end);
             self.dedent();
             self.write_indent();
         }
@@ -142,13 +131,13 @@ impl<'src> Printer<'src> {
     fn print_class_member(&mut self, member: &ClassMember) {
         match &member.kind {
             ClassMemberKind::Property(prop) => self.print_property(prop),
-            ClassMemberKind::Method(method) => self.print_method(method, member.span.end),
+            ClassMemberKind::Method(method) => self.print_method(method),
             ClassMemberKind::ClassConst(cc) => self.print_class_const(cc),
             ClassMemberKind::TraitUse(tu) => self.print_trait_use(tu),
         }
     }
 
-    pub(crate) fn print_method(&mut self, method: &MethodDecl, span_end: u32) {
+    pub(crate) fn print_method(&mut self, method: &MethodDecl) {
         self.print_doc_comment(&method.doc_comment);
         self.print_attributes(&method.attributes);
         if method.is_abstract {
@@ -176,18 +165,12 @@ impl<'src> Printer<'src> {
             self.w(": ");
             self.print_type_hint(ret);
         }
-        if let Some(body) = &method.body {
-            self.newline();
-            self.write_indent();
-            self.w("{");
-            if !body.is_empty() {
+        if let Some(body) = method.body {
+            if !self.flush_gap_comments_before(body.span.start) {
                 self.newline();
-                self.print_stmts_ensure_php(body, true);
-                self.newline();
-                self.flush_leading_comments(span_end);
                 self.write_indent();
             }
-            self.w("}");
+            self.print_block(body);
         } else {
             self.w(";");
         }
@@ -251,15 +234,11 @@ impl<'src> Printer<'src> {
                 self.w(")");
             }
             match &hook.body {
-                PropertyHookBody::Block(stmts) => {
-                    self.w(" {");
-                    if !stmts.is_empty() {
-                        self.newline();
-                        self.print_stmts_ensure_php(stmts, true);
-                        self.newline();
-                        self.write_indent();
+                PropertyHookBody::Block(body) => {
+                    if !self.flush_gap_comments_before(body.span.start) {
+                        self.w(" ");
                     }
-                    self.w("}");
+                    self.print_block(body);
                 }
                 PropertyHookBody::Expression(e) => {
                     self.w(" => ");
@@ -307,7 +286,14 @@ impl<'src> Printer<'src> {
         if tu.adaptations.is_empty() {
             self.w(";");
         } else {
-            self.w(" {");
+            if let Some(brace_start) = tu.adaptations_brace_start {
+                if !self.flush_gap_comments_before(brace_start) {
+                    self.w(" ");
+                }
+            } else {
+                self.w(" ");
+            }
+            self.w("{");
             self.newline();
             self.indent();
             for adapt in tu.adaptations.iter() {
@@ -360,7 +346,7 @@ impl<'src> Printer<'src> {
         }
     }
 
-    pub(crate) fn print_interface(&mut self, iface: &InterfaceDecl, stmt: &Stmt) {
+    pub(crate) fn print_interface(&mut self, iface: &InterfaceDecl) {
         self.print_doc_comment(&iface.doc_comment);
         self.print_attributes(&iface.attributes);
         self.w("interface ");
@@ -374,18 +360,18 @@ impl<'src> Printer<'src> {
                 self.print_name(name);
             }
         }
-        self.print_class_body(&iface.members, stmt.span.end);
+        self.print_class_body(&iface.body);
     }
 
-    pub(crate) fn print_trait(&mut self, trait_decl: &TraitDecl, stmt: &Stmt) {
+    pub(crate) fn print_trait(&mut self, trait_decl: &TraitDecl) {
         self.print_doc_comment(&trait_decl.doc_comment);
         self.print_attributes(&trait_decl.attributes);
         self.w("trait ");
         self.w(trait_decl.name.or_error());
-        self.print_class_body(&trait_decl.members, stmt.span.end);
+        self.print_class_body(&trait_decl.body);
     }
 
-    pub(crate) fn print_enum(&mut self, enum_decl: &EnumDecl, stmt: &Stmt) {
+    pub(crate) fn print_enum(&mut self, enum_decl: &EnumDecl) {
         self.print_doc_comment(&enum_decl.doc_comment);
         self.print_attributes(&enum_decl.attributes);
         self.w("enum ");
@@ -403,15 +389,17 @@ impl<'src> Printer<'src> {
                 self.print_name(name);
             }
         }
-        self.newline();
-        self.write_indent();
+        if !self.flush_gap_comments_before(enum_decl.body.span.start) {
+            self.newline();
+            self.write_indent();
+        }
         self.w("{");
-        if !enum_decl.members.is_empty() {
+        if !enum_decl.body.members.is_empty() {
             self.newline();
             self.indent();
-            for (i, member) in enum_decl.members.iter().enumerate() {
+            for (i, member) in enum_decl.body.members.iter().enumerate() {
                 if i > 0 && !self.has_comments_before(member.span.start) {
-                    let prev_end = enum_decl.members[i - 1].span.end;
+                    let prev_end = enum_decl.body.members[i - 1].span.end;
                     let blank = self.blank_lines_between(prev_end, member.span.start).max(1);
                     for _ in 0..blank {
                         self.newline();
@@ -423,7 +411,7 @@ impl<'src> Printer<'src> {
                 self.newline();
             }
             self.dedent();
-            self.flush_leading_comments(stmt.span.end);
+            self.flush_leading_comments(enum_decl.body.span.end);
             self.write_indent();
         }
         self.w("}");
@@ -442,7 +430,7 @@ impl<'src> Printer<'src> {
                 }
                 self.w(";");
             }
-            EnumMemberKind::Method(method) => self.print_method(method, member.span.end),
+            EnumMemberKind::Method(method) => self.print_method(method),
             EnumMemberKind::ClassConst(cc) => self.print_class_const(cc),
             EnumMemberKind::TraitUse(tu) => self.print_trait_use(tu),
         }

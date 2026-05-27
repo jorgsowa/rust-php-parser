@@ -1632,8 +1632,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         // Pass 2: nested namespace inside any braced body.
         for stmt in stmts {
             if let StmtKind::Namespace(decl) = stmt.kind {
-                if let php_ast::NamespaceBody::Braced(inner) = &decl.body {
-                    for s in inner.iter() {
+                if let php_ast::NamespaceBody::Braced(inner) = decl.body {
+                    for s in inner.stmts.iter() {
                         if matches!(s.kind, StmtKind::Namespace(_)) {
                             self.error(ParseError::Forbidden {
                                 message: "Namespace declarations cannot be nested".into(),
@@ -1651,8 +1651,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         self.validate_use_scope(stmts, None);
         for stmt in stmts {
             if let StmtKind::Namespace(decl) = stmt.kind {
-                if let php_ast::NamespaceBody::Braced(inner) = &decl.body {
-                    self.validate_use_scope(inner, decl.name.as_ref());
+                if let php_ast::NamespaceBody::Braced(inner) = decl.body {
+                    self.validate_use_scope(&inner.stmts, decl.name.as_ref());
                 }
             }
         }

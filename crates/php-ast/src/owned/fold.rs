@@ -44,6 +44,10 @@ pub trait FoldOwned {
         fold_owned_stmt(self, stmt)
     }
 
+    fn fold_block(&mut self, block: &Block) -> Block {
+        fold_owned_block(self, block)
+    }
+
     fn fold_expr(&mut self, expr: &Expr) -> Expr {
         fold_owned_expr(self, expr)
     }
@@ -115,6 +119,13 @@ fn fold_owned_stmts<F: FoldOwned + ?Sized>(folder: &mut F, stmts: &[Stmt]) -> Bo
     stmts.iter().map(|s| folder.fold_stmt(s)).collect()
 }
 
+pub fn fold_owned_block<F: FoldOwned + ?Sized>(folder: &mut F, block: &Block) -> Block {
+    Block {
+        stmts: fold_owned_stmts(folder, &block.stmts),
+        span: block.span,
+    }
+}
+
 fn fold_owned_exprs<F: FoldOwned + ?Sized>(folder: &mut F, exprs: &[Expr]) -> Box<[Expr]> {
     exprs.iter().map(|e| folder.fold_expr(e)).collect()
 }
@@ -169,7 +180,7 @@ fn fold_owned_stmt_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &StmtKind) -> 
         StmtKind::Expression(e) => StmtKind::Expression(Box::new(folder.fold_expr(e))),
         StmtKind::Echo(exprs) => StmtKind::Echo(fold_owned_exprs(folder, exprs)),
         StmtKind::Return(e) => StmtKind::Return(e.as_ref().map(|e| Box::new(folder.fold_expr(e)))),
-        StmtKind::Block(stmts) => StmtKind::Block(fold_owned_stmts(folder, stmts)),
+        StmtKind::Block(block) => StmtKind::Block(Box::new(folder.fold_block(block))),
         StmtKind::If(s) => StmtKind::If(Box::new(IfStmt {
             condition: folder.fold_expr(&s.condition),
             then_branch: Box::new(folder.fold_stmt(&s.then_branch)),
@@ -186,6 +197,7 @@ fn fold_owned_stmt_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &StmtKind) -> 
                 .else_branch
                 .as_ref()
                 .map(|b| Box::new(folder.fold_stmt(b))),
+            else_kw_start: s.else_kw_start,
             uses_alternative: s.uses_alternative,
         })),
         StmtKind::While(s) => StmtKind::While(Box::new(WhileStmt {
@@ -214,7 +226,7 @@ fn fold_owned_stmt_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &StmtKind) -> 
         StmtKind::Function(f) => StmtKind::Function(Box::new(FunctionDecl {
             name: f.name.clone(),
             params: fold_owned_params(folder, &f.params),
-            body: fold_owned_stmts(folder, &f.body),
+            body: Box::new(folder.fold_block(&f.body)),
             return_type: f.return_type.as_ref().map(|t| folder.fold_type_hint(t)),
             by_ref: f.by_ref,
             attributes: fold_owned_attrs(folder, &f.attributes),
@@ -226,15 +238,19 @@ fn fold_owned_stmt_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &StmtKind) -> 
         }
         StmtKind::Switch(s) => StmtKind::Switch(Box::new(SwitchStmt {
             expr: folder.fold_expr(&s.expr),
-            cases: s
-                .cases
-                .iter()
-                .map(|c| SwitchCase {
-                    value: c.value.as_ref().map(|v| folder.fold_expr(v)),
-                    body: fold_owned_stmts(folder, &c.body),
-                    span: c.span,
-                })
-                .collect(),
+            body: SwitchBody {
+                cases: s
+                    .body
+                    .cases
+                    .iter()
+                    .map(|c| SwitchCase {
+                        value: c.value.as_ref().map(|v| folder.fold_expr(v)),
+                        body: fold_owned_stmts(folder, &c.body),
+                        span: c.span,
+                    })
+                    .collect(),
+                span: s.body.span,
+            },
             uses_alternative: s.uses_alternative,
         })),
         StmtKind::Goto(ident) => StmtKind::Goto(ident.clone()),
@@ -251,16 +267,14 @@ fn fold_owned_stmt_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &StmtKind) -> 
         StmtKind::Unset(exprs) => StmtKind::Unset(fold_owned_exprs(folder, exprs)),
         StmtKind::Throw(e) => StmtKind::Throw(Box::new(folder.fold_expr(e))),
         StmtKind::TryCatch(t) => StmtKind::TryCatch(Box::new(TryCatchStmt {
-            body: fold_owned_stmts(folder, &t.body),
+            body: Box::new(folder.fold_block(&t.body)),
             catches: t
                 .catches
                 .iter()
                 .map(|c| folder.fold_catch_clause(c))
                 .collect(),
-            finally: t
-                .finally
-                .as_ref()
-                .map(|stmts| fold_owned_stmts(folder, stmts)),
+            finally: t.finally.as_deref().map(|f| Box::new(folder.fold_block(f))),
+            finally_kw_start: t.finally_kw_start,
         })),
         StmtKind::Global(exprs) => StmtKind::Global(fold_owned_exprs(folder, exprs)),
         StmtKind::Class(cls) => StmtKind::Class(Box::new(fold_owned_class_decl(folder, cls))),
@@ -272,8 +286,8 @@ fn fold_owned_stmt_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &StmtKind) -> 
         StmtKind::Namespace(ns) => StmtKind::Namespace(Box::new(NamespaceDecl {
             name: ns.name.as_ref().map(|n| folder.fold_name(n)),
             body: match &ns.body {
-                NamespaceBody::Braced(stmts) => {
-                    NamespaceBody::Braced(fold_owned_stmts(folder, stmts))
+                NamespaceBody::Braced(block) => {
+                    NamespaceBody::Braced(Box::new(folder.fold_block(block)))
                 }
                 NamespaceBody::Simple => NamespaceBody::Simple,
             },
@@ -479,7 +493,7 @@ fn fold_owned_expr_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &ExprKind) -> 
                 .map(|v| folder.fold_closure_use_var(v))
                 .collect(),
             return_type: c.return_type.as_ref().map(|t| folder.fold_type_hint(t)),
-            body: fold_owned_stmts(folder, &c.body),
+            body: Box::new(folder.fold_block(&c.body)),
             attributes: fold_owned_attrs(folder, &c.attributes),
         })),
         ExprKind::ArrowFunction(f) => ExprKind::ArrowFunction(Box::new(ArrowFunctionExpr {
@@ -497,6 +511,7 @@ fn fold_owned_expr_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &ExprKind) -> 
                 .iter()
                 .map(|arm| folder.fold_match_arm(arm))
                 .collect(),
+            brace_start: m.brace_start,
         }),
         ExprKind::ThrowExpr(e) => ExprKind::ThrowExpr(Box::new(folder.fold_expr(e))),
         ExprKind::Yield(y) => ExprKind::Yield(YieldExpr {
@@ -600,7 +615,7 @@ pub fn fold_owned_class_member<F: FoldOwned + ?Sized>(
                 by_ref: m.by_ref,
                 params: fold_owned_params(folder, &m.params),
                 return_type: m.return_type.as_ref().map(|t| folder.fold_type_hint(t)),
-                body: m.body.as_ref().map(|stmts| fold_owned_stmts(folder, stmts)),
+                body: m.body.as_ref().map(|b| Box::new(folder.fold_block(b))),
                 attributes: fold_owned_attrs(folder, &m.attributes),
                 doc_comment: m.doc_comment.clone(),
             }),
@@ -636,7 +651,7 @@ pub fn fold_owned_enum_member<F: FoldOwned + ?Sized>(
                 by_ref: m.by_ref,
                 params: fold_owned_params(folder, &m.params),
                 return_type: m.return_type.as_ref().map(|t| folder.fold_type_hint(t)),
-                body: m.body.as_ref().map(|stmts| fold_owned_stmts(folder, stmts)),
+                body: m.body.as_ref().map(|b| Box::new(folder.fold_block(b))),
                 attributes: fold_owned_attrs(folder, &m.attributes),
                 doc_comment: m.doc_comment.clone(),
             }),
@@ -658,8 +673,8 @@ pub fn fold_owned_property_hook<F: FoldOwned + ?Sized>(
     PropertyHook {
         kind: hook.kind,
         body: match &hook.body {
-            PropertyHookBody::Block(stmts) => {
-                PropertyHookBody::Block(fold_owned_stmts(folder, stmts))
+            PropertyHookBody::Block(block) => {
+                PropertyHookBody::Block(Box::new(folder.fold_block(block)))
             }
             PropertyHookBody::Expression(e) => PropertyHookBody::Expression(folder.fold_expr(e)),
             PropertyHookBody::Abstract => PropertyHookBody::Abstract,
@@ -712,7 +727,7 @@ pub fn fold_owned_catch_clause<F: FoldOwned + ?Sized>(
     CatchClause {
         types: catch.types.iter().map(|n| folder.fold_name(n)).collect(),
         var: catch.var.clone(),
-        body: fold_owned_stmts(folder, &catch.body),
+        body: Box::new(folder.fold_block(&catch.body)),
         span: catch.span,
     }
 }
@@ -778,6 +793,7 @@ fn fold_owned_trait_use<F: FoldOwned + ?Sized>(folder: &mut F, t: &TraitUseDecl)
                 span: a.span,
             })
             .collect(),
+        adaptations_brace_start: t.adaptations_brace_start,
     }
 }
 
@@ -787,7 +803,10 @@ fn fold_owned_class_decl<F: FoldOwned + ?Sized>(folder: &mut F, cls: &ClassDecl)
         modifiers: cls.modifiers.clone(),
         extends: cls.extends.as_ref().map(|n| folder.fold_name(n)),
         implements: cls.implements.iter().map(|n| folder.fold_name(n)).collect(),
-        members: fold_owned_members(folder, &cls.members),
+        body: ClassBody {
+            members: fold_owned_members(folder, &cls.body.members),
+            span: cls.body.span,
+        },
         attributes: fold_owned_attrs(folder, &cls.attributes),
         doc_comment: cls.doc_comment.clone(),
     }
@@ -800,7 +819,10 @@ fn fold_owned_interface_decl<F: FoldOwned + ?Sized>(
     InterfaceDecl {
         name: iface.name.clone(),
         extends: iface.extends.iter().map(|n| folder.fold_name(n)).collect(),
-        members: fold_owned_members(folder, &iface.members),
+        body: ClassBody {
+            members: fold_owned_members(folder, &iface.body.members),
+            span: iface.body.span,
+        },
         attributes: fold_owned_attrs(folder, &iface.attributes),
         doc_comment: iface.doc_comment.clone(),
     }
@@ -809,7 +831,10 @@ fn fold_owned_interface_decl<F: FoldOwned + ?Sized>(
 fn fold_owned_trait_decl<F: FoldOwned + ?Sized>(folder: &mut F, tr: &TraitDecl) -> TraitDecl {
     TraitDecl {
         name: tr.name.clone(),
-        members: fold_owned_members(folder, &tr.members),
+        body: ClassBody {
+            members: fold_owned_members(folder, &tr.body.members),
+            span: tr.body.span,
+        },
         attributes: fold_owned_attrs(folder, &tr.attributes),
         doc_comment: tr.doc_comment.clone(),
     }
@@ -820,11 +845,15 @@ fn fold_owned_enum_decl<F: FoldOwned + ?Sized>(folder: &mut F, en: &EnumDecl) ->
         name: en.name.clone(),
         scalar_type: en.scalar_type.as_ref().map(|n| folder.fold_name(n)),
         implements: en.implements.iter().map(|n| folder.fold_name(n)).collect(),
-        members: en
-            .members
-            .iter()
-            .map(|m| folder.fold_enum_member(m))
-            .collect(),
+        body: EnumBody {
+            members: en
+                .body
+                .members
+                .iter()
+                .map(|m| folder.fold_enum_member(m))
+                .collect(),
+            span: en.body.span,
+        },
         attributes: fold_owned_attrs(folder, &en.attributes),
         doc_comment: en.doc_comment.clone(),
     }
@@ -869,6 +898,13 @@ mod tests {
     fn expr_stmt(e: Expr) -> Stmt {
         Stmt {
             kind: StmtKind::Expression(Box::new(e)),
+            span: Span::DUMMY,
+        }
+    }
+
+    fn empty_block() -> Block {
+        Block {
+            stmts: Box::from([]),
             span: Span::DUMMY,
         }
     }
@@ -968,7 +1004,7 @@ mod tests {
                     span: Span::DUMMY,
                 }]),
                 return_type: None,
-                body: Box::from([]),
+                body: Box::new(empty_block()),
                 attributes: Box::from([]),
             })),
             span: Span::DUMMY,

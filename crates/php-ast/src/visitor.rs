@@ -41,6 +41,10 @@ pub trait Visitor<'arena, 'src> {
         walk_stmt(self, stmt)
     }
 
+    fn visit_block(&mut self, block: &Block<'arena, 'src>) -> ControlFlow<()> {
+        walk_block(self, block)
+    }
+
     fn visit_expr(&mut self, expr: &Expr<'arena, 'src>) -> ControlFlow<()> {
         walk_expr(self, expr)
     }
@@ -171,6 +175,17 @@ pub fn walk_program<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     ControlFlow::Continue(())
 }
 
+/// Visits each statement in a block.
+pub fn walk_block<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
+    visitor: &mut V,
+    block: &Block<'arena, 'src>,
+) -> ControlFlow<()> {
+    for stmt in block.stmts.iter() {
+        visitor.visit_stmt(stmt)?;
+    }
+    ControlFlow::Continue(())
+}
+
 /// Dispatches `stmt` to the appropriate child visitors based on its [`StmtKind`].
 ///
 /// Call this from [`Visitor::visit_stmt`] to recurse into a statement's children.
@@ -193,10 +208,8 @@ pub fn walk_stmt<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
                 visitor.visit_expr(expr)?;
             }
         }
-        StmtKind::Block(stmts) => {
-            for stmt in stmts.iter() {
-                visitor.visit_stmt(stmt)?;
-            }
+        StmtKind::Block(block) => {
+            visitor.visit_block(block)?;
         }
         StmtKind::If(if_stmt) => {
             visitor.visit_expr(&if_stmt.condition)?;
@@ -239,9 +252,7 @@ pub fn walk_stmt<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
         }
         StmtKind::Function(func) => {
             walk_function_like(visitor, &func.attributes, &func.params, &func.return_type)?;
-            for stmt in func.body.iter() {
-                visitor.visit_stmt(stmt)?;
-            }
+            visitor.visit_block(func.body)?;
         }
         StmtKind::Break(expr) | StmtKind::Continue(expr) => {
             if let Some(expr) = expr {
@@ -250,7 +261,7 @@ pub fn walk_stmt<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
         }
         StmtKind::Switch(switch_stmt) => {
             visitor.visit_expr(&switch_stmt.expr)?;
-            for case in switch_stmt.cases.iter() {
+            for case in switch_stmt.body.cases.iter() {
                 if let Some(value) = &case.value {
                     visitor.visit_expr(value)?;
                 }
@@ -263,16 +274,12 @@ pub fn walk_stmt<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
             visitor.visit_expr(expr)?;
         }
         StmtKind::TryCatch(tc) => {
-            for stmt in tc.body.iter() {
-                visitor.visit_stmt(stmt)?;
-            }
+            visitor.visit_block(tc.body)?;
             for catch in tc.catches.iter() {
                 visitor.visit_catch_clause(catch)?;
             }
-            if let Some(finally) = &tc.finally {
-                for stmt in finally.iter() {
-                    visitor.visit_stmt(stmt)?;
-                }
+            if let Some(finally) = tc.finally {
+                visitor.visit_block(finally)?;
             }
         }
         StmtKind::Declare(decl) => {
@@ -296,7 +303,7 @@ pub fn walk_stmt<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
             for name in class.implements.iter() {
                 visitor.visit_name(name)?;
             }
-            for member in class.members.iter() {
+            for member in class.body.members.iter() {
                 visitor.visit_class_member(member)?;
             }
         }
@@ -305,13 +312,13 @@ pub fn walk_stmt<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
             for name in iface.extends.iter() {
                 visitor.visit_name(name)?;
             }
-            for member in iface.members.iter() {
+            for member in iface.body.members.iter() {
                 visitor.visit_class_member(member)?;
             }
         }
         StmtKind::Trait(trait_decl) => {
             walk_attributes(visitor, &trait_decl.attributes)?;
-            for member in trait_decl.members.iter() {
+            for member in trait_decl.body.members.iter() {
                 visitor.visit_class_member(member)?;
             }
         }
@@ -323,15 +330,13 @@ pub fn walk_stmt<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
             for name in enum_decl.implements.iter() {
                 visitor.visit_name(name)?;
             }
-            for member in enum_decl.members.iter() {
+            for member in enum_decl.body.members.iter() {
                 visitor.visit_enum_member(member)?;
             }
         }
         StmtKind::Namespace(ns) => {
-            if let NamespaceBody::Braced(stmts) = &ns.body {
-                for stmt in stmts.iter() {
-                    visitor.visit_stmt(stmt)?;
-                }
+            if let NamespaceBody::Braced(block) = &ns.body {
+                visitor.visit_block(block)?;
             }
         }
         StmtKind::Const(items) => {
@@ -504,9 +509,7 @@ pub fn walk_expr<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
             for use_var in closure.use_vars.iter() {
                 visitor.visit_closure_use_var(use_var)?;
             }
-            for stmt in closure.body.iter() {
-                visitor.visit_stmt(stmt)?;
-            }
+            visitor.visit_block(closure.body)?;
         }
         ExprKind::ArrowFunction(arrow) => {
             walk_function_like(
@@ -536,7 +539,7 @@ pub fn walk_expr<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
         }
         ExprKind::AnonymousClass(class) => {
             walk_attributes(visitor, &class.attributes)?;
-            for member in class.members.iter() {
+            for member in class.body.members.iter() {
                 visitor.visit_class_member(member)?;
             }
         }
@@ -637,10 +640,8 @@ pub fn walk_property_hook<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
         visitor.visit_param(param)?;
     }
     match &hook.body {
-        PropertyHookBody::Block(stmts) => {
-            for stmt in stmts.iter() {
-                visitor.visit_stmt(stmt)?;
-            }
+        PropertyHookBody::Block(block) => {
+            visitor.visit_block(block)?;
         }
         PropertyHookBody::Expression(expr) => {
             visitor.visit_expr(expr)?;
@@ -717,9 +718,7 @@ pub fn walk_catch_clause<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     for ty in catch.types.iter() {
         visitor.visit_name(ty)?;
     }
-    for stmt in catch.body.iter() {
-        visitor.visit_stmt(stmt)?;
-    }
+    visitor.visit_block(catch.body)?;
     ControlFlow::Continue(())
 }
 
@@ -783,10 +782,8 @@ fn walk_method_decl<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
         &method.params,
         &method.return_type,
     )?;
-    if let Some(body) = &method.body {
-        for stmt in body.iter() {
-            visitor.visit_stmt(stmt)?;
-        }
+    if let Some(body) = method.body {
+        visitor.visit_block(body)?;
     }
     ControlFlow::Continue(())
 }
@@ -1110,7 +1107,7 @@ impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> Visitor<'arena, 'src> for Scop
             }
             StmtKind::Namespace(ns) => {
                 let ns_str = ns.name.as_ref().map(|n| n.src_repr(self.src));
-                match &ns.body {
+                match ns.body {
                     NamespaceBody::Braced(_) => {
                         let prev_ns = self.scope.namespace;
                         let prev_class = self.scope.class_name.take();
@@ -1391,9 +1388,13 @@ mod tests {
             }),
             span: Span::DUMMY,
         });
-        let mut func_body = ArenaVec::new_in(&arena);
-        func_body.push(Stmt {
+        let mut func_body_stmts = ArenaVec::new_in(&arena);
+        func_body_stmts.push(Stmt {
             kind: StmtKind::Expression(inner),
+            span: Span::DUMMY,
+        });
+        let func_body = arena.alloc(Block {
+            stmts: func_body_stmts,
             span: Span::DUMMY,
         });
         let func = arena.alloc(FunctionDecl {

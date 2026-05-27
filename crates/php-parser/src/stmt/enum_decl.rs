@@ -40,6 +40,7 @@ pub(super) fn parse_enum<'arena, 'src>(
     // Capture docblock before parsing body (members must not steal it)
     let doc_comment = parser.take_doc_comment(start);
 
+    let brace_start = parser.start_span();
     parser.expect(TokenKind::LeftBrace);
 
     let mut members = parser.alloc_vec_with_capacity(4);
@@ -62,18 +63,21 @@ pub(super) fn parse_enum<'arena, 'src>(
             while parser.eat(TokenKind::Comma).is_some() {
                 traits.push(parser.parse_name());
             }
-            let adaptations = if parser.check(TokenKind::LeftBrace) {
+            let (adaptations, adaptations_brace_start) = if parser.check(TokenKind::LeftBrace) {
+                let brace_start = parser.start_span();
                 parser.advance();
-                super::trait_use::parse_trait_adaptations(parser)
+                let adaptations = super::trait_use::parse_trait_adaptations(parser);
+                (adaptations, Some(brace_start))
             } else {
                 parser.expect(TokenKind::Semicolon);
-                parser.alloc_vec()
+                (parser.alloc_vec(), None)
             };
             let span = Span::new(member_start, parser.previous_end());
             members.push(EnumMember {
                 kind: EnumMemberKind::TraitUse(TraitUseDecl {
                     traits,
                     adaptations,
+                    adaptations_brace_start,
                 }),
                 span,
             });
@@ -299,6 +303,7 @@ pub(super) fn parse_enum<'arena, 'src>(
             let doc_comment = parser.take_doc_comment(member_start);
 
             let body = if parser.check(TokenKind::LeftBrace) {
+                let brace_start = parser.start_span();
                 parser.expect(TokenKind::LeftBrace);
                 let mut stmts = parser.alloc_vec_with_capacity(16);
                 let saved_loop_depth = parser.loop_depth;
@@ -312,7 +317,11 @@ pub(super) fn parse_enum<'arena, 'src>(
                 }
                 parser.loop_depth = saved_loop_depth;
                 parser.expect(TokenKind::RightBrace);
-                Some(stmts)
+                let block_end = parser.previous_end();
+                Some(parser.alloc(Block {
+                    stmts,
+                    span: Span::new(brace_start, block_end),
+                }))
             } else {
                 parser.expect(TokenKind::Semicolon);
                 None
@@ -353,7 +362,10 @@ pub(super) fn parse_enum<'arena, 'src>(
             name,
             scalar_type,
             implements,
-            members,
+            body: EnumBody {
+                members,
+                span: Span::new(brace_start, end),
+            },
             attributes,
             doc_comment,
         })),

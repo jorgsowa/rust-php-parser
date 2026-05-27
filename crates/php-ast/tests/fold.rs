@@ -170,13 +170,17 @@ fn custom_fold_closure_use_var_no_arena_param() {
         by_ref: true,
         span: Span::DUMMY,
     });
+    let closure_body = arena.alloc(php_ast::ast::Block {
+        stmts: ArenaVec::new_in(&arena),
+        span: Span::DUMMY,
+    });
     let closure = arena.alloc(ClosureExpr {
         is_static: false,
         by_ref: false,
         params: ArenaVec::new_in(&arena),
         use_vars,
         return_type: None,
-        body: ArenaVec::new_in(&arena),
+        body: closure_body,
         attributes: ArenaVec::new_in(&arena),
     });
     let expr = Expr {
@@ -721,6 +725,7 @@ fn fold_trait_use_override_is_dispatched_through_class_member() {
         kind: ClassMemberKind::TraitUse(TraitUseDecl {
             traits,
             adaptations: ArenaVec::new_in(&arena),
+            adaptations_brace_start: None,
         }),
         span: Span::DUMMY,
     };
@@ -756,9 +761,13 @@ fn fold_property_hook_override_block_body() {
         kind: StmtKind::Nop,
         span: Span::DUMMY,
     });
+    let block = arena.alloc(php_ast::ast::Block {
+        stmts: body_stmts,
+        span: Span::DUMMY,
+    });
     let hook = PropertyHook {
         kind: PropertyHookKind::Get,
-        body: PropertyHookBody::Block(body_stmts),
+        body: PropertyHookBody::Block(block),
         is_final: false,
         by_ref: false,
         params: ArenaVec::new_in(&arena),
@@ -893,7 +902,11 @@ fn fold_match_arm_override_dispatched_for_both_arm_kinds() {
         span: Span::DUMMY,
     });
     let match_expr = Expr {
-        kind: ExprKind::Match(MatchExpr { subject, arms }),
+        kind: ExprKind::Match(MatchExpr {
+            subject,
+            arms,
+            brace_start: 0,
+        }),
         span: Span::DUMMY,
     };
     let mut folder = CountArms { count: 0 };
@@ -927,10 +940,14 @@ fn fold_catch_clause_override_clears_var() {
         value: "Exception",
         span: Span::DUMMY,
     });
+    let empty_block = arena.alloc(php_ast::ast::Block {
+        stmts: ArenaVec::new_in(&arena),
+        span: Span::DUMMY,
+    });
     let catch = CatchClause {
         types,
         var: Some("e"),
-        body: ArenaVec::new_in(&arena),
+        body: empty_block,
         span: Span::DUMMY,
     };
     let folded = DropCatchVar.fold_catch_clause(&out, &catch);

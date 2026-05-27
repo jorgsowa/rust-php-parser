@@ -218,7 +218,7 @@ impl<'src> Printer<'src> {
             ExprKind::New(new_expr) => {
                 self.w("new ");
                 if let ExprKind::AnonymousClass(class) = &new_expr.class.kind {
-                    self.print_anonymous_class(class, &new_expr.args, new_expr.class.span.end);
+                    self.print_anonymous_class(class, &new_expr.args);
                 } else {
                     self.print_expr(new_expr.class, PREC_PRIMARY);
                     self.w("(");
@@ -342,7 +342,7 @@ impl<'src> Printer<'src> {
             }
             ExprKind::AnonymousClass(class) => {
                 self.print_class_header(class);
-                self.print_class_body(&class.members, expr.span.end);
+                self.print_class_body(&class.body);
             }
             ExprKind::CallableCreate(cc) => match &cc.kind {
                 CallableCreateKind::Function(name) => {
@@ -403,15 +403,10 @@ impl<'src> Printer<'src> {
             self.w(": ");
             self.print_type_hint(ret);
         }
-        self.w(" {");
-        if !closure.body.is_empty() {
-            self.newline();
-            self.print_stmts(&closure.body, true);
-            self.ensure_php_mode();
-            self.newline();
-            self.write_indent();
+        if !self.flush_gap_comments_before(closure.body.span.start) {
+            self.w(" ");
         }
-        self.w("}");
+        self.print_block(closure.body);
     }
 
     fn print_arrow_function(&mut self, af: &ArrowFunctionExpr) {
@@ -437,7 +432,11 @@ impl<'src> Printer<'src> {
     fn print_match(&mut self, m: &MatchExpr) {
         self.w("match (");
         self.print_expr(m.subject, PREC_LOWEST);
-        self.w(") {");
+        self.w(")");
+        if !self.flush_gap_comments_before(m.brace_start) {
+            self.w(" ");
+        }
+        self.w("{");
         self.newline();
         self.indent();
         for arm in m.arms.iter() {

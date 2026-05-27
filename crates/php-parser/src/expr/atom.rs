@@ -1196,6 +1196,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
             parser.alloc_vec()
         };
 
+        let brace_start = parser.start_span();
         parser.expect(TokenKind::LeftBrace);
         let members = stmt::parse_class_members(parser, false);
         parser.expect(TokenKind::RightBrace);
@@ -1209,7 +1210,10 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
             },
             extends,
             implements,
-            members,
+            body: ClassBody {
+                members,
+                span: Span::new(brace_start, end),
+            },
             attributes: anon_attributes,
             doc_comment: None,
         };
@@ -1378,14 +1382,15 @@ pub(crate) fn parse_closure<'arena, 'src>(
     };
 
     // body
+    let brace_start = parser.start_span();
     parser.expect(TokenKind::LeftBrace);
-    let mut body = parser.alloc_vec_with_capacity(16);
+    let mut body_stmts = parser.alloc_vec_with_capacity(16);
     let saved_loop_depth = parser.loop_depth;
     parser.loop_depth = 0;
     parser.function_depth += 1;
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
-        body.push(stmt::parse_stmt(parser));
+        body_stmts.push(stmt::parse_stmt(parser));
         if parser.current_span() == span_before {
             parser.advance();
         }
@@ -1394,6 +1399,10 @@ pub(crate) fn parse_closure<'arena, 'src>(
     parser.loop_depth = saved_loop_depth;
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
+    let body = parser.alloc(Block {
+        stmts: body_stmts,
+        span: Span::new(brace_start, end),
+    });
 
     Expr {
         kind: ExprKind::Closure(parser.alloc(ClosureExpr {
@@ -1487,6 +1496,7 @@ fn parse_match_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     let subject = parse_expr(parser);
     parser.expect(TokenKind::RightParen);
 
+    let brace_start = parser.start_span();
     parser.expect(TokenKind::LeftBrace);
 
     let mut arms = parser.alloc_vec_with_capacity(4);
@@ -1540,6 +1550,7 @@ fn parse_match_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
         kind: ExprKind::Match(MatchExpr {
             subject: parser.alloc(subject),
             arms,
+            brace_start,
         }),
         span: Span::new(start, end),
     }

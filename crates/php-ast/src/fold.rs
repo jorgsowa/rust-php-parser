@@ -92,6 +92,14 @@ pub trait Fold<'src> {
         fold_stmt(self, arena, stmt)
     }
 
+    fn fold_block<'new>(
+        &mut self,
+        arena: &'new Bump,
+        block: &Block<'_, 'src>,
+    ) -> Block<'new, 'src> {
+        fold_block(self, arena, block)
+    }
+
     fn fold_expr<'new>(&mut self, arena: &'new Bump, expr: &Expr<'_, 'src>) -> Expr<'new, 'src> {
         fold_expr(self, arena, expr)
     }
@@ -217,7 +225,7 @@ pub fn fold_stmt<'new, 'src, F: Fold<'src> + ?Sized>(
         StmtKind::Return(expr) => {
             StmtKind::Return(expr.map(|e| &*arena.alloc(folder.fold_expr(arena, e))))
         }
-        StmtKind::Block(stmts) => StmtKind::Block(fold_stmts(folder, arena, stmts)),
+        StmtKind::Block(block) => StmtKind::Block(arena.alloc(folder.fold_block(arena, block))),
         StmtKind::If(if_stmt) => {
             let mut elseif_branches =
                 ArenaVec::with_capacity_in(if_stmt.elseif_branches.len(), arena);
@@ -235,6 +243,7 @@ pub fn fold_stmt<'new, 'src, F: Fold<'src> + ?Sized>(
                 else_branch: if_stmt
                     .else_branch
                     .map(|b| &*arena.alloc(folder.fold_stmt(arena, b))),
+                else_kw_start: if_stmt.else_kw_start,
                 uses_alternative: if_stmt.uses_alternative,
             });
             StmtKind::If(new_if)
@@ -284,8 +293,8 @@ pub fn fold_stmt<'new, 'src, F: Fold<'src> + ?Sized>(
             StmtKind::Continue(expr.map(|e| &*arena.alloc(folder.fold_expr(arena, e))))
         }
         StmtKind::Switch(sw) => {
-            let mut cases = ArenaVec::with_capacity_in(sw.cases.len(), arena);
-            for case in sw.cases.iter() {
+            let mut cases = ArenaVec::with_capacity_in(sw.body.cases.len(), arena);
+            for case in sw.body.cases.iter() {
                 cases.push(SwitchCase {
                     value: case.value.as_ref().map(|v| folder.fold_expr(arena, v)),
                     body: fold_stmts(folder, arena, &case.body),
@@ -294,7 +303,10 @@ pub fn fold_stmt<'new, 'src, F: Fold<'src> + ?Sized>(
             }
             let new_sw = arena.alloc(SwitchStmt {
                 expr: folder.fold_expr(arena, &sw.expr),
-                cases,
+                body: SwitchBody {
+                    cases,
+                    span: sw.body.span,
+                },
                 uses_alternative: sw.uses_alternative,
             });
             StmtKind::Switch(new_sw)
@@ -321,9 +333,12 @@ pub fn fold_stmt<'new, 'src, F: Fold<'src> + ?Sized>(
                 catches.push(folder.fold_catch_clause(arena, catch));
             }
             let new_tc = arena.alloc(TryCatchStmt {
-                body: fold_stmts(folder, arena, &tc.body),
+                body: arena.alloc(folder.fold_block(arena, tc.body)),
                 catches,
-                finally: tc.finally.as_ref().map(|f| fold_stmts(folder, arena, f)),
+                finally: tc
+                    .finally
+                    .map(|f| &*arena.alloc(folder.fold_block(arena, f))),
+                finally_kw_start: tc.finally_kw_start,
             });
             StmtKind::TryCatch(new_tc)
         }
@@ -340,8 +355,8 @@ pub fn fold_stmt<'new, 'src, F: Fold<'src> + ?Sized>(
             let new_ns = arena.alloc(NamespaceDecl {
                 name: ns.name.as_ref().map(|n| folder.fold_name(arena, n)),
                 body: match &ns.body {
-                    NamespaceBody::Braced(stmts) => {
-                        NamespaceBody::Braced(fold_stmts(folder, arena, stmts))
+                    NamespaceBody::Braced(block) => {
+                        NamespaceBody::Braced(arena.alloc(folder.fold_block(arena, block)))
                     }
                     NamespaceBody::Simple => NamespaceBody::Simple,
                 },
@@ -575,7 +590,7 @@ pub fn fold_expr<'new, 'src, F: Fold<'src> + ?Sized>(
                     .return_type
                     .as_ref()
                     .map(|t| folder.fold_type_hint(arena, t)),
-                body: fold_stmts(folder, arena, &closure.body),
+                body: arena.alloc(folder.fold_block(arena, closure.body)),
                 attributes: fold_attrs(folder, arena, &closure.attributes),
             });
             ExprKind::Closure(new_closure)
@@ -603,6 +618,7 @@ pub fn fold_expr<'new, 'src, F: Fold<'src> + ?Sized>(
                 }
                 arms
             },
+            brace_start: match_expr.brace_start,
         }),
         ExprKind::ThrowExpr(e) => ExprKind::ThrowExpr(arena.alloc(folder.fold_expr(arena, e))),
         ExprKind::Yield(y) => ExprKind::Yield(YieldExpr {
@@ -741,7 +757,9 @@ pub fn fold_property_hook<'new, 'src, F: Fold<'src> + ?Sized>(
     hook: &PropertyHook<'_, 'src>,
 ) -> PropertyHook<'new, 'src> {
     let body = match &hook.body {
-        PropertyHookBody::Block(stmts) => PropertyHookBody::Block(fold_stmts(folder, arena, stmts)),
+        PropertyHookBody::Block(block) => {
+            PropertyHookBody::Block(arena.alloc(fold_block(folder, arena, block)))
+        }
         PropertyHookBody::Expression(expr) => {
             PropertyHookBody::Expression(folder.fold_expr(arena, expr))
         }
@@ -814,7 +832,7 @@ pub fn fold_catch_clause<'new, 'src, F: Fold<'src> + ?Sized>(
     CatchClause {
         types,
         var: catch.var,
-        body: fold_stmts(folder, arena, &catch.body),
+        body: arena.alloc(folder.fold_block(arena, catch.body)),
         span: catch.span,
     }
 }
@@ -854,6 +872,7 @@ pub fn fold_trait_use<'new, 'src, F: Fold<'src> + ?Sized>(
     TraitUseDecl {
         traits,
         adaptations,
+        adaptations_brace_start: trait_use.adaptations_brace_start,
     }
 }
 
@@ -930,7 +949,7 @@ fn fold_function_decl<'new, 'src, F: Fold<'src> + ?Sized>(
     FunctionDecl {
         name: func.name,
         params: fold_params(folder, arena, &func.params),
-        body: fold_stmts(folder, arena, &func.body),
+        body: arena.alloc(folder.fold_block(arena, func.body)),
         return_type: func
             .return_type
             .as_ref()
@@ -958,7 +977,9 @@ fn fold_method_decl<'new, 'src, F: Fold<'src> + ?Sized>(
             .return_type
             .as_ref()
             .map(|t| folder.fold_type_hint(arena, t)),
-        body: method.body.as_ref().map(|b| fold_stmts(folder, arena, b)),
+        body: method
+            .body
+            .map(|b| &*arena.alloc(folder.fold_block(arena, b))),
         attributes: fold_attrs(folder, arena, &method.attributes),
         doc_comment: method.doc_comment.as_ref().map(fold_comment),
     }
@@ -1009,8 +1030,8 @@ fn fold_class_decl<'new, 'src, F: Fold<'src> + ?Sized>(
     arena: &'new Bump,
     class: &ClassDecl<'_, 'src>,
 ) -> ClassDecl<'new, 'src> {
-    let mut members = ArenaVec::with_capacity_in(class.members.len(), arena);
-    for member in class.members.iter() {
+    let mut members = ArenaVec::with_capacity_in(class.body.members.len(), arena);
+    for member in class.body.members.iter() {
         members.push(folder.fold_class_member(arena, member));
     }
     ClassDecl {
@@ -1024,7 +1045,10 @@ fn fold_class_decl<'new, 'src, F: Fold<'src> + ?Sized>(
             }
             v
         },
-        members,
+        body: ClassBody {
+            members,
+            span: class.body.span,
+        },
         attributes: fold_attrs(folder, arena, &class.attributes),
         doc_comment: class.doc_comment.as_ref().map(fold_comment),
     }
@@ -1039,14 +1063,17 @@ fn fold_interface_decl<'new, 'src, F: Fold<'src> + ?Sized>(
     for n in iface.extends.iter() {
         extends.push(folder.fold_name(arena, n));
     }
-    let mut members = ArenaVec::with_capacity_in(iface.members.len(), arena);
-    for member in iface.members.iter() {
+    let mut members = ArenaVec::with_capacity_in(iface.body.members.len(), arena);
+    for member in iface.body.members.iter() {
         members.push(folder.fold_class_member(arena, member));
     }
     InterfaceDecl {
         name: iface.name,
         extends,
-        members,
+        body: ClassBody {
+            members,
+            span: iface.body.span,
+        },
         attributes: fold_attrs(folder, arena, &iface.attributes),
         doc_comment: iface.doc_comment.as_ref().map(fold_comment),
     }
@@ -1057,13 +1084,16 @@ fn fold_trait_decl<'new, 'src, F: Fold<'src> + ?Sized>(
     arena: &'new Bump,
     t: &TraitDecl<'_, 'src>,
 ) -> TraitDecl<'new, 'src> {
-    let mut members = ArenaVec::with_capacity_in(t.members.len(), arena);
-    for member in t.members.iter() {
+    let mut members = ArenaVec::with_capacity_in(t.body.members.len(), arena);
+    for member in t.body.members.iter() {
         members.push(folder.fold_class_member(arena, member));
     }
     TraitDecl {
         name: t.name,
-        members,
+        body: ClassBody {
+            members,
+            span: t.body.span,
+        },
         attributes: fold_attrs(folder, arena, &t.attributes),
         doc_comment: t.doc_comment.as_ref().map(fold_comment),
     }
@@ -1074,8 +1104,8 @@ fn fold_enum_decl<'new, 'src, F: Fold<'src> + ?Sized>(
     arena: &'new Bump,
     e: &EnumDecl<'_, 'src>,
 ) -> EnumDecl<'new, 'src> {
-    let mut members = ArenaVec::with_capacity_in(e.members.len(), arena);
-    for member in e.members.iter() {
+    let mut members = ArenaVec::with_capacity_in(e.body.members.len(), arena);
+    for member in e.body.members.iter() {
         members.push(folder.fold_enum_member(arena, member));
     }
     EnumDecl {
@@ -1088,7 +1118,10 @@ fn fold_enum_decl<'new, 'src, F: Fold<'src> + ?Sized>(
             }
             v
         },
-        members,
+        body: EnumBody {
+            members,
+            span: e.body.span,
+        },
         attributes: fold_attrs(folder, arena, &e.attributes),
         doc_comment: e.doc_comment.as_ref().map(fold_comment),
     }
@@ -1108,6 +1141,17 @@ fn fold_stmts<'new, 'src, F: Fold<'src> + ?Sized>(
         vec.push(folder.fold_stmt(arena, stmt));
     }
     vec
+}
+
+pub fn fold_block<'new, 'src, F: Fold<'src> + ?Sized>(
+    folder: &mut F,
+    arena: &'new Bump,
+    block: &Block<'_, 'src>,
+) -> Block<'new, 'src> {
+    Block {
+        stmts: fold_stmts(folder, arena, &block.stmts),
+        span: block.span,
+    }
 }
 
 fn fold_exprs<'new, 'src, F: Fold<'src> + ?Sized>(

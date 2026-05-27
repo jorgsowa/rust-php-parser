@@ -183,6 +183,21 @@ impl<'src> Printer<'src> {
         // maintain consistent positioning rather than drifting between being inline vs leading.
     }
 
+    /// Flush any pending comments whose offset precedes `block_start`.
+    /// Emits a newline first, then each comment at the current indent level,
+    /// and leaves the cursor on a freshly-indented new line.
+    /// Returns `true` if any comments were flushed so the caller can skip its
+    /// normal ` ` spacer before `{`.
+    pub(crate) fn flush_gap_comments_before(&mut self, block_start: u32) -> bool {
+        if !self.has_comments_before(block_start) {
+            return false;
+        }
+        self.newline();
+        self.flush_leading_comments(block_start);
+        self.write_indent();
+        true
+    }
+
     pub(crate) fn flush_remaining_comments(&mut self) {
         while self.comment_cursor < self.comments.len() {
             let c = &self.comments[self.comment_cursor];

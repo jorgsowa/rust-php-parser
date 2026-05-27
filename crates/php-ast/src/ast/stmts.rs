@@ -17,6 +17,21 @@ pub struct Stmt<'arena, 'src> {
     pub span: Span,
 }
 
+/// A brace-delimited statement block. Used both as a standalone block
+/// statement ([`StmtKind::Block`]) and as the body of constructs that are
+/// *always* braced (functions, methods, closures, `try`/`catch`/`finally`,
+/// braced namespaces, property-hook blocks) — those positions hold a
+/// `&Block` so the "it's a block" invariant is enforced by the type.
+#[derive(Debug, Serialize)]
+#[serde(transparent)]
+pub struct Block<'arena, 'src> {
+    pub stmts: ArenaVec<'arena, Stmt<'arena, 'src>>,
+    /// Span covering `{`..`}` (or the keyword-delimited region for the
+    /// alternative-syntax blocks reachable only via [`StmtKind::Block`]).
+    #[serde(skip)]
+    pub span: Span,
+}
+
 #[derive(Debug, Serialize)]
 pub enum StmtKind<'arena, 'src> {
     /// Expression statement (e.g. `foo();`)
@@ -29,7 +44,7 @@ pub enum StmtKind<'arena, 'src> {
     Return(Option<&'arena Expr<'arena, 'src>>),
 
     /// Block statement: `{ stmts }`
-    Block(ArenaVec<'arena, Stmt<'arena, 'src>>),
+    Block(&'arena Block<'arena, 'src>),
 
     /// If statement
     If(&'arena IfStmt<'arena, 'src>),
@@ -122,6 +137,9 @@ pub struct IfStmt<'arena, 'src> {
     pub then_branch: &'arena Stmt<'arena, 'src>,
     pub elseif_branches: ArenaVec<'arena, ElseIfBranch<'arena, 'src>>,
     pub else_branch: Option<&'arena Stmt<'arena, 'src>>,
+    /// Start byte offset of the `else` keyword; `None` when there is no else branch.
+    #[serde(skip)]
+    pub else_kw_start: Option<u32>,
     #[serde(default, skip_serializing_if = "is_false")]
     pub uses_alternative: bool,
 }
@@ -168,9 +186,17 @@ pub struct DoWhileStmt<'arena, 'src> {
 }
 
 #[derive(Debug, Serialize)]
+pub struct SwitchBody<'arena, 'src> {
+    pub cases: ArenaVec<'arena, SwitchCase<'arena, 'src>>,
+    #[serde(skip)]
+    pub span: Span,
+}
+
+#[derive(Debug, Serialize)]
 pub struct SwitchStmt<'arena, 'src> {
     pub expr: Expr<'arena, 'src>,
-    pub cases: ArenaVec<'arena, SwitchCase<'arena, 'src>>,
+    #[serde(flatten)]
+    pub body: SwitchBody<'arena, 'src>,
     #[serde(default, skip_serializing_if = "is_false")]
     pub uses_alternative: bool,
 }
@@ -184,16 +210,19 @@ pub struct SwitchCase<'arena, 'src> {
 
 #[derive(Debug, Serialize)]
 pub struct TryCatchStmt<'arena, 'src> {
-    pub body: ArenaVec<'arena, Stmt<'arena, 'src>>,
+    pub body: &'arena Block<'arena, 'src>,
     pub catches: ArenaVec<'arena, CatchClause<'arena, 'src>>,
-    pub finally: Option<ArenaVec<'arena, Stmt<'arena, 'src>>>,
+    pub finally: Option<&'arena Block<'arena, 'src>>,
+    /// Start byte offset of the `finally` keyword; `None` when there is no finally clause.
+    #[serde(skip)]
+    pub finally_kw_start: Option<u32>,
 }
 
 #[derive(Debug, Serialize)]
 pub struct CatchClause<'arena, 'src> {
     pub types: ArenaVec<'arena, Name<'arena, 'src>>,
     pub var: Option<&'src str>,
-    pub body: ArenaVec<'arena, Stmt<'arena, 'src>>,
+    pub body: &'arena Block<'arena, 'src>,
     pub span: Span,
 }
 
@@ -206,7 +235,7 @@ pub struct NamespaceDecl<'arena, 'src> {
 #[derive(Debug, Serialize)]
 pub enum NamespaceBody<'arena, 'src> {
     /// `namespace Foo { … }` — braced form; the statements are scoped to this namespace.
-    Braced(ArenaVec<'arena, Stmt<'arena, 'src>>),
+    Braced(&'arena Block<'arena, 'src>),
     /// `namespace Foo;` — simple form; all subsequent statements until the next `namespace` or EOF are in scope.
     Simple,
 }

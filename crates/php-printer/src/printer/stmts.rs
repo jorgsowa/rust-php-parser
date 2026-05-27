@@ -46,11 +46,11 @@ impl<'src> Printer<'src> {
                 }
                 self.w(";");
             }
-            StmtKind::Block(stmts) => {
+            StmtKind::Block(block) => {
                 self.w("{");
-                if !stmts.is_empty() {
+                if !block.stmts.is_empty() {
                     self.newline();
-                    self.print_stmts_ensure_php(stmts, true);
+                    self.print_stmts_ensure_php(&block.stmts, true);
                     self.newline();
                     self.write_indent();
                 } else {
@@ -67,8 +67,11 @@ impl<'src> Printer<'src> {
                     self.print_alt_section(w.body);
                     self.w("endwhile;");
                 } else {
-                    self.w(") ");
-                    self.print_block_or_stmt(w.body);
+                    self.w(")");
+                    if !self.flush_gap_comments_before(w.body.span.start) {
+                        self.w(" ");
+                    }
+                    self.print_stmt_or_block(w.body);
                 }
             }
             StmtKind::For(f) => {
@@ -83,8 +86,11 @@ impl<'src> Printer<'src> {
                     self.print_alt_section(f.body);
                     self.w("endfor;");
                 } else {
-                    self.w(") ");
-                    self.print_block_or_stmt(f.body);
+                    self.w(")");
+                    if !self.flush_gap_comments_before(f.body.span.start) {
+                        self.w(" ");
+                    }
+                    self.print_stmt_or_block(f.body);
                 }
             }
             StmtKind::Foreach(f) => {
@@ -101,18 +107,27 @@ impl<'src> Printer<'src> {
                     self.print_alt_section(f.body);
                     self.w("endforeach;");
                 } else {
-                    self.w(") ");
-                    self.print_block_or_stmt(f.body);
+                    self.w(")");
+                    if !self.flush_gap_comments_before(f.body.span.start) {
+                        self.w(" ");
+                    }
+                    self.print_stmt_or_block(f.body);
                 }
             }
             StmtKind::DoWhile(dw) => {
-                self.w("do ");
-                self.print_block_or_stmt(dw.body);
-                self.w(" while (");
+                self.w("do");
+                if !self.flush_gap_comments_before(dw.body.span.start) {
+                    self.w(" ");
+                }
+                self.print_stmt_or_block(dw.body);
+                if !self.flush_gap_comments_before(dw.condition.span.start) {
+                    self.w(" ");
+                }
+                self.w("while (");
                 self.print_expr(&dw.condition, PREC_LOWEST);
                 self.w(");");
             }
-            StmtKind::Function(func) => self.print_function(func, stmt),
+            StmtKind::Function(func) => self.print_function(func),
             StmtKind::Break(expr) => {
                 self.w("break");
                 if let Some(e) = expr {
@@ -135,13 +150,17 @@ impl<'src> Printer<'src> {
                 if sw.uses_alternative {
                     self.w("):");
                 } else {
-                    self.w(") {");
+                    self.w(")");
+                    if !self.flush_gap_comments_before(sw.body.span.start) {
+                        self.w(" ");
+                    }
+                    self.w("{");
                 }
                 self.newline();
                 self.indent();
-                for (i, case) in sw.cases.iter().enumerate() {
+                for (i, case) in sw.body.cases.iter().enumerate() {
                     if i > 0 {
-                        let prev_end = sw.cases[i - 1].span.end;
+                        let prev_end = sw.body.cases[i - 1].span.end;
                         let scan_to = self
                             .first_pending_comment_before(case.span.start)
                             .unwrap_or(case.span.start);
@@ -203,8 +222,10 @@ impl<'src> Printer<'src> {
                         self.w("enddeclare;");
                     }
                     (Some(body), false) => {
-                        self.w(" ");
-                        self.print_block_or_stmt(body);
+                        if !self.flush_gap_comments_before(body.span.start) {
+                            self.w(" ");
+                        }
+                        self.print_stmt_or_block(body);
                     }
                     (None, _) => {
                         self.w(";");
@@ -221,17 +242,17 @@ impl<'src> Printer<'src> {
                 self.print_expr(expr, PREC_LOWEST);
                 self.w(";");
             }
-            StmtKind::TryCatch(tc) => self.print_try_catch(tc, stmt),
+            StmtKind::TryCatch(tc) => self.print_try_catch(tc),
             StmtKind::Global(exprs) => {
                 self.w("global ");
                 self.print_comma_separated_exprs(exprs);
                 self.w(";");
             }
-            StmtKind::Class(class) => self.print_class(class, stmt),
-            StmtKind::Interface(iface) => self.print_interface(iface, stmt),
-            StmtKind::Trait(trait_decl) => self.print_trait(trait_decl, stmt),
-            StmtKind::Enum(enum_decl) => self.print_enum(enum_decl, stmt),
-            StmtKind::Namespace(ns) => self.print_namespace(ns, stmt),
+            StmtKind::Class(class) => self.print_class(class),
+            StmtKind::Interface(iface) => self.print_interface(iface),
+            StmtKind::Trait(trait_decl) => self.print_trait(trait_decl),
+            StmtKind::Enum(enum_decl) => self.print_enum(enum_decl),
+            StmtKind::Namespace(ns) => self.print_namespace(ns),
             StmtKind::Use(use_decl) => self.print_use(use_decl),
             StmtKind::Const(items) => {
                 if let Some(first) = items.first() {
@@ -310,17 +331,36 @@ impl<'src> Printer<'src> {
         } else {
             self.w("if (");
             self.print_expr(&if_stmt.condition, PREC_LOWEST);
-            self.w(") ");
-            self.print_block_or_stmt(if_stmt.then_branch);
+            self.w(")");
+            if !self.flush_gap_comments_before(if_stmt.then_branch.span.start) {
+                self.w(" ");
+            }
+            self.print_stmt_or_block(if_stmt.then_branch);
             for elseif in if_stmt.elseif_branches.iter() {
-                self.w(" elseif (");
+                if !self.flush_gap_comments_before(elseif.span.start) {
+                    self.w(" ");
+                }
+                self.w("elseif (");
                 self.print_expr(&elseif.condition, PREC_LOWEST);
-                self.w(") ");
-                self.print_block_or_stmt(&elseif.body);
+                self.w(")");
+                if !self.flush_gap_comments_before(elseif.body.span.start) {
+                    self.w(" ");
+                }
+                self.print_stmt_or_block(&elseif.body);
             }
             if let Some(else_branch) = &if_stmt.else_branch {
-                self.w(" else ");
-                self.print_block_or_stmt(else_branch);
+                if let Some(else_kw_start) = if_stmt.else_kw_start {
+                    if !self.flush_gap_comments_before(else_kw_start) {
+                        self.w(" ");
+                    }
+                } else {
+                    self.w(" ");
+                }
+                self.w("else");
+                if !self.flush_gap_comments_before(else_branch.span.start) {
+                    self.w(" ");
+                }
+                self.print_stmt_or_block(else_branch);
             }
         }
     }
@@ -328,39 +368,29 @@ impl<'src> Printer<'src> {
     /// Print a Block's statements indented, without braces — for alternative syntax bodies.
     /// Leaves output positioned at the start of the next line at the current indent level.
     fn print_alt_section(&mut self, body: &Stmt) {
-        if let StmtKind::Block(stmts) = &body.kind {
+        if let StmtKind::Block(block) = &body.kind {
             self.newline();
             self.indent();
             // If the body ends in HTML mode, re-enter PHP inline (same line as last HTML)
             // so the caller's closing keyword (endif, endforeach, etc.) is valid PHP.
-            self.print_stmts_ensure_php(stmts, false);
+            self.print_stmts_ensure_php(&block.stmts, false);
             self.newline();
             self.dedent();
             self.write_indent();
         }
     }
 
-    fn print_try_catch(&mut self, tc: &TryCatchStmt, stmt: &Stmt) {
-        let try_end = tc
-            .catches
-            .first()
-            .map(|c| c.span.start)
-            .unwrap_or(stmt.span.end);
-        self.w("try {");
-        if !tc.body.is_empty() {
-            self.newline();
-            self.indent();
-            self.print_stmts_ensure_php(&tc.body, false);
-            self.newline();
-            self.flush_leading_comments(try_end);
-            self.dedent();
-            self.write_indent();
-        } else {
-            self.flush_leading_comments(try_end);
+    fn print_try_catch(&mut self, tc: &TryCatchStmt) {
+        self.w("try");
+        if !self.flush_gap_comments_before(tc.body.span.start) {
+            self.w(" ");
         }
-        self.w("}");
+        self.print_block(tc.body);
         for catch in tc.catches.iter() {
-            self.w(" catch (");
+            if !self.flush_gap_comments_before(catch.span.start) {
+                self.w(" ");
+            }
+            self.w("catch (");
             for (j, ty) in catch.types.iter().enumerate() {
                 if j > 0 {
                     self.w("|");
@@ -371,52 +401,50 @@ impl<'src> Printer<'src> {
                 self.w(" $");
                 self.w(var);
             }
-            self.w(") {");
-            if !catch.body.is_empty() {
-                self.newline();
-                self.indent();
-                self.print_stmts_ensure_php(&catch.body, false);
-                self.newline();
-                self.flush_leading_comments(catch.span.end);
-                self.dedent();
-                self.write_indent();
-            } else {
-                self.flush_leading_comments(catch.span.end);
+            self.w(")");
+            if !self.flush_gap_comments_before(catch.body.span.start) {
+                self.w(" ");
             }
-            self.w("}");
+            self.print_block(catch.body);
         }
-        if let Some(finally) = &tc.finally {
-            self.w(" finally {");
-            if !finally.is_empty() {
-                self.newline();
-                self.indent();
-                self.print_stmts_ensure_php(finally, false);
-                self.newline();
-                self.flush_leading_comments(stmt.span.end);
-                self.dedent();
-                self.write_indent();
+        if let Some(finally) = tc.finally {
+            if let Some(finally_kw_start) = tc.finally_kw_start {
+                if !self.flush_gap_comments_before(finally_kw_start) {
+                    self.w(" ");
+                }
             } else {
-                self.flush_leading_comments(stmt.span.end);
+                self.w(" ");
             }
-            self.w("}");
+            self.w("finally");
+            if !self.flush_gap_comments_before(finally.span.start) {
+                self.w(" ");
+            }
+            self.print_block(finally);
         }
     }
 
-    pub(crate) fn print_block_or_stmt(&mut self, stmt: &Stmt) {
-        if let StmtKind::Block(stmts) = &stmt.kind {
-            self.w("{");
-            if !stmts.is_empty() {
-                self.newline();
-                self.indent();
-                self.print_stmts_ensure_php(stmts, false);
-                self.newline();
-                self.flush_leading_comments(stmt.span.end);
-                self.dedent();
-                self.write_indent();
-            } else {
-                self.flush_leading_comments(stmt.span.end);
-            }
-            self.w("}");
+    /// Prints a brace-delimited block. Total — every body position routes here.
+    pub(crate) fn print_block(&mut self, block: &Block) {
+        self.w("{");
+        if !block.stmts.is_empty() {
+            self.newline();
+            self.indent();
+            self.print_stmts_ensure_php(&block.stmts, false);
+            self.newline();
+            self.flush_leading_comments(block.span.end);
+            self.dedent();
+            self.write_indent();
+        } else {
+            self.flush_leading_comments(block.span.end);
+        }
+        self.w("}");
+    }
+
+    /// Prints a control-flow body that may be a block or a single statement;
+    /// a bare statement is wrapped in braces for consistent output.
+    pub(crate) fn print_stmt_or_block(&mut self, stmt: &Stmt) {
+        if let StmtKind::Block(block) = &stmt.kind {
+            self.print_block(block);
         } else {
             self.w("{");
             self.newline();
@@ -432,28 +460,18 @@ impl<'src> Printer<'src> {
         }
     }
 
-    fn print_namespace(&mut self, ns: &NamespaceDecl, stmt: &Stmt) {
+    fn print_namespace(&mut self, ns: &NamespaceDecl) {
         self.w("namespace");
         if let Some(name) = &ns.name {
             self.w(" ");
             self.print_name(name);
         }
-        match &ns.body {
-            NamespaceBody::Braced(stmts) => {
-                self.w(" {");
-                if !stmts.is_empty() {
-                    self.newline();
-                    self.indent();
-                    self.print_stmts(stmts, false);
-                    self.ensure_php_mode();
-                    self.newline();
-                    self.flush_leading_comments(stmt.span.end);
-                    self.dedent();
-                    self.write_indent();
-                } else {
-                    self.flush_leading_comments(stmt.span.end);
+        match ns.body {
+            NamespaceBody::Braced(block) => {
+                if !self.flush_gap_comments_before(block.span.start) {
+                    self.w(" ");
                 }
-                self.w("}");
+                self.print_block(block);
             }
             NamespaceBody::Simple => self.w(";"),
         }
