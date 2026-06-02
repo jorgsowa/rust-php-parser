@@ -370,5 +370,6 @@ pub(super) fn parse_enum<'arena, 'src>(
             doc_comment,
         })),
         span: Span::new(start, end),
+        doc_comment: None,
     }
 }

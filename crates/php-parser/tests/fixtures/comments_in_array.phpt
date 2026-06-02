@@ -214,6 +214,14 @@ $z = [
       "span": {
         "start": 188,
         "end": 300
+      },
+      "doc_comment": {
+        "kind": "Doc",
+        "text": "/** doc comment */",
+        "span": {
+          "start": 107,
+          "end": 125
+        }
       }
     },
     {

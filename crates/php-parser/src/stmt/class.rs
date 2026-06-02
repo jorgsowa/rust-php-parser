@@ -125,6 +125,7 @@ pub(super) fn parse_class<'arena, 'src>(
             doc_comment,
         })),
         span: Span::new(start, end),
+        doc_comment: None,
     }
 }
 
@@ -1176,6 +1177,7 @@ pub(super) fn parse_interface<'arena, 'src>(
             doc_comment,
         })),
         span: Span::new(start, end),
+        doc_comment: None,
     }
 }
 
@@ -1218,5 +1220,6 @@ pub(super) fn parse_trait<'arena, 'src>(
             doc_comment,
         })),
         span: Span::new(start, end),
+        doc_comment: None,
     }
 }

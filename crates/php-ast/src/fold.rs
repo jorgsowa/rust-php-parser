@@ -411,6 +411,7 @@ pub fn fold_stmt<'new, 'src, F: Fold<'src> + ?Sized>(
     Stmt {
         kind,
         span: stmt.span,
+        doc_comment: stmt.doc_comment.map(|c| &*arena.alloc(fold_comment(c))),
     }
 }
 

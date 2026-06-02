@@ -1293,6 +1293,7 @@ mod tests {
         stmts.push(Stmt {
             kind: StmtKind::Expression(assign),
             span: Span::DUMMY,
+            doc_comment: None,
         });
         let program = Program {
             stmts,
@@ -1327,6 +1328,7 @@ mod tests {
         stmts.push(Stmt {
             kind: StmtKind::Expression(binary),
             span: Span::DUMMY,
+            doc_comment: None,
         });
         let program = Program {
             stmts,
@@ -1392,6 +1394,7 @@ mod tests {
         func_body_stmts.push(Stmt {
             kind: StmtKind::Expression(inner),
             span: Span::DUMMY,
+            doc_comment: None,
         });
         let func_body = arena.alloc(Block {
             stmts: func_body_stmts,
@@ -1410,10 +1413,12 @@ mod tests {
         stmts.push(Stmt {
             kind: StmtKind::Expression(top),
             span: Span::DUMMY,
+            doc_comment: None,
         });
         stmts.push(Stmt {
             kind: StmtKind::Function(func),
             span: Span::DUMMY,
+            doc_comment: None,
         });
         let program = Program {
             stmts,

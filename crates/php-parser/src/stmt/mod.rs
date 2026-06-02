@@ -23,6 +23,39 @@ pub use class::{parse_class_members, parse_name_list};
 /// pathologically deep input may observe a stack overflow. Use
 /// [`std::thread::Builder::stack_size`] to set a larger stack when needed.
 pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
+    // Snapshot the two values we need for doc-comment attachment *before* the
+    // inner parse, because parsing the statement body updates them:
+    //
+    // • `doc_start`      – the source position of the first token of this
+    //                      statement.  Only doc comments that END before this
+    //                      position can belong to this statement.
+    //
+    // • `scope_open_at`  – the current `last_scope_close` (which tracks the
+    //                      end of the most recent `{` or `}`).  Any doc comment
+    //                      that STARTS before this boundary belongs to an outer
+    //                      or already-closed scope and must not be claimed here.
+    //
+    // We call `take_doc_comment_from` *after* the inner parse for one reason:
+    // declaration parsers (function, class, …) call `take_doc_comment` for
+    // themselves during the inner parse and remove the comment from the list.
+    // That means when we reach the post-parse claim the comment is already gone
+    // for declarations (returns None) but still present for non-declarations
+    // (foreach, assignments, if, …).
+    //
+    // Saving `scope_open_at` beforehand is the key: parsing the body advances
+    // `last_scope_close` past the doc comment's position (via the `{` and `}`
+    // tokens inside the body), so we cannot use the *current* `last_scope_close`
+    // as a lower bound at claim time — we use the *saved* value instead.
+    let doc_start = parser.current_span().start;
+    let scope_open_at = parser.scope_boundary();
+    let mut stmt = parse_stmt_inner(parser);
+    stmt.doc_comment = parser
+        .take_doc_comment_from(doc_start, scope_open_at)
+        .map(|c| parser.alloc(c));
+    stmt
+}
+
+fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     instrument::record_parse_stmt();
 
     // Handle attributes: #[...] before declarations
@@ -41,6 +74,7 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
                 return Stmt {
                     kind: StmtKind::InlineHtml(text),
                     span: token.span,
+                    doc_comment: None,
                 };
             }
             // No inline HTML; fall through to consume any following OpenTag
@@ -56,6 +90,7 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
             Stmt {
                 kind: StmtKind::Nop,
                 span,
+                doc_comment: None,
             }
         }
         // <?= after an inline HTML section (OpenTag left in stream by CloseTag handler above)
@@ -70,6 +105,7 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
             Stmt {
                 kind: StmtKind::Nop,
                 span,
+                doc_comment: None,
             }
         }
         TokenKind::Semicolon => {
@@ -78,6 +114,7 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
             Stmt {
                 kind: StmtKind::Nop,
                 span,
+                doc_comment: None,
             }
         }
         TokenKind::Echo => parse_echo(parser),
@@ -319,6 +356,7 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
                         span: token.span,
                     })),
                     span,
+                    doc_comment: None,
                 }
             } else {
                 parse_expression_stmt(parser)
@@ -332,6 +370,7 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
             Stmt {
                 kind: StmtKind::Error,
                 span,
+                doc_comment: None,
             }
         }
         _ => parse_expression_stmt(parser),
@@ -352,6 +391,7 @@ fn class_modifier_error<'arena, 'src>(
     Stmt {
         kind: StmtKind::Error,
         span,
+        doc_comment: None,
     }
 }
 
@@ -389,6 +429,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         return Stmt {
             kind: StmtKind::Expression(parser.alloc(expr)),
             span,
+            doc_comment: None,
         };
     }
 
@@ -550,6 +591,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 Stmt {
                     kind: StmtKind::Error,
                     span,
+                    doc_comment: None,
                 }
             }
         }
@@ -588,6 +630,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             Stmt {
                 kind: StmtKind::Error,
                 span,
+                doc_comment: None,
             }
         }
     };
@@ -615,6 +658,7 @@ pub fn parse_block<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
                 stmts.push(Stmt {
                     kind: StmtKind::InlineHtml(text),
                     span: token.span,
+                    doc_comment: None,
                 });
             }
             if parser.check(TokenKind::OpenTag) {
@@ -642,6 +686,7 @@ pub fn parse_block<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
     Stmt {
         kind: StmtKind::Block(parser.alloc(Block { stmts, span })),
         span,
+        doc_comment: None,
     }
 }
 
@@ -670,6 +715,7 @@ fn parse_stmts_until_end<'arena, 'src>(
                 stmts.push(Stmt {
                     kind: StmtKind::InlineHtml(text),
                     span: token.span,
+                    doc_comment: None,
                 });
             }
             if parser.check(TokenKind::OpenTag) {
@@ -715,6 +761,7 @@ fn parse_echo<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena
     Stmt {
         kind: StmtKind::Echo(exprs),
         span,
+        doc_comment: None,
     }
 }
 
@@ -738,6 +785,7 @@ fn parse_return<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
     Stmt {
         kind: StmtKind::Return(expr.map(|e| parser.alloc(e))),
         span,
+        doc_comment: None,
     }
 }
 
@@ -769,6 +817,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
                 span: then_span,
             })),
             span: then_span,
+            doc_comment: None,
         });
 
         let mut elseif_branches = parser.alloc_vec();
@@ -789,6 +838,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
                     span: elseif_span,
                 })),
                 span: elseif_span,
+                doc_comment: None,
             };
             elseif_branches.push(ElseIfBranch {
                 condition: elseif_cond,
@@ -807,6 +857,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
                     span: else_span,
                 })),
                 span: else_span,
+                doc_comment: None,
             }))
         } else {
             None
@@ -826,6 +877,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
                 uses_alternative: true,
             })),
             span,
+            doc_comment: None,
         };
     }
 
@@ -874,6 +926,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
             uses_alternative: false,
         })),
         span,
+        doc_comment: None,
     }
 }
 
@@ -901,6 +954,7 @@ fn parse_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
         let body = parser.alloc(Stmt {
             kind: StmtKind::Block(parser.alloc(Block { stmts, span })),
             span,
+            doc_comment: None,
         });
         return Stmt {
             kind: StmtKind::While(parser.alloc(WhileStmt {
@@ -909,6 +963,7 @@ fn parse_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
                 uses_alternative: true,
             })),
             span,
+            doc_comment: None,
         };
     }
 
@@ -924,6 +979,7 @@ fn parse_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
             uses_alternative: false,
         })),
         span,
+        doc_comment: None,
     }
 }
 
@@ -946,6 +1002,7 @@ fn parse_do_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
     Stmt {
         kind: StmtKind::DoWhile(parser.alloc(DoWhileStmt { body, condition })),
         span,
+        doc_comment: None,
     }
 }
 
@@ -973,6 +1030,7 @@ fn parse_for<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
         let body = parser.alloc(Stmt {
             kind: StmtKind::Block(parser.alloc(Block { stmts, span })),
             span,
+            doc_comment: None,
         });
         return Stmt {
             kind: StmtKind::For(parser.alloc(ForStmt {
@@ -983,6 +1041,7 @@ fn parse_for<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                 uses_alternative: true,
             })),
             span,
+            doc_comment: None,
         };
     }
 
@@ -1000,6 +1059,7 @@ fn parse_for<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             uses_alternative: false,
         })),
         span,
+        doc_comment: None,
     }
 }
 
@@ -1058,6 +1118,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
         let body = parser.alloc(Stmt {
             kind: StmtKind::Block(parser.alloc(Block { stmts, span })),
             span,
+            doc_comment: None,
         });
         return Stmt {
             kind: StmtKind::Foreach(parser.alloc(ForeachStmt {
@@ -1068,6 +1129,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
                 uses_alternative: true,
             })),
             span,
+            doc_comment: None,
         };
     }
 
@@ -1085,6 +1147,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
             uses_alternative: false,
         })),
         span,
+        doc_comment: None,
     }
 }
 
@@ -1187,6 +1250,7 @@ fn parse_function<'arena, 'src>(
             doc_comment,
         })),
         span,
+        doc_comment: None,
     }
 }
 
@@ -1585,6 +1649,7 @@ fn parse_break<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
     Stmt {
         kind: StmtKind::Break(expr.map(|e| parser.alloc(e))),
         span,
+        doc_comment: None,
     }
 }
 
@@ -1603,6 +1668,7 @@ fn parse_continue<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
     Stmt {
         kind: StmtKind::Continue(expr.map(|e| parser.alloc(e))),
         span,
+        doc_comment: None,
     }
 }
 
@@ -1745,6 +1811,7 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
             uses_alternative: alt_syntax,
         })),
         span,
+        doc_comment: None,
     }
 }
 
@@ -1761,6 +1828,7 @@ fn parse_throw_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
     Stmt {
         kind: StmtKind::Throw(parser.alloc(expr)),
         span,
+        doc_comment: None,
     }
 }
 
@@ -1868,6 +1936,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             finally_kw_start,
         })),
         span,
+        doc_comment: None,
     }
 }
 
@@ -1888,6 +1957,7 @@ fn parse_goto<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena
     Stmt {
         kind: StmtKind::Goto(name),
         span,
+        doc_comment: None,
     }
 }
 
@@ -1927,6 +1997,7 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
                 span: decl_span,
             })),
             span: decl_span,
+            doc_comment: None,
         });
         (Some(block), true)
     } else {
@@ -1942,6 +2013,7 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
             uses_alternative,
         })),
         span,
+        doc_comment: None,
     }
 }
 
@@ -1963,6 +2035,7 @@ fn parse_unset<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
     Stmt {
         kind: StmtKind::Unset(exprs),
         span,
+        doc_comment: None,
     }
 }
 
@@ -1998,6 +2071,7 @@ fn parse_global<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
     Stmt {
         kind: StmtKind::Global(exprs),
         span,
+        doc_comment: None,
     }
 }
 
@@ -2041,6 +2115,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
                 body: NamespaceBody::Braced(block),
             })),
             span: Span::new(start, end),
+            doc_comment: None,
         };
     }
 
@@ -2070,6 +2145,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
                 body: NamespaceBody::Braced(block),
             })),
             span: Span::new(start, end),
+            doc_comment: None,
         }
     } else {
         // Simple namespace: namespace Foo\Bar;
@@ -2081,6 +2157,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
                 body: NamespaceBody::Simple,
             })),
             span,
+            doc_comment: None,
         }
     }
 }
@@ -2281,6 +2358,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
     Stmt {
         kind: StmtKind::Use(parser.alloc(UseDecl { kind, uses })),
         span,
+        doc_comment: None,
     }
 }
 
@@ -2343,6 +2421,7 @@ fn parse_const_with_attrs<'arena, 'src>(
     Stmt {
         kind: StmtKind::Const(items),
         span,
+        doc_comment: None,
     }
 }
 
@@ -2387,6 +2466,7 @@ fn parse_halt_compiler<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> St
     Stmt {
         kind: StmtKind::HaltCompiler(remaining),
         span,
+        doc_comment: None,
     }
 }
 
@@ -2441,6 +2521,7 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
     Stmt {
         kind: StmtKind::StaticVar(vars),
         span,
+        doc_comment: None,
     }
 }
 
@@ -2463,6 +2544,7 @@ fn parse_expression_stmt_or_label<'arena, 'src>(
             return Stmt {
                 kind: StmtKind::Label(label),
                 span,
+                doc_comment: None,
             };
         }
     }
@@ -2472,6 +2554,7 @@ fn parse_expression_stmt_or_label<'arena, 'src>(
         return Stmt {
             kind: StmtKind::Error,
             span: Span::new(start, parser.previous_end()),
+            doc_comment: None,
         };
     }
 
@@ -2480,6 +2563,7 @@ fn parse_expression_stmt_or_label<'arena, 'src>(
     Stmt {
         kind: StmtKind::Expression(parser.alloc(expr)),
         span,
+        doc_comment: None,
     }
 }
 
@@ -2492,6 +2576,7 @@ fn parse_expression_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         return Stmt {
             kind: StmtKind::Error,
             span: Span::new(start, parser.previous_end()),
+            doc_comment: None,
         };
     }
 
@@ -2520,6 +2605,7 @@ fn parse_expression_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
     Stmt {
         kind: StmtKind::Expression(parser.alloc(expr)),
         span,
+        doc_comment: None,
     }
 }
 

@@ -7,7 +7,7 @@ use super::Printer;
 
 impl<'src> Printer<'src> {
     pub(crate) fn print_function(&mut self, func: &FunctionDecl) {
-        self.print_doc_comment(&func.doc_comment);
+        self.print_doc_comment(func.doc_comment.as_ref());
         self.print_attributes(&func.attributes);
         self.w("function ");
         if func.by_ref {
@@ -29,7 +29,7 @@ impl<'src> Printer<'src> {
     }
 
     pub(crate) fn print_class(&mut self, class: &ClassDecl) {
-        self.print_doc_comment(&class.doc_comment);
+        self.print_doc_comment(class.doc_comment.as_ref());
         self.print_attributes(&class.attributes);
         self.print_class_header(class);
         self.print_class_body(&class.body);
@@ -138,7 +138,7 @@ impl<'src> Printer<'src> {
     }
 
     pub(crate) fn print_method(&mut self, method: &MethodDecl) {
-        self.print_doc_comment(&method.doc_comment);
+        self.print_doc_comment(method.doc_comment.as_ref());
         self.print_attributes(&method.attributes);
         if method.is_abstract {
             self.w("abstract ");
@@ -177,7 +177,7 @@ impl<'src> Printer<'src> {
     }
 
     fn print_property(&mut self, prop: &PropertyDecl) {
-        self.print_doc_comment(&prop.doc_comment);
+        self.print_doc_comment(prop.doc_comment.as_ref());
         self.print_attributes(&prop.attributes);
         if let Some(vis) = &prop.visibility {
             self.w(visibility_str(*vis));
@@ -255,7 +255,7 @@ impl<'src> Printer<'src> {
     }
 
     fn print_class_const(&mut self, cc: &ClassConstDecl) {
-        self.print_doc_comment(&cc.doc_comment);
+        self.print_doc_comment(cc.doc_comment.as_ref());
         self.print_attributes(&cc.attributes);
         if cc.is_final {
             self.w("final ");
@@ -347,7 +347,7 @@ impl<'src> Printer<'src> {
     }
 
     pub(crate) fn print_interface(&mut self, iface: &InterfaceDecl) {
-        self.print_doc_comment(&iface.doc_comment);
+        self.print_doc_comment(iface.doc_comment.as_ref());
         self.print_attributes(&iface.attributes);
         self.w("interface ");
         self.w(iface.name.or_error());
@@ -364,7 +364,7 @@ impl<'src> Printer<'src> {
     }
 
     pub(crate) fn print_trait(&mut self, trait_decl: &TraitDecl) {
-        self.print_doc_comment(&trait_decl.doc_comment);
+        self.print_doc_comment(trait_decl.doc_comment.as_ref());
         self.print_attributes(&trait_decl.attributes);
         self.w("trait ");
         self.w(trait_decl.name.or_error());
@@ -372,7 +372,7 @@ impl<'src> Printer<'src> {
     }
 
     pub(crate) fn print_enum(&mut self, enum_decl: &EnumDecl) {
-        self.print_doc_comment(&enum_decl.doc_comment);
+        self.print_doc_comment(enum_decl.doc_comment.as_ref());
         self.print_attributes(&enum_decl.attributes);
         self.w("enum ");
         self.w(enum_decl.name.or_error());
@@ -420,7 +420,7 @@ impl<'src> Printer<'src> {
     fn print_enum_member(&mut self, member: &EnumMember) {
         match &member.kind {
             EnumMemberKind::Case(case) => {
-                self.print_doc_comment(&case.doc_comment);
+                self.print_doc_comment(case.doc_comment.as_ref());
                 self.print_attributes(&case.attributes);
                 self.w("case ");
                 self.w(case.name.or_error());
@@ -503,7 +503,7 @@ impl<'src> Printer<'src> {
         }
     }
 
-    pub(crate) fn print_doc_comment(&mut self, doc: &Option<Comment>) {
+    pub(crate) fn print_doc_comment(&mut self, doc: Option<&Comment>) {
         if let Some(comment) = doc {
             for (i, line) in comment.text.lines().enumerate() {
                 if i > 0 {

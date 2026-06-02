@@ -37,6 +37,7 @@ fn identity_fold_preserves_expression_stmt() {
     stmts.push(Stmt {
         kind: StmtKind::Expression(assign),
         span: Span::DUMMY,
+        doc_comment: None,
     });
     let program = Program {
         stmts,
@@ -293,6 +294,7 @@ fn stmt_label_arena_string_is_reallocated() {
     let stmt = Stmt {
         kind: StmtKind::Label(s),
         span: Span::DUMMY,
+        doc_comment: None,
     };
     let folded = Identity.fold_stmt(&out, &stmt);
     let StmtKind::Label(t) = &folded.kind else {
@@ -393,6 +395,7 @@ fn fold_stmt_override_transforms_nop_to_error() {
                 return Stmt {
                     kind: StmtKind::Error,
                     span: stmt.span,
+                    doc_comment: None,
                 };
             }
             fold_stmt(self, arena, stmt)
@@ -404,6 +407,7 @@ fn fold_stmt_override_transforms_nop_to_error() {
     stmts.push(Stmt {
         kind: StmtKind::Nop,
         span: Span::DUMMY,
+        doc_comment: None,
     });
     let program = Program {
         stmts,
@@ -760,6 +764,7 @@ fn fold_property_hook_override_block_body() {
     body_stmts.push(Stmt {
         kind: StmtKind::Nop,
         span: Span::DUMMY,
+        doc_comment: None,
     });
     let block = arena.alloc(php_ast::ast::Block {
         stmts: body_stmts,
@@ -1046,6 +1051,7 @@ fn return_none_stays_none() {
     stmts.push(Stmt {
         kind: StmtKind::Return(None),
         span: Span::DUMMY,
+        doc_comment: None,
     });
     let program = Program {
         stmts,
@@ -1066,6 +1072,7 @@ fn foreach_without_key_stays_none() {
     let nop = arena.alloc(Stmt {
         kind: StmtKind::Nop,
         span: Span::DUMMY,
+        doc_comment: None,
     });
     let foreach = arena.alloc(ForeachStmt {
         expr: Expr {
@@ -1083,6 +1090,7 @@ fn foreach_without_key_stays_none() {
     let stmt = Stmt {
         kind: StmtKind::Foreach(foreach),
         span: Span::DUMMY,
+        doc_comment: None,
     };
     let folded = Identity.fold_stmt(&out, &stmt);
     let StmtKind::Foreach(f) = &folded.kind else {

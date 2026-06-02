@@ -112,6 +112,7 @@ pub fn fold_owned_stmt<F: FoldOwned + ?Sized>(folder: &mut F, stmt: &Stmt) -> St
     Stmt {
         kind: fold_owned_stmt_kind(folder, &stmt.kind),
         span: stmt.span,
+        doc_comment: stmt.doc_comment.clone(),
     }
 }
 
@@ -899,6 +900,7 @@ mod tests {
         Stmt {
             kind: StmtKind::Expression(Box::new(e)),
             span: Span::DUMMY,
+            doc_comment: None,
         }
     }
 

@@ -28,6 +28,11 @@ impl<'src> Printer<'src> {
         } else if !is_inline_html {
             self.has_php_content = true;
         }
+        // Emit a standalone doc-block that precedes a non-declaration statement
+        // (e.g. `/** @var Foo $x */` before `foreach`).  For declaration
+        // statements this is always None — their doc-block lives on the inner
+        // decl node and is printed by the declaration printer.
+        self.print_doc_comment(stmt.doc_comment);
         match &stmt.kind {
             StmtKind::Expression(expr) => {
                 self.print_expr(expr, PREC_LOWEST);
@@ -256,7 +261,7 @@ impl<'src> Printer<'src> {
             StmtKind::Use(use_decl) => self.print_use(use_decl),
             StmtKind::Const(items) => {
                 if let Some(first) = items.first() {
-                    self.print_doc_comment(&first.doc_comment);
+                    self.print_doc_comment(first.doc_comment.as_ref());
                     self.print_attributes(&first.attributes);
                 }
                 self.w("const ");

@@ -412,6 +412,14 @@ $obj
       "span": {
         "start": 336,
         "end": 452
+      },
+      "doc_comment": {
+        "kind": "Doc",
+        "text": "/**\n   * Doc comment\n   */",
+        "span": {
+          "start": 226,
+          "end": 252
+        }
       }
     },
     {

@@ -66,8 +66,10 @@ pub struct Parser<'arena, 'src> {
     /// Used when parsing property/parameter default values so that a following hook block
     /// `{ get => ...; }` is not consumed as part of the default expression.
     pub(crate) no_brace_subscript: bool,
-    /// Position after the most recent `}` at this or outer scope depth.
-    /// Prevents doc comments inside closed scopes from leaking to outer statements.
+    /// End position of the most recently consumed `{` or `}` token.
+    /// Used as a floor when searching for doc comments: a comment that starts
+    /// before this boundary belongs to an already-closed scope or to the
+    /// outer block and must not be claimed by inner statements.
     last_scope_close: u32,
 }
 
@@ -275,7 +277,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     pub fn advance(&mut self) -> Token {
         let prev = self.current;
         self.previous_end = prev.span.end;
-        if prev.kind == TokenKind::RightBrace {
+        // Track both { and } as scope boundaries.  Updating on LeftBrace ensures
+        // that statements *inside* a block cannot claim doc comments that were
+        // written *before* the opening brace (e.g. `/** @var */ foreach { echo; }`
+        // must not attach the @var comment to `echo`).
+        if prev.kind == TokenKind::RightBrace || prev.kind == TokenKind::LeftBrace {
             self.last_scope_close = prev.span.end;
         }
         self.current = self.tokens[self.pos];
@@ -455,17 +461,33 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         std::mem::take(&mut self.comments)
     }
 
+    /// The end position of the most recently consumed `{` or `}` token.
+    /// Used by the statement parser to snapshot the scope boundary before
+    /// parsing a statement's body.
+    pub fn scope_boundary(&self) -> u32 {
+        self.last_scope_close
+    }
+
     /// Take the last doc comment (`/** ... */`) that appears before `pos`.
     /// The comment is removed from the comments list so it won't be taken again.
-    /// Only returns comments that appeared after the last scope close (closing `}`),
+    /// Only returns comments that appeared after the last scope boundary (`{` or `}`),
     /// preventing doc comments inside closed scopes from leaking to outer statements.
     pub fn take_doc_comment(&mut self, before: u32) -> Option<Comment<'src>> {
-        // Search backwards for the last Doc comment before `before`
-        // that also appeared AFTER the last scope close (closing `}`)
         let idx = self.comments.iter().rposition(|c| {
             c.kind == CommentKind::Doc
                 && c.span.end <= before
                 && c.span.start >= self.last_scope_close
+        })?;
+        Some(self.comments.remove(idx))
+    }
+
+    /// Like [`take_doc_comment`] but uses `from` as the lower bound instead of
+    /// `last_scope_close`.  Used by the statement parser to reclaim a doc comment
+    /// for the statement that owns it even after its body has been fully parsed
+    /// (which advances `last_scope_close` past the comment's position).
+    pub fn take_doc_comment_from(&mut self, before: u32, from: u32) -> Option<Comment<'src>> {
+        let idx = self.comments.iter().rposition(|c| {
+            c.kind == CommentKind::Doc && c.span.end <= before && c.span.start >= from
         })?;
         Some(self.comments.remove(idx))
     }
@@ -1469,6 +1491,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         Some(Stmt {
             kind: StmtKind::Echo(self.alloc_vec_one(expr)),
             span,
+            doc_comment: None,
         })
     }
 
@@ -1487,6 +1510,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             stmts.push(Stmt {
                 kind: StmtKind::InlineHtml(text),
                 span: token.span,
+                doc_comment: None,
             });
         }
 
@@ -1516,6 +1540,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     stmts.push(Stmt {
                         kind: StmtKind::InlineHtml(text),
                         span: token.span,
+                        doc_comment: None,
                     });
                 }
                 if self.check(TokenKind::OpenTag) {

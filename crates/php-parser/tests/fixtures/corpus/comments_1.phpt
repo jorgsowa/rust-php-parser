@@ -36,6 +36,14 @@ if ($cond) {
       "span": {
         "start": 53,
         "end": 58
+      },
+      "doc_comment": {
+        "kind": "Doc",
+        "text": "/** doc 1 */",
+        "span": {
+          "start": 7,
+          "end": 19
+        }
       }
     },
     {

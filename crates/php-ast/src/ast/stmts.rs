@@ -15,6 +15,61 @@ fn is_false(b: &bool) -> bool {
 pub struct Stmt<'arena, 'src> {
     pub kind: StmtKind<'arena, 'src>,
     pub span: Span,
+    /// The immediately preceding `/** */` doc-block, if any.
+    ///
+    /// Only `/** */` (doc-block) comments are attached here; `//`, `#`, and
+    /// `/* */` comments remain in [`ParseResult::comments`].  When present,
+    /// this comment is **removed** from `ParseResult::comments` — the two
+    /// collections are disjoint.  A doc-block that has no following statement
+    /// before the enclosing `}` or EOF is not attached and stays in
+    /// `ParseResult::comments`.
+    ///
+    /// For declaration statements (`function`, `class`, `interface`, …) the
+    /// doc-block is attached to the *inner* declaration node (e.g.
+    /// [`FunctionDecl::doc_comment`]) and this field will always be `None`.
+    ///
+    /// Stored as a pointer into the arena rather than inline so that the
+    /// `None` case (the vast majority of statements) costs only 8 bytes
+    /// instead of the 32 bytes an inline `Option<Comment>` would require.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<&'arena Comment<'src>>,
+}
+
+impl<'arena, 'src> Stmt<'arena, 'src> {
+    /// The leading `/** */` doc-block for this statement, regardless of where
+    /// it is stored.
+    ///
+    /// For non-declaration statements (`foreach`, `if`, assignments, …) the
+    /// comment lives on [`Stmt::doc_comment`] and is returned directly.
+    ///
+    /// For declaration statements the comment is stored on the inner
+    /// declaration node — this method checks each variant so callers do not
+    /// need to match on [`StmtKind`]:
+    ///
+    /// | `StmtKind` variant | source field |
+    /// |--------------------|--------------|
+    /// | `Function`         | [`FunctionDecl::doc_comment`] |
+    /// | `Class`            | [`ClassDecl::doc_comment`] |
+    /// | `Interface`        | [`InterfaceDecl::doc_comment`] |
+    /// | `Trait`            | [`TraitDecl::doc_comment`] |
+    /// | `Enum`             | [`EnumDecl::doc_comment`] |
+    /// | `Const`            | first [`ConstItem::doc_comment`] |
+    ///
+    /// Returns `None` when no doc-block precedes the statement.
+    pub fn leading_doc_comment(&self) -> Option<&Comment<'src>> {
+        if let Some(doc) = self.doc_comment {
+            return Some(doc);
+        }
+        match &self.kind {
+            StmtKind::Function(f) => f.doc_comment.as_ref(),
+            StmtKind::Class(c) => c.doc_comment.as_ref(),
+            StmtKind::Interface(i) => i.doc_comment.as_ref(),
+            StmtKind::Trait(t) => t.doc_comment.as_ref(),
+            StmtKind::Enum(e) => e.doc_comment.as_ref(),
+            StmtKind::Const(items) => items.first().and_then(|i| i.doc_comment.as_ref()),
+            _ => None,
+        }
+    }
 }
 
 /// A brace-delimited statement block. Used both as a standalone block

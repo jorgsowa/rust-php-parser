@@ -124,6 +124,14 @@ function add($a, $b) {
       "span": {
         "start": 92,
         "end": 99
+      },
+      "doc_comment": {
+        "kind": "Doc",
+        "text": "/** doc comment */",
+        "span": {
+          "start": 58,
+          "end": 76
+        }
       }
     },
     {

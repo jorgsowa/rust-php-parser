@@ -1150,6 +1150,7 @@ mod tests {
         Stmt {
             kind: StmtKind::Expression(Box::new(e)),
             span: Span::DUMMY,
+            doc_comment: None,
         }
     }
 
@@ -1241,6 +1242,7 @@ mod tests {
                 doc_comment: None,
             })),
             span: Span::DUMMY,
+            doc_comment: None,
         };
         let p = program([expr_stmt(top), func]);
 
@@ -1299,6 +1301,7 @@ mod tests {
                 doc_comment: None,
             })),
             span: Span::DUMMY,
+            doc_comment: None,
         };
         let p = program([class_stmt]);
 

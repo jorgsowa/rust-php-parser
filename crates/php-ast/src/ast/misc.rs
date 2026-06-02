@@ -5,7 +5,7 @@ use crate::Span;
 use super::{ArenaVec, Expr, Name, Stmt};
 
 /// A comment found in the source file.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Copy, Serialize)]
 pub struct Comment<'src> {
     pub kind: CommentKind,
     /// Raw text of the comment including its delimiters (e.g. `// foo`, `/* bar */`, `/** baz */`).

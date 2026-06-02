@@ -190,6 +190,28 @@ pub struct Program {
 pub struct Stmt {
     pub kind: StmtKind,
     pub span: Span,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment>,
+}
+
+impl Stmt {
+    /// The leading `/** */` doc-block for this statement, regardless of where
+    /// it is stored.  See [`crate::ast::Stmt::leading_doc_comment`] for the
+    /// full contract.
+    pub fn leading_doc_comment(&self) -> Option<&Comment> {
+        if let Some(doc) = &self.doc_comment {
+            return Some(doc);
+        }
+        match &self.kind {
+            StmtKind::Function(f) => f.doc_comment.as_ref(),
+            StmtKind::Class(c) => c.doc_comment.as_ref(),
+            StmtKind::Interface(i) => i.doc_comment.as_ref(),
+            StmtKind::Trait(t) => t.doc_comment.as_ref(),
+            StmtKind::Enum(e) => e.doc_comment.as_ref(),
+            StmtKind::Const(items) => items.first().and_then(|i| i.doc_comment.as_ref()),
+            _ => None,
+        }
+    }
 }
 
 /// Owned mirror of [`crate::ast::Block`] — a brace-delimited statement block.
@@ -1319,6 +1341,7 @@ fn owned_stmt(stmt: &arena_ast::Stmt<'_, '_>) -> Stmt {
     Stmt {
         kind: owned_stmt_kind(&stmt.kind),
         span: stmt.span,
+        doc_comment: stmt.doc_comment.map(owned_comment),
     }
 }
 
@@ -2221,6 +2244,13 @@ fn av_stmt<'a>(arena: &'a bumpalo::Bump, stmt: &Stmt) -> arena_ast::Stmt<'a, 'a>
     arena_ast::Stmt {
         kind: av_stmt_kind(arena, &stmt.kind),
         span: stmt.span,
+        doc_comment: stmt.doc_comment.as_ref().map(|c| {
+            &*arena.alloc(arena_ast::Comment {
+                kind: c.kind,
+                text: arena.alloc_str(&c.text),
+                span: c.span,
+            })
+        }),
     }
 }
 
