@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.16.0] - 2026-06-02
+
+### Added
+
+- `Stmt::doc_comment` field — standalone `/** */` doc-blocks before non-declaration statements (`foreach`, `if`, `while`, assignments, etc.) are now structurally attached to the `Stmt` node that immediately follows them. Previously these appeared only as free-floating entries in `ParseResult::comments`, requiring positional search. The field is stored as an arena pointer (`Option<&'arena Comment<'src>>`) so the `None` case that covers the vast majority of statements costs only 8 bytes instead of the 32 bytes an inline slot would require (`php-ast`, `php-rs-parser`).
+- `Stmt::leading_doc_comment() -> Option<&Comment>` — unified accessor that returns the preceding `/** */` doc-block regardless of where it lives: `Stmt::doc_comment` for non-declaration statements, or the inner declaration node's own field (`FunctionDecl::doc_comment`, `ClassDecl::doc_comment`, …) for declaration statements. External tools can call this single method without branching on statement kind (`php-ast`).
+- `Comment<'src>` now derives `Clone + Copy`; all three fields (`CommentKind`, `&'src str`, `Span`) were already `Copy` (`php-ast`).
+- `Parser::take_doc_comment_from(before, from)` — like `take_doc_comment` but accepts an explicit lower bound instead of the current scope boundary; used internally by `parse_stmt` to reclaim the correct comment after the statement body has been fully parsed (`php-rs-parser`).
+
+### Changed
+
+- `Parser::advance()` now updates the internal scope-boundary tracker on both `{` and `}` tokens (previously only `}`). This ensures statements inside a block body cannot claim doc-blocks written before the opening brace (`php-rs-parser`).
+- `Printer::print_doc_comment` signature tightened from `&Option<Comment>` to `Option<&Comment>` (`php-printer`).
+
+---
+
 ## [0.15.0] - 2026-05-28
 
 ### Added
