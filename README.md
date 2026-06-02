@@ -45,7 +45,7 @@ let pos = result.source_map.offset_to_line_col(6);
 | `errors` | `Vec<ParseError>` | Parse errors and diagnostics. Empty on success. |
 | `errors_truncated` | `bool` | `true` when the error list was capped and further errors were dropped. |
 | `source` | `String` | The original source text. Slice a span: `&result.source[span.start as usize..span.end as usize]`. |
-| `comments` | `Vec<php_ast::owned::Comment>` | All comments in source order. Does not include `/** */` doc-block comments attached to a declaration — those are in the declaration node's `doc_comment` field. The two collections are disjoint. |
+| `comments` | `Vec<php_ast::owned::Comment>` | All comments in source order, **except** `/** */` doc-block comments that are attached to a node's `doc_comment` field — see below. The two collections are disjoint. |
 | `source_map` | `SourceMap` | Pre-computed line index. `offset_to_line_col(offset)` and `span_to_line_col(span)` both return 0-based `LineCol`. Call `.to_one_based()` for human-readable 1-based positions. |
 
 ## Usage
@@ -214,7 +214,18 @@ if let Some(summary) = &doc.summary {
 }
 ```
 
-Doc-block comments attached to a declaration (`function`, `class`, `method`, `property`, `const`, enum `case`) are stored in the declaration node's `doc_comment` field in the AST and are not present in `ParseResult::comments`. Use `php_rs_parser::phpdoc::parse(comment.text)` to parse them.
+Doc-block comments are stored in a `doc_comment` field on the AST node they precede and are **not** present in `ParseResult::comments` — the two collections are disjoint:
+
+| Placement | Where the `doc_comment` field lives |
+|---|---|
+| Before a declaration (`function`, `class`, `method`, `property`, `const`, enum `case`) | On the inner declaration node (`FunctionDecl`, `ClassDecl`, …) |
+| Before a non-declaration statement (`foreach`, `if`, `while`, assignments, …) | On the `Stmt` wrapper — accessible via `stmt.doc_comment` or the unified `stmt.leading_doc_comment()` accessor |
+
+`Stmt::leading_doc_comment()` returns the doc-block regardless of where it lives, so callers do not need to branch on statement kind.
+
+A doc-block with no following statement before the enclosing `}` or EOF stays in `ParseResult::comments`.
+
+Use `php_rs_parser::phpdoc::parse(comment.text)` to parse the raw text into a structured AST.
 
 ### Arena API
 

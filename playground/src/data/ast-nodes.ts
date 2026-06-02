@@ -30,7 +30,9 @@ export const astNodes: AstNode[] = [
       stmts: ['$x = 1;', 'echo $x;']
     },
     fields: [
-      { name: 'stmts', type: 'Vec<Stmt>', description: 'Statements in block' }
+      { name: 'stmts', type: 'Vec<Stmt>', description: 'Statements in block' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -44,7 +46,9 @@ export const astNodes: AstNode[] = [
       level: ['2']
     },
     fields: [
-      { name: 'level', type: 'Option<Expr>', description: 'Number of levels to break', optional: true }
+      { name: 'level', type: 'Option<Expr>', description: 'Number of levels to break', optional: true },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -97,7 +101,9 @@ export const astNodes: AstNode[] = [
       level: ['2']
     },
     fields: [
-      { name: 'level', type: 'Option<Expr>', description: 'Number of levels to continue', optional: true }
+      { name: 'level', type: 'Option<Expr>', description: 'Number of levels to continue', optional: true },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -113,7 +119,9 @@ export const astNodes: AstNode[] = [
     },
     fields: [
       { name: 'directives', type: 'Vec<(str, Expr)>', description: 'Directives' },
-      { name: 'body', type: 'Option<Stmt>', description: 'Declare body', optional: true }
+      { name: 'body', type: 'Option<Stmt>', description: 'Declare body', optional: true },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -129,7 +137,9 @@ export const astNodes: AstNode[] = [
     },
     fields: [
       { name: 'body', type: 'Stmt', description: 'Loop body' },
-      { name: 'condition', type: 'Expr', description: 'Loop condition' }
+      { name: 'condition', type: 'Expr', description: 'Loop condition' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -143,7 +153,9 @@ export const astNodes: AstNode[] = [
       exprs: ['$greeting', '$name', 'PHP_EOL', '"done"']
     },
     fields: [
-      { name: 'exprs', type: 'Vec<Expr>', description: 'Values to output' }
+      { name: 'exprs', type: 'Vec<Expr>', description: 'Values to output' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -186,7 +198,9 @@ export const astNodes: AstNode[] = [
       { name: 'init', type: 'Vec<Expr>', description: 'Initialization expressions' },
       { name: 'condition', type: 'Vec<Expr>', description: 'Loop conditions' },
       { name: 'update', type: 'Vec<Expr>', description: 'Update expressions' },
-      { name: 'body', type: 'Stmt', description: 'Loop body' }
+      { name: 'body', type: 'Stmt', description: 'Loop body' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -206,7 +220,9 @@ export const astNodes: AstNode[] = [
       { name: 'expr', type: 'Expr', description: 'Expression to iterate' },
       { name: 'key', type: 'Option<Expr>', description: 'Key variable', optional: true },
       { name: 'value', type: 'Expr', description: 'Value variable' },
-      { name: 'body', type: 'Stmt', description: 'Loop body' }
+      { name: 'body', type: 'Stmt', description: 'Loop body' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -245,7 +261,9 @@ export const astNodes: AstNode[] = [
       vars: ['$counter', '$name']
     },
     fields: [
-      { name: 'vars', type: 'Vec<Expr>', description: 'Variables to declare global' }
+      { name: 'vars', type: 'Vec<Expr>', description: 'Variables to declare global' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -259,7 +277,9 @@ export const astNodes: AstNode[] = [
       label: ['end']
     },
     fields: [
-      { name: 'label', type: 'Ident', description: 'Target label' }
+      { name: 'label', type: 'Ident', description: 'Target label' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -293,7 +313,9 @@ export const astNodes: AstNode[] = [
       { name: 'condition', type: 'Expr', description: 'Condition to evaluate' },
       { name: 'then_branch', type: 'Stmt', description: 'Statement when condition is true' },
       { name: 'elseif_branches', type: 'Vec<ElseIfBranch>', description: 'Elseif branches' },
-      { name: 'else_branch', type: 'Option<Stmt>', description: 'Else statement', optional: true }
+      { name: 'else_branch', type: 'Option<Stmt>', description: 'Else statement', optional: true },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -339,7 +361,9 @@ export const astNodes: AstNode[] = [
       name: ['loop']
     },
     fields: [
-      { name: 'name', type: 'string', description: 'Label name' }
+      { name: 'name', type: 'string', description: 'Label name' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -355,7 +379,9 @@ export const astNodes: AstNode[] = [
     },
     fields: [
       { name: 'name', type: 'Option<Name>', description: 'Namespace name', optional: true },
-      { name: 'body', type: 'NamespaceBody', description: 'Namespace contents' }
+      { name: 'body', type: 'NamespaceBody', description: 'Namespace contents' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -378,7 +404,9 @@ export const astNodes: AstNode[] = [
       value: ['$a + $b']
     },
     fields: [
-      { name: 'value', type: 'Option<Expr>', description: 'Return value', optional: true }
+      { name: 'value', type: 'Option<Expr>', description: 'Return value', optional: true },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -392,7 +420,9 @@ export const astNodes: AstNode[] = [
       vars: ['$count = 0', '$max = 100']
     },
     fields: [
-      { name: 'vars', type: 'Vec<StaticVar>', description: 'Static variables' }
+      { name: 'vars', type: 'Vec<StaticVar>', description: 'Static variables' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -408,7 +438,9 @@ export const astNodes: AstNode[] = [
     },
     fields: [
       { name: 'expr', type: 'Expr', description: 'Value to switch on' },
-      { name: 'cases', type: 'Vec<SwitchCase>', description: 'Switch cases' }
+      { name: 'cases', type: 'Vec<SwitchCase>', description: 'Switch cases' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -422,7 +454,9 @@ export const astNodes: AstNode[] = [
       exception: ['new InvalidArgumentException($reason)']
     },
     fields: [
-      { name: 'exception', type: 'Expr', description: 'Exception to throw' }
+      { name: 'exception', type: 'Expr', description: 'Exception to throw' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -458,7 +492,9 @@ export const astNodes: AstNode[] = [
     fields: [
       { name: 'body', type: 'Block', description: 'Try block' },
       { name: 'catches', type: 'Vec<CatchClause>', description: 'Catch clauses' },
-      { name: 'finally', type: 'Option<Block>', description: 'Finally block', optional: true }
+      { name: 'finally', type: 'Option<Block>', description: 'Finally block', optional: true },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -472,7 +508,9 @@ export const astNodes: AstNode[] = [
       vars: ['$a,', '$b,', '$arr[$key]']
     },
     fields: [
-      { name: 'vars', type: 'Vec<Expr>', description: 'Variables to unset' }
+      { name: 'vars', type: 'Vec<Expr>', description: 'Variables to unset' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -488,7 +526,9 @@ export const astNodes: AstNode[] = [
     },
     fields: [
       { name: 'kind', type: 'UseKind', description: 'Type of use (Normal, Function, Const)' },
-      { name: 'uses', type: 'Vec<UseItem>', description: 'Imported items' }
+      { name: 'uses', type: 'Vec<UseItem>', description: 'Imported items' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   {
@@ -504,7 +544,9 @@ export const astNodes: AstNode[] = [
     },
     fields: [
       { name: 'condition', type: 'Expr', description: 'Loop condition' },
-      { name: 'body', type: 'Stmt', description: 'Loop body' }
+      { name: 'body', type: 'Stmt', description: 'Loop body' },
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+
     ]
   },
   // ========== EXPRESSIONS ==========
@@ -1007,7 +1049,9 @@ export const astNodes: AstNode[] = [
     description: 'Null literal',
     phpExample: `$value = null;`,
     keywordInExample: 'null',
-    fields: []
+    fields: [
+      { name: 'doc_comment', type: 'Option<Comment>', description: 'Preceding /** */ doc-block', optional: true }
+    ]
   },
   {
     id: 'expr-null-coalesce',
