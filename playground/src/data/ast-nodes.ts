@@ -899,7 +899,6 @@ export const astNodes: AstNode[] = [
     name: 'Identifier',
     description: 'Bare name used as an expression (function name in a call, class name, etc.)',
     phpExample: `strlen($str);\nMyClass::method();`,
-    keywordInExample: 'strlen',
     fieldHighlights: {
       name: ['strlen', 'MyClass']
     },
