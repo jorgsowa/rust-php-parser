@@ -229,7 +229,7 @@ Use `php_rs_parser::phpdoc::parse(comment.text)` to parse the raw text into a st
 
 ### Arena API
 
-When you already hold an `ArenaParseResult` (e.g. inside an LSP hot path), use `parse_arena()` directly:
+Use `parse_arena()` when managing arena lifetime yourself (e.g. inside an LSP hot path):
 
 ```rust
 let arena = bumpalo::Bump::new();
@@ -241,6 +241,14 @@ let output = php_printer::pretty_print_with_comments(
     result.source,
     &result.comments,
 );
+```
+
+Use `parse_arena_raw()` when you only need the AST and errors and never call `source_map.offset_to_line_col` — it skips building the line index:
+
+```rust
+let arena = bumpalo::Bump::new();
+let result = php_rs_parser::parse_arena_raw(&arena, "<?php echo 1;");
+// result.source_map is a no-op empty map
 ```
 
 The arena-form `Visitor`, `ScopeVisitor`, and `Fold<'src>` traits operate directly on `Program<'arena, 'src>` without any conversion. See [`docs.rs/php-ast`](https://docs.rs/php-ast) for the full arena visitor and fold API.
@@ -255,7 +263,7 @@ The arena-form `Visitor`, `ScopeVisitor`, and `Fold<'src>` traits operate direct
 | **phpdoc-parser** | [![crates.io](https://img.shields.io/crates/v/phpdoc-parser)](https://crates.io/crates/phpdoc-parser) | Standalone structural PHPDoc block parser — tag-agnostic, no external dependencies |
 | **php-printer** | [![crates.io](https://img.shields.io/crates/v/php-printer)](https://crates.io/crates/php-printer) | Pretty printer — converts AST back to PHP source; supports both arena and owned AST |
 
-Source flows through `Lexer → Parser → arena-allocated AST nodes`. The lexer is lazy (tokens produced on demand with peeking slots); the parser is Pratt-based recursive descent with panic-mode error recovery. The owned AST (`php_ast::owned`) provides lifetime-free mirrors of every node type for storage and manipulation without arena lifetime constraints.
+Source flows through `Lexer → Parser → arena-allocated AST nodes`. The lexer is lazy (tokens produced on demand); the parser is Pratt-based recursive descent with a 2-token lookahead window and panic-mode error recovery. The owned AST (`php_ast::owned`) provides lifetime-free mirrors of every node type for storage and manipulation without arena lifetime constraints.
 
 ## Performance
 

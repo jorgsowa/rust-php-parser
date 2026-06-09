@@ -74,6 +74,10 @@
 //! let result = ctx.reparse("<?php echo 2;");
 //! assert!(result.errors.is_empty());
 //! ```
+//!
+//! Use [`parse_arena_raw`] instead of [`parse_arena`] when you never need
+//! line/column positions — it skips building the [`source_map::SourceMap`]
+//! and is slightly faster.
 
 pub mod diagnostics;
 pub(crate) mod expr;
@@ -213,7 +217,8 @@ pub fn parse_versioned(source: &str, version: PhpVersion) -> ParseResult {
 /// source string.
 ///
 /// Prefer [`parse`] unless you are managing the arena yourself for performance
-/// reasons (e.g. LSP re-parsing with [`ParserContext`]).
+/// reasons (e.g. LSP re-parsing with [`ParserContext`]). Use [`parse_arena_raw`]
+/// when you never need line/column positions from `result.source_map`.
 pub fn parse_arena<'arena, 'src>(
     arena: &'arena bumpalo::Bump,
     source: &'src str,
@@ -231,12 +236,11 @@ pub fn parse_arena<'arena, 'src>(
     }
 }
 
-/// Parse PHP `source` using the latest supported PHP version, returning an
-/// arena-allocated [`ArenaParseResult`] **without** building a [`SourceMap`].
+/// Like [`parse_arena`], but skips building the [`source_map::SourceMap`].
 ///
-/// Identical to [`parse_arena`] except that `result.source_map` is an empty
-/// no-op map. Use this when you need maximum throughput and never call
-/// [`SourceMap::offset_to_line_col`] on the result.
+/// `result.source_map` is a no-op empty map. Use this when you only need the
+/// AST and errors — formatters, linters, and batch processors that never call
+/// `source_map.offset_to_line_col` or `source_map.span_to_line_col`.
 pub fn parse_arena_raw<'arena, 'src>(
     arena: &'arena bumpalo::Bump,
     source: &'src str,

@@ -60,9 +60,9 @@ impl SourceMap {
         Self { line_starts }
     }
 
-    /// A no-op source map for callers that never query line/column positions.
-    ///
-    /// All `offset_to_line_col` calls on an empty map return `LineCol { line: 0, col: offset }`.
+    /// A no-op map for callers that never query line/column positions.
+    /// Returned by [`parse_arena_raw`](crate::parse_arena_raw).
+    /// `offset_to_line_col` on an empty map returns `LineCol { line: 0, col: offset }`.
     pub fn empty() -> Self {
         Self {
             line_starts: vec![0u32],
