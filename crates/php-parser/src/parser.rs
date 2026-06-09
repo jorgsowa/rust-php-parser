@@ -34,6 +34,26 @@ fn lex_error_to_parse_error(e: LexerError) -> ParseError {
     }
 }
 
+fn advance_lexer_skip_comments<'src>(
+    lexer: &mut Lexer<'src>,
+    source: &'src str,
+    comments: &mut Vec<Comment<'src>>,
+) -> Token {
+    loop {
+        let tok = lexer.next_token();
+        if tok.kind.is_comment() {
+            let text = &source[tok.span.start as usize..tok.span.end as usize];
+            comments.push(Comment {
+                kind: comment_kind(tok.kind),
+                text,
+                span: tok.span,
+            });
+        } else {
+            return tok;
+        }
+    }
+}
+
 pub struct Parser<'arena, 'src> {
     current: Token,
     /// End offset of the most recently consumed token.
@@ -52,9 +72,11 @@ pub struct Parser<'arena, 'src> {
     /// True only when parsing the parameter list of a `__construct` method.
     /// Used to reject `readonly` parameters outside constructors.
     pub(crate) in_constructor: bool,
-    tokens: Vec<Token>,
-    /// Index of NEXT token in the tokens array (current = tokens[pos - 1])
-    pos: usize,
+    lexer: Lexer<'src>,
+    /// Next token (one ahead of current)
+    next: Token,
+    /// Two tokens ahead of current
+    next2: Token,
     pub arena: &'arena bumpalo::Bump,
     pub source: &'src str,
     errors: Vec<ParseError>,
@@ -85,42 +107,21 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         source: &'src str,
         version: PhpVersion,
     ) -> Self {
-        let (all_tokens, lex_errors) = php_lexer::lex_all(source);
-
-        // Separate comment tokens from the main token stream.
-        // lex_all appends two Eof sentinels; they pass through the filter unchanged.
         let mut comments: Vec<Comment<'src>> = Vec::new();
-        let mut tokens: Vec<Token> = Vec::with_capacity(all_tokens.len());
-        for tok in all_tokens {
-            if tok.kind.is_comment() {
-                let text = &source[tok.span.start as usize..tok.span.end as usize];
-                comments.push(Comment {
-                    kind: comment_kind(tok.kind),
-                    text,
-                    span: tok.span,
-                });
-            } else {
-                tokens.push(tok);
-            }
-        }
-
-        // Seed current with the first token and pos with 1
-        let current = tokens.first().copied().unwrap_or_else(|| Token::eof(0));
-
-        let mut errors: Vec<ParseError> = lex_errors
-            .into_iter()
-            .map(lex_error_to_parse_error)
-            .collect();
-        errors.truncate(MAX_ERRORS);
+        let mut lexer = Lexer::new(source);
+        let current = advance_lexer_skip_comments(&mut lexer, source, &mut comments);
+        let next = advance_lexer_skip_comments(&mut lexer, source, &mut comments);
+        let next2 = advance_lexer_skip_comments(&mut lexer, source, &mut comments);
 
         Self {
             arena,
-            tokens,
-            pos: 1,
+            lexer,
             current,
+            next,
+            next2,
             previous_end: current.span.start,
             source,
-            errors,
+            errors: Vec::new(),
             comments,
             depth: 0,
             expr_depth: 0,
@@ -135,69 +136,27 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
     /// Create a parser starting in PHP mode at `offset` within `source`.
     /// Used for parsing interpolation expressions directly in the original source.
-    ///
-    /// This path creates a lazy Lexer at the offset, then pre-lexes all tokens into
-    /// a vector to match the new pre-lexed architecture, while preserving correct
-    /// absolute spans relative to the original source.
     pub fn new_at(
         arena: &'arena bumpalo::Bump,
         source: &'src str,
         offset: usize,
         version: PhpVersion,
     ) -> Self {
-        let mut lexer = Lexer::new_at(source, offset);
-
-        // Lex all tokens from this position, separating comments from regular tokens
-        let mut tokens = Vec::new();
         let mut comments: Vec<Comment<'src>> = Vec::new();
-
-        loop {
-            let tok = lexer.next_token();
-            let is_eof = tok.kind == TokenKind::Eof;
-            if tok.kind.is_comment() {
-                let text = &source[tok.span.start as usize..tok.span.end as usize];
-                comments.push(Comment {
-                    kind: comment_kind(tok.kind),
-                    text,
-                    span: tok.span,
-                });
-            } else {
-                tokens.push(tok);
-            }
-            if is_eof {
-                break;
-            }
-        }
-
-        // Add a second Eof sentinel for safe peek2
-        // The Eof token from the lexer is always added to tokens before the loop exits
-        let eof_span = tokens
-            .last()
-            .expect("tokens guaranteed to contain at least the Eof token from lexer")
-            .span;
-        tokens.push(Token::new(TokenKind::Eof, eof_span));
-
-        let mut errors: Vec<ParseError> = lexer
-            .errors
-            .into_iter()
-            .map(lex_error_to_parse_error)
-            .collect();
-        errors.truncate(MAX_ERRORS);
-
-        // Seed current with the first token
-        let current = tokens
-            .first()
-            .copied()
-            .unwrap_or_else(|| Token::eof(offset as u32));
+        let mut lexer = Lexer::new_at(source, offset);
+        let current = advance_lexer_skip_comments(&mut lexer, source, &mut comments);
+        let next = advance_lexer_skip_comments(&mut lexer, source, &mut comments);
+        let next2 = advance_lexer_skip_comments(&mut lexer, source, &mut comments);
 
         Self {
             arena,
-            tokens,
-            pos: 1,
+            lexer,
             current,
+            next,
+            next2,
             previous_end: current.span.start,
             source,
-            errors,
+            errors: Vec::new(),
             comments,
             depth: 0,
             expr_depth: 0,
@@ -272,6 +231,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         &self.source[self.current.span.start as usize..self.current.span.end as usize]
     }
 
+    #[inline]
+    fn next_non_comment(&mut self) -> Token {
+        advance_lexer_skip_comments(&mut self.lexer, self.source, &mut self.comments)
+    }
+
     /// Advance to the next token, returning the consumed token.
     #[inline]
     pub fn advance(&mut self) -> Token {
@@ -284,8 +248,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         if prev.kind == TokenKind::RightBrace || prev.kind == TokenKind::LeftBrace {
             self.last_scope_close = prev.span.end;
         }
-        self.current = self.tokens[self.pos];
-        self.pos += 1;
+        self.current = self.next;
+        self.next = self.next2;
+        self.next2 = self.next_non_comment();
         prev
     }
 
@@ -408,31 +373,27 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     }
 
     /// Peek at the next token's kind (one token ahead of current).
-    /// No branches: tokens array guaranteed to have Eof sentinels.
     #[inline]
     pub fn peek_kind(&mut self) -> Option<TokenKind> {
-        Some(self.tokens[self.pos].kind)
+        Some(self.next.kind)
     }
 
     /// Peek two tokens ahead of current.
-    /// No branches: tokens array guaranteed to have dual Eof sentinels.
     #[inline]
     pub fn peek2_kind(&mut self) -> Option<TokenKind> {
-        Some(self.tokens[self.pos + 1].kind)
+        Some(self.next2.kind)
     }
 
     /// Get the text of the peeked token (one token ahead of current).
     #[inline]
     pub fn peek_text(&mut self) -> Option<&'src str> {
-        let token = &self.tokens[self.pos];
-        Some(&self.source[token.span.start as usize..token.span.end as usize])
+        Some(&self.source[self.next.span.start as usize..self.next.span.end as usize])
     }
 
     /// Get the text of the token two tokens ahead of current.
     #[inline]
     pub fn peek2_text(&mut self) -> Option<&'src str> {
-        let token = &self.tokens[self.pos + 1];
-        Some(&self.source[token.span.start as usize..token.span.end as usize])
+        Some(&self.source[self.next2.span.start as usize..self.next2.span.end as usize])
     }
 
     // =========================================================================
@@ -446,7 +407,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     }
 
     pub fn errors_truncated(&self) -> bool {
-        self.errors.len() >= MAX_ERRORS
+        self.errors.len() + self.lexer.errors.len() >= MAX_ERRORS
     }
 
     pub fn errors_mut(&mut self) -> &mut Vec<ParseError> {
@@ -454,7 +415,15 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     }
 
     pub fn into_errors(self) -> Vec<ParseError> {
-        self.errors
+        let mut errors: Vec<ParseError> = self
+            .lexer
+            .errors
+            .into_iter()
+            .map(lex_error_to_parse_error)
+            .collect();
+        errors.extend(self.errors);
+        errors.truncate(MAX_ERRORS);
+        errors
     }
 
     pub fn take_comments(&mut self) -> Vec<Comment<'src>> {
