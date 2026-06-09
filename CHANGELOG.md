@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.17.0] - 2026-06-09
+
+### Added
+
+- `parse_arena_raw` — parses without building a line/column `SourceMap`, for callers (formatters, linters) that only need spans. `SourceMap::new` scans the entire source for newlines and allocates a `Vec<u32>` of line-start offsets on every `parse_arena` call; profiling measured this at ~7.7% of total parse time on the symfony corpus. `parse_arena` is unchanged (`php-rs-parser`).
+- `SourceMap::empty()` — returns a no-op map (single entry at offset 0) used internally by `parse_arena_raw` (`php-rs-parser`).
+
+### Changed
+
+- The parser no longer pre-lexes the whole source into a `Vec<Token>` before parsing. Because only two tokens of lookahead are needed, lexing is now lazy and streamed through a small peeking window, avoiding the wasted pre-pass and the cache pressure of holding the full token array on large files. Behavior is unchanged; lexer errors are still ordered ahead of parse errors. Benchmarks: symfony −6.9%, laravel −24.5% (`php-rs-parser`, `php-lexer`).
+- The `(void)` cast misuse walk now runs only when a void cast was actually parsed, instead of walking every expression statement's subtree. Void casts are a rare PHP 8.5 feature, so the walk almost always found nothing. Behavior is unchanged. Benchmarks: laravel −4.5%, wordpress −2.2%; symfony flat (`php-rs-parser`).
+- Pre-allocate the token `Vec` in `lex_all` and the `line_starts` `Vec` in `SourceMap::new` with capacity hints derived from source length, eliminating several reallocations per file (`php-lexer`, `php-rs-parser`).
+
+### Documentation
+
+- Document `parse_arena_raw` and `SourceMap::empty` in the crate-level Arena API section and README, with cross-links to `parse_arena`; update the Architecture note to reflect lazy streaming and the 2-token lookahead window (`php-rs-parser`).
+
+---
+
 ## [0.16.0] - 2026-06-02
 
 ### Added
