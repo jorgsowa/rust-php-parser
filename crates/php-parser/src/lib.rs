@@ -231,6 +231,29 @@ pub fn parse_arena<'arena, 'src>(
     }
 }
 
+/// Parse PHP `source` using the latest supported PHP version, returning an
+/// arena-allocated [`ArenaParseResult`] **without** building a [`SourceMap`].
+///
+/// Identical to [`parse_arena`] except that `result.source_map` is an empty
+/// no-op map. Use this when you need maximum throughput and never call
+/// [`SourceMap::offset_to_line_col`] on the result.
+pub fn parse_arena_raw<'arena, 'src>(
+    arena: &'arena bumpalo::Bump,
+    source: &'src str,
+) -> ArenaParseResult<'arena, 'src> {
+    let mut parser = parser::Parser::new(arena, source);
+    let program = parser.parse_program();
+    let errors_truncated = parser.errors_truncated();
+    ArenaParseResult {
+        source,
+        program,
+        comments: parser.take_comments(),
+        errors: parser.into_errors(),
+        errors_truncated,
+        source_map: SourceMap::empty(),
+    }
+}
+
 /// Parse `source` targeting the given PHP `version`, returning an
 /// arena-allocated [`ArenaParseResult`].
 ///
