@@ -2569,6 +2569,7 @@ fn parse_expression_stmt_or_label<'arena, 'src>(
 
 fn parse_expression_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
+    let void_casts_before = parser.void_cast_count;
     let expr = expr::parse_expr(parser);
 
     if matches!(expr.kind, ExprKind::Error) {
@@ -2593,11 +2594,15 @@ fn parse_expression_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
     // A void cast is invalid in a position where its result is consumed as a value.
     // Valid: `(void)foo();` (statement), `(void)$a or $b;` (logical-op left).
     // Invalid: `$x = (void)$y;`, `(void)1 + 2;`, `(void)(void)$x;`.
-    if let Some(span) = check_void_cast_stmt_expr(&expr) {
-        parser.error(ParseError::Forbidden {
-            message: "(void) cast cannot be used in an expression context".into(),
-            span,
-        });
+    // Only walk the subtree when this statement actually parsed a void cast;
+    // otherwise the walk is guaranteed to find nothing.
+    if parser.void_cast_count != void_casts_before {
+        if let Some(span) = check_void_cast_stmt_expr(&expr) {
+            parser.error(ParseError::Forbidden {
+                message: "(void) cast cannot be used in an expression context".into(),
+                span,
+            });
+        }
     }
 
     parser.expect_semicolon("expression");

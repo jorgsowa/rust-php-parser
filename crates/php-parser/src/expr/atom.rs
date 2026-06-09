@@ -2089,6 +2089,9 @@ fn try_parse_cast<'arena, 'src>(
     }
     if cast_kind == CastKind::Void {
         parser.require_version(PhpVersion::Php85, "void cast", kw_span);
+        // Record that a void cast exists so the expression-statement misuse
+        // walk can be skipped for the (overwhelmingly common) void-cast-free case.
+        parser.void_cast_count += 1;
     }
     // (real) was removed in PHP 8.0
     let kw_text = &parser.source[kw_span.start as usize..kw_span.end as usize];

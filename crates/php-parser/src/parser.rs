@@ -93,6 +93,10 @@ pub struct Parser<'arena, 'src> {
     /// before this boundary belongs to an already-closed scope or to the
     /// outer block and must not be claimed by inner statements.
     last_scope_close: u32,
+    /// Number of `(void)` casts parsed so far. Snapshotted around an expression
+    /// statement so the void-cast misuse walk only runs when the statement's
+    /// subtree actually contains a void cast (a rare PHP 8.5 feature).
+    pub(crate) void_cast_count: u32,
 }
 
 impl<'arena, 'src> Parser<'arena, 'src> {
@@ -131,6 +135,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             version,
             no_brace_subscript: false,
             last_scope_close: 0,
+            void_cast_count: 0,
         }
     }
 
@@ -166,6 +171,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             version,
             no_brace_subscript: false,
             last_scope_close: 0,
+            void_cast_count: 0,
         }
     }
 
