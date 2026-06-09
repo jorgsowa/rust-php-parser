@@ -53,7 +53,8 @@ pub struct SourceMap {
 impl SourceMap {
     /// Build an index from the given source text.
     pub fn new(source: &str) -> Self {
-        let mut line_starts = vec![0u32];
+        let mut line_starts = Vec::with_capacity(source.len() / 40 + 1);
+        line_starts.push(0u32);
         for pos in memchr::memchr_iter(b'\n', source.as_bytes()) {
             line_starts.push((pos + 1) as u32);
         }
