@@ -1309,7 +1309,7 @@ pub fn lex_all(source: &str) -> (Vec<Token>, Vec<LexerError>) {
     }
 
     let mut lexer = Lexer::new(source);
-    let mut tokens = Vec::new();
+    let mut tokens = Vec::with_capacity(source.len() / 8);
 
     loop {
         let tok = lexer.next_token();
