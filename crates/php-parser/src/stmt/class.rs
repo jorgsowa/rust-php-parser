@@ -34,7 +34,6 @@ fn is_reserved_class_name(name: &str) -> bool {
             // ("Cannot use 'string' as a class name as it is reserved").
             | "int" | "float" | "bool" | "string" | "true" | "false" | "null"
             | "void" | "iterable" | "object" | "mixed" | "never" | "array"
-            | "numeric" | "resource"
     )
 }
 
