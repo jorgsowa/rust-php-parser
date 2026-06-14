@@ -1460,11 +1460,19 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             return None;
         }
         let start = self.start_span();
-        let expr = expr::parse_expr(self);
+        // `<?= a, b ?>` behaves like `echo a, b;` — a comma-separated list.
+        let mut exprs = self.alloc_vec();
+        exprs.push(expr::parse_expr(self));
+        while self.eat(TokenKind::Comma).is_some() {
+            if self.check(TokenKind::Semicolon) || self.check(TokenKind::CloseTag) {
+                break; // trailing comma
+            }
+            exprs.push(expr::parse_expr(self));
+        }
         self.expect_semicolon("short echo tag");
         let span = Span::new(start, self.previous_end());
         Some(Stmt {
-            kind: StmtKind::Echo(self.alloc_vec_one(expr)),
+            kind: StmtKind::Echo(exprs),
             span,
             doc_comment: None,
         })
