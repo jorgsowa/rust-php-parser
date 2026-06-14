@@ -24,9 +24,18 @@ pub(super) fn parse_enum<'arena, 'src>(
         Ident::ERROR
     };
 
-    // Backed enum: enum Foo: string
+    // Backed enum: enum Foo: string — the backing type must be `int` or `string`.
     let scalar_type = if parser.eat(TokenKind::Colon).is_some() {
-        Some(parser.parse_name())
+        let ty = parser.parse_name();
+        let is_int_or_string = matches!(ty, Name::Simple { value, .. }
+            if value.eq_ignore_ascii_case("int") || value.eq_ignore_ascii_case("string"));
+        if !is_int_or_string {
+            parser.error(ParseError::Forbidden {
+                message: "Enum backing type must be int or string".into(),
+                span: ty.span(),
+            });
+        }
+        Some(ty)
     } else {
         None
     };
