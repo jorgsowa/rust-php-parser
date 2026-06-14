@@ -10,7 +10,7 @@ use crate::precedence::{self, ASSIGNMENT_BP};
 use crate::stmt;
 use crate::version::PhpVersion;
 
-use super::{parse_assign_continuation, parse_expr, parse_expr_bp};
+use super::{parse_assign_continuation, parse_expr, parse_expr_bp, parse_member_name};
 
 /// Cast keyword strings and their CastKind values
 const CAST_KEYWORDS: &[(&str, CastKind)] = &[
@@ -1153,6 +1153,72 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
 // New expression: new ClassName(args)
 // =============================================================================
 
+/// Consume a `new_variable` dereference tail on a `new` class reference:
+/// `->prop`, `[idx]`, and `::$staticProp`. In PHP's grammar these are part of
+/// the *class-name reference*, not a dereference of the constructed object — so
+/// `new $this->job()` instantiates the class named by `$this->job`
+/// (`new ($this->job)()`), rather than calling a method on `new $this`.
+fn parse_new_variable_tail<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    mut base: Expr<'arena, 'src>,
+) -> Expr<'arena, 'src> {
+    loop {
+        match parser.current_kind() {
+            TokenKind::Arrow => {
+                parser.advance();
+                let property = parse_member_name(parser);
+                let span = Span::new(base.span.start, property.span.end);
+                base = Expr {
+                    kind: ExprKind::PropertyAccess(PropertyAccessExpr {
+                        object: parser.alloc(base),
+                        property: parser.alloc(property),
+                    }),
+                    span,
+                };
+            }
+            TokenKind::LeftBracket => {
+                parser.advance();
+                let index = if parser.check(TokenKind::RightBracket) {
+                    None
+                } else {
+                    let e = parse_expr(parser);
+                    Some(parser.alloc(e))
+                };
+                parser.expect(TokenKind::RightBracket);
+                let span = Span::new(base.span.start, parser.previous_end());
+                base = Expr {
+                    kind: ExprKind::ArrayAccess(ArrayAccessExpr {
+                        array: parser.alloc(base),
+                        index,
+                    }),
+                    span,
+                };
+            }
+            // `::$prop` — static property as part of the class reference. A
+            // following identifier (`::CONST`) is not a `new_variable`, so stop.
+            TokenKind::DoubleColon if matches!(parser.peek_kind(), Some(TokenKind::Variable)) => {
+                parser.advance(); // ::
+                let token = parser.advance(); // $prop
+                let var_name = parser.variable_name(token);
+                let member = parser.alloc(Expr {
+                    kind: ExprKind::Identifier(NameStr::__src(var_name)),
+                    span: token.span,
+                });
+                let span = Span::new(base.span.start, token.span.end);
+                base = Expr {
+                    kind: ExprKind::StaticPropertyAccess(StaticAccessExpr {
+                        class: parser.alloc(base),
+                        member,
+                    }),
+                    span,
+                };
+            }
+            _ => break,
+        }
+    }
+    base
+}
+
 fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'new'
@@ -1246,6 +1312,10 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         parser.current_kind(),
         TokenKind::Variable | TokenKind::Dollar | TokenKind::LeftParen
     );
+    let class_is_variable = matches!(
+        parser.current_kind(),
+        TokenKind::Variable | TokenKind::Dollar
+    );
     let class = match parser.current_kind() {
         TokenKind::Self_ => {
             let t = parser.advance();
@@ -1327,6 +1397,21 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         }
     };
 
+    // Consume any `new_variable` dereference tail that is part of the class-name
+    // reference (PHP's grammar). For a variable base this is `->prop`/`[idx]`/
+    // `::$prop`; a *name* base can only begin one via `Name::$staticProp`.
+    // A variable base always begins a `new_variable`; a name base only does so
+    // via `Name::$staticProp`.
+    let starts_new_variable = class_is_variable
+        || (class_is_name
+            && parser.current_kind() == TokenKind::DoubleColon
+            && matches!(parser.peek_kind(), Some(TokenKind::Variable)));
+    let class = if starts_new_variable {
+        parse_new_variable_tail(parser, class)
+    } else {
+        class
+    };
+
     // Optional argument list. `new Foo(...)` is rejected: PHP forbids first-class
     // callable syntax in `new` expressions ("Cannot create Closure for new expression").
     let had_parens = parser.check(TokenKind::LeftParen);
@@ -1362,23 +1447,15 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
                 "dereferencing a new expression without parentheses",
                 parser.current_span(),
             );
-        } else if class_is_name {
-            // `Name::$var` is a valid static-property class reference
-            // (`new A::$b` ≡ `new (A::$b)`), not a dereference — allow it.
-            // Everything else (`new Foo->bar`, `new Foo::class`, `new Foo[0]`,
-            // `new self::C`) is a parenless `new` with a class *name* being
-            // dereferenced, which PHP rejects.
-            let is_static_prop_class_ref = parser.current_kind() == TokenKind::DoubleColon
-                && matches!(
-                    parser.peek_kind(),
-                    Some(TokenKind::Variable | TokenKind::Dollar)
-                );
-            if !is_static_prop_class_ref {
-                parser.error(ParseError::Forbidden {
-                    message: "Cannot use a new expression with a class name as a dereferenceable expression without parentheses".into(),
-                    span: parser.current_span(),
-                });
-            }
+        } else if matches!(class.kind, ExprKind::Identifier(_)) {
+            // The class is still a bare *name* (any `new_variable` tail such as
+            // `Name::$prop` was already consumed above). A parenless `new` with a
+            // class name cannot be dereferenced — `new Foo->bar`, `new Foo::class`,
+            // `new Foo[0]`, `new self::C` are all rejected by PHP.
+            parser.error(ParseError::Forbidden {
+                message: "Cannot use a new expression with a class name as a dereferenceable expression without parentheses".into(),
+                span: parser.current_span(),
+            });
         }
     }
 

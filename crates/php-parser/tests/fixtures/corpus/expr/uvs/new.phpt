@@ -41,11 +41,11 @@ new $weird[0]->foo::$className;
       "kind": {
         "Expression": {
           "kind": {
-            "ArrayAccess": {
-              "array": {
+            "New": {
+              "class": {
                 "kind": {
-                  "New": {
-                    "class": {
+                  "ArrayAccess": {
+                    "array": {
                       "kind": {
                         "Variable": "array"
                       },
@@ -54,23 +54,23 @@ new $weird[0]->foo::$className;
                         "end": 32
                       }
                     },
-                    "args": []
+                    "index": {
+                      "kind": {
+                        "String": "className"
+                      },
+                      "span": {
+                        "start": 33,
+                        "end": 44
+                      }
+                    }
                   }
                 },
                 "span": {
-                  "start": 22,
-                  "end": 32
+                  "start": 26,
+                  "end": 45
                 }
               },
-              "index": {
-                "kind": {
-                  "String": "className"
-                },
-                "span": {
-                  "start": 33,
-                  "end": 44
-                }
-              }
+              "args": []
             }
           },
           "span": {
@@ -88,11 +88,11 @@ new $weird[0]->foo::$className;
       "kind": {
         "Expression": {
           "kind": {
-            "PropertyAccess": {
-              "object": {
+            "New": {
+              "class": {
                 "kind": {
-                  "New": {
-                    "class": {
+                  "PropertyAccess": {
+                    "object": {
                       "kind": {
                         "Variable": "obj"
                       },
@@ -101,23 +101,23 @@ new $weird[0]->foo::$className;
                         "end": 55
                       }
                     },
-                    "args": []
+                    "property": {
+                      "kind": {
+                        "Identifier": "className"
+                      },
+                      "span": {
+                        "start": 57,
+                        "end": 66
+                      }
+                    }
                   }
                 },
                 "span": {
-                  "start": 47,
-                  "end": 55
-                }
-              },
-              "property": {
-                "kind": {
-                  "Identifier": "className"
-                },
-                "span": {
-                  "start": 57,
+                  "start": 51,
                   "end": 66
                 }
-              }
+              },
+              "args": []
             }
           },
           "span": {
@@ -135,10 +135,10 @@ new $weird[0]->foo::$className;
       "kind": {
         "Expression": {
           "kind": {
-            "StaticPropertyAccess": {
+            "New": {
               "class": {
                 "kind": {
-                  "New": {
+                  "StaticPropertyAccess": {
                     "class": {
                       "kind": {
                         "Identifier": "Test"
@@ -148,23 +148,23 @@ new $weird[0]->foo::$className;
                         "end": 76
                       }
                     },
-                    "args": []
+                    "member": {
+                      "kind": {
+                        "Identifier": "className"
+                      },
+                      "span": {
+                        "start": 78,
+                        "end": 88
+                      }
+                    }
                   }
                 },
                 "span": {
-                  "start": 68,
-                  "end": 76
-                }
-              },
-              "member": {
-                "kind": {
-                  "Identifier": "className"
-                },
-                "span": {
-                  "start": 78,
+                  "start": 72,
                   "end": 88
                 }
-              }
+              },
+              "args": []
             }
           },
           "span": {
@@ -182,10 +182,10 @@ new $weird[0]->foo::$className;
       "kind": {
         "Expression": {
           "kind": {
-            "StaticPropertyAccess": {
+            "New": {
               "class": {
                 "kind": {
-                  "New": {
+                  "StaticPropertyAccess": {
                     "class": {
                       "kind": {
                         "Variable": "test"
@@ -195,23 +195,23 @@ new $weird[0]->foo::$className;
                         "end": 99
                       }
                     },
-                    "args": []
+                    "member": {
+                      "kind": {
+                        "Identifier": "className"
+                      },
+                      "span": {
+                        "start": 101,
+                        "end": 111
+                      }
+                    }
                   }
                 },
                 "span": {
-                  "start": 90,
-                  "end": 99
-                }
-              },
-              "member": {
-                "kind": {
-                  "Identifier": "className"
-                },
-                "span": {
-                  "start": 101,
+                  "start": 94,
                   "end": 111
                 }
-              }
+              },
+              "args": []
             }
           },
           "span": {
@@ -229,17 +229,17 @@ new $weird[0]->foo::$className;
       "kind": {
         "Expression": {
           "kind": {
-            "StaticPropertyAccess": {
+            "New": {
               "class": {
                 "kind": {
-                  "PropertyAccess": {
-                    "object": {
+                  "StaticPropertyAccess": {
+                    "class": {
                       "kind": {
-                        "ArrayAccess": {
-                          "array": {
+                        "PropertyAccess": {
+                          "object": {
                             "kind": {
-                              "New": {
-                                "class": {
+                              "ArrayAccess": {
+                                "array": {
                                   "kind": {
                                     "Variable": "weird"
                                   },
@@ -248,55 +248,55 @@ new $weird[0]->foo::$className;
                                     "end": 123
                                   }
                                 },
-                                "args": []
+                                "index": {
+                                  "kind": {
+                                    "Int": 0
+                                  },
+                                  "span": {
+                                    "start": 124,
+                                    "end": 125
+                                  }
+                                }
                               }
                             },
                             "span": {
-                              "start": 113,
-                              "end": 123
+                              "start": 117,
+                              "end": 126
                             }
                           },
-                          "index": {
+                          "property": {
                             "kind": {
-                              "Int": 0
+                              "Identifier": "foo"
                             },
                             "span": {
-                              "start": 124,
-                              "end": 125
+                              "start": 128,
+                              "end": 131
                             }
                           }
                         }
                       },
                       "span": {
-                        "start": 113,
-                        "end": 126
+                        "start": 117,
+                        "end": 131
                       }
                     },
-                    "property": {
+                    "member": {
                       "kind": {
-                        "Identifier": "foo"
+                        "Identifier": "className"
                       },
                       "span": {
-                        "start": 128,
-                        "end": 131
+                        "start": 133,
+                        "end": 143
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 113,
-                  "end": 131
-                }
-              },
-              "member": {
-                "kind": {
-                  "Identifier": "className"
-                },
-                "span": {
-                  "start": 133,
+                  "start": 117,
                   "end": 143
                 }
-              }
+              },
+              "args": []
             }
           },
           "span": {

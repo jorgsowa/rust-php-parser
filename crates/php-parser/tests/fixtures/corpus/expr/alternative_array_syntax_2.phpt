@@ -422,11 +422,11 @@ Array and string offset access syntax with curly braces is no longer supported
                   "ArrayAccess": {
                     "array": {
                       "kind": {
-                        "PropertyAccess": {
-                          "object": {
+                        "New": {
+                          "class": {
                             "kind": {
-                              "New": {
-                                "class": {
+                              "PropertyAccess": {
+                                "object": {
                                   "kind": {
                                     "Variable": "a"
                                   },
@@ -435,23 +435,23 @@ Array and string offset access syntax with curly braces is no longer supported
                                     "end": 111
                                   }
                                 },
-                                "args": []
+                                "property": {
+                                  "kind": {
+                                    "Identifier": "b"
+                                  },
+                                  "span": {
+                                    "start": 113,
+                                    "end": 114
+                                  }
+                                }
                               }
                             },
                             "span": {
-                              "start": 105,
-                              "end": 111
-                            }
-                          },
-                          "property": {
-                            "kind": {
-                              "Identifier": "b"
-                            },
-                            "span": {
-                              "start": 113,
+                              "start": 109,
                               "end": 114
                             }
-                          }
+                          },
+                          "args": []
                         }
                       },
                       "span": {

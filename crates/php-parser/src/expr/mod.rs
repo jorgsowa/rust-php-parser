@@ -894,7 +894,9 @@ pub fn parse_expr_bp<'arena, 'src>(
 }
 
 /// Parse a member name after -> or ?->. Accepts identifiers and semi-reserved keywords.
-fn parse_member_name<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
+pub(crate) fn parse_member_name<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+) -> Expr<'arena, 'src> {
     // Plain identifier or any keyword PHP allows as a member name.
     if parser.check(TokenKind::Identifier) || parser.is_semi_reserved_keyword() {
         let token = parser.advance();

@@ -125,27 +125,16 @@ new $a->b['c']();
       "kind": {
         "Expression": {
           "kind": {
-            "FunctionCall": {
-              "name": {
+            "New": {
+              "class": {
                 "kind": {
                   "ArrayAccess": {
                     "array": {
                       "kind": {
-                        "New": {
-                          "class": {
-                            "kind": {
-                              "Variable": "a"
-                            },
-                            "span": {
-                              "start": 65,
-                              "end": 67
-                            }
-                          },
-                          "args": []
-                        }
+                        "Variable": "a"
                       },
                       "span": {
-                        "start": 61,
+                        "start": 65,
                         "end": 67
                       }
                     },
@@ -161,7 +150,7 @@ new $a->b['c']();
                   }
                 },
                 "span": {
-                  "start": 61,
+                  "start": 65,
                   "end": 72
                 }
               },
@@ -183,10 +172,10 @@ new $a->b['c']();
       "kind": {
         "Expression": {
           "kind": {
-            "StaticDynMethodCall": {
+            "New": {
               "class": {
                 "kind": {
-                  "New": {
+                  "StaticPropertyAccess": {
                     "class": {
                       "kind": {
                         "Identifier": "A"
@@ -196,20 +185,19 @@ new $a->b['c']();
                         "end": 81
                       }
                     },
-                    "args": []
+                    "member": {
+                      "kind": {
+                        "Identifier": "b"
+                      },
+                      "span": {
+                        "start": 83,
+                        "end": 85
+                      }
+                    }
                   }
                 },
                 "span": {
-                  "start": 76,
-                  "end": 81
-                }
-              },
-              "method": {
-                "kind": {
-                  "Variable": "b"
-                },
-                "span": {
-                  "start": 83,
+                  "start": 80,
                   "end": 85
                 }
               },
@@ -231,11 +219,11 @@ new $a->b['c']();
       "kind": {
         "Expression": {
           "kind": {
-            "MethodCall": {
-              "object": {
+            "New": {
+              "class": {
                 "kind": {
-                  "New": {
-                    "class": {
+                  "PropertyAccess": {
+                    "object": {
                       "kind": {
                         "Variable": "a"
                       },
@@ -244,20 +232,19 @@ new $a->b['c']();
                         "end": 117
                       }
                     },
-                    "args": []
+                    "property": {
+                      "kind": {
+                        "Identifier": "b"
+                      },
+                      "span": {
+                        "start": 119,
+                        "end": 120
+                      }
+                    }
                   }
                 },
                 "span": {
-                  "start": 111,
-                  "end": 117
-                }
-              },
-              "method": {
-                "kind": {
-                  "Identifier": "b"
-                },
-                "span": {
-                  "start": 119,
+                  "start": 115,
                   "end": 120
                 }
               },
@@ -279,14 +266,14 @@ new $a->b['c']();
       "kind": {
         "Expression": {
           "kind": {
-            "MethodCall": {
-              "object": {
+            "New": {
+              "class": {
                 "kind": {
                   "PropertyAccess": {
                     "object": {
                       "kind": {
-                        "New": {
-                          "class": {
+                        "PropertyAccess": {
+                          "object": {
                             "kind": {
                               "Variable": "a"
                             },
@@ -295,36 +282,35 @@ new $a->b['c']();
                               "end": 130
                             }
                           },
-                          "args": []
+                          "property": {
+                            "kind": {
+                              "Identifier": "b"
+                            },
+                            "span": {
+                              "start": 132,
+                              "end": 133
+                            }
+                          }
                         }
                       },
                       "span": {
-                        "start": 124,
-                        "end": 130
+                        "start": 128,
+                        "end": 133
                       }
                     },
                     "property": {
                       "kind": {
-                        "Identifier": "b"
+                        "Identifier": "c"
                       },
                       "span": {
-                        "start": 132,
-                        "end": 133
+                        "start": 135,
+                        "end": 136
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 124,
-                  "end": 133
-                }
-              },
-              "method": {
-                "kind": {
-                  "Identifier": "c"
-                },
-                "span": {
-                  "start": 135,
+                  "start": 128,
                   "end": 136
                 }
               },
@@ -346,8 +332,8 @@ new $a->b['c']();
       "kind": {
         "Expression": {
           "kind": {
-            "FunctionCall": {
-              "name": {
+            "New": {
+              "class": {
                 "kind": {
                   "ArrayAccess": {
                     "array": {
@@ -355,21 +341,10 @@ new $a->b['c']();
                         "PropertyAccess": {
                           "object": {
                             "kind": {
-                              "New": {
-                                "class": {
-                                  "kind": {
-                                    "Variable": "a"
-                                  },
-                                  "span": {
-                                    "start": 144,
-                                    "end": 146
-                                  }
-                                },
-                                "args": []
-                              }
+                              "Variable": "a"
                             },
                             "span": {
-                              "start": 140,
+                              "start": 144,
                               "end": 146
                             }
                           },
@@ -385,7 +360,7 @@ new $a->b['c']();
                         }
                       },
                       "span": {
-                        "start": 140,
+                        "start": 144,
                         "end": 149
                       }
                     },
@@ -401,7 +376,7 @@ new $a->b['c']();
                   }
                 },
                 "span": {
-                  "start": 140,
+                  "start": 144,
                   "end": 154
                 }
               },
