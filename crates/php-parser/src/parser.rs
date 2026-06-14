@@ -1414,7 +1414,13 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         while self.check(TokenKind::HashBracket) {
             instrument::record_parse_attribute();
             let group_start = self.start_span();
+            let attr_kw_span = self.current_span();
             self.advance(); // consume #[
+            self.require_version(
+                crate::version::PhpVersion::Php80,
+                "attributes",
+                attr_kw_span,
+            );
             let group_len_before = attributes.len();
 
             // Parse comma-separated attributes within this group
