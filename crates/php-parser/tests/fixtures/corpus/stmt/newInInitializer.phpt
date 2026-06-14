@@ -15,8 +15,6 @@ class Bar {
 ===errors===
 New expressions are not supported in this context
 New expressions are not supported in this context
-New expressions are not supported in this context
-New expressions are not supported in this context
 ===ast===
 {
   "stmts": [

@@ -2400,12 +2400,8 @@ fn parse_const_with_attrs<'arena, 'src>(
         };
         parser.expect(TokenKind::Equals);
         let value = expr::parse_expr(parser);
-        if let Some(span) = expr::find_new_in_initializer(&value) {
-            parser.error(ParseError::Forbidden {
-                message: "New expressions are not supported in this context".into(),
-                span,
-            });
-        }
+        // Global constant initializers DO permit `new` (PHP 8.1+) — unlike class
+        // constants — so this site intentionally does not reject it.
         let item_span = Span::new(item_start, value.span.end);
         let item_attrs = pending_attrs.take().unwrap_or_else(|| parser.alloc_vec());
         let doc_comment = pending_doc.take();
@@ -2492,14 +2488,8 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
             .unwrap_or(Ident::ERROR);
 
         let default = if parser.eat(TokenKind::Equals).is_some() {
-            let e = expr::parse_expr(parser);
-            if let Some(span) = expr::find_new_in_initializer(&e) {
-                parser.error(ParseError::Forbidden {
-                    message: "New expressions are not supported in this context".into(),
-                    span,
-                });
-            }
-            Some(e)
+            // Static-variable initializers DO permit `new` (PHP 8.1+).
+            Some(expr::parse_expr(parser))
         } else {
             None
         };
