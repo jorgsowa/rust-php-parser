@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.18.0] - 2026-06-14
+
+### Fixed
+
+- `new` with a member-access or nullsafe class reference now instantiates the named class instead of dereferencing a fresh object. `new $this->job()` is `new ($this->job)()` (not `(new $this)->job()`), and `new $a?->b()` is `new ($a?->b)()`. PHP treats `->prop`, `?->prop`, `[idx]` and `::$prop` after a variable class reference as part of the class-name reference (a `new_variable`), not a dereference of the result. The nullsafe `?->` form is gated to PHP 8.0 (`php-rs-parser`).
+- A parenless `new` with a class *name* can no longer be dereferenced: `new Foo->bar`, `new Foo::class`, `new Foo[0]`, and `new self::C` are rejected by PHP but the parser accepted them (parsing as `(new Foo)->bar`). Variable-form (`new $c->p`) and static-property (`new A::$b`) class refs remain valid. The parenthesized result-dereference `new Foo()->bar` is the PHP 8.4 feature and is now version-gated (`php-rs-parser`).
+- Empty array elements (`[1, , 3]`) are now rejected in value arrays, where PHP fatals with "Cannot use empty array elements in arrays". The error is retracted at destructuring sites, so `[$a, , $c] = ...` and `foreach ($x as [$a, , $c])` remain valid (`php-rs-parser`).
+- Reserved keywords are now rejected as class/interface/trait/enum/global-const names (e.g. `class class {}`, `const for = 1;`), matching PHP. The contextual `enum`/`from` remain usable, and member names (methods, class constants) stay unrestricted (`php-rs-parser`).
+- Parameters after a variadic parameter are now rejected (`function f(...$a, $b) {}`), which PHP fatals as "Only the last parameter can be variadic". A trailing comma after the variadic (`...$a,`) is still valid (`php-rs-parser`).
+- A backed enum's type is now restricted to `int` or `string`; the parser previously accepted any name (`enum E: bool`, `enum E: Foo`) (`php-rs-parser`).
+- An empty attribute group `#[]` is now rejected as a syntax error instead of being silently accepted as an empty attribute set (`php-rs-parser`).
+- `new` in enum constant initializers is now rejected, matching the existing class-constant rule (PHP: "New expressions are not supported in this context") (`php-rs-parser`).
+- `<?= $a, $b ?>` now parses the comma-separated expression list (shorthand for `echo $a, $b;`); previously only a single expression was accepted before erroring (`php-rs-parser`).
+- `enum Enum {}` is now accepted — a second `enum` not followed by a label lexes as a plain identifier, but statement dispatch only treated `enum` as a declaration when followed by a bare identifier token, so it fell through to expression parsing. The `Enum_` token is also accepted as a name; fully-reserved words (`match`/`list`/`fn`) still fall through correctly (`php-rs-parser`).
+- A statement-level `(void)` cast is now allowed as the leftmost-descending leaf under any binary operator (`(void) $x + 1`, `(void) 5 |> f(...)`); the check previously whitelisted only logical operators. A void cast on the right operand is still rejected (`php-rs-parser`).
+- The cross-statement duplicate-`use` detector now resets its seen-imports set when entering a new unbraced `namespace X;` block, so the same import in sibling namespaces is no longer wrongly reported as "already in use". Braced namespaces already reset correctly (`php-rs-parser`).
+- `new` is now allowed in global constant and static-variable initializers (`const C = new Foo();`, `static $x = new Cache();`), which PHP 8.1+ permits; only class/enum constants and property defaults reject it (`php-rs-parser`).
+- `final` properties are now version-gated to PHP 8.4+ instead of being rejected unconditionally with "Cannot use the final modifier on a property" (`php-rs-parser`).
+
+### Changed
+
+- Attributes (`#[...]`) are now version-gated to PHP 8.0; below that target the parser emits a version error rather than accepting them (before 8.0, `#[` begins a comment) (`php-rs-parser`).
+- The `0o`/`0O` explicit octal prefix is now version-gated to PHP 8.1. Legacy `0NNN` octals are unaffected (`php-rs-parser`).
+- Non-capturing `catch (Exception)` without a variable binding is now version-gated to PHP 8.0 (`php-rs-parser`).
+- Constants in traits are now version-gated to PHP 8.2; class/interface/enum constants are unaffected (`php-rs-parser`).
+
+---
+
 ## [0.17.1] - 2026-06-14
 
 ### Fixed
