@@ -232,6 +232,12 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         }
         TokenKind::OctIntLiteralNew => {
             let token = parser.advance();
+            // The explicit `0o` octal prefix was introduced in PHP 8.1.
+            parser.require_version(
+                crate::version::PhpVersion::Php81,
+                "explicit octal literals (0o)",
+                token.span,
+            );
             let text = &parser.source()[token.span.start as usize..token.span.end as usize];
             match parse_int_no_alloc(&text.as_bytes()[2..], 8) {
                 Some(value) => Expr {
