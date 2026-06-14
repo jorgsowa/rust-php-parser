@@ -1204,7 +1204,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
 
         let brace_start = parser.start_span();
         parser.expect(TokenKind::LeftBrace);
-        let members = stmt::parse_class_members(parser, false);
+        let members = stmt::parse_class_members(parser, false, false);
         parser.expect(TokenKind::RightBrace);
         let end = parser.previous_end();
 

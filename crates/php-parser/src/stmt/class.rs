@@ -106,7 +106,7 @@ pub(super) fn parse_class<'arena, 'src>(
 
     let brace_start = parser.start_span();
     parser.expect(TokenKind::LeftBrace);
-    let members = parse_class_members(parser, false);
+    let members = parse_class_members(parser, false, false);
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
 
@@ -357,6 +357,7 @@ struct ClassMemberModifiers {
 pub fn parse_class_members<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     in_interface: bool,
+    in_trait: bool,
 ) -> ArenaVec<'arena, ClassMember<'arena, 'src>> {
     // March 2026: reduce from 16 to 4 for class members
     // Most classes have 3-10 members; larger classes grow efficiently
@@ -402,6 +403,14 @@ pub fn parse_class_members<'arena, 'src>(
         }
 
         if parser.check(TokenKind::Const) {
+            if in_trait {
+                // Constants in traits were introduced in PHP 8.2.
+                parser.require_version(
+                    PhpVersion::Php82,
+                    "constants in traits",
+                    parser.current_span(),
+                );
+            }
             parse_class_const_member(parser, &mut members, member_attrs, member_start, &mods);
             continue;
         }
@@ -1162,7 +1171,7 @@ pub(super) fn parse_interface<'arena, 'src>(
 
     let brace_start = parser.start_span();
     parser.expect(TokenKind::LeftBrace);
-    let members = parse_class_members(parser, true);
+    let members = parse_class_members(parser, true, false);
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
 
@@ -1206,7 +1215,7 @@ pub(super) fn parse_trait<'arena, 'src>(
 
     let brace_start = parser.start_span();
     parser.expect(TokenKind::LeftBrace);
-    let members = parse_class_members(parser, false);
+    let members = parse_class_members(parser, false, true);
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
 
