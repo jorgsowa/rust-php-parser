@@ -1888,6 +1888,15 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             None
         };
 
+        // Non-capturing catch — `catch (E)` without a variable — is PHP 8.0+.
+        if var.is_none() {
+            parser.require_version(
+                PhpVersion::Php80,
+                "non-capturing catch",
+                Span::new(catch_start, parser.previous_end()),
+            );
+        }
+
         parser.expect(TokenKind::RightParen);
         let catch_body_brace_start = parser.start_span();
         parser.expect(TokenKind::LeftBrace);
