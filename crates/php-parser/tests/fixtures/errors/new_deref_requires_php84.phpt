@@ -1,11 +1,11 @@
 ===config===
-min_php=8.3
-max_php=8.3
+min_php=8.0
+max_php=8.0
 ===source===
 <?php
 $x = new Foo()->bar;
 ===errors===
-'dereferencing a new expression without parentheses' requires PHP 8.4 or higher (targeting PHP 8.3)
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher (targeting PHP 8.0)
 ===ast===
 {
   "stmts": [

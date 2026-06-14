@@ -1,13 +1,13 @@
 ===config===
-min_php=8.1
-max_php=8.1
+min_php=8.0
+max_php=8.0
 ===source===
 <?php
 trait T {
     const X = 1;
 }
 ===errors===
-'constants in traits' requires PHP 8.2 or higher (targeting PHP 8.1)
+'constants in traits' requires PHP 8.2 or higher (targeting PHP 8.0)
 ===ast===
 {
   "stmts": [
