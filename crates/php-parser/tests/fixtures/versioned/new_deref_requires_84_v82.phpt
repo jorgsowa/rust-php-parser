@@ -1,11 +1,11 @@
 ===config===
-min_php=8.0
-max_php=8.0
+min_php=8.2
+max_php=8.2
 ===source===
 <?php
 $x = new Foo()->bar;
 ===errors===
-'dereferencing a new expression without parentheses' requires PHP 8.4 or higher (targeting PHP 8.0)
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher (targeting PHP 8.2)
 ===ast===
 {
   "stmts": [
@@ -82,3 +82,5 @@ $x = new Foo()->bar;
     "end": 26
   }
 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "->" in Standard input code on line 2
