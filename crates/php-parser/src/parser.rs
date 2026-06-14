@@ -1684,6 +1684,10 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 if let StmtKind::Namespace(decl) = stmt.kind {
                     if matches!(decl.body, php_ast::NamespaceBody::Simple) {
                         current_namespace = decl.name.as_ref();
+                        // Each unbraced `namespace X;` opens a fresh import scope;
+                        // names imported in a previous namespace do not collide
+                        // with the same import here.
+                        seen.clear();
                     }
                     continue;
                 }
