@@ -2621,16 +2621,11 @@ fn check_void_cast_stmt_expr<'arena, 'src>(
 ) -> Option<php_ast::span::Span> {
     match &expr.kind {
         ExprKind::Cast(CastKind::Void, inner) => find_void_cast_used_as_value(inner),
-        ExprKind::Binary(b)
-            if matches!(
-                b.op,
-                BinaryOp::LogicalOr
-                    | BinaryOp::LogicalAnd
-                    | BinaryOp::BooleanOr
-                    | BinaryOp::BooleanAnd
-                    | BinaryOp::LogicalXor
-            ) =>
-        {
+        // A void cast is permitted as the leftmost-descending leaf of the
+        // statement expression under any binary operator (PHP accepts
+        // `(void) $x + 1`, `(void) $x && $y`, `(void) 5 |> f(...)`), but not as
+        // a right operand (`5 |> (void) f(...)` is rejected).
+        ExprKind::Binary(b) => {
             check_void_cast_stmt_expr(b.left).or_else(|| find_void_cast_used_as_value(b.right))
         }
         _ => find_void_cast_used_as_value(expr),
