@@ -8,7 +8,6 @@ class Test {
     private static $prop;
 }
 ===errors===
-Cannot use the final modifier on a property
 Cannot redeclare property $prop
 Cannot redeclare property $prop
 ===ast===

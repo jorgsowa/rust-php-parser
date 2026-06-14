@@ -1026,10 +1026,12 @@ fn parse_property_member<'arena, 'src>(
         });
     }
     if mods.is_final {
-        parser.error(ParseError::Forbidden {
-            message: "Cannot use the final modifier on a property".into(),
-            span: Span::new(member_start, parser.previous_end()),
-        });
+        // `final` properties became valid in PHP 8.4; older targets reject them.
+        parser.require_version(
+            PhpVersion::Php84,
+            "final properties",
+            Span::new(member_start, parser.previous_end()),
+        );
     }
     if mods.is_readonly {
         if type_hint.is_none() {

@@ -1,4 +1,5 @@
 ===config===
+min_php=8.2
 max_php=8.2
 ===source===
 <?php
@@ -8,7 +9,7 @@ class Test {
     private static $prop;
 }
 ===errors===
-Cannot use the final modifier on a property
+'final properties' requires PHP 8.4 or higher (targeting PHP 8.2)
 Cannot redeclare property $prop
 Cannot redeclare property $prop
 ===ast===
