@@ -256,6 +256,14 @@ pub(super) fn parse_enum<'arena, 'src>(
             };
             parser.expect(TokenKind::Equals);
             let value = expr::parse_expr(parser);
+            // Like class constants, enum constants reject `new` in their
+            // initializer (PHP: "New expressions are not supported in this context").
+            if let Some(span) = expr::find_new_in_initializer(&value) {
+                parser.error(ParseError::Forbidden {
+                    message: "New expressions are not supported in this context".into(),
+                    span,
+                });
+            }
             parser.expect(TokenKind::Semicolon);
             let span = Span::new(member_start, parser.previous_end());
             members.push(EnumMember {
