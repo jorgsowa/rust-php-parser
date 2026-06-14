@@ -1,17 +1,15 @@
 ===source===
-<?php class function while;
+<?php
+class class {}
 ===errors===
-Cannot use "function" as a class name as it is reserved
-expected '{', found 'while'
-expected class member, found 'while'
-expected '}', found end of file
+Cannot use "class" as a class name as it is reserved
 ===ast===
 {
   "stmts": [
     {
       "kind": {
         "Class": {
-          "name": "function",
+          "name": "class",
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -25,14 +23,14 @@ expected '}', found end of file
       },
       "span": {
         "start": 6,
-        "end": 27
+        "end": 20
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 27
+    "end": 20
   }
 }
 ===php_error===
-PHP Parse error:  syntax error, unexpected token "function", expecting identifier in Standard input code on line 1
+PHP Parse error:  syntax error, unexpected token "class", expecting identifier in Standard input code on line 2

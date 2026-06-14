@@ -62,6 +62,7 @@ pub(super) fn parse_class<'arena, 'src>(
     let start = parser.start_span();
     parser.advance(); // consume 'class'
 
+    let name_is_reserved_kw = parser.is_reserved_keyword_as_decl_name();
     let (name, name_span) = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
         (Ident::name(text), span)
     } else {
@@ -74,7 +75,7 @@ pub(super) fn parse_class<'arena, 'src>(
     };
 
     if let Some(text) = name.as_str() {
-        if is_reserved_class_name(text) {
+        if is_reserved_class_name(text) || name_is_reserved_kw {
             parser.error(ParseError::Forbidden {
                 message: format!("Cannot use \"{}\" as a class name as it is reserved", text)
                     .into(),
@@ -1136,6 +1137,7 @@ pub(super) fn parse_interface<'arena, 'src>(
 
     let start = parser.start_span();
     parser.advance();
+    let name_is_reserved_kw = parser.is_reserved_keyword_as_decl_name();
     let (name, name_span) = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
         (Ident::name(text), span)
     } else {
@@ -1148,7 +1150,7 @@ pub(super) fn parse_interface<'arena, 'src>(
     };
 
     if let Some(text) = name.as_str() {
-        if is_reserved_class_name(text) {
+        if is_reserved_class_name(text) || name_is_reserved_kw {
             parser.error(ParseError::Forbidden {
                 message: format!("cannot use '{}' as interface name", text).into(),
                 span: name_span,
@@ -1199,7 +1201,14 @@ pub(super) fn parse_trait<'arena, 'src>(
 
     let start = parser.start_span();
     parser.advance();
-    let name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
+    let name_is_reserved_kw = parser.is_reserved_keyword_as_decl_name();
+    let name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
+        if name_is_reserved_kw {
+            parser.error(ParseError::Forbidden {
+                message: format!("cannot use '{}' as trait name", text).into(),
+                span,
+            });
+        }
         Ident::name(text)
     } else {
         parser.error(ParseError::Expected {

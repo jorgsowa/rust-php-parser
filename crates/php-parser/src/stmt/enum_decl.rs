@@ -13,7 +13,14 @@ pub(super) fn parse_enum<'arena, 'src>(
     let start = parser.start_span();
     parser.advance(); // consume 'enum'
 
-    let name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
+    let name_is_reserved_kw = parser.is_reserved_keyword_as_decl_name();
+    let name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
+        if name_is_reserved_kw {
+            parser.error(ParseError::Forbidden {
+                message: format!("cannot use '{}' as enum name", text).into(),
+                span,
+            });
+        }
         Ident::name(text)
     } else {
         parser.error(ParseError::Expected {

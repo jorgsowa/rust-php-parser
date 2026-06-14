@@ -2405,7 +2405,15 @@ fn parse_const_with_attrs<'arena, 'src>(
     let mut pending_doc = parser.take_doc_comment(start);
     loop {
         let item_start = parser.start_span();
-        let const_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
+        let name_is_reserved_kw = parser.is_reserved_keyword_as_decl_name();
+        let const_name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
+            if name_is_reserved_kw {
+                parser.error(ParseError::Forbidden {
+                    message: format!("cannot use '{}' as constant name as it is reserved", text)
+                        .into(),
+                    span,
+                });
+            }
             Ident::name(text)
         } else {
             parser.error(ParseError::Expected {
