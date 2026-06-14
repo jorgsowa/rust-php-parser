@@ -238,6 +238,9 @@ fn parse_assign_continuation<'arena, 'src>(
     // Short-list destructure: `[, , ,] = …` — PHP fatals on "Cannot use empty list"
     // when every element is omitted (or the array has no elements at all).
     if let ExprKind::Array(elems) = &lhs.kind {
+        // This array is a destructuring target, so empty slots are legal here —
+        // retract the eager "empty array element" errors emitted while parsing it.
+        parser.retract_empty_array_element_errors_within(lhs.span);
         if elems.is_empty() || elems.iter().all(|e| matches!(e.value.kind, ExprKind::Omit)) {
             parser.error(ParseError::Forbidden {
                 message: "Cannot use empty list".into(),

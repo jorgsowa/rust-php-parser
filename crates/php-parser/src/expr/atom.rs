@@ -1843,6 +1843,14 @@ fn parse_array_literal<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Ex
             // Empty element (skipped position for destructuring): [, $b] or [$a, , $c]
             if parser.check(TokenKind::Comma) {
                 let span = parser.current_span();
+                // Empty elements are only valid in list-destructuring targets. In a
+                // value array PHP rejects them ("Cannot use empty array elements in
+                // arrays"). We emit the error eagerly here and retract it at the
+                // destructuring sites (assignment LHS, `foreach as`) where it is legal.
+                parser.error(crate::diagnostics::ParseError::Forbidden {
+                    message: "Cannot use empty array elements in arrays".into(),
+                    span,
+                });
                 elements.push(ArrayElement {
                     key: None,
                     value: Expr {

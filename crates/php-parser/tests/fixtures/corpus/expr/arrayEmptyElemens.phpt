@@ -4,6 +4,7 @@
 [1, , 2];
 array(1, , 2);
 ===errors===
+Cannot use empty array elements in arrays
 expected expression
 ===ast===
 {

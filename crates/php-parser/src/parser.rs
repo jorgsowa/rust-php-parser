@@ -416,6 +416,19 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         self.errors.len() + self.lexer.errors.len() >= MAX_ERRORS
     }
 
+    /// Retract "empty array element" errors emitted within `within`. Empty
+    /// elements (`[$a, , $c]`) are emitted eagerly as errors by the array
+    /// parser because they are only valid in a list-destructuring target; this
+    /// undoes them once such a target is recognized (assignment LHS / foreach).
+    pub fn retract_empty_array_element_errors_within(&mut self, within: Span) {
+        self.errors.retain(|e| {
+            !matches!(e, ParseError::Forbidden { message, span }
+                if message.as_ref() == "Cannot use empty array elements in arrays"
+                    && span.start >= within.start
+                    && span.end <= within.end)
+        });
+    }
+
     pub fn errors_mut(&mut self) -> &mut Vec<ParseError> {
         &mut self.errors
     }
