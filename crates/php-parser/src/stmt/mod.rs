@@ -1590,6 +1590,14 @@ pub fn parse_param_list<'arena, 'src>(
         if parser.eat(TokenKind::Comma).is_none() {
             break;
         }
+        // A variadic parameter must be last: a trailing comma is fine, but
+        // another parameter after it is an error.
+        if variadic && !parser.check(TokenKind::RightParen) {
+            parser.error(ParseError::Forbidden {
+                message: "Only the last parameter can be variadic".into(),
+                span: parser.current_span(),
+            });
+        }
     }
 
     params
