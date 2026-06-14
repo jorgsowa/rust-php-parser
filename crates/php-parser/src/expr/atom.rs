@@ -1154,9 +1154,9 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
 // =============================================================================
 
 /// Consume a `new_variable` dereference tail on a `new` class reference:
-/// `->prop`, `[idx]`, and `::$staticProp`. In PHP's grammar these are part of
-/// the *class-name reference*, not a dereference of the constructed object — so
-/// `new $this->job()` instantiates the class named by `$this->job`
+/// `->prop`, `?->prop`, `[idx]`, and `::$staticProp`. In PHP's grammar these are
+/// part of the *class-name reference*, not a dereference of the constructed
+/// object — so `new $this->job()` instantiates the class named by `$this->job`
 /// (`new ($this->job)()`), rather than calling a method on `new $this`.
 fn parse_new_variable_tail<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
@@ -1164,15 +1164,30 @@ fn parse_new_variable_tail<'arena, 'src>(
 ) -> Expr<'arena, 'src> {
     loop {
         match parser.current_kind() {
-            TokenKind::Arrow => {
+            TokenKind::Arrow | TokenKind::NullsafeArrow => {
+                let nullsafe = parser.current_kind() == TokenKind::NullsafeArrow;
+                let op_span = parser.current_span();
                 parser.advance();
+                if nullsafe {
+                    // `?->` is PHP 8.0+ even inside a class-name reference.
+                    parser.require_version(
+                        crate::version::PhpVersion::Php80,
+                        "nullsafe operator (?->)",
+                        op_span,
+                    );
+                }
                 let property = parse_member_name(parser);
                 let span = Span::new(base.span.start, property.span.end);
+                let access = PropertyAccessExpr {
+                    object: parser.alloc(base),
+                    property: parser.alloc(property),
+                };
                 base = Expr {
-                    kind: ExprKind::PropertyAccess(PropertyAccessExpr {
-                        object: parser.alloc(base),
-                        property: parser.alloc(property),
-                    }),
+                    kind: if nullsafe {
+                        ExprKind::NullsafePropertyAccess(access)
+                    } else {
+                        ExprKind::PropertyAccess(access)
+                    },
                     span,
                 };
             }

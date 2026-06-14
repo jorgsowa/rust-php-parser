@@ -105,11 +105,11 @@ new $a?->b;
       "kind": {
         "Expression": {
           "kind": {
-            "NullsafePropertyAccess": {
-              "object": {
+            "New": {
+              "class": {
                 "kind": {
-                  "New": {
-                    "class": {
+                  "NullsafePropertyAccess": {
+                    "object": {
                       "kind": {
                         "Variable": "a"
                       },
@@ -118,23 +118,23 @@ new $a?->b;
                         "end": 33
                       }
                     },
-                    "args": []
+                    "property": {
+                      "kind": {
+                        "Identifier": "b"
+                      },
+                      "span": {
+                        "start": 36,
+                        "end": 37
+                      }
+                    }
                   }
                 },
                 "span": {
-                  "start": 27,
-                  "end": 33
-                }
-              },
-              "property": {
-                "kind": {
-                  "Identifier": "b"
-                },
-                "span": {
-                  "start": 36,
+                  "start": 31,
                   "end": 37
                 }
-              }
+              },
+              "args": []
             }
           },
           "span": {
