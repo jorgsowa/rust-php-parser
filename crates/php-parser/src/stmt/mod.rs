@@ -313,10 +313,19 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
         TokenKind::Interface => class::parse_interface(parser, parser.alloc_vec()),
         TokenKind::Trait => class::parse_trait(parser, parser.alloc_vec()),
         TokenKind::Enum_ => {
-            // `enum` introduces an enum declaration only when followed by an identifier
+            // `enum` introduces an enum declaration only when followed by a name
             // (the enum name). In any other position — `Enum::class`, `Enum()`,
             // `new Enum`, etc. — it's an ordinary name referring to a class/function.
-            if matches!(parser.peek_kind(), Some(TokenKind::Identifier)) {
+            //
+            // The name may itself spell `enum` (PHP lexes a second `enum` not
+            // followed by a label as a plain identifier, so `enum Enum {}` is a
+            // valid declaration). Fully-reserved words like `match`/`list`/`fn`
+            // cannot name an enum, so they correctly fall through to expression
+            // parsing here.
+            if matches!(
+                parser.peek_kind(),
+                Some(TokenKind::Identifier | TokenKind::Enum_)
+            ) {
                 let span = parser.current_span();
                 parser.require_version(PhpVersion::Php81, "enums", span);
                 enum_decl::parse_enum(parser, parser.alloc_vec())
