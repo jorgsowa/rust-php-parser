@@ -1238,7 +1238,14 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         };
     }
 
-    // Parse the class name — can be an identifier, self, parent, static, qualified name, or parenthesized expr
+    // Parse the class name — can be an identifier, self, parent, static, qualified name, or parenthesized expr.
+    // A *name* form (Foo / self / parent / static) cannot be dereferenced unless
+    // the `new` has parentheses; *variable* forms (`new $c->p`) can (they form a
+    // `new_variable` class reference in PHP's grammar).
+    let class_is_name = !matches!(
+        parser.current_kind(),
+        TokenKind::Variable | TokenKind::Dollar | TokenKind::LeftParen
+    );
     let class = match parser.current_kind() {
         TokenKind::Self_ => {
             let t = parser.advance();
@@ -1322,6 +1329,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
 
     // Optional argument list. `new Foo(...)` is rejected: PHP forbids first-class
     // callable syntax in `new` expressions ("Cannot create Closure for new expression").
+    let had_parens = parser.check(TokenKind::LeftParen);
     let args = if parser.check(TokenKind::LeftParen) {
         let paren_start = parser.current_span().start;
         match parse_arg_list_or_callable(parser) {
@@ -1337,6 +1345,42 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
     } else {
         parser.alloc_vec()
     };
+
+    // A `new` expression immediately followed by `->`, `?->`, `::`, or `[` is a
+    // dereference of the freshly-constructed object.
+    if matches!(
+        parser.current_kind(),
+        TokenKind::Arrow
+            | TokenKind::NullsafeArrow
+            | TokenKind::DoubleColon
+            | TokenKind::LeftBracket
+    ) {
+        if had_parens {
+            // `new Foo()->bar`, `new Foo()::C`, `new Foo()[0]` — PHP 8.4+.
+            parser.require_version(
+                crate::version::PhpVersion::Php84,
+                "dereferencing a new expression without parentheses",
+                parser.current_span(),
+            );
+        } else if class_is_name {
+            // `Name::$var` is a valid static-property class reference
+            // (`new A::$b` ≡ `new (A::$b)`), not a dereference — allow it.
+            // Everything else (`new Foo->bar`, `new Foo::class`, `new Foo[0]`,
+            // `new self::C`) is a parenless `new` with a class *name* being
+            // dereferenced, which PHP rejects.
+            let is_static_prop_class_ref = parser.current_kind() == TokenKind::DoubleColon
+                && matches!(
+                    parser.peek_kind(),
+                    Some(TokenKind::Variable | TokenKind::Dollar)
+                );
+            if !is_static_prop_class_ref {
+                parser.error(ParseError::Forbidden {
+                    message: "Cannot use a new expression with a class name as a dereferenceable expression without parentheses".into(),
+                    span: parser.current_span(),
+                });
+            }
+        }
+    }
 
     let span = Span::new(start, parser.previous_end());
     Expr {
