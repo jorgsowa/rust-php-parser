@@ -1413,7 +1413,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         let mut attributes = self.alloc_vec_with_capacity(1);
         while self.check(TokenKind::HashBracket) {
             instrument::record_parse_attribute();
+            let group_start = self.start_span();
             self.advance(); // consume #[
+            let group_len_before = attributes.len();
 
             // Parse comma-separated attributes within this group
             loop {
@@ -1449,6 +1451,12 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 }
             }
 
+            if attributes.len() == group_len_before {
+                self.error(ParseError::Forbidden {
+                    message: "Attribute list cannot be empty".into(),
+                    span: Span::new(group_start, self.current_span().end),
+                });
+            }
             self.expect(TokenKind::RightBracket);
         }
         attributes
