@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.18.1] - 2026-06-21
+
+### Fixed
+
+- Member access and dereference (`->`, `?->`, `[]`, `{}`, method calls) now bind tighter than `**` exponentiation, matching PHP. `10 ** $this->maxDigits` now parses as `10 ** ($this->maxDigits)` instead of `(10 ** $this)->maxDigits`; in PHP a dereference chain binds tighter than every binary operator. `MEMBER_ACCESS_BP` was raised above `**` (and stays below `::`) (`php-rs-parser`).
+
+---
+
 ## [0.18.0] - 2026-06-14
 
 ### Fixed
