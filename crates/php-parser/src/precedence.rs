@@ -172,14 +172,11 @@ pub const TERNARY_BP: u8 = 10;
 pub const NULL_COALESCE_LEFT_BP: u8 = 14;
 
 /// Postfix member access binding power for `->`, `?->`, `[`, `{`, and `(` (call).
-/// Above postfix `++`/`--` (43) and below `instanceof` (45). Used as the gate that
-/// promoted-property default expressions raise to suppress curly-brace subscripts
-/// while still allowing normal member access.
-pub const MEMBER_ACCESS_BP: u8 = 50;
+/// Above `**` (60) and below `::` (90): in PHP the whole dereference chain binds
+/// tighter than every binary operator, so `10 ** $this->x` is `10 ** ($this->x)`.
+pub const MEMBER_ACCESS_BP: u8 = 65;
 
-/// Scope-resolution `::` binding power. Higher than `**` (60) so it stays untouched
-/// by the `bp=45` gate used for promoted-property defaults (which only intends to
-/// block the `{}` curly-brace subscript at [`MEMBER_ACCESS_BP`]).
+/// Scope-resolution `::` binding power. Highest deref tier, above [`MEMBER_ACCESS_BP`].
 pub const SCOPE_RESOLUTION_BP: u8 = 90;
 
 #[cfg(test)]
@@ -307,6 +304,15 @@ mod tests {
         let prefix_right_bp = prefix_binding_power(TokenKind::Bang).unwrap();
         let (inst_left, _) = infix_binding_power(TokenKind::Instanceof).unwrap();
         assert!(inst_left > prefix_right_bp);
+    }
+
+    #[test]
+    fn test_member_access_above_pow_below_scope() {
+        // PHP: `10 ** $this->x` → `10 ** ($this->x)`; member access binds tighter
+        // than every binary operator, including `**`, but below `::`.
+        let (pow_left, _) = infix_binding_power(TokenKind::StarStar).unwrap();
+        const { assert!(MEMBER_ACCESS_BP < SCOPE_RESOLUTION_BP) }
+        assert!(MEMBER_ACCESS_BP > pow_left);
     }
 
     #[test]
