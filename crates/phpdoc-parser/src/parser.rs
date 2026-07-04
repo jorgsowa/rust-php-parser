@@ -180,6 +180,12 @@ fn extract_prose(lines: &[CleanLine]) -> (Option<PhpDocText>, Option<PhpDocText>
 /// continuation/description lines are prose, so an `@word` inside them
 /// (e.g. `Contact user @example for details.`) must not be mistaken for a
 /// new tag.
+///
+/// Known limitation: an `@word` inside a tag's own first-line body (not a
+/// continuation line) is indistinguishable from a genuine second tag, since
+/// this crate deliberately has no notion of which tag names are "real"
+/// (see the crate-level docs). `@param string $email Contact @jsmith` still
+/// splits into a bogus `jsmith` tag.
 fn split_inline_tag_lines(lines: &[CleanLine]) -> Vec<CleanLine> {
     let mut out = Vec::with_capacity(lines.len());
     for line in lines {
