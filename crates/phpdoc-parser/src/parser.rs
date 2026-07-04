@@ -23,7 +23,8 @@ pub fn parse(text: &str) -> PhpDoc {
     let lines = clean_lines(inner, content_start);
     let (summary, description, tag_start) = extract_prose(&lines);
     let tags = if tag_start < lines.len() {
-        parse_tags(&lines[tag_start..])
+        let expanded = split_inline_tag_lines(&lines[tag_start..]);
+        parse_tags(&expanded)
     } else {
         Vec::new()
     };
@@ -167,6 +168,56 @@ fn extract_prose(lines: &[CleanLine]) -> (Option<PhpDocText>, Option<PhpDocText>
 // =============================================================================
 // Tag parsing
 // =============================================================================
+
+/// Split a physical line at each additional `@tag` boundary that appears
+/// mid-line, so `@param int $x @return int` parses as two tags instead of
+/// one tag whose body swallows the second verbatim. A boundary is a `@`
+/// preceded by whitespace and followed by a letter — this excludes
+/// email-like text (`user@example.com`, no preceding whitespace) and
+/// `{@inline}` tags (preceded by `{`, not whitespace).
+///
+/// Only lines that themselves start with `@` are scanned: a tag's
+/// continuation/description lines are prose, so an `@word` inside them
+/// (e.g. `Contact user @example for details.`) must not be mistaken for a
+/// new tag.
+fn split_inline_tag_lines(lines: &[CleanLine]) -> Vec<CleanLine> {
+    let mut out = Vec::with_capacity(lines.len());
+    for line in lines {
+        if !line.text.trim_start().starts_with('@') {
+            out.push(CleanLine {
+                text: line.text.clone(),
+                base_offset: line.base_offset,
+            });
+            continue;
+        }
+        let bytes = line.text.as_bytes();
+        let mut starts = vec![0usize];
+        for i in 1..bytes.len() {
+            if bytes[i] == b'@'
+                && bytes[i - 1].is_ascii_whitespace()
+                && bytes.get(i + 1).is_some_and(u8::is_ascii_alphabetic)
+            {
+                starts.push(i);
+            }
+        }
+        if starts.len() == 1 {
+            out.push(CleanLine {
+                text: line.text.clone(),
+                base_offset: line.base_offset,
+            });
+            continue;
+        }
+        starts.push(bytes.len());
+        for w in starts.windows(2) {
+            let (s, e) = (w[0], w[1]);
+            out.push(CleanLine {
+                text: line.text[s..e].to_string(),
+                base_offset: line.base_offset + s as u32,
+            });
+        }
+    }
+    out
+}
 
 fn parse_tags(lines: &[CleanLine]) -> Vec<PhpDocTag> {
     let mut tags = Vec::new();

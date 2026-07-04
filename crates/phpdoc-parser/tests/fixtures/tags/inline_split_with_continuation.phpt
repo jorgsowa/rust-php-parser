@@ -1,5 +1,8 @@
 ===input===
-/** @param array<string, int> $map The map @return bool */
+/**
+ * @param int $x @param int $y
+ *   Only applies to $y.
+ */
 ===output===
 {
   "summary": null,
@@ -10,40 +13,40 @@
       "body": {
         "segments": [
           {
-            "Text": "array<string, int> $map The map"
+            "Text": "int $x"
           }
         ],
         "span": {
-          "start": 11,
-          "end": 42
+          "start": 14,
+          "end": 20
         }
       },
       "span": {
-        "start": 4,
-        "end": 43
+        "start": 7,
+        "end": 21
       }
     },
     {
-      "name": "return",
+      "name": "param",
       "body": {
         "segments": [
           {
-            "Text": "bool"
+            "Text": "int $y\nOnly applies to $y."
           }
         ],
         "span": {
-          "start": 51,
-          "end": 55
+          "start": 28,
+          "end": 59
         }
       },
       "span": {
-        "start": 43,
-        "end": 56
+        "start": 21,
+        "end": 61
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 58
+    "end": 63
   }
 }

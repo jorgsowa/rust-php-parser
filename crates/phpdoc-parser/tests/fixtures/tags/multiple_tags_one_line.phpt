@@ -1,49 +1,49 @@
 ===input===
-/** @param array<string, int> $map The map @return bool */
+/** @template U @extends GrandParentBox<U> */
 ===output===
 {
   "summary": null,
   "description": null,
   "tags": [
     {
-      "name": "param",
+      "name": "template",
       "body": {
         "segments": [
           {
-            "Text": "array<string, int> $map The map"
+            "Text": "U"
           }
         ],
         "span": {
-          "start": 11,
-          "end": 42
+          "start": 14,
+          "end": 15
         }
       },
       "span": {
         "start": 4,
-        "end": 43
+        "end": 16
       }
     },
     {
-      "name": "return",
+      "name": "extends",
       "body": {
         "segments": [
           {
-            "Text": "bool"
+            "Text": "GrandParentBox<U>"
           }
         ],
         "span": {
-          "start": 51,
-          "end": 55
+          "start": 25,
+          "end": 42
         }
       },
       "span": {
-        "start": 43,
-        "end": 56
+        "start": 16,
+        "end": 43
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 58
+    "end": 45
   }
 }
