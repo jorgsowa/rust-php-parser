@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.18.2] - 2026-07-04
+
+### Fixed
+
+- Multiple `@tag`s on the same physical PHPDoc line (`@param int $x @return int`, or combined psalm/phpstan annotations like `@template U @extends Foo<U>`) are now parsed as separate tags instead of one tag whose body swallows the rest. The split only applies to a line that itself starts with `@`; a tag's continuation/description lines are still treated as prose, so text like `Contact user @example for details.` is not mistaken for a new tag (`phpdoc-parser`).
+
+### Known limitations
+
+- A bare `@word` inside a tag's own description, on the same line as the tag, preceded by whitespace and followed by a letter (e.g. `@param string $email Contact @jsmith for details.`), may still be misread as the start of a new tag. `phpdoc-parser` is intentionally tag-agnostic — it has no notion of which `@tag` names are "real" — so this ambiguity can't be fully resolved without a hardcoded tag list. Put such tokens in a code span or move them to a continuation line to avoid this.
+
+---
+
 ## [0.18.1] - 2026-06-21
 
 ### Fixed
