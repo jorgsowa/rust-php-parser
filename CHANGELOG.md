@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.18.3] - 2026-07-17
+
+### Fixed
+
+- Blank lines inside an indented heredoc/nowdoc in a CRLF file no longer emit a spurious "Invalid body indentation level" error. A blank line in a CRLF source still carries its `\r` after splitting on `\n`, so the indentation check saw a non-empty line without the closing marker's indent; PHP's scanner treats a line that reaches `\r`/`\n` before any non-whitespace as empty (`php-rs-parser`).
+
+---
+
 ## [0.18.2] - 2026-07-04
 
 ### Fixed
