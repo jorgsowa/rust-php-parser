@@ -2358,14 +2358,17 @@ fn validate_heredoc_indentation(
         return;
     }
     let mut offset = body_offset as usize;
-    for line in raw_body.split('\n') {
+    for raw_line in raw_body.split('\n') {
+        // In a CRLF file a blank line still carries the `\r`; PHP's scanner
+        // treats it as empty (it stops at `\r` or `\n` when checking indent).
+        let line = raw_line.strip_suffix('\r').unwrap_or(raw_line);
         if !line.is_empty() && !line.starts_with(indent) {
             errors.push(ParseError::Forbidden {
                 message: "Invalid body indentation level".into(),
                 span: Span::new(offset as u32, (offset + line.len()) as u32),
             });
         }
-        offset += line.len() + 1; // +1 for the '\n'
+        offset += raw_line.len() + 1; // +1 for the '\n'
     }
 }
 
