@@ -53,3 +53,5 @@ Cannot use partial function application in new expression
     "end": 17
   }
 }
+===php_error===
+PHP Fatal error:  Cannot create Closure for new expression in Standard input code on line 2

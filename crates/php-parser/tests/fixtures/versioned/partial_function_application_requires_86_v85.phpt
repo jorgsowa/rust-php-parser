@@ -1,5 +1,6 @@
 ===config===
 min_php=8.5
+max_php=8.5
 ===source===
 <?php $fn = foo(1, ?, 3);
 ===errors===
