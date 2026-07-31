@@ -7,6 +7,7 @@ authors.workspace = true
 repository.workspace = true
 homepage.workspace = true
 description = "Structural PHPDoc parser. Parses doc-comment blocks into a tag/prose AST with accurate spans; tag bodies exposed as raw text."
+exclude = ["tests/"]
 
 [dependencies]
 serde = { workspace = true }

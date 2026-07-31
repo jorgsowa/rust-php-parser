@@ -10,6 +10,7 @@ description = "PHP Abstract Syntax Tree (AST) node definitions"
 keywords = ["php", "ast", "parser", "syntax"]
 categories = ["parsing", "development-tools"]
 readme = "../../README.md"
+exclude = ["tests/"]
 
 [dependencies]
 serde = { workspace = true }

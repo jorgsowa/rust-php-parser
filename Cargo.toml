@@ -1,6 +1,8 @@
 [profile.release]
 lto = "thin"
 codegen-units = 1
+panic = "abort"
+strip = true
 
 [profile.bench]
 lto = "thin"

@@ -10,6 +10,7 @@ description = "PHP lexer/tokenizer"
 keywords = ["php", "lexer", "tokenizer", "parser"]
 categories = ["parsing", "development-tools"]
 readme = "../../README.md"
+exclude = ["tests/"]
 
 [dependencies]
 php-ast = { workspace = true }
