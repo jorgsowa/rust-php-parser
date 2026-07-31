@@ -1,7 +1,7 @@
 import { type Route } from '../router'
 import { Select } from './Select'
 
-export const PHP_VERSIONS = ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5'] as const
+export const PHP_VERSIONS = ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6'] as const
 export type PhpVersion = (typeof PHP_VERSIONS)[number]
 export type WasmStatus = 'loading' | 'ready' | 'mock'
 
