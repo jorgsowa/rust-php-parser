@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- The PHP 8.6 partial-application rest placeholder (bare `...`) is no longer rejected when it follows a named argument, e.g. `stuff(1, a: 5, ...)`, matching the accepted RFC's own examples (`php-rs-parser`).
+
 ## [0.19.0] - 2026-07-31
 
 ### Added

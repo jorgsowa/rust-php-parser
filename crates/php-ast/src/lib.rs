@@ -2,7 +2,8 @@
 //!
 //! This crate provides:
 //! - The complete set of AST node types ([`ast`] module) — statements, expressions, declarations,
-//!   type hints, operators, and all other syntactic constructs for PHP 8.0–8.5.
+//!   type hints, operators, and all other syntactic constructs for PHP 7.4–8.5, plus PHP 8.6
+//!   partial function application (`?`/`...` call-argument placeholders).
 //! - A [`Span`] type for tracking byte-offset ranges back to the source text.
 //! - A [`visitor`] module with the [`visitor::Visitor`] and [`visitor::ScopeVisitor`] traits for
 //!   depth-first AST traversal, plus free `walk_*` functions that drive the default recursion.

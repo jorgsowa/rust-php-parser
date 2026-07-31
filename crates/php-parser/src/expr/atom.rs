@@ -1842,10 +1842,13 @@ pub(crate) fn parse_arg_list_or_callable<'arena, 'src>(
                 break; // trailing comma
             }
             let arg = parse_arg(parser);
+            // The PHP 8.6 rest placeholder (bare `...`) is always last and is
+            // explicitly allowed after named arguments, e.g. `stuff(a: 1, ...)`.
+            let is_rest_placeholder = arg.unpack && arg.value.is_none();
 
             if arg.name.is_some() {
                 seen_named = true;
-            } else if seen_named {
+            } else if seen_named && !is_rest_placeholder {
                 // Positional argument (including spread) after a named argument
                 parser.error(ParseError::Forbidden {
                     message: "cannot use positional argument after named argument".into(),

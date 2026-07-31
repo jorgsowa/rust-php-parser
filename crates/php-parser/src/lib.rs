@@ -1,8 +1,8 @@
 //! Fast, fault-tolerant PHP parser that produces a fully typed AST.
 //!
-//! This crate parses PHP source code (PHP 7.4–8.5) into a [`php_ast::Program`]
-//! tree, recovering from syntax errors so that downstream tools always receive
-//! a complete AST.
+//! This crate parses PHP source code (PHP 7.4–8.5, plus PHP 8.6 partial function
+//! application) into a [`php_ast::Program`] tree, recovering from syntax errors
+//! so that downstream tools always receive a complete AST.
 //!
 //! # Semantic-rejection responsibility
 //!
