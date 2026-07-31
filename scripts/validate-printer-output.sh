@@ -20,8 +20,8 @@ for fixture in "$FIXTURES_DIR"/*.phpt; do
     # Extract min_php from config section if present
     min_php=$(sed -n '/^===config===/,/^===/p' "$fixture" | grep "^min_php=" | head -1 | cut -d= -f2)
     if [ -n "$min_php" ]; then
-        # Compare versions: skip if installed version is older
-        if [ "$(printf '%s\n' "$min_php" "$PHP_VERSION" | sort -V | head -n1)" = "$min_php" ] && [ "$min_php" != "$PHP_VERSION" ]; then
+        # Compare versions: skip if installed version is older than min_php
+        if [ "$(printf '%s\n' "$min_php" "$PHP_VERSION" | sort -V | head -n1)" = "$PHP_VERSION" ] && [ "$min_php" != "$PHP_VERSION" ]; then
             echo "⊘ $(basename "$fixture") (requires PHP $min_php, have $PHP_VERSION)"
             continue
         fi
