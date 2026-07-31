@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.19.0] - 2026-07-31
+
+### Added
+
+- **PHP 8.6 partial function application (early support)** — `PhpVersion::Php86` added; the parser now understands the `?` and bare `...` call-argument placeholders (e.g. `foo(1, ?, 3)`, `foo(1, ...)`, `foo(s: ?)`) from the [Partial Function Application RFC](https://wiki.php.net/rfc/partial_function_application_v2). Placeholders are rejected in `new` expressions, matching the RFC. Default parse target stays `Php85` since PHP 8.6 hasn't shipped yet (`php-rs-parser`, `php-ast`, `php-printer`).
+
+---
+
 ## [0.18.3] - 2026-07-17
 
 ### Fixed
