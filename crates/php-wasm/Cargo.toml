@@ -22,4 +22,6 @@ serde_json = { workspace = true }
 serde-wasm-bindgen = "0.6"
 
 [package.metadata.wasm-pack.profile.release]
-wasm-opt = ["-Oz"]
+# --enable-bulk-memory: rustc emits memory.copy/memory.fill for wasm32-unknown-unknown
+# by default; wasm-pack's bundled (older) wasm-opt doesn't enable that proposal on its own.
+wasm-opt = ["-Oz", "--enable-bulk-memory"]
