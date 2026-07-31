@@ -9,7 +9,8 @@ use std::fmt;
 ///
 /// Ordering is meaningful: `Php82 > Php81`, etc.
 ///
-/// Defaults to [`PhpVersion::Php85`] (the latest supported version).
+/// Defaults to [`PhpVersion::Php85`], the latest released version — [`PhpVersion::Php86`] must
+/// be opted into explicitly since PHP 8.6 hasn't shipped yet.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord)]
 pub enum PhpVersion {
     /// PHP 7.4 — arrow functions, typed properties, spread in array expressions, numeric literal separator.
@@ -28,6 +29,8 @@ pub enum PhpVersion {
     ///           asymmetric visibility on static properties.
     #[default]
     Php85,
+    /// PHP 8.6 (unreleased) — partial function application (`?`/`...` call-argument placeholders).
+    Php86,
 }
 
 impl fmt::Display for PhpVersion {
@@ -40,6 +43,7 @@ impl fmt::Display for PhpVersion {
             PhpVersion::Php83 => write!(f, "8.3"),
             PhpVersion::Php84 => write!(f, "8.4"),
             PhpVersion::Php85 => write!(f, "8.5"),
+            PhpVersion::Php86 => write!(f, "8.6"),
         }
     }
 }

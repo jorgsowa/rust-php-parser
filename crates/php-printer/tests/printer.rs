@@ -247,6 +247,7 @@ fn php_version(major: u32, minor: u32) -> php_rs_parser::PhpVersion {
         (8, 2) => php_rs_parser::PhpVersion::Php82,
         (8, 3) => php_rs_parser::PhpVersion::Php83,
         (8, 4) => php_rs_parser::PhpVersion::Php84,
+        (8, 6) => php_rs_parser::PhpVersion::Php86,
         _ => php_rs_parser::PhpVersion::Php85,
     }
 }

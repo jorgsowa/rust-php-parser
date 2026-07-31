@@ -600,12 +600,15 @@ pub fn walk_param<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     ControlFlow::Continue(())
 }
 
-/// Visits the value expression of a call argument.
+/// Visits the value expression of a call argument, skipping PHP 8.6 placeholders.
 pub fn walk_arg<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     arg: &Arg<'arena, 'src>,
 ) -> ControlFlow<()> {
-    visitor.visit_expr(&arg.value)
+    match &arg.value {
+        Some(value) => visitor.visit_expr(value),
+        None => ControlFlow::Continue(()),
+    }
 }
 
 /// Dispatches a class member (property, method, constant, or trait use) to its child visitors.

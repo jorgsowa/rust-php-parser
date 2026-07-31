@@ -921,13 +921,18 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                                 kind: ExprKind::Exit(None),
                                 span,
                             }
-                        } else if args.len() == 1 && args[0].name.is_none() && !args[0].unpack {
+                        } else if args.len() == 1
+                            && args[0].name.is_none()
+                            && !args[0].unpack
+                            && args[0].value.is_some()
+                        {
                             // exit(expr)
                             let value = args
                                 .into_iter()
                                 .next()
                                 .expect("args.len() == 1 checked above")
-                                .value;
+                                .value
+                                .expect("value.is_some() checked above");
                             Expr {
                                 kind: ExprKind::Exit(Some(parser.alloc(value))),
                                 span,
@@ -1000,20 +1005,25 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     }
                     ArgListResult::Args(args) => {
                         let span = Span::new(token.span.start, parser.previous_end());
-                        let is_simple =
-                            args.len() == 1 && args[0].name.is_none() && !args[0].unpack;
+                        let is_simple = args.len() == 1
+                            && args[0].name.is_none()
+                            && !args[0].unpack
+                            && args[0].value.is_some();
                         let is_clone_with = args.len() == 2
                             && args[0].name.is_none()
                             && !args[0].unpack
+                            && args[0].value.is_some()
                             && args[1].name.is_none()
-                            && !args[1].unpack;
+                            && !args[1].unpack
+                            && args[1].value.is_some();
                         if is_simple {
                             // clone($obj) — parenthesised single-argument form
                             let object = args
                                 .into_iter()
                                 .next()
                                 .expect("is_simple: args.len() == 1 checked above")
-                                .value;
+                                .value
+                                .expect("is_simple: value.is_some() checked above");
                             Expr {
                                 kind: ExprKind::Clone(parser.alloc(object)),
                                 span,
@@ -1029,11 +1039,13 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                             let object = iter
                                 .next()
                                 .expect("is_clone_with: args.len() == 2 checked above")
-                                .value;
+                                .value
+                                .expect("is_clone_with: value.is_some() checked above");
                             let overrides = iter
                                 .next()
                                 .expect("is_clone_with: args.len() == 2 checked above")
-                                .value;
+                                .value
+                                .expect("is_clone_with: value.is_some() checked above");
                             Expr {
                                 kind: ExprKind::CloneWith(
                                     parser.alloc(object),
@@ -1258,7 +1270,10 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         let args = if parser.check(TokenKind::LeftParen) {
             let paren_start = parser.current_span().start;
             match parse_arg_list_or_callable(parser) {
-                ArgListResult::Args(args) => args,
+                ArgListResult::Args(args) => {
+                    reject_pfa_placeholders_in_new(parser, &args);
+                    args
+                }
                 ArgListResult::CallableMarker => {
                     parser.error(ParseError::Forbidden {
                         message: "Cannot create Closure for new expression".into(),
@@ -1433,7 +1448,10 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
     let args = if parser.check(TokenKind::LeftParen) {
         let paren_start = parser.current_span().start;
         match parse_arg_list_or_callable(parser) {
-            ArgListResult::Args(args) => args,
+            ArgListResult::Args(args) => {
+                reject_pfa_placeholders_in_new(parser, &args);
+                args
+            }
             ArgListResult::CallableMarker => {
                 parser.error(ParseError::Forbidden {
                     message: "Cannot create Closure for new expression".into(),
@@ -1846,6 +1864,18 @@ pub(crate) fn parse_arg_list_or_callable<'arena, 'src>(
     ArgListResult::Args(args)
 }
 
+/// `new` always constructs immediately, so PHP forbids partial function application there.
+fn reject_pfa_placeholders_in_new(parser: &mut Parser<'_, '_>, args: &[Arg]) {
+    for arg in args {
+        if arg.value.is_none() {
+            parser.error(ParseError::Forbidden {
+                message: "Cannot use partial function application in new expression".into(),
+                span: arg.span,
+            });
+        }
+    }
+}
+
 fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 'src> {
     let start = parser.start_span();
 
@@ -1902,8 +1932,41 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
         None
     };
 
-    // Check for unpack: ...expr
+    // Check for unpack: ...expr, or a bare `...` (PHP 8.6 "rest" placeholder).
+    let ellipsis_span = parser.current_span();
     let unpack = parser.eat(TokenKind::Ellipsis).is_some();
+    if unpack && parser.check(TokenKind::RightParen) {
+        parser.require_version(
+            PhpVersion::Php86,
+            "partial function application",
+            ellipsis_span,
+        );
+        return Arg {
+            name,
+            value: None,
+            unpack,
+            by_ref: false,
+            span: Span::new(start, parser.previous_end()),
+        };
+    }
+
+    // Bare `?` (PHP 8.6 placeholder) — never starts an expression, so no lookahead is needed.
+    if !unpack && parser.check(TokenKind::Question) {
+        let question_span = parser.current_span();
+        parser.advance();
+        parser.require_version(
+            PhpVersion::Php86,
+            "partial function application",
+            question_span,
+        );
+        return Arg {
+            name,
+            value: None,
+            unpack: false,
+            by_ref: false,
+            span: Span::new(start, parser.previous_end()),
+        };
+    }
 
     // Check for by-reference: &$var (call-time pass-by-ref, removed in PHP 7.0)
     let by_ref_span = parser.current_span();
@@ -1920,7 +1983,7 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
 
     Arg {
         name,
-        value,
+        value: Some(value),
         unpack,
         by_ref,
         span,

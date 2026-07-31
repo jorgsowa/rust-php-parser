@@ -571,7 +571,7 @@ pub fn fold_owned_param<F: FoldOwned + ?Sized>(folder: &mut F, p: &Param) -> Par
 pub fn fold_owned_arg<F: FoldOwned + ?Sized>(folder: &mut F, arg: &Arg) -> Arg {
     Arg {
         name: arg.name.as_ref().map(|n| folder.fold_name(n)),
-        value: folder.fold_expr(&arg.value),
+        value: arg.value.as_ref().map(|v| folder.fold_expr(v)),
         unpack: arg.unpack,
         by_ref: arg.by_ref,
         span: arg.span,

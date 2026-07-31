@@ -5,6 +5,7 @@ fn main() {
     println!("cargo::rustc-check-cfg=cfg(php_min_83)");
     println!("cargo::rustc-check-cfg=cfg(php_min_84)");
     println!("cargo::rustc-check-cfg=cfg(php_min_85)");
+    println!("cargo::rustc-check-cfg=cfg(php_min_86)");
 
     let Ok(out) = std::process::Command::new("php")
         .args(["-r", "echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION;"])
@@ -34,5 +35,8 @@ fn main() {
     }
     if (maj, min) >= (8, 5) {
         println!("cargo:rustc-cfg=php_min_85");
+    }
+    if (maj, min) >= (8, 6) {
+        println!("cargo:rustc-cfg=php_min_86");
     }
 }

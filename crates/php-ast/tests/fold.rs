@@ -607,10 +607,10 @@ fn fold_arg_override_clears_named_arg() {
             value: "key",
             span: Span::DUMMY,
         }),
-        value: Expr {
+        value: Some(Expr {
             kind: ExprKind::Int(1),
             span: Span::DUMMY,
-        },
+        }),
         unpack: false,
         by_ref: false,
         span: Span::DUMMY,
@@ -620,7 +620,7 @@ fn fold_arg_override_clears_named_arg() {
         folded.name.is_none(),
         "fold_arg override must remove the arg name"
     );
-    assert!(matches!(folded.value.kind, ExprKind::Int(1)));
+    assert!(matches!(folded.value.unwrap().kind, ExprKind::Int(1)));
 }
 
 #[test]
@@ -1022,10 +1022,10 @@ fn fold_name_override_is_dispatched() {
             value: "key",
             span: Span::DUMMY,
         }),
-        value: Expr {
+        value: Some(Expr {
             kind: ExprKind::Int(1),
             span: Span::DUMMY,
-        },
+        }),
         unpack: false,
         by_ref: false,
         span: Span::DUMMY,

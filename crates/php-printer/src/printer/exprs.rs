@@ -476,7 +476,12 @@ impl<'src> Printer<'src> {
             if arg.by_ref {
                 self.w("&");
             }
-            self.print_expr(&arg.value, PREC_LOWEST);
+            match &arg.value {
+                Some(expr) => self.print_expr(expr, PREC_LOWEST),
+                // PHP 8.6 placeholder: bare `?`, or `...` (already written above).
+                None if !arg.unpack => self.w("?"),
+                None => {}
+            }
         }
     }
 

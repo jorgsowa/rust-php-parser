@@ -24,6 +24,7 @@ fn php_version_from_str(s: &str) -> Option<php_rs_parser::PhpVersion> {
         "8.3" => Some(php_rs_parser::PhpVersion::Php83),
         "8.4" => Some(php_rs_parser::PhpVersion::Php84),
         "8.5" => Some(php_rs_parser::PhpVersion::Php85),
+        "8.6" => Some(php_rs_parser::PhpVersion::Php86),
         _ => None,
     }
 }

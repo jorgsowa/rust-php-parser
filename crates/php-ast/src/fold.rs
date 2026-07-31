@@ -694,7 +694,7 @@ pub fn fold_arg<'new, 'src, F: Fold<'src> + ?Sized>(
 ) -> Arg<'new, 'src> {
     Arg {
         name: arg.name.as_ref().map(|n| folder.fold_name(arena, n)),
-        value: folder.fold_expr(arena, &arg.value),
+        value: arg.value.as_ref().map(|v| folder.fold_expr(arena, v)),
         unpack: arg.unpack,
         by_ref: arg.by_ref,
         span: arg.span,

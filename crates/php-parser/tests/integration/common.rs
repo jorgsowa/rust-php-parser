@@ -114,6 +114,7 @@ pub fn php_version(v: (u32, u32)) -> php_rs_parser::PhpVersion {
         (8, 3) => PhpVersion::Php83,
         (8, 4) => PhpVersion::Php84,
         (8, 5) => PhpVersion::Php85,
+        (8, 6) => PhpVersion::Php86,
         _ => panic!("unsupported PHP version: {}.{}", v.0, v.1),
     }
 }

@@ -66,6 +66,7 @@ fn php_version_met(min: (u32, u32)) -> bool {
     const V83: bool = cfg!(php_min_83);
     const V84: bool = cfg!(php_min_84);
     const V85: bool = cfg!(php_min_85);
+    const V86: bool = cfg!(php_min_86);
     match min {
         (major, minor) if (major, minor) <= (8, 0) => true,
         (8, 1) => V81,
@@ -73,6 +74,7 @@ fn php_version_met(min: (u32, u32)) -> bool {
         (8, 3) => V83,
         (8, 4) => V84,
         (8, 5) => V85,
+        (8, 6) => V86,
         _ => false,
     }
 }
@@ -83,6 +85,7 @@ fn php_version_exceeded(max: (u32, u32)) -> bool {
     const V83: bool = cfg!(php_min_83);
     const V84: bool = cfg!(php_min_84);
     const V85: bool = cfg!(php_min_85);
+    const V86: bool = cfg!(php_min_86);
     match max {
         (major, _) if major < 8 => true,
         (8, 0) => V81,
@@ -90,6 +93,7 @@ fn php_version_exceeded(max: (u32, u32)) -> bool {
         (8, 2) => V83,
         (8, 3) => V84,
         (8, 4) => V85,
+        (8, 5) => V86,
         _ => false,
     }
 }

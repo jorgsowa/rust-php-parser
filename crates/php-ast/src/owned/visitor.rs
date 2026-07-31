@@ -569,9 +569,12 @@ pub fn walk_owned_param<V: OwnedVisitor + ?Sized>(
     ControlFlow::Continue(())
 }
 
-/// Visits the value expression of a call argument.
+/// Visits the value expression of a call argument, skipping PHP 8.6 placeholders.
 pub fn walk_owned_arg<V: OwnedVisitor + ?Sized>(visitor: &mut V, arg: &Arg) -> ControlFlow<()> {
-    visitor.visit_expr(&arg.value)
+    match &arg.value {
+        Some(value) => visitor.visit_expr(value),
+        None => ControlFlow::Continue(()),
+    }
 }
 
 /// Dispatches a class member to its child visitors.

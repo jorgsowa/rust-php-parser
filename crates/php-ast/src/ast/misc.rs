@@ -36,7 +36,8 @@ pub struct Program<'arena, 'src> {
 #[derive(Debug, Serialize)]
 pub struct Arg<'arena, 'src> {
     pub name: Option<Name<'arena, 'src>>,
-    pub value: Expr<'arena, 'src>,
+    /// `None` is a PHP 8.6 partial-application placeholder (`?`, or `...` when `unpack` is set).
+    pub value: Option<Expr<'arena, 'src>>,
     pub unpack: bool,
     pub by_ref: bool,
     pub span: Span,

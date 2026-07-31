@@ -159,7 +159,8 @@ impl Serialize for TypeHintKind {
 #[derive(Debug, Clone, Serialize)]
 pub struct Arg {
     pub name: Option<Name>,
-    pub value: Expr,
+    /// `None` is a PHP 8.6 partial-application placeholder (`?`, or `...` when `unpack` is set).
+    pub value: Option<Expr>,
     pub unpack: bool,
     pub by_ref: bool,
     pub span: Span,
@@ -963,7 +964,7 @@ fn owned_type_hint_kind(k: &arena_ast::TypeHintKind<'_, '_>) -> TypeHintKind {
 fn owned_arg(arg: &arena_ast::Arg<'_, '_>) -> Arg {
     Arg {
         name: arg.name.as_ref().map(owned_name),
-        value: owned_expr(&arg.value),
+        value: arg.value.as_ref().map(owned_expr),
         unpack: arg.unpack,
         by_ref: arg.by_ref,
         span: arg.span,
@@ -1835,7 +1836,7 @@ fn av_type_hint_kind<'a>(
 fn av_arg<'a>(arena: &'a bumpalo::Bump, arg: &Arg) -> arena_ast::Arg<'a, 'a> {
     arena_ast::Arg {
         name: arg.name.as_ref().map(|n| av_name(arena, n)),
-        value: av_expr(arena, &arg.value),
+        value: arg.value.as_ref().map(|v| av_expr(arena, v)),
         unpack: arg.unpack,
         by_ref: arg.by_ref,
         span: arg.span,
