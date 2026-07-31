@@ -157,6 +157,17 @@ body::after {
   gap: 8px;
 }
 
+.toolbar-github-link {
+  display: flex;
+  align-items: center;
+  color: var(--text-3);
+  transition: color 0.15s;
+}
+
+.toolbar-github-link:hover {
+  color: var(--accent);
+}
+
 
 /* ── Custom Select ───────────────────────────────────────────────────────── */
 .custom-select {

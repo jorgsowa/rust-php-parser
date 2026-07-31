@@ -181,7 +181,6 @@ export default function App() {
       )}
 
       <div className="statusbar">
-        <span className="statusbar-item">PHP {version}</span>
         <span className="statusbar-item">
           {wasmStatus === 'loading' && 'initialising…'}
           {wasmStatus === 'ready'   && 'rust · wasm'}
