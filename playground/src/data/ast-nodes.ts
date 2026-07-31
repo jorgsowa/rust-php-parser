@@ -1580,7 +1580,7 @@ export const astNodes: AstNode[] = [
     group: 'Components',
     name: 'Arg',
     description: 'Function/method argument',
-    phpExample: `foo($a, $b, name: $c, &$ref, ...$spread);`,
+    phpExample: `foo($a, $b, name: $c, &$ref, ...$spread);\nbar(1, ?, name: ?, ...); // PHP 8.6 partial application placeholders`,
     fieldHighlights: {
       name: ['name'],
       value: ['$a', '$b', '$c', '$ref', '$spread'],
@@ -1589,8 +1589,8 @@ export const astNodes: AstNode[] = [
     },
     fields: [
       { name: 'name', type: 'Option<Name>', description: 'Named argument name', optional: true },
-      { name: 'value', type: 'Expr', description: 'Argument value' },
-      { name: 'unpack', type: 'bool', description: 'Is spread argument (...)' },
+      { name: 'value', type: 'Option<Expr>', description: 'Argument value — None is a PHP 8.6 partial-application placeholder (? or bare ... when unpack is set)', optional: true },
+      { name: 'unpack', type: 'bool', description: 'Is spread argument (...), or the PHP 8.6 rest placeholder when value is None' },
       { name: 'by_ref', type: 'bool', description: 'Passed by reference (&)' }
     ]
   },
