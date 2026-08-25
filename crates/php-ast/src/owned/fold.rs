@@ -795,6 +795,7 @@ fn fold_owned_trait_use<F: FoldOwned + ?Sized>(folder: &mut F, t: &TraitUseDecl)
             })
             .collect(),
         adaptations_brace_start: t.adaptations_brace_start,
+        doc_comment: t.doc_comment.clone(),
     }
 }
 

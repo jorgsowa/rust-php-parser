@@ -800,6 +800,8 @@ pub struct TraitUseDecl {
     pub adaptations: Box<[TraitAdaptation]>,
     #[serde(skip)]
     pub adaptations_brace_start: Option<u32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -1622,6 +1624,7 @@ fn owned_trait_use(t: &arena_ast::TraitUseDecl<'_, '_>) -> TraitUseDecl {
             .collect::<Vec<_>>()
             .into_boxed_slice(),
         adaptations_brace_start: t.adaptations_brace_start,
+        doc_comment: owned_opt_comment(&t.doc_comment),
     }
 }
 
@@ -2593,6 +2596,7 @@ fn av_trait_use<'a>(arena: &'a bumpalo::Bump, t: &TraitUseDecl) -> arena_ast::Tr
         traits,
         adaptations,
         adaptations_brace_start: t.adaptations_brace_start,
+        doc_comment: av_opt_comment(arena, &t.doc_comment),
     }
 }
 

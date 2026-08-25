@@ -173,6 +173,8 @@ pub struct TraitUseDecl<'arena, 'src> {
     /// Start byte offset of the `{` that opens the adaptations block; `None` when there are no adaptations.
     #[serde(skip)]
     pub adaptations_brace_start: Option<u32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
 }
 
 #[derive(Debug, Serialize)]

@@ -276,6 +276,7 @@ impl<'src> Printer<'src> {
     }
 
     fn print_trait_use(&mut self, tu: &TraitUseDecl) {
+        self.print_doc_comment(tu.doc_comment.as_ref());
         self.w("use ");
         for (i, name) in tu.traits.iter().enumerate() {
             if i > 0 {

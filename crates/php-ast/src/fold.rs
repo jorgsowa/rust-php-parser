@@ -874,6 +874,7 @@ pub fn fold_trait_use<'new, 'src, F: Fold<'src> + ?Sized>(
         traits,
         adaptations,
         adaptations_brace_start: trait_use.adaptations_brace_start,
+        doc_comment: trait_use.doc_comment.as_ref().map(fold_comment),
     }
 }
 

@@ -730,6 +730,7 @@ fn fold_trait_use_override_is_dispatched_through_class_member() {
             traits,
             adaptations: ArenaVec::new_in(&arena),
             adaptations_brace_start: None,
+            doc_comment: None,
         }),
         span: Span::DUMMY,
     };

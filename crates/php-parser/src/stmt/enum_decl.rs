@@ -73,28 +73,10 @@ pub(super) fn parse_enum<'arena, 'src>(
 
         // Trait use
         if parser.check(TokenKind::Use) {
-            parser.advance();
-            let mut traits = parser.alloc_vec();
-            traits.push(parser.parse_name());
-            while parser.eat(TokenKind::Comma).is_some() {
-                traits.push(parser.parse_name());
-            }
-            let (adaptations, adaptations_brace_start) = if parser.check(TokenKind::LeftBrace) {
-                let brace_start = parser.start_span();
-                parser.advance();
-                let adaptations = super::trait_use::parse_trait_adaptations(parser);
-                (adaptations, Some(brace_start))
-            } else {
-                parser.expect(TokenKind::Semicolon);
-                (parser.alloc_vec(), None)
-            };
+            let decl = super::class::parse_trait_use_decl(parser, member_start);
             let span = Span::new(member_start, parser.previous_end());
             members.push(EnumMember {
-                kind: EnumMemberKind::TraitUse(TraitUseDecl {
-                    traits,
-                    adaptations,
-                    adaptations_brace_start,
-                }),
+                kind: EnumMemberKind::TraitUse(decl),
                 span,
             });
             continue;

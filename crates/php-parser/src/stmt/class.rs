@@ -478,10 +478,12 @@ pub fn parse_class_members<'arena, 'src>(
     members
 }
 
-fn parse_trait_use_member<'arena, 'src>(
+/// Parse a `use Trait1, Trait2 { ... }` trait-use declaration, shared by class/interface/trait
+/// bodies (via [`parse_trait_use_member`]) and enum bodies (`enum_decl.rs`).
+pub(super) fn parse_trait_use_decl<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     member_start: u32,
-) -> ClassMember<'arena, 'src> {
+) -> TraitUseDecl<'arena, 'src> {
     parser.advance(); // consume `use`
     let mut traits = parser.alloc_vec_with_capacity(2);
     traits.push(parser.parse_name());
@@ -491,6 +493,10 @@ fn parse_trait_use_member<'arena, 'src>(
         }
         traits.push(parser.parse_name());
     }
+    // Capture the docblock before parsing adaptations: entering/leaving the
+    // adaptations block's own `{ }` scope advances `last_scope_close` past the
+    // comment, which would otherwise make it unreachable afterward.
+    let doc_comment = parser.take_doc_comment(member_start);
     let (adaptations, adaptations_brace_start) = if parser.check(TokenKind::LeftBrace) {
         let brace_start = parser.start_span();
         parser.advance();
@@ -500,13 +506,22 @@ fn parse_trait_use_member<'arena, 'src>(
         parser.expect(TokenKind::Semicolon);
         (parser.alloc_vec(), None)
     };
+    TraitUseDecl {
+        traits,
+        adaptations,
+        adaptations_brace_start,
+        doc_comment,
+    }
+}
+
+fn parse_trait_use_member<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    member_start: u32,
+) -> ClassMember<'arena, 'src> {
+    let decl = parse_trait_use_decl(parser, member_start);
     let span = Span::new(member_start, parser.previous_end());
     ClassMember {
-        kind: ClassMemberKind::TraitUse(TraitUseDecl {
-            traits,
-            adaptations,
-            adaptations_brace_start,
-        }),
+        kind: ClassMemberKind::TraitUse(decl),
         span,
     }
 }
