@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.19.1] - 2026-08-25
+
+### Fixed
+
+- A doc comment above a `use SomeTrait;` declaration is no longer stolen by whichever member is parsed next (e.g. the constructor); `TraitUseDecl` now has its own `doc_comment` slot, captured before the adaptations block is parsed. The enum body's trait-use parsing, which had the same gap, now shares the class body's parser instead of duplicating it (`php-ast`, `php-rs-parser`, `php-printer`).
+
+---
+
 ## [0.19.0] - 2026-07-31
 
 ### Added
