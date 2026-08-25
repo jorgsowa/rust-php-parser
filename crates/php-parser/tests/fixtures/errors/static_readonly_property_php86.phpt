@@ -1,5 +1,5 @@
 ===config===
-max_php=8.5
+min_php=8.6
 ===source===
 <?php
 class Foo {
@@ -81,4 +81,4 @@ static properties cannot be readonly
   }
 }
 ===php_error===
-PHP Fatal error:  Readonly property Foo::$x cannot have default value in Standard input code on line 3
+PHP Fatal error:  Static property Foo::$x cannot be readonly in Standard input code on line 3
