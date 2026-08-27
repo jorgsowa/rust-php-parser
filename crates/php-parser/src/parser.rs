@@ -492,9 +492,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     pub fn take_doc_comment(&mut self, before: u32) -> Option<Comment<'src>> {
         let floor = self.last_scope_close.max(self.last_stmt_end);
         let idx = self.comments.iter().rposition(|c| {
-            c.kind == CommentKind::Doc
-                && c.span.end <= before
-                && c.span.start >= floor
+            c.kind == CommentKind::Doc && c.span.end <= before && c.span.start >= floor
         })?;
         Some(self.comments.remove(idx))
     }
