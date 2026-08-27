@@ -93,6 +93,15 @@ pub struct Parser<'arena, 'src> {
     /// before this boundary belongs to an already-closed scope or to the
     /// outer block and must not be claimed by inner statements.
     last_scope_close: u32,
+    /// End position of the most recently fully-parsed statement (at any
+    /// nesting level). Used alongside `last_scope_close` as a floor when
+    /// searching for doc comments: a comment that starts before this position
+    /// lies inside an already-completed sibling statement (e.g. above a
+    /// closure argument nested in an earlier statement's call) and must not
+    /// leak forward to whatever statement is parsed next. Braces alone don't
+    /// catch this — a statement can fully close without ever opening a scope
+    /// (e.g. `foo(fn() => ...);` has no `{`/`}` of its own).
+    last_stmt_end: u32,
     /// Number of `(void)` casts parsed so far. Snapshotted around an expression
     /// statement so the void-cast misuse walk only runs when the statement's
     /// subtree actually contains a void cast (a rare PHP 8.5 feature).
@@ -135,6 +144,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             version,
             no_brace_subscript: false,
             last_scope_close: 0,
+            last_stmt_end: 0,
             void_cast_count: 0,
         }
     }
@@ -171,6 +181,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             version,
             no_brace_subscript: false,
             last_scope_close: 0,
+            last_stmt_end: 0,
             void_cast_count: 0,
         }
     }
@@ -456,23 +467,49 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         self.last_scope_close
     }
 
+    /// The end position of the most recently fully-parsed statement.
+    /// Used by the statement parser to snapshot the sibling boundary before
+    /// parsing the next statement's body.
+    pub fn stmt_boundary(&self) -> u32 {
+        self.last_stmt_end
+    }
+
+    /// Record that a statement ending at `end` has just been fully parsed.
+    /// Called once per statement (see `stmt::parse_stmt`) so a later sibling's
+    /// doc-comment claim can't reach back across it — see `last_stmt_end`.
+    pub(crate) fn mark_stmt_end(&mut self, end: u32) {
+        if end > self.last_stmt_end {
+            self.last_stmt_end = end;
+        }
+    }
+
     /// Take the last doc comment (`/** ... */`) that appears before `pos`.
     /// The comment is removed from the comments list so it won't be taken again.
-    /// Only returns comments that appeared after the last scope boundary (`{` or `}`),
-    /// preventing doc comments inside closed scopes from leaking to outer statements.
+    /// Only returns comments that appeared after the last scope boundary (`{` or `}`)
+    /// and after the last fully-parsed sibling statement, preventing doc comments
+    /// inside closed scopes — or inside an already-completed earlier statement,
+    /// such as above a closure argument nested in a call — from leaking forward.
     pub fn take_doc_comment(&mut self, before: u32) -> Option<Comment<'src>> {
+        let floor = self.last_scope_close.max(self.last_stmt_end);
         let idx = self.comments.iter().rposition(|c| {
             c.kind == CommentKind::Doc
                 && c.span.end <= before
-                && c.span.start >= self.last_scope_close
+                && c.span.start >= floor
         })?;
         Some(self.comments.remove(idx))
     }
 
     /// Like [`take_doc_comment`] but uses `from` as the lower bound instead of
-    /// `last_scope_close`.  Used by the statement parser to reclaim a doc comment
-    /// for the statement that owns it even after its body has been fully parsed
-    /// (which advances `last_scope_close` past the comment's position).
+    /// `last_scope_close`. Used by the statement parser to reclaim a doc
+    /// comment for the statement that owns it even after its body has been
+    /// fully parsed (which advances `last_scope_close` — and, for statements
+    /// with a nested body, `last_stmt_end` too — past the comment's position).
+    /// `from` must already be `.max()`-combined with a *snapshot* of
+    /// `stmt_boundary()` taken before parsing this statement's body, not the
+    /// live value: this call happens after inner parsing, by which point a
+    /// statement with its own nested body has pushed `last_stmt_end` forward
+    /// via its children, which would wrongly exclude this statement's own
+    /// legitimate leading comment if read live here.
     pub fn take_doc_comment_from(&mut self, before: u32, from: u32) -> Option<Comment<'src>> {
         let idx = self.comments.iter().rposition(|c| {
             c.kind == CommentKind::Doc && c.span.end <= before && c.span.start >= from

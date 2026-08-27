@@ -1046,14 +1046,6 @@ foo(
       "span": {
         "start": 1209,
         "end": 1262
-      },
-      "doc_comment": {
-        "kind": "Doc",
-        "text": "/**\n   * Doc comment\n   */",
-        "span": {
-          "start": 1107,
-          "end": 1133
-        }
       }
     }
   ],

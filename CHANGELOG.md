@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- A doc comment nested inside an earlier statement's own parens/brackets (e.g. above a closure argument in a call: `foo(/** @param T $x */ fn($x) => ..., $other)`) is no longer stolen by whichever unrelated statement is parsed next. `Parser` now also tracks the end of the most recently fully-parsed statement (`last_stmt_end`) and floors every doc-comment claim by it, in addition to the existing scope-brace floor — closing the gap for statements that close without ever opening a `{`/`}` of their own. Three existing fixture snapshots (`comments_in_array.phpt`, `comments_in_function_arguments.phpt`, `comments_in_method_chains.phpt`) had this exact leak baked into their expected AST and are corrected (`php-rs-parser`).
+
+---
+
 ## [0.19.1] - 2026-08-25
 
 ### Fixed

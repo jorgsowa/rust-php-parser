@@ -23,7 +23,7 @@ pub use class::{parse_class_members, parse_name_list};
 /// pathologically deep input may observe a stack overflow. Use
 /// [`std::thread::Builder::stack_size`] to set a larger stack when needed.
 pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
-    // Snapshot the two values we need for doc-comment attachment *before* the
+    // Snapshot the values we need for doc-comment attachment *before* the
     // inner parse, because parsing the statement body updates them:
     //
     // • `doc_start`      – the source position of the first token of this
@@ -35,6 +35,14 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
     //                      that STARTS before this boundary belongs to an outer
     //                      or already-closed scope and must not be claimed here.
     //
+    // • `stmt_open_at`   – the current `stmt_boundary()` (end of the most
+    //                      recently fully-parsed statement, at any nesting
+    //                      level). Any doc comment that STARTS before this
+    //                      position lies inside an already-completed sibling
+    //                      statement — e.g. above a closure argument nested in
+    //                      an earlier statement's call — and must not leak
+    //                      forward to this one.
+    //
     // We call `take_doc_comment_from` *after* the inner parse for one reason:
     // declaration parsers (function, class, …) call `take_doc_comment` for
     // themselves during the inner parse and remove the comment from the list.
@@ -42,16 +50,19 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
     // for declarations (returns None) but still present for non-declarations
     // (foreach, assignments, if, …).
     //
-    // Saving `scope_open_at` beforehand is the key: parsing the body advances
-    // `last_scope_close` past the doc comment's position (via the `{` and `}`
-    // tokens inside the body), so we cannot use the *current* `last_scope_close`
-    // as a lower bound at claim time — we use the *saved* value instead.
+    // Saving `scope_open_at` and `stmt_open_at` beforehand is the key: parsing
+    // the body advances `last_scope_close` (via the `{` and `}` tokens inside
+    // the body) and `last_stmt_end` (via nested statements inside the body)
+    // past the doc comment's position, so we cannot use their *current* values
+    // as a lower bound at claim time — we use the *saved* values instead.
     let doc_start = parser.current_span().start;
     let scope_open_at = parser.scope_boundary();
+    let stmt_open_at = parser.stmt_boundary();
     let mut stmt = parse_stmt_inner(parser);
     stmt.doc_comment = parser
-        .take_doc_comment_from(doc_start, scope_open_at)
+        .take_doc_comment_from(doc_start, scope_open_at.max(stmt_open_at))
         .map(|c| parser.alloc(c));
+    parser.mark_stmt_end(stmt.span.end);
     stmt
 }
 
