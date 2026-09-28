@@ -694,6 +694,8 @@ pub struct Param {
     pub attributes: Box<[Attribute]>,
     #[serde(skip_serializing_if = "slice_is_empty")]
     pub hooks: Box<[PropertyHook]>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment>,
     pub span: Span,
 }
 
@@ -1280,6 +1282,7 @@ fn owned_param(p: &arena_ast::Param<'_, '_>) -> Param {
         set_visibility: p.set_visibility,
         attributes: owned_attrs(&p.attributes),
         hooks: owned_hooks(&p.hooks),
+        doc_comment: p.doc_comment.as_ref().map(owned_comment),
         span: p.span,
     }
 }
@@ -2198,6 +2201,7 @@ fn av_param<'a>(arena: &'a bumpalo::Bump, p: &Param) -> arena_ast::Param<'a, 'a>
         set_visibility: p.set_visibility,
         attributes: av_attrs(arena, &p.attributes),
         hooks: av_hooks(arena, &p.hooks),
+        doc_comment: av_opt_comment(arena, &p.doc_comment),
         span: p.span,
     }
 }

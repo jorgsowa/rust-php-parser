@@ -564,6 +564,7 @@ pub fn fold_owned_param<F: FoldOwned + ?Sized>(folder: &mut F, p: &Param) -> Par
         set_visibility: p.set_visibility,
         attributes: fold_owned_attrs(folder, &p.attributes),
         hooks: fold_owned_hooks(folder, &p.hooks),
+        doc_comment: p.doc_comment.clone(),
         span: p.span,
     }
 }

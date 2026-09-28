@@ -442,6 +442,10 @@ impl<'src> Printer<'src> {
             if i > 0 {
                 self.w(", ");
             }
+            if let Some(doc) = &param.doc_comment {
+                self.w(doc.text);
+                self.w(" ");
+            }
             self.print_attributes_inline(&param.attributes);
             if let Some(vis) = &param.visibility {
                 self.w(visibility_str(*vis));

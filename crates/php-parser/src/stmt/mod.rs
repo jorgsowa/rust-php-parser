@@ -1378,6 +1378,11 @@ pub fn parse_param_list<'arena, 'src>(
         return params;
     }
 
+    // Floor for parameter leading doc comments (PHP 8.6): end of the most
+    // recently consumed `(` or `,`, so the first parameter can't claim the
+    // enclosing function/method's own doc-block.
+    let mut param_list_floor = parser.previous_end();
+
     loop {
         if parser.check(TokenKind::RightParen) {
             break;
@@ -1395,14 +1400,20 @@ pub fn parse_param_list<'arena, 'src>(
         // Current token is variable (no type hint)
         {
             // Try fast path: just parse $var with no type or default
-            if let Some(param) = try_parse_simple_param_fastpath_minimal(parser, param_start) {
+            if let Some(param) =
+                try_parse_simple_param_fastpath_minimal(parser, param_start, param_list_floor)
+            {
                 params.push(param);
                 if parser.eat(TokenKind::Comma).is_none() {
                     break;
                 }
+                param_list_floor = parser.previous_end();
                 continue;
             }
         }
+
+        // Doc comment directly preceding this parameter (PHP 8.6).
+        let leading_doc_comment = parser.take_doc_comment_from(param_start, param_list_floor);
 
         // Optional parameter attributes
         let param_attrs = parser.parse_attributes();
@@ -1590,6 +1601,18 @@ pub fn parse_param_list<'arena, 'src>(
             param_end
         };
 
+        // Doc comment trailing this parameter, up to the comma (PHP 8.6).
+        // A leading doc comment takes precedence if both are somehow present.
+        let doc_comment = leading_doc_comment.or_else(|| {
+            let boundary = if parser.check(TokenKind::Comma) || parser.check(TokenKind::RightParen)
+            {
+                parser.current_span().start
+            } else {
+                parser.previous_end()
+            };
+            parser.take_doc_comment_after(param_end, boundary)
+        });
+
         params.push(Param {
             name,
             type_hint,
@@ -1602,12 +1625,14 @@ pub fn parse_param_list<'arena, 'src>(
             set_visibility,
             attributes: param_attrs,
             hooks,
+            doc_comment,
             span: Span::new(param_start, param_end),
         });
 
         if parser.eat(TokenKind::Comma).is_none() {
             break;
         }
+        param_list_floor = parser.previous_end();
         // A variadic parameter must be last: a trailing comma is fine, but
         // another parameter after it is an error.
         if variadic && !parser.check(TokenKind::RightParen) {
@@ -1627,6 +1652,7 @@ pub fn parse_param_list<'arena, 'src>(
 fn try_parse_simple_param_fastpath_minimal<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     param_start: u32,
+    param_list_floor: u32,
 ) -> Option<Param<'arena, 'src>> {
     // Peek-first: Check if this is safe to fast path before consuming any tokens
     // Current token is Variable (already verified by caller)
@@ -1644,10 +1670,23 @@ fn try_parse_simple_param_fastpath_minimal<'arena, 'src>(
         return None;
     }
 
+    // Doc comment directly preceding this parameter (PHP 8.6).
+    let leading_doc_comment = parser.take_doc_comment_from(param_start, param_list_floor);
+
     // Safe to fast path. Now consume the tokens.
     let name_token = parser.advance();
     let name_span_end = name_token.span.end;
     let name = parser.variable_ident(name_token);
+
+    // Doc comment trailing this parameter, up to the comma (PHP 8.6).
+    let doc_comment = leading_doc_comment.or_else(|| {
+        let boundary = if parser.check(TokenKind::Comma) || parser.check(TokenKind::RightParen) {
+            parser.current_span().start
+        } else {
+            parser.previous_end()
+        };
+        parser.take_doc_comment_after(name_span_end, boundary)
+    });
 
     Some(Param {
         name,
@@ -1661,6 +1700,7 @@ fn try_parse_simple_param_fastpath_minimal<'arena, 'src>(
         set_visibility: None,
         attributes: parser.alloc_vec(),
         hooks: parser.alloc_vec(),
+        doc_comment,
         span: Span::new(param_start, name_span_end),
     })
 }

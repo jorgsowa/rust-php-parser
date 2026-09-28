@@ -36,6 +36,12 @@ pub struct Param<'arena, 'src> {
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     #[serde(skip_serializing_if = "ArenaVec::is_empty")]
     pub hooks: ArenaVec<'arena, PropertyHook<'arena, 'src>>,
+    /// A doc-block attached directly to this parameter (PHP 8.6 recognizes
+    /// this for reflection purposes), either immediately before it or
+    /// trailing it up to the comma. Parsed at every version since a bare
+    /// comment is legal PHP regardless of target version.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub doc_comment: Option<Comment<'src>>,
     pub span: Span,
 }
 

@@ -683,6 +683,7 @@ pub fn fold_param<'new, 'src, F: Fold<'src> + ?Sized>(
         set_visibility: param.set_visibility,
         attributes: fold_attrs(folder, arena, &param.attributes),
         hooks: fold_hooks(folder, arena, &param.hooks),
+        doc_comment: param.doc_comment,
         span: param.span,
     }
 }

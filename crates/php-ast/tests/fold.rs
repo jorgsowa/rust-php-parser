@@ -579,6 +579,7 @@ fn fold_param_override_strips_default() {
         set_visibility: None,
         attributes: ArenaVec::new_in(&arena),
         hooks: ArenaVec::new_in(&arena),
+        doc_comment: None,
         span: Span::DUMMY,
     };
     let folded = ClearDefaults.fold_param(&out, &param);

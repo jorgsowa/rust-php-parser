@@ -515,6 +515,16 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         Some(self.comments.remove(idx))
     }
 
+    /// Take a doc comment (`/** ... */`) that appears strictly after `after`
+    /// and ends at or before `before`. Used for a doc comment trailing a
+    /// function parameter (PHP 8.6): `string $x /** ... */,`.
+    pub fn take_doc_comment_after(&mut self, after: u32, before: u32) -> Option<Comment<'src>> {
+        let idx = self.comments.iter().position(|c| {
+            c.kind == CommentKind::Doc && c.span.start >= after && c.span.end <= before
+        })?;
+        Some(self.comments.remove(idx))
+    }
+
     /// Panic-mode error recovery: advance until we hit a likely statement boundary.
     pub fn synchronize(&mut self) {
         loop {
