@@ -77,10 +77,14 @@ pub type Ident = Option<Box<str>>;
 // the JSON output is identical.
 // ---------------------------------------------------------------------------
 
+/// A possibly qualified PHP name.
 #[derive(Debug, Clone, Serialize)]
 pub struct Name {
+    /// Name segments split on `\`.
     pub parts: Box<[Box<str>]>,
+    /// Qualification style.
     pub kind: NameKind,
+    /// Source span.
     pub span: Span,
 }
 
@@ -88,10 +92,14 @@ pub struct Name {
 // Comment
 // ---------------------------------------------------------------------------
 
+/// A source comment.
 #[derive(Debug, Clone, Serialize)]
 pub struct Comment {
+    /// Comment syntax.
     pub kind: CommentKind,
+    /// Raw comment text including delimiters.
     pub text: Box<str>,
+    /// Source span.
     pub span: Span,
 }
 
@@ -102,19 +110,27 @@ pub struct Comment {
 // `Named`. We replicate that here.
 // ---------------------------------------------------------------------------
 
+/// A type declaration.
 #[derive(Debug, Clone, Serialize)]
 pub struct TypeHint {
+    /// Type shape.
     pub kind: TypeHintKind,
+    /// Source span.
     pub span: Span,
 }
 
+/// The shape of a type declaration.
 #[derive(Debug, Clone)]
 pub enum TypeHintKind {
+    /// A class or other user-defined type name.
     Named(Name),
     /// Serialises as `Named` — see [`TypeHintKind::Keyword`](crate::ast::TypeHintKind::Keyword).
     Keyword(BuiltinType, Span),
+    /// `?T`.
     Nullable(Box<TypeHint>),
+    /// `A|B`.
     Union(Box<[TypeHint]>),
+    /// `A&B`.
     Intersection(Box<[TypeHint]>),
 }
 
@@ -156,20 +172,29 @@ impl Serialize for TypeHintKind {
 // Arg / Attribute
 // ---------------------------------------------------------------------------
 
+/// A call argument.
 #[derive(Debug, Clone, Serialize)]
 pub struct Arg {
+    /// Name of a named argument.
     pub name: Option<Name>,
     /// `None` is a PHP 8.6 partial-application placeholder (`?`, or `...` when `unpack` is set).
     pub value: Option<Expr>,
+    /// Whether the argument is spread with `...`.
     pub unpack: bool,
+    /// Whether the argument is prefixed with `&`.
     pub by_ref: bool,
+    /// Source span.
     pub span: Span,
 }
 
+/// A `#[...]` attribute.
 #[derive(Debug, Clone, Serialize)]
 pub struct Attribute {
+    /// Attribute class name.
     pub name: Name,
+    /// Arguments passed to the attribute.
     pub args: Box<[Arg]>,
+    /// Source span.
     pub span: Span,
 }
 
@@ -177,9 +202,12 @@ pub struct Attribute {
 // Program
 // ---------------------------------------------------------------------------
 
+/// Root of a parsed file.
 #[derive(Debug, Clone, Serialize)]
 pub struct Program {
+    /// Top-level statements.
     pub stmts: Box<[Stmt]>,
+    /// Source span.
     pub span: Span,
 }
 
@@ -187,10 +215,14 @@ pub struct Program {
 // Stmt / StmtKind
 // ---------------------------------------------------------------------------
 
+/// A statement.
 #[derive(Debug, Clone, Serialize)]
 pub struct Stmt {
+    /// Statement kind.
     pub kind: StmtKind,
+    /// Source span.
     pub span: Span,
+    /// Preceding doc comment.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
 }
@@ -219,189 +251,303 @@ impl Stmt {
 #[derive(Debug, Clone, Serialize)]
 #[serde(transparent)]
 pub struct Block {
+    /// Statements in the block.
     pub stmts: Box<[Stmt]>,
+    /// Source span.
     #[serde(skip)]
     pub span: Span,
 }
 
+/// The kind of a statement.
 #[derive(Debug, Clone, Serialize)]
 pub enum StmtKind {
+    /// An expression statement.
     Expression(Box<Expr>),
+    /// `echo` with one or more expressions.
     Echo(Box<[Expr]>),
+    /// `return` with optional value.
     Return(Option<Box<Expr>>),
+    /// A nested block.
     Block(Box<Block>),
+    /// An `if` statement.
     If(Box<IfStmt>),
+    /// A `while` loop.
     While(Box<WhileStmt>),
+    /// A `for` loop.
     For(Box<ForStmt>),
+    /// A `foreach` loop.
     Foreach(Box<ForeachStmt>),
+    /// A `do ... while` loop.
     DoWhile(Box<DoWhileStmt>),
+    /// A function declaration.
     Function(Box<FunctionDecl>),
+    /// `break` with optional level.
     Break(Option<Box<Expr>>),
+    /// `continue` with optional level.
     Continue(Option<Box<Expr>>),
+    /// A `switch` statement.
     Switch(Box<SwitchStmt>),
+    /// `goto` with target label.
     Goto(Ident),
+    /// A `label:` definition.
     Label(Box<str>),
+    /// A `declare(...)` statement.
     Declare(Box<DeclareStmt>),
+    /// `unset(...)` targets.
     Unset(Box<[Expr]>),
+    /// A `throw` statement.
     Throw(Box<Expr>),
+    /// A `try`/`catch`/`finally` statement.
     TryCatch(Box<TryCatchStmt>),
+    /// `global` variables.
     Global(Box<[Expr]>),
+    /// A class declaration.
     Class(Box<ClassDecl>),
+    /// An interface declaration.
     Interface(Box<InterfaceDecl>),
+    /// A trait declaration.
     Trait(Box<TraitDecl>),
+    /// An enum declaration.
     Enum(Box<EnumDecl>),
+    /// A namespace declaration.
     Namespace(Box<NamespaceDecl>),
+    /// A `use` import.
     Use(Box<UseDecl>),
+    /// A top-level `const` statement.
     Const(Box<[ConstItem]>),
+    /// A `static` variable statement.
     StaticVar(Box<[StaticVar]>),
+    /// `__halt_compiler()` with the trailing raw data.
     HaltCompiler(Box<str>),
+    /// An empty statement (`;`).
     Nop,
+    /// Text outside PHP tags.
     InlineHtml(Box<str>),
+    /// Placeholder for a statement that failed to parse.
     Error,
 }
 
+/// An `if` statement.
 #[derive(Debug, Clone, Serialize)]
 pub struct IfStmt {
+    /// The `if` condition.
     pub condition: Expr,
+    /// Statement run when the condition holds.
     pub then_branch: Box<Stmt>,
+    /// `elseif` branches in source order.
     pub elseif_branches: Box<[ElseIfBranch]>,
+    /// The `else` statement, if any.
     pub else_branch: Option<Box<Stmt>>,
+    /// Byte offset of the `else` keyword.
     #[serde(skip)]
     pub else_kw_start: Option<u32>,
+    /// Whether the `if: ... endif;` syntax is used.
     #[serde(default, skip_serializing_if = "is_false")]
     pub uses_alternative: bool,
 }
 
+/// An `elseif` branch.
 #[derive(Debug, Clone, Serialize)]
 pub struct ElseIfBranch {
+    /// The `elseif` condition.
     pub condition: Expr,
+    /// Statement run when the condition holds.
     pub body: Stmt,
+    /// Source span.
     pub span: Span,
 }
 
+/// A `while` loop.
 #[derive(Debug, Clone, Serialize)]
 pub struct WhileStmt {
+    /// The loop condition.
     pub condition: Expr,
+    /// The loop body.
     pub body: Box<Stmt>,
+    /// Whether the `while: ... endwhile;` syntax is used.
     #[serde(default, skip_serializing_if = "is_false")]
     pub uses_alternative: bool,
 }
 
+/// A `for` loop.
 #[derive(Debug, Clone, Serialize)]
 pub struct ForStmt {
+    /// Initializer expressions.
     pub init: Box<[Expr]>,
+    /// Condition expressions.
     pub condition: Box<[Expr]>,
+    /// Update expressions.
     pub update: Box<[Expr]>,
+    /// The loop body.
     pub body: Box<Stmt>,
+    /// Whether the `for: ... endfor;` syntax is used.
     #[serde(default, skip_serializing_if = "is_false")]
     pub uses_alternative: bool,
 }
 
+/// A `foreach` loop.
 #[derive(Debug, Clone, Serialize)]
 pub struct ForeachStmt {
+    /// The iterated expression.
     pub expr: Expr,
+    /// The key target, if any.
     pub key: Option<Expr>,
+    /// The value target.
     pub value: Expr,
+    /// The loop body.
     pub body: Box<Stmt>,
+    /// Whether the `foreach: ... endforeach;` syntax is used.
     #[serde(default, skip_serializing_if = "is_false")]
     pub uses_alternative: bool,
 }
 
+/// A `do ... while` loop.
 #[derive(Debug, Clone, Serialize)]
 pub struct DoWhileStmt {
+    /// The loop body.
     pub body: Box<Stmt>,
+    /// The loop condition.
     pub condition: Expr,
 }
 
+/// The braced body of a `switch`.
 #[derive(Debug, Clone, Serialize)]
 pub struct SwitchBody {
+    /// The cases in source order.
     pub cases: Box<[SwitchCase]>,
+    /// Source span.
     #[serde(skip)]
     pub span: Span,
 }
 
+/// A `switch` statement.
 #[derive(Debug, Clone, Serialize)]
 pub struct SwitchStmt {
+    /// The switched-on expression.
     pub expr: Expr,
+    /// The braced case list.
     #[serde(flatten)]
     pub body: SwitchBody,
+    /// Whether the `switch: ... endswitch;` syntax is used.
     #[serde(default, skip_serializing_if = "is_false")]
     pub uses_alternative: bool,
 }
 
+/// A `case` or `default` arm.
 #[derive(Debug, Clone, Serialize)]
 pub struct SwitchCase {
+    /// Case value; `None` for `default`.
     pub value: Option<Expr>,
+    /// Statements of the case.
     pub body: Box<[Stmt]>,
+    /// Source span.
     pub span: Span,
 }
 
+/// A `try` statement.
 #[derive(Debug, Clone, Serialize)]
 pub struct TryCatchStmt {
+    /// The `try` block.
     pub body: Box<Block>,
+    /// The `catch` clauses.
     pub catches: Box<[CatchClause]>,
+    /// The `finally` block, if any.
     pub finally: Option<Box<Block>>,
+    /// Byte offset of the `finally` keyword.
     #[serde(skip)]
     pub finally_kw_start: Option<u32>,
 }
 
+/// A `catch` clause.
 #[derive(Debug, Clone, Serialize)]
 pub struct CatchClause {
+    /// Caught exception types (multi-catch allowed).
     pub types: Box<[Name]>,
+    /// Bound variable name without `$`, if any.
     pub var: Option<Box<str>>,
+    /// The `catch` block.
     pub body: Box<Block>,
+    /// Source span.
     pub span: Span,
 }
 
+/// A `namespace` declaration.
 #[derive(Debug, Clone, Serialize)]
 pub struct NamespaceDecl {
+    /// Namespace name; `None` for the global namespace.
     pub name: Option<Name>,
+    /// Braced or simple form.
     pub body: NamespaceBody,
 }
 
+/// Whether a namespace is braced or statement-terminated.
 #[derive(Debug, Clone, Serialize)]
 pub enum NamespaceBody {
+    /// `namespace X { ... }`.
     Braced(Box<Block>),
+    /// `namespace X;`.
     Simple,
 }
 
+/// A `declare(...)` statement.
 #[derive(Debug, Clone, Serialize)]
 pub struct DeclareStmt {
+    /// Directive name and value pairs.
     pub directives: Box<[(Box<str>, Expr)]>,
+    /// Statement governed by the declare, if any.
     pub body: Option<Box<Stmt>>,
+    /// Whether the `declare: ... enddeclare;` syntax is used.
     #[serde(default, skip_serializing_if = "is_false")]
     pub uses_alternative: bool,
 }
 
+/// A `use` import declaration.
 #[derive(Debug, Clone, Serialize)]
 pub struct UseDecl {
+    /// Import kind (class, function or const).
     pub kind: UseKind,
+    /// The imported items.
     pub uses: Box<[UseItem]>,
 }
 
+/// One imported name in a `use` declaration.
 #[derive(Debug, Clone, Serialize)]
 pub struct UseItem {
+    /// The imported name.
     pub name: Name,
+    /// Local alias from `as`.
     pub alias: Option<Box<str>>,
+    /// Per-item kind in a mixed group use.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kind: Option<UseKind>,
+    /// Source span.
     pub span: Span,
 }
 
+/// One item of a top-level `const` statement.
 #[derive(Debug, Clone, Serialize)]
 pub struct ConstItem {
+    /// Constant name.
     pub name: Ident,
+    /// Constant value.
     pub value: Expr,
+    /// Attributes on the constant.
     pub attributes: Box<[Attribute]>,
+    /// Source span.
     pub span: Span,
+    /// Preceding doc comment.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
 }
 
+/// One variable of a `static` statement.
 #[derive(Debug, Clone, Serialize)]
 pub struct StaticVar {
+    /// Variable name without `$`.
     pub name: Ident,
+    /// Initial value, if any.
     pub default: Option<Expr>,
+    /// Source span.
     pub span: Span,
 }
 
@@ -409,258 +555,425 @@ pub struct StaticVar {
 // Expr / ExprKind
 // ---------------------------------------------------------------------------
 
+/// An expression.
 #[derive(Debug, Clone, Serialize)]
 pub struct Expr {
+    /// Expression kind.
     pub kind: ExprKind,
+    /// Source span.
     pub span: Span,
 }
 
+/// The kind of an expression.
 #[derive(Debug, Clone, Serialize)]
 pub enum ExprKind {
+    /// Integer literal.
     Int(i64),
+    /// Float literal.
     Float(f64),
+    /// String literal without interpolation.
     String(Box<str>),
+    /// Double-quoted string with interpolation.
     InterpolatedString(Box<[StringPart]>),
+    /// Heredoc string.
     Heredoc {
+        /// Heredoc delimiter.
         label: Box<str>,
+        /// Body segments.
         parts: Box<[StringPart]>,
     },
+    /// Nowdoc string.
     Nowdoc {
+        /// Nowdoc delimiter.
         label: Box<str>,
+        /// Raw body text.
         value: Box<str>,
     },
+    /// Backtick shell command.
     ShellExec(Box<[StringPart]>),
+    /// `true` or `false`.
     Bool(bool),
+    /// `null`.
     Null,
+    /// Variable name without `$`.
     Variable(Box<str>),
+    /// `$$x` or `${expr}`.
     VariableVariable(Box<Expr>),
+    /// Bare identifier such as a constant name.
     Identifier(Box<str>),
+    /// Assignment.
     Assign(AssignExpr),
+    /// Binary operation.
     Binary(BinaryExpr),
+    /// Prefix unary operation.
     UnaryPrefix(UnaryPrefixExpr),
+    /// Postfix unary operation.
     UnaryPostfix(UnaryPostfixExpr),
+    /// Ternary conditional.
     Ternary(TernaryExpr),
+    /// `??` expression.
     NullCoalesce(NullCoalesceExpr),
+    /// Function call.
     FunctionCall(FunctionCallExpr),
+    /// Array literal.
     Array(Box<[ArrayElement]>),
+    /// Array offset access.
     ArrayAccess(ArrayAccessExpr),
+    /// `print` expression.
     Print(Box<Expr>),
+    /// Parenthesized expression.
     Parenthesized(Box<Expr>),
+    /// Type cast.
     Cast(CastKind, Box<Expr>),
+    /// `@` error suppression.
     ErrorSuppress(Box<Expr>),
+    /// `isset(...)`.
     Isset(Box<[Expr]>),
+    /// `empty(...)`.
     Empty(Box<Expr>),
+    /// `include`/`require` variant.
     Include(IncludeKind, Box<Expr>),
+    /// `eval(...)`.
     Eval(Box<Expr>),
+    /// `exit`/`die` with optional argument.
     Exit(Option<Box<Expr>>),
+    /// Magic constant such as `__LINE__`.
     MagicConst(MagicConstKind),
+    /// `clone` expression.
     Clone(Box<Expr>),
+    /// `clone` with property overrides.
     CloneWith(Box<Expr>, Box<Expr>),
+    /// `new` expression.
     New(NewExpr),
+    /// `->` property access.
     PropertyAccess(PropertyAccessExpr),
+    /// `?->` property access.
     NullsafePropertyAccess(PropertyAccessExpr),
+    /// `->` method call.
     MethodCall(Box<MethodCallExpr>),
+    /// `?->` method call.
     NullsafeMethodCall(Box<MethodCallExpr>),
+    /// `Class::$prop` access.
     StaticPropertyAccess(StaticAccessExpr),
+    /// `Class::method()` call.
     StaticMethodCall(Box<StaticMethodCallExpr>),
+    /// `Class::$method()` call.
     StaticDynMethodCall(Box<StaticDynMethodCallExpr>),
+    /// `Class::CONST` access.
     ClassConstAccess(StaticAccessExpr),
+    /// `Class::{expr}` constant access.
     ClassConstAccessDynamic {
+        /// Class expression.
         class: Box<Expr>,
+        /// Constant name expression.
         member: Box<Expr>,
     },
+    /// `Class::$$member` property access.
     StaticPropertyAccessDynamic {
+        /// Class expression.
         class: Box<Expr>,
+        /// Property name expression.
         member: Box<Expr>,
     },
+    /// Anonymous function.
     Closure(Box<ClosureExpr>),
+    /// Arrow function.
     ArrowFunction(Box<ArrowFunctionExpr>),
+    /// `match` expression.
     Match(MatchExpr),
+    /// `throw` used as an expression.
     ThrowExpr(Box<Expr>),
+    /// `yield` expression.
     Yield(YieldExpr),
+    /// `new class { ... }`.
     AnonymousClass(Box<ClassDecl>),
+    /// First-class callable syntax.
     CallableCreate(CallableCreateExpr),
+    /// Skipped slot in a list destructuring pattern.
     Omit,
+    /// Placeholder for an expression that failed to parse.
     Error,
 }
 
+/// An assignment.
 #[derive(Debug, Clone, Serialize)]
 pub struct AssignExpr {
+    /// Assignment target.
     pub target: Box<Expr>,
+    /// Assignment operator.
     pub op: AssignOp,
+    /// Assigned value.
     pub value: Box<Expr>,
+    /// Whether this is a reference assignment (`=&`).
     #[serde(skip_serializing_if = "is_false")]
     pub by_ref: bool,
 }
 
+/// A binary operation.
 #[derive(Debug, Clone, Serialize)]
 pub struct BinaryExpr {
+    /// Left operand.
     pub left: Box<Expr>,
+    /// Operator.
     pub op: BinaryOp,
+    /// Right operand.
     pub right: Box<Expr>,
 }
 
+/// A prefix unary operation.
 #[derive(Debug, Clone, Serialize)]
 pub struct UnaryPrefixExpr {
+    /// Operator.
     pub op: UnaryPrefixOp,
+    /// Operand.
     pub operand: Box<Expr>,
 }
 
+/// A postfix unary operation.
 #[derive(Debug, Clone, Serialize)]
 pub struct UnaryPostfixExpr {
+    /// Operand.
     pub operand: Box<Expr>,
+    /// Operator.
     pub op: UnaryPostfixOp,
 }
 
+/// A ternary or short-ternary conditional.
 #[derive(Debug, Clone, Serialize)]
 pub struct TernaryExpr {
+    /// Condition.
     pub condition: Box<Expr>,
+    /// Value when true; `None` for `?:`.
     pub then_expr: Option<Box<Expr>>,
+    /// Value when false.
     pub else_expr: Box<Expr>,
 }
 
+/// A `??` expression.
 #[derive(Debug, Clone, Serialize)]
 pub struct NullCoalesceExpr {
+    /// Value tested for null.
     pub left: Box<Expr>,
+    /// Fallback value.
     pub right: Box<Expr>,
 }
 
+/// A function call.
 #[derive(Debug, Clone, Serialize)]
 pub struct FunctionCallExpr {
+    /// Callee expression.
     pub name: Box<Expr>,
+    /// Call arguments.
     pub args: Box<[Arg]>,
 }
 
+/// An element of an array literal.
 #[derive(Debug, Clone, Serialize)]
 pub struct ArrayElement {
+    /// Key expression, if any.
     pub key: Option<Expr>,
+    /// Element value.
     pub value: Expr,
+    /// Whether the element is spread with `...`.
     pub unpack: bool,
+    /// Whether the value is taken by reference.
     #[serde(skip_serializing_if = "is_false")]
     pub by_ref: bool,
+    /// Source span.
     pub span: Span,
 }
 
+/// An array offset access.
 #[derive(Debug, Clone, Serialize)]
 pub struct ArrayAccessExpr {
+    /// Accessed expression.
     pub array: Box<Expr>,
+    /// Offset; `None` for `$a[]`.
     pub index: Option<Box<Expr>>,
 }
 
+/// A `new` expression.
 #[derive(Debug, Clone, Serialize)]
 pub struct NewExpr {
+    /// Class name or expression.
     pub class: Box<Expr>,
+    /// Constructor arguments.
     pub args: Box<[Arg]>,
 }
 
+/// A `->` or `?->` property access.
 #[derive(Debug, Clone, Serialize)]
 pub struct PropertyAccessExpr {
+    /// Object expression.
     pub object: Box<Expr>,
+    /// Property name or expression.
     pub property: Box<Expr>,
 }
 
+/// A `->` or `?->` method call.
 #[derive(Debug, Clone, Serialize)]
 pub struct MethodCallExpr {
+    /// Object expression.
     pub object: Box<Expr>,
+    /// Method name or expression.
     pub method: Box<Expr>,
+    /// Call arguments.
     pub args: Box<[Arg]>,
 }
 
+/// A `::` static property or constant access.
 #[derive(Debug, Clone, Serialize)]
 pub struct StaticAccessExpr {
+    /// Class expression.
     pub class: Box<Expr>,
+    /// Member name or expression.
     pub member: Box<Expr>,
 }
 
+/// A `Class::method()` call.
 #[derive(Debug, Clone, Serialize)]
 pub struct StaticMethodCallExpr {
+    /// Class expression.
     pub class: Box<Expr>,
+    /// Method name.
     pub method: Box<Expr>,
+    /// Call arguments.
     pub args: Box<[Arg]>,
 }
 
+/// A static call with a dynamic method expression.
 #[derive(Debug, Clone, Serialize)]
 pub struct StaticDynMethodCallExpr {
+    /// Class expression.
     pub class: Box<Expr>,
+    /// Method name expression.
     pub method: Box<Expr>,
+    /// Call arguments.
     pub args: Box<[Arg]>,
 }
 
+/// An anonymous function.
 #[derive(Debug, Clone, Serialize)]
 pub struct ClosureExpr {
+    /// Whether declared `static`.
     pub is_static: bool,
+    /// Whether it returns by reference.
     pub by_ref: bool,
+    /// Parameters.
     pub params: Box<[Param]>,
+    /// Captured variables.
     pub use_vars: Box<[ClosureUseVar]>,
+    /// Declared return type.
     pub return_type: Option<TypeHint>,
+    /// Function body.
     pub body: Box<Block>,
+    /// Attributes on the closure.
     pub attributes: Box<[Attribute]>,
 }
 
+/// A variable captured by a closure `use` clause.
 #[derive(Debug, Clone, Serialize)]
 pub struct ClosureUseVar {
+    /// Captured variable name without `$`.
     pub name: Box<str>,
+    /// Whether captured by reference.
     pub by_ref: bool,
+    /// Source span.
     pub span: Span,
 }
 
+/// An `fn` arrow function.
 #[derive(Debug, Clone, Serialize)]
 pub struct ArrowFunctionExpr {
+    /// Whether declared `static`.
     pub is_static: bool,
+    /// Whether it returns by reference.
     pub by_ref: bool,
+    /// Parameters.
     pub params: Box<[Param]>,
+    /// Declared return type.
     pub return_type: Option<TypeHint>,
+    /// Result expression.
     pub body: Box<Expr>,
+    /// Attributes on the arrow function.
     pub attributes: Box<[Attribute]>,
 }
 
+/// A `match` expression.
 #[derive(Debug, Clone, Serialize)]
 pub struct MatchExpr {
+    /// Matched expression.
     pub subject: Box<Expr>,
+    /// Match arms.
     pub arms: Box<[MatchArm]>,
+    /// Byte offset of the opening `{`.
     #[serde(skip)]
     pub brace_start: u32,
 }
 
+/// An arm of a `match` expression.
 #[derive(Debug, Clone, Serialize)]
 pub struct MatchArm {
+    /// Conditions; `None` for `default`.
     pub conditions: Option<Box<[Expr]>>,
+    /// Result expression.
     pub body: Expr,
+    /// Source span.
     pub span: Span,
 }
 
+/// A `yield` or `yield from` expression.
 #[derive(Debug, Clone, Serialize)]
 pub struct YieldExpr {
+    /// Yielded key, if any.
     pub key: Option<Box<Expr>>,
+    /// Yielded value, if any.
     pub value: Option<Box<Expr>>,
+    /// Whether this is `yield from`.
     pub is_from: bool,
 }
 
+/// A first-class callable, e.g. `f(...)`.
 #[derive(Debug, Clone, Serialize)]
 pub struct CallableCreateExpr {
+    /// The callee.
     pub kind: CallableCreateKind,
 }
 
+/// The callee of a first-class callable.
 #[derive(Debug, Clone, Serialize)]
 pub enum CallableCreateKind {
+    /// `f(...)`.
     Function(Box<Expr>),
+    /// `$obj->method(...)`.
     Method {
+        /// Object expression.
         object: Box<Expr>,
+        /// Method name or expression.
         method: Box<Expr>,
     },
+    /// `$obj?->method(...)`.
     NullsafeMethod {
+        /// Object expression.
         object: Box<Expr>,
+        /// Method name or expression.
         method: Box<Expr>,
     },
+    /// `Class::method(...)`.
     StaticMethod {
+        /// Class expression.
         class: Box<Expr>,
+        /// Method name or expression.
         method: Box<Expr>,
     },
 }
 
+/// A segment of an interpolated string.
 #[derive(Debug, Clone, Serialize)]
 pub enum StringPart {
+    /// Literal text.
     Literal(Box<str>),
+    /// Interpolated expression.
     Expr(Expr),
 }
 
@@ -668,224 +981,360 @@ pub enum StringPart {
 // Owned declaration types
 // ---------------------------------------------------------------------------
 
+/// A function declaration.
 #[derive(Debug, Clone, Serialize)]
 pub struct FunctionDecl {
+    /// Function name.
     pub name: Ident,
+    /// Parameters.
     pub params: Box<[Param]>,
+    /// Function body.
     pub body: Box<Block>,
+    /// Declared return type.
     pub return_type: Option<TypeHint>,
+    /// Whether it returns by reference.
     pub by_ref: bool,
+    /// Attributes on the function.
     pub attributes: Box<[Attribute]>,
+    /// Preceding doc comment.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
 }
 
+/// A function or method parameter.
 #[derive(Debug, Clone, Serialize)]
 pub struct Param {
+    /// Parameter name without `$`.
     pub name: Ident,
+    /// Declared type.
     pub type_hint: Option<TypeHint>,
+    /// Default value.
     pub default: Option<Expr>,
+    /// Whether passed by reference.
     pub by_ref: bool,
+    /// Whether variadic (`...`).
     pub variadic: bool,
+    /// Whether a `readonly` promoted property.
     pub is_readonly: bool,
+    /// Whether a `final` promoted property.
     pub is_final: bool,
+    /// Promotion visibility.
     pub visibility: Option<Visibility>,
+    /// Asymmetric set visibility of a promoted property.
     pub set_visibility: Option<Visibility>,
+    /// Attributes on the parameter.
     pub attributes: Box<[Attribute]>,
+    /// Property hooks of a promoted property.
     #[serde(skip_serializing_if = "slice_is_empty")]
     pub hooks: Box<[PropertyHook]>,
+    /// Preceding doc comment.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
+    /// Source span.
     pub span: Span,
 }
 
+/// The braced member list of a class-like declaration.
 #[derive(Debug, Clone, Serialize)]
 pub struct ClassBody {
+    /// Members in source order.
     pub members: Box<[ClassMember]>,
+    /// Source span.
     #[serde(skip)]
     pub span: Span,
 }
 
+/// A class declaration.
 #[derive(Debug, Clone, Serialize)]
 pub struct ClassDecl {
+    /// Class name; `None` for anonymous classes.
     pub name: Option<Ident>,
+    /// Class modifiers.
     pub modifiers: ClassModifiers,
+    /// Parent class.
     pub extends: Option<Name>,
+    /// Implemented interfaces.
     pub implements: Box<[Name]>,
+    /// Class body.
     #[serde(flatten)]
     pub body: ClassBody,
+    /// Attributes on the class.
     pub attributes: Box<[Attribute]>,
+    /// Preceding doc comment.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
 }
 
+/// A member of a class-like body.
 #[derive(Debug, Clone, Serialize)]
 pub struct ClassMember {
+    /// Member kind.
     pub kind: ClassMemberKind,
+    /// Source span.
     pub span: Span,
 }
 
+/// The kind of a class member.
 #[derive(Debug, Clone, Serialize)]
 pub enum ClassMemberKind {
+    /// Property declaration.
     Property(PropertyDecl),
+    /// Method declaration.
     Method(MethodDecl),
+    /// Class constant declaration.
     ClassConst(ClassConstDecl),
+    /// Trait use clause.
     TraitUse(TraitUseDecl),
 }
 
+/// A property declaration.
 #[derive(Debug, Clone, Serialize)]
 pub struct PropertyDecl {
+    /// Property name without `$`.
     pub name: Ident,
+    /// Read visibility.
     pub visibility: Option<Visibility>,
+    /// Asymmetric set visibility.
     pub set_visibility: Option<Visibility>,
+    /// Whether `static`.
     pub is_static: bool,
+    /// Whether `readonly`.
     pub is_readonly: bool,
+    /// Declared type.
     pub type_hint: Option<TypeHint>,
+    /// Default value.
     pub default: Option<Expr>,
+    /// Attributes on the property.
     pub attributes: Box<[Attribute]>,
+    /// Property hooks.
     #[serde(skip_serializing_if = "slice_is_empty")]
     pub hooks: Box<[PropertyHook]>,
+    /// Preceding doc comment.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
 }
 
+/// A property `get` or `set` hook.
 #[derive(Debug, Clone, Serialize)]
 pub struct PropertyHook {
+    /// `get` or `set`.
     pub kind: PropertyHookKind,
+    /// Hook body.
     pub body: PropertyHookBody,
+    /// Whether `final`.
     pub is_final: bool,
+    /// Whether it returns by reference.
     pub by_ref: bool,
+    /// Parameters of a `set` hook.
     pub params: Box<[Param]>,
+    /// Attributes on the hook.
     pub attributes: Box<[Attribute]>,
+    /// Source span.
     pub span: Span,
 }
 
+/// The body of a property hook.
 #[derive(Debug, Clone, Serialize)]
 pub enum PropertyHookBody {
+    /// Braced body.
     Block(Box<Block>),
+    /// Arrow expression body (`=> expr`).
     Expression(Expr),
+    /// No body (`;`).
     Abstract,
 }
 
+/// A method declaration.
 #[derive(Debug, Clone, Serialize)]
 pub struct MethodDecl {
+    /// Method name.
     pub name: Ident,
+    /// Visibility modifier.
     pub visibility: Option<Visibility>,
+    /// Whether `static`.
     pub is_static: bool,
+    /// Whether `abstract`.
     pub is_abstract: bool,
+    /// Whether `final`.
     pub is_final: bool,
+    /// Whether it returns by reference.
     pub by_ref: bool,
+    /// Parameters.
     pub params: Box<[Param]>,
+    /// Declared return type.
     pub return_type: Option<TypeHint>,
+    /// Method body; `None` for abstract or interface methods.
     pub body: Option<Box<Block>>,
+    /// Attributes on the method.
     pub attributes: Box<[Attribute]>,
+    /// Preceding doc comment.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
 }
 
+/// A class constant declaration.
 #[derive(Debug, Clone, Serialize)]
 pub struct ClassConstDecl {
+    /// Constant name.
     pub name: Ident,
+    /// Visibility modifier.
     pub visibility: Option<Visibility>,
+    /// Whether `final`.
     pub is_final: bool,
+    /// Declared type.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_hint: Option<Box<TypeHint>>,
+    /// Constant value.
     pub value: Expr,
+    /// Attributes on the constant.
     pub attributes: Box<[Attribute]>,
+    /// Preceding doc comment.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
 }
 
+/// A `use Trait;` clause inside a class.
 #[derive(Debug, Clone, Serialize)]
 pub struct TraitUseDecl {
+    /// Used traits.
     pub traits: Box<[Name]>,
+    /// Rules in the `{ ... }` block.
     pub adaptations: Box<[TraitAdaptation]>,
+    /// Byte offset of the opening `{`.
     #[serde(skip)]
     pub adaptations_brace_start: Option<u32>,
+    /// Preceding doc comment.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
 }
 
+/// A `insteadof` or `as` rule in a trait use.
 #[derive(Debug, Clone, Serialize)]
 pub struct TraitAdaptation {
+    /// Rule kind.
     pub kind: TraitAdaptationKind,
+    /// Source span.
     pub span: Span,
 }
 
+/// The kind of trait adaptation rule.
 #[derive(Debug, Clone, Serialize)]
 pub enum TraitAdaptationKind {
+    /// `A::m insteadof B;`.
     Precedence {
+        /// Trait providing the method.
         trait_name: Name,
+        /// Method name.
         method: Name,
+        /// Traits whose method is excluded.
         insteadof: Box<[Name]>,
     },
+    /// `m as [visibility] [alias];`.
     Alias {
+        /// Explicit trait qualifier, if any.
         trait_name: Option<Name>,
+        /// Method name.
         method: Name,
+        /// New visibility, if any.
         new_modifier: Option<Visibility>,
+        /// Alias name, if any.
         new_name: Option<Name>,
     },
 }
 
+/// An interface declaration.
 #[derive(Debug, Clone, Serialize)]
 pub struct InterfaceDecl {
+    /// Interface name.
     pub name: Ident,
+    /// Extended interfaces.
     pub extends: Box<[Name]>,
+    /// Interface body.
     #[serde(flatten)]
     pub body: ClassBody,
+    /// Attributes on the interface.
     pub attributes: Box<[Attribute]>,
+    /// Preceding doc comment.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
 }
 
+/// A trait declaration.
 #[derive(Debug, Clone, Serialize)]
 pub struct TraitDecl {
+    /// Trait name.
     pub name: Ident,
+    /// Trait body.
     #[serde(flatten)]
     pub body: ClassBody,
+    /// Attributes on the trait.
     pub attributes: Box<[Attribute]>,
+    /// Preceding doc comment.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
 }
 
+/// The braced member list of an enum.
 #[derive(Debug, Clone, Serialize)]
 pub struct EnumBody {
+    /// Members in source order.
     pub members: Box<[EnumMember]>,
+    /// Source span.
     #[serde(skip)]
     pub span: Span,
 }
 
+/// An enum declaration.
 #[derive(Debug, Clone, Serialize)]
 pub struct EnumDecl {
+    /// Enum name.
     pub name: Ident,
+    /// Backing type of a backed enum.
     pub scalar_type: Option<Name>,
+    /// Implemented interfaces.
     pub implements: Box<[Name]>,
+    /// Enum body.
     #[serde(flatten)]
     pub body: EnumBody,
+    /// Attributes on the enum.
     pub attributes: Box<[Attribute]>,
+    /// Preceding doc comment.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
 }
 
+/// A member of an enum body.
 #[derive(Debug, Clone, Serialize)]
 pub struct EnumMember {
+    /// Member kind.
     pub kind: EnumMemberKind,
+    /// Source span.
     pub span: Span,
 }
 
+/// The kind of an enum member.
 #[derive(Debug, Clone, Serialize)]
 pub enum EnumMemberKind {
+    /// Enum case.
     Case(EnumCase),
+    /// Method declaration.
     Method(MethodDecl),
+    /// Class constant declaration.
     ClassConst(ClassConstDecl),
+    /// Trait use clause.
     TraitUse(TraitUseDecl),
 }
 
+/// An enum `case`.
 #[derive(Debug, Clone, Serialize)]
 pub struct EnumCase {
+    /// Case name.
     pub name: Ident,
+    /// Backing value.
     pub value: Option<Expr>,
+    /// Attributes on the case.
     pub attributes: Box<[Attribute]>,
+    /// Preceding doc comment.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
 }

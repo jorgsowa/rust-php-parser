@@ -18,14 +18,17 @@ pub(crate) fn is_false(b: &bool) -> bool {
 pub struct ArenaVec<'arena, T>(bumpalo::collections::Vec<'arena, T>);
 
 impl<'arena, T> ArenaVec<'arena, T> {
+    /// Creates an empty vector in `arena`.
     #[inline]
     pub fn new_in(arena: &'arena bumpalo::Bump) -> Self {
         Self(bumpalo::collections::Vec::new_in(arena))
     }
+    /// Creates an empty vector with room for `cap` elements in `arena`.
     #[inline]
     pub fn with_capacity_in(cap: usize, arena: &'arena bumpalo::Bump) -> Self {
         Self(bumpalo::collections::Vec::with_capacity_in(cap, arena))
     }
+    /// Appends `val` to the end.
     #[inline]
     pub fn push(&mut self, val: T) {
         self.0.push(val)

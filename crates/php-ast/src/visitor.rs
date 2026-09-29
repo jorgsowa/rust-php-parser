@@ -33,66 +33,82 @@ use crate::ast::*;
 /// }
 /// ```
 pub trait Visitor<'arena, 'src> {
+    /// Visits the root program node.
     fn visit_program(&mut self, program: &Program<'arena, 'src>) -> ControlFlow<()> {
         walk_program(self, program)
     }
 
+    /// Visits a statement.
     fn visit_stmt(&mut self, stmt: &Stmt<'arena, 'src>) -> ControlFlow<()> {
         walk_stmt(self, stmt)
     }
 
+    /// Visits a block of statements.
     fn visit_block(&mut self, block: &Block<'arena, 'src>) -> ControlFlow<()> {
         walk_block(self, block)
     }
 
+    /// Visits an expression.
     fn visit_expr(&mut self, expr: &Expr<'arena, 'src>) -> ControlFlow<()> {
         walk_expr(self, expr)
     }
 
+    /// Visits a function parameter.
     fn visit_param(&mut self, param: &Param<'arena, 'src>) -> ControlFlow<()> {
         walk_param(self, param)
     }
 
+    /// Visits a call argument.
     fn visit_arg(&mut self, arg: &Arg<'arena, 'src>) -> ControlFlow<()> {
         walk_arg(self, arg)
     }
 
+    /// Visits a class-like member.
     fn visit_class_member(&mut self, member: &ClassMember<'arena, 'src>) -> ControlFlow<()> {
         walk_class_member(self, member)
     }
 
+    /// Visits an enum member.
     fn visit_enum_member(&mut self, member: &EnumMember<'arena, 'src>) -> ControlFlow<()> {
         walk_enum_member(self, member)
     }
 
+    /// Visits a property hook (`get`/`set`).
     fn visit_property_hook(&mut self, hook: &PropertyHook<'arena, 'src>) -> ControlFlow<()> {
         walk_property_hook(self, hook)
     }
 
+    /// Visits a type hint.
     fn visit_type_hint(&mut self, type_hint: &TypeHint<'arena, 'src>) -> ControlFlow<()> {
         walk_type_hint(self, type_hint)
     }
 
+    /// Visits an attribute.
     fn visit_attribute(&mut self, attribute: &Attribute<'arena, 'src>) -> ControlFlow<()> {
         walk_attribute(self, attribute)
     }
 
+    /// Visits a `catch` clause.
     fn visit_catch_clause(&mut self, catch: &CatchClause<'arena, 'src>) -> ControlFlow<()> {
         walk_catch_clause(self, catch)
     }
 
+    /// Visits a `match` arm.
     fn visit_match_arm(&mut self, arm: &MatchArm<'arena, 'src>) -> ControlFlow<()> {
         walk_match_arm(self, arm)
     }
 
+    /// Visits a closure `use` variable.
     fn visit_closure_use_var(&mut self, _var: &ClosureUseVar<'src>) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
 
+    /// Visits a `use Trait;` declaration.
     fn visit_trait_use(&mut self, trait_use: &TraitUseDecl<'arena, 'src>) -> ControlFlow<()> {
         walk_trait_use(self, trait_use)
     }
 
+    /// Visits a trait `insteadof`/`as` adaptation.
     fn visit_trait_adaptation(
         &mut self,
         _adaptation: &TraitAdaptation<'arena, 'src>,
@@ -100,6 +116,7 @@ pub trait Visitor<'arena, 'src> {
         ControlFlow::Continue(())
     }
 
+    /// Visits a name reference.
     fn visit_name(&mut self, _name: &Name<'arena, 'src>) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
@@ -897,6 +914,7 @@ pub struct Scope<'src> {
 /// }
 /// ```
 pub trait ScopeVisitor<'arena, 'src> {
+    /// Visits the root program node with the enclosing scope.
     fn visit_program(
         &mut self,
         _program: &Program<'arena, 'src>,
@@ -904,12 +922,15 @@ pub trait ScopeVisitor<'arena, 'src> {
     ) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Visits a statement with the enclosing scope.
     fn visit_stmt(&mut self, _stmt: &Stmt<'arena, 'src>, _scope: &Scope<'src>) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Visits an expression with the enclosing scope.
     fn visit_expr(&mut self, _expr: &Expr<'arena, 'src>, _scope: &Scope<'src>) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Visits a function parameter with the enclosing scope.
     fn visit_param(
         &mut self,
         _param: &Param<'arena, 'src>,
@@ -917,9 +938,11 @@ pub trait ScopeVisitor<'arena, 'src> {
     ) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Visits a call argument with the enclosing scope.
     fn visit_arg(&mut self, _arg: &Arg<'arena, 'src>, _scope: &Scope<'src>) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Visits a class-like member with the enclosing scope.
     fn visit_class_member(
         &mut self,
         _member: &ClassMember<'arena, 'src>,
@@ -927,6 +950,7 @@ pub trait ScopeVisitor<'arena, 'src> {
     ) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Visits an enum member with the enclosing scope.
     fn visit_enum_member(
         &mut self,
         _member: &EnumMember<'arena, 'src>,
@@ -934,6 +958,7 @@ pub trait ScopeVisitor<'arena, 'src> {
     ) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Visits a property hook (`get`/`set`) with the enclosing scope.
     fn visit_property_hook(
         &mut self,
         _hook: &PropertyHook<'arena, 'src>,
@@ -941,6 +966,7 @@ pub trait ScopeVisitor<'arena, 'src> {
     ) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Visits a type hint with the enclosing scope.
     fn visit_type_hint(
         &mut self,
         _type_hint: &TypeHint<'arena, 'src>,
@@ -948,6 +974,7 @@ pub trait ScopeVisitor<'arena, 'src> {
     ) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Visits an attribute with the enclosing scope.
     fn visit_attribute(
         &mut self,
         _attribute: &Attribute<'arena, 'src>,
@@ -955,6 +982,7 @@ pub trait ScopeVisitor<'arena, 'src> {
     ) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Visits a `catch` clause with the enclosing scope.
     fn visit_catch_clause(
         &mut self,
         _catch: &CatchClause<'arena, 'src>,
@@ -962,6 +990,7 @@ pub trait ScopeVisitor<'arena, 'src> {
     ) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Visits a `match` arm with the enclosing scope.
     fn visit_match_arm(
         &mut self,
         _arm: &MatchArm<'arena, 'src>,
@@ -969,6 +998,7 @@ pub trait ScopeVisitor<'arena, 'src> {
     ) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Visits a closure `use` variable with the enclosing scope.
     fn visit_closure_use_var(
         &mut self,
         _var: &ClosureUseVar<'src>,
@@ -977,6 +1007,7 @@ pub trait ScopeVisitor<'arena, 'src> {
         ControlFlow::Continue(())
     }
 
+    /// Visits a `use Trait;` declaration with the enclosing scope.
     fn visit_trait_use(
         &mut self,
         _trait_use: &TraitUseDecl<'arena, 'src>,
@@ -985,6 +1016,7 @@ pub trait ScopeVisitor<'arena, 'src> {
         ControlFlow::Continue(())
     }
 
+    /// Visits a trait `insteadof`/`as` adaptation with the enclosing scope.
     fn visit_trait_adaptation(
         &mut self,
         _adaptation: &TraitAdaptation<'arena, 'src>,
@@ -993,6 +1025,7 @@ pub trait ScopeVisitor<'arena, 'src> {
         ControlFlow::Continue(())
     }
 
+    /// Visits a comment with the enclosing scope.
     fn visit_comment(&mut self, _comment: &Comment<'src>, _scope: &Scope<'src>) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }

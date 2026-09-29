@@ -455,6 +455,7 @@ impl TokenKind {
 }
 
 impl TokenKind {
+    /// Whether this is `=` or a compound assignment operator.
     #[inline(always)]
     pub fn is_assignment_op(self) -> bool {
         // The assignment operators are contiguous in the enum definition:
