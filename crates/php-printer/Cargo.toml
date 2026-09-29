@@ -10,7 +10,7 @@ homepage.workspace = true
 description = "Pretty printer for PHP AST — converts parsed AST back to PHP source code"
 keywords = ["php", "printer", "pretty-printer", "ast"]
 categories = ["development-tools", "text-processing"]
-readme = "../../README.md"
+readme = "README.md"
 exclude = ["tests/"]
 
 [dependencies]

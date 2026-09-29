@@ -10,7 +10,7 @@ homepage.workspace = true
 description = "Structural PHPDoc parser. Parses doc-comment blocks into a tag/prose AST with accurate spans; tag bodies exposed as raw text."
 keywords = ["php", "phpdoc", "docblock", "parser"]
 categories = ["parsing", "development-tools"]
-readme = "../../README.md"
+readme = "README.md"
 exclude = ["tests/"]
 
 [dependencies]

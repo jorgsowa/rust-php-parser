@@ -10,7 +10,7 @@ homepage.workspace = true
 description = "PHP lexer/tokenizer"
 keywords = ["php", "lexer", "tokenizer", "parser"]
 categories = ["parsing", "development-tools"]
-readme = "../../README.md"
+readme = "README.md"
 exclude = ["tests/"]
 
 [dependencies]
