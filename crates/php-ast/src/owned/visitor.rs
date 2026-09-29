@@ -801,6 +801,7 @@ fn walk_owned_attributes<V: OwnedVisitor + ?Sized>(
 /// Like [`crate::visitor::Scope`] but uses `Option<String>` instead of
 /// `Option<&str>` so the owned visitor has no lifetime parameters.
 #[derive(Debug, Clone, Default)]
+#[non_exhaustive]
 pub struct OwnedScope {
     /// Current namespace, or `None` for the global namespace.
     pub namespace: Option<String>,

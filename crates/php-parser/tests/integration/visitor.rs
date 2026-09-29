@@ -936,3 +936,57 @@ fn scope_walker_delegates_visit_comment() {
     assert_eq!(inner.seen[0].0, "// top-level comment");
     assert_eq!(inner.seen[0].1, None);
 }
+
+#[test]
+fn name_resolver_resolves_class_extends() {
+    use php_ast::resolve::{NameContext, NameResolver, ResolvedName};
+
+    with_parsed(
+        "<?php
+        namespace App;
+        use Lib\\{Foo, function helper};
+        class A extends Foo implements Bar {}",
+        |src, program| {
+            #[derive(Default)]
+            struct Collector {
+                resolver: NameResolver,
+                resolved: Vec<ResolvedName>,
+            }
+            impl<'arena, 'src> ScopeVisitor<'arena, 'src> for Collector {
+                fn visit_stmt(
+                    &mut self,
+                    stmt: &Stmt<'arena, 'src>,
+                    _scope: &Scope<'src>,
+                ) -> ControlFlow<()> {
+                    self.resolver.observe_stmt(stmt);
+                    if let StmtKind::Class(class) = &stmt.kind {
+                        let names = class.extends.iter().chain(class.implements.iter());
+                        for name in names {
+                            self.resolved
+                                .push(self.resolver.resolve_name(name, NameContext::Class));
+                        }
+                    }
+                    ControlFlow::Continue(())
+                }
+            }
+            let mut walker = ScopeWalker::new(src, Collector::default());
+            let _ = walker.walk(program);
+            let c = walker.into_inner();
+            assert_eq!(
+                c.resolved,
+                vec![
+                    ResolvedName::Fqn("Lib\\Foo".into()),
+                    ResolvedName::Fqn("App\\Bar".into()),
+                ]
+            );
+            assert_eq!(
+                c.resolver.resolve::<&str>(
+                    NameContext::Function,
+                    php_ast::NameKind::Unqualified,
+                    &["helper"]
+                ),
+                ResolvedName::Fqn("Lib\\helper".into())
+            );
+        },
+    );
+}

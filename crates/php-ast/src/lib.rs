@@ -7,6 +7,8 @@
 //! - A [`Span`] type for tracking byte-offset ranges back to the source text.
 //! - A [`visitor`] module with the [`visitor::Visitor`] and [`visitor::ScopeVisitor`] traits for
 //!   depth-first AST traversal, plus free `walk_*` functions that drive the default recursion.
+//! - A [`resolve::NameResolver`] that resolves names to fully qualified names using the current
+//!   namespace and `use` imports.
 //!
 //! # Quick start
 //!
@@ -32,6 +34,7 @@
 pub mod ast;
 pub mod fold;
 pub mod owned;
+pub mod resolve;
 pub mod span;
 pub mod visitor;
 

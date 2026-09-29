@@ -847,6 +847,7 @@ fn walk_attributes<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 /// **`function_name`** is set inside named functions and methods; it is `None`
 /// inside closures and arrow functions.
 #[derive(Debug, Clone, Copy, Default)]
+#[non_exhaustive]
 pub struct Scope<'src> {
     /// Current namespace, or `None` for the global namespace.
     ///
