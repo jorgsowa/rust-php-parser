@@ -41,7 +41,7 @@ jobs:
       - name: Restore criterion baseline
         id: restore-baseline
         if: github.event_name == 'pull_request'
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         with:
           path: target/criterion
           key: criterion-baseline-${{ runner.os }}-main-${{ github.sha }}
@@ -94,7 +94,7 @@ jobs:
       # PR restore step picks up the latest one.
       - name: Save criterion baseline
         if: steps.bench-main.outcome == 'success'
-        uses: actions/cache/save@v5
+        uses: actions/cache/save@v6
         with:
           path: target/criterion
           key: criterion-baseline-${{ runner.os }}-main-${{ github.sha }}
