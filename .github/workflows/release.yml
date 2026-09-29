@@ -18,7 +18,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -40,7 +40,7 @@ jobs:
       matrix:
         php-version: ['8.1', '8.2', '8.3', '8.4', '8.5', '8.6']
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -64,7 +64,7 @@ jobs:
       matrix:
         php-version: ['8.1', '8.2', '8.3', '8.4', '8.5', '8.6']
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -84,7 +84,7 @@ jobs:
     needs: php-syntax
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -106,7 +106,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: crates-io
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Verify tag is on main branch
         run: |
@@ -175,7 +175,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Extract version from tag
         id: version
