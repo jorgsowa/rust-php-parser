@@ -37,14 +37,14 @@ phpdoc-parser = { path = "crates/phpdoc-parser", version = "0.21.0" }
 php-printer = { path = "crates/php-printer", version = "0.21.0" }
 miette = { version = "7", features = ["fancy"] }
 thiserror = "2"
-serde = { version = "1", features = ["derive"] }
+serde = { version = "1.0.166", features = ["derive"] }
 insta = "1"
-serde_json = { version = "1" }
+serde_json = { version = "1.0.100" }
 criterion = { version = "0.8", features = ["html_reports"] }
 walkdir = "2.3"
 ignore = "0.4"
-mimalloc = { version = "0.1", default-features = false }
-memchr = "2"
-bumpalo = { version = "3", features = ["collections"] }
+mimalloc = { version = "0.1.30", default-features = false }
+memchr = "2.5"
+bumpalo = { version = "3.12.0", features = ["collections"] }
 pprof = { version = "0.15", features = ["flamegraph", "criterion"] }
 rayon = "1.3"
