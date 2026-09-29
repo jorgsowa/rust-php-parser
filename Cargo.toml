@@ -23,6 +23,7 @@ members = [
 [workspace.package]
 version = "0.20.0"
 edition = "2021"
+rust-version = "1.88"
 license = "BSD-3-Clause"
 authors = ["jorgsowa"]
 repository = "https://github.com/jorgsowa/rust-php-parser"
