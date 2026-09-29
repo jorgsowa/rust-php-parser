@@ -1855,7 +1855,11 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
             && !end_tokens.contains(&parser.current_kind())
             && !parser.check(TokenKind::Eof)
         {
+            let span_before = parser.current_span();
             body.push(parse_stmt(parser));
+            if parser.current_span() == span_before {
+                parser.advance();
+            }
         }
 
         cases.push(SwitchCase {

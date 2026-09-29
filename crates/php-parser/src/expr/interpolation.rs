@@ -406,7 +406,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
     let len = bytes.len();
 
     // Skip leading indent on the first line
-    let mut i = if indent_len > 0 && len >= indent_len && raw_body[..indent_len] == *indent {
+    let mut i = if indent_len > 0 && len >= indent_len && bytes[..indent_len] == *indent.as_bytes() {
         indent_len
     } else {
         0
@@ -421,7 +421,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                 // Preserve the newline in the literal, then skip the indent on the next line
                 literal.push('\n');
                 i += 1;
-                if indent_len > 0 && i + indent_len <= len && raw_body[i..i + indent_len] == *indent
+                if indent_len > 0 && i + indent_len <= len && bytes[i..i + indent_len] == *indent.as_bytes()
                 {
                     i += indent_len;
                 }
@@ -913,7 +913,9 @@ fn parse_complex_interpolation<'arena, 'src>(
     end: u32,
     version: PhpVersion,
 ) -> Expr<'arena, 'src> {
-    let mut sub = crate::parser::Parser::new_at(arena, source, offset as usize, version);
+    // Bounding the source at `end` stops a stray backtick or quote from re-lexing the rest of the file.
+    let bounded = source.get(..end as usize).unwrap_or(source);
+    let mut sub = crate::parser::Parser::new_at(arena, bounded, offset as usize, version);
     let expr = crate::expr::parse_expr(&mut sub);
     if matches!(expr.kind, ExprKind::Error) {
         Expr {
