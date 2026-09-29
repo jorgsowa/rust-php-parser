@@ -4,7 +4,7 @@ max_php=8.4
 ===source===
 <?php #[MyAttr] const VERSION = '8.5';
 ===errors===
-'attributes on constants' requires PHP 8.5 or higher (targeting PHP 8.4)
+'attributes on constants' requires PHP 8.5 or higher
 ===ast===
 {
   "stmts": [

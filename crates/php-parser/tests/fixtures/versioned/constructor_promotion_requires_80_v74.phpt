@@ -9,8 +9,8 @@ class Point {
     ) {}
 }
 ===errors===
-'constructor property promotion' requires PHP 8.0 or higher (targeting PHP 7.4)
-'constructor property promotion' requires PHP 8.0 or higher (targeting PHP 7.4)
+'constructor property promotion' requires PHP 8.0 or higher
+'constructor property promotion' requires PHP 8.0 or higher
 ===ast===
 {
   "stmts": [

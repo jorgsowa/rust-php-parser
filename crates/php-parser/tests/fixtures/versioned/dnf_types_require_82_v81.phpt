@@ -4,7 +4,7 @@ max_php=8.1
 ===source===
 <?php function f((A&B)|C $x) {}
 ===errors===
-'DNF types' requires PHP 8.2 or higher (targeting PHP 8.1)
+'DNF types' requires PHP 8.2 or higher
 ===ast===
 {
   "stmts": [

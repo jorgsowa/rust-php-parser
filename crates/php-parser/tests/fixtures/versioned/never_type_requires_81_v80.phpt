@@ -3,7 +3,7 @@ min_php=8.0
 ===source===
 <?php function f(): never { throw new \Exception(); }
 ===errors===
-'never type' requires PHP 8.1 or higher (targeting PHP 8.0)
+'never type' requires PHP 8.1 or higher
 ===ast===
 {
   "stmts": [

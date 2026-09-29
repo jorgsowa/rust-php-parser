@@ -5,7 +5,7 @@ max_php=8.2
 <?php
 $x = Foo::{$name};
 ===errors===
-'dynamic class constant fetch' requires PHP 8.3 or higher (targeting PHP 8.2)
+'dynamic class constant fetch' requires PHP 8.3 or higher
 ===ast===
 {
   "stmts": [

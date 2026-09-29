@@ -14,12 +14,12 @@ for ((void)a(); $b; (void)$c) {
 // PHP does not allow this, but the parser accepts it.
 $x = (void) $y;
 ===errors===
-'void cast' requires PHP 8.5 or higher (targeting PHP 8.4)
-'void cast' requires PHP 8.5 or higher (targeting PHP 8.4)
-'void cast' requires PHP 8.5 or higher (targeting PHP 8.4)
-'void cast' requires PHP 8.5 or higher (targeting PHP 8.4)
-'void cast' requires PHP 8.5 or higher (targeting PHP 8.4)
-'void cast' requires PHP 8.5 or higher (targeting PHP 8.4)
+'void cast' requires PHP 8.5 or higher
+'void cast' requires PHP 8.5 or higher
+'void cast' requires PHP 8.5 or higher
+'void cast' requires PHP 8.5 or higher
+'void cast' requires PHP 8.5 or higher
+'void cast' requires PHP 8.5 or higher
 (void) cast cannot be used in an expression context
 ===ast===
 {

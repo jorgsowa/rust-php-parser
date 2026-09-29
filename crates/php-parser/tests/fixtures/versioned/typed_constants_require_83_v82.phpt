@@ -4,7 +4,7 @@ max_php=8.2
 ===source===
 <?php class Foo { public const string NAME = 'foo'; }
 ===errors===
-'typed class constants' requires PHP 8.3 or higher (targeting PHP 8.2)
+'typed class constants' requires PHP 8.3 or higher
 ===ast===
 {
   "stmts": [

@@ -22,10 +22,10 @@ class Test {
     }
 }
 ===errors===
-'property hooks' requires PHP 8.4 or higher (targeting PHP 8.3)
-'property hooks' requires PHP 8.4 or higher (targeting PHP 8.3)
-'property hooks' requires PHP 8.4 or higher (targeting PHP 8.3)
-'property hooks' requires PHP 8.4 or higher (targeting PHP 8.3)
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
 Type of parameter $value of hook set must be compatible with property type
 ===ast===
 {

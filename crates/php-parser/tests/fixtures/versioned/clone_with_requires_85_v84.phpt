@@ -4,7 +4,7 @@ max_php=8.4
 ===source===
 <?php $b = clone($a, ['alpha' => 128]);
 ===errors===
-'clone with property overrides' requires PHP 8.5 or higher (targeting PHP 8.4)
+'clone with property overrides' requires PHP 8.5 or higher
 ===ast===
 {
   "stmts": [

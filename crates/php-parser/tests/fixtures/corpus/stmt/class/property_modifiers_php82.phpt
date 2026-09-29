@@ -9,7 +9,7 @@ class Test {
     private static $prop;
 }
 ===errors===
-'final properties' requires PHP 8.4 or higher (targeting PHP 8.2)
+'final properties' requires PHP 8.4 or higher
 Cannot redeclare property $prop
 Cannot redeclare property $prop
 ===ast===

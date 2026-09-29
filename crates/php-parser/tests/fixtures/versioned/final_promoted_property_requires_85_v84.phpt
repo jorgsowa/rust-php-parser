@@ -4,7 +4,7 @@ max_php=8.4
 ===source===
 <?php class Foo { public function __construct(public final string $bar) {} }
 ===errors===
-'final promoted properties' requires PHP 8.5 or higher (targeting PHP 8.4)
+'final promoted properties' requires PHP 8.5 or higher
 ===ast===
 {
   "stmts": [

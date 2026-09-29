@@ -4,7 +4,7 @@ max_php=8.4
 ===source===
 <?php (void) getVersion();
 ===errors===
-'void cast' requires PHP 8.5 or higher (targeting PHP 8.4)
+'void cast' requires PHP 8.5 or higher
 ===ast===
 {
   "stmts": [

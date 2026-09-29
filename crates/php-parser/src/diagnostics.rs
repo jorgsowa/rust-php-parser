@@ -78,7 +78,7 @@ pub enum ParseError {
     /// Syntax that requires a newer PHP version than the targeted one.
     /// Emitted by [`crate::parse_versioned`] when the source uses features
     /// unavailable in the specified [`crate::PhpVersion`].
-    #[error("'{feature}' requires PHP {required} or higher (targeting PHP {used})")]
+    #[error("'{feature}' requires PHP {required} or higher")]
     VersionTooLow {
         feature: Cow<'static, str>,
         required: Cow<'static, str>,

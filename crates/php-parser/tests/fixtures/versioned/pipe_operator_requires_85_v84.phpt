@@ -4,8 +4,8 @@ max_php=8.4
 ===source===
 <?php $x = $value |> trim(...) |> strtolower(...);
 ===errors===
-'pipe operator (|>)' requires PHP 8.5 or higher (targeting PHP 8.4)
-'pipe operator (|>)' requires PHP 8.5 or higher (targeting PHP 8.4)
+'pipe operator (|>)' requires PHP 8.5 or higher
+'pipe operator (|>)' requires PHP 8.5 or higher
 ===ast===
 {
   "stmts": [

@@ -4,7 +4,7 @@ max_php=8.5
 ===source===
 <?php $fn = foo(1, ?, 3);
 ===errors===
-'partial function application' requires PHP 8.6 or higher (targeting PHP 8.5)
+'partial function application' requires PHP 8.6 or higher
 ===ast===
 {
   "stmts": [

@@ -6,7 +6,7 @@ try {
 } catch (Exception) {
 }
 ===errors===
-'non-capturing catch' requires PHP 8.0 or higher (targeting PHP 7.4)
+'non-capturing catch' requires PHP 8.0 or higher
 ===ast===
 {
   "stmts": [

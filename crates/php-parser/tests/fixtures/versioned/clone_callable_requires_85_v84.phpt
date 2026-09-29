@@ -4,7 +4,7 @@ max_php=8.4
 ===source===
 <?php $fn = clone(...);
 ===errors===
-'clone(...) first-class callable' requires PHP 8.5 or higher (targeting PHP 8.4)
+'clone(...) first-class callable' requires PHP 8.5 or higher
 ===ast===
 {
   "stmts": [

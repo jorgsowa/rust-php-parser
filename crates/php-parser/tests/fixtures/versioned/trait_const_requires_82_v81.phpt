@@ -7,7 +7,7 @@ trait T {
     const X = 1;
 }
 ===errors===
-'constants in traits' requires PHP 8.2 or higher (targeting PHP 8.1)
+'constants in traits' requires PHP 8.2 or higher
 ===ast===
 {
   "stmts": [

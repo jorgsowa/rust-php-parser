@@ -4,7 +4,7 @@ max_php=8.3
 ===source===
 <?php abstract readonly class Foo {}
 ===errors===
-'abstract readonly class' requires PHP 8.4 or higher (targeting PHP 8.3)
+'abstract readonly class' requires PHP 8.4 or higher
 ===ast===
 {
   "stmts": [

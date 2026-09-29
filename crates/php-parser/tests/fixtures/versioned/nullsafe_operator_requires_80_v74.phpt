@@ -3,7 +3,7 @@ min_php=7.4
 ===source===
 <?php $result = $obj?->method();
 ===errors===
-'nullsafe operator (?->)' requires PHP 8.0 or higher (targeting PHP 7.4)
+'nullsafe operator (?->)' requires PHP 8.0 or higher
 ===ast===
 {
   "stmts": [

@@ -4,7 +4,7 @@ max_php=8.1
 ===source===
 <?php function f(true $x) {}
 ===errors===
-'true type' requires PHP 8.2 or higher (targeting PHP 8.1)
+'true type' requires PHP 8.2 or higher
 ===ast===
 {
   "stmts": [

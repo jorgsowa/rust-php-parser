@@ -5,7 +5,7 @@ max_php=8.0
 <?php
 $x = 0o17;
 ===errors===
-'explicit octal literals (0o)' requires PHP 8.1 or higher (targeting PHP 8.0)
+'explicit octal literals (0o)' requires PHP 8.1 or higher
 ===ast===
 {
   "stmts": [

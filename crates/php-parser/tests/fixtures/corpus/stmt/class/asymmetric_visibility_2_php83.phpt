@@ -9,10 +9,10 @@ class Test {
 }
 ===errors===
 cannot use multiple set-visibility modifiers
-'asymmetric visibility' requires PHP 8.4 or higher (targeting PHP 8.3)
+'asymmetric visibility' requires PHP 8.4 or higher
 Property with asymmetric visibility must have type
 cannot use multiple set-visibility modifiers
-'asymmetric visibility' requires PHP 8.4 or higher (targeting PHP 8.3)
+'asymmetric visibility' requires PHP 8.4 or higher
 Property with asymmetric visibility must have type
 Cannot redeclare property $x
 ===ast===

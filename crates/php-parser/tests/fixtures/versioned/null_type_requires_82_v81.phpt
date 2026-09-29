@@ -4,7 +4,7 @@ max_php=8.1
 ===source===
 <?php function f(): null {}
 ===errors===
-'null as standalone type' requires PHP 8.2 or higher (targeting PHP 8.1)
+'null as standalone type' requires PHP 8.2 or higher
 ===ast===
 {
   "stmts": [

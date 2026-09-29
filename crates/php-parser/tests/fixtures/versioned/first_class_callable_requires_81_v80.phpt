@@ -3,7 +3,7 @@ min_php=8.0
 ===source===
 <?php $fn = strlen(...);
 ===errors===
-'first-class callable syntax' requires PHP 8.1 or higher (targeting PHP 8.0)
+'first-class callable syntax' requires PHP 8.1 or higher
 ===ast===
 {
   "stmts": [

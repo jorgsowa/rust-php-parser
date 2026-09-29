@@ -4,7 +4,7 @@ max_php=8.4
 ===source===
 <?php class Foo { public static private(set) string $bar = 'x'; }
 ===errors===
-'asymmetric visibility on static properties' requires PHP 8.5 or higher (targeting PHP 8.4)
+'asymmetric visibility on static properties' requires PHP 8.5 or higher
 ===ast===
 {
   "stmts": [

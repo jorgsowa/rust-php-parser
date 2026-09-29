@@ -5,7 +5,7 @@ max_php=8.3
 <?php
 $x = new Foo()->bar;
 ===errors===
-'dereferencing a new expression without parentheses' requires PHP 8.4 or higher (targeting PHP 8.3)
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
 ===ast===
 {
   "stmts": [

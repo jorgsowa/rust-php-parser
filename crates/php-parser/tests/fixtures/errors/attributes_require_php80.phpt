@@ -5,7 +5,7 @@ min_php=7.4
 #[Attr]
 class C {}
 ===errors===
-'attributes' requires PHP 8.0 or higher (targeting PHP 7.4)
+'attributes' requires PHP 8.0 or higher
 ===ast===
 {
   "stmts": [
