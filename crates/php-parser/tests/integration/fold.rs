@@ -19,6 +19,16 @@ fn to_json(program: &php_ast::Program) -> String {
 /// the corpus without requiring a hand-written case per variant.
 #[test]
 fn identity_fold_matches_original_json_across_corpus() {
+    // Deeply nested fuzz fixtures recurse past the default test-thread stack.
+    std::thread::Builder::new()
+        .stack_size(256 * 1024 * 1024)
+        .spawn(identity_fold_across_corpus)
+        .unwrap()
+        .join()
+        .unwrap();
+}
+
+fn identity_fold_across_corpus() {
     let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures");
     let mut paths = crate::common::collect_phpt_files(&dir);
     paths.sort();

@@ -70,6 +70,35 @@ pub fn parse_fixture(content: &str) -> (Option<(u32, u32)>, &str) {
     (min_php, source)
 }
 
+const PHP_VERSIONS: [(u32, u32); 8] = [
+    (7, 4),
+    (8, 0),
+    (8, 1),
+    (8, 2),
+    (8, 3),
+    (8, 4),
+    (8, 5),
+    (8, 6),
+];
+
+/// Versions from `min_php` through `max_php` inclusive; empty unless both are set.
+#[allow(dead_code)]
+pub fn php_version_range(content: &str) -> Vec<(u32, u32)> {
+    let header = content.split("===source===\n").next().unwrap_or("");
+    let read = |key: &str| -> Option<(u32, u32)> {
+        let val = header.lines().find_map(|l| l.strip_prefix(key))?;
+        let (a, b) = val.split_once('.')?;
+        Some((a.parse().ok()?, b.parse().ok()?))
+    };
+    match (read("min_php="), read("max_php=")) {
+        (Some(min), Some(max)) => PHP_VERSIONS
+            .into_iter()
+            .filter(|v| *v >= min && *v <= max)
+            .collect(),
+        _ => Vec::new(),
+    }
+}
+
 /// Recursively collect all `.phpt` files under `dir`.
 ///
 /// Note: This function appears unused in some test binaries (e.g., malformed_php.rs)
@@ -190,6 +219,21 @@ where
         let (min_php, source) = parse_fixture(&content);
 
         let (errors, json) = parse_fn(source, min_php);
+
+        let mismatched: Vec<String> = php_version_range(&content)
+            .into_iter()
+            .filter(|v| {
+                Some(*v) != min_php && parse_fn(source, Some(*v)) != (errors.clone(), json.clone())
+            })
+            .map(|(a, b)| format!("{a}.{b}"))
+            .collect();
+        if !mismatched.is_empty() {
+            failures.lock().unwrap().push(format!(
+                "{rel}: output differs from min_php on PHP {}",
+                mismatched.join(", ")
+            ));
+            return;
+        }
 
         let expect_errors = content.contains("===errors===\n");
         if expect_errors {

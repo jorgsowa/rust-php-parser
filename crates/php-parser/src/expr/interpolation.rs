@@ -406,7 +406,8 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
     let len = bytes.len();
 
     // Skip leading indent on the first line
-    let mut i = if indent_len > 0 && len >= indent_len && bytes[..indent_len] == *indent.as_bytes() {
+    let mut i = if indent_len > 0 && len >= indent_len && bytes[..indent_len] == *indent.as_bytes()
+    {
         indent_len
     } else {
         0
@@ -421,7 +422,9 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                 // Preserve the newline in the literal, then skip the indent on the next line
                 literal.push('\n');
                 i += 1;
-                if indent_len > 0 && i + indent_len <= len && bytes[i..i + indent_len] == *indent.as_bytes()
+                if indent_len > 0
+                    && i + indent_len <= len
+                    && bytes[i..i + indent_len] == *indent.as_bytes()
                 {
                     i += indent_len;
                 }
