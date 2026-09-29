@@ -12,7 +12,7 @@
 //!
 //! # Entry points
 //!
-//! Call [`php_rs_parser::parse()`] — it returns a [`php_rs_parser::ParseResult`]
+//! Call `php_rs_parser::parse()` — it returns a `php_rs_parser::ParseResult`
 //! whose `.program` field is an owned [`Program`]. To convert an
 //! arena-allocated [`Program`](crate::ast::Program) directly, use
 //! [`to_owned_program`].

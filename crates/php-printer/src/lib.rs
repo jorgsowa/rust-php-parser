@@ -64,7 +64,7 @@ pub fn pretty_print_with_comments_and_config<'src>(
 // Owned-program variants — no lifetime parameters, no arena needed
 // =============================================================================
 
-/// Pretty-print a fully-owned PHP program (the result of [`php_rs_parser::parse`]).
+/// Pretty-print a fully-owned PHP program (the result of `php_rs_parser::parse`).
 ///
 /// Internally converts the owned program to arena-allocated form using a
 /// short-lived arena, then delegates to the standard pretty printer.
@@ -90,8 +90,8 @@ pub fn pretty_print_owned_with_config(program: &owned::Program, config: &Printer
 
 /// Pretty-print a fully-owned program with all comments preserved.
 ///
-/// `source` is the original source string (from [`php_rs_parser::ParseResult::source`]).
-/// `comments` is the comment list (from [`php_rs_parser::ParseResult::comments`]).
+/// `source` is the original source string (from `php_rs_parser::ParseResult::source`).
+/// `comments` is the comment list (from `php_rs_parser::ParseResult::comments`).
 pub fn pretty_print_owned_with_comments(
     program: &owned::Program,
     source: &str,

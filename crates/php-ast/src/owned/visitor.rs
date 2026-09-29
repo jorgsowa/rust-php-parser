@@ -2,7 +2,7 @@
 //!
 //! This module mirrors [`crate::visitor`] but operates on the owned AST types
 //! in [`crate::owned`] rather than the arena-allocated types. Use it after
-//! calling [`php_rs_parser::parse()`] — no arena or lifetime management needed.
+//! calling `php_rs_parser::parse()` — no arena or lifetime management needed.
 //!
 //! # Example
 //!

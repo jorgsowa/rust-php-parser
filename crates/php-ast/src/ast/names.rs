@@ -159,7 +159,7 @@ impl<'arena, 'src> Name<'arena, 'src> {
 
     /// Returns the name as a borrowed slice of the source string.
     ///
-    /// Unlike [`to_string_repr`], this never allocates: it uses the stored
+    /// Unlike `to_string_repr`, this never allocates: it uses the stored
     /// span to slice directly into `src`.  The slice includes any leading `\`
     /// for fully-qualified names, exactly as it appears in the source.
     ///

@@ -106,7 +106,7 @@ pub trait Visitor<'arena, 'src> {
 
     /// Called for each comment when driven by [`walk_comments`].
     ///
-    /// Comments live in [`ParseResult::comments`](php_rs_parser::ParseResult::comments)
+    /// Comments live in `ParseResult::comments`
     /// separately from AST nodes. Use [`walk_comments`] to drive this hook.
     fn visit_comment(&mut self, _comment: &Comment<'src>) -> ControlFlow<()> {
         ControlFlow::Continue(())

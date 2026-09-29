@@ -18,7 +18,7 @@ pub struct Stmt<'arena, 'src> {
     /// The immediately preceding `/** */` doc-block, if any.
     ///
     /// Only `/** */` (doc-block) comments are attached here; `//`, `#`, and
-    /// `/* */` comments remain in [`ParseResult::comments`].  When present,
+    /// `/* */` comments remain in `ParseResult::comments`.  When present,
     /// this comment is **removed** from `ParseResult::comments` — the two
     /// collections are disjoint.  A doc-block that has no following statement
     /// before the enclosing `}` or EOF is not attached and stays in

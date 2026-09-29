@@ -169,7 +169,7 @@ pub struct ArenaParseResult<'arena, 'src> {
     /// To process every comment in the file, iterate `result.comments` (for
     /// line, hash, block, and unattached doc comments) and also visit each
     /// declaration node's `doc_comment` field. Or use
-    /// [`php_ast::visitor::walk_comments`] with a [`Visitor`] that also
+    /// [`php_ast::visitor::walk_comments`] with a [`Visitor`](php_ast::visitor::Visitor) that also
     /// overrides the declaration visit methods.
     pub comments: Vec<Comment<'src>>,
     /// Parse errors and diagnostics. Empty on a successful parse.

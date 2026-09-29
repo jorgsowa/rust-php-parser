@@ -15,7 +15,7 @@ pub struct FunctionDecl<'arena, 'src> {
     /// The immediately preceding `/** */` doc-block, if any.
     ///
     /// When present, this comment is **removed** from
-    /// [`ParseResult::comments`](php_rs_parser::ParseResult::comments) — the
+    /// `ParseResult::comments` — the
     /// two collections are disjoint. All other comment forms (line, hash,
     /// block) remain in `ParseResult::comments` regardless of position.
     #[serde(skip_serializing_if = "Option::is_none")]

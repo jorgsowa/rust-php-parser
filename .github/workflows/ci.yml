@@ -32,6 +32,11 @@ jobs:
       - name: Build WASM crate
         run: cargo build -p php-wasm --target wasm32-unknown-unknown
 
+      - name: Rustdoc
+        run: cargo doc --workspace --no-deps
+        env:
+          RUSTDOCFLAGS: -D warnings
+
   php-syntax:
     name: PHP Syntax (${{ matrix.php-version }})
     runs-on: ubuntu-latest
