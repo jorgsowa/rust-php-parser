@@ -48,6 +48,8 @@
 //! }
 //! ```
 
+#![warn(missing_docs)]
+
 pub(crate) mod ast;
 pub(crate) mod parser;
 pub(crate) mod span;

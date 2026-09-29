@@ -1,5 +1,7 @@
 [advisories]
 version = 2
+# quick-xml is pulled in only by pprof (dev-dependency, flamegraph output); pprof 0.15 has no release with a fix
+ignore = ["RUSTSEC-2026-0194", "RUSTSEC-2026-0195"]
 
 [licenses]
 version = 2

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [0.21.0] - 2026-09-29
+
 ### Added
 
 - **`NameResolver`** — resolves class, function and const names to fully qualified names using the current namespace and `use` imports (including group uses and aliases), for both the arena and owned ASTs (`php-ast`).

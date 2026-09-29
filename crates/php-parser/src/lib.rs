@@ -79,14 +79,19 @@
 //! line/column positions — it skips building the [`source_map::SourceMap`]
 //! and is slightly faster.
 
+#![warn(missing_docs)]
+
+/// Parse errors and warnings.
 pub mod diagnostics;
 pub(crate) mod expr;
 pub mod instrument;
 pub(crate) mod parser;
 pub use phpdoc_parser as phpdoc;
 pub(crate) mod precedence;
+/// Byte offset to line/column mapping.
 pub mod source_map;
 pub(crate) mod stmt;
+/// Target PHP version selection.
 pub mod version;
 
 use diagnostics::ParseError;

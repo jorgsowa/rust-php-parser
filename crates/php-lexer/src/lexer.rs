@@ -61,24 +61,33 @@ pub enum LexerErrorKind {
     Other,
 }
 
+/// A recoverable error found while lexing.
 #[derive(Debug, Clone, PartialEq)]
 pub struct LexerError {
+    /// Error category.
     pub kind: LexerErrorKind,
+    /// Human-readable description.
     pub message: String,
+    /// Source range of the error.
     pub span: Span,
 }
 
+/// A lexed token with its source span.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Token {
+    /// Token type.
     pub kind: TokenKind,
+    /// Source range of the token.
     pub span: Span,
 }
 
 impl Token {
+    /// Creates a token.
     pub fn new(kind: TokenKind, span: Span) -> Self {
         Self { kind, span }
     }
 
+    /// Creates an end-of-file token at `offset`.
     pub fn eof(offset: u32) -> Self {
         Self {
             kind: TokenKind::Eof,
@@ -93,12 +102,14 @@ enum LexerMode {
     Php,
 }
 
+/// Streaming PHP lexer with two-token lookahead.
 pub struct Lexer<'src> {
     source: &'src str,
     mode: LexerMode,
     pos: usize,
     peeked: Option<Token>,
     peeked2: Option<Token>,
+    /// Errors collected so far.
     pub errors: Vec<LexerError>,
 }
 
@@ -185,6 +196,7 @@ fn skip_nested_squoted(bytes: &[u8], mut p: usize) -> usize {
 }
 
 impl<'src> Lexer<'src> {
+    /// Creates a lexer for `source`, starting in inline-HTML mode.
     pub fn new(source: &'src str) -> Self {
         debug_assert!(
             source.len() <= u32::MAX as usize,
@@ -244,10 +256,12 @@ impl<'src> Lexer<'src> {
         }
     }
 
+    /// The source text being lexed.
     pub fn source(&self) -> &'src str {
         self.source
     }
 
+    /// Returns the next token without consuming it.
     pub fn peek(&mut self) -> &Token {
         if self.peeked.is_none() {
             self.peeked = Some(self.read_next_token());
@@ -267,6 +281,7 @@ impl<'src> Lexer<'src> {
         self.peeked2.as_ref().expect("peeked2 is Some: set above")
     }
 
+    /// Consumes and returns the next token.
     pub fn next_token(&mut self) -> Token {
         if let Some(token) = self.peeked.take() {
             self.peeked = self.peeked2.take();

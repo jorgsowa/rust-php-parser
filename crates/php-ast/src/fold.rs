@@ -80,6 +80,7 @@ use crate::ast::*;
 ///
 /// See the [module documentation](self) for design rationale and lifetime notes.
 pub trait Fold<'src> {
+    /// Folds the root program node.
     fn fold_program<'new>(
         &mut self,
         arena: &'new Bump,
@@ -88,10 +89,12 @@ pub trait Fold<'src> {
         fold_program(self, arena, program)
     }
 
+    /// Folds a statement.
     fn fold_stmt<'new>(&mut self, arena: &'new Bump, stmt: &Stmt<'_, 'src>) -> Stmt<'new, 'src> {
         fold_stmt(self, arena, stmt)
     }
 
+    /// Folds a block of statements.
     fn fold_block<'new>(
         &mut self,
         arena: &'new Bump,
@@ -100,10 +103,12 @@ pub trait Fold<'src> {
         fold_block(self, arena, block)
     }
 
+    /// Folds an expression.
     fn fold_expr<'new>(&mut self, arena: &'new Bump, expr: &Expr<'_, 'src>) -> Expr<'new, 'src> {
         fold_expr(self, arena, expr)
     }
 
+    /// Folds a function parameter.
     fn fold_param<'new>(
         &mut self,
         arena: &'new Bump,
@@ -112,10 +117,12 @@ pub trait Fold<'src> {
         fold_param(self, arena, param)
     }
 
+    /// Folds a call argument.
     fn fold_arg<'new>(&mut self, arena: &'new Bump, arg: &Arg<'_, 'src>) -> Arg<'new, 'src> {
         fold_arg(self, arena, arg)
     }
 
+    /// Folds a class-like member.
     fn fold_class_member<'new>(
         &mut self,
         arena: &'new Bump,
@@ -124,6 +131,7 @@ pub trait Fold<'src> {
         fold_class_member(self, arena, member)
     }
 
+    /// Folds an enum member.
     fn fold_enum_member<'new>(
         &mut self,
         arena: &'new Bump,
@@ -132,6 +140,7 @@ pub trait Fold<'src> {
         fold_enum_member(self, arena, member)
     }
 
+    /// Folds a property hook.
     fn fold_property_hook<'new>(
         &mut self,
         arena: &'new Bump,
@@ -140,6 +149,7 @@ pub trait Fold<'src> {
         fold_property_hook(self, arena, hook)
     }
 
+    /// Folds a type hint.
     fn fold_type_hint<'new>(
         &mut self,
         arena: &'new Bump,
@@ -148,6 +158,7 @@ pub trait Fold<'src> {
         fold_type_hint(self, arena, type_hint)
     }
 
+    /// Folds an attribute.
     fn fold_attribute<'new>(
         &mut self,
         arena: &'new Bump,
@@ -156,6 +167,7 @@ pub trait Fold<'src> {
         fold_attribute(self, arena, attribute)
     }
 
+    /// Folds a `catch` clause.
     fn fold_catch_clause<'new>(
         &mut self,
         arena: &'new Bump,
@@ -164,6 +176,7 @@ pub trait Fold<'src> {
         fold_catch_clause(self, arena, catch)
     }
 
+    /// Folds a `match` arm.
     fn fold_match_arm<'new>(
         &mut self,
         arena: &'new Bump,
@@ -172,10 +185,12 @@ pub trait Fold<'src> {
         fold_match_arm(self, arena, arm)
     }
 
+    /// Folds a closure `use` variable.
     fn fold_closure_use_var(&mut self, var: &ClosureUseVar<'src>) -> ClosureUseVar<'src> {
         var.clone()
     }
 
+    /// Folds a `use Trait;` declaration.
     fn fold_trait_use<'new>(
         &mut self,
         arena: &'new Bump,
@@ -184,6 +199,7 @@ pub trait Fold<'src> {
         fold_trait_use(self, arena, trait_use)
     }
 
+    /// Folds a trait `insteadof`/`as` adaptation.
     fn fold_trait_adaptation<'new>(
         &mut self,
         arena: &'new Bump,
@@ -192,6 +208,7 @@ pub trait Fold<'src> {
         fold_trait_adaptation(self, arena, adaptation)
     }
 
+    /// Folds a name reference.
     fn fold_name<'new>(&mut self, arena: &'new Bump, name: &Name<'_, 'src>) -> Name<'new, 'src> {
         fold_name(self, arena, name)
     }
@@ -201,6 +218,7 @@ pub trait Fold<'src> {
 // Public free functions — default recursion for each trait method
 // =============================================================================
 
+/// Folds the root program node.
 pub fn fold_program<'new, 'src, F: Fold<'src> + ?Sized>(
     folder: &mut F,
     arena: &'new Bump,
@@ -212,6 +230,7 @@ pub fn fold_program<'new, 'src, F: Fold<'src> + ?Sized>(
     }
 }
 
+/// Folds a statement.
 pub fn fold_stmt<'new, 'src, F: Fold<'src> + ?Sized>(
     folder: &mut F,
     arena: &'new Bump,
@@ -415,6 +434,7 @@ pub fn fold_stmt<'new, 'src, F: Fold<'src> + ?Sized>(
     }
 }
 
+/// Folds an expression.
 pub fn fold_expr<'new, 'src, F: Fold<'src> + ?Sized>(
     folder: &mut F,
     arena: &'new Bump,
@@ -663,6 +683,7 @@ pub fn fold_expr<'new, 'src, F: Fold<'src> + ?Sized>(
     }
 }
 
+/// Folds a function parameter.
 pub fn fold_param<'new, 'src, F: Fold<'src> + ?Sized>(
     folder: &mut F,
     arena: &'new Bump,
@@ -688,6 +709,7 @@ pub fn fold_param<'new, 'src, F: Fold<'src> + ?Sized>(
     }
 }
 
+/// Folds a call argument.
 pub fn fold_arg<'new, 'src, F: Fold<'src> + ?Sized>(
     folder: &mut F,
     arena: &'new Bump,
@@ -702,6 +724,7 @@ pub fn fold_arg<'new, 'src, F: Fold<'src> + ?Sized>(
     }
 }
 
+/// Folds a class-like member.
 pub fn fold_class_member<'new, 'src, F: Fold<'src> + ?Sized>(
     folder: &mut F,
     arena: &'new Bump,
@@ -727,6 +750,7 @@ pub fn fold_class_member<'new, 'src, F: Fold<'src> + ?Sized>(
     }
 }
 
+/// Folds an enum member.
 pub fn fold_enum_member<'new, 'src, F: Fold<'src> + ?Sized>(
     folder: &mut F,
     arena: &'new Bump,
@@ -753,6 +777,7 @@ pub fn fold_enum_member<'new, 'src, F: Fold<'src> + ?Sized>(
     }
 }
 
+/// Folds a property hook.
 pub fn fold_property_hook<'new, 'src, F: Fold<'src> + ?Sized>(
     folder: &mut F,
     arena: &'new Bump,
@@ -778,6 +803,7 @@ pub fn fold_property_hook<'new, 'src, F: Fold<'src> + ?Sized>(
     }
 }
 
+/// Folds a type hint.
 pub fn fold_type_hint<'new, 'src, F: Fold<'src> + ?Sized>(
     folder: &mut F,
     arena: &'new Bump,
@@ -810,6 +836,7 @@ pub fn fold_type_hint<'new, 'src, F: Fold<'src> + ?Sized>(
     }
 }
 
+/// Folds an attribute.
 pub fn fold_attribute<'new, 'src, F: Fold<'src> + ?Sized>(
     folder: &mut F,
     arena: &'new Bump,
@@ -822,6 +849,7 @@ pub fn fold_attribute<'new, 'src, F: Fold<'src> + ?Sized>(
     }
 }
 
+/// Folds a `catch` clause.
 pub fn fold_catch_clause<'new, 'src, F: Fold<'src> + ?Sized>(
     folder: &mut F,
     arena: &'new Bump,
@@ -839,6 +867,7 @@ pub fn fold_catch_clause<'new, 'src, F: Fold<'src> + ?Sized>(
     }
 }
 
+/// Folds a `match` arm.
 pub fn fold_match_arm<'new, 'src, F: Fold<'src> + ?Sized>(
     folder: &mut F,
     arena: &'new Bump,
@@ -858,6 +887,7 @@ pub fn fold_match_arm<'new, 'src, F: Fold<'src> + ?Sized>(
     }
 }
 
+/// Folds a `use Trait;` declaration.
 pub fn fold_trait_use<'new, 'src, F: Fold<'src> + ?Sized>(
     folder: &mut F,
     arena: &'new Bump,
@@ -879,6 +909,7 @@ pub fn fold_trait_use<'new, 'src, F: Fold<'src> + ?Sized>(
     }
 }
 
+/// Folds a trait `insteadof`/`as` adaptation.
 pub fn fold_trait_adaptation<'new, 'src, F: Fold<'src> + ?Sized>(
     folder: &mut F,
     arena: &'new Bump,
@@ -918,6 +949,7 @@ pub fn fold_trait_adaptation<'new, 'src, F: Fold<'src> + ?Sized>(
     }
 }
 
+/// Folds a name reference.
 pub fn fold_name<'new, 'src, F: Fold<'src> + ?Sized>(
     _folder: &mut F,
     arena: &'new Bump,
@@ -1146,6 +1178,7 @@ fn fold_stmts<'new, 'src, F: Fold<'src> + ?Sized>(
     vec
 }
 
+/// Folds a block of statements.
 pub fn fold_block<'new, 'src, F: Fold<'src> + ?Sized>(
     folder: &mut F,
     arena: &'new Bump,
@@ -1236,6 +1269,7 @@ fn fold_string_parts<'new, 'src, F: Fold<'src> + ?Sized>(
 // Private helpers — leaf types
 // =============================================================================
 
+/// Copies a name string into the new arena.
 pub fn fold_name_str<'new, 'src>(
     name: NameStr<'_, 'src>,
     arena: &'new Bump,

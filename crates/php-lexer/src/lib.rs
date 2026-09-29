@@ -19,7 +19,11 @@
 //! }
 //! ```
 
+#![warn(missing_docs)]
+
+/// Lexer implementation.
 pub mod lexer;
+/// Token kinds.
 pub mod token;
 
 pub use lexer::{lex_all, Lexer, LexerError, LexerErrorKind, Token};

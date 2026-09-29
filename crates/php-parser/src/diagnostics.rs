@@ -7,8 +7,10 @@ use thiserror::Error;
 /// warnings (e.g. `final private method` is a PHP warning, not a fatal).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum Severity {
+    /// Fatal in PHP.
     #[default]
     Error,
+    /// Non-fatal in PHP.
     Warning,
 }
 
@@ -22,40 +24,61 @@ pub enum ParseError {
     /// A specific token was expected but a different one was found.
     #[error("expected {expected}, found {found}")]
     Expected {
+        /// Description of the expected token.
         expected: Cow<'static, str>,
+        /// Token actually found.
         found: TokenKind,
+        /// Source range of the error.
         span: Span,
     },
 
     /// An expression was expected but not found (e.g. empty parentheses).
     #[error("expected expression")]
-    ExpectedExpression { span: Span },
+    ExpectedExpression {
+        /// Source range of the error.
+        span: Span,
+    },
 
     /// A statement was expected but not found.
     #[error("expected statement")]
-    ExpectedStatement { span: Span },
+    ExpectedStatement {
+        /// Source range of the error.
+        span: Span,
+    },
 
     /// PHP source must start with `<?php` or `<?`.
     #[error("expected opening PHP tag")]
-    ExpectedOpenTag { span: Span },
+    ExpectedOpenTag {
+        /// Source range of the error.
+        span: Span,
+    },
 
     /// A string literal was opened but never closed.
     #[error("unterminated string literal")]
-    UnterminatedString { span: Span },
+    UnterminatedString {
+        /// Source range of the error.
+        span: Span,
+    },
 
     /// A required token was missing after another construct.
     #[error("expected {expected} after {after}")]
     ExpectedAfter {
+        /// Description of the expected token.
         expected: Cow<'static, str>,
+        /// Construct the token should follow.
         after: Cow<'static, str>,
+        /// Source range of the error.
         span: Span,
     },
 
     /// A delimiter (parenthesis, bracket, brace) was opened but never closed.
     #[error("unclosed {delimiter} opened at {opened_at:?}")]
     UnclosedDelimiter {
+        /// The unclosed delimiter.
         delimiter: Cow<'static, str>,
+        /// Where the delimiter was opened.
         opened_at: Span,
+        /// Source range of the error.
         span: Span,
     },
 
@@ -63,7 +86,9 @@ pub enum ParseError {
     /// (e.g. `(unset)` cast, deprecated syntax). Equivalent to a PHP fatal.
     #[error("{message}")]
     Forbidden {
+        /// Error message.
         message: Cow<'static, str>,
+        /// Source range of the error.
         span: Span,
     },
 
@@ -71,7 +96,9 @@ pub enum ParseError {
     /// as a non-fatal diagnostic; `severity()` returns [`Severity::Warning`].
     #[error("{message}")]
     ForbiddenWarning {
+        /// Error message.
         message: Cow<'static, str>,
+        /// Source range of the error.
         span: Span,
     },
 
@@ -80,14 +107,19 @@ pub enum ParseError {
     /// unavailable in the specified [`crate::PhpVersion`].
     #[error("'{feature}' requires PHP {required} or higher")]
     VersionTooLow {
+        /// Name of the feature used.
         feature: Cow<'static, str>,
+        /// Minimum PHP version required.
         required: Cow<'static, str>,
+        /// PHP version targeted.
         used: Cow<'static, str>,
+        /// Source range of the error.
         span: Span,
     },
 }
 
 impl ParseError {
+    /// Source range of the error.
     pub fn span(&self) -> Span {
         match self {
             ParseError::Expected { span, .. }
