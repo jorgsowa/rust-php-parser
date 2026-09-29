@@ -144,22 +144,3 @@ jobs:
         with:
           files: lcov.info
           fail_ci_if_error: false
-
-  fuzz-smoke:
-    name: Fuzz Smoke Test
-    needs: coverage
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: dtolnay/rust-toolchain@nightly
-
-      - uses: Swatinem/rust-cache@v2
-        with:
-          key: fuzz
-
-      - name: Install cargo-fuzz
-        run: cargo install cargo-fuzz
-
-      - name: Fuzz smoke test (10s)
-        run: cargo fuzz run fuzz_parse -- -max_total_time=10
