@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - `Scope` and `OwnedScope` are now `#[non_exhaustive]` (`php-ast`).
+- Lexer no longer runs a heredoc probe before every token, making parsing ~13% faster on the Laravel framework source (`php-lexer`).
 
 ---
 

@@ -353,13 +353,6 @@ impl<'src> Lexer<'src> {
     }
 
     fn lex_php(&mut self) -> Token {
-        let remaining = &self.source[self.pos..];
-
-        // Try heredoc/nowdoc before skipping whitespace (heredoc does its own whitespace handling)
-        if let Some(token) = self.try_lex_heredoc(remaining) {
-            return token;
-        }
-
         // Skip whitespace only (comments are yielded as tokens below)
         self.skip_whitespace();
 
