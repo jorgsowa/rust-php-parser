@@ -41,7 +41,7 @@ serde = { version = "1", features = ["derive"] }
 insta = "1"
 serde_json = { version = "1" }
 criterion = { version = "0.8", features = ["html_reports"] }
-walkdir = "2"
+walkdir = "2.3"
 ignore = "0.4"
 mimalloc = { version = "0.1", default-features = false }
 memchr = "2"
