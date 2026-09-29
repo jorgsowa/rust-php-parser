@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [0.20.0] - 2026-09-29
+
 ### Added
 
 - **PHP 8.6 doc comments on function parameters** — `Param` now has a `doc_comment` field, populated from a `/** ... */` block placed either immediately before a parameter or trailing it up to the comma (e.g. `function f(/** the id */ int $id, string $name /** display name */) {}`), per the [DocComments For Function Parameters RFC](https://wiki.php.net/rfc/parameter-doccomments). Since a bare comment is legal PHP at any version, attachment isn't gated behind `PhpVersion::Php86` (`php-ast`, `php-rs-parser`, `php-printer`).
