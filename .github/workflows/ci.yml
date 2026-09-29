@@ -57,6 +57,22 @@ jobs:
       - name: Check
         run: cargo check --workspace --exclude php-wasm --locked
 
+  minimal-versions:
+    name: Minimal versions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: dtolnay/rust-toolchain@nightly
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Resolve minimal direct dependency versions
+        run: cargo update -Z direct-minimal-versions
+
+      - name: Check
+        run: cargo check --workspace --exclude php-wasm --all-targets
+
   deny:
     name: Deny
     runs-on: ubuntu-latest
