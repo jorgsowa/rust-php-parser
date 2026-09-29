@@ -10,7 +10,9 @@ use crate::owned;
 pub enum NameContext {
     /// Classes, interfaces, traits, enums.
     Class,
+    /// Functions.
     Function,
+    /// Constants.
     Const,
 }
 
@@ -21,7 +23,12 @@ pub enum ResolvedName {
     Fqn(String),
     /// Unqualified function/const in a namespace with no matching import:
     /// PHP tries `namespaced` first, then `global`.
-    Fallback { namespaced: String, global: String },
+    Fallback {
+        /// Candidate inside the current namespace.
+        namespaced: String,
+        /// Candidate in the global namespace.
+        global: String,
+    },
     /// `self`, `static` or `parent` (lowercase); needs class context to resolve.
     Special(&'static str),
     /// Synthesised error-recovery name.
@@ -45,6 +52,7 @@ pub struct NameResolver {
 }
 
 impl NameResolver {
+    /// Creates a resolver in the global namespace with no imports.
     pub fn new() -> Self {
         Self::default()
     }

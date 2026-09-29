@@ -9,6 +9,8 @@
 //! assert_eq!(output, "<?php\necho 1 + 2;");
 //! ```
 
+#![warn(missing_docs)]
+
 mod precedence;
 mod printer;
 

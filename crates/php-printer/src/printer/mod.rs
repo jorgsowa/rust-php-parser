@@ -8,7 +8,9 @@ use php_ast::Comment;
 
 /// Configuration for the pretty printer.
 pub struct PrinterConfig {
+    /// Indentation style.
     pub indent: Indent,
+    /// Line terminator.
     pub newline: &'static str,
     /// Maximum blank lines preserved between statements. 0 normalizes all blank lines away.
     pub blank_lines_upper_bound: usize,
@@ -16,7 +18,9 @@ pub struct PrinterConfig {
 
 /// Indentation style.
 pub enum Indent {
+    /// Indent with this many spaces per level.
     Spaces(usize),
+    /// Indent with one tab per level.
     Tabs,
 }
 

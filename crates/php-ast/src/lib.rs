@@ -31,11 +31,16 @@
 //! }
 //! ```
 
+#![warn(missing_docs)]
+
+/// Arena-allocated AST node types.
 pub mod ast;
 pub mod fold;
 pub mod owned;
 pub mod resolve;
+/// Byte-offset source spans.
 pub mod span;
+/// Read-only AST traversal.
 pub mod visitor;
 
 pub use ast::*;

@@ -37,7 +37,9 @@ impl LineCol {
 /// A line/column range corresponding to a [`Span`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct LineColSpan {
+    /// Range start.
     pub start: LineCol,
+    /// Range end.
     pub end: LineCol,
 }
 

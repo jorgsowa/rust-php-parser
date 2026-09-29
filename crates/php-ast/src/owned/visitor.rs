@@ -43,74 +43,92 @@ use super::*;
 /// To **skip** a subtree, override the method and return `Continue(())`
 /// without calling the corresponding `walk_owned_*` function.
 pub trait OwnedVisitor {
+    /// Visits a program node.
     fn visit_program(&mut self, program: &Program) -> ControlFlow<()> {
         walk_owned_program(self, program)
     }
 
+    /// Visits a statement node.
     fn visit_stmt(&mut self, stmt: &Stmt) -> ControlFlow<()> {
         walk_owned_stmt(self, stmt)
     }
 
+    /// Visits a block node.
     fn visit_block(&mut self, block: &Block) -> ControlFlow<()> {
         walk_owned_block(self, block)
     }
 
+    /// Visits an expression node.
     fn visit_expr(&mut self, expr: &Expr) -> ControlFlow<()> {
         walk_owned_expr(self, expr)
     }
 
+    /// Visits a param node.
     fn visit_param(&mut self, param: &Param) -> ControlFlow<()> {
         walk_owned_param(self, param)
     }
 
+    /// Visits an arg node.
     fn visit_arg(&mut self, arg: &Arg) -> ControlFlow<()> {
         walk_owned_arg(self, arg)
     }
 
+    /// Visits a class member node.
     fn visit_class_member(&mut self, member: &ClassMember) -> ControlFlow<()> {
         walk_owned_class_member(self, member)
     }
 
+    /// Visits an enum member node.
     fn visit_enum_member(&mut self, member: &EnumMember) -> ControlFlow<()> {
         walk_owned_enum_member(self, member)
     }
 
+    /// Visits a property hook node.
     fn visit_property_hook(&mut self, hook: &PropertyHook) -> ControlFlow<()> {
         walk_owned_property_hook(self, hook)
     }
 
+    /// Visits a type hint node.
     fn visit_type_hint(&mut self, type_hint: &TypeHint) -> ControlFlow<()> {
         walk_owned_type_hint(self, type_hint)
     }
 
+    /// Visits an attribute node.
     fn visit_attribute(&mut self, attribute: &Attribute) -> ControlFlow<()> {
         walk_owned_attribute(self, attribute)
     }
 
+    /// Visits a catch clause node.
     fn visit_catch_clause(&mut self, catch: &CatchClause) -> ControlFlow<()> {
         walk_owned_catch_clause(self, catch)
     }
 
+    /// Visits a match arm node.
     fn visit_match_arm(&mut self, arm: &MatchArm) -> ControlFlow<()> {
         walk_owned_match_arm(self, arm)
     }
 
+    /// Visits a closure use var node.
     fn visit_closure_use_var(&mut self, _var: &ClosureUseVar) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
 
+    /// Visits a trait use node.
     fn visit_trait_use(&mut self, trait_use: &TraitUseDecl) -> ControlFlow<()> {
         walk_owned_trait_use(self, trait_use)
     }
 
+    /// Visits a trait adaptation node.
     fn visit_trait_adaptation(&mut self, _adaptation: &TraitAdaptation) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
 
+    /// Visits a name node.
     fn visit_name(&mut self, _name: &Name) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
 
+    /// Visits a comment node.
     fn visit_comment(&mut self, _comment: &Comment) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
@@ -163,6 +181,7 @@ pub fn walk_owned_block<V: OwnedVisitor + ?Sized>(
     ControlFlow::Continue(())
 }
 
+/// Walks the children of a statement.
 pub fn walk_owned_stmt<V: OwnedVisitor + ?Sized>(visitor: &mut V, stmt: &Stmt) -> ControlFlow<()> {
     match &stmt.kind {
         StmtKind::Expression(expr) => {
@@ -816,21 +835,27 @@ pub struct OwnedScope {
 /// Every visit method receives an [`OwnedScope`] describing the lexical context
 /// at that node. Drive traversal with [`OwnedScopeWalker`].
 pub trait OwnedScopeVisitor {
+    /// Called for each program with its enclosing scope.
     fn visit_program(&mut self, _program: &Program, _scope: &OwnedScope) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Called for each statement with its enclosing scope.
     fn visit_stmt(&mut self, _stmt: &Stmt, _scope: &OwnedScope) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Called for each expression with its enclosing scope.
     fn visit_expr(&mut self, _expr: &Expr, _scope: &OwnedScope) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Called for each param with its enclosing scope.
     fn visit_param(&mut self, _param: &Param, _scope: &OwnedScope) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Called for each arg with its enclosing scope.
     fn visit_arg(&mut self, _arg: &Arg, _scope: &OwnedScope) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Called for each class member with its enclosing scope.
     fn visit_class_member(
         &mut self,
         _member: &ClassMember,
@@ -838,9 +863,11 @@ pub trait OwnedScopeVisitor {
     ) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Called for each enum member with its enclosing scope.
     fn visit_enum_member(&mut self, _member: &EnumMember, _scope: &OwnedScope) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Called for each property hook with its enclosing scope.
     fn visit_property_hook(
         &mut self,
         _hook: &PropertyHook,
@@ -848,18 +875,23 @@ pub trait OwnedScopeVisitor {
     ) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Called for each type hint with its enclosing scope.
     fn visit_type_hint(&mut self, _type_hint: &TypeHint, _scope: &OwnedScope) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Called for each attribute with its enclosing scope.
     fn visit_attribute(&mut self, _attribute: &Attribute, _scope: &OwnedScope) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Called for each catch clause with its enclosing scope.
     fn visit_catch_clause(&mut self, _catch: &CatchClause, _scope: &OwnedScope) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Called for each match arm with its enclosing scope.
     fn visit_match_arm(&mut self, _arm: &MatchArm, _scope: &OwnedScope) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Called for each closure use var with its enclosing scope.
     fn visit_closure_use_var(
         &mut self,
         _var: &ClosureUseVar,
@@ -867,6 +899,7 @@ pub trait OwnedScopeVisitor {
     ) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Called for each trait use with its enclosing scope.
     fn visit_trait_use(
         &mut self,
         _trait_use: &TraitUseDecl,
@@ -874,6 +907,7 @@ pub trait OwnedScopeVisitor {
     ) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Called for each trait adaptation with its enclosing scope.
     fn visit_trait_adaptation(
         &mut self,
         _adaptation: &TraitAdaptation,
@@ -881,6 +915,7 @@ pub trait OwnedScopeVisitor {
     ) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Called for each comment with its enclosing scope.
     fn visit_comment(&mut self, _comment: &Comment, _scope: &OwnedScope) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }

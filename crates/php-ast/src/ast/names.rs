@@ -127,20 +127,32 @@ mod ident_layout_tests {
 pub enum Name<'arena, 'src> {
     /// Single unqualified identifier — no `ArenaVec` allocation.
     /// `&'src str` instead of `Cow` since this is always a borrowed slice of the source.
-    Simple { value: &'src str, span: Span },
+    Simple {
+        /// The identifier text.
+        value: &'src str,
+        /// Source range of the name.
+        span: Span,
+    },
     /// Multi-part or prefixed name (`Foo\Bar`, `\Foo`, `namespace\Foo`).
     Complex {
+        /// Name segments split on `\`.
         parts: ArenaVec<'arena, &'src str>,
+        /// Qualification form.
         kind: NameKind,
+        /// Source range of the name.
         span: Span,
     },
     /// Synthesised during error recovery when no real name could be parsed.
     /// Distinguishable from any user-written name; visitors and tools can
     /// explicitly skip or flag these.
-    Error { span: Span },
+    Error {
+        /// Source range where a name was expected.
+        span: Span,
+    },
 }
 
 impl<'arena, 'src> Name<'arena, 'src> {
+    /// Source range of the name.
     #[inline]
     pub fn span(&self) -> Span {
         match self {
@@ -148,6 +160,7 @@ impl<'arena, 'src> Name<'arena, 'src> {
         }
     }
 
+    /// Qualification form of the name.
     #[inline]
     pub fn kind(&self) -> NameKind {
         match self {
@@ -270,6 +283,7 @@ impl<'arena, 'src> serde::Serialize for Name<'arena, 'src> {
     }
 }
 
+/// How a name is qualified.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 pub enum NameKind {
     /// A bare identifier with no namespace separator: `Foo`, `strlen`.
@@ -360,9 +374,12 @@ impl BuiltinType {
     }
 }
 
+/// A type declaration with its source range.
 #[derive(Debug, Serialize)]
 pub struct TypeHint<'arena, 'src> {
+    /// Type form.
     pub kind: TypeHintKind<'arena, 'src>,
+    /// Source range of this node.
     pub span: Span,
 }
 
