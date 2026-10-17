@@ -352,7 +352,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         } else {
             self.error(ParseError::Expected {
                 expected: format!("{}", kind).into(),
-                found: self.current_kind(),
+                found: self.current_kind().description().into(),
                 span: self.current_span(),
             });
             None
@@ -822,7 +822,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 let err_span = self.current_span();
                 self.error(ParseError::Expected {
                     expected: "identifier".into(),
-                    found: self.current_kind(),
+                    found: self.current_kind().description().into(),
                     span: err_span,
                 });
                 let span = Span::new(start, err_span.end);

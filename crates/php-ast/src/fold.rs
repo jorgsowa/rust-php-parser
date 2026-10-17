@@ -262,7 +262,7 @@ pub fn fold_stmt<'new, 'src, F: Fold<'src> + ?Sized>(
                 else_branch: if_stmt
                     .else_branch
                     .map(|b| &*arena.alloc(folder.fold_stmt(arena, b))),
-                else_kw_start: if_stmt.else_kw_start,
+                else_kw_span: if_stmt.else_kw_span,
                 uses_alternative: if_stmt.uses_alternative,
             });
             StmtKind::If(new_if)
@@ -357,7 +357,7 @@ pub fn fold_stmt<'new, 'src, F: Fold<'src> + ?Sized>(
                 finally: tc
                     .finally
                     .map(|f| &*arena.alloc(folder.fold_block(arena, f))),
-                finally_kw_start: tc.finally_kw_start,
+                finally_kw_span: tc.finally_kw_span,
             });
             StmtKind::TryCatch(new_tc)
         }
@@ -639,7 +639,7 @@ pub fn fold_expr<'new, 'src, F: Fold<'src> + ?Sized>(
                 }
                 arms
             },
-            brace_start: match_expr.brace_start,
+            brace_span: match_expr.brace_span,
         }),
         ExprKind::ThrowExpr(e) => ExprKind::ThrowExpr(arena.alloc(folder.fold_expr(arena, e))),
         ExprKind::Yield(y) => ExprKind::Yield(YieldExpr {
@@ -904,7 +904,7 @@ pub fn fold_trait_use<'new, 'src, F: Fold<'src> + ?Sized>(
     TraitUseDecl {
         traits,
         adaptations,
-        adaptations_brace_start: trait_use.adaptations_brace_start,
+        adaptations_brace_span: trait_use.adaptations_brace_span,
         doc_comment: trait_use.doc_comment.as_ref().map(fold_comment),
     }
 }

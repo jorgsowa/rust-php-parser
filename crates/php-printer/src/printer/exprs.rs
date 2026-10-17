@@ -458,7 +458,7 @@ impl<'src> Printer<'src> {
         self.w("match (");
         self.print_expr(m.subject, PREC_LOWEST);
         self.w(")");
-        if !self.flush_gap_comments_before(m.brace_start) {
+        if !self.flush_gap_comments_before(m.brace_span.start) {
             self.w(" ");
         }
         self.w("{");

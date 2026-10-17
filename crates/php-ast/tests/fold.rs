@@ -730,7 +730,7 @@ fn fold_trait_use_override_is_dispatched_through_class_member() {
         kind: ClassMemberKind::TraitUse(TraitUseDecl {
             traits,
             adaptations: ArenaVec::new_in(&arena),
-            adaptations_brace_start: None,
+            adaptations_brace_span: None,
             doc_comment: None,
         }),
         span: Span::DUMMY,
@@ -912,7 +912,7 @@ fn fold_match_arm_override_dispatched_for_both_arm_kinds() {
         kind: ExprKind::Match(MatchExpr {
             subject,
             arms,
-            brace_start: 0,
+            brace_span: Span::DUMMY,
         }),
         span: Span::DUMMY,
     };

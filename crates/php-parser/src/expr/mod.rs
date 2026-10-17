@@ -689,7 +689,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                         let err_span = parser.current_span();
                         parser.error(ParseError::Expected {
                             expected: "identifier".into(),
-                            found: parser.current_kind(),
+                            found: parser.current_kind().description().into(),
                             span: err_span,
                         });
                         let span = Span::new(lhs.span.start, err_span.end);
@@ -938,7 +938,7 @@ pub(crate) fn parse_member_name<'arena, 'src>(
             let span = parser.current_span();
             parser.error(ParseError::Expected {
                 expected: "member name".into(),
-                found: parser.current_kind(),
+                found: parser.current_kind().description().into(),
                 span,
             });
             Expr {

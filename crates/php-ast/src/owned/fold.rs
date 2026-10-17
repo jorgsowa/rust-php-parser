@@ -226,7 +226,7 @@ fn fold_owned_stmt_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &StmtKind) -> 
                 .else_branch
                 .as_ref()
                 .map(|b| Box::new(folder.fold_stmt(b))),
-            else_kw_start: s.else_kw_start,
+            else_kw_span: s.else_kw_span,
             uses_alternative: s.uses_alternative,
         })),
         StmtKind::While(s) => StmtKind::While(Box::new(WhileStmt {
@@ -303,7 +303,7 @@ fn fold_owned_stmt_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &StmtKind) -> 
                 .map(|c| folder.fold_catch_clause(c))
                 .collect(),
             finally: t.finally.as_deref().map(|f| Box::new(folder.fold_block(f))),
-            finally_kw_start: t.finally_kw_start,
+            finally_kw_span: t.finally_kw_span,
         })),
         StmtKind::Global(exprs) => StmtKind::Global(fold_owned_exprs(folder, exprs)),
         StmtKind::Class(cls) => StmtKind::Class(Box::new(fold_owned_class_decl(folder, cls))),
@@ -541,7 +541,7 @@ fn fold_owned_expr_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &ExprKind) -> 
                 .iter()
                 .map(|arm| folder.fold_match_arm(arm))
                 .collect(),
-            brace_start: m.brace_start,
+            brace_span: m.brace_span,
         }),
         ExprKind::ThrowExpr(e) => ExprKind::ThrowExpr(Box::new(folder.fold_expr(e))),
         ExprKind::Yield(y) => ExprKind::Yield(YieldExpr {
@@ -811,7 +811,7 @@ pub fn fold_owned_trait_use<F: FoldOwned + ?Sized>(
             .iter()
             .map(|a| folder.fold_trait_adaptation(a))
             .collect(),
-        adaptations_brace_start: t.adaptations_brace_start,
+        adaptations_brace_span: t.adaptations_brace_span,
         doc_comment: t.doc_comment.clone(),
     }
 }

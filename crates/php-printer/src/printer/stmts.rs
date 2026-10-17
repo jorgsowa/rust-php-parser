@@ -354,8 +354,8 @@ impl<'src> Printer<'src> {
                 self.print_stmt_or_block(&elseif.body);
             }
             if let Some(else_branch) = &if_stmt.else_branch {
-                if let Some(else_kw_start) = if_stmt.else_kw_start {
-                    if !self.flush_gap_comments_before(else_kw_start) {
+                if let Some(else_kw_span) = if_stmt.else_kw_span {
+                    if !self.flush_gap_comments_before(else_kw_span.start) {
                         self.w(" ");
                     }
                 } else {
@@ -413,8 +413,8 @@ impl<'src> Printer<'src> {
             self.print_block(catch.body);
         }
         if let Some(finally) = tc.finally {
-            if let Some(finally_kw_start) = tc.finally_kw_start {
-                if !self.flush_gap_comments_before(finally_kw_start) {
+            if let Some(finally_kw_span) = tc.finally_kw_span {
+                if !self.flush_gap_comments_before(finally_kw_span.start) {
                     self.w(" ");
                 }
             } else {

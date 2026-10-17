@@ -202,9 +202,9 @@ pub struct IfStmt<'arena, 'src> {
     pub elseif_branches: ArenaVec<'arena, ElseIfBranch<'arena, 'src>>,
     /// `else` statement, if any.
     pub else_branch: Option<&'arena Stmt<'arena, 'src>>,
-    /// Start byte offset of the `else` keyword; `None` when there is no else branch.
+    /// The `else` keyword; `None` when there is no else branch. Not serialized.
     #[serde(skip)]
-    pub else_kw_start: Option<u32>,
+    pub else_kw_span: Option<Span>,
     /// `true` when written in alternative syntax (`: ... endX;`).
     #[serde(default, skip_serializing_if = "is_false")]
     pub uses_alternative: bool,
@@ -317,9 +317,9 @@ pub struct TryCatchStmt<'arena, 'src> {
     pub catches: ArenaVec<'arena, CatchClause<'arena, 'src>>,
     /// `finally` block, if any.
     pub finally: Option<&'arena Block<'arena, 'src>>,
-    /// Start byte offset of the `finally` keyword; `None` when there is no finally clause.
+    /// The `finally` keyword; `None` when there is no finally clause. Not serialized.
     #[serde(skip)]
-    pub finally_kw_start: Option<u32>,
+    pub finally_kw_span: Option<Span>,
 }
 
 /// A `catch (Type $e) { ... }` clause.

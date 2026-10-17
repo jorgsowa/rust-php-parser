@@ -492,3 +492,16 @@ fn source_over_4_gib_is_refused() {
         ));
     }
 }
+
+/// `found` carries the token's description rather than a php-lexer type, so
+/// new tokens are not a breaking change for `ParseError`.
+#[test]
+fn expected_error_describes_the_found_token() {
+    let result = php_rs_parser::parse("<?php foo(1 2);");
+    let first = result.errors.first().expect("an error");
+    assert!(
+        matches!(first, ParseError::Expected { expected, found, .. } if expected == "')'" && found == "integer"),
+        "{first:?}"
+    );
+    assert_eq!(first.to_string(), "expected ')', found integer");
+}

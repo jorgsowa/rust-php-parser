@@ -25,7 +25,7 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
                 let span = parser.current_span();
                 parser.error(ParseError::Expected {
                     expected: "method name".into(),
-                    found: parser.current_kind(),
+                    found: parser.current_kind().description().into(),
                     span,
                 });
                 Name::Error { span }
@@ -73,7 +73,7 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
                 let span = parser.current_span();
                 parser.error(ParseError::Expected {
                     expected: "'insteadof' or 'as'".into(),
-                    found: parser.current_kind(),
+                    found: parser.current_kind().description().into(),
                     span,
                 });
                 parser.advance();
@@ -97,7 +97,7 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
             let span = parser.current_span();
             parser.error(ParseError::Expected {
                 expected: "'::' or 'as'".into(),
-                found: parser.current_kind(),
+                found: parser.current_kind().description().into(),
                 span,
             });
             parser.advance();

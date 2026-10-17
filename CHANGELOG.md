@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `TokenKind::description` (`php-lexer`).
 - `ScopeVisitor` and `OwnedScopeVisitor` gain `visit_name` and `visit_block`, and `FoldOwned` gains `fold_trait_use` and `fold_trait_adaptation` (with `fold_owned_trait_use`/`fold_owned_trait_adaptation`), matching the plain visitors and the arena `Fold`. All have default bodies (`php-ast`).
 - `NameStr::new_in` builds a `NameStr` in an arena without the hidden `__arena` constructor (`php-ast`).
 - `php_ast::bumpalo` and `php_rs_parser::bumpalo` re-export the arena allocator that appears in their APIs (`php-ast`, `php-rs-parser`).
@@ -28,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Breaking:** `ParseError::Expected::found` is a `Cow<'static, str>` description (e.g. `"';'"`, `"identifier"`) instead of a `php_lexer::TokenKind`, so new lexer tokens are no longer a breaking change for `php-rs-parser`. The error message text is unchanged. `TokenKind::description` returns the same text as its `Display` (`php-rs-parser`, `php-lexer`).
+- **Breaking:** the printer-only offsets are `Span`s of the token they mark: `IfStmt::else_kw_start` → `else_kw_span`, `TryCatchStmt::finally_kw_start` → `finally_kw_span`, `MatchExpr::brace_start` → `brace_span`, `TraitUseDecl::adaptations_brace_start` → `adaptations_brace_span`, in both the arena and owned AST. They are still not serialized (`php-ast`, `php-rs-parser`, `php-printer`).
 - **Breaking:** `php_rs_parser::instrument` is public only with the `instrument` feature, and `owned::from_owned_program` is `#[doc(hidden)]`: both are internals, not stable API (`php-rs-parser`, `php-ast`).
 - **Breaking:** `ExprKind::String` holds a `NameStr` instead of `&'arena str`, so literals without escape sequences borrow the source instead of being copied into the arena. `NameStr` derefs to `str`; use `.as_str()` where a `&str` is needed (`php-ast`, `php-rs-parser`).
 - Faster parsing, measured on the Laravel framework with its vendor directory (95 MB), the workload of the `mir` analyzer: arena parsing is ~14% faster and `parse()` ~10% faster. String literals are no longer copied into the arena, the parser no longer rescans each quoted string for escapes or interpolation that the lexer already saw, double-quoted strings are lexed with a vectorised search instead of byte by byte, and array literals start with room for four elements instead of growing from zero (`php-lexer`, `php-rs-parser`).

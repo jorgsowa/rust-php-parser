@@ -339,9 +339,9 @@ pub struct IfStmt {
     pub elseif_branches: Box<[ElseIfBranch]>,
     /// The `else` statement, if any.
     pub else_branch: Option<Box<Stmt>>,
-    /// Byte offset of the `else` keyword.
+    /// The `else` keyword. Not serialized.
     #[serde(skip)]
-    pub else_kw_start: Option<u32>,
+    pub else_kw_span: Option<Span>,
     /// Whether the `if: ... endif;` syntax is used.
     #[serde(default, skip_serializing_if = "is_false")]
     pub uses_alternative: bool,
@@ -454,9 +454,9 @@ pub struct TryCatchStmt {
     pub catches: Box<[CatchClause]>,
     /// The `finally` block, if any.
     pub finally: Option<Box<Block>>,
-    /// Byte offset of the `finally` keyword.
+    /// The `finally` keyword. Not serialized.
     #[serde(skip)]
-    pub finally_kw_start: Option<u32>,
+    pub finally_kw_span: Option<Span>,
 }
 
 /// A `catch` clause.
@@ -1121,9 +1121,9 @@ pub struct MatchExpr {
     pub subject: Box<Expr>,
     /// Match arms.
     pub arms: Box<[MatchArm]>,
-    /// Byte offset of the opening `{`.
+    /// The opening `{`. Not serialized.
     #[serde(skip)]
-    pub brace_start: u32,
+    pub brace_span: Span,
 }
 
 /// An arm of a `match` expression.
@@ -1415,9 +1415,9 @@ pub struct TraitUseDecl {
     pub traits: Box<[Name]>,
     /// Rules in the `{ ... }` block.
     pub adaptations: Box<[TraitAdaptation]>,
-    /// Byte offset of the opening `{`.
+    /// The opening `{` of the adaptations block. Not serialized.
     #[serde(skip)]
-    pub adaptations_brace_start: Option<u32>,
+    pub adaptations_brace_span: Option<Span>,
     /// Preceding doc comment.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
@@ -1846,7 +1846,7 @@ fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
                 })
                 .collect::<Vec<_>>()
                 .into_boxed_slice(),
-            brace_start: m.brace_start,
+            brace_span: m.brace_span,
         }),
         arena_ast::ExprKind::ThrowExpr(e) => ExprKind::ThrowExpr(Box::new(owned_expr(e))),
         arena_ast::ExprKind::Yield(y) => ExprKind::Yield(YieldExpr {
@@ -2108,7 +2108,7 @@ fn owned_stmt_kind(k: &arena_ast::StmtKind<'_, '_>) -> StmtKind {
                 .collect::<Vec<_>>()
                 .into_boxed_slice(),
             else_branch: s.else_branch.map(|b| Box::new(owned_stmt(b))),
-            else_kw_start: s.else_kw_start,
+            else_kw_span: s.else_kw_span,
             uses_alternative: s.uses_alternative,
         })),
         arena_ast::StmtKind::While(s) => StmtKind::While(Box::new(WhileStmt {
@@ -2188,7 +2188,7 @@ fn owned_stmt_kind(k: &arena_ast::StmtKind<'_, '_>) -> StmtKind {
                 .collect::<Vec<_>>()
                 .into_boxed_slice(),
             finally: t.finally.map(|f| Box::new(owned_block(f))),
-            finally_kw_start: t.finally_kw_start,
+            finally_kw_span: t.finally_kw_span,
         })),
         arena_ast::StmtKind::Global(exprs) => StmtKind::Global(owned_exprs(exprs)),
         arena_ast::StmtKind::Class(cls) => StmtKind::Class(Box::new(owned_class_decl(cls))),
@@ -2363,7 +2363,7 @@ fn owned_trait_use(t: &arena_ast::TraitUseDecl<'_, '_>) -> TraitUseDecl {
             })
             .collect::<Vec<_>>()
             .into_boxed_slice(),
-        adaptations_brace_start: t.adaptations_brace_start,
+        adaptations_brace_span: t.adaptations_brace_span,
         doc_comment: owned_opt_comment(&t.doc_comment),
     }
 }
@@ -2819,7 +2819,7 @@ fn av_leaf_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
                 }
                 v
             },
-            brace_start: m.brace_start,
+            brace_span: m.brace_span,
         }),
         ExprKind::ThrowExpr(e) => arena_ast::ExprKind::ThrowExpr(arena.alloc(av_expr(arena, e))),
         ExprKind::Yield(y) => arena_ast::ExprKind::Yield(arena_ast::YieldExpr {
@@ -3170,7 +3170,7 @@ fn av_if_stmt<'a>(arena: &'a bumpalo::Bump, s: &IfStmt) -> arena_ast::IfStmt<'a,
             .else_branch
             .as_ref()
             .map(|b| &*arena.alloc(av_stmt(arena, b))),
-        else_kw_start: s.else_kw_start,
+        else_kw_span: s.else_kw_span,
         uses_alternative: s.uses_alternative,
     }
 }
@@ -3287,7 +3287,7 @@ fn av_try_catch_stmt<'a>(
             .finally
             .as_deref()
             .map(|f| &*arena.alloc(av_block(arena, f))),
-        finally_kw_start: t.finally_kw_start,
+        finally_kw_span: t.finally_kw_span,
     }
 }
 
@@ -3493,7 +3493,7 @@ fn av_trait_use<'a>(arena: &'a bumpalo::Bump, t: &TraitUseDecl) -> arena_ast::Tr
     arena_ast::TraitUseDecl {
         traits,
         adaptations,
-        adaptations_brace_start: t.adaptations_brace_start,
+        adaptations_brace_span: t.adaptations_brace_span,
         doc_comment: av_opt_comment(arena, &t.doc_comment),
     }
 }

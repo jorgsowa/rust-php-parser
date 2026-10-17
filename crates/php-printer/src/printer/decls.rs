@@ -287,8 +287,8 @@ impl<'src> Printer<'src> {
         if tu.adaptations.is_empty() {
             self.w(";");
         } else {
-            if let Some(brace_start) = tu.adaptations_brace_start {
-                if !self.flush_gap_comments_before(brace_start) {
+            if let Some(brace) = tu.adaptations_brace_span {
+                if !self.flush_gap_comments_before(brace.start) {
                     self.w(" ");
                 }
             } else {

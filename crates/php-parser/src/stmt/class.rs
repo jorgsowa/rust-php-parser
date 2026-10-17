@@ -68,7 +68,7 @@ pub(super) fn parse_class<'arena, 'src>(
     } else {
         parser.error(ParseError::Expected {
             expected: "class name".into(),
-            found: parser.current_kind(),
+            found: parser.current_kind().description().into(),
             span: parser.current_span(),
         });
         (Ident::ERROR, parser.current_span())
@@ -185,7 +185,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
                     let span = parser.current_span();
                     parser.error(ParseError::Expected {
                         expected: "'get' or 'set'".into(),
-                        found: parser.current_kind(),
+                        found: parser.current_kind().description().into(),
                         span,
                     });
                     parser.advance();
@@ -210,7 +210,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
                     let span = parser.current_span();
                     parser.error(ParseError::Expected {
                         expected: "'get' or 'set'".into(),
-                        found: parser.current_kind(),
+                        found: parser.current_kind().description().into(),
                         span,
                     });
                     // Skip until ; or } for recovery
@@ -229,7 +229,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
             let span = parser.current_span();
             parser.error(ParseError::Expected {
                 expected: "'get' or 'set'".into(),
-                found: parser.current_kind(),
+                found: parser.current_kind().description().into(),
                 span,
             });
             // Skip until ; or } for recovery
@@ -398,7 +398,7 @@ pub fn parse_class_members<'arena, 'src>(
             let span = parser.current_span();
             parser.error(ParseError::Expected {
                 expected: "modifier".into(),
-                found: parser.current_kind(),
+                found: parser.current_kind().description().into(),
                 span,
             });
         }
@@ -470,7 +470,7 @@ pub fn parse_class_members<'arena, 'src>(
 
         parser.error(ParseError::Expected {
             expected: "class member".into(),
-            found: parser.current_kind(),
+            found: parser.current_kind().description().into(),
             span: parser.current_span(),
         });
         parser.synchronize_class_body();
@@ -497,11 +497,10 @@ pub(super) fn parse_trait_use_decl<'arena, 'src>(
     // adaptations block's own `{ }` scope advances `last_scope_close` past the
     // comment, which would otherwise make it unreachable afterward.
     let doc_comment = parser.take_doc_comment(member_start);
-    let (adaptations, adaptations_brace_start) = if parser.check(TokenKind::LeftBrace) {
-        let brace_start = parser.start_span();
-        parser.advance();
+    let (adaptations, adaptations_brace_span) = if parser.check(TokenKind::LeftBrace) {
+        let brace = parser.advance().span;
         let adaptations = super::trait_use::parse_trait_adaptations(parser);
-        (adaptations, Some(brace_start))
+        (adaptations, Some(brace))
     } else {
         parser.expect(TokenKind::Semicolon);
         (parser.alloc_vec(), None)
@@ -509,7 +508,7 @@ pub(super) fn parse_trait_use_decl<'arena, 'src>(
     TraitUseDecl {
         traits,
         adaptations,
-        adaptations_brace_start,
+        adaptations_brace_span,
         doc_comment,
     }
 }
@@ -753,7 +752,7 @@ fn parse_class_const_member<'arena, 'src>(
             let span = parser.current_span();
             parser.error(ParseError::Expected {
                 expected: "constant name".into(),
-                found: parser.current_kind(),
+                found: parser.current_kind().description().into(),
                 span,
             });
             Ident::ERROR
@@ -829,7 +828,7 @@ fn parse_method_member<'arena, 'src>(
     } else {
         parser.error(ParseError::Expected {
             expected: "method name".into(),
-            found: parser.current_kind(),
+            found: parser.current_kind().description().into(),
             span: parser.current_span(),
         });
         Ident::ERROR
@@ -1158,7 +1157,7 @@ pub(super) fn parse_interface<'arena, 'src>(
     } else {
         parser.error(ParseError::Expected {
             expected: "interface name".into(),
-            found: parser.current_kind(),
+            found: parser.current_kind().description().into(),
             span: parser.current_span(),
         });
         (Ident::ERROR, parser.current_span())
@@ -1228,7 +1227,7 @@ pub(super) fn parse_trait<'arena, 'src>(
     } else {
         parser.error(ParseError::Expected {
             expected: "trait name".into(),
-            found: parser.current_kind(),
+            found: parser.current_kind().description().into(),
             span: parser.current_span(),
         });
         Ident::ERROR

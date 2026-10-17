@@ -1,5 +1,4 @@
 use php_ast::Span;
-use php_lexer::TokenKind;
 use std::borrow::Cow;
 use thiserror::Error;
 
@@ -26,8 +25,10 @@ pub enum ParseError {
     Expected {
         /// Description of the expected token.
         expected: Cow<'static, str>,
-        /// Token actually found.
-        found: TokenKind,
+        /// Description of the token actually found, e.g. `"';'"` or
+        /// `"identifier"`. A description rather than the lexer's token kind,
+        /// so that new tokens are not a breaking change for this type.
+        found: Cow<'static, str>,
         /// Source range of the error.
         span: Span,
     },

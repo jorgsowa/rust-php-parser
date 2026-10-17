@@ -262,9 +262,10 @@ pub struct TraitUseDecl<'arena, 'src> {
     pub traits: ArenaVec<'arena, Name<'arena, 'src>>,
     /// `insteadof` and `as` rules from the adaptation block.
     pub adaptations: ArenaVec<'arena, TraitAdaptation<'arena, 'src>>,
-    /// Start byte offset of the `{` that opens the adaptations block; `None` when there are no adaptations.
+    /// The `{` that opens the adaptations block; `None` when there are no
+    /// adaptations. Not serialized.
     #[serde(skip)]
-    pub adaptations_brace_start: Option<u32>,
+    pub adaptations_brace_span: Option<Span>,
     /// Preceding `/** */` doc-block, if any.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment<'src>>,

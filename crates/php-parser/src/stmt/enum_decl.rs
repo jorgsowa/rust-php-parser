@@ -25,7 +25,7 @@ pub(super) fn parse_enum<'arena, 'src>(
     } else {
         parser.error(ParseError::Expected {
             expected: "enum name".into(),
-            found: parser.current_kind(),
+            found: parser.current_kind().description().into(),
             span: parser.current_span(),
         });
         Ident::ERROR
@@ -99,7 +99,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                     let span = parser.current_span();
                     parser.error(ParseError::Expected {
                         expected: "case name".into(),
-                        found: parser.current_kind(),
+                        found: parser.current_kind().description().into(),
                         span,
                     });
                     (Ident::ERROR, span)
@@ -247,7 +247,7 @@ pub(super) fn parse_enum<'arena, 'src>(
             } else {
                 parser.error(ParseError::Expected {
                     expected: "constant name".into(),
-                    found: parser.current_kind(),
+                    found: parser.current_kind().description().into(),
                     span: parser.current_span(),
                 });
                 Ident::ERROR
@@ -355,7 +355,7 @@ pub(super) fn parse_enum<'arena, 'src>(
 
         parser.error(ParseError::Expected {
             expected: "enum member".into(),
-            found: parser.current_kind(),
+            found: parser.current_kind().description().into(),
             span: parser.current_span(),
         });
         parser.synchronize_enum_body();

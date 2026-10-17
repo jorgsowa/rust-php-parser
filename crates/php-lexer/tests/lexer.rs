@@ -639,3 +639,16 @@ fn unterminated_strings_are_not_verbatim() {
     assert_eq!(verbatim_flags("'abc"), [false]);
     assert_eq!(verbatim_flags("\"abc"), [false]);
 }
+
+#[test]
+fn token_description_matches_display() {
+    for kind in [
+        TokenKind::LeftBrace,
+        TokenKind::Semicolon,
+        TokenKind::Identifier,
+        TokenKind::Eof,
+    ] {
+        assert_eq!(kind.description(), kind.to_string());
+    }
+    assert_eq!(TokenKind::LeftBrace.description(), "'{'");
+}

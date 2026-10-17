@@ -697,9 +697,9 @@ pub struct MatchExpr<'arena, 'src> {
     pub subject: &'arena Expr<'arena, 'src>,
     /// Match arms in order.
     pub arms: ArenaVec<'arena, MatchArm<'arena, 'src>>,
-    /// Start byte offset of the `{` in `match (...) {`.
+    /// The `{` in `match (...) {`. Not serialized.
     #[serde(skip)]
-    pub brace_start: u32,
+    pub brace_span: Span,
 }
 
 /// One arm of a `match`.

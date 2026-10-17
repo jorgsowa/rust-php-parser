@@ -411,7 +411,7 @@ fn class_modifier_error<'arena, 'src>(
     let span = Span::new(start, parser.previous_end());
     parser.error(ParseError::Expected {
         expected: "'class'".into(),
-        found: parser.current_kind(),
+        found: parser.current_kind().description().into(),
         span,
     });
     parser.synchronize();
@@ -611,7 +611,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 let span = parser.current_span();
                 parser.error(ParseError::Expected {
                     expected: "'class'".into(),
-                    found: parser.current_kind(),
+                    found: parser.current_kind().description().into(),
                     span,
                 });
                 parser.synchronize();
@@ -650,7 +650,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             let span = parser.current_span();
             parser.error(ParseError::Expected {
                 expected: "declaration after attributes".into(),
-                found: parser.current_kind(),
+                found: parser.current_kind().description().into(),
                 span,
             });
             parser.synchronize();
@@ -900,7 +900,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
                 then_branch,
                 elseif_branches,
                 else_branch,
-                else_kw_start: None,
+                else_kw_span: None,
                 uses_alternative: true,
             })),
             span,
@@ -927,11 +927,11 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
         });
     }
 
-    let (else_branch, else_kw_start) = if parser.check(TokenKind::Else) {
-        let else_kw_start = parser.start_span();
+    let (else_branch, else_kw_span) = if parser.check(TokenKind::Else) {
+        let else_kw_span = parser.current_span();
         parser.advance();
         let s = parse_stmt_or_block(parser);
-        (Some(parser.alloc(s)), Some(else_kw_start))
+        (Some(parser.alloc(s)), Some(else_kw_span))
     } else {
         (None, None)
     };
@@ -949,7 +949,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
             then_branch,
             elseif_branches,
             else_branch,
-            else_kw_start,
+            else_kw_span,
             uses_alternative: false,
         })),
         span,
@@ -1223,7 +1223,7 @@ fn parse_function<'arena, 'src>(
     } else {
         parser.error(ParseError::Expected {
             expected: "function name".into(),
-            found: parser.current_kind(),
+            found: parser.current_kind().description().into(),
             span: parser.current_span(),
         });
         Ident::ERROR
@@ -1991,8 +1991,8 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         });
     }
 
-    let (finally, finally_kw_start) = if parser.check(TokenKind::Finally) {
-        let finally_kw_start = parser.start_span();
+    let (finally, finally_kw_span) = if parser.check(TokenKind::Finally) {
+        let finally_kw_span = parser.current_span();
         parser.advance();
         let finally_brace_start = parser.start_span();
         parser.expect(TokenKind::LeftBrace);
@@ -2009,7 +2009,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             stmts: finally_stmts,
             span: Span::new(finally_brace_start, parser.previous_end()),
         });
-        (Some(finally_body), Some(finally_kw_start))
+        (Some(finally_body), Some(finally_kw_span))
     } else {
         (None, None)
     };
@@ -2017,7 +2017,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
     if catches.is_empty() && finally.is_none() {
         parser.error(ParseError::Expected {
             expected: "catch or finally clause".into(),
-            found: parser.current_kind(),
+            found: parser.current_kind().description().into(),
             span: Span::new(start, parser.previous_end()),
         });
     }
@@ -2028,7 +2028,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             body,
             catches,
             finally,
-            finally_kw_start,
+            finally_kw_span,
         })),
         span,
         doc_comment: None,
@@ -2142,7 +2142,7 @@ fn parse_global<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
     if !is_simple_variable(&e) {
         parser.error(ParseError::Expected {
             expected: "variable".into(),
-            found: parser.current_kind(),
+            found: parser.current_kind().description().into(),
             span: e.span,
         });
     }
@@ -2155,7 +2155,7 @@ fn parse_global<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
         if !is_simple_variable(&e) {
             parser.error(ParseError::Expected {
                 expected: "variable".into(),
-                found: parser.current_kind(),
+                found: parser.current_kind().description().into(),
                 span: e.span,
             });
         }
@@ -2290,7 +2290,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             if !has_trailing_sep {
                 parser.error(ParseError::Expected {
                     expected: "namespace separator before '{'".into(),
-                    found: parser.current_kind(),
+                    found: parser.current_kind().description().into(),
                     span: first_name.span(),
                 });
             }
@@ -2299,7 +2299,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
         if parser.check(TokenKind::RightBrace) {
             parser.error(ParseError::Expected {
                 expected: "at least one import in group use".into(),
-                found: TokenKind::RightBrace,
+                found: TokenKind::RightBrace.description().into(),
                 span: parser.current_span(),
             });
         }
@@ -2329,7 +2329,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             if sub_name.kind() == NameKind::FullyQualified {
                 parser.error(ParseError::Expected {
                     expected: "non-fully-qualified name in group use".into(),
-                    found: parser.current_kind(),
+                    found: parser.current_kind().description().into(),
                     span: sub_name.span(),
                 });
             }
@@ -2487,7 +2487,7 @@ fn parse_const_with_attrs<'arena, 'src>(
         } else {
             parser.error(ParseError::Expected {
                 expected: "constant name".into(),
-                found: parser.current_kind(),
+                found: parser.current_kind().description().into(),
                 span: parser.current_span(),
             });
             Ident::ERROR

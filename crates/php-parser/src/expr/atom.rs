@@ -103,7 +103,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             let span = parser.current_span();
             parser.error(ParseError::Expected {
                 expected: "'function' or 'fn'".into(),
-                found: parser.current_kind(),
+                found: parser.current_kind().description().into(),
                 span,
             });
             return Expr {
@@ -121,7 +121,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         let span = parser.current_span();
         parser.error(ParseError::Expected {
             expected: "'function', 'fn', or 'static'".into(),
-            found: parser.current_kind(),
+            found: parser.current_kind().description().into(),
             span,
         });
         return Expr {
@@ -1679,7 +1679,7 @@ fn parse_match_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     let subject = parse_expr(parser);
     parser.expect(TokenKind::RightParen);
 
-    let brace_start = parser.start_span();
+    let brace_span = parser.current_span();
     parser.expect(TokenKind::LeftBrace);
 
     let mut arms = parser.alloc_vec_with_capacity(4);
@@ -1733,7 +1733,7 @@ fn parse_match_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
         kind: ExprKind::Match(MatchExpr {
             subject: parser.alloc(subject),
             arms,
-            brace_start,
+            brace_span,
         }),
         span: Span::new(start, end),
     }
