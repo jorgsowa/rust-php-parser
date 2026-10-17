@@ -42,24 +42,25 @@ fn assert_has_errors_owned(code: &str) {
 fn assert_depth_exceeded(code: &str) {
     let arena = bumpalo::Bump::new();
     let result = php_rs_parser::parse_arena(&arena, code);
-    let msgs = format_errors(&result);
     assert!(
-        msgs.contains("maximum expression nesting depth exceeded"),
-        "expected depth-limit error, got:\n{msgs}"
+        result
+            .errors
+            .iter()
+            .any(|e| matches!(e, ParseError::NestingTooDeep { .. })),
+        "expected depth-limit error, got:\n{}",
+        format_errors(&result)
     );
 }
 
 fn assert_depth_exceeded_owned(code: &str) {
     let result = php_rs_parser::parse(code);
-    let msgs = result
-        .errors
-        .iter()
-        .map(|e| e.to_string())
-        .collect::<Vec<_>>()
-        .join("\n");
     assert!(
-        msgs.contains("maximum expression nesting depth exceeded"),
-        "(owned) expected depth-limit error, got:\n{msgs}"
+        result
+            .errors
+            .iter()
+            .any(|e| matches!(e, ParseError::NestingTooDeep { .. })),
+        "(owned) expected depth-limit error, got:\n{:?}",
+        result.errors
     );
 }
 
@@ -90,92 +91,226 @@ fn assert_no_errors_owned(code: &str) {
 // ============================================================================
 // NESTING DEPTH LIMIT
 // These tests generate input programmatically and must stay inline.
+//
+// Statements, expressions and string interpolation share one budget of 512
+// levels of parser recursion; a construct can take more than one per level
+// (`($x + (...))` takes two: the parentheses and the right operand).
+// Unoptimised builds use far more stack per level than release builds, so the
+// tests that reach the limit run on a large stack.
 // ============================================================================
 
+/// Inside the nesting budget for every construct below.
+const VALID_DEPTH: usize = 250;
+/// Past the nesting budget.
+const EXCESSIVE_DEPTH: usize = 600;
+
+fn with_deep_stack<F: FnOnce() + Send + 'static>(f: F) {
+    with_stack(256 * 1024 * 1024, f);
+}
+
+/// A named generator that nests one construct `n` levels deep.
+type Nester = (&'static str, fn(usize) -> String);
+
+const NESTED_EXPRESSIONS: &[Nester] = &[
+    ("arrays", |n| {
+        format!("<?php {}{};", "[".repeat(n), "]".repeat(n))
+    }),
+    ("parens", |n| {
+        format!("<?php {}1{};", "(".repeat(n), ")".repeat(n))
+    }),
+    ("ternary", |n| {
+        format!("<?php {}1{};", "$x ? ".repeat(n), " : 1".repeat(n))
+    }),
+    ("binary_ops", |n| {
+        format!("<?php {}$x{};", "($x + ".repeat(n), ")".repeat(n))
+    }),
+    ("function_calls", |n| {
+        format!("<?php {}1{};", "f(".repeat(n), ")".repeat(n))
+    }),
+    ("match", |n| {
+        format!(
+            "<?php {}1{};",
+            "match(".repeat(n),
+            ") { default => 1 }".repeat(n)
+        )
+    }),
+    ("closures", |n| {
+        format!(
+            "<?php {}1{};",
+            "function() { return ".repeat(n),
+            "; }".repeat(n)
+        )
+    }),
+    ("arrow_functions", |n| {
+        format!("<?php {}1;", "fn() => ".repeat(n))
+    }),
+    ("casts", |n| format!("<?php {}1;", "(int) ".repeat(n))),
+    ("variable_variables", |n| {
+        format!("<?php {}x;", "$".repeat(n))
+    }),
+];
+
+const NESTED_STATEMENTS: &[Nester] = &[
+    ("blocks", |n| {
+        format!("<?php {}{}", "{".repeat(n), "}".repeat(n))
+    }),
+    ("if_blocks", |n| {
+        format!("<?php {}{}", "if (1) {".repeat(n), "}".repeat(n))
+    }),
+    ("braceless_if", |n| {
+        format!("<?php {}echo 1;", "if (1) ".repeat(n))
+    }),
+    ("else_if", |n| {
+        format!("<?php if (1) {{}}{}", " else if (1) {}".repeat(n))
+    }),
+    ("anonymous_classes", |n| {
+        format!(
+            "<?php {}{}",
+            "new class { function f() { ".repeat(n),
+            "} };".repeat(n)
+        )
+    }),
+];
+
 #[test]
-fn deeply_nested_arrays_hit_depth_limit() {
-    let nested = format!("<?php {}{};", "[".repeat(75), "]".repeat(75));
-    with_large_stack(move || assert_depth_exceeded(&nested));
+fn nesting_within_budget_parses_without_errors() {
+    with_deep_stack(|| {
+        for (name, generate) in NESTED_EXPRESSIONS.iter().chain(NESTED_STATEMENTS) {
+            let code = generate(VALID_DEPTH);
+            let arena = bumpalo::Bump::new();
+            let result = php_rs_parser::parse_arena(&arena, &code);
+            assert!(
+                result.errors.is_empty(),
+                "{name}: unexpected errors: {}",
+                format_errors(&result)
+            );
+        }
+    });
 }
 
 #[test]
-fn deeply_nested_arrays_hit_depth_limit_owned() {
-    let nested = format!("<?php {}{};", "[".repeat(75), "]".repeat(75));
-    with_large_stack(move || assert_depth_exceeded_owned(&nested));
+fn nesting_past_budget_reports_error() {
+    with_deep_stack(|| {
+        for (name, generate) in NESTED_EXPRESSIONS.iter().chain(NESTED_STATEMENTS) {
+            let code = generate(EXCESSIVE_DEPTH);
+            eprintln!("checking {name}");
+            assert_depth_exceeded(&code);
+            assert_depth_exceeded_owned(&code);
+        }
+    });
+}
+
+/// The 50-level expression limit used to reject plausible generated code such
+/// as deeply nested config arrays.
+#[test]
+fn moderately_nested_arrays_are_valid() {
+    let code = format!("<?php return {}1{};", "['k' => ".repeat(75), "]".repeat(75));
+    with_deep_stack(move || {
+        assert_no_errors(&code);
+        assert_no_errors_owned(&code);
+    });
+}
+
+/// Reaching the limit must not take time or memory proportional to the
+/// remaining input: every level past the budget is skipped linearly.
+#[test]
+fn far_too_deep_nesting_is_rejected_without_crashing() {
+    with_deep_stack(|| {
+        for code in [
+            format!("<?php {}", "{".repeat(100_000)),
+            format!("<?php {}", "if (1) {".repeat(20_000)),
+            format!("<?php {};", "(".repeat(100_000)),
+            format!("<?php {}x;", "$".repeat(100_000)),
+        ] {
+            assert_depth_exceeded(&code);
+            assert_depth_exceeded_owned(&code);
+        }
+    });
 }
 
 #[test]
-fn deeply_nested_parens_hit_depth_limit() {
-    let nested = format!("<?php {}{};", "(".repeat(75), ")".repeat(75));
-    with_large_stack(move || assert_depth_exceeded(&nested));
+fn string_interpolation_shares_the_nesting_budget() {
+    with_deep_stack(|| {
+        // An interpolated expression must not restart the count at zero.
+        let code = format!(
+            "<?php {}\"{{$a[{}1{}]}}\"{};",
+            "(".repeat(500),
+            "(".repeat(100),
+            ")".repeat(100),
+            ")".repeat(500)
+        );
+        assert_depth_exceeded(&code);
+        assert_depth_exceeded_owned(&code);
+
+        // A little nesting on either side of the string is fine.
+        let code = format!(
+            "<?php {}\"{{$a[{}1{}]}}\"{};",
+            "(".repeat(100),
+            "(".repeat(100),
+            ")".repeat(100),
+            ")".repeat(100)
+        );
+        assert_no_errors(&code);
+    });
 }
 
 #[test]
-fn deeply_nested_parens_hit_depth_limit_owned() {
-    let nested = format!("<?php {}{};", "(".repeat(75), ")".repeat(75));
-    with_large_stack(move || assert_depth_exceeded_owned(&nested));
+fn deeply_nested_double_quoted_strings_are_rejected() {
+    for n in [64, 50_000] {
+        let code = format!("<?php {}x{};", "\"{$a[".repeat(n), "]}\"".repeat(n));
+        with_deep_stack(move || {
+            assert_depth_exceeded(&code);
+            assert_depth_exceeded_owned(&code);
+        });
+    }
 }
 
 #[test]
-fn deeply_nested_ternary_hit_depth_limit() {
-    // $x ? $x ? $x ? ... : 1 : 1 : 1
-    let nested = format!(
-        "<?php {};",
-        "$x ? ".repeat(75).to_string() + "1" + &" : 1".repeat(75)
-    );
-    with_large_stack(move || assert_depth_exceeded(&nested));
+fn a_few_nested_double_quoted_strings_are_valid() {
+    let code = format!("<?php {}x{};", "\"{$a[".repeat(8), "]}\"".repeat(8));
+    assert_no_errors(&code);
+}
+
+fn nested_heredocs(n: usize) -> String {
+    let mut code = String::from("<?php $x = ");
+    for i in 0..n {
+        code.push_str(&format!("<<<A{i}\n{{$a["));
+    }
+    code.push('1');
+    for i in (0..n).rev() {
+        code.push_str(&format!("]}}\nA{i}\n"));
+    }
+    code.push(';');
+    code
 }
 
 #[test]
-fn deeply_nested_ternary_hit_depth_limit_owned() {
-    let nested = format!(
-        "<?php {};",
-        "$x ? ".repeat(75).to_string() + "1" + &" : 1".repeat(75)
-    );
-    with_large_stack(move || assert_depth_exceeded_owned(&nested));
+fn a_few_nested_heredocs_are_valid() {
+    assert_no_errors(&nested_heredocs(8));
 }
 
+/// Each nested string is re-lexed by its own sub-parser. String nesting is
+/// capped well below the general budget so that the work stays a small multiple
+/// of the input size instead of growing quadratically with the depth.
 #[test]
-fn deeply_nested_binary_ops_hit_depth_limit() {
-    // $x + ($x + ($x + ... ))
-    let nested = format!("<?php {}{};", "($x + ".repeat(75), ")".repeat(75));
-    with_large_stack(move || assert_depth_exceeded(&nested));
-}
-
-#[test]
-fn deeply_nested_binary_ops_hit_depth_limit_owned() {
-    let nested = format!("<?php {}{};", "($x + ".repeat(75), ")".repeat(75));
-    with_large_stack(move || assert_depth_exceeded_owned(&nested));
-}
-
-#[test]
-fn deeply_nested_function_calls_hit_depth_limit() {
-    // f(f(f(f(...))))
-    let nested = format!("<?php {}{};", "f(".repeat(75), ")".repeat(75));
-    with_large_stack(move || assert_depth_exceeded(&nested));
-}
-
-#[test]
-fn deeply_nested_function_calls_hit_depth_limit_owned() {
-    let nested = format!("<?php {}{};", "f(".repeat(75), ")".repeat(75));
-    with_large_stack(move || assert_depth_exceeded_owned(&nested));
-}
-
-#[test]
-fn deeply_nested_match_hit_depth_limit() {
-    // match(match(match(...) {}) {}) {}
-    let open = "match(".repeat(75);
-    let close = ") { default => 1 }".repeat(75);
-    let nested = format!("<?php {open}1{close};");
-    with_large_stack(move || assert_depth_exceeded(&nested));
-}
-
-#[test]
-fn deeply_nested_match_hit_depth_limit_owned() {
-    let open = "match(".repeat(75);
-    let close = ") { default => 1 }".repeat(75);
-    let nested = format!("<?php {open}1{close};");
-    with_large_stack(move || assert_depth_exceeded_owned(&nested));
+fn deeply_nested_heredocs_parse_in_linear_time() {
+    let small = nested_heredocs(2_000);
+    let large = nested_heredocs(16_000);
+    with_deep_stack(move || {
+        let time = |code: &str| {
+            let start = std::time::Instant::now();
+            assert_depth_exceeded(code);
+            start.elapsed()
+        };
+        time(&small); // warm-up
+        let small_time = time(&small);
+        let large_time = time(&large);
+        // 8x the input: quadratic growth would take ~64x as long.
+        assert!(
+            large_time < small_time * 24,
+            "2k levels took {small_time:?}, 16k levels took {large_time:?}"
+        );
+    });
 }
 
 // ============================================================================
@@ -200,17 +335,26 @@ fn many_sequential_statements_owned() {
 #[test]
 fn very_long_concatenation_chain() {
     // "a" . "b" . "c" . ... (flat, not nested — should not hit depth limit)
-    let parts: Vec<&str> = (0..5_000).map(|_| "\"a\"").collect();
+    let parts: Vec<&str> = (0..20_000).map(|_| "\"a\"").collect();
     let code = format!("<?php echo {};", parts.join(" . "));
     assert_no_errors(&code);
 }
 
+/// Long left-associative chains are built in a loop by the parser, so their
+/// depth is unbounded; converting them to the owned AST and dropping it must
+/// not recurse once per link. This runs on a small stack to prove it.
 #[test]
-fn very_long_concatenation_chain_owned() {
-    let parts: Vec<&str> = (0..5_000).map(|_| "\"a\"").collect();
-    let code = format!("<?php echo {};", parts.join(" . "));
-    // owned conversion recurses through a 5 000-deep binary-op tree; needs extra stack
-    with_stack(64 * 1024 * 1024, move || assert_no_errors_owned(&code));
+fn very_long_chains_owned() {
+    let concat = format!("<?php echo $a{};", " . $a".repeat(20_000));
+    let methods = format!("<?php $a{};", "->b()".repeat(20_000));
+    let mixed = format!("<?php $a{};", "->b[0]::C?->d(...)".repeat(5_000));
+    with_stack(256 * 1024, move || {
+        for code in [concat, methods, mixed] {
+            let result = php_rs_parser::parse(&code);
+            assert!(result.errors.is_empty(), "{:?}", result.errors);
+            drop(result);
+        }
+    });
 }
 
 #[test]

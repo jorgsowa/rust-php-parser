@@ -8,7 +8,22 @@ use crate::stmt;
 use crate::version::PhpVersion;
 
 const MAX_ERRORS: usize = 100;
-pub(crate) const MAX_DEPTH: u32 = 50;
+/// Maximum recursion depth shared by statements, expressions and the
+/// sub-parsers that handle string interpolation. Each nested statement,
+/// expression or variable-variable `$` consumes one unit; exceeding the budget
+/// reports [`ParseError::NestingTooDeep`] instead of overflowing the stack.
+///
+/// Sized from measured release-build frames: the costliest nesting paths
+/// (casts, arrow functions, interpolated strings) use about 2 KiB of stack per
+/// level, so the full budget fits in roughly 1 MiB and stays safe on the 2 MiB
+/// default stack of spawned threads.
+pub(crate) const MAX_NESTING_DEPTH: u32 = 512;
+
+/// Nesting units charged for entering the code inside a string interpolation.
+/// Every nested string is re-lexed by its own sub-parser, so work grows with
+/// string depth × length; charging a larger share of the budget keeps string
+/// nesting under 32 levels and so bounds that factor.
+pub(crate) const INTERPOLATION_NESTING_COST: u32 = MAX_NESTING_DEPTH / 32;
 
 fn comment_kind(kind: TokenKind) -> CommentKind {
     match kind {
@@ -61,8 +76,9 @@ pub struct Parser<'arena, 'src> {
     previous_end: u32,
     /// Block nesting depth (0 = top-level scope)
     pub depth: u32,
-    /// Expression nesting depth — guards against stack overflow on deeply nested input
-    pub(crate) expr_depth: u32,
+    /// Recursion depth shared by statements and expressions (see
+    /// [`MAX_NESTING_DEPTH`]); sub-parsers start from their parent's value.
+    pub(crate) nesting_depth: u32,
     /// Loop/switch nesting depth — tracks valid break/continue targets.
     /// Resets to 0 when crossing a function/method/closure boundary.
     pub(crate) loop_depth: u32,
@@ -132,7 +148,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             errors: Vec::new(),
             comments,
             depth: 0,
-            expr_depth: 0,
+            nesting_depth: 0,
             loop_depth: 0,
             function_depth: 0,
             in_constructor: false,
@@ -146,11 +162,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
     /// Create a parser starting in PHP mode at `offset` within `source`.
     /// Used for parsing interpolation expressions directly in the original source.
+    /// `nesting_depth` is the enclosing parser's depth, so code inside a string
+    /// shares the same budget as the code around it.
     pub fn new_at(
         arena: &'arena bumpalo::Bump,
         source: &'src str,
         offset: usize,
         version: PhpVersion,
+        nesting_depth: u32,
     ) -> Self {
         let mut comments: Vec<Comment<'src>> = Vec::new();
         let mut lexer = Lexer::new_at(source, offset);
@@ -169,7 +188,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             errors: Vec::new(),
             comments,
             depth: 0,
-            expr_depth: 0,
+            nesting_depth,
             loop_depth: 0,
             function_depth: 0,
             in_constructor: false,
@@ -416,6 +435,26 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         if self.errors.len() < MAX_ERRORS {
             self.errors.push(err);
         }
+    }
+
+    /// Enter one level of statement/expression recursion. Returns `false`, after
+    /// reporting [`ParseError::NestingTooDeep`], when the shared budget is used
+    /// up; the caller must then return without recursing and without calling
+    /// [`leave_nesting`](Self::leave_nesting).
+    #[inline]
+    pub(crate) fn enter_nesting(&mut self) -> bool {
+        if self.nesting_depth >= MAX_NESTING_DEPTH {
+            let span = self.current_span();
+            self.error(ParseError::NestingTooDeep { span });
+            return false;
+        }
+        self.nesting_depth += 1;
+        true
+    }
+
+    #[inline]
+    pub(crate) fn leave_nesting(&mut self) {
+        self.nesting_depth -= 1;
     }
 
     pub fn errors_truncated(&self) -> bool {

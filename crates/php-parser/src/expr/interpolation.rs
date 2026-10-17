@@ -1,6 +1,7 @@
 use php_ast::*;
 
 use crate::diagnostics::ParseError;
+use crate::parser::{INTERPOLATION_NESTING_COST, MAX_NESTING_DEPTH};
 use crate::version::PhpVersion;
 
 /// Parse the inner content of a double-quoted or backtick string into parts.
@@ -14,6 +15,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
     inner: &'src str,
     base_offset: u32,
     version: PhpVersion,
+    nesting_depth: u32,
     errors: &mut Vec<ParseError>,
 ) -> ArenaVec<'arena, StringPart<'arena, 'src>> {
     let mut parts = ArenaVec::with_capacity_in(8, arena);
@@ -66,6 +68,8 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                             base_offset + expr_start as u32,
                             base_offset + i as u32,
                             version,
+                            nesting_depth,
+                            errors,
                         );
                         if i < len {
                             i += 1; // skip }
@@ -331,8 +335,15 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                 // Parse the expression using a sub-parser starting at the absolute offset
                 let expr_offset = base_offset + expr_start as u32;
                 let end_offset = base_offset + expr_end as u32;
-                let expr =
-                    parse_complex_interpolation(arena, source, expr_offset, end_offset, version);
+                let expr = parse_complex_interpolation(
+                    arena,
+                    source,
+                    expr_offset,
+                    end_offset,
+                    version,
+                    nesting_depth,
+                    errors,
+                );
                 if matches!(
                     expr.kind,
                     ExprKind::ClassConstAccess(_) | ExprKind::ClassConstAccessDynamic { .. }
@@ -389,6 +400,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
 /// all source offsets remain accurate. Complex `{$expr}` interpolations are parsed
 /// with a direct sub-parser on `source`, eliminating the wrapping/reoffset overhead
 /// of the old `parse_interpolated_parts_heredoc` path.
+#[allow(clippy::too_many_arguments)]
 pub fn parse_interpolated_parts_indented<'arena, 'src>(
     arena: &'arena bumpalo::Bump,
     source: &'src str,
@@ -396,6 +408,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
     body_offset: u32,
     indent: &str,
     version: PhpVersion,
+    nesting_depth: u32,
     errors: &mut Vec<ParseError>,
 ) -> ArenaVec<'arena, StringPart<'arena, 'src>> {
     let indent_len = indent.len();
@@ -565,8 +578,15 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                 // correct absolute position — use the fast sub-parser path directly.
                 let expr_offset = body_offset + expr_start as u32;
                 let end_offset = body_offset + expr_end as u32;
-                let expr =
-                    parse_complex_interpolation(arena, source, expr_offset, end_offset, version);
+                let expr = parse_complex_interpolation(
+                    arena,
+                    source,
+                    expr_offset,
+                    end_offset,
+                    version,
+                    nesting_depth,
+                    errors,
+                );
                 if matches!(
                     expr.kind,
                     ExprKind::ClassConstAccess(_) | ExprKind::ClassConstAccessDynamic { .. }
@@ -915,11 +935,30 @@ fn parse_complex_interpolation<'arena, 'src>(
     offset: u32,
     end: u32,
     version: PhpVersion,
+    nesting_depth: u32,
+    errors: &mut Vec<ParseError>,
 ) -> Expr<'arena, 'src> {
+    let nesting_depth = nesting_depth + INTERPOLATION_NESTING_COST;
+    if nesting_depth > MAX_NESTING_DEPTH {
+        let span = Span::new(offset, end);
+        errors.push(ParseError::NestingTooDeep { span });
+        return Expr {
+            kind: ExprKind::Error,
+            span,
+        };
+    }
     // Bounding the source at `end` stops a stray backtick or quote from re-lexing the rest of the file.
     let bounded = source.get(..end as usize).unwrap_or(source);
-    let mut sub = crate::parser::Parser::new_at(arena, bounded, offset as usize, version);
+    let mut sub =
+        crate::parser::Parser::new_at(arena, bounded, offset as usize, version, nesting_depth);
     let expr = crate::expr::parse_expr(&mut sub);
+    // Other sub-parser errors are left to the enclosing string's own checks, but
+    // a blown nesting budget must surface or the cut-off subtree would pass silently.
+    errors.extend(
+        sub.into_errors()
+            .into_iter()
+            .filter(|e| matches!(e, ParseError::NestingTooDeep { .. })),
+    );
     if matches!(expr.kind, ExprKind::Error) {
         Expr {
             kind: ExprKind::Error,

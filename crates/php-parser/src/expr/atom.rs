@@ -35,6 +35,22 @@ pub(crate) enum ArgListResult<'arena, 'src> {
     CallableMarker,
 }
 
+/// [`parse_atom`] for the operand of a variable-variable `$`, which recurses
+/// without passing through `parse_expr_bp` and so takes its own nesting unit.
+pub(super) fn parse_atom_nested<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+) -> Expr<'arena, 'src> {
+    if !parser.enter_nesting() {
+        return Expr {
+            kind: ExprKind::Error,
+            span: parser.current_span(),
+        };
+    }
+    let expr = parse_atom(parser);
+    parser.leave_nesting();
+    expr
+}
+
 /// Parse an atomic expression (prefix unaries, literals, variables, etc.)
 pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
     instrument::record_parse_atom();
@@ -363,6 +379,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     inner,
                     inner_offset,
                     parser.version,
+                    parser.nesting_depth,
                     parser.errors_mut(),
                 );
                 Expr {
@@ -387,6 +404,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     inner,
                     inner_offset,
                     parser.version,
+                    parser.nesting_depth,
                     parser.errors_mut(),
                 );
                 // Collapse single literal part into String, or use InterpolatedString
@@ -440,6 +458,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     inner,
                     inner_offset,
                     parser.version,
+                    parser.nesting_depth,
                     parser.errors_mut(),
                 );
                 Expr {
@@ -466,6 +485,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     inner,
                     inner_offset,
                     parser.version,
+                    parser.nesting_depth,
                     parser.errors_mut(),
                 );
                 Expr {
@@ -497,6 +517,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                         body_offset,
                         &indent,
                         parser.version,
+                        parser.nesting_depth,
                         parser.errors_mut(),
                     );
                     Expr {
@@ -511,6 +532,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                         raw_body,
                         body_offset,
                         parser.version,
+                        parser.nesting_depth,
                         parser.errors_mut(),
                     );
                     Expr {
@@ -609,7 +631,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 expr
             } else {
                 // $$var or $$$var — parse_atom handles recursion
-                parse_atom(parser)
+                parse_atom_nested(parser)
             };
             let span = Span::new(token.span.start, parser.previous_end());
             Expr {
@@ -1385,7 +1407,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
                 parser.expect(TokenKind::RightBrace);
                 expr
             } else {
-                parse_atom(parser)
+                parse_atom_nested(parser)
             };
             let span = Span::new(token.span.start, parser.previous_end());
             Expr {

@@ -3,7 +3,7 @@ use php_lexer::TokenKind;
 
 use crate::diagnostics::ParseError;
 use crate::instrument;
-use crate::parser::{Parser, MAX_DEPTH};
+use crate::parser::Parser;
 use crate::precedence::{
     self, ASSIGNMENT_BP, MEMBER_ACCESS_BP, NULL_COALESCE_LEFT_BP, SCOPE_RESOLUTION_BP, TERNARY_BP,
 };
@@ -315,17 +315,10 @@ pub fn parse_expr_bp<'arena, 'src>(
     if min_bp != 0 {
         instrument::record_parse_expr_bp_recursive();
     }
-    parser.expr_depth += 1;
-    if parser.expr_depth > MAX_DEPTH {
-        parser.expr_depth -= 1;
-        let span = parser.current_span();
-        parser.error(ParseError::Forbidden {
-            message: "maximum expression nesting depth exceeded".into(),
-            span,
-        });
+    if !parser.enter_nesting() {
         return Expr {
             kind: ExprKind::Error,
-            span,
+            span: parser.current_span(),
         };
     }
     let mut lhs = parse_atom(parser);
@@ -608,7 +601,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                 }
             } else if parser.check(TokenKind::Dollar) {
                 // Dynamic static property: A::$$b, A::${'b'}
-                let member = parse_atom(parser);
+                let member = atom::parse_atom_nested(parser);
                 let span = Span::new(lhs.span.start, member.span.end);
                 lhs = Expr {
                     kind: ExprKind::StaticPropertyAccessDynamic {
@@ -889,7 +882,7 @@ pub fn parse_expr_bp<'arena, 'src>(
         break;
     }
 
-    parser.expr_depth -= 1;
+    parser.leave_nesting();
     lhs
 }
 
@@ -933,7 +926,7 @@ pub(crate) fn parse_member_name<'arena, 'src>(
                 parser.expect(TokenKind::RightBrace);
                 e
             } else {
-                parse_atom(parser)
+                atom::parse_atom_nested(parser)
             };
             let span = Span::new(start, parser.previous_end());
             Expr {

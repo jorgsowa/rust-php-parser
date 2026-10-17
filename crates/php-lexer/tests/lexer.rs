@@ -490,6 +490,56 @@ mod strings_and_variables {
 // Pathological input
 // =============================================================================
 
+#[test]
+fn nested_strings_in_interpolation_lex_as_one_token() {
+    let code = r#""a {$x["b {$y['c']} {$z["{$w}"]}"]} d";"#;
+    assert_eq!(
+        php_kinds(code),
+        vec![TokenKind::DoubleQuotedString, TokenKind::Semicolon]
+    );
+    // An escaped quote inside a nested string does not end it early.
+    assert_eq!(
+        php_kinds(r#""{$x["\"}"]}";"#),
+        vec![TokenKind::DoubleQuotedString, TokenKind::Semicolon]
+    );
+}
+
+/// Skipping `{$...}` used to recurse once per nested string, so attacker-chosen
+/// nesting overflowed the stack. It runs on a deliberately small stack here.
+#[test]
+fn deeply_nested_strings_in_interpolation_do_not_overflow() {
+    let depth = 200_000;
+    let closed = format!("<?php {}x{};", "\"{$a[".repeat(depth), "]}\"".repeat(depth));
+    let unclosed = format!("<?php {}x", "\"{$a[".repeat(depth));
+    std::thread::Builder::new()
+        .stack_size(64 * 1024)
+        .spawn(move || {
+            let (tokens, errors) = php_lexer::lex_all(&closed);
+            let kinds: Vec<_> = tokens.iter().map(|t| t.kind).collect();
+            assert_eq!(
+                kinds,
+                [
+                    TokenKind::OpenTag,
+                    TokenKind::DoubleQuotedString,
+                    TokenKind::Semicolon,
+                    TokenKind::Eof,
+                    TokenKind::Eof
+                ]
+            );
+            assert!(errors.is_empty());
+
+            let (_, errors) = php_lexer::lex_all(&unclosed);
+            assert_eq!(errors.len(), 1);
+            assert_eq!(
+                errors[0].kind,
+                php_lexer::LexerErrorKind::UnterminatedString
+            );
+        })
+        .unwrap()
+        .join()
+        .unwrap();
+}
+
 /// A source whose offsets do not fit the `u32` spans must be refused in every
 /// build profile; release builds used to wrap the offsets instead.
 #[test]

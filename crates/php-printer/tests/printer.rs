@@ -328,3 +328,118 @@ fn pretty_print_file() {
     let output = php_printer::pretty_print_file(&result.program);
     assert_eq!(output, "<?php\necho 'hello';\n");
 }
+
+// ============================================================================
+// Deep and long input
+// ============================================================================
+
+fn on_stack<F: FnOnce() + Send + 'static>(bytes: usize, f: F) {
+    std::thread::Builder::new()
+        .stack_size(bytes)
+        .spawn(f)
+        .unwrap()
+        .join()
+        .unwrap();
+}
+
+/// Print `code` through both the arena and the owned API and check that the
+/// output is complete, parses cleanly and is stable when printed again.
+fn assert_round_trips(code: &str) {
+    let arena = bumpalo::Bump::new();
+    let parsed = php_rs_parser::parse_arena(&arena, code);
+    assert!(parsed.errors.is_empty(), "{:?}", parsed.errors);
+    let printed = php_printer::pretty_print(&parsed.program);
+    assert!(!printed.contains("max depth"), "printer truncated the tree");
+
+    let owned = php_rs_parser::parse(code);
+    assert_eq!(php_printer::pretty_print_owned(&owned.program), printed);
+
+    let reparsed = php_rs_parser::parse_arena(&arena, &printed);
+    assert!(reparsed.errors.is_empty(), "{:?}", reparsed.errors);
+    assert_eq!(php_printer::pretty_print(&reparsed.program), printed);
+}
+
+/// A 300-term concatenation used to cross the printer's 256-level limit and
+/// come out as `/* max depth */`, which is not valid PHP.
+#[test]
+fn long_chains_print_in_full() {
+    on_stack(1024 * 1024, || {
+        for code in [
+            format!("<?php echo $a{};", " . $a".repeat(300)),
+            format!("<?php echo $a{};", " . $a".repeat(20_000)),
+            format!("<?php $a{};", "->b()".repeat(20_000)),
+            format!("<?php $a{};", "?->b[0]::C->d(...)".repeat(2_000)),
+        ] {
+            assert_round_trips(&code);
+        }
+        // Printed as `(($a ?: $b) ?: $b) ?: …`, which would re-parse as
+        // nesting rather than a chain, so only the first print is checked.
+        let code = format!("<?php $a{};", " ?: $b".repeat(5_000));
+        let arena = bumpalo::Bump::new();
+        let parsed = php_rs_parser::parse_arena(&arena, &code);
+        let printed = php_printer::pretty_print(&parsed.program);
+        assert!(printed.ends_with(") ?: $b;") && !printed.contains("max depth"));
+    });
+}
+
+/// The printer's limit sits above anything the parser accepts.
+#[test]
+fn maximally_nested_input_prints_in_full() {
+    // Unoptimised builds need far more stack per level than release builds.
+    on_stack(256 * 1024 * 1024, || {
+        for code in [
+            format!("<?php {}{}", "if ($a) {".repeat(500), "}".repeat(500)),
+            format!("<?php {}1{};", "[".repeat(500), "]".repeat(500)),
+            format!(
+                "<?php {}1{};",
+                "function () { return ".repeat(250),
+                "; }".repeat(250)
+            ),
+        ] {
+            assert_round_trips(&code);
+        }
+    });
+}
+
+/// Chain links are printed iteratively, so the parentheses each link needs
+/// must still open and close in the right places.
+#[test]
+fn chain_operands_get_parentheses_from_precedence() {
+    use php_ast::ast::BinaryOp;
+    use php_ast::owned::*;
+    use php_ast::Span;
+
+    let expr = |kind| Expr {
+        kind,
+        span: Span::DUMMY,
+    };
+    let var = |name: &str| expr(ExprKind::Variable(name.into()));
+    let binary = |left, op, right| {
+        expr(ExprKind::Binary(BinaryExpr {
+            left: Box::new(left),
+            op,
+            right: Box::new(right),
+        }))
+    };
+    // (($a + $b) * $c)->m() with no Parenthesized nodes: every chain link
+    // binds looser than its parent and needs parentheses supplied.
+    let sum = binary(var("a"), BinaryOp::Add, var("b"));
+    let product = binary(sum, BinaryOp::Mul, var("c"));
+    let call = expr(ExprKind::MethodCall(Box::new(MethodCallExpr {
+        object: Box::new(product),
+        method: Box::new(expr(ExprKind::Identifier("m".into()))),
+        args: Box::new([]),
+    })));
+    let program = Program {
+        stmts: Box::new([Stmt {
+            kind: StmtKind::Expression(Box::new(call)),
+            span: Span::DUMMY,
+            doc_comment: None,
+        }]),
+        span: Span::DUMMY,
+    };
+    assert_eq!(
+        php_printer::pretty_print_owned(&program),
+        "<?php\n(($a + $b) * $c)->m();"
+    );
+}

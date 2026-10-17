@@ -128,11 +128,43 @@ fn is_ident_continue(b: u8) -> bool {
 /// heredocs, where the expression body may itself contain nested strings.
 /// Returns the byte index immediately after the matching `}`; on EOF returns
 /// `bytes.len()` so the caller's unterminated-string branch fires.
+///
+/// Nested strings and interpolations (`"{$a["{$b}"]}"`) are tracked with an
+/// explicit stack rather than recursion, because their depth is controlled by
+/// the input and would otherwise overflow the native stack.
 fn skip_complex_interp(bytes: &[u8], mut p: usize) -> usize {
     debug_assert!(bytes.get(p) == Some(&b'{'));
+    // Interpolations and double-quoted strings strictly alternate, so the state
+    // is the innermost frame plus the brace depths of the suspended
+    // interpolations, one per enclosing nested string.
+    let mut in_dquote = false;
     let mut depth = 0i32;
+    let mut suspended: Vec<i32> = Vec::new();
     while p < bytes.len() {
         match bytes[p] {
+            b'\\' => {
+                p += 1;
+                if p < bytes.len() {
+                    p += 1;
+                }
+            }
+            b'"' if in_dquote => {
+                p += 1;
+                depth = suspended
+                    .pop()
+                    .expect("a nested string is entered from an interpolation");
+                in_dquote = false;
+            }
+            b'{' if in_dquote => {
+                if bytes.get(p + 1) == Some(&b'$') {
+                    // Re-scanned below as the opening brace of the new interpolation.
+                    in_dquote = false;
+                    depth = 0;
+                } else {
+                    p += 1;
+                }
+            }
+            _ if in_dquote => p += 1,
             b'{' => {
                 depth += 1;
                 p += 1;
@@ -141,36 +173,18 @@ fn skip_complex_interp(bytes: &[u8], mut p: usize) -> usize {
                 depth -= 1;
                 p += 1;
                 if depth == 0 {
-                    return p;
+                    if suspended.is_empty() {
+                        return p;
+                    }
+                    in_dquote = true;
                 }
             }
-            b'\\' => {
+            b'"' => {
+                suspended.push(depth);
+                in_dquote = true;
                 p += 1;
-                if p < bytes.len() {
-                    p += 1;
-                }
             }
-            b'"' => p = skip_nested_dquoted(bytes, p),
             b'\'' => p = skip_nested_squoted(bytes, p),
-            _ => p += 1,
-        }
-    }
-    p
-}
-
-fn skip_nested_dquoted(bytes: &[u8], mut p: usize) -> usize {
-    debug_assert!(bytes.get(p) == Some(&b'"'));
-    p += 1;
-    while p < bytes.len() {
-        match bytes[p] {
-            b'\\' => {
-                p += 1;
-                if p < bytes.len() {
-                    p += 1;
-                }
-            }
-            b'"' => return p + 1,
-            b'{' if bytes.get(p + 1) == Some(&b'$') => p = skip_complex_interp(bytes, p),
             _ => p += 1,
         }
     }

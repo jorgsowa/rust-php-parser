@@ -102,6 +102,15 @@ pub enum ParseError {
         span: Span,
     },
 
+    /// Statements, expressions or string interpolations are nested deeper than
+    /// the parser's recursion budget. The innermost construct is replaced by an
+    /// error node so that parsing stays within a bounded stack.
+    #[error("maximum nesting depth exceeded")]
+    NestingTooDeep {
+        /// Source range of the error.
+        span: Span,
+    },
+
     /// The source is larger than 4 GiB, so byte offsets no longer fit in a
     /// [`Span`]. Nothing is parsed and the program is empty.
     #[error("source is {len} bytes; the maximum is 4 GiB")]
@@ -141,6 +150,7 @@ impl ParseError {
             | ParseError::UnclosedDelimiter { span, .. }
             | ParseError::Forbidden { span, .. }
             | ParseError::ForbiddenWarning { span, .. }
+            | ParseError::NestingTooDeep { span }
             | ParseError::SourceTooLarge { span, .. }
             | ParseError::VersionTooLow { span, .. } => *span,
         }

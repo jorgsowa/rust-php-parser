@@ -18,11 +18,17 @@ pub use class::{parse_class_members, parse_name_list};
 /// # Stack depth
 ///
 /// This is a recursive-descent parser: every nested block, `if`/`while`/`for` body, and similar
-/// construct recurses through `parse_stmt`. Rust does not grow the stack automatically, so callers
-/// running the parser on a thread with a very small stack (e.g. a custom rayon pool) and
-/// pathologically deep input may observe a stack overflow. Use
-/// [`std::thread::Builder::stack_size`] to set a larger stack when needed.
+/// construct recurses through `parse_stmt`. Each statement takes one unit of the nesting budget
+/// shared with expressions, so pathologically deep input yields
+/// [`ParseError::NestingTooDeep`] rather than a stack overflow.
 pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
+    if !parser.enter_nesting() {
+        return Stmt {
+            kind: StmtKind::Error,
+            span: parser.current_span(),
+            doc_comment: None,
+        };
+    }
     // Snapshot the values we need for doc-comment attachment *before* the
     // inner parse, because parsing the statement body updates them:
     //
@@ -63,6 +69,7 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
         .take_doc_comment_from(doc_start, scope_open_at.max(stmt_open_at))
         .map(|c| parser.alloc(c));
     parser.mark_stmt_end(stmt.span.end);
+    parser.leave_nesting();
     stmt
 }
 

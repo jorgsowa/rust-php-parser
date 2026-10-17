@@ -54,7 +54,10 @@ const SPACES: [&str; 17] = [
     "                ",
 ];
 
-pub(crate) const MAX_DEPTH: usize = 256;
+/// Recursion guard for hand-built or folded trees. Chains (`$a . $b . …`,
+/// `$x->a()->b()…`) are printed without recursing per link, so a tree from the
+/// parser, whose nesting budget is 512 levels, stays far below this.
+pub(crate) const MAX_DEPTH: usize = 2048;
 
 pub(crate) struct Printer<'src> {
     output: String,

@@ -695,6 +695,153 @@ pub enum ExprKind {
     Error,
 }
 
+// ---------------------------------------------------------------------------
+// Expression chains
+//
+// The parser builds left-associative operator chains and postfix chains
+// (`$a . $b . …`, `$x->a()->b()…`, `$a[0][1]…`) in a loop rather than by
+// recursion, so their length is limited only by the input. Converting or
+// dropping such a chain one recursive call per link would overflow the stack,
+// so these helpers expose the operand each link continues from and the
+// conversions and `Drop` walk it iteratively. The three functions must list
+// the same variants and fields.
+// ---------------------------------------------------------------------------
+
+impl Drop for Expr {
+    fn drop(&mut self) {
+        let Some(operand) = owned_chain_operand_mut(&mut self.kind) else {
+            return;
+        };
+        // A single link drops fine recursively, and most chains are that short.
+        if owned_chain_operand(&operand.kind).is_none() {
+            return;
+        }
+        // Detach each operand's kind before the node holding it is dropped, so
+        // every drop below only sees a shallow `Error` in the chain position.
+        let mut kind = std::mem::replace(&mut operand.kind, ExprKind::Error);
+        while let Some(operand) = owned_chain_operand_mut(&mut kind) {
+            let next = std::mem::replace(&mut operand.kind, ExprKind::Error);
+            kind = next;
+        }
+    }
+}
+
+/// A stack of chain links that only allocates for chains longer than its
+/// inline capacity; almost every chain in real code fits.
+struct LinkStack<T: Copy> {
+    inline: [Option<T>; 8],
+    len: usize,
+    spilled: Vec<T>,
+}
+
+impl<T: Copy> LinkStack<T> {
+    fn new() -> Self {
+        Self {
+            inline: [None; 8],
+            len: 0,
+            spilled: Vec::new(),
+        }
+    }
+
+    fn push(&mut self, link: T) {
+        if self.len < self.inline.len() {
+            self.inline[self.len] = Some(link);
+            self.len += 1;
+        } else {
+            self.spilled.push(link);
+        }
+    }
+
+    fn pop(&mut self) -> Option<T> {
+        if let Some(link) = self.spilled.pop() {
+            return Some(link);
+        }
+        self.len = self.len.checked_sub(1)?;
+        self.inline[self.len]
+    }
+}
+
+fn arena_chain_operand<'a, 'arena, 'src>(
+    k: &'a arena_ast::ExprKind<'arena, 'src>,
+) -> Option<&'a arena_ast::Expr<'arena, 'src>> {
+    use arena_ast::{CallableCreateKind as C, ExprKind as K};
+    match k {
+        K::Assign(a) => Some(a.target),
+        K::Binary(b) => Some(b.left),
+        K::UnaryPostfix(u) => Some(u.operand),
+        K::Ternary(t) => Some(t.condition),
+        K::NullCoalesce(n) => Some(n.left),
+        K::FunctionCall(f) => Some(f.name),
+        K::ArrayAccess(a) => Some(a.array),
+        K::PropertyAccess(p) | K::NullsafePropertyAccess(p) => Some(p.object),
+        K::MethodCall(m) | K::NullsafeMethodCall(m) => Some(m.object),
+        K::StaticPropertyAccess(s) | K::ClassConstAccess(s) => Some(s.class),
+        K::StaticMethodCall(s) => Some(s.class),
+        K::StaticDynMethodCall(s) => Some(s.class),
+        K::ClassConstAccessDynamic { class, .. } | K::StaticPropertyAccessDynamic { class, .. } => {
+            Some(class)
+        }
+        K::CallableCreate(c) => Some(match &c.kind {
+            C::Function(e) => e,
+            C::Method { object, .. } | C::NullsafeMethod { object, .. } => object,
+            C::StaticMethod { class, .. } => class,
+        }),
+        _ => None,
+    }
+}
+
+fn owned_chain_operand(k: &ExprKind) -> Option<&Expr> {
+    use CallableCreateKind as C;
+    match k {
+        ExprKind::Assign(a) => Some(&a.target),
+        ExprKind::Binary(b) => Some(&b.left),
+        ExprKind::UnaryPostfix(u) => Some(&u.operand),
+        ExprKind::Ternary(t) => Some(&t.condition),
+        ExprKind::NullCoalesce(n) => Some(&n.left),
+        ExprKind::FunctionCall(f) => Some(&f.name),
+        ExprKind::ArrayAccess(a) => Some(&a.array),
+        ExprKind::PropertyAccess(p) | ExprKind::NullsafePropertyAccess(p) => Some(&p.object),
+        ExprKind::MethodCall(m) | ExprKind::NullsafeMethodCall(m) => Some(&m.object),
+        ExprKind::StaticPropertyAccess(s) | ExprKind::ClassConstAccess(s) => Some(&s.class),
+        ExprKind::StaticMethodCall(s) => Some(&s.class),
+        ExprKind::StaticDynMethodCall(s) => Some(&s.class),
+        ExprKind::ClassConstAccessDynamic { class, .. }
+        | ExprKind::StaticPropertyAccessDynamic { class, .. } => Some(class),
+        ExprKind::CallableCreate(c) => Some(match &c.kind {
+            C::Function(e) => e,
+            C::Method { object, .. } | C::NullsafeMethod { object, .. } => object,
+            C::StaticMethod { class, .. } => class,
+        }),
+        _ => None,
+    }
+}
+
+fn owned_chain_operand_mut(k: &mut ExprKind) -> Option<&mut Expr> {
+    use CallableCreateKind as C;
+    match k {
+        ExprKind::Assign(a) => Some(&mut a.target),
+        ExprKind::Binary(b) => Some(&mut b.left),
+        ExprKind::UnaryPostfix(u) => Some(&mut u.operand),
+        ExprKind::Ternary(t) => Some(&mut t.condition),
+        ExprKind::NullCoalesce(n) => Some(&mut n.left),
+        ExprKind::FunctionCall(f) => Some(&mut f.name),
+        ExprKind::ArrayAccess(a) => Some(&mut a.array),
+        ExprKind::PropertyAccess(p) | ExprKind::NullsafePropertyAccess(p) => Some(&mut p.object),
+        ExprKind::MethodCall(m) | ExprKind::NullsafeMethodCall(m) => Some(&mut m.object),
+        ExprKind::StaticPropertyAccess(s) | ExprKind::ClassConstAccess(s) => Some(&mut s.class),
+        ExprKind::StaticMethodCall(s) => Some(&mut s.class),
+        ExprKind::StaticDynMethodCall(s) => Some(&mut s.class),
+        ExprKind::ClassConstAccessDynamic { class, .. }
+        | ExprKind::StaticPropertyAccessDynamic { class, .. } => Some(class),
+        ExprKind::CallableCreate(c) => Some(match &mut c.kind {
+            C::Function(e) => e,
+            C::Method { object, .. } | C::NullsafeMethod { object, .. } => object,
+            C::StaticMethod { class, .. } => class,
+        }),
+        _ => None,
+    }
+}
+
 /// An assignment.
 #[derive(Debug, Clone, Serialize)]
 pub struct AssignExpr {
@@ -1474,10 +1621,39 @@ pub fn to_owned_type_hint(hint: &arena_ast::TypeHint<'_, '_>) -> TypeHint {
 }
 
 fn owned_expr(expr: &arena_ast::Expr<'_, '_>) -> Expr {
-    Expr {
-        kind: owned_expr_kind(&expr.kind),
-        span: expr.span,
+    let Some(first) = arena_chain_operand(&expr.kind) else {
+        return Expr {
+            kind: owned_expr_kind(&expr.kind, &mut None),
+            span: expr.span,
+        };
+    };
+    // Chains are converted bottom-up from an explicit stack: their length is
+    // set by the input, so recursing once per link could overflow the stack.
+    let mut chain = LinkStack::new();
+    chain.push(expr);
+    let mut leaf = first;
+    while let Some(operand) = arena_chain_operand(&leaf.kind) {
+        chain.push(leaf);
+        leaf = operand;
     }
+    let mut converted = Expr {
+        kind: owned_expr_kind(&leaf.kind, &mut None),
+        span: leaf.span,
+    };
+    while let Some(node) = chain.pop() {
+        let mut operand = Some(converted);
+        converted = Expr {
+            kind: owned_expr_kind(&node.kind, &mut operand),
+            span: node.span,
+        };
+        debug_assert!(operand.is_none(), "chain operand left unused");
+    }
+    converted
+}
+
+/// The pre-converted chain operand if there is one, else `expr` converted.
+fn owned_chain(operand: &mut Option<Expr>, expr: &arena_ast::Expr<'_, '_>) -> Expr {
+    operand.take().unwrap_or_else(|| owned_expr(expr))
 }
 
 fn owned_exprs(exprs: &[arena_ast::Expr<'_, '_>]) -> Box<[Expr]> {
@@ -1488,7 +1664,9 @@ fn owned_exprs(exprs: &[arena_ast::Expr<'_, '_>]) -> Box<[Expr]> {
         .into_boxed_slice()
 }
 
-fn owned_expr_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
+/// `operand` holds the already-converted chain operand when `k` is a chain node
+/// (see [`arena_chain_operand`]).
+fn owned_expr_kind(k: &arena_ast::ExprKind<'_, '_>, operand: &mut Option<Expr>) -> ExprKind {
     match k {
         arena_ast::ExprKind::Int(v) => ExprKind::Int(*v),
         arena_ast::ExprKind::Float(v) => ExprKind::Float(*v),
@@ -1513,13 +1691,13 @@ fn owned_expr_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
         }
         arena_ast::ExprKind::Identifier(s) => ExprKind::Identifier(s.as_str().into()),
         arena_ast::ExprKind::Assign(a) => ExprKind::Assign(AssignExpr {
-            target: Box::new(owned_expr(a.target)),
+            target: Box::new(owned_chain(operand, a.target)),
             op: a.op,
             value: Box::new(owned_expr(a.value)),
             by_ref: a.by_ref,
         }),
         arena_ast::ExprKind::Binary(b) => ExprKind::Binary(BinaryExpr {
-            left: Box::new(owned_expr(b.left)),
+            left: Box::new(owned_chain(operand, b.left)),
             op: b.op,
             right: Box::new(owned_expr(b.right)),
         }),
@@ -1528,20 +1706,20 @@ fn owned_expr_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
             operand: Box::new(owned_expr(u.operand)),
         }),
         arena_ast::ExprKind::UnaryPostfix(u) => ExprKind::UnaryPostfix(UnaryPostfixExpr {
-            operand: Box::new(owned_expr(u.operand)),
+            operand: Box::new(owned_chain(operand, u.operand)),
             op: u.op,
         }),
         arena_ast::ExprKind::Ternary(t) => ExprKind::Ternary(TernaryExpr {
-            condition: Box::new(owned_expr(t.condition)),
+            condition: Box::new(owned_chain(operand, t.condition)),
             then_expr: t.then_expr.map(|e| Box::new(owned_expr(e))),
             else_expr: Box::new(owned_expr(t.else_expr)),
         }),
         arena_ast::ExprKind::NullCoalesce(n) => ExprKind::NullCoalesce(NullCoalesceExpr {
-            left: Box::new(owned_expr(n.left)),
+            left: Box::new(owned_chain(operand, n.left)),
             right: Box::new(owned_expr(n.right)),
         }),
         arena_ast::ExprKind::FunctionCall(f) => ExprKind::FunctionCall(FunctionCallExpr {
-            name: Box::new(owned_expr(f.name)),
+            name: Box::new(owned_chain(operand, f.name)),
             args: owned_args(&f.args),
         }),
         arena_ast::ExprKind::Array(elems) => ExprKind::Array(
@@ -1558,7 +1736,7 @@ fn owned_expr_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
                 .into_boxed_slice(),
         ),
         arena_ast::ExprKind::ArrayAccess(a) => ExprKind::ArrayAccess(ArrayAccessExpr {
-            array: Box::new(owned_expr(a.array)),
+            array: Box::new(owned_chain(operand, a.array)),
             index: a.index.map(|e| Box::new(owned_expr(e))),
         }),
         arena_ast::ExprKind::Print(e) => ExprKind::Print(Box::new(owned_expr(e))),
@@ -1580,60 +1758,60 @@ fn owned_expr_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
             args: owned_args(&n.args),
         }),
         arena_ast::ExprKind::PropertyAccess(p) => ExprKind::PropertyAccess(PropertyAccessExpr {
-            object: Box::new(owned_expr(p.object)),
+            object: Box::new(owned_chain(operand, p.object)),
             property: Box::new(owned_expr(p.property)),
         }),
         arena_ast::ExprKind::NullsafePropertyAccess(p) => {
             ExprKind::NullsafePropertyAccess(PropertyAccessExpr {
-                object: Box::new(owned_expr(p.object)),
+                object: Box::new(owned_chain(operand, p.object)),
                 property: Box::new(owned_expr(p.property)),
             })
         }
         arena_ast::ExprKind::MethodCall(m) => ExprKind::MethodCall(Box::new(MethodCallExpr {
-            object: Box::new(owned_expr(m.object)),
+            object: Box::new(owned_chain(operand, m.object)),
             method: Box::new(owned_expr(m.method)),
             args: owned_args(&m.args),
         })),
         arena_ast::ExprKind::NullsafeMethodCall(m) => {
             ExprKind::NullsafeMethodCall(Box::new(MethodCallExpr {
-                object: Box::new(owned_expr(m.object)),
+                object: Box::new(owned_chain(operand, m.object)),
                 method: Box::new(owned_expr(m.method)),
                 args: owned_args(&m.args),
             }))
         }
         arena_ast::ExprKind::StaticPropertyAccess(s) => {
             ExprKind::StaticPropertyAccess(StaticAccessExpr {
-                class: Box::new(owned_expr(s.class)),
+                class: Box::new(owned_chain(operand, s.class)),
                 member: Box::new(owned_expr(s.member)),
             })
         }
         arena_ast::ExprKind::StaticMethodCall(s) => {
             ExprKind::StaticMethodCall(Box::new(StaticMethodCallExpr {
-                class: Box::new(owned_expr(s.class)),
+                class: Box::new(owned_chain(operand, s.class)),
                 method: Box::new(owned_expr(s.method)),
                 args: owned_args(&s.args),
             }))
         }
         arena_ast::ExprKind::StaticDynMethodCall(s) => {
             ExprKind::StaticDynMethodCall(Box::new(StaticDynMethodCallExpr {
-                class: Box::new(owned_expr(s.class)),
+                class: Box::new(owned_chain(operand, s.class)),
                 method: Box::new(owned_expr(s.method)),
                 args: owned_args(&s.args),
             }))
         }
         arena_ast::ExprKind::ClassConstAccess(s) => ExprKind::ClassConstAccess(StaticAccessExpr {
-            class: Box::new(owned_expr(s.class)),
+            class: Box::new(owned_chain(operand, s.class)),
             member: Box::new(owned_expr(s.member)),
         }),
         arena_ast::ExprKind::ClassConstAccessDynamic { class, member } => {
             ExprKind::ClassConstAccessDynamic {
-                class: Box::new(owned_expr(class)),
+                class: Box::new(owned_chain(operand, class)),
                 member: Box::new(owned_expr(member)),
             }
         }
         arena_ast::ExprKind::StaticPropertyAccessDynamic { class, member } => {
             ExprKind::StaticPropertyAccessDynamic {
-                class: Box::new(owned_expr(class)),
+                class: Box::new(owned_chain(operand, class)),
                 member: Box::new(owned_expr(member)),
             }
         }
@@ -1691,23 +1869,23 @@ fn owned_expr_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
         arena_ast::ExprKind::CallableCreate(c) => ExprKind::CallableCreate(CallableCreateExpr {
             kind: match &c.kind {
                 arena_ast::CallableCreateKind::Function(e) => {
-                    CallableCreateKind::Function(Box::new(owned_expr(e)))
+                    CallableCreateKind::Function(Box::new(owned_chain(operand, e)))
                 }
                 arena_ast::CallableCreateKind::Method { object, method } => {
                     CallableCreateKind::Method {
-                        object: Box::new(owned_expr(object)),
+                        object: Box::new(owned_chain(operand, object)),
                         method: Box::new(owned_expr(method)),
                     }
                 }
                 arena_ast::CallableCreateKind::NullsafeMethod { object, method } => {
                     CallableCreateKind::NullsafeMethod {
-                        object: Box::new(owned_expr(object)),
+                        object: Box::new(owned_chain(operand, object)),
                         method: Box::new(owned_expr(method)),
                     }
                 }
                 arena_ast::CallableCreateKind::StaticMethod { class, method } => {
                     CallableCreateKind::StaticMethod {
-                        class: Box::new(owned_expr(class)),
+                        class: Box::new(owned_chain(operand, class)),
                         method: Box::new(owned_expr(method)),
                     }
                 }
@@ -2358,10 +2536,42 @@ fn av_string_parts<'a>(
 }
 
 fn av_expr<'a>(arena: &'a bumpalo::Bump, expr: &Expr) -> arena_ast::Expr<'a, 'a> {
-    arena_ast::Expr {
-        kind: av_expr_kind(arena, &expr.kind),
-        span: expr.span,
+    let Some(first) = owned_chain_operand(&expr.kind) else {
+        return arena_ast::Expr {
+            kind: av_expr_kind(arena, &expr.kind, &mut None),
+            span: expr.span,
+        };
+    };
+    // Bottom-up over an explicit stack, as in `owned_expr`.
+    let mut chain = LinkStack::new();
+    chain.push(expr);
+    let mut leaf = first;
+    while let Some(operand) = owned_chain_operand(&leaf.kind) {
+        chain.push(leaf);
+        leaf = operand;
     }
+    let mut converted = arena_ast::Expr {
+        kind: av_expr_kind(arena, &leaf.kind, &mut None),
+        span: leaf.span,
+    };
+    while let Some(node) = chain.pop() {
+        let mut operand = Some(converted);
+        converted = arena_ast::Expr {
+            kind: av_expr_kind(arena, &node.kind, &mut operand),
+            span: node.span,
+        };
+        debug_assert!(operand.is_none(), "chain operand left unused");
+    }
+    converted
+}
+
+/// The pre-converted chain operand if there is one, else `expr` converted.
+fn av_chain<'a>(
+    arena: &'a bumpalo::Bump,
+    operand: &mut Option<arena_ast::Expr<'a, 'a>>,
+    expr: &Expr,
+) -> arena_ast::Expr<'a, 'a> {
+    operand.take().unwrap_or_else(|| av_expr(arena, expr))
 }
 
 fn av_exprs<'a>(
@@ -2379,7 +2589,13 @@ fn av_namestr<'a>(arena: &'a bumpalo::Bump, s: &str) -> arena_ast::NameStr<'a, '
     arena_ast::NameStr::__arena(arena.alloc_str(s))
 }
 
-fn av_expr_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKind<'a, 'a> {
+/// `operand` holds the already-converted chain operand when `k` is a chain node
+/// (see [`owned_chain_operand`]).
+fn av_expr_kind<'a>(
+    arena: &'a bumpalo::Bump,
+    k: &ExprKind,
+    operand: &mut Option<arena_ast::Expr<'a, 'a>>,
+) -> arena_ast::ExprKind<'a, 'a> {
     match k {
         ExprKind::Int(v) => arena_ast::ExprKind::Int(*v),
         ExprKind::Float(v) => arena_ast::ExprKind::Float(*v),
@@ -2404,13 +2620,13 @@ fn av_expr_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
         }
         ExprKind::Identifier(s) => arena_ast::ExprKind::Identifier(av_namestr(arena, s)),
         ExprKind::Assign(a) => arena_ast::ExprKind::Assign(arena_ast::AssignExpr {
-            target: arena.alloc(av_expr(arena, &a.target)),
+            target: arena.alloc(av_chain(arena, operand, &a.target)),
             op: a.op,
             value: arena.alloc(av_expr(arena, &a.value)),
             by_ref: a.by_ref,
         }),
         ExprKind::Binary(b) => arena_ast::ExprKind::Binary(arena_ast::BinaryExpr {
-            left: arena.alloc(av_expr(arena, &b.left)),
+            left: arena.alloc(av_chain(arena, operand, &b.left)),
             op: b.op,
             right: arena.alloc(av_expr(arena, &b.right)),
         }),
@@ -2420,12 +2636,12 @@ fn av_expr_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
         }),
         ExprKind::UnaryPostfix(u) => {
             arena_ast::ExprKind::UnaryPostfix(arena_ast::UnaryPostfixExpr {
-                operand: arena.alloc(av_expr(arena, &u.operand)),
+                operand: arena.alloc(av_chain(arena, operand, &u.operand)),
                 op: u.op,
             })
         }
         ExprKind::Ternary(t) => arena_ast::ExprKind::Ternary(arena_ast::TernaryExpr {
-            condition: arena.alloc(av_expr(arena, &t.condition)),
+            condition: arena.alloc(av_chain(arena, operand, &t.condition)),
             then_expr: t
                 .then_expr
                 .as_ref()
@@ -2434,13 +2650,13 @@ fn av_expr_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
         }),
         ExprKind::NullCoalesce(n) => {
             arena_ast::ExprKind::NullCoalesce(arena_ast::NullCoalesceExpr {
-                left: arena.alloc(av_expr(arena, &n.left)),
+                left: arena.alloc(av_chain(arena, operand, &n.left)),
                 right: arena.alloc(av_expr(arena, &n.right)),
             })
         }
         ExprKind::FunctionCall(f) => {
             arena_ast::ExprKind::FunctionCall(arena_ast::FunctionCallExpr {
-                name: arena.alloc(av_expr(arena, &f.name)),
+                name: arena.alloc(av_chain(arena, operand, &f.name)),
                 args: av_args(arena, &f.args),
             })
         }
@@ -2458,7 +2674,7 @@ fn av_expr_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
             arena_ast::ExprKind::Array(v)
         }
         ExprKind::ArrayAccess(a) => arena_ast::ExprKind::ArrayAccess(arena_ast::ArrayAccessExpr {
-            array: arena.alloc(av_expr(arena, &a.array)),
+            array: arena.alloc(av_chain(arena, operand, &a.array)),
             index: a.index.as_ref().map(|e| &*arena.alloc(av_expr(arena, e))),
         }),
         ExprKind::Print(e) => arena_ast::ExprKind::Print(arena.alloc(av_expr(arena, e))),
@@ -2490,65 +2706,65 @@ fn av_expr_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
         }),
         ExprKind::PropertyAccess(p) => {
             arena_ast::ExprKind::PropertyAccess(arena_ast::PropertyAccessExpr {
-                object: arena.alloc(av_expr(arena, &p.object)),
+                object: arena.alloc(av_chain(arena, operand, &p.object)),
                 property: arena.alloc(av_expr(arena, &p.property)),
             })
         }
         ExprKind::NullsafePropertyAccess(p) => {
             arena_ast::ExprKind::NullsafePropertyAccess(arena_ast::PropertyAccessExpr {
-                object: arena.alloc(av_expr(arena, &p.object)),
+                object: arena.alloc(av_chain(arena, operand, &p.object)),
                 property: arena.alloc(av_expr(arena, &p.property)),
             })
         }
         ExprKind::MethodCall(m) => {
             arena_ast::ExprKind::MethodCall(arena.alloc(arena_ast::MethodCallExpr {
-                object: arena.alloc(av_expr(arena, &m.object)),
+                object: arena.alloc(av_chain(arena, operand, &m.object)),
                 method: arena.alloc(av_expr(arena, &m.method)),
                 args: av_args(arena, &m.args),
             }))
         }
         ExprKind::NullsafeMethodCall(m) => {
             arena_ast::ExprKind::NullsafeMethodCall(arena.alloc(arena_ast::MethodCallExpr {
-                object: arena.alloc(av_expr(arena, &m.object)),
+                object: arena.alloc(av_chain(arena, operand, &m.object)),
                 method: arena.alloc(av_expr(arena, &m.method)),
                 args: av_args(arena, &m.args),
             }))
         }
         ExprKind::StaticPropertyAccess(s) => {
             arena_ast::ExprKind::StaticPropertyAccess(arena_ast::StaticAccessExpr {
-                class: arena.alloc(av_expr(arena, &s.class)),
+                class: arena.alloc(av_chain(arena, operand, &s.class)),
                 member: arena.alloc(av_expr(arena, &s.member)),
             })
         }
         ExprKind::StaticMethodCall(s) => {
             arena_ast::ExprKind::StaticMethodCall(arena.alloc(arena_ast::StaticMethodCallExpr {
-                class: arena.alloc(av_expr(arena, &s.class)),
+                class: arena.alloc(av_chain(arena, operand, &s.class)),
                 method: arena.alloc(av_expr(arena, &s.method)),
                 args: av_args(arena, &s.args),
             }))
         }
         ExprKind::StaticDynMethodCall(s) => arena_ast::ExprKind::StaticDynMethodCall(arena.alloc(
             arena_ast::StaticDynMethodCallExpr {
-                class: arena.alloc(av_expr(arena, &s.class)),
+                class: arena.alloc(av_chain(arena, operand, &s.class)),
                 method: arena.alloc(av_expr(arena, &s.method)),
                 args: av_args(arena, &s.args),
             },
         )),
         ExprKind::ClassConstAccess(s) => {
             arena_ast::ExprKind::ClassConstAccess(arena_ast::StaticAccessExpr {
-                class: arena.alloc(av_expr(arena, &s.class)),
+                class: arena.alloc(av_chain(arena, operand, &s.class)),
                 member: arena.alloc(av_expr(arena, &s.member)),
             })
         }
         ExprKind::ClassConstAccessDynamic { class, member } => {
             arena_ast::ExprKind::ClassConstAccessDynamic {
-                class: arena.alloc(av_expr(arena, class)),
+                class: arena.alloc(av_chain(arena, operand, class)),
                 member: arena.alloc(av_expr(arena, member)),
             }
         }
         ExprKind::StaticPropertyAccessDynamic { class, member } => {
             arena_ast::ExprKind::StaticPropertyAccessDynamic {
-                class: arena.alloc(av_expr(arena, class)),
+                class: arena.alloc(av_chain(arena, operand, class)),
                 member: arena.alloc(av_expr(arena, member)),
             }
         }
@@ -2608,24 +2824,24 @@ fn av_expr_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
         ExprKind::CallableCreate(c) => {
             arena_ast::ExprKind::CallableCreate(arena_ast::CallableCreateExpr {
                 kind: match &c.kind {
-                    CallableCreateKind::Function(e) => {
-                        arena_ast::CallableCreateKind::Function(arena.alloc(av_expr(arena, e)))
-                    }
+                    CallableCreateKind::Function(e) => arena_ast::CallableCreateKind::Function(
+                        arena.alloc(av_chain(arena, operand, e)),
+                    ),
                     CallableCreateKind::Method { object, method } => {
                         arena_ast::CallableCreateKind::Method {
-                            object: arena.alloc(av_expr(arena, object)),
+                            object: arena.alloc(av_chain(arena, operand, object)),
                             method: arena.alloc(av_expr(arena, method)),
                         }
                     }
                     CallableCreateKind::NullsafeMethod { object, method } => {
                         arena_ast::CallableCreateKind::NullsafeMethod {
-                            object: arena.alloc(av_expr(arena, object)),
+                            object: arena.alloc(av_chain(arena, operand, object)),
                             method: arena.alloc(av_expr(arena, method)),
                         }
                     }
                     CallableCreateKind::StaticMethod { class, method } => {
                         arena_ast::CallableCreateKind::StaticMethod {
-                            class: arena.alloc(av_expr(arena, class)),
+                            class: arena.alloc(av_chain(arena, operand, class)),
                             method: arena.alloc(av_expr(arena, method)),
                         }
                     }
@@ -2737,53 +2953,15 @@ fn av_stmt_kind<'a>(arena: &'a bumpalo::Bump, k: &StmtKind) -> arena_ast::StmtKi
             arena_ast::StmtKind::Return(e.as_ref().map(|e| &*arena.alloc(av_expr(arena, e))))
         }
         StmtKind::Block(block) => arena_ast::StmtKind::Block(arena.alloc(av_block(arena, block))),
-        StmtKind::If(s) => arena_ast::StmtKind::If(
-            arena.alloc(arena_ast::IfStmt {
-                condition: av_expr(arena, &s.condition),
-                then_branch: arena.alloc(av_stmt(arena, &s.then_branch)),
-                elseif_branches: {
-                    let mut v =
-                        arena_ast::ArenaVec::with_capacity_in(s.elseif_branches.len(), arena);
-                    for b in s.elseif_branches.iter() {
-                        v.push(arena_ast::ElseIfBranch {
-                            condition: av_expr(arena, &b.condition),
-                            body: av_stmt(arena, &b.body),
-                            span: b.span,
-                        });
-                    }
-                    v
-                },
-                else_branch: s
-                    .else_branch
-                    .as_ref()
-                    .map(|b| &*arena.alloc(av_stmt(arena, b))),
-                else_kw_start: s.else_kw_start,
-                uses_alternative: s.uses_alternative,
-            }),
-        ),
-        StmtKind::While(s) => arena_ast::StmtKind::While(arena.alloc(arena_ast::WhileStmt {
-            condition: av_expr(arena, &s.condition),
-            body: arena.alloc(av_stmt(arena, &s.body)),
-            uses_alternative: s.uses_alternative,
-        })),
-        StmtKind::For(s) => arena_ast::StmtKind::For(arena.alloc(arena_ast::ForStmt {
-            init: av_exprs(arena, &s.init),
-            condition: av_exprs(arena, &s.condition),
-            update: av_exprs(arena, &s.update),
-            body: arena.alloc(av_stmt(arena, &s.body)),
-            uses_alternative: s.uses_alternative,
-        })),
-        StmtKind::Foreach(s) => arena_ast::StmtKind::Foreach(arena.alloc(arena_ast::ForeachStmt {
-            expr: av_expr(arena, &s.expr),
-            key: s.key.as_ref().map(|e| av_expr(arena, e)),
-            value: av_expr(arena, &s.value),
-            body: arena.alloc(av_stmt(arena, &s.body)),
-            uses_alternative: s.uses_alternative,
-        })),
-        StmtKind::DoWhile(s) => arena_ast::StmtKind::DoWhile(arena.alloc(arena_ast::DoWhileStmt {
-            body: arena.alloc(av_stmt(arena, &s.body)),
-            condition: av_expr(arena, &s.condition),
-        })),
+        StmtKind::If(s) => arena_ast::StmtKind::If(arena.alloc(av_if_stmt(arena, s))),
+        StmtKind::While(s) => arena_ast::StmtKind::While(arena.alloc(av_while_stmt(arena, s))),
+        StmtKind::For(s) => arena_ast::StmtKind::For(arena.alloc(av_for_stmt(arena, s))),
+        StmtKind::Foreach(s) => {
+            arena_ast::StmtKind::Foreach(arena.alloc(av_foreach_stmt(arena, s)))
+        }
+        StmtKind::DoWhile(s) => {
+            arena_ast::StmtKind::DoWhile(arena.alloc(av_do_while_stmt(arena, s)))
+        }
         StmtKind::Function(f) => {
             arena_ast::StmtKind::Function(arena.alloc(av_function_decl(arena, f)))
         }
@@ -2793,65 +2971,17 @@ fn av_stmt_kind<'a>(arena: &'a bumpalo::Bump, k: &StmtKind) -> arena_ast::StmtKi
         StmtKind::Continue(e) => {
             arena_ast::StmtKind::Continue(e.as_ref().map(|e| &*arena.alloc(av_expr(arena, e))))
         }
-        StmtKind::Switch(s) => arena_ast::StmtKind::Switch(arena.alloc(arena_ast::SwitchStmt {
-            expr: av_expr(arena, &s.expr),
-            body: {
-                let mut cases = arena_ast::ArenaVec::with_capacity_in(s.body.cases.len(), arena);
-                for c in s.body.cases.iter() {
-                    cases.push(arena_ast::SwitchCase {
-                        value: c.value.as_ref().map(|vl| av_expr(arena, vl)),
-                        body: av_stmts(arena, &c.body),
-                        span: c.span,
-                    });
-                }
-                arena_ast::SwitchBody {
-                    cases,
-                    span: s.body.span,
-                }
-            },
-            uses_alternative: s.uses_alternative,
-        })),
+        StmtKind::Switch(s) => arena_ast::StmtKind::Switch(arena.alloc(av_switch_stmt(arena, s))),
         StmtKind::Goto(ident) => arena_ast::StmtKind::Goto(av_ident(arena, ident)),
         StmtKind::Label(s) => arena_ast::StmtKind::Label(av_str(arena, s)),
-        StmtKind::Declare(d) => arena_ast::StmtKind::Declare(arena.alloc(arena_ast::DeclareStmt {
-            directives: {
-                let mut v = arena_ast::ArenaVec::with_capacity_in(d.directives.len(), arena);
-                for (k, val) in d.directives.iter() {
-                    v.push((arena.alloc_str(k) as &str, av_expr(arena, val)));
-                }
-                v
-            },
-            body: d.body.as_ref().map(|b| &*arena.alloc(av_stmt(arena, b))),
-            uses_alternative: d.uses_alternative,
-        })),
+        StmtKind::Declare(d) => {
+            arena_ast::StmtKind::Declare(arena.alloc(av_declare_stmt(arena, d)))
+        }
         StmtKind::Unset(exprs) => arena_ast::StmtKind::Unset(av_exprs(arena, exprs)),
         StmtKind::Throw(e) => arena_ast::StmtKind::Throw(arena.alloc(av_expr(arena, e))),
-        StmtKind::TryCatch(t) => arena_ast::StmtKind::TryCatch(
-            arena.alloc(arena_ast::TryCatchStmt {
-                body: arena.alloc(av_block(arena, &t.body)),
-                catches: {
-                    let mut v = arena_ast::ArenaVec::with_capacity_in(t.catches.len(), arena);
-                    for c in t.catches.iter() {
-                        let mut types = arena_ast::ArenaVec::with_capacity_in(c.types.len(), arena);
-                        for n in c.types.iter() {
-                            types.push(av_name(arena, n));
-                        }
-                        v.push(arena_ast::CatchClause {
-                            types,
-                            var: c.var.as_deref().map(|s| av_str(arena, s)),
-                            body: arena.alloc(av_block(arena, &c.body)),
-                            span: c.span,
-                        });
-                    }
-                    v
-                },
-                finally: t
-                    .finally
-                    .as_deref()
-                    .map(|f| &*arena.alloc(av_block(arena, f))),
-                finally_kw_start: t.finally_kw_start,
-            }),
-        ),
+        StmtKind::TryCatch(t) => {
+            arena_ast::StmtKind::TryCatch(arena.alloc(av_try_catch_stmt(arena, t)))
+        }
         StmtKind::Global(exprs) => arena_ast::StmtKind::Global(av_exprs(arena, exprs)),
         StmtKind::Class(cls) => arena_ast::StmtKind::Class(arena.alloc(av_class_decl(arena, cls))),
         StmtKind::Interface(iface) => {
@@ -2860,55 +2990,11 @@ fn av_stmt_kind<'a>(arena: &'a bumpalo::Bump, k: &StmtKind) -> arena_ast::StmtKi
         StmtKind::Trait(tr) => arena_ast::StmtKind::Trait(arena.alloc(av_trait_decl(arena, tr))),
         StmtKind::Enum(en) => arena_ast::StmtKind::Enum(arena.alloc(av_enum_decl(arena, en))),
         StmtKind::Namespace(ns) => {
-            arena_ast::StmtKind::Namespace(arena.alloc(arena_ast::NamespaceDecl {
-                name: ns.name.as_ref().map(|n| av_name(arena, n)),
-                body: match &ns.body {
-                    NamespaceBody::Braced(block) => {
-                        arena_ast::NamespaceBody::Braced(&*arena.alloc(av_block(arena, block)))
-                    }
-                    NamespaceBody::Simple => arena_ast::NamespaceBody::Simple,
-                },
-            }))
+            arena_ast::StmtKind::Namespace(arena.alloc(av_namespace_decl(arena, ns)))
         }
-        StmtKind::Use(u) => arena_ast::StmtKind::Use(arena.alloc(arena_ast::UseDecl {
-            kind: u.kind,
-            uses: {
-                let mut v = arena_ast::ArenaVec::with_capacity_in(u.uses.len(), arena);
-                for item in u.uses.iter() {
-                    v.push(arena_ast::UseItem {
-                        name: av_name(arena, &item.name),
-                        alias: item.alias.as_deref().map(|s| av_str(arena, s)),
-                        kind: item.kind,
-                        span: item.span,
-                    });
-                }
-                v
-            },
-        })),
-        StmtKind::Const(items) => {
-            let mut v = arena_ast::ArenaVec::with_capacity_in(items.len(), arena);
-            for item in items.iter() {
-                v.push(arena_ast::ConstItem {
-                    name: av_ident(arena, &item.name),
-                    value: av_expr(arena, &item.value),
-                    attributes: av_attrs(arena, &item.attributes),
-                    span: item.span,
-                    doc_comment: av_opt_comment(arena, &item.doc_comment),
-                });
-            }
-            arena_ast::StmtKind::Const(v)
-        }
-        StmtKind::StaticVar(vars) => {
-            let mut v = arena_ast::ArenaVec::with_capacity_in(vars.len(), arena);
-            for var in vars.iter() {
-                v.push(arena_ast::StaticVar {
-                    name: av_ident(arena, &var.name),
-                    default: var.default.as_ref().map(|e| av_expr(arena, e)),
-                    span: var.span,
-                });
-            }
-            arena_ast::StmtKind::StaticVar(v)
-        }
+        StmtKind::Use(u) => arena_ast::StmtKind::Use(arena.alloc(av_use_decl(arena, u))),
+        StmtKind::Const(items) => arena_ast::StmtKind::Const(av_const_items(arena, items)),
+        StmtKind::StaticVar(vars) => arena_ast::StmtKind::StaticVar(av_static_vars(arena, vars)),
         StmtKind::HaltCompiler(s) => arena_ast::StmtKind::HaltCompiler(av_str(arena, s)),
         StmtKind::Nop => arena_ast::StmtKind::Nop,
         StmtKind::InlineHtml(s) => arena_ast::StmtKind::InlineHtml(av_str(arena, s)),
@@ -2916,6 +3002,219 @@ fn av_stmt_kind<'a>(arena: &'a bumpalo::Bump, k: &StmtKind) -> arena_ast::StmtKi
     }
 }
 
+// Kept out of line so `av_stmt_kind`, which nested statements recurse through,
+// does not carry every variant's temporaries in its own stack frame.
+#[inline(never)]
+fn av_if_stmt<'a>(arena: &'a bumpalo::Bump, s: &IfStmt) -> arena_ast::IfStmt<'a, 'a> {
+    arena_ast::IfStmt {
+        condition: av_expr(arena, &s.condition),
+        then_branch: arena.alloc(av_stmt(arena, &s.then_branch)),
+        elseif_branches: {
+            let mut v = arena_ast::ArenaVec::with_capacity_in(s.elseif_branches.len(), arena);
+            for b in s.elseif_branches.iter() {
+                v.push(arena_ast::ElseIfBranch {
+                    condition: av_expr(arena, &b.condition),
+                    body: av_stmt(arena, &b.body),
+                    span: b.span,
+                });
+            }
+            v
+        },
+        else_branch: s
+            .else_branch
+            .as_ref()
+            .map(|b| &*arena.alloc(av_stmt(arena, b))),
+        else_kw_start: s.else_kw_start,
+        uses_alternative: s.uses_alternative,
+    }
+}
+
+#[inline(never)]
+fn av_while_stmt<'a>(arena: &'a bumpalo::Bump, s: &WhileStmt) -> arena_ast::WhileStmt<'a, 'a> {
+    arena_ast::WhileStmt {
+        condition: av_expr(arena, &s.condition),
+        body: arena.alloc(av_stmt(arena, &s.body)),
+        uses_alternative: s.uses_alternative,
+    }
+}
+
+#[inline(never)]
+fn av_for_stmt<'a>(arena: &'a bumpalo::Bump, s: &ForStmt) -> arena_ast::ForStmt<'a, 'a> {
+    arena_ast::ForStmt {
+        init: av_exprs(arena, &s.init),
+        condition: av_exprs(arena, &s.condition),
+        update: av_exprs(arena, &s.update),
+        body: arena.alloc(av_stmt(arena, &s.body)),
+        uses_alternative: s.uses_alternative,
+    }
+}
+
+#[inline(never)]
+fn av_foreach_stmt<'a>(
+    arena: &'a bumpalo::Bump,
+    s: &ForeachStmt,
+) -> arena_ast::ForeachStmt<'a, 'a> {
+    arena_ast::ForeachStmt {
+        expr: av_expr(arena, &s.expr),
+        key: s.key.as_ref().map(|e| av_expr(arena, e)),
+        value: av_expr(arena, &s.value),
+        body: arena.alloc(av_stmt(arena, &s.body)),
+        uses_alternative: s.uses_alternative,
+    }
+}
+
+#[inline(never)]
+fn av_do_while_stmt<'a>(
+    arena: &'a bumpalo::Bump,
+    s: &DoWhileStmt,
+) -> arena_ast::DoWhileStmt<'a, 'a> {
+    arena_ast::DoWhileStmt {
+        body: arena.alloc(av_stmt(arena, &s.body)),
+        condition: av_expr(arena, &s.condition),
+    }
+}
+
+#[inline(never)]
+fn av_switch_stmt<'a>(arena: &'a bumpalo::Bump, s: &SwitchStmt) -> arena_ast::SwitchStmt<'a, 'a> {
+    arena_ast::SwitchStmt {
+        expr: av_expr(arena, &s.expr),
+        body: {
+            let mut cases = arena_ast::ArenaVec::with_capacity_in(s.body.cases.len(), arena);
+            for c in s.body.cases.iter() {
+                cases.push(arena_ast::SwitchCase {
+                    value: c.value.as_ref().map(|vl| av_expr(arena, vl)),
+                    body: av_stmts(arena, &c.body),
+                    span: c.span,
+                });
+            }
+            arena_ast::SwitchBody {
+                cases,
+                span: s.body.span,
+            }
+        },
+        uses_alternative: s.uses_alternative,
+    }
+}
+
+#[inline(never)]
+fn av_declare_stmt<'a>(
+    arena: &'a bumpalo::Bump,
+    d: &DeclareStmt,
+) -> arena_ast::DeclareStmt<'a, 'a> {
+    arena_ast::DeclareStmt {
+        directives: {
+            let mut v = arena_ast::ArenaVec::with_capacity_in(d.directives.len(), arena);
+            for (k, val) in d.directives.iter() {
+                v.push((arena.alloc_str(k) as &str, av_expr(arena, val)));
+            }
+            v
+        },
+        body: d.body.as_ref().map(|b| &*arena.alloc(av_stmt(arena, b))),
+        uses_alternative: d.uses_alternative,
+    }
+}
+
+#[inline(never)]
+fn av_try_catch_stmt<'a>(
+    arena: &'a bumpalo::Bump,
+    t: &TryCatchStmt,
+) -> arena_ast::TryCatchStmt<'a, 'a> {
+    arena_ast::TryCatchStmt {
+        body: arena.alloc(av_block(arena, &t.body)),
+        catches: {
+            let mut v = arena_ast::ArenaVec::with_capacity_in(t.catches.len(), arena);
+            for c in t.catches.iter() {
+                let mut types = arena_ast::ArenaVec::with_capacity_in(c.types.len(), arena);
+                for n in c.types.iter() {
+                    types.push(av_name(arena, n));
+                }
+                v.push(arena_ast::CatchClause {
+                    types,
+                    var: c.var.as_deref().map(|s| av_str(arena, s)),
+                    body: arena.alloc(av_block(arena, &c.body)),
+                    span: c.span,
+                });
+            }
+            v
+        },
+        finally: t
+            .finally
+            .as_deref()
+            .map(|f| &*arena.alloc(av_block(arena, f))),
+        finally_kw_start: t.finally_kw_start,
+    }
+}
+
+#[inline(never)]
+fn av_namespace_decl<'a>(
+    arena: &'a bumpalo::Bump,
+    ns: &NamespaceDecl,
+) -> arena_ast::NamespaceDecl<'a, 'a> {
+    arena_ast::NamespaceDecl {
+        name: ns.name.as_ref().map(|n| av_name(arena, n)),
+        body: match &ns.body {
+            NamespaceBody::Braced(block) => {
+                arena_ast::NamespaceBody::Braced(&*arena.alloc(av_block(arena, block)))
+            }
+            NamespaceBody::Simple => arena_ast::NamespaceBody::Simple,
+        },
+    }
+}
+
+#[inline(never)]
+fn av_use_decl<'a>(arena: &'a bumpalo::Bump, u: &UseDecl) -> arena_ast::UseDecl<'a, 'a> {
+    arena_ast::UseDecl {
+        kind: u.kind,
+        uses: {
+            let mut v = arena_ast::ArenaVec::with_capacity_in(u.uses.len(), arena);
+            for item in u.uses.iter() {
+                v.push(arena_ast::UseItem {
+                    name: av_name(arena, &item.name),
+                    alias: item.alias.as_deref().map(|s| av_str(arena, s)),
+                    kind: item.kind,
+                    span: item.span,
+                });
+            }
+            v
+        },
+    }
+}
+
+#[inline(never)]
+fn av_const_items<'a>(
+    arena: &'a bumpalo::Bump,
+    items: &[ConstItem],
+) -> arena_ast::ArenaVec<'a, arena_ast::ConstItem<'a, 'a>> {
+    let mut v = arena_ast::ArenaVec::with_capacity_in(items.len(), arena);
+    for item in items.iter() {
+        v.push(arena_ast::ConstItem {
+            name: av_ident(arena, &item.name),
+            value: av_expr(arena, &item.value),
+            attributes: av_attrs(arena, &item.attributes),
+            span: item.span,
+            doc_comment: av_opt_comment(arena, &item.doc_comment),
+        });
+    }
+    v
+}
+
+#[inline(never)]
+fn av_static_vars<'a>(
+    arena: &'a bumpalo::Bump,
+    vars: &[StaticVar],
+) -> arena_ast::ArenaVec<'a, arena_ast::StaticVar<'a, 'a>> {
+    let mut v = arena_ast::ArenaVec::with_capacity_in(vars.len(), arena);
+    for var in vars.iter() {
+        v.push(arena_ast::StaticVar {
+            name: av_ident(arena, &var.name),
+            default: var.default.as_ref().map(|e| av_expr(arena, e)),
+            span: var.span,
+        });
+    }
+    v
+}
+
+#[inline(never)]
 fn av_function_decl<'a>(
     arena: &'a bumpalo::Bump,
     f: &FunctionDecl,
@@ -3072,6 +3371,7 @@ fn av_class_decl<'a>(arena: &'a bumpalo::Bump, cls: &ClassDecl) -> arena_ast::Cl
     }
 }
 
+#[inline(never)]
 fn av_interface_decl<'a>(
     arena: &'a bumpalo::Bump,
     iface: &InterfaceDecl,
@@ -3092,6 +3392,7 @@ fn av_interface_decl<'a>(
     }
 }
 
+#[inline(never)]
 fn av_trait_decl<'a>(arena: &'a bumpalo::Bump, tr: &TraitDecl) -> arena_ast::TraitDecl<'a, 'a> {
     arena_ast::TraitDecl {
         name: av_ident(arena, &tr.name),
@@ -3104,6 +3405,7 @@ fn av_trait_decl<'a>(arena: &'a bumpalo::Bump, tr: &TraitDecl) -> arena_ast::Tra
     }
 }
 
+#[inline(never)]
 fn av_enum_decl<'a>(arena: &'a bumpalo::Bump, en: &EnumDecl) -> arena_ast::EnumDecl<'a, 'a> {
     let mut implements = arena_ast::ArenaVec::with_capacity_in(en.implements.len(), arena);
     for n in en.implements.iter() {

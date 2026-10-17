@@ -13,18 +13,58 @@ impl<'src> Printer<'src> {
             self.depth -= 1;
             return;
         }
-        let my_prec = expr_precedence(&expr.kind);
-        let needs_parens = my_prec < parent_prec && my_prec != PREC_PRIMARY;
-        if needs_parens {
-            self.w("(");
+        if chain_operand(&expr.kind).is_none() {
+            let my_prec = expr_precedence(&expr.kind);
+            let needs_parens = my_prec < parent_prec && my_prec != PREC_PRIMARY;
+            if needs_parens {
+                self.w("(");
+            }
+            self.print_expr_inner(expr);
+            if needs_parens {
+                self.w(")");
+            }
+            self.depth -= 1;
+            return;
         }
-        self.print_expr_inner(expr);
-        if needs_parens {
-            self.w(")");
+        // A chain node prints its chain operand first (see `chain_operand`), so
+        // a chain of any length is printed without recursing per link: open each
+        // link's parenthesis on the way down, print the innermost node, then
+        // emit each link's remainder on the way back up.
+        let mut chain = LinkStack::new();
+        let mut node = expr;
+        let mut prec = parent_prec;
+        loop {
+            let my_prec = expr_precedence(&node.kind);
+            let needs_parens = my_prec < prec && my_prec != PREC_PRIMARY;
+            if needs_parens {
+                self.w("(");
+            }
+            match chain_operand(&node.kind) {
+                Some((operand, operand_prec)) => {
+                    chain.push((node, needs_parens));
+                    node = operand;
+                    prec = operand_prec;
+                }
+                None => {
+                    self.print_expr_inner(node);
+                    if needs_parens {
+                        self.w(")");
+                    }
+                    break;
+                }
+            }
+        }
+        while let Some((node, needs_parens)) = chain.pop() {
+            self.print_expr_inner(node);
+            if needs_parens {
+                self.w(")");
+            }
         }
         self.depth -= 1;
     }
 
+    /// Print `expr`, except for its chain operand, which `print_expr` has
+    /// already printed.
     fn print_expr_inner(&mut self, expr: &Expr) {
         match &expr.kind {
             ExprKind::Int(n) => self.w(&n.to_string()),
@@ -96,8 +136,7 @@ impl<'src> Printer<'src> {
             }
             ExprKind::Identifier(name) => self.w(name.as_str()),
             ExprKind::Assign(assign) => {
-                let (_, lhs_prec, rhs_prec) = assign_op_precedence(assign.op);
-                self.print_expr(assign.target, lhs_prec);
+                let (_, _, rhs_prec) = assign_op_precedence(assign.op);
                 self.w(" ");
                 if assign.by_ref {
                     self.w("=& ");
@@ -108,8 +147,7 @@ impl<'src> Printer<'src> {
                 self.print_expr(assign.value, rhs_prec);
             }
             ExprKind::Binary(binary) => {
-                let (_, lhs_prec, rhs_prec) = binary_op_precedence(binary.op);
-                self.print_expr(binary.left, lhs_prec);
+                let (_, _, rhs_prec) = binary_op_precedence(binary.op);
                 self.w(" ");
                 self.w(binary_op_str(binary.op));
                 self.w(" ");
@@ -119,12 +157,8 @@ impl<'src> Printer<'src> {
                 self.w(unary_prefix_op_str(unary.op));
                 self.print_expr(unary.operand, PREC_UNARY);
             }
-            ExprKind::UnaryPostfix(unary) => {
-                self.print_expr(unary.operand, PREC_PRIMARY);
-                self.w(unary_postfix_op_str(unary.op));
-            }
+            ExprKind::UnaryPostfix(unary) => self.w(unary_postfix_op_str(unary.op)),
             ExprKind::Ternary(ternary) => {
-                self.print_expr(ternary.condition, PREC_TERNARY + 1);
                 if let Some(then_expr) = &ternary.then_expr {
                     self.w(" ? ");
                     self.print_expr(then_expr, PREC_LOWEST);
@@ -135,12 +169,10 @@ impl<'src> Printer<'src> {
                 self.print_expr(ternary.else_expr, PREC_TERNARY + 1);
             }
             ExprKind::NullCoalesce(nc) => {
-                self.print_expr(nc.left, PREC_NULL_COALESCE + 1);
                 self.w(" ?? ");
                 self.print_expr(nc.right, PREC_NULL_COALESCE);
             }
             ExprKind::FunctionCall(call) => {
-                self.print_expr(call.name, PREC_PRIMARY);
                 self.w("(");
                 self.print_args(&call.args);
                 self.w(")");
@@ -151,7 +183,6 @@ impl<'src> Printer<'src> {
                 self.w("]");
             }
             ExprKind::ArrayAccess(access) => {
-                self.print_expr(access.array, PREC_PRIMARY);
                 self.w("[");
                 if let Some(index) = &access.index {
                     self.print_expr(index, PREC_LOWEST);
@@ -227,7 +258,6 @@ impl<'src> Printer<'src> {
                 }
             }
             ExprKind::PropertyAccess(access) => {
-                self.print_expr(access.object, PREC_PRIMARY);
                 self.w("->");
                 if self.needs_braces_for_property(&access.property.kind) {
                     self.w("{");
@@ -238,7 +268,6 @@ impl<'src> Printer<'src> {
                 }
             }
             ExprKind::NullsafePropertyAccess(access) => {
-                self.print_expr(access.object, PREC_PRIMARY);
                 self.w("?->");
                 if self.needs_braces_for_property(&access.property.kind) {
                     self.w("{");
@@ -249,7 +278,6 @@ impl<'src> Printer<'src> {
                 }
             }
             ExprKind::MethodCall(call) => {
-                self.print_expr(call.object, PREC_PRIMARY);
                 self.w("->");
                 if self.needs_braces_for_property(&call.method.kind) {
                     self.w("{");
@@ -263,7 +291,6 @@ impl<'src> Printer<'src> {
                 self.w(")");
             }
             ExprKind::NullsafeMethodCall(call) => {
-                self.print_expr(call.object, PREC_PRIMARY);
                 self.w("?->");
                 if self.needs_braces_for_property(&call.method.kind) {
                     self.w("{");
@@ -277,28 +304,23 @@ impl<'src> Printer<'src> {
                 self.w(")");
             }
             ExprKind::StaticPropertyAccess(access) => {
-                self.print_expr(access.class, PREC_PRIMARY);
                 self.w("::$");
                 self.print_expr(access.member, PREC_PRIMARY);
             }
             ExprKind::ClassConstAccess(access) => {
-                self.print_expr(access.class, PREC_PRIMARY);
                 self.w("::");
                 self.print_expr(access.member, PREC_PRIMARY);
             }
-            ExprKind::ClassConstAccessDynamic { class, member } => {
-                self.print_expr(class, PREC_PRIMARY);
+            ExprKind::ClassConstAccessDynamic { member, .. } => {
                 self.w("::{");
                 self.print_expr(member, PREC_LOWEST);
                 self.w("}");
             }
-            ExprKind::StaticPropertyAccessDynamic { class, member } => {
-                self.print_expr(class, PREC_PRIMARY);
+            ExprKind::StaticPropertyAccessDynamic { member, .. } => {
                 self.w("::");
                 self.print_expr(member, PREC_PRIMARY);
             }
             ExprKind::StaticMethodCall(call) => {
-                self.print_expr(call.class, PREC_PRIMARY);
                 self.w("::");
                 self.print_expr(call.method, PREC_PRIMARY);
                 self.w("(");
@@ -306,7 +328,6 @@ impl<'src> Printer<'src> {
                 self.w(")");
             }
             ExprKind::StaticDynMethodCall(call) => {
-                self.print_expr(call.class, PREC_PRIMARY);
                 self.w("::");
                 self.print_expr(call.method, PREC_PRIMARY);
                 self.w("(");
@@ -345,24 +366,18 @@ impl<'src> Printer<'src> {
                 self.print_class_body(&class.body);
             }
             ExprKind::CallableCreate(cc) => match &cc.kind {
-                CallableCreateKind::Function(name) => {
-                    self.print_expr(name, PREC_PRIMARY);
-                    self.w("(...)");
-                }
-                CallableCreateKind::Method { object, method } => {
-                    self.print_expr(object, PREC_PRIMARY);
+                CallableCreateKind::Function(_) => self.w("(...)"),
+                CallableCreateKind::Method { method, .. } => {
                     self.w("->");
                     self.print_expr(method, PREC_PRIMARY);
                     self.w("(...)");
                 }
-                CallableCreateKind::NullsafeMethod { object, method } => {
-                    self.print_expr(object, PREC_PRIMARY);
+                CallableCreateKind::NullsafeMethod { method, .. } => {
                     self.w("?->");
                     self.print_expr(method, PREC_PRIMARY);
                     self.w("(...)");
                 }
-                CallableCreateKind::StaticMethod { class, method } => {
-                    self.print_expr(class, PREC_PRIMARY);
+                CallableCreateKind::StaticMethod { method, .. } => {
                     self.w("::");
                     self.print_expr(method, PREC_PRIMARY);
                     self.w("(...)");
@@ -635,4 +650,75 @@ impl<'src> Printer<'src> {
             self.w("'");
         }
     }
+}
+
+/// A stack of chain links that only allocates for chains longer than its
+/// inline capacity; almost every chain in real code fits.
+struct LinkStack<T: Copy> {
+    inline: [Option<T>; 8],
+    len: usize,
+    spilled: Vec<T>,
+}
+
+impl<T: Copy> LinkStack<T> {
+    fn new() -> Self {
+        Self {
+            inline: [None; 8],
+            len: 0,
+            spilled: Vec::new(),
+        }
+    }
+
+    fn push(&mut self, link: T) {
+        if self.len < self.inline.len() {
+            self.inline[self.len] = Some(link);
+            self.len += 1;
+        } else {
+            self.spilled.push(link);
+        }
+    }
+
+    fn pop(&mut self) -> Option<T> {
+        if let Some(link) = self.spilled.pop() {
+            return Some(link);
+        }
+        self.len = self.len.checked_sub(1)?;
+        self.inline[self.len]
+    }
+}
+
+/// The operand a chain node prints first, with the precedence it is printed
+/// at. Mirrors the leading `print_expr` call each of these variants made before
+/// chains were printed iteratively; `print_expr_inner` prints the rest.
+fn chain_operand<'a, 'arena, 'src>(
+    kind: &'a ExprKind<'arena, 'src>,
+) -> Option<(&'a Expr<'arena, 'src>, i8)> {
+    let operand = match kind {
+        ExprKind::Assign(assign) => {
+            return Some((assign.target, assign_op_precedence(assign.op).1))
+        }
+        ExprKind::Binary(binary) => return Some((binary.left, binary_op_precedence(binary.op).1)),
+        ExprKind::Ternary(ternary) => return Some((ternary.condition, PREC_TERNARY + 1)),
+        ExprKind::NullCoalesce(nc) => return Some((nc.left, PREC_NULL_COALESCE + 1)),
+        ExprKind::UnaryPostfix(unary) => unary.operand,
+        ExprKind::FunctionCall(call) => call.name,
+        ExprKind::ArrayAccess(access) => access.array,
+        ExprKind::PropertyAccess(access) | ExprKind::NullsafePropertyAccess(access) => {
+            access.object
+        }
+        ExprKind::MethodCall(call) | ExprKind::NullsafeMethodCall(call) => call.object,
+        ExprKind::StaticPropertyAccess(access) | ExprKind::ClassConstAccess(access) => access.class,
+        ExprKind::ClassConstAccessDynamic { class, .. }
+        | ExprKind::StaticPropertyAccessDynamic { class, .. } => class,
+        ExprKind::StaticMethodCall(call) => call.class,
+        ExprKind::StaticDynMethodCall(call) => call.class,
+        ExprKind::CallableCreate(cc) => match &cc.kind {
+            CallableCreateKind::Function(name) => name,
+            CallableCreateKind::Method { object, .. }
+            | CallableCreateKind::NullsafeMethod { object, .. } => object,
+            CallableCreateKind::StaticMethod { class, .. } => class,
+        },
+        _ => return None,
+    };
+    Some((operand, PREC_PRIMARY))
 }

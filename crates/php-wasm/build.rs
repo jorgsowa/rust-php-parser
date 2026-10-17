@@ -12,4 +12,11 @@ fn main() {
     }
     // Re-run whenever HEAD moves (commit, checkout, rebase …)
     println!("cargo:rerun-if-changed=.git/HEAD");
+
+    // At its full nesting budget the parser needs about 1 MiB of stack, which is
+    // all wasm32 gets by default. Wasm has no guard page, so an overflow would
+    // silently corrupt linear memory rather than trap; leave ample headroom.
+    if std::env::var("CARGO_CFG_TARGET_ARCH").as_deref() == Ok("wasm32") {
+        println!("cargo:rustc-link-arg=-zstack-size=8388608");
+    }
 }

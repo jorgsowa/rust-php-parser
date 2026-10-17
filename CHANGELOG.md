@@ -9,11 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Deeply nested input no longer overflows the stack.** Statements, expressions and the code inside string interpolation now share one recursion budget of 512 levels, and input nested deeper reports the new `ParseError::NestingTooDeep` instead of aborting the process. Statement nesting had no limit at all and interpolated code restarted the count at zero, so about 10 KB of `{` or `if (1) {` was enough to crash. The budget is sized so that the costliest paths stay within about 1 MiB of stack in release builds (`php-rs-parser`).
+- Expressions nested more than 50 levels deep are no longer rejected. Most constructs (`[`, `(`, `f(`, `match (`) take one level of the 512-level budget; some take two, e.g. `($x + (...))` (`php-rs-parser`).
+- Nested strings inside interpolation (`"{$a["{$b[...]}"]}"`, nested heredocs) no longer take quadratic time. Every nested string is re-lexed by its own sub-parser, so each one now takes a larger share of the budget, which keeps string nesting under 32 levels (`php-rs-parser`).
+- The lexer skips nested strings inside `{$...}` with an explicit stack instead of recursion; deeply nested double-quoted strings overflowed the stack before the parser's limit applied (`php-lexer`).
+- `parse()` no longer overflows the stack on long left-associative or postfix chains such as a 20,000-term concatenation or method chain: converting the AST to its owned form and back, and dropping the owned form, walk chains iteratively (`php-ast`).
+- The printer prints such chains without recursing per link, and its depth guard now sits well above anything the parser accepts, so a 300-term concatenation is no longer printed as `/* max depth */` (`php-printer`).
 - Sources over 4 GiB are refused in release builds too. The size guard was a `debug_assert!`, so release builds wrapped the `u32` span offsets and could slice the wrong text or panic. The `parse_*` functions now return an empty program with the new `ParseError::SourceTooLarge`, and `Lexer::new`/`Lexer::new_at` yield only `Eof` with a `LexerErrorKind::FileTooLarge` error (`php-lexer`, `php-rs-parser`).
+- The WebAssembly build reserves an 8 MiB stack instead of the 1 MiB default; wasm has no guard page, so an overflow there would corrupt memory rather than trap (`php-wasm`).
 
 ### Changed
 
-- `ParseError` has a new `SourceTooLarge` variant; exhaustive matches need an extra arm (`php-rs-parser`).
+- `ParseError` has new `NestingTooDeep` and `SourceTooLarge` variants; exhaustive matches need extra arms. Exceeding the nesting limit used to produce `ParseError::Forbidden` with the message "maximum expression nesting depth exceeded" (`php-rs-parser`).
+- `php_ast::owned::Expr` implements `Drop`, so its fields can no longer be moved out by destructuring; take them with `std::mem::replace(&mut expr.kind, ExprKind::Error)` instead (`php-ast`).
 
 ---
 
