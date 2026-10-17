@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The WebAssembly build reserves an 8 MiB stack instead of the 1 MiB default; wasm has no guard page, so an overflow there would corrupt memory rather than trap (`php-wasm`).
 - `errors_truncated` is `true` only when errors were actually dropped; it was also set when exactly 100 errors were reported (`php-rs-parser`).
 - `ParseError::UnclosedDelimiter` reads "expected ')' to close the delimiter opened at byte 3074" instead of "unclosed '')'' opened at Span { start: 3074, end: 3075 }", and its `delimiter` field holds `')'` rather than `'')''` (`php-rs-parser`).
+- `SourceMap::line_col_to_offset` returns `None` for a column past the end of its line instead of an offset on a later line, and no longer overflows on a huge column (`php-rs-parser`).
 
 ### Added
 

@@ -50,6 +50,8 @@ pub struct LineColSpan {
 pub struct SourceMap {
     /// Byte offset of the start of each line. `line_starts[0]` is always 0.
     line_starts: Vec<u32>,
+    /// Source length in bytes; `u32::MAX` for [`SourceMap::empty`].
+    len: u32,
 }
 
 impl SourceMap {
@@ -60,7 +62,10 @@ impl SourceMap {
         for pos in memchr::memchr_iter(b'\n', source.as_bytes()) {
             line_starts.push((pos + 1) as u32);
         }
-        Self { line_starts }
+        Self {
+            line_starts,
+            len: source.len() as u32,
+        }
     }
 
     /// A no-op map for callers that never query line/column positions.
@@ -69,6 +74,7 @@ impl SourceMap {
     pub fn empty() -> Self {
         Self {
             line_starts: vec![0u32],
+            len: u32::MAX,
         }
     }
 
@@ -107,12 +113,15 @@ impl SourceMap {
         }
     }
 
-    /// Convert a 0-based line/column back to a byte offset.
-    /// Returns `None` if the line is out of range.
+    /// Convert a 0-based line/column to a byte offset; `None` past the line's `\n` or the end of the source.
     pub fn line_col_to_offset(&self, lc: LineCol) -> Option<u32> {
-        self.line_starts
-            .get(lc.line as usize)
-            .map(|start| start + lc.col)
+        let line = lc.line as usize;
+        let start = *self.line_starts.get(line)?;
+        let end = match self.line_starts.get(line + 1) {
+            Some(next_start) => next_start - 1,
+            None => self.len,
+        };
+        start.checked_add(lc.col).filter(|&offset| offset <= end)
     }
 }
 
@@ -168,6 +177,32 @@ mod tests {
         let lc = LineCol { line: 1, col: 5 };
         let offset = map.line_col_to_offset(lc).unwrap();
         assert_eq!(map.offset_to_line_col(offset), lc);
+    }
+
+    #[test]
+    fn column_past_line_end_is_rejected() {
+        let map = SourceMap::new("ab\ncd");
+        assert_eq!(map.line_col_to_offset(LineCol { line: 0, col: 2 }), Some(2));
+        assert_eq!(map.line_col_to_offset(LineCol { line: 0, col: 3 }), None);
+        assert_eq!(map.line_col_to_offset(LineCol { line: 1, col: 2 }), Some(5));
+        assert_eq!(map.line_col_to_offset(LineCol { line: 1, col: 3 }), None);
+        assert_eq!(
+            map.line_col_to_offset(LineCol {
+                line: 1,
+                col: u32::MAX
+            }),
+            None
+        );
+    }
+
+    #[test]
+    fn empty_map_accepts_any_column() {
+        let map = SourceMap::empty();
+        assert_eq!(
+            map.line_col_to_offset(LineCol { line: 0, col: 42 }),
+            Some(42)
+        );
+        assert_eq!(map.line_col_to_offset(LineCol { line: 1, col: 0 }), None);
     }
 
     #[test]
