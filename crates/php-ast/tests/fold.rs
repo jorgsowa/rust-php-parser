@@ -1104,9 +1104,9 @@ fn constructors_leave_optional_fields_empty() {
     assert!(method.params.is_empty() && method.body.is_none() && method.return_type.is_none());
     assert!(!method.is_static && !method.is_abstract && !method.is_final);
 
-    let owned = php_ast::owned::Param::new(Some("y".into()), Span::DUMMY);
-    assert_eq!(owned.name.as_deref(), Some("y"));
+    let owned = php_ast::owned::Param::new(php_ast::owned::Ident::name("y"), Span::DUMMY);
+    assert_eq!(owned.name.as_str(), Some("y"));
     assert!(owned.default.is_none() && owned.hooks.is_empty());
-    let owned_method = php_ast::owned::MethodDecl::new(Some("go".into()));
+    let owned_method = php_ast::owned::MethodDecl::new(php_ast::owned::Ident::name("go"));
     assert!(owned_method.params.is_empty() && owned_method.body.is_none());
 }

@@ -54,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Breaking:** `ExprKind::ThrowExpr` is renamed to `ExprKind::Throw`, matching `StmtKind::Throw`, in the arena and owned AST and in serialized output (`php-ast`).
 - **Breaking:** `ExprKind::StaticDynMethodCall` and `StaticDynMethodCallExpr` are renamed to `StaticMethodCallDynamic` and `StaticMethodCallDynamicExpr`, matching `ClassConstAccessDynamic` and `StaticPropertyAccessDynamic` (`php-ast`).
 - **Breaking:** `StmtKind::Label` holds an `Ident` borrowed from the source, like `StmtKind::Goto`, instead of an arena-allocated `&str` (`Box<str>` in the owned AST). Serialized output is unchanged (`php-ast`, `php-rs-parser`).
+- **Breaking:** `owned::Ident` is a struct instead of an alias for `Option<Box<str>>`, with the same API as the arena `Ident`: `Ident::name`, `Ident::ERROR`, `as_str`, `is_error`, `or_error`, `Display` and `PartialEq<&str>`. Serialized output is unchanged (`php-ast`).
 
 - **Breaking:** `PrinterConfig::newline` is a `Newline` enum (`Lf`, the default, or `CrLf`) instead of a `&'static str` (`php-printer`).
 ---

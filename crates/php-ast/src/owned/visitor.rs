@@ -990,7 +990,7 @@ impl<V: OwnedScopeVisitor> OwnedVisitor for OwnedScopeWalker<V> {
         self.inner.visit_stmt(stmt, &self.scope)?;
         match &stmt.kind {
             StmtKind::Function(func) => {
-                let fn_name = func.name.as_ref().map(|n| n.to_string());
+                let fn_name = func.name.as_str().map(str::to_owned);
                 let prev_fn = std::mem::replace(&mut self.scope.function_name, fn_name);
                 walk_owned_stmt(self, stmt)?;
                 self.scope.function_name = prev_fn;
@@ -999,7 +999,7 @@ impl<V: OwnedScopeVisitor> OwnedVisitor for OwnedScopeWalker<V> {
                 let class_name = class
                     .name
                     .as_ref()
-                    .and_then(|ident| ident.as_ref())
+                    .and_then(|ident| ident.as_str())
                     .map(|s| s.to_string());
                 let prev_class = std::mem::replace(&mut self.scope.class_name, class_name);
                 let prev_fn = self.scope.function_name.take();
@@ -1008,7 +1008,7 @@ impl<V: OwnedScopeVisitor> OwnedVisitor for OwnedScopeWalker<V> {
                 self.scope.function_name = prev_fn;
             }
             StmtKind::Interface(iface) => {
-                let iface_name = iface.name.as_ref().map(|n| n.to_string());
+                let iface_name = iface.name.as_str().map(str::to_owned);
                 let prev_class = std::mem::replace(&mut self.scope.class_name, iface_name);
                 let prev_fn = self.scope.function_name.take();
                 walk_owned_stmt(self, stmt)?;
@@ -1016,7 +1016,7 @@ impl<V: OwnedScopeVisitor> OwnedVisitor for OwnedScopeWalker<V> {
                 self.scope.function_name = prev_fn;
             }
             StmtKind::Trait(trait_decl) => {
-                let trait_name = trait_decl.name.as_ref().map(|n| n.to_string());
+                let trait_name = trait_decl.name.as_str().map(str::to_owned);
                 let prev_class = std::mem::replace(&mut self.scope.class_name, trait_name);
                 let prev_fn = self.scope.function_name.take();
                 walk_owned_stmt(self, stmt)?;
@@ -1024,7 +1024,7 @@ impl<V: OwnedScopeVisitor> OwnedVisitor for OwnedScopeWalker<V> {
                 self.scope.function_name = prev_fn;
             }
             StmtKind::Enum(enum_decl) => {
-                let enum_name = enum_decl.name.as_ref().map(|n| n.to_string());
+                let enum_name = enum_decl.name.as_str().map(str::to_owned);
                 let prev_class = std::mem::replace(&mut self.scope.class_name, enum_name);
                 let prev_fn = self.scope.function_name.take();
                 walk_owned_stmt(self, stmt)?;
@@ -1082,7 +1082,7 @@ impl<V: OwnedScopeVisitor> OwnedVisitor for OwnedScopeWalker<V> {
     fn visit_class_member(&mut self, member: &ClassMember) -> ControlFlow<()> {
         self.inner.visit_class_member(member, &self.scope)?;
         if let ClassMemberKind::Method(method) = &member.kind {
-            let fn_name = method.name.as_ref().map(|n| n.to_string());
+            let fn_name = method.name.as_str().map(str::to_owned);
             let prev_fn = std::mem::replace(&mut self.scope.function_name, fn_name);
             walk_owned_class_member(self, member)?;
             self.scope.function_name = prev_fn;
@@ -1095,7 +1095,7 @@ impl<V: OwnedScopeVisitor> OwnedVisitor for OwnedScopeWalker<V> {
     fn visit_enum_member(&mut self, member: &EnumMember) -> ControlFlow<()> {
         self.inner.visit_enum_member(member, &self.scope)?;
         if let EnumMemberKind::Method(method) = &member.kind {
-            let fn_name = method.name.as_ref().map(|n| n.to_string());
+            let fn_name = method.name.as_str().map(str::to_owned);
             let prev_fn = std::mem::replace(&mut self.scope.function_name, fn_name);
             walk_owned_enum_member(self, member)?;
             self.scope.function_name = prev_fn;
@@ -1289,7 +1289,7 @@ mod tests {
         let inner = binary(dummy_int(3), BinaryOp::Add, dummy_int(4));
         let func = Stmt {
             kind: StmtKind::Function(Box::new(FunctionDecl {
-                name: Some(Box::from("foo")),
+                name: crate::owned::Ident::name("foo"),
                 params: Box::from([]),
                 body: block_of([expr_stmt(inner)]),
                 return_type: None,
@@ -1329,7 +1329,7 @@ mod tests {
         // class Foo { public function bar() { $x; } }
         let method = ClassMember {
             kind: ClassMemberKind::Method(MethodDecl {
-                name: Some(Box::from("bar")),
+                name: crate::owned::Ident::name("bar"),
                 visibility: Some(crate::ast::Visibility::Public),
                 is_static: false,
                 is_abstract: false,
@@ -1345,7 +1345,7 @@ mod tests {
         };
         let class_stmt = Stmt {
             kind: StmtKind::Class(Box::new(ClassDecl {
-                name: Some(Some(Box::from("Foo"))),
+                name: Some(crate::owned::Ident::name("Foo")),
                 modifiers: crate::ast::ClassModifiers::default(),
                 extends: None,
                 implements: Box::from([]),
@@ -1374,7 +1374,7 @@ mod tests {
                     self.methods.push(format!(
                         "{}::{}",
                         scope.class_name.as_deref().unwrap_or("<anon>"),
-                        m.name.as_deref().unwrap_or("<error>"),
+                        m.name.or_error(),
                     ));
                 }
                 ControlFlow::Continue(())

@@ -35,6 +35,8 @@ pub use visitor::{
     OwnedScopeWalker, OwnedVisitor,
 };
 
+use std::fmt;
+
 use serde::Serialize;
 
 use crate::ast as arena_ast;
@@ -56,18 +58,58 @@ fn slice_is_empty<T>(v: &[T]) -> bool {
     v.is_empty()
 }
 
-// ---------------------------------------------------------------------------
-// Ident
-//
-// `Ident<'src>` serialises as `null` for the error state (empty string) and as
-// a JSON string for real names. `Option<Box<str>>` produces identical output:
-// `None` → null, `Some(s)` → "s". We use a type alias to keep field types
-// readable.
-// ---------------------------------------------------------------------------
+/// Owned equivalent of [`Ident`](crate::ast::Ident), with the same API and serialized form.
+#[derive(Clone, PartialEq, Eq, Hash, Serialize)]
+#[serde(transparent)]
+pub struct Ident(Option<Box<str>>);
 
-/// Owned equivalent of [`Ident`](crate::ast::Ident).
-/// `None` represents the error state (no identifier was parsed).
-pub type Ident = Option<Box<str>>;
+impl Ident {
+    /// Sentinel for "no identifier was parsed".
+    pub const ERROR: Self = Self(None);
+
+    /// Construct an identifier from a non-empty name.
+    pub fn name(s: impl Into<Box<str>>) -> Self {
+        let s = s.into();
+        debug_assert!(!s.is_empty(), "Ident::name() called with empty string");
+        Self(Some(s))
+    }
+
+    /// Returns `Some(s)` for a real identifier, `None` for the error state.
+    pub fn as_str(&self) -> Option<&str> {
+        self.0.as_deref()
+    }
+
+    /// Returns `true` if this identifier was synthesised during error recovery.
+    pub fn is_error(&self) -> bool {
+        self.0.is_none()
+    }
+
+    /// Returns the inner string, or `"<error>"` for the error state.
+    pub fn or_error(&self) -> &str {
+        self.0.as_deref().unwrap_or("<error>")
+    }
+}
+
+impl fmt::Debug for Ident {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match &self.0 {
+            Some(s) => f.debug_tuple("Ident").field(s).finish(),
+            None => f.write_str("Ident::ERROR"),
+        }
+    }
+}
+
+impl fmt::Display for Ident {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.or_error())
+    }
+}
+
+impl PartialEq<&str> for Ident {
+    fn eq(&self, other: &&str) -> bool {
+        self.as_str() == Some(*other)
+    }
+}
 
 // ---------------------------------------------------------------------------
 // Name
@@ -1615,7 +1657,7 @@ pub struct EnumCase {
 // ===========================================================================
 
 fn owned_ident(ident: arena_ast::Ident<'_>) -> Ident {
-    ident.as_str().map(|s| s.into())
+    ident.as_str().map_or(Ident::ERROR, Ident::name)
 }
 
 fn owned_name(name: &arena_ast::Name<'_, '_>) -> Name {
@@ -2572,7 +2614,7 @@ fn av_str<'a>(arena: &'a bumpalo::Bump, s: &str) -> &'a str {
 }
 
 fn av_ident<'a>(arena: &'a bumpalo::Bump, ident: &Ident) -> arena_ast::Ident<'a> {
-    match ident {
+    match ident.as_str() {
         Some(s) => arena_ast::Ident::name(arena.alloc_str(s)),
         None => arena_ast::Ident::ERROR,
     }
