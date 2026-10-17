@@ -7,7 +7,7 @@ if ($b) {
 }
 ===errors===
 unterminated block comment
-unclosed ''}'' opened at Span { start: 15, end: 16 }
+expected '}' to close the delimiter opened at byte 15
 ===php_error===
 PHP Parse error:  Unterminated comment starting line 5 in Standard input code on line 5
 ===ast===

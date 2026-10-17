@@ -7,7 +7,7 @@ if ($x > 1 {
 expected expression
 expected '}', found 'echo'
 Array and string offset access syntax with curly braces is no longer supported
-unclosed '')'' opened at Span { start: 9, end: 10 }
+expected ')' to close the delimiter opened at byte 9
 expected expression
 ===php_error===
 PHP Parse error:  syntax error, unexpected token "{" in Standard input code on line 2

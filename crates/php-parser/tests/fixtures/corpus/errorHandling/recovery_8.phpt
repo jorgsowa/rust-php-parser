@@ -8,7 +8,7 @@ while (true) {
     $i = 1;
     $i = 2;
 ===errors===
-unclosed ''}'' opened at Span { start: 118, end: 119 }
+expected '}' to close the delimiter opened at byte 118
 ===php_error===
 PHP Parse error:  Unclosed '{' on line 6 in Standard input code on line 8
 ===ast===

@@ -2,7 +2,7 @@
 <?php for (;;; ) {} while (true) { break; }
 ===errors===
 expected expression
-unclosed '')'' opened at Span { start: 10, end: 11 }
+expected ')' to close the delimiter opened at byte 10
 expected expression
 expected expression
 ===php_error===

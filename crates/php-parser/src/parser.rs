@@ -401,7 +401,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             Some(self.advance())
         } else {
             self.error(ParseError::UnclosedDelimiter {
-                delimiter: format!("'{}'", kind).into(),
+                delimiter: kind.description().into(),
                 opened_at,
                 span: self.current_span(),
             });

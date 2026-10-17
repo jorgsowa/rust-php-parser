@@ -37,7 +37,7 @@ expected variable, found ')'
 expected '{', found ';'
 expected '}', found end of file
 expected ';' after expression
-unclosed ''}'' opened at Span { start: 171, end: 176 }
+expected '}' to close the delimiter opened at byte 171
 ===php_error===
 PHP Parse error:  syntax error, unexpected token ")", expecting variable in Standard input code on line 3
 ===ast===

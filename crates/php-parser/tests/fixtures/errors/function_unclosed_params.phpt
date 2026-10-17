@@ -3,7 +3,7 @@ min_php=8.4
 ===source===
 <?php function test(int $x { }
 ===errors===
-unclosed '')'' opened at Span { start: 19, end: 20 }
+expected ')' to close the delimiter opened at byte 19
 ===php_error===
 PHP Parse error:  Unclosed '(' in Standard input code on line 1
 ===ast===

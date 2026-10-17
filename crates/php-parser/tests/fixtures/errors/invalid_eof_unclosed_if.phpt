@@ -3,7 +3,7 @@
 if ($x > 1) {
     echo "hello";
 ===errors===
-unclosed ''}'' opened at Span { start: 18, end: 19 }
+expected '}' to close the delimiter opened at byte 18
 ===php_error===
 PHP Parse error:  Unclosed '{' on line 2 in Standard input code on line 3
 ===ast===
