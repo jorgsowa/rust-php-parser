@@ -7,6 +7,7 @@ mod types;
 use php_ast::Comment;
 
 /// Configuration for the pretty printer.
+#[non_exhaustive]
 pub struct PrinterConfig {
     /// Indentation style.
     pub indent: Indent,
@@ -17,6 +18,7 @@ pub struct PrinterConfig {
 }
 
 /// Indentation style.
+#[non_exhaustive]
 pub enum Indent {
     /// Indent with this many spaces per level.
     Spaces(usize),
@@ -108,6 +110,15 @@ impl<'src> Printer<'src> {
 
     pub fn into_output(self) -> String {
         self.output
+    }
+
+    /// Marks a node this printer version cannot print. The AST enums are
+    /// `#[non_exhaustive]`; a marker keeps the output visibly wrong (and
+    /// unparseable) instead of silently dropping the node.
+    pub(crate) fn unsupported(&mut self, what: &str) {
+        self.w("/* unsupported ");
+        self.w(what);
+        self.w(" */");
     }
 
     pub(crate) fn w(&mut self, s: &str) {
@@ -258,6 +269,7 @@ impl<'src> Printer<'src> {
                     self.newline();
                 }
             }
+            _ => self.w(comment.text),
         }
     }
 

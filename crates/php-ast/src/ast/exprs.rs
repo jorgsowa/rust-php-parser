@@ -113,6 +113,7 @@ pub struct Expr<'arena, 'src> {
 
 /// The kinds of expression.
 #[derive(Debug, Serialize)]
+#[non_exhaustive]
 pub enum ExprKind<'arena, 'src> {
     /// Integer literal
     Int(i64),
@@ -307,6 +308,7 @@ impl<'arena, 'src> Expr<'arena, 'src> {
 
 /// The type of a cast expression.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[non_exhaustive]
 pub enum CastKind {
     /// `(int)` or `(integer)` cast.
     Int,
@@ -328,6 +330,7 @@ pub enum CastKind {
 
 /// The include/require keyword used.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[non_exhaustive]
 pub enum IncludeKind {
     /// `include 'file.php'` — emits a warning if the file is not found.
     Include,
@@ -341,6 +344,7 @@ pub enum IncludeKind {
 
 /// The magic constants.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[non_exhaustive]
 pub enum MagicConstKind {
     /// `__CLASS__` — name of the current class, or empty string outside a class.
     Class,
@@ -380,6 +384,7 @@ pub struct AssignExpr<'arena, 'src> {
 
 /// Assignment operators.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[non_exhaustive]
 pub enum AssignOp {
     /// `=`
     Assign,
@@ -424,6 +429,7 @@ pub struct BinaryExpr<'arena, 'src> {
 
 /// Binary operators.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[non_exhaustive]
 pub enum BinaryOp {
     /// `+`
     Add,
@@ -494,6 +500,7 @@ pub struct UnaryPrefixExpr<'arena, 'src> {
 
 /// Prefix unary operators.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[non_exhaustive]
 pub enum UnaryPrefixOp {
     /// `-expr` — arithmetic negation.
     Negate,
@@ -520,6 +527,7 @@ pub struct UnaryPostfixExpr<'arena, 'src> {
 
 /// Postfix unary operators.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[non_exhaustive]
 pub enum UnaryPostfixOp {
     /// `$x++` — post-increment; returns the current value then increments.
     PostIncrement,
@@ -735,6 +743,7 @@ pub struct CallableCreateExpr<'arena, 'src> {
 
 /// The callee forms of a first-class callable.
 #[derive(Debug, Serialize)]
+#[non_exhaustive]
 pub enum CallableCreateKind<'arena, 'src> {
     /// `foo(...)`, `$var(...)`, `\Ns\func(...)`
     Function(&'arena Expr<'arena, 'src>),
@@ -765,6 +774,7 @@ pub enum CallableCreateKind<'arena, 'src> {
 
 /// A segment of an interpolated string.
 #[derive(Debug, Serialize)]
+#[non_exhaustive]
 pub enum StringPart<'arena, 'src> {
     /// A plain text segment of an interpolated string or heredoc.
     Literal(&'arena str),

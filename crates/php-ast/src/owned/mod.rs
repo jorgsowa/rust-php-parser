@@ -122,6 +122,7 @@ pub struct TypeHint {
 
 /// The shape of a type declaration.
 #[derive(Debug, Clone)]
+#[non_exhaustive]
 pub enum TypeHintKind {
     /// A class or other user-defined type name.
     Named(Name),
@@ -261,6 +262,7 @@ pub struct Block {
 
 /// The kind of a statement.
 #[derive(Debug, Clone, Serialize)]
+#[non_exhaustive]
 pub enum StmtKind {
     /// An expression statement.
     Expression(Box<Expr>),
@@ -483,6 +485,7 @@ pub struct NamespaceDecl {
 
 /// Whether a namespace is braced or statement-terminated.
 #[derive(Debug, Clone, Serialize)]
+#[non_exhaustive]
 pub enum NamespaceBody {
     /// `namespace X { ... }`.
     Braced(Box<Block>),
@@ -567,6 +570,7 @@ pub struct Expr {
 
 /// The kind of an expression.
 #[derive(Debug, Clone, Serialize)]
+#[non_exhaustive]
 pub enum ExprKind {
     /// Integer literal.
     Int(i64),
@@ -1157,6 +1161,7 @@ pub struct CallableCreateExpr {
 
 /// The callee of a first-class callable.
 #[derive(Debug, Clone, Serialize)]
+#[non_exhaustive]
 pub enum CallableCreateKind {
     /// `f(...)`.
     Function(Box<Expr>),
@@ -1185,6 +1190,7 @@ pub enum CallableCreateKind {
 
 /// A segment of an interpolated string.
 #[derive(Debug, Clone, Serialize)]
+#[non_exhaustive]
 pub enum StringPart {
     /// Literal text.
     Literal(Box<str>),
@@ -1218,6 +1224,7 @@ pub struct FunctionDecl {
 
 /// A function or method parameter.
 #[derive(Debug, Clone, Serialize)]
+#[non_exhaustive]
 pub struct Param {
     /// Parameter name without `$`.
     pub name: Ident,
@@ -1247,6 +1254,30 @@ pub struct Param {
     pub doc_comment: Option<Comment>,
     /// Source span.
     pub span: Span,
+}
+
+impl Param {
+    /// A parameter with `name` and `span` set and every other field empty.
+    /// The fields are public, so set the rest by assignment; `Param` is
+    /// `#[non_exhaustive]` and cannot be built with a struct literal outside
+    /// this crate.
+    pub fn new(name: Ident, span: Span) -> Self {
+        Self {
+            name,
+            type_hint: None,
+            default: None,
+            by_ref: false,
+            variadic: false,
+            is_readonly: false,
+            is_final: false,
+            visibility: None,
+            set_visibility: None,
+            attributes: Box::new([]),
+            hooks: Box::new([]),
+            doc_comment: None,
+            span,
+        }
+    }
 }
 
 /// The braced member list of a class-like declaration.
@@ -1291,6 +1322,7 @@ pub struct ClassMember {
 
 /// The kind of a class member.
 #[derive(Debug, Clone, Serialize)]
+#[non_exhaustive]
 pub enum ClassMemberKind {
     /// Property declaration.
     Property(PropertyDecl),
@@ -1350,6 +1382,7 @@ pub struct PropertyHook {
 
 /// The body of a property hook.
 #[derive(Debug, Clone, Serialize)]
+#[non_exhaustive]
 pub enum PropertyHookBody {
     /// Braced body.
     Block(Box<Block>),
@@ -1361,6 +1394,7 @@ pub enum PropertyHookBody {
 
 /// A method declaration.
 #[derive(Debug, Clone, Serialize)]
+#[non_exhaustive]
 pub struct MethodDecl {
     /// Method name.
     pub name: Ident,
@@ -1385,6 +1419,26 @@ pub struct MethodDecl {
     /// Preceding doc comment.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment>,
+}
+
+impl MethodDecl {
+    /// A method with `name` set and every other field empty. Set the rest by
+    /// assignment; see [`Param::new`].
+    pub fn new(name: Ident) -> Self {
+        Self {
+            name,
+            visibility: None,
+            is_static: false,
+            is_abstract: false,
+            is_final: false,
+            by_ref: false,
+            params: Box::new([]),
+            return_type: None,
+            body: None,
+            attributes: Box::new([]),
+            doc_comment: None,
+        }
+    }
 }
 
 /// A class constant declaration.
@@ -1434,6 +1488,7 @@ pub struct TraitAdaptation {
 
 /// The kind of trait adaptation rule.
 #[derive(Debug, Clone, Serialize)]
+#[non_exhaustive]
 pub enum TraitAdaptationKind {
     /// `A::m insteadof B;`.
     Precedence {
@@ -1529,6 +1584,7 @@ pub struct EnumMember {
 
 /// The kind of an enum member.
 #[derive(Debug, Clone, Serialize)]
+#[non_exhaustive]
 pub enum EnumMemberKind {
     /// Enum case.
     Case(EnumCase),

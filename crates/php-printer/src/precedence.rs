@@ -73,6 +73,7 @@ pub fn binary_op_precedence(op: BinaryOp) -> (i8, i8, i8) {
         ),
         BinaryOp::Instanceof => (PREC_INSTANCEOF, PREC_INSTANCEOF + 1, PREC_INSTANCEOF + 1),
         BinaryOp::Pipe => (PREC_PIPE, PREC_PIPE, PREC_PIPE + 1),
+        _ => (PREC_LOWEST, PREC_PRIMARY, PREC_PRIMARY),
     }
 }
 

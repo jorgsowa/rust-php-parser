@@ -93,6 +93,7 @@ pub struct Block<'arena, 'src> {
 
 /// The kinds of statement.
 #[derive(Debug, Serialize)]
+#[non_exhaustive]
 pub enum StmtKind<'arena, 'src> {
     /// Expression statement (e.g. `foo();`)
     Expression(&'arena Expr<'arena, 'src>),
@@ -346,6 +347,7 @@ pub struct NamespaceDecl<'arena, 'src> {
 
 /// Whether a namespace is braced or simple.
 #[derive(Debug, Serialize)]
+#[non_exhaustive]
 pub enum NamespaceBody<'arena, 'src> {
     /// `namespace Foo { … }` — braced form; the statements are scoped to this namespace.
     Braced(&'arena Block<'arena, 'src>),
@@ -376,6 +378,7 @@ pub struct UseDecl<'arena, 'src> {
 
 /// What a `use` import brings in.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[non_exhaustive]
 pub enum UseKind {
     /// `use Foo\Bar` — imports a class, interface, trait, or enum.
     Normal,

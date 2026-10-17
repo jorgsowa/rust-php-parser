@@ -18,6 +18,7 @@ pub struct InlineTag {
 
 /// A segment of prose text — either plain text or an inline tag.
 #[derive(Debug, Clone, Serialize)]
+#[non_exhaustive]
 pub enum TextSegment {
     /// Literal prose.
     Text(String),

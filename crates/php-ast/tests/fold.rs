@@ -556,32 +556,18 @@ fn fold_param_override_strips_default() {
             arena: &'new Bump,
             param: &Param<'_, 'src>,
         ) -> Param<'new, 'src> {
-            Param {
-                default: None,
-                ..fold_param(self, arena, param)
-            }
+            let mut param = fold_param(self, arena, param);
+            param.default = None;
+            param
         }
     }
     let arena = Bump::new();
     let out = Bump::new();
-    let param = Param {
-        name: Ident::name("x"),
-        type_hint: None,
-        default: Some(Expr {
-            kind: ExprKind::Int(42),
-            span: Span::DUMMY,
-        }),
-        by_ref: false,
-        variadic: false,
-        is_readonly: false,
-        is_final: false,
-        visibility: None,
-        set_visibility: None,
-        attributes: ArenaVec::new_in(&arena),
-        hooks: ArenaVec::new_in(&arena),
-        doc_comment: None,
+    let mut param = Param::new(&arena, Ident::name("x"), Span::DUMMY);
+    param.default = Some(Expr {
+        kind: ExprKind::Int(42),
         span: Span::DUMMY,
-    };
+    });
     let folded = ClearDefaults.fold_param(&out, &param);
     assert!(
         folded.default.is_none(),
@@ -1123,4 +1109,28 @@ fn match_default_arm_conditions_none_stays_none() {
         folded.conditions.is_none(),
         "default arm (conditions=None) must stay None — must not be confused with empty vec"
     );
+}
+
+/// `Param` and `MethodDecl` are `#[non_exhaustive]`; their constructors set the
+/// required fields and leave the rest empty for assignment.
+#[test]
+fn constructors_leave_optional_fields_empty() {
+    let arena = Bump::new();
+    let param = Param::new(&arena, Ident::name("x"), Span::new(1, 3));
+    assert_eq!(param.name.as_str(), Some("x"));
+    assert_eq!(param.span, Span::new(1, 3));
+    assert!(param.type_hint.is_none() && param.default.is_none() && param.visibility.is_none());
+    assert!(!param.by_ref && !param.variadic && !param.is_readonly && !param.is_final);
+    assert!(param.attributes.is_empty() && param.hooks.is_empty());
+
+    let method = MethodDecl::new(&arena, Ident::name("run"));
+    assert_eq!(method.name.as_str(), Some("run"));
+    assert!(method.params.is_empty() && method.body.is_none() && method.return_type.is_none());
+    assert!(!method.is_static && !method.is_abstract && !method.is_final);
+
+    let owned = php_ast::owned::Param::new(Some("y".into()), Span::DUMMY);
+    assert_eq!(owned.name.as_deref(), Some("y"));
+    assert!(owned.default.is_none() && owned.hooks.is_empty());
+    let owned_method = php_ast::owned::MethodDecl::new(Some("go".into()));
+    assert!(owned_method.params.is_empty() && owned_method.body.is_none());
 }

@@ -1329,10 +1329,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
 
         let class_decl = ClassDecl {
             name: None,
-            modifiers: ClassModifiers {
-                is_readonly: anon_readonly,
-                ..Default::default()
-            },
+            modifiers: crate::stmt::class_modifiers(false, false, anon_readonly),
             extends,
             implements,
             body: ClassBody {

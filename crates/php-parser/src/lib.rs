@@ -116,6 +116,7 @@ pub use version::PhpVersion;
 ///
 /// Use [`parse_arena`] or [`ParserContext`] when you need the arena-allocated
 /// form for maximum throughput in tight loops or LSP re-parse scenarios.
+#[non_exhaustive]
 pub struct ParseResult {
     /// The original source text, owned.
     pub source: String,
@@ -162,6 +163,7 @@ impl ParseResult {
 /// [`ParserContext::reparse`]. Both the AST and the source text are borrowed,
 /// so this type has two lifetime parameters. Use [`ParseResult`] (from
 /// [`parse`]) when you need an owned, lifetime-free result.
+#[non_exhaustive]
 pub struct ArenaParseResult<'arena, 'src> {
     /// The original source text. Useful for extracting text from spans
     /// via `&result.source[span.start as usize..span.end as usize]`.

@@ -4,6 +4,7 @@
 /// guarantees a compact discriminant layout used by [`TokenKind::is_assignment_op`].
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[non_exhaustive]
 pub enum TokenKind {
     // -------------------------------------------------------------------------
     // Literals

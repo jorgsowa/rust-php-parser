@@ -308,6 +308,7 @@ impl<'src> Printer<'src> {
             StmtKind::Error => {
                 self.w("/* error */");
             }
+            _ => self.unsupported("statement"),
         }
     }
 
@@ -479,6 +480,7 @@ impl<'src> Printer<'src> {
                 self.print_block(block);
             }
             NamespaceBody::Simple => self.w(";"),
+            _ => self.unsupported("namespace body"),
         }
     }
 
@@ -488,6 +490,7 @@ impl<'src> Printer<'src> {
             UseKind::Function => self.w("function "),
             UseKind::Const => self.w("const "),
             UseKind::Normal => {}
+            _ => self.unsupported("use kind"),
         }
         for (i, item) in use_decl.uses.iter().enumerate() {
             if i > 0 {

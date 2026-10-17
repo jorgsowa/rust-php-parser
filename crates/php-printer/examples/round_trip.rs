@@ -18,10 +18,8 @@ fn main() {
         pretty_print_owned_with_comments(&reparsed.program, &reparsed.source, &reparsed.comments);
     assert_eq!(printed, again, "printing is not idempotent");
 
-    let config = PrinterConfig {
-        indent: Indent::Spaces(2),
-        ..Default::default()
-    };
+    let mut config = PrinterConfig::default();
+    config.indent = Indent::Spaces(2);
     println!(
         "{}",
         pretty_print_owned_with_comments_and_config(

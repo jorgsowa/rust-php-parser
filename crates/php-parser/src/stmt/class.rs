@@ -20,7 +20,7 @@ fn visibility_rank(v: php_ast::Visibility) -> u8 {
     match v {
         php_ast::Visibility::Private => 0,
         php_ast::Visibility::Protected => 1,
-        php_ast::Visibility::Public => 2,
+        _ => 2,
     }
 }
 
@@ -260,14 +260,13 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
                         span: paren_span,
                     });
                 }
-                PropertyHookKind::Set => {
-                    if p.len() != 1 {
-                        parser.error(ParseError::Forbidden {
-                            message: "set hook must have exactly one parameter".into(),
-                            span: paren_span,
-                        });
-                    }
+                PropertyHookKind::Set if p.len() != 1 => {
+                    parser.error(ParseError::Forbidden {
+                        message: "set hook must have exactly one parameter".into(),
+                        span: paren_span,
+                    });
                 }
+                _ => {}
             }
 
             p
@@ -322,6 +321,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
                 }
                 seen_set = true;
             }
+            _ => {}
         }
 
         let hook_span = Span::new(hook_start, parser.previous_end());
@@ -941,18 +941,19 @@ fn parse_method_member<'arena, 'src>(
 
     let span = Span::new(member_start, parser.previous_end());
     ClassMember {
-        kind: ClassMemberKind::Method(MethodDecl {
-            name: method_name,
-            visibility: mods.visibility,
-            is_static: mods.is_static,
-            is_abstract: mods.is_abstract,
-            is_final: mods.is_final,
-            by_ref,
-            params,
-            return_type,
-            body,
-            attributes: member_attrs,
-            doc_comment,
+        kind: ClassMemberKind::Method({
+            let mut method = MethodDecl::new(parser.arena, method_name);
+            method.visibility = mods.visibility;
+            method.is_static = mods.is_static;
+            method.is_abstract = mods.is_abstract;
+            method.is_final = mods.is_final;
+            method.by_ref = by_ref;
+            method.params = params;
+            method.return_type = return_type;
+            method.body = body;
+            method.attributes = member_attrs;
+            method.doc_comment = doc_comment;
+            method
         }),
         span,
     }

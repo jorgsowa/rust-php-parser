@@ -20,6 +20,7 @@ impl<'src> Printer<'src> {
                 }
             }
             Name::Error { .. } => self.w("<error>"),
+            _ => self.unsupported("name"),
         }
     }
 
@@ -65,6 +66,7 @@ impl<'src> Printer<'src> {
                     self.w(")");
                 }
             }
+            _ => self.unsupported("type"),
         }
     }
 }

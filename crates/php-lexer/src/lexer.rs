@@ -52,6 +52,7 @@ static IS_IDENT_CONTINUE: [bool; 256] = make_ident_continue_table();
 
 /// Discriminant for [`LexerError`] — describes what kind of lexer failure occurred.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum LexerErrorKind {
     /// The lexer reached end-of-file inside a string literal without finding the closing delimiter.
     UnterminatedString,

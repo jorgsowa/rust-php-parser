@@ -12,6 +12,7 @@ use std::fmt;
 /// Defaults to [`PhpVersion::Php85`], the latest released version — [`PhpVersion::Php86`] must
 /// be opted into explicitly since PHP 8.6 hasn't shipped yet.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord)]
+#[non_exhaustive]
 pub enum PhpVersion {
     /// PHP 7.4 — arrow functions, typed properties, spread in array expressions, numeric literal separator.
     Php74,

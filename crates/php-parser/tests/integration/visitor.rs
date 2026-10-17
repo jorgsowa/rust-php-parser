@@ -721,6 +721,7 @@ fn walk_trait_use_can_be_called_directly() {
                     match &adaptation.kind {
                         TraitAdaptationKind::Precedence { .. } => self.precedence += 1,
                         TraitAdaptationKind::Alias { .. } => self.alias += 1,
+                        _ => {}
                     }
                     ControlFlow::Continue(())
                 }

@@ -1138,6 +1138,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     BuiltinType::Null => "null",
                     BuiltinType::True => "true",
                     BuiltinType::False => "false",
+                    _ => return None,
                 };
                 Some(name.to_string())
             }
@@ -1148,16 +1149,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                         NameKind::Unqualified | NameKind::Qualified => "",
                         NameKind::FullyQualified => "\\",
                         NameKind::Relative => "namespace\\",
-                        NameKind::Error => return None,
+                        _ => return None,
                     };
                     let joined = parts.iter().copied().collect::<Vec<_>>().join("\\");
                     Some(format!("{}{}", prefix, joined))
                 }
-                Name::Error { .. } => None,
+                _ => None,
             },
-            TypeHintKind::Nullable(_) | TypeHintKind::Union(_) | TypeHintKind::Intersection(_) => {
-                None
-            }
+            _ => None,
         }
     }
 
@@ -1722,7 +1721,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             if let StmtKind::Namespace(decl) = stmt.kind {
                 let kind = match decl.body {
                     php_ast::NamespaceBody::Braced(_) => NsKind::Braced,
-                    php_ast::NamespaceBody::Simple => NsKind::Unbraced,
+                    _ => NsKind::Unbraced,
                 };
                 if let Some((prev_kind, prev_span)) = first_ns {
                     if prev_kind != kind {
@@ -1826,6 +1825,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     php_ast::UseKind::Normal => 0,
                     php_ast::UseKind::Function => 1,
                     php_ast::UseKind::Const => 2,
+                    _ => 3,
                 };
                 let parts = item.name.parts_slice();
                 let effective_alias = item
@@ -1868,6 +1868,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     php_ast::UseKind::Normal => 0,
                     php_ast::UseKind::Function => 1,
                     php_ast::UseKind::Const => 2,
+                    _ => 3,
                 };
                 let parts = item.name.parts_slice();
                 let effective_alias = item

@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `Param::new` and `MethodDecl::new` in the arena and owned AST (`php-ast`).
 - `TokenKind::description` (`php-lexer`).
 - `ScopeVisitor` and `OwnedScopeVisitor` gain `visit_name` and `visit_block`, and `FoldOwned` gains `fold_trait_use` and `fold_trait_adaptation` (with `fold_owned_trait_use`/`fold_owned_trait_adaptation`), matching the plain visitors and the arena `Fold`. All have default bodies (`php-ast`).
 - `NameStr::new_in` builds a `NameStr` in an arena without the hidden `__arena` constructor (`php-ast`).
@@ -29,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Breaking:** every public enum is `#[non_exhaustive]` — all AST enums (`ExprKind`, `StmtKind`, `BinaryOp`, `TypeHintKind`, …, arena and owned), `PhpVersion`, `ParseError`, `Severity`, `TokenKind`, `LexerErrorKind`, `Indent` and `TextSegment` — so new PHP syntax and versions can be added without a major release. Matches on them outside these crates need a `_` arm. The structs most likely to grow fields are `#[non_exhaustive]` too: `Param`, `MethodDecl` (arena and owned), `ClassModifiers`, `ParseResult`, `ArenaParseResult` and `PrinterConfig`. Build them with `Param::new`/`MethodDecl::new` or `Default::default()` and assign the remaining public fields, e.g. `let mut config = PrinterConfig::default(); config.indent = Indent::Spaces(2);` (all crates).
+- The printer writes `/* unsupported … */` for a node kind it does not know, rather than dropping it silently (`php-printer`).
 - **Breaking:** `ParseError::Expected::found` is a `Cow<'static, str>` description (e.g. `"';'"`, `"identifier"`) instead of a `php_lexer::TokenKind`, so new lexer tokens are no longer a breaking change for `php-rs-parser`. The error message text is unchanged. `TokenKind::description` returns the same text as its `Display` (`php-rs-parser`, `php-lexer`).
 - **Breaking:** the printer-only offsets are `Span`s of the token they mark: `IfStmt::else_kw_start` → `else_kw_span`, `TryCatchStmt::finally_kw_start` → `finally_kw_span`, `MatchExpr::brace_start` → `brace_span`, `TraitUseDecl::adaptations_brace_start` → `adaptations_brace_span`, in both the arena and owned AST. They are still not serialized (`php-ast`, `php-rs-parser`, `php-printer`).
 - **Breaking:** `php_rs_parser::instrument` is public only with the `instrument` feature, and `owned::from_owned_program` is `#[doc(hidden)]`: both are internals, not stable API (`php-rs-parser`, `php-ast`).

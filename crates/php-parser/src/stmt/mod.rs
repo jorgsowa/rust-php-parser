@@ -176,10 +176,7 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
             if parser.check(TokenKind::Class) {
                 class::parse_class(
                     parser,
-                    ClassModifiers {
-                        is_abstract: true,
-                        ..Default::default()
-                    },
+                    class_modifiers(true, false, false),
                     parser.alloc_vec(),
                 )
             } else if parser.check(TokenKind::Readonly)
@@ -191,11 +188,7 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
                 parser.advance(); // consume 'readonly'
                 class::parse_class(
                     parser,
-                    ClassModifiers {
-                        is_abstract: true,
-                        is_readonly: true,
-                        ..Default::default()
-                    },
+                    class_modifiers(true, false, true),
                     parser.alloc_vec(),
                 )
             } else if parser.check(TokenKind::Final) {
@@ -208,11 +201,7 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
                 if parser.check(TokenKind::Class) {
                     class::parse_class(
                         parser,
-                        ClassModifiers {
-                            is_abstract: true,
-                            is_final: true,
-                            ..Default::default()
-                        },
+                        class_modifiers(true, true, false),
                         parser.alloc_vec(),
                     )
                 } else {
@@ -229,10 +218,7 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
             if parser.check(TokenKind::Class) {
                 class::parse_class(
                     parser,
-                    ClassModifiers {
-                        is_final: true,
-                        ..Default::default()
-                    },
+                    class_modifiers(false, true, false),
                     parser.alloc_vec(),
                 )
             } else if parser.check(TokenKind::Readonly) {
@@ -242,11 +228,7 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
                 if parser.check(TokenKind::Class) {
                     class::parse_class(
                         parser,
-                        ClassModifiers {
-                            is_final: true,
-                            is_readonly: true,
-                            ..Default::default()
-                        },
+                        class_modifiers(false, true, true),
                         parser.alloc_vec(),
                     )
                 } else {
@@ -262,11 +244,7 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
                 if parser.check(TokenKind::Class) {
                     class::parse_class(
                         parser,
-                        ClassModifiers {
-                            is_abstract: true,
-                            is_final: true,
-                            ..Default::default()
-                        },
+                        class_modifiers(true, true, false),
                         parser.alloc_vec(),
                     )
                 } else {
@@ -283,10 +261,7 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
                 parser.advance(); // consume 'readonly'
                 class::parse_class(
                     parser,
-                    ClassModifiers {
-                        is_readonly: true,
-                        ..Default::default()
-                    },
+                    class_modifiers(false, false, true),
                     parser.alloc_vec(),
                 )
             } else if parser.peek_kind() == Some(TokenKind::Final)
@@ -299,11 +274,7 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
                 parser.advance(); // consume 'final'
                 class::parse_class(
                     parser,
-                    ClassModifiers {
-                        is_final: true,
-                        is_readonly: true,
-                        ..Default::default()
-                    },
+                    class_modifiers(false, true, true),
                     parser.alloc_vec(),
                 )
             } else if parser.peek_kind() == Some(TokenKind::Abstract)
@@ -316,11 +287,7 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
                 parser.advance(); // consume 'abstract'
                 class::parse_class(
                     parser,
-                    ClassModifiers {
-                        is_abstract: true,
-                        is_readonly: true,
-                        ..Default::default()
-                    },
+                    class_modifiers(true, false, true),
                     parser.alloc_vec(),
                 )
             } else {
@@ -404,6 +371,19 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
     }
 }
 
+/// `ClassModifiers` is `#[non_exhaustive]`, so it is built from its default.
+pub(crate) fn class_modifiers(
+    is_abstract: bool,
+    is_final: bool,
+    is_readonly: bool,
+) -> ClassModifiers {
+    let mut modifiers = ClassModifiers::default();
+    modifiers.is_abstract = is_abstract;
+    modifiers.is_final = is_final;
+    modifiers.is_readonly = is_readonly;
+    modifiers
+}
+
 fn class_modifier_error<'arena, 'src>(
     parser: &mut Parser<'arena, 'src>,
     start: u32,
@@ -470,14 +450,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             let start = parser.start_span();
             parser.advance();
             if parser.check(TokenKind::Class) {
-                return class::parse_class(
-                    parser,
-                    ClassModifiers {
-                        is_abstract: true,
-                        ..Default::default()
-                    },
-                    attributes,
-                );
+                return class::parse_class(parser, class_modifiers(true, false, false), attributes);
             } else if parser.check(TokenKind::Readonly)
                 && parser.peek_kind() == Some(TokenKind::Class)
             {
@@ -485,15 +458,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 let span = parser.current_span();
                 parser.require_version(PhpVersion::Php84, "abstract readonly class", span);
                 parser.advance(); // consume 'readonly'
-                return class::parse_class(
-                    parser,
-                    ClassModifiers {
-                        is_abstract: true,
-                        is_readonly: true,
-                        ..Default::default()
-                    },
-                    attributes,
-                );
+                return class::parse_class(parser, class_modifiers(true, false, true), attributes);
             } else if parser.check(TokenKind::Final) {
                 parser.advance();
                 parser.error(ParseError::Forbidden {
@@ -503,11 +468,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 if parser.check(TokenKind::Class) {
                     return class::parse_class(
                         parser,
-                        ClassModifiers {
-                            is_abstract: true,
-                            is_final: true,
-                            ..Default::default()
-                        },
+                        class_modifiers(true, true, false),
                         attributes,
                     );
                 } else {
@@ -521,27 +482,12 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             let start = parser.start_span();
             parser.advance();
             if parser.check(TokenKind::Class) {
-                class::parse_class(
-                    parser,
-                    ClassModifiers {
-                        is_final: true,
-                        ..Default::default()
-                    },
-                    attributes,
-                )
+                class::parse_class(parser, class_modifiers(false, true, false), attributes)
             } else if parser.check(TokenKind::Readonly) {
                 let span = parser.current_span();
                 parser.require_version(PhpVersion::Php82, "readonly class", span);
                 parser.advance();
-                class::parse_class(
-                    parser,
-                    ClassModifiers {
-                        is_final: true,
-                        is_readonly: true,
-                        ..Default::default()
-                    },
-                    attributes,
-                )
+                class::parse_class(parser, class_modifiers(false, true, true), attributes)
             } else if parser.check(TokenKind::Abstract) {
                 parser.advance();
                 parser.error(ParseError::Forbidden {
@@ -549,15 +495,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     span: Span::new(start, parser.previous_end()),
                 });
                 if parser.check(TokenKind::Class) {
-                    class::parse_class(
-                        parser,
-                        ClassModifiers {
-                            is_abstract: true,
-                            is_final: true,
-                            ..Default::default()
-                        },
-                        attributes,
-                    )
+                    class::parse_class(parser, class_modifiers(true, true, false), attributes)
                 } else {
                     class_modifier_error(parser, start)
                 }
@@ -570,43 +508,20 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             parser.advance();
             if parser.check(TokenKind::Class) {
                 parser.require_version(PhpVersion::Php82, "readonly class", readonly_span);
-                class::parse_class(
-                    parser,
-                    ClassModifiers {
-                        is_readonly: true,
-                        ..Default::default()
-                    },
-                    attributes,
-                )
+                class::parse_class(parser, class_modifiers(false, false, true), attributes)
             } else if parser.check(TokenKind::Final) && parser.peek_kind() == Some(TokenKind::Class)
             {
                 // `readonly final class` — same as `final readonly class`
                 parser.require_version(PhpVersion::Php82, "readonly class", readonly_span);
                 parser.advance(); // consume 'final'
-                return class::parse_class(
-                    parser,
-                    ClassModifiers {
-                        is_final: true,
-                        is_readonly: true,
-                        ..Default::default()
-                    },
-                    attributes,
-                );
+                return class::parse_class(parser, class_modifiers(false, true, true), attributes);
             } else if parser.check(TokenKind::Abstract)
                 && parser.peek_kind() == Some(TokenKind::Class)
             {
                 // `readonly abstract class` — valid in PHP 8.4
                 parser.require_version(PhpVersion::Php84, "abstract readonly class", readonly_span);
                 parser.advance(); // consume 'abstract'
-                return class::parse_class(
-                    parser,
-                    ClassModifiers {
-                        is_abstract: true,
-                        is_readonly: true,
-                        ..Default::default()
-                    },
-                    attributes,
-                );
+                return class::parse_class(parser, class_modifiers(true, false, true), attributes);
             } else {
                 let span = parser.current_span();
                 parser.error(ParseError::Expected {
@@ -1620,20 +1535,20 @@ pub fn parse_param_list<'arena, 'src>(
             parser.take_doc_comment_after(param_end, boundary)
         });
 
-        params.push(Param {
-            name,
-            type_hint,
-            default,
-            by_ref,
-            variadic,
-            is_readonly,
-            is_final,
-            visibility,
-            set_visibility,
-            attributes: param_attrs,
-            hooks,
-            doc_comment,
-            span: Span::new(param_start, param_end),
+        params.push({
+            let mut param = Param::new(parser.arena, name, Span::new(param_start, param_end));
+            param.type_hint = type_hint;
+            param.default = default;
+            param.by_ref = by_ref;
+            param.variadic = variadic;
+            param.is_readonly = is_readonly;
+            param.is_final = is_final;
+            param.visibility = visibility;
+            param.set_visibility = set_visibility;
+            param.attributes = param_attrs;
+            param.hooks = hooks;
+            param.doc_comment = doc_comment;
+            param
         });
 
         if parser.eat(TokenKind::Comma).is_none() {
@@ -1695,20 +1610,10 @@ fn try_parse_simple_param_fastpath_minimal<'arena, 'src>(
         parser.take_doc_comment_after(name_span_end, boundary)
     });
 
-    Some(Param {
-        name,
-        type_hint: None,
-        default: None,
-        by_ref: false,
-        variadic: false,
-        is_readonly: false,
-        is_final: false,
-        visibility: None,
-        set_visibility: None,
-        attributes: parser.alloc_vec(),
-        hooks: parser.alloc_vec(),
-        doc_comment,
-        span: Span::new(param_start, name_span_end),
+    Some({
+        let mut param = Param::new(parser.arena, name, Span::new(param_start, name_span_end));
+        param.doc_comment = doc_comment;
+        param
     })
 }
 
@@ -2351,7 +2256,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                             cp.push(p);
                         }
                     }
-                    Name::Error { .. } => {}
+                    _ => {}
                 }
                 cp
             };
@@ -2378,11 +2283,12 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             let local_name = alias.unwrap_or(sub_last_part);
             let effective_kind = item_kind.unwrap_or(kind);
             let seen = match effective_kind {
-                UseKind::Normal => &mut seen_normal,
-                UseKind::Function => &mut seen_function,
-                UseKind::Const => &mut seen_const,
+                UseKind::Normal => Some(&mut seen_normal),
+                UseKind::Function => Some(&mut seen_function),
+                UseKind::Const => Some(&mut seen_const),
+                _ => None,
             };
-            if !local_name.is_empty() && !seen.insert(local_name) {
+            if !local_name.is_empty() && seen.is_some_and(|seen| !seen.insert(local_name)) {
                 parser.error(ParseError::Forbidden {
                     message: format!(
                         "cannot import {} as {} because the name is already in use",

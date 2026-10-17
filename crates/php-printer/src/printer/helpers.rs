@@ -140,6 +140,7 @@ pub(crate) fn binary_op_str(op: BinaryOp) -> &'static str {
         BinaryOp::LogicalXor => "xor",
         BinaryOp::Instanceof => "instanceof",
         BinaryOp::Pipe => "|>",
+        _ => "/* unsupported operator */",
     }
 }
 
@@ -159,6 +160,7 @@ pub(crate) fn assign_op_str(op: AssignOp) -> &'static str {
         AssignOp::ShiftLeft => "<<=",
         AssignOp::ShiftRight => ">>=",
         AssignOp::Coalesce => "??=",
+        _ => "/* unsupported operator */",
     }
 }
 
@@ -170,6 +172,7 @@ pub(crate) fn unary_prefix_op_str(op: UnaryPrefixOp) -> &'static str {
         UnaryPrefixOp::BitwiseNot => "~",
         UnaryPrefixOp::PreIncrement => "++",
         UnaryPrefixOp::PreDecrement => "--",
+        _ => "/* unsupported operator */",
     }
 }
 
@@ -177,6 +180,7 @@ pub(crate) fn unary_postfix_op_str(op: UnaryPostfixOp) -> &'static str {
     match op {
         UnaryPostfixOp::PostIncrement => "++",
         UnaryPostfixOp::PostDecrement => "--",
+        _ => "/* unsupported operator */",
     }
 }
 
@@ -190,6 +194,7 @@ pub(crate) fn cast_str(kind: CastKind) -> &'static str {
         CastKind::Object => "(object)",
         CastKind::Unset => "(unset)",
         CastKind::Void => "(void)",
+        _ => "/* unsupported cast */ ",
     }
 }
 
@@ -199,6 +204,7 @@ pub(crate) fn include_kind_str(kind: IncludeKind) -> &'static str {
         IncludeKind::IncludeOnce => "include_once",
         IncludeKind::Require => "require",
         IncludeKind::RequireOnce => "require_once",
+        _ => "/* unsupported include */",
     }
 }
 
@@ -213,6 +219,7 @@ pub(crate) fn magic_const_str(kind: MagicConstKind) -> &'static str {
         MagicConstKind::Namespace => "__NAMESPACE__",
         MagicConstKind::Trait => "__TRAIT__",
         MagicConstKind::Property => "__PROPERTY__",
+        _ => "/* unsupported constant */",
     }
 }
 
@@ -221,5 +228,6 @@ pub(crate) fn visibility_str(vis: Visibility) -> &'static str {
         Visibility::Public => "public",
         Visibility::Protected => "protected",
         Visibility::Private => "private",
+        _ => "/* unsupported visibility */",
     }
 }

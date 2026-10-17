@@ -17,6 +17,7 @@ pub struct Comment<'src> {
 
 /// Distinguishes the four syntactic forms of PHP comment.
 #[derive(Debug, Serialize, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum CommentKind {
     /// `// …` — single-line slash comment
     Line,

@@ -134,6 +134,7 @@ impl<'src> Printer<'src> {
             ClassMemberKind::Method(method) => self.print_method(method),
             ClassMemberKind::ClassConst(cc) => self.print_class_const(cc),
             ClassMemberKind::TraitUse(tu) => self.print_trait_use(tu),
+            _ => self.unsupported("class member"),
         }
     }
 
@@ -227,6 +228,7 @@ impl<'src> Printer<'src> {
             match hook.kind {
                 PropertyHookKind::Get => self.w("get"),
                 PropertyHookKind::Set => self.w("set"),
+                _ => self.unsupported("property hook"),
             }
             if !hook.params.is_empty() {
                 self.w("(");
@@ -246,6 +248,7 @@ impl<'src> Printer<'src> {
                     self.w(";");
                 }
                 PropertyHookBody::Abstract => self.w(";"),
+                _ => self.unsupported("property hook body"),
             }
             self.newline();
         }
@@ -337,6 +340,7 @@ impl<'src> Printer<'src> {
                             self.print_name(name);
                         }
                     }
+                    _ => self.unsupported("trait adaptation"),
                 }
                 self.w(";");
                 self.newline();
@@ -434,6 +438,7 @@ impl<'src> Printer<'src> {
             EnumMemberKind::Method(method) => self.print_method(method),
             EnumMemberKind::ClassConst(cc) => self.print_class_const(cc),
             EnumMemberKind::TraitUse(tu) => self.print_trait_use(tu),
+            _ => self.unsupported("enum member"),
         }
     }
 

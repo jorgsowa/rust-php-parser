@@ -124,6 +124,7 @@ mod ident_layout_tests {
 /// The `Error` variant is synthesised during error recovery when the parser
 /// expected a name but found none. It carries only a span so consumers can
 /// distinguish it from any user-written name.
+#[non_exhaustive]
 pub enum Name<'arena, 'src> {
     /// Single unqualified identifier — no `ArenaVec` allocation.
     /// `&'src str` instead of `Cow` since this is always a borrowed slice of the source.
@@ -285,6 +286,7 @@ impl<'arena, 'src> serde::Serialize for Name<'arena, 'src> {
 
 /// How a name is qualified.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[non_exhaustive]
 pub enum NameKind {
     /// A bare identifier with no namespace separator: `Foo`, `strlen`.
     Unqualified,
@@ -302,6 +304,7 @@ pub enum NameKind {
 /// 20 reserved type names. One byte instead of a `Cow<str>` + `Span` in the AST.
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[non_exhaustive]
 pub enum BuiltinType {
     /// `int` — integer scalar type.
     Int,
@@ -391,6 +394,7 @@ pub struct TypeHint<'arena, 'src> {
 ///
 /// Serialises identically to `Named` so all existing snapshots remain unchanged.
 #[derive(Debug)]
+#[non_exhaustive]
 pub enum TypeHintKind<'arena, 'src> {
     /// A user-defined or qualified class name: `Foo`, `\Ns\Bar`.
     Named(Name<'arena, 'src>),

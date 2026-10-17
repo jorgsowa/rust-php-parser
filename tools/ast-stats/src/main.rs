@@ -67,6 +67,7 @@ impl<'a, 'src> Visitor<'a, 'src> for NodeCounter {
             StmtKind::HaltCompiler(_) => "HaltCompiler",
             StmtKind::Nop => "Nop",
             StmtKind::Error => "Error",
+            _ => "Other",
         };
         self.bump(name);
         walk_stmt(self, stmt)
@@ -146,6 +147,7 @@ impl<'a, 'src> Visitor<'a, 'src> for NodeCounter {
             ExprKind::CallableCreate(_) => self.bump("CallableCreate"),
             ExprKind::Omit => self.bump("Omit"),
             ExprKind::Error => self.bump("Error"),
+            _ => self.bump("Other"),
         }
         walk_expr(self, expr)
     }
@@ -188,6 +190,7 @@ impl<'a, 'src> Visitor<'a, 'src> for NodeCounter {
             ClassMemberKind::TraitUse(_) => {
                 self.bump("TraitUse");
             }
+            _ => self.bump("Other"),
         }
         walk_class_member(self, member)
     }

@@ -7,6 +7,7 @@ use crate::owned;
 
 /// Which import table a name is looked up in.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum NameContext {
     /// Classes, interfaces, traits, enums.
     Class,
@@ -18,6 +19,7 @@ pub enum NameContext {
 
 /// Result of resolving a name against the current namespace and imports.
 #[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ResolvedName {
     /// Fully qualified name without a leading backslash.
     Fqn(String),

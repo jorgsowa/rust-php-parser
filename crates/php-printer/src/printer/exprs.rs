@@ -40,30 +40,36 @@ impl<'src> Printer<'src> {
     /// link's parenthesis on the way down, print the innermost node, then emit
     /// each link's remainder on the way back up.
     fn print_chain_operand(&mut self, expr: &Expr) {
-        let (mut node, mut prec) = chain_operand(&expr.kind).expect("chain link has an operand");
+        let Some((mut node, mut prec)) = chain_operand(&expr.kind) else {
+            return;
+        };
         let needs_parens = self.open_paren(node, prec);
-        if !is_chain(&node.kind) {
+        let Some(next) = linked_operand(node) else {
             // A single link, by far the most common chain: no stack needed.
             self.print_expr_inner(node);
             if needs_parens {
                 self.w(")");
             }
             return;
-        }
+        };
         let mut chain = LinkStack::new();
         chain.push((node, needs_parens));
-        (node, prec) = chain_operand(&node.kind).expect("chain link has an operand");
+        (node, prec) = next;
         loop {
             let needs_parens = self.open_paren(node, prec);
-            if !is_chain(&node.kind) {
-                self.print_expr_inner(node);
-                if needs_parens {
-                    self.w(")");
+            match linked_operand(node) {
+                Some(next) => {
+                    chain.push((node, needs_parens));
+                    (node, prec) = next;
                 }
-                break;
+                None => {
+                    self.print_expr_inner(node);
+                    if needs_parens {
+                        self.w(")");
+                    }
+                    break;
+                }
             }
-            chain.push((node, needs_parens));
-            (node, prec) = chain_operand(&node.kind).expect("chain link has an operand");
         }
         while let Some((node, needs_parens)) = chain.pop() {
             self.print_expr_inner(node);
@@ -392,9 +398,11 @@ impl<'src> Printer<'src> {
                     self.print_expr(method, PREC_PRIMARY);
                     self.w("(...)");
                 }
+                _ => self.unsupported("callable"),
             },
             ExprKind::Omit => {}
             ExprKind::Error => self.w("/* error */"),
+            _ => self.unsupported("expression"),
         }
     }
 
@@ -592,6 +600,7 @@ impl<'src> Printer<'src> {
                     }
                     last_literal_ends_with_brace = false;
                 }
+                _ => self.unsupported("string part"),
             }
         }
     }
@@ -601,6 +610,7 @@ impl<'src> Printer<'src> {
             match part {
                 StringPart::Literal(s) => self.w(&escape_shell_exec(s)),
                 StringPart::Expr(expr) => self.print_string_part_expr(expr),
+                _ => self.unsupported("string part"),
             }
         }
     }
@@ -610,6 +620,7 @@ impl<'src> Printer<'src> {
             match part {
                 StringPart::Literal(s) => self.w(&escape_heredoc(s)),
                 StringPart::Expr(expr) => self.print_string_part_expr(expr),
+                _ => self.unsupported("string part"),
             }
         }
     }
@@ -659,6 +670,18 @@ impl<'src> Printer<'src> {
             self.w(&escape_single_quoted(s));
             self.w("'");
         }
+    }
+}
+
+/// The chain operand of `node`, checking the cheap [`is_chain`] first.
+#[inline]
+fn linked_operand<'a, 'arena, 'src>(
+    node: &'a Expr<'arena, 'src>,
+) -> Option<(&'a Expr<'arena, 'src>, i8)> {
+    if is_chain(&node.kind) {
+        chain_operand(&node.kind)
+    } else {
+        None
     }
 }
 
@@ -753,6 +776,7 @@ fn chain_operand<'a, 'arena, 'src>(
             CallableCreateKind::Method { object, .. }
             | CallableCreateKind::NullsafeMethod { object, .. } => object,
             CallableCreateKind::StaticMethod { class, .. } => class,
+            _ => return None,
         },
         _ => return None,
     };

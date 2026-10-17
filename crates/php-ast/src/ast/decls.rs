@@ -31,6 +31,7 @@ pub struct FunctionDecl<'arena, 'src> {
 
 /// A function, method, closure or hook parameter.
 #[derive(Debug, Serialize)]
+#[non_exhaustive]
 pub struct Param<'arena, 'src> {
     /// Parameter name without `$`.
     pub name: Ident<'src>,
@@ -65,8 +66,33 @@ pub struct Param<'arena, 'src> {
     pub span: Span,
 }
 
+impl<'arena, 'src> Param<'arena, 'src> {
+    /// A parameter with `name` and `span` set and every other field empty
+    /// (`None`, `false`, no attributes or hooks). The fields are public, so set
+    /// the rest by assignment; `Param` is `#[non_exhaustive]` and cannot be
+    /// built with a struct literal outside this crate.
+    pub fn new(arena: &'arena bumpalo::Bump, name: Ident<'src>, span: Span) -> Self {
+        Self {
+            name,
+            type_hint: None,
+            default: None,
+            by_ref: false,
+            variadic: false,
+            is_readonly: false,
+            is_final: false,
+            visibility: None,
+            set_visibility: None,
+            attributes: ArenaVec::new_in(arena),
+            hooks: ArenaVec::new_in(arena),
+            doc_comment: None,
+            span,
+        }
+    }
+}
+
 /// Member visibility modifier.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[non_exhaustive]
 pub enum Visibility {
     /// `public` — accessible from anywhere.
     Public,
@@ -109,6 +135,7 @@ pub struct ClassDecl<'arena, 'src> {
 
 /// Modifiers preceding `class`.
 #[derive(Debug, Clone, Serialize, Default)]
+#[non_exhaustive]
 pub struct ClassModifiers {
     /// `true` for `abstract class`.
     pub is_abstract: bool,
@@ -129,6 +156,7 @@ pub struct ClassMember<'arena, 'src> {
 
 /// The kinds of class-like member.
 #[derive(Debug, Serialize)]
+#[non_exhaustive]
 pub enum ClassMemberKind<'arena, 'src> {
     /// Property declaration.
     Property(PropertyDecl<'arena, 'src>),
@@ -169,6 +197,7 @@ pub struct PropertyDecl<'arena, 'src> {
 
 /// Which accessor a property hook implements.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[non_exhaustive]
 pub enum PropertyHookKind {
     /// `get` hook — called when the property is read.
     Get,
@@ -178,6 +207,7 @@ pub enum PropertyHookKind {
 
 /// The body form of a property hook.
 #[derive(Debug, Serialize)]
+#[non_exhaustive]
 pub enum PropertyHookBody<'arena, 'src> {
     /// `{ stmts }` — a full statement block.
     Block(&'arena Block<'arena, 'src>),
@@ -208,6 +238,7 @@ pub struct PropertyHook<'arena, 'src> {
 
 /// A method declaration inside a class-like body.
 #[derive(Debug, Serialize)]
+#[non_exhaustive]
 pub struct MethodDecl<'arena, 'src> {
     /// Method name.
     pub name: Ident<'src>,
@@ -232,6 +263,27 @@ pub struct MethodDecl<'arena, 'src> {
     /// Preceding `/** */` doc-block, if any.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub doc_comment: Option<Comment<'src>>,
+}
+
+impl<'arena, 'src> MethodDecl<'arena, 'src> {
+    /// A method with `name` set and every other field empty (no modifiers,
+    /// parameters, return type, body or attributes). Set the rest by
+    /// assignment; see [`Param::new`].
+    pub fn new(arena: &'arena bumpalo::Bump, name: Ident<'src>) -> Self {
+        Self {
+            name,
+            visibility: None,
+            is_static: false,
+            is_abstract: false,
+            is_final: false,
+            by_ref: false,
+            params: ArenaVec::new_in(arena),
+            return_type: None,
+            body: None,
+            attributes: ArenaVec::new_in(arena),
+            doc_comment: None,
+        }
+    }
 }
 
 /// A class constant: `const X = 1;`.
@@ -282,6 +334,7 @@ pub struct TraitAdaptation<'arena, 'src> {
 
 /// The kinds of trait adaptation rule.
 #[derive(Debug, Serialize)]
+#[non_exhaustive]
 pub enum TraitAdaptationKind<'arena, 'src> {
     /// `A::foo insteadof B, C;`
     Precedence {
@@ -377,6 +430,7 @@ pub struct EnumMember<'arena, 'src> {
 
 /// The kinds of enum member.
 #[derive(Debug, Serialize)]
+#[non_exhaustive]
 pub enum EnumMemberKind<'arena, 'src> {
     /// An enum case: `case Foo;` or `case Foo = 'foo';` (backed enum).
     Case(EnumCase<'arena, 'src>),

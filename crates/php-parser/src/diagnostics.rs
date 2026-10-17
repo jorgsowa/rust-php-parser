@@ -5,6 +5,7 @@ use thiserror::Error;
 /// Diagnostic severity. Mirrors `php -l`'s split between fatal errors and
 /// warnings (e.g. `final private method` is a PHP warning, not a fatal).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+#[non_exhaustive]
 pub enum Severity {
     /// Fatal in PHP.
     #[default]
@@ -19,6 +20,7 @@ pub enum Severity {
 /// so errors are informational rather than fatal. Each variant carries a
 /// [`Span`] identifying the source location.
 #[derive(Debug, Clone, Error)]
+#[non_exhaustive]
 pub enum ParseError {
     /// A specific token was expected but a different one was found.
     #[error("expected {expected}, found {found}")]

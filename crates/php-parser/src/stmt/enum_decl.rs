@@ -335,18 +335,19 @@ pub(super) fn parse_enum<'arena, 'src>(
 
             let span = Span::new(member_start, parser.previous_end());
             members.push(EnumMember {
-                kind: EnumMemberKind::Method(MethodDecl {
-                    name: method_name,
-                    visibility,
-                    is_static,
-                    is_abstract,
-                    is_final,
-                    by_ref,
-                    params,
-                    return_type,
-                    body,
-                    attributes: member_attrs,
-                    doc_comment,
+                kind: EnumMemberKind::Method({
+                    let mut method = MethodDecl::new(parser.arena, method_name);
+                    method.visibility = visibility;
+                    method.is_static = is_static;
+                    method.is_abstract = is_abstract;
+                    method.is_final = is_final;
+                    method.by_ref = by_ref;
+                    method.params = params;
+                    method.return_type = return_type;
+                    method.body = body;
+                    method.attributes = member_attrs;
+                    method.doc_comment = doc_comment;
+                    method
                 }),
                 span,
             });

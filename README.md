@@ -167,7 +167,8 @@ Use `pretty_print_owned_file` to append a trailing newline. Pass a `PrinterConfi
 ```rust
 use php_printer::{PrinterConfig, Indent};
 
-let config = PrinterConfig { indent: Indent::Spaces(2), ..Default::default() };
+let mut config = PrinterConfig::default();
+config.indent = Indent::Spaces(2);
 let output = php_printer::pretty_print_owned_with_config(&result.program, &config);
 ```
 
