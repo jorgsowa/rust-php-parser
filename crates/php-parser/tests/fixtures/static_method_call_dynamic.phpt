@@ -8,7 +8,7 @@ $obj::$fn();
 self::$method();
 parent::$method();
 
-// first-class callable — produces CallableCreate, not StaticDynMethodCall
+// first-class callable — produces CallableCreate, not StaticMethodCallDynamic
 Foo::$method(...);
 
 // chained array access before call — produces FunctionCall(ArrayAccess(StaticPropertyAccess))
@@ -20,7 +20,7 @@ Foo::$method['key']();
       "kind": {
         "Expression": {
           "kind": {
-            "StaticDynMethodCall": {
+            "StaticMethodCallDynamic": {
               "class": {
                 "kind": {
                   "Identifier": "Foo"
@@ -57,7 +57,7 @@ Foo::$method['key']();
       "kind": {
         "Expression": {
           "kind": {
-            "StaticDynMethodCall": {
+            "StaticMethodCallDynamic": {
               "class": {
                 "kind": {
                   "Identifier": "Foo"
@@ -131,7 +131,7 @@ Foo::$method['key']();
       "kind": {
         "Expression": {
           "kind": {
-            "StaticDynMethodCall": {
+            "StaticMethodCallDynamic": {
               "class": {
                 "kind": {
                   "Identifier": "static"
@@ -168,7 +168,7 @@ Foo::$method['key']();
       "kind": {
         "Expression": {
           "kind": {
-            "StaticDynMethodCall": {
+            "StaticMethodCallDynamic": {
               "class": {
                 "kind": {
                   "Variable": "obj"
@@ -205,7 +205,7 @@ Foo::$method['key']();
       "kind": {
         "Expression": {
           "kind": {
-            "StaticDynMethodCall": {
+            "StaticMethodCallDynamic": {
               "class": {
                 "kind": {
                   "Identifier": "self"
@@ -242,7 +242,7 @@ Foo::$method['key']();
       "kind": {
         "Expression": {
           "kind": {
-            "StaticDynMethodCall": {
+            "StaticMethodCallDynamic": {
               "class": {
                 "kind": {
                   "Identifier": "parent"
@@ -287,8 +287,8 @@ Foo::$method['key']();
                       "Identifier": "Foo"
                     },
                     "span": {
-                      "start": 185,
-                      "end": 188
+                      "start": 189,
+                      "end": 192
                     }
                   },
                   "method": {
@@ -296,8 +296,8 @@ Foo::$method['key']();
                       "Variable": "method"
                     },
                     "span": {
-                      "start": 190,
-                      "end": 197
+                      "start": 194,
+                      "end": 201
                     }
                   }
                 }
@@ -305,14 +305,14 @@ Foo::$method['key']();
             }
           },
           "span": {
-            "start": 185,
-            "end": 202
+            "start": 189,
+            "end": 206
           }
         }
       },
       "span": {
-        "start": 185,
-        "end": 203
+        "start": 189,
+        "end": 207
       }
     },
     {
@@ -331,8 +331,8 @@ Foo::$method['key']();
                               "Identifier": "Foo"
                             },
                             "span": {
-                              "start": 302,
-                              "end": 305
+                              "start": 306,
+                              "end": 309
                             }
                           },
                           "member": {
@@ -340,15 +340,15 @@ Foo::$method['key']();
                               "Identifier": "method"
                             },
                             "span": {
-                              "start": 307,
-                              "end": 314
+                              "start": 311,
+                              "end": 318
                             }
                           }
                         }
                       },
                       "span": {
-                        "start": 302,
-                        "end": 314
+                        "start": 306,
+                        "end": 318
                       }
                     },
                     "index": {
@@ -356,34 +356,34 @@ Foo::$method['key']();
                         "String": "key"
                       },
                       "span": {
-                        "start": 315,
-                        "end": 320
+                        "start": 319,
+                        "end": 324
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 302,
-                  "end": 321
+                  "start": 306,
+                  "end": 325
                 }
               },
               "args": []
             }
           },
           "span": {
-            "start": 302,
-            "end": 323
+            "start": 306,
+            "end": 327
           }
         }
       },
       "span": {
-        "start": 302,
-        "end": 324
+        "start": 306,
+        "end": 328
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 324
+    "end": 328
   }
 }

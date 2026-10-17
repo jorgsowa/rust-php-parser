@@ -94,7 +94,7 @@
     "Closure (static)": 4,
     "Null": 2894,
     "Yield": 10,
-    "StaticDynMethodCall": 2,
+    "StaticMethodCallDynamic": 2,
     "Empty": 320,
     "ClassConstAccessDynamic": 3,
     "Match": 33,
@@ -264,7 +264,7 @@
         "StaticMethodCall": 60,
         "Param": 130,
         "Class": 4,
-        "StaticDynMethodCall": 1,
+        "StaticMethodCallDynamic": 1,
         "Namespace": 6,
         "Method (typed return)": 31,
         "Ternary": 6,
@@ -4997,7 +4997,7 @@
         "If": 334,
         "TryCatch": 3,
         "InterpolatedString": 8,
-        "StaticDynMethodCall": 1
+        "StaticMethodCallDynamic": 1
       }
     },
     "src/Http": {

@@ -1167,7 +1167,7 @@ export const astNodes: AstNode[] = [
   {
     id: 'expr-static-dyn-method',
     group: 'Class/Object Operations',
-    name: 'StaticDynMethodCall',
+    name: 'StaticMethodCallDynamic',
     description: 'Dynamic static method call (Class::$method(args))',
     phpExample: `MyClass::$method($arg);`,
     fieldHighlights: {

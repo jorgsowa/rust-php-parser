@@ -576,8 +576,8 @@ pub fn fold_expr<'new, 'src, F: Fold<'src> + ?Sized>(
                 args: fold_args(folder, arena, &call.args),
             }))
         }
-        ExprKind::StaticDynMethodCall(call) => {
-            ExprKind::StaticDynMethodCall(arena.alloc(StaticDynMethodCallExpr {
+        ExprKind::StaticMethodCallDynamic(call) => {
+            ExprKind::StaticMethodCallDynamic(arena.alloc(StaticMethodCallDynamicExpr {
                 class: arena.alloc(folder.fold_expr(arena, call.class)),
                 method: arena.alloc(folder.fold_expr(arena, call.method)),
                 args: fold_args(folder, arena, &call.args),

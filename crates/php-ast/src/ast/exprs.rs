@@ -247,7 +247,7 @@ pub enum ExprKind<'arena, 'src> {
     StaticMethodCall(&'arena StaticMethodCallExpr<'arena, 'src>),
 
     /// Dynamic static method call: `Class::$method(args)`
-    StaticDynMethodCall(&'arena StaticDynMethodCallExpr<'arena, 'src>),
+    StaticMethodCallDynamic(&'arena StaticMethodCallDynamicExpr<'arena, 'src>),
 
     /// Class constant access: `Class::CONST`
     ClassConstAccess(StaticAccessExpr<'arena, 'src>),
@@ -642,7 +642,7 @@ pub struct StaticMethodCallExpr<'arena, 'src> {
 
 /// A static call with a dynamic method name: `Class::$method(args)`.
 #[derive(Debug, Serialize)]
-pub struct StaticDynMethodCallExpr<'arena, 'src> {
+pub struct StaticMethodCallDynamicExpr<'arena, 'src> {
     /// Class expression or name.
     pub class: &'arena Expr<'arena, 'src>,
     /// Expression yielding the method name.

@@ -663,7 +663,7 @@ pub enum ExprKind {
     /// `Class::method()` call.
     StaticMethodCall(Box<StaticMethodCallExpr>),
     /// `Class::$method()` call.
-    StaticDynMethodCall(Box<StaticDynMethodCallExpr>),
+    StaticMethodCallDynamic(Box<StaticMethodCallDynamicExpr>),
     /// `Class::CONST` access.
     ClassConstAccess(StaticAccessExpr),
     /// `Class::{expr}` constant access.
@@ -797,7 +797,7 @@ fn arena_is_chain(k: &arena_ast::ExprKind<'_, '_>) -> bool {
             | arena_ast::ExprKind::StaticPropertyAccess(_)
             | arena_ast::ExprKind::ClassConstAccess(_)
             | arena_ast::ExprKind::StaticMethodCall(_)
-            | arena_ast::ExprKind::StaticDynMethodCall(_)
+            | arena_ast::ExprKind::StaticMethodCallDynamic(_)
             | arena_ast::ExprKind::ClassConstAccessDynamic { .. }
             | arena_ast::ExprKind::StaticPropertyAccessDynamic { .. }
             | arena_ast::ExprKind::CallableCreate(_)
@@ -823,7 +823,7 @@ fn owned_is_chain(k: &ExprKind) -> bool {
             | ExprKind::StaticPropertyAccess(_)
             | ExprKind::ClassConstAccess(_)
             | ExprKind::StaticMethodCall(_)
-            | ExprKind::StaticDynMethodCall(_)
+            | ExprKind::StaticMethodCallDynamic(_)
             | ExprKind::ClassConstAccessDynamic { .. }
             | ExprKind::StaticPropertyAccessDynamic { .. }
             | ExprKind::CallableCreate(_)
@@ -847,7 +847,7 @@ fn arena_chain_operand<'a, 'arena, 'src>(
         K::MethodCall(m) | K::NullsafeMethodCall(m) => Some(m.object),
         K::StaticPropertyAccess(s) | K::ClassConstAccess(s) => Some(s.class),
         K::StaticMethodCall(s) => Some(s.class),
-        K::StaticDynMethodCall(s) => Some(s.class),
+        K::StaticMethodCallDynamic(s) => Some(s.class),
         K::ClassConstAccessDynamic { class, .. } | K::StaticPropertyAccessDynamic { class, .. } => {
             Some(class)
         }
@@ -875,7 +875,7 @@ fn owned_chain_operand(k: &ExprKind) -> Option<&Expr> {
         ExprKind::MethodCall(m) | ExprKind::NullsafeMethodCall(m) => Some(&m.object),
         ExprKind::StaticPropertyAccess(s) | ExprKind::ClassConstAccess(s) => Some(&s.class),
         ExprKind::StaticMethodCall(s) => Some(&s.class),
-        ExprKind::StaticDynMethodCall(s) => Some(&s.class),
+        ExprKind::StaticMethodCallDynamic(s) => Some(&s.class),
         ExprKind::ClassConstAccessDynamic { class, .. }
         | ExprKind::StaticPropertyAccessDynamic { class, .. } => Some(class),
         ExprKind::CallableCreate(c) => Some(match &c.kind {
@@ -902,7 +902,7 @@ fn owned_chain_operand_mut(k: &mut ExprKind) -> Option<&mut Expr> {
         ExprKind::MethodCall(m) | ExprKind::NullsafeMethodCall(m) => Some(&mut m.object),
         ExprKind::StaticPropertyAccess(s) | ExprKind::ClassConstAccess(s) => Some(&mut s.class),
         ExprKind::StaticMethodCall(s) => Some(&mut s.class),
-        ExprKind::StaticDynMethodCall(s) => Some(&mut s.class),
+        ExprKind::StaticMethodCallDynamic(s) => Some(&mut s.class),
         ExprKind::ClassConstAccessDynamic { class, .. }
         | ExprKind::StaticPropertyAccessDynamic { class, .. } => Some(class),
         ExprKind::CallableCreate(c) => Some(match &mut c.kind {
@@ -1062,7 +1062,7 @@ pub struct StaticMethodCallExpr {
 
 /// A static call with a dynamic method expression.
 #[derive(Debug, Clone, Serialize)]
-pub struct StaticDynMethodCallExpr {
+pub struct StaticMethodCallDynamicExpr {
     /// Class expression.
     pub class: Box<Expr>,
     /// Method name expression.
@@ -1929,7 +1929,7 @@ fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
         | arena_ast::ExprKind::StaticPropertyAccess(_)
         | arena_ast::ExprKind::ClassConstAccess(_)
         | arena_ast::ExprKind::StaticMethodCall(_)
-        | arena_ast::ExprKind::StaticDynMethodCall(_)
+        | arena_ast::ExprKind::StaticMethodCallDynamic(_)
         | arena_ast::ExprKind::ClassConstAccessDynamic { .. }
         | arena_ast::ExprKind::StaticPropertyAccessDynamic { .. }
         | arena_ast::ExprKind::CallableCreate(_) => {
@@ -2008,8 +2008,8 @@ fn owned_link_kind(k: &arena_ast::ExprKind<'_, '_>, operand: Expr) -> ExprKind {
                 args: owned_args(&s.args),
             }))
         }
-        arena_ast::ExprKind::StaticDynMethodCall(s) => {
-            ExprKind::StaticDynMethodCall(Box::new(StaticDynMethodCallExpr {
+        arena_ast::ExprKind::StaticMethodCallDynamic(s) => {
+            ExprKind::StaticMethodCallDynamic(Box::new(StaticMethodCallDynamicExpr {
                 class: Box::new(operand),
                 method: Box::new(owned_expr(s.method)),
                 args: owned_args(&s.args),
@@ -2902,7 +2902,7 @@ fn av_leaf_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
         | ExprKind::StaticPropertyAccess(_)
         | ExprKind::ClassConstAccess(_)
         | ExprKind::StaticMethodCall(_)
-        | ExprKind::StaticDynMethodCall(_)
+        | ExprKind::StaticMethodCallDynamic(_)
         | ExprKind::ClassConstAccessDynamic { .. }
         | ExprKind::StaticPropertyAccessDynamic { .. }
         | ExprKind::CallableCreate(_) => {
@@ -2998,8 +2998,8 @@ fn av_link_kind<'a>(
                 args: av_args(arena, &s.args),
             }))
         }
-        ExprKind::StaticDynMethodCall(s) => arena_ast::ExprKind::StaticDynMethodCall(arena.alloc(
-            arena_ast::StaticDynMethodCallExpr {
+        ExprKind::StaticMethodCallDynamic(s) => arena_ast::ExprKind::StaticMethodCallDynamic(arena.alloc(
+            arena_ast::StaticMethodCallDynamicExpr {
                 class: arena.alloc(operand),
                 method: arena.alloc(av_expr(arena, &s.method)),
                 args: av_args(arena, &s.args),

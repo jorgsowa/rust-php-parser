@@ -80,7 +80,7 @@
     "Foreach": 2952,
     "ArrowFunction (plain)": 211,
     "UnaryPrefix": 9821,
-    "StaticDynMethodCall": 3,
+    "StaticMethodCallDynamic": 3,
     "Nowdoc": 3,
     "Function": 980,
     "Int": 10849,
@@ -804,7 +804,7 @@
         "UnaryPrefix": 82,
         "Parenthesized": 12,
         "ClassConst": 14,
-        "StaticDynMethodCall": 1,
+        "StaticMethodCallDynamic": 1,
         "String": 867,
         "Bool": 69,
         "Empty": 36,
@@ -1100,7 +1100,7 @@
         "Array": 63,
         "Param (plain)": 95,
         "Property": 52,
-        "StaticDynMethodCall": 1,
+        "StaticMethodCallDynamic": 1,
         "Method (static)": 37,
         "Continue": 1,
         "InterpolatedString": 14,
@@ -4999,7 +4999,7 @@
         "Param (plain)": 8,
         "Variable": 80,
         "Int": 5,
-        "StaticDynMethodCall": 1
+        "StaticMethodCallDynamic": 1
       }
     },
     "plugins/woocommerce/src/Internal/RestApi/Routes/V4/OrderNotes/Schema": {

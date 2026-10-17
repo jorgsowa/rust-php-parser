@@ -52,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Breaking:** `ParseError::VersionTooLow::required` and `::used` are `PhpVersion` values instead of strings. The message text is unchanged (`php-rs-parser`).
 - **Breaking:** `ResolvedName::Special` holds a `SpecialClass` enum (`Self_`, `Static`, `Parent`) instead of a `&'static str` (`php-ast`).
 - **Breaking:** `ExprKind::ThrowExpr` is renamed to `ExprKind::Throw`, matching `StmtKind::Throw`, in the arena and owned AST and in serialized output (`php-ast`).
+- **Breaking:** `ExprKind::StaticDynMethodCall` and `StaticDynMethodCallExpr` are renamed to `StaticMethodCallDynamic` and `StaticMethodCallDynamicExpr`, matching `ClassConstAccessDynamic` and `StaticPropertyAccessDynamic` (`php-ast`).
 
 - **Breaking:** `PrinterConfig::newline` is a `Newline` enum (`Lf`, the default, or `CrLf`) instead of a `&'static str` (`php-printer`).
 ---

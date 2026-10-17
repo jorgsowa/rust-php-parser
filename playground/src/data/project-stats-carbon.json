@@ -81,7 +81,7 @@
     "TryCatch": 50,
     "Throw": 73,
     "Method (static)": 296,
-    "StaticDynMethodCall": 1,
+    "StaticMethodCallDynamic": 1,
     "Array": 4088,
     "ClassConst": 83,
     "Assign": 1655,
@@ -288,7 +288,7 @@
         "For": 2,
         "ErrorSuppress": 10,
         "TraitUse": 15,
-        "StaticDynMethodCall": 1
+        "StaticMethodCallDynamic": 1
       }
     },
     "src/Carbon/List": {

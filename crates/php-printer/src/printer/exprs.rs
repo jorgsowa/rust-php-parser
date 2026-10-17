@@ -343,7 +343,7 @@ impl<'src> Printer<'src> {
                 self.print_args(&call.args);
                 self.w(")");
             }
-            ExprKind::StaticDynMethodCall(call) => {
+            ExprKind::StaticMethodCallDynamic(call) => {
                 self.w("::");
                 self.print_expr(call.method, PREC_PRIMARY);
                 self.w("(");
@@ -704,7 +704,7 @@ fn is_chain(kind: &ExprKind) -> bool {
             | ExprKind::StaticPropertyAccess(_)
             | ExprKind::ClassConstAccess(_)
             | ExprKind::StaticMethodCall(_)
-            | ExprKind::StaticDynMethodCall(_)
+            | ExprKind::StaticMethodCallDynamic(_)
             | ExprKind::ClassConstAccessDynamic { .. }
             | ExprKind::StaticPropertyAccessDynamic { .. }
             | ExprKind::CallableCreate(_)
@@ -770,7 +770,7 @@ fn chain_operand<'a, 'arena, 'src>(
         ExprKind::ClassConstAccessDynamic { class, .. }
         | ExprKind::StaticPropertyAccessDynamic { class, .. } => class,
         ExprKind::StaticMethodCall(call) => call.class,
-        ExprKind::StaticDynMethodCall(call) => call.class,
+        ExprKind::StaticMethodCallDynamic(call) => call.class,
         ExprKind::CallableCreate(cc) => match &cc.kind {
             CallableCreateKind::Function(name) => name,
             CallableCreateKind::Method { object, .. }

@@ -7,7 +7,7 @@
       "kind": {
         "Expression": {
           "kind": {
-            "StaticDynMethodCall": {
+            "StaticMethodCallDynamic": {
               "class": {
                 "kind": {
                   "Variable": "class"

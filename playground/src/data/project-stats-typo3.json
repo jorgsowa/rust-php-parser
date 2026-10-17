@@ -22862,7 +22862,7 @@
         "Property (plain)": 3,
         "ArrayAccess": 16,
         "Global": 1,
-        "StaticDynMethodCall": 6,
+        "StaticMethodCallDynamic": 6,
         "Method (plain)": 6,
         "Array": 12,
         "StaticPropertyAccess": 6,

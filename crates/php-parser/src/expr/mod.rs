@@ -573,8 +573,8 @@ pub fn parse_expr_bp<'arena, 'src>(
                         ArgListResult::Args(args) => {
                             let span = Span::new(lhs.span.start, parser.previous_end());
                             lhs = Expr {
-                                kind: ExprKind::StaticDynMethodCall(parser.alloc(
-                                    StaticDynMethodCallExpr {
+                                kind: ExprKind::StaticMethodCallDynamic(parser.alloc(
+                                    StaticMethodCallDynamicExpr {
                                         class: parser.alloc(lhs),
                                         method,
                                         args,

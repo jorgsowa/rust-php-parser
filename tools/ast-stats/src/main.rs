@@ -115,7 +115,7 @@ impl<'a, 'src> Visitor<'a, 'src> for NodeCounter {
             ExprKind::NullsafeMethodCall(_) => self.bump("NullsafeMethodCall"),
             ExprKind::StaticPropertyAccess(_) => self.bump("StaticPropertyAccess"),
             ExprKind::StaticMethodCall(_) => self.bump("StaticMethodCall"),
-            ExprKind::StaticDynMethodCall(_) => self.bump("StaticDynMethodCall"),
+            ExprKind::StaticMethodCallDynamic(_) => self.bump("StaticMethodCallDynamic"),
             ExprKind::ClassConstAccess(_) => self.bump("ClassConstAccess"),
             ExprKind::ClassConstAccessDynamic { .. } => self.bump("ClassConstAccessDynamic"),
             ExprKind::StaticPropertyAccessDynamic { .. } => {

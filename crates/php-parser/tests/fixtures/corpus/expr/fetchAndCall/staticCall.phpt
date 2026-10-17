@@ -107,7 +107,7 @@ $a['b']::c();
       "kind": {
         "Expression": {
           "kind": {
-            "StaticDynMethodCall": {
+            "StaticMethodCallDynamic": {
               "class": {
                 "kind": {
                   "Identifier": "A"

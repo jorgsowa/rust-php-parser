@@ -475,7 +475,7 @@ pub fn walk_owned_expr<V: OwnedVisitor + ?Sized>(visitor: &mut V, expr: &Expr) -
                 visitor.visit_arg(arg)?;
             }
         }
-        ExprKind::StaticDynMethodCall(call) => {
+        ExprKind::StaticMethodCallDynamic(call) => {
             visitor.visit_expr(&call.class)?;
             visitor.visit_expr(&call.method)?;
             for arg in call.args.iter() {

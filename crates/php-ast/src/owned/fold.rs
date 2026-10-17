@@ -492,8 +492,8 @@ fn fold_owned_expr_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &ExprKind) -> 
                 args: fold_owned_args(folder, &s.args),
             }))
         }
-        ExprKind::StaticDynMethodCall(s) => {
-            ExprKind::StaticDynMethodCall(Box::new(StaticDynMethodCallExpr {
+        ExprKind::StaticMethodCallDynamic(s) => {
+            ExprKind::StaticMethodCallDynamic(Box::new(StaticMethodCallDynamicExpr {
                 class: Box::new(folder.fold_expr(&s.class)),
                 method: Box::new(folder.fold_expr(&s.method)),
                 args: fold_owned_args(folder, &s.args),

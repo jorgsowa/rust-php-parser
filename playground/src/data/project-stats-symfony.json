@@ -34,7 +34,7 @@
     "Global": 1,
     "StaticVar": 82,
     "Empty": 129,
-    "StaticDynMethodCall": 2,
+    "StaticMethodCallDynamic": 2,
     "Identifier": 143906,
     "FunctionCall": 25851,
     "If": 19614,
@@ -8462,7 +8462,7 @@
         "Int": 427,
         "ArrowFunction (plain)": 3,
         "NullsafeMethodCall": 1,
-        "StaticDynMethodCall": 1,
+        "StaticMethodCallDynamic": 1,
         "Break": 8,
         "Method (static)": 46
       }
@@ -19840,7 +19840,7 @@
         "Param (promoted)": 5,
         "ThrowExpr": 1,
         "Break": 4,
-        "StaticDynMethodCall": 1,
+        "StaticMethodCallDynamic": 1,
         "ArrayAccess": 66,
         "Param": 251,
         "Use": 53,

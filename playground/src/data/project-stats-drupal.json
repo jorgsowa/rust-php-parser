@@ -16190,7 +16190,7 @@
         "ArrayAccess": 44,
         "Variable": 515,
         "If": 4,
-        "StaticDynMethodCall": 2,
+        "StaticMethodCallDynamic": 2,
         "Null": 2,
         "Expression": 286,
         "Param (plain)": 9,
