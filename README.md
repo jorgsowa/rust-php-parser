@@ -92,6 +92,7 @@ let b = ctx.reparse_owned("<?php echo 2;"); // a stays alive
 - `reparse()` — returns an arena-allocated `ArenaParseResult` that borrows from `ctx`; the previous result **must be dropped** before calling again:
 
 ```rust
+let mut ctx = php_rs_parser::ParserContext::new();
 let result = ctx.reparse("<?php echo 1;");
 drop(result); // required before next reparse
 let result = ctx.reparse("<?php echo 2;");
@@ -167,6 +168,7 @@ let output = php_printer::pretty_print(&result.program);
 ```rust
 use php_printer::{Indent, PrettyPrinter, PrinterConfig};
 
+let result = php_rs_parser::parse("<?php echo 1 + 2;");
 let mut config = PrinterConfig::default();
 config.indent = Indent::Spaces(2);
 let output = PrettyPrinter::new()
@@ -254,7 +256,7 @@ The crates follow [Semantic Versioning](https://semver.org/) for their Rust API.
 | **php-lexer** | [![crates.io](https://img.shields.io/crates/v/php-lexer)](https://crates.io/crates/php-lexer) | Hand-written tokenizer with handling for strings, heredoc/nowdoc, and inline HTML |
 | **php-ast** | [![crates.io](https://img.shields.io/crates/v/php-ast)](https://crates.io/crates/php-ast) | AST type definitions; arena `Visitor`/`ScopeVisitor`/`Fold` traits; owned `OwnedVisitor`/`OwnedScopeVisitor`/`FoldOwned` traits |
 | **php-rs-parser** | [![crates.io](https://img.shields.io/crates/v/php-rs-parser)](https://crates.io/crates/php-rs-parser) | Pratt-based recursive descent parser with panic-mode error recovery, source map; re-exports `phpdoc-parser` as `php_rs_parser::phpdoc` |
-| **phpdoc-parser** | [![crates.io](https://img.shields.io/crates/v/phpdoc-parser)](https://crates.io/crates/phpdoc-parser) | Standalone structural PHPDoc block parser — tag-agnostic, no external dependencies |
+| **phpdoc-parser** | [![crates.io](https://img.shields.io/crates/v/phpdoc-parser)](https://crates.io/crates/phpdoc-parser) | Standalone structural PHPDoc block parser — tag-agnostic, tag bodies exposed as raw text |
 | **php-printer** | [![crates.io](https://img.shields.io/crates/v/php-printer)](https://crates.io/crates/php-printer) | Pretty printer — converts AST back to PHP source; supports both arena and owned AST |
 
 Source flows through `Lexer → Parser → arena-allocated AST nodes`. The lexer is lazy (tokens produced on demand); the parser is Pratt-based recursive descent with a 2-token lookahead window and panic-mode error recovery. The owned AST (`php_ast::owned`) provides lifetime-free mirrors of every node type for storage and manipulation without arena lifetime constraints.

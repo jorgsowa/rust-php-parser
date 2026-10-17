@@ -1,4 +1,4 @@
-//! Hand-written PHP lexer with support for PHP 8.0–8.5 syntax.
+//! Hand-written PHP lexer with support for PHP 7.4–8.5 syntax (plus PHP 8.6 partial function application).
 //!
 //! This crate provides:
 //! - [`Lexer`] — a lazy, streaming tokenizer. Call [`Lexer::next_token`] to advance one token at

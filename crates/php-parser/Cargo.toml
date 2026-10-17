@@ -22,6 +22,7 @@ bumpalo = { workspace = true }
 memchr = { workspace = true }
 
 [dev-dependencies]
+php-printer = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 criterion = { workspace = true }

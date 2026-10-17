@@ -2,7 +2,12 @@
 
 ## Supported Versions
 
-Only the latest released version receives security fixes.
+| Version | Supported |
+|---------|-----------|
+| 1.x | Latest minor release |
+| 0.x | No (once 1.0 is released) |
+
+Security fixes are released as a patch to the latest 1.x minor version. When 2.0 is released, the latest 1.x minor keeps receiving security fixes for 6 months. Until 1.0 is released, only the latest 0.x version is supported.
 
 ## Reporting a Vulnerability
 

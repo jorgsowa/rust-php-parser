@@ -755,6 +755,7 @@ dependencies = [
  "mimalloc",
  "php-ast",
  "php-lexer",
+ "php-printer",
  "phpdoc-parser",
  "pprof",
  "rayon",

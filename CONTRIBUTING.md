@@ -7,7 +7,7 @@ From fresh clone to open PR.
 ## Prerequisites
 
 - **Rust** — latest stable toolchain (`rustup update stable`)
-- **PHP** — PHP 8.2 or newer for `php -l` fixture validation (the test suite skips syntax checks if PHP is not installed but CI runs them)
+- **PHP** — PHP 8.1 or newer for `php -l` fixture validation (the test suite skips syntax checks if PHP is not installed but CI runs them)
 - `cargo` and standard Rust tooling (`clippy`, `rustfmt`)
 
 ---
@@ -28,7 +28,7 @@ cargo test          # all tests should pass
 |-------|--------------|---------|
 | `crates/php-ast` | `php-ast` | AST node types; arena `Visitor`/`ScopeVisitor`/`Fold` traits; owned `OwnedVisitor`/`OwnedScopeVisitor`/`FoldOwned` traits |
 | `crates/php-lexer` | `php-lexer` | Lazy tokenizer with peeking slots (arena-allocated) |
-| `crates/php-parser` | `php-rs-parser` | Recursive-descent parser, PHPDoc parser, source map, semantic analysis helpers |
+| `crates/php-parser` | `php-rs-parser` | Recursive-descent parser, source map, semantic analysis helpers; re-exports `phpdoc-parser` as `php_rs_parser::phpdoc` |
 | `crates/phpdoc-parser` | `phpdoc-parser` | Standalone structural PHPDoc block parser |
 | `crates/php-printer` | `php-printer` | Pretty printer (AST → PHP source); supports both arena and owned AST |
 | `crates/php-wasm` | `php-wasm` | WebAssembly bindings exposing the parser and printer to JavaScript |
@@ -49,10 +49,11 @@ cargo test -p php-printer
 cargo test -p phpdoc-parser
 
 # Run specific test suites
-cargo test --test integration   # all .phpt parser fixture tests (including corpus)
-cargo test --test php_syntax    # validate every fixture via `php -l`
-cargo test --test malformed_php # error recovery and diagnostics
-cargo test --test visitor       # visitor and scope-aware traversal
+cargo test -p php-rs-parser --test integration                # all parser integration tests
+cargo test -p php-rs-parser --test integration fixtures::     # .phpt parser fixture tests (including corpus)
+cargo test -p php-rs-parser --test integration malformed_php:: # error recovery and diagnostics
+cargo test -p php-rs-parser --test integration visitor::      # visitor and scope-aware traversal
+cargo test -p php-rs-parser --test php_syntax                 # validate every fixture via `php -l`
 cargo test -p php-printer --test printer  # printer fixtures
 
 # Regenerate expected AST/errors in all .phpt fixtures

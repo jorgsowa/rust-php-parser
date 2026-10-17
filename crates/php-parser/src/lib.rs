@@ -83,6 +83,10 @@
 
 #![warn(missing_docs)]
 
+#[cfg(doctest)]
+#[doc = include_str!("../../../README.md")]
+struct ReadmeDoctests;
+
 /// Parse errors and warnings.
 pub mod diagnostics;
 pub(crate) mod expr;
