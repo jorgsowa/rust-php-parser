@@ -353,7 +353,7 @@ impl<'src> Printer<'src> {
             ExprKind::Closure(closure) => self.print_closure(closure),
             ExprKind::ArrowFunction(af) => self.print_arrow_function(af),
             ExprKind::Match(m) => self.print_match(m),
-            ExprKind::ThrowExpr(e) => {
+            ExprKind::Throw(e) => {
                 self.w("throw ");
                 self.print_expr(e, PREC_LOWEST);
             }

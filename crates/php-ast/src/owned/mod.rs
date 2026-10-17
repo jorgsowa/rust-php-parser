@@ -687,7 +687,7 @@ pub enum ExprKind {
     /// `match` expression.
     Match(MatchExpr),
     /// `throw` used as an expression.
-    ThrowExpr(Box<Expr>),
+    Throw(Box<Expr>),
     /// `yield` expression.
     Yield(YieldExpr),
     /// `new class { ... }`.
@@ -1904,7 +1904,7 @@ fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
                 .into_boxed_slice(),
             brace_span: m.brace_span,
         }),
-        arena_ast::ExprKind::ThrowExpr(e) => ExprKind::ThrowExpr(Box::new(owned_expr(e))),
+        arena_ast::ExprKind::Throw(e) => ExprKind::Throw(Box::new(owned_expr(e))),
         arena_ast::ExprKind::Yield(y) => ExprKind::Yield(YieldExpr {
             key: y.key.map(|e| Box::new(owned_expr(e))),
             value: y.value.map(|e| Box::new(owned_expr(e))),
@@ -2877,7 +2877,7 @@ fn av_leaf_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
             },
             brace_span: m.brace_span,
         }),
-        ExprKind::ThrowExpr(e) => arena_ast::ExprKind::ThrowExpr(arena.alloc(av_expr(arena, e))),
+        ExprKind::Throw(e) => arena_ast::ExprKind::Throw(arena.alloc(av_expr(arena, e))),
         ExprKind::Yield(y) => arena_ast::ExprKind::Yield(arena_ast::YieldExpr {
             key: y.key.as_ref().map(|e| &*arena.alloc(av_expr(arena, e))),
             value: y.value.as_ref().map(|e| &*arena.alloc(av_expr(arena, e))),

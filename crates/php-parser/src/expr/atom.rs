@@ -779,7 +779,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             let expr = parse_expr_bp(parser, ASSIGNMENT_BP);
             let merged = span.merge(expr.span);
             Expr {
-                kind: ExprKind::ThrowExpr(parser.alloc(expr)),
+                kind: ExprKind::Throw(parser.alloc(expr)),
                 span: merged,
             }
         }

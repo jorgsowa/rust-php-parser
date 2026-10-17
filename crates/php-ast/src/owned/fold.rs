@@ -543,7 +543,7 @@ fn fold_owned_expr_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &ExprKind) -> 
                 .collect(),
             brace_span: m.brace_span,
         }),
-        ExprKind::ThrowExpr(e) => ExprKind::ThrowExpr(Box::new(folder.fold_expr(e))),
+        ExprKind::Throw(e) => ExprKind::Throw(Box::new(folder.fold_expr(e))),
         ExprKind::Yield(y) => ExprKind::Yield(YieldExpr {
             key: y.key.as_ref().map(|e| Box::new(folder.fold_expr(e))),
             value: y.value.as_ref().map(|e| Box::new(folder.fold_expr(e))),

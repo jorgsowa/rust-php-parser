@@ -61,7 +61,7 @@
                         "conditions": null,
                         "body": {
                           "kind": {
-                            "ThrowExpr": {
+                            "Throw": {
                               "kind": {
                                 "New": {
                                   "class": {

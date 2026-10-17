@@ -509,7 +509,7 @@ pub fn walk_owned_expr<V: OwnedVisitor + ?Sized>(visitor: &mut V, expr: &Expr) -
                 visitor.visit_match_arm(arm)?;
             }
         }
-        ExprKind::ThrowExpr(expr) => {
+        ExprKind::Throw(expr) => {
             visitor.visit_expr(expr)?;
         }
         ExprKind::Yield(yield_expr) => {

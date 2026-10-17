@@ -543,7 +543,7 @@ pub fn walk_expr<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
                 visitor.visit_match_arm(arm)?;
             }
         }
-        ExprKind::ThrowExpr(expr) => {
+        ExprKind::Throw(expr) => {
             visitor.visit_expr(expr)?;
         }
         ExprKind::Yield(yield_expr) => {

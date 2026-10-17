@@ -3187,7 +3187,7 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                     },
                                     "right": {
                                       "kind": {
-                                        "ThrowExpr": {
+                                        "Throw": {
                                           "kind": {
                                             "New": {
                                               "class": {

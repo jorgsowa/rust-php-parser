@@ -448,7 +448,7 @@ class UserController extends BaseController implements JsonResponder
                                             },
                                             "right": {
                                               "kind": {
-                                                "ThrowExpr": {
+                                                "Throw": {
                                                   "kind": {
                                                     "New": {
                                                       "class": {

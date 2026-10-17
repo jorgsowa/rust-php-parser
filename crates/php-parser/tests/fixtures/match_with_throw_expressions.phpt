@@ -76,7 +76,7 @@ $x = match ($status) {
                         ],
                         "body": {
                           "kind": {
-                            "ThrowExpr": {
+                            "Throw": {
                               "kind": {
                                 "New": {
                                   "class": {
@@ -111,7 +111,7 @@ $x = match ($status) {
                         "conditions": null,
                         "body": {
                           "kind": {
-                            "ThrowExpr": {
+                            "Throw": {
                               "kind": {
                                 "New": {
                                   "class": {

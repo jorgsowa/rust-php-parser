@@ -27,7 +27,7 @@
                     "return_type": null,
                     "body": {
                       "kind": {
-                        "ThrowExpr": {
+                        "Throw": {
                           "kind": {
                             "New": {
                               "class": {

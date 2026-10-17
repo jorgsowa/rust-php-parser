@@ -278,7 +278,7 @@ pub enum ExprKind<'arena, 'src> {
     Match(MatchExpr<'arena, 'src>),
 
     /// Throw as expression (PHP 8)
-    ThrowExpr(&'arena Expr<'arena, 'src>),
+    Throw(&'arena Expr<'arena, 'src>),
 
     /// Yield: `yield` / `yield $val` / `yield $key => $val`
     Yield(YieldExpr<'arena, 'src>),

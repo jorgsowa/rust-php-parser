@@ -142,7 +142,7 @@ impl<'a, 'src> Visitor<'a, 'src> for NodeCounter {
             }
             ExprKind::Match(_) => self.bump("Match"),
             ExprKind::Yield(_) => self.bump("Yield"),
-            ExprKind::ThrowExpr(_) => self.bump("ThrowExpr"),
+            ExprKind::Throw(_) => self.bump("ThrowExpr"),
             ExprKind::AnonymousClass(_) => self.bump("AnonymousClass"),
             ExprKind::CallableCreate(_) => self.bump("CallableCreate"),
             ExprKind::Omit => self.bump("Omit"),

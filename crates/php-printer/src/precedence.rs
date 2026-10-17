@@ -91,7 +91,7 @@ pub fn expr_precedence(kind: &ExprKind) -> i8 {
         ExprKind::Ternary(_) => PREC_TERNARY,
         ExprKind::NullCoalesce(_) => PREC_NULL_COALESCE,
         ExprKind::Yield(_) => PREC_YIELD,
-        ExprKind::ThrowExpr(_) => PREC_ASSIGN,
+        ExprKind::Throw(_) => PREC_ASSIGN,
         ExprKind::Print(_) => PREC_PRINT,
         ExprKind::Include(_, _) => PREC_INCLUDE,
         ExprKind::Cast(_, _) => PREC_CAST,

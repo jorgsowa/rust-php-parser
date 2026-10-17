@@ -641,7 +641,7 @@ pub fn fold_expr<'new, 'src, F: Fold<'src> + ?Sized>(
             },
             brace_span: match_expr.brace_span,
         }),
-        ExprKind::ThrowExpr(e) => ExprKind::ThrowExpr(arena.alloc(folder.fold_expr(arena, e))),
+        ExprKind::Throw(e) => ExprKind::Throw(arena.alloc(folder.fold_expr(arena, e))),
         ExprKind::Yield(y) => ExprKind::Yield(YieldExpr {
             key: y.key.map(|k| &*arena.alloc(folder.fold_expr(arena, k))),
             value: y.value.map(|v| &*arena.alloc(folder.fold_expr(arena, v))),

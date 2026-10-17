@@ -24,7 +24,7 @@ $a ?? throw new Exception;
                   "name": null,
                   "value": {
                     "kind": {
-                      "ThrowExpr": {
+                      "Throw": {
                         "kind": {
                           "Variable": "x"
                         },
@@ -76,7 +76,7 @@ $a ?? throw new Exception;
               },
               "right": {
                 "kind": {
-                  "ThrowExpr": {
+                  "Throw": {
                     "kind": {
                       "New": {
                         "class": {
