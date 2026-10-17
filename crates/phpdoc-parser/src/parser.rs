@@ -40,10 +40,41 @@ pub fn parse(text: &str) -> PhpDoc {
 // Internal types
 // =============================================================================
 
-struct CleanLine {
-    text: String,
+/// One comment line with its leading `*` decoration removed, borrowed from
+/// the comment text.
+#[derive(Clone, Copy)]
+struct CleanLine<'a> {
+    text: &'a str,
     /// Byte offset of `text[0]` within the original comment string.
     base_offset: u32,
+    /// Length of `text`'s leading whitespace, as `str::trim_start` sees it;
+    /// computed once since every pass asks for it.
+    lead: u32,
+}
+
+impl<'a> CleanLine<'a> {
+    fn new(text: &'a str, base_offset: u32) -> Self {
+        Self {
+            text,
+            base_offset,
+            lead: (text.len() - text.trim_start().len()) as u32,
+        }
+    }
+
+    /// `text` without leading whitespace.
+    fn trimmed_start(&self) -> &'a str {
+        &self.text[self.lead as usize..]
+    }
+
+    /// Whether the line is empty or all whitespace.
+    fn is_blank(&self) -> bool {
+        self.lead as usize == self.text.len()
+    }
+
+    /// Whether the line starts a `@tag`.
+    fn starts_tag(&self) -> bool {
+        self.trimmed_start().starts_with('@')
+    }
 }
 
 // =============================================================================
@@ -66,7 +97,7 @@ fn strip_delimiters(text: &str) -> (&str, u32) {
 // Line cleaning
 // =============================================================================
 
-fn clean_lines(inner: &str, content_start: u32) -> Vec<CleanLine> {
+fn clean_lines(inner: &str, content_start: u32) -> Vec<CleanLine<'_>> {
     let mut lines = Vec::new();
     let mut offset_in_inner: u32 = 0;
 
@@ -97,10 +128,7 @@ fn clean_lines(inner: &str, content_start: u32) -> Vec<CleanLine> {
         };
         stripped_bytes += extra_stripped;
 
-        lines.push(CleanLine {
-            text: cleaned.to_owned(),
-            base_offset: line_abs_start + stripped_bytes,
-        });
+        lines.push(CleanLine::new(cleaned, line_abs_start + stripped_bytes));
 
         offset_in_inner += raw_line.len() as u32 + 1;
     }
@@ -112,15 +140,15 @@ fn clean_lines(inner: &str, content_start: u32) -> Vec<CleanLine> {
 // Prose extraction
 // =============================================================================
 
-fn extract_prose(lines: &[CleanLine]) -> (Option<PhpDocText>, Option<PhpDocText>, usize) {
+fn extract_prose(lines: &[CleanLine<'_>]) -> (Option<PhpDocText>, Option<PhpDocText>, usize) {
     let tag_start = lines
         .iter()
-        .position(|l| l.text.trim_start().starts_with('@'))
+        .position(CleanLine::starts_tag)
         .unwrap_or(lines.len());
 
     let prose_lines = &lines[..tag_start];
 
-    let Some(start) = prose_lines.iter().position(|l| !l.text.trim().is_empty()) else {
+    let Some(start) = prose_lines.iter().position(|l| !l.is_blank()) else {
         return (None, None, tag_start);
     };
 
@@ -130,31 +158,29 @@ fn extract_prose(lines: &[CleanLine]) -> (Option<PhpDocText>, Option<PhpDocText>
         if trimmed.is_empty() {
             None
         } else {
-            let leading = (line.text.len() - line.text.trim_start().len()) as u32;
-            Some(text_from_str(trimmed, line.base_offset + leading))
+            Some(text_from_str(trimmed, line.base_offset + line.lead))
         }
     };
 
     let blank_after_summary = prose_lines[start..]
         .iter()
-        .position(|l| l.text.trim().is_empty())
+        .position(CleanLine::is_blank)
         .map(|i| i + start);
 
     let description = if let Some(blank) = blank_after_summary {
         let desc_start = prose_lines[blank..]
             .iter()
-            .position(|l| !l.text.trim().is_empty())
+            .position(|l| !l.is_blank())
             .map(|i| i + blank);
 
         if let Some(ds) = desc_start {
             let desc_end = prose_lines
                 .iter()
-                .rposition(|l| !l.text.trim().is_empty())
+                .rposition(|l| !l.is_blank())
                 .map(|i| i + 1)
                 .unwrap_or(ds);
 
-            let slice: Vec<&CleanLine> = prose_lines[ds..desc_end].iter().collect();
-            description_to_text(&slice)
+            description_to_text(&prose_lines[ds..desc_end])
         } else {
             None
         }
@@ -186,74 +212,59 @@ fn extract_prose(lines: &[CleanLine]) -> (Option<PhpDocText>, Option<PhpDocText>
 /// this crate deliberately has no notion of which tag names are "real"
 /// (see the crate-level docs). `@param string $email Contact @jsmith` still
 /// splits into a bogus `jsmith` tag.
-fn split_inline_tag_lines(lines: &[CleanLine]) -> Vec<CleanLine> {
+fn split_inline_tag_lines<'a>(lines: &[CleanLine<'a>]) -> Vec<CleanLine<'a>> {
     let mut out = Vec::with_capacity(lines.len());
-    for line in lines {
-        if !line.text.trim_start().starts_with('@') {
-            out.push(CleanLine {
-                text: line.text.clone(),
-                base_offset: line.base_offset,
-            });
+    for &line in lines {
+        if !line.starts_tag() {
+            out.push(line);
             continue;
         }
         let bytes = line.text.as_bytes();
-        let mut starts = vec![0usize];
+        let mut piece_start = 0;
         for i in 1..bytes.len() {
             if bytes[i] == b'@'
                 && bytes[i - 1].is_ascii_whitespace()
                 && bytes.get(i + 1).is_some_and(u8::is_ascii_alphabetic)
             {
-                starts.push(i);
+                out.push(CleanLine::new(
+                    &line.text[piece_start..i],
+                    line.base_offset + piece_start as u32,
+                ));
+                piece_start = i;
             }
         }
-        if starts.len() == 1 {
-            out.push(CleanLine {
-                text: line.text.clone(),
-                base_offset: line.base_offset,
-            });
-            continue;
-        }
-        starts.push(bytes.len());
-        for w in starts.windows(2) {
-            let (s, e) = (w[0], w[1]);
-            out.push(CleanLine {
-                text: line.text[s..e].to_string(),
-                base_offset: line.base_offset + s as u32,
-            });
-        }
+        out.push(CleanLine::new(
+            &line.text[piece_start..],
+            line.base_offset + piece_start as u32,
+        ));
     }
     out
 }
 
-fn parse_tags(lines: &[CleanLine]) -> Vec<PhpDocTag> {
+fn parse_tags(lines: &[CleanLine<'_>]) -> Vec<PhpDocTag> {
     let mut tags = Vec::new();
     let mut i = 0;
 
     while i < lines.len() {
-        let line_text = lines[i].text.trim_start();
-        if !line_text.starts_with('@') {
+        if !lines[i].starts_tag() {
             i += 1;
             continue;
         }
 
         let tag_start_offset = lines[i].base_offset;
 
-        let mut tag_lines: Vec<&CleanLine> = vec![&lines[i]];
+        let first_line = i;
         i += 1;
-        while i < lines.len() && !lines[i].text.trim_start().starts_with('@') {
-            tag_lines.push(&lines[i]);
+        while i < lines.len() && !lines[i].starts_tag() {
             i += 1;
         }
+        let tag_lines = &lines[first_line..i];
 
         let last = tag_lines.last().unwrap();
         let tag_end_offset = last.base_offset + last.text.len() as u32;
         let tag_span = Span::new(tag_start_offset, tag_end_offset);
 
-        let first = tag_lines[0]
-            .text
-            .trim_start()
-            .strip_prefix('@')
-            .unwrap_or("");
+        let first = tag_lines[0].trimmed_start().strip_prefix('@').unwrap_or("");
 
         let (tag_name, body_on_first) = match first.find(|c: char| c.is_whitespace()) {
             Some(pos) => {
@@ -267,7 +278,7 @@ fn parse_tags(lines: &[CleanLine]) -> Vec<PhpDocTag> {
         };
 
         let body_base_offset = {
-            let after_at = &tag_lines[0].text.trim_start()[1 + tag_name.len()..];
+            let after_at = &tag_lines[0].trimmed_start()[1 + tag_name.len()..];
             let ws = (after_at.len() - after_at.trim_start().len()) as u32;
             tag_lines[0].base_offset + 1 + tag_name.len() as u32 + ws
         };
@@ -353,10 +364,7 @@ impl PhpDocTextBuilder {
             self.span_start = Some(content_offset);
         }
         self.span_end = content_offset + trimmed.len() as u32;
-        merge_into(
-            &mut self.segments,
-            text_from_str(trimmed, content_offset).segments,
-        );
+        append_text(&mut self.segments, trimmed, content_offset);
     }
 
     fn build(self) -> Option<PhpDocText> {
@@ -375,14 +383,14 @@ impl PhpDocTextBuilder {
 /// expression from its description (e.g. `@var T\nThe description`).
 fn tag_body_to_text(
     first_piece: Option<(&str, u32)>,
-    continuation: &[&CleanLine],
+    continuation: &[CleanLine<'_>],
 ) -> Option<PhpDocText> {
     let mut builder = PhpDocTextBuilder::new(BlankLinePolicy::Insignificant);
     if let Some((text, base)) = first_piece {
         builder.push_line(text, base);
     }
     for line in continuation {
-        builder.push_line(&line.text, line.base_offset);
+        builder.push_line(line.text, line.base_offset);
     }
     builder.build()
 }
@@ -390,10 +398,10 @@ fn tag_body_to_text(
 /// Build a [`PhpDocText`] for a description (multi-line prose after the summary).
 ///
 /// Lines are joined with `\n`; blank lines produce `\n\n` paragraph breaks.
-fn description_to_text(lines: &[&CleanLine]) -> Option<PhpDocText> {
+fn description_to_text(lines: &[CleanLine<'_>]) -> Option<PhpDocText> {
     let mut builder = PhpDocTextBuilder::new(BlankLinePolicy::ParagraphBreak);
     for line in lines {
-        builder.push_line(&line.text, line.base_offset);
+        builder.push_line(line.text, line.base_offset);
     }
     builder.build()
 }
@@ -410,16 +418,6 @@ fn push_text(segments: &mut Vec<TextSegment>, text: &str) {
     }
 }
 
-/// Extend `dest` with `src`, merging adjacent `Text` segments at the boundary.
-fn merge_into(dest: &mut Vec<TextSegment>, src: Vec<TextSegment>) {
-    for seg in src {
-        match seg {
-            TextSegment::Text(t) => push_text(dest, &t),
-            other => dest.push(other),
-        }
-    }
-}
-
 // =============================================================================
 // Inline-tag scanning
 // =============================================================================
@@ -427,15 +425,23 @@ fn merge_into(dest: &mut Vec<TextSegment>, src: Vec<TextSegment>) {
 /// Build a [`PhpDocText`] from a string, scanning for `{@tagname body}` inline tags.
 fn text_from_str(s: &str, base_offset: u32) -> PhpDocText {
     let mut segments = Vec::new();
+    append_text(&mut segments, s, base_offset);
+    PhpDocText {
+        segments,
+        span: Span::new(base_offset, base_offset + s.len() as u32),
+    }
+}
+
+/// Append the segments of `s` to `segments`, merging plain text into a
+/// trailing `Text` segment and splitting out `{@tagname body}` inline tags.
+fn append_text(segments: &mut Vec<TextSegment>, s: &str, base_offset: u32) {
     let bytes = s.as_bytes();
     let mut i = 0;
     let mut text_start = 0;
 
     while i < bytes.len() {
         if bytes[i] == b'{' && bytes.get(i + 1) == Some(&b'@') {
-            if i > text_start {
-                segments.push(TextSegment::Text(s[text_start..i].to_owned()));
-            }
+            push_text(segments, &s[text_start..i]);
 
             let tag_abs_start = i;
             i += 2; // skip `{@`
@@ -492,12 +498,5 @@ fn text_from_str(s: &str, base_offset: u32) -> PhpDocText {
         }
     }
 
-    if text_start < s.len() {
-        segments.push(TextSegment::Text(s[text_start..].to_owned()));
-    }
-
-    PhpDocText {
-        segments,
-        span: Span::new(base_offset, base_offset + s.len() as u32),
-    }
+    push_text(segments, &s[text_start..]);
 }
