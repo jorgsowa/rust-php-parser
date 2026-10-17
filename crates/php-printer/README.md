@@ -4,7 +4,7 @@ Pretty printer that converts a PHP AST from [`php-rs-parser`](https://crates.io/
 
 ```rust
 let result = php_rs_parser::parse("<?php echo 1 + 2;");
-let output = php_printer::pretty_print_owned(&result.program);
+let output = php_printer::pretty_print(&result.program);
 assert_eq!(output, "<?php\necho 1 + 2;");
 ```
 

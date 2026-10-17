@@ -103,10 +103,6 @@ pub(crate) struct Printer<'src> {
 }
 
 impl<'src> Printer<'src> {
-    pub fn new(config: &PrinterConfig) -> Self {
-        Self::with_comments(config, "", &[])
-    }
-
     pub fn with_comments(
         config: &PrinterConfig,
         source: &'src str,

@@ -158,33 +158,23 @@ For arena-allocated ASTs from `parse_arena()`, use the `Fold<'src>` trait from `
 
 ```rust
 let result = php_rs_parser::parse("<?php echo 1 + 2;");
-let output = php_printer::pretty_print_owned(&result.program);
+let output = php_printer::pretty_print(&result.program);
 // output == "<?php\necho 1 + 2;"
 ```
 
-Use `pretty_print_owned_file` to append a trailing newline. Pass a `PrinterConfig` for custom indentation:
+`pretty_print` accepts both the owned program from `parse()` and the arena program from `parse_arena()`. Use `PrettyPrinter` to preserve comments, pass a `PrinterConfig`, or append a trailing newline:
 
 ```rust
-use php_printer::{PrinterConfig, Indent};
+use php_printer::{Indent, PrettyPrinter, PrinterConfig};
 
 let mut config = PrinterConfig::default();
 config.indent = Indent::Spaces(2);
-let output = php_printer::pretty_print_owned_with_config(&result.program, &config);
+let output = PrettyPrinter::new()
+    .config(config)
+    .comments(&result.source, &result.comments)
+    .trailing_newline(true)
+    .print(&result.program);
 ```
-
-To preserve comments, pass the source and comment list from `ParseResult`:
-
-```rust
-let output = php_printer::pretty_print_owned_with_comments(
-    &result.program,
-    &result.source,
-    &result.comments,
-);
-```
-
-Both variants accept an optional `PrinterConfig`:
-- `pretty_print_owned_with_comments_and_config` — comments + custom config
-- `pretty_print_with_comments` / `pretty_print_with_comments_and_config` — arena equivalents for use with `parse_arena()`
 
 ### PHPDoc parser
 
@@ -237,11 +227,9 @@ let arena = bumpalo::Bump::new();
 let result = php_rs_parser::parse_arena(&arena, "<?php echo 1;");
 let output = php_printer::pretty_print(&result.program);
 // With comments:
-let output = php_printer::pretty_print_with_comments(
-    &result.program,
-    result.source,
-    &result.comments,
-);
+let output = php_printer::PrettyPrinter::new()
+    .comments(result.source, &result.comments)
+    .print(&result.program);
 ```
 
 Turn off `ParseOptions::source_map` when you only need the AST and errors and never call `source_map.offset_to_line_col` — it skips building the line index:

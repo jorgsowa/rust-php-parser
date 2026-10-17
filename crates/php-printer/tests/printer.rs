@@ -1,4 +1,4 @@
-use php_printer::{pretty_print_with_comments_and_config, PrinterConfig};
+use php_printer::{PrettyPrinter, PrinterConfig};
 use rayon::prelude::*;
 use std::sync::Mutex;
 
@@ -109,14 +109,14 @@ fn fixtures() {
             let arena = bumpalo::Bump::new();
             let result = php_rs_parser::parse_arena(&arena, &fixture.source);
             if fixture.no_source {
-                php_printer::pretty_print_with_config(&result.program, &fixture.config)
+                PrettyPrinter::new()
+                    .config(fixture.config.clone())
+                    .print(&result.program)
             } else {
-                pretty_print_with_comments_and_config(
-                    &result.program,
-                    result.source,
-                    &result.comments,
-                    &fixture.config,
-                )
+                PrettyPrinter::new()
+                    .config(fixture.config.clone())
+                    .comments(result.source, &result.comments)
+                    .print(&result.program)
             }
         };
 
@@ -145,26 +145,26 @@ fn fixtures() {
         let arena1 = bumpalo::Bump::new();
         let result1 = php_rs_parser::parse_arena(&arena1, &fixture.source);
         let first = if fixture.no_source {
-            php_printer::pretty_print_with_config(&result1.program, &fixture.config)
+            PrettyPrinter::new()
+                .config(fixture.config.clone())
+                .print(&result1.program)
         } else {
-            pretty_print_with_comments_and_config(
-                &result1.program,
-                result1.source,
-                &result1.comments,
-                &fixture.config,
-            )
+            PrettyPrinter::new()
+                .config(fixture.config.clone())
+                .comments(result1.source, &result1.comments)
+                .print(&result1.program)
         };
         let arena2 = bumpalo::Bump::new();
         let result2 = php_rs_parser::parse_arena(&arena2, &first);
         let second = if fixture.no_source {
-            php_printer::pretty_print_with_config(&result2.program, &fixture.config)
+            PrettyPrinter::new()
+                .config(fixture.config.clone())
+                .print(&result2.program)
         } else {
-            pretty_print_with_comments_and_config(
-                &result2.program,
-                result2.source,
-                &result2.comments,
-                &fixture.config,
-            )
+            PrettyPrinter::new()
+                .config(fixture.config.clone())
+                .comments(result2.source, &result2.comments)
+                .print(&result2.program)
         };
         if first != second {
             failures.lock().unwrap().push(format!(
@@ -328,10 +328,12 @@ fn parser_corpus_round_trip() {
 // =============================================================================
 
 #[test]
-fn pretty_print_file() {
+fn trailing_newline() {
     let arena = bumpalo::Bump::new();
     let result = php_rs_parser::parse_arena(&arena, "<?php echo 'hello';");
-    let output = php_printer::pretty_print_file(&result.program);
+    let output = PrettyPrinter::new()
+        .trailing_newline(true)
+        .print(&result.program);
     assert_eq!(output, "<?php\necho 'hello';\n");
 }
 
@@ -358,7 +360,7 @@ fn assert_round_trips(code: &str) {
     assert!(!printed.contains("max depth"), "printer truncated the tree");
 
     let owned = php_rs_parser::parse(code);
-    assert_eq!(php_printer::pretty_print_owned(&owned.program), printed);
+    assert_eq!(php_printer::pretty_print(&owned.program), printed);
 
     let reparsed = php_rs_parser::parse_arena(&arena, &printed);
     assert!(reparsed.errors.is_empty(), "{:?}", reparsed.errors);
@@ -445,7 +447,7 @@ fn chain_operands_get_parentheses_from_precedence() {
         span: Span::DUMMY,
     };
     assert_eq!(
-        php_printer::pretty_print_owned(&program),
+        php_printer::pretty_print(&program),
         "<?php\n(($a + $b) * $c)->m();"
     );
 }
@@ -456,6 +458,15 @@ fn crlf_newline() {
     let result = php_rs_parser::parse_arena(&arena, "<?php if ($a) { echo 1; }");
     let mut config = PrinterConfig::default();
     config.newline = php_printer::Newline::CrLf;
-    let out = php_printer::pretty_print_with_config(&result.program, &config);
+    let out = PrettyPrinter::new().config(config).print(&result.program);
     assert_eq!(out, "<?php\r\nif ($a) {\r\n    echo 1;\r\n}");
+}
+
+#[test]
+fn owned_program_keeps_comments() {
+    let result = php_rs_parser::parse("<?php\n// greet\necho 'hi';");
+    let out = PrettyPrinter::new()
+        .comments(&result.source, &result.comments)
+        .print(&result.program);
+    assert_eq!(out, "<?php\n// greet\necho 'hi';");
 }
