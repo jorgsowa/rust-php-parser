@@ -96,6 +96,8 @@ pub struct Parser<'arena, 'src> {
     pub arena: &'arena bumpalo::Bump,
     pub source: &'src str,
     errors: Vec<ParseError>,
+    /// Set when [`error`](Self::error) discards an error because the cap was reached.
+    errors_dropped: bool,
     /// All comments found in the source, collected during lexing.
     comments: Vec<Comment<'src>>,
     /// PHP version being targeted — used for version-specific error reporting.
@@ -146,6 +148,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             previous_end: current.span.start,
             source,
             errors: Vec::new(),
+            errors_dropped: false,
             comments,
             depth: 0,
             nesting_depth: 0,
@@ -186,6 +189,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             previous_end: current.span.start,
             source,
             errors: Vec::new(),
+            errors_dropped: false,
             comments,
             depth: 0,
             nesting_depth,
@@ -441,6 +445,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     pub fn error(&mut self, err: ParseError) {
         if self.errors.len() < MAX_ERRORS {
             self.errors.push(err);
+        } else {
+            self.errors_dropped = true;
         }
     }
 
@@ -465,7 +471,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     }
 
     pub fn errors_truncated(&self) -> bool {
-        self.errors.len() + self.lexer.errors.len() >= MAX_ERRORS
+        self.errors_dropped || self.errors.len() + self.lexer.errors.len() > MAX_ERRORS
     }
 
     /// Retract "empty array element" errors emitted within `within`. Empty

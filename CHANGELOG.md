@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The printer prints such chains without recursing per link, and its depth guard now sits well above anything the parser accepts, so a 300-term concatenation is no longer printed as `/* max depth */` (`php-printer`).
 - Sources over 4 GiB are refused in release builds too. The size guard was a `debug_assert!`, so release builds wrapped the `u32` span offsets and could slice the wrong text or panic. The `parse_*` functions now return an empty program with the new `ParseError::SourceTooLarge`, and `Lexer::new`/`Lexer::new_at` yield only `Eof` with a `LexerErrorKind::FileTooLarge` error (`php-lexer`, `php-rs-parser`).
 - The WebAssembly build reserves an 8 MiB stack instead of the 1 MiB default; wasm has no guard page, so an overflow there would corrupt memory rather than trap (`php-wasm`).
+- `errors_truncated` is `true` only when errors were actually dropped; it was also set when exactly 100 errors were reported (`php-rs-parser`).
 
 ### Added
 

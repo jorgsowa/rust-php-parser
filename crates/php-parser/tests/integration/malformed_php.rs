@@ -505,3 +505,17 @@ fn expected_error_describes_the_found_token() {
     );
     assert_eq!(first.to_string(), "expected ')', found integer");
 }
+
+#[test]
+fn errors_truncated_only_when_errors_were_dropped() {
+    let with_errors =
+        |n: usize| php_rs_parser::parse(&format!("<?php {}", "(unset) $a;".repeat(n)));
+
+    let at_cap = with_errors(100);
+    assert_eq!(at_cap.errors.len(), 100);
+    assert!(!at_cap.errors_truncated);
+
+    let over_cap = with_errors(101);
+    assert_eq!(over_cap.errors.len(), 100);
+    assert!(over_cap.errors_truncated);
+}
