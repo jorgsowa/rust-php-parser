@@ -17,7 +17,6 @@ exclude = ["benches/", "tests/", "examples/", ".gitmodules"]
 php-ast = { workspace = true }
 php-lexer = { workspace = true }
 phpdoc-parser = { workspace = true }
-miette = { workspace = true }
 thiserror = { workspace = true }
 bumpalo = { workspace = true }
 memchr = { workspace = true }

@@ -58,42 +58,15 @@ fn parse_fixture(content: &str) -> (Option<(u32, u32)>, &str) {
     (min_php, source)
 }
 
-fn php_version_met(min: (u32, u32)) -> bool {
-    const V81: bool = cfg!(php_min_81);
-    const V82: bool = cfg!(php_min_82);
-    const V83: bool = cfg!(php_min_83);
-    const V84: bool = cfg!(php_min_84);
-    const V85: bool = cfg!(php_min_85);
-    const V86: bool = cfg!(php_min_86);
-    match min {
-        (major, minor) if (major, minor) <= (8, 0) => true,
-        (8, 1) => V81,
-        (8, 2) => V82,
-        (8, 3) => V83,
-        (8, 4) => V84,
-        (8, 5) => V85,
-        (8, 6) => V86,
-        _ => false,
-    }
-}
-
-fn php_version_exceeded(max: (u32, u32)) -> bool {
-    const V81: bool = cfg!(php_min_81);
-    const V82: bool = cfg!(php_min_82);
-    const V83: bool = cfg!(php_min_83);
-    const V84: bool = cfg!(php_min_84);
-    const V85: bool = cfg!(php_min_85);
-    const V86: bool = cfg!(php_min_86);
-    match max {
-        (major, _) if major < 8 => true,
-        (8, 0) => V81,
-        (8, 1) => V82,
-        (8, 2) => V83,
-        (8, 3) => V84,
-        (8, 4) => V85,
-        (8, 5) => V86,
-        _ => false,
-    }
+/// Version of the `php` binary on `PATH`, or `None` when PHP is not installed.
+fn php_version() -> Option<(u32, u32)> {
+    let out = std::process::Command::new("php")
+        .args(["-r", "echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION;"])
+        .output()
+        .ok()?;
+    let ver = String::from_utf8_lossy(&out.stdout);
+    let (maj, min) = ver.trim().split_once('.')?;
+    Some((maj.parse().ok()?, min.parse().ok()?))
 }
 
 fn strip_stack_trace(s: &str) -> String {
@@ -172,9 +145,12 @@ fn update_fixture_php_error(path: &str, actual: &str) {
     std::fs::write(path, new_content).unwrap_or_else(|e| panic!("failed to write {path}: {e}"));
 }
 
-#[cfg_attr(not(php_available), ignore)]
 #[test]
 fn fixture_files_are_valid_php() {
+    let Some(php) = php_version() else {
+        eprintln!("skipping: `php` not found on PATH");
+        return;
+    };
     let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures");
     let update = std::env::var("UPDATE_FIXTURES").is_ok();
 
@@ -195,12 +171,12 @@ fn fixture_files_are_valid_php() {
         let php_error = parse_php_error(&src);
 
         if let Some(min) = min_php {
-            if !php_version_met(min) {
+            if php < min {
                 return;
             }
         }
         if let Some(max) = max_php {
-            if php_version_exceeded(max) {
+            if php > max {
                 return;
             }
         }

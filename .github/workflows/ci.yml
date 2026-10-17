@@ -55,7 +55,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2.9.2
 
       - name: Check
-        run: cargo check --workspace --exclude php-wasm
+        run: cargo check --workspace --exclude php-wasm --locked
 
   minimal-versions:
     name: Minimal versions

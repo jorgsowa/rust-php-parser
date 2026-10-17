@@ -8,12 +8,12 @@ A fast, fault-tolerant PHP parser written in Rust. Produces a full typed AST wit
 
 ```toml
 [dependencies]
-php-rs-parser = "*"
-php-ast = "*"       # AST types and visitor/fold traits
+php-rs-parser = "0.21"
+php-ast = "0.21"     # AST types and visitor/fold traits
 
 # Optional
-php-printer = "*"   # pretty-print AST back to PHP source
-bumpalo = "*"       # only needed when using parse_arena() directly
+php-printer = "0.21" # pretty-print AST back to PHP source
+bumpalo = "3"        # only needed when using parse_arena() directly
 ```
 
 ## Quick Start

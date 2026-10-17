@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Removed the unused `miette` dependency, which pulled about 70 crates into every build (`php-rs-parser`).
+- `php-rs-parser` no longer has a build script; it ran `php -r` on every build only to configure its own tests, which now detect PHP at run time (`php-rs-parser`).
+- Every published crate now ships its `LICENSE` file, as BSD-3-Clause requires.
+- `Cargo.lock` is committed, so `cargo publish --locked` and the MSRV job build against known dependency versions.
 - **Deeply nested input no longer overflows the stack.** Statements, expressions and the code inside string interpolation now share one recursion budget of 512 levels, and input nested deeper reports the new `ParseError::NestingTooDeep` instead of aborting the process. Statement nesting had no limit at all and interpolated code restarted the count at zero, so about 10 KB of `{` or `if (1) {` was enough to crash. The budget is sized so that the costliest paths stay within about 1 MiB of stack in release builds (`php-rs-parser`).
 - Expressions nested more than 50 levels deep are no longer rejected. Most constructs (`[`, `(`, `f(`, `match (`) take one level of the 512-level budget; some take two, e.g. `($x + (...))` (`php-rs-parser`).
 - Nested strings inside interpolation (`"{$a["{$b[...]}"]}"`, nested heredocs) no longer take quadratic time. Every nested string is re-lexed by its own sub-parser, so each one now takes a larger share of the budget, which keeps string nesting under 32 levels (`php-rs-parser`).
