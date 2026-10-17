@@ -4,6 +4,7 @@
 //! run automatically by `fixtures()`.
 
 use crate::common::format_errors;
+use php_rs_parser::diagnostics::ParseError;
 
 /// Run a test on a large thread stack to avoid stack overflow on deeply nested input.
 fn with_large_stack<F: FnOnce() + Send + 'static>(f: F) {
@@ -322,5 +323,28 @@ fn fuzz_crash_repro_double_quoted_multibyte_end_owned() {
     let data = b"\x3c\x3f\x3c\x3f\x70\x68\x70\x20\x63\x6c\x61\x73\x12\x24\x78\x22\x68\x65\x20\x3d\x20\x5b\x74\x70\x68\x70\x20\xd7\x87";
     if let Ok(src) = std::str::from_utf8(data) {
         let _ = php_rs_parser::parse(src);
+    }
+}
+
+/// Spans hold `u32` offsets; a larger source is refused up front in every build
+/// profile instead of being parsed with offsets that wrap.
+#[test]
+#[cfg(target_pointer_width = "64")]
+fn source_over_4_gib_is_refused() {
+    // Zeroed allocations are mapped lazily, so this does not touch 4 GiB of memory.
+    let bytes = vec![0u8; u32::MAX as usize + 1];
+    // SAFETY: NUL bytes are valid single-byte UTF-8.
+    let source = unsafe { std::str::from_utf8_unchecked(&bytes) };
+    let arena = bumpalo::Bump::new();
+    for result in [
+        php_rs_parser::parse_arena(&arena, source),
+        php_rs_parser::parse_arena_raw(&arena, source),
+        php_rs_parser::parse_arena_versioned(&arena, source, php_rs_parser::PhpVersion::Php74),
+    ] {
+        assert!(result.program.stmts.is_empty());
+        assert!(matches!(
+            result.errors[..],
+            [ParseError::SourceTooLarge { len, .. }] if len == source.len()
+        ));
     }
 }

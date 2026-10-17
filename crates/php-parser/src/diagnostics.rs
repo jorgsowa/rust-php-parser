@@ -102,6 +102,16 @@ pub enum ParseError {
         span: Span,
     },
 
+    /// The source is larger than 4 GiB, so byte offsets no longer fit in a
+    /// [`Span`]. Nothing is parsed and the program is empty.
+    #[error("source is {len} bytes; the maximum is 4 GiB")]
+    SourceTooLarge {
+        /// Length of the rejected source in bytes.
+        len: usize,
+        /// Always empty (`0..0`).
+        span: Span,
+    },
+
     /// Syntax that requires a newer PHP version than the targeted one.
     /// Emitted by [`crate::parse_versioned`] when the source uses features
     /// unavailable in the specified [`crate::PhpVersion`].
@@ -131,6 +141,7 @@ impl ParseError {
             | ParseError::UnclosedDelimiter { span, .. }
             | ParseError::Forbidden { span, .. }
             | ParseError::ForbiddenWarning { span, .. }
+            | ParseError::SourceTooLarge { span, .. }
             | ParseError::VersionTooLow { span, .. } => *span,
         }
     }

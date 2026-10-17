@@ -228,17 +228,7 @@ pub fn parse_arena<'arena, 'src>(
     arena: &'arena bumpalo::Bump,
     source: &'src str,
 ) -> ArenaParseResult<'arena, 'src> {
-    let mut parser = parser::Parser::new(arena, source);
-    let program = parser.parse_program();
-    let errors_truncated = parser.errors_truncated();
-    ArenaParseResult {
-        source,
-        program,
-        comments: parser.take_comments(),
-        errors: parser.into_errors(),
-        errors_truncated,
-        source_map: SourceMap::new(source),
-    }
+    run_parser(arena, source, PhpVersion::default(), true)
 }
 
 /// Like [`parse_arena`], but skips building the [`source_map::SourceMap`].
@@ -250,17 +240,7 @@ pub fn parse_arena_raw<'arena, 'src>(
     arena: &'arena bumpalo::Bump,
     source: &'src str,
 ) -> ArenaParseResult<'arena, 'src> {
-    let mut parser = parser::Parser::new(arena, source);
-    let program = parser.parse_program();
-    let errors_truncated = parser.errors_truncated();
-    ArenaParseResult {
-        source,
-        program,
-        comments: parser.take_comments(),
-        errors: parser.into_errors(),
-        errors_truncated,
-        source_map: SourceMap::empty(),
-    }
+    run_parser(arena, source, PhpVersion::default(), false)
 }
 
 /// Parse `source` targeting the given PHP `version`, returning an
@@ -273,6 +253,36 @@ pub fn parse_arena_versioned<'arena, 'src>(
     source: &'src str,
     version: PhpVersion,
 ) -> ArenaParseResult<'arena, 'src> {
+    run_parser(arena, source, version, true)
+}
+
+/// Shared body of the `parse_arena*` functions.
+///
+/// Spans store byte offsets as `u32`, so a source over 4 GiB is rejected up
+/// front with [`ParseError::SourceTooLarge`] and an empty program instead of
+/// being parsed with offsets that would wrap.
+fn run_parser<'arena, 'src>(
+    arena: &'arena bumpalo::Bump,
+    source: &'src str,
+    version: PhpVersion,
+    with_source_map: bool,
+) -> ArenaParseResult<'arena, 'src> {
+    if source.len() > u32::MAX as usize {
+        return ArenaParseResult {
+            source,
+            program: Program {
+                stmts: php_ast::ArenaVec::new_in(arena),
+                span: php_ast::Span::new(0, 0),
+            },
+            comments: Vec::new(),
+            errors: vec![ParseError::SourceTooLarge {
+                len: source.len(),
+                span: php_ast::Span::new(0, 0),
+            }],
+            errors_truncated: false,
+            source_map: SourceMap::empty(),
+        };
+    }
     let mut parser = parser::Parser::with_version(arena, source, version);
     let program = parser.parse_program();
     let errors_truncated = parser.errors_truncated();
@@ -282,7 +292,11 @@ pub fn parse_arena_versioned<'arena, 'src>(
         comments: parser.take_comments(),
         errors: parser.into_errors(),
         errors_truncated,
-        source_map: SourceMap::new(source),
+        source_map: if with_source_map {
+            SourceMap::new(source)
+        } else {
+            SourceMap::empty()
+        },
     }
 }
 

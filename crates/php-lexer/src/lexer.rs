@@ -197,12 +197,13 @@ fn skip_nested_squoted(bytes: &[u8], mut p: usize) -> usize {
 
 impl<'src> Lexer<'src> {
     /// Creates a lexer for `source`, starting in inline-HTML mode.
+    ///
+    /// Spans hold `u32` offsets, so a source over 4 GiB is not lexed at all: the
+    /// lexer yields only `Eof` and records a [`LexerErrorKind::FileTooLarge`] error.
     pub fn new(source: &'src str) -> Self {
-        debug_assert!(
-            source.len() <= u32::MAX as usize,
-            "source is {} bytes, which exceeds the u32::MAX span limit",
-            source.len()
-        );
+        if let Some(lexer) = Self::too_large(source) {
+            return lexer;
+        }
 
         // Skip shebang line if present (e.g., #!/usr/bin/env php)
         let pos = if source.starts_with("#!") {
@@ -239,12 +240,12 @@ impl<'src> Lexer<'src> {
     /// The caller guarantees that `source[offset..]` contains valid PHP expression
     /// content (no `<?php` tag needed — the lexer is pre-set to PHP mode).
     /// Spans produced will be correct absolute offsets into `source`.
+    ///
+    /// Like [`Lexer::new`], a source over 4 GiB yields only `Eof` and an error.
     pub fn new_at(source: &'src str, offset: usize) -> Self {
-        debug_assert!(
-            source.len() <= u32::MAX as usize,
-            "source is {} bytes, which exceeds the u32::MAX span limit",
-            source.len()
-        );
+        if let Some(lexer) = Self::too_large(source) {
+            return lexer;
+        }
 
         Self {
             source,
@@ -254,6 +255,30 @@ impl<'src> Lexer<'src> {
             peeked2: None,
             errors: Vec::new(),
         }
+    }
+
+    /// A lexer over an empty source when `source` does not fit `u32` spans;
+    /// checked in release builds too, since the `as u32` casts would wrap.
+    fn too_large(source: &str) -> Option<Self> {
+        if source.len() <= u32::MAX as usize {
+            return None;
+        }
+        Some(Self {
+            source: "",
+            mode: LexerMode::Php,
+            pos: 0,
+            peeked: None,
+            peeked2: None,
+            errors: vec![LexerError {
+                kind: LexerErrorKind::FileTooLarge,
+                message: format!(
+                    "source is {} bytes, which exceeds the maximum supported size of {} bytes",
+                    source.len(),
+                    u32::MAX
+                ),
+                span: Span::new(0, 0),
+            }],
+        })
     }
 
     /// The source text being lexed.
@@ -1302,22 +1327,9 @@ impl<'src> Lexer<'src> {
 /// Returns a tuple of (tokens, errors). The token vector is guaranteed to end with
 /// an Eof token, and includes a second Eof sentinel to make peek2 safe.
 pub fn lex_all(source: &str) -> (Vec<Token>, Vec<LexerError>) {
-    if source.len() > u32::MAX as usize {
-        let error = LexerError {
-            kind: LexerErrorKind::FileTooLarge,
-            message: format!(
-                "source is {} bytes, which exceeds the maximum supported size of {} bytes",
-                source.len(),
-                u32::MAX
-            ),
-            span: Span::new(0, 0),
-        };
-        let eof = Token::eof(0);
-        return (vec![eof, eof], vec![error]);
-    }
-
     let mut lexer = Lexer::new(source);
-    let mut tokens = Vec::with_capacity(source.len() / 8);
+    // `lexer.source()` is empty when `source` was rejected as too large.
+    let mut tokens = Vec::with_capacity(lexer.source().len() / 8);
 
     loop {
         let tok = lexer.next_token();

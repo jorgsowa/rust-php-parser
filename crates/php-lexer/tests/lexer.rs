@@ -485,3 +485,37 @@ mod strings_and_variables {
         assert_eq!(toks[6], (TokenKind::IntLiteral, "45".to_string()));
     }
 }
+
+// =============================================================================
+// Pathological input
+// =============================================================================
+
+/// A source whose offsets do not fit the `u32` spans must be refused in every
+/// build profile; release builds used to wrap the offsets instead.
+#[test]
+#[cfg(target_pointer_width = "64")]
+fn source_over_4_gib_is_refused() {
+    // Zeroed allocations are mapped lazily, so this does not touch 4 GiB of memory.
+    let bytes = vec![0u8; u32::MAX as usize + 1];
+    // SAFETY: NUL bytes are valid single-byte UTF-8.
+    let source = unsafe { std::str::from_utf8_unchecked(&bytes) };
+
+    let mut lexer = Lexer::new(source);
+    assert_eq!(lexer.next_token().kind, TokenKind::Eof);
+    assert_eq!(lexer.errors.len(), 1);
+    assert_eq!(
+        lexer.errors[0].kind,
+        php_lexer::LexerErrorKind::FileTooLarge
+    );
+
+    let mut lexer = Lexer::new_at(source, 1);
+    assert_eq!(lexer.next_token().kind, TokenKind::Eof);
+    assert_eq!(
+        lexer.errors[0].kind,
+        php_lexer::LexerErrorKind::FileTooLarge
+    );
+
+    let (tokens, errors) = php_lexer::lex_all(source);
+    assert!(tokens.iter().all(|t| t.kind == TokenKind::Eof));
+    assert_eq!(errors[0].kind, php_lexer::LexerErrorKind::FileTooLarge);
+}
