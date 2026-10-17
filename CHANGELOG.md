@@ -56,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Breaking:** `StmtKind::Label` holds an `Ident` borrowed from the source, like `StmtKind::Goto`, instead of an arena-allocated `&str` (`Box<str>` in the owned AST). Serialized output is unchanged (`php-ast`, `php-rs-parser`).
 - **Breaking:** `owned::Ident` is a struct instead of an alias for `Option<Box<str>>`, with the same API as the arena `Ident`: `Ident::name`, `Ident::ERROR`, `as_str`, `is_error`, `or_error`, `Display` and `PartialEq<&str>`. Serialized output is unchanged (`php-ast`).
 - **Breaking:** `phpdoc_parser::Span` is a re-export of `php_ast::Span` instead of its own type, so PHPDoc and AST spans share one type; PHPDoc offsets are still relative to the docblock text. `phpdoc-parser` now depends on `php-ast` (`phpdoc-parser`).
+- **Breaking:** `phpdoc_parser::body_text` takes `Option<&PhpDocText>` instead of `&Option<PhpDocText>` (call it with `tag.body.as_ref()`), and `find_tags` and `inline_tags` return iterators instead of `Vec`s (`phpdoc-parser`).
 
 - **Breaking:** `PrinterConfig::newline` is a `Newline` enum (`Lf`, the default, or `CrLf`) instead of a `&'static str` (`php-printer`).
 ---

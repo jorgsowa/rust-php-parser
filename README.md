@@ -197,12 +197,12 @@ let doc = parse("/** @param int $x The value\n * @return bool */");
 
 // Find the first @param tag
 if let Some(param) = find_tag(&doc, "param") {
-    println!("{}", body_text(&param.body).unwrap_or_default()); // "int $x The value"
+    println!("{}", body_text(param.body.as_ref()).unwrap_or_default()); // "int $x The value"
 }
 
 // Iterate all @param tags
 for param in find_tags(&doc, "param") {
-    let body = body_text(&param.body).unwrap_or_default();
+    let body = body_text(param.body.as_ref()).unwrap_or_default();
 }
 
 // Reconstruct full text of the summary (including inline tags)

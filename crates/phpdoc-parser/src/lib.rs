@@ -28,7 +28,7 @@
 //!
 //! let doc = parse("/** @param int $x The mapping */");
 //! for param in find_tags(&doc, "param") {
-//!     let body = body_text(&param.body).unwrap_or_default();
+//!     let body = body_text(param.body.as_ref()).unwrap_or_default();
 //!     // body is "int $x The mapping" — parse the type yourself
 //! }
 //! ```
@@ -81,10 +81,13 @@ pub fn find_tag<'d>(doc: &'d PhpDoc, name: &str) -> Option<&'d PhpDocTag> {
 /// ```
 /// use phpdoc_parser::{parse, find_tags};
 /// let doc = parse("/**\n * @param int $x\n * @param string $y\n */");
-/// assert_eq!(find_tags(&doc, "param").len(), 2);
+/// assert_eq!(find_tags(&doc, "param").count(), 2);
 /// ```
-pub fn find_tags<'d>(doc: &'d PhpDoc, name: &str) -> Vec<&'d PhpDocTag> {
-    doc.tags.iter().filter(|t| t.name == name).collect()
+pub fn find_tags<'d, 'n>(
+    doc: &'d PhpDoc,
+    name: &'n str,
+) -> impl Iterator<Item = &'d PhpDocTag> + use<'d, 'n> {
+    doc.tags.iter().filter(move |t| t.name == name)
 }
 
 /// Reconstruct the text content of a `PhpDocText`, including inline tags.
@@ -124,11 +127,11 @@ pub fn text_content(text: &PhpDocText) -> String {
 /// use phpdoc_parser::{parse, find_tag, body_text};
 /// let doc = parse("/** @param int $x */");
 /// let param = find_tag(&doc, "param").unwrap();
-/// let text = body_text(&param.body).unwrap();
+/// let text = body_text(param.body.as_ref()).unwrap();
 /// assert!(text.contains("$x"));
 /// ```
-pub fn body_text(body: &Option<PhpDocText>) -> Option<String> {
-    body.as_ref().map(text_content)
+pub fn body_text(body: Option<&PhpDocText>) -> Option<String> {
+    body.map(text_content)
 }
 
 /// Extract all inline tags from a text segment.
@@ -138,14 +141,11 @@ pub fn body_text(body: &Option<PhpDocText>) -> Option<String> {
 /// use phpdoc_parser::{parse, inline_tags};
 /// let doc = parse("/** See {@link Foo} and {@link Bar}. */");
 /// let tags = inline_tags(doc.summary.as_ref().unwrap());
-/// assert_eq!(tags.len(), 2);
+/// assert_eq!(tags.count(), 2);
 /// ```
-pub fn inline_tags(text: &PhpDocText) -> Vec<&InlineTag> {
-    text.segments
-        .iter()
-        .filter_map(|seg| match seg {
-            TextSegment::InlineTag(tag) => Some(tag),
-            _ => None,
-        })
-        .collect()
+pub fn inline_tags(text: &PhpDocText) -> impl Iterator<Item = &InlineTag> {
+    text.segments.iter().filter_map(|seg| match seg {
+        TextSegment::InlineTag(tag) => Some(tag),
+        _ => None,
+    })
 }

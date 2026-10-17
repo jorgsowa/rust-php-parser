@@ -7,7 +7,7 @@ use phpdoc_parser::{body_text, find_tags, parse};
 
 let doc = parse("/** @param int $x The value */");
 for param in find_tags(&doc, "param") {
-    println!("{}", body_text(&param.body).unwrap_or_default());
+    println!("{}", body_text(param.body.as_ref()).unwrap_or_default());
 }
 ```
 
