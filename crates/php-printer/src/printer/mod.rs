@@ -13,7 +13,7 @@ pub struct PrinterConfig {
     /// Indentation style.
     pub indent: Indent,
     /// Line terminator.
-    pub newline: &'static str,
+    pub newline: Newline,
     /// Maximum blank lines preserved between statements. 0 normalizes all blank lines away.
     pub blank_lines_upper_bound: usize,
 }
@@ -28,11 +28,32 @@ pub enum Indent {
     Tabs,
 }
 
+/// Line terminator style.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+#[non_exhaustive]
+pub enum Newline {
+    /// `\n`
+    #[default]
+    Lf,
+    /// `\r\n`
+    CrLf,
+}
+
+impl Newline {
+    /// The line terminator text.
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Newline::Lf => "\n",
+            Newline::CrLf => "\r\n",
+        }
+    }
+}
+
 impl Default for PrinterConfig {
     fn default() -> Self {
         Self {
             indent: Indent::Spaces(4),
-            newline: "\n",
+            newline: Newline::Lf,
             blank_lines_upper_bound: 1,
         }
     }
@@ -99,7 +120,7 @@ impl<'src> Printer<'src> {
             output: String::with_capacity(4096),
             indent_level: 0,
             indent_str,
-            nl: config.newline,
+            nl: config.newline.as_str(),
             blank_lines_upper_bound: config.blank_lines_upper_bound,
             depth: 0,
             source,

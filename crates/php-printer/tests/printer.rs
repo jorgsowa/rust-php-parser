@@ -447,3 +447,13 @@ fn chain_operands_get_parentheses_from_precedence() {
         "<?php\n(($a + $b) * $c)->m();"
     );
 }
+
+#[test]
+fn crlf_newline() {
+    let arena = bumpalo::Bump::new();
+    let result = php_rs_parser::parse_arena(&arena, "<?php if ($a) { echo 1; }");
+    let mut config = PrinterConfig::default();
+    config.newline = php_printer::Newline::CrLf;
+    let out = php_printer::pretty_print_with_config(&result.program, &config);
+    assert_eq!(out, "<?php\r\nif ($a) {\r\n    echo 1;\r\n}");
+}

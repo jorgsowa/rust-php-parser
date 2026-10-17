@@ -14,7 +14,7 @@
 mod precedence;
 mod printer;
 
-pub use printer::{Indent, PrinterConfig};
+pub use printer::{Indent, Newline, PrinterConfig};
 
 use php_ast::owned;
 use php_ast::{Comment, Program};
