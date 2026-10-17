@@ -19,3 +19,6 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    ignore:
+      # Refs are channel/branch names (stable, nightly, MSRV), not semver tags.
+      - dependency-name: dtolnay/rust-toolchain
