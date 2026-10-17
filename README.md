@@ -243,6 +243,10 @@ let result = php_rs_parser::parse_arena_with(&arena, "<?php echo 1;", &options);
 
 The arena-form `Visitor`, `ScopeVisitor`, and `Fold<'src>` traits operate directly on `Program<'arena, 'src>` without any conversion. See [`docs.rs/php-ast`](https://docs.rs/php-ast) for the full arena visitor and fold API.
 
+## Versioning
+
+The crates follow [Semantic Versioning](https://semver.org/) for their Rust API. The JSON/serde shape of the AST (from `serde::Serialize`, also used by the playground) is **not** covered: it is meant for debugging, snapshots and tooling, and may change in any release. `Deserialize` is not implemented.
+
 ## Architecture
 
 | Crate | crates.io | Purpose |

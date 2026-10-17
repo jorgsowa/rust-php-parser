@@ -47,6 +47,10 @@
 //!     }
 //! }
 //! ```
+//!
+//! # Serialization
+//!
+//! The AST implements [`serde::Serialize`]; its serialized shape is not covered by semver.
 
 #![warn(missing_docs)]
 

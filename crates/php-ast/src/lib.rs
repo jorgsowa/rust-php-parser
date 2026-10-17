@@ -30,6 +30,12 @@
 //!     }
 //! }
 //! ```
+//!
+//! # Serialization
+//!
+//! AST types implement [`serde::Serialize`] for debugging, snapshots and tooling.
+//! The serialized shape is **not** covered by semver and may change in any release,
+//! for example when a node is renamed. `Deserialize` is not implemented.
 
 #![warn(missing_docs)]
 
