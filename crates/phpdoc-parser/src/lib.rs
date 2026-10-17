@@ -52,11 +52,11 @@
 
 pub(crate) mod ast;
 pub(crate) mod parser;
-pub(crate) mod span;
 
 pub use ast::{InlineTag, PhpDoc, PhpDocTag, PhpDocText, TextSegment};
 pub use parser::parse;
-pub use span::Span;
+/// Spans are byte offsets into the docblock text passed to [`parse`], not into the PHP file.
+pub use php_ast::Span;
 
 // =============================================================================
 // Utility functions for common tasks

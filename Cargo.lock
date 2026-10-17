@@ -781,6 +781,7 @@ dependencies = [
 name = "phpdoc-parser"
 version = "0.21.0"
 dependencies = [
+ "php-ast",
  "rayon",
  "serde",
  "serde_json",

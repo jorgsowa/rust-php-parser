@@ -14,6 +14,7 @@ readme = "README.md"
 exclude = ["tests/"]
 
 [dependencies]
+php-ast = { workspace = true }
 serde = { workspace = true }
 
 [dev-dependencies]
