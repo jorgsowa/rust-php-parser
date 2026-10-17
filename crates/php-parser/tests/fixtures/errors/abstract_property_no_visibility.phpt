@@ -4,6 +4,8 @@ min_php=8.4
 <?php class Foo { abstract string $bar; }
 ===errors===
 properties cannot be abstract
+===php_error===
+PHP Fatal error:  Only hooked properties may be declared abstract in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -69,5 +71,3 @@ properties cannot be abstract
     "end": 41
   }
 }
-===php_error===
-PHP Fatal error:  Only hooked properties may be declared abstract in Standard input code on line 1

@@ -9,6 +9,8 @@ function c(): int|mixed {}
 void cannot be used as part of a union type
 never cannot be used as part of a union type
 mixed cannot be used as part of a union type
+===php_error===
+PHP Fatal error:  Void can only be used as a standalone type in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -201,5 +203,3 @@ mixed cannot be used as part of a union type
     "end": 85
   }
 }
-===php_error===
-PHP Fatal error:  Void can only be used as a standalone type in Standard input code on line 2

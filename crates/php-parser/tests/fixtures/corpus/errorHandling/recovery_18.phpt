@@ -28,6 +28,8 @@ echo $a, ;
 for ($a, ; $b, ; $c, );
 ===errors===
 The use statement with non-compound name 'A' has no effect
+===php_error===
+PHP Parse error:  syntax error, unexpected token ";", expecting identifier or fully qualified name or namespaced name in Standard input code on line 5
 ===ast===
 {
   "stmts": [
@@ -520,5 +522,3 @@ The use statement with non-compound name 'A' has no effect
     "end": 324
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token ";", expecting identifier or fully qualified name or namespaced name in Standard input code on line 5

@@ -3,6 +3,8 @@
 ===errors===
 expected expression
 expected ';' after expression
+===php_error===
+PHP Parse error:  syntax error, unexpected token "}" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -65,5 +67,3 @@ expected ';' after expression
     "end": 24
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "}" in Standard input code on line 1

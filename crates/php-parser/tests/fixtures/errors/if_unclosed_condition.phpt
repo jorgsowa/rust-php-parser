@@ -5,6 +5,8 @@ expected expression
 Array and string offset access syntax with curly braces is no longer supported
 unclosed '')'' opened at Span { start: 9, end: 10 }
 expected statement
+===php_error===
+PHP Parse error:  syntax error, unexpected token "{" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -51,5 +53,3 @@ expected statement
     "end": 14
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "{" in Standard input code on line 1

@@ -36,6 +36,8 @@ expected ';' after echo statement
 expected ';', found 'throw'
 expected ';' after throw statement
 expected ';', found end of file
+===php_error===
+PHP Parse error:  syntax error, unexpected token "use", expecting "{" in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -344,5 +346,3 @@ expected ';', found end of file
     "end": 150
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "use", expecting "{" in Standard input code on line 3

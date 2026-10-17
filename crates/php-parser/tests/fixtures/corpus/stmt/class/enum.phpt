@@ -11,6 +11,8 @@ enum C: int implements Bar {
 }
 ===errors===
 'class' cannot be used as an enum case name
+===php_error===
+PHP Fatal error:  A class constant must not be called 'class'; it is reserved for class name fetching in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -142,5 +144,3 @@ enum C: int implements Bar {
     "end": 113
   }
 }
-===php_error===
-PHP Fatal error:  A class constant must not be called 'class'; it is reserved for class name fetching in Standard input code on line 4

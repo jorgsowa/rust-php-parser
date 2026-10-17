@@ -2,6 +2,8 @@
 <?php $x = match ($v) { 1 => 'one', default => 'first', default => 'second' };
 ===errors===
 match expression may only contain one default arm
+===php_error===
+PHP Fatal error:  Match expressions may only contain one default arm in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -118,5 +120,3 @@ match expression may only contain one default arm
     "end": 78
   }
 }
-===php_error===
-PHP Fatal error:  Match expressions may only contain one default arm in Standard input code on line 1

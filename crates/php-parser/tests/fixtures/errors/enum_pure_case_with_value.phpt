@@ -8,6 +8,8 @@ enum Direction {
 }
 ===errors===
 Case North of pure enum Direction must not have a value
+===php_error===
+PHP Fatal error:  Case North of non-backed enum Direction must not have a value in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -67,5 +69,3 @@ Case North of pure enum Direction must not have a value
     "end": 60
   }
 }
-===php_error===
-PHP Fatal error:  Case North of non-backed enum Direction must not have a value in Standard input code on line 3

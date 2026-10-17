@@ -43,18 +43,16 @@ fn parse_fixture(content: &str) -> (Option<(u32, u32)>, &str) {
     let rest = &content[source_pos..];
     let after_source = rest.strip_prefix(source_marker).unwrap_or(rest);
 
-    let errors_pos = after_source.find("===errors===\n");
-    let ast_pos = after_source.find("===ast===\n");
-    let source_raw = match (errors_pos, ast_pos) {
-        (Some(e), Some(a)) => &after_source[..e.min(a)],
-        (Some(e), None) => &after_source[..e],
-        (None, Some(a)) => &after_source[..a],
-        (None, None) => after_source,
-    };
-    let source = if errors_pos.is_none() && ast_pos.is_none() {
-        source_raw
-    } else {
-        source_raw.strip_suffix('\n').unwrap_or(source_raw)
+    let source = match ["===errors===\n", "===php_error===\n", "===ast===\n"]
+        .iter()
+        .filter_map(|m| after_source.find(m))
+        .min()
+    {
+        Some(end) => {
+            let raw = &after_source[..end];
+            raw.strip_suffix('\n').unwrap_or(raw)
+        }
+        None => after_source,
     };
 
     (min_php, source)
@@ -149,7 +147,8 @@ fn parse_max_php(content: &str) -> Option<(u32, u32)> {
 fn parse_php_error(content: &str) -> Option<String> {
     content.find("===php_error===\n").map(|p| {
         let after = &content[p + "===php_error===\n".len()..];
-        after.trim_end_matches('\n').to_string()
+        let end = after.find("===ast===\n").unwrap_or(after.len());
+        after[..end].trim_end_matches('\n').to_string()
     })
 }
 
@@ -157,14 +156,17 @@ fn update_fixture_php_error(path: &str, actual: &str) {
     let content =
         std::fs::read_to_string(path).unwrap_or_else(|e| panic!("failed to read {path}: {e}"));
 
+    // The section sits between ===errors=== and ===ast===: replace it in place,
+    // or insert it before ===ast=== (appending only when there is no AST yet).
+    let section = format!("===php_error===\n{actual}\n");
     let new_content = if let Some(p) = content.find("===php_error===\n") {
-        format!("{}===php_error===\n{}\n", &content[..p], actual)
+        let after = &content[p..];
+        let end = after.find("===ast===\n").unwrap_or(after.len());
+        format!("{}{section}{}", &content[..p], &after[end..])
+    } else if let Some(a) = content.find("===ast===\n") {
+        format!("{}{section}{}", &content[..a], &content[a..])
     } else {
-        format!(
-            "{}\n===php_error===\n{}\n",
-            content.trim_end_matches('\n'),
-            actual
-        )
+        format!("{}\n{section}", content.trim_end_matches('\n'))
     };
 
     std::fs::write(path, new_content).unwrap_or_else(|e| panic!("failed to write {path}: {e}"));

@@ -14,6 +14,8 @@ for ((void)a(); $b; (void)$c) {
 $x = (void) $y;
 ===errors===
 (void) cast cannot be used in an expression context
+===php_error===
+PHP Parse error:  syntax error, unexpected token "(void)" in Standard input code on line 11
 ===ast===
 {
   "stmts": [
@@ -282,5 +284,3 @@ $x = (void) $y;
     "end": 188
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "(void)" in Standard input code on line 11

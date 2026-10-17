@@ -2,6 +2,8 @@
 <?php try { $x = 1; } echo 'after';
 ===errors===
 expected catch or finally clause, found 'echo'
+===php_error===
+PHP Fatal error:  Cannot use try without catch or finally in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -81,5 +83,3 @@ expected catch or finally clause, found 'echo'
     "end": 35
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use try without catch or finally in Standard input code on line 1

@@ -21,6 +21,8 @@ $x = (void) $y;
 'void cast' requires PHP 8.5 or higher
 'void cast' requires PHP 8.5 or higher
 (void) cast cannot be used in an expression context
+===php_error===
+PHP Parse error:  syntax error, unexpected identifier "foo" in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -289,5 +291,3 @@ $x = (void) $y;
     "end": 188
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected identifier "foo" in Standard input code on line 2

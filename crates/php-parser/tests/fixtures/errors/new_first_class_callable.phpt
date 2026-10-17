@@ -3,6 +3,8 @@
 new Foo(...);
 ===errors===
 Cannot create Closure for new expression
+===php_error===
+PHP Fatal error:  Cannot create Closure for new expression in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -40,5 +42,3 @@ Cannot create Closure for new expression
     "end": 19
   }
 }
-===php_error===
-PHP Fatal error:  Cannot create Closure for new expression in Standard input code on line 2

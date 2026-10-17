@@ -8,6 +8,8 @@ class A {
 }
 ===errors===
 Method __construct() cannot declare a return type
+===php_error===
+PHP Fatal error:  Method A::__construct() cannot declare a return type in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -75,5 +77,3 @@ Method __construct() cannot declare a return type
     "end": 60
   }
 }
-===php_error===
-PHP Fatal error:  Method A::__construct() cannot declare a return type in Standard input code on line 3

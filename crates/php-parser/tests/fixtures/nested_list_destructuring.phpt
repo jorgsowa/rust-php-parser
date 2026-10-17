@@ -4,6 +4,8 @@ list($a, [[$b, $c]]) = [[1, [2, 3]]];
 [$x, [$y, $z]] = $data;
 ===errors===
 Cannot mix [] and list()
+===php_error===
+PHP Fatal error:  Cannot mix [] and list() in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -333,5 +335,3 @@ Cannot mix [] and list()
     "end": 67
   }
 }
-===php_error===
-PHP Fatal error:  Cannot mix [] and list() in Standard input code on line 2

@@ -8,6 +8,8 @@ namespace B {
 echo 3;
 ===errors===
 Cannot mix bracketed namespace declarations with unbracketed namespace declarations
+===php_error===
+PHP Fatal error:  Cannot mix bracketed namespace declarations with unbracketed namespace declarations in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -119,5 +121,3 @@ Cannot mix bracketed namespace declarations with unbracketed namespace declarati
     "end": 62
   }
 }
-===php_error===
-PHP Fatal error:  Cannot mix bracketed namespace declarations with unbracketed namespace declarations in Standard input code on line 4

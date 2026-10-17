@@ -12,6 +12,8 @@ class Test {
 'final properties' requires PHP 8.4 or higher
 Cannot redeclare property $prop
 Cannot redeclare property $prop
+===php_error===
+PHP Fatal error:  Cannot use the final modifier on a property in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -113,5 +115,3 @@ Cannot redeclare property $prop
     "end": 94
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use the final modifier on a property in Standard input code on line 3

@@ -6,6 +6,8 @@ $x = 1 + 2
 ===errors===
 expected ';' after echo statement
 expected ';' after expression
+===php_error===
+PHP Parse error:  syntax error, unexpected token "echo", expecting "," or ";" in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -110,5 +112,3 @@ expected ';' after expression
     "end": 43
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "echo", expecting "," or ";" in Standard input code on line 3

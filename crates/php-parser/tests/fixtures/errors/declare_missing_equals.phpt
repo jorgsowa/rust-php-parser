@@ -2,6 +2,8 @@
 <?php declare(strict_types 1);
 ===errors===
 expected '=', found integer
+===php_error===
+PHP Parse error:  syntax error, unexpected integer "1", expecting "=" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -36,5 +38,3 @@ expected '=', found integer
     "end": 30
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected integer "1", expecting "=" in Standard input code on line 1

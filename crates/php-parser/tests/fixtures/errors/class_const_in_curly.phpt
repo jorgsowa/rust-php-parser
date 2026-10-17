@@ -4,6 +4,8 @@ min_php=8.4
 <?php $x = "{$obj::CONST}";
 ===errors===
 class constant access is not valid as a standalone interpolation expression
+===php_error===
+PHP Parse error:  syntax error, unexpected token "}", expecting "->" or "?->" or "[" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -81,5 +83,3 @@ class constant access is not valid as a standalone interpolation expression
     "end": 27
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "}", expecting "->" or "?->" or "[" in Standard input code on line 1

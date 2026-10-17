@@ -13,6 +13,8 @@ class Foo {
 }
 ===errors===
 expected class member, found '@'
+===php_error===
+PHP Parse error:  syntax error, unexpected token "@", expecting "function" in Standard input code on line 5
 ===ast===
 {
   "stmts": [
@@ -137,5 +139,3 @@ expected class member, found '@'
     "end": 160
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "@", expecting "function" in Standard input code on line 5

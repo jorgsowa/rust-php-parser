@@ -3,6 +3,8 @@
 0787;
 ===errors===
 Invalid numeric literal
+===php_error===
+PHP Parse error:  Invalid numeric literal in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -29,5 +31,3 @@ Invalid numeric literal
     "end": 11
   }
 }
-===php_error===
-PHP Parse error:  Invalid numeric literal in Standard input code on line 2

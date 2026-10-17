@@ -9,6 +9,8 @@ class Test {
 }
 ===errors===
 get hook of property must not have a parameter list
+===php_error===
+PHP Fatal error:  get hook of property Test::$prop must not have a parameter list in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -81,5 +83,3 @@ get hook of property must not have a parameter list
     "end": 66
   }
 }
-===php_error===
-PHP Fatal error:  get hook of property Test::$prop must not have a parameter list in Standard input code on line 4

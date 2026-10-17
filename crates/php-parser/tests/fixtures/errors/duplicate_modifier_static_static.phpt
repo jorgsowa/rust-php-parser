@@ -2,6 +2,8 @@
 <?php class A { static static $x; }
 ===errors===
 duplicate modifier 'static'
+===php_error===
+PHP Fatal error:  Multiple static modifiers are not allowed in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -50,5 +52,3 @@ duplicate modifier 'static'
     "end": 35
   }
 }
-===php_error===
-PHP Fatal error:  Multiple static modifiers are not allowed in Standard input code on line 1

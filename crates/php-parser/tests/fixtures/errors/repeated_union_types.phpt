@@ -3,6 +3,8 @@
 ===errors===
 Duplicate type 'int' in union type
 expected variable, found ')'
+===php_error===
+PHP Parse error:  syntax error, unexpected token ")", expecting variable in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -125,5 +127,3 @@ expected variable, found ')'
     "end": 40
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token ")", expecting variable in Standard input code on line 1

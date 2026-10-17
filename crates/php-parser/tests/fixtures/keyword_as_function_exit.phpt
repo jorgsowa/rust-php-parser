@@ -2,6 +2,8 @@
 <?php function exit(string|int $status = 0): never {}
 ===errors===
 cannot use 'exit' as function name; it is reserved
+===php_error===
+PHP Parse error:  syntax error, unexpected token "exit", expecting "(" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -114,5 +116,3 @@ cannot use 'exit' as function name; it is reserved
     "end": 53
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "exit", expecting "(" in Standard input code on line 1

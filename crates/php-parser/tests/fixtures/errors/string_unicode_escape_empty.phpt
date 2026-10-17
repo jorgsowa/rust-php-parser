@@ -2,6 +2,8 @@
 <?php $s = "\u{}";
 ===errors===
 Invalid UTF-8 codepoint escape sequence: empty code point
+===php_error===
+PHP Parse error:  Invalid UTF-8 codepoint escape sequence in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -48,5 +50,3 @@ Invalid UTF-8 codepoint escape sequence: empty code point
     "end": 18
   }
 }
-===php_error===
-PHP Parse error:  Invalid UTF-8 codepoint escape sequence in Standard input code on line 1

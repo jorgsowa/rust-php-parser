@@ -7,6 +7,8 @@ expected ';' after expression
 expected '}', found end of file
 Array and string offset access syntax with curly braces is no longer supported
 expected ';' after expression
+===php_error===
+PHP Parse error:  syntax error, unexpected variable "$x", expecting "]" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -92,5 +94,3 @@ expected ';' after expression
     "end": 15
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected variable "$x", expecting "]" in Standard input code on line 1

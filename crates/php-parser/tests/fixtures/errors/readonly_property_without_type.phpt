@@ -5,6 +5,8 @@ class Foo {
 }
 ===errors===
 readonly property must have type
+===php_error===
+PHP Fatal error:  Readonly property Foo::$bar must have type in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -53,5 +55,3 @@ readonly property must have type
     "end": 45
   }
 }
-===php_error===
-PHP Fatal error:  Readonly property Foo::$bar must have type in Standard input code on line 3

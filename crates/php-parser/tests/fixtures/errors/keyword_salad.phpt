@@ -5,6 +5,8 @@ Cannot use "function" as a class name as it is reserved
 expected '{', found 'while'
 expected class member, found 'while'
 expected '}', found end of file
+===php_error===
+PHP Parse error:  syntax error, unexpected token "function", expecting identifier in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -34,5 +36,3 @@ expected '}', found end of file
     "end": 27
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "function", expecting identifier in Standard input code on line 1

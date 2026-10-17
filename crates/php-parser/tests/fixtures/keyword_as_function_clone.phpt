@@ -2,6 +2,8 @@
 <?php function clone(object $object): object {}
 ===errors===
 cannot use 'clone' as function name; it is reserved
+===php_error===
+PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -78,5 +80,3 @@ cannot use 'clone' as function name; it is reserved
     "end": 47
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Standard input code on line 1

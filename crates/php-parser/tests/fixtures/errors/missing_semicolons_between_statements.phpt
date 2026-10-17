@@ -3,6 +3,8 @@
 ===errors===
 expected ';' after expression
 expected ';' after expression
+===php_error===
+PHP Parse error:  syntax error, unexpected variable "$y" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -86,5 +88,3 @@ expected ';' after expression
     "end": 19
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected variable "$y" in Standard input code on line 1

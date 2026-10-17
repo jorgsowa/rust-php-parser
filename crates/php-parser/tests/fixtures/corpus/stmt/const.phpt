@@ -20,6 +20,8 @@ const ThisIsInvalid = 4,
     AttributesOnMultipleConstants = 5;
 ===errors===
 cannot use attributes on multi-constant declaration
+===php_error===
+PHP Fatal error:  Cannot apply attributes to multiple constants at once in Standard input code on line 16
 ===ast===
 {
   "stmts": [
@@ -338,5 +340,3 @@ cannot use attributes on multi-constant declaration
     "end": 263
   }
 }
-===php_error===
-PHP Fatal error:  Cannot apply attributes to multiple constants at once in Standard input code on line 16

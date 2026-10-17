@@ -10,6 +10,8 @@ class Test {
 ===errors===
 Cannot redeclare property $prop
 Cannot redeclare property $prop
+===php_error===
+PHP Fatal error:  Cannot redeclare Test::$prop in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -111,5 +113,3 @@ Cannot redeclare property $prop
     "end": 94
   }
 }
-===php_error===
-PHP Fatal error:  Cannot redeclare Test::$prop in Standard input code on line 4

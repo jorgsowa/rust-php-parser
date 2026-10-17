@@ -9,6 +9,8 @@ class Foo {
 }
 ===errors===
 readonly promoted property must have type
+===php_error===
+PHP Fatal error:  Readonly property Foo::$x must have type in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -76,5 +78,3 @@ readonly promoted property must have type
     "end": 89
   }
 }
-===php_error===
-PHP Fatal error:  Readonly property Foo::$x must have type in Standard input code on line 4

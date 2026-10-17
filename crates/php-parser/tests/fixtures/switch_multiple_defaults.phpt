@@ -2,6 +2,8 @@
 <?php switch ($x) { default: break; case 1: break; default: break; }
 ===errors===
 Switch statements may only contain one default clause
+===php_error===
+PHP Fatal error:  Switch statements may only contain one default clause in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -94,5 +96,3 @@ Switch statements may only contain one default clause
     "end": 68
   }
 }
-===php_error===
-PHP Fatal error:  Switch statements may only contain one default clause in Standard input code on line 1

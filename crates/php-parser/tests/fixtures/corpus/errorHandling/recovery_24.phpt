@@ -6,6 +6,8 @@ function foo() :
 }
 ===errors===
 expected identifier, found '{'
+===php_error===
+PHP Parse error:  syntax error, unexpected token "{" in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -64,5 +66,3 @@ expected identifier, found '{'
     "end": 41
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "{" in Standard input code on line 3

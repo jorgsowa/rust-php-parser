@@ -17,6 +17,8 @@ class A {
 A void function must not return a value
 A never-returning function must not return
 A void function must not return a value
+===php_error===
+PHP Fatal error:  A void function must not return a value in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -227,5 +229,3 @@ A void function must not return a value
     "end": 140
   }
 }
-===php_error===
-PHP Fatal error:  A void function must not return a value in Standard input code on line 2

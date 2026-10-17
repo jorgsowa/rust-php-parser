@@ -10,6 +10,8 @@ class Foo {
 }
 ===errors===
 duplicate 'get' hook
+===php_error===
+PHP Fatal error:  Cannot redeclare property hook "get" in Standard input code on line 5
 ===ast===
 {
   "stmts": [
@@ -141,5 +143,3 @@ duplicate 'get' hook
     "end": 97
   }
 }
-===php_error===
-PHP Fatal error:  Cannot redeclare property hook "get" in Standard input code on line 5

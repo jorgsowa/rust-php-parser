@@ -5,6 +5,8 @@ min_php=8.3
 ===errors===
 cannot use 'static' as constant modifier
 cannot use 'abstract' as constant modifier
+===php_error===
+PHP Fatal error:  Cannot use the static modifier on a class constant in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -53,5 +55,3 @@ cannot use 'abstract' as constant modifier
     "end": 50
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use the static modifier on a class constant in Standard input code on line 1

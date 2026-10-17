@@ -7,6 +7,8 @@ function foo(Foo|Foo $x) { }
 
 ===errors===
 Duplicate type 'Foo' in union type
+===php_error===
+PHP Fatal error:  Duplicate type Foo is redundant in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -94,5 +96,3 @@ Duplicate type 'Foo' in union type
     "end": 34
   }
 }
-===php_error===
-PHP Fatal error:  Duplicate type Foo is redundant in Standard input code on line 2

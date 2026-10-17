@@ -5,6 +5,8 @@ expected expression
 unclosed '')'' opened at Span { start: 10, end: 11 }
 expected expression
 expected expression
+===php_error===
+PHP Parse error:  syntax error, unexpected token ";", expecting ")" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -94,5 +96,3 @@ expected expression
     "end": 43
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token ";", expecting ")" in Standard input code on line 1

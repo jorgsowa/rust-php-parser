@@ -3,6 +3,8 @@
 $x = [1, , 3];
 ===errors===
 Cannot use empty array elements in arrays
+===php_error===
+PHP Fatal error:  Cannot use empty array elements in arrays in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -99,5 +101,3 @@ Cannot use empty array elements in arrays
     "end": 20
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use empty array elements in arrays in Standard input code on line 2

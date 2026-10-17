@@ -5,6 +5,8 @@ max_php=8.2
 new;
 ===errors===
 expected identifier, found ';'
+===php_error===
+PHP Parse error:  syntax error, unexpected token ";" in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -40,5 +42,3 @@ expected identifier, found ';'
     "end": 10
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token ";" in Standard input code on line 2

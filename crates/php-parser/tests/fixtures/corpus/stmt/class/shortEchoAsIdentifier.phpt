@@ -14,6 +14,8 @@ expected '::' or 'as', found '<?php'
 expected '::' or 'as', found identifier
 expected identifier, found ';'
 expected '::' or 'as', found ';'
+===php_error===
+PHP Parse error:  Cannot use "<?=" as an identifier in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -100,5 +102,3 @@ expected '::' or 'as', found ';'
     "end": 67
   }
 }
-===php_error===
-PHP Parse error:  Cannot use "<?=" as an identifier in Standard input code on line 4

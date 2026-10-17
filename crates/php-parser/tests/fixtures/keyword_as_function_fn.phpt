@@ -2,6 +2,8 @@
 <?php function fn() {}
 ===errors===
 cannot use 'fn' as function name; it is reserved
+===php_error===
+PHP Parse error:  syntax error, unexpected token "fn", expecting "(" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -27,5 +29,3 @@ cannot use 'fn' as function name; it is reserved
     "end": 22
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "fn", expecting "(" in Standard input code on line 1

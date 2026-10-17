@@ -11,6 +11,8 @@ class Test
 ===errors===
 cannot have hooks on comma-separated property
 Property hook list must not be empty
+===php_error===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 5
 ===ast===
 {
   "stmts": [
@@ -77,5 +79,3 @@ Property hook list must not be empty
     "end": 48
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 5

@@ -6,6 +6,8 @@ class Foo {
 }
 ===errors===
 expected expression
+===php_error===
+PHP Parse error:  syntax error, unexpected token ";" in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -140,5 +142,3 @@ expected expression
     "end": 79
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token ";" in Standard input code on line 3

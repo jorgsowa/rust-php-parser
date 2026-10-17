@@ -2,6 +2,8 @@
 <?php class A { static function __cLoNe() {} }
 ===errors===
 Method __cLoNe() cannot be static
+===php_error===
+PHP Fatal error:  Method A::__cLoNe() cannot be static in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -52,5 +54,3 @@ Method __cLoNe() cannot be static
     "end": 46
   }
 }
-===php_error===
-PHP Fatal error:  Method A::__cLoNe() cannot be static in Standard input code on line 1

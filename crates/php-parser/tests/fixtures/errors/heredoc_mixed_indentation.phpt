@@ -5,6 +5,8 @@ $x = <<<END
     END;
 ===errors===
 Invalid body indentation level
+===php_error===
+PHP Parse error:  Invalid indentation - tabs and spaces cannot be mixed in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -58,5 +60,3 @@ Invalid body indentation level
     "end": 42
   }
 }
-===php_error===
-PHP Parse error:  Invalid indentation - tabs and spaces cannot be mixed in Standard input code on line 3

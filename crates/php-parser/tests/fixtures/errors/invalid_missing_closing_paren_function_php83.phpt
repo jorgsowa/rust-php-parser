@@ -7,6 +7,8 @@ function foo(int $a, $b {
 }
 ===errors===
 unclosed '')'' opened at Span { start: 18, end: 19 }
+===php_error===
+PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -120,5 +122,3 @@ unclosed '')'' opened at Span { start: 18, end: 19 }
     "end": 53
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard input code on line 2

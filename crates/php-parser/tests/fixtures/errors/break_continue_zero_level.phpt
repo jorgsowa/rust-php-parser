@@ -9,6 +9,8 @@ for ($i = 0; $i < 10; $i++) {
 ===errors===
 'break' operator accepts only positive integers
 'continue' operator accepts only positive integers
+===php_error===
+PHP Fatal error:  'break' operator accepts only positive integers in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -260,5 +262,3 @@ for ($i = 0; $i < 10; $i++) {
     "end": 98
   }
 }
-===php_error===
-PHP Fatal error:  'break' operator accepts only positive integers in Standard input code on line 3

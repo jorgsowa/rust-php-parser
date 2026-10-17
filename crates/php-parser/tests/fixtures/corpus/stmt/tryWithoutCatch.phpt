@@ -6,6 +6,8 @@ try {
 }
 ===errors===
 expected catch or finally clause, found end of file
+===php_error===
+PHP Fatal error:  Cannot use try without catch or finally in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -57,5 +59,3 @@ expected catch or finally clause, found end of file
     "end": 25
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use try without catch or finally in Standard input code on line 3

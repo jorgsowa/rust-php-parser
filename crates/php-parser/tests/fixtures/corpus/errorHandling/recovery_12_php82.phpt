@@ -6,6 +6,8 @@ new
 ===errors===
 expected identifier, found end of file
 expected ';' after expression
+===php_error===
+PHP Parse error:  syntax error, unexpected end of file in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -41,5 +43,3 @@ expected ';' after expression
     "end": 9
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected end of file in Standard input code on line 2

@@ -9,6 +9,8 @@ while (true) {
     $i = 2;
 ===errors===
 unclosed ''}'' opened at Span { start: 118, end: 119 }
+===php_error===
+PHP Parse error:  Unclosed '{' on line 6 in Standard input code on line 8
 ===ast===
 {
   "stmts": [
@@ -158,5 +160,3 @@ unclosed ''}'' opened at Span { start: 118, end: 119 }
     "end": 143
   }
 }
-===php_error===
-PHP Parse error:  Unclosed '{' on line 6 in Standard input code on line 8

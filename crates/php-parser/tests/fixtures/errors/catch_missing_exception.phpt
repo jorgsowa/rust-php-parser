@@ -4,6 +4,8 @@
 expected '(', found '{'
 expected identifier, found '{'
 expected ')', found '{'
+===php_error===
+PHP Parse error:  syntax error, unexpected token "{", expecting "(" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -45,5 +47,3 @@ expected ')', found '{'
     "end": 23
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "{", expecting "(" in Standard input code on line 1

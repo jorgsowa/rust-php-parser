@@ -9,6 +9,8 @@ class Foo {
 }
 ===errors===
 duplicate modifier 'readonly'
+===php_error===
+PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -93,5 +95,3 @@ duplicate modifier 'readonly'
     "end": 105
   }
 }
-===php_error===
-PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input code on line 4

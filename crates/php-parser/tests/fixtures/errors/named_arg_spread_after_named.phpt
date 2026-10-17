@@ -2,6 +2,8 @@
 <?php func(a: 1, ...$args);
 ===errors===
 cannot use positional argument after named argument
+===php_error===
+PHP Fatal error:  Cannot use argument unpacking after named arguments in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -85,5 +87,3 @@ cannot use positional argument after named argument
     "end": 27
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use argument unpacking after named arguments in Standard input code on line 1

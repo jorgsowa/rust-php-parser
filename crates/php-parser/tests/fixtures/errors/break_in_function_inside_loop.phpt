@@ -7,6 +7,8 @@ for ($i = 0; $i < 10; $i++) {
 }
 ===errors===
 Cannot 'break' 1 level
+===php_error===
+PHP Fatal error:  'break' not in the 'loop' or 'switch' context in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -146,5 +148,3 @@ Cannot 'break' 1 level
     "end": 79
   }
 }
-===php_error===
-PHP Fatal error:  'break' not in the 'loop' or 'switch' context in Standard input code on line 4

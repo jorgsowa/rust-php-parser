@@ -2,6 +2,8 @@
 <?php use A\{B as Foo, C as Foo};
 ===errors===
 cannot import A\C as Foo because the name is already in use
+===php_error===
+PHP Fatal error:  Cannot use A\C as Foo because the name is already in use in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -60,5 +62,3 @@ cannot import A\C as Foo because the name is already in use
     "end": 33
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use A\C as Foo because the name is already in use in Standard input code on line 1

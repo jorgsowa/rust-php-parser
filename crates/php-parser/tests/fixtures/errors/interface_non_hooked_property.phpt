@@ -11,6 +11,8 @@ interface I {
 }
 ===errors===
 Interfaces may only include hooked properties
+===php_error===
+PHP Fatal error:  Interfaces may only include hooked properties in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -70,5 +72,3 @@ Interfaces may only include hooked properties
     "end": 40
   }
 }
-===php_error===
-PHP Fatal error:  Interfaces may only include hooked properties in Standard input code on line 3

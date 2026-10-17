@@ -19,6 +19,8 @@ class Test {
 }
 ===errors===
 A parenthesized intersection type can only be used as part of a union type
+===php_error===
+PHP Parse error:  syntax error, unexpected variable "$x", expecting "|" in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -398,5 +400,3 @@ A parenthesized intersection type can only be used as part of a union type
     "end": 321
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected variable "$x", expecting "|" in Standard input code on line 3

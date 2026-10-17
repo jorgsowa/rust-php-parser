@@ -6,6 +6,8 @@ max_php=8.2
 $x = Foo::{$name};
 ===errors===
 'dynamic class constant fetch' requires PHP 8.3 or higher
+===php_error===
+PHP Parse error:  syntax error, unexpected token ";", expecting "(" in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -71,5 +73,3 @@ $x = Foo::{$name};
     "end": 24
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token ";", expecting "(" in Standard input code on line 2

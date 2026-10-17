@@ -50,24 +50,28 @@ pub fn parse_fixture(content: &str) -> (Option<(u32, u32)>, &str) {
     let rest = &content[source_pos..];
     let after_source = rest.strip_prefix(source_marker).unwrap_or(rest);
 
-    // Source ends at the earliest of ===errors=== or ===ast=== (or EOF).
-    // One trailing '\n' is stripped because it is the newline before the marker,
-    // not part of the PHP source itself.
-    let errors_pos = after_source.find("===errors===\n");
-    let ast_pos = after_source.find("===ast===\n");
-    let source_raw = match (errors_pos, ast_pos) {
-        (Some(e), Some(a)) => &after_source[..e.min(a)],
-        (Some(e), None) => &after_source[..e],
-        (None, Some(a)) => &after_source[..a],
-        (None, None) => after_source,
-    };
-    let source = if errors_pos.is_none() && ast_pos.is_none() {
-        source_raw
-    } else {
-        source_raw.strip_suffix('\n').unwrap_or(source_raw)
+    // Source ends at the earliest of ===errors===, ===php_error=== or ===ast===
+    // (or EOF). One trailing '\n' is stripped because it is the newline before
+    // the marker, not part of the PHP source itself.
+    let source = match next_section_pos(after_source) {
+        Some(end) => {
+            let raw = &after_source[..end];
+            raw.strip_suffix('\n').unwrap_or(raw)
+        }
+        None => after_source,
     };
 
     (min_php, source)
+}
+
+/// Position of the earliest `===errors===`, `===php_error===` or `===ast===`
+/// marker in `s`, if any.
+#[allow(dead_code)]
+fn next_section_pos(s: &str) -> Option<usize> {
+    ["===errors===\n", "===php_error===\n", "===ast===\n"]
+        .iter()
+        .filter_map(|m| s.find(m))
+        .min()
 }
 
 /// Recursively collect all `.phpt` files under `dir`.
@@ -123,7 +127,7 @@ pub fn php_version(v: (u32, u32)) -> php_rs_parser::PhpVersion {
 #[allow(dead_code)]
 pub fn extract_errors_section(content: &str) -> Option<String> {
     let after = &content[content.find("===errors===\n")? + "===errors===\n".len()..];
-    let end = after.find("===ast===\n").unwrap_or(after.len());
+    let end = next_section_pos(after).unwrap_or(after.len());
     let text = after[..end].trim_end_matches('\n').to_string();
     if text.is_empty() {
         None
@@ -136,7 +140,7 @@ pub fn extract_errors_section(content: &str) -> Option<String> {
 #[allow(dead_code)]
 pub fn extract_ast_section(content: &str) -> Option<String> {
     let after = &content[content.find("===ast===\n")? + "===ast===\n".len()..];
-    let end = after.find("===php_error===\n").unwrap_or(after.len());
+    let end = next_section_pos(after).unwrap_or(after.len());
     Some(after[..end].trim_end_matches('\n').to_string())
 }
 
@@ -149,7 +153,8 @@ pub fn php_error_closure_violation(content: &str, rel: &str) -> Option<String> {
     }
     let marker = "===php_error===\n";
     let pos = content.find(marker)?;
-    let body = content[pos + marker.len()..].trim();
+    let after = &content[pos + marker.len()..];
+    let body = after[..next_section_pos(after).unwrap_or(after.len())].trim();
     if body.is_empty() {
         return None;
     }

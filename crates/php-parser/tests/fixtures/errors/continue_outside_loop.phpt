@@ -3,6 +3,8 @@
 continue;
 ===errors===
 Cannot 'continue' 1 level
+===php_error===
+PHP Fatal error:  'continue' not in the 'loop' or 'switch' context in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -21,5 +23,3 @@ Cannot 'continue' 1 level
     "end": 15
   }
 }
-===php_error===
-PHP Fatal error:  'continue' not in the 'loop' or 'switch' context in Standard input code on line 2

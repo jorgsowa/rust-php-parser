@@ -9,6 +9,8 @@ class Foo {
 }
 ===errors===
 duplicate modifier 'final'
+===php_error===
+PHP Fatal error:  Multiple final modifiers are not allowed in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -93,5 +95,3 @@ duplicate modifier 'final'
     "end": 99
   }
 }
-===php_error===
-PHP Fatal error:  Multiple final modifiers are not allowed in Standard input code on line 4

@@ -2,6 +2,8 @@
 <?php function yield() {}
 ===errors===
 cannot use 'yield' as function name; it is reserved
+===php_error===
+PHP Parse error:  syntax error, unexpected token "yield", expecting "(" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -27,5 +29,3 @@ cannot use 'yield' as function name; it is reserved
     "end": 25
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "yield", expecting "(" in Standard input code on line 1

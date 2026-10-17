@@ -9,6 +9,8 @@ enum Status {
 }
 ===errors===
 expected enum member, found '@'
+===php_error===
+PHP Parse error:  syntax error, unexpected token "@", expecting "function" in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -60,5 +62,3 @@ expected enum member, found '@'
     "end": 70
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "@", expecting "function" in Standard input code on line 3

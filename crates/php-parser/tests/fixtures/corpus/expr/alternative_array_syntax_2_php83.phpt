@@ -22,6 +22,8 @@ Array and string offset access syntax with curly braces is no longer supported
 Array and string offset access syntax with curly braces is no longer supported
 Array and string offset access syntax with curly braces is no longer supported
 Array and string offset access syntax with curly braces is no longer supported
+===php_error===
+PHP Fatal error:  Array and string offset access syntax with curly braces is no longer supported in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -495,5 +497,3 @@ Array and string offset access syntax with curly braces is no longer supported
     "end": 122
   }
 }
-===php_error===
-PHP Fatal error:  Array and string offset access syntax with curly braces is no longer supported in Standard input code on line 3

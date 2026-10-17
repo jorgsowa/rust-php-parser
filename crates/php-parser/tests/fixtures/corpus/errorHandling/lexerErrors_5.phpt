@@ -8,6 +8,8 @@ if ($b) {
 ===errors===
 unterminated block comment
 unclosed ''}'' opened at Span { start: 15, end: 16 }
+===php_error===
+PHP Parse error:  Unterminated comment starting line 5 in Standard input code on line 5
 ===ast===
 {
   "stmts": [
@@ -85,5 +87,3 @@ unclosed ''}'' opened at Span { start: 15, end: 16 }
     "end": 28
   }
 }
-===php_error===
-PHP Parse error:  Unterminated comment starting line 5 in Standard input code on line 5

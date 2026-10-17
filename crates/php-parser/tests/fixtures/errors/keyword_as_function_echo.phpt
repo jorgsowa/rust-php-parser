@@ -2,6 +2,8 @@
 <?php function echo() {}
 ===errors===
 cannot use 'echo' as function name; it is reserved
+===php_error===
+PHP Parse error:  syntax error, unexpected token "echo", expecting "(" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -27,5 +29,3 @@ cannot use 'echo' as function name; it is reserved
     "end": 24
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "echo", expecting "(" in Standard input code on line 1

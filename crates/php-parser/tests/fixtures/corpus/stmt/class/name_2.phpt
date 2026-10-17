@@ -4,6 +4,8 @@ min_php=8.4
 <?php class PARENT {}
 ===errors===
 Cannot use "PARENT" as a class name as it is reserved
+===php_error===
+PHP Fatal error:  Cannot use "PARENT" as a class name as it is reserved in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -33,5 +35,3 @@ Cannot use "PARENT" as a class name as it is reserved
     "end": 21
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use "PARENT" as a class name as it is reserved in Standard input code on line 1

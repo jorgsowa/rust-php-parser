@@ -23,6 +23,8 @@ expected 'get' or 'set', found 'static'
 duplicate 'get' hook
 expected 'get' or 'set', found 'readonly'
 duplicate 'get' hook
+===php_error===
+PHP Fatal error:  Cannot use the public modifier on a property hook in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -133,5 +135,3 @@ duplicate 'get' hook
     "end": 167
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use the public modifier on a property hook in Standard input code on line 4

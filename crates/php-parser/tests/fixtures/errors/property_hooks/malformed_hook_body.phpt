@@ -10,6 +10,8 @@ class Foo {
 }
 ===errors===
 expected 'get' or 'set', found integer
+===php_error===
+PHP Parse error:  syntax error, unexpected integer "123", expecting identifier in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -128,5 +130,3 @@ expected 'get' or 'set', found integer
     "end": 91
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected integer "123", expecting identifier in Standard input code on line 4

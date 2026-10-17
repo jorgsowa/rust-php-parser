@@ -5,6 +5,8 @@ for ($i = 0; $i < 10; $i++) {
 }
 ===errors===
 Cannot 'break' 5 levels
+===php_error===
+PHP Fatal error:  Cannot 'break' 5 levels in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -135,5 +137,3 @@ Cannot 'break' 5 levels
     "end": 50
   }
 }
-===php_error===
-PHP Fatal error:  Cannot 'break' 5 levels in Standard input code on line 3

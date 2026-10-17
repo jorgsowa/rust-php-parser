@@ -5,6 +5,8 @@ min_php=8.0
 #[] class C {}
 ===errors===
 Attribute list cannot be empty
+===php_error===
+PHP Parse error:  syntax error, unexpected token "]" in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -34,5 +36,3 @@ Attribute list cannot be empty
     "end": 20
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "]" in Standard input code on line 2

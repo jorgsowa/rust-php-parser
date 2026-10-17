@@ -2,6 +2,8 @@
 <?php class A { public public $a; }
 ===errors===
 cannot use multiple visibility modifiers
+===php_error===
+PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -50,5 +52,3 @@ cannot use multiple visibility modifiers
     "end": 35
   }
 }
-===php_error===
-PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 1

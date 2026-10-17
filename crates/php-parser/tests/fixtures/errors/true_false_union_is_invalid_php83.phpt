@@ -5,6 +5,8 @@ max_php=8.3
 <?php function f(): true|false {}
 ===errors===
 Type contains both true and false, bool must be used instead
+===php_error===
+PHP Fatal error:  Type contains both true and false, bool should be used instead in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -75,5 +77,3 @@ Type contains both true and false, bool must be used instead
     "end": 33
   }
 }
-===php_error===
-PHP Fatal error:  Type contains both true and false, bool should be used instead in Standard input code on line 1

@@ -9,6 +9,8 @@ $k = 2;
 // The output here drops the loop - would require Error node to handle this
 ===errors===
 expected expression
+===php_error===
+PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -156,5 +158,3 @@ expected expression
     "end": 47
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 4

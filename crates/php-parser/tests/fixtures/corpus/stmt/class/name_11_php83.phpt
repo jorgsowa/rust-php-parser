@@ -4,6 +4,8 @@ max_php=8.3
 <?php interface PARENT {}
 ===errors===
 cannot use 'PARENT' as interface name
+===php_error===
+PHP Fatal error:  Cannot use 'PARENT' as class name as it is reserved in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -27,5 +29,3 @@ cannot use 'PARENT' as interface name
     "end": 25
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use 'PARENT' as class name as it is reserved in Standard input code on line 1

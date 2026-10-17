@@ -9,6 +9,8 @@ $k = 2;
 ===errors===
 expected '(', found variable
 unclosed '')'' opened at Span { start: 22, end: 24 }
+===php_error===
+PHP Parse error:  syntax error, unexpected variable "$j", expecting "(" in Standard input code on line 6
 ===ast===
 {
   "stmts": [
@@ -138,5 +140,3 @@ unclosed '')'' opened at Span { start: 22, end: 24 }
     "end": 37
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected variable "$j", expecting "(" in Standard input code on line 6

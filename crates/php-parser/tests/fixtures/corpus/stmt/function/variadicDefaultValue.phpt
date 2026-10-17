@@ -3,6 +3,8 @@
 function foo(...$foo = []) {}
 ===errors===
 Variadic parameter cannot have a default value
+===php_error===
+PHP Fatal error:  Variadic parameter cannot have a default value in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -53,5 +55,3 @@ Variadic parameter cannot have a default value
     "end": 35
   }
 }
-===php_error===
-PHP Fatal error:  Variadic parameter cannot have a default value in Standard input code on line 2

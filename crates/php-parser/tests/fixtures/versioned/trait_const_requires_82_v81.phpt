@@ -8,6 +8,8 @@ trait T {
 }
 ===errors===
 'constants in traits' requires PHP 8.2 or higher
+===php_error===
+PHP Fatal error:  Traits cannot have constants in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -54,5 +56,3 @@ trait T {
     "end": 34
   }
 }
-===php_error===
-PHP Fatal error:  Traits cannot have constants in Standard input code on line 3

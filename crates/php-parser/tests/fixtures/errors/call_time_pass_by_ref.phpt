@@ -2,6 +2,8 @@
 <?php sort(&$arr);
 ===errors===
 call-time pass-by-reference is not allowed
+===php_error===
+PHP Parse error:  syntax error, unexpected token "&" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -58,5 +60,3 @@ call-time pass-by-reference is not allowed
     "end": 18
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "&" in Standard input code on line 1

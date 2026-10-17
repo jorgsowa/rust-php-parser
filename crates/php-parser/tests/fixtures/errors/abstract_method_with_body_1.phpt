@@ -2,6 +2,8 @@
 <?php abstract class Foo { abstract function bar() { echo 'body'; } }
 ===errors===
 abstract method cannot contain a body
+===php_error===
+PHP Fatal error:  Abstract function Foo::bar() cannot contain body in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -72,5 +74,3 @@ abstract method cannot contain a body
     "end": 69
   }
 }
-===php_error===
-PHP Fatal error:  Abstract function Foo::bar() cannot contain body in Standard input code on line 1

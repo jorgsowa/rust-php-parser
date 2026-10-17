@@ -5,6 +5,8 @@ $x = array(1, 2,
 expected expression
 expected ')', found end of file
 expected ';' after expression
+===php_error===
+PHP Parse error:  Unclosed '(' in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -101,5 +103,3 @@ expected ';' after expression
     "end": 22
   }
 }
-===php_error===
-PHP Parse error:  Unclosed '(' in Standard input code on line 2

@@ -2,6 +2,8 @@
 <?php class A { abstract abstract function a(); }
 ===errors===
 duplicate modifier 'abstract'
+===php_error===
+PHP Fatal error:  Multiple abstract modifiers are not allowed in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -52,5 +54,3 @@ duplicate modifier 'abstract'
     "end": 49
   }
 }
-===php_error===
-PHP Fatal error:  Multiple abstract modifiers are not allowed in Standard input code on line 1

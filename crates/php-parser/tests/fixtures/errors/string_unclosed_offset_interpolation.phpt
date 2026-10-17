@@ -2,6 +2,8 @@
 <?php $s = "${arr[";
 ===errors===
 unclosed '[' in string offset interpolation
+===php_error===
+PHP Parse error:  Unclosed '[' in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -60,5 +62,3 @@ unclosed '[' in string offset interpolation
     "end": 20
   }
 }
-===php_error===
-PHP Parse error:  Unclosed '[' in Standard input code on line 1

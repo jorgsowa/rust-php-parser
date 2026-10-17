@@ -14,6 +14,8 @@ $cb = function(public int $z) {};
 Cannot declare promoted property outside a constructor
 Cannot declare promoted property outside a constructor
 Cannot declare promoted property outside a constructor
+===php_error===
+PHP Fatal error:  Cannot declare promoted property outside a constructor in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -227,5 +229,3 @@ Cannot declare promoted property outside a constructor
     "end": 126
   }
 }
-===php_error===
-PHP Fatal error:  Cannot declare promoted property outside a constructor in Standard input code on line 3

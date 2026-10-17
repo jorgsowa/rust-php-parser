@@ -6,6 +6,8 @@ isset(($a), (($b)));
 isset(1 + 1);
 ===errors===
 Cannot use isset() on the result of an expression (you can use "null !== expression" instead)
+===php_error===
+PHP Fatal error:  Cannot use isset() on the result of an expression (you can use "null !== expression" instead) in Standard input code on line 5
 ===ast===
 {
   "stmts": [
@@ -122,5 +124,3 @@ Cannot use isset() on the result of an expression (you can use "null !== express
     "end": 102
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use isset() on the result of an expression (you can use "null !== expression" instead) in Standard input code on line 5

@@ -2,6 +2,8 @@
 <?php $a = [1, 2, 3;
 ===errors===
 expected ']', found ';'
+===php_error===
+PHP Parse error:  syntax error, unexpected token ";", expecting "]" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -100,5 +102,3 @@ expected ']', found ';'
     "end": 20
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token ";", expecting "]" in Standard input code on line 1

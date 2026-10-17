@@ -2,6 +2,8 @@
 <?php interface A extends PARENT {}
 ===errors===
 cannot use 'PARENT' as class name
+===php_error===
+PHP Fatal error:  Cannot use "PARENT" as interface name, as it is reserved in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -36,5 +38,3 @@ cannot use 'PARENT' as class name
     "end": 35
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use "PARENT" as interface name, as it is reserved in Standard input code on line 1

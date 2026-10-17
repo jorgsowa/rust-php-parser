@@ -22,6 +22,8 @@ expected ']', found variable
 expected ';' after expression
 expected ';' after expression
 expected expression
+===php_error===
+PHP Parse error:  syntax error, unexpected variable "$oopsAnotherValue", expecting "]" in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -315,5 +317,3 @@ expected expression
     "end": 156
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected variable "$oopsAnotherValue", expecting "]" in Standard input code on line 3

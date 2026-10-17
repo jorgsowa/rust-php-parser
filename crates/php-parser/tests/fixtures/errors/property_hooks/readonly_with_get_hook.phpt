@@ -9,6 +9,8 @@ class Foo {
 }
 ===errors===
 A readonly property cannot declare hooks
+===php_error===
+PHP Fatal error:  Hooked properties cannot be readonly in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -127,5 +129,3 @@ A readonly property cannot declare hooks
     "end": 94
   }
 }
-===php_error===
-PHP Fatal error:  Hooked properties cannot be readonly in Standard input code on line 3

@@ -6,6 +6,8 @@ array(1, , 2);
 ===errors===
 Cannot use empty array elements in arrays
 expected expression
+===php_error===
+PHP Fatal error:  Cannot use empty array elements in arrays in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -149,5 +151,3 @@ expected expression
     "end": 31
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use empty array elements in arrays in Standard input code on line 3

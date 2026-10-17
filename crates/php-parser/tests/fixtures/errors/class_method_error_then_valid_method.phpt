@@ -5,6 +5,8 @@
 }
 ===errors===
 expected variable, found ')'
+===php_error===
+PHP Parse error:  syntax error, unexpected token "(int)", expecting "(" in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -144,5 +146,3 @@ expected variable, found ')'
     "end": 104
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "(int)", expecting "(" in Standard input code on line 2

@@ -3,6 +3,8 @@
 $a = (real) 1.5;
 ===errors===
 the (real) cast is no longer supported, use (float) instead
+===php_error===
+PHP Parse error:  The (real) cast has been removed, use (float) instead in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -60,5 +62,3 @@ the (real) cast is no longer supported, use (float) instead
     "end": 22
   }
 }
-===php_error===
-PHP Parse error:  The (real) cast has been removed, use (float) instead in Standard input code on line 2

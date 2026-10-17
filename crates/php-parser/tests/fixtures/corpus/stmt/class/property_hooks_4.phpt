@@ -8,6 +8,8 @@ class Test {
 ===errors===
 expected 'get' or 'set', found identifier
 Property hook list must not be empty
+===php_error===
+PHP Fatal error:  Unknown hook "FOO" for property Test::$prop, expected "get" or "set" in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -56,5 +58,3 @@ Property hook list must not be empty
     "end": 53
   }
 }
-===php_error===
-PHP Fatal error:  Unknown hook "FOO" for property Test::$prop, expected "get" or "set" in Standard input code on line 3

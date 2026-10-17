@@ -2,6 +2,8 @@
 <?php class {} function foo(): int { return 1; }
 ===errors===
 expected class name, found '{'
+===php_error===
+PHP Parse error:  syntax error, unexpected token "{", expecting identifier in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -82,5 +84,3 @@ expected class name, found '{'
     "end": 48
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "{", expecting identifier in Standard input code on line 1

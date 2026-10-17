@@ -224,10 +224,14 @@ fn parse_parser_fixture_header(content: &str) -> ParserFixtureHeader {
 
 fn extract_parser_fixture_source<'a>(content: &'a str, header: &ParserFixtureHeader) -> &'a str {
     let after = &content[header.source_start..];
-    let end = [after.find("===errors===\n"), after.find("===ast===\n")]
-        .into_iter()
-        .flatten()
-        .min();
+    let end = [
+        after.find("===errors===\n"),
+        after.find("===php_error===\n"),
+        after.find("===ast===\n"),
+    ]
+    .into_iter()
+    .flatten()
+    .min();
     let raw = match end {
         Some(e) => &after[..e],
         None => after,

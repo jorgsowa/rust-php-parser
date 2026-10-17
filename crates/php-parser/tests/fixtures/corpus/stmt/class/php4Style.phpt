@@ -10,6 +10,8 @@ class A {
 }
 ===errors===
 abstract method cannot contain a body
+===php_error===
+PHP Fatal error:  Class A declares abstract method baz() and must therefore be declared abstract in Standard input code on line 6
 ===ast===
 {
   "stmts": [
@@ -98,5 +100,3 @@ abstract method cannot contain a body
     "end": 92
   }
 }
-===php_error===
-PHP Fatal error:  Class A declares abstract method baz() and must therefore be declared abstract in Standard input code on line 6

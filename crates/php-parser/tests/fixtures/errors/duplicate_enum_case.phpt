@@ -11,6 +11,8 @@ enum E {
 }
 ===errors===
 Cannot redefine class constant E::A
+===php_error===
+PHP Fatal error:  Cannot redefine class constant E::A in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -62,5 +64,3 @@ Cannot redefine class constant E::A
     "end": 40
   }
 }
-===php_error===
-PHP Fatal error:  Cannot redefine class constant E::A in Standard input code on line 4

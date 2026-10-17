@@ -7,6 +7,8 @@ class A {
 }
 ===errors===
 cannot use 'static' as constant modifier
+===php_error===
+PHP Fatal error:  Cannot use 'static' as constant modifier in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -60,5 +62,3 @@ cannot use 'static' as constant modifier
     "end": 41
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use 'static' as constant modifier in Standard input code on line 3

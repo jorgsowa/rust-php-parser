@@ -6,6 +6,8 @@ expected ';' after expression
 expected ';' after expression
 expected expression
 expected expression
+===php_error===
+PHP Parse error:  syntax error, unexpected integer "2", expecting "}" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -101,5 +103,3 @@ expected expression
     "end": 35
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected integer "2", expecting "}" in Standard input code on line 1

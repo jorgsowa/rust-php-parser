@@ -13,6 +13,8 @@ class Foo {
 ===errors===
 expected expression
 expected '}', found end of file
+===php_error===
+PHP Parse error:  syntax error, unexpected token "public" in Standard input code on line 7
 ===ast===
 {
   "stmts": [
@@ -122,5 +124,3 @@ expected '}', found end of file
     "end": 126
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "public" in Standard input code on line 7

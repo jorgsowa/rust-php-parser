@@ -5,6 +5,8 @@ max_php=8.2
 <?php enum Status { abstract const X = 1; }
 ===errors===
 cannot use 'abstract' as constant modifier
+===php_error===
+PHP Fatal error:  Cannot use 'abstract' as constant modifier in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -53,5 +55,3 @@ cannot use 'abstract' as constant modifier
     "end": 43
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use 'abstract' as constant modifier in Standard input code on line 1

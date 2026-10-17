@@ -5,6 +5,8 @@ echo 2;
 namespace A;
 ===errors===
 Namespace declaration statement has to be the very first statement or after any declare call in the script
+===php_error===
+PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -73,5 +75,3 @@ Namespace declaration statement has to be the very first statement or after any 
     "end": 34
   }
 }
-===php_error===
-PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in Standard input code on line 4

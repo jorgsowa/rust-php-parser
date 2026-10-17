@@ -2,6 +2,8 @@
 <?php switch () { case 1: break; } if (true) { echo 'ok'; }
 ===errors===
 expected expression
+===php_error===
+PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -106,5 +108,3 @@ expected expression
     "end": 59
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 1

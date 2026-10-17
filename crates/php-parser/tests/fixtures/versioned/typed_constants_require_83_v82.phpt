@@ -5,6 +5,8 @@ max_php=8.2
 <?php class Foo { public const string NAME = 'foo'; }
 ===errors===
 'typed class constants' requires PHP 8.3 or higher
+===php_error===
+PHP Parse error:  syntax error, unexpected identifier "NAME", expecting "=" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -76,5 +78,3 @@ max_php=8.2
     "end": 53
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected identifier "NAME", expecting "=" in Standard input code on line 1

@@ -4,6 +4,8 @@
 expected '::' or 'as', found identifier
 expected identifier, found ';'
 expected '::' or 'as', found ';'
+===php_error===
+PHP Parse error:  syntax error, unexpected identifier "invalid", expecting "::" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -91,5 +93,3 @@ expected '::' or 'as', found ';'
     "end": 73
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected identifier "invalid", expecting "::" in Standard input code on line 1

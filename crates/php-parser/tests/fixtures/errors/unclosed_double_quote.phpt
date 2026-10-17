@@ -3,6 +3,8 @@
 ===errors===
 unterminated string literal
 expected ';' after expression
+===php_error===
+PHP Parse error:  syntax error, unexpected end of file, expecting variable or "${" or "{$" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -29,5 +31,3 @@ expected ';' after expression
     "end": 22
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected end of file, expecting variable or "${" or "{$" in Standard input code on line 1

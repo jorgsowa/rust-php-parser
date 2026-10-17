@@ -15,6 +15,8 @@ cannot use multiple set-visibility modifiers
 'asymmetric visibility' requires PHP 8.4 or higher
 Property with asymmetric visibility must have type
 Cannot redeclare property $x
+===php_error===
+PHP Parse error:  syntax error, unexpected token ")", expecting amp in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -81,5 +83,3 @@ Cannot redeclare property $x
     "end": 87
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token ")", expecting amp in Standard input code on line 3

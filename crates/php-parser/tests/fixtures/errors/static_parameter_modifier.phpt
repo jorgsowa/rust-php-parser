@@ -12,6 +12,8 @@ class A {
 }
 ===errors===
 Cannot use the static modifier on a parameter
+===php_error===
+PHP Fatal error:  Cannot use the static modifier on a parameter in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -96,5 +98,3 @@ Cannot use the static modifier on a parameter
     "end": 74
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use the static modifier on a parameter in Standard input code on line 3

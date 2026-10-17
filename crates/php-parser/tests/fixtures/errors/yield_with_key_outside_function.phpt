@@ -2,6 +2,8 @@
 <?php yield $key => $val;
 ===errors===
 'yield' can only be used inside a function
+===php_error===
+PHP Fatal error:  The "yield" expression can only be used inside a function in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -48,5 +50,3 @@
     "end": 25
   }
 }
-===php_error===
-PHP Fatal error:  The "yield" expression can only be used inside a function in Standard input code on line 1

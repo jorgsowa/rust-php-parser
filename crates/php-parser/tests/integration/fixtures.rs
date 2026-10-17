@@ -3,14 +3,16 @@
 use crate::common::{php_version, run_fixture_corpus};
 
 /// Rewrite the `===errors===` and `===ast===` sections of a fixture file.
-/// Preserves any existing `===php_error===` section that follows.
+/// Preserves any existing `===php_error===` section, placed between them.
 fn update_fixture(path: &str, errors: &str, new_ast: &str) {
     let content =
         std::fs::read_to_string(path).unwrap_or_else(|e| panic!("failed to read {path}: {e}"));
 
-    let php_error_section = content
-        .find("===php_error===\n")
-        .map(|p| content[p..].trim_end_matches('\n').to_string() + "\n");
+    let php_error_section = content.find("===php_error===\n").map(|p| {
+        let section = &content[p..];
+        let end = section.find("===ast===\n").unwrap_or(section.len());
+        section[..end].trim_end_matches('\n').to_string() + "\n"
+    });
 
     let source_marker = "===source===\n";
     let after_source = content
@@ -19,18 +21,19 @@ fn update_fixture(path: &str, errors: &str, new_ast: &str) {
         .unwrap_or(0);
 
     let rest = &content[after_source..];
-    let source_end = rest
-        .find("===errors===\n")
-        .or_else(|| rest.find("===ast===\n"))
+    let source_end = ["===errors===\n", "===php_error===\n", "===ast===\n"]
+        .iter()
+        .filter_map(|m| rest.find(m))
+        .min()
         .map(|p| after_source + p)
         .unwrap_or(content.len());
 
     let before_sections = &content[..source_end];
-    let php_error_tail = php_error_section.as_deref().unwrap_or("");
+    let php_error = php_error_section.as_deref().unwrap_or("");
     let new_content = if errors.is_empty() {
-        format!("{before_sections}===ast===\n{new_ast}\n{php_error_tail}")
+        format!("{before_sections}{php_error}===ast===\n{new_ast}\n")
     } else {
-        format!("{before_sections}===errors===\n{errors}\n===ast===\n{new_ast}\n{php_error_tail}")
+        format!("{before_sections}===errors===\n{errors}\n{php_error}===ast===\n{new_ast}\n")
     };
     std::fs::write(path, new_content).unwrap_or_else(|e| panic!("failed to write {path}: {e}"));
 }

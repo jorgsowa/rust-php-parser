@@ -12,6 +12,8 @@ class Test {
 'final properties' requires PHP 8.4 or higher
 Cannot redeclare property $prop
 Cannot redeclare property $prop
+===php_error===
+PHP Fatal error:  Cannot declare property Test::$prop final, the final modifier is allowed only for methods, classes, and class constants in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -113,5 +115,3 @@ Cannot redeclare property $prop
     "end": 94
   }
 }
-===php_error===
-PHP Fatal error:  Cannot declare property Test::$prop final, the final modifier is allowed only for methods, classes, and class constants in Standard input code on line 3

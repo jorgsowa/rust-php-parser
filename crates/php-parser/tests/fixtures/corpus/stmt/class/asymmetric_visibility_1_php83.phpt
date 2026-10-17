@@ -19,6 +19,8 @@ Property with asymmetric visibility must have type
 Property with asymmetric visibility must have type
 Visibility of property must not be weaker than set visibility
 Property with asymmetric visibility must have type
+===php_error===
+PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -172,5 +174,3 @@ Property with asymmetric visibility must have type
     "end": 240
   }
 }
-===php_error===
-PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 4

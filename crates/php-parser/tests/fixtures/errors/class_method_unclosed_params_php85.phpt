@@ -8,6 +8,8 @@ class Foo {
 }
 ===errors===
 expected ')', found '{'
+===php_error===
+PHP Parse error:  syntax error, unexpected token "return", expecting identifier in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -181,5 +183,3 @@ expected ')', found '{'
     "end": 115
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "return", expecting identifier in Standard input code on line 3

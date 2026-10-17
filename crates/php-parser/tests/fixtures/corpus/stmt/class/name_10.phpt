@@ -4,6 +4,8 @@ min_php=8.4
 <?php interface self {}
 ===errors===
 cannot use 'self' as interface name
+===php_error===
+PHP Fatal error:  Cannot use "self" as an interface name as it is reserved in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -27,5 +29,3 @@ cannot use 'self' as interface name
     "end": 23
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use "self" as an interface name as it is reserved in Standard input code on line 1

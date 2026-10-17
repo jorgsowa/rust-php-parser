@@ -7,6 +7,8 @@ list(($a), ((($b)))) = $x;
 list(1 + 1) = $x;
 ===errors===
 Assignments can only happen to writable values
+===php_error===
+PHP Fatal error:  Assignments can only happen to writable values in Standard input code on line 6
 ===ast===
 {
   "stmts": [
@@ -195,5 +197,3 @@ Assignments can only happen to writable values
     "end": 113
   }
 }
-===php_error===
-PHP Fatal error:  Assignments can only happen to writable values in Standard input code on line 6

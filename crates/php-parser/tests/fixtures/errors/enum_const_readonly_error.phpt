@@ -4,6 +4,8 @@ min_php=8.3
 <?php enum Status { readonly const X = 1; }
 ===errors===
 cannot use 'readonly' as constant modifier
+===php_error===
+PHP Fatal error:  Cannot use the readonly modifier on a class constant in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -52,5 +54,3 @@ cannot use 'readonly' as constant modifier
     "end": 43
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use the readonly modifier on a class constant in Standard input code on line 1

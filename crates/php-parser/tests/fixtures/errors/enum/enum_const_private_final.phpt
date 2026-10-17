@@ -4,6 +4,8 @@ min_php=8.1
 <?php enum Status { private final const PRIV = 1; }
 ===errors===
 Private constant cannot be final as it is not visible to other classes
+===php_error===
+PHP Fatal error:  Private constant Status::PRIV cannot be final as it is not visible to other classes in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -52,5 +54,3 @@ Private constant cannot be final as it is not visible to other classes
     "end": 51
   }
 }
-===php_error===
-PHP Fatal error:  Private constant Status::PRIV cannot be final as it is not visible to other classes in Standard input code on line 1

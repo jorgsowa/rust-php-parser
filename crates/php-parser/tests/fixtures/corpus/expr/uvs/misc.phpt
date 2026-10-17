@@ -8,6 +8,8 @@
 [0, 1][0] = 1;
 ===errors===
 Cannot use temporary expression in write context
+===php_error===
+PHP Fatal error:  Cannot use temporary expression in write context in Standard input code on line 7
 ===ast===
 {
   "stmts": [
@@ -349,5 +351,3 @@ Cannot use temporary expression in write context
     "end": 99
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use temporary expression in write context in Standard input code on line 7

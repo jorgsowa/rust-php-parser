@@ -4,6 +4,8 @@ $foo->
 ;
 ===errors===
 expected member name, found ';'
+===php_error===
+PHP Parse error:  syntax error, unexpected token ";", expecting identifier or variable or "{" or "$" in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -47,5 +49,3 @@ expected member name, found ';'
     "end": 14
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token ";", expecting identifier or variable or "{" or "$" in Standard input code on line 3

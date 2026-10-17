@@ -3,6 +3,8 @@
 function f(...$args, $more) {}
 ===errors===
 Only the last parameter can be variadic
+===php_error===
+PHP Fatal error:  Only the last parameter can be variadic in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -61,5 +63,3 @@ Only the last parameter can be variadic
     "end": 36
   }
 }
-===php_error===
-PHP Fatal error:  Only the last parameter can be variadic in Standard input code on line 2

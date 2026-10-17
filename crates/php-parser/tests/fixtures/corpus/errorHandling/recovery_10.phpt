@@ -6,6 +6,8 @@ function foo() {
 ===errors===
 expected member name, found '}'
 expected ';' after expression
+===php_error===
+PHP Parse error:  syntax error, unexpected token "}", expecting identifier or variable or "{" or "$" in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -66,5 +68,3 @@ expected ';' after expression
     "end": 35
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "}", expecting identifier or variable or "{" or "$" in Standard input code on line 4

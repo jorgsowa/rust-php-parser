@@ -4,6 +4,8 @@ min_php=8.1
 <?php enum Suit { case class; }
 ===errors===
 'class' cannot be used as an enum case name
+===php_error===
+PHP Fatal error:  A class constant must not be called 'class'; it is reserved for class name fetching in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -42,5 +44,3 @@ min_php=8.1
     "end": 31
   }
 }
-===php_error===
-PHP Fatal error:  A class constant must not be called 'class'; it is reserved for class name fetching in Standard input code on line 1

@@ -4,6 +4,8 @@ max_php=8.2
 <?php class Foo { abstract public string $bar; }
 ===errors===
 properties cannot be abstract
+===php_error===
+PHP Fatal error:  Properties cannot be declared abstract in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -69,5 +71,3 @@ properties cannot be abstract
     "end": 48
   }
 }
-===php_error===
-PHP Fatal error:  Properties cannot be declared abstract in Standard input code on line 1

@@ -19,6 +19,8 @@ Cannot 'break' 1 level
 Cannot 'break' 2 levels
 Cannot 'continue' 1 level
 Cannot 'continue' 2 levels
+===php_error===
+PHP Fatal error:  'break' not in the 'loop' or 'switch' context in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -141,5 +143,3 @@ Cannot 'continue' 2 levels
     "end": 96
   }
 }
-===php_error===
-PHP Fatal error:  'break' not in the 'loop' or 'switch' context in Standard input code on line 3

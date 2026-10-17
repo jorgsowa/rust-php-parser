@@ -5,6 +5,8 @@ min_php=8.1
 ===errors===
 expected expression
 Case Active of pure enum Status must not have a value
+===php_error===
+PHP Parse error:  syntax error, unexpected token ";" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -102,5 +104,3 @@ Case Active of pure enum Status must not have a value
     "end": 86
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token ";" in Standard input code on line 1

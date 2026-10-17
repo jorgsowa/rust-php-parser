@@ -5,6 +5,8 @@ max_php=8.4
 <?php enum Status { abstract public function label(): string; }
 ===errors===
 enum methods cannot be abstract
+===php_error===
+PHP Fatal error:  Enum Status must implement 1 abstract private method (Status::label) in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -67,5 +69,3 @@ enum methods cannot be abstract
     "end": 63
   }
 }
-===php_error===
-PHP Fatal error:  Enum Status must implement 1 abstract private method (Status::label) in Standard input code on line 1

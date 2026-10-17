@@ -9,6 +9,8 @@ class A {
 }
 ===errors===
 Cannot redeclare method f()
+===php_error===
+PHP Fatal error:  Cannot redeclare A::f() in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -79,5 +81,3 @@ Cannot redeclare method f()
     "end": 71
   }
 }
-===php_error===
-PHP Fatal error:  Cannot redeclare A::f() in Standard input code on line 4

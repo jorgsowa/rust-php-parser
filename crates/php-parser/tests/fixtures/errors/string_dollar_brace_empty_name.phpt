@@ -2,6 +2,8 @@
 <?php $x = "${}";
 ===errors===
 empty variable name in '${...}' string interpolation
+===php_error===
+PHP Parse error:  syntax error, unexpected token "}" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -60,5 +62,3 @@ empty variable name in '${...}' string interpolation
     "end": 17
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "}" in Standard input code on line 1

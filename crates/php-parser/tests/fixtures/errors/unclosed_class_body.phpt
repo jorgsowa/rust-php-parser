@@ -2,6 +2,8 @@
 <?php class Foo { public function bar() {}
 ===errors===
 expected '}', found end of file
+===php_error===
+PHP Parse error:  Unclosed '{' in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -52,5 +54,3 @@ expected '}', found end of file
     "end": 42
   }
 }
-===php_error===
-PHP Parse error:  Unclosed '{' in Standard input code on line 1

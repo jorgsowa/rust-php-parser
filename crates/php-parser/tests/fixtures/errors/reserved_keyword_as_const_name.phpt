@@ -3,6 +3,8 @@
 const class = 1;
 ===errors===
 cannot use 'class' as constant name as it is reserved
+===php_error===
+PHP Parse error:  syntax error, unexpected token "class", expecting identifier in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -39,5 +41,3 @@ cannot use 'class' as constant name as it is reserved
     "end": 22
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "class", expecting identifier in Standard input code on line 2

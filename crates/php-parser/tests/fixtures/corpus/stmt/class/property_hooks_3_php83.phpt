@@ -9,6 +9,8 @@ class Test {
 }
 ===errors===
 get hook of property must not have a parameter list
+===php_error===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -81,5 +83,3 @@ get hook of property must not have a parameter list
     "end": 66
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3

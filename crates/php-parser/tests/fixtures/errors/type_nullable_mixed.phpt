@@ -7,6 +7,8 @@ function foo(?mixed $x) { }
 
 ===errors===
 mixed cannot be used with nullable type
+===php_error===
+PHP Fatal error:  Type mixed cannot be marked as nullable since mixed already includes null in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -74,5 +76,3 @@ mixed cannot be used with nullable type
     "end": 33
   }
 }
-===php_error===
-PHP Fatal error:  Type mixed cannot be marked as nullable since mixed already includes null in Standard input code on line 2

@@ -6,6 +6,8 @@ abc؛
     END;
 ===errors===
 Invalid body indentation level
+===php_error===
+PHP Parse error:  Invalid body indentation level (expecting an indentation level of at least 4) in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -70,5 +72,3 @@ Invalid body indentation level
     "end": 39
   }
 }
-===php_error===
-PHP Parse error:  Invalid body indentation level (expecting an indentation level of at least 4) in Standard input code on line 4

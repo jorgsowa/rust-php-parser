@@ -9,6 +9,8 @@ class A {
 }
 ===errors===
 static properties cannot be readonly
+===php_error===
+PHP Fatal error:  Static property A::$d cannot be readonly in Standard input code on line 7
 ===ast===
 {
   "stmts": [
@@ -195,5 +197,3 @@ static properties cannot be readonly
     "end": 126
   }
 }
-===php_error===
-PHP Fatal error:  Static property A::$d cannot be readonly in Standard input code on line 7

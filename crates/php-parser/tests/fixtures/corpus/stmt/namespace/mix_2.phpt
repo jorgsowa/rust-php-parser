@@ -9,6 +9,8 @@ echo 3;
 ===errors===
 Cannot mix bracketed namespace declarations with unbracketed namespace declarations
 No code may exist outside of namespace {}
+===php_error===
+PHP Fatal error:  No code may exist outside of namespace {} in Standard input code on line 5
 ===ast===
 {
   "stmts": [
@@ -120,5 +122,3 @@ No code may exist outside of namespace {}
     "end": 62
   }
 }
-===php_error===
-PHP Fatal error:  No code may exist outside of namespace {} in Standard input code on line 5

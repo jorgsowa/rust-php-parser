@@ -8,6 +8,8 @@ enum E: int {
 }
 ===errors===
 New expressions are not supported in this context
+===php_error===
+PHP Fatal error:  New expressions are not supported in this context in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -97,5 +99,3 @@ New expressions are not supported in this context
     "end": 62
   }
 }
-===php_error===
-PHP Fatal error:  New expressions are not supported in this context in Standard input code on line 4

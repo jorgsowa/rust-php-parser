@@ -4,6 +4,8 @@ min_php=8.5
 <?php class Foo { private public(set) static int $count = 0; }
 ===errors===
 Visibility of property must not be weaker than set visibility
+===php_error===
+PHP Fatal error:  Visibility of property Foo::$count must not be weaker than set visibility in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -77,5 +79,3 @@ Visibility of property must not be weaker than set visibility
     "end": 62
   }
 }
-===php_error===
-PHP Fatal error:  Visibility of property Foo::$count must not be weaker than set visibility in Standard input code on line 1

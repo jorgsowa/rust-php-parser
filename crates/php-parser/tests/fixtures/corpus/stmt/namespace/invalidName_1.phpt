@@ -4,6 +4,8 @@
 expected identifier, found 'self'
 expected ';', found 'self'
 The use statement with non-compound name 'A' has no effect
+===php_error===
+PHP Fatal error:  Cannot use A as self because 'self' is a special class name in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -60,5 +62,3 @@ The use statement with non-compound name 'A' has no effect
     "end": 20
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use A as self because 'self' is a special class name in Standard input code on line 1

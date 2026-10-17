@@ -6,6 +6,8 @@ bar()
 baz();
 ===errors===
 expected ';' after expression
+===php_error===
+PHP Parse error:  syntax error, unexpected identifier "baz" in Standard input code on line 5
 ===ast===
 {
   "stmts": [
@@ -99,5 +101,3 @@ expected ';' after expression
     "end": 26
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected identifier "baz" in Standard input code on line 5

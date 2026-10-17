@@ -5,6 +5,8 @@ max_php=8.5
 <?php $fn = foo(1, ?, 3);
 ===errors===
 'partial function application' requires PHP 8.6 or higher
+===php_error===
+PHP Parse error:  syntax error, unexpected token "?", expecting ")" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -109,5 +111,3 @@ max_php=8.5
     "end": 25
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "?", expecting ")" in Standard input code on line 1

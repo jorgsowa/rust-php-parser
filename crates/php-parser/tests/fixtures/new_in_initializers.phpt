@@ -21,6 +21,8 @@ $g = fn($x = new Foo()) => $x;
 ===errors===
 New expressions are not supported in this context
 New expressions are not supported in this context
+===php_error===
+PHP Fatal error:  New expressions are not supported in this context in Standard input code on line 5
 ===ast===
 {
   "stmts": [
@@ -589,5 +591,3 @@ New expressions are not supported in this context
     "end": 348
   }
 }
-===php_error===
-PHP Fatal error:  New expressions are not supported in this context in Standard input code on line 5

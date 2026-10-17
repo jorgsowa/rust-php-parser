@@ -4,6 +4,8 @@ max_php=8.3
 <?php class self {}
 ===errors===
 Cannot use "self" as a class name as it is reserved
+===php_error===
+PHP Fatal error:  Cannot use 'self' as class name as it is reserved in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -33,5 +35,3 @@ Cannot use "self" as a class name as it is reserved
     "end": 19
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use 'self' as class name as it is reserved in Standard input code on line 1

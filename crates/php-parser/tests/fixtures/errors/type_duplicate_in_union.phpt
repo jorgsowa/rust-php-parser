@@ -7,6 +7,8 @@ function foo(int|int|string $x) { }
 
 ===errors===
 Duplicate type 'int' in union type
+===php_error===
+PHP Fatal error:  Duplicate type int is redundant in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -112,5 +114,3 @@ Duplicate type 'int' in union type
     "end": 41
   }
 }
-===php_error===
-PHP Fatal error:  Duplicate type int is redundant in Standard input code on line 2

@@ -9,6 +9,8 @@ class Test {
 ===errors===
 Property hook list must not be empty
 Property hook list must not be empty
+===php_error===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -94,5 +96,3 @@ Property hook list must not be empty
     "end": 93
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3

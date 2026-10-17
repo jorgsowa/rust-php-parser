@@ -2,6 +2,8 @@
 <?php [$a, null, $c] = $arr;
 ===errors===
 Assignments can only happen to writable values
+===php_error===
+PHP Fatal error:  Assignments can only happen to writable values in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -98,5 +100,3 @@ Assignments can only happen to writable values
     "end": 28
   }
 }
-===php_error===
-PHP Fatal error:  Assignments can only happen to writable values in Standard input code on line 1

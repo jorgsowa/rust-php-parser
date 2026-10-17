@@ -10,6 +10,8 @@ interface Logger {
 }
 ===errors===
 expected class member, found '@'
+===php_error===
+PHP Parse error:  syntax error, unexpected token "@", expecting "function" or "const" in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -176,5 +178,3 @@ expected class member, found '@'
     "end": 129
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "@", expecting "function" or "const" in Standard input code on line 4

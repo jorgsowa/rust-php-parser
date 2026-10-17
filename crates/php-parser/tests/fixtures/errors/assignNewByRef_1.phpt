@@ -5,6 +5,8 @@ min_php=8.4
 $a =& new B;
 ===errors===
 Cannot use by-reference assignment with 'new' expression
+===php_error===
+PHP Parse error:  syntax error, unexpected token ";", expecting "(" in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -63,5 +65,3 @@ Cannot use by-reference assignment with 'new' expression
     "end": 18
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token ";", expecting "(" in Standard input code on line 2

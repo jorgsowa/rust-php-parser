@@ -9,6 +9,8 @@ class Foo {
 }
 ===errors===
 set hook must have exactly one parameter
+===php_error===
+PHP Fatal error:  set hook of property Foo::$x must accept exactly one parameters in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -157,5 +159,3 @@ set hook must have exactly one parameter
     "end": 77
   }
 }
-===php_error===
-PHP Fatal error:  set hook of property Foo::$x must accept exactly one parameters in Standard input code on line 4

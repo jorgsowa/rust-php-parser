@@ -5,6 +5,8 @@ max_php=8.4
 <?php (void) getVersion();
 ===errors===
 'void cast' requires PHP 8.5 or higher
+===php_error===
+PHP Parse error:  syntax error, unexpected identifier "getVersion" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -53,5 +55,3 @@ max_php=8.4
     "end": 26
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected identifier "getVersion" in Standard input code on line 1

@@ -14,6 +14,8 @@ class B {
 ===errors===
 expected ';', found 'public'
 expected ';', found '}'
+===php_error===
+PHP Parse error:  syntax error, unexpected token "public", expecting "," or ";" in Standard input code on line 6
 ===ast===
 {
   "stmts": [
@@ -225,5 +227,3 @@ expected ';', found '}'
     "end": 163
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "public", expecting "," or ";" in Standard input code on line 6

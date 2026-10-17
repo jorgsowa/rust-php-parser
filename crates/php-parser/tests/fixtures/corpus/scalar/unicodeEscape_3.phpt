@@ -3,6 +3,8 @@
 "\u{FFFFFFFFFFFFFFFF}";
 ===errors===
 Invalid UTF-8 codepoint escape sequence: Codepoint too large
+===php_error===
+PHP Parse error:  Invalid UTF-8 codepoint escape sequence: Codepoint too large in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -29,5 +31,3 @@ Invalid UTF-8 codepoint escape sequence: Codepoint too large
     "end": 29
   }
 }
-===php_error===
-PHP Parse error:  Invalid UTF-8 codepoint escape sequence: Codepoint too large in Standard input code on line 2

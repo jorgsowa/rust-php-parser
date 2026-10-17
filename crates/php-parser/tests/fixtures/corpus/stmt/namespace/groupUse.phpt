@@ -11,6 +11,8 @@ Cannot use A\B\C\D as D because the name is already in use
 Cannot use A\B\C\D as D because the name is already in use
 Cannot use A\B\b\c as c because the name is already in use
 Cannot use A\B\D as D because the name is already in use
+===php_error===
+PHP Fatal error:  Cannot use A\B\C\D as D because the name is already in use in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -327,5 +329,3 @@ Cannot use A\B\D as D because the name is already in use
     "end": 137
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use A\B\C\D as D because the name is already in use in Standard input code on line 4

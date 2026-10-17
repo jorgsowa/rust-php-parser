@@ -8,6 +8,8 @@ enum Status: string {
 }
 ===errors===
 Case Active of backed enum Status must have a value
+===php_error===
+PHP Fatal error:  Case Active of backed enum Status must have a value in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -76,5 +78,3 @@ Case Active of backed enum Status must have a value
     "end": 78
   }
 }
-===php_error===
-PHP Fatal error:  Case Active of backed enum Status must have a value in Standard input code on line 3

@@ -2,6 +2,8 @@
 <?php trait A {} class C { use A { m as x; }
 ===errors===
 expected '}', found end of file
+===php_error===
+PHP Parse error:  Unclosed '{' in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -101,5 +103,3 @@ expected '}', found end of file
     "end": 44
   }
 }
-===php_error===
-PHP Parse error:  Unclosed '{' in Standard input code on line 1

@@ -2,6 +2,8 @@
 <?php [, , ,] = $arr;
 ===errors===
 Cannot use empty list
+===php_error===
+PHP Fatal error:  Cannot use empty list in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -94,5 +96,3 @@ Cannot use empty list
     "end": 21
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use empty list in Standard input code on line 1

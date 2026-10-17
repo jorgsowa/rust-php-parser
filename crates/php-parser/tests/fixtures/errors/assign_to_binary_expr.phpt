@@ -2,6 +2,8 @@
 <?php 1 + 2 = $x;
 ===errors===
 Cannot use expression as assignment target.
+===php_error===
+PHP Parse error:  syntax error, unexpected token "=" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -68,5 +70,3 @@ Cannot use expression as assignment target.
     "end": 17
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "=" in Standard input code on line 1

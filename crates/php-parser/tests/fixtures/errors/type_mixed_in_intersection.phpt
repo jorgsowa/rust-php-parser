@@ -7,6 +7,8 @@ function foo(mixed&Foo $x) { }
 
 ===errors===
 mixed cannot be used in intersection types
+===php_error===
+PHP Fatal error:  Type mixed cannot be part of an intersection type in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -94,5 +96,3 @@ mixed cannot be used in intersection types
     "end": 36
   }
 }
-===php_error===
-PHP Fatal error:  Type mixed cannot be part of an intersection type in Standard input code on line 2

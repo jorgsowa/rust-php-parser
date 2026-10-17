@@ -3,6 +3,8 @@
 ===errors===
 expected ')', found end of file
 expected statement
+===php_error===
+PHP Parse error:  Unclosed '(' in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -43,5 +45,3 @@ expected statement
     "end": 28
   }
 }
-===php_error===
-PHP Parse error:  Unclosed '(' in Standard input code on line 1

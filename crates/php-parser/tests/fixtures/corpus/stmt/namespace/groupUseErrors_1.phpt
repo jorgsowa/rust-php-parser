@@ -5,6 +5,8 @@ use Foo\{Bar}
 use Bar\{Foo};
 ===errors===
 expected ';', found 'use'
+===php_error===
+PHP Parse error:  syntax error, unexpected token "use", expecting ";" in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -76,5 +78,3 @@ expected ';', found 'use'
     "end": 55
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "use", expecting ";" in Standard input code on line 4

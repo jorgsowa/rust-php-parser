@@ -5,6 +5,8 @@ min_php=8.3
 ===errors===
 expected ';' after expression
 expected class name, found '{'
+===php_error===
+PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -69,5 +71,3 @@ expected class name, found '{'
     "end": 37
   }
 }
-===php_error===
-PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input code on line 1

@@ -4,6 +4,8 @@ min_php=8.1
 <?php function foo(readonly string $x) {}
 ===errors===
 Cannot declare promoted property outside a constructor
+===php_error===
+PHP Fatal error:  Cannot declare promoted property outside a constructor in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -63,5 +65,3 @@ Cannot declare promoted property outside a constructor
     "end": 41
   }
 }
-===php_error===
-PHP Fatal error:  Cannot declare promoted property outside a constructor in Standard input code on line 1

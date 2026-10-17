@@ -98,11 +98,11 @@ max_php=8.3           skip php -l on newer PHP
 ===errors===          (optional; presence means parser errors are expected)
 error message text    one ParseError display message per line
 
-===ast===             (optional; expected JSON AST — auto-generated)
-{ ... }
-
 ===php_error===       (optional; auto-generated when php -l rejects the source)
 PHP message from stderr
+
+===ast===             (optional; expected JSON AST — auto-generated)
+{ ... }
 ```
 
 ### Fixture format (printer)

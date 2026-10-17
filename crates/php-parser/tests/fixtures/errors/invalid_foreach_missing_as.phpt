@@ -5,6 +5,8 @@ foreach ($items $item) {
 }
 ===errors===
 expected 'as', found variable
+===php_error===
+PHP Parse error:  syntax error, unexpected variable "$item" in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -72,5 +74,3 @@ expected 'as', found variable
     "end": 48
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected variable "$item" in Standard input code on line 2

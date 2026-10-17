@@ -3,6 +3,8 @@
 __halt_compiler()
 ===errors===
 expected ';' or '?>' after __halt_compiler()
+===php_error===
+PHP Parse error:  syntax error, unexpected end of file, expecting ";" in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -21,5 +23,3 @@ expected ';' or '?>' after __halt_compiler()
     "end": 23
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected end of file, expecting ";" in Standard input code on line 2

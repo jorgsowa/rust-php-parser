@@ -11,6 +11,8 @@ $this?->foo(...);
 function foo() {}
 ===errors===
 Cannot create Closure as attribute argument
+===php_error===
+PHP Fatal error:  Cannot create Closure as attribute argument in Standard input code on line 10
 ===ast===
 {
   "stmts": [
@@ -203,5 +205,3 @@ Cannot create Closure as attribute argument
     "end": 176
   }
 }
-===php_error===
-PHP Fatal error:  Cannot create Closure as attribute argument in Standard input code on line 10

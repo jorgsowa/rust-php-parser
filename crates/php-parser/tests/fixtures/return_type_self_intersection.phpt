@@ -4,6 +4,8 @@ min_php=8.2
 <?php function foo(): (self&Stringable) {}
 ===errors===
 A parenthesized intersection type can only be used as part of a union type
+===php_error===
+PHP Parse error:  syntax error, unexpected token "{", expecting "|" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -74,5 +76,3 @@ A parenthesized intersection type can only be used as part of a union type
     "end": 42
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "{", expecting "|" in Standard input code on line 1

@@ -7,6 +7,8 @@ class F {
 }
 ===errors===
 Cannot declare hooks for static property
+===php_error===
+PHP Fatal error:  Cannot declare hooks for static property in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -96,5 +98,3 @@ Cannot declare hooks for static property
     "end": 56
   }
 }
-===php_error===
-PHP Fatal error:  Cannot declare hooks for static property in Standard input code on line 3

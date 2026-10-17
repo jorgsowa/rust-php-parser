@@ -2,6 +2,8 @@
 <?php function test() {
 ===errors===
 unclosed ''}'' opened at Span { start: 22, end: 23 }
+===php_error===
+PHP Parse error:  Unclosed '{' in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -27,5 +29,3 @@ unclosed ''}'' opened at Span { start: 22, end: 23 }
     "end": 23
   }
 }
-===php_error===
-PHP Parse error:  Unclosed '{' in Standard input code on line 1

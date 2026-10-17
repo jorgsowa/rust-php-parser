@@ -20,6 +20,8 @@ const ThisIsInvalid = 4,
     AttributesOnMultipleConstants = 5;
 ===errors===
 cannot use attributes on multi-constant declaration
+===php_error===
+PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 6
 ===ast===
 {
   "stmts": [
@@ -338,5 +340,3 @@ cannot use attributes on multi-constant declaration
     "end": 263
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 6

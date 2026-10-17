@@ -2,6 +2,8 @@
 <?php class readonly {}
 ===errors===
 Cannot use "readonly" as a class name as it is reserved
+===php_error===
+PHP Parse error:  syntax error, unexpected token "readonly", expecting identifier in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -31,5 +33,3 @@ Cannot use "readonly" as a class name as it is reserved
     "end": 23
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "readonly", expecting identifier in Standard input code on line 1

@@ -4,6 +4,8 @@ $arr[]
 EOT;
 ===errors===
 empty index in string interpolation
+===php_error===
+PHP Parse error:  syntax error, unexpected token "]", expecting "-" or identifier or variable or number in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -65,5 +67,3 @@ empty index in string interpolation
     "end": 29
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "]", expecting "-" or identifier or variable or number in Standard input code on line 2

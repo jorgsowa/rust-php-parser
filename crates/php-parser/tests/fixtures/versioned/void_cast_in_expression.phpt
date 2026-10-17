@@ -4,6 +4,8 @@ min_php=8.5
 <?php $x = (void)1 + 2;
 ===errors===
 (void) cast cannot be used in an expression context
+===php_error===
+PHP Parse error:  syntax error, unexpected token "(void)" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -81,5 +83,3 @@ min_php=8.5
     "end": 23
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "(void)" in Standard input code on line 1

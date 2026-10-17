@@ -6,6 +6,8 @@ switch ($a) {
 }
 ===errors===
 expected expression
+===php_error===
+PHP Parse error:  syntax error, unexpected token "endfor", expecting "case" or "default" or "}" in Standard input code on line 4
 ===ast===
 {
   "stmts": [
@@ -60,5 +62,3 @@ expected expression
     "end": 44
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "endfor", expecting "case" or "default" or "}" in Standard input code on line 4

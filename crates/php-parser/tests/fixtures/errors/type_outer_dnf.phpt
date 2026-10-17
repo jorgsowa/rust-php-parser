@@ -8,6 +8,8 @@ function foo((Foo|Bar)&Baz $x) { }
 
 ===errors===
 Type declarations cannot be union types, use DNF syntax (A&B)|C instead
+===php_error===
+PHP Parse error:  syntax error, unexpected token "|", expecting amp in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -123,5 +125,3 @@ Type declarations cannot be union types, use DNF syntax (A&B)|C instead
     "end": 40
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "|", expecting amp in Standard input code on line 2

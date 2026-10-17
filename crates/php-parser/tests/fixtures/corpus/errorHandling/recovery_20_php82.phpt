@@ -10,6 +10,8 @@ class Foo {
 }
 ===errors===
 expected modifier, found identifier
+===php_error===
+PHP Parse error:  syntax error, unexpected identifier "publi", expecting "function" or "const" in Standard input code on line 5
 ===ast===
 {
   "stmts": [
@@ -111,5 +113,3 @@ expected modifier, found identifier
     "end": 71
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected identifier "publi", expecting "function" or "const" in Standard input code on line 5

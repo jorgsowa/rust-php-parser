@@ -8,6 +8,8 @@ f(&$a);
 f($a, ...$b);
 ===errors===
 call-time pass-by-reference is not allowed
+===php_error===
+PHP Parse error:  syntax error, unexpected token "&" in Standard input code on line 6
 ===ast===
 {
   "stmts": [
@@ -269,5 +271,3 @@ call-time pass-by-reference is not allowed
     "end": 51
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "&" in Standard input code on line 6

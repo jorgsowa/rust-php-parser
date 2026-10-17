@@ -10,6 +10,8 @@ enum Suit: string
 }
 ===errors===
 Case Diamonds of backed enum Suit must have a value
+===php_error===
+PHP Fatal error:  Case Diamonds of backed enum Suit must have a value in Standard input code on line 6
 ===ast===
 {
   "stmts": [
@@ -120,5 +122,3 @@ Case Diamonds of backed enum Suit must have a value
     "end": 115
   }
 }
-===php_error===
-PHP Fatal error:  Case Diamonds of backed enum Suit must have a value in Standard input code on line 6

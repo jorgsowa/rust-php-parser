@@ -7,6 +7,8 @@ enum Suit: bool {
 }
 ===errors===
 Enum backing type must be int or string
+===php_error===
+PHP Fatal error:  Enum backing type must be int or string, bool given in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -62,5 +64,3 @@ Enum backing type must be int or string
     "end": 49
   }
 }
-===php_error===
-PHP Fatal error:  Enum backing type must be int or string, bool given in Standard input code on line 2

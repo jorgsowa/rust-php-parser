@@ -7,6 +7,8 @@ namespace A {
 }
 ===errors===
 Namespace declarations cannot be nested
+===php_error===
+PHP Fatal error:  Namespace declarations cannot be nested in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -63,5 +65,3 @@ Namespace declarations cannot be nested
     "end": 46
   }
 }
-===php_error===
-PHP Fatal error:  Namespace declarations cannot be nested in Standard input code on line 3

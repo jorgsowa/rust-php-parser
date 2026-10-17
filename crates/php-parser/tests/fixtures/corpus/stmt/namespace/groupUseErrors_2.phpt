@@ -4,6 +4,8 @@
 use Foo {Bar, Baz};
 ===errors===
 expected namespace separator before '{', found '{'
+===php_error===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===ast===
 {
   "stmts": [
@@ -62,5 +64,3 @@ expected namespace separator before '{', found '{'
     "end": 49
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3

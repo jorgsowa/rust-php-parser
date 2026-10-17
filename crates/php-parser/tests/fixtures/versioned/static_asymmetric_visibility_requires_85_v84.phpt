@@ -5,6 +5,8 @@ max_php=8.4
 <?php class Foo { public static private(set) string $bar = 'x'; }
 ===errors===
 'asymmetric visibility on static properties' requires PHP 8.5 or higher
+===php_error===
+PHP Fatal error:  Static property may not have asymmetric visibility in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -78,5 +80,3 @@ max_php=8.4
     "end": 65
   }
 }
-===php_error===
-PHP Fatal error:  Static property may not have asymmetric visibility in Standard input code on line 1

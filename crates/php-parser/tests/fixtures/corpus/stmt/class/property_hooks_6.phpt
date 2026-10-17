@@ -10,6 +10,8 @@ class Test
 }
 ===errors===
 cannot have hooks on comma-separated property
+===php_error===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 5
 ===ast===
 {
   "stmts": [
@@ -110,5 +112,3 @@ cannot have hooks on comma-separated property
     "end": 67
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 5

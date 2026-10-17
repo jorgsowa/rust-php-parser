@@ -2,6 +2,8 @@
 <?php trait A {} class C { use A { insteadof; } }
 ===errors===
 expected '::' or 'as', found ';'
+===php_error===
+PHP Parse error:  syntax error, unexpected token ";", expecting "as" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -68,5 +70,3 @@ expected '::' or 'as', found ';'
     "end": 49
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token ";", expecting "as" in Standard input code on line 1

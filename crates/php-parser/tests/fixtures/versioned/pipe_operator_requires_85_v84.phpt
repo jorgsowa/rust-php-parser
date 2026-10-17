@@ -6,6 +6,8 @@ max_php=8.4
 ===errors===
 'pipe operator (|>)' requires PHP 8.5 or higher
 'pipe operator (|>)' requires PHP 8.5 or higher
+===php_error===
+PHP Parse error:  syntax error, unexpected token ">" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -116,5 +118,3 @@ max_php=8.4
     "end": 50
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token ">" in Standard input code on line 1

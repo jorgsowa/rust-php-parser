@@ -2,6 +2,8 @@
 <?php + ; $x = 1;
 ===errors===
 expected expression
+===php_error===
+PHP Parse error:  syntax error, unexpected token ";" in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -74,5 +76,3 @@ expected expression
     "end": 17
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token ";" in Standard input code on line 1

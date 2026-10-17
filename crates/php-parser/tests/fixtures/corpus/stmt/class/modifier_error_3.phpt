@@ -3,6 +3,8 @@
 ===errors===
 duplicate modifier 'readonly'
 readonly property must have type
+===php_error===
+PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -51,5 +53,3 @@ readonly property must have type
     "end": 39
   }
 }
-===php_error===
-PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input code on line 1

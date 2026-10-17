@@ -5,6 +5,8 @@ min_php=8.1
 $a === $b == $c;
 ===errors===
 Chaining non-associative operators requires explicit parentheses.
+===php_error===
+PHP Parse error:  syntax error, unexpected token "==" in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -71,5 +73,3 @@ Chaining non-associative operators requires explicit parentheses.
     "end": 22
   }
 }
-===php_error===
-PHP Parse error:  syntax error, unexpected token "==" in Standard input code on line 2

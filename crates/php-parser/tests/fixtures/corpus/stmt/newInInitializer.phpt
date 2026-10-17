@@ -15,6 +15,8 @@ class Bar {
 ===errors===
 New expressions are not supported in this context
 New expressions are not supported in this context
+===php_error===
+PHP Fatal error:  New expressions are not supported in this context in Standard input code on line 11
 ===ast===
 {
   "stmts": [
@@ -292,5 +294,3 @@ New expressions are not supported in this context
     "end": 163
   }
 }
-===php_error===
-PHP Fatal error:  New expressions are not supported in this context in Standard input code on line 11

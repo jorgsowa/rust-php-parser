@@ -2,6 +2,8 @@
 <?php class A { static function __construct() {} }
 ===errors===
 Method __construct() cannot be static
+===php_error===
+PHP Fatal error:  Method A::__construct() cannot be static in Standard input code on line 1
 ===ast===
 {
   "stmts": [
@@ -52,5 +54,3 @@ Method __construct() cannot be static
     "end": 50
   }
 }
-===php_error===
-PHP Fatal error:  Method A::__construct() cannot be static in Standard input code on line 1

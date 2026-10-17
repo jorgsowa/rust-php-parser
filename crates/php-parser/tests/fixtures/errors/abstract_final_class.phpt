@@ -5,6 +5,8 @@ final abstract class Bar {}
 ===errors===
 cannot use 'abstract' and 'final' together on a class
 cannot use 'abstract' and 'final' together on a class
+===php_error===
+PHP Fatal error:  Cannot use the final modifier on an abstract class in Standard input code on line 2
 ===ast===
 {
   "stmts": [
@@ -54,5 +56,3 @@ cannot use 'abstract' and 'final' together on a class
     "end": 61
   }
 }
-===php_error===
-PHP Fatal error:  Cannot use the final modifier on an abstract class in Standard input code on line 2
