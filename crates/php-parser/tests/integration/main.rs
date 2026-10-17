@@ -1,4 +1,5 @@
 mod common;
+mod fingerprint;
 mod fixtures;
 mod fold;
 mod line_endings;

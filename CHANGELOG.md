@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `php_ast::fingerprint::structural_fingerprint` hashes any AST node (arena or owned) while ignoring every `Span`, so a declaration that only moved keeps its fingerprint. It is meant for incremental analyzers: comparing fingerprints lets a salsa query backdate a function or method whose code did not change when the file around it was edited (`php-ast`).
 - `Param::new` and `MethodDecl::new` in the arena and owned AST (`php-ast`).
 - `TokenKind::description` (`php-lexer`).
 - `ScopeVisitor` and `OwnedScopeVisitor` gain `visit_name` and `visit_block`, and `FoldOwned` gains `fold_trait_use` and `fold_trait_adaptation` (with `fold_owned_trait_use`/`fold_owned_trait_adaptation`), matching the plain visitors and the arena `Fold`. All have default bodies (`php-ast`).

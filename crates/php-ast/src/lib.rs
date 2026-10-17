@@ -35,6 +35,7 @@
 
 /// Arena-allocated AST node types.
 pub mod ast;
+pub mod fingerprint;
 pub mod fold;
 pub mod owned;
 pub mod resolve;
