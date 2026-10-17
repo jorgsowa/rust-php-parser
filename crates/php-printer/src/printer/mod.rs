@@ -7,6 +7,7 @@ mod types;
 use php_ast::Comment;
 
 /// Configuration for the pretty printer.
+#[derive(Debug, Clone, PartialEq, Eq)]
 #[non_exhaustive]
 pub struct PrinterConfig {
     /// Indentation style.
@@ -18,6 +19,7 @@ pub struct PrinterConfig {
 }
 
 /// Indentation style.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[non_exhaustive]
 pub enum Indent {
     /// Indent with this many spaces per level.

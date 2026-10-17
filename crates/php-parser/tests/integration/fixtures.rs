@@ -112,3 +112,13 @@ fn parse_results_can_be_stored_in_hashmap() {
 
     assert_eq!(cache.len(), fixtures.len());
 }
+
+#[test]
+fn result_types_implement_debug_and_clone() {
+    fn assert_debug_clone<T: std::fmt::Debug + Clone>() {}
+    fn assert_debug<T: std::fmt::Debug>() {}
+    assert_debug_clone::<php_rs_parser::ParseResult>();
+    assert_debug_clone::<php_rs_parser::source_map::SourceMap>();
+    assert_debug::<php_rs_parser::ArenaParseResult<'_, '_>>();
+    assert_debug::<php_rs_parser::ParserContext>();
+}

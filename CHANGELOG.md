@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `php_ast::bumpalo` and `php_rs_parser::bumpalo` re-export the arena allocator that appears in their APIs (`php-ast`, `php-rs-parser`).
 - Pull requests run `cargo-semver-checks` against their base branch (informational), and the release workflow runs it against crates.io before publishing.
 - `Lexer::is_verbatim_string` reports whether a quoted-string token contains no escape sequence (and, for a double-quoted string, no `$`), as recorded while lexing it (`php-lexer`).
+- `ParseResult`, `SourceMap`, `PrinterConfig` and `Indent` implement `Debug` and `Clone` (`SourceMap`, `PrinterConfig` and `Indent` also `PartialEq`/`Eq`, `Indent` also `Copy`); `ArenaParseResult` and `ParserContext` implement `Debug` (`php-rs-parser`, `php-printer`).
 
 ### Changed
 

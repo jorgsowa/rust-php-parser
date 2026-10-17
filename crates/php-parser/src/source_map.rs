@@ -47,6 +47,7 @@ pub struct LineColSpan {
 ///
 /// Construction is O(n) in the source length. Each lookup is O(log n) in the
 /// number of lines (binary search), which is effectively O(1) for typical files.
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SourceMap {
     /// Byte offset of the start of each line. `line_starts[0]` is always 0.
     line_starts: Vec<u32>,
