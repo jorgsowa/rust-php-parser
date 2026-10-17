@@ -31,10 +31,32 @@ pub enum ResolvedName {
         /// Candidate in the global namespace.
         global: String,
     },
-    /// `self`, `static` or `parent` (lowercase); needs class context to resolve.
-    Special(&'static str),
+    /// `self`, `static` or `parent`; needs class context to resolve.
+    Special(SpecialClass),
     /// Synthesised error-recovery name.
     Error,
+}
+
+/// A class name that refers to the enclosing class or its parent.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum SpecialClass {
+    /// `self`
+    Self_,
+    /// `static`
+    Static,
+    /// `parent`
+    Parent,
+}
+
+impl SpecialClass {
+    /// The lowercase keyword.
+    pub fn as_str(self) -> &'static str {
+        match self {
+            SpecialClass::Self_ => "self",
+            SpecialClass::Static => "static",
+            SpecialClass::Parent => "parent",
+        }
+    }
 }
 
 /// Tracks the current namespace and `use` imports and resolves names against them.
@@ -179,9 +201,9 @@ impl NameResolver {
             NameContext::Class => {
                 let lower = name.to_ascii_lowercase();
                 match lower.as_str() {
-                    "self" => return ResolvedName::Special("self"),
-                    "static" => return ResolvedName::Special("static"),
-                    "parent" => return ResolvedName::Special("parent"),
+                    "self" => return ResolvedName::Special(SpecialClass::Self_),
+                    "static" => return ResolvedName::Special(SpecialClass::Static),
+                    "parent" => return ResolvedName::Special(SpecialClass::Parent),
                     _ => {}
                 }
                 match self.classes.get(&lower) {
@@ -261,7 +283,7 @@ mod tests {
         assert_eq!(r.resolve(c, NameKind::Relative, &["Foo"]), fqn("App\\Foo"));
         assert_eq!(
             r.resolve(c, NameKind::Unqualified, &["Self"]),
-            ResolvedName::Special("self")
+            ResolvedName::Special(SpecialClass::Self_)
         );
     }
 
