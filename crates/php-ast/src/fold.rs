@@ -23,8 +23,8 @@
 //! # Arena-allocated strings
 //!
 //! Several AST nodes store `&'arena str` values that were *not* borrowed from
-//! the source buffer — for example string literals, [`StmtKind::Label`], and
-//! [`ExprKind::Nowdoc`] values.  The identity fold re-allocates these via
+//! the source buffer — for example string literals and [`ExprKind::Nowdoc`]
+//! values.  The identity fold re-allocates these via
 //! `arena.alloc_str(s)` so the output nodes are self-contained within the
 //! new arena.  Source-borrowed [`NameStr`] values (`NameStr::__src`) are
 //! preserved as-is without copying.
@@ -331,7 +331,7 @@ pub fn fold_stmt<'new, 'src, F: Fold<'src> + ?Sized>(
             StmtKind::Switch(new_sw)
         }
         StmtKind::Goto(ident) => StmtKind::Goto(*ident),
-        StmtKind::Label(s) => StmtKind::Label(arena.alloc_str(s)),
+        StmtKind::Label(ident) => StmtKind::Label(*ident),
         StmtKind::Declare(decl) => {
             let mut directives = ArenaVec::with_capacity_in(decl.directives.len(), arena);
             for (name, expr) in decl.directives.iter() {

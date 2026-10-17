@@ -283,7 +283,7 @@ fn fold_owned_stmt_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &StmtKind) -> 
             uses_alternative: s.uses_alternative,
         })),
         StmtKind::Goto(ident) => StmtKind::Goto(ident.clone()),
-        StmtKind::Label(s) => StmtKind::Label(s.clone()),
+        StmtKind::Label(ident) => StmtKind::Label(ident.clone()),
         StmtKind::Declare(d) => StmtKind::Declare(Box::new(DeclareStmt {
             directives: d
                 .directives

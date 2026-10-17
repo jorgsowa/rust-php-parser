@@ -284,30 +284,6 @@ fn custom_fold_transforms_ints() {
 // through as pointers into the source arena. JSON comparison cannot catch this.
 // =============================================================================
 
-/// `StmtKind::Label` stores `&'arena str`. The fold must re-allocate it.
-#[test]
-fn stmt_label_arena_string_is_reallocated() {
-    // PHP: my_label:
-    let src = Bump::new();
-    let out = Bump::new();
-    let s = src.alloc_str("my_label");
-    let stmt = Stmt {
-        kind: StmtKind::Label(s),
-        span: Span::DUMMY,
-        doc_comment: None,
-    };
-    let folded = Identity.fold_stmt(&out, &stmt);
-    let StmtKind::Label(t) = &folded.kind else {
-        panic!("expected Label")
-    };
-    assert_eq!(*t, "my_label");
-    assert_ne!(
-        t.as_ptr(),
-        s.as_ptr(),
-        "Label text must be re-allocated into the output arena"
-    );
-}
-
 /// `ExprKind::Nowdoc.value` is `&'arena str`. The fold must re-allocate it.
 /// `.label` is `&'src str` and must NOT be re-allocated.
 #[test]

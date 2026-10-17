@@ -2537,9 +2537,9 @@ fn parse_expression_stmt_or_label<'arena, 'src>(
     if let ExprKind::Identifier(name) = expr.kind {
         if parser.eat(TokenKind::Colon).is_some() {
             let span = Span::new(start, parser.previous_end());
-            let label: &'arena str = name
-                .__into_arena_str()
-                .unwrap_or_else(|| parser.arena.alloc_str(name.as_str()));
+            let label =
+                Ident::name(&parser.source[expr.span.start as usize..expr.span.end as usize]);
+            debug_assert_eq!(label.as_str(), Some(name.as_str()));
             return Stmt {
                 kind: StmtKind::Label(label),
                 span,

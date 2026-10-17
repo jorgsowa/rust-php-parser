@@ -293,7 +293,7 @@ pub enum StmtKind {
     /// `goto` with target label.
     Goto(Ident),
     /// A `label:` definition.
-    Label(Box<str>),
+    Label(Ident),
     /// A `declare(...)` statement.
     Declare(Box<DeclareStmt>),
     /// `unset(...)` targets.
@@ -2212,7 +2212,7 @@ fn owned_stmt_kind(k: &arena_ast::StmtKind<'_, '_>) -> StmtKind {
             uses_alternative: s.uses_alternative,
         })),
         arena_ast::StmtKind::Goto(ident) => StmtKind::Goto(owned_ident(*ident)),
-        arena_ast::StmtKind::Label(s) => StmtKind::Label(Box::from(*s)),
+        arena_ast::StmtKind::Label(ident) => StmtKind::Label(owned_ident(*ident)),
         arena_ast::StmtKind::Declare(d) => StmtKind::Declare(Box::new(DeclareStmt {
             directives: d
                 .directives
@@ -2998,13 +2998,13 @@ fn av_link_kind<'a>(
                 args: av_args(arena, &s.args),
             }))
         }
-        ExprKind::StaticMethodCallDynamic(s) => arena_ast::ExprKind::StaticMethodCallDynamic(arena.alloc(
-            arena_ast::StaticMethodCallDynamicExpr {
+        ExprKind::StaticMethodCallDynamic(s) => arena_ast::ExprKind::StaticMethodCallDynamic(
+            arena.alloc(arena_ast::StaticMethodCallDynamicExpr {
                 class: arena.alloc(operand),
                 method: arena.alloc(av_expr(arena, &s.method)),
                 args: av_args(arena, &s.args),
-            },
-        )),
+            }),
+        ),
         ExprKind::ClassConstAccess(s) => {
             arena_ast::ExprKind::ClassConstAccess(arena_ast::StaticAccessExpr {
                 class: arena.alloc(operand),
@@ -3175,7 +3175,7 @@ fn av_stmt_kind<'a>(arena: &'a bumpalo::Bump, k: &StmtKind) -> arena_ast::StmtKi
         }
         StmtKind::Switch(s) => arena_ast::StmtKind::Switch(arena.alloc(av_switch_stmt(arena, s))),
         StmtKind::Goto(ident) => arena_ast::StmtKind::Goto(av_ident(arena, ident)),
-        StmtKind::Label(s) => arena_ast::StmtKind::Label(av_str(arena, s)),
+        StmtKind::Label(ident) => arena_ast::StmtKind::Label(av_ident(arena, ident)),
         StmtKind::Declare(d) => {
             arena_ast::StmtKind::Declare(arena.alloc(av_declare_stmt(arena, d)))
         }

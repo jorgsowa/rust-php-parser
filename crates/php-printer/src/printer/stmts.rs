@@ -206,7 +206,7 @@ impl<'src> Printer<'src> {
                 self.w(";");
             }
             StmtKind::Label(label) => {
-                self.w(label);
+                self.w(label.or_error());
                 self.w(":");
             }
             StmtKind::Declare(decl) => {

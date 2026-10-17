@@ -138,7 +138,7 @@ pub enum StmtKind<'arena, 'src> {
     Goto(Ident<'src>),
 
     /// Label statement
-    Label(&'arena str),
+    Label(Ident<'src>),
 
     /// Declare statement
     Declare(&'arena DeclareStmt<'arena, 'src>),
