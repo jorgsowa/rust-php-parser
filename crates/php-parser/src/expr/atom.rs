@@ -304,11 +304,9 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             // would panic in that case.
             let without_open = text.strip_prefix('\'').unwrap_or(text);
             let inner = without_open.strip_suffix('\'').unwrap_or(without_open);
-            // Fast path: if no backslash, inner is a verbatim source slice
-            let value: &'arena str = if !inner.contains('\\') {
-                // inner is a subslice of `src` which has lifetime 'src
-                let offset = inner.as_ptr() as usize - src.as_ptr() as usize;
-                parser.arena.alloc_str(&src[offset..offset + inner.len()])
+            // Fast path: the lexer saw no backslash, so inner is a verbatim source slice
+            let value = if parser.is_verbatim_string(token.span.start) {
+                NameStr::__src(inner)
             } else {
                 // Decode single-quote escape sequences: \' → ' and \\ → \
                 let mut decoded = String::with_capacity(inner.len());
@@ -342,7 +340,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                         i += ch.len_utf8();
                     }
                 }
-                parser.arena.alloc_str(&decoded)
+                NameStr::__arena(parser.arena.alloc_str(&decoded))
             };
             Expr {
                 kind: ExprKind::String(value),
@@ -363,13 +361,19 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             // strings, so it is safe to treat the missing closing quote as absent here.
             let Some(without_open) = stripped.strip_prefix('"') else {
                 return Expr {
-                    kind: ExprKind::String(parser.arena.alloc_str("")),
+                    kind: ExprKind::String(NameStr::__src("")),
                     span: token.span,
                 };
             };
             let inner = without_open.strip_suffix('"').unwrap_or(without_open);
 
-            if super::interpolation::has_interpolation(inner) {
+            if parser.is_verbatim_string(token.span.start) {
+                // The lexer saw no backslash and no `$`: a verbatim source slice.
+                Expr {
+                    kind: ExprKind::String(NameStr::__src(inner)),
+                    span: token.span,
+                }
+            } else if super::interpolation::has_interpolation(inner) {
                 // Compute the byte offset of inner within src via pointer arithmetic so
                 // the result is correct regardless of the b/B prefix or termination.
                 let inner_offset = (inner.as_ptr() as usize - src.as_ptr() as usize) as u32;
@@ -386,13 +390,10 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     kind: ExprKind::InterpolatedString(parts),
                     span: token.span,
                 }
-            } else if !inner.contains('\\') {
+            } else if memchr::memchr(b'\\', inner.as_bytes()).is_none() {
                 // No interpolation and no escapes — verbatim source slice
-                let offset = inner.as_ptr() as usize - src.as_ptr() as usize;
                 Expr {
-                    kind: ExprKind::String(
-                        parser.arena.alloc_str(&src[offset..offset + inner.len()]),
-                    ),
+                    kind: ExprKind::String(NameStr::__src(inner)),
                     span: token.span,
                 }
             } else {
@@ -415,7 +416,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                         .expect("parts.len() == 1 checked above")
                     {
                         StringPart::Literal(s) => Expr {
-                            kind: ExprKind::String(s),
+                            kind: ExprKind::String(NameStr::__arena(s)),
                             span: token.span,
                         },
                         part => {
@@ -465,7 +466,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     kind: ExprKind::ShellExec(parts),
                     span: token.span,
                 }
-            } else if !inner.contains('\\') {
+            } else if memchr::memchr(b'\\', inner.as_bytes()).is_none() {
                 // No escapes — verbatim source slice
                 let offset = inner.as_ptr() as usize - src.as_ptr() as usize;
                 let mut parts = parser.alloc_vec_with_capacity(1);
@@ -2053,11 +2054,15 @@ fn parse_array_literal<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Ex
     let start = parser.start_span();
     parser.advance(); // consume [
 
-    // March 2026 optimization: right-size pre-allocation for memory efficiency
-    // Start with 0 capacity; bumpalo grows dynamically as needed.
-    // Most arrays (1-5 elements) fit in initial chunk; large arrays (100+) are rare
-    // but allocate efficiently with growth. This saves ~5% memory overall.
-    let mut elements = parser.alloc_vec_with_capacity(0);
+    // Room for a few elements up front: growing from zero reallocates (and
+    // copies) on the first several pushes, since nested elements keep the
+    // vector from growing in place. Empty `[]` is common and stays unallocated.
+    let cap = if parser.check(TokenKind::RightBracket) {
+        0
+    } else {
+        4
+    };
+    let mut elements = parser.alloc_vec_with_capacity(cap);
 
     if !parser.check(TokenKind::RightBracket) {
         loop {
@@ -2111,8 +2116,13 @@ fn parse_array_call<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     parser.advance(); // consume 'array'
     parser.expect(TokenKind::LeftParen);
 
-    // March 2026: same right-sizing as parse_array_literal
-    let mut elements = parser.alloc_vec_with_capacity(0);
+    // Same sizing as parse_array_literal.
+    let cap = if parser.check(TokenKind::RightParen) {
+        0
+    } else {
+        4
+    };
+    let mut elements = parser.alloc_vec_with_capacity(cap);
 
     if !parser.check(TokenKind::RightParen) {
         loop {

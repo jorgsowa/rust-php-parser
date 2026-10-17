@@ -18,8 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sources over 4 GiB are refused in release builds too. The size guard was a `debug_assert!`, so release builds wrapped the `u32` span offsets and could slice the wrong text or panic. The `parse_*` functions now return an empty program with the new `ParseError::SourceTooLarge`, and `Lexer::new`/`Lexer::new_at` yield only `Eof` with a `LexerErrorKind::FileTooLarge` error (`php-lexer`, `php-rs-parser`).
 - The WebAssembly build reserves an 8 MiB stack instead of the 1 MiB default; wasm has no guard page, so an overflow there would corrupt memory rather than trap (`php-wasm`).
 
+### Added
+
+- `Lexer::is_verbatim_string` reports whether a quoted-string token contains no escape sequence (and, for a double-quoted string, no `$`), as recorded while lexing it (`php-lexer`).
+
 ### Changed
 
+- **Breaking:** `ExprKind::String` holds a `NameStr` instead of `&'arena str`, so literals without escape sequences borrow the source instead of being copied into the arena. `NameStr` derefs to `str`; use `.as_str()` where a `&str` is needed (`php-ast`, `php-rs-parser`).
+- Faster parsing, measured on the Laravel framework with its vendor directory (95 MB), the workload of the `mir` analyzer: arena parsing is ~14% faster and `parse()` ~10% faster. String literals are no longer copied into the arena, the parser no longer rescans each quoted string for escapes or interpolation that the lexer already saw, double-quoted strings are lexed with a vectorised search instead of byte by byte, and array literals start with room for four elements instead of growing from zero (`php-lexer`, `php-rs-parser`).
 - PHPDoc parsing is ~27% faster with identical output: lines are borrowed from the comment rather than copied, and text is appended directly instead of being built and merged (`phpdoc-parser`).
 - `ParseError` has new `NestingTooDeep` and `SourceTooLarge` variants; exhaustive matches need extra arms. Exceeding the nesting limit used to produce `ParseError::Forbidden` with the message "maximum expression nesting depth exceeded" (`php-rs-parser`).
 - `php_ast::owned::Expr` implements `Drop`, so its fields can no longer be moved out by destructuring; take them with `std::mem::replace(&mut expr.kind, ExprKind::Error)` instead (`php-ast`).

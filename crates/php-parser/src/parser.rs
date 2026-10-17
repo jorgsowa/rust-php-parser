@@ -217,6 +217,13 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         self.source
     }
 
+    /// Whether the quoted-string token starting at `start` needs no decoding
+    /// (see [`Lexer::is_verbatim_string`]).
+    #[inline]
+    pub(crate) fn is_verbatim_string(&mut self, start: u32) -> bool {
+        self.lexer.is_verbatim_string(start)
+    }
+
     // =========================================================================
     // Arena helpers
     // =========================================================================

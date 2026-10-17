@@ -109,6 +109,12 @@ pub struct Lexer<'src> {
     pos: usize,
     peeked: Option<Token>,
     peeked2: Option<Token>,
+    /// Start offsets, in source order, of quoted-string tokens whose contents
+    /// cannot be used verbatim (see [`Lexer::is_verbatim_string`]).
+    non_verbatim_strings: Vec<u32>,
+    /// Index into `non_verbatim_strings` of the last lookup; strings are
+    /// usually queried in source order, which makes lookups O(1).
+    verbatim_cursor: usize,
     /// Errors collected so far.
     pub errors: Vec<LexerError>,
 }
@@ -246,6 +252,8 @@ impl<'src> Lexer<'src> {
             pos,
             peeked: None,
             peeked2: None,
+            non_verbatim_strings: Vec::new(),
+            verbatim_cursor: 0,
             errors: Vec::new(),
         }
     }
@@ -267,6 +275,8 @@ impl<'src> Lexer<'src> {
             pos: offset,
             peeked: None,
             peeked2: None,
+            non_verbatim_strings: Vec::new(),
+            verbatim_cursor: 0,
             errors: Vec::new(),
         }
     }
@@ -283,6 +293,8 @@ impl<'src> Lexer<'src> {
             pos: 0,
             peeked: None,
             peeked2: None,
+            non_verbatim_strings: Vec::new(),
+            verbatim_cursor: 0,
             errors: vec![LexerError {
                 kind: LexerErrorKind::FileTooLarge,
                 message: format!(
@@ -293,6 +305,25 @@ impl<'src> Lexer<'src> {
                 span: Span::new(0, 0),
             }],
         })
+    }
+
+    /// Whether the single- or double-quoted string token starting at `start`
+    /// contains no escape sequence and, for a double-quoted string, no `$`, so
+    /// its contents between the quotes can be used verbatim without decoding.
+    ///
+    /// Only meaningful for string tokens this lexer has already produced.
+    pub fn is_verbatim_string(&mut self, start: u32) -> bool {
+        let list = &self.non_verbatim_strings;
+        let mut i = self.verbatim_cursor;
+        if i > 0 && list.get(i - 1).is_some_and(|&prev| prev >= start) {
+            // Queried out of order: fall back to a search.
+            return list.binary_search(&start).is_err();
+        }
+        while list.get(i).is_some_and(|&next| next < start) {
+            i += 1;
+        }
+        self.verbatim_cursor = i;
+        list.get(i) != Some(&start)
     }
 
     /// The source text being lexed.
@@ -846,6 +877,7 @@ impl<'src> Lexer<'src> {
                         message: "unterminated string literal".to_string(),
                         span: Span::new(start as u32, self.source.len() as u32),
                     });
+                    self.mark_non_verbatim(start);
                     self.pos = self.source.len();
                     return self.tok(TokenKind::SingleQuotedString, start);
                 }
@@ -853,6 +885,7 @@ impl<'src> Lexer<'src> {
                     p += offset;
                     match bytes[p] {
                         b'\\' => {
+                            self.mark_non_verbatim(start);
                             p += 1;
                             if p < bytes.len() {
                                 p += 1;
@@ -880,40 +913,57 @@ impl<'src> Lexer<'src> {
             p += 1;
         }
         p += 1; // skip opening "
+        let mut verbatim = true;
         loop {
-            if p >= bytes.len() {
+            let segment = p;
+            let Some(offset) = memchr::memchr3(b'\\', b'"', b'$', &bytes[p..]) else {
                 self.errors.push(LexerError {
                     kind: LexerErrorKind::UnterminatedString,
                     message: "unterminated string literal".to_string(),
                     span: Span::new(start as u32, self.source.len() as u32),
                 });
+                self.mark_non_verbatim(start);
                 self.pos = self.source.len();
                 return self.tok(TokenKind::DoubleQuotedString, start);
-            }
+            };
+            p += offset;
             match bytes[p] {
                 b'\\' => {
-                    p += 1;
-                    if p < bytes.len() {
-                        p += 1;
-                    }
+                    verbatim = false;
+                    p = (p + 2).min(bytes.len());
                 }
                 b'"' => {
                     p += 1;
                     break;
                 }
-                // `{$...}` is PHP's complex expression interpolation. The expression
-                // inside may contain nested strings, so skip over the matching `}`
-                // using a balanced-brace scan that respects string quoting.
-                b'{' if p + 1 < bytes.len() && bytes[p + 1] == b'$' => {
-                    p = skip_complex_interp(bytes, p);
-                }
+                // b'$'
                 _ => {
-                    p += 1;
+                    verbatim = false;
+                    // `{$...}` is PHP's complex expression interpolation. The
+                    // expression inside may contain nested strings, so skip over
+                    // the matching `}` using a balanced-brace scan that respects
+                    // string quoting. A `{` before `segment` was escaped.
+                    if p > segment && bytes[p - 1] == b'{' {
+                        p = skip_complex_interp(bytes, p - 1);
+                    } else {
+                        p += 1;
+                    }
                 }
             }
         }
+        if !verbatim {
+            self.mark_non_verbatim(start);
+        }
         self.pos = p;
         self.tok(TokenKind::DoubleQuotedString, start)
+    }
+
+    #[inline]
+    fn mark_non_verbatim(&mut self, start: usize) {
+        // A string's start is recorded at most once and tokens are lexed in order.
+        if self.non_verbatim_strings.last() != Some(&(start as u32)) {
+            self.non_verbatim_strings.push(start as u32);
+        }
     }
 
     fn scan_backtick_string(&mut self) -> Token {

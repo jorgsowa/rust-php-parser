@@ -111,8 +111,9 @@ pub enum ExprKind<'arena, 'src> {
     /// Float literal
     Float(f64),
 
-    /// String literal
-    String(&'arena str),
+    /// String literal, with escape sequences decoded. Borrowed from the source
+    /// when the literal has none.
+    String(NameStr<'arena, 'src>),
 
     /// Interpolated string: `"Hello $name, you are {$age} years old"`
     InterpolatedString(ArenaVec<'arena, StringPart<'arena, 'src>>),

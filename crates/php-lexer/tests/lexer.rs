@@ -569,3 +569,73 @@ fn source_over_4_gib_is_refused() {
     assert!(tokens.iter().all(|t| t.kind == TokenKind::Eof));
     assert_eq!(errors[0].kind, php_lexer::LexerErrorKind::FileTooLarge);
 }
+
+// =============================================================================
+// Verbatim string detection
+// =============================================================================
+
+/// Lex `code` (after `<?php `) and report, for each quoted-string token,
+/// whether the lexer considers its contents usable verbatim.
+fn verbatim_flags(code: &str) -> Vec<bool> {
+    let full = format!("<?php {code}");
+    let mut lexer = Lexer::new(&full);
+    let mut starts = Vec::new();
+    loop {
+        let token = lexer.next_token();
+        match token.kind {
+            TokenKind::Eof => break,
+            TokenKind::SingleQuotedString | TokenKind::DoubleQuotedString => {
+                starts.push(token.span.start)
+            }
+            _ => {}
+        }
+    }
+    starts
+        .into_iter()
+        .map(|start| lexer.is_verbatim_string(start))
+        .collect()
+}
+
+#[test]
+fn verbatim_strings_have_no_escapes_or_dollar() {
+    assert_eq!(
+        verbatim_flags(r#"'a'; 'b\'c'; b'd'; 'e\\f';"#),
+        [true, false, true, false]
+    );
+    assert_eq!(
+        verbatim_flags(r#""a"; "b\n"; "$c"; "{$d}"; "e$"; "\{$f}"; B"g";"#),
+        [true, false, false, false, false, false, true]
+    );
+    // A `{$` whose `{` is escaped is plain text followed by a simple variable.
+    assert_eq!(
+        php_kinds(r#""\{$x}";"#),
+        vec![TokenKind::DoubleQuotedString, TokenKind::Semicolon]
+    );
+}
+
+#[test]
+fn verbatim_lookup_out_of_order() {
+    let full = r#"<?php 'a\b'; 'c'; 'd\e';"#;
+    let mut lexer = Lexer::new(full);
+    let mut starts = Vec::new();
+    loop {
+        let token = lexer.next_token();
+        if token.kind == TokenKind::Eof {
+            break;
+        }
+        if token.kind == TokenKind::SingleQuotedString {
+            starts.push(token.span.start);
+        }
+    }
+    // Queries normally arrive in source order; a backwards query must still be right.
+    assert!(!lexer.is_verbatim_string(starts[2]));
+    assert!(!lexer.is_verbatim_string(starts[0]));
+    assert!(lexer.is_verbatim_string(starts[1]));
+    assert!(!lexer.is_verbatim_string(starts[0]));
+}
+
+#[test]
+fn unterminated_strings_are_not_verbatim() {
+    assert_eq!(verbatim_flags("'abc"), [false]);
+    assert_eq!(verbatim_flags("\"abc"), [false]);
+}

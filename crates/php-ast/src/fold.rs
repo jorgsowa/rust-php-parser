@@ -443,7 +443,7 @@ pub fn fold_expr<'new, 'src, F: Fold<'src> + ?Sized>(
     let kind = match &expr.kind {
         ExprKind::Int(n) => ExprKind::Int(*n),
         ExprKind::Float(f) => ExprKind::Float(*f),
-        ExprKind::String(s) => ExprKind::String(arena.alloc_str(s)),
+        ExprKind::String(s) => ExprKind::String(fold_name_str(*s, arena)),
         ExprKind::InterpolatedString(parts) => {
             ExprKind::InterpolatedString(fold_string_parts(folder, arena, parts))
         }

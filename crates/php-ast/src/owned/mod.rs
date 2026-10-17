@@ -1750,7 +1750,7 @@ fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
     match k {
         arena_ast::ExprKind::Int(v) => ExprKind::Int(*v),
         arena_ast::ExprKind::Float(v) => ExprKind::Float(*v),
-        arena_ast::ExprKind::String(s) => ExprKind::String(Box::from(*s)),
+        arena_ast::ExprKind::String(s) => ExprKind::String(Box::from(s.as_str())),
         arena_ast::ExprKind::InterpolatedString(parts) => {
             ExprKind::InterpolatedString(owned_string_parts(parts))
         }
@@ -2711,7 +2711,7 @@ fn av_leaf_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
     match k {
         ExprKind::Int(v) => arena_ast::ExprKind::Int(*v),
         ExprKind::Float(v) => arena_ast::ExprKind::Float(*v),
-        ExprKind::String(s) => arena_ast::ExprKind::String(arena.alloc_str(s)),
+        ExprKind::String(s) => arena_ast::ExprKind::String(av_namestr(arena, s)),
         ExprKind::InterpolatedString(parts) => {
             arena_ast::ExprKind::InterpolatedString(av_string_parts(arena, parts))
         }

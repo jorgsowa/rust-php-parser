@@ -60,12 +60,12 @@ fn identity_fold_preserves_arena_strings() {
 
     let s = arena.alloc_str("hello world");
     let expr = Expr {
-        kind: ExprKind::String(s),
+        kind: ExprKind::String(NameStr::__arena(s)),
         span: Span::DUMMY,
     };
     let folded_expr = Identity.fold_expr(&out, &expr);
     match folded_expr.kind {
-        ExprKind::String(t) => assert_eq!(t, "hello world"),
+        ExprKind::String(t) => assert_eq!(t.as_str(), "hello world"),
         _ => panic!("expected String"),
     }
 }
@@ -130,14 +130,14 @@ fn string_literal_is_reallocated_into_new_arena() {
 
     let s = src_arena.alloc_str("hello world");
     let expr = Expr {
-        kind: ExprKind::String(s),
+        kind: ExprKind::String(NameStr::__arena(s)),
         span: Span::DUMMY,
     };
     let folded_expr = Identity.fold_expr(&out, &expr);
     let ExprKind::String(t) = folded_expr.kind else {
         panic!("expected String")
     };
-    assert_eq!(t, "hello world");
+    assert_eq!(t.as_str(), "hello world");
     // Must be a fresh allocation in `out`, not a pointer into `src_arena`
     assert_ne!(
         t.as_ptr(),

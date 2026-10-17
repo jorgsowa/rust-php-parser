@@ -127,9 +127,8 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                                 } else {
                                     let idx_offset = base_offset + idx_start as u32;
                                     let idx_end = base_offset + (i - 1) as u32;
-                                    let index_expr = parse_simple_index(
-                                        arena, source, idx_str, idx_offset, idx_end,
-                                    );
+                                    let index_expr =
+                                        parse_simple_index(source, idx_str, idx_offset, idx_end);
                                     let span = Span::new(var_offset, base_offset + i as u32);
                                     expr = Expr {
                                         kind: ExprKind::ArrayAccess(ArrayAccessExpr {
@@ -243,7 +242,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                                 let idx_end = base_offset + (i - 1) as u32;
 
                                 let index_expr =
-                                    parse_simple_index(arena, source, idx_str, idx_offset, idx_end);
+                                    parse_simple_index(source, idx_str, idx_offset, idx_end);
 
                                 let span = Span::new(var_offset, base_offset + i as u32);
                                 expr = Expr {
@@ -514,7 +513,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                                 let idx_offset = body_offset + idx_start as u32;
                                 let idx_end = body_offset + (i - 1) as u32;
                                 let index_expr =
-                                    parse_simple_index(arena, source, idx_str, idx_offset, idx_end);
+                                    parse_simple_index(source, idx_str, idx_offset, idx_end);
                                 let span = Span::new(var_offset, body_offset + i as u32);
                                 expr = Expr {
                                     kind: ExprKind::ArrayAccess(ArrayAccessExpr {
@@ -787,27 +786,21 @@ pub fn has_interpolation(inner: &str) -> bool {
     let bytes = inner.as_bytes();
     let len = bytes.len();
     let mut i = 0;
-    while i < len {
-        if bytes[i] == b'\\' {
-            // Skip the backslash and the escaped character (which might be multi-byte)
-            i += 1;
-            if i < len {
-                if bytes[i] < 0x80 {
-                    i += 1;
-                } else {
-                    i += 1; // skip first byte of multi-byte
-                    while i < len && is_utf8_continuation(bytes[i]) {
-                        i += 1;
-                    }
-                }
+    // Only `\`, `$` and `{` matter, so jump between them. A UTF-8 continuation
+    // byte never equals one of them, so skipping just the byte after a
+    // backslash is enough to step over an escaped multi-byte character.
+    while let Some(offset) = memchr::memchr3(b'\\', b'$', b'{', &bytes[i..]) {
+        i += offset;
+        match bytes[i] {
+            b'\\' => {
+                i = (i + 2).min(len);
+                continue;
             }
-            continue;
-        }
-        if bytes[i] == b'$' && i + 1 < len && (is_var_start(bytes[i + 1]) || bytes[i + 1] == b'{') {
-            return true;
-        }
-        if bytes[i] == b'{' && i + 1 < len && bytes[i + 1] == b'$' {
-            return true;
+            b'$' if i + 1 < len && (is_var_start(bytes[i + 1]) || bytes[i + 1] == b'{') => {
+                return true;
+            }
+            b'{' if i + 1 < len && bytes[i + 1] == b'$' => return true,
+            _ => {}
         }
         i += 1;
     }
@@ -860,7 +853,6 @@ fn is_utf8_continuation(b: u8) -> bool {
 /// only `"0"` or `[1-9][0-9]*` are valid positive indices, and `-[1-9][0-9]*`
 /// for negative. Forms like `"-0"`, `"00"`, `"07"` are string keys.
 fn parse_simple_index<'arena, 'src>(
-    arena: &'arena bumpalo::Bump,
     source: &'src str,
     idx_str: &str,
     idx_offset: u32,
@@ -899,7 +891,7 @@ fn parse_simple_index<'arena, 'src>(
     let key_start = idx_offset as usize;
     let key_end = idx_end as usize;
     Expr {
-        kind: ExprKind::String(arena.alloc_str(&source[key_start..key_end])),
+        kind: ExprKind::String(NameStr::__src(&source[key_start..key_end])),
         span,
     }
 }
