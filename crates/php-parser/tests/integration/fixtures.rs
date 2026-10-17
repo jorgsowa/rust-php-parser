@@ -45,7 +45,11 @@ fn arena_fixtures() {
         |source, min_php| {
             let arena = bumpalo::Bump::new();
             let result = match min_php.map(php_version) {
-                Some(v) => php_rs_parser::parse_arena_versioned(&arena, source, v),
+                Some(v) => php_rs_parser::parse_arena_with(
+                    &arena,
+                    source,
+                    &php_rs_parser::ParseOptions::default().version(v),
+                ),
                 None => php_rs_parser::parse_arena(&arena, source),
             };
             let errors = result.errors.iter().map(|e| e.to_string()).collect();
@@ -61,7 +65,10 @@ fn owned_fixtures() {
     run_fixture_corpus(
         |source, min_php| {
             let result = match min_php.map(php_version) {
-                Some(v) => php_rs_parser::parse_versioned(source, v),
+                Some(v) => php_rs_parser::parse_with(
+                    source,
+                    &php_rs_parser::ParseOptions::default().version(v),
+                ),
                 None => php_rs_parser::parse(source),
             };
             let errors = result.errors.iter().map(|e| e.to_string()).collect();
@@ -103,7 +110,10 @@ fn parse_results_can_be_stored_in_hashmap() {
             let content = std::fs::read_to_string(&path).unwrap();
             let (min_php, source) = crate::common::parse_fixture(&content);
             let result = match min_php.map(php_version) {
-                Some(v) => php_rs_parser::parse_versioned(source, v),
+                Some(v) => php_rs_parser::parse_with(
+                    source,
+                    &php_rs_parser::ParseOptions::default().version(v),
+                ),
                 None => php_rs_parser::parse(source),
             };
             (PathBuf::from(rel), result)

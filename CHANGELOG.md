@@ -57,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Breaking:** `owned::Ident` is a struct instead of an alias for `Option<Box<str>>`, with the same API as the arena `Ident`: `Ident::name`, `Ident::ERROR`, `as_str`, `is_error`, `or_error`, `Display` and `PartialEq<&str>`. Serialized output is unchanged (`php-ast`).
 - **Breaking:** `phpdoc_parser::Span` is a re-export of `php_ast::Span` instead of its own type, so PHPDoc and AST spans share one type; PHPDoc offsets are still relative to the docblock text. `phpdoc-parser` now depends on `php-ast` (`phpdoc-parser`).
 - **Breaking:** `phpdoc_parser::body_text` takes `Option<&PhpDocText>` instead of `&Option<PhpDocText>` (call it with `tag.body.as_ref()`), and `find_tags` and `inline_tags` return iterators instead of `Vec`s (`phpdoc-parser`).
+- **Breaking:** the parse entry points take a `ParseOptions` (target `version`, whether to build the `source_map`) instead of coming in one function per combination. `parse_versioned(src, v)` becomes `parse_with(src, &ParseOptions::default().version(v))`, `parse_arena_versioned` becomes `parse_arena_with`, and `parse_arena_raw` becomes `parse_arena_with` with `.source_map(false)`. `ParserContext::with_options` and `set_options` replace `reparse_versioned` and `reparse_owned_versioned` (`php-rs-parser`).
 
 - **Breaking:** `PrinterConfig::newline` is a `Newline` enum (`Lf`, the default, or `CrLf`) instead of a `&'static str` (`php-printer`).
 ---

@@ -286,9 +286,11 @@ fn parser_corpus_round_trip() {
         let first_print = {
             let arena = bumpalo::Bump::new();
             let result = match header.min_php {
-                Some((maj, min)) => {
-                    php_rs_parser::parse_arena_versioned(&arena, source, php_version(maj, min))
-                }
+                Some((maj, min)) => php_rs_parser::parse_arena_with(
+                    &arena,
+                    source,
+                    &php_rs_parser::ParseOptions::default().version(php_version(maj, min)),
+                ),
                 None => php_rs_parser::parse_arena(&arena, source),
             };
             php_printer::pretty_print(&result.program)

@@ -77,7 +77,7 @@ cargo fmt --check
 - **Lazy lexer** — Tokens are produced on demand, not pre-lexed into an array. The lexer has a small set of peeking slots.
 - **Pratt parser for expressions** — Operator precedence is handled via a Pratt (top-down operator precedence) approach with binding-power tables. See `crates/php-parser/src/expr.rs`.
 - **Error recovery** — The parser uses panic-mode recovery to produce a complete AST even for invalid PHP. Recovery points are statement boundaries; unrecoverable nodes become `StmtKind::Error` or `ExprKind::Error`.
-- **Version gating** — `PhpVersion` controls which syntax is accepted. `parse_versioned()` targets older PHP versions. Version-specific parse paths emit `ParseError::VersionTooLow` rather than failing.
+- **Version gating** — `PhpVersion` controls which syntax is accepted. `ParseOptions::version` targets older PHP versions. Version-specific parse paths emit `ParseError::VersionTooLow` rather than failing.
 
 ---
 

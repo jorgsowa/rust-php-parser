@@ -70,7 +70,7 @@ impl SourceMap {
     }
 
     /// A no-op map for callers that never query line/column positions.
-    /// Returned by [`parse_arena_raw`](crate::parse_arena_raw).
+    /// Used when [`ParseOptions::source_map`](crate::ParseOptions::source_map) is `false`.
     /// `offset_to_line_col` on an empty map returns `LineCol { line: 0, col: offset }`.
     pub fn empty() -> Self {
         Self {

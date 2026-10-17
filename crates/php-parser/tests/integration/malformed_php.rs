@@ -482,8 +482,16 @@ fn source_over_4_gib_is_refused() {
     let arena = bumpalo::Bump::new();
     for result in [
         php_rs_parser::parse_arena(&arena, source),
-        php_rs_parser::parse_arena_raw(&arena, source),
-        php_rs_parser::parse_arena_versioned(&arena, source, php_rs_parser::PhpVersion::Php74),
+        php_rs_parser::parse_arena_with(
+            &arena,
+            source,
+            &php_rs_parser::ParseOptions::default().source_map(false),
+        ),
+        php_rs_parser::parse_arena_with(
+            &arena,
+            source,
+            &php_rs_parser::ParseOptions::default().version(php_rs_parser::PhpVersion::Php74),
+        ),
     ] {
         assert!(result.program.stmts.is_empty());
         assert!(matches!(
@@ -523,7 +531,10 @@ fn errors_truncated_only_when_errors_were_dropped() {
 #[test]
 fn version_too_low_carries_typed_versions() {
     use php_rs_parser::PhpVersion;
-    let result = php_rs_parser::parse_versioned("<?php enum E {}", PhpVersion::Php80);
+    let result = php_rs_parser::parse_with(
+        "<?php enum E {}",
+        &php_rs_parser::ParseOptions::default().version(PhpVersion::Php80),
+    );
     let first = result.errors.first().expect("an error");
     assert!(
         matches!(

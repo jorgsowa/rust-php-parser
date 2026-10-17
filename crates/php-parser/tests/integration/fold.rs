@@ -46,10 +46,10 @@ fn identity_fold_across_corpus() {
         let src_arena = Bump::new();
 
         let result = if let Some(ver) = min_php {
-            php_rs_parser::parse_arena_versioned(
+            php_rs_parser::parse_arena_with(
                 &src_arena,
                 source,
-                crate::common::php_version(ver),
+                &php_rs_parser::ParseOptions::default().version(crate::common::php_version(ver)),
             )
         } else {
             php_rs_parser::parse_arena(&src_arena, source)

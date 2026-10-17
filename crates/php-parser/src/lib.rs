@@ -32,14 +32,16 @@
 //!
 //! # Version-aware parsing
 //!
-//! Use [`parse_versioned`] to target a specific PHP version. Syntax that
-//! requires a higher version is still parsed into the AST, but a
+//! Use [`parse_with`] and [`ParseOptions`] to target a specific PHP version.
+//! Syntax that requires a higher version is still parsed into the AST, but a
 //! [`diagnostics::ParseError::VersionTooLow`] diagnostic is emitted.
 //!
 //! ```
-//! let result = php_rs_parser::parse_versioned(
+//! use php_rs_parser::{ParseOptions, PhpVersion};
+//!
+//! let result = php_rs_parser::parse_with(
 //!     "<?php enum Status { case Active; }",
-//!     php_rs_parser::PhpVersion::Php80,
+//!     &ParseOptions::default().version(PhpVersion::Php80),
 //! );
 //! assert!(!result.errors.is_empty()); // enums require PHP 8.1
 //! ```
@@ -75,7 +77,7 @@
 //! assert!(result.errors.is_empty());
 //! ```
 //!
-//! Use [`parse_arena_raw`] instead of [`parse_arena`] when you never need
+//! Set [`ParseOptions::source_map`] to `false` when you never need
 //! line/column positions — it skips building the [`source_map::SourceMap`]
 //! and is slightly faster.
 
@@ -109,7 +111,7 @@ pub use version::PhpVersion;
 
 /// Lifetime-free result of parsing a PHP source string.
 ///
-/// This is the primary return type of [`parse`] and [`parse_versioned`]. The
+/// This is the primary return type of [`parse`] and [`parse_with`]. The
 /// AST is fully owned (`Box<str>`, `Box<[T]>`) so it can be stored in a
 /// `HashMap`, sent across threads, or cached alongside other data without
 /// fighting the borrow checker.
@@ -160,7 +162,7 @@ impl ParseResult {
 
 /// Arena-allocated result of parsing a PHP source string.
 ///
-/// Returned by [`parse_arena`], [`parse_arena_versioned`], and
+/// Returned by [`parse_arena`], [`parse_arena_with`], and
 /// [`ParserContext::reparse`]. Both the AST and the source text are borrowed,
 /// so this type has two lifetime parameters. Use [`ParseResult`] (from
 /// [`parse`]) when you need an owned, lifetime-free result.
@@ -200,7 +202,48 @@ pub struct ArenaParseResult<'arena, 'src> {
     pub source_map: SourceMap,
 }
 
-/// Parse PHP `source` using the latest supported PHP version (currently 8.5).
+/// Options for [`parse_with`], [`parse_arena_with`] and [`ParserContext::with_options`].
+///
+/// ```
+/// use php_rs_parser::{ParseOptions, PhpVersion};
+///
+/// let options = ParseOptions::default().version(PhpVersion::Php80);
+/// let result = php_rs_parser::parse_with("<?php enum Status {}", &options);
+/// assert!(!result.errors.is_empty()); // enums require PHP 8.1
+/// ```
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive]
+pub struct ParseOptions {
+    /// Target PHP version; newer syntax is parsed but reported as [`ParseError::VersionTooLow`].
+    pub version: PhpVersion,
+    /// Whether to build `result.source_map`; when `false` it is left empty. Defaults to `true`.
+    pub source_map: bool,
+}
+
+impl Default for ParseOptions {
+    fn default() -> Self {
+        Self {
+            version: PhpVersion::default(),
+            source_map: true,
+        }
+    }
+}
+
+impl ParseOptions {
+    /// Sets [`version`](Self::version).
+    pub fn version(mut self, version: PhpVersion) -> Self {
+        self.version = version;
+        self
+    }
+
+    /// Sets [`source_map`](Self::source_map).
+    pub fn source_map(mut self, source_map: bool) -> Self {
+        self.source_map = source_map;
+        self
+    }
+}
+
+/// Parse PHP `source` with the default [`ParseOptions`].
 ///
 /// Returns a fully-owned [`ParseResult`] with no lifetime parameters. The
 /// internal arena is created, used, and converted within this call.
@@ -208,24 +251,16 @@ pub struct ArenaParseResult<'arena, 'src> {
 /// Use [`parse_arena`] when you need the raw arena-allocated AST for maximum
 /// throughput (no allocation copying).
 pub fn parse(source: &str) -> ParseResult {
-    let arena = bumpalo::Bump::new();
-    ParseResult::from_arena_result(parse_arena(&arena, source))
+    parse_with(source, &ParseOptions::default())
 }
 
-/// Parse `source` targeting the given PHP `version`.
-///
-/// Syntax that requires a higher version than `version` is still parsed and
-/// included in the AST, but a [`diagnostics::ParseError::VersionTooLow`] error
-/// is also emitted so callers can report it to the user.
-///
-/// Returns a fully-owned [`ParseResult`]. Use [`parse_arena_versioned`] for the
-/// arena form.
-pub fn parse_versioned(source: &str, version: PhpVersion) -> ParseResult {
+/// Parse PHP `source` with the given `options`, returning a fully-owned [`ParseResult`].
+pub fn parse_with(source: &str, options: &ParseOptions) -> ParseResult {
     let arena = bumpalo::Bump::new();
-    ParseResult::from_arena_result(parse_arena_versioned(&arena, source, version))
+    ParseResult::from_arena_result(parse_arena_with(&arena, source, options))
 }
 
-/// Parse PHP `source` using the latest supported PHP version, returning an
+/// Parse PHP `source` with the default [`ParseOptions`], returning an
 /// arena-allocated [`ArenaParseResult`].
 ///
 /// The `arena` is used for all AST allocations, giving callers control over
@@ -233,50 +268,22 @@ pub fn parse_versioned(source: &str, version: PhpVersion) -> ParseResult {
 /// source string.
 ///
 /// Prefer [`parse`] unless you are managing the arena yourself for performance
-/// reasons (e.g. LSP re-parsing with [`ParserContext`]). Use [`parse_arena_raw`]
-/// when you never need line/column positions from `result.source_map`.
+/// reasons (e.g. LSP re-parsing with [`ParserContext`]).
 pub fn parse_arena<'arena, 'src>(
     arena: &'arena bumpalo::Bump,
     source: &'src str,
 ) -> ArenaParseResult<'arena, 'src> {
-    run_parser(arena, source, PhpVersion::default(), true)
+    parse_arena_with(arena, source, &ParseOptions::default())
 }
 
-/// Like [`parse_arena`], but skips building the [`source_map::SourceMap`].
+/// Parse PHP `source` with the given `options`, returning an arena-allocated
+/// [`ArenaParseResult`].
 ///
-/// `result.source_map` is a no-op empty map. Use this when you only need the
-/// AST and errors — formatters, linters, and batch processors that never call
-/// `source_map.offset_to_line_col` or `source_map.span_to_line_col`.
-pub fn parse_arena_raw<'arena, 'src>(
+/// Spans are `u32`, so a source over 4 GiB yields an empty program and [`ParseError::SourceTooLarge`].
+pub fn parse_arena_with<'arena, 'src>(
     arena: &'arena bumpalo::Bump,
     source: &'src str,
-) -> ArenaParseResult<'arena, 'src> {
-    run_parser(arena, source, PhpVersion::default(), false)
-}
-
-/// Parse `source` targeting the given PHP `version`, returning an
-/// arena-allocated [`ArenaParseResult`].
-///
-/// See [`parse_arena`] for arena lifetime semantics and [`parse_versioned`] for
-/// version-gating behaviour.
-pub fn parse_arena_versioned<'arena, 'src>(
-    arena: &'arena bumpalo::Bump,
-    source: &'src str,
-    version: PhpVersion,
-) -> ArenaParseResult<'arena, 'src> {
-    run_parser(arena, source, version, true)
-}
-
-/// Shared body of the `parse_arena*` functions.
-///
-/// Spans store byte offsets as `u32`, so a source over 4 GiB is rejected up
-/// front with [`ParseError::SourceTooLarge`] and an empty program instead of
-/// being parsed with offsets that would wrap.
-fn run_parser<'arena, 'src>(
-    arena: &'arena bumpalo::Bump,
-    source: &'src str,
-    version: PhpVersion,
-    with_source_map: bool,
+    options: &ParseOptions,
 ) -> ArenaParseResult<'arena, 'src> {
     if source.len() > u32::MAX as usize {
         return ArenaParseResult {
@@ -294,7 +301,7 @@ fn run_parser<'arena, 'src>(
             source_map: SourceMap::empty(),
         };
     }
-    let mut parser = parser::Parser::with_version(arena, source, version);
+    let mut parser = parser::Parser::with_version(arena, source, options.version);
     let program = parser.parse_program();
     let errors_truncated = parser.errors_truncated();
     ArenaParseResult {
@@ -303,7 +310,7 @@ fn run_parser<'arena, 'src>(
         comments: parser.take_comments(),
         errors: parser.into_errors(),
         errors_truncated,
-        source_map: if with_source_map {
+        source_map: if options.source_map {
             SourceMap::new(source)
         } else {
             SourceMap::empty()
@@ -320,11 +327,9 @@ fn run_parser<'arena, 'src>(
 /// any new allocations.
 ///
 /// The Rust lifetime system enforces safety: the returned [`ArenaParseResult`]
-/// borrows from `self`, so the borrow checker prevents calling [`reparse`] or
-/// [`reparse_versioned`] again while the previous result is still alive.
-///
-/// [`reparse`]: ParserContext::reparse
-/// [`reparse_versioned`]: ParserContext::reparse_versioned
+/// borrows from `self`, so the borrow checker prevents calling
+/// [`reparse`](ParserContext::reparse) again while the previous result is
+/// still alive.
 ///
 /// # Example
 ///
@@ -341,17 +346,34 @@ fn run_parser<'arena, 'src>(
 #[derive(Debug)]
 pub struct ParserContext {
     arena: bumpalo::Bump,
+    options: ParseOptions,
 }
 
 impl ParserContext {
-    /// Create a new context with an empty arena.
+    /// Create a new context with an empty arena and the default [`ParseOptions`].
     pub fn new() -> Self {
+        Self::with_options(ParseOptions::default())
+    }
+
+    /// Create a new context with an empty arena that parses with `options`.
+    pub fn with_options(options: ParseOptions) -> Self {
         Self {
             arena: bumpalo::Bump::new(),
+            options,
         }
     }
 
-    /// Reset the arena and parse `source` using PHP 8.5 (the latest version).
+    /// The options used by every reparse.
+    pub fn options(&self) -> &ParseOptions {
+        &self.options
+    }
+
+    /// Replace the options used by later reparses, keeping the arena.
+    pub fn set_options(&mut self, options: ParseOptions) {
+        self.options = options;
+    }
+
+    /// Reset the arena and parse `source`.
     ///
     /// The previous [`ArenaParseResult`] **must be dropped** before calling
     /// this method. The borrow checker enforces this: the returned result
@@ -359,19 +381,7 @@ impl ParserContext {
     /// the first result is still live is a compile-time error.
     pub fn reparse<'a, 'src>(&'a mut self, source: &'src str) -> ArenaParseResult<'a, 'src> {
         self.arena.reset();
-        parse_arena(&self.arena, source)
-    }
-
-    /// Reset the arena and parse `source` targeting the given PHP `version`.
-    ///
-    /// See [`reparse`](ParserContext::reparse) for lifetime safety notes.
-    pub fn reparse_versioned<'a, 'src>(
-        &'a mut self,
-        source: &'src str,
-        version: PhpVersion,
-    ) -> ArenaParseResult<'a, 'src> {
-        self.arena.reset();
-        parse_arena_versioned(&self.arena, source, version)
+        parse_arena_with(&self.arena, source, &self.options)
     }
 
     /// Reset the arena and parse `source`, returning a fully-owned [`ParseResult`].
@@ -382,18 +392,7 @@ impl ParserContext {
     /// there is no borrow on `self` after this call returns.
     pub fn reparse_owned(&mut self, source: &str) -> ParseResult {
         self.arena.reset();
-        ParseResult::from_arena_result(parse_arena(&self.arena, source))
-    }
-
-    /// Reset the arena and parse `source` targeting the given PHP `version`,
-    /// returning a fully-owned [`ParseResult`].
-    ///
-    /// See [`reparse_owned`](ParserContext::reparse_owned) for ownership notes
-    /// and [`reparse_versioned`](ParserContext::reparse_versioned) for version
-    /// semantics.
-    pub fn reparse_owned_versioned(&mut self, source: &str, version: PhpVersion) -> ParseResult {
-        self.arena.reset();
-        ParseResult::from_arena_result(parse_arena_versioned(&self.arena, source, version))
+        ParseResult::from_arena_result(parse_arena_with(&self.arena, source, &self.options))
     }
 }
 

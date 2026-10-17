@@ -52,14 +52,14 @@ let pos = result.source_map.offset_to_line_col(6);
 
 ### Version-aware parsing
 
-The parser targets PHP 8.5 by default. Use `parse_versioned()` to target an earlier version:
+The parser targets PHP 8.5 by default. Use `parse_with()` and `ParseOptions` to target an earlier version:
 
 ```rust
-use php_rs_parser::{parse_versioned, PhpVersion};
+use php_rs_parser::{parse_with, ParseOptions, PhpVersion};
 
-let result = parse_versioned(
+let result = parse_with(
     "<?php enum Status { case Active; }",
-    PhpVersion::Php80,
+    &ParseOptions::default().version(PhpVersion::Php80),
 );
 // Enums require PHP 8.1 — a VersionTooLow diagnostic is emitted.
 assert!(!result.errors.is_empty());
@@ -97,7 +97,7 @@ drop(result); // required before next reparse
 let result = ctx.reparse("<?php echo 2;");
 ```
 
-Versioned forms `reparse_versioned` and `reparse_owned_versioned` are also available.
+Use `ParserContext::with_options()` to parse with non-default `ParseOptions`.
 
 ### Visitor API
 
@@ -244,11 +244,12 @@ let output = php_printer::pretty_print_with_comments(
 );
 ```
 
-Use `parse_arena_raw()` when you only need the AST and errors and never call `source_map.offset_to_line_col` — it skips building the line index:
+Turn off `ParseOptions::source_map` when you only need the AST and errors and never call `source_map.offset_to_line_col` — it skips building the line index:
 
 ```rust
 let arena = bumpalo::Bump::new();
-let result = php_rs_parser::parse_arena_raw(&arena, "<?php echo 1;");
+let options = php_rs_parser::ParseOptions::default().source_map(false);
+let result = php_rs_parser::parse_arena_with(&arena, "<?php echo 1;", &options);
 // result.source_map is a no-op empty map
 ```
 
