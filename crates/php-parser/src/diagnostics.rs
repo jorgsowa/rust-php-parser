@@ -1,3 +1,4 @@
+use crate::PhpVersion;
 use php_ast::Span;
 use std::borrow::Cow;
 use thiserror::Error;
@@ -132,9 +133,9 @@ pub enum ParseError {
         /// Name of the feature used.
         feature: Cow<'static, str>,
         /// Minimum PHP version required.
-        required: Cow<'static, str>,
+        required: PhpVersion,
         /// PHP version targeted.
-        used: Cow<'static, str>,
+        used: PhpVersion,
         /// Source range of the error.
         span: Span,
     },

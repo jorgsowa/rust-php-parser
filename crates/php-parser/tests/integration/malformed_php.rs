@@ -519,3 +519,22 @@ fn errors_truncated_only_when_errors_were_dropped() {
     assert_eq!(over_cap.errors.len(), 100);
     assert!(over_cap.errors_truncated);
 }
+
+#[test]
+fn version_too_low_carries_typed_versions() {
+    use php_rs_parser::PhpVersion;
+    let result = php_rs_parser::parse_versioned("<?php enum E {}", PhpVersion::Php80);
+    let first = result.errors.first().expect("an error");
+    assert!(
+        matches!(
+            first,
+            ParseError::VersionTooLow {
+                required: PhpVersion::Php81,
+                used: PhpVersion::Php80,
+                ..
+            }
+        ),
+        "{first:?}"
+    );
+    assert_eq!(first.to_string(), "'enums' requires PHP 8.1 or higher");
+}

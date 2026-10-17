@@ -210,8 +210,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         if self.version < min {
             self.error(ParseError::VersionTooLow {
                 feature: feature.into(),
-                required: min.to_string().into(),
-                used: self.version.to_string().into(),
+                required: min,
+                used: self.version,
                 span,
             });
         }
