@@ -13,46 +13,57 @@ impl<'src> Printer<'src> {
             self.depth -= 1;
             return;
         }
-        if chain_operand(&expr.kind).is_none() {
-            let my_prec = expr_precedence(&expr.kind);
-            let needs_parens = my_prec < parent_prec && my_prec != PREC_PRIMARY;
-            if needs_parens {
-                self.w("(");
-            }
-            self.print_expr_inner(expr);
+        let needs_parens = self.open_paren(expr, parent_prec);
+        if is_chain(&expr.kind) {
+            self.print_chain_operand(expr);
+        }
+        self.print_expr_inner(expr);
+        if needs_parens {
+            self.w(")");
+        }
+        self.depth -= 1;
+    }
+
+    /// Write `(` if `expr` binds looser than its context requires.
+    #[inline]
+    fn open_paren(&mut self, expr: &Expr, parent_prec: i8) -> bool {
+        let my_prec = expr_precedence(&expr.kind);
+        let needs_parens = my_prec < parent_prec && my_prec != PREC_PRIMARY;
+        if needs_parens {
+            self.w("(");
+        }
+        needs_parens
+    }
+
+    /// Print the chain operand of `expr` (see `chain_operand`), which may itself
+    /// be a chain of any length. Rather than recursing per link, open each
+    /// link's parenthesis on the way down, print the innermost node, then emit
+    /// each link's remainder on the way back up.
+    fn print_chain_operand(&mut self, expr: &Expr) {
+        let (mut node, mut prec) = chain_operand(&expr.kind).expect("chain link has an operand");
+        let needs_parens = self.open_paren(node, prec);
+        if !is_chain(&node.kind) {
+            // A single link, by far the most common chain: no stack needed.
+            self.print_expr_inner(node);
             if needs_parens {
                 self.w(")");
             }
-            self.depth -= 1;
             return;
         }
-        // A chain node prints its chain operand first (see `chain_operand`), so
-        // a chain of any length is printed without recursing per link: open each
-        // link's parenthesis on the way down, print the innermost node, then
-        // emit each link's remainder on the way back up.
         let mut chain = LinkStack::new();
-        let mut node = expr;
-        let mut prec = parent_prec;
+        chain.push((node, needs_parens));
+        (node, prec) = chain_operand(&node.kind).expect("chain link has an operand");
         loop {
-            let my_prec = expr_precedence(&node.kind);
-            let needs_parens = my_prec < prec && my_prec != PREC_PRIMARY;
-            if needs_parens {
-                self.w("(");
-            }
-            match chain_operand(&node.kind) {
-                Some((operand, operand_prec)) => {
-                    chain.push((node, needs_parens));
-                    node = operand;
-                    prec = operand_prec;
+            let needs_parens = self.open_paren(node, prec);
+            if !is_chain(&node.kind) {
+                self.print_expr_inner(node);
+                if needs_parens {
+                    self.w(")");
                 }
-                None => {
-                    self.print_expr_inner(node);
-                    if needs_parens {
-                        self.w(")");
-                    }
-                    break;
-                }
+                break;
             }
+            chain.push((node, needs_parens));
+            (node, prec) = chain_operand(&node.kind).expect("chain link has an operand");
         }
         while let Some((node, needs_parens)) = chain.pop() {
             self.print_expr_inner(node);
@@ -60,7 +71,6 @@ impl<'src> Printer<'src> {
                 self.w(")");
             }
         }
-        self.depth -= 1;
     }
 
     /// Print `expr`, except for its chain operand, which `print_expr` has
@@ -652,6 +662,32 @@ impl<'src> Printer<'src> {
     }
 }
 
+/// Whether `kind` is a chain link; a bit test, cheaper than `chain_operand`.
+#[inline]
+fn is_chain(kind: &ExprKind) -> bool {
+    matches!(
+        kind,
+        ExprKind::Assign(_)
+            | ExprKind::Binary(_)
+            | ExprKind::UnaryPostfix(_)
+            | ExprKind::Ternary(_)
+            | ExprKind::NullCoalesce(_)
+            | ExprKind::FunctionCall(_)
+            | ExprKind::ArrayAccess(_)
+            | ExprKind::PropertyAccess(_)
+            | ExprKind::NullsafePropertyAccess(_)
+            | ExprKind::MethodCall(_)
+            | ExprKind::NullsafeMethodCall(_)
+            | ExprKind::StaticPropertyAccess(_)
+            | ExprKind::ClassConstAccess(_)
+            | ExprKind::StaticMethodCall(_)
+            | ExprKind::StaticDynMethodCall(_)
+            | ExprKind::ClassConstAccessDynamic { .. }
+            | ExprKind::StaticPropertyAccessDynamic { .. }
+            | ExprKind::CallableCreate(_)
+    )
+}
+
 /// A stack of chain links that only allocates for chains longer than its
 /// inline capacity; almost every chain in real code fits.
 struct LinkStack<T: Copy> {
@@ -688,7 +724,7 @@ impl<T: Copy> LinkStack<T> {
 }
 
 /// The operand a chain node prints first, with the precedence it is printed
-/// at. Mirrors the leading `print_expr` call each of these variants made before
+/// at. Must agree with `is_chain`. Mirrors the leading `print_expr` call each of these variants made before
 /// chains were printed iteratively; `print_expr_inner` prints the rest.
 fn chain_operand<'a, 'arena, 'src>(
     kind: &'a ExprKind<'arena, 'src>,

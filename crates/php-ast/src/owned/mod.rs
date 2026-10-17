@@ -703,26 +703,37 @@ pub enum ExprKind {
 // recursion, so their length is limited only by the input. Converting or
 // dropping such a chain one recursive call per link would overflow the stack,
 // so these helpers expose the operand each link continues from and the
-// conversions and `Drop` walk it iteratively. The three functions must list
-// the same variants and fields.
+// conversions and `Drop` walk it iteratively. The `*_is_chain`,
+// `*_chain_operand*` and `*_link_kind` functions must agree on the variants and
+// on which field is the operand.
 // ---------------------------------------------------------------------------
 
 impl Drop for Expr {
+    #[inline(always)]
     fn drop(&mut self) {
-        let Some(operand) = owned_chain_operand_mut(&mut self.kind) else {
-            return;
-        };
-        // A single link drops fine recursively, and most chains are that short.
-        if owned_chain_operand(&operand.kind).is_none() {
-            return;
+        // Only the bit test is inlined into the drop glue of every expression.
+        if owned_is_chain(&self.kind) {
+            unlink_chain(&mut self.kind);
         }
-        // Detach each operand's kind before the node holding it is dropped, so
-        // every drop below only sees a shallow `Error` in the chain position.
-        let mut kind = std::mem::replace(&mut operand.kind, ExprKind::Error);
-        while let Some(operand) = owned_chain_operand_mut(&mut kind) {
-            let next = std::mem::replace(&mut operand.kind, ExprKind::Error);
-            kind = next;
-        }
+    }
+}
+
+/// Detach the chain below the link `kind` so that it is dropped iteratively.
+#[inline(never)]
+fn unlink_chain(kind: &mut ExprKind) {
+    let Some(operand) = owned_chain_operand_mut(kind) else {
+        return;
+    };
+    // A single link drops fine recursively, and most chains are that short.
+    if !owned_is_chain(&operand.kind) {
+        return;
+    }
+    // Detach each operand's kind before the node holding it is dropped, so
+    // every drop below only sees a shallow `Error` in the chain position.
+    let mut kind = std::mem::replace(&mut operand.kind, ExprKind::Error);
+    while let Some(operand) = owned_chain_operand_mut(&mut kind) {
+        let next = std::mem::replace(&mut operand.kind, ExprKind::Error);
+        kind = next;
     }
 }
 
@@ -761,6 +772,60 @@ impl<T: Copy> LinkStack<T> {
     }
 }
 
+/// Whether `k` is a chain node. Cheaper than [`arena_chain_operand`] (a bit
+/// test rather than a jump table), so leaves take the fast path.
+#[inline]
+fn arena_is_chain(k: &arena_ast::ExprKind<'_, '_>) -> bool {
+    matches!(
+        k,
+        arena_ast::ExprKind::Assign(_)
+            | arena_ast::ExprKind::Binary(_)
+            | arena_ast::ExprKind::UnaryPostfix(_)
+            | arena_ast::ExprKind::Ternary(_)
+            | arena_ast::ExprKind::NullCoalesce(_)
+            | arena_ast::ExprKind::FunctionCall(_)
+            | arena_ast::ExprKind::ArrayAccess(_)
+            | arena_ast::ExprKind::PropertyAccess(_)
+            | arena_ast::ExprKind::NullsafePropertyAccess(_)
+            | arena_ast::ExprKind::MethodCall(_)
+            | arena_ast::ExprKind::NullsafeMethodCall(_)
+            | arena_ast::ExprKind::StaticPropertyAccess(_)
+            | arena_ast::ExprKind::ClassConstAccess(_)
+            | arena_ast::ExprKind::StaticMethodCall(_)
+            | arena_ast::ExprKind::StaticDynMethodCall(_)
+            | arena_ast::ExprKind::ClassConstAccessDynamic { .. }
+            | arena_ast::ExprKind::StaticPropertyAccessDynamic { .. }
+            | arena_ast::ExprKind::CallableCreate(_)
+    )
+}
+
+/// Whether `k` is a chain node; see [`arena_is_chain`].
+#[inline]
+fn owned_is_chain(k: &ExprKind) -> bool {
+    matches!(
+        k,
+        ExprKind::Assign(_)
+            | ExprKind::Binary(_)
+            | ExprKind::UnaryPostfix(_)
+            | ExprKind::Ternary(_)
+            | ExprKind::NullCoalesce(_)
+            | ExprKind::FunctionCall(_)
+            | ExprKind::ArrayAccess(_)
+            | ExprKind::PropertyAccess(_)
+            | ExprKind::NullsafePropertyAccess(_)
+            | ExprKind::MethodCall(_)
+            | ExprKind::NullsafeMethodCall(_)
+            | ExprKind::StaticPropertyAccess(_)
+            | ExprKind::ClassConstAccess(_)
+            | ExprKind::StaticMethodCall(_)
+            | ExprKind::StaticDynMethodCall(_)
+            | ExprKind::ClassConstAccessDynamic { .. }
+            | ExprKind::StaticPropertyAccessDynamic { .. }
+            | ExprKind::CallableCreate(_)
+    )
+}
+
+#[inline]
 fn arena_chain_operand<'a, 'arena, 'src>(
     k: &'a arena_ast::ExprKind<'arena, 'src>,
 ) -> Option<&'a arena_ast::Expr<'arena, 'src>> {
@@ -790,6 +855,7 @@ fn arena_chain_operand<'a, 'arena, 'src>(
     }
 }
 
+#[inline]
 fn owned_chain_operand(k: &ExprKind) -> Option<&Expr> {
     use CallableCreateKind as C;
     match k {
@@ -816,6 +882,7 @@ fn owned_chain_operand(k: &ExprKind) -> Option<&Expr> {
     }
 }
 
+#[inline]
 fn owned_chain_operand_mut(k: &mut ExprKind) -> Option<&mut Expr> {
     use CallableCreateKind as C;
     match k {
@@ -1571,6 +1638,7 @@ fn owned_arg(arg: &arena_ast::Arg<'_, '_>) -> Arg {
     }
 }
 
+#[inline(never)]
 fn owned_args(args: &[arena_ast::Arg<'_, '_>]) -> Box<[Arg]> {
     args.iter()
         .map(owned_arg)
@@ -1594,6 +1662,7 @@ fn owned_attrs(attrs: &[arena_ast::Attribute<'_, '_>]) -> Box<[Attribute]> {
         .into_boxed_slice()
 }
 
+#[inline(never)]
 fn owned_string_parts(parts: &[arena_ast::StringPart<'_, '_>]) -> Box<[StringPart]> {
     parts
         .iter()
@@ -1620,15 +1689,33 @@ pub fn to_owned_type_hint(hint: &arena_ast::TypeHint<'_, '_>) -> TypeHint {
     owned_type_hint(hint)
 }
 
+#[inline]
 fn owned_expr(expr: &arena_ast::Expr<'_, '_>) -> Expr {
-    let Some(first) = arena_chain_operand(&expr.kind) else {
+    if !arena_is_chain(&expr.kind) {
         return Expr {
-            kind: owned_expr_kind(&expr.kind, &mut None),
+            kind: owned_leaf_kind(&expr.kind),
             span: expr.span,
         };
-    };
-    // Chains are converted bottom-up from an explicit stack: their length is
-    // set by the input, so recursing once per link could overflow the stack.
+    }
+    owned_chain_expr(expr)
+}
+
+/// Convert a chain bottom-up from an explicit stack: its length is set by the
+/// input, so recursing once per link could overflow the stack.
+#[inline(never)]
+fn owned_chain_expr(expr: &arena_ast::Expr<'_, '_>) -> Expr {
+    let first = arena_chain_operand(&expr.kind).expect("chain link has an operand");
+    if !arena_is_chain(&first.kind) {
+        // A single link, by far the most common chain: no stack needed.
+        let operand = Expr {
+            kind: owned_leaf_kind(&first.kind),
+            span: first.span,
+        };
+        return Expr {
+            kind: owned_link_kind(&expr.kind, operand),
+            span: expr.span,
+        };
+    }
     let mut chain = LinkStack::new();
     chain.push(expr);
     let mut leaf = first;
@@ -1637,25 +1724,19 @@ fn owned_expr(expr: &arena_ast::Expr<'_, '_>) -> Expr {
         leaf = operand;
     }
     let mut converted = Expr {
-        kind: owned_expr_kind(&leaf.kind, &mut None),
+        kind: owned_leaf_kind(&leaf.kind),
         span: leaf.span,
     };
     while let Some(node) = chain.pop() {
-        let mut operand = Some(converted);
         converted = Expr {
-            kind: owned_expr_kind(&node.kind, &mut operand),
+            kind: owned_link_kind(&node.kind, converted),
             span: node.span,
         };
-        debug_assert!(operand.is_none(), "chain operand left unused");
     }
     converted
 }
 
-/// The pre-converted chain operand if there is one, else `expr` converted.
-fn owned_chain(operand: &mut Option<Expr>, expr: &arena_ast::Expr<'_, '_>) -> Expr {
-    operand.take().unwrap_or_else(|| owned_expr(expr))
-}
-
+#[inline(never)]
 fn owned_exprs(exprs: &[arena_ast::Expr<'_, '_>]) -> Box<[Expr]> {
     exprs
         .iter()
@@ -1664,9 +1745,8 @@ fn owned_exprs(exprs: &[arena_ast::Expr<'_, '_>]) -> Box<[Expr]> {
         .into_boxed_slice()
 }
 
-/// `operand` holds the already-converted chain operand when `k` is a chain node
-/// (see [`arena_chain_operand`]).
-fn owned_expr_kind(k: &arena_ast::ExprKind<'_, '_>, operand: &mut Option<Expr>) -> ExprKind {
+/// Convert an expression kind that is not a chain link (see [`arena_chain_operand`]).
+fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
     match k {
         arena_ast::ExprKind::Int(v) => ExprKind::Int(*v),
         arena_ast::ExprKind::Float(v) => ExprKind::Float(*v),
@@ -1690,37 +1770,9 @@ fn owned_expr_kind(k: &arena_ast::ExprKind<'_, '_>, operand: &mut Option<Expr>) 
             ExprKind::VariableVariable(Box::new(owned_expr(inner)))
         }
         arena_ast::ExprKind::Identifier(s) => ExprKind::Identifier(s.as_str().into()),
-        arena_ast::ExprKind::Assign(a) => ExprKind::Assign(AssignExpr {
-            target: Box::new(owned_chain(operand, a.target)),
-            op: a.op,
-            value: Box::new(owned_expr(a.value)),
-            by_ref: a.by_ref,
-        }),
-        arena_ast::ExprKind::Binary(b) => ExprKind::Binary(BinaryExpr {
-            left: Box::new(owned_chain(operand, b.left)),
-            op: b.op,
-            right: Box::new(owned_expr(b.right)),
-        }),
         arena_ast::ExprKind::UnaryPrefix(u) => ExprKind::UnaryPrefix(UnaryPrefixExpr {
             op: u.op,
             operand: Box::new(owned_expr(u.operand)),
-        }),
-        arena_ast::ExprKind::UnaryPostfix(u) => ExprKind::UnaryPostfix(UnaryPostfixExpr {
-            operand: Box::new(owned_chain(operand, u.operand)),
-            op: u.op,
-        }),
-        arena_ast::ExprKind::Ternary(t) => ExprKind::Ternary(TernaryExpr {
-            condition: Box::new(owned_chain(operand, t.condition)),
-            then_expr: t.then_expr.map(|e| Box::new(owned_expr(e))),
-            else_expr: Box::new(owned_expr(t.else_expr)),
-        }),
-        arena_ast::ExprKind::NullCoalesce(n) => ExprKind::NullCoalesce(NullCoalesceExpr {
-            left: Box::new(owned_chain(operand, n.left)),
-            right: Box::new(owned_expr(n.right)),
-        }),
-        arena_ast::ExprKind::FunctionCall(f) => ExprKind::FunctionCall(FunctionCallExpr {
-            name: Box::new(owned_chain(operand, f.name)),
-            args: owned_args(&f.args),
         }),
         arena_ast::ExprKind::Array(elems) => ExprKind::Array(
             elems
@@ -1735,10 +1787,6 @@ fn owned_expr_kind(k: &arena_ast::ExprKind<'_, '_>, operand: &mut Option<Expr>) 
                 .collect::<Vec<_>>()
                 .into_boxed_slice(),
         ),
-        arena_ast::ExprKind::ArrayAccess(a) => ExprKind::ArrayAccess(ArrayAccessExpr {
-            array: Box::new(owned_chain(operand, a.array)),
-            index: a.index.map(|e| Box::new(owned_expr(e))),
-        }),
         arena_ast::ExprKind::Print(e) => ExprKind::Print(Box::new(owned_expr(e))),
         arena_ast::ExprKind::Parenthesized(e) => ExprKind::Parenthesized(Box::new(owned_expr(e))),
         arena_ast::ExprKind::Cast(kind, e) => ExprKind::Cast(*kind, Box::new(owned_expr(e))),
@@ -1757,64 +1805,6 @@ fn owned_expr_kind(k: &arena_ast::ExprKind<'_, '_>, operand: &mut Option<Expr>) 
             class: Box::new(owned_expr(n.class)),
             args: owned_args(&n.args),
         }),
-        arena_ast::ExprKind::PropertyAccess(p) => ExprKind::PropertyAccess(PropertyAccessExpr {
-            object: Box::new(owned_chain(operand, p.object)),
-            property: Box::new(owned_expr(p.property)),
-        }),
-        arena_ast::ExprKind::NullsafePropertyAccess(p) => {
-            ExprKind::NullsafePropertyAccess(PropertyAccessExpr {
-                object: Box::new(owned_chain(operand, p.object)),
-                property: Box::new(owned_expr(p.property)),
-            })
-        }
-        arena_ast::ExprKind::MethodCall(m) => ExprKind::MethodCall(Box::new(MethodCallExpr {
-            object: Box::new(owned_chain(operand, m.object)),
-            method: Box::new(owned_expr(m.method)),
-            args: owned_args(&m.args),
-        })),
-        arena_ast::ExprKind::NullsafeMethodCall(m) => {
-            ExprKind::NullsafeMethodCall(Box::new(MethodCallExpr {
-                object: Box::new(owned_chain(operand, m.object)),
-                method: Box::new(owned_expr(m.method)),
-                args: owned_args(&m.args),
-            }))
-        }
-        arena_ast::ExprKind::StaticPropertyAccess(s) => {
-            ExprKind::StaticPropertyAccess(StaticAccessExpr {
-                class: Box::new(owned_chain(operand, s.class)),
-                member: Box::new(owned_expr(s.member)),
-            })
-        }
-        arena_ast::ExprKind::StaticMethodCall(s) => {
-            ExprKind::StaticMethodCall(Box::new(StaticMethodCallExpr {
-                class: Box::new(owned_chain(operand, s.class)),
-                method: Box::new(owned_expr(s.method)),
-                args: owned_args(&s.args),
-            }))
-        }
-        arena_ast::ExprKind::StaticDynMethodCall(s) => {
-            ExprKind::StaticDynMethodCall(Box::new(StaticDynMethodCallExpr {
-                class: Box::new(owned_chain(operand, s.class)),
-                method: Box::new(owned_expr(s.method)),
-                args: owned_args(&s.args),
-            }))
-        }
-        arena_ast::ExprKind::ClassConstAccess(s) => ExprKind::ClassConstAccess(StaticAccessExpr {
-            class: Box::new(owned_chain(operand, s.class)),
-            member: Box::new(owned_expr(s.member)),
-        }),
-        arena_ast::ExprKind::ClassConstAccessDynamic { class, member } => {
-            ExprKind::ClassConstAccessDynamic {
-                class: Box::new(owned_chain(operand, class)),
-                member: Box::new(owned_expr(member)),
-            }
-        }
-        arena_ast::ExprKind::StaticPropertyAccessDynamic { class, member } => {
-            ExprKind::StaticPropertyAccessDynamic {
-                class: Box::new(owned_chain(operand, class)),
-                member: Box::new(owned_expr(member)),
-            }
-        }
         arena_ast::ExprKind::Closure(c) => ExprKind::Closure(Box::new(ClosureExpr {
             is_static: c.is_static,
             by_ref: c.by_ref,
@@ -1866,33 +1856,150 @@ fn owned_expr_kind(k: &arena_ast::ExprKind<'_, '_>, operand: &mut Option<Expr>) 
         arena_ast::ExprKind::AnonymousClass(cls) => {
             ExprKind::AnonymousClass(Box::new(owned_class_decl(cls)))
         }
+        arena_ast::ExprKind::Omit => ExprKind::Omit,
+        arena_ast::ExprKind::Error => ExprKind::Error,
+        arena_ast::ExprKind::Assign(_)
+        | arena_ast::ExprKind::Binary(_)
+        | arena_ast::ExprKind::UnaryPostfix(_)
+        | arena_ast::ExprKind::Ternary(_)
+        | arena_ast::ExprKind::NullCoalesce(_)
+        | arena_ast::ExprKind::FunctionCall(_)
+        | arena_ast::ExprKind::ArrayAccess(_)
+        | arena_ast::ExprKind::PropertyAccess(_)
+        | arena_ast::ExprKind::NullsafePropertyAccess(_)
+        | arena_ast::ExprKind::MethodCall(_)
+        | arena_ast::ExprKind::NullsafeMethodCall(_)
+        | arena_ast::ExprKind::StaticPropertyAccess(_)
+        | arena_ast::ExprKind::ClassConstAccess(_)
+        | arena_ast::ExprKind::StaticMethodCall(_)
+        | arena_ast::ExprKind::StaticDynMethodCall(_)
+        | arena_ast::ExprKind::ClassConstAccessDynamic { .. }
+        | arena_ast::ExprKind::StaticPropertyAccessDynamic { .. }
+        | arena_ast::ExprKind::CallableCreate(_) => {
+            unreachable!("chain links are converted by the link function")
+        }
+    }
+}
+
+/// Convert a chain link, given its already-converted chain operand.
+fn owned_link_kind(k: &arena_ast::ExprKind<'_, '_>, operand: Expr) -> ExprKind {
+    match k {
+        arena_ast::ExprKind::Assign(a) => ExprKind::Assign(AssignExpr {
+            target: Box::new(operand),
+            op: a.op,
+            value: Box::new(owned_expr(a.value)),
+            by_ref: a.by_ref,
+        }),
+        arena_ast::ExprKind::Binary(b) => ExprKind::Binary(BinaryExpr {
+            left: Box::new(operand),
+            op: b.op,
+            right: Box::new(owned_expr(b.right)),
+        }),
+        arena_ast::ExprKind::UnaryPostfix(u) => ExprKind::UnaryPostfix(UnaryPostfixExpr {
+            operand: Box::new(operand),
+            op: u.op,
+        }),
+        arena_ast::ExprKind::Ternary(t) => ExprKind::Ternary(TernaryExpr {
+            condition: Box::new(operand),
+            then_expr: t.then_expr.map(|e| Box::new(owned_expr(e))),
+            else_expr: Box::new(owned_expr(t.else_expr)),
+        }),
+        arena_ast::ExprKind::NullCoalesce(n) => ExprKind::NullCoalesce(NullCoalesceExpr {
+            left: Box::new(operand),
+            right: Box::new(owned_expr(n.right)),
+        }),
+        arena_ast::ExprKind::FunctionCall(f) => ExprKind::FunctionCall(FunctionCallExpr {
+            name: Box::new(operand),
+            args: owned_args(&f.args),
+        }),
+        arena_ast::ExprKind::ArrayAccess(a) => ExprKind::ArrayAccess(ArrayAccessExpr {
+            array: Box::new(operand),
+            index: a.index.map(|e| Box::new(owned_expr(e))),
+        }),
+        arena_ast::ExprKind::PropertyAccess(p) => ExprKind::PropertyAccess(PropertyAccessExpr {
+            object: Box::new(operand),
+            property: Box::new(owned_expr(p.property)),
+        }),
+        arena_ast::ExprKind::NullsafePropertyAccess(p) => {
+            ExprKind::NullsafePropertyAccess(PropertyAccessExpr {
+                object: Box::new(operand),
+                property: Box::new(owned_expr(p.property)),
+            })
+        }
+        arena_ast::ExprKind::MethodCall(m) => ExprKind::MethodCall(Box::new(MethodCallExpr {
+            object: Box::new(operand),
+            method: Box::new(owned_expr(m.method)),
+            args: owned_args(&m.args),
+        })),
+        arena_ast::ExprKind::NullsafeMethodCall(m) => {
+            ExprKind::NullsafeMethodCall(Box::new(MethodCallExpr {
+                object: Box::new(operand),
+                method: Box::new(owned_expr(m.method)),
+                args: owned_args(&m.args),
+            }))
+        }
+        arena_ast::ExprKind::StaticPropertyAccess(s) => {
+            ExprKind::StaticPropertyAccess(StaticAccessExpr {
+                class: Box::new(operand),
+                member: Box::new(owned_expr(s.member)),
+            })
+        }
+        arena_ast::ExprKind::StaticMethodCall(s) => {
+            ExprKind::StaticMethodCall(Box::new(StaticMethodCallExpr {
+                class: Box::new(operand),
+                method: Box::new(owned_expr(s.method)),
+                args: owned_args(&s.args),
+            }))
+        }
+        arena_ast::ExprKind::StaticDynMethodCall(s) => {
+            ExprKind::StaticDynMethodCall(Box::new(StaticDynMethodCallExpr {
+                class: Box::new(operand),
+                method: Box::new(owned_expr(s.method)),
+                args: owned_args(&s.args),
+            }))
+        }
+        arena_ast::ExprKind::ClassConstAccess(s) => ExprKind::ClassConstAccess(StaticAccessExpr {
+            class: Box::new(operand),
+            member: Box::new(owned_expr(s.member)),
+        }),
+        arena_ast::ExprKind::ClassConstAccessDynamic { member, .. } => {
+            ExprKind::ClassConstAccessDynamic {
+                class: Box::new(operand),
+                member: Box::new(owned_expr(member)),
+            }
+        }
+        arena_ast::ExprKind::StaticPropertyAccessDynamic { member, .. } => {
+            ExprKind::StaticPropertyAccessDynamic {
+                class: Box::new(operand),
+                member: Box::new(owned_expr(member)),
+            }
+        }
         arena_ast::ExprKind::CallableCreate(c) => ExprKind::CallableCreate(CallableCreateExpr {
             kind: match &c.kind {
-                arena_ast::CallableCreateKind::Function(e) => {
-                    CallableCreateKind::Function(Box::new(owned_chain(operand, e)))
+                arena_ast::CallableCreateKind::Function(_) => {
+                    CallableCreateKind::Function(Box::new(operand))
                 }
-                arena_ast::CallableCreateKind::Method { object, method } => {
+                arena_ast::CallableCreateKind::Method { method, .. } => {
                     CallableCreateKind::Method {
-                        object: Box::new(owned_chain(operand, object)),
+                        object: Box::new(operand),
                         method: Box::new(owned_expr(method)),
                     }
                 }
-                arena_ast::CallableCreateKind::NullsafeMethod { object, method } => {
+                arena_ast::CallableCreateKind::NullsafeMethod { method, .. } => {
                     CallableCreateKind::NullsafeMethod {
-                        object: Box::new(owned_chain(operand, object)),
+                        object: Box::new(operand),
                         method: Box::new(owned_expr(method)),
                     }
                 }
-                arena_ast::CallableCreateKind::StaticMethod { class, method } => {
+                arena_ast::CallableCreateKind::StaticMethod { method, .. } => {
                     CallableCreateKind::StaticMethod {
-                        class: Box::new(owned_chain(operand, class)),
+                        class: Box::new(operand),
                         method: Box::new(owned_expr(method)),
                     }
                 }
             },
         }),
-        arena_ast::ExprKind::Omit => ExprKind::Omit,
-        arena_ast::ExprKind::Error => ExprKind::Error,
+        _ => unreachable!("not a chain link"),
     }
 }
 
@@ -1914,6 +2021,7 @@ fn owned_param(p: &arena_ast::Param<'_, '_>) -> Param {
     }
 }
 
+#[inline(never)]
 fn owned_params(params: &[arena_ast::Param<'_, '_>]) -> Box<[Param]> {
     params
         .iter()
@@ -1942,6 +2050,7 @@ fn owned_hook(h: &arena_ast::PropertyHook<'_, '_>) -> PropertyHook {
     }
 }
 
+#[inline(never)]
 fn owned_hooks(hooks: &[arena_ast::PropertyHook<'_, '_>]) -> Box<[PropertyHook]> {
     hooks
         .iter()
@@ -2476,6 +2585,7 @@ fn av_arg<'a>(arena: &'a bumpalo::Bump, arg: &Arg) -> arena_ast::Arg<'a, 'a> {
     }
 }
 
+#[inline(never)]
 fn av_args<'a>(
     arena: &'a bumpalo::Bump,
     args: &[Arg],
@@ -2495,6 +2605,7 @@ fn av_attr<'a>(arena: &'a bumpalo::Bump, attr: &Attribute) -> arena_ast::Attribu
     }
 }
 
+#[inline(never)]
 fn av_attrs<'a>(
     arena: &'a bumpalo::Bump,
     attrs: &[Attribute],
@@ -2536,13 +2647,29 @@ fn av_string_parts<'a>(
 }
 
 fn av_expr<'a>(arena: &'a bumpalo::Bump, expr: &Expr) -> arena_ast::Expr<'a, 'a> {
-    let Some(first) = owned_chain_operand(&expr.kind) else {
+    if !owned_is_chain(&expr.kind) {
         return arena_ast::Expr {
-            kind: av_expr_kind(arena, &expr.kind, &mut None),
+            kind: av_leaf_kind(arena, &expr.kind),
             span: expr.span,
         };
-    };
-    // Bottom-up over an explicit stack, as in `owned_expr`.
+    }
+    av_chain_expr(arena, expr)
+}
+
+/// Bottom-up over an explicit stack, as in `owned_chain_expr`.
+#[inline(never)]
+fn av_chain_expr<'a>(arena: &'a bumpalo::Bump, expr: &Expr) -> arena_ast::Expr<'a, 'a> {
+    let first = owned_chain_operand(&expr.kind).expect("chain link has an operand");
+    if !owned_is_chain(&first.kind) {
+        let operand = arena_ast::Expr {
+            kind: av_leaf_kind(arena, &first.kind),
+            span: first.span,
+        };
+        return arena_ast::Expr {
+            kind: av_link_kind(arena, &expr.kind, operand),
+            span: expr.span,
+        };
+    }
     let mut chain = LinkStack::new();
     chain.push(expr);
     let mut leaf = first;
@@ -2551,29 +2678,19 @@ fn av_expr<'a>(arena: &'a bumpalo::Bump, expr: &Expr) -> arena_ast::Expr<'a, 'a>
         leaf = operand;
     }
     let mut converted = arena_ast::Expr {
-        kind: av_expr_kind(arena, &leaf.kind, &mut None),
+        kind: av_leaf_kind(arena, &leaf.kind),
         span: leaf.span,
     };
     while let Some(node) = chain.pop() {
-        let mut operand = Some(converted);
         converted = arena_ast::Expr {
-            kind: av_expr_kind(arena, &node.kind, &mut operand),
+            kind: av_link_kind(arena, &node.kind, converted),
             span: node.span,
         };
-        debug_assert!(operand.is_none(), "chain operand left unused");
     }
     converted
 }
 
-/// The pre-converted chain operand if there is one, else `expr` converted.
-fn av_chain<'a>(
-    arena: &'a bumpalo::Bump,
-    operand: &mut Option<arena_ast::Expr<'a, 'a>>,
-    expr: &Expr,
-) -> arena_ast::Expr<'a, 'a> {
-    operand.take().unwrap_or_else(|| av_expr(arena, expr))
-}
-
+#[inline(never)]
 fn av_exprs<'a>(
     arena: &'a bumpalo::Bump,
     exprs: &[Expr],
@@ -2589,13 +2706,8 @@ fn av_namestr<'a>(arena: &'a bumpalo::Bump, s: &str) -> arena_ast::NameStr<'a, '
     arena_ast::NameStr::__arena(arena.alloc_str(s))
 }
 
-/// `operand` holds the already-converted chain operand when `k` is a chain node
-/// (see [`owned_chain_operand`]).
-fn av_expr_kind<'a>(
-    arena: &'a bumpalo::Bump,
-    k: &ExprKind,
-    operand: &mut Option<arena_ast::Expr<'a, 'a>>,
-) -> arena_ast::ExprKind<'a, 'a> {
+/// Convert an expression kind that is not a chain link (see [`owned_chain_operand`]).
+fn av_leaf_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKind<'a, 'a> {
     match k {
         ExprKind::Int(v) => arena_ast::ExprKind::Int(*v),
         ExprKind::Float(v) => arena_ast::ExprKind::Float(*v),
@@ -2619,47 +2731,10 @@ fn av_expr_kind<'a>(
             arena_ast::ExprKind::VariableVariable(arena.alloc(av_expr(arena, inner)))
         }
         ExprKind::Identifier(s) => arena_ast::ExprKind::Identifier(av_namestr(arena, s)),
-        ExprKind::Assign(a) => arena_ast::ExprKind::Assign(arena_ast::AssignExpr {
-            target: arena.alloc(av_chain(arena, operand, &a.target)),
-            op: a.op,
-            value: arena.alloc(av_expr(arena, &a.value)),
-            by_ref: a.by_ref,
-        }),
-        ExprKind::Binary(b) => arena_ast::ExprKind::Binary(arena_ast::BinaryExpr {
-            left: arena.alloc(av_chain(arena, operand, &b.left)),
-            op: b.op,
-            right: arena.alloc(av_expr(arena, &b.right)),
-        }),
         ExprKind::UnaryPrefix(u) => arena_ast::ExprKind::UnaryPrefix(arena_ast::UnaryPrefixExpr {
             op: u.op,
             operand: arena.alloc(av_expr(arena, &u.operand)),
         }),
-        ExprKind::UnaryPostfix(u) => {
-            arena_ast::ExprKind::UnaryPostfix(arena_ast::UnaryPostfixExpr {
-                operand: arena.alloc(av_chain(arena, operand, &u.operand)),
-                op: u.op,
-            })
-        }
-        ExprKind::Ternary(t) => arena_ast::ExprKind::Ternary(arena_ast::TernaryExpr {
-            condition: arena.alloc(av_chain(arena, operand, &t.condition)),
-            then_expr: t
-                .then_expr
-                .as_ref()
-                .map(|e| &*arena.alloc(av_expr(arena, e))),
-            else_expr: arena.alloc(av_expr(arena, &t.else_expr)),
-        }),
-        ExprKind::NullCoalesce(n) => {
-            arena_ast::ExprKind::NullCoalesce(arena_ast::NullCoalesceExpr {
-                left: arena.alloc(av_chain(arena, operand, &n.left)),
-                right: arena.alloc(av_expr(arena, &n.right)),
-            })
-        }
-        ExprKind::FunctionCall(f) => {
-            arena_ast::ExprKind::FunctionCall(arena_ast::FunctionCallExpr {
-                name: arena.alloc(av_chain(arena, operand, &f.name)),
-                args: av_args(arena, &f.args),
-            })
-        }
         ExprKind::Array(elems) => {
             let mut v = arena_ast::ArenaVec::with_capacity_in(elems.len(), arena);
             for e in elems.iter() {
@@ -2673,10 +2748,6 @@ fn av_expr_kind<'a>(
             }
             arena_ast::ExprKind::Array(v)
         }
-        ExprKind::ArrayAccess(a) => arena_ast::ExprKind::ArrayAccess(arena_ast::ArrayAccessExpr {
-            array: arena.alloc(av_chain(arena, operand, &a.array)),
-            index: a.index.as_ref().map(|e| &*arena.alloc(av_expr(arena, e))),
-        }),
         ExprKind::Print(e) => arena_ast::ExprKind::Print(arena.alloc(av_expr(arena, e))),
         ExprKind::Parenthesized(e) => {
             arena_ast::ExprKind::Parenthesized(arena.alloc(av_expr(arena, e)))
@@ -2704,70 +2775,6 @@ fn av_expr_kind<'a>(
             class: arena.alloc(av_expr(arena, &n.class)),
             args: av_args(arena, &n.args),
         }),
-        ExprKind::PropertyAccess(p) => {
-            arena_ast::ExprKind::PropertyAccess(arena_ast::PropertyAccessExpr {
-                object: arena.alloc(av_chain(arena, operand, &p.object)),
-                property: arena.alloc(av_expr(arena, &p.property)),
-            })
-        }
-        ExprKind::NullsafePropertyAccess(p) => {
-            arena_ast::ExprKind::NullsafePropertyAccess(arena_ast::PropertyAccessExpr {
-                object: arena.alloc(av_chain(arena, operand, &p.object)),
-                property: arena.alloc(av_expr(arena, &p.property)),
-            })
-        }
-        ExprKind::MethodCall(m) => {
-            arena_ast::ExprKind::MethodCall(arena.alloc(arena_ast::MethodCallExpr {
-                object: arena.alloc(av_chain(arena, operand, &m.object)),
-                method: arena.alloc(av_expr(arena, &m.method)),
-                args: av_args(arena, &m.args),
-            }))
-        }
-        ExprKind::NullsafeMethodCall(m) => {
-            arena_ast::ExprKind::NullsafeMethodCall(arena.alloc(arena_ast::MethodCallExpr {
-                object: arena.alloc(av_chain(arena, operand, &m.object)),
-                method: arena.alloc(av_expr(arena, &m.method)),
-                args: av_args(arena, &m.args),
-            }))
-        }
-        ExprKind::StaticPropertyAccess(s) => {
-            arena_ast::ExprKind::StaticPropertyAccess(arena_ast::StaticAccessExpr {
-                class: arena.alloc(av_chain(arena, operand, &s.class)),
-                member: arena.alloc(av_expr(arena, &s.member)),
-            })
-        }
-        ExprKind::StaticMethodCall(s) => {
-            arena_ast::ExprKind::StaticMethodCall(arena.alloc(arena_ast::StaticMethodCallExpr {
-                class: arena.alloc(av_chain(arena, operand, &s.class)),
-                method: arena.alloc(av_expr(arena, &s.method)),
-                args: av_args(arena, &s.args),
-            }))
-        }
-        ExprKind::StaticDynMethodCall(s) => arena_ast::ExprKind::StaticDynMethodCall(arena.alloc(
-            arena_ast::StaticDynMethodCallExpr {
-                class: arena.alloc(av_chain(arena, operand, &s.class)),
-                method: arena.alloc(av_expr(arena, &s.method)),
-                args: av_args(arena, &s.args),
-            },
-        )),
-        ExprKind::ClassConstAccess(s) => {
-            arena_ast::ExprKind::ClassConstAccess(arena_ast::StaticAccessExpr {
-                class: arena.alloc(av_chain(arena, operand, &s.class)),
-                member: arena.alloc(av_expr(arena, &s.member)),
-            })
-        }
-        ExprKind::ClassConstAccessDynamic { class, member } => {
-            arena_ast::ExprKind::ClassConstAccessDynamic {
-                class: arena.alloc(av_chain(arena, operand, class)),
-                member: arena.alloc(av_expr(arena, member)),
-            }
-        }
-        ExprKind::StaticPropertyAccessDynamic { class, member } => {
-            arena_ast::ExprKind::StaticPropertyAccessDynamic {
-                class: arena.alloc(av_chain(arena, operand, class)),
-                member: arena.alloc(av_expr(arena, member)),
-            }
-        }
         ExprKind::Closure(c) => arena_ast::ExprKind::Closure(arena.alloc(arena_ast::ClosureExpr {
             is_static: c.is_static,
             by_ref: c.by_ref,
@@ -2821,35 +2828,171 @@ fn av_expr_kind<'a>(
         ExprKind::AnonymousClass(cls) => {
             arena_ast::ExprKind::AnonymousClass(arena.alloc(av_class_decl(arena, cls)))
         }
+        ExprKind::Omit => arena_ast::ExprKind::Omit,
+        ExprKind::Error => arena_ast::ExprKind::Error,
+        ExprKind::Assign(_)
+        | ExprKind::Binary(_)
+        | ExprKind::UnaryPostfix(_)
+        | ExprKind::Ternary(_)
+        | ExprKind::NullCoalesce(_)
+        | ExprKind::FunctionCall(_)
+        | ExprKind::ArrayAccess(_)
+        | ExprKind::PropertyAccess(_)
+        | ExprKind::NullsafePropertyAccess(_)
+        | ExprKind::MethodCall(_)
+        | ExprKind::NullsafeMethodCall(_)
+        | ExprKind::StaticPropertyAccess(_)
+        | ExprKind::ClassConstAccess(_)
+        | ExprKind::StaticMethodCall(_)
+        | ExprKind::StaticDynMethodCall(_)
+        | ExprKind::ClassConstAccessDynamic { .. }
+        | ExprKind::StaticPropertyAccessDynamic { .. }
+        | ExprKind::CallableCreate(_) => {
+            unreachable!("chain links are converted by the link function")
+        }
+    }
+}
+
+/// Convert a chain link, given its already-converted chain operand.
+fn av_link_kind<'a>(
+    arena: &'a bumpalo::Bump,
+    k: &ExprKind,
+    operand: arena_ast::Expr<'a, 'a>,
+) -> arena_ast::ExprKind<'a, 'a> {
+    match k {
+        ExprKind::Assign(a) => arena_ast::ExprKind::Assign(arena_ast::AssignExpr {
+            target: arena.alloc(operand),
+            op: a.op,
+            value: arena.alloc(av_expr(arena, &a.value)),
+            by_ref: a.by_ref,
+        }),
+        ExprKind::Binary(b) => arena_ast::ExprKind::Binary(arena_ast::BinaryExpr {
+            left: arena.alloc(operand),
+            op: b.op,
+            right: arena.alloc(av_expr(arena, &b.right)),
+        }),
+        ExprKind::UnaryPostfix(u) => {
+            arena_ast::ExprKind::UnaryPostfix(arena_ast::UnaryPostfixExpr {
+                operand: arena.alloc(operand),
+                op: u.op,
+            })
+        }
+        ExprKind::Ternary(t) => arena_ast::ExprKind::Ternary(arena_ast::TernaryExpr {
+            condition: arena.alloc(operand),
+            then_expr: t
+                .then_expr
+                .as_ref()
+                .map(|e| &*arena.alloc(av_expr(arena, e))),
+            else_expr: arena.alloc(av_expr(arena, &t.else_expr)),
+        }),
+        ExprKind::NullCoalesce(n) => {
+            arena_ast::ExprKind::NullCoalesce(arena_ast::NullCoalesceExpr {
+                left: arena.alloc(operand),
+                right: arena.alloc(av_expr(arena, &n.right)),
+            })
+        }
+        ExprKind::FunctionCall(f) => {
+            arena_ast::ExprKind::FunctionCall(arena_ast::FunctionCallExpr {
+                name: arena.alloc(operand),
+                args: av_args(arena, &f.args),
+            })
+        }
+        ExprKind::ArrayAccess(a) => arena_ast::ExprKind::ArrayAccess(arena_ast::ArrayAccessExpr {
+            array: arena.alloc(operand),
+            index: a.index.as_ref().map(|e| &*arena.alloc(av_expr(arena, e))),
+        }),
+        ExprKind::PropertyAccess(p) => {
+            arena_ast::ExprKind::PropertyAccess(arena_ast::PropertyAccessExpr {
+                object: arena.alloc(operand),
+                property: arena.alloc(av_expr(arena, &p.property)),
+            })
+        }
+        ExprKind::NullsafePropertyAccess(p) => {
+            arena_ast::ExprKind::NullsafePropertyAccess(arena_ast::PropertyAccessExpr {
+                object: arena.alloc(operand),
+                property: arena.alloc(av_expr(arena, &p.property)),
+            })
+        }
+        ExprKind::MethodCall(m) => {
+            arena_ast::ExprKind::MethodCall(arena.alloc(arena_ast::MethodCallExpr {
+                object: arena.alloc(operand),
+                method: arena.alloc(av_expr(arena, &m.method)),
+                args: av_args(arena, &m.args),
+            }))
+        }
+        ExprKind::NullsafeMethodCall(m) => {
+            arena_ast::ExprKind::NullsafeMethodCall(arena.alloc(arena_ast::MethodCallExpr {
+                object: arena.alloc(operand),
+                method: arena.alloc(av_expr(arena, &m.method)),
+                args: av_args(arena, &m.args),
+            }))
+        }
+        ExprKind::StaticPropertyAccess(s) => {
+            arena_ast::ExprKind::StaticPropertyAccess(arena_ast::StaticAccessExpr {
+                class: arena.alloc(operand),
+                member: arena.alloc(av_expr(arena, &s.member)),
+            })
+        }
+        ExprKind::StaticMethodCall(s) => {
+            arena_ast::ExprKind::StaticMethodCall(arena.alloc(arena_ast::StaticMethodCallExpr {
+                class: arena.alloc(operand),
+                method: arena.alloc(av_expr(arena, &s.method)),
+                args: av_args(arena, &s.args),
+            }))
+        }
+        ExprKind::StaticDynMethodCall(s) => arena_ast::ExprKind::StaticDynMethodCall(arena.alloc(
+            arena_ast::StaticDynMethodCallExpr {
+                class: arena.alloc(operand),
+                method: arena.alloc(av_expr(arena, &s.method)),
+                args: av_args(arena, &s.args),
+            },
+        )),
+        ExprKind::ClassConstAccess(s) => {
+            arena_ast::ExprKind::ClassConstAccess(arena_ast::StaticAccessExpr {
+                class: arena.alloc(operand),
+                member: arena.alloc(av_expr(arena, &s.member)),
+            })
+        }
+        ExprKind::ClassConstAccessDynamic { member, .. } => {
+            arena_ast::ExprKind::ClassConstAccessDynamic {
+                class: arena.alloc(operand),
+                member: arena.alloc(av_expr(arena, member)),
+            }
+        }
+        ExprKind::StaticPropertyAccessDynamic { member, .. } => {
+            arena_ast::ExprKind::StaticPropertyAccessDynamic {
+                class: arena.alloc(operand),
+                member: arena.alloc(av_expr(arena, member)),
+            }
+        }
         ExprKind::CallableCreate(c) => {
             arena_ast::ExprKind::CallableCreate(arena_ast::CallableCreateExpr {
                 kind: match &c.kind {
-                    CallableCreateKind::Function(e) => arena_ast::CallableCreateKind::Function(
-                        arena.alloc(av_chain(arena, operand, e)),
-                    ),
-                    CallableCreateKind::Method { object, method } => {
+                    CallableCreateKind::Function(_) => {
+                        arena_ast::CallableCreateKind::Function(arena.alloc(operand))
+                    }
+                    CallableCreateKind::Method { method, .. } => {
                         arena_ast::CallableCreateKind::Method {
-                            object: arena.alloc(av_chain(arena, operand, object)),
+                            object: arena.alloc(operand),
                             method: arena.alloc(av_expr(arena, method)),
                         }
                     }
-                    CallableCreateKind::NullsafeMethod { object, method } => {
+                    CallableCreateKind::NullsafeMethod { method, .. } => {
                         arena_ast::CallableCreateKind::NullsafeMethod {
-                            object: arena.alloc(av_chain(arena, operand, object)),
+                            object: arena.alloc(operand),
                             method: arena.alloc(av_expr(arena, method)),
                         }
                     }
-                    CallableCreateKind::StaticMethod { class, method } => {
+                    CallableCreateKind::StaticMethod { method, .. } => {
                         arena_ast::CallableCreateKind::StaticMethod {
-                            class: arena.alloc(av_chain(arena, operand, class)),
+                            class: arena.alloc(operand),
                             method: arena.alloc(av_expr(arena, method)),
                         }
                     }
                 },
             })
         }
-        ExprKind::Omit => arena_ast::ExprKind::Omit,
-        ExprKind::Error => arena_ast::ExprKind::Error,
+        _ => unreachable!("not a chain link"),
     }
 }
 
@@ -2871,6 +3014,7 @@ fn av_param<'a>(arena: &'a bumpalo::Bump, p: &Param) -> arena_ast::Param<'a, 'a>
     }
 }
 
+#[inline(never)]
 fn av_params<'a>(
     arena: &'a bumpalo::Bump,
     params: &[Param],
