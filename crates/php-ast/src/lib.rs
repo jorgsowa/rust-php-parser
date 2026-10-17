@@ -45,3 +45,7 @@ pub mod visitor;
 
 pub use ast::*;
 pub use span::Span;
+
+/// The arena allocator behind [`ArenaVec`] and [`fold::Fold`], re-exported so
+/// callers use the same version.
+pub use bumpalo;

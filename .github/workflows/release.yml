@@ -100,9 +100,28 @@ jobs:
       - name: Validate printer output with php -l
         run: ./scripts/validate-printer-output.sh
 
+  semver:
+    name: Semver
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2.9.2
+
+      - uses: taiki-e/install-action@v2.87.29
+        with:
+          tool: cargo-semver-checks
+
+      # Fails when the new version is too small a bump over the latest
+      # crates.io release for the API changes it contains.
+      - name: Check semver against crates.io
+        run: cargo semver-checks --workspace --exclude php-wasm --exclude ast-stats
+
   publish:
     name: Publish to crates.io
-    needs: [lint, test, printer]
+    needs: [lint, test, printer, semver]
     runs-on: ubuntu-latest
     environment: crates-io
     steps:

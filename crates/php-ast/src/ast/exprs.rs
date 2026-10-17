@@ -13,6 +13,10 @@ enum NameStrInner<'arena, 'src> {
 /// A name string from either the source buffer or the bump arena. Use [`as_str`](NameStr::as_str)
 /// or `Deref` to get the string value — the allocation origin is an internal parser detail.
 ///
+/// Build one with [`NameStr::new_in`], or move one into another arena with
+/// [`fold_name_str`](crate::fold::fold_name_str). The hidden `__*` constructors
+/// and accessors exist for the parser and are not part of the stable API.
+///
 /// Using this as the payload for both `ExprKind::Variable` and `ExprKind::Identifier`
 /// gives them the same binding type, so or-patterns compile natively:
 ///
@@ -28,6 +32,11 @@ enum NameStrInner<'arena, 'src> {
 pub struct NameStr<'arena, 'src>(NameStrInner<'arena, 'src>);
 
 impl<'arena, 'src> NameStr<'arena, 'src> {
+    /// Copies `s` into `arena`.
+    pub fn new_in(arena: &'arena bumpalo::Bump, s: &str) -> Self {
+        Self(NameStrInner::Arena(arena.alloc_str(s)))
+    }
+
     /// Borrowed directly from the source buffer.
     #[doc(hidden)]
     #[inline]

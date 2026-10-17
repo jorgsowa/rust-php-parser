@@ -1269,7 +1269,9 @@ fn fold_string_parts<'new, 'src, F: Fold<'src> + ?Sized>(
 // Private helpers — leaf types
 // =============================================================================
 
-/// Copies a name string into the new arena.
+/// Moves a [`NameStr`] into the output arena of a fold: a string borrowed from
+/// the source stays borrowed, an arena string is copied into `arena`. Use it
+/// when overriding a fold method that rebuilds names, variables or strings.
 pub fn fold_name_str<'new, 'src>(
     name: NameStr<'_, 'src>,
     arena: &'new Bump,

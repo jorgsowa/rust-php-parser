@@ -40,3 +40,15 @@ instrument = []
 [[bench]]
 name = "parse"
 harness = false
+
+[[example]]
+name = "profile_array_parsing"
+required-features = ["instrument"]
+
+[[example]]
+name = "profile_corpus"
+required-features = ["instrument"]
+
+[[example]]
+name = "profile_statements"
+required-features = ["instrument"]

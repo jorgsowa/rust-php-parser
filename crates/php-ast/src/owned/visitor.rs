@@ -915,6 +915,14 @@ pub trait OwnedScopeVisitor {
     ) -> ControlFlow<()> {
         ControlFlow::Continue(())
     }
+    /// Called for each block with its enclosing scope.
+    fn visit_block(&mut self, _block: &Block, _scope: &OwnedScope) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
+    /// Called for each name reference with its enclosing scope.
+    fn visit_name(&mut self, _name: &Name, _scope: &OwnedScope) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
     /// Called for each comment with its enclosing scope.
     fn visit_comment(&mut self, _comment: &Comment, _scope: &OwnedScope) -> ControlFlow<()> {
         ControlFlow::Continue(())
@@ -1143,6 +1151,15 @@ impl<V: OwnedScopeVisitor> OwnedVisitor for OwnedScopeWalker<V> {
 
     fn visit_trait_adaptation(&mut self, adaptation: &TraitAdaptation) -> ControlFlow<()> {
         self.inner.visit_trait_adaptation(adaptation, &self.scope)
+    }
+
+    fn visit_block(&mut self, block: &Block) -> ControlFlow<()> {
+        self.inner.visit_block(block, &self.scope)?;
+        walk_owned_block(self, block)
+    }
+
+    fn visit_name(&mut self, name: &Name) -> ControlFlow<()> {
+        self.inner.visit_name(name, &self.scope)
     }
 
     fn visit_comment(&mut self, comment: &Comment) -> ControlFlow<()> {

@@ -990,3 +990,141 @@ fn name_resolver_resolves_class_extends() {
         },
     );
 }
+
+// =============================================================================
+// Scope visitors see names and blocks, like the plain visitors
+// =============================================================================
+
+#[test]
+fn scope_visitor_visits_names_and_blocks_with_scope() {
+    #[derive(Default)]
+    struct Collector {
+        names: Vec<(String, Option<String>)>,
+        blocks_in: Vec<Option<String>>,
+    }
+    impl<'arena, 'src> ScopeVisitor<'arena, 'src> for Collector {
+        fn visit_name(
+            &mut self,
+            name: &Name<'arena, 'src>,
+            scope: &Scope<'src>,
+        ) -> ControlFlow<()> {
+            self.names.push((
+                name.to_string_repr().into_owned(),
+                scope.class_name.map(str::to_owned),
+            ));
+            ControlFlow::Continue(())
+        }
+        fn visit_block(
+            &mut self,
+            _block: &Block<'arena, 'src>,
+            scope: &Scope<'src>,
+        ) -> ControlFlow<()> {
+            self.blocks_in.push(scope.function_name.map(str::to_owned));
+            ControlFlow::Continue(())
+        }
+    }
+    with_parsed(
+        "<?php
+        class Foo extends Base {
+            public function bar(): void { try { f(); } catch (Baz $e) { } }
+        }",
+        |src, program| {
+            let mut walker = ScopeWalker::new(src, Collector::default());
+            let _ = walker.walk(program);
+            let c = walker.into_inner();
+            assert!(
+                c.names.contains(&("Base".into(), Some("Foo".into()))),
+                "{:?}",
+                c.names
+            );
+            assert!(
+                c.names.contains(&("Baz".into(), Some("Foo".into()))),
+                "{:?}",
+                c.names
+            );
+            assert!(!c.blocks_in.is_empty());
+            assert!(
+                c.blocks_in.iter().all(|f| f.as_deref() == Some("bar")),
+                "{:?}",
+                c.blocks_in
+            );
+        },
+    );
+}
+
+#[test]
+fn owned_scope_visitor_visits_names_and_blocks_with_scope() {
+    use php_ast::owned::{
+        Block as OwnedBlock, Name as OwnedName, OwnedScope, OwnedScopeVisitor, OwnedScopeWalker,
+    };
+    #[derive(Default)]
+    struct Collector {
+        names: Vec<(String, Option<String>)>,
+        blocks_in: Vec<Option<String>>,
+    }
+    impl OwnedScopeVisitor for Collector {
+        fn visit_name(&mut self, name: &OwnedName, scope: &OwnedScope) -> ControlFlow<()> {
+            self.names
+                .push((name.parts.join("\\"), scope.class_name.clone()));
+            ControlFlow::Continue(())
+        }
+        fn visit_block(&mut self, _block: &OwnedBlock, scope: &OwnedScope) -> ControlFlow<()> {
+            self.blocks_in.push(scope.function_name.clone());
+            ControlFlow::Continue(())
+        }
+    }
+    let result = php_rs_parser::parse(
+        "<?php
+        class Foo extends Base {
+            public function bar(): void { try { f(); } catch (Baz $e) { } }
+        }",
+    );
+    let mut walker = OwnedScopeWalker::new(Collector::default());
+    let _ = walker.walk(&result.program);
+    let c = walker.into_inner();
+    assert!(
+        c.names.contains(&("Base".into(), Some("Foo".into()))),
+        "{:?}",
+        c.names
+    );
+    assert!(
+        c.names.contains(&("Baz".into(), Some("Foo".into()))),
+        "{:?}",
+        c.names
+    );
+    assert!(!c.blocks_in.is_empty());
+    assert!(
+        c.blocks_in.iter().all(|f| f.as_deref() == Some("bar")),
+        "{:?}",
+        c.blocks_in
+    );
+}
+
+#[test]
+fn fold_owned_trait_use_is_overridable() {
+    use php_ast::owned::{fold_owned_trait_use, FoldOwned, TraitUseDecl};
+    struct CountTraitUses(usize);
+    impl FoldOwned for CountTraitUses {
+        fn fold_trait_use(&mut self, trait_use: &TraitUseDecl) -> TraitUseDecl {
+            self.0 += 1;
+            fold_owned_trait_use(self, trait_use)
+        }
+    }
+    let result = php_rs_parser::parse(
+        "<?php
+        class A { use T1; use T2 { T2::f as g; } }
+        enum E { use T3; case X; }",
+    );
+    let mut folder = CountTraitUses(0);
+    let _ = folder.fold_program(&result.program);
+    assert_eq!(folder.0, 3);
+}
+
+#[test]
+fn name_str_new_in_copies_into_the_arena() {
+    let arena = bumpalo::Bump::new();
+    let s = String::from("synthesized");
+    let name = NameStr::new_in(&arena, &s);
+    drop(s);
+    assert_eq!(name.as_str(), "synthesized");
+}

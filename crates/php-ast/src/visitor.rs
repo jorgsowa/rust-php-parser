@@ -1025,6 +1025,20 @@ pub trait ScopeVisitor<'arena, 'src> {
         ControlFlow::Continue(())
     }
 
+    /// Visits a block with the enclosing scope.
+    fn visit_block(
+        &mut self,
+        _block: &Block<'arena, 'src>,
+        _scope: &Scope<'src>,
+    ) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
+
+    /// Visits a name reference with the enclosing scope.
+    fn visit_name(&mut self, _name: &Name<'arena, 'src>, _scope: &Scope<'src>) -> ControlFlow<()> {
+        ControlFlow::Continue(())
+    }
+
     /// Visits a comment with the enclosing scope.
     fn visit_comment(&mut self, _comment: &Comment<'src>, _scope: &Scope<'src>) -> ControlFlow<()> {
         ControlFlow::Continue(())
@@ -1266,6 +1280,15 @@ impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> Visitor<'arena, 'src> for Scop
         adaptation: &TraitAdaptation<'arena, 'src>,
     ) -> ControlFlow<()> {
         self.inner.visit_trait_adaptation(adaptation, &self.scope)
+    }
+
+    fn visit_block(&mut self, block: &Block<'arena, 'src>) -> ControlFlow<()> {
+        self.inner.visit_block(block, &self.scope)?;
+        walk_block(self, block)
+    }
+
+    fn visit_name(&mut self, name: &Name<'arena, 'src>) -> ControlFlow<()> {
+        self.inner.visit_name(name, &self.scope)
     }
 
     fn visit_comment(&mut self, comment: &Comment<'src>) -> ControlFlow<()> {

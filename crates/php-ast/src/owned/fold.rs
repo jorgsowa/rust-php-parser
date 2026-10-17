@@ -106,6 +106,16 @@ pub trait FoldOwned {
         fold_owned_closure_use_var(self, var)
     }
 
+    /// Transforms a `use Trait;` declaration; recurses by default.
+    fn fold_trait_use(&mut self, trait_use: &TraitUseDecl) -> TraitUseDecl {
+        fold_owned_trait_use(self, trait_use)
+    }
+
+    /// Transforms a trait `insteadof`/`as` adaptation; recurses by default.
+    fn fold_trait_adaptation(&mut self, adaptation: &TraitAdaptation) -> TraitAdaptation {
+        fold_owned_trait_adaptation(self, adaptation)
+    }
+
     /// Transforms a name node; recurses by default.
     fn fold_name(&mut self, name: &Name) -> Name {
         fold_owned_name(self, name)
@@ -648,9 +658,7 @@ pub fn fold_owned_class_member<F: FoldOwned + ?Sized>(
             ClassMemberKind::ClassConst(c) => {
                 ClassMemberKind::ClassConst(fold_owned_class_const(folder, c))
             }
-            ClassMemberKind::TraitUse(t) => {
-                ClassMemberKind::TraitUse(fold_owned_trait_use(folder, t))
-            }
+            ClassMemberKind::TraitUse(t) => ClassMemberKind::TraitUse(folder.fold_trait_use(t)),
         },
         span: member.span,
     }
@@ -685,9 +693,7 @@ pub fn fold_owned_enum_member<F: FoldOwned + ?Sized>(
             EnumMemberKind::ClassConst(c) => {
                 EnumMemberKind::ClassConst(fold_owned_class_const(folder, c))
             }
-            EnumMemberKind::TraitUse(t) => {
-                EnumMemberKind::TraitUse(fold_owned_trait_use(folder, t))
-            }
+            EnumMemberKind::TraitUse(t) => EnumMemberKind::TraitUse(folder.fold_trait_use(t)),
         },
         span: member.span,
     }
@@ -793,40 +799,52 @@ fn fold_owned_class_const<F: FoldOwned + ?Sized>(
     }
 }
 
-fn fold_owned_trait_use<F: FoldOwned + ?Sized>(folder: &mut F, t: &TraitUseDecl) -> TraitUseDecl {
+/// Folds a `use Trait;` declaration inside a class or enum body.
+pub fn fold_owned_trait_use<F: FoldOwned + ?Sized>(
+    folder: &mut F,
+    t: &TraitUseDecl,
+) -> TraitUseDecl {
     TraitUseDecl {
         traits: t.traits.iter().map(|n| folder.fold_name(n)).collect(),
         adaptations: t
             .adaptations
             .iter()
-            .map(|a| TraitAdaptation {
-                kind: match &a.kind {
-                    TraitAdaptationKind::Precedence {
-                        trait_name,
-                        method,
-                        insteadof,
-                    } => TraitAdaptationKind::Precedence {
-                        trait_name: folder.fold_name(trait_name),
-                        method: folder.fold_name(method),
-                        insteadof: insteadof.iter().map(|n| folder.fold_name(n)).collect(),
-                    },
-                    TraitAdaptationKind::Alias {
-                        trait_name,
-                        method,
-                        new_modifier,
-                        new_name,
-                    } => TraitAdaptationKind::Alias {
-                        trait_name: trait_name.as_ref().map(|n| folder.fold_name(n)),
-                        method: folder.fold_name(method),
-                        new_modifier: *new_modifier,
-                        new_name: new_name.as_ref().map(|n| folder.fold_name(n)),
-                    },
-                },
-                span: a.span,
-            })
+            .map(|a| folder.fold_trait_adaptation(a))
             .collect(),
         adaptations_brace_start: t.adaptations_brace_start,
         doc_comment: t.doc_comment.clone(),
+    }
+}
+
+/// Folds a trait `insteadof`/`as` adaptation.
+pub fn fold_owned_trait_adaptation<F: FoldOwned + ?Sized>(
+    folder: &mut F,
+    a: &TraitAdaptation,
+) -> TraitAdaptation {
+    TraitAdaptation {
+        kind: match &a.kind {
+            TraitAdaptationKind::Precedence {
+                trait_name,
+                method,
+                insteadof,
+            } => TraitAdaptationKind::Precedence {
+                trait_name: folder.fold_name(trait_name),
+                method: folder.fold_name(method),
+                insteadof: insteadof.iter().map(|n| folder.fold_name(n)).collect(),
+            },
+            TraitAdaptationKind::Alias {
+                trait_name,
+                method,
+                new_modifier,
+                new_name,
+            } => TraitAdaptationKind::Alias {
+                trait_name: trait_name.as_ref().map(|n| folder.fold_name(n)),
+                method: folder.fold_name(method),
+                new_modifier: *new_modifier,
+                new_name: new_name.as_ref().map(|n| folder.fold_name(n)),
+            },
+        },
+        span: a.span,
     }
 }
 

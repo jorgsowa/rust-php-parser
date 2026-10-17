@@ -3,6 +3,10 @@
 //! This module provides zero-cost abstractions for profiling when the `instrument` feature
 //! is enabled. When disabled, all instrumentation macros and calls compile to nothing.
 
+// Without the feature the module is crate-private and only the no-op
+// `record_*` hooks are used.
+#![cfg_attr(not(feature = "instrument"), allow(dead_code))]
+
 #[cfg(feature = "instrument")]
 use std::sync::{Mutex, OnceLock};
 

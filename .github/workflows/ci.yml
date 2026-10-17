@@ -73,6 +73,32 @@ jobs:
       - name: Check
         run: cargo check --workspace --exclude php-wasm --all-targets
 
+  semver:
+    name: Semver
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    # Flags API breaks against the base branch for review. Breaking changes are
+    # allowed before 1.0, so this does not block; the release workflow runs the
+    # same check against crates.io and does block.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2.9.2
+
+      - uses: taiki-e/install-action@v2.87.29
+        with:
+          tool: cargo-semver-checks
+
+      - name: Check semver against the base branch
+        run: >-
+          cargo semver-checks --workspace --exclude php-wasm --exclude ast-stats
+          --baseline-rev ${{ github.event.pull_request.base.sha }}
+
   deny:
     name: Deny
     runs-on: ubuntu-latest
