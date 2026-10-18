@@ -1,5 +1,3 @@
-use std::borrow::Cow;
-
 use php_ast::*;
 use php_lexer::TokenKind;
 
@@ -65,25 +63,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         )
         && parser.peek_kind() == Some(TokenKind::Backslash)
     {
-        let token = parser.advance();
-        let src = parser.source;
-        let first = &src[token.span.start as usize..token.span.end as usize];
-        let mut parts: Vec<&str> = vec![first];
-        while parser.eat(TokenKind::Backslash).is_some() {
-            if let Some((part, _)) = parser.eat_identifier_or_keyword() {
-                parts.push(part);
-            }
-        }
-        let span = Span::new(token.span.start, parser.previous_end());
-        let ident = if parts.len() == 1 {
-            NameStr::__src(parts[0])
-        } else {
-            NameStr::__arena(parser.arena.alloc_str(&parts.join("\\")))
-        };
-        return Expr {
-            kind: ExprKind::Identifier(ident),
-            span,
-        };
+        return name_expr(parser.parse_name());
     }
 
     // Attributed closure/arrow function: #[Attr] function(...) { } or #[Attr] fn(...) => ...
@@ -643,55 +623,8 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
 
         // Identifiers (function names, class names, etc.)
         // Also handles qualified names: App\Models\User
-        TokenKind::Identifier => {
-            let token = parser.advance();
-            let src = parser.source;
-            let text = &src[token.span.start as usize..token.span.end as usize];
-
-            // Check if this is a qualified name: Foo\Bar\Baz
-            if parser.check(TokenKind::Backslash) {
-                let mut parts: Vec<&str> = vec![text];
-                while parser.eat(TokenKind::Backslash).is_some() {
-                    if let Some((part, _)) = parser.eat_identifier_or_keyword() {
-                        parts.push(part);
-                    }
-                }
-                let span = Span::new(token.span.start, parser.previous_end());
-                Expr {
-                    kind: ExprKind::Identifier(NameStr::__arena(
-                        parser.arena.alloc_str(&parts.join("\\")),
-                    )),
-                    span,
-                }
-            } else {
-                Expr {
-                    kind: ExprKind::Identifier(NameStr::__src(text)),
-                    span: token.span,
-                }
-            }
-        }
-
-        // Backslash — fully qualified name: \Foo\Bar
-        TokenKind::Backslash => {
-            let start = parser.start_span();
-            let name = parser.parse_name();
-            let span = Span::new(start, name.span().end);
-            if matches!(name, Name::Error { .. }) {
-                Expr {
-                    kind: ExprKind::Error,
-                    span,
-                }
-            } else {
-                let ident = match name.to_string_repr() {
-                    Cow::Borrowed(s) => NameStr::__src(s),
-                    Cow::Owned(ref s) => NameStr::__arena(parser.arena.alloc_str(s)),
-                };
-                Expr {
-                    kind: ExprKind::Identifier(ident),
-                    span,
-                }
-            }
-        }
+        // Fully qualified (\Foo\Bar) and relative (namespace\Foo) names are handled below.
+        TokenKind::Identifier | TokenKind::Backslash => name_expr(parser.parse_name()),
 
         // `enum` as an identifier — valid in any expression position where a name is
         // expected (e.g. `Enum::class`, `Enum::someMethod()`, `new Enum`, `Enum()`).
@@ -700,27 +633,20 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         TokenKind::Enum_ => {
             let token = parser.advance();
             let src = parser.source;
-            let text = &src[token.span.start as usize..token.span.end as usize];
-            Expr {
-                kind: ExprKind::Identifier(NameStr::__src(text)),
-                span: token.span,
-            }
+            simple_name_expr(
+                &src[token.span.start as usize..token.span.end as usize],
+                token.span,
+            )
         }
 
         // self, parent, static — used as class names (e.g. self::method())
         TokenKind::Self_ => {
             let token = parser.advance();
-            Expr {
-                kind: ExprKind::Identifier(NameStr::__arena("self")),
-                span: token.span,
-            }
+            simple_name_expr("self", token.span)
         }
         TokenKind::Parent_ => {
             let token = parser.advance();
-            Expr {
-                kind: ExprKind::Identifier(NameStr::__arena("parent")),
-                span: token.span,
-            }
+            simple_name_expr("parent", token.span)
         }
         TokenKind::Static => {
             let token = parser.advance();
@@ -732,10 +658,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             if parser.check(TokenKind::Fn_) {
                 return parse_arrow_function(parser, true, token.span.start, parser.alloc_vec());
             }
-            Expr {
-                kind: ExprKind::Identifier(NameStr::__arena("static")),
-                span: token.span,
-            }
+            simple_name_expr("static", token.span)
         }
 
         // Print expression
@@ -918,14 +841,16 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         TokenKind::Exit | TokenKind::Die => {
             let token = parser.advance();
             let src = parser.source;
-            let name_text =
-                NameStr::__src(&src[token.span.start as usize..token.span.end as usize]);
+            let name_text = Name::Simple {
+                value: &src[token.span.start as usize..token.span.end as usize],
+                span: token.span,
+            };
             if parser.check(TokenKind::LeftParen) {
                 match parse_arg_list_or_callable(parser) {
                     ArgListResult::CallableMarker => {
                         // exit(...) - first class callable
                         let callee = Expr {
-                            kind: ExprKind::Identifier(name_text),
+                            kind: ExprKind::Name(name_text),
                             span: token.span,
                         };
                         let span = Span::new(token.span.start, parser.previous_end());
@@ -963,7 +888,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                         } else {
                             // exit(status: 42), exit(...$args), exit($a, $b) - function call form
                             let callee = Expr {
-                                kind: ExprKind::Identifier(name_text),
+                                kind: ExprKind::Name(name_text),
                                 span: token.span,
                             };
                             Expr {
@@ -1004,8 +929,10 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 });
             if !looks_like_cast && parser.check(TokenKind::LeftParen) {
                 let src = parser.source;
-                let name_text =
-                    NameStr::__src(&src[token.span.start as usize..token.span.end as usize]);
+                let name_text = Name::Simple {
+                    value: &src[token.span.start as usize..token.span.end as usize],
+                    span: token.span,
+                };
                 match parse_arg_list_or_callable(parser) {
                     ArgListResult::CallableMarker => {
                         // clone(...) — first-class callable (PHP 8.5)
@@ -1016,7 +943,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                         );
                         let span = Span::new(token.span.start, parser.previous_end());
                         let callee = Expr {
-                            kind: ExprKind::Identifier(name_text),
+                            kind: ExprKind::Name(name_text),
                             span: token.span,
                         };
                         Expr {
@@ -1079,7 +1006,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                         } else {
                             // 3+ args, named args, or spread — user-defined function named "clone"
                             let callee = Expr {
-                                kind: ExprKind::Identifier(name_text),
+                                kind: ExprKind::Name(name_text),
                                 span: token.span,
                             };
                             Expr {
@@ -1136,23 +1063,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
 
         // namespace\Foo\Bar — relative name in expression context
         TokenKind::Namespace if parser.peek_kind() == Some(TokenKind::Backslash) => {
-            let start = parser.start_span();
-            let name = parser.parse_name();
-            let span = Span::new(start, name.span().end);
-            if matches!(name, Name::Error { .. }) {
-                Expr {
-                    kind: ExprKind::Error,
-                    span,
-                }
-            } else {
-                let text = parser
-                    .arena
-                    .alloc_str(&format!("namespace\\{}", name.join_parts()));
-                Expr {
-                    kind: ExprKind::Identifier(NameStr::__arena(text)),
-                    span,
-                }
-            }
+            name_expr(parser.parse_name())
         }
         TokenKind::Namespace => {
             let span = parser.current_span();
@@ -1166,10 +1077,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         // readonly used as identifier (function name, etc.)
         TokenKind::Readonly => {
             let token = parser.advance();
-            Expr {
-                kind: ExprKind::Identifier(NameStr::__arena("readonly")),
-                span: token.span,
-            }
+            simple_name_expr("readonly", token.span)
         }
 
         // Error: unexpected token
@@ -1369,24 +1277,15 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
     let class = match parser.current_kind() {
         TokenKind::Self_ => {
             let t = parser.advance();
-            Expr {
-                kind: ExprKind::Identifier(NameStr::__arena("self")),
-                span: t.span,
-            }
+            simple_name_expr("self", t.span)
         }
         TokenKind::Parent_ => {
             let t = parser.advance();
-            Expr {
-                kind: ExprKind::Identifier(NameStr::__arena("parent")),
-                span: t.span,
-            }
+            simple_name_expr("parent", t.span)
         }
         TokenKind::Static => {
             let t = parser.advance();
-            Expr {
-                kind: ExprKind::Identifier(NameStr::__arena("static")),
-                span: t.span,
-            }
+            simple_name_expr("static", t.span)
         }
         TokenKind::Variable => {
             // new $className()
@@ -1425,26 +1324,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
                 span: paren_span,
             }
         }
-        _ => {
-            // Parse as a name (possibly qualified)
-            let name = parser.parse_name();
-            let span = name.span();
-            if matches!(name, Name::Error { .. }) {
-                Expr {
-                    kind: ExprKind::Error,
-                    span,
-                }
-            } else {
-                let ident = match name.to_string_repr() {
-                    Cow::Borrowed(s) => NameStr::__src(s),
-                    Cow::Owned(ref s) => NameStr::__arena(parser.arena.alloc_str(s)),
-                };
-                Expr {
-                    kind: ExprKind::Identifier(ident),
-                    span,
-                }
-            }
-        }
+        _ => name_expr(parser.parse_name()),
     };
 
     // Consume any `new_variable` dereference tail that is part of the class-name
@@ -1500,7 +1380,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
                 "dereferencing a new expression without parentheses",
                 parser.current_span(),
             );
-        } else if matches!(class.kind, ExprKind::Identifier(_)) {
+        } else if matches!(class.kind, ExprKind::Name(_)) {
             // The class is still a bare *name* (any `new_variable` tail such as
             // `Name::$prop` was already consumed above). A parenless `new` with a
             // class name cannot be dereferenced — `new Foo->bar`, `new Foo::class`,
@@ -2548,4 +2428,20 @@ pub(super) fn parse_float_no_alloc(text: &str) -> f64 {
         .ok()
         .and_then(|s| s.parse::<f64>().ok())
         .unwrap_or(0.0)
+}
+
+fn name_expr<'arena, 'src>(name: Name<'arena, 'src>) -> Expr<'arena, 'src> {
+    let span = name.span();
+    let kind = match name {
+        Name::Error { .. } => ExprKind::Error,
+        name => ExprKind::Name(name),
+    };
+    Expr { kind, span }
+}
+
+fn simple_name_expr<'arena, 'src>(value: &'src str, span: Span) -> Expr<'arena, 'src> {
+    Expr {
+        kind: ExprKind::Name(Name::Simple { value, span }),
+        span,
+    }
 }

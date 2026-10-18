@@ -66,7 +66,16 @@ PHP Fatal error:  Arrow functions on the right hand side of |> must be parenthes
                               "FunctionCall": {
                                 "name": {
                                   "kind": {
-                                    "Identifier": "trim"
+                                    "Name": {
+                                      "parts": [
+                                        "trim"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 31,
+                                        "end": 35
+                                      }
+                                    }
                                   },
                                   "span": {
                                     "start": 31,

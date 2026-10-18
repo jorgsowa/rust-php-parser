@@ -13,7 +13,16 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
       "kind": {
         "Expression": {
           "kind": {
-            "Identifier": "abc"
+            "Name": {
+              "parts": [
+                "abc"
+              ],
+              "kind": "Unqualified",
+              "span": {
+                "start": 6,
+                "end": 9
+              }
+            }
           },
           "span": {
             "start": 6,

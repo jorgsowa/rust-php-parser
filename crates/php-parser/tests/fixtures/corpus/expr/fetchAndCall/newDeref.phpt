@@ -20,7 +20,16 @@
                       "New": {
                         "class": {
                           "kind": {
-                            "Identifier": "A"
+                            "Name": {
+                              "parts": [
+                                "A"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 12,
+                                "end": 13
+                              }
+                            }
                           },
                           "span": {
                             "start": 12,
@@ -75,7 +84,16 @@
                       "New": {
                         "class": {
                           "kind": {
-                            "Identifier": "A"
+                            "Name": {
+                              "parts": [
+                                "A"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 24,
+                                "end": 25
+                              }
+                            }
                           },
                           "span": {
                             "start": 24,
@@ -131,7 +149,16 @@
                       "New": {
                         "class": {
                           "kind": {
-                            "Identifier": "A"
+                            "Name": {
+                              "parts": [
+                                "A"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 38,
+                                "end": 39
+                              }
+                            }
                           },
                           "span": {
                             "start": 38,
@@ -189,7 +216,16 @@
                             "New": {
                               "class": {
                                 "kind": {
-                                  "Identifier": "A"
+                                  "Name": {
+                                    "parts": [
+                                      "A"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 52,
+                                      "end": 53
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 52,

@@ -21,7 +21,16 @@ $arr = [Enum::class, Enum::FOO];
               "ClassConstAccess": {
                 "class": {
                   "kind": {
-                    "Identifier": "Enum"
+                    "Name": {
+                      "parts": [
+                        "Enum"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 11,
+                        "end": 15
+                      }
+                    }
                   },
                   "span": {
                     "start": 11,
@@ -71,7 +80,16 @@ $arr = [Enum::class, Enum::FOO];
                   "ClassConstAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "Enum"
+                        "Name": {
+                          "parts": [
+                            "Enum"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 29,
+                            "end": 33
+                          }
+                        }
                       },
                       "span": {
                         "start": 29,
@@ -114,7 +132,16 @@ $arr = [Enum::class, Enum::FOO];
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "register"
+                  "Name": {
+                    "parts": [
+                      "register"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 42,
+                      "end": 50
+                    }
+                  }
                 },
                 "span": {
                   "start": 42,
@@ -129,7 +156,16 @@ $arr = [Enum::class, Enum::FOO];
                       "ClassConstAccess": {
                         "class": {
                           "kind": {
-                            "Identifier": "Enum"
+                            "Name": {
+                              "parts": [
+                                "Enum"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 51,
+                                "end": 55
+                              }
+                            }
                           },
                           "span": {
                             "start": 51,
@@ -193,7 +229,16 @@ $arr = [Enum::class, Enum::FOO];
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "Enum"
+                        "Name": {
+                          "parts": [
+                            "Enum"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 74,
+                            "end": 78
+                          }
+                        }
                       },
                       "span": {
                         "start": 74,
@@ -228,7 +273,16 @@ $arr = [Enum::class, Enum::FOO];
             "StaticMethodCall": {
               "class": {
                 "kind": {
-                  "Identifier": "Enum"
+                  "Name": {
+                    "parts": [
+                      "Enum"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 82,
+                      "end": 86
+                    }
+                  }
                 },
                 "span": {
                   "start": 82,
@@ -278,7 +332,16 @@ $arr = [Enum::class, Enum::FOO];
                   "ClassConstAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "\\Enum"
+                        "Name": {
+                          "parts": [
+                            "Enum"
+                          ],
+                          "kind": "FullyQualified",
+                          "span": {
+                            "start": 103,
+                            "end": 108
+                          }
+                        }
                       },
                       "span": {
                         "start": 103,
@@ -334,7 +397,18 @@ $arr = [Enum::class, Enum::FOO];
                   "ClassConstAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "App\\Models\\Enum"
+                        "Name": {
+                          "parts": [
+                            "App",
+                            "Models",
+                            "Enum"
+                          ],
+                          "kind": "Qualified",
+                          "span": {
+                            "start": 122,
+                            "end": 137
+                          }
+                        }
                       },
                       "span": {
                         "start": 122,
@@ -390,7 +464,16 @@ $arr = [Enum::class, Enum::FOO];
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "enum"
+                        "Name": {
+                          "parts": [
+                            "enum"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 151,
+                            "end": 155
+                          }
+                        }
                       },
                       "span": {
                         "start": 151,
@@ -448,7 +531,16 @@ $arr = [Enum::class, Enum::FOO];
                     "op": "Instanceof",
                     "right": {
                       "kind": {
-                        "Identifier": "Enum"
+                        "Name": {
+                          "parts": [
+                            "Enum"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 180,
+                            "end": 184
+                          }
+                        }
                       },
                       "span": {
                         "start": 180,
@@ -500,7 +592,16 @@ $arr = [Enum::class, Enum::FOO];
                           "ClassConstAccess": {
                             "class": {
                               "kind": {
-                                "Identifier": "Enum"
+                                "Name": {
+                                  "parts": [
+                                    "Enum"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 194,
+                                    "end": 198
+                                  }
+                                }
                               },
                               "span": {
                                 "start": 194,
@@ -536,7 +637,16 @@ $arr = [Enum::class, Enum::FOO];
                           "ClassConstAccess": {
                             "class": {
                               "kind": {
-                                "Identifier": "Enum"
+                                "Name": {
+                                  "parts": [
+                                    "Enum"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 207,
+                                    "end": 211
+                                  }
+                                }
                               },
                               "span": {
                                 "start": 207,

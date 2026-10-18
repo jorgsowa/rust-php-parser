@@ -25,7 +25,16 @@ $result = compute();
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "compute"
+                        "Name": {
+                          "parts": [
+                            "compute"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 47,
+                            "end": 54
+                          }
+                        }
                       },
                       "span": {
                         "start": 47,

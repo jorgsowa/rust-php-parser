@@ -20,7 +20,16 @@
               "op": "Instanceof",
               "right": {
                 "kind": {
-                  "Identifier": "Foo"
+                  "Name": {
+                    "parts": [
+                      "Foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 22,
+                      "end": 25
+                    }
+                  }
                 },
                 "span": {
                   "start": 22,
@@ -60,7 +69,16 @@
                     "op": "Instanceof",
                     "right": {
                       "kind": {
-                        "Identifier": "Bar"
+                        "Name": {
+                          "parts": [
+                            "Bar"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 41,
+                            "end": 44
+                          }
+                        }
                       },
                       "span": {
                         "start": 41,
@@ -90,7 +108,16 @@
                     "op": "Instanceof",
                     "right": {
                       "kind": {
-                        "Identifier": "Baz"
+                        "Name": {
+                          "parts": [
+                            "Baz"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 62,
+                            "end": 65
+                          }
+                        }
                       },
                       "span": {
                         "start": 62,

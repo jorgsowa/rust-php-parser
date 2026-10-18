@@ -43,7 +43,16 @@ PHP Fatal error:  Cannot use B as PARENT because 'PARENT' is a special class nam
       "kind": {
         "Expression": {
           "kind": {
-            "Identifier": "parent"
+            "Name": {
+              "parts": [
+                "parent"
+              ],
+              "kind": "Unqualified",
+              "span": {
+                "start": 15,
+                "end": 21
+              }
+            }
           },
           "span": {
             "start": 15,

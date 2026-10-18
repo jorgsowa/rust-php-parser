@@ -535,7 +535,16 @@ $obj
                               "StaticMethodCall": {
                                 "class": {
                                   "kind": {
-                                    "Identifier": "MyClass"
+                                    "Name": {
+                                      "parts": [
+                                        "MyClass"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 616,
+                                        "end": 623
+                                      }
+                                    }
                                   },
                                   "span": {
                                     "start": 616,

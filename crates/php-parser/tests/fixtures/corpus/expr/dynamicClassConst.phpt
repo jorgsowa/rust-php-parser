@@ -14,7 +14,16 @@ $foo::{bar()};
             "ClassConstAccessDynamic": {
               "class": {
                 "kind": {
-                  "Identifier": "Foo"
+                  "Name": {
+                    "parts": [
+                      "Foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 9
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,
@@ -26,7 +35,16 @@ $foo::{bar()};
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "bar"
+                        "Name": {
+                          "parts": [
+                            "bar"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 12,
+                            "end": 15
+                          }
+                        }
                       },
                       "span": {
                         "start": 12,
@@ -73,7 +91,16 @@ $foo::{bar()};
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "bar"
+                        "Name": {
+                          "parts": [
+                            "bar"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 27,
+                            "end": 30
+                          }
+                        }
                       },
                       "span": {
                         "start": 27,

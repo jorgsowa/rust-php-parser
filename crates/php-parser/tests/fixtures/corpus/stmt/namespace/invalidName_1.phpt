@@ -43,7 +43,16 @@ PHP Fatal error:  Cannot use A as self because 'self' is a special class name in
       "kind": {
         "Expression": {
           "kind": {
-            "Identifier": "self"
+            "Name": {
+              "parts": [
+                "self"
+              ],
+              "kind": "Unqualified",
+              "span": {
+                "start": 15,
+                "end": 19
+              }
+            }
           },
           "span": {
             "start": 15,

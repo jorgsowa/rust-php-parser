@@ -14,7 +14,16 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "foo"
+                  "Name": {
+                    "parts": [
+                      "foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 9
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,
@@ -124,7 +133,16 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "bar"
+                  "Name": {
+                    "parts": [
+                      "bar"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 29,
+                      "end": 32
+                    }
+                  }
                 },
                 "span": {
                   "start": 29,
@@ -198,7 +216,16 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "baz"
+                  "Name": {
+                    "parts": [
+                      "baz"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 57,
+                      "end": 60
+                    }
+                  }
                 },
                 "span": {
                   "start": 57,
@@ -290,7 +317,16 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "array_map"
+                  "Name": {
+                    "parts": [
+                      "array_map"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 82,
+                      "end": 91
+                    }
+                  }
                 },
                 "span": {
                   "start": 82,

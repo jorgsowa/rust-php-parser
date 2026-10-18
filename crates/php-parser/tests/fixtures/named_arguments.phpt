@@ -10,7 +10,16 @@
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "htmlspecialchars"
+                  "Name": {
+                    "parts": [
+                      "htmlspecialchars"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 22
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,
@@ -58,7 +67,16 @@
                   },
                   "value": {
                     "kind": {
-                      "Identifier": "ENT_QUOTES"
+                      "Name": {
+                        "parts": [
+                          "ENT_QUOTES"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 44,
+                          "end": 54
+                        }
+                      }
                     },
                     "span": {
                       "start": 44,

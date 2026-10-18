@@ -66,7 +66,16 @@ use App\{A, B,};
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "foo"
+                  "Name": {
+                    "parts": [
+                      "foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 31,
+                      "end": 34
+                    }
+                  }
                 },
                 "span": {
                   "start": 31,

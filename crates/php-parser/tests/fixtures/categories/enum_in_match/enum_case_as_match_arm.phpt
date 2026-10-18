@@ -82,7 +82,16 @@ min_php=8.1
                               "ClassConstAccess": {
                                 "class": {
                                   "kind": {
-                                    "Identifier": "Status"
+                                    "Name": {
+                                      "parts": [
+                                        "Status"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 67,
+                                        "end": 73
+                                      }
+                                    }
                                   },
                                   "span": {
                                     "start": 67,
@@ -127,7 +136,16 @@ min_php=8.1
                               "ClassConstAccess": {
                                 "class": {
                                   "kind": {
-                                    "Identifier": "Status"
+                                    "Name": {
+                                      "parts": [
+                                        "Status"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 91,
+                                        "end": 97
+                                      }
+                                    }
                                   },
                                   "span": {
                                     "start": 91,

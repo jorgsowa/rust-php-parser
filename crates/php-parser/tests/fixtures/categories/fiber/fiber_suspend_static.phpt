@@ -25,7 +25,16 @@ min_php=8.1
                   "StaticMethodCall": {
                     "class": {
                       "kind": {
-                        "Identifier": "Fiber"
+                        "Name": {
+                          "parts": [
+                            "Fiber"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 13,
+                            "end": 18
+                          }
+                        }
                       },
                       "span": {
                         "start": 13,

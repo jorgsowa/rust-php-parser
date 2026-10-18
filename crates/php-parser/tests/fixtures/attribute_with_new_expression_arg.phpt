@@ -31,7 +31,16 @@
                       "New": {
                         "class": {
                           "kind": {
-                            "Identifier": "Config"
+                            "Name": {
+                              "parts": [
+                                "Config"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 17,
+                                "end": 23
+                              }
+                            }
                           },
                           "span": {
                             "start": 17,

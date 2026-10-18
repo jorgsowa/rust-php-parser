@@ -12,7 +12,16 @@ $a ?? throw new Exception;
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "test"
+                  "Name": {
+                    "parts": [
+                      "test"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 10
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,
@@ -81,7 +90,16 @@ $a ?? throw new Exception;
                       "New": {
                         "class": {
                           "kind": {
-                            "Identifier": "Exception"
+                            "Name": {
+                              "parts": [
+                                "Exception"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 38,
+                                "end": 47
+                              }
+                            }
                           },
                           "span": {
                             "start": 38,

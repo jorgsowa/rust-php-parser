@@ -317,7 +317,16 @@ $m = $a && $b or $c;
                               "op": "Instanceof",
                               "right": {
                                 "kind": {
-                                  "Identifier": "A"
+                                  "Name": {
+                                    "parts": [
+                                      "A"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 208,
+                                      "end": 209
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 208,
@@ -334,7 +343,16 @@ $m = $a && $b or $c;
                         "op": "BitwiseOr",
                         "right": {
                           "kind": {
-                            "Identifier": "B"
+                            "Name": {
+                              "parts": [
+                                "B"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 212,
+                                "end": 213
+                              }
+                            }
                           },
                           "span": {
                             "start": 212,
@@ -405,7 +423,16 @@ $m = $a && $b or $c;
                                   "Binary": {
                                     "left": {
                                       "kind": {
-                                        "Identifier": "int"
+                                        "Name": {
+                                          "parts": [
+                                            "int"
+                                          ],
+                                          "kind": "Unqualified",
+                                          "span": {
+                                            "start": 236,
+                                            "end": 239
+                                          }
+                                        }
                                       },
                                       "span": {
                                         "start": 236,
@@ -415,7 +442,16 @@ $m = $a && $b or $c;
                                     "op": "BitwiseAnd",
                                     "right": {
                                       "kind": {
-                                        "Identifier": "string"
+                                        "Name": {
+                                          "parts": [
+                                            "string"
+                                          ],
+                                          "kind": "Unqualified",
+                                          "span": {
+                                            "start": 242,
+                                            "end": 248
+                                          }
+                                        }
                                       },
                                       "span": {
                                         "start": 242,
@@ -445,7 +481,16 @@ $m = $a && $b or $c;
                     "op": "BitwiseOr",
                     "right": {
                       "kind": {
-                        "Identifier": "bool"
+                        "Name": {
+                          "parts": [
+                            "bool"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 252,
+                            "end": 256
+                          }
+                        }
                       },
                       "span": {
                         "start": 252,

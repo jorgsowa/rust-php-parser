@@ -20,7 +20,16 @@ PHP Parse error:  syntax error, unexpected identifier "bar" in Standard input co
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "foo"
+                  "Name": {
+                    "parts": [
+                      "foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 7,
+                      "end": 10
+                    }
+                  }
                 },
                 "span": {
                   "start": 7,
@@ -48,7 +57,16 @@ PHP Parse error:  syntax error, unexpected identifier "bar" in Standard input co
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "bar"
+                  "Name": {
+                    "parts": [
+                      "bar"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 13,
+                      "end": 16
+                    }
+                  }
                 },
                 "span": {
                   "start": 13,
@@ -76,7 +94,16 @@ PHP Parse error:  syntax error, unexpected identifier "bar" in Standard input co
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "baz"
+                  "Name": {
+                    "parts": [
+                      "baz"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 19,
+                      "end": 22
+                    }
+                  }
                 },
                 "span": {
                   "start": 19,

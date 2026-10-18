@@ -362,6 +362,7 @@ pub fn walk_owned_stmt<V: OwnedVisitor + ?Sized>(visitor: &mut V, stmt: &Stmt) -
 /// Dispatches `expr` to the appropriate child visitors based on its [`ExprKind`].
 pub fn walk_owned_expr<V: OwnedVisitor + ?Sized>(visitor: &mut V, expr: &Expr) -> ControlFlow<()> {
     match &expr.kind {
+        ExprKind::Name(name) => visitor.visit_name(name)?,
         ExprKind::Assign(assign) => {
             visitor.visit_expr(&assign.target)?;
             visitor.visit_expr(&assign.value)?;

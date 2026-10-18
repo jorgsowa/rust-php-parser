@@ -174,7 +174,16 @@ function gen() {
                           "FunctionCall": {
                             "name": {
                               "kind": {
-                                "Identifier": "otherGen"
+                                "Name": {
+                                  "parts": [
+                                    "otherGen"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 111,
+                                    "end": 119
+                                  }
+                                }
                               },
                               "span": {
                                 "start": 111,

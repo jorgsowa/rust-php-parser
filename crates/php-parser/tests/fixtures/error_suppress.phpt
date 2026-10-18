@@ -12,7 +12,16 @@
                 "FunctionCall": {
                   "name": {
                     "kind": {
-                      "Identifier": "file_get_contents"
+                      "Name": {
+                        "parts": [
+                          "file_get_contents"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 7,
+                          "end": 24
+                        }
+                      }
                     },
                     "span": {
                       "start": 7,

@@ -21,7 +21,16 @@ PHP Parse error:  syntax error, unexpected identifier "getVersion" in Standard i
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "getVersion"
+                        "Name": {
+                          "parts": [
+                            "getVersion"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 13,
+                            "end": 23
+                          }
+                        }
                       },
                       "span": {
                         "start": 13,

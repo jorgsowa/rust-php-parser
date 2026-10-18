@@ -115,7 +115,16 @@ empty(array(1, 2, 3));
                 "FunctionCall": {
                   "name": {
                     "kind": {
-                      "Identifier": "foo"
+                      "Name": {
+                        "parts": [
+                          "foo"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 54,
+                          "end": 57
+                        }
+                      }
                     },
                     "span": {
                       "start": 54,

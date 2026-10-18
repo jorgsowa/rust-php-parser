@@ -61,7 +61,16 @@ min_php=8.1
                             "ClassConstAccess": {
                               "class": {
                                 "kind": {
-                                  "Identifier": "self"
+                                  "Name": {
+                                    "parts": [
+                                      "self"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 77,
+                                      "end": 81
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 77,

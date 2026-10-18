@@ -26,7 +26,16 @@ $a['b']::c();
             "StaticMethodCall": {
               "class": {
                 "kind": {
-                  "Identifier": "A"
+                  "Name": {
+                    "parts": [
+                      "A"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 33,
+                      "end": 34
+                    }
+                  }
                 },
                 "span": {
                   "start": 33,
@@ -66,7 +75,16 @@ $a['b']::c();
                   "ClassConstAccessDynamic": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 41,
+                            "end": 42
+                          }
+                        }
                       },
                       "span": {
                         "start": 41,
@@ -110,7 +128,16 @@ $a['b']::c();
             "StaticMethodCallDynamic": {
               "class": {
                 "kind": {
-                  "Identifier": "A"
+                  "Name": {
+                    "parts": [
+                      "A"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 53,
+                      "end": 54
+                    }
+                  }
                 },
                 "span": {
                   "start": 53,
@@ -153,7 +180,16 @@ $a['b']::c();
                         "StaticPropertyAccess": {
                           "class": {
                             "kind": {
-                              "Identifier": "A"
+                              "Name": {
+                                "parts": [
+                                  "A"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 62,
+                                  "end": 63
+                                }
+                              }
                             },
                             "span": {
                               "start": 62,
@@ -222,7 +258,16 @@ $a['b']::c();
                               "StaticPropertyAccess": {
                                 "class": {
                                   "kind": {
-                                    "Identifier": "A"
+                                    "Name": {
+                                      "parts": [
+                                        "A"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 76,
+                                        "end": 77
+                                      }
+                                    }
                                   },
                                   "span": {
                                     "start": 76,
@@ -301,7 +346,16 @@ $a['b']::c();
                   "StaticMethodCall": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 119,
+                            "end": 120
+                          }
+                        }
                       },
                       "span": {
                         "start": 119,
@@ -354,7 +408,16 @@ $a['b']::c();
             "StaticMethodCall": {
               "class": {
                 "kind": {
-                  "Identifier": "static"
+                  "Name": {
+                    "parts": [
+                      "static"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 158,
+                      "end": 164
+                    }
+                  }
                 },
                 "span": {
                   "start": 158,

@@ -30,7 +30,16 @@ PHP: (!($a instanceof Foo)) && (!($b instanceof Bar)).
                           "op": "Instanceof",
                           "right": {
                             "kind": {
-                              "Identifier": "Foo"
+                              "Name": {
+                                "parts": [
+                                  "Foo"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 21,
+                                  "end": 24
+                                }
+                              }
                             },
                             "span": {
                               "start": 21,
@@ -71,7 +80,16 @@ PHP: (!($a instanceof Foo)) && (!($b instanceof Bar)).
                           "op": "Instanceof",
                           "right": {
                             "kind": {
-                              "Identifier": "Bar"
+                              "Name": {
+                                "parts": [
+                                  "Bar"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 43,
+                                  "end": 46
+                                }
+                              }
                             },
                             "span": {
                               "start": 43,

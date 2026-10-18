@@ -28,7 +28,16 @@
                             "FunctionCall": {
                               "name": {
                                 "kind": {
-                                  "Identifier": "getValue"
+                                  "Name": {
+                                    "parts": [
+                                      "getValue"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 12,
+                                      "end": 20
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 12,

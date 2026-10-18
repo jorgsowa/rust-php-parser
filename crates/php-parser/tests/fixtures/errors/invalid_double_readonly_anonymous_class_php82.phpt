@@ -17,7 +17,16 @@ PHP Parse error:  syntax error, unexpected token "readonly" in Standard input co
             "New": {
               "class": {
                 "kind": {
-                  "Identifier": "readonly"
+                  "Name": {
+                    "parts": [
+                      "readonly"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 10,
+                      "end": 18
+                    }
+                  }
                 },
                 "span": {
                   "start": 10,

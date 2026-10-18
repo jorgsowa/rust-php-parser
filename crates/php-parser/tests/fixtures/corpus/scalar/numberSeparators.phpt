@@ -122,7 +122,16 @@ PHP Parse error:  syntax error, unexpected identifier "_" in Standard input code
       "kind": {
         "Expression": {
           "kind": {
-            "Identifier": "_100"
+            "Name": {
+              "parts": [
+                "_100"
+              ],
+              "kind": "Unqualified",
+              "span": {
+                "start": 105,
+                "end": 109
+              }
+            }
           },
           "span": {
             "start": 105,

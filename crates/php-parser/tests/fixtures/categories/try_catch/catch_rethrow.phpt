@@ -14,7 +14,16 @@
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "foo"
+                          "Name": {
+                            "parts": [
+                              "foo"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 12,
+                              "end": 15
+                            }
+                          }
                         },
                         "span": {
                           "start": 12,

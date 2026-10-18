@@ -27,7 +27,16 @@ $fn = Foo::bar(...);
                     "kind": {
                       "Function": {
                         "kind": {
-                          "Identifier": "strlen"
+                          "Name": {
+                            "parts": [
+                              "strlen"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 12,
+                              "end": 18
+                            }
+                          }
                         },
                         "span": {
                           "start": 12,
@@ -137,7 +146,16 @@ $fn = Foo::bar(...);
                       "StaticMethod": {
                         "class": {
                           "kind": {
-                            "Identifier": "Foo"
+                            "Name": {
+                              "parts": [
+                                "Foo"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 56,
+                                "end": 59
+                              }
+                            }
                           },
                           "span": {
                             "start": 56,

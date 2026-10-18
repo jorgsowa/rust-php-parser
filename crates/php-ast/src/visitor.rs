@@ -396,6 +396,7 @@ pub fn walk_expr<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     expr: &Expr<'arena, 'src>,
 ) -> ControlFlow<()> {
     match &expr.kind {
+        ExprKind::Name(name) => visitor.visit_name(name)?,
         ExprKind::Assign(assign) => {
             visitor.visit_expr(assign.target)?;
             visitor.visit_expr(assign.value)?;

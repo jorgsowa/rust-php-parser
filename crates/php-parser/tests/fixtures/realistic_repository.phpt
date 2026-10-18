@@ -1276,7 +1276,16 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                             "New": {
                               "class": {
                                 "kind": {
-                                  "Identifier": "User"
+                                  "Name": {
+                                    "parts": [
+                                      "User"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 1120,
+                                      "end": 1124
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 1120,
@@ -1554,7 +1563,16 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                   "StaticPropertyAccess": {
                                     "class": {
                                       "kind": {
-                                        "Identifier": "self"
+                                        "Name": {
+                                          "parts": [
+                                            "self"
+                                          ],
+                                          "kind": "Unqualified",
+                                          "span": {
+                                            "start": 1306,
+                                            "end": 1310
+                                          }
+                                        }
                                       },
                                       "span": {
                                         "start": 1306,
@@ -1864,7 +1882,16 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                   "StaticPropertyAccess": {
                                     "class": {
                                       "kind": {
-                                        "Identifier": "self"
+                                        "Name": {
+                                          "parts": [
+                                            "self"
+                                          ],
+                                          "kind": "Unqualified",
+                                          "span": {
+                                            "start": 1521,
+                                            "end": 1525
+                                          }
+                                        }
                                       },
                                       "span": {
                                         "start": 1521,
@@ -2043,7 +2070,16 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                             "FunctionCall": {
                               "name": {
                                 "kind": {
-                                  "Identifier": "array_map"
+                                  "Name": {
+                                    "parts": [
+                                      "array_map"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 1630,
+                                      "end": 1639
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 1630,
@@ -2289,7 +2325,16 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                   "FunctionCall": {
                                     "name": {
                                       "kind": {
-                                        "Identifier": "sanitize"
+                                        "Name": {
+                                          "parts": [
+                                            "sanitize"
+                                          ],
+                                          "kind": "Unqualified",
+                                          "span": {
+                                            "start": 1776,
+                                            "end": 1784
+                                          }
+                                        }
                                       },
                                       "span": {
                                         "start": 1776,
@@ -2413,7 +2458,16 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                   "FunctionCall": {
                                     "name": {
                                       "kind": {
-                                        "Identifier": "array_filter"
+                                        "Name": {
+                                          "parts": [
+                                            "array_filter"
+                                          ],
+                                          "kind": "Unqualified",
+                                          "span": {
+                                            "start": 1849,
+                                            "end": 1861
+                                          }
+                                        }
                                       },
                                       "span": {
                                         "start": 1849,
@@ -3192,7 +3246,16 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                             "New": {
                                               "class": {
                                                 "kind": {
-                                                  "Identifier": "\\RuntimeException"
+                                                  "Name": {
+                                                    "parts": [
+                                                      "RuntimeException"
+                                                    ],
+                                                    "kind": "FullyQualified",
+                                                    "span": {
+                                                      "start": 2465,
+                                                      "end": 2482
+                                                    }
+                                                  }
                                                 },
                                                 "span": {
                                                   "start": 2465,
@@ -3467,7 +3530,16 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                             "StaticPropertyAccess": {
                               "class": {
                                 "kind": {
-                                  "Identifier": "self"
+                                  "Name": {
+                                    "parts": [
+                                      "self"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 2690,
+                                      "end": 2694
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 2690,

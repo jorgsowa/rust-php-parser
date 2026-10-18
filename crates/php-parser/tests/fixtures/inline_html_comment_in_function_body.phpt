@@ -25,7 +25,16 @@ function tmpl() {
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "foo"
+                          "Name": {
+                            "parts": [
+                              "foo"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 28,
+                              "end": 31
+                            }
+                          }
                         },
                         "span": {
                           "start": 28,
@@ -85,7 +94,16 @@ function tmpl() {
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "bar"
+                          "Name": {
+                            "parts": [
+                              "bar"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 94,
+                              "end": 97
+                            }
+                          }
                         },
                         "span": {
                           "start": 94,

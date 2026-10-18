@@ -31,7 +31,16 @@ PHP Parse error:  syntax error, unexpected token "->" in Standard input code on 
                         "New": {
                           "class": {
                             "kind": {
-                              "Identifier": "Foo"
+                              "Name": {
+                                "parts": [
+                                  "Foo"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 15,
+                                  "end": 18
+                                }
+                              }
                             },
                             "span": {
                               "start": 15,

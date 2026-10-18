@@ -16,7 +16,16 @@ PHP Parse error:  syntax error, unexpected token ")" in Standard input code on l
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "foo"
+                  "Name": {
+                    "parts": [
+                      "foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 7,
+                      "end": 10
+                    }
+                  }
                 },
                 "span": {
                   "start": 7,

@@ -23,7 +23,16 @@ function gen() {
                           "FunctionCall": {
                             "name": {
                               "kind": {
-                                "Identifier": "array_map"
+                                "Name": {
+                                  "parts": [
+                                    "array_map"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 38,
+                                    "end": 47
+                                  }
+                                }
                               },
                               "span": {
                                 "start": 38,

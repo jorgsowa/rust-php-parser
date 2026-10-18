@@ -24,7 +24,16 @@ PHP Fatal error:  Cannot create Closure as attribute argument in Standard input 
               "kind": {
                 "Function": {
                   "kind": {
-                    "Identifier": "foo"
+                    "Name": {
+                      "parts": [
+                        "foo"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 6,
+                        "end": 9
+                      }
+                    }
                   },
                   "span": {
                     "start": 6,
@@ -94,7 +103,16 @@ PHP Fatal error:  Cannot create Closure as attribute argument in Standard input 
                 "StaticMethod": {
                   "class": {
                     "kind": {
-                      "Identifier": "A"
+                      "Name": {
+                        "parts": [
+                          "A"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 33,
+                          "end": 34
+                        }
+                      }
                     },
                     "span": {
                       "start": 33,

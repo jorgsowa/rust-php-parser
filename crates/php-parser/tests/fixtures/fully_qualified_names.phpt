@@ -26,7 +26,16 @@ $x = \strlen('hello');
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "\\Exception"
+                        "Name": {
+                          "parts": [
+                            "Exception"
+                          ],
+                          "kind": "FullyQualified",
+                          "span": {
+                            "start": 15,
+                            "end": 25
+                          }
+                        }
                       },
                       "span": {
                         "start": 15,
@@ -80,7 +89,18 @@ $x = \strlen('hello');
             "StaticMethodCall": {
               "class": {
                 "kind": {
-                  "Identifier": "\\App\\Services\\Logger"
+                  "Name": {
+                    "parts": [
+                      "App",
+                      "Services",
+                      "Logger"
+                    ],
+                    "kind": "FullyQualified",
+                    "span": {
+                      "start": 36,
+                      "end": 56
+                    }
+                  }
                 },
                 "span": {
                   "start": 36,
@@ -149,7 +169,16 @@ $x = \strlen('hello');
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "\\strlen"
+                        "Name": {
+                          "parts": [
+                            "strlen"
+                          ],
+                          "kind": "FullyQualified",
+                          "span": {
+                            "start": 75,
+                            "end": 82
+                          }
+                        }
                       },
                       "span": {
                         "start": 75,

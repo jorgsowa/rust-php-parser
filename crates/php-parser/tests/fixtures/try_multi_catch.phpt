@@ -21,7 +21,16 @@ try {
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "process"
+                          "Name": {
+                            "parts": [
+                              "process"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 16,
+                              "end": 23
+                            }
+                          }
                         },
                         "span": {
                           "start": 16,
@@ -76,7 +85,16 @@ try {
                         "FunctionCall": {
                           "name": {
                             "kind": {
-                              "Identifier": "handleTypeError"
+                              "Name": {
+                                "parts": [
+                                  "handleTypeError"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 67,
+                                  "end": 82
+                                }
+                              }
                             },
                             "span": {
                               "start": 67,
@@ -144,7 +162,16 @@ try {
                         "FunctionCall": {
                           "name": {
                             "kind": {
-                              "Identifier": "handleRuntime"
+                              "Name": {
+                                "parts": [
+                                  "handleRuntime"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 121,
+                                  "end": 134
+                                }
+                              }
                             },
                             "span": {
                               "start": 121,

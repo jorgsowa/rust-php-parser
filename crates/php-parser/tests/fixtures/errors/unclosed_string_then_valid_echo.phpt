@@ -52,7 +52,16 @@ PHP Parse error:  syntax error, unexpected identifier "hello" in Standard input 
       "kind": {
         "Expression": {
           "kind": {
-            "Identifier": "hello"
+            "Name": {
+              "parts": [
+                "hello"
+              ],
+              "kind": "Unqualified",
+              "span": {
+                "start": 32,
+                "end": 37
+              }
+            }
           },
           "span": {
             "start": 32,

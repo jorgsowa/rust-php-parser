@@ -10,7 +10,16 @@
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "array_map"
+                  "Name": {
+                    "parts": [
+                      "array_map"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 15
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,
@@ -26,7 +35,16 @@
                         "kind": {
                           "Function": {
                             "kind": {
-                              "Identifier": "strlen"
+                              "Name": {
+                                "parts": [
+                                  "strlen"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 16,
+                                  "end": 22
+                                }
+                              }
                             },
                             "span": {
                               "start": 16,
@@ -55,7 +73,16 @@
                       "FunctionCall": {
                         "name": {
                           "kind": {
-                            "Identifier": "array_filter"
+                            "Name": {
+                              "parts": [
+                                "array_filter"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 29,
+                                "end": 41
+                              }
+                            }
                           },
                           "span": {
                             "start": 29,
@@ -89,7 +116,16 @@
                                   "kind": {
                                     "Function": {
                                       "kind": {
-                                        "Identifier": "is_string"
+                                        "Name": {
+                                          "parts": [
+                                            "is_string"
+                                          ],
+                                          "kind": "Unqualified",
+                                          "span": {
+                                            "start": 48,
+                                            "end": 57
+                                          }
+                                        }
                                       },
                                       "span": {
                                         "start": 48,

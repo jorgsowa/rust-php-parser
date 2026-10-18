@@ -10,7 +10,16 @@
             "ClassConstAccess": {
               "class": {
                 "kind": {
-                  "Identifier": "Foo"
+                  "Name": {
+                    "parts": [
+                      "Foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 9
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,
@@ -46,7 +55,16 @@
             "ClassConstAccess": {
               "class": {
                 "kind": {
-                  "Identifier": "self"
+                  "Name": {
+                    "parts": [
+                      "self"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 18,
+                      "end": 22
+                    }
+                  }
                 },
                 "span": {
                   "start": 18,
@@ -82,7 +100,16 @@
             "ClassConstAccess": {
               "class": {
                 "kind": {
-                  "Identifier": "static"
+                  "Name": {
+                    "parts": [
+                      "static"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 31,
+                      "end": 37
+                    }
+                  }
                 },
                 "span": {
                   "start": 31,

@@ -5,7 +5,7 @@ use crate::Span;
 
 #[cfg(feature = "serde")]
 use super::is_false;
-use super::{ArenaVec, Arg, Attribute, Block, ClassDecl, Param, TypeHint};
+use super::{ArenaVec, Arg, Attribute, Block, ClassDecl, Name, Param, TypeHint};
 
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
 enum NameStrInner<'arena, 'src> {
@@ -165,8 +165,12 @@ pub enum ExprKind<'arena, 'src> {
     /// Variable variable: `$$var`, `$$$var`, `${expr}`
     VariableVariable(&'arena Expr<'arena, 'src>),
 
-    /// Identifier (bare name, e.g. function name in a call)
+    /// Member name after `->`, `?->` or `::`: the `foo` in `$a->foo` or `A::foo()`
     Identifier(NameStr<'arena, 'src>),
+
+    /// Reference to a function, class or constant: a call or `new` target, the class in
+    /// `Foo::bar()` or `$x instanceof Foo`, or a constant such as `PHP_EOL`
+    Name(Name<'arena, 'src>),
 
     /// Assignment: `$x = expr` or `$x += expr`
     Assign(AssignExpr<'arena, 'src>),

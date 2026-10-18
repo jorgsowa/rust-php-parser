@@ -27,7 +27,16 @@ __FUNCIONT__->length();
             "PropertyAccess": {
               "object": {
                 "kind": {
-                  "Identifier": "A"
+                  "Name": {
+                    "parts": [
+                      "A"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 7,
+                      "end": 8
+                    }
+                  }
                 },
                 "span": {
                   "start": 7,
@@ -63,7 +72,16 @@ __FUNCIONT__->length();
             "MethodCall": {
               "object": {
                 "kind": {
-                  "Identifier": "A"
+                  "Name": {
+                    "parts": [
+                      "A"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 18,
+                      "end": 19
+                    }
+                  }
                 },
                 "span": {
                   "start": 18,
@@ -100,7 +118,16 @@ __FUNCIONT__->length();
             "ArrayAccess": {
               "array": {
                 "kind": {
-                  "Identifier": "A"
+                  "Name": {
+                    "parts": [
+                      "A"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 31,
+                      "end": 32
+                    }
+                  }
                 },
                 "span": {
                   "start": 31,
@@ -142,7 +169,16 @@ __FUNCIONT__->length();
                         "ArrayAccess": {
                           "array": {
                             "kind": {
-                              "Identifier": "A"
+                              "Name": {
+                                "parts": [
+                                  "A"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 37,
+                                  "end": 38
+                                }
+                              }
                             },
                             "span": {
                               "start": 37,
@@ -213,7 +249,16 @@ __FUNCIONT__->length();
                   "ClassConstAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 50,
+                            "end": 51
+                          }
+                        }
                       },
                       "span": {
                         "start": 50,
@@ -274,7 +319,16 @@ __FUNCIONT__->length();
                               "ClassConstAccess": {
                                 "class": {
                                   "kind": {
-                                    "Identifier": "A"
+                                    "Name": {
+                                      "parts": [
+                                        "A"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 59,
+                                        "end": 60
+                                      }
+                                    }
                                   },
                                   "span": {
                                     "start": 59,
@@ -361,7 +415,16 @@ __FUNCIONT__->length();
                   "ClassConstAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 74,
+                            "end": 75
+                          }
+                        }
                       },
                       "span": {
                         "start": 74,
@@ -416,7 +479,16 @@ __FUNCIONT__->length();
                   "ClassConstAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 88,
+                            "end": 89
+                          }
+                        }
                       },
                       "span": {
                         "start": 88,
@@ -472,7 +544,16 @@ __FUNCIONT__->length();
                   "ClassConstAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 104,
+                            "end": 105
+                          }
+                        }
                       },
                       "span": {
                         "start": 104,
@@ -527,7 +608,16 @@ __FUNCIONT__->length();
                   "ClassConstAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 113,
+                            "end": 114
+                          }
+                        }
                       },
                       "span": {
                         "start": 113,
@@ -582,7 +672,16 @@ __FUNCIONT__->length();
                   "ClassConstAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 123,
+                            "end": 124
+                          }
+                        }
                       },
                       "span": {
                         "start": 123,
@@ -707,7 +806,16 @@ __FUNCIONT__->length();
             "MethodCall": {
               "object": {
                 "kind": {
-                  "Identifier": "__FUNCIONT__"
+                  "Name": {
+                    "parts": [
+                      "__FUNCIONT__"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 174,
+                      "end": 186
+                    }
+                  }
                 },
                 "span": {
                   "start": 174,

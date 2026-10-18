@@ -75,7 +75,16 @@ echo "Complex: {$объект->свойство}";
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "Класс"
+                        "Name": {
+                          "parts": [
+                            "Класс"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 86,
+                            "end": 96
+                          }
+                        }
                       },
                       "span": {
                         "start": 86,

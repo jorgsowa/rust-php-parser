@@ -83,7 +83,16 @@ PHP Fatal error:  Cannot apply attributes to multiple constants at once in Stand
             "name": "D",
             "value": {
               "kind": {
-                "Identifier": "E"
+                "Name": {
+                  "parts": [
+                    "E"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 42,
+                    "end": 43
+                  }
+                }
               },
               "span": {
                 "start": 42,

@@ -222,7 +222,16 @@ class TaskService
                                         "ClassConstAccess": {
                                           "class": {
                                             "kind": {
-                                              "Identifier": "Priority"
+                                              "Name": {
+                                                "parts": [
+                                                  "Priority"
+                                                ],
+                                                "kind": "Unqualified",
+                                                "span": {
+                                                  "start": 216,
+                                                  "end": 224
+                                                }
+                                              }
                                             },
                                             "span": {
                                               "start": 216,
@@ -267,7 +276,16 @@ class TaskService
                                         "ClassConstAccess": {
                                           "class": {
                                             "kind": {
-                                              "Identifier": "Priority"
+                                              "Name": {
+                                                "parts": [
+                                                  "Priority"
+                                                ],
+                                                "kind": "Unqualified",
+                                                "span": {
+                                                  "start": 261,
+                                                  "end": 269
+                                                }
+                                              }
                                             },
                                             "span": {
                                               "start": 261,
@@ -312,7 +330,16 @@ class TaskService
                                         "ClassConstAccess": {
                                           "class": {
                                             "kind": {
-                                              "Identifier": "Priority"
+                                              "Name": {
+                                                "parts": [
+                                                  "Priority"
+                                                ],
+                                                "kind": "Unqualified",
+                                                "span": {
+                                                  "start": 312,
+                                                  "end": 320
+                                                }
+                                              }
                                             },
                                             "span": {
                                               "start": 312,
@@ -357,7 +384,16 @@ class TaskService
                                         "ClassConstAccess": {
                                           "class": {
                                             "kind": {
-                                              "Identifier": "Priority"
+                                              "Name": {
+                                                "parts": [
+                                                  "Priority"
+                                                ],
+                                                "kind": "Unqualified",
+                                                "span": {
+                                                  "start": 359,
+                                                  "end": 367
+                                                }
+                                              }
                                             },
                                             "span": {
                                               "start": 359,
@@ -512,7 +548,16 @@ class TaskService
                             "ClassConstAccess": {
                               "class": {
                                 "kind": {
-                                  "Identifier": "static"
+                                  "Name": {
+                                    "parts": [
+                                      "static"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 527,
+                                      "end": 533
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 527,
@@ -720,7 +765,16 @@ class TaskService
                                   "StaticPropertyAccess": {
                                     "class": {
                                       "kind": {
-                                        "Identifier": "self"
+                                        "Name": {
+                                          "parts": [
+                                            "self"
+                                          ],
+                                          "kind": "Unqualified",
+                                          "span": {
+                                            "start": 702,
+                                            "end": 706
+                                          }
+                                        }
                                       },
                                       "span": {
                                         "start": 702,
@@ -777,7 +831,16 @@ class TaskService
                                   "StaticPropertyAccess": {
                                     "class": {
                                       "kind": {
-                                        "Identifier": "self"
+                                        "Name": {
+                                          "parts": [
+                                            "self"
+                                          ],
+                                          "kind": "Unqualified",
+                                          "span": {
+                                            "start": 734,
+                                            "end": 738
+                                          }
+                                        }
                                       },
                                       "span": {
                                         "start": 734,
@@ -1205,7 +1268,16 @@ class TaskService
                                                 "ClassConstAccess": {
                                                   "class": {
                                                     "kind": {
-                                                      "Identifier": "Priority"
+                                                      "Name": {
+                                                        "parts": [
+                                                          "Priority"
+                                                        ],
+                                                        "kind": "Unqualified",
+                                                        "span": {
+                                                          "start": 1036,
+                                                          "end": 1044
+                                                        }
+                                                      }
                                                     },
                                                     "span": {
                                                       "start": 1036,
@@ -1254,7 +1326,16 @@ class TaskService
                                                 "ClassConstAccess": {
                                                   "class": {
                                                     "kind": {
-                                                      "Identifier": "Priority"
+                                                      "Name": {
+                                                        "parts": [
+                                                          "Priority"
+                                                        ],
+                                                        "kind": "Unqualified",
+                                                        "span": {
+                                                          "start": 1072,
+                                                          "end": 1080
+                                                        }
+                                                      }
                                                     },
                                                     "span": {
                                                       "start": 1072,

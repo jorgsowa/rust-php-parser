@@ -33,7 +33,16 @@
                     "op": "Instanceof",
                     "right": {
                       "kind": {
-                        "Identifier": "Foo"
+                        "Name": {
+                          "parts": [
+                            "Foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 25,
+                            "end": 28
+                          }
+                        }
                       },
                       "span": {
                         "start": 25,

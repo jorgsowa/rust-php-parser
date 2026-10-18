@@ -15,7 +15,16 @@ PHP Parse error:  syntax error, unexpected end of file in Standard input code on
             "New": {
               "class": {
                 "kind": {
-                  "Identifier": "T"
+                  "Name": {
+                    "parts": [
+                      "T"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 10,
+                      "end": 11
+                    }
+                  }
                 },
                 "span": {
                   "start": 10,

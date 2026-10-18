@@ -81,7 +81,16 @@ $x = match ($status) {
                                 "New": {
                                   "class": {
                                     "kind": {
-                                      "Identifier": "NotFoundException"
+                                      "Name": {
+                                        "parts": [
+                                          "NotFoundException"
+                                        ],
+                                        "kind": "Unqualified",
+                                        "span": {
+                                          "start": 67,
+                                          "end": 84
+                                        }
+                                      }
                                     },
                                     "span": {
                                       "start": 67,
@@ -116,7 +125,16 @@ $x = match ($status) {
                                 "New": {
                                   "class": {
                                     "kind": {
-                                      "Identifier": "RuntimeException"
+                                      "Name": {
+                                        "parts": [
+                                          "RuntimeException"
+                                        ],
+                                        "kind": "Unqualified",
+                                        "span": {
+                                          "start": 113,
+                                          "end": 129
+                                        }
+                                      }
                                     },
                                     "span": {
                                       "start": 113,

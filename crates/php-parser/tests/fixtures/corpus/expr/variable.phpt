@@ -61,7 +61,16 @@ $$a['b'];
                 "FunctionCall": {
                   "name": {
                     "kind": {
-                      "Identifier": "foo"
+                      "Name": {
+                        "parts": [
+                          "foo"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 21,
+                          "end": 24
+                        }
+                      }
                     },
                     "span": {
                       "start": 21,

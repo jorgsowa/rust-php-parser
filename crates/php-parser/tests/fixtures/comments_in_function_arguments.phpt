@@ -103,7 +103,16 @@ foo(
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "foo"
+                  "Name": {
+                    "parts": [
+                      "foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 45,
+                      "end": 48
+                    }
+                  }
                 },
                 "span": {
                   "start": 45,
@@ -335,7 +344,16 @@ foo(
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "foo"
+                  "Name": {
+                    "parts": [
+                      "foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 335,
+                      "end": 338
+                    }
+                  }
                 },
                 "span": {
                   "start": 335,
@@ -350,7 +368,16 @@ foo(
                       "FunctionCall": {
                         "name": {
                           "kind": {
-                            "Identifier": "bar"
+                            "Name": {
+                              "parts": [
+                                "bar"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 342,
+                                "end": 345
+                              }
+                            }
                           },
                           "span": {
                             "start": 342,
@@ -925,7 +952,16 @@ foo(
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "foo"
+                  "Name": {
+                    "parts": [
+                      "foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 1100,
+                      "end": 1103
+                    }
+                  }
                 },
                 "span": {
                   "start": 1100,
@@ -972,7 +1008,16 @@ foo(
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "foo"
+                  "Name": {
+                    "parts": [
+                      "foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 1209,
+                      "end": 1212
+                    }
+                  }
                 },
                 "span": {
                   "start": 1209,

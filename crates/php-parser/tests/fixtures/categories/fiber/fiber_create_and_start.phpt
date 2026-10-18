@@ -25,7 +25,16 @@ min_php=8.1
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "Fiber"
+                        "Name": {
+                          "parts": [
+                            "Fiber"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 19,
+                            "end": 24
+                          }
+                        }
                       },
                       "span": {
                         "start": 19,
@@ -68,7 +77,16 @@ min_php=8.1
                                         "StaticMethodCall": {
                                           "class": {
                                             "kind": {
-                                              "Identifier": "Fiber"
+                                              "Name": {
+                                                "parts": [
+                                                  "Fiber"
+                                                ],
+                                                "kind": "Unqualified",
+                                                "span": {
+                                                  "start": 44,
+                                                  "end": 49
+                                                }
+                                              }
                                             },
                                             "span": {
                                               "start": 44,

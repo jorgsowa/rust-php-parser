@@ -17,7 +17,16 @@ PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input 
             "New": {
               "class": {
                 "kind": {
-                  "Identifier": "readonly"
+                  "Name": {
+                    "parts": [
+                      "readonly"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 10,
+                      "end": 18
+                    }
+                  }
                 },
                 "span": {
                   "start": 10,

@@ -10,7 +10,16 @@
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "array_filter"
+                  "Name": {
+                    "parts": [
+                      "array_filter"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 18
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,

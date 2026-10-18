@@ -53,7 +53,16 @@ $r3 = $a || $b *= 2;
                               "FunctionCall": {
                                 "name": {
                                   "kind": {
-                                    "Identifier": "foo"
+                                    "Name": {
+                                      "parts": [
+                                        "foo"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 23,
+                                        "end": 26
+                                      }
+                                    }
                                   },
                                   "span": {
                                     "start": 23,
@@ -181,7 +190,16 @@ $r3 = $a || $b *= 2;
                             "FunctionCall": {
                               "name": {
                                 "kind": {
-                                  "Identifier": "fetch"
+                                  "Name": {
+                                    "parts": [
+                                      "fetch"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 61,
+                                      "end": 66
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 61,

@@ -205,7 +205,16 @@ enum Suit: string implements HasColor {
                                         "ClassConstAccess": {
                                           "class": {
                                             "kind": {
-                                              "Identifier": "Suit"
+                                              "Name": {
+                                                "parts": [
+                                                  "Suit"
+                                                ],
+                                                "kind": "Unqualified",
+                                                "span": {
+                                                  "start": 243,
+                                                  "end": 247
+                                                }
+                                              }
                                             },
                                             "span": {
                                               "start": 243,
@@ -233,7 +242,16 @@ enum Suit: string implements HasColor {
                                         "ClassConstAccess": {
                                           "class": {
                                             "kind": {
-                                              "Identifier": "Suit"
+                                              "Name": {
+                                                "parts": [
+                                                  "Suit"
+                                                ],
+                                                "kind": "Unqualified",
+                                                "span": {
+                                                  "start": 257,
+                                                  "end": 261
+                                                }
+                                              }
                                             },
                                             "span": {
                                               "start": 257,
@@ -278,7 +296,16 @@ enum Suit: string implements HasColor {
                                         "ClassConstAccess": {
                                           "class": {
                                             "kind": {
-                                              "Identifier": "Suit"
+                                              "Name": {
+                                                "parts": [
+                                                  "Suit"
+                                                ],
+                                                "kind": "Unqualified",
+                                                "span": {
+                                                  "start": 294,
+                                                  "end": 298
+                                                }
+                                              }
                                             },
                                             "span": {
                                               "start": 294,
@@ -306,7 +333,16 @@ enum Suit: string implements HasColor {
                                         "ClassConstAccess": {
                                           "class": {
                                             "kind": {
-                                              "Identifier": "Suit"
+                                              "Name": {
+                                                "parts": [
+                                                  "Suit"
+                                                ],
+                                                "kind": "Unqualified",
+                                                "span": {
+                                                  "start": 307,
+                                                  "end": 311
+                                                }
+                                              }
                                             },
                                             "span": {
                                               "start": 307,

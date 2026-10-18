@@ -48,7 +48,16 @@ PHP Parse error:  syntax error, unexpected token ">" in Standard input code on l
                                 "kind": {
                                   "Function": {
                                     "kind": {
-                                      "Identifier": "trim"
+                                      "Name": {
+                                        "parts": [
+                                          "trim"
+                                        ],
+                                        "kind": "Unqualified",
+                                        "span": {
+                                          "start": 21,
+                                          "end": 25
+                                        }
+                                      }
                                     },
                                     "span": {
                                       "start": 21,
@@ -77,7 +86,16 @@ PHP Parse error:  syntax error, unexpected token ">" in Standard input code on l
                           "kind": {
                             "Function": {
                               "kind": {
-                                "Identifier": "strtolower"
+                                "Name": {
+                                  "parts": [
+                                    "strtolower"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 34,
+                                    "end": 44
+                                  }
+                                }
                               },
                               "span": {
                                 "start": 34,

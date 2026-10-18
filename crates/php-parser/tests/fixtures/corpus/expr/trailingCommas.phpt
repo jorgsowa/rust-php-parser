@@ -17,7 +17,16 @@ isset($a, $b, );
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "foo"
+                  "Name": {
+                    "parts": [
+                      "foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 7,
+                      "end": 10
+                    }
+                  }
                 },
                 "span": {
                   "start": 7,
@@ -156,7 +165,16 @@ isset($a, $b, );
             "StaticMethodCall": {
               "class": {
                 "kind": {
-                  "Identifier": "Foo"
+                  "Name": {
+                    "parts": [
+                      "Foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 43,
+                      "end": 46
+                    }
+                  }
                 },
                 "span": {
                   "start": 43,
@@ -230,7 +248,16 @@ isset($a, $b, );
             "New": {
               "class": {
                 "kind": {
-                  "Identifier": "Foo"
+                  "Name": {
+                    "parts": [
+                      "Foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 67,
+                      "end": 70
+                    }
+                  }
                 },
                 "span": {
                   "start": 67,

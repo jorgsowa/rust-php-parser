@@ -60,7 +60,16 @@
                             "StaticPropertyAccess": {
                               "class": {
                                 "kind": {
-                                  "Identifier": "self"
+                                  "Name": {
+                                    "parts": [
+                                      "self"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 69,
+                                      "end": 73
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 69,

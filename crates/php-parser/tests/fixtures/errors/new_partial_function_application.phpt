@@ -17,7 +17,16 @@ PHP Fatal error:  Cannot create Closure for new expression in Standard input cod
             "New": {
               "class": {
                 "kind": {
-                  "Identifier": "Foo"
+                  "Name": {
+                    "parts": [
+                      "Foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 10,
+                      "end": 13
+                    }
+                  }
                 },
                 "span": {
                   "start": 10,

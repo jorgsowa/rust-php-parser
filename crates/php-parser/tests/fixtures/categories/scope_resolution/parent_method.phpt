@@ -43,7 +43,16 @@
                             "StaticMethodCall": {
                               "class": {
                                 "kind": {
-                                  "Identifier": "parent"
+                                  "Name": {
+                                    "parts": [
+                                      "parent"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 52,
+                                      "end": 58
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 52,

@@ -12,7 +12,16 @@ namespace\A\B;
       "kind": {
         "Expression": {
           "kind": {
-            "Identifier": "A"
+            "Name": {
+              "parts": [
+                "A"
+              ],
+              "kind": "Unqualified",
+              "span": {
+                "start": 7,
+                "end": 8
+              }
+            }
           },
           "span": {
             "start": 7,
@@ -29,7 +38,17 @@ namespace\A\B;
       "kind": {
         "Expression": {
           "kind": {
-            "Identifier": "A\\B"
+            "Name": {
+              "parts": [
+                "A",
+                "B"
+              ],
+              "kind": "Qualified",
+              "span": {
+                "start": 10,
+                "end": 13
+              }
+            }
           },
           "span": {
             "start": 10,
@@ -46,7 +65,17 @@ namespace\A\B;
       "kind": {
         "Expression": {
           "kind": {
-            "Identifier": "\\A\\B"
+            "Name": {
+              "parts": [
+                "A",
+                "B"
+              ],
+              "kind": "FullyQualified",
+              "span": {
+                "start": 15,
+                "end": 19
+              }
+            }
           },
           "span": {
             "start": 15,
@@ -63,7 +92,17 @@ namespace\A\B;
       "kind": {
         "Expression": {
           "kind": {
-            "Identifier": "namespace\\A\\B"
+            "Name": {
+              "parts": [
+                "A",
+                "B"
+              ],
+              "kind": "Relative",
+              "span": {
+                "start": 21,
+                "end": 34
+              }
+            }
           },
           "span": {
             "start": 21,

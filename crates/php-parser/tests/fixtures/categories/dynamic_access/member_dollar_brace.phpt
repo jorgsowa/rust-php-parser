@@ -30,7 +30,16 @@ C::${f()} = g();
                             "FunctionCall": {
                               "name": {
                                 "kind": {
-                                  "Identifier": "f"
+                                  "Name": {
+                                    "parts": [
+                                      "f"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 13,
+                                      "end": 14
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 13,
@@ -64,7 +73,16 @@ C::${f()} = g();
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "g"
+                        "Name": {
+                          "parts": [
+                            "g"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 20,
+                            "end": 21
+                          }
+                        }
                       },
                       "span": {
                         "start": 20,
@@ -135,7 +153,16 @@ C::${f()} = g();
                             "FunctionCall": {
                               "name": {
                                 "kind": {
-                                  "Identifier": "f"
+                                  "Name": {
+                                    "parts": [
+                                      "f"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 36,
+                                      "end": 37
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 36,
@@ -169,7 +196,16 @@ C::${f()} = g();
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "g"
+                        "Name": {
+                          "parts": [
+                            "g"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 43,
+                            "end": 44
+                          }
+                        }
                       },
                       "span": {
                         "start": 43,
@@ -207,7 +243,16 @@ C::${f()} = g();
                   "StaticPropertyAccessDynamic": {
                     "class": {
                       "kind": {
-                        "Identifier": "C"
+                        "Name": {
+                          "parts": [
+                            "C"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 48,
+                            "end": 49
+                          }
+                        }
                       },
                       "span": {
                         "start": 48,
@@ -221,7 +266,16 @@ C::${f()} = g();
                             "FunctionCall": {
                               "name": {
                                 "kind": {
-                                  "Identifier": "f"
+                                  "Name": {
+                                    "parts": [
+                                      "f"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 53,
+                                      "end": 54
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 53,
@@ -255,7 +309,16 @@ C::${f()} = g();
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "g"
+                        "Name": {
+                          "parts": [
+                            "g"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 60,
+                            "end": 61
+                          }
+                        }
                       },
                       "span": {
                         "start": 60,

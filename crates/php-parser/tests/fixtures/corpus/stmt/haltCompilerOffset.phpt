@@ -14,7 +14,16 @@ Foo
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "var_dump"
+                  "Name": {
+                    "parts": [
+                      "var_dump"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 7,
+                      "end": 15
+                    }
+                  }
                 },
                 "span": {
                   "start": 7,
@@ -26,7 +35,16 @@ Foo
                   "name": null,
                   "value": {
                     "kind": {
-                      "Identifier": "__HALT_COMPILER_OFFSET__"
+                      "Name": {
+                        "parts": [
+                          "__HALT_COMPILER_OFFSET__"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 16,
+                          "end": 40
+                        }
+                      }
                     },
                     "span": {
                       "start": 16,

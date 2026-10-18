@@ -18,7 +18,16 @@
                             "New": {
                               "class": {
                                 "kind": {
-                                  "Identifier": "Foo"
+                                  "Name": {
+                                    "parts": [
+                                      "Foo"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 11,
+                                      "end": 14
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 11,

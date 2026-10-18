@@ -18,7 +18,16 @@ min_php=8.1
                     "New": {
                       "class": {
                         "kind": {
-                          "Identifier": "\\Exception"
+                          "Name": {
+                            "parts": [
+                              "Exception"
+                            ],
+                            "kind": "FullyQualified",
+                            "span": {
+                              "start": 38,
+                              "end": 48
+                            }
+                          }
                         },
                         "span": {
                           "start": 38,

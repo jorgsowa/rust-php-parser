@@ -143,7 +143,16 @@ DIE($a, $b);
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "exit"
+                  "Name": {
+                    "parts": [
+                      "exit"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 61,
+                      "end": 65
+                    }
+                  }
                 },
                 "span": {
                   "start": 61,
@@ -199,7 +208,16 @@ DIE($a, $b);
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "exit"
+                  "Name": {
+                    "parts": [
+                      "exit"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 79,
+                      "end": 83
+                    }
+                  }
                 },
                 "span": {
                   "start": 79,
@@ -246,7 +264,16 @@ DIE($a, $b);
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "exit"
+                  "Name": {
+                    "parts": [
+                      "exit"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 95,
+                      "end": 99
+                    }
+                  }
                 },
                 "span": {
                   "start": 95,
@@ -311,7 +338,16 @@ DIE($a, $b);
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "\\exit"
+                  "Name": {
+                    "parts": [
+                      "exit"
+                    ],
+                    "kind": "FullyQualified",
+                    "span": {
+                      "start": 109,
+                      "end": 114
+                    }
+                  }
                 },
                 "span": {
                   "start": 109,
@@ -359,7 +395,16 @@ DIE($a, $b);
               "kind": {
                 "Function": {
                   "kind": {
-                    "Identifier": "exit"
+                    "Name": {
+                      "parts": [
+                        "exit"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 120,
+                        "end": 124
+                      }
+                    }
                   },
                   "span": {
                     "start": 120,
@@ -387,7 +432,16 @@ DIE($a, $b);
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "DIE"
+                  "Name": {
+                    "parts": [
+                      "DIE"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 131,
+                      "end": 134
+                    }
+                  }
                 },
                 "span": {
                   "start": 131,

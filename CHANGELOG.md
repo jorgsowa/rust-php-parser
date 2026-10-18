@@ -16,9 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Breaking:** removed `BuiltinType::Integer`, `BuiltinType::Double` and `BuiltinType::Boolean`. In type position PHP treats `integer`, `double` and `boolean` as class names, so they now parse as `TypeHintKind::Named` (`php-ast`, `php-rs-parser`).
 - **Breaking:** `PropertyDecl` has new `is_final` and `is_abstract` fields; the PHP 8.4 `final` and `abstract` property modifiers were parsed and then dropped, so the printer lost them too. Both are serialized only when `true` (`php-ast`, `php-rs-parser`, `php-printer`).
+- **Breaking:** function, class and constant references in expressions (call and `new` targets, the class in `Foo::bar()`, `Foo::C` and `instanceof`, constants) are `ExprKind::Name(Name)` instead of `ExprKind::Identifier`, so `visit_name`, `fold_name` and `NameResolver` see them with their qualification. `Identifier` is kept for member names after `->`, `?->` and `::` (`php-ast`, `php-rs-parser`, `php-printer`).
 
 ### Fixed
 
+- `new namespace\Foo` dropped the `namespace\` prefix of the class name (`php-rs-parser`).
 - `Visitor`, `OwnedVisitor` and both scope walkers call `visit_name` for the namespace name, named-argument names and the names in trait `insteadof`/`as` adaptations, matching `Fold`. The default `visit_trait_adaptation` now walks into the adaptation (`php-ast`).
 - `ScopeWalker` and `OwnedScopeWalker` start every walk from the global scope; a reused walker kept the namespace of the previous program, and the class and function names after a `Break` (`php-ast`).
 - `NameResolver` resolves unqualified `true`, `false` and `null` constants to the global name inside a namespace instead of `ResolvedName::Fallback` (`php-ast`).

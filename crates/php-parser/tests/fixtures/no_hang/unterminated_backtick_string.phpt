@@ -19,7 +19,16 @@ PHP Parse error:  syntax error, unexpected variable "$x", expecting "]" in Stand
             "ArrayAccess": {
               "array": {
                 "kind": {
-                  "Identifier": "cl"
+                  "Name": {
+                    "parts": [
+                      "cl"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 8
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,
@@ -28,7 +37,16 @@ PHP Parse error:  syntax error, unexpected variable "$x", expecting "]" in Stand
               },
               "index": {
                 "kind": {
-                  "Identifier": "p1"
+                  "Name": {
+                    "parts": [
+                      "p1"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 9,
+                      "end": 11
+                    }
+                  }
                 },
                 "span": {
                   "start": 9,

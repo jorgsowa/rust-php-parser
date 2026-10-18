@@ -12,7 +12,16 @@ min_php=8.5
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "clone"
+                  "Name": {
+                    "parts": [
+                      "clone"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 11
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,

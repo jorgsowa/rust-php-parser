@@ -83,7 +83,16 @@ PHP Parse error:  syntax error, unexpected token "const" in Standard input code 
             "name": "D",
             "value": {
               "kind": {
-                "Identifier": "E"
+                "Name": {
+                  "parts": [
+                    "E"
+                  ],
+                  "kind": "Unqualified",
+                  "span": {
+                    "start": 42,
+                    "end": 43
+                  }
+                }
               },
               "span": {
                 "start": 42,

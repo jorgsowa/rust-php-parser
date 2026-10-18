@@ -19,7 +19,16 @@ try {
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "risky"
+                          "Name": {
+                            "parts": [
+                              "risky"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 16,
+                              "end": 21
+                            }
+                          }
                         },
                         "span": {
                           "start": 16,
@@ -84,7 +93,16 @@ try {
                         "FunctionCall": {
                           "name": {
                             "kind": {
-                              "Identifier": "handle"
+                              "Name": {
+                                "parts": [
+                                  "handle"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 50,
+                                  "end": 56
+                                }
+                              }
                             },
                             "span": {
                               "start": 50,

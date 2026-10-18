@@ -30,7 +30,16 @@ namespace {
                 "kind": {
                   "Expression": {
                     "kind": {
-                      "Identifier": "foo"
+                      "Name": {
+                        "parts": [
+                          "foo"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 31,
+                          "end": 34
+                        }
+                      }
                     },
                     "span": {
                       "start": 31,
@@ -62,7 +71,16 @@ namespace {
                 "kind": {
                   "Expression": {
                     "kind": {
-                      "Identifier": "bar"
+                      "Name": {
+                        "parts": [
+                          "bar"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 54,
+                          "end": 57
+                        }
+                      }
                     },
                     "span": {
                       "start": 54,

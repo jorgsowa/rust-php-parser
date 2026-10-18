@@ -25,7 +25,18 @@ App\Helpers\format($data);
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "App\\Models\\User"
+                        "Name": {
+                          "parts": [
+                            "App",
+                            "Models",
+                            "User"
+                          ],
+                          "kind": "Qualified",
+                          "span": {
+                            "start": 18,
+                            "end": 33
+                          }
+                        }
                       },
                       "span": {
                         "start": 18,
@@ -60,7 +71,18 @@ App\Helpers\format($data);
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "App\\Helpers\\format"
+                  "Name": {
+                    "parts": [
+                      "App",
+                      "Helpers",
+                      "format"
+                    ],
+                    "kind": "Qualified",
+                    "span": {
+                      "start": 37,
+                      "end": 55
+                    }
+                  }
                 },
                 "span": {
                   "start": 37,

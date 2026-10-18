@@ -440,7 +440,16 @@ class Foo {
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "Test"
+                        "Name": {
+                          "parts": [
+                            "Test"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 403,
+                            "end": 407
+                          }
+                        }
                       },
                       "span": {
                         "start": 403,
@@ -549,7 +558,16 @@ class Foo {
             "StaticMethodCall": {
               "class": {
                 "kind": {
-                  "Identifier": "Test"
+                  "Name": {
+                    "parts": [
+                      "Test"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 437,
+                      "end": 441
+                    }
+                  }
                 },
                 "span": {
                   "start": 437,
@@ -586,7 +604,16 @@ class Foo {
             "StaticMethodCall": {
               "class": {
                 "kind": {
-                  "Identifier": "Test"
+                  "Name": {
+                    "parts": [
+                      "Test"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 451,
+                      "end": 455
+                    }
+                  }
                 },
                 "span": {
                   "start": 451,
@@ -695,7 +722,16 @@ class Foo {
             "ClassConstAccess": {
               "class": {
                 "kind": {
-                  "Identifier": "Test"
+                  "Name": {
+                    "parts": [
+                      "Test"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 496,
+                      "end": 500
+                    }
+                  }
                 },
                 "span": {
                   "start": 496,
@@ -731,7 +767,16 @@ class Foo {
             "ClassConstAccess": {
               "class": {
                 "kind": {
-                  "Identifier": "Test"
+                  "Name": {
+                    "parts": [
+                      "Test"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 509,
+                      "end": 513
+                    }
+                  }
                 },
                 "span": {
                   "start": 509,

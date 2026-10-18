@@ -463,6 +463,7 @@ pub fn fold_expr<'new, 'src, F: Fold<'src> + ?Sized>(
             ExprKind::VariableVariable(arena.alloc(folder.fold_expr(arena, inner)))
         }
         ExprKind::Identifier(name) => ExprKind::Identifier(fold_name_str(*name, arena)),
+        ExprKind::Name(name) => ExprKind::Name(folder.fold_name(arena, name)),
         ExprKind::Assign(assign) => ExprKind::Assign(AssignExpr {
             target: arena.alloc(folder.fold_expr(arena, assign.target)),
             op: assign.op,

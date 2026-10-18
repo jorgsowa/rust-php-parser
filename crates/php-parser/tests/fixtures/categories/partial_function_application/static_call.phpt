@@ -25,7 +25,16 @@ min_php=8.6
                   "StaticMethodCall": {
                     "class": {
                       "kind": {
-                        "Identifier": "Foo"
+                        "Name": {
+                          "parts": [
+                            "Foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 12,
+                            "end": 15
+                          }
+                        }
                       },
                       "span": {
                         "start": 12,

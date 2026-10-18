@@ -36,7 +36,16 @@ function outer(): void {
                           "FunctionCall": {
                             "name": {
                               "kind": {
-                                "Identifier": "compute"
+                                "Name": {
+                                  "parts": [
+                                    "compute"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 66,
+                                    "end": 73
+                                  }
+                                }
                               },
                               "span": {
                                 "start": 66,

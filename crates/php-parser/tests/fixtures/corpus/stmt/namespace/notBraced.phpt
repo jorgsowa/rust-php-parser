@@ -35,7 +35,16 @@ bar;
       "kind": {
         "Expression": {
           "kind": {
-            "Identifier": "foo"
+            "Name": {
+              "parts": [
+                "foo"
+              ],
+              "kind": "Unqualified",
+              "span": {
+                "start": 26,
+                "end": 29
+              }
+            }
           },
           "span": {
             "start": 26,
@@ -73,7 +82,16 @@ bar;
       "kind": {
         "Expression": {
           "kind": {
-            "Identifier": "bar"
+            "Name": {
+              "parts": [
+                "bar"
+              ],
+              "kind": "Unqualified",
+              "span": {
+                "start": 47,
+                "end": 50
+              }
+            }
           },
           "span": {
             "start": 47,

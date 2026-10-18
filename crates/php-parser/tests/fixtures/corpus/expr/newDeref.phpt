@@ -31,7 +31,16 @@ new class {}();
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 11,
+                            "end": 12
+                          }
+                        }
                       },
                       "span": {
                         "start": 11,
@@ -78,7 +87,16 @@ new class {}();
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 25,
+                            "end": 26
+                          }
+                        }
                       },
                       "span": {
                         "start": 25,
@@ -126,7 +144,16 @@ new class {}();
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 41,
+                            "end": 42
+                          }
+                        }
                       },
                       "span": {
                         "start": 41,
@@ -173,7 +200,16 @@ new class {}();
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 55,
+                            "end": 56
+                          }
+                        }
                       },
                       "span": {
                         "start": 55,
@@ -221,7 +257,16 @@ new class {}();
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 71,
+                            "end": 72
+                          }
+                        }
                       },
                       "span": {
                         "start": 71,
@@ -268,7 +313,16 @@ new class {}();
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 86,
+                            "end": 87
+                          }
+                        }
                       },
                       "span": {
                         "start": 86,
@@ -315,7 +369,16 @@ new class {}();
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 98,
+                            "end": 99
+                          }
+                        }
                       },
                       "span": {
                         "start": 98,

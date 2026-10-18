@@ -22,7 +22,16 @@ function f() {
                 "New": {
                   "class": {
                     "kind": {
-                      "Identifier": "Foo"
+                      "Name": {
+                        "parts": [
+                          "Foo"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 20,
+                          "end": 23
+                        }
+                      }
                     },
                     "span": {
                       "start": 20,
@@ -77,7 +86,16 @@ function f() {
                 "New": {
                   "class": {
                     "kind": {
-                      "Identifier": "Bar"
+                      "Name": {
+                        "parts": [
+                          "Bar"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 48,
+                          "end": 51
+                        }
+                      }
                     },
                     "span": {
                       "start": 48,
@@ -158,7 +176,16 @@ function f() {
                         "New": {
                           "class": {
                             "kind": {
-                              "Identifier": "Cache"
+                              "Name": {
+                                "parts": [
+                                  "Cache"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 95,
+                                  "end": 100
+                                }
+                              }
                             },
                             "span": {
                               "start": 95,
@@ -195,7 +222,16 @@ function f() {
                         "New": {
                           "class": {
                             "kind": {
-                              "Identifier": "Store"
+                              "Name": {
+                                "parts": [
+                                  "Store"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 124,
+                                  "end": 129
+                                }
+                              }
                             },
                             "span": {
                               "start": 124,
@@ -222,7 +258,16 @@ function f() {
                         "New": {
                           "class": {
                             "kind": {
-                              "Identifier": "Other"
+                              "Name": {
+                                "parts": [
+                                  "Other"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 142,
+                                  "end": 147
+                                }
+                              }
                             },
                             "span": {
                               "start": 142,

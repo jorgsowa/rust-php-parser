@@ -105,7 +105,16 @@ function combined() {
                           "FunctionCall": {
                             "name": {
                               "kind": {
-                                "Identifier": "otherGenerator"
+                                "Name": {
+                                  "parts": [
+                                    "otherGenerator"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 69,
+                                    "end": 83
+                                  }
+                                }
                               },
                               "span": {
                                 "start": 69,

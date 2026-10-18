@@ -335,7 +335,16 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "clone"
+                  "Name": {
+                    "parts": [
+                      "clone"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 175,
+                      "end": 180
+                    }
+                  }
                 },
                 "span": {
                   "start": 175,
@@ -436,7 +445,16 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "clone"
+                  "Name": {
+                    "parts": [
+                      "clone"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 229,
+                      "end": 234
+                    }
+                  }
                 },
                 "span": {
                   "start": 229,
@@ -570,7 +588,16 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "clone"
+                  "Name": {
+                    "parts": [
+                      "clone"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 298,
+                      "end": 303
+                    }
+                  }
                 },
                 "span": {
                   "start": 298,
@@ -695,7 +722,16 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "clone"
+                  "Name": {
+                    "parts": [
+                      "clone"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 359,
+                      "end": 364
+                    }
+                  }
                 },
                 "span": {
                   "start": 359,
@@ -751,7 +787,16 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "clone"
+                  "Name": {
+                    "parts": [
+                      "clone"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 378,
+                      "end": 383
+                    }
+                  }
                 },
                 "span": {
                   "start": 378,
@@ -876,7 +921,16 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "clone"
+                  "Name": {
+                    "parts": [
+                      "clone"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 431,
+                      "end": 436
+                    }
+                  }
                 },
                 "span": {
                   "start": 431,
@@ -1026,7 +1080,16 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
               "kind": {
                 "Function": {
                   "kind": {
-                    "Identifier": "clone"
+                    "Name": {
+                      "parts": [
+                        "clone"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 513,
+                        "end": 518
+                      }
+                    }
                   },
                   "span": {
                     "start": 513,

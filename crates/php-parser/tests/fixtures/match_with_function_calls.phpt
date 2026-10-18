@@ -31,7 +31,16 @@ $label = match (getStatus()) {
                         "FunctionCall": {
                           "name": {
                             "kind": {
-                              "Identifier": "getStatus"
+                              "Name": {
+                                "parts": [
+                                  "getStatus"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 22,
+                                  "end": 31
+                                }
+                              }
                             },
                             "span": {
                               "start": 22,
@@ -54,7 +63,16 @@ $label = match (getStatus()) {
                               "FunctionCall": {
                                 "name": {
                                   "kind": {
-                                    "Identifier": "isActive"
+                                    "Name": {
+                                      "parts": [
+                                        "isActive"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 41,
+                                        "end": 49
+                                      }
+                                    }
                                   },
                                   "span": {
                                     "start": 41,
@@ -91,7 +109,16 @@ $label = match (getStatus()) {
                               "FunctionCall": {
                                 "name": {
                                   "kind": {
-                                    "Identifier": "isPending"
+                                    "Name": {
+                                      "parts": [
+                                        "isPending"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 69,
+                                        "end": 78
+                                      }
+                                    }
                                   },
                                   "span": {
                                     "start": 69,
@@ -130,7 +157,16 @@ $label = match (getStatus()) {
                                 "New": {
                                   "class": {
                                     "kind": {
-                                      "Identifier": "LogicException"
+                                      "Name": {
+                                        "parts": [
+                                          "LogicException"
+                                        ],
+                                        "kind": "Unqualified",
+                                        "span": {
+                                          "start": 120,
+                                          "end": 134
+                                        }
+                                      }
                                     },
                                     "span": {
                                       "start": 120,

@@ -16,7 +16,16 @@ min_php=8.5
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "someFn"
+                        "Name": {
+                          "parts": [
+                            "someFn"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 12,
+                            "end": 18
+                          }
+                        }
                       },
                       "span": {
                         "start": 12,

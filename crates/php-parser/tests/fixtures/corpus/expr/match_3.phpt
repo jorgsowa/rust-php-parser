@@ -42,7 +42,16 @@ $result = match ($operator) {
                               "ClassConstAccess": {
                                 "class": {
                                   "kind": {
-                                    "Identifier": "BinaryOperator"
+                                    "Name": {
+                                      "parts": [
+                                        "BinaryOperator"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 41,
+                                        "end": 55
+                                      }
+                                    }
                                   },
                                   "span": {
                                     "start": 41,

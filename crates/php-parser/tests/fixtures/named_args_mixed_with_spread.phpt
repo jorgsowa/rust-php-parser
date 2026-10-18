@@ -14,7 +14,16 @@ PHP Fatal error:  Cannot use argument unpacking after named arguments in Standar
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "func"
+                  "Name": {
+                    "parts": [
+                      "func"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 10
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,

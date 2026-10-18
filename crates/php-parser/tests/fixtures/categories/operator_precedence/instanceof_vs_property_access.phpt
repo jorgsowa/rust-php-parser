@@ -42,7 +42,16 @@ $a->b instanceof Foo;
               "op": "Instanceof",
               "right": {
                 "kind": {
-                  "Identifier": "Foo"
+                  "Name": {
+                    "parts": [
+                      "Foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 23,
+                      "end": 26
+                    }
+                  }
                 },
                 "span": {
                   "start": 23,

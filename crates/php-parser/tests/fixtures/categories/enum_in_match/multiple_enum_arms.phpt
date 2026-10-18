@@ -40,7 +40,16 @@ min_php=8.1
                               "ClassConstAccess": {
                                 "class": {
                                   "kind": {
-                                    "Identifier": "Status"
+                                    "Name": {
+                                      "parts": [
+                                        "Status"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 28,
+                                        "end": 34
+                                      }
+                                    }
                                   },
                                   "span": {
                                     "start": 28,
@@ -68,7 +77,16 @@ min_php=8.1
                               "ClassConstAccess": {
                                 "class": {
                                   "kind": {
-                                    "Identifier": "Status"
+                                    "Name": {
+                                      "parts": [
+                                        "Status"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 44,
+                                        "end": 50
+                                      }
+                                    }
                                   },
                                   "span": {
                                     "start": 44,
@@ -113,7 +131,16 @@ min_php=8.1
                               "ClassConstAccess": {
                                 "class": {
                                   "kind": {
-                                    "Identifier": "Status"
+                                    "Name": {
+                                      "parts": [
+                                        "Status"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 71,
+                                        "end": 77
+                                      }
+                                    }
                                   },
                                   "span": {
                                     "start": 71,

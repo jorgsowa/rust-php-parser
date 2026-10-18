@@ -32,7 +32,16 @@ finally { }
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "doTry"
+                          "Name": {
+                            "parts": [
+                              "doTry"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 17,
+                              "end": 22
+                            }
+                          }
                         },
                         "span": {
                           "start": 17,
@@ -77,7 +86,16 @@ finally { }
                         "FunctionCall": {
                           "name": {
                             "kind": {
-                              "Identifier": "doCatchA"
+                              "Name": {
+                                "parts": [
+                                  "doCatchA"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 47,
+                                  "end": 55
+                                }
+                              }
                             },
                             "span": {
                               "start": 47,
@@ -126,7 +144,16 @@ finally { }
                         "FunctionCall": {
                           "name": {
                             "kind": {
-                              "Identifier": "doCatchB"
+                              "Name": {
+                                "parts": [
+                                  "doCatchB"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 80,
+                                  "end": 88
+                                }
+                              }
                             },
                             "span": {
                               "start": 80,
@@ -162,7 +189,16 @@ finally { }
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "doFinally"
+                          "Name": {
+                            "parts": [
+                              "doFinally"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 108,
+                              "end": 117
+                            }
+                          }
                         },
                         "span": {
                           "start": 108,

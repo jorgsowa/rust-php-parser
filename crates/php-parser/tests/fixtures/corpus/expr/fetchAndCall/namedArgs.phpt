@@ -12,7 +12,16 @@ bar(class: 0);
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "foo"
+                  "Name": {
+                    "parts": [
+                      "foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 9
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,
@@ -95,7 +104,16 @@ bar(class: 0);
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "bar"
+                  "Name": {
+                    "parts": [
+                      "bar"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 25,
+                      "end": 28
+                    }
+                  }
                 },
                 "span": {
                   "start": 25,

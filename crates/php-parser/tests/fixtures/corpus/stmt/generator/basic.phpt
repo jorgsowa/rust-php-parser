@@ -597,7 +597,16 @@ function gen() {
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "func"
+                          "Name": {
+                            "parts": [
+                              "func"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 493,
+                              "end": 497
+                            }
+                          }
                         },
                         "span": {
                           "start": 493,
@@ -724,7 +733,16 @@ function gen() {
                     "New": {
                       "class": {
                         "kind": {
-                          "Identifier": "Foo"
+                          "Name": {
+                            "parts": [
+                              "Foo"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 547,
+                              "end": 550
+                            }
+                          }
                         },
                         "span": {
                           "start": 547,

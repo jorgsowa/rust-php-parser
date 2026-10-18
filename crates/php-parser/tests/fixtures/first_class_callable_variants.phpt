@@ -28,7 +28,16 @@ $e = $obj->$dynamic(...);
                     "kind": {
                       "Function": {
                         "kind": {
-                          "Identifier": "strlen"
+                          "Name": {
+                            "parts": [
+                              "strlen"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 11,
+                              "end": 17
+                            }
+                          }
                         },
                         "span": {
                           "start": 11,
@@ -138,7 +147,16 @@ $e = $obj->$dynamic(...);
                       "StaticMethod": {
                         "class": {
                           "kind": {
-                            "Identifier": "Foo"
+                            "Name": {
+                              "parts": [
+                                "Foo"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 53,
+                                "end": 56
+                              }
+                            }
                           },
                           "span": {
                             "start": 53,

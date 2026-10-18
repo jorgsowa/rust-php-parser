@@ -28,7 +28,16 @@ class Foo {}
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "foo"
+                  "Name": {
+                    "parts": [
+                      "foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 46,
+                      "end": 49
+                    }
+                  }
                 },
                 "span": {
                   "start": 46,
@@ -274,7 +283,17 @@ class Foo {}
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "\\Namespace\\foo"
+                  "Name": {
+                    "parts": [
+                      "Namespace",
+                      "foo"
+                    ],
+                    "kind": "FullyQualified",
+                    "span": {
+                      "start": 307,
+                      "end": 321
+                    }
+                  }
                 },
                 "span": {
                   "start": 307,

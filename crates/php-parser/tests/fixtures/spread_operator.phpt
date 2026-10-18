@@ -12,7 +12,16 @@ $merged = [...$a, ...$b, 1, 2];
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "call"
+                  "Name": {
+                    "parts": [
+                      "call"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 10
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,

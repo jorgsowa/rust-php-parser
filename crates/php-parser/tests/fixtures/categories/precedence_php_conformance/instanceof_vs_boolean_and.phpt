@@ -26,7 +26,16 @@ $a instanceof Foo && $b instanceof Bar;
                     "op": "Instanceof",
                     "right": {
                       "kind": {
-                        "Identifier": "Foo"
+                        "Name": {
+                          "parts": [
+                            "Foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 20,
+                            "end": 23
+                          }
+                        }
                       },
                       "span": {
                         "start": 20,
@@ -56,7 +65,16 @@ $a instanceof Foo && $b instanceof Bar;
                     "op": "Instanceof",
                     "right": {
                       "kind": {
-                        "Identifier": "Bar"
+                        "Name": {
+                          "parts": [
+                            "Bar"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 41,
+                            "end": 44
+                          }
+                        }
                       },
                       "span": {
                         "start": 41,

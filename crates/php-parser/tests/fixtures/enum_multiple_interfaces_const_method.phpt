@@ -109,7 +109,16 @@ enum Status: string implements Loggable, Serializable {
                       "ClassConstAccess": {
                         "class": {
                           "kind": {
-                            "Identifier": "self"
+                            "Name": {
+                              "parts": [
+                                "self"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 143,
+                                "end": 147
+                              }
+                            }
                           },
                           "span": {
                             "start": 143,
@@ -263,7 +272,16 @@ enum Status: string implements Loggable, Serializable {
                                   "ClassConstAccess": {
                                     "class": {
                                       "kind": {
-                                        "Identifier": "self"
+                                        "Name": {
+                                          "parts": [
+                                            "self"
+                                          ],
+                                          "kind": "Unqualified",
+                                          "span": {
+                                            "start": 296,
+                                            "end": 300
+                                          }
+                                        }
                                       },
                                       "span": {
                                         "start": 296,

@@ -50,7 +50,16 @@
                           "Binary": {
                             "left": {
                               "kind": {
-                                "Identifier": "FLAG_A"
+                                "Name": {
+                                  "parts": [
+                                    "FLAG_A"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 66,
+                                    "end": 72
+                                  }
+                                }
                               },
                               "span": {
                                 "start": 66,
@@ -60,7 +69,16 @@
                             "op": "BitwiseOr",
                             "right": {
                               "kind": {
-                                "Identifier": "FLAG_B"
+                                "Name": {
+                                  "parts": [
+                                    "FLAG_B"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 75,
+                                    "end": 81
+                                  }
+                                }
                               },
                               "span": {
                                 "start": 75,

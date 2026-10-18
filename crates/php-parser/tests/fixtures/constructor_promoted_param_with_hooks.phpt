@@ -72,7 +72,16 @@ class Foo {
                                 "FunctionCall": {
                                   "name": {
                                     "kind": {
-                                      "Identifier": "strtoupper"
+                                      "Name": {
+                                        "parts": [
+                                          "strtoupper"
+                                        ],
+                                        "kind": "Unqualified",
+                                        "span": {
+                                          "start": 100,
+                                          "end": 110
+                                        }
+                                      }
                                     },
                                     "span": {
                                       "start": 100,
@@ -178,7 +187,16 @@ class Foo {
                                             "FunctionCall": {
                                               "name": {
                                                 "kind": {
-                                                  "Identifier": "trim"
+                                                  "Name": {
+                                                    "parts": [
+                                                      "trim"
+                                                    ],
+                                                    "kind": "Unqualified",
+                                                    "span": {
+                                                      "start": 172,
+                                                      "end": 176
+                                                    }
+                                                  }
                                                 },
                                                 "span": {
                                                   "start": 172,

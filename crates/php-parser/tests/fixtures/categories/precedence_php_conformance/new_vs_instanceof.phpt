@@ -17,7 +17,16 @@ new Foo() instanceof Foo;
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "Foo"
+                        "Name": {
+                          "parts": [
+                            "Foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 10,
+                            "end": 13
+                          }
+                        }
                       },
                       "span": {
                         "start": 10,
@@ -35,7 +44,16 @@ new Foo() instanceof Foo;
               "op": "Instanceof",
               "right": {
                 "kind": {
-                  "Identifier": "Foo"
+                  "Name": {
+                    "parts": [
+                      "Foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 27,
+                      "end": 30
+                    }
+                  }
                 },
                 "span": {
                   "start": 27,

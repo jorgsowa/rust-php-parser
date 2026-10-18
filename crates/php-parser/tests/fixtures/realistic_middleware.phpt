@@ -726,7 +726,16 @@ class RateLimitMiddleware implements MiddlewareInterface
                               "StaticPropertyAccess": {
                                 "class": {
                                   "kind": {
-                                    "Identifier": "self"
+                                    "Name": {
+                                      "parts": [
+                                        "self"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 638,
+                                        "end": 642
+                                      }
+                                    }
                                   },
                                   "span": {
                                     "start": 638,
@@ -989,7 +998,16 @@ class RateLimitMiddleware implements MiddlewareInterface
                                   "FunctionCall": {
                                     "name": {
                                       "kind": {
-                                        "Identifier": "str_replace"
+                                        "Name": {
+                                          "parts": [
+                                            "str_replace"
+                                          ],
+                                          "kind": "Unqualified",
+                                          "span": {
+                                            "start": 857,
+                                            "end": 868
+                                          }
+                                        }
                                       },
                                       "span": {
                                         "start": 857,
@@ -1102,7 +1120,16 @@ class RateLimitMiddleware implements MiddlewareInterface
                                         "New": {
                                           "class": {
                                             "kind": {
-                                              "Identifier": "Response"
+                                              "Name": {
+                                                "parts": [
+                                                  "Response"
+                                                ],
+                                                "kind": "Unqualified",
+                                                "span": {
+                                                  "start": 946,
+                                                  "end": 954
+                                                }
+                                              }
                                             },
                                             "span": {
                                               "start": 946,
@@ -1541,7 +1568,16 @@ class RateLimitMiddleware implements MiddlewareInterface
                                         "New": {
                                           "class": {
                                             "kind": {
-                                              "Identifier": "Response"
+                                              "Name": {
+                                                "parts": [
+                                                  "Response"
+                                                ],
+                                                "kind": "Unqualified",
+                                                "span": {
+                                                  "start": 1283,
+                                                  "end": 1291
+                                                }
+                                              }
                                             },
                                             "span": {
                                               "start": 1283,
@@ -1685,7 +1721,16 @@ class RateLimitMiddleware implements MiddlewareInterface
                                             "FunctionCall": {
                                               "name": {
                                                 "kind": {
-                                                  "Identifier": "error_log"
+                                                  "Name": {
+                                                    "parts": [
+                                                      "error_log"
+                                                    ],
+                                                    "kind": "Unqualified",
+                                                    "span": {
+                                                      "start": 1401,
+                                                      "end": 1410
+                                                    }
+                                                  }
                                                 },
                                                 "span": {
                                                   "start": 1401,
@@ -1778,7 +1823,16 @@ class RateLimitMiddleware implements MiddlewareInterface
                                         "New": {
                                           "class": {
                                             "kind": {
-                                              "Identifier": "Response"
+                                              "Name": {
+                                                "parts": [
+                                                  "Response"
+                                                ],
+                                                "kind": "Unqualified",
+                                                "span": {
+                                                  "start": 1470,
+                                                  "end": 1478
+                                                }
+                                              }
                                             },
                                             "span": {
                                               "start": 1470,
@@ -2006,7 +2060,16 @@ class RateLimitMiddleware implements MiddlewareInterface
                                   "StaticPropertyAccess": {
                                     "class": {
                                       "kind": {
-                                        "Identifier": "self"
+                                        "Name": {
+                                          "parts": [
+                                            "self"
+                                          ],
+                                          "kind": "Unqualified",
+                                          "span": {
+                                            "start": 1639,
+                                            "end": 1643
+                                          }
+                                        }
                                       },
                                       "span": {
                                         "start": 1639,
@@ -2040,7 +2103,16 @@ class RateLimitMiddleware implements MiddlewareInterface
                                           "StaticPropertyAccess": {
                                             "class": {
                                               "kind": {
-                                                "Identifier": "self"
+                                                "Name": {
+                                                  "parts": [
+                                                    "self"
+                                                  ],
+                                                  "kind": "Unqualified",
+                                                  "span": {
+                                                    "start": 1666,
+                                                    "end": 1670
+                                                  }
+                                                }
                                               },
                                               "span": {
                                                 "start": 1666,
@@ -2502,7 +2574,16 @@ class RateLimitMiddleware implements MiddlewareInterface
                                         "ClassConstAccess": {
                                           "class": {
                                             "kind": {
-                                              "Identifier": "self"
+                                              "Name": {
+                                                "parts": [
+                                                  "self"
+                                                ],
+                                                "kind": "Unqualified",
+                                                "span": {
+                                                  "start": 2048,
+                                                  "end": 2052
+                                                }
+                                              }
                                             },
                                             "span": {
                                               "start": 2048,
@@ -2655,7 +2736,16 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       "New": {
                                         "class": {
                                           "kind": {
-                                            "Identifier": "Response"
+                                            "Name": {
+                                              "parts": [
+                                                "Response"
+                                              ],
+                                              "kind": "Unqualified",
+                                              "span": {
+                                                "start": 2172,
+                                                "end": 2180
+                                              }
+                                            }
                                           },
                                           "span": {
                                             "start": 2172,

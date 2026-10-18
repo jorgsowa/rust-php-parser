@@ -92,7 +92,16 @@ echo "$obj->parameterName[]";
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "Foo"
+                        "Name": {
+                          "parts": [
+                            "Foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 74,
+                            "end": 77
+                          }
+                        }
                       },
                       "span": {
                         "start": 74,

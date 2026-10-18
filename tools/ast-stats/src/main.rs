@@ -87,6 +87,7 @@ impl<'a, 'src> Visitor<'a, 'src> for NodeCounter {
             ExprKind::Variable(_) => self.bump("Variable"),
             ExprKind::VariableVariable(_) => self.bump("VariableVariable"),
             ExprKind::Identifier(_) => self.bump("Identifier"),
+            ExprKind::Name(_) => self.bump("Name"),
             ExprKind::Assign(_) => self.bump("Assign"),
             ExprKind::Binary(_) => self.bump("Binary"),
             ExprKind::UnaryPrefix(_) => self.bump("UnaryPrefix"),

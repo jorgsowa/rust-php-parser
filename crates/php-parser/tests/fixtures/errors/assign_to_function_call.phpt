@@ -17,7 +17,16 @@ PHP Fatal error:  Can't use function return value in write context in Standard i
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "func"
+                        "Name": {
+                          "parts": [
+                            "func"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 6,
+                            "end": 10
+                          }
+                        }
                       },
                       "span": {
                         "start": 6,

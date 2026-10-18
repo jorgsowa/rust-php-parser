@@ -28,7 +28,16 @@ readonly();
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "readonly"
+                  "Name": {
+                    "parts": [
+                      "readonly"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 29,
+                      "end": 37
+                    }
+                  }
                 },
                 "span": {
                   "start": 29,

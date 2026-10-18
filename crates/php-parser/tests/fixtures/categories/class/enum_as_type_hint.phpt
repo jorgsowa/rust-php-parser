@@ -161,7 +161,16 @@ function baz(Enum $x): Enum { return $x; }
                             "New": {
                               "class": {
                                 "kind": {
-                                  "Identifier": "Enum"
+                                  "Name": {
+                                    "parts": [
+                                      "Enum"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 117,
+                                      "end": 121
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 117,

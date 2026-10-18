@@ -28,7 +28,16 @@ try {
                             "FunctionCall": {
                               "name": {
                                 "kind": {
-                                  "Identifier": "dangerousOp"
+                                  "Name": {
+                                    "parts": [
+                                      "dangerousOp"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 30,
+                                      "end": 41
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 30,
@@ -73,7 +82,16 @@ try {
                                 "FunctionCall": {
                                   "name": {
                                     "kind": {
-                                      "Identifier": "log"
+                                      "Name": {
+                                        "parts": [
+                                          "log"
+                                        ],
+                                        "kind": "Unqualified",
+                                        "span": {
+                                          "start": 87,
+                                          "end": 90
+                                        }
+                                      }
                                     },
                                     "span": {
                                       "start": 87,
@@ -169,7 +187,16 @@ try {
                         "FunctionCall": {
                           "name": {
                             "kind": {
-                              "Identifier": "handleOuter"
+                              "Name": {
+                                "parts": [
+                                  "handleOuter"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 154,
+                                  "end": 165
+                                }
+                              }
                             },
                             "span": {
                               "start": 154,

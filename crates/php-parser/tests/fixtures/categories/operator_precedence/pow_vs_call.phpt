@@ -26,7 +26,16 @@ PHP: `10 ** foo()` is `10 ** (foo())`. A call on the `**` right operand binds ti
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "foo"
+                        "Name": {
+                          "parts": [
+                            "foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 12,
+                            "end": 15
+                          }
+                        }
                       },
                       "span": {
                         "start": 12,

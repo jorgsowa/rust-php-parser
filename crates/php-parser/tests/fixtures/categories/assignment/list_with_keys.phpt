@@ -74,7 +74,16 @@
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "getPoint"
+                        "Name": {
+                          "parts": [
+                            "getPoint"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 31,
+                            "end": 39
+                          }
+                        }
                       },
                       "span": {
                         "start": 31,

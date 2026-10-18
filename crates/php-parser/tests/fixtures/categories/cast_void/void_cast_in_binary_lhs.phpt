@@ -41,7 +41,16 @@ min_php=8.5
                     "kind": {
                       "Function": {
                         "kind": {
-                          "Identifier": "foo"
+                          "Name": {
+                            "parts": [
+                              "foo"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 18,
+                              "end": 21
+                            }
+                          }
                         },
                         "span": {
                           "start": 18,

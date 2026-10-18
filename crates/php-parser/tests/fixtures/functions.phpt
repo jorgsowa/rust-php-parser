@@ -202,7 +202,16 @@ greet('PHP');
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "add"
+                        "Name": {
+                          "parts": [
+                            "add"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 127,
+                            "end": 130
+                          }
+                        }
                       },
                       "span": {
                         "start": 127,
@@ -274,7 +283,16 @@ greet('PHP');
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "greet"
+                  "Name": {
+                    "parts": [
+                      "greet"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 138,
+                      "end": 143
+                    }
+                  }
                 },
                 "span": {
                   "start": 138,
@@ -302,7 +320,16 @@ greet('PHP');
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "greet"
+                  "Name": {
+                    "parts": [
+                      "greet"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 147,
+                      "end": 152
+                    }
+                  }
                 },
                 "span": {
                   "start": 147,

@@ -25,7 +25,16 @@ new $a->b['c']();
             "New": {
               "class": {
                 "kind": {
-                  "Identifier": "A"
+                  "Name": {
+                    "parts": [
+                      "A"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 11,
+                      "end": 12
+                    }
+                  }
                 },
                 "span": {
                   "start": 11,
@@ -53,7 +62,16 @@ new $a->b['c']();
             "New": {
               "class": {
                 "kind": {
-                  "Identifier": "A"
+                  "Name": {
+                    "parts": [
+                      "A"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 18,
+                      "end": 19
+                    }
+                  }
                 },
                 "span": {
                   "start": 18,
@@ -178,7 +196,16 @@ new $a->b['c']();
                   "StaticPropertyAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 80,
+                            "end": 81
+                          }
+                        }
                       },
                       "span": {
                         "start": 80,
@@ -403,7 +430,16 @@ new $a->b['c']();
                 "New": {
                   "class": {
                     "kind": {
-                      "Identifier": "A"
+                      "Name": {
+                        "parts": [
+                          "A"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 222,
+                          "end": 223
+                        }
+                      }
                     },
                     "span": {
                       "start": 222,

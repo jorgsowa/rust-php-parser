@@ -43,7 +43,16 @@ $a ** $b instanceof Foo;
               "op": "Instanceof",
               "right": {
                 "kind": {
-                  "Identifier": "Foo"
+                  "Name": {
+                    "parts": [
+                      "Foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 26,
+                      "end": 29
+                    }
+                  }
                 },
                 "span": {
                   "start": 26,

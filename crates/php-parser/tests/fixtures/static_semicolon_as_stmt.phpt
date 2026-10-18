@@ -11,7 +11,16 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "::" in Standard
       "kind": {
         "Expression": {
           "kind": {
-            "Identifier": "static"
+            "Name": {
+              "parts": [
+                "static"
+              ],
+              "kind": "Unqualified",
+              "span": {
+                "start": 6,
+                "end": 12
+              }
+            }
           },
           "span": {
             "start": 6,

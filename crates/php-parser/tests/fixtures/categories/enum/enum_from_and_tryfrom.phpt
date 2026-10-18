@@ -10,7 +10,16 @@
             "StaticMethodCall": {
               "class": {
                 "kind": {
-                  "Identifier": "Status"
+                  "Name": {
+                    "parts": [
+                      "Status"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 12
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,
@@ -66,7 +75,16 @@
             "StaticMethodCall": {
               "class": {
                 "kind": {
-                  "Identifier": "Status"
+                  "Name": {
+                    "parts": [
+                      "Status"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 23,
+                      "end": 29
+                    }
+                  }
                 },
                 "span": {
                   "start": 23,

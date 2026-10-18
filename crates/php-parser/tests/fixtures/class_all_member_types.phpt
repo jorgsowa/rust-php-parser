@@ -445,7 +445,16 @@ abstract class Complete {
                             "New": {
                               "class": {
                                 "kind": {
-                                  "Identifier": "self"
+                                  "Name": {
+                                    "parts": [
+                                      "self"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 413,
+                                      "end": 417
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 413,

@@ -32,7 +32,16 @@
                             "New": {
                               "class": {
                                 "kind": {
-                                  "Identifier": "Exception"
+                                  "Name": {
+                                    "parts": [
+                                      "Exception"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 29,
+                                      "end": 38
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 29,

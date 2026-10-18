@@ -13,7 +13,16 @@ $a::class;
       "kind": {
         "Expression": {
           "kind": {
-            "Identifier": "A"
+            "Name": {
+              "parts": [
+                "A"
+              ],
+              "kind": "Unqualified",
+              "span": {
+                "start": 7,
+                "end": 8
+              }
+            }
           },
           "span": {
             "start": 7,
@@ -33,7 +42,16 @@ $a::class;
             "ClassConstAccess": {
               "class": {
                 "kind": {
-                  "Identifier": "A"
+                  "Name": {
+                    "parts": [
+                      "A"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 10,
+                      "end": 11
+                    }
+                  }
                 },
                 "span": {
                   "start": 10,
@@ -69,7 +87,16 @@ $a::class;
             "ClassConstAccess": {
               "class": {
                 "kind": {
-                  "Identifier": "A"
+                  "Name": {
+                    "parts": [
+                      "A"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 16,
+                      "end": 17
+                    }
+                  }
                 },
                 "span": {
                   "start": 16,

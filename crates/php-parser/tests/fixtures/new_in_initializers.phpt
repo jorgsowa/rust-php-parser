@@ -39,7 +39,16 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "Foo"
+                        "Name": {
+                          "parts": [
+                            "Foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 28,
+                            "end": 31
+                          }
+                        }
                       },
                       "span": {
                         "start": 28,
@@ -74,7 +83,16 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "Bar"
+                        "Name": {
+                          "parts": [
+                            "Bar"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 44,
+                            "end": 47
+                          }
+                        }
                       },
                       "span": {
                         "start": 44,
@@ -176,7 +194,16 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                       "New": {
                         "class": {
                           "kind": {
-                            "Identifier": "DefaultObj"
+                            "Name": {
+                              "parts": [
+                                "DefaultObj"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 98,
+                                "end": 108
+                              }
+                            }
                           },
                           "span": {
                             "start": 98,
@@ -210,7 +237,16 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                       "New": {
                         "class": {
                           "kind": {
-                            "Identifier": "Config"
+                            "Name": {
+                              "parts": [
+                                "Config"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 130,
+                                "end": 136
+                              }
+                            }
                           },
                           "span": {
                             "start": 130,
@@ -251,7 +287,16 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                           "New": {
                             "class": {
                               "kind": {
-                                "Identifier": "Param"
+                                "Name": {
+                                  "parts": [
+                                    "Param"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 177,
+                                    "end": 182
+                                  }
+                                }
                               },
                               "span": {
                                 "start": 177,
@@ -314,7 +359,16 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                         "New": {
                           "class": {
                             "kind": {
-                              "Identifier": "Cache"
+                              "Name": {
+                                "parts": [
+                                  "Cache"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 233,
+                                  "end": 238
+                                }
+                              }
                             },
                             "span": {
                               "start": 233,
@@ -380,7 +434,16 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                       "New": {
                         "class": {
                           "kind": {
-                            "Identifier": "Foo"
+                            "Name": {
+                              "parts": [
+                                "Foo"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 256,
+                                "end": 259
+                              }
+                            }
                           },
                           "span": {
                             "start": 256,
@@ -445,7 +508,16 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                             "New": {
                               "class": {
                                 "kind": {
-                                  "Identifier": "Foo"
+                                  "Name": {
+                                    "parts": [
+                                      "Foo"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 307,
+                                      "end": 310
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 307,
@@ -526,7 +598,16 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                             "New": {
                               "class": {
                                 "kind": {
-                                  "Identifier": "Foo"
+                                  "Name": {
+                                    "parts": [
+                                      "Foo"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 335,
+                                      "end": 338
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 335,

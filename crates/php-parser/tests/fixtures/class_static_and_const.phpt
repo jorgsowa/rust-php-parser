@@ -151,7 +151,16 @@ class Config {
                                   "StaticPropertyAccess": {
                                     "class": {
                                       "kind": {
-                                        "Identifier": "self"
+                                        "Name": {
+                                          "parts": [
+                                            "self"
+                                          ],
+                                          "kind": "Unqualified",
+                                          "span": {
+                                            "start": 177,
+                                            "end": 181
+                                          }
+                                        }
                                       },
                                       "span": {
                                         "start": 177,

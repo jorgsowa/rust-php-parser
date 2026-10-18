@@ -23,7 +23,16 @@ function page() {
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "header"
+                          "Name": {
+                            "parts": [
+                              "header"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 28,
+                              "end": 34
+                            }
+                          }
                         },
                         "span": {
                           "start": 28,
@@ -67,7 +76,16 @@ function page() {
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "nav"
+                          "Name": {
+                            "parts": [
+                              "nav"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 62,
+                              "end": 65
+                            }
+                          }
                         },
                         "span": {
                           "start": 62,
@@ -111,7 +129,16 @@ function page() {
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "body"
+                          "Name": {
+                            "parts": [
+                              "body"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 94,
+                              "end": 98
+                            }
+                          }
                         },
                         "span": {
                           "start": 94,

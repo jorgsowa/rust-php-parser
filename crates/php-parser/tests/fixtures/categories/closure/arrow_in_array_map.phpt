@@ -10,7 +10,16 @@
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "array_map"
+                  "Name": {
+                    "parts": [
+                      "array_map"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 15
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,

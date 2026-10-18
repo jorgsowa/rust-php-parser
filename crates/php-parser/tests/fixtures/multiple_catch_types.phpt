@@ -21,7 +21,16 @@ try {
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "foo"
+                          "Name": {
+                            "parts": [
+                              "foo"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 16,
+                              "end": 19
+                            }
+                          }
                         },
                         "span": {
                           "start": 16,
@@ -86,7 +95,16 @@ try {
                         "FunctionCall": {
                           "name": {
                             "kind": {
-                              "Identifier": "handle"
+                              "Name": {
+                                "parts": [
+                                  "handle"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 84,
+                                  "end": 90
+                                }
+                              }
                             },
                             "span": {
                               "start": 84,
@@ -154,7 +172,16 @@ try {
                         "FunctionCall": {
                           "name": {
                             "kind": {
-                              "Identifier": "other"
+                              "Name": {
+                                "parts": [
+                                  "other"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 130,
+                                  "end": 135
+                                }
+                              }
                             },
                             "span": {
                               "start": 130,

@@ -107,7 +107,16 @@ min_php=8.1
                               "ClassConstAccess": {
                                 "class": {
                                   "kind": {
-                                    "Identifier": "Color"
+                                    "Name": {
+                                      "parts": [
+                                        "Color"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 84,
+                                        "end": 89
+                                      }
+                                    }
                                   },
                                   "span": {
                                     "start": 84,
@@ -152,7 +161,16 @@ min_php=8.1
                               "ClassConstAccess": {
                                 "class": {
                                   "kind": {
-                                    "Identifier": "Color"
+                                    "Name": {
+                                      "parts": [
+                                        "Color"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 101,
+                                        "end": 106
+                                      }
+                                    }
                                   },
                                   "span": {
                                     "start": 101,

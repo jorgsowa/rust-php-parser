@@ -49,7 +49,16 @@ echo namespace\SOME_CONST;
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "MyClass"
+                        "Name": {
+                          "parts": [
+                            "MyClass"
+                          ],
+                          "kind": "Relative",
+                          "span": {
+                            "start": 41,
+                            "end": 58
+                          }
+                        }
                       },
                       "span": {
                         "start": 41,
@@ -84,7 +93,16 @@ echo namespace\SOME_CONST;
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "namespace\\helper_func"
+                  "Name": {
+                    "parts": [
+                      "helper_func"
+                    ],
+                    "kind": "Relative",
+                    "span": {
+                      "start": 62,
+                      "end": 83
+                    }
+                  }
                 },
                 "span": {
                   "start": 62,
@@ -110,7 +128,16 @@ echo namespace\SOME_CONST;
         "Echo": [
           {
             "kind": {
-              "Identifier": "namespace\\SOME_CONST"
+              "Name": {
+                "parts": [
+                  "SOME_CONST"
+                ],
+                "kind": "Relative",
+                "span": {
+                  "start": 92,
+                  "end": 112
+                }
+              }
             },
             "span": {
               "start": 92,

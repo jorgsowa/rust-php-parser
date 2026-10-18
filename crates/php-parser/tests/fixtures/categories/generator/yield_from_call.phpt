@@ -20,7 +20,16 @@
                           "FunctionCall": {
                             "name": {
                               "kind": {
-                                "Identifier": "otherGen"
+                                "Name": {
+                                  "parts": [
+                                    "otherGen"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 34,
+                                    "end": 42
+                                  }
+                                }
                               },
                               "span": {
                                 "start": 34,

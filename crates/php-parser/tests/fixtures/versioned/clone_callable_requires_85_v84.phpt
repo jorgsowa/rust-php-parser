@@ -31,7 +31,16 @@ PHP Parse error:  syntax error, unexpected token "..." in Standard input code on
                     "kind": {
                       "Function": {
                         "kind": {
-                          "Identifier": "clone"
+                          "Name": {
+                            "parts": [
+                              "clone"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 12,
+                              "end": 17
+                            }
+                          }
                         },
                         "span": {
                           "start": 12,

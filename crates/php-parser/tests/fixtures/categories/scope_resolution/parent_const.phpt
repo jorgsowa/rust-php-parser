@@ -43,7 +43,16 @@
                             "ClassConstAccess": {
                               "class": {
                                 "kind": {
-                                  "Identifier": "parent"
+                                  "Name": {
+                                    "parts": [
+                                      "parent"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 59,
+                                      "end": 65
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 59,

@@ -109,7 +109,16 @@
                               "FunctionCall": {
                                 "name": {
                                   "kind": {
-                                    "Identifier": "strlen"
+                                    "Name": {
+                                      "parts": [
+                                        "strlen"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 41,
+                                        "end": 47
+                                      }
+                                    }
                                   },
                                   "span": {
                                     "start": 41,

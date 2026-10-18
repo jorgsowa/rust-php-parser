@@ -14,7 +14,16 @@
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "foo"
+                          "Name": {
+                            "parts": [
+                              "foo"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 12,
+                              "end": 15
+                            }
+                          }
                         },
                         "span": {
                           "start": 12,
@@ -45,7 +54,16 @@
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "cleanup"
+                          "Name": {
+                            "parts": [
+                              "cleanup"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 31,
+                              "end": 38
+                            }
+                          }
                         },
                         "span": {
                           "start": 31,

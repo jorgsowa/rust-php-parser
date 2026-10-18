@@ -141,7 +141,16 @@ new $weird[0]->foo::$className;
                   "StaticPropertyAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "Test"
+                        "Name": {
+                          "parts": [
+                            "Test"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 72,
+                            "end": 76
+                          }
+                        }
                       },
                       "span": {
                         "start": 72,

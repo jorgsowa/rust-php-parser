@@ -500,7 +500,16 @@ function arrGen() {
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "getArr"
+                          "Name": {
+                            "parts": [
+                              "getArr"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 177,
+                              "end": 183
+                            }
+                          }
                         },
                         "span": {
                           "start": 177,
@@ -546,7 +555,16 @@ function arrGen() {
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "arrGen"
+                          "Name": {
+                            "parts": [
+                              "arrGen"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 192,
+                              "end": 198
+                            }
+                          }
                         },
                         "span": {
                           "start": 192,
@@ -592,7 +610,16 @@ function arrGen() {
                     "New": {
                       "class": {
                         "kind": {
-                          "Identifier": "ArrayIterator"
+                          "Name": {
+                            "parts": [
+                              "ArrayIterator"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 211,
+                              "end": 224
+                            }
+                          }
                         },
                         "span": {
                           "start": 211,
@@ -743,7 +770,16 @@ function arrGen() {
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "getArr"
+                          "Name": {
+                            "parts": [
+                              "getArr"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 262,
+                              "end": 268
+                            }
+                          }
                         },
                         "span": {
                           "start": 262,
@@ -856,7 +892,16 @@ function arrGen() {
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "arrGen"
+                          "Name": {
+                            "parts": [
+                              "arrGen"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 291,
+                              "end": 297
+                            }
+                          }
                         },
                         "span": {
                           "start": 291,

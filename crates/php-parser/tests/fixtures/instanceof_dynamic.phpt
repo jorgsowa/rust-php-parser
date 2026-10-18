@@ -94,7 +94,16 @@ $d = $obj instanceof static;
                     "op": "Instanceof",
                     "right": {
                       "kind": {
-                        "Identifier": "self"
+                        "Name": {
+                          "parts": [
+                            "self"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 60,
+                            "end": 64
+                          }
+                        }
                       },
                       "span": {
                         "start": 60,
@@ -151,7 +160,16 @@ $d = $obj instanceof static;
                     "op": "Instanceof",
                     "right": {
                       "kind": {
-                        "Identifier": "parent"
+                        "Name": {
+                          "parts": [
+                            "parent"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 87,
+                            "end": 93
+                          }
+                        }
                       },
                       "span": {
                         "start": 87,
@@ -208,7 +226,16 @@ $d = $obj instanceof static;
                     "op": "Instanceof",
                     "right": {
                       "kind": {
-                        "Identifier": "static"
+                        "Name": {
+                          "parts": [
+                            "static"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 116,
+                            "end": 122
+                          }
+                        }
                       },
                       "span": {
                         "start": 116,

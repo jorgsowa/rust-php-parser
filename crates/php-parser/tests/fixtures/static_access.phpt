@@ -16,7 +16,16 @@ static::factory();
             "ClassConstAccess": {
               "class": {
                 "kind": {
-                  "Identifier": "Foo"
+                  "Name": {
+                    "parts": [
+                      "Foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 9
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,
@@ -52,7 +61,16 @@ static::factory();
             "StaticPropertyAccess": {
               "class": {
                 "kind": {
-                  "Identifier": "Foo"
+                  "Name": {
+                    "parts": [
+                      "Foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 16,
+                      "end": 19
+                    }
+                  }
                 },
                 "span": {
                   "start": 16,
@@ -88,7 +106,16 @@ static::factory();
             "StaticMethodCall": {
               "class": {
                 "kind": {
-                  "Identifier": "Foo"
+                  "Name": {
+                    "parts": [
+                      "Foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 32,
+                      "end": 35
+                    }
+                  }
                 },
                 "span": {
                   "start": 32,
@@ -125,7 +152,16 @@ static::factory();
             "StaticPropertyAccess": {
               "class": {
                 "kind": {
-                  "Identifier": "self"
+                  "Name": {
+                    "parts": [
+                      "self"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 47,
+                      "end": 51
+                    }
+                  }
                 },
                 "span": {
                   "start": 47,
@@ -161,7 +197,16 @@ static::factory();
             "StaticMethodCall": {
               "class": {
                 "kind": {
-                  "Identifier": "parent"
+                  "Name": {
+                    "parts": [
+                      "parent"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 57,
+                      "end": 63
+                    }
+                  }
                 },
                 "span": {
                   "start": 57,
@@ -198,7 +243,16 @@ static::factory();
             "StaticMethodCall": {
               "class": {
                 "kind": {
-                  "Identifier": "static"
+                  "Name": {
+                    "parts": [
+                      "static"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 80,
+                      "end": 86
+                    }
+                  }
                 },
                 "span": {
                   "start": 80,

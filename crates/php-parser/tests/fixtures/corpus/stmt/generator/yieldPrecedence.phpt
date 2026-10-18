@@ -240,7 +240,16 @@ function gen() {
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "var_dump"
+                          "Name": {
+                            "parts": [
+                              "var_dump"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 128,
+                              "end": 136
+                            }
+                          }
                         },
                         "span": {
                           "start": 128,
@@ -531,7 +540,16 @@ function gen() {
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "var_dump"
+                          "Name": {
+                            "parts": [
+                              "var_dump"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 268,
+                              "end": 276
+                            }
+                          }
                         },
                         "span": {
                           "start": 268,
@@ -656,7 +674,16 @@ function gen() {
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "var_dump"
+                          "Name": {
+                            "parts": [
+                              "var_dump"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 323,
+                              "end": 331
+                            }
+                          }
                         },
                         "span": {
                           "start": 323,

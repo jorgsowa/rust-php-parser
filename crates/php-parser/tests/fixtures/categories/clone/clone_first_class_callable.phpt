@@ -26,7 +26,16 @@ min_php=8.5
                     "kind": {
                       "Function": {
                         "kind": {
-                          "Identifier": "clone"
+                          "Name": {
+                            "parts": [
+                              "clone"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 12,
+                              "end": 17
+                            }
+                          }
                         },
                         "span": {
                           "start": 12,

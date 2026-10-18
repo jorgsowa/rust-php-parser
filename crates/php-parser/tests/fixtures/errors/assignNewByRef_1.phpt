@@ -30,7 +30,16 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "(" in Standard 
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "B"
+                        "Name": {
+                          "parts": [
+                            "B"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 16,
+                            "end": 17
+                          }
+                        }
                       },
                       "span": {
                         "start": 16,

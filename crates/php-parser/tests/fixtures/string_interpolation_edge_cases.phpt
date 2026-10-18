@@ -269,7 +269,16 @@ $nested = "{{ {$x} }}";
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "stdClass"
+                        "Name": {
+                          "parts": [
+                            "stdClass"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 185,
+                            "end": 193
+                          }
+                        }
                       },
                       "span": {
                         "start": 185,

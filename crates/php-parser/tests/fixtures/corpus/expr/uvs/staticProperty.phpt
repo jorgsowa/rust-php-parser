@@ -18,7 +18,16 @@ A::$A::$b;
             "StaticPropertyAccess": {
               "class": {
                 "kind": {
-                  "Identifier": "A"
+                  "Name": {
+                    "parts": [
+                      "A"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 7
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,
@@ -245,7 +254,16 @@ A::$A::$b;
             "StaticPropertyAccessDynamic": {
               "class": {
                 "kind": {
-                  "Identifier": "A"
+                  "Name": {
+                    "parts": [
+                      "A"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 58,
+                      "end": 59
+                    }
+                  }
                 },
                 "span": {
                   "start": 58,
@@ -292,7 +310,16 @@ A::$A::$b;
                   "StaticPropertyAccessDynamic": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 66,
+                            "end": 67
+                          }
+                        }
                       },
                       "span": {
                         "start": 66,
@@ -355,7 +382,16 @@ A::$A::$b;
                   "StaticPropertyAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 77,
+                            "end": 78
+                          }
+                        }
                       },
                       "span": {
                         "start": 77,

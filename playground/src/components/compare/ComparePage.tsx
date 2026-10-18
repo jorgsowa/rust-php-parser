@@ -24,7 +24,8 @@ const DOC_LINKS: Record<string, string> = Object.fromEntries(
 // Human-readable descriptions for node types
 const NODE_DESCRIPTIONS: Record<string, string> = {
   Expression: 'Expression statement — wraps any expression used as a statement',
-  Identifier: 'Bare name used in calls, class refs, constants',
+  Identifier: 'Member name after ->, ?-> or ::',
+  Name: 'Function, class or constant name',
   Variable: 'Variable reference ($name)',
   String: 'Plain string literal',
   MethodCall: 'Object method call ($obj->method(...))',

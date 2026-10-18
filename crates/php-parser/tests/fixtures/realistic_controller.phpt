@@ -403,7 +403,16 @@ class UserController extends BaseController implements JsonResponder
                                                 "StaticMethodCall": {
                                                   "class": {
                                                     "kind": {
-                                                      "Identifier": "User"
+                                                      "Name": {
+                                                        "parts": [
+                                                          "User"
+                                                        ],
+                                                        "kind": "Unqualified",
+                                                        "span": {
+                                                          "start": 380,
+                                                          "end": 384
+                                                        }
+                                                      }
                                                     },
                                                     "span": {
                                                       "start": 380,
@@ -453,7 +462,16 @@ class UserController extends BaseController implements JsonResponder
                                                     "New": {
                                                       "class": {
                                                         "kind": {
-                                                          "Identifier": "NotFoundException"
+                                                          "Name": {
+                                                            "parts": [
+                                                              "NotFoundException"
+                                                            ],
+                                                            "kind": "Unqualified",
+                                                            "span": {
+                                                              "start": 409,
+                                                              "end": 426
+                                                            }
+                                                          }
                                                         },
                                                         "span": {
                                                           "start": 409,
@@ -1046,7 +1064,16 @@ class UserController extends BaseController implements JsonResponder
                                   "StaticMethodCall": {
                                     "class": {
                                       "kind": {
-                                        "Identifier": "User"
+                                        "Name": {
+                                          "parts": [
+                                            "User"
+                                          ],
+                                          "kind": "Unqualified",
+                                          "span": {
+                                            "start": 1023,
+                                            "end": 1027
+                                          }
+                                        }
                                       },
                                       "span": {
                                         "start": 1023,
@@ -1103,7 +1130,16 @@ class UserController extends BaseController implements JsonResponder
                                   "FunctionCall": {
                                     "name": {
                                       "kind": {
-                                        "Identifier": "array_map"
+                                        "Name": {
+                                          "parts": [
+                                            "array_map"
+                                          ],
+                                          "kind": "Unqualified",
+                                          "span": {
+                                            "start": 1053,
+                                            "end": 1062
+                                          }
+                                        }
                                       },
                                       "span": {
                                         "start": 1053,
@@ -1240,7 +1276,16 @@ class UserController extends BaseController implements JsonResponder
                                   "FunctionCall": {
                                     "name": {
                                       "kind": {
-                                        "Identifier": "array_filter"
+                                        "Name": {
+                                          "parts": [
+                                            "array_filter"
+                                          ],
+                                          "kind": "Unqualified",
+                                          "span": {
+                                            "start": 1117,
+                                            "end": 1129
+                                          }
+                                        }
                                       },
                                       "span": {
                                         "start": 1117,
@@ -1313,7 +1358,16 @@ class UserController extends BaseController implements JsonResponder
                                                               "FunctionCall": {
                                                                 "name": {
                                                                   "kind": {
-                                                                    "Identifier": "strlen"
+                                                                    "Name": {
+                                                                      "parts": [
+                                                                        "strlen"
+                                                                      ],
+                                                                      "kind": "Unqualified",
+                                                                      "span": {
+                                                                        "start": 1188,
+                                                                        "end": 1194
+                                                                      }
+                                                                    }
                                                                   },
                                                                   "span": {
                                                                     "start": 1188,

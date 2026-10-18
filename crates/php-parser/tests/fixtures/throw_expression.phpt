@@ -42,7 +42,16 @@ $result = match ($status) {
                             "New": {
                               "class": {
                                 "kind": {
-                                  "Identifier": "InvalidArgumentException"
+                                  "Name": {
+                                    "parts": [
+                                      "InvalidArgumentException"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 31,
+                                      "end": 55
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 31,
@@ -165,7 +174,16 @@ $result = match ($status) {
                                 "New": {
                                   "class": {
                                     "kind": {
-                                      "Identifier": "RuntimeException"
+                                      "Name": {
+                                        "parts": [
+                                          "RuntimeException"
+                                        ],
+                                        "kind": "Unqualified",
+                                        "span": {
+                                          "start": 144,
+                                          "end": 160
+                                        }
+                                      }
                                     },
                                     "span": {
                                       "start": 144,

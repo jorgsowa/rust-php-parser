@@ -11,7 +11,16 @@ PHP Parse error:  syntax error, unexpected end of file in Standard input code on
       "kind": {
         "Expression": {
           "kind": {
-            "Identifier": "foo"
+            "Name": {
+              "parts": [
+                "foo"
+              ],
+              "kind": "Unqualified",
+              "span": {
+                "start": 6,
+                "end": 9
+              }
+            }
           },
           "span": {
             "start": 6,

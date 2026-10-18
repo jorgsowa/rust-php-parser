@@ -71,7 +71,16 @@ PHP Parse error:  syntax error, unexpected identifier "thing", expecting "]" in 
       "kind": {
         "Expression": {
           "kind": {
-            "Identifier": "thing"
+            "Name": {
+              "parts": [
+                "thing"
+              ],
+              "kind": "Unqualified",
+              "span": {
+                "start": 16,
+                "end": 21
+              }
+            }
           },
           "span": {
             "start": 16,

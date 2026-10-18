@@ -151,6 +151,7 @@ impl<'src> Printer<'src> {
                 }
             }
             ExprKind::Identifier(name) => self.w(name.as_str()),
+            ExprKind::Name(name) => self.print_name(name),
             ExprKind::Assign(assign) => {
                 let (_, _, rhs_prec) = assign_op_precedence(assign.op);
                 self.w(" ");

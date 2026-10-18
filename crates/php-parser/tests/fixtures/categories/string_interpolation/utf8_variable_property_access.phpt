@@ -75,7 +75,16 @@ echo "Value: $объект->свойство";
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "Объект"
+                        "Name": {
+                          "parts": [
+                            "Объект"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 92,
+                            "end": 104
+                          }
+                        }
                       },
                       "span": {
                         "start": 92,

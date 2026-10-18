@@ -57,7 +57,16 @@
                             "ClassConstAccess": {
                               "class": {
                                 "kind": {
-                                  "Identifier": "self"
+                                  "Name": {
+                                    "parts": [
+                                      "self"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 60,
+                                      "end": 64
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 60,

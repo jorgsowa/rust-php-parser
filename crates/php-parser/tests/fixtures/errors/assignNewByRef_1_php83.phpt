@@ -30,7 +30,16 @@ PHP Parse error:  syntax error, unexpected token "new" in Standard input code on
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "B"
+                        "Name": {
+                          "parts": [
+                            "B"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 16,
+                            "end": 17
+                          }
+                        }
                       },
                       "span": {
                         "start": 16,

@@ -31,7 +31,16 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "(" in Standard 
                   "ClassConstAccessDynamic": {
                     "class": {
                       "kind": {
-                        "Identifier": "Foo"
+                        "Name": {
+                          "parts": [
+                            "Foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 11,
+                            "end": 14
+                          }
+                        }
                       },
                       "span": {
                         "start": 11,

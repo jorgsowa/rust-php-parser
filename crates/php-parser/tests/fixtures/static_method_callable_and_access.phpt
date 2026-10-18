@@ -31,7 +31,16 @@ $f = self::$prop;
                       "StaticMethod": {
                         "class": {
                           "kind": {
-                            "Identifier": "Foo"
+                            "Name": {
+                              "parts": [
+                                "Foo"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 11,
+                                "end": 14
+                              }
+                            }
                           },
                           "span": {
                             "start": 11,
@@ -89,7 +98,16 @@ $f = self::$prop;
                   "StaticPropertyAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "Foo"
+                        "Name": {
+                          "parts": [
+                            "Foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 31,
+                            "end": 34
+                          }
+                        }
                       },
                       "span": {
                         "start": 31,
@@ -145,7 +163,16 @@ $f = self::$prop;
                   "ClassConstAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "Foo"
+                        "Name": {
+                          "parts": [
+                            "Foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 48,
+                            "end": 51
+                          }
+                        }
                       },
                       "span": {
                         "start": 48,
@@ -201,7 +228,16 @@ $f = self::$prop;
                   "StaticMethodCall": {
                     "class": {
                       "kind": {
-                        "Identifier": "static"
+                        "Name": {
+                          "parts": [
+                            "static"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 65,
+                            "end": 71
+                          }
+                        }
                       },
                       "span": {
                         "start": 65,
@@ -258,7 +294,16 @@ $f = self::$prop;
                   "StaticMethodCall": {
                     "class": {
                       "kind": {
-                        "Identifier": "parent"
+                        "Name": {
+                          "parts": [
+                            "parent"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 88,
+                            "end": 94
+                          }
+                        }
                       },
                       "span": {
                         "start": 88,
@@ -315,7 +360,16 @@ $f = self::$prop;
                   "StaticPropertyAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "self"
+                        "Name": {
+                          "parts": [
+                            "self"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 111,
+                            "end": 115
+                          }
+                        }
                       },
                       "span": {
                         "start": 111,

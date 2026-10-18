@@ -34,7 +34,16 @@
                             "New": {
                               "class": {
                                 "kind": {
-                                  "Identifier": "static"
+                                  "Name": {
+                                    "parts": [
+                                      "static"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 63,
+                                      "end": 69
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 63,

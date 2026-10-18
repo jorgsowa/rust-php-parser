@@ -66,7 +66,16 @@ PHP Fatal error:  No code may exist outside of namespace {} in Standard input co
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "foo"
+                  "Name": {
+                    "parts": [
+                      "foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 39,
+                      "end": 42
+                    }
+                  }
                 },
                 "span": {
                   "start": 39,

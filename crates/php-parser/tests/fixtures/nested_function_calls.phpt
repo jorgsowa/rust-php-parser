@@ -10,7 +10,16 @@
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "implode"
+                  "Name": {
+                    "parts": [
+                      "implode"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 13
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,
@@ -43,7 +52,16 @@
                       "FunctionCall": {
                         "name": {
                           "kind": {
-                            "Identifier": "array_map"
+                            "Name": {
+                              "parts": [
+                                "array_map"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 20,
+                                "end": 29
+                              }
+                            }
                           },
                           "span": {
                             "start": 20,
@@ -76,7 +94,16 @@
                                 "FunctionCall": {
                                   "name": {
                                     "kind": {
-                                      "Identifier": "explode"
+                                      "Name": {
+                                        "parts": [
+                                          "explode"
+                                        ],
+                                        "kind": "Unqualified",
+                                        "span": {
+                                          "start": 44,
+                                          "end": 51
+                                        }
+                                      }
                                     },
                                     "span": {
                                       "start": 44,

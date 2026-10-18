@@ -561,7 +561,16 @@ $foo::BAR[2][1][0];
             "ArrayAccess": {
               "array": {
                 "kind": {
-                  "Identifier": "FOO"
+                  "Name": {
+                    "parts": [
+                      "FOO"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 114,
+                      "end": 117
+                    }
+                  }
                 },
                 "span": {
                   "start": 114,
@@ -600,7 +609,16 @@ $foo::BAR[2][1][0];
                   "ClassConstAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "Foo"
+                        "Name": {
+                          "parts": [
+                            "Foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 122,
+                            "end": 125
+                          }
+                        }
                       },
                       "span": {
                         "start": 122,

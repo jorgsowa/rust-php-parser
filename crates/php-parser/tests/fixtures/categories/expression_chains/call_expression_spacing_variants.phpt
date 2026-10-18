@@ -39,7 +39,16 @@ foo()->bar(1);
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "foo"
+                  "Name": {
+                    "parts": [
+                      "foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 45,
+                      "end": 48
+                    }
+                  }
                 },
                 "span": {
                   "start": 45,
@@ -86,7 +95,16 @@ foo()->bar(1);
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "foo"
+                  "Name": {
+                    "parts": [
+                      "foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 99,
+                      "end": 102
+                    }
+                  }
                 },
                 "span": {
                   "start": 99,
@@ -151,7 +169,16 @@ foo()->bar(1);
             "StaticMethodCall": {
               "class": {
                 "kind": {
-                  "Identifier": "Math"
+                  "Name": {
+                    "parts": [
+                      "Math"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 152,
+                      "end": 156
+                    }
+                  }
                 },
                 "span": {
                   "start": 152,
@@ -207,7 +234,16 @@ foo()->bar(1);
             "StaticMethodCall": {
               "class": {
                 "kind": {
-                  "Identifier": "Math"
+                  "Name": {
+                    "parts": [
+                      "Math"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 212,
+                      "end": 216
+                    }
+                  }
                 },
                 "span": {
                   "start": 212,
@@ -506,7 +542,16 @@ foo()->bar(1);
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "foo"
+                        "Name": {
+                          "parts": [
+                            "foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 510,
+                            "end": 513
+                          }
+                        }
                       },
                       "span": {
                         "start": 510,

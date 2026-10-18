@@ -142,7 +142,16 @@ $a instanceof Foo == $c;
                     "op": "Instanceof",
                     "right": {
                       "kind": {
-                        "Identifier": "Foo"
+                        "Name": {
+                          "parts": [
+                            "Foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 51,
+                            "end": 54
+                          }
+                        }
                       },
                       "span": {
                         "start": 51,

@@ -22,7 +22,16 @@ PHP Fatal error:  Cannot use try without catch or finally in Standard input code
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "foo"
+                          "Name": {
+                            "parts": [
+                              "foo"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 17,
+                              "end": 20
+                            }
+                          }
                         },
                         "span": {
                           "start": 17,

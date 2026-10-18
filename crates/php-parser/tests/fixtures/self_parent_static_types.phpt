@@ -144,7 +144,16 @@ class Builder {
                             "New": {
                               "class": {
                                 "kind": {
-                                  "Identifier": "static"
+                                  "Name": {
+                                    "parts": [
+                                      "static"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 145,
+                                      "end": 151
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 145,

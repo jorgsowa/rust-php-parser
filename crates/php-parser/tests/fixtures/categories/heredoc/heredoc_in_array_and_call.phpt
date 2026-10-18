@@ -95,7 +95,16 @@ bar(<<<X
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "bar"
+                  "Name": {
+                    "parts": [
+                      "bar"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 37,
+                      "end": 40
+                    }
+                  }
                 },
                 "span": {
                   "start": 37,

@@ -102,7 +102,16 @@ function bar($x, $y,) {}
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "foo"
+                  "Name": {
+                    "parts": [
+                      "foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 25,
+                      "end": 28
+                    }
+                  }
                 },
                 "span": {
                   "start": 25,

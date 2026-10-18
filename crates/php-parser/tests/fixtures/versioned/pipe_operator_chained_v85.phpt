@@ -29,7 +29,16 @@ min_php=8.5
                           "kind": {
                             "Function": {
                               "kind": {
-                                "Identifier": "strlen"
+                                "Name": {
+                                  "parts": [
+                                    "strlen"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 12,
+                                    "end": 18
+                                  }
+                                }
                               },
                               "span": {
                                 "start": 12,
@@ -58,7 +67,16 @@ min_php=8.5
                     "kind": {
                       "Function": {
                         "kind": {
-                          "Identifier": "abs"
+                          "Name": {
+                            "parts": [
+                              "abs"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 27,
+                              "end": 30
+                            }
+                          }
                         },
                         "span": {
                           "start": 27,

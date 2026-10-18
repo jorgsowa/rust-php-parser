@@ -26,7 +26,16 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "id"
+                        "Name": {
+                          "parts": [
+                            "id"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 7,
+                            "end": 9
+                          }
+                        }
                       },
                       "span": {
                         "start": 7,
@@ -106,7 +115,16 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                         "FunctionCall": {
                           "name": {
                             "kind": {
-                              "Identifier": "id"
+                              "Name": {
+                                "parts": [
+                                  "id"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 26,
+                                  "end": 28
+                                }
+                              }
                             },
                             "span": {
                               "start": 26,
@@ -216,7 +234,16 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                               "FunctionCall": {
                                 "name": {
                                   "kind": {
-                                    "Identifier": "id"
+                                    "Name": {
+                                      "parts": [
+                                        "id"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 51,
+                                        "end": 53
+                                      }
+                                    }
                                   },
                                   "span": {
                                     "start": 51,
@@ -318,7 +345,16 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                                     "FunctionCall": {
                                       "name": {
                                         "kind": {
-                                          "Identifier": "id"
+                                          "Name": {
+                                            "parts": [
+                                              "id"
+                                            ],
+                                            "kind": "Unqualified",
+                                            "span": {
+                                              "start": 74,
+                                              "end": 76
+                                            }
+                                          }
                                         },
                                         "span": {
                                           "start": 74,

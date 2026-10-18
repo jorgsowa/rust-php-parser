@@ -125,7 +125,17 @@ private\protected\public\static\abstract\final();
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "fn\\use"
+                  "Name": {
+                    "parts": [
+                      "fn",
+                      "use"
+                    ],
+                    "kind": "Qualified",
+                    "span": {
+                      "start": 90,
+                      "end": 96
+                    }
+                  }
                 },
                 "span": {
                   "start": 90,
@@ -153,7 +163,17 @@ private\protected\public\static\abstract\final();
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "\\fn\\use"
+                  "Name": {
+                    "parts": [
+                      "fn",
+                      "use"
+                    ],
+                    "kind": "FullyQualified",
+                    "span": {
+                      "start": 100,
+                      "end": 107
+                    }
+                  }
                 },
                 "span": {
                   "start": 100,
@@ -181,7 +201,17 @@ private\protected\public\static\abstract\final();
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "namespace\\fn\\use"
+                  "Name": {
+                    "parts": [
+                      "fn",
+                      "use"
+                    ],
+                    "kind": "Relative",
+                    "span": {
+                      "start": 111,
+                      "end": 127
+                    }
+                  }
                 },
                 "span": {
                   "start": 111,
@@ -209,7 +239,21 @@ private\protected\public\static\abstract\final();
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "private\\protected\\public\\static\\abstract\\final"
+                  "Name": {
+                    "parts": [
+                      "private",
+                      "protected",
+                      "public",
+                      "static",
+                      "abstract",
+                      "final"
+                    ],
+                    "kind": "Qualified",
+                    "span": {
+                      "start": 131,
+                      "end": 177
+                    }
+                  }
                 },
                 "span": {
                   "start": 131,

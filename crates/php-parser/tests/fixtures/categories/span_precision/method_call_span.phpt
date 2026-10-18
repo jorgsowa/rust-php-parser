@@ -125,7 +125,16 @@ Foo::bar(1);
             "StaticMethodCall": {
               "class": {
                 "kind": {
-                  "Identifier": "Foo"
+                  "Name": {
+                    "parts": [
+                      "Foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 41,
+                      "end": 44
+                    }
+                  }
                 },
                 "span": {
                   "start": 41,

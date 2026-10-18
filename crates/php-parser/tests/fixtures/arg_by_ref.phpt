@@ -14,7 +14,16 @@ PHP Parse error:  syntax error, unexpected token "&" in Standard input code on l
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "f"
+                  "Name": {
+                    "parts": [
+                      "f"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 7
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,

@@ -74,7 +74,16 @@ function a(
                   "ClassConstAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 59,
+                            "end": 60
+                          }
+                        }
                       },
                       "span": {
                         "start": 59,

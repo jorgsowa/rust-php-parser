@@ -37,7 +37,16 @@ PHP Parse error:  syntax error, unexpected identifier "foo" in Standard input co
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "foo"
+                        "Name": {
+                          "parts": [
+                            "foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 12,
+                            "end": 15
+                          }
+                        }
                       },
                       "span": {
                         "start": 12,
@@ -76,7 +85,16 @@ PHP Parse error:  syntax error, unexpected identifier "foo" in Standard input co
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "foo"
+                        "Name": {
+                          "parts": [
+                            "foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 28,
+                            "end": 31
+                          }
+                        }
                       },
                       "span": {
                         "start": 28,
@@ -165,7 +183,16 @@ PHP Parse error:  syntax error, unexpected identifier "foo" in Standard input co
                       "FunctionCall": {
                         "name": {
                           "kind": {
-                            "Identifier": "a"
+                            "Name": {
+                              "parts": [
+                                "a"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 94,
+                                "end": 95
+                              }
+                            }
                           },
                           "span": {
                             "start": 94,

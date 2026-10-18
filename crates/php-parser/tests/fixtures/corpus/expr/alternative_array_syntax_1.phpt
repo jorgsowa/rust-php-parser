@@ -231,7 +231,16 @@ PHP Parse error:  syntax error, unexpected token "{" in Standard input code on l
                   "StaticPropertyAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 53,
+                            "end": 54
+                          }
+                        }
                       },
                       "span": {
                         "start": 53,
@@ -283,7 +292,16 @@ PHP Parse error:  syntax error, unexpected token "{" in Standard input code on l
             "ArrayAccess": {
               "array": {
                 "kind": {
-                  "Identifier": "A"
+                  "Name": {
+                    "parts": [
+                      "A"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 65,
+                      "end": 66
+                    }
+                  }
                 },
                 "span": {
                   "start": 65,
@@ -322,7 +340,16 @@ PHP Parse error:  syntax error, unexpected token "{" in Standard input code on l
                   "ClassConstAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 71,
+                            "end": 72
+                          }
+                        }
                       },
                       "span": {
                         "start": 71,

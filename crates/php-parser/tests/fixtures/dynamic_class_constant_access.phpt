@@ -29,7 +29,16 @@ $d = $class::${'prop_' . $name};
                   "ClassConstAccessDynamic": {
                     "class": {
                       "kind": {
-                        "Identifier": "Foo"
+                        "Name": {
+                          "parts": [
+                            "Foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 11,
+                            "end": 14
+                          }
+                        }
                       },
                       "span": {
                         "start": 11,
@@ -85,7 +94,16 @@ $d = $class::${'prop_' . $name};
                   "ClassConstAccessDynamic": {
                     "class": {
                       "kind": {
-                        "Identifier": "Foo"
+                        "Name": {
+                          "parts": [
+                            "Foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 30,
+                            "end": 33
+                          }
+                        }
                       },
                       "span": {
                         "start": 30,

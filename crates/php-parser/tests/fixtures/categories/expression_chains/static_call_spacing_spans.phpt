@@ -18,7 +18,16 @@ $obj?->prop;
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "foo"
+                  "Name": {
+                    "parts": [
+                      "foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 74,
+                      "end": 77
+                    }
+                  }
                 },
                 "span": {
                   "start": 74,
@@ -83,7 +92,16 @@ $obj?->prop;
             "StaticMethodCall": {
               "class": {
                 "kind": {
-                  "Identifier": "Math"
+                  "Name": {
+                    "parts": [
+                      "Math"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 125,
+                      "end": 129
+                    }
+                  }
                 },
                 "span": {
                   "start": 125,

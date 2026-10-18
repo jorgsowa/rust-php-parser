@@ -34,7 +34,16 @@ PHP: ((string)$a) instanceof Foo.
               "op": "Instanceof",
               "right": {
                 "kind": {
-                  "Identifier": "Foo"
+                  "Name": {
+                    "parts": [
+                      "Foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 28,
+                      "end": 31
+                    }
+                  }
                 },
                 "span": {
                   "start": 28,

@@ -897,13 +897,13 @@ export const astNodes: AstNode[] = [
     id: 'expr-identifier',
     group: 'Variables & Values',
     name: 'Identifier',
-    description: 'Bare name used as an expression (function name in a call, class name, etc.)',
-    phpExample: `strlen($str);\nMyClass::method();`,
+    description: 'Member name after ->, ?-> or :: (method, property or class constant)',
+    phpExample: `$obj->save();\nMyClass::VERSION;`,
     fieldHighlights: {
-      name: ['strlen', 'MyClass']
+      name: ['save', 'VERSION']
     },
     fields: [
-      { name: 'name', type: 'string', description: 'Identifier name' }
+      { name: 'name', type: 'string', description: 'Member name' }
     ]
   },
   {
@@ -1717,7 +1717,7 @@ export const astNodes: AstNode[] = [
     id: 'helper-name',
     group: 'Components',
     name: 'Name',
-    description: 'Namespace-qualified name',
+    description: 'Namespace-qualified name; also the expression for a function, class or constant reference such as strlen in strlen($s)',
     phpExample: `use App\\Models\\User;\nclass Post extends \\App\\Models\\BaseModel implements Countable {}`,
     fieldHighlights: {
       parts: ['App\\Models\\User', '\\App\\Models\\BaseModel', 'Countable']

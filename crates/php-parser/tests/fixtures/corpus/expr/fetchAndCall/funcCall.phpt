@@ -22,7 +22,16 @@ a()['b'];
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "a"
+                  "Name": {
+                    "parts": [
+                      "a"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 35,
+                      "end": 36
+                    }
+                  }
                 },
                 "span": {
                   "start": 35,
@@ -310,7 +319,16 @@ a()['b'];
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "a"
+                        "Name": {
+                          "parts": [
+                            "a"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 120,
+                            "end": 121
+                          }
+                        }
                       },
                       "span": {
                         "start": 120,

@@ -67,7 +67,16 @@ class Foo {
                             "FunctionCall": {
                               "name": {
                                 "kind": {
-                                  "Identifier": "strtoupper"
+                                  "Name": {
+                                    "parts": [
+                                      "strtoupper"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 59,
+                                      "end": 69
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 59,
@@ -138,7 +147,16 @@ class Foo {
                             "FunctionCall": {
                               "name": {
                                 "kind": {
-                                  "Identifier": "strtolower"
+                                  "Name": {
+                                    "parts": [
+                                      "strtolower"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 114,
+                                      "end": 124
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 114,
@@ -347,7 +365,16 @@ class Foo {
                                         "FunctionCall": {
                                           "name": {
                                             "kind": {
-                                              "Identifier": "max"
+                                              "Name": {
+                                                "parts": [
+                                                  "max"
+                                                ],
+                                                "kind": "Unqualified",
+                                                "span": {
+                                                  "start": 230,
+                                                  "end": 233
+                                                }
+                                              }
                                             },
                                             "span": {
                                               "start": 230,

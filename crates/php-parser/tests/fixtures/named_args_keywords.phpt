@@ -12,7 +12,16 @@ foo(class: 'MyClass', static: true, match: 'yes');
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "array_slice"
+                  "Name": {
+                    "parts": [
+                      "array_slice"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 17
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,
@@ -122,7 +131,16 @@ foo(class: 'MyClass', static: true, match: 'yes');
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "foo"
+                  "Name": {
+                    "parts": [
+                      "foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 54,
+                      "end": 57
+                    }
+                  }
                 },
                 "span": {
                   "start": 54,

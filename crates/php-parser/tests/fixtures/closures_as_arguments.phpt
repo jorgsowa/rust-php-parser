@@ -25,7 +25,16 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "array_filter"
+                        "Name": {
+                          "parts": [
+                            "array_filter"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 18,
+                            "end": 30
+                          }
+                        }
                       },
                       "span": {
                         "start": 18,
@@ -162,7 +171,16 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "array_map"
+                        "Name": {
+                          "parts": [
+                            "array_map"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 68,
+                            "end": 77
+                          }
+                        }
                       },
                       "span": {
                         "start": 68,

@@ -44,7 +44,16 @@ PHP Parse error:  syntax error, unexpected token "static", expecting identifier 
       "kind": {
         "Expression": {
           "kind": {
-            "Identifier": "static"
+            "Name": {
+              "parts": [
+                "static"
+              ],
+              "kind": "Unqualified",
+              "span": {
+                "start": 15,
+                "end": 21
+              }
+            }
           },
           "span": {
             "start": 15,

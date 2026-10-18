@@ -13,7 +13,16 @@ static::class;
             "StaticPropertyAccess": {
               "class": {
                 "kind": {
-                  "Identifier": "static"
+                  "Name": {
+                    "parts": [
+                      "static"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 12
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,
@@ -49,7 +58,16 @@ static::class;
             "StaticMethodCall": {
               "class": {
                 "kind": {
-                  "Identifier": "static"
+                  "Name": {
+                    "parts": [
+                      "static"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 21,
+                      "end": 27
+                    }
+                  }
                 },
                 "span": {
                   "start": 21,
@@ -86,7 +104,16 @@ static::class;
             "ClassConstAccess": {
               "class": {
                 "kind": {
-                  "Identifier": "static"
+                  "Name": {
+                    "parts": [
+                      "static"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 39,
+                      "end": 45
+                    }
+                  }
                 },
                 "span": {
                   "start": 39,

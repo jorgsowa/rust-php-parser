@@ -888,6 +888,7 @@ fn visits_namespace_named_arg_and_trait_adaptation_names() {
         }";
     let expected = vec![
         "App\\Http",
+        "f",
         "label",
         "A",
         "B",
@@ -956,7 +957,10 @@ fn visits_catch_clause_types() {
         |_src, program| {
             let mut v = NameCollector::default();
             let _ = v.visit_program(program);
-            assert_eq!(v.names, vec!["RuntimeException", "LogicException"]);
+            assert_eq!(
+                v.names,
+                vec!["foo", "RuntimeException", "LogicException", "bar"]
+            );
         },
     );
 }
@@ -1116,6 +1120,81 @@ fn name_resolver_resolves_class_extends() {
                     &["helper"]
                 ),
                 ResolvedName::Fqn("Lib\\helper".into())
+            );
+        },
+    );
+}
+
+#[test]
+fn visits_names_in_expressions_but_not_member_names() {
+    with_parsed(
+        "<?php \\strlen(PHP_EOL); new Foo\\Bar; Foo::bar(); Foo::C; $x instanceof namespace\\Baz;
+        static::f(); $o->m(); $o->p; Foo::$s;",
+        |_src, program| {
+            let mut v = NameCollector::default();
+            let _ = v.visit_program(program);
+            assert_eq!(
+                v.names,
+                vec!["\\strlen", "PHP_EOL", "Foo\\Bar", "Foo", "Foo", "Baz", "static", "Foo"]
+            );
+        },
+    );
+}
+
+#[test]
+fn name_resolver_resolves_expression_names() {
+    use php_ast::resolve::{NameContext, NameResolver, ResolvedName};
+
+    #[derive(Default)]
+    struct Collector {
+        resolver: NameResolver,
+        resolved: Vec<ResolvedName>,
+    }
+    impl<'arena, 'src> ScopeVisitor<'arena, 'src> for Collector {
+        fn visit_stmt(
+            &mut self,
+            stmt: &Stmt<'arena, 'src>,
+            _scope: &Scope<'src>,
+        ) -> ControlFlow<()> {
+            self.resolver.observe_stmt(stmt);
+            ControlFlow::Continue(())
+        }
+        fn visit_expr(
+            &mut self,
+            expr: &Expr<'arena, 'src>,
+            _scope: &Scope<'src>,
+        ) -> ControlFlow<()> {
+            let (name, ctx) = match &expr.kind {
+                ExprKind::FunctionCall(call) => (call.name, NameContext::Function),
+                ExprKind::New(new) => (new.class, NameContext::Class),
+                _ => return ControlFlow::Continue(()),
+            };
+            if let ExprKind::Name(name) = &name.kind {
+                self.resolved.push(self.resolver.resolve_name(name, ctx));
+            }
+            ControlFlow::Continue(())
+        }
+    }
+    with_parsed(
+        "<?php
+        namespace App;
+        use Lib\\Foo;
+        use function Lib\\helper;
+        helper(); strlen(); new Foo; new Sub\\Bar;",
+        |src, program| {
+            let mut walker = ScopeWalker::new(src, Collector::default());
+            let _ = walker.walk(program);
+            assert_eq!(
+                walker.into_inner().resolved,
+                vec![
+                    ResolvedName::Fqn("Lib\\helper".into()),
+                    ResolvedName::Fallback {
+                        namespaced: "App\\strlen".into(),
+                        global: "strlen".into()
+                    },
+                    ResolvedName::Fqn("Lib\\Foo".into()),
+                    ResolvedName::Fqn("App\\Sub\\Bar".into()),
+                ]
             );
         },
     );

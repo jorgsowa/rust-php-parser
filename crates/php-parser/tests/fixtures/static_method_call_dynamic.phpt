@@ -23,7 +23,16 @@ Foo::$method['key']();
             "StaticMethodCallDynamic": {
               "class": {
                 "kind": {
-                  "Identifier": "Foo"
+                  "Name": {
+                    "parts": [
+                      "Foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 7,
+                      "end": 10
+                    }
+                  }
                 },
                 "span": {
                   "start": 7,
@@ -60,7 +69,16 @@ Foo::$method['key']();
             "StaticMethodCallDynamic": {
               "class": {
                 "kind": {
-                  "Identifier": "Foo"
+                  "Name": {
+                    "parts": [
+                      "Foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 23,
+                      "end": 26
+                    }
+                  }
                 },
                 "span": {
                   "start": 23,
@@ -134,7 +152,16 @@ Foo::$method['key']();
             "StaticMethodCallDynamic": {
               "class": {
                 "kind": {
-                  "Identifier": "static"
+                  "Name": {
+                    "parts": [
+                      "static"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 43,
+                      "end": 49
+                    }
+                  }
                 },
                 "span": {
                   "start": 43,
@@ -208,7 +235,16 @@ Foo::$method['key']();
             "StaticMethodCallDynamic": {
               "class": {
                 "kind": {
-                  "Identifier": "self"
+                  "Name": {
+                    "parts": [
+                      "self"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 71,
+                      "end": 75
+                    }
+                  }
                 },
                 "span": {
                   "start": 71,
@@ -245,7 +281,16 @@ Foo::$method['key']();
             "StaticMethodCallDynamic": {
               "class": {
                 "kind": {
-                  "Identifier": "parent"
+                  "Name": {
+                    "parts": [
+                      "parent"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 88,
+                      "end": 94
+                    }
+                  }
                 },
                 "span": {
                   "start": 88,
@@ -284,7 +329,16 @@ Foo::$method['key']();
                 "StaticMethod": {
                   "class": {
                     "kind": {
-                      "Identifier": "Foo"
+                      "Name": {
+                        "parts": [
+                          "Foo"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 189,
+                          "end": 192
+                        }
+                      }
                     },
                     "span": {
                       "start": 189,
@@ -328,7 +382,16 @@ Foo::$method['key']();
                         "StaticPropertyAccess": {
                           "class": {
                             "kind": {
-                              "Identifier": "Foo"
+                              "Name": {
+                                "parts": [
+                                  "Foo"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 306,
+                                  "end": 309
+                                }
+                              }
                             },
                             "span": {
                               "start": 306,

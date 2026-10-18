@@ -34,7 +34,16 @@ PHP: (~$a) instanceof Foo. ~ binds tighter than instanceof.
               "op": "Instanceof",
               "right": {
                 "kind": {
-                  "Identifier": "Foo"
+                  "Name": {
+                    "parts": [
+                      "Foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 21,
+                      "end": 24
+                    }
+                  }
                 },
                 "span": {
                   "start": 21,

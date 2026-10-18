@@ -394,6 +394,7 @@ fn fold_owned_expr_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &ExprKind) -> 
             ExprKind::VariableVariable(Box::new(folder.fold_expr(inner)))
         }
         ExprKind::Identifier(s) => ExprKind::Identifier(s.clone()),
+        ExprKind::Name(name) => ExprKind::Name(folder.fold_name(name)),
         ExprKind::Assign(a) => ExprKind::Assign(AssignExpr {
             target: Box::new(folder.fold_expr(&a.target)),
             op: a.op,

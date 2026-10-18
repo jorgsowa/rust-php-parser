@@ -346,7 +346,10 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
                 let span = Span::new(start, parser.previous_end());
                 Stmt {
                     kind: StmtKind::Expression(parser.alloc(Expr {
-                        kind: ExprKind::Identifier(NameStr::__arena("static")),
+                        kind: ExprKind::Name(Name::Simple {
+                            value: "static",
+                            span: token.span,
+                        }),
                         span: token.span,
                     })),
                     span,
@@ -2534,12 +2537,10 @@ fn parse_expression_stmt_or_label<'arena, 'src>(
     let start = parser.start_span();
     let expr = expr::parse_expr(parser);
 
-    if let ExprKind::Identifier(name) = expr.kind {
+    if let ExprKind::Name(Name::Simple { value, .. }) = expr.kind {
         if parser.eat(TokenKind::Colon).is_some() {
             let span = Span::new(start, parser.previous_end());
-            let label =
-                Ident::name(&parser.source[expr.span.start as usize..expr.span.end as usize]);
-            debug_assert_eq!(label.as_str(), Some(name.as_str()));
+            let label = Ident::name(value);
             return Stmt {
                 kind: StmtKind::Label(label),
                 span,

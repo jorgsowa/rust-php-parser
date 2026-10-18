@@ -130,7 +130,16 @@ echo "{$obj->items[0]}";
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "Foo"
+                        "Name": {
+                          "parts": [
+                            "Foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 69,
+                            "end": 72
+                          }
+                        }
                       },
                       "span": {
                         "start": 69,

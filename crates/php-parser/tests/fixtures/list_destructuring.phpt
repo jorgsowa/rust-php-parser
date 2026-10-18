@@ -77,7 +77,16 @@ list($x, , $z) = $array;
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "getValues"
+                        "Name": {
+                          "parts": [
+                            "getValues"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 25,
+                            "end": 34
+                          }
+                        }
                       },
                       "span": {
                         "start": 25,

@@ -113,7 +113,16 @@ echo $result;
                           "FunctionCall": {
                             "name": {
                               "kind": {
-                                "Identifier": "fib"
+                                "Name": {
+                                  "parts": [
+                                    "fib"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 80,
+                                    "end": 83
+                                  }
+                                }
                               },
                               "span": {
                                 "start": 80,
@@ -173,7 +182,16 @@ echo $result;
                           "FunctionCall": {
                             "name": {
                               "kind": {
-                                "Identifier": "fib"
+                                "Name": {
+                                  "parts": [
+                                    "fib"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 94,
+                                    "end": 97
+                                  }
+                                }
                               },
                               "span": {
                                 "start": 94,
@@ -271,7 +289,16 @@ echo $result;
                   "FunctionCall": {
                     "name": {
                       "kind": {
-                        "Identifier": "fib"
+                        "Name": {
+                          "parts": [
+                            "fib"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 120,
+                            "end": 123
+                          }
+                        }
                       },
                       "span": {
                         "start": 120,

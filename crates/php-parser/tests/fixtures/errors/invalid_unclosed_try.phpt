@@ -25,7 +25,16 @@ PHP Parse error:  syntax error, unexpected token "catch" in Standard input code 
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "foo"
+                          "Name": {
+                            "parts": [
+                              "foo"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 16,
+                              "end": 19
+                            }
+                          }
                         },
                         "span": {
                           "start": 16,

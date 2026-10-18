@@ -31,7 +31,16 @@ clone $a instanceof Box;
               "op": "Instanceof",
               "right": {
                 "kind": {
-                  "Identifier": "Box"
+                  "Name": {
+                    "parts": [
+                      "Box"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 26,
+                      "end": 29
+                    }
+                  }
                 },
                 "span": {
                   "start": 26,

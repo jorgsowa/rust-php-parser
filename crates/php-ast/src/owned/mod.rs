@@ -680,8 +680,10 @@ pub enum ExprKind {
     Variable(Box<str>),
     /// `$$x` or `${expr}`.
     VariableVariable(Box<Expr>),
-    /// Bare identifier such as a constant name.
+    /// Member name after `->`, `?->` or `::`.
     Identifier(Box<str>),
+    /// Reference to a function, class or constant.
+    Name(Name),
     /// Assignment.
     Assign(AssignExpr),
     /// Binary operation.
@@ -1954,6 +1956,7 @@ fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
             ExprKind::VariableVariable(Box::new(owned_expr(inner)))
         }
         arena_ast::ExprKind::Identifier(s) => ExprKind::Identifier(s.as_str().into()),
+        arena_ast::ExprKind::Name(name) => ExprKind::Name(owned_name(name)),
         arena_ast::ExprKind::UnaryPrefix(u) => ExprKind::UnaryPrefix(UnaryPrefixExpr {
             op: u.op,
             operand: Box::new(owned_expr(u.operand)),
@@ -2918,6 +2921,7 @@ fn av_leaf_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
             arena_ast::ExprKind::VariableVariable(arena.alloc(av_expr(arena, inner)))
         }
         ExprKind::Identifier(s) => arena_ast::ExprKind::Identifier(av_namestr(arena, s)),
+        ExprKind::Name(name) => arena_ast::ExprKind::Name(av_name(arena, name)),
         ExprKind::UnaryPrefix(u) => arena_ast::ExprKind::UnaryPrefix(arena_ast::UnaryPrefixExpr {
             op: u.op,
             operand: arena.alloc(av_expr(arena, &u.operand)),

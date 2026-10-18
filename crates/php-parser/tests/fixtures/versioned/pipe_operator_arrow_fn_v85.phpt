@@ -84,7 +84,16 @@ min_php=8.5
                                   "FunctionCall": {
                                     "name": {
                                       "kind": {
-                                        "Identifier": "trim"
+                                        "Name": {
+                                          "parts": [
+                                            "trim"
+                                          ],
+                                          "kind": "Unqualified",
+                                          "span": {
+                                            "start": 48,
+                                            "end": 52
+                                          }
+                                        }
                                       },
                                       "span": {
                                         "start": 48,

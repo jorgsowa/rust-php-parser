@@ -58,7 +58,16 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
                     "ClassConstAccess": {
                       "class": {
                         "kind": {
-                          "Identifier": "Status"
+                          "Name": {
+                            "parts": [
+                              "Status"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 69,
+                              "end": 75
+                            }
+                          }
                         },
                         "span": {
                           "start": 69,

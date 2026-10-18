@@ -26,7 +26,16 @@ $a instanceof Foo < 5;
                     "op": "Instanceof",
                     "right": {
                       "kind": {
-                        "Identifier": "Foo"
+                        "Name": {
+                          "parts": [
+                            "Foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 20,
+                            "end": 23
+                          }
+                        }
                       },
                       "span": {
                         "start": 20,

@@ -57,7 +57,16 @@ PHP Parse error:  syntax error, unexpected end of file, expecting variable or he
                     "op": "Less",
                     "right": {
                       "kind": {
-                        "Identifier": "EOT"
+                        "Name": {
+                          "parts": [
+                            "EOT"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 14,
+                            "end": 17
+                          }
+                        }
                       },
                       "span": {
                         "start": 14,
@@ -88,7 +97,16 @@ PHP Parse error:  syntax error, unexpected end of file, expecting variable or he
       "kind": {
         "Expression": {
           "kind": {
-            "Identifier": "hello"
+            "Name": {
+              "parts": [
+                "hello"
+              ],
+              "kind": "Unqualified",
+              "span": {
+                "start": 18,
+                "end": 23
+              }
+            }
           },
           "span": {
             "start": 18,

@@ -20,7 +20,16 @@ A::$b['c'];
             "StaticPropertyAccess": {
               "class": {
                 "kind": {
-                  "Identifier": "A"
+                  "Name": {
+                    "parts": [
+                      "A"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 35,
+                      "end": 36
+                    }
+                  }
                 },
                 "span": {
                   "start": 35,
@@ -56,7 +65,16 @@ A::$b['c'];
             "StaticPropertyAccessDynamic": {
               "class": {
                 "kind": {
-                  "Identifier": "A"
+                  "Name": {
+                    "parts": [
+                      "A"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 42,
+                      "end": 43
+                    }
+                  }
                 },
                 "span": {
                   "start": 42,
@@ -100,7 +118,16 @@ A::$b['c'];
             "StaticPropertyAccessDynamic": {
               "class": {
                 "kind": {
-                  "Identifier": "A"
+                  "Name": {
+                    "parts": [
+                      "A"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 50,
+                      "end": 51
+                    }
+                  }
                 },
                 "span": {
                   "start": 50,
@@ -147,7 +174,16 @@ A::$b['c'];
                   "StaticPropertyAccess": {
                     "class": {
                       "kind": {
-                        "Identifier": "A"
+                        "Name": {
+                          "parts": [
+                            "A"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 78,
+                            "end": 79
+                          }
+                        }
                       },
                       "span": {
                         "start": 78,

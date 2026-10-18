@@ -34,7 +34,16 @@ try {
                           "FunctionCall": {
                             "name": {
                               "kind": {
-                                "Identifier": "riskyOperation"
+                                "Name": {
+                                  "parts": [
+                                    "riskyOperation"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 21,
+                                    "end": 35
+                                  }
+                                }
                               },
                               "span": {
                                 "start": 21,
@@ -113,7 +122,16 @@ try {
                     "FunctionCall": {
                       "name": {
                         "kind": {
-                          "Identifier": "cleanup"
+                          "Name": {
+                            "parts": [
+                              "cleanup"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 93,
+                              "end": 100
+                            }
+                          }
                         },
                         "span": {
                           "start": 93,

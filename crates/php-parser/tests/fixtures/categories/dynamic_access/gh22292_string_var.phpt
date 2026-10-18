@@ -61,7 +61,16 @@ assert(!$f->{'---'});
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "var_dump"
+                  "Name": {
+                    "parts": [
+                      "var_dump"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 24,
+                      "end": 32
+                    }
+                  }
                 },
                 "span": {
                   "start": 24,
@@ -116,7 +125,16 @@ assert(!$f->{'---'});
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "assert"
+                  "Name": {
+                    "parts": [
+                      "assert"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 44,
+                      "end": 50
+                    }
+                  }
                 },
                 "span": {
                   "start": 44,
@@ -195,7 +213,16 @@ assert(!$f->{'---'});
                   "New": {
                     "class": {
                       "kind": {
-                        "Identifier": "Foo"
+                        "Name": {
+                          "parts": [
+                            "Foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 72,
+                            "end": 75
+                          }
+                        }
                       },
                       "span": {
                         "start": 72,
@@ -230,7 +257,16 @@ assert(!$f->{'---'});
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "var_dump"
+                  "Name": {
+                    "parts": [
+                      "var_dump"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 79,
+                      "end": 87
+                    }
+                  }
                 },
                 "span": {
                   "start": 79,
@@ -296,7 +332,16 @@ assert(!$f->{'---'});
             "FunctionCall": {
               "name": {
                 "kind": {
-                  "Identifier": "assert"
+                  "Name": {
+                    "parts": [
+                      "assert"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 102,
+                      "end": 108
+                    }
+                  }
                 },
                 "span": {
                   "start": 102,

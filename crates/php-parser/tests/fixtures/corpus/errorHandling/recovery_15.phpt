@@ -16,7 +16,16 @@ PHP Parse error:  syntax error, unexpected end of file, expecting variable or "{
             "StaticPropertyAccessDynamic": {
               "class": {
                 "kind": {
-                  "Identifier": "Foo"
+                  "Name": {
+                    "parts": [
+                      "Foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 9
+                    }
+                  }
                 },
                 "span": {
                   "start": 6,
