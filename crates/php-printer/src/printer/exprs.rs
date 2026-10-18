@@ -592,72 +592,45 @@ impl<'src> Printer<'src> {
     }
 
     fn print_string_parts(&mut self, parts: &[StringPart]) {
-        let mut last_literal_ends_with_brace = false;
-        for part in parts.iter() {
-            match part {
-                StringPart::Literal(s) => {
-                    self.w(&escape_double_quoted(s));
-                    last_literal_ends_with_brace = s.ends_with('{');
-                }
-                StringPart::Expr(expr) => {
-                    if last_literal_ends_with_brace {
-                        self.print_string_part_expr_with_braces(expr);
-                    } else {
-                        self.print_string_part_expr(expr);
-                    }
-                    last_literal_ends_with_brace = false;
-                }
-                _ => self.unsupported("string part"),
-            }
-        }
+        self.print_interpolated_parts(parts, escape_double_quoted);
     }
 
     fn print_backtick_parts(&mut self, parts: &[StringPart]) {
-        for part in parts.iter() {
-            match part {
-                StringPart::Literal(s) => self.w(&escape_shell_exec(s)),
-                StringPart::Expr(expr) => self.print_string_part_expr(expr),
-                _ => self.unsupported("string part"),
-            }
-        }
+        self.print_interpolated_parts(parts, escape_shell_exec);
     }
 
     fn print_heredoc_parts(&mut self, parts: &[StringPart]) {
-        for part in parts.iter() {
+        self.print_interpolated_parts(parts, escape_heredoc);
+    }
+
+    fn print_interpolated_parts(&mut self, parts: &[StringPart], escape: fn(&str) -> String) {
+        let mut after_brace = false;
+        for (i, part) in parts.iter().enumerate() {
             match part {
-                StringPart::Literal(s) => self.w(&escape_heredoc(s)),
-                StringPart::Expr(expr) => self.print_string_part_expr(expr),
+                StringPart::Literal(s) => {
+                    self.w(&escape(s));
+                    // A bare `$name` after a literal `{` would open `{$...}` syntax.
+                    after_brace = s.ends_with('{');
+                }
+                StringPart::Expr(expr) => {
+                    match &expr.kind {
+                        ExprKind::Variable(name)
+                            if !after_brace && !extends_simple_variable(parts.get(i + 1)) =>
+                        {
+                            self.w("$");
+                            self.w(name.as_str());
+                        }
+                        _ => {
+                            self.w("{");
+                            self.print_expr(expr, PREC_LOWEST);
+                            self.w("}");
+                        }
+                    }
+                    after_brace = false;
+                }
                 _ => self.unsupported("string part"),
             }
         }
-    }
-
-    fn print_string_part_expr(&mut self, expr: &Expr) {
-        match &expr.kind {
-            ExprKind::Variable(name) => {
-                self.w("$");
-                self.w(name.as_str());
-            }
-            _ => {
-                self.w("{");
-                self.print_expr(expr, PREC_LOWEST);
-                self.w("}");
-            }
-        }
-    }
-
-    fn print_string_part_expr_with_braces(&mut self, expr: &Expr) {
-        self.w("{");
-        match &expr.kind {
-            ExprKind::Variable(name) => {
-                self.w("$");
-                self.w(name.as_str());
-            }
-            _ => {
-                self.print_expr(expr, PREC_LOWEST);
-            }
-        }
-        self.w("}");
     }
 
     fn needs_braces_for_property(&self, expr: &ExprKind) -> bool {
@@ -678,6 +651,17 @@ impl<'src> Printer<'src> {
             self.w("'");
         }
     }
+}
+
+/// Whether `next` would be read as part of a bare `$name` placed before it:
+/// more name characters, an index or a property access.
+fn extends_simple_variable(next: Option<&StringPart>) -> bool {
+    let Some(StringPart::Literal(s)) = next else {
+        return false;
+    };
+    s.starts_with(|c: char| c.is_ascii_alphanumeric() || c == '_' || c == '[' || !c.is_ascii())
+        || s.starts_with("->")
+        || s.starts_with("?->")
 }
 
 /// The chain operand of `node`, checking the cheap [`is_chain`] first.
