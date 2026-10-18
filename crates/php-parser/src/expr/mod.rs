@@ -202,6 +202,37 @@ fn is_valid_destructure_element(kind: &ExprKind<'_, '_>) -> bool {
     }
 }
 
+/// True if `kind` is a variable, a fetch or a call: what PHP can take a reference of.
+fn is_variable_or_call(kind: &ExprKind<'_, '_>) -> bool {
+    matches!(
+        kind,
+        ExprKind::Variable(_)
+            | ExprKind::VariableVariable(_)
+            | ExprKind::ArrayAccess(_)
+            | ExprKind::PropertyAccess(_)
+            | ExprKind::NullsafePropertyAccess(_)
+            | ExprKind::StaticPropertyAccess(_)
+            | ExprKind::StaticPropertyAccessDynamic { .. }
+            | ExprKind::FunctionCall(_)
+            | ExprKind::MethodCall(_)
+            | ExprKind::NullsafeMethodCall(_)
+            | ExprKind::StaticMethodCall(_)
+            | ExprKind::StaticMethodCallDynamic(_)
+            | ExprKind::CallableCreate(_)
+            | ExprKind::Error
+    )
+}
+
+/// True if a destructuring list assigns any element by reference, as in `[&$a] = …`.
+fn has_reference_element(kind: &ExprKind<'_, '_>) -> bool {
+    let ExprKind::Array(elems) = kind else {
+        return false;
+    };
+    elems
+        .iter()
+        .any(|el| el.by_ref || has_reference_element(&el.value.kind))
+}
+
 /// Find the first `new` expression inside an initializer that PHP rejects
 /// at compile time (class/global const value, property default, static
 /// variable initializer). Returns `None` if there is no offending `new`.
@@ -443,6 +474,34 @@ fn parse_assign_continuation<'arena, 'src>(
             message: "Cannot take reference of a parenthesized expression".into(),
             span: rhs.span,
         });
+    } else if by_ref && !is_variable_or_call(&rhs.kind) {
+        parser.error(ParseError::Forbidden {
+            message: "Cannot assign reference to non referenceable value".into(),
+            span: rhs.span,
+        });
+    } else if by_ref && is_temporary_write_target(&rhs.kind) {
+        parser.error(ParseError::Forbidden {
+            message: "Cannot use temporary expression in write context".into(),
+            span: rhs.span,
+        });
+    } else if op == AssignOp::Assign && has_reference_element(&lhs.kind) {
+        let mut source = &rhs.kind;
+        while let ExprKind::Parenthesized(inner) = source {
+            source = &inner.kind;
+        }
+        let message = if has_nullsafe_link(source) {
+            "Cannot take reference of a nullsafe chain"
+        } else if !is_variable_or_call(source) {
+            "Cannot assign reference to non referenceable value"
+        } else {
+            ""
+        };
+        if !message.is_empty() {
+            parser.error(ParseError::Forbidden {
+                message: message.into(),
+                span: rhs.span,
+            });
+        }
     }
     let span = lhs.span.merge(rhs.span);
     Expr {
