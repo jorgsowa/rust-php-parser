@@ -1457,7 +1457,7 @@ pub(crate) fn parse_closure<'arena, 'src>(
     // use clause
     let use_vars = if parser.eat(TokenKind::Use).is_some() {
         parser.expect(TokenKind::LeftParen);
-        let vars = parse_closure_use_list(parser);
+        let vars = parse_closure_use_list(parser, &params);
         parser.expect(TokenKind::RightParen);
         vars
     } else {
@@ -1479,6 +1479,7 @@ pub(crate) fn parse_closure<'arena, 'src>(
     parser.loop_depth = 0;
     parser.function_depth += 1;
     let saved_by_ref = std::mem::replace(&mut parser.by_ref_function, by_ref);
+    let saved_static_vars = std::mem::take(&mut parser.static_vars);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
         body_stmts.push(stmt::parse_stmt(parser));
@@ -1488,6 +1489,7 @@ pub(crate) fn parse_closure<'arena, 'src>(
     }
     parser.function_depth -= 1;
     parser.by_ref_function = saved_by_ref;
+    parser.static_vars = saved_static_vars;
     parser.loop_depth = saved_loop_depth;
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
@@ -1512,6 +1514,7 @@ pub(crate) fn parse_closure<'arena, 'src>(
 
 fn parse_closure_use_list<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
+    params: &[Param<'arena, 'src>],
 ) -> ArenaVec<'arena, ClosureUseVar<'src>> {
     let mut vars = parser.alloc_vec_with_capacity(2);
     loop {
@@ -1523,16 +1526,26 @@ fn parse_closure_use_list<'arena, 'src>(
         if let Some(token) = parser.eat(TokenKind::Variable) {
             let name = parser.variable_ident(token);
             let span = Span::new(var_start, token.span.end);
-            let message = match name.as_str() {
-                Some("this") => Some("Cannot use $this as lexical variable"),
+            let message: Option<std::borrow::Cow<'static, str>> = match name.as_str() {
+                Some("this") => Some("Cannot use $this as lexical variable".into()),
                 Some(n) if super::is_superglobal(n) => {
-                    Some("Cannot use auto-global as lexical variable")
+                    Some("Cannot use auto-global as lexical variable".into())
+                }
+                Some(n) if params.iter().any(|p| p.name.as_str() == Some(n)) => {
+                    Some(format!("Cannot use lexical variable ${n} as a parameter name").into())
+                }
+                Some(n)
+                    if vars
+                        .iter()
+                        .any(|v: &ClosureUseVar<'_>| v.name.as_str() == Some(n)) =>
+                {
+                    Some(format!("Cannot use variable ${n} twice").into())
                 }
                 _ => None,
             };
             if let Some(message) = message {
                 parser.error(ParseError::Forbidden {
-                    message: message.into(),
+                    message,
                     span: name.span,
                 });
             }
@@ -1573,10 +1586,12 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
     parser.expect(TokenKind::FatArrow);
     parser.function_depth += 1;
     let saved_by_ref = std::mem::replace(&mut parser.by_ref_function, by_ref);
+    let saved_static_vars = std::mem::take(&mut parser.static_vars);
     let body = parse_expr(parser);
     super::check_reference_return(parser, &body);
     parser.function_depth -= 1;
     parser.by_ref_function = saved_by_ref;
+    parser.static_vars = saved_static_vars;
     let span = Span::new(start, body.span.end);
 
     Expr {

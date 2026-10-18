@@ -1194,6 +1194,7 @@ fn parse_function<'arena, 'src>(
     parser.loop_depth = 0;
     parser.function_depth += 1;
     let saved_by_ref = std::mem::replace(&mut parser.by_ref_function, by_ref);
+    let saved_static_vars = std::mem::take(&mut parser.static_vars);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
         body_stmts.push(parse_stmt(parser));
@@ -1203,6 +1204,7 @@ fn parse_function<'arena, 'src>(
     }
     parser.function_depth -= 1;
     parser.by_ref_function = saved_by_ref;
+    parser.static_vars = saved_static_vars;
     parser.loop_depth = saved_loop_depth;
     parser.expect_closing(TokenKind::RightBrace, open_brace_span);
     let end = parser.previous_end();
@@ -1321,11 +1323,18 @@ pub(crate) fn check_returns_against_type<'arena, 'src>(
     walk(parser, &body.stmts, is_void);
 }
 
-fn check_param_name(parser: &mut Parser<'_, '_>, name: php_ast::Ident<'_>) {
+fn check_param_name(
+    parser: &mut Parser<'_, '_>,
+    name: php_ast::Ident<'_>,
+    earlier: &[Param<'_, '_>],
+) {
     let message: std::borrow::Cow<'static, str> = match name.as_str() {
         Some("this") => "Cannot use $this as parameter".into(),
         Some(n) if expr::is_superglobal(n) => {
             format!("Cannot re-assign auto-global variable {n}").into()
+        }
+        Some(n) if earlier.iter().any(|p| p.name.as_str() == Some(n)) => {
+            format!("Redefinition of parameter ${n}").into()
         }
         _ => return,
     };
@@ -1368,7 +1377,7 @@ pub fn parse_param_list<'arena, 'src>(
             if let Some(param) =
                 try_parse_simple_param_fastpath_minimal(parser, param_start, param_list_floor)
             {
-                check_param_name(parser, param.name);
+                check_param_name(parser, param.name, &params);
                 params.push(param);
                 if parser.eat(TokenKind::Comma).is_none() {
                     break;
@@ -1538,7 +1547,7 @@ pub fn parse_param_list<'arena, 'src>(
         let name = name_token
             .map(|t| parser.variable_ident(t))
             .unwrap_or(parser.missing_ident());
-        check_param_name(parser, name);
+        check_param_name(parser, name, &params);
 
         let default = if parser.eat(TokenKind::Equals).is_some() {
             // Suppress `{` subscript so a following hook block `{ get => ...; }`
@@ -2649,11 +2658,17 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
         let name = var_token
             .map(|t| parser.variable_ident(t))
             .unwrap_or(parser.missing_ident());
-        if name.as_str() == Some("this") {
-            parser.error(ParseError::Forbidden {
+        match name.as_str() {
+            Some("this") => parser.error(ParseError::Forbidden {
                 message: "Cannot use $this as static variable".into(),
                 span: name.span,
-            });
+            }),
+            Some(n) if parser.static_vars.contains(&n) => parser.error(ParseError::Forbidden {
+                message: format!("Duplicate declaration of static variable ${n}").into(),
+                span: name.span,
+            }),
+            Some(n) => parser.static_vars.push(n),
+            None => {}
         }
 
         let default = if parser.eat(TokenKind::Equals).is_some() {

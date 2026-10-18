@@ -91,6 +91,8 @@ pub struct Parser<'arena, 'src> {
     pub(crate) function_depth: u32,
     /// True inside the body of a function, method, closure or hook that returns by reference.
     pub(crate) by_ref_function: bool,
+    /// Names declared by `static` in the current function body or top-level code.
+    pub(crate) static_vars: Vec<&'src str>,
     /// Number of statements being parsed around the current one; 1 for a top-level statement,
     /// including one directly inside a braced `namespace`.
     pub(crate) stmt_depth: u32,
@@ -166,6 +168,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             loop_depth: 0,
             function_depth: 0,
             by_ref_function: false,
+            static_vars: Vec::new(),
             stmt_depth: 0,
             in_constructor: false,
             version,
@@ -210,6 +213,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             loop_depth: 0,
             function_depth: 0,
             by_ref_function: false,
+            static_vars: Vec::new(),
             stmt_depth: 0,
             in_constructor: false,
             version,
