@@ -45,7 +45,7 @@
               "kind": {
                 "Property": {
                   "name": "b",
-                  "visibility": null,
+                  "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
                   "is_readonly": false,
@@ -71,7 +71,7 @@
               "kind": {
                 "Property": {
                   "name": "c",
-                  "visibility": null,
+                  "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
                   "is_readonly": false,

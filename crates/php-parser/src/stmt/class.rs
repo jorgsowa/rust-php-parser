@@ -1,3 +1,4 @@
+use php_ast::fold::Fold;
 use php_ast::*;
 use php_lexer::TokenKind;
 
@@ -959,6 +960,20 @@ fn parse_method_member<'arena, 'src>(
     }
 }
 
+struct AstCopy;
+impl<'src> Fold<'src> for AstCopy {}
+
+fn copy_attributes<'arena, 'src>(
+    parser: &Parser<'arena, 'src>,
+    attrs: &[Attribute<'arena, 'src>],
+) -> ArenaVec<'arena, Attribute<'arena, 'src>> {
+    let mut out = parser.alloc_vec();
+    for attr in attrs {
+        out.push(AstCopy.fold_attribute(parser.arena, attr));
+    }
+    out
+}
+
 fn parse_property_member<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     members: &mut ArenaVec<'arena, ClassMember<'arena, 'src>>,
@@ -1073,6 +1088,7 @@ fn parse_property_member<'arena, 'src>(
         }
     }
     let span = Span::new(member_start, parser.previous_end());
+    let first_index = members.len();
     members.push(ClassMember {
         kind: ClassMemberKind::Property(PropertyDecl {
             name: prop_name,
@@ -1112,16 +1128,25 @@ fn parse_property_member<'arena, 'src>(
                 parser.alloc_vec()
             };
             let pspan = Span::new(member_start, parser.previous_end());
+            // Every item of `public int $a, $b;` gets its own copy of the shared type and attributes.
+            let ClassMemberKind::Property(first) = &members[first_index].kind else {
+                unreachable!()
+            };
+            let ptype_hint = first
+                .type_hint
+                .as_ref()
+                .map(|t| AstCopy.fold_type_hint(parser.arena, t));
+            let pattributes = copy_attributes(parser, &first.attributes);
             members.push(ClassMember {
                 kind: ClassMemberKind::Property(PropertyDecl {
                     name: pname,
-                    visibility: None,
-                    set_visibility: None,
+                    visibility: mods.visibility,
+                    set_visibility: mods.set_visibility,
                     is_static: mods.is_static,
                     is_readonly: mods.is_readonly,
-                    type_hint: None,
+                    type_hint: ptype_hint,
                     default: pdefault,
-                    attributes: parser.alloc_vec(),
+                    attributes: pattributes,
                     hooks: phooks,
                     doc_comment: None,
                 }),

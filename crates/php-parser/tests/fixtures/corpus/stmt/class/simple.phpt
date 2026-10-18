@@ -135,7 +135,7 @@ class A extends B implements C, D {
               "kind": {
                 "Property": {
                   "name": "c",
-                  "visibility": null,
+                  "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
                   "is_readonly": false,

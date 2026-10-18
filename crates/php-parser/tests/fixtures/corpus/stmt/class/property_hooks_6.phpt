@@ -49,7 +49,7 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
               "kind": {
                 "Property": {
                   "name": "bar",
-                  "visibility": null,
+                  "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
                   "is_readonly": false,
