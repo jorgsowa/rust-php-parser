@@ -64,6 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `?>` ends a `goto`, `unset`, `global`, `static`, `use`, `const` or `namespace Foo` statement like `;` does; these required a `;` before it (`php-rs-parser`).
 - A heredoc ended at a line inside a multi-line `{$...}` or `${...}` interpolation that looked like its closing label (`php-lexer`, `php-rs-parser`).
 - `const`, `use` and `namespace` declarations inside a function, block or control structure are reported; PHP allows them only at the outermost scope. `__halt_compiler()` in a function body was not reported (`php-rs-parser`).
+- `static` in a parameter or property type, such as `?static $a`, is reported; PHP allows it only in return and class constant types (`php-rs-parser`).
 
 ---
 

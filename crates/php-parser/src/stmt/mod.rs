@@ -1476,7 +1476,9 @@ pub fn parse_param_list<'arena, 'src>(
             || parser.check(TokenKind::Ampersand)
                 && matches!(parser.peek_kind(), Some(TokenKind::Variable)))
         {
-            Some(parser.parse_type_hint())
+            let type_hint = parser.parse_type_hint();
+            parser.reject_static_type(&type_hint, "parameter");
+            Some(type_hint)
         } else {
             None
         };

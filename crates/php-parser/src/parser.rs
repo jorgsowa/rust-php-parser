@@ -900,6 +900,25 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     // Type hint parsing
     // =========================================================================
 
+    /// Report `static` in a type outside return and class constant types, where PHP rejects it.
+    pub(crate) fn reject_static_type(&mut self, type_hint: &TypeHint<'_, '_>, position: &str) {
+        match &type_hint.kind {
+            TypeHintKind::Keyword(BuiltinType::Static, span) => {
+                self.error(ParseError::Forbidden {
+                    message: format!("static cannot be used as a {position} type").into(),
+                    span: *span,
+                });
+            }
+            TypeHintKind::Nullable(inner) => self.reject_static_type(inner, position),
+            TypeHintKind::Union(types) | TypeHintKind::Intersection(types) => {
+                for t in types.iter() {
+                    self.reject_static_type(t, position);
+                }
+            }
+            _ => {}
+        }
+    }
+
     /// Parse a type hint: `?T`, `A|B`, `A&B`, `(A&B)|C` (DNF), or simple type.
     pub fn parse_type_hint(&mut self) -> TypeHint<'arena, 'src> {
         let start = self.start_span();

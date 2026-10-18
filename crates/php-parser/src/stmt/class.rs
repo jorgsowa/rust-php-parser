@@ -442,7 +442,9 @@ pub fn parse_class_members<'arena, 'src>(
         }
 
         let type_hint = if parser.could_be_type_hint() && !parser.check(TokenKind::Variable) {
-            Some(parser.parse_type_hint())
+            let type_hint = parser.parse_type_hint();
+            parser.reject_static_type(&type_hint, "property");
+            Some(type_hint)
         } else {
             None
         };
