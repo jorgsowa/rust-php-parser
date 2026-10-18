@@ -21,18 +21,18 @@ pub mod fold;
 pub mod visitor;
 
 pub use fold::{
-    fold_owned_arg, fold_owned_attribute, fold_owned_catch_clause, fold_owned_class_member,
-    fold_owned_closure_use_var, fold_owned_enum_member, fold_owned_expr, fold_owned_match_arm,
-    fold_owned_name, fold_owned_param, fold_owned_program, fold_owned_property_hook,
-    fold_owned_stmt, fold_owned_trait_adaptation, fold_owned_trait_use, fold_owned_type_hint,
-    FoldOwned,
+    fold_owned_arg, fold_owned_attribute, fold_owned_block, fold_owned_catch_clause,
+    fold_owned_class_member, fold_owned_closure_use_var, fold_owned_enum_member, fold_owned_expr,
+    fold_owned_match_arm, fold_owned_name, fold_owned_param, fold_owned_program,
+    fold_owned_property_hook, fold_owned_stmt, fold_owned_trait_adaptation, fold_owned_trait_use,
+    fold_owned_type_hint, FoldOwned,
 };
 pub use visitor::{
-    walk_owned_arg, walk_owned_attribute, walk_owned_catch_clause, walk_owned_class_member,
-    walk_owned_comments, walk_owned_enum_member, walk_owned_expr, walk_owned_match_arm,
-    walk_owned_name, walk_owned_param, walk_owned_program, walk_owned_property_hook,
-    walk_owned_stmt, walk_owned_trait_adaptation, walk_owned_trait_use, walk_owned_type_hint,
-    OwnedScope, OwnedScopeVisitor, OwnedScopeWalker, OwnedVisitor,
+    walk_owned_arg, walk_owned_attribute, walk_owned_block, walk_owned_catch_clause,
+    walk_owned_class_member, walk_owned_comments, walk_owned_enum_member, walk_owned_expr,
+    walk_owned_match_arm, walk_owned_name, walk_owned_param, walk_owned_program,
+    walk_owned_property_hook, walk_owned_stmt, walk_owned_trait_adaptation, walk_owned_trait_use,
+    walk_owned_type_hint, OwnedScope, OwnedScopeVisitor, OwnedScopeWalker, OwnedVisitor,
 };
 
 use std::fmt;

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `walk_trait_adaptation` and `walk_owned_trait_adaptation` (`php-ast`).
+- `php_ast::owned` re-exports `walk_owned_block` and `fold_owned_block` like the other walk and fold functions (`php-ast`).
 
 ### Changed
 

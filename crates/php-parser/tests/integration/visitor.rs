@@ -1258,3 +1258,29 @@ fn name_str_new_in_copies_into_the_arena() {
     drop(s);
     assert_eq!(name.as_str(), "synthesized");
 }
+
+#[test]
+fn owned_block_walk_and_fold_are_overridable() {
+    use php_ast::owned::{fold_owned_block, walk_owned_block, Block, FoldOwned, OwnedVisitor};
+    struct CountBlocks(usize);
+    impl OwnedVisitor for CountBlocks {
+        fn visit_block(&mut self, block: &Block) -> ControlFlow<()> {
+            self.0 += 1;
+            walk_owned_block(self, block)
+        }
+    }
+    impl FoldOwned for CountBlocks {
+        fn fold_block(&mut self, block: &Block) -> Block {
+            self.0 += 1;
+            fold_owned_block(self, block)
+        }
+    }
+    let result = php_rs_parser::parse("<?php function f() { if (1) { g(); } }");
+    let mut visitor = CountBlocks(0);
+    let _ = visitor.visit_program(&result.program);
+    let visited = visitor.0;
+    let mut folder = CountBlocks(0);
+    let _ = folder.fold_program(&result.program);
+    assert!(visited > 0);
+    assert_eq!(folder.0, visited);
+}
