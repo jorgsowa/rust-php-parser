@@ -22,7 +22,8 @@ bumpalo = { workspace = true }
 memchr = { workspace = true }
 
 [dev-dependencies]
-php-printer = { workspace = true }
+# Path-only so `cargo publish` strips it: php-printer dev-depends on this crate.
+php-printer = { path = "../php-printer" }
 serde = { workspace = true }
 serde_json = { workspace = true }
 criterion = { workspace = true }
