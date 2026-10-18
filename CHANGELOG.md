@@ -54,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `from` was a keyword, so a function, class or constant named `from` could be declared but not used: `from()`, `From::class`, `new From` and `From` as a type were rejected (`php-lexer`, `php-rs-parser`).
 - `${expr}` in a string took only a bare name: `"${'a'}"` and `"${"a$b"}"` were reported as an empty variable name, a `"` inside ended the string, and in an indented heredoc `${...}` was kept as text. Any expression is now a variable variable, and the index in `${a[expr]}` is a full expression, so `${a['k']}` indexes `k` instead of `'k'` (`php-lexer`, `php-rs-parser`).
 - `"\u{D800}"` through `"\u{DFFF}"` were reported as too large; PHP accepts surrogate code points and encodes them as three UTF-8 bytes, which are now stored one char per byte like `\x` escapes (`php-rs-parser`).
+- `$obj->__halt_compiler` was rejected; after `->` and `?->` PHP accepts any name (`php-rs-parser`).
 
 ---
 

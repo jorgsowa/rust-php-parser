@@ -1040,8 +1040,11 @@ pub fn parse_expr_bp<'arena, 'src>(
 pub(crate) fn parse_member_name<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
 ) -> Expr<'arena, 'src> {
-    // Plain identifier or any keyword PHP allows as a member name.
-    if parser.check(TokenKind::Identifier) || parser.is_semi_reserved_keyword() {
+    // After `->` PHP's lexer reads any label as a name, `__halt_compiler` included.
+    if parser.check(TokenKind::Identifier)
+        || parser.is_semi_reserved_keyword()
+        || parser.check(TokenKind::HaltCompiler)
+    {
         let token = parser.advance();
         let text = &parser.source[token.span.start as usize..token.span.end as usize];
         return Expr {
