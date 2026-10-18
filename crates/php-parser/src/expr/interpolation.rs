@@ -144,6 +144,11 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                             } else {
                                 let idx_offset = base_offset + idx_start as u32;
                                 let idx_end = base_offset + (i - 1) as u32;
+                                check_simple_offset(
+                                    idx_str,
+                                    Span::new(idx_offset, idx_end),
+                                    errors,
+                                );
 
                                 let index_expr =
                                     parse_simple_index(source, idx_str, idx_offset, idx_end);
@@ -427,6 +432,11 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                             } else {
                                 let idx_offset = body_offset + idx_start as u32;
                                 let idx_end = body_offset + (i - 1) as u32;
+                                check_simple_offset(
+                                    idx_str,
+                                    Span::new(idx_offset, idx_end),
+                                    errors,
+                                );
                                 let index_expr =
                                     parse_simple_index(source, idx_str, idx_offset, idx_end);
                                 let span = Span::new(var_offset, body_offset + i as u32);
@@ -775,6 +785,38 @@ fn is_var_char(b: u8) -> bool {
 
 fn is_utf8_continuation(b: u8) -> bool {
     (b & 0xC0) == 0x80
+}
+
+/// Report an offset in `"$a[...]"` that PHP's lexer does not accept there: only a name, a
+/// `$variable` or an optionally negated number, with no quotes or whitespace.
+fn check_simple_offset(idx: &str, span: Span, errors: &mut Vec<ParseError>) {
+    let bytes = idx.as_bytes();
+    let is_name_byte = |c: &u8| c.is_ascii_alphanumeric() || *c == b'_' || *c >= 0x80;
+    let is_name =
+        |b: &[u8]| b.first().is_some_and(|c| !c.is_ascii_digit()) && b.iter().all(is_name_byte);
+    let digits = bytes.strip_prefix(b"-").unwrap_or(bytes);
+    let is_number = match digits {
+        [b'0', b'x' | b'X', rest @ ..] => {
+            !rest.is_empty() && rest.iter().all(|c| c.is_ascii_hexdigit() || *c == b'_')
+        }
+        [b'0', b'b' | b'B', rest @ ..] => {
+            !rest.is_empty() && rest.iter().all(|c| matches!(c, b'0' | b'1' | b'_'))
+        }
+        [b'0', b'o' | b'O', rest @ ..] => {
+            !rest.is_empty() && rest.iter().all(|c| matches!(c, b'0'..=b'7' | b'_'))
+        }
+        [first, ..] => {
+            first.is_ascii_digit() && digits.iter().all(|c| c.is_ascii_digit() || *c == b'_')
+        }
+        [] => false,
+    };
+    let valid = is_number || is_name(bytes) || bytes.strip_prefix(b"$").is_some_and(is_name);
+    if !valid {
+        errors.push(ParseError::Forbidden {
+            message: "invalid offset in simple string interpolation".into(),
+            span,
+        });
+    }
 }
 
 /// Parse an array index from simple string interpolation: `$arr[expr]`.

@@ -76,6 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A `$` followed by something other than a variable, `$` or `{`, as in `$"abc"`, `$1` or `$a->$"b"`, is reported (`php-rs-parser`).
 - A keyword directly followed by `\` and a name, such as `class\Foo` or `implements\A`, is lexed as the first part of a qualified name like PHP 8 does, so `class\Foo::x()` parses and `class B implements\A {}` is reported (`php-lexer`).
 - Whitespace inside a namespaced name, as in `Foo \ Bar` or `\ Foo()`, is reported; PHP 8 reads a name as a single token. A group `use Foo \ {A}` keeps accepting it (`php-rs-parser`).
+- An offset in simple string interpolation that is not a name, number or variable, such as `"$a['k']"` or `"$a[ 0 ]"`, is reported (`php-rs-parser`).
 
 ---
 
