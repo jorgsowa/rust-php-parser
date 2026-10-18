@@ -854,9 +854,19 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
         // Check for relative: namespace\Foo
         let relative = !fully_qualified && self.check(TokenKind::Namespace);
+        // PHP lexes a name as one token, so the separators must touch the parts.
+        let mut separated_at = None;
         if relative {
-            self.advance();
-            self.expect(TokenKind::Backslash);
+            let keyword_end = self.advance().span.end;
+            if self
+                .expect(TokenKind::Backslash)
+                .is_some_and(|t| t.span.start != keyword_end)
+            {
+                separated_at = Some(keyword_end);
+            }
+        }
+        if (fully_qualified || relative) && self.previous_end() != self.current_span().start {
+            separated_at.get_or_insert(self.previous_end());
         }
 
         // First part
@@ -887,14 +897,23 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
         // Subsequent parts: \Ident
         let mut last_end = first_span.end;
-        while self.eat(TokenKind::Backslash).is_some() {
+        while let Some(separator) = self.eat(TokenKind::Backslash) {
             if let Some((text, span)) = self.eat_identifier_or_keyword() {
+                if separator.span.start != last_end || span.start != separator.span.end {
+                    separated_at.get_or_insert(separator.span.start);
+                }
                 parts.push(text);
                 last_end = span.end;
             }
         }
 
         let span = Span::new(start, last_end);
+        if separated_at.is_some() {
+            self.error(ParseError::Forbidden {
+                message: "A namespaced name cannot contain whitespace".into(),
+                span,
+            });
+        }
 
         let kind = if fully_qualified {
             NameKind::FullyQualified
