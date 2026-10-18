@@ -615,7 +615,7 @@ B"$A";
                       },
                       "index": {
                         "kind": {
-                          "String": "'B'"
+                          "String": "B"
                         },
                         "span": {
                           "start": 156,
@@ -626,7 +626,7 @@ B"$A";
                   },
                   "span": {
                     "start": 152,
-                    "end": 160
+                    "end": 161
                   }
                 }
               }

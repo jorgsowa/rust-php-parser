@@ -1,7 +1,9 @@
 ===source===
 <?php $s = "${arr[";
 ===errors===
-unclosed '[' in string offset interpolation
+unterminated string literal
+unclosed '${' in string interpolation
+expected ';' after expression
 ===php_error===
 PHP Parse error:  Unclosed '[' in Standard input code on line 1
 ===ast===
@@ -28,11 +30,47 @@ PHP Parse error:  Unclosed '[' in Standard input code on line 1
                     {
                       "Expr": {
                         "kind": {
-                          "Variable": "arr"
+                          "VariableVariable": {
+                            "kind": {
+                              "ArrayAccess": {
+                                "array": {
+                                  "kind": {
+                                    "Name": {
+                                      "parts": [
+                                        "arr"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 14,
+                                        "end": 17
+                                      }
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 14,
+                                    "end": 17
+                                  }
+                                },
+                                "index": {
+                                  "kind": {
+                                    "String": ";"
+                                  },
+                                  "span": {
+                                    "start": 18,
+                                    "end": 20
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 14,
+                              "end": 20
+                            }
+                          }
                         },
                         "span": {
-                          "start": 14,
-                          "end": 17
+                          "start": 12,
+                          "end": 20
                         }
                       }
                     }
@@ -40,14 +78,14 @@ PHP Parse error:  Unclosed '[' in Standard input code on line 1
                 },
                 "span": {
                   "start": 11,
-                  "end": 19
+                  "end": 20
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 19
+            "end": 20
           }
         }
       },

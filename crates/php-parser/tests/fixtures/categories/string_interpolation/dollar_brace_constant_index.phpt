@@ -36,7 +36,16 @@
                             },
                             "index": {
                               "kind": {
-                                "String": "PHP_INT_MAX"
+                                "Name": {
+                                  "parts": [
+                                    "PHP_INT_MAX"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 18,
+                                    "end": 29
+                                  }
+                                }
                               },
                               "span": {
                                 "start": 18,
@@ -47,7 +56,7 @@
                         },
                         "span": {
                           "start": 12,
-                          "end": 30
+                          "end": 31
                         }
                       }
                     }

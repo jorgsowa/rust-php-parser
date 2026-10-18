@@ -46,114 +46,18 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                             arena.alloc_str(&inner[literal_start..i]),
                         ));
                     }
-                    i += 2; // skip ${
-                    let var_offset = base_offset + (i - 2) as u32;
-                    if i < len && bytes[i] == b'$' {
-                        // ${$foo} — variable variable; use sub-parser from the inner $
-                        let expr_start = i;
-                        let mut depth = 1usize;
-                        while i < len && depth > 0 {
-                            match bytes[i] {
-                                b'{' => depth += 1,
-                                b'}' => depth -= 1,
-                                _ => {}
-                            }
-                            if depth > 0 {
-                                i += 1;
-                            }
-                        }
-                        let inner_expr = parse_complex_interpolation(
-                            arena,
-                            source,
-                            base_offset + expr_start as u32,
-                            base_offset + i as u32,
-                            version,
-                            nesting_depth,
-                            errors,
-                        );
-                        if i < len {
-                            i += 1; // skip }
-                        } else {
-                            errors.push(ParseError::Forbidden {
-                                message: "unclosed '${' in string interpolation".into(),
-                                span: Span::new(var_offset, base_offset + i as u32),
-                            });
-                        }
-                        parts.push(StringPart::Expr(Expr {
-                            kind: ExprKind::VariableVariable(arena.alloc(inner_expr)),
-                            span: Span::new(var_offset, base_offset + i as u32),
-                        }));
-                    } else {
-                        // ${varname} or ${varname[index]} — identifier as variable name
-                        let name_start = i;
-                        while i < len && is_var_char(bytes[i]) {
-                            i += 1;
-                            while i < len && is_utf8_continuation(bytes[i]) {
-                                i += 1;
-                            }
-                        }
-                        let var_name: &'src str =
-                            &source[base_offset as usize + name_start..base_offset as usize + i];
-                        if var_name.is_empty() {
-                            errors.push(ParseError::Forbidden {
-                                message: "empty variable name in '${...}' string interpolation"
-                                    .into(),
-                                span: Span::new(var_offset, base_offset + i as u32 + 1),
-                            });
-                        }
-                        let mut expr = Expr {
-                            kind: ExprKind::Variable(NameStr::__src(var_name)),
-                            span: Span::new(
-                                base_offset + name_start as u32,
-                                base_offset + i as u32,
-                            ),
-                        };
-                        // Optional [index]
-                        if i < len && bytes[i] == b'[' {
-                            let bracket_offset = base_offset + i as u32;
-                            i += 1;
-                            let idx_start = i;
-                            while i < len && bytes[i] != b']' && bytes[i] != b'}' {
-                                i += 1;
-                            }
-                            if i < len && bytes[i] == b']' {
-                                let idx_str = &inner[idx_start..i];
-                                i += 1;
-                                if idx_str.is_empty() {
-                                    errors.push(ParseError::Forbidden {
-                                        message: "empty index in string interpolation".into(),
-                                        span: Span::new(bracket_offset, base_offset + i as u32),
-                                    });
-                                } else {
-                                    let idx_offset = base_offset + idx_start as u32;
-                                    let idx_end = base_offset + (i - 1) as u32;
-                                    let index_expr =
-                                        parse_simple_index(source, idx_str, idx_offset, idx_end);
-                                    let span = Span::new(var_offset, base_offset + i as u32);
-                                    expr = Expr {
-                                        kind: ExprKind::ArrayAccess(ArrayAccessExpr {
-                                            array: arena.alloc(expr),
-                                            index: Some(arena.alloc(index_expr)),
-                                        }),
-                                        span,
-                                    };
-                                }
-                            } else {
-                                errors.push(ParseError::Forbidden {
-                                    message: "unclosed '[' in string offset interpolation".into(),
-                                    span: Span::new(bracket_offset, base_offset + i as u32),
-                                });
-                            }
-                        }
-                        // Skip to closing }
-                        while i < len && bytes[i] != b'}' {
-                            i += 1;
-                        }
-                        if i < len {
-                            i += 1; // skip }
-                        }
-                        parts.push(StringPart::Expr(expr));
-                    }
+                    let (expr, next) = parse_dollar_brace(
+                        arena,
+                        source,
+                        inner,
+                        base_offset,
+                        i,
+                        version,
+                        nesting_depth,
+                        errors,
+                    );
+                    parts.push(StringPart::Expr(expr));
+                    i = next;
                     literal_start = i;
                 // Check for {$ (complex syntax handled below) - this is simple $var
                 } else if i + 1 < len && is_var_start(bytes[i + 1]) {
@@ -442,7 +346,24 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                 }
             }
             b'$' => {
-                if i + 1 < len && is_var_start(bytes[i + 1]) {
+                if i + 1 < len && bytes[i + 1] == b'{' {
+                    if !literal.is_empty() {
+                        parts.push(StringPart::Literal(arena.alloc_str(&literal)));
+                        literal.clear();
+                    }
+                    let (expr, next) = parse_dollar_brace(
+                        arena,
+                        source,
+                        raw_body,
+                        body_offset,
+                        i,
+                        version,
+                        nesting_depth,
+                        errors,
+                    );
+                    parts.push(StringPart::Expr(expr));
+                    i = next;
+                } else if i + 1 < len && is_var_start(bytes[i + 1]) {
                     if !literal.is_empty() {
                         parts.push(StringPart::Literal(arena.alloc_str(&literal)));
                         literal.clear();
@@ -933,6 +854,120 @@ fn is_php_interp_nonzero_int(s: &str) -> bool {
         }
         _ => false,
     }
+}
+
+/// Parse `${name}`, `${name[expr]}` or `${expr}` starting at the `$` in `text`, a verbatim
+/// slice of `source` at `offset`. Returns the expression and the position after the `}`.
+#[allow(clippy::too_many_arguments)]
+fn parse_dollar_brace<'arena, 'src>(
+    arena: &'arena bumpalo::Bump,
+    source: &'src str,
+    text: &'src str,
+    offset: u32,
+    dollar: usize,
+    version: PhpVersion,
+    nesting_depth: u32,
+    errors: &mut Vec<ParseError>,
+) -> (Expr<'arena, 'src>, usize) {
+    let bytes = text.as_bytes();
+    let content_start = dollar + 2;
+    let (close, closed) = find_closing_brace(bytes, content_start);
+    let after = if closed { close + 1 } else { close };
+    let span = Span::new(offset + dollar as u32, offset + after as u32);
+    if !closed {
+        errors.push(ParseError::Forbidden {
+            message: "unclosed '${' in string interpolation".into(),
+            span,
+        });
+    }
+    let sub_expr = |start: usize, end: usize, errors: &mut Vec<ParseError>| {
+        parse_complex_interpolation(
+            arena,
+            source,
+            offset + start as u32,
+            offset + end as u32,
+            version,
+            nesting_depth,
+            errors,
+        )
+    };
+
+    // PHP reads a label directly followed by `}` or `[` as a variable name, anything else as an
+    // expression whose value names the variable.
+    let mut name_end = content_start;
+    if name_end < close && is_var_start(bytes[name_end]) {
+        while name_end < close && is_var_char(bytes[name_end]) {
+            name_end += 1;
+            while name_end < close && is_utf8_continuation(bytes[name_end]) {
+                name_end += 1;
+            }
+        }
+    }
+    let is_name = name_end > content_start
+        && (name_end == close || (bytes[name_end] == b'[' && bytes[close - 1] == b']'));
+    if !is_name {
+        if text[content_start..close].trim().is_empty() {
+            errors.push(ParseError::Forbidden {
+                message: "empty variable name in '${...}' string interpolation".into(),
+                span,
+            });
+        }
+        let inner = sub_expr(content_start, close, errors);
+        let expr = Expr {
+            kind: ExprKind::VariableVariable(arena.alloc(inner)),
+            span,
+        };
+        return (expr, after);
+    }
+
+    let var = Expr {
+        kind: ExprKind::Variable(NameStr::__src(&text[content_start..name_end])),
+        span: Span::new(offset + content_start as u32, offset + name_end as u32),
+    };
+    if name_end == close {
+        return (var, after);
+    }
+    if text[name_end + 1..close - 1].trim().is_empty() {
+        errors.push(ParseError::Forbidden {
+            message: "empty index in string interpolation".into(),
+            span: Span::new(offset + name_end as u32, offset + close as u32),
+        });
+    }
+    let index = sub_expr(name_end + 1, close - 1, errors);
+    let expr = Expr {
+        kind: ExprKind::ArrayAccess(ArrayAccessExpr {
+            array: arena.alloc(var),
+            index: Some(arena.alloc(index)),
+        }),
+        span,
+    };
+    (expr, after)
+}
+
+/// Find the `}` closing an interpolation whose body starts at `i`, skipping quoted strings.
+/// Returns its position and whether it was found; otherwise the position is the end of `bytes`.
+fn find_closing_brace(bytes: &[u8], mut i: usize) -> (usize, bool) {
+    let mut depth = 1usize;
+    while i < bytes.len() {
+        match bytes[i] {
+            b'{' => depth += 1,
+            b'}' => {
+                depth -= 1;
+                if depth == 0 {
+                    return (i, true);
+                }
+            }
+            quote @ (b'\'' | b'"') => {
+                i += 1;
+                while i < bytes.len() && bytes[i] != quote {
+                    i += if bytes[i] == b'\\' { 2 } else { 1 };
+                }
+            }
+            _ => {}
+        }
+        i += 1;
+    }
+    (bytes.len(), false)
 }
 
 /// Parse a complex interpolation expression using a sub-parser that starts directly

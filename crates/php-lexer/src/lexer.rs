@@ -131,7 +131,7 @@ fn is_ident_continue(b: u8) -> bool {
 }
 
 /// Scan past a balanced `{ ... }` that starts at `p` (pointing at `{`).
-/// Used to skip `{$...}` complex interpolation inside double-quoted strings and
+/// Used to skip `{$...}` and `${...}` interpolation inside double-quoted strings and
 /// heredocs, where the expression body may itself contain nested strings.
 /// Returns the byte index immediately after the matching `}`; on EOF returns
 /// `bytes.len()` so the caller's unterminated-string branch fires.
@@ -170,6 +170,11 @@ fn skip_complex_interp(bytes: &[u8], mut p: usize) -> usize {
                 } else {
                     p += 1;
                 }
+            }
+            b'$' if in_dquote && bytes.get(p + 1) == Some(&b'{') => {
+                p += 1;
+                in_dquote = false;
+                depth = 0;
             }
             _ if in_dquote => p += 1,
             b'{' => {
@@ -940,12 +945,14 @@ impl<'src> Lexer<'src> {
                 // b'$'
                 _ => {
                     verbatim = false;
-                    // `{$...}` is PHP's complex expression interpolation. The
-                    // expression inside may contain nested strings, so skip over
-                    // the matching `}` using a balanced-brace scan that respects
-                    // string quoting. A `{` before `segment` was escaped.
+                    // `{$...}` and `${...}` hold expressions that may contain
+                    // nested strings, so skip over the matching `}` using a
+                    // balanced-brace scan that respects string quoting. A `{`
+                    // before `segment` was escaped.
                     if p > segment && bytes[p - 1] == b'{' {
                         p = skip_complex_interp(bytes, p - 1);
+                    } else if bytes.get(p + 1) == Some(&b'{') {
+                        p = skip_complex_interp(bytes, p + 1);
                     } else {
                         p += 1;
                     }

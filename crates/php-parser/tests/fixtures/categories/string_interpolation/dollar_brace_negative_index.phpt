@@ -36,7 +36,18 @@
                             },
                             "index": {
                               "kind": {
-                                "Int": -1
+                                "UnaryPrefix": {
+                                  "op": "Negate",
+                                  "operand": {
+                                    "kind": {
+                                      "Int": 1
+                                    },
+                                    "span": {
+                                      "start": 19,
+                                      "end": 20
+                                    }
+                                  }
+                                }
                               },
                               "span": {
                                 "start": 18,
@@ -47,7 +58,7 @@
                         },
                         "span": {
                           "start": 12,
-                          "end": 21
+                          "end": 22
                         }
                       }
                     }
