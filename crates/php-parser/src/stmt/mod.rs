@@ -1462,6 +1462,15 @@ pub fn parse_param_list<'arena, 'src>(
             }
         }
 
+        if let (Some(get), Some(set)) = (visibility, set_visibility) {
+            if class::visibility_rank(set) > class::visibility_rank(get) {
+                parser.error(ParseError::Forbidden {
+                    message: "Visibility of property must not be weaker than set visibility".into(),
+                    span: Span::new(param_start, parser.previous_end()),
+                });
+            }
+        }
+
         // Any modifier above promotes the param to a property — only valid
         // inside __construct. PHP rejects this with
         // "Cannot declare promoted property outside a constructor".
@@ -1492,6 +1501,12 @@ pub fn parse_param_list<'arena, 'src>(
         if is_readonly && visibility.is_some() && type_hint.is_none() {
             parser.error(ParseError::Forbidden {
                 message: "readonly promoted property must have type".into(),
+                span: Span::new(param_start, parser.previous_end()),
+            });
+        }
+        if set_visibility.is_some() && type_hint.is_none() {
+            parser.error(ParseError::Forbidden {
+                message: "Property with asymmetric visibility must have type".into(),
                 span: Span::new(param_start, parser.previous_end()),
             });
         }

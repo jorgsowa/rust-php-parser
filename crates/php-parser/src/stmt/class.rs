@@ -17,7 +17,7 @@ use crate::version::PhpVersion;
 /// Higher rank = wider audience (public > protected > private). Set
 /// visibility may not be wider than get visibility — i.e. set_rank must be
 /// >= get_rank.
-fn visibility_rank(v: php_ast::Visibility) -> u8 {
+pub(super) fn visibility_rank(v: php_ast::Visibility) -> u8 {
     match v {
         php_ast::Visibility::Private => 0,
         php_ast::Visibility::Protected => 1,

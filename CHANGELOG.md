@@ -93,6 +93,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Duplicate types compare class names case-insensitively and are reported in intersections and between DNF members too, as in `Foo|FOO`, `A&A` and `(A&B)|(B&A)`; `true` or `false` next to `bool` and `array` or `Traversable` next to `iterable` are duplicates as well (`php-rs-parser`).
 - A builtin type written with a namespace is reported: `\int` and `namespace\int` must be unqualified, and `Foo\int`, `\array` and `\callable` use a reserved name (`php-rs-parser`).
 - A class, interface, trait or enum constant declared twice is reported, as is an enum constant named like a case. Enum cases differing only in case, such as `case A; case a;`, were reported as redefined; constant names are case-sensitive (`php-rs-parser`).
+- A promoted constructor parameter with asymmetric visibility is checked like the same property declaration: a set visibility wider than its visibility, as in `private protected(set) string $a`, and a missing type are reported (`php-rs-parser`).
 
 ---
 
