@@ -871,11 +871,6 @@ pub fn parse_expr_bp<'arena, 'src>(
             } else if parser.check(TokenKind::LeftBrace) {
                 // Dynamic class constant/method: A::{'b'}(), Foo::{bar()}
                 let brace_span = parser.current_span();
-                parser.require_version(
-                    PhpVersion::Php83,
-                    "dynamic class constant fetch",
-                    brace_span,
-                );
                 parser.advance(); // consume {
                 let member = parse_expr(parser);
                 parser.expect(TokenKind::RightBrace);
@@ -895,26 +890,26 @@ pub fn parse_expr_bp<'arena, 'src>(
                             };
                         }
                         ArgListResult::Args(args) => {
-                            let lhs_start = lhs.span.start;
-                            let callee = Expr {
-                                kind: ExprKind::ClassConstAccessDynamic {
-                                    class: parser.alloc(lhs),
-                                    member: parser.alloc(member),
-                                },
-                                span: Span::new(lhs_start, parser.previous_end()),
-                            };
-                            let span = Span::new(lhs_start, parser.previous_end());
+                            let span = Span::new(lhs.span.start, parser.previous_end());
                             lhs = Expr {
-                                kind: ExprKind::FunctionCall(FunctionCallExpr {
-                                    name: parser.alloc(callee),
-                                    args,
-                                }),
+                                kind: ExprKind::StaticMethodCallDynamic(parser.alloc(
+                                    StaticMethodCallDynamicExpr {
+                                        class: parser.alloc(lhs),
+                                        method: parser.alloc(member),
+                                        args,
+                                    },
+                                )),
                                 span,
                             };
                         }
                     }
                 } else {
                     // Dynamic class constant: Foo::{bar()}
+                    parser.require_version(
+                        PhpVersion::Php83,
+                        "dynamic class constant fetch",
+                        brace_span,
+                    );
                     let span = Span::new(lhs.span.start, parser.previous_end());
                     lhs = Expr {
                         kind: ExprKind::ClassConstAccessDynamic {

@@ -69,42 +69,32 @@ $a['b']::c();
       "kind": {
         "Expression": {
           "kind": {
-            "FunctionCall": {
-              "name": {
+            "StaticMethodCallDynamic": {
+              "class": {
                 "kind": {
-                  "ClassConstAccessDynamic": {
-                    "class": {
-                      "kind": {
-                        "Name": {
-                          "parts": [
-                            "A"
-                          ],
-                          "kind": "Unqualified",
-                          "span": {
-                            "start": 41,
-                            "end": 42
-                          }
-                        }
-                      },
-                      "span": {
-                        "start": 41,
-                        "end": 42
-                      }
-                    },
-                    "member": {
-                      "kind": {
-                        "String": "b"
-                      },
-                      "span": {
-                        "start": 45,
-                        "end": 48
-                      }
+                  "Name": {
+                    "parts": [
+                      "A"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 41,
+                      "end": 42
                     }
                   }
                 },
                 "span": {
                   "start": 41,
-                  "end": 51
+                  "end": 42
+                }
+              },
+              "method": {
+                "kind": {
+                  "String": "b"
+                },
+                "span": {
+                  "start": 45,
+                  "end": 48
                 }
               },
               "args": []

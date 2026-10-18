@@ -82,6 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `list(...)` used as a value, as in `f(list($a))` or `$x = list($a);`, is reported; it is only valid as an assignment or `foreach` target (`php-rs-parser`).
 - A namespace declared with a namespace-relative name, such as `namespace namespace\Foo;`, is reported (`php-rs-parser`).
 - A heredoc or nowdoc whose closing marker is indented with both tabs and spaces is reported (`php-rs-parser`).
+- `A::{$m}()` parsed as a call of the value of the dynamic class constant `A::{$m}`; it is a static method call whose name is `$m`, now `ExprKind::StaticMethodCallDynamic`. It no longer requires PHP 8.3, which applies only to the constant fetch (`php-rs-parser`).
 
 ---
 

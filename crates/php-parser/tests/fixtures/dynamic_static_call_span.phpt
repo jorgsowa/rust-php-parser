@@ -7,42 +7,32 @@
       "kind": {
         "Expression": {
           "kind": {
-            "FunctionCall": {
-              "name": {
+            "StaticMethodCallDynamic": {
+              "class": {
                 "kind": {
-                  "ClassConstAccessDynamic": {
-                    "class": {
-                      "kind": {
-                        "Name": {
-                          "parts": [
-                            "Foo"
-                          ],
-                          "kind": "Unqualified",
-                          "span": {
-                            "start": 6,
-                            "end": 9
-                          }
-                        }
-                      },
-                      "span": {
-                        "start": 6,
-                        "end": 9
-                      }
-                    },
-                    "member": {
-                      "kind": {
-                        "Variable": "m"
-                      },
-                      "span": {
-                        "start": 12,
-                        "end": 14
-                      }
+                  "Name": {
+                    "parts": [
+                      "Foo"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 6,
+                      "end": 9
                     }
                   }
                 },
                 "span": {
                   "start": 6,
-                  "end": 17
+                  "end": 9
+                }
+              },
+              "method": {
+                "kind": {
+                  "Variable": "m"
+                },
+                "span": {
+                  "start": 12,
+                  "end": 14
                 }
               },
               "args": []
