@@ -1049,6 +1049,7 @@ fn foreach_without_key_stays_none() {
             kind: ExprKind::Variable(NameStr::__src("item")),
             span: Span::DUMMY,
         },
+        by_ref: false,
         body: nop,
         uses_alternative: false,
     });

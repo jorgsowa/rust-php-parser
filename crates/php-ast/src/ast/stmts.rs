@@ -269,6 +269,9 @@ pub struct ForeachStmt<'arena, 'src> {
     pub key: Option<Expr<'arena, 'src>>,
     /// Value target.
     pub value: Expr<'arena, 'src>,
+    /// `true` when the value is taken by reference: `foreach ($a as &$v)`.
+    #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
+    pub by_ref: bool,
     /// Loop body.
     pub body: &'arena Stmt<'arena, 'src>,
     /// `true` when written in alternative syntax (`: ... endX;`).

@@ -290,6 +290,7 @@ pub fn fold_stmt<'new, 'src, F: Fold<'src> + ?Sized>(
                 expr: folder.fold_expr(arena, &fe.expr),
                 key: fe.key.as_ref().map(|k| folder.fold_expr(arena, k)),
                 value: folder.fold_expr(arena, &fe.value),
+                by_ref: fe.by_ref,
                 body: arena.alloc(folder.fold_stmt(arena, fe.body)),
                 uses_alternative: fe.uses_alternative,
             });

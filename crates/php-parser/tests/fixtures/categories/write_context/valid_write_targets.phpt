@@ -963,6 +963,7 @@ foreach ($a as A::$p => &$o[0]) {}
               "end": 242
             }
           },
+          "by_ref": true,
           "body": {
             "kind": {
               "Block": []

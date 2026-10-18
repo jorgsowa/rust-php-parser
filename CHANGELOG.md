@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Breaking:** `Ident` (arena and owned) carries the `span` of its token; for variable names it includes the `$`. `Ident::name(s)` and `Ident::ERROR` are replaced by `Ident::new(s, span)` and `Ident::error(span)`. `CatchClause::var`, `UseItem::alias` and `ClosureUseVar::name` are `Ident` instead of strings. A real identifier serializes as `{"name": ..., "span": ...}` instead of a string; the error state is still `null` (`php-ast`, `php-rs-parser`, `php-printer`).
 - **Breaking:** `TraitAdaptationKind::Alias` (arena and owned) has a new `is_final` field for the PHP 8.3 `foo as final bar;` alias, which was rejected; it is serialized only when `true` (`php-ast`, `php-rs-parser`, `php-printer`).
 - **Breaking:** removed `TokenKind::From`. `from` is lexed as an identifier; the parser recognizes it only after `yield` (`php-lexer`).
+- **Breaking:** `ForeachStmt` (arena and owned) has a new `by_ref` field for `foreach ($a as &$v)`; the `&` was parsed and dropped, so the printer wrote a by-value loop. It is serialized only when `true` (`php-ast`, `php-rs-parser`, `php-printer`).
 
 ### Fixed
 
@@ -87,6 +88,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A namespace declared with a namespace-relative name, such as `namespace namespace\Foo;`, is reported (`php-rs-parser`).
 - A heredoc or nowdoc whose closing marker is indented with both tabs and spaces is reported (`php-rs-parser`).
 - `A::{$m}()` parsed as a call of the value of the dynamic class constant `A::{$m}`; it is a static method call whose name is `$m`, now `ExprKind::StaticMethodCallDynamic`. It no longer requires PHP 8.3, which applies only to the constant fetch (`php-rs-parser`).
+- A `foreach` key taken by reference, as in `foreach ($a as &$k => $v)`, is reported (`php-rs-parser`).
 
 ---
 

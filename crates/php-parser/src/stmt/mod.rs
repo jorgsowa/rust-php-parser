@@ -1051,19 +1051,21 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
     let collection = expr::parse_expr(parser);
     parser.expect(TokenKind::As);
 
-    if parser.check(TokenKind::Ampersand) {
-        parser.advance();
-    }
+    let first_ref = parser.eat(TokenKind::Ampersand);
     let first = expr::parse_expr(parser);
 
-    let (key, value) = if parser.eat(TokenKind::FatArrow).is_some() {
-        if parser.check(TokenKind::Ampersand) {
-            parser.advance();
+    let (key, value, by_ref) = if parser.eat(TokenKind::FatArrow).is_some() {
+        if let Some(amp) = first_ref {
+            parser.error(ParseError::Forbidden {
+                message: "Key element cannot be a reference".into(),
+                span: amp.span.merge(first.span),
+            });
         }
+        let by_ref = parser.eat(TokenKind::Ampersand).is_some();
         let value = expr::parse_expr(parser);
-        (Some(first), value)
+        (Some(first), value, by_ref)
     } else {
-        (None, first)
+        (None, first, first_ref.is_some())
     };
     if let Some(k) = &key {
         expr::check_write_target(parser, k, false);
@@ -1096,6 +1098,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
                 expr: collection,
                 key,
                 value,
+                by_ref,
                 body,
                 uses_alternative: true,
             })),
@@ -1114,6 +1117,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
             expr: collection,
             key,
             value,
+            by_ref,
             body,
             uses_alternative: false,
         })),

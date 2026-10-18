@@ -106,6 +106,9 @@ impl<'src> Printer<'src> {
                     self.print_expr(key, PREC_LOWEST);
                     self.w(" => ");
                 }
+                if f.by_ref {
+                    self.w("&");
+                }
                 self.print_expr(&f.value, PREC_LOWEST);
                 if f.uses_alternative {
                     self.w("):");

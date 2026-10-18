@@ -25,6 +25,7 @@
               "end": 31
             }
           },
+          "by_ref": true,
           "body": {
             "kind": {
               "Block": [

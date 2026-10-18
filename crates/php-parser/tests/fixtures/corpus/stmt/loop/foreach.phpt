@@ -78,6 +78,7 @@ endforeach;
               "end": 71
             }
           },
+          "by_ref": true,
           "body": {
             "kind": {
               "Block": []
@@ -170,6 +171,7 @@ endforeach;
               "end": 128
             }
           },
+          "by_ref": true,
           "body": {
             "kind": {
               "Block": []

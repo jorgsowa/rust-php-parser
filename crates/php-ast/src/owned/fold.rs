@@ -245,6 +245,7 @@ fn fold_owned_stmt_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &StmtKind) -> 
             expr: folder.fold_expr(&s.expr),
             key: s.key.as_ref().map(|e| folder.fold_expr(e)),
             value: folder.fold_expr(&s.value),
+            by_ref: s.by_ref,
             body: Box::new(folder.fold_stmt(&s.body)),
             uses_alternative: s.uses_alternative,
         })),
