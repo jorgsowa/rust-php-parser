@@ -544,14 +544,7 @@ impl<'src> Printer<'src> {
 
     pub(crate) fn print_doc_comment(&mut self, doc: Option<&Comment>) {
         if let Some(comment) = doc {
-            for (i, line) in comment.text.lines().enumerate() {
-                if i > 0 {
-                    self.newline();
-                    self.write_indent();
-                }
-                let trimmed = if i == 0 { line.trim_end() } else { line.trim() };
-                self.w(trimmed);
-            }
+            self.write_doc_comment(comment.text);
             self.newline();
             self.write_indent();
         }

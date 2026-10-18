@@ -9,8 +9,8 @@ foreach ($items as $x) {
 ===print===
 <?php
 /**
-* @var Foo $x
-*/
+ * @var Foo $x
+ */
 foreach ($items as $x) {
     $x->process();
 }

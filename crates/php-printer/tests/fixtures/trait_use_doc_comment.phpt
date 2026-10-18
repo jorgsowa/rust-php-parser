@@ -12,7 +12,7 @@ class Base
 class Base
 {
     /**
-    * Uses shared behavior.
-    */
+     * Uses shared behavior.
+     */
     use SharedBehavior;
 }

@@ -15,8 +15,8 @@ class WithAdaptations
 class WithAdaptations
 {
     /**
-    * Resolve conflicting methods.
-    */
+     * Resolve conflicting methods.
+     */
     use BehaviorA, BehaviorB {
         BehaviorA::foo insteadof BehaviorB;
         BehaviorB::bar as protected;

@@ -282,14 +282,7 @@ impl<'src> Printer<'src> {
                 } else {
                     self.write_indent();
                 }
-                for (i, line) in comment.text.lines().enumerate() {
-                    if i > 0 {
-                        self.newline();
-                        self.write_indent();
-                    }
-                    let trimmed = if i == 0 { line.trim_end() } else { line.trim() };
-                    self.w(trimmed);
-                }
+                self.write_doc_comment(comment.text);
                 self.newline();
             }
             CommentKind::Line | CommentKind::Hash => {
@@ -316,6 +309,22 @@ impl<'src> Printer<'src> {
                 }
             }
             _ => self.w(comment.text),
+        }
+    }
+
+    /// Write a doc comment re-indented to the current level, keeping each
+    /// continuation `*` one column right of the opening `/`.
+    pub(crate) fn write_doc_comment(&mut self, text: &str) {
+        for (i, line) in text.lines().enumerate() {
+            if i > 0 {
+                self.newline();
+                self.write_indent();
+            }
+            let line = if i == 0 { line.trim_end() } else { line.trim() };
+            if i > 0 && line.starts_with('*') {
+                self.w(" ");
+            }
+            self.w(line);
         }
     }
 

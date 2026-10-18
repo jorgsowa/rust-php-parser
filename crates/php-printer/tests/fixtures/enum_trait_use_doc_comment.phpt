@@ -14,8 +14,8 @@ enum Status
 enum Status
 {
     /**
-    * Uses shared enum behavior.
-    */
+     * Uses shared enum behavior.
+     */
     use EnumBehavior;
 
     case Active;
