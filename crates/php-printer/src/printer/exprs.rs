@@ -94,10 +94,13 @@ impl<'src> Printer<'src> {
                     } else {
                         self.w("\\INF");
                     }
+                } else if *f != 0.0 && !(1e-4..1e15).contains(&f.abs()) {
+                    // Positional notation would spell out hundreds of digits.
+                    self.w(&format!("{f:e}"));
                 } else {
                     let s = format!("{f}");
                     self.w(&s);
-                    if !s.contains('.') && !s.contains('e') && !s.contains('E') {
+                    if !s.contains('.') {
                         self.w(".0");
                     }
                 }
