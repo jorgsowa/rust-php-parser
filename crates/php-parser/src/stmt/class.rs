@@ -781,12 +781,6 @@ fn parse_class_const_member<'arena, 'src>(
     }
     parser.expect(TokenKind::Semicolon);
     let span = Span::new(member_start, parser.previous_end());
-    if !member_attrs.is_empty() && const_items.len() > 1 {
-        parser.error(ParseError::Forbidden {
-            message: "cannot use attributes on multi-constant declaration".into(),
-            span,
-        });
-    }
     // Allocate the type hint into the arena so all items can share a reference
     let shared_type_hint: Option<&'arena _> = const_type.map(|th| parser.alloc(th));
     let mut const_iter = const_items.into_iter();
@@ -804,6 +798,10 @@ fn parse_class_const_member<'arena, 'src>(
             span,
         });
         for (rest_name, rest_value) in const_iter {
+            let ClassMemberKind::ClassConst(first) = &members[members.len() - 1].kind else {
+                unreachable!()
+            };
+            let attributes = copy_attributes(parser, &first.attributes);
             members.push(ClassMember {
                 kind: ClassMemberKind::ClassConst(ClassConstDecl {
                     name: rest_name,
@@ -811,7 +809,7 @@ fn parse_class_const_member<'arena, 'src>(
                     is_final: mods.is_final,
                     type_hint: shared_type_hint,
                     value: rest_value,
-                    attributes: parser.alloc_vec(),
+                    attributes,
                     doc_comment: None,
                 }),
                 span,
