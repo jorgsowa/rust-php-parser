@@ -1125,12 +1125,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             TypeHintKind::Keyword(builtin, _) => {
                 let name = match builtin {
                     BuiltinType::Int => "int",
-                    BuiltinType::Integer => "integer",
                     BuiltinType::Float => "float",
-                    BuiltinType::Double => "double",
                     BuiltinType::String => "string",
                     BuiltinType::Bool => "bool",
-                    BuiltinType::Boolean => "boolean",
                     BuiltinType::Void => "void",
                     BuiltinType::Never => "never",
                     BuiltinType::Mixed => "mixed",
@@ -1395,12 +1392,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             };
             let builtin = match lower {
                 "int" => Some(BuiltinType::Int),
-                "integer" => Some(BuiltinType::Integer),
                 "float" => Some(BuiltinType::Float),
-                "double" => Some(BuiltinType::Double),
                 "string" => Some(BuiltinType::String),
                 "bool" => Some(BuiltinType::Bool),
-                "boolean" => Some(BuiltinType::Boolean),
                 "void" => Some(BuiltinType::Void),
                 "never" => Some(BuiltinType::Never),
                 "mixed" => Some(BuiltinType::Mixed),

@@ -305,7 +305,7 @@ pub enum NameKind {
 }
 
 /// PHP built-in type keyword — zero-cost alternative to `Name::Simple` for the
-/// 20 reserved type names. One byte instead of a `Cow<str>` + `Span` in the AST.
+/// 17 reserved type names. One byte instead of a `Cow<str>` + `Span` in the AST.
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
@@ -313,18 +313,12 @@ pub enum NameKind {
 pub enum BuiltinType {
     /// `int` — integer scalar type.
     Int,
-    /// `integer` — alias for `int`, accepted in type casts.
-    Integer,
     /// `float` — floating-point scalar type.
     Float,
-    /// `double` — alias for `float`, accepted in type casts.
-    Double,
     /// `string` — string scalar type.
     String,
     /// `bool` — boolean scalar type.
     Bool,
-    /// `boolean` — alias for `bool`, accepted in type casts.
-    Boolean,
     /// `void` — return-only type indicating no value is returned.
     Void,
     /// `never` — return-only type for functions that never return normally (PHP 8.1+).
@@ -359,12 +353,9 @@ impl BuiltinType {
     pub fn as_str(self) -> &'static str {
         match self {
             Self::Int => "int",
-            Self::Integer => "integer",
             Self::Float => "float",
-            Self::Double => "double",
             Self::String => "string",
             Self::Bool => "bool",
-            Self::Boolean => "boolean",
             Self::Void => "void",
             Self::Never => "never",
             Self::Mixed => "mixed",
