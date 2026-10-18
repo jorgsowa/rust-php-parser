@@ -1,6 +1,7 @@
 ===source===
 <?php list($a)[0];
 ===errors===
+list() can only be used as an assignment or foreach target
 Cannot dereference this expression
 ===php_error===
 PHP Parse error:  syntax error, unexpected token "[", expecting "=" in Standard input code on line 1

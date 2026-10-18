@@ -69,6 +69,10 @@ fn advance_lexer_skip_comments<'src>(
     }
 }
 
+/// Reported for every `list(...)` and retracted when it turns out to be a destructuring target.
+pub(crate) const LIST_OUTSIDE_DESTRUCTURING: &str =
+    "list() can only be used as an assignment or foreach target";
+
 pub struct Parser<'arena, 'src> {
     current: Token,
     /// End offset of the most recently consumed token.
@@ -498,14 +502,15 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         self.errors_dropped || self.errors.len() + self.lexer.errors.len() > MAX_ERRORS
     }
 
-    /// Retract "empty array element" errors emitted within `within`. Empty
-    /// elements (`[$a, , $c]`) are emitted eagerly as errors by the array
-    /// parser because they are only valid in a list-destructuring target; this
-    /// undoes them once such a target is recognized (assignment LHS / foreach).
-    pub fn retract_empty_array_element_errors_within(&mut self, within: Span) {
+    /// Retract "empty array element" and `list()` errors emitted within `within`.
+    /// Empty elements (`[$a, , $c]`) and `list(...)` are reported eagerly because
+    /// they are only valid in a list-destructuring target; this undoes them once
+    /// such a target is recognized (assignment LHS / foreach).
+    pub fn retract_destructuring_errors_within(&mut self, within: Span) {
         self.errors.retain(|e| {
             !matches!(e, ParseError::Forbidden { message, span }
-                if message.as_ref() == "Cannot use empty array elements in arrays"
+                if (message.as_ref() == "Cannot use empty array elements in arrays"
+                    || message.as_ref() == LIST_OUTSIDE_DESTRUCTURING)
                     && span.start >= within.start
                     && span.end <= within.end)
         });

@@ -2155,6 +2155,10 @@ fn parse_list_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'
             span,
         });
     }
+    parser.error(ParseError::Forbidden {
+        message: crate::parser::LIST_OUTSIDE_DESTRUCTURING.into(),
+        span,
+    });
 
     Expr {
         kind: ExprKind::Array(elements),

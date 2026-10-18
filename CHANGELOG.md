@@ -78,6 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Whitespace inside a namespaced name, as in `Foo \ Bar` or `\ Foo()`, is reported; PHP 8 reads a name as a single token. A group `use Foo \ {A}` keeps accepting it (`php-rs-parser`).
 - An offset in simple string interpolation that is not a name, number or variable, such as `"$a['k']"` or `"$a[ 0 ]"`, is reported (`php-rs-parser`).
 - A `function` or `const` item inside a `use function` or `use const` group, such as `use const A\{B, const C}`, is reported; per-item kinds are only allowed in an untyped group (`php-rs-parser`).
+- `list(...)` used as a value, as in `f(list($a))` or `$x = list($a);`, is reported; it is only valid as an assignment or `foreach` target (`php-rs-parser`).
 
 ---
 

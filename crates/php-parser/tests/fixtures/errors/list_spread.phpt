@@ -3,6 +3,7 @@
 ===errors===
 expected expression
 expected ')', found '...'
+list() can only be used as an assignment or foreach target
 expected ';' after expression
 expected expression
 ===php_error===

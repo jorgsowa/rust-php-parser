@@ -1072,9 +1072,9 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
 
     // The `as` target(s) are destructuring positions, so empty array slots
     // (`foreach ($x as [$a, , $c])`) are legal — retract the eager errors.
-    parser.retract_empty_array_element_errors_within(value.span);
+    parser.retract_destructuring_errors_within(value.span);
     if let Some(k) = &key {
-        parser.retract_empty_array_element_errors_within(k.span);
+        parser.retract_destructuring_errors_within(k.span);
     }
 
     parser.expect_closing(TokenKind::RightParen, open_span);
