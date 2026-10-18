@@ -132,8 +132,8 @@ pub fn prefix_binding_power(kind: TokenKind) -> Option<u8> {
     match kind {
         // `!` (boolean not) is the only prefix unary BELOW instanceof per PHP.
         TokenKind::Bang => Some(LOW_PREFIX_BP),
-        // All other prefix unaries (+u, -u, ~, ++, --, casts, @, clone) sit
-        // ABOVE instanceof per PHP's precedence table.
+        // All other prefix unaries (+u, -u, ~, ++, --, casts, @) sit
+        // ABOVE instanceof per PHP's precedence table; `clone` uses `CLONE_BP`.
         TokenKind::Minus | TokenKind::Plus => Some(HIGH_PREFIX_BP),
         TokenKind::Tilde => Some(HIGH_PREFIX_BP),
         TokenKind::PlusPlus | TokenKind::MinusMinus => Some(HIGH_PREFIX_BP),
@@ -145,8 +145,12 @@ pub fn prefix_binding_power(kind: TokenKind) -> Option<u8> {
 pub const LOW_PREFIX_BP: u8 = 41;
 
 /// Right binding power for high-tier prefix unaries (+u, -u, ~, ++, --,
-/// (cast), @, clone) — above `instanceof` (45/46), below `**` (60).
+/// (cast), @) — above `instanceof` (45/46), below `**` (60).
 pub const HIGH_PREFIX_BP: u8 = 47;
+
+/// Right binding power for `clone`, which binds tighter than `**`:
+/// `clone $a ** 2` is `(clone $a) ** 2`.
+pub const CLONE_BP: u8 = 61;
 
 /// Returns the postfix binding power for a token, or None if it's not a postfix operator.
 /// Returns (left_bp, ()).
@@ -280,6 +284,13 @@ mod tests {
         // prefix unary BELOW instanceof.
         let (inst_left, _) = infix_binding_power(TokenKind::Instanceof).unwrap();
         assert!(LOW_PREFIX_BP < inst_left);
+    }
+
+    #[test]
+    fn test_clone_between_pow_and_member_access() {
+        let (pow_left, _) = infix_binding_power(TokenKind::StarStar).unwrap();
+        const { assert!(MEMBER_ACCESS_BP > CLONE_BP) }
+        assert!(CLONE_BP > pow_left);
     }
 
     #[test]

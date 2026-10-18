@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `new namespace\Foo` dropped the `namespace\` prefix of the class name (`php-rs-parser`).
 - `declare(...) ?>` took the inline HTML after `?>` as its body instead of ending at `?>` like at `;`, so the printer wrote `declare(strict_types=1) { ?>...`, which PHP rejects (`php-rs-parser`).
 - A float literal longer than 256 bytes was cut off before parsing, so `0.000…5` with hundreds of digits read as `0.0` (`php-rs-parser`).
+- `clone $a ** 2` parsed as `clone ($a ** 2)`; `clone` binds tighter than `**`, so it is now `(clone $a) ** 2` (`php-rs-parser`).
 - `Visitor`, `OwnedVisitor` and both scope walkers call `visit_name` for the namespace name, named-argument names and the names in trait `insteadof`/`as` adaptations, matching `Fold`. The default `visit_trait_adaptation` now walks into the adaptation (`php-ast`).
 - `ScopeWalker` and `OwnedScopeWalker` start every walk from the global scope; a reused walker kept the namespace of the previous program, and the class and function names after a `Break` (`php-ast`).
 - `NameResolver` resolves unqualified `true`, `false` and `null` constants to the global name inside a namespace instead of `ResolvedName::Fallback` (`php-ast`).

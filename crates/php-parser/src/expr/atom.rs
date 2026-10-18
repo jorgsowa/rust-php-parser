@@ -1020,7 +1020,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     }
                 }
             } else {
-                let mut operand = parse_expr_bp(parser, precedence::HIGH_PREFIX_BP);
+                let mut operand = parse_expr_bp(parser, precedence::CLONE_BP);
                 if parser.current_kind().is_assignment_op() {
                     operand = parse_assign_continuation(parser, operand);
                 }
