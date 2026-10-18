@@ -14,7 +14,13 @@ final readonly class Money {
     {
       "kind": {
         "Class": {
-          "name": "Money",
+          "name": {
+            "name": "Money",
+            "span": {
+              "start": 27,
+              "end": 32
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": true,
@@ -26,7 +32,13 @@ final readonly class Money {
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 55,
+                      "end": 66
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -34,7 +46,13 @@ final readonly class Money {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "amount",
+                      "name": {
+                        "name": "amount",
+                        "span": {
+                          "start": 87,
+                          "end": 94
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -67,7 +85,13 @@ final readonly class Money {
                       }
                     },
                     {
-                      "name": "currency",
+                      "name": {
+                        "name": "currency",
+                        "span": {
+                          "start": 118,
+                          "end": 127
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

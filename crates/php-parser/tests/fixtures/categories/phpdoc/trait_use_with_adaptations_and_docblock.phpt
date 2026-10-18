@@ -17,7 +17,13 @@ class WithAdaptations
     {
       "kind": {
         "Class": {
-          "name": "WithAdaptations",
+          "name": {
+            "name": "WithAdaptations",
+            "span": {
+              "start": 13,
+              "end": 28
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

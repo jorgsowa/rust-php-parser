@@ -13,14 +13,26 @@ enum Color {
     {
       "kind": {
         "Enum": {
-          "name": "Color",
+          "name": {
+            "name": "Color",
+            "span": {
+              "start": 11,
+              "end": 16
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "Case": {
-                  "name": "Red",
+                  "name": {
+                    "name": "Red",
+                    "span": {
+                      "start": 28,
+                      "end": 31
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -33,7 +45,13 @@ enum Color {
             {
               "kind": {
                 "Case": {
-                  "name": "Green",
+                  "name": {
+                    "name": "Green",
+                    "span": {
+                      "start": 42,
+                      "end": 47
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -46,7 +64,13 @@ enum Color {
             {
               "kind": {
                 "Case": {
-                  "name": "Blue",
+                  "name": {
+                    "name": "Blue",
+                    "span": {
+                      "start": 58,
+                      "end": 62
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }

@@ -12,7 +12,13 @@ PHP Fatal error:  Cannot use the readonly modifier on a method in Standard input
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -24,7 +30,13 @@ PHP Fatal error:  Cannot use the readonly modifier on a method in Standard input
             {
               "kind": {
                 "Method": {
-                  "name": "foo",
+                  "name": {
+                    "name": "foo",
+                    "span": {
+                      "start": 34,
+                      "end": 37
+                    }
+                  },
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": false,

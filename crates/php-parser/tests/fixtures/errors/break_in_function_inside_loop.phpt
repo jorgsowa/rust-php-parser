@@ -105,7 +105,13 @@ PHP Fatal error:  'break' not in the 'loop' or 'switch' context in Standard inpu
                 {
                   "kind": {
                     "Function": {
-                      "name": "foo",
+                      "name": {
+                        "name": "foo",
+                        "span": {
+                          "start": 49,
+                          "end": 52
+                        }
+                      },
                       "params": [],
                       "body": [
                         {

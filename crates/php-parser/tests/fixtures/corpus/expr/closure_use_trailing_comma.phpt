@@ -14,7 +14,13 @@ function() use($a,) {};
               "params": [],
               "use_vars": [
                 {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 21,
+                      "end": 23
+                    }
+                  },
                   "by_ref": false,
                   "span": {
                     "start": 21,

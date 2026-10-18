@@ -12,7 +12,13 @@ PHP Fatal error:  Visibility of property Foo::$count must not be weaker than set
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -24,7 +30,13 @@ PHP Fatal error:  Visibility of property Foo::$count must not be weaker than set
             {
               "kind": {
                 "Property": {
-                  "name": "count",
+                  "name": {
+                    "name": "count",
+                    "span": {
+                      "start": 49,
+                      "end": 55
+                    }
+                  },
                   "visibility": "Private",
                   "set_visibility": "Public",
                   "is_static": true,

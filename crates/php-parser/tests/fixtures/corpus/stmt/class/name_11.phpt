@@ -12,7 +12,13 @@ PHP Fatal error:  Cannot use "PARENT" as an interface name as it is reserved in 
     {
       "kind": {
         "Interface": {
-          "name": "PARENT",
+          "name": {
+            "name": "PARENT",
+            "span": {
+              "start": 16,
+              "end": 22
+            }
+          },
           "extends": [],
           "members": [],
           "attributes": []

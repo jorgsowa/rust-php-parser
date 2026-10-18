@@ -13,7 +13,13 @@ PHP Parse error:  syntax error, unexpected token "readonly", expecting end of fi
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 21,
+              "end": 24
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -25,7 +31,13 @@ PHP Parse error:  syntax error, unexpected token "readonly", expecting end of fi
             {
               "kind": {
                 "Property": {
-                  "name": "bar",
+                  "name": {
+                    "name": "bar",
+                    "span": {
+                      "start": 41,
+                      "end": 45
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

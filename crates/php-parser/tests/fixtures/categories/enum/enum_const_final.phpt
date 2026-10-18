@@ -8,14 +8,26 @@ min_php=8.1
     {
       "kind": {
         "Enum": {
-          "name": "Status",
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 11,
+              "end": 17
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "ClassConst": {
-                  "name": "X",
+                  "name": {
+                    "name": "X",
+                    "span": {
+                      "start": 32,
+                      "end": 33
+                    }
+                  },
                   "visibility": null,
                   "is_final": true,
                   "value": {
@@ -38,7 +50,13 @@ min_php=8.1
             {
               "kind": {
                 "ClassConst": {
-                  "name": "Y",
+                  "name": {
+                    "name": "Y",
+                    "span": {
+                      "start": 58,
+                      "end": 59
+                    }
+                  },
                   "visibility": "Public",
                   "is_final": true,
                   "value": {

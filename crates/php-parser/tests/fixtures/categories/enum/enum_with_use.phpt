@@ -8,7 +8,13 @@ min_php=8.1
     {
       "kind": {
         "Enum": {
-          "name": "Suit",
+          "name": {
+            "name": "Suit",
+            "span": {
+              "start": 11,
+              "end": 15
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
@@ -38,7 +44,13 @@ min_php=8.1
             {
               "kind": {
                 "Case": {
-                  "name": "Hearts",
+                  "name": {
+                    "name": "Hearts",
+                    "span": {
+                      "start": 38,
+                      "end": 44
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }

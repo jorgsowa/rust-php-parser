@@ -11,7 +11,13 @@ PHP Parse error:  syntax error, unexpected token "class", expecting identifier i
     {
       "kind": {
         "Class": {
-          "name": "class",
+          "name": {
+            "name": "class",
+            "span": {
+              "start": 12,
+              "end": 17
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

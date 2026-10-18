@@ -10,7 +10,13 @@ PHP Parse error:  syntax error, unexpected token "static", expecting identifier 
     {
       "kind": {
         "Class": {
-          "name": "static",
+          "name": {
+            "name": "static",
+            "span": {
+              "start": 12,
+              "end": 18
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

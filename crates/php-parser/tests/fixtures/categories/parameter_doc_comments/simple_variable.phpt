@@ -10,10 +10,22 @@ function search(
     {
       "kind": {
         "Function": {
-          "name": "search",
+          "name": {
+            "name": "search",
+            "span": {
+              "start": 15,
+              "end": 21
+            }
+          },
           "params": [
             {
-              "name": "id",
+              "name": {
+                "name": "id",
+                "span": {
+                  "start": 52,
+                  "end": 55
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,

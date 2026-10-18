@@ -18,10 +18,22 @@ function a(
     {
       "kind": {
         "Function": {
-          "name": "a",
+          "name": {
+            "name": "a",
+            "span": {
+              "start": 16,
+              "end": 17
+            }
+          },
           "params": [
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 23,
+                  "end": 25
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": "Null",
@@ -43,7 +55,13 @@ function a(
               }
             },
             {
-              "name": "c",
+              "name": {
+                "name": "c",
+                "span": {
+                  "start": 38,
+                  "end": 40
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {
@@ -67,7 +85,13 @@ function a(
               }
             },
             {
-              "name": "d",
+              "name": {
+                "name": "d",
+                "span": {
+                  "start": 54,
+                  "end": 56
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {
@@ -119,7 +143,13 @@ function a(
               }
             },
             {
-              "name": "f",
+              "name": {
+                "name": "f",
+                "span": {
+                  "start": 69,
+                  "end": 71
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {
@@ -154,7 +184,13 @@ function a(
               }
             },
             {
-              "name": "g",
+              "name": {
+                "name": "g",
+                "span": {
+                  "start": 82,
+                  "end": 84
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {
@@ -189,7 +225,13 @@ function a(
               }
             },
             {
-              "name": "h",
+              "name": {
+                "name": "h",
+                "span": {
+                  "start": 97,
+                  "end": 99
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {
@@ -213,7 +255,13 @@ function a(
               }
             },
             {
-              "name": "i",
+              "name": {
+                "name": "i",
+                "span": {
+                  "start": 115,
+                  "end": 117
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {
@@ -237,7 +285,13 @@ function a(
               }
             },
             {
-              "name": "j",
+              "name": {
+                "name": "j",
+                "span": {
+                  "start": 128,
+                  "end": 130
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {
@@ -279,7 +333,13 @@ function a(
               }
             },
             {
-              "name": "k",
+              "name": {
+                "name": "k",
+                "span": {
+                  "start": 146,
+                  "end": 148
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {

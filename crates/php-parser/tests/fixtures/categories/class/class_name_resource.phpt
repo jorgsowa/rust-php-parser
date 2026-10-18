@@ -10,7 +10,13 @@ class resource {}
     {
       "kind": {
         "Class": {
-          "name": "resource",
+          "name": {
+            "name": "resource",
+            "span": {
+              "start": 12,
+              "end": 20
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

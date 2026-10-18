@@ -6,10 +6,22 @@
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [
             {
-              "name": "nums",
+              "name": {
+                "name": "nums",
+                "span": {
+                  "start": 26,
+                  "end": 31
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {

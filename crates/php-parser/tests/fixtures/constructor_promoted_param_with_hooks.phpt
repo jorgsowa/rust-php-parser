@@ -16,7 +16,13 @@ class Foo {
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -28,7 +34,13 @@ class Foo {
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 38,
+                      "end": 49
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -36,7 +48,13 @@ class Foo {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "name",
+                      "name": {
+                        "name": "name",
+                        "span": {
+                          "start": 73,
+                          "end": 78
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -249,7 +267,13 @@ class Foo {
                           "by_ref": false,
                           "params": [
                             {
-                              "name": "value",
+                              "name": {
+                                "name": "value",
+                                "span": {
+                                  "start": 148,
+                                  "end": 154
+                                }
+                              },
                               "type_hint": {
                                 "kind": {
                                   "Named": {

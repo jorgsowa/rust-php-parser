@@ -12,7 +12,13 @@ function test(A|B $a): int|false {}
     {
       "kind": {
         "Class": {
-          "name": "Test",
+          "name": {
+            "name": "Test",
+            "span": {
+              "start": 13,
+              "end": 17
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -24,7 +30,13 @@ function test(A|B $a): int|false {}
             {
               "kind": {
                 "Property": {
-                  "name": "prop",
+                  "name": {
+                    "name": "prop",
+                    "span": {
+                      "start": 47,
+                      "end": 52
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -114,10 +126,22 @@ function test(A|B $a): int|false {}
     {
       "kind": {
         "Function": {
-          "name": "test",
+          "name": {
+            "name": "test",
+            "span": {
+              "start": 66,
+              "end": 70
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 75,
+                  "end": 77
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [

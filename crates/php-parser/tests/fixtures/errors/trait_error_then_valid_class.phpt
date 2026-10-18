@@ -14,7 +14,13 @@ PHP Parse error:  syntax error, unexpected token "}" in Standard input code on l
     {
       "kind": {
         "Trait": {
-          "name": "T",
+          "name": {
+            "name": "T",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "members": [
             {
               "kind": {
@@ -65,7 +71,13 @@ PHP Parse error:  syntax error, unexpected token "}" in Standard input code on l
     {
       "kind": {
         "Class": {
-          "name": "C",
+          "name": {
+            "name": "C",
+            "span": {
+              "start": 40,
+              "end": 41
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

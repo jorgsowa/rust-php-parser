@@ -12,7 +12,13 @@ class Foo extends numeric implements resource {}
     {
       "kind": {
         "Class": {
-          "name": "numeric",
+          "name": {
+            "name": "numeric",
+            "span": {
+              "start": 12,
+              "end": 19
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -32,7 +38,13 @@ class Foo extends numeric implements resource {}
     {
       "kind": {
         "Interface": {
-          "name": "resource",
+          "name": {
+            "name": "resource",
+            "span": {
+              "start": 33,
+              "end": 41
+            }
+          },
           "extends": [],
           "members": [],
           "attributes": []
@@ -46,7 +58,13 @@ class Foo extends numeric implements resource {}
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 51,
+              "end": 54
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

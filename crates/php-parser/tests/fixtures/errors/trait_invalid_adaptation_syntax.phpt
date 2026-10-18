@@ -12,12 +12,24 @@ PHP Parse error:  syntax error, unexpected identifier "invalid", expecting "::" 
     {
       "kind": {
         "Trait": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "members": [
             {
               "kind": {
                 "Method": {
-                  "name": "m",
+                  "name": {
+                    "name": "m",
+                    "span": {
+                      "start": 32,
+                      "end": 33
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -46,7 +58,13 @@ PHP Parse error:  syntax error, unexpected identifier "invalid", expecting "::" 
     {
       "kind": {
         "Class": {
-          "name": "C",
+          "name": {
+            "name": "C",
+            "span": {
+              "start": 47,
+              "end": 48
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

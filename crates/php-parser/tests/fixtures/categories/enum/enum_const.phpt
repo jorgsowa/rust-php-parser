@@ -8,7 +8,13 @@ min_php=8.1
     {
       "kind": {
         "Enum": {
-          "name": "Suit",
+          "name": {
+            "name": "Suit",
+            "span": {
+              "start": 11,
+              "end": 15
+            }
+          },
           "scalar_type": {
             "parts": [
               "string"
@@ -24,7 +30,13 @@ min_php=8.1
             {
               "kind": {
                 "ClassConst": {
-                  "name": "TOTAL",
+                  "name": {
+                    "name": "TOTAL",
+                    "span": {
+                      "start": 32,
+                      "end": 37
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -47,7 +59,13 @@ min_php=8.1
             {
               "kind": {
                 "Case": {
-                  "name": "Hearts",
+                  "name": {
+                    "name": "Hearts",
+                    "span": {
+                      "start": 48,
+                      "end": 54
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "H"

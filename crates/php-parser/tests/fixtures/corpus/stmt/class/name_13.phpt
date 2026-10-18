@@ -10,7 +10,13 @@ PHP Fatal error:  Cannot use "self" as interface name, as it is reserved in Stan
     {
       "kind": {
         "Interface": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 16,
+              "end": 17
+            }
+          },
           "extends": [
             {
               "parts": [

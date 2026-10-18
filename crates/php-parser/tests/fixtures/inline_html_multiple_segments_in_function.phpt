@@ -13,7 +13,13 @@ function page() {
     {
       "kind": {
         "Function": {
-          "name": "page",
+          "name": {
+            "name": "page",
+            "span": {
+              "start": 15,
+              "end": 19
+            }
+          },
           "params": [],
           "body": [
             {

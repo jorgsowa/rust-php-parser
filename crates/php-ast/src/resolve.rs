@@ -122,7 +122,7 @@ impl NameResolver {
                     self.add_import(
                         item.kind.unwrap_or(decl.kind),
                         &item.name.join_parts(),
-                        item.alias,
+                        item.alias.and_then(|a| a.as_str()),
                     );
                 }
             }
@@ -147,7 +147,7 @@ impl NameResolver {
                     self.add_import(
                         item.kind.unwrap_or(decl.kind),
                         &item.name.parts.join("\\"),
-                        item.alias.as_deref(),
+                        item.alias.as_ref().and_then(|a| a.as_str()),
                     );
                 }
             }

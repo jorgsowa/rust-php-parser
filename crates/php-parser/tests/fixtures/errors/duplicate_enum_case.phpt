@@ -19,14 +19,26 @@ PHP Fatal error:  Cannot redefine class constant E::A in Standard input code on 
     {
       "kind": {
         "Enum": {
-          "name": "E",
+          "name": {
+            "name": "E",
+            "span": {
+              "start": 11,
+              "end": 12
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "Case": {
-                  "name": "A",
+                  "name": {
+                    "name": "A",
+                    "span": {
+                      "start": 24,
+                      "end": 25
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -39,7 +51,13 @@ PHP Fatal error:  Cannot redefine class constant E::A in Standard input code on 
             {
               "kind": {
                 "Case": {
-                  "name": "A",
+                  "name": {
+                    "name": "A",
+                    "span": {
+                      "start": 36,
+                      "end": 37
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }

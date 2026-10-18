@@ -121,7 +121,13 @@ class UserController extends BaseController implements JsonResponder
                   "end": 83
                 }
               },
-              "alias": "Auth",
+              "alias": {
+                "name": "Auth",
+                "span": {
+                  "start": 87,
+                  "end": 91
+                }
+              },
               "span": {
                 "start": 59,
                 "end": 91
@@ -138,7 +144,13 @@ class UserController extends BaseController implements JsonResponder
     {
       "kind": {
         "Class": {
-          "name": "UserController",
+          "name": {
+            "name": "UserController",
+            "span": {
+              "start": 100,
+              "end": 114
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -170,7 +182,13 @@ class UserController extends BaseController implements JsonResponder
             {
               "kind": {
                 "Property": {
-                  "name": "auth",
+                  "name": {
+                    "name": "auth",
+                    "span": {
+                      "start": 198,
+                      "end": 203
+                    }
+                  },
                   "visibility": "Private",
                   "set_visibility": null,
                   "is_static": false,
@@ -205,7 +223,13 @@ class UserController extends BaseController implements JsonResponder
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 226,
+                      "end": 237
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -213,7 +237,13 @@ class UserController extends BaseController implements JsonResponder
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "auth",
+                      "name": {
+                        "name": "auth",
+                        "span": {
+                          "start": 250,
+                          "end": 255
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -316,7 +346,13 @@ class UserController extends BaseController implements JsonResponder
             {
               "kind": {
                 "Method": {
-                  "name": "show",
+                  "name": {
+                    "name": "show",
+                    "span": {
+                      "start": 319,
+                      "end": 323
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -324,7 +360,13 @@ class UserController extends BaseController implements JsonResponder
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "id",
+                      "name": {
+                        "name": "id",
+                        "span": {
+                          "start": 328,
+                          "end": 331
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -850,7 +892,13 @@ class UserController extends BaseController implements JsonResponder
                                   }
                                 }
                               ],
-                              "var": "e",
+                              "var": {
+                                "name": "e",
+                                "span": {
+                                  "start": 832,
+                                  "end": 834
+                                }
+                              },
                               "body": [
                                 {
                                   "kind": {
@@ -1018,7 +1066,13 @@ class UserController extends BaseController implements JsonResponder
             {
               "kind": {
                 "Method": {
-                  "name": "list",
+                  "name": {
+                    "name": "list",
+                    "span": {
+                      "start": 986,
+                      "end": 990
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -1156,7 +1210,13 @@ class UserController extends BaseController implements JsonResponder
                                               "by_ref": false,
                                               "params": [
                                                 {
-                                                  "name": "u",
+                                                  "name": {
+                                                    "name": "u",
+                                                    "span": {
+                                                      "start": 1066,
+                                                      "end": 1068
+                                                    }
+                                                  },
                                                   "type_hint": null,
                                                   "default": null,
                                                   "by_ref": false,
@@ -1320,7 +1380,13 @@ class UserController extends BaseController implements JsonResponder
                                               "by_ref": false,
                                               "params": [
                                                 {
-                                                  "name": "name",
+                                                  "name": {
+                                                    "name": "name",
+                                                    "span": {
+                                                      "start": 1147,
+                                                      "end": 1152
+                                                    }
+                                                  },
                                                   "type_hint": null,
                                                   "default": null,
                                                   "by_ref": false,
@@ -1338,7 +1404,13 @@ class UserController extends BaseController implements JsonResponder
                                               ],
                                               "use_vars": [
                                                 {
-                                                  "name": "users",
+                                                  "name": {
+                                                    "name": "users",
+                                                    "span": {
+                                                      "start": 1159,
+                                                      "end": 1165
+                                                    }
+                                                  },
                                                   "by_ref": false,
                                                   "span": {
                                                     "start": 1159,

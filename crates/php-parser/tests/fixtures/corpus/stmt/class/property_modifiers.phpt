@@ -18,7 +18,13 @@ PHP Fatal error:  Cannot redeclare Test::$prop in Standard input code on line 4
     {
       "kind": {
         "Class": {
-          "name": "Test",
+          "name": {
+            "name": "Test",
+            "span": {
+              "start": 12,
+              "end": 16
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -30,7 +36,13 @@ PHP Fatal error:  Cannot redeclare Test::$prop in Standard input code on line 4
             {
               "kind": {
                 "Property": {
-                  "name": "prop",
+                  "name": {
+                    "name": "prop",
+                    "span": {
+                      "start": 36,
+                      "end": 41
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -49,7 +61,13 @@ PHP Fatal error:  Cannot redeclare Test::$prop in Standard input code on line 4
             {
               "kind": {
                 "Property": {
-                  "name": "prop",
+                  "name": {
+                    "name": "prop",
+                    "span": {
+                      "start": 60,
+                      "end": 65
+                    }
+                  },
                   "visibility": null,
                   "set_visibility": null,
                   "is_static": false,
@@ -84,7 +102,13 @@ PHP Fatal error:  Cannot redeclare Test::$prop in Standard input code on line 4
             {
               "kind": {
                 "Property": {
-                  "name": "prop",
+                  "name": {
+                    "name": "prop",
+                    "span": {
+                      "start": 86,
+                      "end": 91
+                    }
+                  },
                   "visibility": "Private",
                   "set_visibility": null,
                   "is_static": true,

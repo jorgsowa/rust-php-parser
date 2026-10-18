@@ -25,7 +25,13 @@
                     "by_ref": false,
                     "params": [
                       {
-                        "name": "x",
+                        "name": {
+                          "name": "x",
+                          "span": {
+                            "start": 19,
+                            "end": 21
+                          }
+                        },
                         "type_hint": {
                           "kind": {
                             "Named": {

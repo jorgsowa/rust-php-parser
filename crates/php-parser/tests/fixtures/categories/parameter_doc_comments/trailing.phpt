@@ -10,10 +10,22 @@ function search(
     {
       "kind": {
         "Function": {
-          "name": "search",
+          "name": {
+            "name": "search",
+            "span": {
+              "start": 15,
+              "end": 21
+            }
+          },
           "params": [
             {
-              "name": "query",
+              "name": {
+                "name": "query",
+                "span": {
+                  "start": 34,
+                  "end": 40
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -54,7 +66,13 @@ function search(
               }
             },
             {
-              "name": "filter",
+              "name": {
+                "name": "filter",
+                "span": {
+                  "start": 80,
+                  "end": 87
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {

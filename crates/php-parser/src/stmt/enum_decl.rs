@@ -21,14 +21,14 @@ pub(super) fn parse_enum<'arena, 'src>(
                 span,
             });
         }
-        Ident::name(text)
+        Ident::new(text, span)
     } else {
         parser.error(ParseError::Expected {
             expected: "enum name".into(),
             found: parser.current_kind().description().into(),
             span: parser.current_span(),
         });
-        Ident::ERROR
+        parser.missing_ident()
     };
 
     // Backed enum: enum Foo: string — the backing type must be `int` or `string`.
@@ -94,7 +94,7 @@ pub(super) fn parse_enum<'arena, 'src>(
             }
             let (case_name, case_name_span) =
                 if let Some((text, span)) = parser.eat_identifier_or_keyword() {
-                    (Ident::name(text), span)
+                    (Ident::new(text, span), span)
                 } else {
                     let span = parser.current_span();
                     parser.error(ParseError::Expected {
@@ -102,7 +102,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                         found: parser.current_kind().description().into(),
                         span,
                     });
-                    (Ident::ERROR, span)
+                    (parser.missing_ident(), span)
                 };
             let equals_token = parser.eat(TokenKind::Equals);
             let value = if equals_token.is_some() {
@@ -242,15 +242,15 @@ pub(super) fn parse_enum<'arena, 'src>(
                 None
             };
 
-            let const_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-                Ident::name(text)
+            let const_name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
+                Ident::new(text, span)
             } else {
                 parser.error(ParseError::Expected {
                     expected: "constant name".into(),
                     found: parser.current_kind().description().into(),
                     span: parser.current_span(),
                 });
-                Ident::ERROR
+                parser.missing_ident()
             };
             parser.expect(TokenKind::Equals);
             let value = expr::parse_expr(parser);
@@ -290,10 +290,10 @@ pub(super) fn parse_enum<'arena, 'src>(
 
             parser.advance();
             let by_ref = parser.eat(TokenKind::Ampersand).is_some();
-            let method_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-                Ident::name(text)
+            let method_name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
+                Ident::new(text, span)
             } else {
-                Ident::ERROR
+                parser.missing_ident()
             };
 
             parser.expect(TokenKind::LeftParen);

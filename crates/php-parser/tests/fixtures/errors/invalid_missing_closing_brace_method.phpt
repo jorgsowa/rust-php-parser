@@ -21,7 +21,13 @@ PHP Parse error:  syntax error, unexpected token "public" in Standard input code
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -33,7 +39,13 @@ PHP Parse error:  syntax error, unexpected token "public" in Standard input code
             {
               "kind": {
                 "Method": {
-                  "name": "bar",
+                  "name": {
+                    "name": "bar",
+                    "span": {
+                      "start": 38,
+                      "end": 41
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -69,7 +81,13 @@ PHP Parse error:  syntax error, unexpected token "public" in Standard input code
                     {
                       "kind": {
                         "Function": {
-                          "name": "baz",
+                          "name": {
+                            "name": "baz",
+                            "span": {
+                              "start": 89,
+                              "end": 92
+                            }
+                          },
                           "params": [],
                           "body": [
                             {

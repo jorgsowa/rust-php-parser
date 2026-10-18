@@ -10,10 +10,22 @@ EOT
     {
       "kind": {
         "Function": {
-          "name": "f",
+          "name": {
+            "name": "f",
+            "span": {
+              "start": 15,
+              "end": 16
+            }
+          },
           "params": [
             {
-              "name": "s",
+              "name": {
+                "name": "s",
+                "span": {
+                  "start": 17,
+                  "end": 19
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {

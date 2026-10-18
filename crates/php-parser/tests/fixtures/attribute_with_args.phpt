@@ -6,7 +6,13 @@
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 32,
+              "end": 35
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,

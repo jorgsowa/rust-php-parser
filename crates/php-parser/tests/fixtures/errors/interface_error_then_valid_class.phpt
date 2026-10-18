@@ -10,13 +10,25 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
     {
       "kind": {
         "Interface": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 16,
+              "end": 19
+            }
+          },
           "extends": [],
           "members": [
             {
               "kind": {
                 "ClassConst": {
-                  "name": "X",
+                  "name": {
+                    "name": "X",
+                    "span": {
+                      "start": 28,
+                      "end": 29
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -46,7 +58,13 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
     {
       "kind": {
         "Class": {
-          "name": "Baz",
+          "name": {
+            "name": "Baz",
+            "span": {
+              "start": 42,
+              "end": 45
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

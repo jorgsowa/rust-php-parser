@@ -8,14 +8,26 @@ min_php=8.1
     {
       "kind": {
         "Enum": {
-          "name": "E",
+          "name": {
+            "name": "E",
+            "span": {
+              "start": 11,
+              "end": 12
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "Case": {
-                  "name": "A",
+                  "name": {
+                    "name": "A",
+                    "span": {
+                      "start": 20,
+                      "end": 21
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -28,7 +40,13 @@ min_php=8.1
             {
               "kind": {
                 "Method": {
-                  "name": "foo",
+                  "name": {
+                    "name": "foo",
+                    "span": {
+                      "start": 51,
+                      "end": 54
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

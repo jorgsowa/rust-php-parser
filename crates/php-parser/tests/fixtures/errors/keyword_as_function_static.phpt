@@ -10,7 +10,13 @@ PHP Parse error:  syntax error, unexpected token "static", expecting "(" in Stan
     {
       "kind": {
         "Function": {
-          "name": "static",
+          "name": {
+            "name": "static",
+            "span": {
+              "start": 15,
+              "end": 21
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,

@@ -18,7 +18,13 @@ PHP Fatal error:  Class A declares abstract method baz() and must therefore be d
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 13,
+              "end": 14
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -30,7 +36,13 @@ PHP Fatal error:  Class A declares abstract method baz() and must therefore be d
             {
               "kind": {
                 "Property": {
-                  "name": "foo",
+                  "name": {
+                    "name": "foo",
+                    "span": {
+                      "start": 25,
+                      "end": 29
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -48,7 +60,13 @@ PHP Fatal error:  Class A declares abstract method baz() and must therefore be d
             {
               "kind": {
                 "Method": {
-                  "name": "bar",
+                  "name": {
+                    "name": "bar",
+                    "span": {
+                      "start": 44,
+                      "end": 47
+                    }
+                  },
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": false,
@@ -68,7 +86,13 @@ PHP Fatal error:  Class A declares abstract method baz() and must therefore be d
             {
               "kind": {
                 "Method": {
-                  "name": "baz",
+                  "name": {
+                    "name": "baz",
+                    "span": {
+                      "start": 82,
+                      "end": 85
+                    }
+                  },
                   "visibility": null,
                   "is_static": true,
                   "is_abstract": true,

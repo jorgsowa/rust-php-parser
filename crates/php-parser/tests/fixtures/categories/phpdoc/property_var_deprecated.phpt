@@ -22,7 +22,13 @@ class Proxy {
     {
       "kind": {
         "Class": {
-          "name": "Proxy",
+          "name": {
+            "name": "Proxy",
+            "span": {
+              "start": 131,
+              "end": 136
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -34,7 +40,13 @@ class Proxy {
             {
               "kind": {
                 "Property": {
-                  "name": "data",
+                  "name": {
+                    "name": "data",
+                    "span": {
+                      "start": 193,
+                      "end": 198
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -85,7 +97,13 @@ class Proxy {
             {
               "kind": {
                 "Method": {
-                  "name": "oldMethod",
+                  "name": {
+                    "name": "oldMethod",
+                    "span": {
+                      "start": 305,
+                      "end": 314
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

@@ -471,10 +471,22 @@ foo(
     {
       "kind": {
         "Function": {
-          "name": "test",
+          "name": {
+            "name": "test",
+            "span": {
+              "start": 445,
+              "end": 449
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 466,
+                  "end": 468
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {
@@ -498,7 +510,13 @@ foo(
               }
             },
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 488,
+                  "end": 490
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {
@@ -555,7 +573,13 @@ foo(
                     "by_ref": false,
                     "params": [
                       {
-                        "name": "x",
+                        "name": {
+                          "name": "x",
+                          "span": {
+                            "start": 561,
+                            "end": 563
+                          }
+                        },
                         "type_hint": null,
                         "default": null,
                         "by_ref": false,
@@ -571,7 +595,13 @@ foo(
                         }
                       },
                       {
-                        "name": "y",
+                        "name": {
+                          "name": "y",
+                          "span": {
+                            "start": 574,
+                            "end": 576
+                          }
+                        },
                         "type_hint": null,
                         "default": null,
                         "by_ref": false,
@@ -641,10 +671,22 @@ foo(
     {
       "kind": {
         "Function": {
-          "name": "typed",
+          "name": {
+            "name": "typed",
+            "span": {
+              "start": 648,
+              "end": 653
+            }
+          },
           "params": [
             {
-              "name": "s",
+              "name": {
+                "name": "s",
+                "span": {
+                  "start": 677,
+                  "end": 679
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -677,7 +719,13 @@ foo(
               }
             },
             {
-              "name": "i",
+              "name": {
+                "name": "i",
+                "span": {
+                  "start": 696,
+                  "end": 698
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -724,10 +772,22 @@ foo(
     {
       "kind": {
         "Function": {
-          "name": "variadic",
+          "name": {
+            "name": "variadic",
+            "span": {
+              "start": 739,
+              "end": 747
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 751,
+                  "end": 753
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -743,7 +803,13 @@ foo(
               }
             },
             {
-              "name": "rest",
+              "name": {
+                "name": "rest",
+                "span": {
+                  "start": 775,
+                  "end": 780
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -773,7 +839,13 @@ foo(
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 830,
+              "end": 833
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -785,7 +857,13 @@ foo(
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 854,
+                      "end": 865
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -793,7 +871,13 @@ foo(
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "x",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 890,
+                          "end": 892
+                        }
+                      },
                       "type_hint": null,
                       "default": null,
                       "by_ref": false,
@@ -809,7 +893,13 @@ foo(
                       }
                     },
                     {
-                      "name": "y",
+                      "name": {
+                        "name": "y",
+                        "span": {
+                          "start": 921,
+                          "end": 923
+                        }
+                      },
                       "type_hint": null,
                       "default": null,
                       "by_ref": false,

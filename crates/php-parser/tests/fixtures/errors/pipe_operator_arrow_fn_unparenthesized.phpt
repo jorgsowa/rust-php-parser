@@ -44,7 +44,13 @@ PHP Fatal error:  Arrow functions on the right hand side of |> must be parenthes
                           "by_ref": false,
                           "params": [
                             {
-                              "name": "s",
+                              "name": {
+                                "name": "s",
+                                "span": {
+                                  "start": 24,
+                                  "end": 26
+                                }
+                              },
                               "type_hint": null,
                               "default": null,
                               "by_ref": false,

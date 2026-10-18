@@ -167,7 +167,7 @@ fn custom_fold_closure_use_var_no_arena_param() {
 
     let mut use_vars = ArenaVec::new_in(&arena);
     use_vars.push(ClosureUseVar {
-        name: "x",
+        name: Ident::new("x", Span::DUMMY),
         by_ref: true,
         span: Span::DUMMY,
     });
@@ -539,7 +539,7 @@ fn fold_param_override_strips_default() {
     }
     let arena = Bump::new();
     let out = Bump::new();
-    let mut param = Param::new(&arena, Ident::name("x"), Span::DUMMY);
+    let mut param = Param::new(&arena, Ident::new("x", Span::DUMMY), Span::DUMMY);
     param.default = Some(Expr {
         kind: ExprKind::Int(42),
         span: Span::DUMMY,
@@ -606,7 +606,7 @@ fn fold_class_member_override_is_dispatched() {
     let out = Bump::new();
     let member = ClassMember {
         kind: ClassMemberKind::ClassConst(ClassConstDecl {
-            name: Ident::name("FOO"),
+            name: Ident::new("FOO", Span::DUMMY),
             visibility: None,
             is_final: false,
             type_hint: None,
@@ -647,7 +647,7 @@ fn fold_enum_member_override_is_dispatched() {
     let out = Bump::new();
     let member = EnumMember {
         kind: EnumMemberKind::Case(EnumCase {
-            name: Ident::name("Active"),
+            name: Ident::new("Active", Span::DUMMY),
             value: None,
             attributes: ArenaVec::new_in(&arena),
             doc_comment: None,
@@ -915,7 +915,7 @@ fn fold_catch_clause_override_clears_var() {
     });
     let catch = CatchClause {
         types,
-        var: Some("e"),
+        var: Some(Ident::new("e", Span::DUMMY)),
         body: empty_block,
         span: Span::DUMMY,
     };
@@ -1092,21 +1092,23 @@ fn match_default_arm_conditions_none_stays_none() {
 #[test]
 fn constructors_leave_optional_fields_empty() {
     let arena = Bump::new();
-    let param = Param::new(&arena, Ident::name("x"), Span::new(1, 3));
+    let param = Param::new(&arena, Ident::new("x", Span::DUMMY), Span::new(1, 3));
     assert_eq!(param.name.as_str(), Some("x"));
     assert_eq!(param.span, Span::new(1, 3));
     assert!(param.type_hint.is_none() && param.default.is_none() && param.visibility.is_none());
     assert!(!param.by_ref && !param.variadic && !param.is_readonly && !param.is_final);
     assert!(param.attributes.is_empty() && param.hooks.is_empty());
 
-    let method = MethodDecl::new(&arena, Ident::name("run"));
+    let method = MethodDecl::new(&arena, Ident::new("run", Span::DUMMY));
     assert_eq!(method.name.as_str(), Some("run"));
     assert!(method.params.is_empty() && method.body.is_none() && method.return_type.is_none());
     assert!(!method.is_static && !method.is_abstract && !method.is_final);
 
-    let owned = php_ast::owned::Param::new(php_ast::owned::Ident::name("y"), Span::DUMMY);
+    let owned =
+        php_ast::owned::Param::new(php_ast::owned::Ident::new("y", Span::DUMMY), Span::DUMMY);
     assert_eq!(owned.name.as_str(), Some("y"));
     assert!(owned.default.is_none() && owned.hooks.is_empty());
-    let owned_method = php_ast::owned::MethodDecl::new(php_ast::owned::Ident::name("go"));
+    let owned_method =
+        php_ast::owned::MethodDecl::new(php_ast::owned::Ident::new("go", Span::DUMMY));
     assert!(owned_method.params.is_empty() && owned_method.body.is_none());
 }

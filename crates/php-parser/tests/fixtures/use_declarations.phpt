@@ -57,7 +57,13 @@ use const App\Config\VERSION;
                   "end": 48
                 }
               },
-              "alias": "AuthService",
+              "alias": {
+                "name": "AuthService",
+                "span": {
+                  "start": 52,
+                  "end": 63
+                }
+              },
               "span": {
                 "start": 31,
                 "end": 63

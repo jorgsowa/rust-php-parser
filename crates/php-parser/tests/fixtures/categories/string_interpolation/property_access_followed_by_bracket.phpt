@@ -11,7 +11,13 @@ echo "$obj->parameterName[]";
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -23,7 +29,13 @@ echo "$obj->parameterName[]";
             {
               "kind": {
                 "Property": {
-                  "name": "parameterName",
+                  "name": {
+                    "name": "parameterName",
+                    "span": {
+                      "start": 36,
+                      "end": 50
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

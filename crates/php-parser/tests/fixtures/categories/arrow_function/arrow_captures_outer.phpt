@@ -25,7 +25,13 @@
                     "by_ref": false,
                     "params": [
                       {
-                        "name": "x",
+                        "name": {
+                          "name": "x",
+                          "span": {
+                            "start": 17,
+                            "end": 19
+                          }
+                        },
                         "type_hint": null,
                         "default": null,
                         "by_ref": false,

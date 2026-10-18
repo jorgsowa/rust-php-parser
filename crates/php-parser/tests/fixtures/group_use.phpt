@@ -178,7 +178,13 @@ use App\{Models\User as U, Services\Auth as A};
                   "end": 150
                 }
               },
-              "alias": "U",
+              "alias": {
+                "name": "U",
+                "span": {
+                  "start": 154,
+                  "end": 155
+                }
+              },
               "span": {
                 "start": 139,
                 "end": 155
@@ -197,7 +203,13 @@ use App\{Models\User as U, Services\Auth as A};
                   "end": 170
                 }
               },
-              "alias": "A",
+              "alias": {
+                "name": "A",
+                "span": {
+                  "start": 174,
+                  "end": 175
+                }
+              },
               "span": {
                 "start": 157,
                 "end": 175

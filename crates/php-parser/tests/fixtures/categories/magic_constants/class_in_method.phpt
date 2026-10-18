@@ -6,7 +6,13 @@
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -18,7 +24,13 @@
             {
               "kind": {
                 "Method": {
-                  "name": "name",
+                  "name": {
+                    "name": "name",
+                    "span": {
+                      "start": 34,
+                      "end": 38
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

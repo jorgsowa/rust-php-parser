@@ -13,7 +13,13 @@ PHP Parse error:  syntax error, unexpected token "function", expecting identifie
     {
       "kind": {
         "Class": {
-          "name": "function",
+          "name": {
+            "name": "function",
+            "span": {
+              "start": 12,
+              "end": 20
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

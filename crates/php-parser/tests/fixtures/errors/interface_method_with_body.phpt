@@ -10,13 +10,25 @@ PHP Fatal error:  Interface function Foo::bar() cannot contain body in Standard 
     {
       "kind": {
         "Interface": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 16,
+              "end": 19
+            }
+          },
           "extends": [],
           "members": [
             {
               "kind": {
                 "Method": {
-                  "name": "bar",
+                  "name": {
+                    "name": "bar",
+                    "span": {
+                      "start": 38,
+                      "end": 41
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

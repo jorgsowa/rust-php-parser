@@ -27,7 +27,13 @@ class Document {
     {
       "kind": {
         "Class": {
-          "name": "Document",
+          "name": {
+            "name": "Document",
+            "span": {
+              "start": 66,
+              "end": 74
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -39,7 +45,13 @@ class Document {
             {
               "kind": {
                 "Method": {
-                  "name": "create",
+                  "name": {
+                    "name": "create",
+                    "span": {
+                      "start": 136,
+                      "end": 142
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -67,7 +79,13 @@ class Document {
             {
               "kind": {
                 "Method": {
-                  "name": "update",
+                  "name": {
+                    "name": "update",
+                    "span": {
+                      "start": 208,
+                      "end": 214
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -95,7 +113,13 @@ class Document {
             {
               "kind": {
                 "Method": {
-                  "name": "delete",
+                  "name": {
+                    "name": "delete",
+                    "span": {
+                      "start": 280,
+                      "end": 286
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

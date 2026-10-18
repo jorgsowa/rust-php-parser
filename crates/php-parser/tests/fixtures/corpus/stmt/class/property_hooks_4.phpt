@@ -16,7 +16,13 @@ PHP Fatal error:  Unknown hook "FOO" for property Test::$prop, expected "get" or
     {
       "kind": {
         "Class": {
-          "name": "Test",
+          "name": {
+            "name": "Test",
+            "span": {
+              "start": 12,
+              "end": 16
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -28,7 +34,13 @@ PHP Fatal error:  Unknown hook "FOO" for property Test::$prop, expected "get" or
             {
               "kind": {
                 "Property": {
-                  "name": "prop",
+                  "name": {
+                    "name": "prop",
+                    "span": {
+                      "start": 30,
+                      "end": 35
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

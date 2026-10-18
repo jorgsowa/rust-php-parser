@@ -352,7 +352,13 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                         "by_ref": false,
                         "params": [
                           {
-                            "name": "x",
+                            "name": {
+                              "name": "x",
+                              "span": {
+                                "start": 105,
+                                "end": 107
+                              }
+                            },
                             "type_hint": null,
                             "default": null,
                             "by_ref": false,

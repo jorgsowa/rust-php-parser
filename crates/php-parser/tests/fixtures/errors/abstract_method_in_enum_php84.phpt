@@ -13,14 +13,26 @@ PHP Fatal error:  Enum Status must implement 1 abstract private method (Status::
     {
       "kind": {
         "Enum": {
-          "name": "Status",
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 11,
+              "end": 17
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "Method": {
-                  "name": "label",
+                  "name": {
+                    "name": "label",
+                    "span": {
+                      "start": 45,
+                      "end": 50
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": true,

@@ -29,7 +29,13 @@ PHP Fatal error:  Cannot apply attributes to multiple constants at once in Stand
       "kind": {
         "Const": [
           {
-            "name": "A",
+            "name": {
+              "name": "A",
+              "span": {
+                "start": 13,
+                "end": 14
+              }
+            },
             "value": {
               "kind": {
                 "Int": 0
@@ -46,7 +52,13 @@ PHP Fatal error:  Cannot apply attributes to multiple constants at once in Stand
             }
           },
           {
-            "name": "B",
+            "name": {
+              "name": "B",
+              "span": {
+                "start": 20,
+                "end": 21
+              }
+            },
             "value": {
               "kind": {
                 "Float": 1.0
@@ -63,7 +75,13 @@ PHP Fatal error:  Cannot apply attributes to multiple constants at once in Stand
             }
           },
           {
-            "name": "C",
+            "name": {
+              "name": "C",
+              "span": {
+                "start": 29,
+                "end": 30
+              }
+            },
             "value": {
               "kind": {
                 "String": "A"
@@ -80,7 +98,13 @@ PHP Fatal error:  Cannot apply attributes to multiple constants at once in Stand
             }
           },
           {
-            "name": "D",
+            "name": {
+              "name": "D",
+              "span": {
+                "start": 38,
+                "end": 39
+              }
+            },
             "value": {
               "kind": {
                 "Name": {
@@ -116,7 +140,13 @@ PHP Fatal error:  Cannot apply attributes to multiple constants at once in Stand
       "kind": {
         "Const": [
           {
-            "name": "WithOneAttribute",
+            "name": {
+              "name": "WithOneAttribute",
+              "span": {
+                "start": 63,
+                "end": 79
+              }
+            },
             "value": {
               "kind": {
                 "Int": 1
@@ -161,7 +191,13 @@ PHP Fatal error:  Cannot apply attributes to multiple constants at once in Stand
       "kind": {
         "Const": [
           {
-            "name": "WithUngroupedAttriutes",
+            "name": {
+              "name": "WithUngroupedAttriutes",
+              "span": {
+                "start": 111,
+                "end": 133
+              }
+            },
             "value": {
               "kind": {
                 "Int": 2
@@ -223,7 +259,13 @@ PHP Fatal error:  Cannot apply attributes to multiple constants at once in Stand
       "kind": {
         "Const": [
           {
-            "name": "WithGroupAttributes",
+            "name": {
+              "name": "WithGroupAttributes",
+              "span": {
+                "start": 163,
+                "end": 182
+              }
+            },
             "value": {
               "kind": {
                 "Int": 3
@@ -285,7 +327,13 @@ PHP Fatal error:  Cannot apply attributes to multiple constants at once in Stand
       "kind": {
         "Const": [
           {
-            "name": "ThisIsInvalid",
+            "name": {
+              "name": "ThisIsInvalid",
+              "span": {
+                "start": 206,
+                "end": 219
+              }
+            },
             "value": {
               "kind": {
                 "Int": 4
@@ -320,7 +368,13 @@ PHP Fatal error:  Cannot apply attributes to multiple constants at once in Stand
             }
           },
           {
-            "name": "AttributesOnMultipleConstants",
+            "name": {
+              "name": "AttributesOnMultipleConstants",
+              "span": {
+                "start": 229,
+                "end": 258
+              }
+            },
             "value": {
               "kind": {
                 "Int": 5

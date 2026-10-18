@@ -34,7 +34,13 @@ const MAX_RETRIES = 3;
       "kind": {
         "Const": [
           {
-            "name": "MAX_RETRIES",
+            "name": {
+              "name": "MAX_RETRIES",
+              "span": {
+                "start": 63,
+                "end": 74
+              }
+            },
             "value": {
               "kind": {
                 "Int": 3

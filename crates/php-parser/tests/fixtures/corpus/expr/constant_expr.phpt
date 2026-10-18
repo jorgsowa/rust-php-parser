@@ -45,7 +45,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_1",
+            "name": {
+              "name": "T_1",
+              "span": {
+                "start": 13,
+                "end": 16
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -92,7 +98,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_2",
+            "name": {
+              "name": "T_2",
+              "span": {
+                "start": 33,
+                "end": 36
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -139,7 +151,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_3",
+            "name": {
+              "name": "T_3",
+              "span": {
+                "start": 52,
+                "end": 55
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -186,7 +204,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_4",
+            "name": {
+              "name": "T_4",
+              "span": {
+                "start": 75,
+                "end": 78
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -233,7 +257,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_5",
+            "name": {
+              "name": "T_5",
+              "span": {
+                "start": 102,
+                "end": 105
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -308,7 +338,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_6",
+            "name": {
+              "name": "T_6",
+              "span": {
+                "start": 131,
+                "end": 134
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -395,7 +431,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_7",
+            "name": {
+              "name": "T_7",
+              "span": {
+                "start": 164,
+                "end": 167
+              }
+            },
             "value": {
               "kind": {
                 "MagicConst": "Line"
@@ -422,7 +464,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_8",
+            "name": {
+              "name": "T_8",
+              "span": {
+                "start": 186,
+                "end": 189
+              }
+            },
             "value": {
               "kind": {
                 "Heredoc": {
@@ -456,7 +504,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_9",
+            "name": {
+              "name": "T_9",
+              "span": {
+                "start": 248,
+                "end": 251
+              }
+            },
             "value": {
               "kind": {
                 "UnaryPrefix": {
@@ -505,7 +559,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_10",
+            "name": {
+              "name": "T_10",
+              "span": {
+                "start": 265,
+                "end": 269
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -627,7 +687,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_11",
+            "name": {
+              "name": "T_11",
+              "span": {
+                "start": 297,
+                "end": 301
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -674,7 +740,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_12",
+            "name": {
+              "name": "T_12",
+              "span": {
+                "start": 318,
+                "end": 322
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -721,7 +793,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_13",
+            "name": {
+              "name": "T_13",
+              "span": {
+                "start": 340,
+                "end": 344
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -768,7 +846,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_14",
+            "name": {
+              "name": "T_14",
+              "span": {
+                "start": 361,
+                "end": 365
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -815,7 +899,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_15",
+            "name": {
+              "name": "T_15",
+              "span": {
+                "start": 382,
+                "end": 386
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -862,7 +952,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_16",
+            "name": {
+              "name": "T_16",
+              "span": {
+                "start": 404,
+                "end": 408
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -909,7 +1005,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_17",
+            "name": {
+              "name": "T_17",
+              "span": {
+                "start": 426,
+                "end": 430
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -956,7 +1058,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_18",
+            "name": {
+              "name": "T_18",
+              "span": {
+                "start": 446,
+                "end": 450
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -1003,7 +1111,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_19",
+            "name": {
+              "name": "T_19",
+              "span": {
+                "start": 467,
+                "end": 471
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -1050,7 +1164,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_20",
+            "name": {
+              "name": "T_20",
+              "span": {
+                "start": 487,
+                "end": 491
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -1097,7 +1217,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_21",
+            "name": {
+              "name": "T_21",
+              "span": {
+                "start": 508,
+                "end": 512
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -1144,7 +1270,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_22",
+            "name": {
+              "name": "T_22",
+              "span": {
+                "start": 530,
+                "end": 534
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -1191,7 +1323,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_23",
+            "name": {
+              "name": "T_23",
+              "span": {
+                "start": 552,
+                "end": 556
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -1238,7 +1376,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_24",
+            "name": {
+              "name": "T_24",
+              "span": {
+                "start": 575,
+                "end": 579
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -1285,7 +1429,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_25",
+            "name": {
+              "name": "T_25",
+              "span": {
+                "start": 598,
+                "end": 602
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -1352,7 +1502,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_26",
+            "name": {
+              "name": "T_26",
+              "span": {
+                "start": 622,
+                "end": 626
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -1419,7 +1575,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_27",
+            "name": {
+              "name": "T_27",
+              "span": {
+                "start": 650,
+                "end": 654
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -1466,7 +1628,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_28",
+            "name": {
+              "name": "T_28",
+              "span": {
+                "start": 671,
+                "end": 675
+              }
+            },
             "value": {
               "kind": {
                 "ArrayAccess": {
@@ -1564,7 +1732,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_29",
+            "name": {
+              "name": "T_29",
+              "span": {
+                "start": 698,
+                "end": 702
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -1611,7 +1785,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_30",
+            "name": {
+              "name": "T_30",
+              "span": {
+                "start": 720,
+                "end": 724
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -1658,7 +1838,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_31",
+            "name": {
+              "name": "T_31",
+              "span": {
+                "start": 742,
+                "end": 746
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -1705,7 +1891,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_32",
+            "name": {
+              "name": "T_32",
+              "span": {
+                "start": 764,
+                "end": 768
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -1752,7 +1944,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_33",
+            "name": {
+              "name": "T_33",
+              "span": {
+                "start": 786,
+                "end": 790
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -1799,7 +1997,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_34",
+            "name": {
+              "name": "T_34",
+              "span": {
+                "start": 807,
+                "end": 811
+              }
+            },
             "value": {
               "kind": {
                 "Binary": {
@@ -1846,7 +2050,13 @@ const T_35 = !false;
       "kind": {
         "Const": [
           {
-            "name": "T_35",
+            "name": {
+              "name": "T_35",
+              "span": {
+                "start": 830,
+                "end": 834
+              }
+            },
             "value": {
               "kind": {
                 "UnaryPrefix": {

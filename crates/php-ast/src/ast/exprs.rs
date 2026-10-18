@@ -5,7 +5,7 @@ use crate::Span;
 
 #[cfg(feature = "serde")]
 use super::is_false;
-use super::{ArenaVec, Arg, Attribute, Block, ClassDecl, Name, Param, TypeHint};
+use super::{ArenaVec, Arg, Attribute, Block, ClassDecl, Ident, Name, Param, TypeHint};
 
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
 enum NameStrInner<'arena, 'src> {
@@ -708,7 +708,7 @@ pub struct ClosureExpr<'arena, 'src> {
 #[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ClosureUseVar<'src> {
     /// Captured variable name without `$`.
-    pub name: &'src str,
+    pub name: Ident<'src>,
     /// `true` for `use (&$x)`.
     pub by_ref: bool,
     /// Source range of this node.

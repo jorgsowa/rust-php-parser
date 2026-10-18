@@ -27,7 +27,13 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                     "by_ref": false,
                     "params": [
                       {
-                        "name": "x",
+                        "name": {
+                          "name": "x",
+                          "span": {
+                            "start": 14,
+                            "end": 16
+                          }
+                        },
                         "type_hint": null,
                         "default": null,
                         "by_ref": false,
@@ -51,7 +57,13 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                           "by_ref": false,
                           "params": [
                             {
-                              "name": "y",
+                              "name": {
+                                "name": "y",
+                                "span": {
+                                  "start": 24,
+                                  "end": 26
+                                }
+                              },
                               "type_hint": null,
                               "default": null,
                               "by_ref": false,
@@ -75,7 +87,13 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                                 "by_ref": false,
                                 "params": [
                                   {
-                                    "name": "z",
+                                    "name": {
+                                      "name": "z",
+                                      "span": {
+                                        "start": 34,
+                                        "end": 36
+                                      }
+                                    },
                                     "type_hint": null,
                                     "default": null,
                                     "by_ref": false,
@@ -200,7 +218,13 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                     "by_ref": false,
                     "params": [
                       {
-                        "name": "a",
+                        "name": {
+                          "name": "a",
+                          "span": {
+                            "start": 63,
+                            "end": 65
+                          }
+                        },
                         "type_hint": null,
                         "default": null,
                         "by_ref": false,
@@ -256,7 +280,13 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                                 "by_ref": false,
                                 "params": [
                                   {
-                                    "name": "b",
+                                    "name": {
+                                      "name": "b",
+                                      "span": {
+                                        "start": 82,
+                                        "end": 84
+                                      }
+                                    },
                                     "type_hint": null,
                                     "default": null,
                                     "by_ref": false,
@@ -317,7 +347,13 @@ $g = fn($a) => $a > 0 ? fn($b) => $b * 2 : fn($b) => $b * -1;
                                 "by_ref": false,
                                 "params": [
                                   {
-                                    "name": "b",
+                                    "name": {
+                                      "name": "b",
+                                      "span": {
+                                        "start": 101,
+                                        "end": 103
+                                      }
+                                    },
                                     "type_hint": null,
                                     "default": null,
                                     "by_ref": false,

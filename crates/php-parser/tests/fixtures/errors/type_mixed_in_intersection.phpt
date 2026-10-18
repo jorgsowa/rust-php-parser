@@ -15,10 +15,22 @@ PHP Fatal error:  Type mixed cannot be part of an intersection type in Standard 
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 29,
+                  "end": 31
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Intersection": [

@@ -27,10 +27,22 @@ class Constructor {
     {
       "kind": {
         "Function": {
-          "name": "test1",
+          "name": {
+            "name": "test1",
+            "span": {
+              "start": 15,
+              "end": 20
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 21,
+                  "end": 23
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -46,7 +58,13 @@ class Constructor {
               }
             },
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 29,
+                  "end": 31
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -76,10 +94,22 @@ class Constructor {
     {
       "kind": {
         "Function": {
-          "name": "test2",
+          "name": {
+            "name": "test2",
+            "span": {
+              "start": 45,
+              "end": 50
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 51,
+                  "end": 53
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -95,7 +125,13 @@ class Constructor {
               }
             },
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 60,
+                  "end": 62
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": true,
@@ -125,10 +161,22 @@ class Constructor {
     {
       "kind": {
         "Function": {
-          "name": "test3",
+          "name": {
+            "name": "test3",
+            "span": {
+              "start": 76,
+              "end": 81
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 82,
+                  "end": 84
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -144,7 +192,13 @@ class Constructor {
               }
             },
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 95,
+                  "end": 97
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -191,10 +245,22 @@ class Constructor {
     {
       "kind": {
         "Function": {
-          "name": "test4",
+          "name": {
+            "name": "test4",
+            "span": {
+              "start": 111,
+              "end": 116
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 117,
+                  "end": 119
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -210,7 +276,13 @@ class Constructor {
               }
             },
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 131,
+                  "end": 133
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -257,10 +329,22 @@ class Constructor {
     {
       "kind": {
         "Function": {
-          "name": "test5",
+          "name": {
+            "name": "test5",
+            "span": {
+              "start": 147,
+              "end": 152
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 153,
+                  "end": 155
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -276,7 +360,13 @@ class Constructor {
               }
             },
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 167,
+                  "end": 169
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Nullable": {
@@ -331,10 +421,22 @@ class Constructor {
     {
       "kind": {
         "Function": {
-          "name": "test6",
+          "name": {
+            "name": "test6",
+            "span": {
+              "start": 183,
+              "end": 188
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 189,
+                  "end": 191
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -350,7 +452,13 @@ class Constructor {
               }
             },
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 204,
+                  "end": 206
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Nullable": {
@@ -405,10 +513,22 @@ class Constructor {
     {
       "kind": {
         "Function": {
-          "name": "test7",
+          "name": {
+            "name": "test7",
+            "span": {
+              "start": 220,
+              "end": 225
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 226,
+                  "end": 228
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -424,7 +544,13 @@ class Constructor {
               }
             },
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 246,
+                  "end": 248
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -499,10 +625,22 @@ class Constructor {
     {
       "kind": {
         "Function": {
-          "name": "test8",
+          "name": {
+            "name": "test8",
+            "span": {
+              "start": 262,
+              "end": 267
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 268,
+                  "end": 270
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -518,7 +656,13 @@ class Constructor {
               }
             },
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 289,
+                  "end": 291
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -593,10 +737,22 @@ class Constructor {
     {
       "kind": {
         "Function": {
-          "name": "test9",
+          "name": {
+            "name": "test9",
+            "span": {
+              "start": 305,
+              "end": 310
+            }
+          },
           "params": [
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 323,
+                  "end": 325
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -644,10 +800,22 @@ class Constructor {
     {
       "kind": {
         "Function": {
-          "name": "test10",
+          "name": {
+            "name": "test10",
+            "span": {
+              "start": 339,
+              "end": 345
+            }
+          },
           "params": [
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 359,
+                  "end": 361
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": true,
@@ -695,10 +863,22 @@ class Constructor {
     {
       "kind": {
         "Function": {
-          "name": "test11",
+          "name": {
+            "name": "test11",
+            "span": {
+              "start": 375,
+              "end": 381
+            }
+          },
           "params": [
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 399,
+                  "end": 401
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -763,10 +943,22 @@ class Constructor {
     {
       "kind": {
         "Function": {
-          "name": "test12",
+          "name": {
+            "name": "test12",
+            "span": {
+              "start": 415,
+              "end": 421
+            }
+          },
           "params": [
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 440,
+                  "end": 442
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -831,7 +1023,13 @@ class Constructor {
     {
       "kind": {
         "Class": {
-          "name": "Test",
+          "name": {
+            "name": "Test",
+            "span": {
+              "start": 453,
+              "end": 457
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -843,7 +1041,13 @@ class Constructor {
             {
               "kind": {
                 "Method": {
-                  "name": "method1",
+                  "name": {
+                    "name": "method1",
+                    "span": {
+                      "start": 480,
+                      "end": 487
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -851,7 +1055,13 @@ class Constructor {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "b",
+                      "name": {
+                        "name": "b",
+                        "span": {
+                          "start": 492,
+                          "end": 494
+                        }
+                      },
                       "type_hint": null,
                       "default": null,
                       "by_ref": false,
@@ -880,7 +1090,13 @@ class Constructor {
             {
               "kind": {
                 "Method": {
-                  "name": "method2",
+                  "name": {
+                    "name": "method2",
+                    "span": {
+                      "start": 519,
+                      "end": 526
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -888,7 +1104,13 @@ class Constructor {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "b",
+                      "name": {
+                        "name": "b",
+                        "span": {
+                          "start": 532,
+                          "end": 534
+                        }
+                      },
                       "type_hint": null,
                       "default": null,
                       "by_ref": true,
@@ -917,7 +1139,13 @@ class Constructor {
             {
               "kind": {
                 "Method": {
-                  "name": "method3",
+                  "name": {
+                    "name": "method3",
+                    "span": {
+                      "start": 559,
+                      "end": 566
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -925,7 +1153,13 @@ class Constructor {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "b",
+                      "name": {
+                        "name": "b",
+                        "span": {
+                          "start": 576,
+                          "end": 578
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -971,7 +1205,13 @@ class Constructor {
             {
               "kind": {
                 "Method": {
-                  "name": "method4",
+                  "name": {
+                    "name": "method4",
+                    "span": {
+                      "start": 603,
+                      "end": 610
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -979,7 +1219,13 @@ class Constructor {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "b",
+                      "name": {
+                        "name": "b",
+                        "span": {
+                          "start": 621,
+                          "end": 623
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -1034,7 +1280,13 @@ class Constructor {
     {
       "kind": {
         "Class": {
-          "name": "Constructor",
+          "name": {
+            "name": "Constructor",
+            "span": {
+              "start": 636,
+              "end": 647
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -1046,7 +1298,13 @@ class Constructor {
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 670,
+                      "end": 681
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -1054,7 +1312,13 @@ class Constructor {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "b",
+                      "name": {
+                        "name": "b",
+                        "span": {
+                          "start": 699,
+                          "end": 701
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

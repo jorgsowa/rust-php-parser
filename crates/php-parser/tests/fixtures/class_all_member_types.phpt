@@ -31,7 +31,13 @@ abstract class Complete {
     {
       "kind": {
         "Class": {
-          "name": "Complete",
+          "name": {
+            "name": "Complete",
+            "span": {
+              "start": 21,
+              "end": 29
+            }
+          },
           "modifiers": {
             "is_abstract": true,
             "is_final": false,
@@ -66,7 +72,13 @@ abstract class Complete {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "MAX",
+                  "name": {
+                    "name": "MAX",
+                    "span": {
+                      "start": 69,
+                      "end": 72
+                    }
+                  },
                   "visibility": "Public",
                   "is_final": false,
                   "value": {
@@ -89,7 +101,13 @@ abstract class Complete {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "MIN",
+                  "name": {
+                    "name": "MIN",
+                    "span": {
+                      "start": 100,
+                      "end": 103
+                    }
+                  },
                   "visibility": "Protected",
                   "is_final": false,
                   "value": {
@@ -112,7 +130,13 @@ abstract class Complete {
             {
               "kind": {
                 "Property": {
-                  "name": "name",
+                  "name": {
+                    "name": "name",
+                    "span": {
+                      "start": 128,
+                      "end": 133
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -147,7 +171,13 @@ abstract class Complete {
             {
               "kind": {
                 "Property": {
-                  "name": "age",
+                  "name": {
+                    "name": "age",
+                    "span": {
+                      "start": 153,
+                      "end": 157
+                    }
+                  },
                   "visibility": "Protected",
                   "set_visibility": null,
                   "is_static": false,
@@ -190,7 +220,13 @@ abstract class Complete {
             {
               "kind": {
                 "Property": {
-                  "name": "instances",
+                  "name": {
+                    "name": "instances",
+                    "span": {
+                      "start": 188,
+                      "end": 198
+                    }
+                  },
                   "visibility": "Private",
                   "set_visibility": null,
                   "is_static": true,
@@ -233,7 +269,13 @@ abstract class Complete {
             {
               "kind": {
                 "Property": {
-                  "name": "id",
+                  "name": {
+                    "name": "id",
+                    "span": {
+                      "start": 232,
+                      "end": 235
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -268,7 +310,13 @@ abstract class Complete {
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 258,
+                      "end": 269
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -276,7 +324,13 @@ abstract class Complete {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "name",
+                      "name": {
+                        "name": "name",
+                        "span": {
+                          "start": 277,
+                          "end": 282
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -309,7 +363,13 @@ abstract class Complete {
                       }
                     },
                     {
-                      "name": "score",
+                      "name": {
+                        "name": "score",
+                        "span": {
+                          "start": 304,
+                          "end": 310
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -412,7 +472,13 @@ abstract class Complete {
             {
               "kind": {
                 "Method": {
-                  "name": "create",
+                  "name": {
+                    "name": "create",
+                    "span": {
+                      "start": 377,
+                      "end": 383
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": true,
                   "is_abstract": false,
@@ -506,7 +572,13 @@ abstract class Complete {
             {
               "kind": {
                 "Method": {
-                  "name": "validate",
+                  "name": {
+                    "name": "validate",
+                    "span": {
+                      "start": 469,
+                      "end": 477
+                    }
+                  },
                   "visibility": "Protected",
                   "is_static": false,
                   "is_abstract": true,
@@ -543,7 +615,13 @@ abstract class Complete {
             {
               "kind": {
                 "Method": {
-                  "name": "getId",
+                  "name": {
+                    "name": "getId",
+                    "span": {
+                      "start": 514,
+                      "end": 519
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

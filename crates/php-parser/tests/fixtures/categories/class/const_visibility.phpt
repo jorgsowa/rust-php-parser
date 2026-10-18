@@ -6,7 +6,13 @@
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -18,7 +24,13 @@
             {
               "kind": {
                 "ClassConst": {
-                  "name": "A",
+                  "name": {
+                    "name": "A",
+                    "span": {
+                      "start": 31,
+                      "end": 32
+                    }
+                  },
                   "visibility": "Public",
                   "is_final": false,
                   "value": {
@@ -41,7 +53,13 @@
             {
               "kind": {
                 "ClassConst": {
-                  "name": "B",
+                  "name": {
+                    "name": "B",
+                    "span": {
+                      "start": 54,
+                      "end": 55
+                    }
+                  },
                   "visibility": "Protected",
                   "is_final": false,
                   "value": {
@@ -64,7 +82,13 @@
             {
               "kind": {
                 "ClassConst": {
-                  "name": "C",
+                  "name": {
+                    "name": "C",
+                    "span": {
+                      "start": 75,
+                      "end": 76
+                    }
+                  },
                   "visibility": "Private",
                   "is_final": false,
                   "value": {

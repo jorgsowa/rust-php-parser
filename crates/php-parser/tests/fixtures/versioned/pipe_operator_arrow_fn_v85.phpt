@@ -62,7 +62,13 @@ min_php=8.5
                               "by_ref": false,
                               "params": [
                                 {
-                                  "name": "s",
+                                  "name": {
+                                    "name": "s",
+                                    "span": {
+                                      "start": 41,
+                                      "end": 43
+                                    }
+                                  },
                                   "type_hint": null,
                                   "default": null,
                                   "by_ref": false,

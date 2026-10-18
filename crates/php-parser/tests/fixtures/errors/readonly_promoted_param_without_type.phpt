@@ -17,7 +17,13 @@ PHP Fatal error:  Readonly property Foo::$x must have type in Standard input cod
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -29,7 +35,13 @@ PHP Fatal error:  Readonly property Foo::$x must have type in Standard input cod
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 38,
+                      "end": 49
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -37,7 +49,13 @@ PHP Fatal error:  Readonly property Foo::$x must have type in Standard input cod
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "x",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 75,
+                          "end": 77
+                        }
+                      },
                       "type_hint": null,
                       "default": null,
                       "by_ref": false,

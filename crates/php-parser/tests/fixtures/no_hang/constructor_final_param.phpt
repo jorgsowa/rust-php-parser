@@ -8,7 +8,13 @@ min_php=8.5
     {
       "kind": {
         "Class": {
-          "name": "P",
+          "name": {
+            "name": "P",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -20,7 +26,13 @@ min_php=8.5
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 32,
+                      "end": 43
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -28,7 +40,13 @@ min_php=8.5
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "i",
+                      "name": {
+                        "name": "i",
+                        "span": {
+                          "start": 50,
+                          "end": 52
+                        }
+                      },
                       "type_hint": null,
                       "default": null,
                       "by_ref": false,

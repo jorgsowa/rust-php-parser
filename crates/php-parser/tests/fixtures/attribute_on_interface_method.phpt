@@ -6,13 +6,25 @@
     {
       "kind": {
         "Interface": {
-          "name": "I",
+          "name": {
+            "name": "I",
+            "span": {
+              "start": 16,
+              "end": 17
+            }
+          },
           "extends": [],
           "members": [
             {
               "kind": {
                 "Method": {
-                  "name": "foo",
+                  "name": {
+                    "name": "foo",
+                    "span": {
+                      "start": 44,
+                      "end": 47
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

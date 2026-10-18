@@ -8,7 +8,13 @@ min_php=8.3
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -20,7 +26,13 @@ min_php=8.3
             {
               "kind": {
                 "ClassConst": {
-                  "name": "X",
+                  "name": {
+                    "name": "X",
+                    "span": {
+                      "start": 26,
+                      "end": 27
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "type_hint": {
@@ -61,7 +73,13 @@ min_php=8.3
             {
               "kind": {
                 "ClassConst": {
-                  "name": "Y",
+                  "name": {
+                    "name": "Y",
+                    "span": {
+                      "start": 54,
+                      "end": 55
+                    }
+                  },
                   "visibility": "Private",
                   "is_final": false,
                   "type_hint": {
@@ -102,7 +120,13 @@ min_php=8.3
             {
               "kind": {
                 "ClassConst": {
-                  "name": "Z",
+                  "name": {
+                    "name": "Z",
+                    "span": {
+                      "start": 82,
+                      "end": 83
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "type_hint": {

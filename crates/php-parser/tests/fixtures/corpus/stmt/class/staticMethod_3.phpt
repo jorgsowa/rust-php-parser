@@ -10,7 +10,13 @@ PHP Fatal error:  Method A::__clone() cannot be static in Standard input code on
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -22,7 +28,13 @@ PHP Fatal error:  Method A::__clone() cannot be static in Standard input code on
             {
               "kind": {
                 "Method": {
-                  "name": "__clone",
+                  "name": {
+                    "name": "__clone",
+                    "span": {
+                      "start": 32,
+                      "end": 39
+                    }
+                  },
                   "visibility": null,
                   "is_static": true,
                   "is_abstract": false,

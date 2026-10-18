@@ -12,14 +12,26 @@ PHP Fatal error:  A class constant must not be called 'class'; it is reserved fo
     {
       "kind": {
         "Enum": {
-          "name": "Suit",
+          "name": {
+            "name": "Suit",
+            "span": {
+              "start": 11,
+              "end": 15
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "Case": {
-                  "name": "class",
+                  "name": {
+                    "name": "class",
+                    "span": {
+                      "start": 23,
+                      "end": 28
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }

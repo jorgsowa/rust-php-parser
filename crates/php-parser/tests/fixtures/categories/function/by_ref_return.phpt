@@ -6,7 +6,13 @@
     {
       "kind": {
         "Function": {
-          "name": "getRef",
+          "name": {
+            "name": "getRef",
+            "span": {
+              "start": 16,
+              "end": 22
+            }
+          },
           "params": [],
           "body": [
             {

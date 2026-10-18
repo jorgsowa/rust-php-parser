@@ -31,7 +31,13 @@
                         "kind": {
                           "StaticVar": [
                             {
-                              "name": "x",
+                              "name": {
+                                "name": "x",
+                                "span": {
+                                  "start": 33,
+                                  "end": 35
+                                }
+                              },
                               "default": {
                                 "kind": {
                                   "Int": 0

@@ -6,10 +6,22 @@
     {
       "kind": {
         "Function": {
-          "name": "f",
+          "name": {
+            "name": "f",
+            "span": {
+              "start": 15,
+              "end": 16
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 51,
+                  "end": 53
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Intersection": [

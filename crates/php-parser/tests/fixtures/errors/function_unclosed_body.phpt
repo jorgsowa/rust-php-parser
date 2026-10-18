@@ -10,7 +10,13 @@ PHP Parse error:  Unclosed '{' in Standard input code on line 1
     {
       "kind": {
         "Function": {
-          "name": "test",
+          "name": {
+            "name": "test",
+            "span": {
+              "start": 15,
+              "end": 19
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,

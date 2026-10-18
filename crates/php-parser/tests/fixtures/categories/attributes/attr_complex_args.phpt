@@ -6,7 +6,13 @@
     {
       "kind": {
         "Function": {
-          "name": "handler",
+          "name": {
+            "name": "handler",
+            "span": {
+              "start": 58,
+              "end": 65
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,

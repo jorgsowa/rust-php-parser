@@ -10,7 +10,13 @@ class Service {
     {
       "kind": {
         "Class": {
-          "name": "Service",
+          "name": {
+            "name": "Service",
+            "span": {
+              "start": 12,
+              "end": 19
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -65,7 +71,13 @@ class Service {
             {
               "kind": {
                 "Method": {
-                  "name": "run",
+                  "name": {
+                    "name": "run",
+                    "span": {
+                      "start": 85,
+                      "end": 88
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

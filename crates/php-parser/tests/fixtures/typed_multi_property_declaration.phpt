@@ -6,7 +6,13 @@
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -18,7 +24,13 @@
             {
               "kind": {
                 "Property": {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 49,
+                      "end": 51
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": "Private",
                   "is_static": false,
@@ -87,7 +99,13 @@
             {
               "kind": {
                 "Property": {
-                  "name": "b",
+                  "name": {
+                    "name": "b",
+                    "span": {
+                      "start": 57,
+                      "end": 59
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": "Private",
                   "is_static": false,

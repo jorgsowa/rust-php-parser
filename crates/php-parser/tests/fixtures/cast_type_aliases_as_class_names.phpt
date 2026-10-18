@@ -6,10 +6,22 @@
     {
       "kind": {
         "Function": {
-          "name": "f",
+          "name": {
+            "name": "f",
+            "span": {
+              "start": 15,
+              "end": 16
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 25,
+                  "end": 27
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -42,7 +54,13 @@
               }
             },
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 37,
+                  "end": 39
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Nullable": {
@@ -83,7 +101,13 @@
               }
             },
             {
-              "name": "c",
+              "name": {
+                "name": "c",
+                "span": {
+                  "start": 53,
+                  "end": 55
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [

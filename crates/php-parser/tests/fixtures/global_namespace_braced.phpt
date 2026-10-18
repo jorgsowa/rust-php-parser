@@ -15,7 +15,13 @@ namespace {
               {
                 "kind": {
                   "Function": {
-                    "name": "globalFunc",
+                    "name": {
+                      "name": "globalFunc",
+                      "span": {
+                        "start": 31,
+                        "end": 41
+                      }
+                    },
                     "params": [],
                     "body": [],
                     "return_type": null,

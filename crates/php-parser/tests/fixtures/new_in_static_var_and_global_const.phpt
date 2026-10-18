@@ -16,7 +16,13 @@ function f() {
       "kind": {
         "Const": [
           {
-            "name": "C",
+            "name": {
+              "name": "C",
+              "span": {
+                "start": 12,
+                "end": 13
+              }
+            },
             "value": {
               "kind": {
                 "New": {
@@ -63,7 +69,13 @@ function f() {
       "kind": {
         "Const": [
           {
-            "name": "D",
+            "name": {
+              "name": "D",
+              "span": {
+                "start": 33,
+                "end": 34
+              }
+            },
             "value": {
               "kind": {
                 "Int": 1
@@ -80,7 +92,13 @@ function f() {
             }
           },
           {
-            "name": "E",
+            "name": {
+              "name": "E",
+              "span": {
+                "start": 40,
+                "end": 41
+              }
+            },
             "value": {
               "kind": {
                 "New": {
@@ -163,14 +181,26 @@ function f() {
     {
       "kind": {
         "Function": {
-          "name": "f",
+          "name": {
+            "name": "f",
+            "span": {
+              "start": 69,
+              "end": 70
+            }
+          },
           "params": [],
           "body": [
             {
               "kind": {
                 "StaticVar": [
                   {
-                    "name": "a",
+                    "name": {
+                      "name": "a",
+                      "span": {
+                        "start": 86,
+                        "end": 88
+                      }
+                    },
                     "default": {
                       "kind": {
                         "New": {
@@ -216,7 +246,13 @@ function f() {
               "kind": {
                 "StaticVar": [
                   {
-                    "name": "b",
+                    "name": {
+                      "name": "b",
+                      "span": {
+                        "start": 115,
+                        "end": 117
+                      }
+                    },
                     "default": {
                       "kind": {
                         "New": {
@@ -252,7 +288,13 @@ function f() {
                     }
                   },
                   {
-                    "name": "c",
+                    "name": {
+                      "name": "c",
+                      "span": {
+                        "start": 133,
+                        "end": 135
+                      }
+                    },
                     "default": {
                       "kind": {
                         "New": {

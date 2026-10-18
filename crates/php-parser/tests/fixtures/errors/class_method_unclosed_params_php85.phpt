@@ -16,7 +16,13 @@ PHP Parse error:  syntax error, unexpected token "return", expecting identifier 
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -28,7 +34,13 @@ PHP Parse error:  syntax error, unexpected token "return", expecting identifier 
             {
               "kind": {
                 "Method": {
-                  "name": "bar",
+                  "name": {
+                    "name": "bar",
+                    "span": {
+                      "start": 38,
+                      "end": 41
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -36,7 +48,13 @@ PHP Parse error:  syntax error, unexpected token "return", expecting identifier 
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "x",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 46,
+                          "end": 48
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -69,7 +87,13 @@ PHP Parse error:  syntax error, unexpected token "return", expecting identifier 
                       }
                     },
                     {
-                      "name": "y",
+                      "name": {
+                        "name": "y",
+                        "span": {
+                          "start": 57,
+                          "end": 59
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -133,7 +157,13 @@ PHP Parse error:  syntax error, unexpected token "return", expecting identifier 
             {
               "kind": {
                 "Method": {
-                  "name": "baz",
+                  "name": {
+                    "name": "baz",
+                    "span": {
+                      "start": 94,
+                      "end": 97
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

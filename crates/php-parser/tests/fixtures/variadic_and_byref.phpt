@@ -12,10 +12,22 @@ function byref(&$ref): void {
     {
       "kind": {
         "Function": {
-          "name": "variadic",
+          "name": {
+            "name": "variadic",
+            "span": {
+              "start": 15,
+              "end": 23
+            }
+          },
           "params": [
             {
-              "name": "args",
+              "name": {
+                "name": "args",
+                "span": {
+                  "start": 31,
+                  "end": 36
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -97,10 +109,22 @@ function byref(&$ref): void {
     {
       "kind": {
         "Function": {
-          "name": "byref",
+          "name": {
+            "name": "byref",
+            "span": {
+              "start": 70,
+              "end": 75
+            }
+          },
           "params": [
             {
-              "name": "ref",
+              "name": {
+                "name": "ref",
+                "span": {
+                  "start": 77,
+                  "end": 81
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": true,

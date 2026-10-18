@@ -13,7 +13,13 @@ PHP Fatal error:  Readonly property Foo::$bar must have type in Standard input c
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -25,7 +31,13 @@ PHP Fatal error:  Readonly property Foo::$bar must have type in Standard input c
             {
               "kind": {
                 "Property": {
-                  "name": "bar",
+                  "name": {
+                    "name": "bar",
+                    "span": {
+                      "start": 38,
+                      "end": 42
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

@@ -18,7 +18,13 @@ enum Status
     {
       "kind": {
         "Enum": {
-          "name": "Status",
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 12,
+              "end": 18
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
@@ -56,7 +62,13 @@ enum Status
             {
               "kind": {
                 "Case": {
-                  "name": "Active",
+                  "name": {
+                    "name": "Active",
+                    "span": {
+                      "start": 103,
+                      "end": 109
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }

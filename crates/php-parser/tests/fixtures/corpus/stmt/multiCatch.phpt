@@ -56,7 +56,13 @@ try {
                   }
                 }
               ],
-              "var": "e1",
+              "var": {
+                "name": "e1",
+                "span": {
+                  "start": 33,
+                  "end": 36
+                }
+              },
               "body": [
                 {
                   "kind": {
@@ -105,7 +111,13 @@ try {
                   }
                 }
               ],
-              "var": "e2",
+              "var": {
+                "name": "e2",
+                "span": {
+                  "start": 64,
+                  "end": 67
+                }
+              },
               "body": [
                 {
                   "kind": {

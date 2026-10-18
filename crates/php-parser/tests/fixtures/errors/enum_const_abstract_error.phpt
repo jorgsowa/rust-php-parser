@@ -12,14 +12,26 @@ PHP Fatal error:  Cannot use the abstract modifier on a class constant in Standa
     {
       "kind": {
         "Enum": {
-          "name": "Status",
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 11,
+              "end": 17
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "ClassConst": {
-                  "name": "X",
+                  "name": {
+                    "name": "X",
+                    "span": {
+                      "start": 35,
+                      "end": 36
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {

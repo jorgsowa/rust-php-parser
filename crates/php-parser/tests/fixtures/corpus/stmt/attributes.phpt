@@ -35,7 +35,13 @@ $b = #[A13] static fn() => 0;
     {
       "kind": {
         "Function": {
-          "name": "a",
+          "name": {
+            "name": "a",
+            "span": {
+              "start": 64,
+              "end": 65
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,
@@ -167,7 +173,13 @@ $b = #[A13] static fn() => 0;
     {
       "kind": {
         "Class": {
-          "name": "C",
+          "name": {
+            "name": "C",
+            "span": {
+              "start": 85,
+              "end": 86
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -179,7 +191,13 @@ $b = #[A13] static fn() => 0;
             {
               "kind": {
                 "Method": {
-                  "name": "m",
+                  "name": {
+                    "name": "m",
+                    "span": {
+                      "start": 119,
+                      "end": 120
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -187,7 +205,13 @@ $b = #[A13] static fn() => 0;
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "param",
+                      "name": {
+                        "name": "param",
+                        "span": {
+                          "start": 136,
+                          "end": 142
+                        }
+                      },
                       "type_hint": null,
                       "default": null,
                       "by_ref": false,
@@ -252,7 +276,13 @@ $b = #[A13] static fn() => 0;
             {
               "kind": {
                 "Property": {
-                  "name": "prop",
+                  "name": {
+                    "name": "prop",
+                    "span": {
+                      "start": 175,
+                      "end": 180
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -315,7 +345,13 @@ $b = #[A13] static fn() => 0;
     {
       "kind": {
         "Interface": {
-          "name": "I",
+          "name": {
+            "name": "I",
+            "span": {
+              "start": 201,
+              "end": 202
+            }
+          },
           "extends": [],
           "members": [],
           "attributes": [
@@ -347,7 +383,13 @@ $b = #[A13] static fn() => 0;
     {
       "kind": {
         "Trait": {
-          "name": "T",
+          "name": {
+            "name": "T",
+            "span": {
+              "start": 218,
+              "end": 219
+            }
+          },
           "members": [],
           "attributes": [
             {

@@ -15,10 +15,22 @@ echo $result;
     {
       "kind": {
         "Function": {
-          "name": "fib",
+          "name": {
+            "name": "fib",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [
             {
-              "name": "n",
+              "name": {
+                "name": "n",
+                "span": {
+                  "start": 19,
+                  "end": 21
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,

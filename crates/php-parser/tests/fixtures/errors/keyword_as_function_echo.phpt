@@ -10,7 +10,13 @@ PHP Parse error:  syntax error, unexpected token "echo", expecting "(" in Standa
     {
       "kind": {
         "Function": {
-          "name": "echo",
+          "name": {
+            "name": "echo",
+            "span": {
+              "start": 15,
+              "end": 19
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,

@@ -77,7 +77,13 @@ finally { }
                   }
                 }
               ],
-              "var": "b",
+              "var": {
+                "name": "b",
+                "span": {
+                  "start": 37,
+                  "end": 39
+                }
+              },
               "body": [
                 {
                   "kind": {
@@ -135,7 +141,13 @@ finally { }
                   }
                 }
               ],
-              "var": "c",
+              "var": {
+                "name": "c",
+                "span": {
+                  "start": 70,
+                  "end": 72
+                }
+              },
               "body": [
                 {
                   "kind": {
@@ -245,7 +257,13 @@ finally { }
                   }
                 }
               ],
-              "var": "b",
+              "var": {
+                "name": "b",
+                "span": {
+                  "start": 155,
+                  "end": 157
+                }
+              },
               "body": [],
               "span": {
                 "start": 152,

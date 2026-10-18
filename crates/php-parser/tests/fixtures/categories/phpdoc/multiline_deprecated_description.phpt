@@ -11,7 +11,13 @@ function oldMethod(): void {}
     {
       "kind": {
         "Function": {
-          "name": "oldMethod",
+          "name": {
+            "name": "oldMethod",
+            "span": {
+              "start": 94,
+              "end": 103
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {

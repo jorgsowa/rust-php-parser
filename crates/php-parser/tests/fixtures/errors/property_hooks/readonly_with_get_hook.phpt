@@ -17,7 +17,13 @@ PHP Fatal error:  Hooked properties cannot be readonly in Standard input code on
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -29,7 +35,13 @@ PHP Fatal error:  Hooked properties cannot be readonly in Standard input code on
             {
               "kind": {
                 "Property": {
-                  "name": "bar",
+                  "name": {
+                    "name": "bar",
+                    "span": {
+                      "start": 45,
+                      "end": 49
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

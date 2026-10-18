@@ -74,7 +74,13 @@ class TaskService
     {
       "kind": {
         "Enum": {
-          "name": "Priority",
+          "name": {
+            "name": "Priority",
+            "span": {
+              "start": 33,
+              "end": 41
+            }
+          },
           "scalar_type": {
             "parts": [
               "int"
@@ -90,7 +96,13 @@ class TaskService
             {
               "kind": {
                 "Case": {
-                  "name": "Low",
+                  "name": {
+                    "name": "Low",
+                    "span": {
+                      "start": 58,
+                      "end": 61
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 1
@@ -111,7 +123,13 @@ class TaskService
             {
               "kind": {
                 "Case": {
-                  "name": "Medium",
+                  "name": {
+                    "name": "Medium",
+                    "span": {
+                      "start": 76,
+                      "end": 82
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 2
@@ -132,7 +150,13 @@ class TaskService
             {
               "kind": {
                 "Case": {
-                  "name": "High",
+                  "name": {
+                    "name": "High",
+                    "span": {
+                      "start": 97,
+                      "end": 101
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 3
@@ -153,7 +177,13 @@ class TaskService
             {
               "kind": {
                 "Case": {
-                  "name": "Critical",
+                  "name": {
+                    "name": "Critical",
+                    "span": {
+                      "start": 116,
+                      "end": 124
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 4
@@ -174,7 +204,13 @@ class TaskService
             {
               "kind": {
                 "Method": {
-                  "name": "label",
+                  "name": {
+                    "name": "label",
+                    "span": {
+                      "start": 151,
+                      "end": 156
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -457,7 +493,13 @@ class TaskService
             {
               "kind": {
                 "Method": {
-                  "name": "fromLabel",
+                  "name": {
+                    "name": "fromLabel",
+                    "span": {
+                      "start": 447,
+                      "end": 456
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": true,
                   "is_abstract": false,
@@ -465,7 +507,13 @@ class TaskService
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "label",
+                      "name": {
+                        "name": "label",
+                        "span": {
+                          "start": 464,
+                          "end": 470
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -521,7 +569,13 @@ class TaskService
                       "kind": {
                         "StaticVar": [
                           {
-                            "name": "map",
+                            "name": {
+                              "name": "map",
+                              "span": {
+                                "start": 499,
+                                "end": 503
+                              }
+                            },
                             "default": {
                               "kind": "Null",
                               "span": {
@@ -607,7 +661,13 @@ class TaskService
     {
       "kind": {
         "Class": {
-          "name": "TaskService",
+          "name": {
+            "name": "TaskService",
+            "span": {
+              "start": 560,
+              "end": 571
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -619,7 +679,13 @@ class TaskService
             {
               "kind": {
                 "Property": {
-                  "name": "counter",
+                  "name": {
+                    "name": "counter",
+                    "span": {
+                      "start": 597,
+                      "end": 605
+                    }
+                  },
                   "visibility": "Private",
                   "set_visibility": null,
                   "is_static": true,
@@ -662,7 +728,13 @@ class TaskService
             {
               "kind": {
                 "Method": {
-                  "name": "create",
+                  "name": {
+                    "name": "create",
+                    "span": {
+                      "start": 639,
+                      "end": 645
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": true,
                   "is_abstract": false,
@@ -670,7 +742,13 @@ class TaskService
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "title",
+                      "name": {
+                        "name": "title",
+                        "span": {
+                          "start": 653,
+                          "end": 659
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -703,7 +781,13 @@ class TaskService
                       }
                     },
                     {
-                      "name": "priority",
+                      "name": {
+                        "name": "priority",
+                        "span": {
+                          "start": 670,
+                          "end": 679
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -898,7 +982,13 @@ class TaskService
                                     "by_ref": false,
                                     "params": [
                                       {
-                                        "name": "t",
+                                        "name": {
+                                          "name": "t",
+                                          "span": {
+                                            "start": 788,
+                                            "end": 790
+                                          }
+                                        },
                                         "type_hint": {
                                           "kind": {
                                             "Named": {
@@ -931,7 +1021,13 @@ class TaskService
                                         }
                                       },
                                       {
-                                        "name": "i",
+                                        "name": {
+                                          "name": "i",
+                                          "span": {
+                                            "start": 796,
+                                            "end": 798
+                                          }
+                                        },
                                         "type_hint": {
                                           "kind": {
                                             "Named": {

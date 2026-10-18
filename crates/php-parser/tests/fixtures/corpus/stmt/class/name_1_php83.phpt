@@ -12,7 +12,13 @@ PHP Fatal error:  Cannot use 'self' as class name as it is reserved in Standard 
     {
       "kind": {
         "Class": {
-          "name": "self",
+          "name": {
+            "name": "self",
+            "span": {
+              "start": 12,
+              "end": 16
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

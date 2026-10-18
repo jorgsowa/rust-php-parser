@@ -15,7 +15,13 @@ PHP Fatal error:  Cannot use the static modifier on a class constant in Standard
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -27,7 +33,13 @@ PHP Fatal error:  Cannot use the static modifier on a class constant in Standard
             {
               "kind": {
                 "ClassConst": {
-                  "name": "X",
+                  "name": {
+                    "name": "X",
+                    "span": {
+                      "start": 33,
+                      "end": 34
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {

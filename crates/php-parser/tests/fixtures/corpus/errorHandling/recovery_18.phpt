@@ -129,7 +129,13 @@ PHP Parse error:  syntax error, unexpected token ";", expecting identifier or fu
       "kind": {
         "Const": [
           {
-            "name": "A",
+            "name": {
+              "name": "A",
+              "span": {
+                "start": 57,
+                "end": 58
+              }
+            },
             "value": {
               "kind": {
                 "Int": 42
@@ -155,7 +161,13 @@ PHP Parse error:  syntax error, unexpected token ";", expecting identifier or fu
     {
       "kind": {
         "Class": {
-          "name": "X",
+          "name": {
+            "name": "X",
+            "span": {
+              "start": 74,
+              "end": 75
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -267,7 +279,13 @@ PHP Parse error:  syntax error, unexpected token ";", expecting identifier or fu
             {
               "kind": {
                 "ClassConst": {
-                  "name": "A",
+                  "name": {
+                    "name": "A",
+                    "span": {
+                      "start": 162,
+                      "end": 163
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -290,7 +308,13 @@ PHP Parse error:  syntax error, unexpected token ";", expecting identifier or fu
             {
               "kind": {
                 "Property": {
-                  "name": "x",
+                  "name": {
+                    "name": "x",
+                    "span": {
+                      "start": 183,
+                      "end": 185
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -317,7 +341,13 @@ PHP Parse error:  syntax error, unexpected token ";", expecting identifier or fu
     {
       "kind": {
         "Interface": {
-          "name": "I",
+          "name": {
+            "name": "I",
+            "span": {
+              "start": 201,
+              "end": 202
+            }
+          },
           "extends": [
             {
               "parts": [
@@ -433,7 +463,13 @@ PHP Parse error:  syntax error, unexpected token ";", expecting identifier or fu
       "kind": {
         "StaticVar": [
           {
-            "name": "a",
+            "name": {
+              "name": "a",
+              "span": {
+                "start": 283,
+                "end": 285
+              }
+            },
             "default": null,
             "span": {
               "start": 283,

@@ -17,13 +17,25 @@ interface Repository {
     {
       "kind": {
         "Interface": {
-          "name": "Repository",
+          "name": {
+            "name": "Repository",
+            "span": {
+              "start": 64,
+              "end": 74
+            }
+          },
           "extends": [],
           "members": [
             {
               "kind": {
                 "Method": {
-                  "name": "findById",
+                  "name": {
+                    "name": "findById",
+                    "span": {
+                      "start": 131,
+                      "end": 139
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -31,7 +43,13 @@ interface Repository {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "id",
+                      "name": {
+                        "name": "id",
+                        "span": {
+                          "start": 144,
+                          "end": 147
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

@@ -15,7 +15,13 @@ PHP Fatal error:  Enum backing type must be int or string, bool given in Standar
     {
       "kind": {
         "Enum": {
-          "name": "Suit",
+          "name": {
+            "name": "Suit",
+            "span": {
+              "start": 11,
+              "end": 15
+            }
+          },
           "scalar_type": {
             "parts": [
               "bool"
@@ -31,7 +37,13 @@ PHP Fatal error:  Enum backing type must be int or string, bool given in Standar
             {
               "kind": {
                 "Case": {
-                  "name": "Hearts",
+                  "name": {
+                    "name": "Hearts",
+                    "span": {
+                      "start": 33,
+                      "end": 39
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Bool": true

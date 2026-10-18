@@ -11,7 +11,13 @@ max_php=8.3
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 30,
+              "end": 33
+            }
+          },
           "modifiers": {
             "is_abstract": true,
             "is_final": false,

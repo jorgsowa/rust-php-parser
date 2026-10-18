@@ -22,7 +22,13 @@ enum Status: int {
     {
       "kind": {
         "Enum": {
-          "name": "Status",
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 69,
+              "end": 75
+            }
+          },
           "scalar_type": {
             "parts": [
               "int"
@@ -38,7 +44,13 @@ enum Status: int {
             {
               "kind": {
                 "Case": {
-                  "name": "OK",
+                  "name": {
+                    "name": "OK",
+                    "span": {
+                      "start": 132,
+                      "end": 134
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 200
@@ -67,7 +79,13 @@ enum Status: int {
             {
               "kind": {
                 "Case": {
-                  "name": "NOT_FOUND",
+                  "name": {
+                    "name": "NOT_FOUND",
+                    "span": {
+                      "start": 188,
+                      "end": 197
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 404

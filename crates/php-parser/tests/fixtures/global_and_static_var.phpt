@@ -12,14 +12,26 @@ function counter() {
     {
       "kind": {
         "Function": {
-          "name": "counter",
+          "name": {
+            "name": "counter",
+            "span": {
+              "start": 15,
+              "end": 22
+            }
+          },
           "params": [],
           "body": [
             {
               "kind": {
                 "StaticVar": [
                   {
-                    "name": "count",
+                    "name": {
+                      "name": "count",
+                      "span": {
+                        "start": 38,
+                        "end": 44
+                      }
+                    },
                     "default": {
                       "kind": {
                         "Int": 0

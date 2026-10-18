@@ -12,7 +12,13 @@ PHP Fatal error:  Cannot use the final modifier on an abstract method in Standar
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -24,7 +30,13 @@ PHP Fatal error:  Cannot use the final modifier on an abstract method in Standar
             {
               "kind": {
                 "Method": {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 40,
+                      "end": 41
+                    }
+                  },
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": true,

@@ -321,15 +321,22 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     }
 
     /// Like [`variable_name`] but returns an [`Ident`] — empty/zero-length
-    /// inputs yield [`Ident::ERROR`].
+    /// inputs yield [`Ident::error`].
     #[inline]
     pub fn variable_ident(&self, token: Token) -> Ident<'src> {
         let s = self.variable_name(token);
         if s.is_empty() {
-            Ident::ERROR
+            Ident::error(token.span)
         } else {
-            Ident::name(s)
+            Ident::new(s, token.span)
         }
+    }
+
+    /// Zero-width error [`Ident`] at the current token, for a missing name.
+    #[inline]
+    pub fn missing_ident(&self) -> Ident<'src> {
+        let at = self.current.span.start;
+        Ident::error(Span::new(at, at))
     }
 
     /// Check if the current token matches the given kind.
@@ -1830,6 +1837,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 let parts = item.name.parts_slice();
                 let effective_alias = item
                     .alias
+                    .and_then(|a| a.as_str())
                     .unwrap_or_else(|| parts.last().copied().unwrap_or(""));
                 // Warn only if it's a non-compound name and we're in global scope.
                 // Global scope = namespace is None (passed from top-level call).
@@ -1873,6 +1881,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 let parts = item.name.parts_slice();
                 let effective_alias = item
                     .alias
+                    .and_then(|a| a.as_str())
                     .unwrap_or_else(|| parts.last().copied().unwrap_or(""));
                 if !effective_alias.is_empty() {
                     seen.insert((kind_tag, effective_alias));

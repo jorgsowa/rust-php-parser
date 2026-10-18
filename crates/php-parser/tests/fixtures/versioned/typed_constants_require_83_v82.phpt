@@ -13,7 +13,13 @@ PHP Parse error:  syntax error, unexpected identifier "NAME", expecting "=" in S
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -25,7 +31,13 @@ PHP Parse error:  syntax error, unexpected identifier "NAME", expecting "=" in S
             {
               "kind": {
                 "ClassConst": {
-                  "name": "NAME",
+                  "name": {
+                    "name": "NAME",
+                    "span": {
+                      "start": 38,
+                      "end": 42
+                    }
+                  },
                   "visibility": "Public",
                   "is_final": false,
                   "type_hint": {

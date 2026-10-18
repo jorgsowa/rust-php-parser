@@ -15,10 +15,22 @@ PHP Fatal error:  Duplicate type Foo\Bar is redundant in Standard input code on 
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 37,
+                  "end": 39
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [

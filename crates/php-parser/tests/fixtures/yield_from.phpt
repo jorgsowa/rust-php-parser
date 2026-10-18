@@ -10,7 +10,13 @@ function combined() {
     {
       "kind": {
         "Function": {
-          "name": "combined",
+          "name": {
+            "name": "combined",
+            "span": {
+              "start": 15,
+              "end": 23
+            }
+          },
           "params": [],
           "body": [
             {

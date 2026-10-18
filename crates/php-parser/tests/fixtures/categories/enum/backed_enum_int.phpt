@@ -8,7 +8,13 @@ min_php=8.1
     {
       "kind": {
         "Enum": {
-          "name": "Status",
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 11,
+              "end": 17
+            }
+          },
           "scalar_type": {
             "parts": [
               "int"
@@ -24,7 +30,13 @@ min_php=8.1
             {
               "kind": {
                 "Case": {
-                  "name": "Active",
+                  "name": {
+                    "name": "Active",
+                    "span": {
+                      "start": 30,
+                      "end": 36
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 1
@@ -45,7 +57,13 @@ min_php=8.1
             {
               "kind": {
                 "Case": {
-                  "name": "Inactive",
+                  "name": {
+                    "name": "Inactive",
+                    "span": {
+                      "start": 47,
+                      "end": 55
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 0

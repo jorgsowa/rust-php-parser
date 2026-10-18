@@ -8,14 +8,26 @@ min_php=8.1
     {
       "kind": {
         "Enum": {
-          "name": "Color",
+          "name": {
+            "name": "Color",
+            "span": {
+              "start": 11,
+              "end": 16
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "Case": {
-                  "name": "Red",
+                  "name": {
+                    "name": "Red",
+                    "span": {
+                      "start": 24,
+                      "end": 27
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -28,7 +40,13 @@ min_php=8.1
             {
               "kind": {
                 "Method": {
-                  "name": "default",
+                  "name": {
+                    "name": "default",
+                    "span": {
+                      "start": 52,
+                      "end": 59
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": true,
                   "is_abstract": false,

@@ -20,7 +20,13 @@ class Money {
     {
       "kind": {
         "Class": {
-          "name": "Money",
+          "name": {
+            "name": "Money",
+            "span": {
+              "start": 40,
+              "end": 45
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -32,7 +38,13 @@ class Money {
             {
               "kind": {
                 "Method": {
-                  "name": "of",
+                  "name": {
+                    "name": "of",
+                    "span": {
+                      "start": 165,
+                      "end": 167
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": true,
                   "is_abstract": false,
@@ -40,7 +52,13 @@ class Money {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "amount",
+                      "name": {
+                        "name": "amount",
+                        "span": {
+                          "start": 172,
+                          "end": 179
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -111,7 +129,13 @@ class Money {
             {
               "kind": {
                 "Property": {
-                  "name": "value",
+                  "name": {
+                    "name": "value",
+                    "span": {
+                      "start": 233,
+                      "end": 239
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

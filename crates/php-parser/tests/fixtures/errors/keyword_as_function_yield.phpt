@@ -10,7 +10,13 @@ PHP Parse error:  syntax error, unexpected token "yield", expecting "(" in Stand
     {
       "kind": {
         "Function": {
-          "name": "yield",
+          "name": {
+            "name": "yield",
+            "span": {
+              "start": 15,
+              "end": 20
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,

@@ -25,7 +25,13 @@
                     "by_ref": false,
                     "params": [
                       {
-                        "name": "s",
+                        "name": {
+                          "name": "s",
+                          "span": {
+                            "start": 23,
+                            "end": 25
+                          }
+                        },
                         "type_hint": {
                           "kind": {
                             "Nullable": {

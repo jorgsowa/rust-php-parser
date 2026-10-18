@@ -14,7 +14,13 @@ class Foo {
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -26,7 +32,13 @@ class Foo {
             {
               "kind": {
                 "Property": {
-                  "name": "prop",
+                  "name": {
+                    "name": "prop",
+                    "span": {
+                      "start": 46,
+                      "end": 51
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": "Private",
                   "is_static": false,
@@ -169,7 +181,13 @@ class Foo {
                       "by_ref": false,
                       "params": [
                         {
-                          "name": "v",
+                          "name": {
+                            "name": "v",
+                            "span": {
+                              "start": 106,
+                              "end": 108
+                            }
+                          },
                           "type_hint": {
                             "kind": {
                               "Named": {

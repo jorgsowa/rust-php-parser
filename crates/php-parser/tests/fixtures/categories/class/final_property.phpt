@@ -13,7 +13,13 @@ class C {
     {
       "kind": {
         "Class": {
-          "name": "C",
+          "name": {
+            "name": "C",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -25,7 +31,13 @@ class C {
             {
               "kind": {
                 "Property": {
-                  "name": "x",
+                  "name": {
+                    "name": "x",
+                    "span": {
+                      "start": 37,
+                      "end": 39
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -69,7 +81,13 @@ class C {
             {
               "kind": {
                 "Property": {
-                  "name": "y",
+                  "name": {
+                    "name": "y",
+                    "span": {
+                      "start": 72,
+                      "end": 74
+                    }
+                  },
                   "visibility": "Protected",
                   "set_visibility": null,
                   "is_static": false,
@@ -113,7 +131,13 @@ class C {
             {
               "kind": {
                 "Property": {
-                  "name": "z",
+                  "name": {
+                    "name": "z",
+                    "span": {
+                      "start": 105,
+                      "end": 107
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

@@ -18,7 +18,13 @@ class Base
     {
       "kind": {
         "Class": {
-          "name": "Base",
+          "name": {
+            "name": "Base",
+            "span": {
+              "start": 13,
+              "end": 17
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -61,7 +67,13 @@ class Base
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 110,
+                      "end": 121
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

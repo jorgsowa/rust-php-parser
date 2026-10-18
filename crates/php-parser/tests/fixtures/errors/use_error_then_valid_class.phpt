@@ -38,7 +38,13 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 18,
+              "end": 21
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

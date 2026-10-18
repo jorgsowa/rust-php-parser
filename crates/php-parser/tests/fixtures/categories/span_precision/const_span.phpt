@@ -9,7 +9,13 @@ const A = 1, B = 2;
       "kind": {
         "Const": [
           {
-            "name": "FOO",
+            "name": {
+              "name": "FOO",
+              "span": {
+                "start": 12,
+                "end": 15
+              }
+            },
             "value": {
               "kind": {
                 "Int": 1
@@ -36,7 +42,13 @@ const A = 1, B = 2;
       "kind": {
         "Const": [
           {
-            "name": "A",
+            "name": {
+              "name": "A",
+              "span": {
+                "start": 27,
+                "end": 28
+              }
+            },
             "value": {
               "kind": {
                 "Int": 1
@@ -53,7 +65,13 @@ const A = 1, B = 2;
             }
           },
           {
-            "name": "B",
+            "name": {
+              "name": "B",
+              "span": {
+                "start": 34,
+                "end": 35
+              }
+            },
             "value": {
               "kind": {
                 "Int": 2

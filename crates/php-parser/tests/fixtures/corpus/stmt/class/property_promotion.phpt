@@ -20,7 +20,13 @@ class Point {
     {
       "kind": {
         "Class": {
-          "name": "Point",
+          "name": {
+            "name": "Point",
+            "span": {
+              "start": 13,
+              "end": 18
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -32,7 +38,13 @@ class Point {
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 41,
+                      "end": 52
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -40,7 +52,13 @@ class Point {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "x",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 75,
+                          "end": 77
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -81,7 +99,13 @@ class Point {
                       }
                     },
                     {
-                      "name": "y",
+                      "name": {
+                        "name": "y",
+                        "span": {
+                          "start": 109,
+                          "end": 111
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -122,7 +146,13 @@ class Point {
                       }
                     },
                     {
-                      "name": "z",
+                      "name": {
+                        "name": "z",
+                        "span": {
+                          "start": 141,
+                          "end": 143
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -163,7 +193,13 @@ class Point {
                       }
                     },
                     {
-                      "name": "a",
+                      "name": {
+                        "name": "a",
+                        "span": {
+                          "start": 183,
+                          "end": 185
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -204,7 +240,13 @@ class Point {
                       }
                     },
                     {
-                      "name": "h",
+                      "name": {
+                        "name": "h",
+                        "span": {
+                          "start": 206,
+                          "end": 208
+                        }
+                      },
                       "type_hint": null,
                       "default": null,
                       "by_ref": false,
@@ -244,7 +286,13 @@ class Point {
                       }
                     },
                     {
-                      "name": "g",
+                      "name": {
+                        "name": "g",
+                        "span": {
+                          "start": 244,
+                          "end": 246
+                        }
+                      },
                       "type_hint": null,
                       "default": {
                         "kind": {
@@ -292,7 +340,13 @@ class Point {
                       }
                     },
                     {
-                      "name": "i",
+                      "name": {
+                        "name": "i",
+                        "span": {
+                          "start": 280,
+                          "end": 282
+                        }
+                      },
                       "type_hint": null,
                       "default": null,
                       "by_ref": false,

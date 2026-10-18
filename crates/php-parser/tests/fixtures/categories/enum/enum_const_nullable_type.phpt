@@ -8,14 +8,26 @@ min_php=8.3
     {
       "kind": {
         "Enum": {
-          "name": "Status",
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 11,
+              "end": 17
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "ClassConst": {
-                  "name": "MAYBE",
+                  "name": {
+                    "name": "MAYBE",
+                    "span": {
+                      "start": 34,
+                      "end": 39
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "type_hint": {
@@ -62,7 +74,13 @@ min_php=8.3
             {
               "kind": {
                 "ClassConst": {
-                  "name": "COUNT",
+                  "name": {
+                    "name": "COUNT",
+                    "span": {
+                      "start": 59,
+                      "end": 64
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "type_hint": {

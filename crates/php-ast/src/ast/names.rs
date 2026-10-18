@@ -11,66 +11,70 @@ use super::ArenaVec;
 /// enum case, etc. Distinct from [`Name`], which represents possibly-qualified
 /// names.
 ///
-/// Memory layout is identical to `&'src str` (16 bytes); `Option<Ident>` is
-/// also 16 bytes via the standard pointer niche. The "error" state — produced
-/// during error recovery when no identifier was found in the source — is
-/// represented by an empty string slice, which cannot occur for a real PHP
-/// identifier (the lexer rejects empty matches).
+/// The "error" state — produced during error recovery when no identifier was
+/// found in the source — is represented by an empty name, which cannot occur
+/// for a real PHP identifier (the lexer rejects empty matches).
 ///
-/// Use [`Ident::name`] / [`Ident::ERROR`] to construct, [`Ident::as_str`] to
+/// Use [`Ident::new`] / [`Ident::error`] to construct, [`Ident::as_str`] to
 /// extract a real name, [`Ident::is_error`] to test for the error state.
-/// Serialises as a JSON string for real names and `null` for the error state.
-#[repr(transparent)]
+/// Serialises as `{"name": .., "span": ..}` for real names and `null` for the
+/// error state.
 #[derive(Clone, Copy)]
-pub struct Ident<'src>(&'src str);
+pub struct Ident<'src> {
+    name: &'src str,
+    /// Source range of the identifier token; includes the `$` of a variable name.
+    pub span: Span,
+}
 
 impl<'src> Ident<'src> {
-    /// Sentinel for "no identifier was parsed" — same memory layout as a real
-    /// `Ident`, distinguished by the empty-string interior.
-    pub const ERROR: Self = Self("");
-
-    /// Construct an identifier from a non-empty source slice.
-    /// Empty input is rejected in debug builds — use [`Ident::ERROR`] instead.
+    /// Construct an identifier from a non-empty name.
+    /// Empty input is rejected in debug builds — use [`Ident::error`] instead.
     #[inline]
-    pub fn name(s: &'src str) -> Self {
-        debug_assert!(!s.is_empty(), "Ident::name() called with empty string");
-        Self(s)
+    pub fn new(name: &'src str, span: Span) -> Self {
+        debug_assert!(!name.is_empty(), "Ident::new() called with empty name");
+        Self { name, span }
+    }
+
+    /// Placeholder for "no identifier was parsed" at `span`.
+    #[inline]
+    pub const fn error(span: Span) -> Self {
+        Self { name: "", span }
     }
 
     /// Returns `Some(s)` for a real identifier, `None` for the error state.
     #[inline]
     pub fn as_str(&self) -> Option<&'src str> {
-        if self.0.is_empty() {
+        if self.name.is_empty() {
             None
         } else {
-            Some(self.0)
+            Some(self.name)
         }
     }
 
     /// Returns `true` if this identifier was synthesised during error recovery.
     #[inline]
     pub fn is_error(&self) -> bool {
-        self.0.is_empty()
+        self.name.is_empty()
     }
 
     /// Returns the inner string, or `"<error>"` for the error state.
     /// Useful when constructing diagnostic messages.
     #[inline]
     pub fn or_error(&self) -> &'src str {
-        if self.0.is_empty() {
+        if self.name.is_empty() {
             "<error>"
         } else {
-            self.0
+            self.name
         }
     }
 }
 
 impl<'src> std::fmt::Debug for Ident<'src> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        if self.0.is_empty() {
-            f.write_str("Ident::ERROR")
+        if self.name.is_empty() {
+            write!(f, "Ident::error({:?})", self.span)
         } else {
-            f.debug_tuple("Ident").field(&self.0).finish()
+            write!(f, "Ident({:?}, {:?})", self.name, self.span)
         }
     }
 }
@@ -84,33 +88,20 @@ impl<'src> std::fmt::Display for Ident<'src> {
 #[cfg(feature = "serde")]
 impl<'src> serde::Serialize for Ident<'src> {
     fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
-        if self.0.is_empty() {
-            s.serialize_none()
-        } else {
-            s.serialize_str(self.0)
+        use serde::ser::SerializeStruct;
+        if self.name.is_empty() {
+            return s.serialize_none();
         }
+        let mut st = s.serialize_struct("Ident", 2)?;
+        st.serialize_field("name", self.name)?;
+        st.serialize_field("span", &self.span)?;
+        st.end()
     }
 }
 
 impl<'src> PartialEq<&str> for Ident<'src> {
     fn eq(&self, other: &&str) -> bool {
-        !self.0.is_empty() && self.0 == *other
-    }
-}
-
-#[cfg(test)]
-mod ident_layout_tests {
-    use super::Ident;
-
-    /// `Ident` is `#[repr(transparent)]` over `&str`; this test guards the
-    /// invariant so the size never accidentally regresses.
-    #[test]
-    fn ident_has_same_size_as_str_slice() {
-        assert_eq!(std::mem::size_of::<Ident>(), std::mem::size_of::<&str>());
-        assert_eq!(
-            std::mem::size_of::<Option<Ident>>(),
-            std::mem::size_of::<Option<&str>>()
-        );
+        !self.name.is_empty() && self.name == *other
     }
 }
 

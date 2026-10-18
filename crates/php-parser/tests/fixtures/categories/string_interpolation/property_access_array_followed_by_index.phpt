@@ -14,7 +14,13 @@ echo "{$obj->items[0]}";
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -26,7 +32,13 @@ echo "{$obj->items[0]}";
             {
               "kind": {
                 "Property": {
-                  "name": "items",
+                  "name": {
+                    "name": "items",
+                    "span": {
+                      "start": 35,
+                      "end": 41
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

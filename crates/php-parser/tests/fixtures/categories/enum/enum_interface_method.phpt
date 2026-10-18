@@ -8,7 +8,13 @@ min_php=8.1
     {
       "kind": {
         "Enum": {
-          "name": "Suit",
+          "name": {
+            "name": "Suit",
+            "span": {
+              "start": 11,
+              "end": 15
+            }
+          },
           "scalar_type": {
             "parts": [
               "string"
@@ -35,7 +41,13 @@ min_php=8.1
             {
               "kind": {
                 "Case": {
-                  "name": "Hearts",
+                  "name": {
+                    "name": "Hearts",
+                    "span": {
+                      "start": 54,
+                      "end": 60
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "H"
@@ -56,7 +68,13 @@ min_php=8.1
             {
               "kind": {
                 "Method": {
-                  "name": "__toString",
+                  "name": {
+                    "name": "__toString",
+                    "span": {
+                      "start": 84,
+                      "end": 94
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

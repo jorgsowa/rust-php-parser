@@ -19,14 +19,26 @@ PHP Fatal error:  A class constant must not be called 'class'; it is reserved fo
     {
       "kind": {
         "Enum": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "Case": {
-                  "name": "class",
+                  "name": {
+                    "name": "class",
+                    "span": {
+                      "start": 25,
+                      "end": 30
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -48,7 +60,13 @@ PHP Fatal error:  A class constant must not be called 'class'; it is reserved fo
     {
       "kind": {
         "Enum": {
-          "name": "B",
+          "name": {
+            "name": "B",
+            "span": {
+              "start": 39,
+              "end": 40
+            }
+          },
           "scalar_type": null,
           "implements": [
             {
@@ -84,7 +102,13 @@ PHP Fatal error:  A class constant must not be called 'class'; it is reserved fo
     {
       "kind": {
         "Enum": {
-          "name": "C",
+          "name": {
+            "name": "C",
+            "span": {
+              "start": 70,
+              "end": 71
+            }
+          },
           "scalar_type": {
             "parts": [
               "int"
@@ -111,7 +135,13 @@ PHP Fatal error:  A class constant must not be called 'class'; it is reserved fo
             {
               "kind": {
                 "Case": {
-                  "name": "Foo",
+                  "name": {
+                    "name": "Foo",
+                    "span": {
+                      "start": 103,
+                      "end": 106
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 1

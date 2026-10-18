@@ -8,14 +8,26 @@ min_php=8.3
     {
       "kind": {
         "Enum": {
-          "name": "Config",
+          "name": {
+            "name": "Config",
+            "span": {
+              "start": 11,
+              "end": 17
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "ClassConst": {
-                  "name": "VALUE",
+                  "name": {
+                    "name": "VALUE",
+                    "span": {
+                      "start": 43,
+                      "end": 48
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "type_hint": {
@@ -102,7 +114,13 @@ min_php=8.3
             {
               "kind": {
                 "ClassConst": {
-                  "name": "MAYBE",
+                  "name": {
+                    "name": "MAYBE",
+                    "span": {
+                      "start": 70,
+                      "end": 75
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "type_hint": {

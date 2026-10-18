@@ -9,7 +9,13 @@ echo 'done';
   "stmts": [
     {
       "kind": {
-        "Goto": "end"
+        "Goto": {
+          "name": "end",
+          "span": {
+            "start": 11,
+            "end": 14
+          }
+        }
       },
       "span": {
         "start": 6,
@@ -37,7 +43,13 @@ echo 'done';
     },
     {
       "kind": {
-        "Label": "end"
+        "Label": {
+          "name": "end",
+          "span": {
+            "start": 40,
+            "end": 43
+          }
+        }
       },
       "span": {
         "start": 40,

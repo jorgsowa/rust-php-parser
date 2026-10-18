@@ -13,7 +13,13 @@ PHP Fatal error:  Null can not be used as a standalone type in Standard input co
     {
       "kind": {
         "Function": {
-          "name": "f",
+          "name": {
+            "name": "f",
+            "span": {
+              "start": 15,
+              "end": 16
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {

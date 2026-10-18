@@ -16,14 +16,26 @@ PHP Fatal error:  Case North of non-backed enum Direction must not have a value 
     {
       "kind": {
         "Enum": {
-          "name": "Direction",
+          "name": {
+            "name": "Direction",
+            "span": {
+              "start": 11,
+              "end": 20
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "Case": {
-                  "name": "North",
+                  "name": {
+                    "name": "North",
+                    "span": {
+                      "start": 32,
+                      "end": 37
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 1
@@ -44,7 +56,13 @@ PHP Fatal error:  Case North of non-backed enum Direction must not have a value 
             {
               "kind": {
                 "Case": {
-                  "name": "South",
+                  "name": {
+                    "name": "South",
+                    "span": {
+                      "start": 52,
+                      "end": 57
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }

@@ -16,10 +16,22 @@ PHP Parse error:  syntax error, unexpected token "|", expecting amp in Standard 
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 33,
+                  "end": 35
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Intersection": [

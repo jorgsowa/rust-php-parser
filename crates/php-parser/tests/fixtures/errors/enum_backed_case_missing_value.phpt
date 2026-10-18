@@ -16,7 +16,13 @@ PHP Fatal error:  Case Active of backed enum Status must have a value in Standar
     {
       "kind": {
         "Enum": {
-          "name": "Status",
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 11,
+              "end": 17
+            }
+          },
           "scalar_type": {
             "parts": [
               "string"
@@ -32,7 +38,13 @@ PHP Fatal error:  Case Active of backed enum Status must have a value in Standar
             {
               "kind": {
                 "Case": {
-                  "name": "Active",
+                  "name": {
+                    "name": "Active",
+                    "span": {
+                      "start": 37,
+                      "end": 43
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -45,7 +57,13 @@ PHP Fatal error:  Case Active of backed enum Status must have a value in Standar
             {
               "kind": {
                 "Case": {
-                  "name": "Inactive",
+                  "name": {
+                    "name": "Inactive",
+                    "span": {
+                      "start": 54,
+                      "end": 62
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "inactive"

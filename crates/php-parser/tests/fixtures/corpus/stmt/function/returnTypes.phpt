@@ -11,7 +11,13 @@ function test4() : Foo\Bar {}
     {
       "kind": {
         "Function": {
-          "name": "test1",
+          "name": {
+            "name": "test1",
+            "span": {
+              "start": 16,
+              "end": 21
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,
@@ -27,7 +33,13 @@ function test4() : Foo\Bar {}
     {
       "kind": {
         "Function": {
-          "name": "test2",
+          "name": {
+            "name": "test2",
+            "span": {
+              "start": 36,
+              "end": 41
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {
@@ -60,7 +72,13 @@ function test4() : Foo\Bar {}
     {
       "kind": {
         "Function": {
-          "name": "test3",
+          "name": {
+            "name": "test3",
+            "span": {
+              "start": 64,
+              "end": 69
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {
@@ -93,7 +111,13 @@ function test4() : Foo\Bar {}
     {
       "kind": {
         "Function": {
-          "name": "test4",
+          "name": {
+            "name": "test4",
+            "span": {
+              "start": 95,
+              "end": 100
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {

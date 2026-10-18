@@ -12,7 +12,13 @@ function test(A&B $a): A&B {}
     {
       "kind": {
         "Class": {
-          "name": "Test",
+          "name": {
+            "name": "Test",
+            "span": {
+              "start": 13,
+              "end": 17
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -24,7 +30,13 @@ function test(A&B $a): A&B {}
             {
               "kind": {
                 "Property": {
-                  "name": "prop",
+                  "name": {
+                    "name": "prop",
+                    "span": {
+                      "start": 35,
+                      "end": 40
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -96,10 +108,22 @@ function test(A&B $a): A&B {}
     {
       "kind": {
         "Function": {
-          "name": "test",
+          "name": {
+            "name": "test",
+            "span": {
+              "start": 54,
+              "end": 58
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 63,
+                  "end": 65
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Intersection": [

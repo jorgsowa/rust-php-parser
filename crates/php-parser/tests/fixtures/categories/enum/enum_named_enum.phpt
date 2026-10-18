@@ -12,14 +12,26 @@ enum Enum {
     {
       "kind": {
         "Enum": {
-          "name": "Enum",
+          "name": {
+            "name": "Enum",
+            "span": {
+              "start": 11,
+              "end": 15
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "Case": {
-                  "name": "A",
+                  "name": {
+                    "name": "A",
+                    "span": {
+                      "start": 27,
+                      "end": 28
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -32,7 +44,13 @@ enum Enum {
             {
               "kind": {
                 "Case": {
-                  "name": "B",
+                  "name": {
+                    "name": "B",
+                    "span": {
+                      "start": 39,
+                      "end": 40
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }

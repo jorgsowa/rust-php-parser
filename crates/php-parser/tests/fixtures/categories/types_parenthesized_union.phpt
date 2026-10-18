@@ -23,10 +23,22 @@ class X {
     {
       "kind": {
         "Function": {
-          "name": "test1",
+          "name": {
+            "name": "test1",
+            "span": {
+              "start": 56,
+              "end": 61
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 74,
+                  "end": 76
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -157,10 +169,22 @@ class X {
     {
       "kind": {
         "Function": {
-          "name": "test2",
+          "name": {
+            "name": "test2",
+            "span": {
+              "start": 143,
+              "end": 148
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 167,
+                  "end": 169
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -337,10 +361,22 @@ class X {
     {
       "kind": {
         "Function": {
-          "name": "test3",
+          "name": {
+            "name": "test3",
+            "span": {
+              "start": 220,
+              "end": 225
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 230,
+                  "end": 232
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -415,7 +451,13 @@ class X {
     {
       "kind": {
         "Class": {
-          "name": "X",
+          "name": {
+            "name": "X",
+            "span": {
+              "start": 303,
+              "end": 304
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -427,7 +469,13 @@ class X {
             {
               "kind": {
                 "Property": {
-                  "name": "prop1",
+                  "name": {
+                    "name": "prop1",
+                    "span": {
+                      "start": 330,
+                      "end": 336
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -546,7 +594,13 @@ class X {
             {
               "kind": {
                 "Property": {
-                  "name": "prop2",
+                  "name": {
+                    "name": "prop2",
+                    "span": {
+                      "start": 367,
+                      "end": 373
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

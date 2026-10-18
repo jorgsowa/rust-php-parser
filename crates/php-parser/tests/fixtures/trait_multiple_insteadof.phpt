@@ -15,12 +15,24 @@ class C {
     {
       "kind": {
         "Trait": {
-          "name": "T1",
+          "name": {
+            "name": "T1",
+            "span": {
+              "start": 12,
+              "end": 14
+            }
+          },
           "members": [
             {
               "kind": {
                 "Method": {
-                  "name": "m",
+                  "name": {
+                    "name": "m",
+                    "span": {
+                      "start": 33,
+                      "end": 34
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -49,12 +61,24 @@ class C {
     {
       "kind": {
         "Trait": {
-          "name": "T2",
+          "name": {
+            "name": "T2",
+            "span": {
+              "start": 48,
+              "end": 50
+            }
+          },
           "members": [
             {
               "kind": {
                 "Method": {
-                  "name": "m",
+                  "name": {
+                    "name": "m",
+                    "span": {
+                      "start": 69,
+                      "end": 70
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -83,12 +107,24 @@ class C {
     {
       "kind": {
         "Trait": {
-          "name": "T3",
+          "name": {
+            "name": "T3",
+            "span": {
+              "start": 84,
+              "end": 86
+            }
+          },
           "members": [
             {
               "kind": {
                 "Method": {
-                  "name": "m",
+                  "name": {
+                    "name": "m",
+                    "span": {
+                      "start": 105,
+                      "end": 106
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -117,7 +153,13 @@ class C {
     {
       "kind": {
         "Class": {
-          "name": "C",
+          "name": {
+            "name": "C",
+            "span": {
+              "start": 120,
+              "end": 121
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

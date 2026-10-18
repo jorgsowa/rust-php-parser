@@ -24,7 +24,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
       "kind": {
         "Const": [
           {
-            "name": "C",
+            "name": {
+              "name": "C",
+              "span": {
+                "start": 13,
+                "end": 14
+              }
+            },
             "value": {
               "kind": {
                 "New": {
@@ -70,10 +76,22 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
     {
       "kind": {
         "Function": {
-          "name": "a",
+          "name": {
+            "name": "a",
+            "span": {
+              "start": 36,
+              "end": 37
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 38,
+                  "end": 40
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {
@@ -122,7 +140,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
               "kind": {
                 "StaticVar": [
                   {
-                    "name": "y",
+                    "name": {
+                      "name": "y",
+                      "span": {
+                        "start": 65,
+                        "end": 67
+                      }
+                    },
                     "default": {
                       "kind": {
                         "New": {
@@ -178,7 +202,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
     {
       "kind": {
         "Class": {
-          "name": "Bar",
+          "name": {
+            "name": "Bar",
+            "span": {
+              "start": 105,
+              "end": 108
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -190,7 +220,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
             {
               "kind": {
                 "ClassConst": {
-                  "name": "C",
+                  "name": {
+                    "name": "C",
+                    "span": {
+                      "start": 121,
+                      "end": 122
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -233,7 +269,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
             {
               "kind": {
                 "Property": {
-                  "name": "prop",
+                  "name": {
+                    "name": "prop",
+                    "span": {
+                      "start": 145,
+                      "end": 150
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

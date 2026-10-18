@@ -17,7 +17,13 @@ class Collection {
     {
       "kind": {
         "Class": {
-          "name": "Collection",
+          "name": {
+            "name": "Collection",
+            "span": {
+              "start": 75,
+              "end": 85
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -29,7 +35,13 @@ class Collection {
             {
               "kind": {
                 "Method": {
-                  "name": "add",
+                  "name": {
+                    "name": "add",
+                    "span": {
+                      "start": 169,
+                      "end": 172
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -37,7 +49,13 @@ class Collection {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "item",
+                      "name": {
+                        "name": "item",
+                        "span": {
+                          "start": 180,
+                          "end": 185
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

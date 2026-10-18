@@ -38,7 +38,13 @@ trait X {}
     {
       "kind": {
         "Trait": {
-          "name": "X",
+          "name": {
+            "name": "X",
+            "span": {
+              "start": 22,
+              "end": 23
+            }
+          },
           "members": [],
           "attributes": []
         }

@@ -10,7 +10,13 @@ PHP Parse error:  syntax error, unexpected token "match", expecting "(" in Stand
     {
       "kind": {
         "Function": {
-          "name": "match",
+          "name": {
+            "name": "match",
+            "span": {
+              "start": 15,
+              "end": 20
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,

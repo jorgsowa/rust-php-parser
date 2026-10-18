@@ -13,7 +13,13 @@ const VERSION = '1.0.0';
       "kind": {
         "Const": [
           {
-            "name": "VERSION",
+            "name": {
+              "name": "VERSION",
+              "span": {
+                "start": 42,
+                "end": 49
+              }
+            },
             "value": {
               "kind": {
                 "String": "1.0.0"

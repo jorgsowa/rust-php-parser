@@ -6,7 +6,13 @@
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -18,7 +24,13 @@
             {
               "kind": {
                 "Property": {
-                  "name": "x",
+                  "name": {
+                    "name": "x",
+                    "span": {
+                      "start": 32,
+                      "end": 34
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": true,
@@ -44,7 +56,13 @@
             {
               "kind": {
                 "Method": {
-                  "name": "f",
+                  "name": {
+                    "name": "f",
+                    "span": {
+                      "start": 56,
+                      "end": 57
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

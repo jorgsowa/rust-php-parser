@@ -12,7 +12,13 @@ class Foo {
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -24,7 +30,13 @@ class Foo {
             {
               "kind": {
                 "Method": {
-                  "name": "list",
+                  "name": {
+                    "name": "list",
+                    "span": {
+                      "start": 38,
+                      "end": 42
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -79,7 +91,13 @@ class Foo {
             {
               "kind": {
                 "Method": {
-                  "name": "match",
+                  "name": {
+                    "name": "match",
+                    "span": {
+                      "start": 87,
+                      "end": 92
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -116,7 +134,13 @@ class Foo {
             {
               "kind": {
                 "Method": {
-                  "name": "class",
+                  "name": {
+                    "name": "class",
+                    "span": {
+                      "start": 124,
+                      "end": 129
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -171,7 +195,13 @@ class Foo {
             {
               "kind": {
                 "Method": {
-                  "name": "switch",
+                  "name": {
+                    "name": "switch",
+                    "span": {
+                      "start": 175,
+                      "end": 181
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

@@ -13,7 +13,13 @@ PHP Parse error:  syntax error, unexpected token "]" in Standard input code on l
     {
       "kind": {
         "Class": {
-          "name": "C",
+          "name": {
+            "name": "C",
+            "span": {
+              "start": 16,
+              "end": 17
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

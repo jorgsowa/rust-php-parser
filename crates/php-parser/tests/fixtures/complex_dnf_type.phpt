@@ -11,10 +11,22 @@ function foo(
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 78,
+                  "end": 80
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [

@@ -8,10 +8,22 @@ function a($b, array $c, callable $d, E $f) {}
     {
       "kind": {
         "Function": {
-          "name": "a",
+          "name": {
+            "name": "a",
+            "span": {
+              "start": 16,
+              "end": 17
+            }
+          },
           "params": [
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 18,
+                  "end": 20
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -27,7 +39,13 @@ function a($b, array $c, callable $d, E $f) {}
               }
             },
             {
-              "name": "c",
+              "name": {
+                "name": "c",
+                "span": {
+                  "start": 28,
+                  "end": 30
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -60,7 +78,13 @@ function a($b, array $c, callable $d, E $f) {}
               }
             },
             {
-              "name": "d",
+              "name": {
+                "name": "d",
+                "span": {
+                  "start": 41,
+                  "end": 43
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -93,7 +117,13 @@ function a($b, array $c, callable $d, E $f) {}
               }
             },
             {
-              "name": "f",
+              "name": {
+                "name": "f",
+                "span": {
+                  "start": 47,
+                  "end": 49
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {

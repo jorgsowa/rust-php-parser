@@ -8,14 +8,26 @@ min_php=8.1
     {
       "kind": {
         "Enum": {
-          "name": "Numbers",
+          "name": {
+            "name": "Numbers",
+            "span": {
+              "start": 11,
+              "end": 18
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "ClassConst": {
-                  "name": "PI",
+                  "name": {
+                    "name": "PI",
+                    "span": {
+                      "start": 27,
+                      "end": 29
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -38,7 +50,13 @@ min_php=8.1
             {
               "kind": {
                 "ClassConst": {
-                  "name": "TAU",
+                  "name": {
+                    "name": "TAU",
+                    "span": {
+                      "start": 44,
+                      "end": 47
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {

@@ -8,7 +8,13 @@ min_php=8.2
     {
       "kind": {
         "Class": {
-          "name": "Point",
+          "name": {
+            "name": "Point",
+            "span": {
+              "start": 21,
+              "end": 26
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -20,7 +26,13 @@ min_php=8.2
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 45,
+                      "end": 56
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -28,7 +40,13 @@ min_php=8.2
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "x",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 68,
+                          "end": 70
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -61,7 +79,13 @@ min_php=8.2
                       }
                     },
                     {
-                      "name": "y",
+                      "name": {
+                        "name": "y",
+                        "span": {
+                          "start": 83,
+                          "end": 85
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

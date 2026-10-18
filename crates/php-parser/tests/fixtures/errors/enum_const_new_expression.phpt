@@ -16,7 +16,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
     {
       "kind": {
         "Enum": {
-          "name": "E",
+          "name": {
+            "name": "E",
+            "span": {
+              "start": 11,
+              "end": 12
+            }
+          },
           "scalar_type": {
             "parts": [
               "int"
@@ -32,7 +38,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
             {
               "kind": {
                 "Case": {
-                  "name": "A",
+                  "name": {
+                    "name": "A",
+                    "span": {
+                      "start": 29,
+                      "end": 30
+                    }
+                  },
                   "value": {
                     "kind": {
                       "Int": 1
@@ -53,7 +65,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
             {
               "kind": {
                 "ClassConst": {
-                  "name": "X",
+                  "name": {
+                    "name": "X",
+                    "span": {
+                      "start": 46,
+                      "end": 47
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {

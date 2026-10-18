@@ -11,7 +11,13 @@ echo "Complex: {$объект->свойство}";
     {
       "kind": {
         "Class": {
-          "name": "Класс",
+          "name": {
+            "name": "Класс",
+            "span": {
+              "start": 12,
+              "end": 22
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -23,7 +29,13 @@ echo "Complex: {$объект->свойство}";
             {
               "kind": {
                 "Property": {
-                  "name": "свойство",
+                  "name": {
+                    "name": "свойство",
+                    "span": {
+                      "start": 36,
+                      "end": 53
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

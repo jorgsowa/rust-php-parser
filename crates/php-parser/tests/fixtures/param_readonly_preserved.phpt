@@ -8,7 +8,13 @@ min_php=8.1
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -20,7 +26,13 @@ min_php=8.1
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 27,
+                      "end": 38
+                    }
+                  },
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": false,
@@ -28,7 +40,13 @@ min_php=8.1
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "x",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 55,
+                          "end": 57
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

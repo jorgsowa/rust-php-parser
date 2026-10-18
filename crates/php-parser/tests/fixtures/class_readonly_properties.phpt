@@ -14,7 +14,13 @@ class Point {
     {
       "kind": {
         "Class": {
-          "name": "Point",
+          "name": {
+            "name": "Point",
+            "span": {
+              "start": 12,
+              "end": 17
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -26,7 +32,13 @@ class Point {
             {
               "kind": {
                 "Property": {
-                  "name": "x",
+                  "name": {
+                    "name": "x",
+                    "span": {
+                      "start": 46,
+                      "end": 48
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -61,7 +73,13 @@ class Point {
             {
               "kind": {
                 "Property": {
-                  "name": "y",
+                  "name": {
+                    "name": "y",
+                    "span": {
+                      "start": 76,
+                      "end": 78
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -96,7 +114,13 @@ class Point {
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 100,
+                      "end": 111
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -104,7 +128,13 @@ class Point {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "x",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 118,
+                          "end": 120
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -137,7 +167,13 @@ class Point {
                       }
                     },
                     {
-                      "name": "y",
+                      "name": {
+                        "name": "y",
+                        "span": {
+                          "start": 128,
+                          "end": 130
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

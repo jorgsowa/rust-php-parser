@@ -66,7 +66,13 @@
                             {
                               "kind": {
                                 "Method": {
-                                  "name": "run",
+                                  "name": {
+                                    "name": "run",
+                                    "span": {
+                                      "start": 83,
+                                      "end": 86
+                                    }
+                                  },
                                   "visibility": "Public",
                                   "is_static": false,
                                   "is_abstract": false,

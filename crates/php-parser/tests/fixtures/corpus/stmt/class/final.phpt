@@ -8,7 +8,13 @@ final class A {}
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 19,
+              "end": 20
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": true,

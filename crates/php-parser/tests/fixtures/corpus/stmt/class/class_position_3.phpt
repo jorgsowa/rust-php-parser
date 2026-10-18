@@ -38,7 +38,13 @@ interface X {}
     {
       "kind": {
         "Interface": {
-          "name": "X",
+          "name": {
+            "name": "X",
+            "span": {
+              "start": 26,
+              "end": 27
+            }
+          },
           "extends": [],
           "members": [],
           "attributes": []

@@ -46,7 +46,13 @@ PHP Parse error:  syntax error, unexpected token ")", expecting variable in Stan
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 16,
+              "end": 19
+            }
+          },
           "params": [
             {
               "name": null,
@@ -114,10 +120,22 @@ PHP Parse error:  syntax error, unexpected token ")", expecting variable in Stan
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 50,
+              "end": 53
+            }
+          },
           "params": [
             {
-              "name": "foo",
+              "name": {
+                "name": "foo",
+                "span": {
+                  "start": 60,
+                  "end": 64
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -215,7 +233,13 @@ PHP Parse error:  syntax error, unexpected token ")", expecting variable in Stan
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 97,
+              "end": 100
+            }
+          },
           "params": [
             {
               "name": null,
@@ -266,7 +290,13 @@ PHP Parse error:  syntax error, unexpected token ")", expecting variable in Stan
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 130,
+              "end": 133
+            }
+          },
           "params": [
             {
               "name": null,
@@ -317,7 +347,13 @@ PHP Parse error:  syntax error, unexpected token ")", expecting variable in Stan
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 161,
+              "end": 164
+            }
+          },
           "params": [
             {
               "name": null,
@@ -357,7 +393,13 @@ PHP Parse error:  syntax error, unexpected token ")", expecting variable in Stan
             {
               "kind": {
                 "Class": {
-                  "name": "Bar",
+                  "name": {
+                    "name": "Bar",
+                    "span": {
+                      "start": 177,
+                      "end": 180
+                    }
+                  },
                   "modifiers": {
                     "is_abstract": false,
                     "is_final": false,
@@ -369,7 +411,13 @@ PHP Parse error:  syntax error, unexpected token ")", expecting variable in Stan
                     {
                       "kind": {
                         "Method": {
-                          "name": "foo",
+                          "name": {
+                            "name": "foo",
+                            "span": {
+                              "start": 196,
+                              "end": 199
+                            }
+                          },
                           "visibility": null,
                           "is_static": false,
                           "is_abstract": false,

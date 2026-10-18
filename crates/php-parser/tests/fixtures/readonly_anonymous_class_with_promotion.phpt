@@ -44,7 +44,13 @@ $obj = new readonly class(1, 2) {
                             {
                               "kind": {
                                 "Method": {
-                                  "name": "__construct",
+                                  "name": {
+                                    "name": "__construct",
+                                    "span": {
+                                      "start": 60,
+                                      "end": 71
+                                    }
+                                  },
                                   "visibility": "Public",
                                   "is_static": false,
                                   "is_abstract": false,
@@ -52,7 +58,13 @@ $obj = new readonly class(1, 2) {
                                   "by_ref": false,
                                   "params": [
                                     {
-                                      "name": "x",
+                                      "name": {
+                                        "name": "x",
+                                        "span": {
+                                          "start": 92,
+                                          "end": 94
+                                        }
+                                      },
                                       "type_hint": {
                                         "kind": {
                                           "Named": {
@@ -85,7 +97,13 @@ $obj = new readonly class(1, 2) {
                                       }
                                     },
                                     {
-                                      "name": "y",
+                                      "name": {
+                                        "name": "y",
+                                        "span": {
+                                          "start": 115,
+                                          "end": 117
+                                        }
+                                      },
                                       "type_hint": {
                                         "kind": {
                                           "Named": {

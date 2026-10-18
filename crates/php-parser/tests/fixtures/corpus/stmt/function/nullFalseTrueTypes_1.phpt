@@ -12,7 +12,13 @@ function f_true(): true {}
     {
       "kind": {
         "Function": {
-          "name": "f_null",
+          "name": {
+            "name": "f_null",
+            "span": {
+              "start": 16,
+              "end": 22
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {
@@ -45,7 +51,13 @@ function f_true(): true {}
     {
       "kind": {
         "Function": {
-          "name": "f_false",
+          "name": {
+            "name": "f_false",
+            "span": {
+              "start": 43,
+              "end": 50
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {
@@ -78,7 +90,13 @@ function f_true(): true {}
     {
       "kind": {
         "Function": {
-          "name": "f_true",
+          "name": {
+            "name": "f_true",
+            "span": {
+              "start": 72,
+              "end": 78
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {

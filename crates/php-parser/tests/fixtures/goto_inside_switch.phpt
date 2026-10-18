@@ -37,7 +37,13 @@ echo 'done';
               "body": [
                 {
                   "kind": {
-                    "Goto": "done"
+                    "Goto": {
+                      "name": "done",
+                      "span": {
+                        "start": 45,
+                        "end": 49
+                      }
+                    }
                   },
                   "span": {
                     "start": 40,
@@ -96,7 +102,13 @@ echo 'done';
     },
     {
       "kind": {
-        "Label": "done"
+        "Label": {
+          "name": "done",
+          "span": {
+            "start": 85,
+            "end": 89
+          }
+        }
       },
       "span": {
         "start": 85,

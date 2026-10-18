@@ -12,7 +12,13 @@ PHP Parse error:  syntax error, unexpected token "class", expecting identifier i
       "kind": {
         "Const": [
           {
-            "name": "class",
+            "name": {
+              "name": "class",
+              "span": {
+                "start": 12,
+                "end": 17
+              }
+            },
             "value": {
               "kind": {
                 "Int": 1

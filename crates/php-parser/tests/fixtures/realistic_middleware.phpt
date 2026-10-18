@@ -237,13 +237,25 @@ class RateLimitMiddleware implements MiddlewareInterface
     {
       "kind": {
         "Interface": {
-          "name": "MiddlewareInterface",
+          "name": {
+            "name": "MiddlewareInterface",
+            "span": {
+              "start": 149,
+              "end": 168
+            }
+          },
           "extends": [],
           "members": [
             {
               "kind": {
                 "Method": {
-                  "name": "handle",
+                  "name": {
+                    "name": "handle",
+                    "span": {
+                      "start": 191,
+                      "end": 197
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -251,7 +263,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "request",
+                      "name": {
+                        "name": "request",
+                        "span": {
+                          "start": 206,
+                          "end": 214
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -284,7 +302,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                       }
                     },
                     {
-                      "name": "next",
+                      "name": {
+                        "name": "next",
+                        "span": {
+                          "start": 225,
+                          "end": 230
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -356,7 +380,13 @@ class RateLimitMiddleware implements MiddlewareInterface
     {
       "kind": {
         "Class": {
-          "name": "AuthMiddleware",
+          "name": {
+            "name": "AuthMiddleware",
+            "span": {
+              "start": 252,
+              "end": 266
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -379,7 +409,13 @@ class RateLimitMiddleware implements MiddlewareInterface
             {
               "kind": {
                 "Property": {
-                  "name": "validator",
+                  "name": {
+                    "name": "validator",
+                    "span": {
+                      "start": 336,
+                      "end": 346
+                    }
+                  },
                   "visibility": "Private",
                   "set_visibility": null,
                   "is_static": false,
@@ -414,7 +450,13 @@ class RateLimitMiddleware implements MiddlewareInterface
             {
               "kind": {
                 "Property": {
-                  "name": "excludedPaths",
+                  "name": {
+                    "name": "excludedPaths",
+                    "span": {
+                      "start": 373,
+                      "end": 387
+                    }
+                  },
                   "visibility": "Private",
                   "set_visibility": null,
                   "is_static": true,
@@ -457,7 +499,13 @@ class RateLimitMiddleware implements MiddlewareInterface
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 415,
+                      "end": 426
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -465,7 +513,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "validator",
+                      "name": {
+                        "name": "validator",
+                        "span": {
+                          "start": 442,
+                          "end": 452
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -568,7 +622,13 @@ class RateLimitMiddleware implements MiddlewareInterface
             {
               "kind": {
                 "Method": {
-                  "name": "handle",
+                  "name": {
+                    "name": "handle",
+                    "span": {
+                      "start": 526,
+                      "end": 532
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -576,7 +636,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "request",
+                      "name": {
+                        "name": "request",
+                        "span": {
+                          "start": 541,
+                          "end": 549
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -609,7 +675,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                       }
                     },
                     {
-                      "name": "next",
+                      "name": {
+                        "name": "next",
+                        "span": {
+                          "start": 560,
+                          "end": 565
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -1559,7 +1631,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                                   }
                                 }
                               ],
-                              "var": "e",
+                              "var": {
+                                "name": "e",
+                                "span": {
+                                  "start": 1254,
+                                  "end": 1256
+                                }
+                              },
                               "body": [
                                 {
                                   "kind": {
@@ -1710,7 +1788,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                                   }
                                 }
                               ],
-                              "var": "e",
+                              "var": {
+                                "name": "e",
+                                "span": {
+                                  "start": 1382,
+                                  "end": 1384
+                                }
+                              },
                               "body": [
                                 {
                                   "kind": {
@@ -1990,7 +2074,13 @@ class RateLimitMiddleware implements MiddlewareInterface
             {
               "kind": {
                 "Method": {
-                  "name": "exclude",
+                  "name": {
+                    "name": "exclude",
+                    "span": {
+                      "start": 1593,
+                      "end": 1600
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": true,
                   "is_abstract": false,
@@ -1998,7 +2088,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "paths",
+                      "name": {
+                        "name": "paths",
+                        "span": {
+                          "start": 1611,
+                          "end": 1617
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -2199,7 +2295,13 @@ class RateLimitMiddleware implements MiddlewareInterface
     {
       "kind": {
         "Class": {
-          "name": "RateLimitMiddleware",
+          "name": {
+            "name": "RateLimitMiddleware",
+            "span": {
+              "start": 1715,
+              "end": 1734
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -2222,7 +2324,13 @@ class RateLimitMiddleware implements MiddlewareInterface
             {
               "kind": {
                 "ClassConst": {
-                  "name": "MAX_REQUESTS",
+                  "name": {
+                    "name": "MAX_REQUESTS",
+                    "span": {
+                      "start": 1786,
+                      "end": 1798
+                    }
+                  },
                   "visibility": "Private",
                   "is_final": false,
                   "value": {
@@ -2245,7 +2353,13 @@ class RateLimitMiddleware implements MiddlewareInterface
             {
               "kind": {
                 "ClassConst": {
-                  "name": "WINDOW_SECONDS",
+                  "name": {
+                    "name": "WINDOW_SECONDS",
+                    "span": {
+                      "start": 1824,
+                      "end": 1838
+                    }
+                  },
                   "visibility": "Private",
                   "is_final": false,
                   "value": {
@@ -2268,7 +2382,13 @@ class RateLimitMiddleware implements MiddlewareInterface
             {
               "kind": {
                 "Method": {
-                  "name": "handle",
+                  "name": {
+                    "name": "handle",
+                    "span": {
+                      "start": 1866,
+                      "end": 1872
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -2276,7 +2396,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "request",
+                      "name": {
+                        "name": "request",
+                        "span": {
+                          "start": 1881,
+                          "end": 1889
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -2309,7 +2435,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                       }
                     },
                     {
-                      "name": "next",
+                      "name": {
+                        "name": "next",
+                        "span": {
+                          "start": 1900,
+                          "end": 1905
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -2900,7 +3032,13 @@ class RateLimitMiddleware implements MiddlewareInterface
             {
               "kind": {
                 "Method": {
-                  "name": "getCount",
+                  "name": {
+                    "name": "getCount",
+                    "span": {
+                      "start": 2300,
+                      "end": 2308
+                    }
+                  },
                   "visibility": "Private",
                   "is_static": false,
                   "is_abstract": false,
@@ -2908,7 +3046,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "key",
+                      "name": {
+                        "name": "key",
+                        "span": {
+                          "start": 2316,
+                          "end": 2320
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -2964,7 +3108,13 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "kind": {
                         "StaticVar": [
                           {
-                            "name": "counts",
+                            "name": {
+                              "name": "counts",
+                              "span": {
+                                "start": 2348,
+                                "end": 2355
+                              }
+                            },
                             "default": {
                               "kind": {
                                 "Array": []

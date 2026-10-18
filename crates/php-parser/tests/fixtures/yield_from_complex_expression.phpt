@@ -9,7 +9,13 @@ function gen() {
     {
       "kind": {
         "Function": {
-          "name": "gen",
+          "name": {
+            "name": "gen",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [],
           "body": [
             {
@@ -49,7 +55,13 @@ function gen() {
                                       "by_ref": false,
                                       "params": [
                                         {
-                                          "name": "x",
+                                          "name": {
+                                            "name": "x",
+                                            "span": {
+                                              "start": 51,
+                                              "end": 53
+                                            }
+                                          },
                                           "type_hint": null,
                                           "default": null,
                                           "by_ref": false,

@@ -18,7 +18,13 @@ PHP Parse error:  syntax error, unexpected identifier "publi", expecting "functi
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 13,
+              "end": 16
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -30,7 +36,13 @@ PHP Parse error:  syntax error, unexpected identifier "publi", expecting "functi
             {
               "kind": {
                 "Property": {
-                  "name": "bar1",
+                  "name": {
+                    "name": "bar1",
+                    "span": {
+                      "start": 30,
+                      "end": 35
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -48,7 +60,13 @@ PHP Parse error:  syntax error, unexpected identifier "publi", expecting "functi
             {
               "kind": {
                 "Property": {
-                  "name": "foo",
+                  "name": {
+                    "name": "foo",
+                    "span": {
+                      "start": 47,
+                      "end": 51
+                    }
+                  },
                   "visibility": null,
                   "set_visibility": null,
                   "is_static": false,
@@ -83,7 +101,13 @@ PHP Parse error:  syntax error, unexpected identifier "publi", expecting "functi
             {
               "kind": {
                 "Property": {
-                  "name": "bar",
+                  "name": {
+                    "name": "bar",
+                    "span": {
+                      "start": 64,
+                      "end": 68
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

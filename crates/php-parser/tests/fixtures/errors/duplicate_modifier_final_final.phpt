@@ -10,7 +10,13 @@ PHP Fatal error:  Multiple final modifiers are not allowed in Standard input cod
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -22,7 +28,13 @@ PHP Fatal error:  Multiple final modifiers are not allowed in Standard input cod
             {
               "kind": {
                 "Method": {
-                  "name": "f",
+                  "name": {
+                    "name": "f",
+                    "span": {
+                      "start": 37,
+                      "end": 38
+                    }
+                  },
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": false,

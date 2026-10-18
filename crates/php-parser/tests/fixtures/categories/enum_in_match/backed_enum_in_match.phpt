@@ -8,7 +8,13 @@ min_php=8.1
     {
       "kind": {
         "Enum": {
-          "name": "Color",
+          "name": {
+            "name": "Color",
+            "span": {
+              "start": 11,
+              "end": 16
+            }
+          },
           "scalar_type": {
             "parts": [
               "string"
@@ -24,7 +30,13 @@ min_php=8.1
             {
               "kind": {
                 "Case": {
-                  "name": "Red",
+                  "name": {
+                    "name": "Red",
+                    "span": {
+                      "start": 32,
+                      "end": 35
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "red"
@@ -45,7 +57,13 @@ min_php=8.1
             {
               "kind": {
                 "Case": {
-                  "name": "Blue",
+                  "name": {
+                    "name": "Blue",
+                    "span": {
+                      "start": 50,
+                      "end": 54
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "blue"

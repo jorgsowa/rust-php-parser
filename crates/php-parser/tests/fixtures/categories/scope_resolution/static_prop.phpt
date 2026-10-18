@@ -6,7 +6,13 @@
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -18,7 +24,13 @@
             {
               "kind": {
                 "Property": {
-                  "name": "count",
+                  "name": {
+                    "name": "count",
+                    "span": {
+                      "start": 36,
+                      "end": 42
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": true,

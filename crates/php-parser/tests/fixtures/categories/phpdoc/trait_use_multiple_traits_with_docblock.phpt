@@ -14,7 +14,13 @@ class Multi
     {
       "kind": {
         "Class": {
-          "name": "Multi",
+          "name": {
+            "name": "Multi",
+            "span": {
+              "start": 13,
+              "end": 18
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

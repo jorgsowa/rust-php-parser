@@ -10,7 +10,13 @@ class Builder {
     {
       "kind": {
         "Class": {
-          "name": "Builder",
+          "name": {
+            "name": "Builder",
+            "span": {
+              "start": 12,
+              "end": 19
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -22,7 +28,13 @@ class Builder {
             {
               "kind": {
                 "Method": {
-                  "name": "setName",
+                  "name": {
+                    "name": "setName",
+                    "span": {
+                      "start": 42,
+                      "end": 49
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -30,7 +42,13 @@ class Builder {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "name",
+                      "name": {
+                        "name": "name",
+                        "span": {
+                          "start": 57,
+                          "end": 62
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -111,7 +129,13 @@ class Builder {
             {
               "kind": {
                 "Method": {
-                  "name": "create",
+                  "name": {
+                    "name": "create",
+                    "span": {
+                      "start": 115,
+                      "end": 121
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": true,
                   "is_abstract": false,

@@ -405,7 +405,7 @@ impl<'src> Printer<'src> {
             }
             if let Some(var) = catch.var {
                 self.w(" $");
-                self.w(var);
+                self.w(var.or_error());
             }
             self.w(")");
             if !self.flush_gap_comments_before(catch.body.span.start) {
@@ -499,7 +499,7 @@ impl<'src> Printer<'src> {
             self.print_name(&item.name);
             if let Some(alias) = item.alias {
                 self.w(" as ");
-                self.w(alias);
+                self.w(alias.or_error());
             }
         }
         self.w(";");

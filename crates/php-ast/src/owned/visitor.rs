@@ -1334,7 +1334,7 @@ mod tests {
         let inner = binary(dummy_int(3), BinaryOp::Add, dummy_int(4));
         let func = Stmt {
             kind: StmtKind::Function(Box::new(FunctionDecl {
-                name: crate::owned::Ident::name("foo"),
+                name: crate::owned::Ident::new("foo", Span::DUMMY),
                 params: Box::from([]),
                 body: block_of([expr_stmt(inner)]),
                 return_type: None,
@@ -1374,7 +1374,7 @@ mod tests {
         // class Foo { public function bar() { $x; } }
         let method = ClassMember {
             kind: ClassMemberKind::Method(MethodDecl {
-                name: crate::owned::Ident::name("bar"),
+                name: crate::owned::Ident::new("bar", Span::DUMMY),
                 visibility: Some(crate::ast::Visibility::Public),
                 is_static: false,
                 is_abstract: false,
@@ -1390,7 +1390,7 @@ mod tests {
         };
         let class_stmt = Stmt {
             kind: StmtKind::Class(Box::new(ClassDecl {
-                name: Some(crate::owned::Ident::name("Foo")),
+                name: Some(crate::owned::Ident::new("Foo", Span::DUMMY)),
                 modifiers: crate::ast::ClassModifiers::default(),
                 extends: None,
                 implements: Box::from([]),

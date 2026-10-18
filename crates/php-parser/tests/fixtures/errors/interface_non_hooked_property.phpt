@@ -19,13 +19,25 @@ PHP Fatal error:  Interfaces may only include hooked properties in Standard inpu
     {
       "kind": {
         "Interface": {
-          "name": "I",
+          "name": {
+            "name": "I",
+            "span": {
+              "start": 16,
+              "end": 17
+            }
+          },
           "extends": [],
           "members": [
             {
               "kind": {
                 "Property": {
-                  "name": "x",
+                  "name": {
+                    "name": "x",
+                    "span": {
+                      "start": 35,
+                      "end": 37
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

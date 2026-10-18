@@ -38,7 +38,13 @@ class C {}
     {
       "kind": {
         "Class": {
-          "name": "C",
+          "name": {
+            "name": "C",
+            "span": {
+              "start": 22,
+              "end": 23
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

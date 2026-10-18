@@ -14,7 +14,13 @@ class Foo {
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 13,
+              "end": 16
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -26,7 +32,13 @@ class Foo {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "A",
+                  "name": {
+                    "name": "A",
+                    "span": {
+                      "start": 29,
+                      "end": 30
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -49,7 +61,13 @@ class Foo {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "B",
+                  "name": {
+                    "name": "B",
+                    "span": {
+                      "start": 53,
+                      "end": 54
+                    }
+                  },
                   "visibility": "Public",
                   "is_final": false,
                   "value": {
@@ -72,7 +90,13 @@ class Foo {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "C",
+                  "name": {
+                    "name": "C",
+                    "span": {
+                      "start": 80,
+                      "end": 81
+                    }
+                  },
                   "visibility": "Protected",
                   "is_final": false,
                   "value": {
@@ -95,7 +119,13 @@ class Foo {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "D",
+                  "name": {
+                    "name": "D",
+                    "span": {
+                      "start": 105,
+                      "end": 106
+                    }
+                  },
                   "visibility": "Private",
                   "is_final": false,
                   "value": {
@@ -118,7 +148,13 @@ class Foo {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "E",
+                  "name": {
+                    "name": "E",
+                    "span": {
+                      "start": 128,
+                      "end": 129
+                    }
+                  },
                   "visibility": null,
                   "is_final": true,
                   "value": {

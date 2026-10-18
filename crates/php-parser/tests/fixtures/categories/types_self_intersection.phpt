@@ -13,7 +13,13 @@ class TestSelfIntersection {
     {
       "kind": {
         "Class": {
-          "name": "TestSelfIntersection",
+          "name": {
+            "name": "TestSelfIntersection",
+            "span": {
+              "start": 70,
+              "end": 90
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -25,7 +31,13 @@ class TestSelfIntersection {
             {
               "kind": {
                 "Method": {
-                  "name": "test",
+                  "name": {
+                    "name": "test",
+                    "span": {
+                      "start": 113,
+                      "end": 117
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -33,7 +45,13 @@ class TestSelfIntersection {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "x",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 125,
+                          "end": 127
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Intersection": [

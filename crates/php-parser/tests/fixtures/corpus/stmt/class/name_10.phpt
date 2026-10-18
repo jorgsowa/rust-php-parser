@@ -12,7 +12,13 @@ PHP Fatal error:  Cannot use "self" as an interface name as it is reserved in St
     {
       "kind": {
         "Interface": {
-          "name": "self",
+          "name": {
+            "name": "self",
+            "span": {
+              "start": 16,
+              "end": 20
+            }
+          },
           "extends": [],
           "members": [],
           "attributes": []

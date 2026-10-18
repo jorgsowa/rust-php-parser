@@ -11,13 +11,25 @@ interface HasName {
     {
       "kind": {
         "Interface": {
-          "name": "HasName",
+          "name": {
+            "name": "HasName",
+            "span": {
+              "start": 16,
+              "end": 23
+            }
+          },
           "extends": [],
           "members": [
             {
               "kind": {
                 "Property": {
-                  "name": "name",
+                  "name": {
+                    "name": "name",
+                    "span": {
+                      "start": 44,
+                      "end": 49
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

@@ -30,7 +30,13 @@ PHP Parse error:  syntax error, unexpected token "{", expecting identifier in St
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 24,
+              "end": 27
+            }
+          },
           "params": [],
           "body": [
             {

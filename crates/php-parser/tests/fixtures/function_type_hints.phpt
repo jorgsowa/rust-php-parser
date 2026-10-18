@@ -9,10 +9,22 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
     {
       "kind": {
         "Function": {
-          "name": "process",
+          "name": {
+            "name": "process",
+            "span": {
+              "start": 15,
+              "end": 22
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 28,
+                  "end": 30
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Nullable": {
@@ -53,7 +65,13 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
               }
             },
             {
-              "name": "y",
+              "name": {
+                "name": "y",
+                "span": {
+                  "start": 43,
+                  "end": 45
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -114,7 +132,13 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
               }
             },
             {
-              "name": "z",
+              "name": {
+                "name": "z",
+                "span": {
+                  "start": 69,
+                  "end": 71
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Intersection": [

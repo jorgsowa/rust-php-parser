@@ -14,7 +14,13 @@ class Test {
     {
       "kind": {
         "Class": {
-          "name": "Test",
+          "name": {
+            "name": "Test",
+            "span": {
+              "start": 12,
+              "end": 16
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -26,7 +32,13 @@ class Test {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "X",
+                  "name": {
+                    "name": "X",
+                    "span": {
+                      "start": 33,
+                      "end": 34
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "type_hint": {
@@ -67,7 +79,13 @@ class Test {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "Y",
+                  "name": {
+                    "name": "Y",
+                    "span": {
+                      "start": 65,
+                      "end": 66
+                    }
+                  },
                   "visibility": "Private",
                   "is_final": false,
                   "type_hint": {
@@ -108,7 +126,13 @@ class Test {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "Z",
+                  "name": {
+                    "name": "Z",
+                    "span": {
+                      "start": 74,
+                      "end": 75
+                    }
+                  },
                   "visibility": "Private",
                   "is_final": false,
                   "type_hint": {
@@ -149,7 +173,13 @@ class Test {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "ARRAY",
+                  "name": {
+                    "name": "ARRAY",
+                    "span": {
+                      "start": 99,
+                      "end": 104
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "type_hint": {
@@ -190,7 +220,13 @@ class Test {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "FOO",
+                  "name": {
+                    "name": "FOO",
+                    "span": {
+                      "start": 134,
+                      "end": 137
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "type_hint": {

@@ -15,7 +15,13 @@ PHP Fatal error:  Cannot declare hooks for static property in Standard input cod
     {
       "kind": {
         "Class": {
-          "name": "F",
+          "name": {
+            "name": "F",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -27,7 +33,13 @@ PHP Fatal error:  Cannot declare hooks for static property in Standard input cod
             {
               "kind": {
                 "Property": {
-                  "name": "x",
+                  "name": {
+                    "name": "x",
+                    "span": {
+                      "start": 38,
+                      "end": 40
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": true,

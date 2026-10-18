@@ -12,7 +12,13 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "=" in Standard 
       "kind": {
         "Const": [
           {
-            "name": "X",
+            "name": {
+              "name": "X",
+              "span": {
+                "start": 12,
+                "end": 13
+              }
+            },
             "value": {
               "kind": "Error",
               "span": {

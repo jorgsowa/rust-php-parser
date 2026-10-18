@@ -373,7 +373,13 @@ try { echo 5; } catch (Exception $e) { echo 6; } finally { echo 7; }
                   }
                 }
               ],
-              "var": "e",
+              "var": {
+                "name": "e",
+                "span": {
+                  "start": 186,
+                  "end": 188
+                }
+              },
               "body": [
                 {
                   "kind": {

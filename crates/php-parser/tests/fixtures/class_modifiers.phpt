@@ -20,7 +20,13 @@ readonly class Value {
     {
       "kind": {
         "Class": {
-          "name": "Base",
+          "name": {
+            "name": "Base",
+            "span": {
+              "start": 21,
+              "end": 25
+            }
+          },
           "modifiers": {
             "is_abstract": true,
             "is_final": false,
@@ -32,7 +38,13 @@ readonly class Value {
             {
               "kind": {
                 "Method": {
-                  "name": "doSomething",
+                  "name": {
+                    "name": "doSomething",
+                    "span": {
+                      "start": 57,
+                      "end": 68
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": true,
@@ -78,7 +90,13 @@ readonly class Value {
     {
       "kind": {
         "Class": {
-          "name": "Sealed",
+          "name": {
+            "name": "Sealed",
+            "span": {
+              "start": 92,
+              "end": 98
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": true,
@@ -90,7 +108,13 @@ readonly class Value {
             {
               "kind": {
                 "Method": {
-                  "name": "run",
+                  "name": {
+                    "name": "run",
+                    "span": {
+                      "start": 121,
+                      "end": 124
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -136,7 +160,13 @@ readonly class Value {
     {
       "kind": {
         "Class": {
-          "name": "Value",
+          "name": {
+            "name": "Value",
+            "span": {
+              "start": 153,
+              "end": 158
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -148,7 +178,13 @@ readonly class Value {
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 181,
+                      "end": 192
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -156,7 +192,13 @@ readonly class Value {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "name",
+                      "name": {
+                        "name": "name",
+                        "span": {
+                          "start": 216,
+                          "end": 221
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -189,7 +231,13 @@ readonly class Value {
                       }
                     },
                     {
-                      "name": "age",
+                      "name": {
+                        "name": "age",
+                        "span": {
+                          "start": 242,
+                          "end": 246
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

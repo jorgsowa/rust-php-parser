@@ -12,10 +12,22 @@ function foo(int $x): void {}
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 70,
+              "end": 73
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 78,
+                  "end": 80
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {

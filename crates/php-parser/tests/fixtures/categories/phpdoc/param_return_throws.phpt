@@ -15,10 +15,22 @@ function createUser(string $name, int $age): User {}
     {
       "kind": {
         "Function": {
-          "name": "createUser",
+          "name": {
+            "name": "createUser",
+            "span": {
+              "start": 159,
+              "end": 169
+            }
+          },
           "params": [
             {
-              "name": "name",
+              "name": {
+                "name": "name",
+                "span": {
+                  "start": 177,
+                  "end": 182
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -51,7 +63,13 @@ function createUser(string $name, int $age): User {}
               }
             },
             {
-              "name": "age",
+              "name": {
+                "name": "age",
+                "span": {
+                  "start": 188,
+                  "end": 192
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {

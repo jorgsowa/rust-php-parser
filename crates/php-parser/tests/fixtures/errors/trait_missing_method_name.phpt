@@ -10,7 +10,13 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "as" in Standard
     {
       "kind": {
         "Trait": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "members": [],
           "attributes": []
         }
@@ -23,7 +29,13 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "as" in Standard
     {
       "kind": {
         "Class": {
-          "name": "C",
+          "name": {
+            "name": "C",
+            "span": {
+              "start": 23,
+              "end": 24
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

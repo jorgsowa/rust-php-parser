@@ -69,7 +69,13 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                               "by_ref": false,
                               "params": [
                                 {
-                                  "name": "x",
+                                  "name": {
+                                    "name": "x",
+                                    "span": {
+                                      "start": 42,
+                                      "end": 44
+                                    }
+                                  },
                                   "type_hint": null,
                                   "default": null,
                                   "by_ref": false,
@@ -197,7 +203,13 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                               "by_ref": false,
                               "params": [
                                 {
-                                  "name": "x",
+                                  "name": {
+                                    "name": "x",
+                                    "span": {
+                                      "start": 87,
+                                      "end": 89
+                                    }
+                                  },
                                   "type_hint": null,
                                   "default": null,
                                   "by_ref": false,

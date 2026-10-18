@@ -19,7 +19,13 @@ function() use($a) : \Foo\Bar {};
               "by_ref": false,
               "params": [
                 {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 15,
+                      "end": 17
+                    }
+                  },
                   "type_hint": null,
                   "default": null,
                   "by_ref": false,
@@ -79,7 +85,13 @@ function() use($a) : \Foo\Bar {};
               "by_ref": false,
               "params": [
                 {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 37,
+                      "end": 39
+                    }
+                  },
                   "type_hint": null,
                   "default": null,
                   "by_ref": false,
@@ -97,7 +109,13 @@ function() use($a) : \Foo\Bar {};
               ],
               "use_vars": [
                 {
-                  "name": "b",
+                  "name": {
+                    "name": "b",
+                    "span": {
+                      "start": 45,
+                      "end": 47
+                    }
+                  },
                   "by_ref": false,
                   "span": {
                     "start": 45,
@@ -131,7 +149,13 @@ function() use($a) : \Foo\Bar {};
               "params": [],
               "use_vars": [
                 {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 68,
+                      "end": 70
+                    }
+                  },
                   "by_ref": false,
                   "span": {
                     "start": 68,
@@ -139,7 +163,13 @@ function() use($a) : \Foo\Bar {};
                   }
                 },
                 {
-                  "name": "b",
+                  "name": {
+                    "name": "b",
+                    "span": {
+                      "start": 73,
+                      "end": 75
+                    }
+                  },
                   "by_ref": true,
                   "span": {
                     "start": 72,
@@ -172,7 +202,13 @@ function() use($a) : \Foo\Bar {};
               "by_ref": true,
               "params": [
                 {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 92,
+                      "end": 94
+                    }
+                  },
                   "type_hint": null,
                   "default": null,
                   "by_ref": false,
@@ -239,7 +275,13 @@ function() use($a) : \Foo\Bar {};
               "by_ref": false,
               "params": [
                 {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 131,
+                      "end": 133
+                    }
+                  },
                   "type_hint": null,
                   "default": null,
                   "by_ref": false,
@@ -299,7 +341,13 @@ function() use($a) : \Foo\Bar {};
               "params": [],
               "use_vars": [
                 {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 162,
+                      "end": 164
+                    }
+                  },
                   "by_ref": false,
                   "span": {
                     "start": 162,

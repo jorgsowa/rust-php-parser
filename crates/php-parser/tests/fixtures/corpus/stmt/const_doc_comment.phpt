@@ -10,7 +10,13 @@ const ANSWER = 42;
       "kind": {
         "Const": [
           {
-            "name": "ANSWER",
+            "name": {
+              "name": "ANSWER",
+              "span": {
+                "start": 45,
+                "end": 51
+              }
+            },
             "value": {
               "kind": {
                 "Int": 42

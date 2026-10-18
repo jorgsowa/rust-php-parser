@@ -17,7 +17,13 @@ PHP Fatal error:  get hook of property Foo::$x must not have a parameter list in
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -29,7 +35,13 @@ PHP Fatal error:  get hook of property Foo::$x must not have a parameter list in
             {
               "kind": {
                 "Property": {
-                  "name": "x",
+                  "name": {
+                    "name": "x",
+                    "span": {
+                      "start": 33,
+                      "end": 35
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -82,7 +94,13 @@ PHP Fatal error:  get hook of property Foo::$x must not have a parameter list in
                       "by_ref": false,
                       "params": [
                         {
-                          "name": "a",
+                          "name": {
+                            "name": "a",
+                            "span": {
+                              "start": 54,
+                              "end": 56
+                            }
+                          },
                           "type_hint": {
                             "kind": {
                               "Named": {

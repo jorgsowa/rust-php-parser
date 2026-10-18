@@ -121,7 +121,13 @@ PHP Fatal error:  'break' not in the 'loop' or 'switch' context in Standard inpu
     },
     {
       "kind": {
-        "Label": "label"
+        "Label": {
+          "name": "label",
+          "span": {
+            "start": 78,
+            "end": 83
+          }
+        }
       },
       "span": {
         "start": 78,
@@ -130,7 +136,13 @@ PHP Fatal error:  'break' not in the 'loop' or 'switch' context in Standard inpu
     },
     {
       "kind": {
-        "Goto": "label"
+        "Goto": {
+          "name": "label",
+          "span": {
+            "start": 90,
+            "end": 95
+          }
+        }
       },
       "span": {
         "start": 85,

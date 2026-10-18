@@ -5,7 +5,13 @@
   "stmts": [
     {
       "kind": {
-        "Goto": "undefined"
+        "Goto": {
+          "name": "undefined",
+          "span": {
+            "start": 11,
+            "end": 20
+          }
+        }
       },
       "span": {
         "start": 6,
@@ -14,7 +20,13 @@
     },
     {
       "kind": {
-        "Label": "undefined"
+        "Label": {
+          "name": "undefined",
+          "span": {
+            "start": 22,
+            "end": 31
+          }
+        }
       },
       "span": {
         "start": 22,

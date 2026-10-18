@@ -10,7 +10,13 @@ PHP Fatal error:  Cannot use the final modifier on an abstract class in Standard
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 27,
+              "end": 30
+            }
+          },
           "modifiers": {
             "is_abstract": true,
             "is_final": true,

@@ -22,7 +22,13 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -34,7 +40,13 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
             {
               "kind": {
                 "Method": {
-                  "name": "bar",
+                  "name": {
+                    "name": "bar",
+                    "span": {
+                      "start": 52,
+                      "end": 55
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -89,7 +101,13 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
             {
               "kind": {
                 "Method": {
-                  "name": "baz",
+                  "name": {
+                    "name": "baz",
+                    "span": {
+                      "start": 111,
+                      "end": 114
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -144,7 +162,13 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
             {
               "kind": {
                 "Method": {
-                  "name": "qux",
+                  "name": {
+                    "name": "qux",
+                    "span": {
+                      "start": 170,
+                      "end": 173
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

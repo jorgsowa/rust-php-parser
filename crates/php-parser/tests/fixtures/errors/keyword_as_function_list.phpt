@@ -10,7 +10,13 @@ PHP Parse error:  syntax error, unexpected token "list", expecting "(" in Standa
     {
       "kind": {
         "Function": {
-          "name": "list",
+          "name": {
+            "name": "list",
+            "span": {
+              "start": 15,
+              "end": 19
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,

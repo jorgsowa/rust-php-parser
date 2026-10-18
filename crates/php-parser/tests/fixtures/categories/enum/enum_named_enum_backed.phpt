@@ -12,7 +12,13 @@ enum Enum: string {
     {
       "kind": {
         "Enum": {
-          "name": "Enum",
+          "name": {
+            "name": "Enum",
+            "span": {
+              "start": 11,
+              "end": 15
+            }
+          },
           "scalar_type": {
             "parts": [
               "string"
@@ -28,7 +34,13 @@ enum Enum: string {
             {
               "kind": {
                 "Case": {
-                  "name": "A",
+                  "name": {
+                    "name": "A",
+                    "span": {
+                      "start": 35,
+                      "end": 36
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "a"
@@ -49,7 +61,13 @@ enum Enum: string {
             {
               "kind": {
                 "Case": {
-                  "name": "B",
+                  "name": {
+                    "name": "B",
+                    "span": {
+                      "start": 53,
+                      "end": 54
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "b"

@@ -106,7 +106,13 @@ class Precedence {
     {
       "kind": {
         "Class": {
-          "name": "Base",
+          "name": {
+            "name": "Base",
+            "span": {
+              "start": 48,
+              "end": 52
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -170,7 +176,13 @@ class Precedence {
     {
       "kind": {
         "Class": {
-          "name": "WithConflict",
+          "name": {
+            "name": "WithConflict",
+            "span": {
+              "start": 179,
+              "end": 191
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -289,7 +301,13 @@ class Precedence {
     {
       "kind": {
         "Class": {
-          "name": "WithAlias",
+          "name": {
+            "name": "WithAlias",
+            "span": {
+              "start": 386,
+              "end": 395
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -416,7 +434,13 @@ class Precedence {
     {
       "kind": {
         "Class": {
-          "name": "MultiInsteadof",
+          "name": {
+            "name": "MultiInsteadof",
+            "span": {
+              "start": 603,
+              "end": 617
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -555,7 +579,13 @@ class Precedence {
     {
       "kind": {
         "Class": {
-          "name": "CommentAfterName",
+          "name": {
+            "name": "CommentAfterName",
+            "span": {
+              "start": 829,
+              "end": 845
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -652,7 +682,13 @@ class Precedence {
     {
       "kind": {
         "Class": {
-          "name": "MultiCommentAdaptation",
+          "name": {
+            "name": "MultiCommentAdaptation",
+            "span": {
+              "start": 1057,
+              "end": 1079
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -729,12 +765,24 @@ class Precedence {
     {
       "kind": {
         "Trait": {
-          "name": "BaseTrait",
+          "name": {
+            "name": "BaseTrait",
+            "span": {
+              "start": 1262,
+              "end": 1271
+            }
+          },
           "members": [
             {
               "kind": {
                 "ClassConst": {
-                  "name": "C1",
+                  "name": {
+                    "name": "C1",
+                    "span": {
+                      "start": 1299,
+                      "end": 1301
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -757,7 +805,13 @@ class Precedence {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "C2",
+                  "name": {
+                    "name": "C2",
+                    "span": {
+                      "start": 1331,
+                      "end": 1333
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -780,7 +834,13 @@ class Precedence {
             {
               "kind": {
                 "Method": {
-                  "name": "m1",
+                  "name": {
+                    "name": "m1",
+                    "span": {
+                      "start": 1373,
+                      "end": 1375
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -800,7 +860,13 @@ class Precedence {
             {
               "kind": {
                 "Method": {
-                  "name": "m2",
+                  "name": {
+                    "name": "m2",
+                    "span": {
+                      "start": 1413,
+                      "end": 1415
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -965,7 +1031,13 @@ class Precedence {
     {
       "kind": {
         "Class": {
-          "name": "MultipleBlocks",
+          "name": {
+            "name": "MultipleBlocks",
+            "span": {
+              "start": 1665,
+              "end": 1679
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -1065,7 +1137,13 @@ class Precedence {
     {
       "kind": {
         "Class": {
-          "name": "Precedence",
+          "name": {
+            "name": "Precedence",
+            "span": {
+              "start": 1834,
+              "end": 1844
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

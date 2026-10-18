@@ -19,7 +19,13 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -31,7 +37,13 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
             {
               "kind": {
                 "Property": {
-                  "name": "x",
+                  "name": {
+                    "name": "x",
+                    "span": {
+                      "start": 33,
+                      "end": 35
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -74,7 +86,13 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
             {
               "kind": {
                 "ClassConst": {
-                  "name": "BAR",
+                  "name": {
+                    "name": "BAR",
+                    "span": {
+                      "start": 58,
+                      "end": 61
+                    }
+                  },
                   "visibility": "Public",
                   "is_final": false,
                   "value": {
@@ -97,7 +115,13 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
             {
               "kind": {
                 "Property": {
-                  "name": "y",
+                  "name": {
+                    "name": "y",
+                    "span": {
+                      "start": 99,
+                      "end": 101
+                    }
+                  },
                   "visibility": "Private",
                   "set_visibility": null,
                   "is_static": false,
@@ -140,7 +164,13 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
             {
               "kind": {
                 "Method": {
-                  "name": "baz",
+                  "name": {
+                    "name": "baz",
+                    "span": {
+                      "start": 133,
+                      "end": 136
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

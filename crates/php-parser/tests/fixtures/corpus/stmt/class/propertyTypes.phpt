@@ -17,7 +17,13 @@ PHP Fatal error:  Static property A::$d cannot be readonly in Standard input cod
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 13,
+              "end": 14
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -29,7 +35,13 @@ PHP Fatal error:  Static property A::$d cannot be readonly in Standard input cod
             {
               "kind": {
                 "Property": {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 35,
+                      "end": 37
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -64,7 +76,13 @@ PHP Fatal error:  Static property A::$d cannot be readonly in Standard input cod
             {
               "kind": {
                 "Property": {
-                  "name": "b",
+                  "name": {
+                    "name": "b",
+                    "span": {
+                      "start": 62,
+                      "end": 64
+                    }
+                  },
                   "visibility": "Protected",
                   "set_visibility": null,
                   "is_static": true,
@@ -99,7 +117,13 @@ PHP Fatal error:  Static property A::$d cannot be readonly in Standard input cod
             {
               "kind": {
                 "Property": {
-                  "name": "c",
+                  "name": {
+                    "name": "c",
+                    "span": {
+                      "start": 85,
+                      "end": 87
+                    }
+                  },
                   "visibility": "Private",
                   "set_visibility": null,
                   "is_static": false,
@@ -142,7 +166,13 @@ PHP Fatal error:  Static property A::$d cannot be readonly in Standard input cod
             {
               "kind": {
                 "Property": {
-                  "name": "d",
+                  "name": {
+                    "name": "d",
+                    "span": {
+                      "start": 121,
+                      "end": 123
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": true,

@@ -18,7 +18,13 @@ class User {
     {
       "kind": {
         "Class": {
-          "name": "User",
+          "name": {
+            "name": "User",
+            "span": {
+              "start": 12,
+              "end": 16
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -30,7 +36,13 @@ class User {
             {
               "kind": {
                 "Property": {
-                  "name": "name",
+                  "name": {
+                    "name": "name",
+                    "span": {
+                      "start": 37,
+                      "end": 42
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -65,7 +77,13 @@ class User {
             {
               "kind": {
                 "Property": {
-                  "name": "age",
+                  "name": {
+                    "name": "age",
+                    "span": {
+                      "start": 60,
+                      "end": 64
+                    }
+                  },
                   "visibility": "Private",
                   "set_visibility": null,
                   "is_static": false,
@@ -108,7 +126,13 @@ class User {
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 91,
+                      "end": 102
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -116,7 +140,13 @@ class User {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "name",
+                      "name": {
+                        "name": "name",
+                        "span": {
+                          "start": 110,
+                          "end": 115
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -219,7 +249,13 @@ class User {
             {
               "kind": {
                 "Method": {
-                  "name": "getName",
+                  "name": {
+                    "name": "getName",
+                    "span": {
+                      "start": 175,
+                      "end": 182
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

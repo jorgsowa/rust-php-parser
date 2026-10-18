@@ -13,7 +13,13 @@ fn($foo, ) => $bar;
               "by_ref": false,
               "params": [
                 {
-                  "name": "foo",
+                  "name": {
+                    "name": "foo",
+                    "span": {
+                      "start": 9,
+                      "end": 13
+                    }
+                  },
                   "type_hint": null,
                   "default": null,
                   "by_ref": false,

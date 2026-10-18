@@ -6,7 +6,13 @@
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 60,
+              "end": 63
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

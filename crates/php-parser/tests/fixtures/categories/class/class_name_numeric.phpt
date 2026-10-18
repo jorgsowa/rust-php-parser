@@ -10,7 +10,13 @@ class numeric {}
     {
       "kind": {
         "Class": {
-          "name": "numeric",
+          "name": {
+            "name": "numeric",
+            "span": {
+              "start": 12,
+              "end": 19
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

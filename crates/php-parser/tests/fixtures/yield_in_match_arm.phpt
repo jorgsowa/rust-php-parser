@@ -12,10 +12,22 @@ function gen($x) {
     {
       "kind": {
         "Function": {
-          "name": "gen",
+          "name": {
+            "name": "gen",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 19,
+                  "end": 21
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,

@@ -16,7 +16,13 @@ PHP Fatal error:  Method A::__construct() cannot declare a return type in Standa
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -28,7 +34,13 @@ PHP Fatal error:  Method A::__construct() cannot declare a return type in Standa
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 36,
+                      "end": 47
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

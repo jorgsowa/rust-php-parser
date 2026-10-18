@@ -14,7 +14,13 @@ class C {
     {
       "kind": {
         "Class": {
-          "name": "C",
+          "name": {
+            "name": "C",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -26,7 +32,13 @@ class C {
             {
               "kind": {
                 "Method": {
-                  "name": "endif",
+                  "name": {
+                    "name": "endif",
+                    "span": {
+                      "start": 29,
+                      "end": 34
+                    }
+                  },
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": false,
@@ -46,7 +58,13 @@ class C {
             {
               "kind": {
                 "Method": {
-                  "name": "endfor",
+                  "name": {
+                    "name": "endfor",
+                    "span": {
+                      "start": 53,
+                      "end": 59
+                    }
+                  },
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": false,
@@ -66,7 +84,13 @@ class C {
             {
               "kind": {
                 "Method": {
-                  "name": "endforeach",
+                  "name": {
+                    "name": "endforeach",
+                    "span": {
+                      "start": 78,
+                      "end": 88
+                    }
+                  },
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": false,
@@ -86,7 +110,13 @@ class C {
             {
               "kind": {
                 "Method": {
-                  "name": "endwhile",
+                  "name": {
+                    "name": "endwhile",
+                    "span": {
+                      "start": 107,
+                      "end": 115
+                    }
+                  },
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": false,
@@ -106,7 +136,13 @@ class C {
             {
               "kind": {
                 "Method": {
-                  "name": "endswitch",
+                  "name": {
+                    "name": "endswitch",
+                    "span": {
+                      "start": 134,
+                      "end": 143
+                    }
+                  },
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": false,
@@ -126,7 +162,13 @@ class C {
             {
               "kind": {
                 "Method": {
-                  "name": "enddeclare",
+                  "name": {
+                    "name": "enddeclare",
+                    "span": {
+                      "start": 162,
+                      "end": 172
+                    }
+                  },
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": false,

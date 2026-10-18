@@ -30,7 +30,13 @@ class User {}
     {
       "kind": {
         "Class": {
-          "name": "User",
+          "name": {
+            "name": "User",
+            "span": {
+              "start": 34,
+              "end": 38
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

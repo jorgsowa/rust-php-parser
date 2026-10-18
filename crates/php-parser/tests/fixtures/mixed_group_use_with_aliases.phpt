@@ -22,7 +22,13 @@ use A\B\{C as D, function e as f, const G as H};
                   "end": 16
                 }
               },
-              "alias": "D",
+              "alias": {
+                "name": "D",
+                "span": {
+                  "start": 20,
+                  "end": 21
+                }
+              },
               "span": {
                 "start": 15,
                 "end": 21
@@ -41,7 +47,13 @@ use A\B\{C as D, function e as f, const G as H};
                   "end": 33
                 }
               },
-              "alias": "f",
+              "alias": {
+                "name": "f",
+                "span": {
+                  "start": 37,
+                  "end": 38
+                }
+              },
               "kind": "Function",
               "span": {
                 "start": 23,
@@ -61,7 +73,13 @@ use A\B\{C as D, function e as f, const G as H};
                   "end": 47
                 }
               },
-              "alias": "H",
+              "alias": {
+                "name": "H",
+                "span": {
+                  "start": 51,
+                  "end": 52
+                }
+              },
               "kind": "Const",
               "span": {
                 "start": 40,

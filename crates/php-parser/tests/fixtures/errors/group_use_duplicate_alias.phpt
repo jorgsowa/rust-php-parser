@@ -24,7 +24,13 @@ PHP Fatal error:  Cannot use A\C as Foo because the name is already in use in St
                   "end": 14
                 }
               },
-              "alias": "Foo",
+              "alias": {
+                "name": "Foo",
+                "span": {
+                  "start": 18,
+                  "end": 21
+                }
+              },
               "span": {
                 "start": 13,
                 "end": 21
@@ -42,7 +48,13 @@ PHP Fatal error:  Cannot use A\C as Foo because the name is already in use in St
                   "end": 24
                 }
               },
-              "alias": "Foo",
+              "alias": {
+                "name": "Foo",
+                "span": {
+                  "start": 28,
+                  "end": 31
+                }
+              },
               "span": {
                 "start": 23,
                 "end": 31

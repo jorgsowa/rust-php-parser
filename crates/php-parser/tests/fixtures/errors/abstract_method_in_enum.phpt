@@ -12,14 +12,26 @@ PHP Fatal error:  Enum method Status::label() must not be abstract in Standard i
     {
       "kind": {
         "Enum": {
-          "name": "Status",
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 11,
+              "end": 17
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "Method": {
-                  "name": "label",
+                  "name": {
+                    "name": "label",
+                    "span": {
+                      "start": 45,
+                      "end": 50
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": true,

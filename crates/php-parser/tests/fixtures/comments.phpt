@@ -137,10 +137,22 @@ function add($a, $b) {
     {
       "kind": {
         "Function": {
-          "name": "add",
+          "name": {
+            "name": "add",
+            "span": {
+              "start": 131,
+              "end": 134
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 135,
+                  "end": 137
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -156,7 +168,13 @@ function add($a, $b) {
               }
             },
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 139,
+                  "end": 141
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,

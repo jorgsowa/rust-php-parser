@@ -9,7 +9,13 @@ interface ReadWrite extends Readable, Writable {
     {
       "kind": {
         "Interface": {
-          "name": "ReadWrite",
+          "name": {
+            "name": "ReadWrite",
+            "span": {
+              "start": 16,
+              "end": 25
+            }
+          },
           "extends": [
             {
               "parts": [
@@ -36,7 +42,13 @@ interface ReadWrite extends Readable, Writable {
             {
               "kind": {
                 "Method": {
-                  "name": "flush",
+                  "name": {
+                    "name": "flush",
+                    "span": {
+                      "start": 75,
+                      "end": 80
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

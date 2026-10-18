@@ -17,10 +17,22 @@ function test2(): never {} // PHP 8.1
     {
       "kind": {
         "Function": {
-          "name": "test",
+          "name": {
+            "name": "test",
+            "span": {
+              "start": 15,
+              "end": 19
+            }
+          },
           "params": [
             {
-              "name": "a1",
+              "name": {
+                "name": "a1",
+                "span": {
+                  "start": 30,
+                  "end": 33
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -53,7 +65,13 @@ function test2(): never {} // PHP 8.1
               }
             },
             {
-              "name": "a2",
+              "name": {
+                "name": "a2",
+                "span": {
+                  "start": 39,
+                  "end": 42
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -86,7 +104,13 @@ function test2(): never {} // PHP 8.1
               }
             },
             {
-              "name": "a3",
+              "name": {
+                "name": "a3",
+                "span": {
+                  "start": 50,
+                  "end": 53
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -119,7 +143,13 @@ function test2(): never {} // PHP 8.1
               }
             },
             {
-              "name": "a4",
+              "name": {
+                "name": "a4",
+                "span": {
+                  "start": 62,
+                  "end": 65
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -152,7 +182,13 @@ function test2(): never {} // PHP 8.1
               }
             },
             {
-              "name": "a5",
+              "name": {
+                "name": "a5",
+                "span": {
+                  "start": 91,
+                  "end": 94
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -185,7 +221,13 @@ function test2(): never {} // PHP 8.1
               }
             },
             {
-              "name": "a6",
+              "name": {
+                "name": "a6",
+                "span": {
+                  "start": 118,
+                  "end": 121
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -218,7 +260,13 @@ function test2(): never {} // PHP 8.1
               }
             },
             {
-              "name": "a7",
+              "name": {
+                "name": "a7",
+                "span": {
+                  "start": 144,
+                  "end": 147
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -251,7 +299,13 @@ function test2(): never {} // PHP 8.1
               }
             },
             {
-              "name": "a8",
+              "name": {
+                "name": "a8",
+                "span": {
+                  "start": 169,
+                  "end": 172
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -284,7 +338,13 @@ function test2(): never {} // PHP 8.1
               }
             },
             {
-              "name": "a9",
+              "name": {
+                "name": "a9",
+                "span": {
+                  "start": 195,
+                  "end": 198
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -348,7 +408,13 @@ function test2(): never {} // PHP 8.1
     {
       "kind": {
         "Function": {
-          "name": "test2",
+          "name": {
+            "name": "test2",
+            "span": {
+              "start": 242,
+              "end": 247
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {

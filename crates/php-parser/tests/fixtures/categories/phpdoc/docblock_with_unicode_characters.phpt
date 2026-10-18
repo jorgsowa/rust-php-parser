@@ -21,7 +21,13 @@ class ServiceWithUnicode {
     {
       "kind": {
         "Class": {
-          "name": "ServiceWithUnicode",
+          "name": {
+            "name": "ServiceWithUnicode",
+            "span": {
+              "start": 177,
+              "end": 195
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -33,7 +39,13 @@ class ServiceWithUnicode {
             {
               "kind": {
                 "Method": {
-                  "name": "process",
+                  "name": {
+                    "name": "process",
+                    "span": {
+                      "start": 316,
+                      "end": 323
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

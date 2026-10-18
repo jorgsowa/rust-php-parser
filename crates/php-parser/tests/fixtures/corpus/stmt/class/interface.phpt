@@ -10,7 +10,13 @@ interface A extends C, D {
     {
       "kind": {
         "Interface": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 17,
+              "end": 18
+            }
+          },
           "extends": [
             {
               "parts": [
@@ -37,7 +43,13 @@ interface A extends C, D {
             {
               "kind": {
                 "Method": {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 54,
+                      "end": 55
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

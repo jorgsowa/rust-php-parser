@@ -59,7 +59,13 @@
                   }
                 }
               ],
-              "var": "a",
+              "var": {
+                "name": "a",
+                "span": {
+                  "start": 30,
+                  "end": 32
+                }
+              },
               "body": [],
               "span": {
                 "start": 27,
@@ -79,7 +85,13 @@
                   }
                 }
               ],
-              "var": "b",
+              "var": {
+                "name": "b",
+                "span": {
+                  "start": 47,
+                  "end": 49
+                }
+              },
               "body": [],
               "span": {
                 "start": 44,
@@ -99,7 +111,13 @@
                   }
                 }
               ],
-              "var": "c",
+              "var": {
+                "name": "c",
+                "span": {
+                  "start": 64,
+                  "end": 66
+                }
+              },
               "body": [],
               "span": {
                 "start": 61,

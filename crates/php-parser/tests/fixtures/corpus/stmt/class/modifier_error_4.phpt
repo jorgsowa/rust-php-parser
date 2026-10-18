@@ -10,7 +10,13 @@ PHP Fatal error:  Multiple abstract modifiers are not allowed in Standard input 
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -22,7 +28,13 @@ PHP Fatal error:  Multiple abstract modifiers are not allowed in Standard input 
             {
               "kind": {
                 "Method": {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 43,
+                      "end": 44
+                    }
+                  },
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": true,

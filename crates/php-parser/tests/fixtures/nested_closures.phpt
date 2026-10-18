@@ -31,7 +31,13 @@ $outer = function($x) {
                     "by_ref": false,
                     "params": [
                       {
-                        "name": "x",
+                        "name": {
+                          "name": "x",
+                          "span": {
+                            "start": 24,
+                            "end": 26
+                          }
+                        },
                         "type_hint": null,
                         "default": null,
                         "by_ref": false,
@@ -72,7 +78,13 @@ $outer = function($x) {
                                       "by_ref": false,
                                       "params": [
                                         {
-                                          "name": "y",
+                                          "name": {
+                                            "name": "y",
+                                            "span": {
+                                              "start": 52,
+                                              "end": 54
+                                            }
+                                          },
                                           "type_hint": null,
                                           "default": null,
                                           "by_ref": false,
@@ -90,7 +102,13 @@ $outer = function($x) {
                                       ],
                                       "use_vars": [
                                         {
-                                          "name": "x",
+                                          "name": {
+                                            "name": "x",
+                                            "span": {
+                                              "start": 61,
+                                              "end": 63
+                                            }
+                                          },
                                           "by_ref": false,
                                           "span": {
                                             "start": 61,

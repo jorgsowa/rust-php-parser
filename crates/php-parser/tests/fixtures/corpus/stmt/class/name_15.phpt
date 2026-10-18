@@ -10,7 +10,13 @@ PHP Fatal error:  Cannot use "static" as interface name, as it is reserved in St
     {
       "kind": {
         "Interface": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 16,
+              "end": 17
+            }
+          },
           "extends": [
             {
               "parts": [

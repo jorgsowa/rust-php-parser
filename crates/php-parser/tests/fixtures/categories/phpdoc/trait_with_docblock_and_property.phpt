@@ -18,12 +18,24 @@ trait Timestamps {
     {
       "kind": {
         "Trait": {
-          "name": "Timestamps",
+          "name": {
+            "name": "Timestamps",
+            "span": {
+              "start": 115,
+              "end": 125
+            }
+          },
           "members": [
             {
               "kind": {
                 "Property": {
-                  "name": "createdAt",
+                  "name": {
+                    "name": "createdAt",
+                    "span": {
+                      "start": 190,
+                      "end": 200
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

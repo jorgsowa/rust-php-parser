@@ -12,7 +12,13 @@ abstract class Base {
     {
       "kind": {
         "Class": {
-          "name": "Base",
+          "name": {
+            "name": "Base",
+            "span": {
+              "start": 21,
+              "end": 25
+            }
+          },
           "modifiers": {
             "is_abstract": true,
             "is_final": false,
@@ -24,7 +30,13 @@ abstract class Base {
             {
               "kind": {
                 "Method": {
-                  "name": "template",
+                  "name": {
+                    "name": "template",
+                    "span": {
+                      "start": 60,
+                      "end": 68
+                    }
+                  },
                   "visibility": "Protected",
                   "is_static": false,
                   "is_abstract": true,
@@ -61,7 +73,13 @@ abstract class Base {
             {
               "kind": {
                 "Method": {
-                  "name": "execute",
+                  "name": {
+                    "name": "execute",
+                    "span": {
+                      "start": 106,
+                      "end": 113
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

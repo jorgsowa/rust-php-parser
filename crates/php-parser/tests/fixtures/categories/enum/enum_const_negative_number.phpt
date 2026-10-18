@@ -8,14 +8,26 @@ min_php=8.1
     {
       "kind": {
         "Enum": {
-          "name": "Numbers",
+          "name": {
+            "name": "Numbers",
+            "span": {
+              "start": 11,
+              "end": 18
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "ClassConst": {
-                  "name": "NEG_INT",
+                  "name": {
+                    "name": "NEG_INT",
+                    "span": {
+                      "start": 27,
+                      "end": 34
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -49,7 +61,13 @@ min_php=8.1
             {
               "kind": {
                 "ClassConst": {
-                  "name": "NEG_FLOAT",
+                  "name": {
+                    "name": "NEG_FLOAT",
+                    "span": {
+                      "start": 48,
+                      "end": 57
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {

@@ -25,12 +25,24 @@ class B {
     {
       "kind": {
         "Trait": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 13,
+              "end": 14
+            }
+          },
           "members": [
             {
               "kind": {
                 "Method": {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 37,
+                      "end": 38
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -59,7 +71,13 @@ class B {
     {
       "kind": {
         "Class": {
-          "name": "B",
+          "name": {
+            "name": "B",
+            "span": {
+              "start": 53,
+              "end": 54
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

@@ -8,7 +8,13 @@ min_php=8.5
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -20,7 +26,13 @@ min_php=8.5
             {
               "kind": {
                 "Property": {
-                  "name": "count",
+                  "name": {
+                    "name": "count",
+                    "span": {
+                      "start": 51,
+                      "end": 57
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": "Protected",
                   "is_static": true,

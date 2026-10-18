@@ -13,7 +13,13 @@ class User {
     {
       "kind": {
         "Class": {
-          "name": "User",
+          "name": {
+            "name": "User",
+            "span": {
+              "start": 12,
+              "end": 16
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -25,7 +31,13 @@ class User {
             {
               "kind": {
                 "Property": {
-                  "name": "name",
+                  "name": {
+                    "name": "name",
+                    "span": {
+                      "start": 52,
+                      "end": 57
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": "Protected",
                   "is_static": false,
@@ -60,7 +72,13 @@ class User {
             {
               "kind": {
                 "Property": {
-                  "name": "age",
+                  "name": {
+                    "name": "age",
+                    "span": {
+                      "start": 87,
+                      "end": 91
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": "Private",
                   "is_static": false,
@@ -95,7 +113,13 @@ class User {
             {
               "kind": {
                 "Property": {
-                  "name": "email",
+                  "name": {
+                    "name": "email",
+                    "span": {
+                      "start": 127,
+                      "end": 133
+                    }
+                  },
                   "visibility": "Protected",
                   "set_visibility": "Private",
                   "is_static": false,

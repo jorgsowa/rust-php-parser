@@ -11,10 +11,22 @@ function f(
     {
       "kind": {
         "Function": {
-          "name": "f",
+          "name": {
+            "name": "f",
+            "span": {
+              "start": 30,
+              "end": 31
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 59,
+                  "end": 61
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -82,7 +94,13 @@ function f(
               }
             },
             {
-              "name": "y",
+              "name": {
+                "name": "y",
+                "span": {
+                  "start": 83,
+                  "end": 85
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {

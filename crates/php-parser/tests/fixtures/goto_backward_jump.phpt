@@ -9,7 +9,13 @@ if ($count++ < 3) {
   "stmts": [
     {
       "kind": {
-        "Label": "start"
+        "Label": {
+          "name": "start",
+          "span": {
+            "start": 6,
+            "end": 11
+          }
+        }
       },
       "span": {
         "start": 6,
@@ -64,7 +70,13 @@ if ($count++ < 3) {
               "Block": [
                 {
                   "kind": {
-                    "Goto": "start"
+                    "Goto": {
+                      "name": "start",
+                      "span": {
+                        "start": 42,
+                        "end": 47
+                      }
+                    }
                   },
                   "span": {
                     "start": 37,

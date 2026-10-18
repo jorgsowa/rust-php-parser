@@ -31,7 +31,13 @@ PHP Fatal error:  Cannot declare promoted property outside a constructor in Stan
                     "by_ref": false,
                     "params": [
                       {
-                        "name": "x",
+                        "name": {
+                          "name": "x",
+                          "span": {
+                            "start": 36,
+                            "end": 38
+                          }
+                        },
                         "type_hint": {
                           "kind": {
                             "Named": {

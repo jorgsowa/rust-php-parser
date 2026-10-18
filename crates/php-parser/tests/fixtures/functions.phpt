@@ -17,10 +17,22 @@ greet('PHP');
     {
       "kind": {
         "Function": {
-          "name": "add",
+          "name": {
+            "name": "add",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 19,
+                  "end": 21
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -36,7 +48,13 @@ greet('PHP');
               }
             },
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 23,
+                  "end": 25
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -104,10 +122,22 @@ greet('PHP');
     {
       "kind": {
         "Function": {
-          "name": "greet",
+          "name": {
+            "name": "greet",
+            "span": {
+              "start": 61,
+              "end": 66
+            }
+          },
           "params": [
             {
-              "name": "name",
+              "name": {
+                "name": "name",
+                "span": {
+                  "start": 67,
+                  "end": 72
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {

@@ -6,7 +6,13 @@
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -18,7 +24,13 @@
             {
               "kind": {
                 "ClassConst": {
-                  "name": "X",
+                  "name": {
+                    "name": "X",
+                    "span": {
+                      "start": 24,
+                      "end": 25
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -41,7 +53,13 @@
             {
               "kind": {
                 "Method": {
-                  "name": "f",
+                  "name": {
+                    "name": "f",
+                    "span": {
+                      "start": 47,
+                      "end": 48
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

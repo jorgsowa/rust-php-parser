@@ -15,10 +15,22 @@ PHP Fatal error:  Type mixed cannot be marked as nullable since mixed already in
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 26,
+                  "end": 28
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Nullable": {

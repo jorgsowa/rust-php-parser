@@ -11,7 +11,13 @@ function a() {
     {
       "kind": {
         "Function": {
-          "name": "a",
+          "name": {
+            "name": "a",
+            "span": {
+              "start": 16,
+              "end": 17
+            }
+          },
           "params": [],
           "body": [
             {
@@ -71,7 +77,13 @@ function a() {
               "kind": {
                 "StaticVar": [
                   {
-                    "name": "c",
+                    "name": {
+                      "name": "c",
+                      "span": {
+                        "start": 61,
+                        "end": 63
+                      }
+                    },
                     "default": null,
                     "span": {
                       "start": 61,
@@ -79,7 +91,13 @@ function a() {
                     }
                   },
                   {
-                    "name": "d",
+                    "name": {
+                      "name": "d",
+                      "span": {
+                        "start": 65,
+                        "end": 67
+                      }
+                    },
                     "default": {
                       "kind": {
                         "String": "e"

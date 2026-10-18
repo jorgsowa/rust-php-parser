@@ -9,10 +9,22 @@ function test(?Foo $bar, ?string $foo) : ?Baz {
     {
       "kind": {
         "Function": {
-          "name": "test",
+          "name": {
+            "name": "test",
+            "span": {
+              "start": 16,
+              "end": 20
+            }
+          },
           "params": [
             {
-              "name": "bar",
+              "name": {
+                "name": "bar",
+                "span": {
+                  "start": 26,
+                  "end": 30
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Nullable": {
@@ -53,7 +65,13 @@ function test(?Foo $bar, ?string $foo) : ?Baz {
               }
             },
             {
-              "name": "foo",
+              "name": {
+                "name": "foo",
+                "span": {
+                  "start": 40,
+                  "end": 44
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Nullable": {

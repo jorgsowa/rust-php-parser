@@ -42,7 +42,13 @@ class A {
                       {
                         "kind": {
                           "Method": {
-                            "name": "test",
+                            "name": {
+                              "name": "test",
+                              "span": {
+                                "start": 39,
+                                "end": 43
+                              }
+                            },
                             "visibility": "Public",
                             "is_static": false,
                             "is_abstract": false,
@@ -171,7 +177,13 @@ class A {
                       {
                         "kind": {
                           "Property": {
-                            "name": "foo",
+                            "name": {
+                              "name": "foo",
+                              "span": {
+                                "start": 117,
+                                "end": 121
+                              }
+                            },
                             "visibility": "Public",
                             "set_visibility": null,
                             "is_static": false,
@@ -321,7 +333,13 @@ class A {
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 177,
+              "end": 178
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -333,7 +351,13 @@ class A {
             {
               "kind": {
                 "Method": {
-                  "name": "test",
+                  "name": {
+                    "name": "test",
+                    "span": {
+                      "start": 201,
+                      "end": 205
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -371,7 +395,13 @@ class A {
                                       {
                                         "kind": {
                                           "ClassConst": {
-                                            "name": "A",
+                                            "name": {
+                                              "name": "A",
+                                              "span": {
+                                                "start": 272,
+                                                "end": 273
+                                              }
+                                            },
                                             "visibility": null,
                                             "is_final": false,
                                             "value": {

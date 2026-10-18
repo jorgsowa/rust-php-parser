@@ -6,7 +6,13 @@
     {
       "kind": {
         "Interface": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 16,
+              "end": 19
+            }
+          },
           "extends": [
             {
               "parts": [
@@ -33,7 +39,13 @@
             {
               "kind": {
                 "Method": {
-                  "name": "run",
+                  "name": {
+                    "name": "run",
+                    "span": {
+                      "start": 55,
+                      "end": 58
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

@@ -8,14 +8,26 @@ min_php=8.1
     {
       "kind": {
         "Enum": {
-          "name": "Suit",
+          "name": {
+            "name": "Suit",
+            "span": {
+              "start": 11,
+              "end": 15
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "Case": {
-                  "name": "for",
+                  "name": {
+                    "name": "for",
+                    "span": {
+                      "start": 23,
+                      "end": 26
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -28,7 +40,13 @@ min_php=8.1
             {
               "kind": {
                 "Case": {
-                  "name": "function",
+                  "name": {
+                    "name": "function",
+                    "span": {
+                      "start": 33,
+                      "end": 41
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -41,7 +59,13 @@ min_php=8.1
             {
               "kind": {
                 "Case": {
-                  "name": "match",
+                  "name": {
+                    "name": "match",
+                    "span": {
+                      "start": 48,
+                      "end": 53
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }

@@ -17,7 +17,13 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
     {
       "kind": {
         "Class": {
-          "name": "Test",
+          "name": {
+            "name": "Test",
+            "span": {
+              "start": 12,
+              "end": 16
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -29,7 +35,13 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
             {
               "kind": {
                 "Property": {
-                  "name": "prop",
+                  "name": {
+                    "name": "prop",
+                    "span": {
+                      "start": 30,
+                      "end": 35
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -47,7 +59,13 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 59,
+                      "end": 70
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -55,7 +73,13 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "prop2",
+                      "name": {
+                        "name": "prop2",
+                        "span": {
+                          "start": 78,
+                          "end": 84
+                        }
+                      },
                       "type_hint": null,
                       "default": null,
                       "by_ref": false,

@@ -63,42 +63,49 @@ fn slice_is_empty<T>(v: &[T]) -> bool {
 
 /// Owned equivalent of [`Ident`](crate::ast::Ident), with the same API and serialized form.
 #[derive(Clone, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "serde", derive(Serialize))]
-#[cfg_attr(feature = "serde", serde(transparent))]
-pub struct Ident(Option<Box<str>>);
+pub struct Ident {
+    name: Option<Box<str>>,
+    /// Source range of the identifier token; includes the `$` of a variable name.
+    pub span: Span,
+}
 
 impl Ident {
-    /// Sentinel for "no identifier was parsed".
-    pub const ERROR: Self = Self(None);
-
     /// Construct an identifier from a non-empty name.
-    pub fn name(s: impl Into<Box<str>>) -> Self {
-        let s = s.into();
-        debug_assert!(!s.is_empty(), "Ident::name() called with empty string");
-        Self(Some(s))
+    pub fn new(name: impl Into<Box<str>>, span: Span) -> Self {
+        let name = name.into();
+        debug_assert!(!name.is_empty(), "Ident::new() called with empty name");
+        Self {
+            name: Some(name),
+            span,
+        }
+    }
+
+    /// Placeholder for "no identifier was parsed" at `span`.
+    pub const fn error(span: Span) -> Self {
+        Self { name: None, span }
     }
 
     /// Returns `Some(s)` for a real identifier, `None` for the error state.
     pub fn as_str(&self) -> Option<&str> {
-        self.0.as_deref()
+        self.name.as_deref()
     }
 
     /// Returns `true` if this identifier was synthesised during error recovery.
     pub fn is_error(&self) -> bool {
-        self.0.is_none()
+        self.name.is_none()
     }
 
     /// Returns the inner string, or `"<error>"` for the error state.
     pub fn or_error(&self) -> &str {
-        self.0.as_deref().unwrap_or("<error>")
+        self.name.as_deref().unwrap_or("<error>")
     }
 }
 
 impl fmt::Debug for Ident {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match &self.0 {
-            Some(s) => f.debug_tuple("Ident").field(s).finish(),
-            None => f.write_str("Ident::ERROR"),
+        match &self.name {
+            Some(s) => write!(f, "Ident({:?}, {:?})", s, self.span),
+            None => write!(f, "Ident::error({:?})", self.span),
         }
     }
 }
@@ -106,6 +113,20 @@ impl fmt::Debug for Ident {
 impl fmt::Display for Ident {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(self.or_error())
+    }
+}
+
+#[cfg(feature = "serde")]
+impl Serialize for Ident {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+        use serde::ser::SerializeStruct;
+        let Some(name) = &self.name else {
+            return s.serialize_none();
+        };
+        let mut st = s.serialize_struct("Ident", 2)?;
+        st.serialize_field("name", name)?;
+        st.serialize_field("span", &self.span)?;
+        st.end()
     }
 }
 
@@ -534,7 +555,7 @@ pub struct CatchClause {
     /// Caught exception types (multi-catch allowed).
     pub types: Box<[Name]>,
     /// Bound variable name without `$`, if any.
-    pub var: Option<Box<str>>,
+    pub var: Option<Ident>,
     /// The `catch` block.
     pub body: Box<Block>,
     /// Source span.
@@ -592,7 +613,7 @@ pub struct UseItem {
     /// The imported name.
     pub name: Name,
     /// Local alias from `as`.
-    pub alias: Option<Box<str>>,
+    pub alias: Option<Ident>,
     /// Per-item kind in a mixed group use.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub kind: Option<UseKind>,
@@ -1189,7 +1210,7 @@ pub struct ClosureExpr {
 #[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ClosureUseVar {
     /// Captured variable name without `$`.
-    pub name: Box<str>,
+    pub name: Ident,
     /// Whether captured by reference.
     pub by_ref: bool,
     /// Source span.
@@ -1744,7 +1765,10 @@ pub struct EnumCase {
 // ===========================================================================
 
 fn owned_ident(ident: arena_ast::Ident<'_>) -> Ident {
-    ident.as_str().map_or(Ident::ERROR, Ident::name)
+    match ident.as_str() {
+        Some(s) => Ident::new(s, ident.span),
+        None => Ident::error(ident.span),
+    }
 }
 
 fn owned_name(name: &arena_ast::Name<'_, '_>) -> Name {
@@ -2000,7 +2024,7 @@ fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
                 .use_vars
                 .iter()
                 .map(|v| ClosureUseVar {
-                    name: v.name.into(),
+                    name: owned_ident(v.name),
                     by_ref: v.by_ref,
                     span: v.span,
                 })
@@ -2367,7 +2391,7 @@ fn owned_stmt_kind(k: &arena_ast::StmtKind<'_, '_>) -> StmtKind {
                         .map(owned_name)
                         .collect::<Vec<_>>()
                         .into_boxed_slice(),
-                    var: c.var.map(Box::from),
+                    var: c.var.map(owned_ident),
                     body: Box::new(owned_block(c.body)),
                     span: c.span,
                 })
@@ -2399,7 +2423,7 @@ fn owned_stmt_kind(k: &arena_ast::StmtKind<'_, '_>) -> StmtKind {
                 .iter()
                 .map(|item| UseItem {
                     name: owned_name(&item.name),
-                    alias: item.alias.map(Box::from),
+                    alias: item.alias.map(owned_ident),
                     kind: item.kind,
                     span: item.span,
                 })
@@ -2705,8 +2729,8 @@ fn av_str<'a>(arena: &'a bumpalo::Bump, s: &str) -> &'a str {
 
 fn av_ident<'a>(arena: &'a bumpalo::Bump, ident: &Ident) -> arena_ast::Ident<'a> {
     match ident.as_str() {
-        Some(s) => arena_ast::Ident::name(arena.alloc_str(s)),
-        None => arena_ast::Ident::ERROR,
+        Some(s) => arena_ast::Ident::new(arena.alloc_str(s), ident.span),
+        None => arena_ast::Ident::error(ident.span),
     }
 }
 
@@ -2974,7 +2998,7 @@ fn av_leaf_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
                 let mut v = arena_ast::ArenaVec::with_capacity_in(c.use_vars.len(), arena);
                 for uv in c.use_vars.iter() {
                     v.push(arena_ast::ClosureUseVar {
-                        name: arena.alloc_str(&uv.name),
+                        name: av_ident(arena, &uv.name),
                         by_ref: uv.by_ref,
                         span: uv.span,
                     });
@@ -3465,7 +3489,7 @@ fn av_try_catch_stmt<'a>(
                 }
                 v.push(arena_ast::CatchClause {
                     types,
-                    var: c.var.as_deref().map(|s| av_str(arena, s)),
+                    var: c.var.as_ref().map(|v| av_ident(arena, v)),
                     body: arena.alloc(av_block(arena, &c.body)),
                     span: c.span,
                 });
@@ -3505,7 +3529,7 @@ fn av_use_decl<'a>(arena: &'a bumpalo::Bump, u: &UseDecl) -> arena_ast::UseDecl<
             for item in u.uses.iter() {
                 v.push(arena_ast::UseItem {
                     name: av_name(arena, &item.name),
-                    alias: item.alias.as_deref().map(|s| av_str(arena, s)),
+                    alias: item.alias.as_ref().map(|a| av_ident(arena, a)),
                     kind: item.kind,
                     span: item.span,
                 });

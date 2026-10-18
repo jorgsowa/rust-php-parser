@@ -1137,14 +1137,14 @@ fn parse_function<'arena, 'src>(
                 span,
             });
         }
-        Ident::name(text)
+        Ident::new(text, span)
     } else {
         parser.error(ParseError::Expected {
             expected: "function name".into(),
             found: parser.current_kind().description().into(),
             span: parser.current_span(),
         });
-        Ident::ERROR
+        parser.missing_ident()
     };
 
     let open_paren = parser.expect(TokenKind::LeftParen);
@@ -1484,7 +1484,7 @@ pub fn parse_param_list<'arena, 'src>(
         let name_span_end = name_token.as_ref().map(|t| t.span.end);
         let name = name_token
             .map(|t| parser.variable_ident(t))
-            .unwrap_or(Ident::ERROR);
+            .unwrap_or(parser.missing_ident());
 
         let default = if parser.eat(TokenKind::Equals).is_some() {
             if visibility.is_some() {
@@ -1860,7 +1860,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
 
         let var = if parser.check(TokenKind::Variable) {
             let t = parser.advance();
-            Some(parser.variable_name(t))
+            Some(parser.variable_ident(t))
         } else {
             None
         };
@@ -1953,8 +1953,8 @@ fn parse_goto<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena
     let name_token = parser.expect(TokenKind::Identifier);
     let src = parser.source;
     let name = name_token
-        .map(|t| Ident::name(&src[t.span.start as usize..t.span.end as usize]))
-        .unwrap_or(Ident::ERROR);
+        .map(|t| Ident::new(&src[t.span.start as usize..t.span.end as usize], t.span))
+        .unwrap_or(parser.missing_ident());
     parser.expect(TokenKind::Semicolon);
     let span = Span::new(start, parser.previous_end());
     Stmt {
@@ -2277,13 +2277,14 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             let alias = if parser.eat(TokenKind::As).is_some() {
                 let alias_token = parser.expect(TokenKind::Identifier);
                 let src = parser.source;
-                alias_token.map(|t| &src[t.span.start as usize..t.span.end as usize])
+                alias_token
+                    .map(|t| Ident::new(&src[t.span.start as usize..t.span.end as usize], t.span))
             } else {
                 None
             };
 
             let use_span = Span::new(sub_start, parser.previous_end());
-            let local_name = alias.unwrap_or(sub_last_part);
+            let local_name = alias.and_then(|a| a.as_str()).unwrap_or(sub_last_part);
             let effective_kind = item_kind.unwrap_or(kind);
             let seen = match effective_kind {
                 UseKind::Normal => Some(&mut seen_normal),
@@ -2319,7 +2320,8 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
         let alias = if parser.eat(TokenKind::As).is_some() {
             let alias_token = parser.expect(TokenKind::Identifier);
             let src = parser.source;
-            alias_token.map(|t| &src[t.span.start as usize..t.span.end as usize])
+            alias_token
+                .map(|t| Ident::new(&src[t.span.start as usize..t.span.end as usize], t.span))
         } else {
             None
         };
@@ -2342,7 +2344,8 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             let alias = if parser.eat(TokenKind::As).is_some() {
                 let alias_token = parser.expect(TokenKind::Identifier);
                 let src = parser.source;
-                alias_token.map(|t| &src[t.span.start as usize..t.span.end as usize])
+                alias_token
+                    .map(|t| Ident::new(&src[t.span.start as usize..t.span.end as usize], t.span))
             } else {
                 None
             };
@@ -2392,14 +2395,14 @@ fn parse_const_with_attrs<'arena, 'src>(
                     span,
                 });
             }
-            Ident::name(text)
+            Ident::new(text, span)
         } else {
             parser.error(ParseError::Expected {
                 expected: "constant name".into(),
                 found: parser.current_kind().description().into(),
                 span: parser.current_span(),
             });
-            Ident::ERROR
+            parser.missing_ident()
         };
         parser.expect(TokenKind::Equals);
         let value = expr::parse_expr(parser);
@@ -2488,7 +2491,7 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
         let var_token = parser.expect(TokenKind::Variable);
         let name = var_token
             .map(|t| parser.variable_ident(t))
-            .unwrap_or(Ident::ERROR);
+            .unwrap_or(parser.missing_ident());
 
         let default = if parser.eat(TokenKind::Equals).is_some() {
             // Static-variable initializers DO permit `new` (PHP 8.1+).
@@ -2537,10 +2540,10 @@ fn parse_expression_stmt_or_label<'arena, 'src>(
     let start = parser.start_span();
     let expr = expr::parse_expr(parser);
 
-    if let ExprKind::Name(Name::Simple { value, .. }) = expr.kind {
+    if let ExprKind::Name(Name::Simple { value, span }) = expr.kind {
         if parser.eat(TokenKind::Colon).is_some() {
+            let label = Ident::new(value, span);
             let span = Span::new(start, parser.previous_end());
-            let label = Ident::name(value);
             return Stmt {
                 kind: StmtKind::Label(label),
                 span,

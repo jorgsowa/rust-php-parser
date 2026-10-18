@@ -1506,7 +1506,7 @@ mod tests {
             span: Span::DUMMY,
         });
         let func = arena.alloc(FunctionDecl {
-            name: Ident::name("foo"),
+            name: Ident::new("foo", Span::DUMMY),
             params: ArenaVec::new_in(&arena),
             body: func_body,
             return_type: None,

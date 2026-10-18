@@ -35,7 +35,13 @@ function gen() {
     {
       "kind": {
         "Function": {
-          "name": "gen",
+          "name": {
+            "name": "gen",
+            "span": {
+              "start": 16,
+              "end": 19
+            }
+          },
           "params": [],
           "body": [
             {

@@ -18,7 +18,13 @@ PHP Fatal error:  Case Diamonds of backed enum Suit must have a value in Standar
     {
       "kind": {
         "Enum": {
-          "name": "Suit",
+          "name": {
+            "name": "Suit",
+            "span": {
+              "start": 12,
+              "end": 16
+            }
+          },
           "scalar_type": {
             "parts": [
               "string"
@@ -34,7 +40,13 @@ PHP Fatal error:  Case Diamonds of backed enum Suit must have a value in Standar
             {
               "kind": {
                 "Case": {
-                  "name": "Hearts",
+                  "name": {
+                    "name": "Hearts",
+                    "span": {
+                      "start": 36,
+                      "end": 42
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "H"
@@ -55,7 +67,13 @@ PHP Fatal error:  Case Diamonds of backed enum Suit must have a value in Standar
             {
               "kind": {
                 "Case": {
-                  "name": "Diamonds",
+                  "name": {
+                    "name": "Diamonds",
+                    "span": {
+                      "start": 59,
+                      "end": 67
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -68,7 +86,13 @@ PHP Fatal error:  Case Diamonds of backed enum Suit must have a value in Standar
             {
               "kind": {
                 "Case": {
-                  "name": "Clubs",
+                  "name": {
+                    "name": "Clubs",
+                    "span": {
+                      "start": 78,
+                      "end": 83
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "C"
@@ -89,7 +113,13 @@ PHP Fatal error:  Case Diamonds of backed enum Suit must have a value in Standar
             {
               "kind": {
                 "Case": {
-                  "name": "Spades",
+                  "name": {
+                    "name": "Spades",
+                    "span": {
+                      "start": 100,
+                      "end": 106
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "S"

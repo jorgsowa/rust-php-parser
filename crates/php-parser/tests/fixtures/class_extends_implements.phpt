@@ -18,13 +18,25 @@ class User extends Model implements Loggable, Serializable {
     {
       "kind": {
         "Interface": {
-          "name": "Loggable",
+          "name": {
+            "name": "Loggable",
+            "span": {
+              "start": 16,
+              "end": 24
+            }
+          },
           "extends": [],
           "members": [
             {
               "kind": {
                 "Method": {
-                  "name": "log",
+                  "name": {
+                    "name": "log",
+                    "span": {
+                      "start": 47,
+                      "end": 50
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -70,13 +82,25 @@ class User extends Model implements Loggable, Serializable {
     {
       "kind": {
         "Interface": {
-          "name": "Serializable",
+          "name": {
+            "name": "Serializable",
+            "span": {
+              "start": 72,
+              "end": 84
+            }
+          },
           "extends": [],
           "members": [
             {
               "kind": {
                 "Method": {
-                  "name": "serialize",
+                  "name": {
+                    "name": "serialize",
+                    "span": {
+                      "start": 107,
+                      "end": 116
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -122,7 +146,13 @@ class User extends Model implements Loggable, Serializable {
     {
       "kind": {
         "Class": {
-          "name": "User",
+          "name": {
+            "name": "User",
+            "span": {
+              "start": 136,
+              "end": 140
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -164,7 +194,13 @@ class User extends Model implements Loggable, Serializable {
             {
               "kind": {
                 "Method": {
-                  "name": "log",
+                  "name": {
+                    "name": "log",
+                    "span": {
+                      "start": 211,
+                      "end": 214
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -201,7 +237,13 @@ class User extends Model implements Loggable, Serializable {
             {
               "kind": {
                 "Method": {
-                  "name": "serialize",
+                  "name": {
+                    "name": "serialize",
+                    "span": {
+                      "start": 246,
+                      "end": 255
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

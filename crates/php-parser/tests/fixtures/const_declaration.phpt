@@ -7,7 +7,13 @@
       "kind": {
         "Const": [
           {
-            "name": "PI",
+            "name": {
+              "name": "PI",
+              "span": {
+                "start": 12,
+                "end": 14
+              }
+            },
             "value": {
               "kind": {
                 "Float": 3.14
@@ -34,7 +40,13 @@
       "kind": {
         "Const": [
           {
-            "name": "APP_NAME",
+            "name": {
+              "name": "APP_NAME",
+              "span": {
+                "start": 29,
+                "end": 37
+              }
+            },
             "value": {
               "kind": {
                 "String": "MyApp"

@@ -14,7 +14,13 @@ final readonly class Coordinate {
     {
       "kind": {
         "Class": {
-          "name": "Coordinate",
+          "name": {
+            "name": "Coordinate",
+            "span": {
+              "start": 27,
+              "end": 37
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": true,
@@ -26,7 +32,13 @@ final readonly class Coordinate {
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 60,
+                      "end": 71
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -34,7 +46,13 @@ final readonly class Coordinate {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "lat",
+                      "name": {
+                        "name": "lat",
+                        "span": {
+                          "start": 94,
+                          "end": 98
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -67,7 +85,13 @@ final readonly class Coordinate {
                       }
                     },
                     {
-                      "name": "lng",
+                      "name": {
+                        "name": "lng",
+                        "span": {
+                          "start": 121,
+                          "end": 125
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

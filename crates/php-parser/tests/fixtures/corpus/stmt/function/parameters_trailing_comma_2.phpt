@@ -13,7 +13,13 @@ class Foo
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 13,
+              "end": 16
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -25,7 +31,13 @@ class Foo
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 32,
+                      "end": 43
+                    }
+                  },
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": false,
@@ -33,7 +45,13 @@ class Foo
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "name",
+                      "name": {
+                        "name": "name",
+                        "span": {
+                          "start": 44,
+                          "end": 49
+                        }
+                      },
                       "type_hint": null,
                       "default": null,
                       "by_ref": false,
@@ -49,7 +67,13 @@ class Foo
                       }
                     },
                     {
-                      "name": "value",
+                      "name": {
+                        "name": "value",
+                        "span": {
+                          "start": 51,
+                          "end": 57
+                        }
+                      },
                       "type_hint": null,
                       "default": null,
                       "by_ref": false,

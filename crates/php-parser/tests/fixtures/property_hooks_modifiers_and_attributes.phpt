@@ -24,7 +24,13 @@ abstract class Foo {
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 21,
+              "end": 24
+            }
+          },
           "modifiers": {
             "is_abstract": true,
             "is_final": false,
@@ -36,7 +42,13 @@ abstract class Foo {
             {
               "kind": {
                 "Property": {
-                  "name": "abstract_prop",
+                  "name": {
+                    "name": "abstract_prop",
+                    "span": {
+                      "start": 51,
+                      "end": 65
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -98,7 +110,13 @@ abstract class Foo {
             {
               "kind": {
                 "Property": {
-                  "name": "final_prop",
+                  "name": {
+                    "name": "final_prop",
+                    "span": {
+                      "start": 115,
+                      "end": 126
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -222,7 +240,13 @@ abstract class Foo {
                       "by_ref": false,
                       "params": [
                         {
-                          "name": "value",
+                          "name": {
+                            "name": "value",
+                            "span": {
+                              "start": 184,
+                              "end": 190
+                            }
+                          },
                           "type_hint": {
                             "kind": {
                               "Named": {
@@ -272,7 +296,13 @@ abstract class Foo {
             {
               "kind": {
                 "Property": {
-                  "name": "attr_prop",
+                  "name": {
+                    "name": "attr_prop",
+                    "span": {
+                      "start": 245,
+                      "end": 255
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -434,7 +464,13 @@ abstract class Foo {
                       "by_ref": false,
                       "params": [
                         {
-                          "name": "value",
+                          "name": {
+                            "name": "value",
+                            "span": {
+                              "start": 352,
+                              "end": 358
+                            }
+                          },
                           "type_hint": {
                             "kind": {
                               "Named": {

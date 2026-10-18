@@ -13,14 +13,26 @@ PHP Fatal error:  Cannot use 'static' as constant modifier in Standard input cod
     {
       "kind": {
         "Enum": {
-          "name": "Status",
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 11,
+              "end": 17
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "ClassConst": {
-                  "name": "X",
+                  "name": {
+                    "name": "X",
+                    "span": {
+                      "start": 33,
+                      "end": 34
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {

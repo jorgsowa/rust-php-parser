@@ -13,7 +13,13 @@ function outer(): void {
     {
       "kind": {
         "Function": {
-          "name": "outer",
+          "name": {
+            "name": "outer",
+            "span": {
+              "start": 15,
+              "end": 20
+            }
+          },
           "params": [],
           "body": [
             {
@@ -84,7 +90,13 @@ function outer(): void {
             {
               "kind": {
                 "Function": {
-                  "name": "inner",
+                  "name": {
+                    "name": "inner",
+                    "span": {
+                      "start": 114,
+                      "end": 119
+                    }
+                  },
                   "params": [],
                   "body": [
                     {

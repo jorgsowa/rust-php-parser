@@ -11,10 +11,22 @@ PHP Fatal error:  Variadic parameter cannot have a default value in Standard inp
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [
             {
-              "name": "foo",
+              "name": {
+                "name": "foo",
+                "span": {
+                  "start": 22,
+                  "end": 26
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {

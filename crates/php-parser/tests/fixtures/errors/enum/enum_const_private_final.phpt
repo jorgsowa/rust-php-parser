@@ -12,14 +12,26 @@ PHP Fatal error:  Private constant Status::PRIV cannot be final as it is not vis
     {
       "kind": {
         "Enum": {
-          "name": "Status",
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 11,
+              "end": 17
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "ClassConst": {
-                  "name": "PRIV",
+                  "name": {
+                    "name": "PRIV",
+                    "span": {
+                      "start": 40,
+                      "end": 44
+                    }
+                  },
                   "visibility": "Private",
                   "is_final": true,
                   "value": {

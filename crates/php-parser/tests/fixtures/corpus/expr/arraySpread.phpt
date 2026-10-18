@@ -115,7 +115,13 @@ function arrGen() {
     {
       "kind": {
         "Function": {
-          "name": "getArr",
+          "name": {
+            "name": "getArr",
+            "span": {
+              "start": 36,
+              "end": 42
+            }
+          },
           "params": [],
           "body": [
             {
@@ -184,7 +190,13 @@ function arrGen() {
     {
       "kind": {
         "Function": {
-          "name": "arrGen",
+          "name": {
+            "name": "arrGen",
+            "span": {
+              "start": 75,
+              "end": 81
+            }
+          },
           "params": [],
           "body": [
             {

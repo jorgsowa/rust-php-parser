@@ -19,7 +19,13 @@ class Foo {
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 13,
+              "end": 16
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -31,7 +37,13 @@ class Foo {
             {
               "kind": {
                 "Property": {
-                  "name": "type",
+                  "name": {
+                    "name": "type",
+                    "span": {
+                      "start": 43,
+                      "end": 48
+                    }
+                  },
                   "visibility": null,
                   "set_visibility": "Private",
                   "is_static": false,
@@ -66,7 +78,13 @@ class Foo {
             {
               "kind": {
                 "Property": {
-                  "name": "count",
+                  "name": {
+                    "name": "count",
+                    "span": {
+                      "start": 73,
+                      "end": 79
+                    }
+                  },
                   "visibility": null,
                   "set_visibility": "Protected",
                   "is_static": false,
@@ -109,7 +127,13 @@ class Foo {
             {
               "kind": {
                 "Property": {
-                  "name": "label",
+                  "name": {
+                    "name": "label",
+                    "span": {
+                      "start": 108,
+                      "end": 114
+                    }
+                  },
                   "visibility": null,
                   "set_visibility": "Public",
                   "is_static": false,
@@ -144,7 +168,13 @@ class Foo {
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 137,
+                      "end": 148
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -152,7 +182,13 @@ class Foo {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "name",
+                      "name": {
+                        "name": "name",
+                        "span": {
+                          "start": 178,
+                          "end": 183
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -185,7 +221,13 @@ class Foo {
                       }
                     },
                     {
-                      "name": "age",
+                      "name": {
+                        "name": "age",
+                        "span": {
+                          "start": 212,
+                          "end": 216
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

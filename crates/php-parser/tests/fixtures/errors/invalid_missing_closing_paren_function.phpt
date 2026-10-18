@@ -15,10 +15,22 @@ PHP Parse error:  syntax error, unexpected token "return", expecting identifier 
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 23,
+                  "end": 25
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -51,7 +63,13 @@ PHP Parse error:  syntax error, unexpected token "return", expecting identifier 
               }
             },
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 27,
+                  "end": 29
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,

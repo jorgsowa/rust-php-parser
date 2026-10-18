@@ -429,7 +429,7 @@ impl<'src> Printer<'src> {
                     self.w("&");
                 }
                 self.w("$");
-                self.w(var.name);
+                self.w(var.name.or_error());
             }
             self.w(")");
         }

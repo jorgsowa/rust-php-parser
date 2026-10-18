@@ -10,7 +10,13 @@ PHP Fatal error:  Cannot use "self" as interface name, as it is reserved in Stan
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

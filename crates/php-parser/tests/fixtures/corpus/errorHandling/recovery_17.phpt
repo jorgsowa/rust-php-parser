@@ -157,7 +157,13 @@ PHP Parse error:  syntax error, unexpected token "use", expecting "{" in Standar
       "kind": {
         "Const": [
           {
-            "name": "A",
+            "name": {
+              "name": "A",
+              "span": {
+                "start": 57,
+                "end": 58
+              }
+            },
             "value": {
               "kind": {
                 "Int": 1
@@ -333,7 +339,13 @@ PHP Parse error:  syntax error, unexpected token "use", expecting "{" in Standar
     },
     {
       "kind": {
-        "Goto": "label"
+        "Goto": {
+          "name": "label",
+          "span": {
+            "start": 145,
+            "end": 150
+          }
+        }
       },
       "span": {
         "start": 140,

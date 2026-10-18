@@ -25,7 +25,13 @@
                     "by_ref": false,
                     "params": [
                       {
-                        "name": "x",
+                        "name": {
+                          "name": "x",
+                          "span": {
+                            "start": 14,
+                            "end": 16
+                          }
+                        },
                         "type_hint": null,
                         "default": null,
                         "by_ref": false,
@@ -41,7 +47,13 @@
                         }
                       },
                       {
-                        "name": "y",
+                        "name": {
+                          "name": "y",
+                          "span": {
+                            "start": 18,
+                            "end": 20
+                          }
+                        },
                         "type_hint": null,
                         "default": null,
                         "by_ref": false,

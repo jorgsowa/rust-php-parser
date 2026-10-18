@@ -9,10 +9,22 @@ function process(?string $name, ?int $count, ?array $items): ?bool {
     {
       "kind": {
         "Function": {
-          "name": "process",
+          "name": {
+            "name": "process",
+            "span": {
+              "start": 15,
+              "end": 22
+            }
+          },
           "params": [
             {
-              "name": "name",
+              "name": {
+                "name": "name",
+                "span": {
+                  "start": 31,
+                  "end": 36
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Nullable": {
@@ -53,7 +65,13 @@ function process(?string $name, ?int $count, ?array $items): ?bool {
               }
             },
             {
-              "name": "count",
+              "name": {
+                "name": "count",
+                "span": {
+                  "start": 43,
+                  "end": 49
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Nullable": {
@@ -94,7 +112,13 @@ function process(?string $name, ?int $count, ?array $items): ?bool {
               }
             },
             {
-              "name": "items",
+              "name": {
+                "name": "items",
+                "span": {
+                  "start": 58,
+                  "end": 64
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Nullable": {

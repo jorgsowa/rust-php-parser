@@ -13,7 +13,13 @@ enum Status: string {
     {
       "kind": {
         "Enum": {
-          "name": "Status",
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 11,
+              "end": 17
+            }
+          },
           "scalar_type": {
             "parts": [
               "string"
@@ -29,7 +35,13 @@ enum Status: string {
             {
               "kind": {
                 "Case": {
-                  "name": "Active",
+                  "name": {
+                    "name": "Active",
+                    "span": {
+                      "start": 37,
+                      "end": 43
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "active"
@@ -50,7 +62,13 @@ enum Status: string {
             {
               "kind": {
                 "Case": {
-                  "name": "Inactive",
+                  "name": {
+                    "name": "Inactive",
+                    "span": {
+                      "start": 65,
+                      "end": 73
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "inactive"
@@ -71,7 +89,13 @@ enum Status: string {
             {
               "kind": {
                 "Case": {
-                  "name": "Pending",
+                  "name": {
+                    "name": "Pending",
+                    "span": {
+                      "start": 97,
+                      "end": 104
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "pending"

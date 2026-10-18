@@ -17,7 +17,13 @@ class EventDispatcher {
     {
       "kind": {
         "Class": {
-          "name": "EventDispatcher",
+          "name": {
+            "name": "EventDispatcher",
+            "span": {
+              "start": 119,
+              "end": 134
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -29,7 +35,13 @@ class EventDispatcher {
             {
               "kind": {
                 "Method": {
-                  "name": "validate",
+                  "name": {
+                    "name": "validate",
+                    "span": {
+                      "start": 261,
+                      "end": 269
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -37,7 +49,13 @@ class EventDispatcher {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "value",
+                      "name": {
+                        "name": "value",
+                        "span": {
+                          "start": 276,
+                          "end": 282
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

@@ -7,7 +7,13 @@
     {
       "kind": {
         "Class": {
-          "name": "Incomplete",
+          "name": {
+            "name": "Incomplete",
+            "span": {
+              "start": 12,
+              "end": 22
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

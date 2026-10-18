@@ -15,7 +15,13 @@ enum Direction implements HasLabel {
     {
       "kind": {
         "Enum": {
-          "name": "Direction",
+          "name": {
+            "name": "Direction",
+            "span": {
+              "start": 11,
+              "end": 20
+            }
+          },
           "scalar_type": null,
           "implements": [
             {
@@ -56,7 +62,13 @@ enum Direction implements HasLabel {
             {
               "kind": {
                 "Case": {
-                  "name": "North",
+                  "name": {
+                    "name": "North",
+                    "span": {
+                      "start": 72,
+                      "end": 77
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -69,7 +81,13 @@ enum Direction implements HasLabel {
             {
               "kind": {
                 "Case": {
-                  "name": "South",
+                  "name": {
+                    "name": "South",
+                    "span": {
+                      "start": 88,
+                      "end": 93
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -82,7 +100,13 @@ enum Direction implements HasLabel {
             {
               "kind": {
                 "Case": {
-                  "name": "East",
+                  "name": {
+                    "name": "East",
+                    "span": {
+                      "start": 104,
+                      "end": 108
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -95,7 +119,13 @@ enum Direction implements HasLabel {
             {
               "kind": {
                 "Case": {
-                  "name": "West",
+                  "name": {
+                    "name": "West",
+                    "span": {
+                      "start": 119,
+                      "end": 123
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }

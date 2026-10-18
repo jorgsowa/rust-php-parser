@@ -12,7 +12,13 @@
               {
                 "kind": {
                   "Function": {
-                    "name": "main",
+                    "name": {
+                      "name": "main",
+                      "span": {
+                        "start": 27,
+                        "end": 31
+                      }
+                    },
                     "params": [],
                     "body": [],
                     "return_type": null,

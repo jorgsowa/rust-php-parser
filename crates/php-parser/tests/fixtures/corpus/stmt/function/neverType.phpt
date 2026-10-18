@@ -7,7 +7,13 @@ function test(): never {}
     {
       "kind": {
         "Function": {
-          "name": "test",
+          "name": {
+            "name": "test",
+            "span": {
+              "start": 15,
+              "end": 19
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {

@@ -84,7 +84,13 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
     {
       "kind": {
         "Function": {
-          "name": "healthy",
+          "name": {
+            "name": "healthy",
+            "span": {
+              "start": 29,
+              "end": 36
+            }
+          },
           "params": [],
           "body": [
             {

@@ -73,7 +73,13 @@ PHP Fatal error:  Cannot use A as B because the name is already in use in Standa
                   "end": 23
                 }
               },
-              "alias": "E",
+              "alias": {
+                "name": "E",
+                "span": {
+                  "start": 27,
+                  "end": 28
+                }
+              },
               "span": {
                 "start": 20,
                 "end": 28
@@ -104,7 +110,13 @@ PHP Fatal error:  Cannot use A as B because the name is already in use in Standa
                   "end": 37
                 }
               },
-              "alias": "H",
+              "alias": {
+                "name": "H",
+                "span": {
+                  "start": 41,
+                  "end": 42
+                }
+              },
               "span": {
                 "start": 34,
                 "end": 42
@@ -181,7 +193,13 @@ PHP Fatal error:  Cannot use A as B because the name is already in use in Standa
                   "end": 99
                 }
               },
-              "alias": "B",
+              "alias": {
+                "name": "B",
+                "span": {
+                  "start": 103,
+                  "end": 104
+                }
+              },
               "span": {
                 "start": 97,
                 "end": 104
@@ -243,7 +261,13 @@ PHP Fatal error:  Cannot use A as B because the name is already in use in Standa
                   "end": 182
                 }
               },
-              "alias": "baz",
+              "alias": {
+                "name": "baz",
+                "span": {
+                  "start": 186,
+                  "end": 189
+                }
+              },
               "span": {
                 "start": 175,
                 "end": 189
@@ -305,7 +329,13 @@ PHP Fatal error:  Cannot use A as B because the name is already in use in Standa
                   "end": 227
                 }
               },
-              "alias": "BAZ",
+              "alias": {
+                "name": "BAZ",
+                "span": {
+                  "start": 231,
+                  "end": 234
+                }
+              },
               "span": {
                 "start": 220,
                 "end": 234

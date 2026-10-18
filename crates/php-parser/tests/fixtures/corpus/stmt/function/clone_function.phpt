@@ -25,10 +25,22 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
     {
       "kind": {
         "Function": {
-          "name": "clone",
+          "name": {
+            "name": "clone",
+            "span": {
+              "start": 16,
+              "end": 21
+            }
+          },
           "params": [
             {
-              "name": "object",
+              "name": {
+                "name": "object",
+                "span": {
+                  "start": 29,
+                  "end": 36
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -61,7 +73,13 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
               }
             },
             {
-              "name": "withProperties",
+              "name": {
+                "name": "withProperties",
+                "span": {
+                  "start": 44,
+                  "end": 59
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {

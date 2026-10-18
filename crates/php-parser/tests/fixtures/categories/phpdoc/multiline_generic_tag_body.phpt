@@ -12,7 +12,13 @@ function foo(): void {}
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 82,
+              "end": 85
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {

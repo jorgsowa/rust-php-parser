@@ -12,7 +12,13 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "|" in Standard 
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {

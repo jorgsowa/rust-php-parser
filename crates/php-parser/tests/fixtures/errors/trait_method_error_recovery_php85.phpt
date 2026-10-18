@@ -17,12 +17,24 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
     {
       "kind": {
         "Trait": {
-          "name": "LoggerTrait",
+          "name": {
+            "name": "LoggerTrait",
+            "span": {
+              "start": 12,
+              "end": 23
+            }
+          },
           "members": [
             {
               "kind": {
                 "Method": {
-                  "name": "log",
+                  "name": {
+                    "name": "log",
+                    "span": {
+                      "start": 46,
+                      "end": 49
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -30,7 +42,13 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "msg",
+                      "name": {
+                        "name": "msg",
+                        "span": {
+                          "start": 57,
+                          "end": 61
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -113,7 +131,13 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
             {
               "kind": {
                 "Method": {
-                  "name": "error",
+                  "name": {
+                    "name": "error",
+                    "span": {
+                      "start": 117,
+                      "end": 122
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -121,7 +145,13 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "msg",
+                      "name": {
+                        "name": "msg",
+                        "span": {
+                          "start": 130,
+                          "end": 134
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

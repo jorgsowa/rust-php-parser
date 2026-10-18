@@ -6,7 +6,13 @@
     {
       "kind": {
         "Function": {
-          "name": "noop",
+          "name": {
+            "name": "noop",
+            "span": {
+              "start": 15,
+              "end": 19
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {

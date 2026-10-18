@@ -13,7 +13,13 @@ PHP Fatal error:  Type contains both true and false, bool should be used instead
     {
       "kind": {
         "Function": {
-          "name": "f",
+          "name": {
+            "name": "f",
+            "span": {
+              "start": 15,
+              "end": 16
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {

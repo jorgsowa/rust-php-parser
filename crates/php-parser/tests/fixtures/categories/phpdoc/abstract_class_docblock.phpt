@@ -15,7 +15,13 @@ abstract class GenericBase {
     {
       "kind": {
         "Class": {
-          "name": "GenericBase",
+          "name": {
+            "name": "GenericBase",
+            "span": {
+              "start": 68,
+              "end": 79
+            }
+          },
           "modifiers": {
             "is_abstract": true,
             "is_final": false,
@@ -27,7 +33,13 @@ abstract class GenericBase {
             {
               "kind": {
                 "Method": {
-                  "name": "getValue",
+                  "name": {
+                    "name": "getValue",
+                    "span": {
+                      "start": 111,
+                      "end": 119
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": true,

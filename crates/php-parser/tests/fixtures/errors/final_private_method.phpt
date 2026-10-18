@@ -18,7 +18,13 @@ Private methods cannot be final as they are never overridden by other classes
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -30,7 +36,13 @@ Private methods cannot be final as they are never overridden by other classes
             {
               "kind": {
                 "Method": {
-                  "name": "f",
+                  "name": {
+                    "name": "f",
+                    "span": {
+                      "start": 43,
+                      "end": 44
+                    }
+                  },
                   "visibility": "Private",
                   "is_static": false,
                   "is_abstract": false,

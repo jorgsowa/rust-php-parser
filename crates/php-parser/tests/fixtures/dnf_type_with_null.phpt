@@ -8,10 +8,22 @@ min_php=8.2
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 48,
+                  "end": 50
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [

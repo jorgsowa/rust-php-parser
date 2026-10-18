@@ -24,10 +24,22 @@ class Test {
     {
       "kind": {
         "Function": {
-          "name": "test",
+          "name": {
+            "name": "test",
+            "span": {
+              "start": 15,
+              "end": 19
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 56,
+                  "end": 58
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -88,7 +100,13 @@ class Test {
               }
             },
             {
-              "name": "y",
+              "name": {
+                "name": "y",
+                "span": {
+                  "start": 93,
+                  "end": 95
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -224,7 +242,13 @@ class Test {
     {
       "kind": {
         "Class": {
-          "name": "Test",
+          "name": {
+            "name": "Test",
+            "span": {
+              "start": 141,
+              "end": 145
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -236,7 +260,13 @@ class Test {
             {
               "kind": {
                 "Property": {
-                  "name": "prop",
+                  "name": {
+                    "name": "prop",
+                    "span": {
+                      "start": 173,
+                      "end": 178
+                    }
+                  },
                   "visibility": "Private",
                   "set_visibility": null,
                   "is_static": false,
@@ -299,7 +329,13 @@ class Test {
             {
               "kind": {
                 "Method": {
-                  "name": "method",
+                  "name": {
+                    "name": "method",
+                    "span": {
+                      "start": 201,
+                      "end": 207
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -307,7 +343,13 @@ class Test {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "param",
+                      "name": {
+                        "name": "param",
+                        "span": {
+                          "start": 242,
+                          "end": 248
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Union": [

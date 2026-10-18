@@ -11,7 +11,13 @@ PHP Parse error:  syntax error, unexpected token ")", expecting variable in Stan
     {
       "kind": {
         "Function": {
-          "name": "f",
+          "name": {
+            "name": "f",
+            "span": {
+              "start": 15,
+              "end": 16
+            }
+          },
           "params": [
             {
               "name": null,

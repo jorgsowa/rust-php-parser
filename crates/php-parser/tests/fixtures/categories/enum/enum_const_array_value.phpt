@@ -8,14 +8,26 @@ min_php=8.1
     {
       "kind": {
         "Enum": {
-          "name": "Lists",
+          "name": {
+            "name": "Lists",
+            "span": {
+              "start": 11,
+              "end": 16
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "ClassConst": {
-                  "name": "EMPTY",
+                  "name": {
+                    "name": "EMPTY",
+                    "span": {
+                      "start": 25,
+                      "end": 30
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -38,7 +50,13 @@ min_php=8.1
             {
               "kind": {
                 "ClassConst": {
-                  "name": "NUMS",
+                  "name": {
+                    "name": "NUMS",
+                    "span": {
+                      "start": 43,
+                      "end": 47
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -113,7 +131,13 @@ min_php=8.1
             {
               "kind": {
                 "ClassConst": {
-                  "name": "ASSOC",
+                  "name": {
+                    "name": "ASSOC",
+                    "span": {
+                      "start": 67,
+                      "end": 72
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {

@@ -13,7 +13,13 @@ PHP Fatal error:  Static property may not have asymmetric visibility in Standard
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -25,7 +31,13 @@ PHP Fatal error:  Static property may not have asymmetric visibility in Standard
             {
               "kind": {
                 "Property": {
-                  "name": "bar",
+                  "name": {
+                    "name": "bar",
+                    "span": {
+                      "start": 52,
+                      "end": 56
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": "Private",
                   "is_static": true,

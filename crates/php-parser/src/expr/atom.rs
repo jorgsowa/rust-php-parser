@@ -1489,7 +1489,7 @@ fn parse_closure_use_list<'arena, 'src>(
         let var_start = parser.start_span();
         let by_ref = parser.eat(TokenKind::Ampersand).is_some();
         if let Some(token) = parser.eat(TokenKind::Variable) {
-            let name = parser.variable_name(token);
+            let name = parser.variable_ident(token);
             let span = Span::new(var_start, token.span.end);
             vars.push(ClosureUseVar { name, by_ref, span });
         }

@@ -12,7 +12,13 @@ PHP Fatal error:  Cannot use 'parent' as class name as it is reserved in Standar
     {
       "kind": {
         "Class": {
-          "name": "parent",
+          "name": {
+            "name": "parent",
+            "span": {
+              "start": 12,
+              "end": 18
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

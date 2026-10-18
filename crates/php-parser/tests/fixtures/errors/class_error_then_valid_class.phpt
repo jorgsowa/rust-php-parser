@@ -14,7 +14,13 @@ PHP Parse error:  syntax error, unexpected token "}" in Standard input code on l
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -72,7 +78,13 @@ PHP Parse error:  syntax error, unexpected token "}" in Standard input code on l
     {
       "kind": {
         "Class": {
-          "name": "Bar",
+          "name": {
+            "name": "Bar",
+            "span": {
+              "start": 42,
+              "end": 45
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -84,7 +96,13 @@ PHP Parse error:  syntax error, unexpected token "}" in Standard input code on l
             {
               "kind": {
                 "Property": {
-                  "name": "x",
+                  "name": {
+                    "name": "x",
+                    "span": {
+                      "start": 59,
+                      "end": 61
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

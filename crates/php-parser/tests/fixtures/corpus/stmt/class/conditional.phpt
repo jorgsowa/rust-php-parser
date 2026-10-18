@@ -25,7 +25,13 @@ if (true) {
                 {
                   "kind": {
                     "Class": {
-                      "name": "A",
+                      "name": {
+                        "name": "A",
+                        "span": {
+                          "start": 29,
+                          "end": 30
+                        }
+                      },
                       "modifiers": {
                         "is_abstract": false,
                         "is_final": false,

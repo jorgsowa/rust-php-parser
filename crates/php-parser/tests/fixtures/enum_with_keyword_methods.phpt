@@ -16,14 +16,26 @@ enum Status {
     {
       "kind": {
         "Enum": {
-          "name": "Status",
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 11,
+              "end": 17
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "Case": {
-                  "name": "Active",
+                  "name": {
+                    "name": "Active",
+                    "span": {
+                      "start": 29,
+                      "end": 35
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -36,7 +48,13 @@ enum Status {
             {
               "kind": {
                 "Case": {
-                  "name": "Inactive",
+                  "name": {
+                    "name": "Inactive",
+                    "span": {
+                      "start": 46,
+                      "end": 54
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -49,7 +67,13 @@ enum Status {
             {
               "kind": {
                 "Method": {
-                  "name": "list",
+                  "name": {
+                    "name": "list",
+                    "span": {
+                      "start": 77,
+                      "end": 81
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -104,7 +128,13 @@ enum Status {
             {
               "kind": {
                 "Method": {
-                  "name": "match",
+                  "name": {
+                    "name": "match",
+                    "span": {
+                      "start": 126,
+                      "end": 131
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -159,7 +189,13 @@ enum Status {
             {
               "kind": {
                 "Method": {
-                  "name": "switch",
+                  "name": {
+                    "name": "switch",
+                    "span": {
+                      "start": 177,
+                      "end": 183
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

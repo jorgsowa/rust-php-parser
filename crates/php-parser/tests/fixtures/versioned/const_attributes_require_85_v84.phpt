@@ -14,7 +14,13 @@ PHP Parse error:  syntax error, unexpected token "const" in Standard input code 
       "kind": {
         "Const": [
           {
-            "name": "VERSION",
+            "name": {
+              "name": "VERSION",
+              "span": {
+                "start": 22,
+                "end": 29
+              }
+            },
             "value": {
               "kind": {
                 "String": "8.5"

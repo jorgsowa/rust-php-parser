@@ -14,10 +14,22 @@ function bar((A&B)|(C&D) $y): (E&F)|null {
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 27,
+                  "end": 29
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -211,10 +223,22 @@ function bar((A&B)|(C&D) $y): (E&F)|null {
     {
       "kind": {
         "Function": {
-          "name": "bar",
+          "name": {
+            "name": "bar",
+            "span": {
+              "start": 68,
+              "end": 71
+            }
+          },
           "params": [
             {
-              "name": "y",
+              "name": {
+                "name": "y",
+                "span": {
+                  "start": 84,
+                  "end": 86
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [

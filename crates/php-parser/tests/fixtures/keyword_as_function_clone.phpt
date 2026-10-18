@@ -10,10 +10,22 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
     {
       "kind": {
         "Function": {
-          "name": "clone",
+          "name": {
+            "name": "clone",
+            "span": {
+              "start": 15,
+              "end": 20
+            }
+          },
           "params": [
             {
-              "name": "object",
+              "name": {
+                "name": "object",
+                "span": {
+                  "start": 28,
+                  "end": 35
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {

@@ -370,7 +370,13 @@ $obj = new class($x) extends Base implements Iface {
                             {
                               "kind": {
                                 "Property": {
-                                  "name": "x",
+                                  "name": {
+                                    "name": "x",
+                                    "span": {
+                                      "start": 264,
+                                      "end": 266
+                                    }
+                                  },
                                   "visibility": "Public",
                                   "set_visibility": null,
                                   "is_static": false,
@@ -396,7 +402,13 @@ $obj = new class($x) extends Base implements Iface {
                             {
                               "kind": {
                                 "Method": {
-                                  "name": "hello",
+                                  "name": {
+                                    "name": "hello",
+                                    "span": {
+                                      "start": 293,
+                                      "end": 298
+                                    }
+                                  },
                                   "visibility": "Public",
                                   "is_static": false,
                                   "is_abstract": false,
@@ -514,7 +526,13 @@ $obj = new class($x) extends Base implements Iface {
                             {
                               "kind": {
                                 "Property": {
-                                  "name": "val",
+                                  "name": {
+                                    "name": "val",
+                                    "span": {
+                                      "start": 458,
+                                      "end": 462
+                                    }
+                                  },
                                   "visibility": "Private",
                                   "set_visibility": null,
                                   "is_static": false,
@@ -532,7 +550,13 @@ $obj = new class($x) extends Base implements Iface {
                             {
                               "kind": {
                                 "Method": {
-                                  "name": "__construct",
+                                  "name": {
+                                    "name": "__construct",
+                                    "span": {
+                                      "start": 484,
+                                      "end": 495
+                                    }
+                                  },
                                   "visibility": "Public",
                                   "is_static": false,
                                   "is_abstract": false,
@@ -540,7 +564,13 @@ $obj = new class($x) extends Base implements Iface {
                                   "by_ref": false,
                                   "params": [
                                     {
-                                      "name": "val",
+                                      "name": {
+                                        "name": "val",
+                                        "span": {
+                                          "start": 496,
+                                          "end": 500
+                                        }
+                                      },
                                       "type_hint": null,
                                       "default": null,
                                       "by_ref": false,
@@ -626,7 +656,13 @@ $obj = new class($x) extends Base implements Iface {
                             {
                               "kind": {
                                 "Method": {
-                                  "name": "getValue",
+                                  "name": {
+                                    "name": "getValue",
+                                    "span": {
+                                      "start": 557,
+                                      "end": 565
+                                    }
+                                  },
                                   "visibility": "Public",
                                   "is_static": false,
                                   "is_abstract": false,

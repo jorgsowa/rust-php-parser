@@ -18,7 +18,13 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
     {
       "kind": {
         "Class": {
-          "name": "Test",
+          "name": {
+            "name": "Test",
+            "span": {
+              "start": 12,
+              "end": 16
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -30,7 +36,13 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
             {
               "kind": {
                 "Property": {
-                  "name": "foo",
+                  "name": {
+                    "name": "foo",
+                    "span": {
+                      "start": 31,
+                      "end": 35
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -48,7 +60,13 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
             {
               "kind": {
                 "Property": {
-                  "name": "bar",
+                  "name": {
+                    "name": "bar",
+                    "span": {
+                      "start": 37,
+                      "end": 41
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

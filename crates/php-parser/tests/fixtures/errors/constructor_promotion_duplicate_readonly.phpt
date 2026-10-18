@@ -17,7 +17,13 @@ PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input 
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -29,7 +35,13 @@ PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input 
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 38,
+                      "end": 49
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -37,7 +49,13 @@ PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input 
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "x",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 91,
+                          "end": 93
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

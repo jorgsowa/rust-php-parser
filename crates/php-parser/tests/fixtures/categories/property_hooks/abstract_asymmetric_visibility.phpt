@@ -14,7 +14,13 @@ abstract class Foo {
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 21,
+              "end": 24
+            }
+          },
           "modifiers": {
             "is_abstract": true,
             "is_final": false,
@@ -26,7 +32,13 @@ abstract class Foo {
             {
               "kind": {
                 "Property": {
-                  "name": "count",
+                  "name": {
+                    "name": "count",
+                    "span": {
+                      "start": 64,
+                      "end": 70
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": "Private",
                   "is_static": false,

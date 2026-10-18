@@ -10,7 +10,13 @@ PHP Fatal error:  Abstract function Foo::bar() cannot contain body in Standard i
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 21,
+              "end": 24
+            }
+          },
           "modifiers": {
             "is_abstract": true,
             "is_final": false,
@@ -22,7 +28,13 @@ PHP Fatal error:  Abstract function Foo::bar() cannot contain body in Standard i
             {
               "kind": {
                 "Method": {
-                  "name": "bar",
+                  "name": {
+                    "name": "bar",
+                    "span": {
+                      "start": 52,
+                      "end": 55
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": true,

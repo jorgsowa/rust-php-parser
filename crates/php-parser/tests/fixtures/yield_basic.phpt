@@ -11,7 +11,13 @@ function generate() {
     {
       "kind": {
         "Function": {
-          "name": "generate",
+          "name": {
+            "name": "generate",
+            "span": {
+              "start": 15,
+              "end": 23
+            }
+          },
           "params": [],
           "body": [
             {

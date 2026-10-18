@@ -25,7 +25,13 @@ class Test {
     {
       "kind": {
         "Class": {
-          "name": "Test",
+          "name": {
+            "name": "Test",
+            "span": {
+              "start": 12,
+              "end": 16
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -37,7 +43,13 @@ class Test {
             {
               "kind": {
                 "Property": {
-                  "name": "x",
+                  "name": {
+                    "name": "x",
+                    "span": {
+                      "start": 37,
+                      "end": 39
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -115,7 +127,13 @@ class Test {
             {
               "kind": {
                 "Property": {
-                  "name": "y",
+                  "name": {
+                    "name": "y",
+                    "span": {
+                      "start": 115,
+                      "end": 117
+                    }
+                  },
                   "visibility": "Private",
                   "set_visibility": null,
                   "is_static": false,
@@ -150,7 +168,13 @@ class Test {
             {
               "kind": {
                 "Property": {
-                  "name": "z",
+                  "name": {
+                    "name": "z",
+                    "span": {
+                      "start": 138,
+                      "end": 140
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -273,7 +297,13 @@ class Test {
                       "by_ref": false,
                       "params": [
                         {
-                          "name": "value",
+                          "name": {
+                            "name": "value",
+                            "span": {
+                              "start": 237,
+                              "end": 243
+                            }
+                          },
                           "type_hint": {
                             "kind": {
                               "Named": {
@@ -323,7 +353,13 @@ class Test {
             {
               "kind": {
                 "Property": {
-                  "name": "counter",
+                  "name": {
+                    "name": "counter",
+                    "span": {
+                      "start": 289,
+                      "end": 297
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -457,7 +493,13 @@ class Test {
                       "by_ref": false,
                       "params": [
                         {
-                          "name": "value",
+                          "name": {
+                            "name": "value",
+                            "span": {
+                              "start": 384,
+                              "end": 390
+                            }
+                          },
                           "type_hint": {
                             "kind": {
                               "Named": {

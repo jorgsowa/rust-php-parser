@@ -65,14 +65,14 @@ pub(super) fn parse_class<'arena, 'src>(
 
     let name_is_reserved_kw = parser.is_reserved_keyword_as_decl_name();
     let (name, name_span) = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
-        (Ident::name(text), span)
+        (Ident::new(text, span), span)
     } else {
         parser.error(ParseError::Expected {
             expected: "class name".into(),
             found: parser.current_kind().description().into(),
             span: parser.current_span(),
         });
-        (Ident::ERROR, parser.current_span())
+        (parser.missing_ident(), parser.current_span())
     };
 
     if let Some(text) = name.as_str() {
@@ -747,8 +747,8 @@ fn parse_class_const_member<'arena, 'src>(
 
     let mut const_items = parser.alloc_vec();
     loop {
-        let const_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-            Ident::name(text)
+        let const_name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
+            Ident::new(text, span)
         } else {
             let span = parser.current_span();
             parser.error(ParseError::Expected {
@@ -756,7 +756,7 @@ fn parse_class_const_member<'arena, 'src>(
                 found: parser.current_kind().description().into(),
                 span,
             });
-            Ident::ERROR
+            parser.missing_ident()
         };
         parser.expect(TokenKind::Equals);
         let value = expr::parse_expr(parser);
@@ -824,15 +824,15 @@ fn parse_method_member<'arena, 'src>(
 ) -> ClassMember<'arena, 'src> {
     parser.advance(); // consume `function`
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
-    let method_name = if let Some((text, _)) = parser.eat_identifier_or_keyword() {
-        Ident::name(text)
+    let method_name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
+        Ident::new(text, span)
     } else {
         parser.error(ParseError::Expected {
             expected: "method name".into(),
             found: parser.current_kind().description().into(),
             span: parser.current_span(),
         });
-        Ident::ERROR
+        parser.missing_ident()
     };
 
     parser.expect(TokenKind::LeftParen);
@@ -1183,14 +1183,14 @@ pub(super) fn parse_interface<'arena, 'src>(
     parser.advance();
     let name_is_reserved_kw = parser.is_reserved_keyword_as_decl_name();
     let (name, name_span) = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
-        (Ident::name(text), span)
+        (Ident::new(text, span), span)
     } else {
         parser.error(ParseError::Expected {
             expected: "interface name".into(),
             found: parser.current_kind().description().into(),
             span: parser.current_span(),
         });
-        (Ident::ERROR, parser.current_span())
+        (parser.missing_ident(), parser.current_span())
     };
 
     if let Some(text) = name.as_str() {
@@ -1253,14 +1253,14 @@ pub(super) fn parse_trait<'arena, 'src>(
                 span,
             });
         }
-        Ident::name(text)
+        Ident::new(text, span)
     } else {
         parser.error(ParseError::Expected {
             expected: "trait name".into(),
             found: parser.current_kind().description().into(),
             span: parser.current_span(),
         });
-        Ident::ERROR
+        parser.missing_ident()
     };
 
     // Capture docblock before parsing body (members must not steal it)

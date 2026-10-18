@@ -10,7 +10,13 @@ PHP Parse error:  syntax error, unexpected token "readonly", expecting identifie
     {
       "kind": {
         "Class": {
-          "name": "readonly",
+          "name": {
+            "name": "readonly",
+            "span": {
+              "start": 12,
+              "end": 20
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

@@ -10,7 +10,13 @@ PHP Parse error:  syntax error, unexpected token "fn", expecting "(" in Standard
     {
       "kind": {
         "Function": {
-          "name": "fn",
+          "name": {
+            "name": "fn",
+            "span": {
+              "start": 15,
+              "end": 17
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,

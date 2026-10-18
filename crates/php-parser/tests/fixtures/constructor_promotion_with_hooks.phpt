@@ -15,7 +15,13 @@ class Point {
     {
       "kind": {
         "Class": {
-          "name": "Point",
+          "name": {
+            "name": "Point",
+            "span": {
+              "start": 12,
+              "end": 17
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -27,7 +33,13 @@ class Point {
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 40,
+                      "end": 51
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -35,7 +47,13 @@ class Point {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "x",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 81,
+                          "end": 83
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -68,7 +86,13 @@ class Point {
                       }
                     },
                     {
-                      "name": "y",
+                      "name": {
+                        "name": "y",
+                        "span": {
+                          "start": 117,
+                          "end": 119
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -101,7 +125,13 @@ class Point {
                       }
                     },
                     {
-                      "name": "z",
+                      "name": {
+                        "name": "z",
+                        "span": {
+                          "start": 143,
+                          "end": 145
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

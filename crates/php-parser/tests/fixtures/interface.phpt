@@ -12,13 +12,25 @@ interface HasName extends HasId {
     {
       "kind": {
         "Interface": {
-          "name": "HasId",
+          "name": {
+            "name": "HasId",
+            "span": {
+              "start": 16,
+              "end": 21
+            }
+          },
           "extends": [],
           "members": [
             {
               "kind": {
                 "Method": {
-                  "name": "getId",
+                  "name": {
+                    "name": "getId",
+                    "span": {
+                      "start": 44,
+                      "end": 49
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -64,7 +76,13 @@ interface HasName extends HasId {
     {
       "kind": {
         "Interface": {
-          "name": "HasName",
+          "name": {
+            "name": "HasName",
+            "span": {
+              "start": 70,
+              "end": 77
+            }
+          },
           "extends": [
             {
               "parts": [
@@ -81,7 +99,13 @@ interface HasName extends HasId {
             {
               "kind": {
                 "Method": {
-                  "name": "getName",
+                  "name": {
+                    "name": "getName",
+                    "span": {
+                      "start": 114,
+                      "end": 121
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

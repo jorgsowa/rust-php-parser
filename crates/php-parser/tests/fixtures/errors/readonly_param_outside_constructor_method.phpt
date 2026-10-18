@@ -12,7 +12,13 @@ PHP Fatal error:  Cannot declare promoted property outside a constructor in Stan
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -24,7 +30,13 @@ PHP Fatal error:  Cannot declare promoted property outside a constructor in Stan
             {
               "kind": {
                 "Method": {
-                  "name": "bar",
+                  "name": {
+                    "name": "bar",
+                    "span": {
+                      "start": 27,
+                      "end": 30
+                    }
+                  },
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": false,
@@ -32,7 +44,13 @@ PHP Fatal error:  Cannot declare promoted property outside a constructor in Stan
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "x",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 47,
+                          "end": 49
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

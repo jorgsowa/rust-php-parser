@@ -87,10 +87,22 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test1",
+          "name": {
+            "name": "test1",
+            "span": {
+              "start": 64,
+              "end": 69
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 88,
+                  "end": 90
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -267,10 +279,22 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test2",
+          "name": {
+            "name": "test2",
+            "span": {
+              "start": 167,
+              "end": 172
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 183,
+                  "end": 185
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -391,7 +415,13 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test3",
+          "name": {
+            "name": "test3",
+            "span": {
+              "start": 237,
+              "end": 242
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {
@@ -508,10 +538,22 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test4",
+          "name": {
+            "name": "test4",
+            "span": {
+              "start": 319,
+              "end": 324
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 341,
+                  "end": 343
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -678,10 +720,22 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test5",
+          "name": {
+            "name": "test5",
+            "span": {
+              "start": 396,
+              "end": 401
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 408,
+                  "end": 410
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -774,10 +828,22 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test6",
+          "name": {
+            "name": "test6",
+            "span": {
+              "start": 470,
+              "end": 475
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 482,
+                  "end": 484
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Intersection": [
@@ -870,10 +936,22 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test7",
+          "name": {
+            "name": "test7",
+            "span": {
+              "start": 538,
+              "end": 543
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 560,
+                  "end": 562
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -966,10 +1044,22 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test8",
+          "name": {
+            "name": "test8",
+            "span": {
+              "start": 617,
+              "end": 622
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 637,
+                  "end": 639
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Intersection": [
@@ -1044,10 +1134,22 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test9",
+          "name": {
+            "name": "test9",
+            "span": {
+              "start": 685,
+              "end": 690
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 720,
+                  "end": 722
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -1178,10 +1280,22 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test10",
+          "name": {
+            "name": "test10",
+            "span": {
+              "start": 770,
+              "end": 776
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 797,
+                  "end": 799
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -1316,10 +1430,22 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test11",
+          "name": {
+            "name": "test11",
+            "span": {
+              "start": 851,
+              "end": 857
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 866,
+                  "end": 868
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -1394,7 +1520,13 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Class": {
-          "name": "TestDNFProperties",
+          "name": {
+            "name": "TestDNFProperties",
+            "span": {
+              "start": 935,
+              "end": 952
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -1406,7 +1538,13 @@ function test25(iterable|A $x) {}
             {
               "kind": {
                 "Property": {
-                  "name": "prop1",
+                  "name": {
+                    "name": "prop1",
+                    "span": {
+                      "start": 978,
+                      "end": 984
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -1525,7 +1663,13 @@ function test25(iterable|A $x) {}
             {
               "kind": {
                 "Property": {
-                  "name": "prop2",
+                  "name": {
+                    "name": "prop2",
+                    "span": {
+                      "start": 1019,
+                      "end": 1025
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -1726,7 +1870,13 @@ function test25(iterable|A $x) {}
             {
               "kind": {
                 "Method": {
-                  "name": "test13",
+                  "name": {
+                    "name": "test13",
+                    "span": {
+                      "start": 1079,
+                      "end": 1085
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -1734,7 +1884,13 @@ function test25(iterable|A $x) {}
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "x",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 1095,
+                          "end": 1097
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Union": [
@@ -1808,7 +1964,13 @@ function test25(iterable|A $x) {}
             {
               "kind": {
                 "Method": {
-                  "name": "test15",
+                  "name": {
+                    "name": "test15",
+                    "span": {
+                      "start": 1171,
+                      "end": 1177
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -1816,7 +1978,13 @@ function test25(iterable|A $x) {}
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "x",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 1198,
+                          "end": 1200
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Union": [
@@ -2027,7 +2195,13 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test16",
+          "name": {
+            "name": "test16",
+            "span": {
+              "start": 1281,
+              "end": 1287
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {
@@ -2190,10 +2364,22 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test17",
+          "name": {
+            "name": "test17",
+            "span": {
+              "start": 1352,
+              "end": 1358
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 1368,
+                  "end": 1370
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -2268,10 +2454,22 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test18",
+          "name": {
+            "name": "test18",
+            "span": {
+              "start": 1416,
+              "end": 1422
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 1433,
+                  "end": 1435
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -2346,10 +2544,22 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test19",
+          "name": {
+            "name": "test19",
+            "span": {
+              "start": 1502,
+              "end": 1508
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 1532,
+                  "end": 1534
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -2442,10 +2652,22 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test20",
+          "name": {
+            "name": "test20",
+            "span": {
+              "start": 1606,
+              "end": 1612
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 1631,
+                  "end": 1633
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -2630,10 +2852,22 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test21",
+          "name": {
+            "name": "test21",
+            "span": {
+              "start": 1695,
+              "end": 1701
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 1746,
+                  "end": 1748
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -2772,7 +3006,13 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Class": {
-          "name": "TestStaticReturn",
+          "name": {
+            "name": "TestStaticReturn",
+            "span": {
+              "start": 1796,
+              "end": 1812
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -2784,7 +3024,13 @@ function test25(iterable|A $x) {}
             {
               "kind": {
                 "Method": {
-                  "name": "test",
+                  "name": {
+                    "name": "test",
+                    "span": {
+                      "start": 1835,
+                      "end": 1839
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -2876,10 +3122,22 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test23",
+          "name": {
+            "name": "test23",
+            "span": {
+              "start": 1929,
+              "end": 1935
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 1947,
+                  "end": 1949
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -2954,10 +3212,22 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test24",
+          "name": {
+            "name": "test24",
+            "span": {
+              "start": 1997,
+              "end": 2003
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 2015,
+                  "end": 2017
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -3032,10 +3302,22 @@ function test25(iterable|A $x) {}
     {
       "kind": {
         "Function": {
-          "name": "test25",
+          "name": {
+            "name": "test25",
+            "span": {
+              "start": 2067,
+              "end": 2073
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 2085,
+                  "end": 2087
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [

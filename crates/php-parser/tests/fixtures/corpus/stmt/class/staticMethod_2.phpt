@@ -10,7 +10,13 @@ PHP Fatal error:  Method A::__destruct() cannot be static in Standard input code
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -22,7 +28,13 @@ PHP Fatal error:  Method A::__destruct() cannot be static in Standard input code
             {
               "kind": {
                 "Method": {
-                  "name": "__destruct",
+                  "name": {
+                    "name": "__destruct",
+                    "span": {
+                      "start": 32,
+                      "end": 42
+                    }
+                  },
                   "visibility": null,
                   "is_static": true,
                   "is_abstract": false,

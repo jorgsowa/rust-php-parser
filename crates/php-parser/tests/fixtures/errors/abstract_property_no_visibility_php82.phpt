@@ -12,7 +12,13 @@ PHP Fatal error:  Properties cannot be declared abstract in Standard input code 
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -24,7 +30,13 @@ PHP Fatal error:  Properties cannot be declared abstract in Standard input code 
             {
               "kind": {
                 "Property": {
-                  "name": "bar",
+                  "name": {
+                    "name": "bar",
+                    "span": {
+                      "start": 34,
+                      "end": 38
+                    }
+                  },
                   "visibility": null,
                   "set_visibility": null,
                   "is_static": false,

@@ -14,7 +14,13 @@ class Config {
     {
       "kind": {
         "Class": {
-          "name": "Config",
+          "name": {
+            "name": "Config",
+            "span": {
+              "start": 12,
+              "end": 18
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -26,7 +32,13 @@ class Config {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "VERSION",
+                  "name": {
+                    "name": "VERSION",
+                    "span": {
+                      "start": 38,
+                      "end": 45
+                    }
+                  },
                   "visibility": "Public",
                   "is_final": false,
                   "value": {
@@ -49,7 +61,13 @@ class Config {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "DEBUG",
+                  "name": {
+                    "name": "DEBUG",
+                    "span": {
+                      "start": 73,
+                      "end": 78
+                    }
+                  },
                   "visibility": "Private",
                   "is_final": false,
                   "value": {
@@ -72,7 +90,13 @@ class Config {
             {
               "kind": {
                 "Property": {
-                  "name": "count",
+                  "name": {
+                    "name": "count",
+                    "span": {
+                      "start": 110,
+                      "end": 116
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": true,
@@ -115,7 +139,13 @@ class Config {
             {
               "kind": {
                 "Method": {
-                  "name": "increment",
+                  "name": {
+                    "name": "increment",
+                    "span": {
+                      "start": 149,
+                      "end": 158
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": true,
                   "is_abstract": false,

@@ -251,7 +251,13 @@ class Foo {}
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 254,
+              "end": 257
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

@@ -8,7 +8,13 @@ min_php=8.3
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -20,7 +26,13 @@ min_php=8.3
             {
               "kind": {
                 "ClassConst": {
-                  "name": "NAME",
+                  "name": {
+                    "name": "NAME",
+                    "span": {
+                      "start": 38,
+                      "end": 42
+                    }
+                  },
                   "visibility": "Public",
                   "is_final": false,
                   "type_hint": {

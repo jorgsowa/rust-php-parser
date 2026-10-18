@@ -15,12 +15,24 @@ class Post {
     {
       "kind": {
         "Trait": {
-          "name": "Timestampable",
+          "name": {
+            "name": "Timestampable",
+            "span": {
+              "start": 12,
+              "end": 25
+            }
+          },
           "members": [
             {
               "kind": {
                 "Method": {
-                  "name": "getCreatedAt",
+                  "name": {
+                    "name": "getCreatedAt",
+                    "span": {
+                      "start": 48,
+                      "end": 60
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -103,7 +115,13 @@ class Post {
     {
       "kind": {
         "Class": {
-          "name": "Post",
+          "name": {
+            "name": "Post",
+            "span": {
+              "start": 120,
+              "end": 124
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -138,7 +156,13 @@ class Post {
             {
               "kind": {
                 "Property": {
-                  "name": "title",
+                  "name": {
+                    "name": "title",
+                    "span": {
+                      "start": 168,
+                      "end": 174
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

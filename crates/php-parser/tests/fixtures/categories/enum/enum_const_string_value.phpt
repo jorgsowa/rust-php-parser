@@ -8,14 +8,26 @@ min_php=8.1
     {
       "kind": {
         "Enum": {
-          "name": "Status",
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 11,
+              "end": 17
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "ClassConst": {
-                  "name": "PREFIX",
+                  "name": {
+                    "name": "PREFIX",
+                    "span": {
+                      "start": 26,
+                      "end": 32
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {

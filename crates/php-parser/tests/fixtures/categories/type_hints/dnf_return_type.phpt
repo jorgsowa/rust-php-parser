@@ -8,7 +8,13 @@ min_php=8.2
     {
       "kind": {
         "Function": {
-          "name": "baz",
+          "name": {
+            "name": "baz",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {

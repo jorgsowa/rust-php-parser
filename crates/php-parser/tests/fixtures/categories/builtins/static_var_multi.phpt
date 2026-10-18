@@ -6,14 +6,26 @@
     {
       "kind": {
         "Function": {
-          "name": "f",
+          "name": {
+            "name": "f",
+            "span": {
+              "start": 15,
+              "end": 16
+            }
+          },
           "params": [],
           "body": [
             {
               "kind": {
                 "StaticVar": [
                   {
-                    "name": "a",
+                    "name": {
+                      "name": "a",
+                      "span": {
+                        "start": 28,
+                        "end": 30
+                      }
+                    },
                     "default": {
                       "kind": {
                         "Int": 1
@@ -29,7 +41,13 @@
                     }
                   },
                   {
-                    "name": "b",
+                    "name": {
+                      "name": "b",
+                      "span": {
+                        "start": 36,
+                        "end": 38
+                      }
+                    },
                     "default": {
                       "kind": {
                         "Int": 2

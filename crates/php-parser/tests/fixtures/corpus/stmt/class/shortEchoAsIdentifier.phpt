@@ -22,7 +22,13 @@ PHP Parse error:  Cannot use "<?=" as an identifier in Standard input code on li
     {
       "kind": {
         "Class": {
-          "name": "C",
+          "name": {
+            "name": "C",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

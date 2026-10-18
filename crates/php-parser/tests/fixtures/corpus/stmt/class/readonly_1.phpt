@@ -11,7 +11,13 @@ readonly class A {
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 22,
+              "end": 23
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

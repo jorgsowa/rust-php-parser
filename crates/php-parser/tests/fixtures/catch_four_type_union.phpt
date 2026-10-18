@@ -94,7 +94,13 @@ try {
                   }
                 }
               ],
-              "var": "e",
+              "var": {
+                "name": "e",
+                "span": {
+                  "start": 87,
+                  "end": 89
+                }
+              },
               "body": [
                 {
                   "kind": {

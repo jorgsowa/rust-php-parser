@@ -11,7 +11,13 @@ echo "Value: $объект->свойство";
     {
       "kind": {
         "Class": {
-          "name": "Объект",
+          "name": {
+            "name": "Объект",
+            "span": {
+              "start": 12,
+              "end": 24
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -23,7 +29,13 @@ echo "Value: $объект->свойство";
             {
               "kind": {
                 "Property": {
-                  "name": "свойство",
+                  "name": {
+                    "name": "свойство",
+                    "span": {
+                      "start": 38,
+                      "end": 55
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

@@ -9,14 +9,26 @@ function foo() {
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [],
           "body": [
             {
               "kind": {
                 "StaticVar": [
                   {
-                    "name": "a",
+                    "name": {
+                      "name": "a",
+                      "span": {
+                        "start": 34,
+                        "end": 36
+                      }
+                    },
                     "default": {
                       "kind": {
                         "Int": 0
@@ -32,7 +44,13 @@ function foo() {
                     }
                   },
                   {
-                    "name": "b",
+                    "name": {
+                      "name": "b",
+                      "span": {
+                        "start": 42,
+                        "end": 44
+                      }
+                    },
                     "default": {
                       "kind": {
                         "String": "init"
@@ -48,7 +66,13 @@ function foo() {
                     }
                   },
                   {
-                    "name": "c",
+                    "name": {
+                      "name": "c",
+                      "span": {
+                        "start": 55,
+                        "end": 57
+                      }
+                    },
                     "default": {
                       "kind": {
                         "Array": []

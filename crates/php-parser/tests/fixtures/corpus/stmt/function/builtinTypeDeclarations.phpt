@@ -7,10 +7,22 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
     {
       "kind": {
         "Function": {
-          "name": "test",
+          "name": {
+            "name": "test",
+            "span": {
+              "start": 15,
+              "end": 19
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 25,
+                  "end": 27
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -43,7 +55,13 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
               }
             },
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 33,
+                  "end": 35
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -76,7 +94,13 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
               }
             },
             {
-              "name": "c",
+              "name": {
+                "name": "c",
+                "span": {
+                  "start": 43,
+                  "end": 45
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -109,7 +133,13 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
               }
             },
             {
-              "name": "d",
+              "name": {
+                "name": "d",
+                "span": {
+                  "start": 54,
+                  "end": 56
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -142,7 +172,13 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
               }
             },
             {
-              "name": "e",
+              "name": {
+                "name": "e",
+                "span": {
+                  "start": 67,
+                  "end": 69
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -175,7 +211,13 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
               }
             },
             {
-              "name": "f",
+              "name": {
+                "name": "f",
+                "span": {
+                  "start": 78,
+                  "end": 80
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -208,7 +250,13 @@ function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixe
               }
             },
             {
-              "name": "g",
+              "name": {
+                "name": "g",
+                "span": {
+                  "start": 88,
+                  "end": 90
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {

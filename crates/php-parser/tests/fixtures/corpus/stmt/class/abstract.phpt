@@ -11,7 +11,13 @@ abstract class A {
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 22,
+              "end": 23
+            }
+          },
           "modifiers": {
             "is_abstract": true,
             "is_final": false,
@@ -23,7 +29,13 @@ abstract class A {
             {
               "kind": {
                 "Method": {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 46,
+                      "end": 47
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -43,7 +55,13 @@ abstract class A {
             {
               "kind": {
                 "Method": {
-                  "name": "b",
+                  "name": {
+                    "name": "b",
+                    "span": {
+                      "start": 82,
+                      "end": 83
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": true,

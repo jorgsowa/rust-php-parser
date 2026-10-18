@@ -86,7 +86,13 @@ try {
                   }
                 }
               ],
-              "var": "e",
+              "var": {
+                "name": "e",
+                "span": {
+                  "start": 58,
+                  "end": 60
+                }
+              },
               "body": [
                 {
                   "kind": {

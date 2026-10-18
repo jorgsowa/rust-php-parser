@@ -13,7 +13,13 @@ PHP Parse error:  syntax error, unexpected token "(int)", expecting "(" in Stand
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -25,7 +31,13 @@ PHP Parse error:  syntax error, unexpected token "(int)", expecting "(" in Stand
             {
               "kind": {
                 "Method": {
-                  "name": "bad",
+                  "name": {
+                    "name": "bad",
+                    "span": {
+                      "start": 38,
+                      "end": 41
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -79,7 +91,13 @@ PHP Parse error:  syntax error, unexpected token "(int)", expecting "(" in Stand
             {
               "kind": {
                 "Method": {
-                  "name": "good",
+                  "name": {
+                    "name": "good",
+                    "span": {
+                      "start": 71,
+                      "end": 75
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

@@ -15,12 +15,24 @@ trait MyTrait {
     {
       "kind": {
         "Trait": {
-          "name": "MyTrait",
+          "name": {
+            "name": "MyTrait",
+            "span": {
+              "start": 89,
+              "end": 96
+            }
+          },
           "members": [
             {
               "kind": {
                 "Method": {
-                  "name": "foo",
+                  "name": {
+                    "name": "foo",
+                    "span": {
+                      "start": 119,
+                      "end": 122
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

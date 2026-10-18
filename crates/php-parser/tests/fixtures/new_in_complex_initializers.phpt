@@ -18,10 +18,22 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 24,
+                  "end": 26
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {
@@ -65,7 +77,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
               }
             },
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 44,
+                  "end": 46
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {
@@ -146,7 +164,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
               }
             },
             {
-              "name": "c",
+              "name": {
+                "name": "c",
+                "span": {
+                  "start": 73,
+                  "end": 75
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {
@@ -232,7 +256,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
     {
       "kind": {
         "Class": {
-          "name": "Config",
+          "name": {
+            "name": "Config",
+            "span": {
+              "start": 109,
+              "end": 115
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -244,7 +274,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
             {
               "kind": {
                 "ClassConst": {
-                  "name": "DEFAULT",
+                  "name": {
+                    "name": "DEFAULT",
+                    "span": {
+                      "start": 128,
+                      "end": 135
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {

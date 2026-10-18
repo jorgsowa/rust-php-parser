@@ -10,7 +10,13 @@ class MyClass {
     {
       "kind": {
         "Class": {
-          "name": "MyClass",
+          "name": {
+            "name": "MyClass",
+            "span": {
+              "start": 12,
+              "end": 19
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -22,7 +28,13 @@ class MyClass {
             {
               "kind": {
                 "Property": {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 36,
+                      "end": 38
+                    }
+                  },
                   "visibility": "Protected",
                   "set_visibility": null,
                   "is_static": false,

@@ -6,7 +6,13 @@
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -18,7 +24,13 @@
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 34,
+                      "end": 45
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -26,7 +38,13 @@
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "flags",
+                      "name": {
+                        "name": "flags",
+                        "span": {
+                          "start": 57,
+                          "end": 63
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

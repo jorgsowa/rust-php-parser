@@ -9,10 +9,22 @@ function &b($b) {}
     {
       "kind": {
         "Function": {
-          "name": "a",
+          "name": {
+            "name": "a",
+            "span": {
+              "start": 16,
+              "end": 17
+            }
+          },
           "params": [
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 19,
+                  "end": 21
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": true,
@@ -42,10 +54,22 @@ function &b($b) {}
     {
       "kind": {
         "Function": {
-          "name": "b",
+          "name": {
+            "name": "b",
+            "span": {
+              "start": 36,
+              "end": 37
+            }
+          },
           "params": [
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 38,
+                  "end": 40
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,

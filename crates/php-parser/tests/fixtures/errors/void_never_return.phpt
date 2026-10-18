@@ -25,7 +25,13 @@ PHP Fatal error:  A void function must not return a value in Standard input code
     {
       "kind": {
         "Function": {
-          "name": "v",
+          "name": {
+            "name": "v",
+            "span": {
+              "start": 15,
+              "end": 16
+            }
+          },
           "params": [],
           "body": [
             {
@@ -76,7 +82,13 @@ PHP Fatal error:  A void function must not return a value in Standard input code
     {
       "kind": {
         "Function": {
-          "name": "n",
+          "name": {
+            "name": "n",
+            "span": {
+              "start": 48,
+              "end": 49
+            }
+          },
           "params": [],
           "body": [
             {
@@ -119,7 +131,13 @@ PHP Fatal error:  A void function must not return a value in Standard input code
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 77,
+              "end": 78
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -131,7 +149,13 @@ PHP Fatal error:  A void function must not return a value in Standard input code
             {
               "kind": {
                 "Method": {
-                  "name": "m",
+                  "name": {
+                    "name": "m",
+                    "span": {
+                      "start": 101,
+                      "end": 102
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

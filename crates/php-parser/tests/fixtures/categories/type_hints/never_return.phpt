@@ -6,7 +6,13 @@
     {
       "kind": {
         "Function": {
-          "name": "abort",
+          "name": {
+            "name": "abort",
+            "span": {
+              "start": 15,
+              "end": 20
+            }
+          },
           "params": [],
           "body": [
             {

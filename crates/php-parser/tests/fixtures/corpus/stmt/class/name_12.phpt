@@ -10,7 +10,13 @@ PHP Parse error:  syntax error, unexpected token "static", expecting identifier 
     {
       "kind": {
         "Interface": {
-          "name": "static",
+          "name": {
+            "name": "static",
+            "span": {
+              "start": 16,
+              "end": 22
+            }
+          },
           "extends": [],
           "members": [],
           "attributes": []

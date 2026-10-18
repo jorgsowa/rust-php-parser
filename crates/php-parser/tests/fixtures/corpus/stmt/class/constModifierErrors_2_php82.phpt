@@ -15,7 +15,13 @@ PHP Fatal error:  Cannot use 'abstract' as constant modifier in Standard input c
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -27,7 +33,13 @@ PHP Fatal error:  Cannot use 'abstract' as constant modifier in Standard input c
             {
               "kind": {
                 "ClassConst": {
-                  "name": "X",
+                  "name": {
+                    "name": "X",
+                    "span": {
+                      "start": 35,
+                      "end": 36
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {

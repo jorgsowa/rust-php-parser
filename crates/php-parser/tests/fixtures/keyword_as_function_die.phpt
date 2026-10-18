@@ -10,10 +10,22 @@ PHP Parse error:  syntax error, unexpected token "exit", expecting "(" in Standa
     {
       "kind": {
         "Function": {
-          "name": "die",
+          "name": {
+            "name": "die",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [
             {
-              "name": "status",
+              "name": {
+                "name": "status",
+                "span": {
+                  "start": 30,
+                  "end": 37
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [

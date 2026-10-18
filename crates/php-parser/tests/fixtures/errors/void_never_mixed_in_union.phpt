@@ -17,7 +17,13 @@ PHP Fatal error:  Void can only be used as a standalone type in Standard input c
     {
       "kind": {
         "Function": {
-          "name": "a",
+          "name": {
+            "name": "a",
+            "span": {
+              "start": 15,
+              "end": 16
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {
@@ -78,7 +84,13 @@ PHP Fatal error:  Void can only be used as a standalone type in Standard input c
     {
       "kind": {
         "Function": {
-          "name": "b",
+          "name": {
+            "name": "b",
+            "span": {
+              "start": 41,
+              "end": 42
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {
@@ -139,7 +151,13 @@ PHP Fatal error:  Void can only be used as a standalone type in Standard input c
     {
       "kind": {
         "Function": {
-          "name": "c",
+          "name": {
+            "name": "c",
+            "span": {
+              "start": 68,
+              "end": 69
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {

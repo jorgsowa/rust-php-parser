@@ -206,7 +206,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                   "end": 107
                 }
               },
-              "alias": "DB",
+              "alias": {
+                "name": "DB",
+                "span": {
+                  "start": 111,
+                  "end": 113
+                }
+              },
               "span": {
                 "start": 84,
                 "end": 113
@@ -255,13 +261,25 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
     {
       "kind": {
         "Interface": {
-          "name": "RepositoryInterface",
+          "name": {
+            "name": "RepositoryInterface",
+            "span": {
+              "start": 161,
+              "end": 180
+            }
+          },
           "extends": [],
           "members": [
             {
               "kind": {
                 "Method": {
-                  "name": "find",
+                  "name": {
+                    "name": "find",
+                    "span": {
+                      "start": 203,
+                      "end": 207
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -269,7 +287,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "id",
+                      "name": {
+                        "name": "id",
+                        "span": {
+                          "start": 212,
+                          "end": 215
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -340,7 +364,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             {
               "kind": {
                 "Method": {
-                  "name": "findAll",
+                  "name": {
+                    "name": "findAll",
+                    "span": {
+                      "start": 245,
+                      "end": 252
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -377,7 +407,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             {
               "kind": {
                 "Method": {
-                  "name": "save",
+                  "name": {
+                    "name": "save",
+                    "span": {
+                      "start": 283,
+                      "end": 287
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -385,7 +421,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "user",
+                      "name": {
+                        "name": "user",
+                        "span": {
+                          "start": 293,
+                          "end": 298
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -448,7 +490,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             {
               "kind": {
                 "Method": {
-                  "name": "delete",
+                  "name": {
+                    "name": "delete",
+                    "span": {
+                      "start": 327,
+                      "end": 333
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -456,7 +504,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "id",
+                      "name": {
+                        "name": "id",
+                        "span": {
+                          "start": 338,
+                          "end": 341
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -528,7 +582,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
     {
       "kind": {
         "Class": {
-          "name": "AbstractRepository",
+          "name": {
+            "name": "AbstractRepository",
+            "span": {
+              "start": 368,
+              "end": 386
+            }
+          },
           "modifiers": {
             "is_abstract": true,
             "is_final": false,
@@ -540,7 +600,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             {
               "kind": {
                 "Property": {
-                  "name": "db",
+                  "name": {
+                    "name": "db",
+                    "span": {
+                      "start": 415,
+                      "end": 418
+                    }
+                  },
                   "visibility": "Protected",
                   "set_visibility": null,
                   "is_static": false,
@@ -575,7 +641,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 441,
+                      "end": 452
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -583,7 +655,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "db",
+                      "name": {
+                        "name": "db",
+                        "span": {
+                          "start": 456,
+                          "end": 459
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -686,7 +764,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             {
               "kind": {
                 "Method": {
-                  "name": "tableName",
+                  "name": {
+                    "name": "tableName",
+                    "span": {
+                      "start": 531,
+                      "end": 540
+                    }
+                  },
                   "visibility": "Protected",
                   "is_static": false,
                   "is_abstract": true,
@@ -723,7 +807,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             {
               "kind": {
                 "Method": {
-                  "name": "hydrate",
+                  "name": {
+                    "name": "hydrate",
+                    "span": {
+                      "start": 584,
+                      "end": 591
+                    }
+                  },
                   "visibility": "Protected",
                   "is_static": false,
                   "is_abstract": true,
@@ -731,7 +821,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "row",
+                      "name": {
+                        "name": "row",
+                        "span": {
+                          "start": 598,
+                          "end": 602
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -794,7 +890,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             {
               "kind": {
                 "Method": {
-                  "name": "count",
+                  "name": {
+                    "name": "count",
+                    "span": {
+                      "start": 640,
+                      "end": 645
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -1023,7 +1125,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
     {
       "kind": {
         "Class": {
-          "name": "UserRepository",
+          "name": {
+            "name": "UserRepository",
+            "span": {
+              "start": 788,
+              "end": 802
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -1088,7 +1196,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             {
               "kind": {
                 "ClassConst": {
-                  "name": "PER_PAGE",
+                  "name": {
+                    "name": "PER_PAGE",
+                    "span": {
+                      "start": 910,
+                      "end": 918
+                    }
+                  },
                   "visibility": "Public",
                   "is_final": false,
                   "value": {
@@ -1111,7 +1225,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             {
               "kind": {
                 "Property": {
-                  "name": "queryCount",
+                  "name": {
+                    "name": "queryCount",
+                    "span": {
+                      "start": 948,
+                      "end": 959
+                    }
+                  },
                   "visibility": "Private",
                   "set_visibility": null,
                   "is_static": true,
@@ -1154,7 +1274,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             {
               "kind": {
                 "Method": {
-                  "name": "tableName",
+                  "name": {
+                    "name": "tableName",
+                    "span": {
+                      "start": 989,
+                      "end": 998
+                    }
+                  },
                   "visibility": "Protected",
                   "is_static": false,
                   "is_abstract": false,
@@ -1209,7 +1335,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             {
               "kind": {
                 "Method": {
-                  "name": "hydrate",
+                  "name": {
+                    "name": "hydrate",
+                    "span": {
+                      "start": 1069,
+                      "end": 1076
+                    }
+                  },
                   "visibility": "Protected",
                   "is_static": false,
                   "is_abstract": false,
@@ -1217,7 +1349,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "row",
+                      "name": {
+                        "name": "row",
+                        "span": {
+                          "start": 1083,
+                          "end": 1087
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -1485,7 +1623,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             {
               "kind": {
                 "Method": {
-                  "name": "find",
+                  "name": {
+                    "name": "find",
+                    "span": {
+                      "start": 1271,
+                      "end": 1275
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -1493,7 +1637,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "id",
+                      "name": {
+                        "name": "id",
+                        "span": {
+                          "start": 1280,
+                          "end": 1283
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -1846,7 +1996,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             {
               "kind": {
                 "Method": {
-                  "name": "findAll",
+                  "name": {
+                    "name": "findAll",
+                    "span": {
+                      "start": 1490,
+                      "end": 1497
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -2096,7 +2252,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                         "by_ref": false,
                                         "params": [
                                           {
-                                            "name": "row",
+                                            "name": {
+                                              "name": "row",
+                                              "span": {
+                                                "start": 1649,
+                                                "end": 1653
+                                              }
+                                            },
                                             "type_hint": {
                                               "kind": {
                                                 "Named": {
@@ -2237,7 +2399,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             {
               "kind": {
                 "Method": {
-                  "name": "findByEmail",
+                  "name": {
+                    "name": "findByEmail",
+                    "span": {
+                      "start": 1715,
+                      "end": 1726
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -2245,7 +2413,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "email",
+                      "name": {
+                        "name": "email",
+                        "span": {
+                          "start": 1734,
+                          "end": 1740
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -2502,7 +2676,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                               "by_ref": false,
                                               "params": [
                                                 {
-                                                  "name": "u",
+                                                  "name": {
+                                                    "name": "u",
+                                                    "span": {
+                                                      "start": 1909,
+                                                      "end": 1911
+                                                    }
+                                                  },
                                                   "type_hint": {
                                                     "kind": {
                                                       "Named": {
@@ -2537,7 +2717,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                               ],
                                               "use_vars": [
                                                 {
-                                                  "name": "sanitized",
+                                                  "name": {
+                                                    "name": "sanitized",
+                                                    "span": {
+                                                      "start": 1918,
+                                                      "end": 1928
+                                                    }
+                                                  },
                                                   "by_ref": false,
                                                   "span": {
                                                     "start": 1918,
@@ -2722,7 +2908,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             {
               "kind": {
                 "Method": {
-                  "name": "save",
+                  "name": {
+                    "name": "save",
+                    "span": {
+                      "start": 2076,
+                      "end": 2080
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -2730,7 +2922,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "user",
+                      "name": {
+                        "name": "user",
+                        "span": {
+                          "start": 2086,
+                          "end": 2091
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -2971,7 +3169,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                   }
                                 }
                               ],
-                              "var": "e",
+                              "var": {
+                                "name": "e",
+                                "span": {
+                                  "start": 2266,
+                                  "end": 2268
+                                }
+                              },
                               "body": [
                                 {
                                   "kind": {
@@ -3113,7 +3317,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             {
               "kind": {
                 "Method": {
-                  "name": "delete",
+                  "name": {
+                    "name": "delete",
+                    "span": {
+                      "start": 2391,
+                      "end": 2397
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -3121,7 +3331,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "id",
+                      "name": {
+                        "name": "id",
+                        "span": {
+                          "start": 2402,
+                          "end": 2405
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -3497,7 +3713,13 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
             {
               "kind": {
                 "Method": {
-                  "name": "getQueryCount",
+                  "name": {
+                    "name": "getQueryCount",
+                    "span": {
+                      "start": 2648,
+                      "end": 2661
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": true,
                   "is_abstract": false,

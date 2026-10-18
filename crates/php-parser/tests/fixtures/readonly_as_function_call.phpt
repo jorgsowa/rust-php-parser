@@ -6,7 +6,13 @@
     {
       "kind": {
         "Function": {
-          "name": "readonly",
+          "name": {
+            "name": "readonly",
+            "span": {
+              "start": 15,
+              "end": 23
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,

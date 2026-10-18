@@ -20,7 +20,13 @@ PHP Fatal error:  Cannot use the static modifier on a parameter in Standard inpu
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -32,7 +38,13 @@ PHP Fatal error:  Cannot use the static modifier on a parameter in Standard inpu
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 36,
+                      "end": 47
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -40,7 +52,13 @@ PHP Fatal error:  Cannot use the static modifier on a parameter in Standard inpu
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "x",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 66,
+                          "end": 68
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

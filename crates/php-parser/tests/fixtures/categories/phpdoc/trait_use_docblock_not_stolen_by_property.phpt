@@ -16,7 +16,13 @@ class WidgetConfig
     {
       "kind": {
         "Class": {
-          "name": "WidgetConfig",
+          "name": {
+            "name": "WidgetConfig",
+            "span": {
+              "start": 13,
+              "end": 25
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -59,7 +65,13 @@ class WidgetConfig
             {
               "kind": {
                 "Property": {
-                  "name": "name",
+                  "name": {
+                    "name": "name",
+                    "span": {
+                      "start": 132,
+                      "end": 137
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

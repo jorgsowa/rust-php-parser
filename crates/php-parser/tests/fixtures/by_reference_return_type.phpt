@@ -12,7 +12,13 @@ function &getReference(array &$arr): mixed {
     {
       "kind": {
         "Function": {
-          "name": "getValue",
+          "name": {
+            "name": "getValue",
+            "span": {
+              "start": 16,
+              "end": 24
+            }
+          },
           "params": [],
           "body": [
             {
@@ -82,10 +88,22 @@ function &getReference(array &$arr): mixed {
     {
       "kind": {
         "Function": {
-          "name": "getReference",
+          "name": {
+            "name": "getReference",
+            "span": {
+              "start": 79,
+              "end": 91
+            }
+          },
           "params": [
             {
-              "name": "arr",
+              "name": {
+                "name": "arr",
+                "span": {
+                  "start": 99,
+                  "end": 103
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {

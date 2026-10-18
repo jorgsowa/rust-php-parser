@@ -22,7 +22,13 @@ PHP Parse error:  syntax error, unexpected token "public", expecting "," or ";" 
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -34,7 +40,13 @@ PHP Parse error:  syntax error, unexpected token "public", expecting "," or ";" 
             {
               "kind": {
                 "Property": {
-                  "name": "foo",
+                  "name": {
+                    "name": "foo",
+                    "span": {
+                      "start": 52,
+                      "end": 56
+                    }
+                  },
                   "visibility": "Private",
                   "set_visibility": null,
                   "is_static": false,
@@ -60,7 +72,13 @@ PHP Parse error:  syntax error, unexpected token "public", expecting "," or ";" 
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 78,
+                      "end": 89
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -68,7 +86,13 @@ PHP Parse error:  syntax error, unexpected token "public", expecting "," or ";" 
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "s",
+                      "name": {
+                        "name": "s",
+                        "span": {
+                          "start": 97,
+                          "end": 99
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -180,7 +204,13 @@ PHP Parse error:  syntax error, unexpected token "public", expecting "," or ";" 
     {
       "kind": {
         "Class": {
-          "name": "B",
+          "name": {
+            "name": "B",
+            "span": {
+              "start": 142,
+              "end": 143
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -192,7 +222,13 @@ PHP Parse error:  syntax error, unexpected token "public", expecting "," or ";" 
             {
               "kind": {
                 "ClassConst": {
-                  "name": "X",
+                  "name": {
+                    "name": "X",
+                    "span": {
+                      "start": 156,
+                      "end": 157
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {

@@ -15,7 +15,13 @@ function tmpl() {
     {
       "kind": {
         "Function": {
-          "name": "tmpl",
+          "name": {
+            "name": "tmpl",
+            "span": {
+              "start": 15,
+              "end": 19
+            }
+          },
           "params": [],
           "body": [
             {

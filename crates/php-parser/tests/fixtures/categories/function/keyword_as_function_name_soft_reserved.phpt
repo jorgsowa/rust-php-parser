@@ -12,7 +12,13 @@ function parent() {}
     {
       "kind": {
         "Function": {
-          "name": "null",
+          "name": {
+            "name": "null",
+            "span": {
+              "start": 15,
+              "end": 19
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,
@@ -28,7 +34,13 @@ function parent() {}
     {
       "kind": {
         "Function": {
-          "name": "true",
+          "name": {
+            "name": "true",
+            "span": {
+              "start": 34,
+              "end": 38
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,
@@ -44,7 +56,13 @@ function parent() {}
     {
       "kind": {
         "Function": {
-          "name": "false",
+          "name": {
+            "name": "false",
+            "span": {
+              "start": 53,
+              "end": 58
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,
@@ -60,7 +78,13 @@ function parent() {}
     {
       "kind": {
         "Function": {
-          "name": "readonly",
+          "name": {
+            "name": "readonly",
+            "span": {
+              "start": 73,
+              "end": 81
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,
@@ -76,7 +100,13 @@ function parent() {}
     {
       "kind": {
         "Function": {
-          "name": "self",
+          "name": {
+            "name": "self",
+            "span": {
+              "start": 96,
+              "end": 100
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,
@@ -92,7 +122,13 @@ function parent() {}
     {
       "kind": {
         "Function": {
-          "name": "parent",
+          "name": {
+            "name": "parent",
+            "span": {
+              "start": 115,
+              "end": 121
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,

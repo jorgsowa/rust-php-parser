@@ -345,7 +345,7 @@ pub struct CatchClause<'arena, 'src> {
     /// Caught exception types (`A|B`).
     pub types: ArenaVec<'arena, Name<'arena, 'src>>,
     /// Bound variable name; `None` if omitted (PHP 8.0+).
-    pub var: Option<&'src str>,
+    pub var: Option<Ident<'src>>,
     /// `catch` block.
     pub body: &'arena Block<'arena, 'src>,
     /// Source range of this node.
@@ -416,7 +416,7 @@ pub struct UseItem<'arena, 'src> {
     /// Imported name.
     pub name: Name<'arena, 'src>,
     /// Alias after `as`, if any.
-    pub alias: Option<&'src str>,
+    pub alias: Option<Ident<'src>>,
     /// Per-item kind in a mixed group `use Foo\{function bar}`.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub kind: Option<UseKind>,

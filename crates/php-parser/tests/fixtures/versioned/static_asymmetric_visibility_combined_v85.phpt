@@ -12,7 +12,13 @@ class Foo {
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -24,7 +30,13 @@ class Foo {
             {
               "kind": {
                 "Property": {
-                  "name": "count",
+                  "name": {
+                    "name": "count",
+                    "span": {
+                      "start": 55,
+                      "end": 61
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": "Protected",
                   "is_static": true,
@@ -67,7 +79,13 @@ class Foo {
             {
               "kind": {
                 "Property": {
-                  "name": "name",
+                  "name": {
+                    "name": "name",
+                    "span": {
+                      "start": 105,
+                      "end": 110
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": "Private",
                   "is_static": true,

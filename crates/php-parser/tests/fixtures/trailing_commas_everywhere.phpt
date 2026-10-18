@@ -13,10 +13,22 @@ use App\{A, B,};
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 19,
+                  "end": 21
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -32,7 +44,13 @@ use App\{A, B,};
               }
             },
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 23,
+                  "end": 25
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -155,7 +173,13 @@ use App\{A, B,};
                     "by_ref": false,
                     "params": [
                       {
-                        "name": "x",
+                        "name": {
+                          "name": "x",
+                          "span": {
+                            "start": 57,
+                            "end": 59
+                          }
+                        },
                         "type_hint": null,
                         "default": null,
                         "by_ref": false,
@@ -173,7 +197,13 @@ use App\{A, B,};
                     ],
                     "use_vars": [
                       {
-                        "name": "y",
+                        "name": {
+                          "name": "y",
+                          "span": {
+                            "start": 67,
+                            "end": 69
+                          }
+                        },
                         "by_ref": false,
                         "span": {
                           "start": 67,
@@ -226,7 +256,13 @@ use App\{A, B,};
                     "by_ref": false,
                     "params": [
                       {
-                        "name": "x",
+                        "name": {
+                          "name": "x",
+                          "span": {
+                            "start": 84,
+                            "end": 86
+                          }
+                        },
                         "type_hint": null,
                         "default": null,
                         "by_ref": false,

@@ -12,10 +12,22 @@ PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard 
     {
       "kind": {
         "Function": {
-          "name": "test",
+          "name": {
+            "name": "test",
+            "span": {
+              "start": 15,
+              "end": 19
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 24,
+                  "end": 26
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {

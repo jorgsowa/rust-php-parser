@@ -27,12 +27,24 @@ trait MultiMember {
     {
       "kind": {
         "Trait": {
-          "name": "MultiMember",
+          "name": {
+            "name": "MultiMember",
+            "span": {
+              "start": 83,
+              "end": 94
+            }
+          },
           "members": [
             {
               "kind": {
                 "Method": {
-                  "name": "first",
+                  "name": {
+                    "name": "first",
+                    "span": {
+                      "start": 153,
+                      "end": 158
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -60,7 +72,13 @@ trait MultiMember {
             {
               "kind": {
                 "Property": {
-                  "name": "prop",
+                  "name": {
+                    "name": "prop",
+                    "span": {
+                      "start": 222,
+                      "end": 227
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -103,7 +121,13 @@ trait MultiMember {
             {
               "kind": {
                 "Method": {
-                  "name": "third",
+                  "name": {
+                    "name": "third",
+                    "span": {
+                      "start": 286,
+                      "end": 291
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

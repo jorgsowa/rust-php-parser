@@ -22,7 +22,13 @@ enum Status: string implements Loggable, Serializable {
     {
       "kind": {
         "Enum": {
-          "name": "Status",
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 11,
+              "end": 17
+            }
+          },
           "scalar_type": {
             "parts": [
               "string"
@@ -59,7 +65,13 @@ enum Status: string implements Loggable, Serializable {
             {
               "kind": {
                 "Case": {
-                  "name": "Active",
+                  "name": {
+                    "name": "Active",
+                    "span": {
+                      "start": 71,
+                      "end": 77
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "active"
@@ -80,7 +92,13 @@ enum Status: string implements Loggable, Serializable {
             {
               "kind": {
                 "Case": {
-                  "name": "Inactive",
+                  "name": {
+                    "name": "Inactive",
+                    "span": {
+                      "start": 99,
+                      "end": 107
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "inactive"
@@ -101,7 +119,13 @@ enum Status: string implements Loggable, Serializable {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "DEFAULT",
+                  "name": {
+                    "name": "DEFAULT",
+                    "span": {
+                      "start": 133,
+                      "end": 140
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -152,7 +176,13 @@ enum Status: string implements Loggable, Serializable {
             {
               "kind": {
                 "Method": {
-                  "name": "label",
+                  "name": {
+                    "name": "label",
+                    "span": {
+                      "start": 178,
+                      "end": 183
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -226,7 +256,13 @@ enum Status: string implements Loggable, Serializable {
             {
               "kind": {
                 "Method": {
-                  "name": "isActive",
+                  "name": {
+                    "name": "isActive",
+                    "span": {
+                      "start": 252,
+                      "end": 260
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

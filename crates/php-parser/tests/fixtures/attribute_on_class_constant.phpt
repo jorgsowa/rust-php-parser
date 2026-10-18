@@ -6,7 +6,13 @@
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -18,7 +24,13 @@
             {
               "kind": {
                 "ClassConst": {
-                  "name": "FOO",
+                  "name": {
+                    "name": "FOO",
+                    "span": {
+                      "start": 36,
+                      "end": 39
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {

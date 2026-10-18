@@ -190,10 +190,22 @@ function bar($x, $y,) {}
     {
       "kind": {
         "Function": {
-          "name": "bar",
+          "name": {
+            "name": "bar",
+            "span": {
+              "start": 52,
+              "end": 55
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 56,
+                  "end": 58
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -209,7 +221,13 @@ function bar($x, $y,) {}
               }
             },
             {
-              "name": "y",
+              "name": {
+                "name": "y",
+                "span": {
+                  "start": 60,
+                  "end": 62
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,

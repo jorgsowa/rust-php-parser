@@ -15,7 +15,13 @@ PHP Fatal error:  Cannot use the readonly modifier on a class constant in Standa
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -27,7 +33,13 @@ PHP Fatal error:  Cannot use the readonly modifier on a class constant in Standa
             {
               "kind": {
                 "ClassConst": {
-                  "name": "X",
+                  "name": {
+                    "name": "X",
+                    "span": {
+                      "start": 35,
+                      "end": 36
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {

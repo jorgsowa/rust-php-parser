@@ -25,7 +25,13 @@ if (true) {
                 {
                   "kind": {
                     "Function": {
-                      "name": "A",
+                      "name": {
+                        "name": "A",
+                        "span": {
+                          "start": 32,
+                          "end": 33
+                        }
+                      },
                       "params": [],
                       "body": [],
                       "return_type": null,

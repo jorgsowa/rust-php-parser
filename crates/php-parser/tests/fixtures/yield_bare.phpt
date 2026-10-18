@@ -9,7 +9,13 @@ function gen() {
     {
       "kind": {
         "Function": {
-          "name": "gen",
+          "name": {
+            "name": "gen",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [],
           "body": [
             {

@@ -16,10 +16,22 @@ PHP Fatal error:  Duplicate type int is redundant in Standard input code on line
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 41,
+                  "end": 43
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [

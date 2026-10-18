@@ -16,7 +16,13 @@ const HASH = 3;
       "kind": {
         "Const": [
           {
-            "name": "BLOCK",
+            "name": {
+              "name": "BLOCK",
+              "span": {
+                "start": 33,
+                "end": 38
+              }
+            },
             "value": {
               "kind": {
                 "Int": 1
@@ -43,7 +49,13 @@ const HASH = 3;
       "kind": {
         "Const": [
           {
-            "name": "LINE",
+            "name": {
+              "name": "LINE",
+              "span": {
+                "start": 67,
+                "end": 71
+              }
+            },
             "value": {
               "kind": {
                 "Int": 2
@@ -70,7 +82,13 @@ const HASH = 3;
       "kind": {
         "Const": [
           {
-            "name": "HASH",
+            "name": {
+              "name": "HASH",
+              "span": {
+                "start": 99,
+                "end": 103
+              }
+            },
             "value": {
               "kind": {
                 "Int": 3

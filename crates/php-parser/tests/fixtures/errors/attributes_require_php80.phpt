@@ -12,7 +12,13 @@ class C {}
     {
       "kind": {
         "Class": {
-          "name": "C",
+          "name": {
+            "name": "C",
+            "span": {
+              "start": 20,
+              "end": 21
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

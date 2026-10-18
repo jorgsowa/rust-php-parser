@@ -25,7 +25,13 @@
                     "by_ref": true,
                     "params": [
                       {
-                        "name": "x",
+                        "name": {
+                          "name": "x",
+                          "span": {
+                            "start": 22,
+                            "end": 24
+                          }
+                        },
                         "type_hint": null,
                         "default": null,
                         "by_ref": false,
@@ -43,7 +49,13 @@
                     ],
                     "use_vars": [
                       {
-                        "name": "ref",
+                        "name": {
+                          "name": "ref",
+                          "span": {
+                            "start": 32,
+                            "end": 36
+                          }
+                        },
                         "by_ref": true,
                         "span": {
                           "start": 31,

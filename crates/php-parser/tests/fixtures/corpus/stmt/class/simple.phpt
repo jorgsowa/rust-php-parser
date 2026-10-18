@@ -20,7 +20,13 @@ class A extends B implements C, D {
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 13,
+              "end": 14
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -62,7 +68,13 @@ class A extends B implements C, D {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "A",
+                  "name": {
+                    "name": "A",
+                    "span": {
+                      "start": 53,
+                      "end": 54
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -85,7 +97,13 @@ class A extends B implements C, D {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "C",
+                  "name": {
+                    "name": "C",
+                    "span": {
+                      "start": 62,
+                      "end": 63
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -108,7 +126,13 @@ class A extends B implements C, D {
             {
               "kind": {
                 "Property": {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 83,
+                      "end": 85
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -134,7 +158,13 @@ class A extends B implements C, D {
             {
               "kind": {
                 "Property": {
-                  "name": "c",
+                  "name": {
+                    "name": "c",
+                    "span": {
+                      "start": 93,
+                      "end": 95
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -160,7 +190,13 @@ class A extends B implements C, D {
             {
               "kind": {
                 "Property": {
-                  "name": "e",
+                  "name": {
+                    "name": "e",
+                    "span": {
+                      "start": 117,
+                      "end": 119
+                    }
+                  },
                   "visibility": "Protected",
                   "set_visibility": null,
                   "is_static": false,
@@ -178,7 +214,13 @@ class A extends B implements C, D {
             {
               "kind": {
                 "Property": {
-                  "name": "f",
+                  "name": {
+                    "name": "f",
+                    "span": {
+                      "start": 133,
+                      "end": 135
+                    }
+                  },
                   "visibility": "Private",
                   "set_visibility": null,
                   "is_static": false,
@@ -196,7 +238,13 @@ class A extends B implements C, D {
             {
               "kind": {
                 "Method": {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 158,
+                      "end": 159
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -216,7 +264,13 @@ class A extends B implements C, D {
             {
               "kind": {
                 "Method": {
-                  "name": "b",
+                  "name": {
+                    "name": "b",
+                    "span": {
+                      "start": 192,
+                      "end": 193
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": true,
                   "is_abstract": false,
@@ -224,7 +278,13 @@ class A extends B implements C, D {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "a",
+                      "name": {
+                        "name": "a",
+                        "span": {
+                          "start": 194,
+                          "end": 196
+                        }
+                      },
                       "type_hint": null,
                       "default": null,
                       "by_ref": false,
@@ -253,7 +313,13 @@ class A extends B implements C, D {
             {
               "kind": {
                 "Method": {
-                  "name": "c",
+                  "name": {
+                    "name": "c",
+                    "span": {
+                      "start": 227,
+                      "end": 228
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -290,7 +356,13 @@ class A extends B implements C, D {
             {
               "kind": {
                 "Method": {
-                  "name": "d",
+                  "name": {
+                    "name": "d",
+                    "span": {
+                      "start": 261,
+                      "end": 262
+                    }
+                  },
                   "visibility": "Protected",
                   "is_static": false,
                   "is_abstract": false,
@@ -310,7 +382,13 @@ class A extends B implements C, D {
             {
               "kind": {
                 "Method": {
-                  "name": "e",
+                  "name": {
+                    "name": "e",
+                    "span": {
+                      "start": 289,
+                      "end": 290
+                    }
+                  },
                   "visibility": "Private",
                   "is_static": false,
                   "is_abstract": false,

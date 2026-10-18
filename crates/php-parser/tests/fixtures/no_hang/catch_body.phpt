@@ -21,7 +21,13 @@
                   }
                 }
               ],
-              "var": "e",
+              "var": {
+                "name": "e",
+                "span": {
+                  "start": 30,
+                  "end": 32
+                }
+              },
               "body": [
                 {
                   "kind": {

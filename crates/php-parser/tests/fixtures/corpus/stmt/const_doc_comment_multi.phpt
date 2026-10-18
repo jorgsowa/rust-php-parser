@@ -10,7 +10,13 @@ const FIRST = 1, SECOND = 2, THIRD = 3;
       "kind": {
         "Const": [
           {
-            "name": "FIRST",
+            "name": {
+              "name": "FIRST",
+              "span": {
+                "start": 35,
+                "end": 40
+              }
+            },
             "value": {
               "kind": {
                 "Int": 1
@@ -35,7 +41,13 @@ const FIRST = 1, SECOND = 2, THIRD = 3;
             }
           },
           {
-            "name": "SECOND",
+            "name": {
+              "name": "SECOND",
+              "span": {
+                "start": 46,
+                "end": 52
+              }
+            },
             "value": {
               "kind": {
                 "Int": 2
@@ -52,7 +64,13 @@ const FIRST = 1, SECOND = 2, THIRD = 3;
             }
           },
           {
-            "name": "THIRD",
+            "name": {
+              "name": "THIRD",
+              "span": {
+                "start": 58,
+                "end": 63
+              }
+            },
             "value": {
               "kind": {
                 "Int": 3

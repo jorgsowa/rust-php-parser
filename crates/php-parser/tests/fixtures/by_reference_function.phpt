@@ -10,14 +10,26 @@ function &getRef() {
     {
       "kind": {
         "Function": {
-          "name": "getRef",
+          "name": {
+            "name": "getRef",
+            "span": {
+              "start": 16,
+              "end": 22
+            }
+          },
           "params": [],
           "body": [
             {
               "kind": {
                 "StaticVar": [
                   {
-                    "name": "val",
+                    "name": {
+                      "name": "val",
+                      "span": {
+                        "start": 38,
+                        "end": 42
+                      }
+                    },
                     "default": {
                       "kind": {
                         "Int": 0

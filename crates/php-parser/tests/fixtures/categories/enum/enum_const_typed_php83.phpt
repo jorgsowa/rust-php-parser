@@ -8,14 +8,26 @@ min_php=8.3
     {
       "kind": {
         "Enum": {
-          "name": "Status",
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 11,
+              "end": 17
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "ClassConst": {
-                  "name": "MODE",
+                  "name": {
+                    "name": "MODE",
+                    "span": {
+                      "start": 40,
+                      "end": 44
+                    }
+                  },
                   "visibility": "Public",
                   "is_final": false,
                   "type_hint": {
@@ -56,7 +68,13 @@ min_php=8.3
             {
               "kind": {
                 "ClassConst": {
-                  "name": "MIXED",
+                  "name": {
+                    "name": "MIXED",
+                    "span": {
+                      "start": 71,
+                      "end": 76
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "type_hint": {

@@ -15,10 +15,22 @@ class Foo {
     {
       "kind": {
         "Function": {
-          "name": "f",
+          "name": {
+            "name": "f",
+            "span": {
+              "start": 15,
+              "end": 16
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 30,
+                  "end": 32
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -276,7 +288,13 @@ class Foo {
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 77,
+              "end": 80
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -288,7 +306,13 @@ class Foo {
             {
               "kind": {
                 "Property": {
-                  "name": "prop",
+                  "name": {
+                    "name": "prop",
+                    "span": {
+                      "start": 102,
+                      "end": 107
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -379,7 +403,13 @@ class Foo {
             {
               "kind": {
                 "Method": {
-                  "name": "bar",
+                  "name": {
+                    "name": "bar",
+                    "span": {
+                      "start": 129,
+                      "end": 132
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -387,7 +417,13 @@ class Foo {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "a",
+                      "name": {
+                        "name": "a",
+                        "span": {
+                          "start": 145,
+                          "end": 147
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Union": [
@@ -504,7 +540,13 @@ class Foo {
                       }
                     },
                     {
-                      "name": "b",
+                      "name": {
+                        "name": "b",
+                        "span": {
+                          "start": 156,
+                          "end": 158
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Union": [

@@ -10,7 +10,13 @@ PHP Fatal error:  Method A::__CONSTRUCT() cannot be static in Standard input cod
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -22,7 +28,13 @@ PHP Fatal error:  Method A::__CONSTRUCT() cannot be static in Standard input cod
             {
               "kind": {
                 "Method": {
-                  "name": "__CONSTRUCT",
+                  "name": {
+                    "name": "__CONSTRUCT",
+                    "span": {
+                      "start": 32,
+                      "end": 43
+                    }
+                  },
                   "visibility": null,
                   "is_static": true,
                   "is_abstract": false,

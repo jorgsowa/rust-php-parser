@@ -8,7 +8,13 @@ min_php=8.1
     {
       "kind": {
         "Enum": {
-          "name": "Status",
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 11,
+              "end": 17
+            }
+          },
           "scalar_type": {
             "parts": [
               "string"
@@ -24,7 +30,13 @@ min_php=8.1
             {
               "kind": {
                 "Case": {
-                  "name": "Active",
+                  "name": {
+                    "name": "Active",
+                    "span": {
+                      "start": 33,
+                      "end": 39
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "a"
@@ -45,7 +57,13 @@ min_php=8.1
             {
               "kind": {
                 "ClassConst": {
-                  "name": "DEFAULT",
+                  "name": {
+                    "name": "DEFAULT",
+                    "span": {
+                      "start": 53,
+                      "end": 60
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -96,7 +114,13 @@ min_php=8.1
             {
               "kind": {
                 "ClassConst": {
-                  "name": "SUM",
+                  "name": {
+                    "name": "SUM",
+                    "span": {
+                      "start": 83,
+                      "end": 86
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {

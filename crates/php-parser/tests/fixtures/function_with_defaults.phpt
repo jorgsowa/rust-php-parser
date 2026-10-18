@@ -6,10 +6,22 @@
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 19,
+                  "end": 21
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -25,7 +37,13 @@
               }
             },
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 23,
+                  "end": 25
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {
@@ -49,7 +67,13 @@
               }
             },
             {
-              "name": "c",
+              "name": {
+                "name": "c",
+                "span": {
+                  "start": 32,
+                  "end": 34
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {

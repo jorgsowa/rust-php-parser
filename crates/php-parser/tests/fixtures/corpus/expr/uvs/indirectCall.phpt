@@ -527,7 +527,13 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                                     "by_ref": false,
                                     "params": [
                                       {
-                                        "name": "x",
+                                        "name": {
+                                          "name": "x",
+                                          "span": {
+                                            "start": 124,
+                                            "end": 126
+                                          }
+                                        },
                                         "type_hint": null,
                                         "default": null,
                                         "by_ref": false,
@@ -704,7 +710,13 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                                                       "by_ref": false,
                                                       "params": [
                                                         {
-                                                          "name": "x",
+                                                          "name": {
+                                                            "name": "x",
+                                                            "span": {
+                                                              "start": 181,
+                                                              "end": 183
+                                                            }
+                                                          },
                                                           "type_hint": null,
                                                           "default": {
                                                             "kind": "Null",
@@ -728,7 +740,13 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                                                       ],
                                                       "use_vars": [
                                                         {
-                                                          "name": "f",
+                                                          "name": {
+                                                            "name": "f",
+                                                            "span": {
+                                                              "start": 198,
+                                                              "end": 200
+                                                            }
+                                                          },
                                                           "by_ref": true,
                                                           "span": {
                                                             "start": 197,

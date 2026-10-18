@@ -16,7 +16,13 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
               "by_ref": false,
               "params": [
                 {
-                  "name": "x",
+                  "name": {
+                    "name": "x",
+                    "span": {
+                      "start": 9,
+                      "end": 11
+                    }
+                  },
                   "type_hint": null,
                   "default": null,
                   "by_ref": false,

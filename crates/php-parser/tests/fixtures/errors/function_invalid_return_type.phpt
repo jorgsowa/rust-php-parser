@@ -10,7 +10,13 @@ PHP Parse error:  syntax error, unexpected token "{" in Standard input code on l
     {
       "kind": {
         "Function": {
-          "name": "test",
+          "name": {
+            "name": "test",
+            "span": {
+              "start": 15,
+              "end": 19
+            }
+          },
           "params": [],
           "body": [],
           "return_type": {

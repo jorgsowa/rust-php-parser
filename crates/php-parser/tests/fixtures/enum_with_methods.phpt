@@ -23,7 +23,13 @@ enum Suit: string implements HasColor {
     {
       "kind": {
         "Enum": {
-          "name": "Suit",
+          "name": {
+            "name": "Suit",
+            "span": {
+              "start": 11,
+              "end": 15
+            }
+          },
           "scalar_type": {
             "parts": [
               "string"
@@ -50,7 +56,13 @@ enum Suit: string implements HasColor {
             {
               "kind": {
                 "Case": {
-                  "name": "Hearts",
+                  "name": {
+                    "name": "Hearts",
+                    "span": {
+                      "start": 55,
+                      "end": 61
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "H"
@@ -71,7 +83,13 @@ enum Suit: string implements HasColor {
             {
               "kind": {
                 "Case": {
-                  "name": "Diamonds",
+                  "name": {
+                    "name": "Diamonds",
+                    "span": {
+                      "start": 78,
+                      "end": 86
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "D"
@@ -92,7 +110,13 @@ enum Suit: string implements HasColor {
             {
               "kind": {
                 "Case": {
-                  "name": "Clubs",
+                  "name": {
+                    "name": "Clubs",
+                    "span": {
+                      "start": 103,
+                      "end": 108
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "C"
@@ -113,7 +137,13 @@ enum Suit: string implements HasColor {
             {
               "kind": {
                 "Case": {
-                  "name": "Spades",
+                  "name": {
+                    "name": "Spades",
+                    "span": {
+                      "start": 125,
+                      "end": 131
+                    }
+                  },
                   "value": {
                     "kind": {
                       "String": "S"
@@ -134,7 +164,13 @@ enum Suit: string implements HasColor {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "COUNT",
+                  "name": {
+                    "name": "COUNT",
+                    "span": {
+                      "start": 150,
+                      "end": 155
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -157,7 +193,13 @@ enum Suit: string implements HasColor {
             {
               "kind": {
                 "Method": {
-                  "name": "color",
+                  "name": {
+                    "name": "color",
+                    "span": {
+                      "start": 182,
+                      "end": 187
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,

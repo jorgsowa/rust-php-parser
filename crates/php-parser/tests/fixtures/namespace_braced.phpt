@@ -28,7 +28,13 @@ namespace App\Models {
               {
                 "kind": {
                   "Class": {
-                    "name": "UserService",
+                    "name": {
+                      "name": "UserService",
+                      "span": {
+                        "start": 41,
+                        "end": 52
+                      }
+                    },
                     "modifiers": {
                       "is_abstract": false,
                       "is_final": false,
@@ -73,7 +79,13 @@ namespace App\Models {
               {
                 "kind": {
                   "Class": {
-                    "name": "User",
+                    "name": {
+                      "name": "User",
+                      "span": {
+                        "start": 91,
+                        "end": 95
+                      }
+                    },
                     "modifiers": {
                       "is_abstract": false,
                       "is_final": false,

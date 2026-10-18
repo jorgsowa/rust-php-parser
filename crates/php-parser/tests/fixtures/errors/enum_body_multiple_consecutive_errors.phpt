@@ -22,14 +22,26 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
     {
       "kind": {
         "Enum": {
-          "name": "Status",
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 11,
+              "end": 17
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "Case": {
-                  "name": "Active",
+                  "name": {
+                    "name": "Active",
+                    "span": {
+                      "start": 43,
+                      "end": 49
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -42,7 +54,13 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
             {
               "kind": {
                 "Case": {
-                  "name": "Inactive",
+                  "name": {
+                    "name": "Inactive",
+                    "span": {
+                      "start": 74,
+                      "end": 82
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -55,7 +73,13 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
             {
               "kind": {
                 "Case": {
-                  "name": "Pending",
+                  "name": {
+                    "name": "Pending",
+                    "span": {
+                      "start": 107,
+                      "end": 114
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }

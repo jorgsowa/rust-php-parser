@@ -10,7 +10,13 @@ function indexedGen() {
     {
       "kind": {
         "Function": {
-          "name": "indexedGen",
+          "name": {
+            "name": "indexedGen",
+            "span": {
+              "start": 15,
+              "end": 25
+            }
+          },
           "params": [],
           "body": [
             {

@@ -27,7 +27,13 @@
               {
                 "kind": {
                   "Class": {
-                    "name": "X",
+                    "name": {
+                      "name": "X",
+                      "span": {
+                        "start": 38,
+                        "end": 39
+                      }
+                    },
                     "modifiers": {
                       "is_abstract": false,
                       "is_final": false,

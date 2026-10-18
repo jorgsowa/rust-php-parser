@@ -12,7 +12,13 @@ PHP Fatal error:  Cannot use "PARENT" as a class name as it is reserved in Stand
     {
       "kind": {
         "Class": {
-          "name": "PARENT",
+          "name": {
+            "name": "PARENT",
+            "span": {
+              "start": 12,
+              "end": 18
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

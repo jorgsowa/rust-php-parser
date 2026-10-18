@@ -9,10 +9,22 @@ function foo($bar, ) {
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 16,
+              "end": 19
+            }
+          },
           "params": [
             {
-              "name": "bar",
+              "name": {
+                "name": "bar",
+                "span": {
+                  "start": 20,
+                  "end": 24
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,

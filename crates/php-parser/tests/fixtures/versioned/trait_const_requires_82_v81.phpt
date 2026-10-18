@@ -16,12 +16,24 @@ PHP Fatal error:  Traits cannot have constants in Standard input code on line 3
     {
       "kind": {
         "Trait": {
-          "name": "T",
+          "name": {
+            "name": "T",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "members": [
             {
               "kind": {
                 "ClassConst": {
-                  "name": "X",
+                  "name": {
+                    "name": "X",
+                    "span": {
+                      "start": 26,
+                      "end": 27
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {

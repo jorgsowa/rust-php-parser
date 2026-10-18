@@ -18,7 +18,13 @@ class UserRepository {
     {
       "kind": {
         "Class": {
-          "name": "UserRepository",
+          "name": {
+            "name": "UserRepository",
+            "span": {
+              "start": 57,
+              "end": 71
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -30,7 +36,13 @@ class UserRepository {
             {
               "kind": {
                 "Method": {
-                  "name": "find",
+                  "name": {
+                    "name": "find",
+                    "span": {
+                      "start": 270,
+                      "end": 274
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -38,7 +50,13 @@ class UserRepository {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "name",
+                      "name": {
+                        "name": "name",
+                        "span": {
+                          "start": 282,
+                          "end": 287
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

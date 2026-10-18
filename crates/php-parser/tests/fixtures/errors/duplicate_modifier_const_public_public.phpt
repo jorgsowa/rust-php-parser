@@ -10,7 +10,13 @@ PHP Fatal error:  Multiple access type modifiers are not allowed in Standard inp
     {
       "kind": {
         "Class": {
-          "name": "A",
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -22,7 +28,13 @@ PHP Fatal error:  Multiple access type modifiers are not allowed in Standard inp
             {
               "kind": {
                 "ClassConst": {
-                  "name": "X",
+                  "name": {
+                    "name": "X",
+                    "span": {
+                      "start": 36,
+                      "end": 37
+                    }
+                  },
                   "visibility": "Public",
                   "is_final": false,
                   "value": {

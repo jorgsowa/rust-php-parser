@@ -56,7 +56,13 @@ class Foo {
     {
       "kind": {
         "Class": {
-          "name": "Test",
+          "name": {
+            "name": "Test",
+            "span": {
+              "start": 13,
+              "end": 17
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -68,7 +74,13 @@ class Foo {
             {
               "kind": {
                 "Method": {
-                  "name": "array",
+                  "name": {
+                    "name": "array",
+                    "span": {
+                      "start": 33,
+                      "end": 38
+                    }
+                  },
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": false,
@@ -88,7 +100,13 @@ class Foo {
             {
               "kind": {
                 "Method": {
-                  "name": "public",
+                  "name": {
+                    "name": "public",
+                    "span": {
+                      "start": 57,
+                      "end": 63
+                    }
+                  },
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": false,
@@ -108,7 +126,13 @@ class Foo {
             {
               "kind": {
                 "Method": {
-                  "name": "list",
+                  "name": {
+                    "name": "list",
+                    "span": {
+                      "start": 90,
+                      "end": 94
+                    }
+                  },
                   "visibility": null,
                   "is_static": true,
                   "is_abstract": false,
@@ -128,7 +152,13 @@ class Foo {
             {
               "kind": {
                 "Method": {
-                  "name": "protected",
+                  "name": {
+                    "name": "protected",
+                    "span": {
+                      "start": 120,
+                      "end": 129
+                    }
+                  },
                   "visibility": null,
                   "is_static": true,
                   "is_abstract": false,
@@ -148,7 +178,13 @@ class Foo {
             {
               "kind": {
                 "Property": {
-                  "name": "class",
+                  "name": {
+                    "name": "class",
+                    "span": {
+                      "start": 147,
+                      "end": 153
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -166,7 +202,13 @@ class Foo {
             {
               "kind": {
                 "Property": {
-                  "name": "private",
+                  "name": {
+                    "name": "private",
+                    "span": {
+                      "start": 166,
+                      "end": 174
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -184,7 +226,13 @@ class Foo {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "TRAIT",
+                  "name": {
+                    "name": "TRAIT",
+                    "span": {
+                      "start": 187,
+                      "end": 192
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -207,7 +255,13 @@ class Foo {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "FINAL",
+                  "name": {
+                    "name": "FINAL",
+                    "span": {
+                      "start": 198,
+                      "end": 203
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -230,7 +284,13 @@ class Foo {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "__CLASS__",
+                  "name": {
+                    "name": "__CLASS__",
+                    "span": {
+                      "start": 220,
+                      "end": 229
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -253,7 +313,13 @@ class Foo {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "__TRAIT__",
+                  "name": {
+                    "name": "__TRAIT__",
+                    "span": {
+                      "start": 235,
+                      "end": 244
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -276,7 +342,13 @@ class Foo {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "__FUNCTION__",
+                  "name": {
+                    "name": "__FUNCTION__",
+                    "span": {
+                      "start": 250,
+                      "end": 262
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -299,7 +371,13 @@ class Foo {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "__METHOD__",
+                  "name": {
+                    "name": "__METHOD__",
+                    "span": {
+                      "start": 268,
+                      "end": 278
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -322,7 +400,13 @@ class Foo {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "__LINE__",
+                  "name": {
+                    "name": "__LINE__",
+                    "span": {
+                      "start": 284,
+                      "end": 292
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -345,7 +429,13 @@ class Foo {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "__FILE__",
+                  "name": {
+                    "name": "__FILE__",
+                    "span": {
+                      "start": 308,
+                      "end": 316
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -368,7 +458,13 @@ class Foo {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "__DIR__",
+                  "name": {
+                    "name": "__DIR__",
+                    "span": {
+                      "start": 322,
+                      "end": 329
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -391,7 +487,13 @@ class Foo {
             {
               "kind": {
                 "ClassConst": {
-                  "name": "__NAMESPACE__",
+                  "name": {
+                    "name": "__NAMESPACE__",
+                    "span": {
+                      "start": 335,
+                      "end": 348
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -808,7 +910,13 @@ class Foo {
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 529,
+              "end": 532
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

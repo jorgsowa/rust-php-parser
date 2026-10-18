@@ -57,10 +57,22 @@ enum Color {
     {
       "kind": {
         "Function": {
-          "name": "add",
+          "name": {
+            "name": "add",
+            "span": {
+              "start": 56,
+              "end": 59
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 64,
+                  "end": 66
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -93,7 +105,13 @@ enum Color {
               }
             },
             {
-              "name": "b",
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 72,
+                  "end": 74
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -213,7 +231,13 @@ enum Color {
     {
       "kind": {
         "Function": {
-          "name": "listUsers",
+          "name": {
+            "name": "listUsers",
+            "span": {
+              "start": 192,
+              "end": 201
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,
@@ -328,7 +352,13 @@ enum Color {
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 253,
+              "end": 256
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -383,7 +413,13 @@ enum Color {
     {
       "kind": {
         "Class": {
-          "name": "Bar",
+          "name": {
+            "name": "Bar",
+            "span": {
+              "start": 317,
+              "end": 320
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -438,7 +474,13 @@ enum Color {
     {
       "kind": {
         "Class": {
-          "name": "User",
+          "name": {
+            "name": "User",
+            "span": {
+              "start": 362,
+              "end": 366
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -450,7 +492,13 @@ enum Color {
             {
               "kind": {
                 "Property": {
-                  "name": "name",
+                  "name": {
+                    "name": "name",
+                    "span": {
+                      "start": 409,
+                      "end": 414
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -522,7 +570,13 @@ enum Color {
             {
               "kind": {
                 "Property": {
-                  "name": "id",
+                  "name": {
+                    "name": "id",
+                    "span": {
+                      "start": 465,
+                      "end": 468
+                    }
+                  },
                   "visibility": "Private",
                   "set_visibility": null,
                   "is_static": false,
@@ -592,7 +646,13 @@ enum Color {
             {
               "kind": {
                 "Method": {
-                  "name": "name",
+                  "name": {
+                    "name": "name",
+                    "span": {
+                      "start": 534,
+                      "end": 538
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -712,10 +772,22 @@ enum Color {
     {
       "kind": {
         "Function": {
-          "name": "greet",
+          "name": {
+            "name": "greet",
+            "span": {
+              "start": 623,
+              "end": 628
+            }
+          },
           "params": [
             {
-              "name": "name",
+              "name": {
+                "name": "name",
+                "span": {
+                  "start": 649,
+                  "end": 654
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {
@@ -817,14 +889,26 @@ enum Color {
     {
       "kind": {
         "Enum": {
-          "name": "Color",
+          "name": {
+            "name": "Color",
+            "span": {
+              "start": 755,
+              "end": 760
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "Case": {
-                  "name": "Red",
+                  "name": {
+                    "name": "Red",
+                    "span": {
+                      "start": 788,
+                      "end": 791
+                    }
+                  },
                   "value": null,
                   "attributes": [
                     {
@@ -855,7 +939,13 @@ enum Color {
             {
               "kind": {
                 "Case": {
-                  "name": "Blue",
+                  "name": {
+                    "name": "Blue",
+                    "span": {
+                      "start": 802,
+                      "end": 806
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }

@@ -15,10 +15,22 @@ class Container {
     {
       "kind": {
         "Function": {
-          "name": "processData",
+          "name": {
+            "name": "processData",
+            "span": {
+              "start": 15,
+              "end": 26
+            }
+          },
           "params": [
             {
-              "name": "data",
+              "name": {
+                "name": "data",
+                "span": {
+                  "start": 49,
+                  "end": 54
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Intersection": [
@@ -154,7 +166,13 @@ class Container {
     {
       "kind": {
         "Class": {
-          "name": "Container",
+          "name": {
+            "name": "Container",
+            "span": {
+              "start": 95,
+              "end": 104
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -166,7 +184,13 @@ class Container {
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 127,
+                      "end": 138
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -174,7 +198,13 @@ class Container {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "items",
+                      "name": {
+                        "name": "items",
+                        "span": {
+                          "start": 183,
+                          "end": 189
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Intersection": [
@@ -235,7 +265,13 @@ class Container {
                       }
                     },
                     {
-                      "name": "value",
+                      "name": {
+                        "name": "value",
+                        "span": {
+                          "start": 224,
+                          "end": 230
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Union": [

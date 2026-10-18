@@ -16,7 +16,13 @@ class MyClass {
     {
       "kind": {
         "Class": {
-          "name": "MyClass",
+          "name": {
+            "name": "MyClass",
+            "span": {
+              "start": 12,
+              "end": 19
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,

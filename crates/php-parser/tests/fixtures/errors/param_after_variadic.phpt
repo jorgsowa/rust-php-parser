@@ -11,10 +11,22 @@ PHP Fatal error:  Only the last parameter can be variadic in Standard input code
     {
       "kind": {
         "Function": {
-          "name": "f",
+          "name": {
+            "name": "f",
+            "span": {
+              "start": 15,
+              "end": 16
+            }
+          },
           "params": [
             {
-              "name": "args",
+              "name": {
+                "name": "args",
+                "span": {
+                  "start": 20,
+                  "end": 25
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,
@@ -30,7 +42,13 @@ PHP Fatal error:  Only the last parameter can be variadic in Standard input code
               }
             },
             {
-              "name": "more",
+              "name": {
+                "name": "more",
+                "span": {
+                  "start": 27,
+                  "end": 32
+                }
+              },
               "type_hint": null,
               "default": null,
               "by_ref": false,

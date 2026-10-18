@@ -8,10 +8,22 @@ min_php=8.2
     {
       "kind": {
         "Function": {
-          "name": "f",
+          "name": {
+            "name": "f",
+            "span": {
+              "start": 15,
+              "end": 16
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 22,
+                  "end": 24
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {

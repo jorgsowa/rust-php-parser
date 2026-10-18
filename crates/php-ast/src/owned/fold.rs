@@ -1054,7 +1054,7 @@ mod tests {
                 by_ref: false,
                 params: Box::from([]),
                 use_vars: Box::from([ClosureUseVar {
-                    name: Box::from("x"),
+                    name: Ident::new("x", Span::DUMMY),
                     by_ref: false,
                     span: Span::DUMMY,
                 }]),
@@ -1070,8 +1070,8 @@ mod tests {
         impl FoldOwned for Rename {
             fn fold_closure_use_var(&mut self, var: &ClosureUseVar) -> ClosureUseVar {
                 ClosureUseVar {
-                    name: if var.name.as_ref() == "x" {
-                        Box::from("renamed")
+                    name: if var.name == "x" {
+                        Ident::new("renamed", var.name.span)
                     } else {
                         var.name.clone()
                     },
@@ -1084,7 +1084,7 @@ mod tests {
         let folded = Rename.fold_program(&p);
         if let StmtKind::Expression(expr) = &folded.stmts[0].kind {
             if let ExprKind::Closure(c) = &expr.kind {
-                assert_eq!(c.use_vars[0].name.as_ref(), "renamed");
+                assert_eq!(c.use_vars[0].name, "renamed");
                 return;
             }
         }

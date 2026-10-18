@@ -21,7 +21,13 @@
               {
                 "kind": {
                   "Function": {
-                    "name": "foo",
+                    "name": {
+                      "name": "foo",
+                      "span": {
+                        "start": 29,
+                        "end": 32
+                      }
+                    },
                     "params": [],
                     "body": [],
                     "return_type": null,
@@ -61,7 +67,13 @@
               {
                 "kind": {
                   "Function": {
-                    "name": "bar",
+                    "name": {
+                      "name": "bar",
+                      "span": {
+                        "start": 63,
+                        "end": 66
+                      }
+                    },
                     "params": [],
                     "body": [],
                     "return_type": null,

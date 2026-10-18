@@ -21,7 +21,13 @@ fn($a, $b) => $a && $b;
               "by_ref": false,
               "params": [
                 {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 14,
+                      "end": 16
+                    }
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -87,7 +93,13 @@ fn($a, $b) => $a && $b;
               "by_ref": false,
               "params": [
                 {
-                  "name": "x",
+                  "name": {
+                    "name": "x",
+                    "span": {
+                      "start": 28,
+                      "end": 30
+                    }
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -144,7 +156,13 @@ fn($a, $b) => $a && $b;
               "by_ref": false,
               "params": [
                 {
-                  "name": "x",
+                  "name": {
+                    "name": "x",
+                    "span": {
+                      "start": 55,
+                      "end": 57
+                    }
+                  },
                   "type_hint": null,
                   "default": null,
                   "by_ref": true,
@@ -193,7 +211,13 @@ fn($a, $b) => $a && $b;
               "by_ref": true,
               "params": [
                 {
-                  "name": "x",
+                  "name": {
+                    "name": "x",
+                    "span": {
+                      "start": 70,
+                      "end": 72
+                    }
+                  },
                   "type_hint": null,
                   "default": null,
                   "by_ref": false,
@@ -242,7 +266,13 @@ fn($a, $b) => $a && $b;
               "by_ref": false,
               "params": [
                 {
-                  "name": "x",
+                  "name": {
+                    "name": "x",
+                    "span": {
+                      "start": 84,
+                      "end": 86
+                    }
+                  },
                   "type_hint": null,
                   "default": null,
                   "by_ref": false,
@@ -258,7 +288,13 @@ fn($a, $b) => $a && $b;
                   }
                 },
                 {
-                  "name": "rest",
+                  "name": {
+                    "name": "rest",
+                    "span": {
+                      "start": 91,
+                      "end": 96
+                    }
+                  },
                   "type_hint": null,
                   "default": null,
                   "by_ref": false,
@@ -356,7 +392,13 @@ fn($a, $b) => $a && $b;
               "by_ref": false,
               "params": [
                 {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 129,
+                      "end": 131
+                    }
+                  },
                   "type_hint": null,
                   "default": null,
                   "by_ref": false,
@@ -372,7 +414,13 @@ fn($a, $b) => $a && $b;
                   }
                 },
                 {
-                  "name": "b",
+                  "name": {
+                    "name": "b",
+                    "span": {
+                      "start": 133,
+                      "end": 135
+                    }
+                  },
                   "type_hint": null,
                   "default": null,
                   "by_ref": false,
@@ -441,7 +489,13 @@ fn($a, $b) => $a && $b;
               "by_ref": false,
               "params": [
                 {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 154,
+                      "end": 156
+                    }
+                  },
                   "type_hint": null,
                   "default": null,
                   "by_ref": false,
@@ -457,7 +511,13 @@ fn($a, $b) => $a && $b;
                   }
                 },
                 {
-                  "name": "b",
+                  "name": {
+                    "name": "b",
+                    "span": {
+                      "start": 158,
+                      "end": 160
+                    }
+                  },
                   "type_hint": null,
                   "default": null,
                   "by_ref": false,

@@ -17,7 +17,13 @@ final class Value {
     {
       "kind": {
         "Class": {
-          "name": "Value",
+          "name": {
+            "name": "Value",
+            "span": {
+              "start": 74,
+              "end": 79
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": true,
@@ -29,7 +35,13 @@ final class Value {
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 138,
+                      "end": 149
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -37,7 +49,13 @@ final class Value {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "value",
+                      "name": {
+                        "name": "value",
+                        "span": {
+                          "start": 164,
+                          "end": 170
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

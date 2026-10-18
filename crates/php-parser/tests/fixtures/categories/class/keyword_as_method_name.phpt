@@ -10,7 +10,13 @@
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -22,7 +28,13 @@
             {
               "kind": {
                 "Method": {
-                  "name": "clone",
+                  "name": {
+                    "name": "clone",
+                    "span": {
+                      "start": 31,
+                      "end": 36
+                    }
+                  },
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": false,
@@ -42,7 +54,13 @@
             {
               "kind": {
                 "Method": {
-                  "name": "match",
+                  "name": {
+                    "name": "match",
+                    "span": {
+                      "start": 55,
+                      "end": 60
+                    }
+                  },
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": false,
@@ -62,7 +80,13 @@
             {
               "kind": {
                 "Method": {
-                  "name": "fn",
+                  "name": {
+                    "name": "fn",
+                    "span": {
+                      "start": 79,
+                      "end": 81
+                    }
+                  },
                   "visibility": null,
                   "is_static": false,
                   "is_abstract": false,

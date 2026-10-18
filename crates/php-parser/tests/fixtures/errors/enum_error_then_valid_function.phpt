@@ -13,14 +13,26 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
     {
       "kind": {
         "Enum": {
-          "name": "Status",
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 11,
+              "end": 17
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "Case": {
-                  "name": "Active",
+                  "name": {
+                    "name": "Active",
+                    "span": {
+                      "start": 25,
+                      "end": 31
+                    }
+                  },
                   "value": {
                     "kind": "Error",
                     "span": {
@@ -48,7 +60,13 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
     {
       "kind": {
         "Function": {
-          "name": "use_status",
+          "name": {
+            "name": "use_status",
+            "span": {
+              "start": 47,
+              "end": 57
+            }
+          },
           "params": [],
           "body": [
             {

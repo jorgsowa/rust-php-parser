@@ -29,10 +29,22 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 15,
+              "end": 18
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 19,
+                  "end": 21
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {
@@ -76,7 +88,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
               }
             },
             {
-              "name": "y",
+              "name": {
+                "name": "y",
+                "span": {
+                  "start": 35,
+                  "end": 37
+                }
+              },
               "type_hint": null,
               "default": {
                 "kind": {
@@ -171,7 +189,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
     {
       "kind": {
         "Class": {
-          "name": "MyClass",
+          "name": {
+            "name": "MyClass",
+            "span": {
+              "start": 65,
+              "end": 72
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -183,7 +207,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
             {
               "kind": {
                 "Property": {
-                  "name": "prop",
+                  "name": {
+                    "name": "prop",
+                    "span": {
+                      "start": 86,
+                      "end": 91
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -229,7 +259,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
             {
               "kind": {
                 "ClassConst": {
-                  "name": "C",
+                  "name": {
+                    "name": "C",
+                    "span": {
+                      "start": 122,
+                      "end": 123
+                    }
+                  },
                   "visibility": null,
                   "is_final": false,
                   "value": {
@@ -272,7 +308,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
             {
               "kind": {
                 "Method": {
-                  "name": "method",
+                  "name": {
+                    "name": "method",
+                    "span": {
+                      "start": 161,
+                      "end": 167
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -280,7 +322,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "p",
+                      "name": {
+                        "name": "p",
+                        "span": {
+                          "start": 168,
+                          "end": 170
+                        }
+                      },
                       "type_hint": null,
                       "default": {
                         "kind": {
@@ -346,14 +394,26 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
     {
       "kind": {
         "Function": {
-          "name": "baz",
+          "name": {
+            "name": "baz",
+            "span": {
+              "start": 201,
+              "end": 204
+            }
+          },
           "params": [],
           "body": [
             {
               "kind": {
                 "StaticVar": [
                   {
-                    "name": "cache",
+                    "name": {
+                      "name": "cache",
+                      "span": {
+                        "start": 220,
+                        "end": 226
+                      }
+                    },
                     "default": {
                       "kind": {
                         "New": {
@@ -409,7 +469,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
     {
       "kind": {
         "Function": {
-          "name": "qux",
+          "name": {
+            "name": "qux",
+            "span": {
+              "start": 273,
+              "end": 276
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,
@@ -501,7 +567,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                     "by_ref": false,
                     "params": [
                       {
-                        "name": "x",
+                        "name": {
+                          "name": "x",
+                          "span": {
+                            "start": 298,
+                            "end": 300
+                          }
+                        },
                         "type_hint": null,
                         "default": {
                           "kind": {
@@ -591,7 +663,13 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                     "by_ref": false,
                     "params": [
                       {
-                        "name": "x",
+                        "name": {
+                          "name": "x",
+                          "span": {
+                            "start": 326,
+                            "end": 328
+                          }
+                        },
                         "type_hint": null,
                         "default": {
                           "kind": {

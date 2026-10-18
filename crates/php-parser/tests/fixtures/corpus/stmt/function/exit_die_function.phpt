@@ -15,10 +15,22 @@ PHP Parse error:  syntax error, unexpected token "exit", expecting "(" in Standa
     {
       "kind": {
         "Function": {
-          "name": "exit",
+          "name": {
+            "name": "exit",
+            "span": {
+              "start": 16,
+              "end": 20
+            }
+          },
           "params": [
             {
-              "name": "status",
+              "name": {
+                "name": "status",
+                "span": {
+                  "start": 32,
+                  "end": 39
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -118,10 +130,22 @@ PHP Parse error:  syntax error, unexpected token "exit", expecting "(" in Standa
     {
       "kind": {
         "Function": {
-          "name": "die",
+          "name": {
+            "name": "die",
+            "span": {
+              "start": 65,
+              "end": 68
+            }
+          },
           "params": [
             {
-              "name": "status",
+              "name": {
+                "name": "status",
+                "span": {
+                  "start": 80,
+                  "end": 87
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [

@@ -73,7 +73,13 @@ try {
                           }
                         }
                       ],
-                      "var": "e",
+                      "var": {
+                        "name": "e",
+                        "span": {
+                          "start": 73,
+                          "end": 75
+                        }
+                      },
                       "body": [
                         {
                           "kind": {
@@ -178,7 +184,13 @@ try {
                   }
                 }
               ],
-              "var": "e",
+              "var": {
+                "name": "e",
+                "span": {
+                  "start": 144,
+                  "end": 146
+                }
+              },
               "body": [
                 {
                   "kind": {

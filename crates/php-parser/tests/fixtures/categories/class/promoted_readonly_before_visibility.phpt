@@ -15,7 +15,13 @@ class Foo {
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -27,7 +33,13 @@ class Foo {
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 38,
+                      "end": 49
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -35,7 +47,13 @@ class Foo {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "a",
+                      "name": {
+                        "name": "a",
+                        "span": {
+                          "start": 85,
+                          "end": 87
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -68,7 +86,13 @@ class Foo {
                       }
                     },
                     {
-                      "name": "b",
+                      "name": {
+                        "name": "b",
+                        "span": {
+                          "start": 118,
+                          "end": 120
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -101,7 +125,13 @@ class Foo {
                       }
                     },
                     {
-                      "name": "c",
+                      "name": {
+                        "name": "c",
+                        "span": {
+                          "start": 151,
+                          "end": 153
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

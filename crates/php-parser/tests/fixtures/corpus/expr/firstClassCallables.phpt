@@ -186,7 +186,13 @@ PHP Fatal error:  Cannot create Closure as attribute argument in Standard input 
     {
       "kind": {
         "Function": {
-          "name": "foo",
+          "name": {
+            "name": "foo",
+            "span": {
+              "start": 168,
+              "end": 171
+            }
+          },
           "params": [],
           "body": [],
           "return_type": null,

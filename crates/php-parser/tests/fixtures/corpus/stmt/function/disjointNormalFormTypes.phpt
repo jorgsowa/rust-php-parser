@@ -15,7 +15,13 @@ function test((A&B)|(X&Y) $a): (A&B)|(X&Y) {}
     {
       "kind": {
         "Class": {
-          "name": "Test",
+          "name": {
+            "name": "Test",
+            "span": {
+              "start": 13,
+              "end": 17
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -27,7 +33,13 @@ function test((A&B)|(X&Y) $a): (A&B)|(X&Y) {}
             {
               "kind": {
                 "Property": {
-                  "name": "prop",
+                  "name": {
+                    "name": "prop",
+                    "span": {
+                      "start": 43,
+                      "end": 48
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -146,7 +158,13 @@ function test((A&B)|(X&Y) $a): (A&B)|(X&Y) {}
             {
               "kind": {
                 "Property": {
-                  "name": "prop2",
+                  "name": {
+                    "name": "prop2",
+                    "span": {
+                      "start": 78,
+                      "end": 84
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -246,10 +264,22 @@ function test((A&B)|(X&Y) $a): (A&B)|(X&Y) {}
     {
       "kind": {
         "Function": {
-          "name": "test",
+          "name": {
+            "name": "test",
+            "span": {
+              "start": 98,
+              "end": 102
+            }
+          },
           "params": [
             {
-              "name": "a",
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 115,
+                  "end": 117
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [

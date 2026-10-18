@@ -18,7 +18,13 @@ class User {
     {
       "kind": {
         "Class": {
-          "name": "User",
+          "name": {
+            "name": "User",
+            "span": {
+              "start": 116,
+              "end": 120
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -30,7 +36,13 @@ class User {
             {
               "kind": {
                 "Method": {
-                  "name": "getById",
+                  "name": {
+                    "name": "getById",
+                    "span": {
+                      "start": 181,
+                      "end": 188
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -38,7 +50,13 @@ class User {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "id",
+                      "name": {
+                        "name": "id",
+                        "span": {
+                          "start": 189,
+                          "end": 192
+                        }
+                      },
                       "type_hint": null,
                       "default": null,
                       "by_ref": false,

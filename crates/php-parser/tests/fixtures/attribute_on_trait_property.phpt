@@ -6,12 +6,24 @@
     {
       "kind": {
         "Trait": {
-          "name": "T",
+          "name": {
+            "name": "T",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
           "members": [
             {
               "kind": {
                 "Property": {
-                  "name": "dep",
+                  "name": {
+                    "name": "dep",
+                    "span": {
+                      "start": 40,
+                      "end": 44
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

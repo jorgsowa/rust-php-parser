@@ -26,7 +26,13 @@ echo 'done';
           },
           "then_branch": {
             "kind": {
-              "Goto": "labelA"
+              "Goto": {
+                "name": "labelA",
+                "span": {
+                  "start": 19,
+                  "end": 25
+                }
+              }
             },
             "span": {
               "start": 14,
@@ -56,7 +62,13 @@ echo 'done';
           },
           "then_branch": {
             "kind": {
-              "Goto": "labelB"
+              "Goto": {
+                "name": "labelB",
+                "span": {
+                  "start": 40,
+                  "end": 46
+                }
+              }
             },
             "span": {
               "start": 35,
@@ -74,7 +86,13 @@ echo 'done';
     },
     {
       "kind": {
-        "Label": "labelA"
+        "Label": {
+          "name": "labelA",
+          "span": {
+            "start": 48,
+            "end": 54
+          }
+        }
       },
       "span": {
         "start": 48,
@@ -102,7 +120,13 @@ echo 'done';
     },
     {
       "kind": {
-        "Goto": "end"
+        "Goto": {
+          "name": "end",
+          "span": {
+            "start": 71,
+            "end": 74
+          }
+        }
       },
       "span": {
         "start": 66,
@@ -111,7 +135,13 @@ echo 'done';
     },
     {
       "kind": {
-        "Label": "labelB"
+        "Label": {
+          "name": "labelB",
+          "span": {
+            "start": 76,
+            "end": 82
+          }
+        }
       },
       "span": {
         "start": 76,
@@ -139,7 +169,13 @@ echo 'done';
     },
     {
       "kind": {
-        "Label": "end"
+        "Label": {
+          "name": "end",
+          "span": {
+            "start": 94,
+            "end": 97
+          }
+        }
       },
       "span": {
         "start": 94,

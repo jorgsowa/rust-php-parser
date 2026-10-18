@@ -8,14 +8,26 @@ min_php=8.1
     {
       "kind": {
         "Enum": {
-          "name": "Direction",
+          "name": {
+            "name": "Direction",
+            "span": {
+              "start": 11,
+              "end": 20
+            }
+          },
           "scalar_type": null,
           "implements": [],
           "members": [
             {
               "kind": {
                 "Case": {
-                  "name": "North",
+                  "name": {
+                    "name": "North",
+                    "span": {
+                      "start": 28,
+                      "end": 33
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -28,7 +40,13 @@ min_php=8.1
             {
               "kind": {
                 "Case": {
-                  "name": "South",
+                  "name": {
+                    "name": "South",
+                    "span": {
+                      "start": 40,
+                      "end": 45
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -41,7 +59,13 @@ min_php=8.1
             {
               "kind": {
                 "Case": {
-                  "name": "East",
+                  "name": {
+                    "name": "East",
+                    "span": {
+                      "start": 52,
+                      "end": 56
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }
@@ -54,7 +78,13 @@ min_php=8.1
             {
               "kind": {
                 "Case": {
-                  "name": "West",
+                  "name": {
+                    "name": "West",
+                    "span": {
+                      "start": 63,
+                      "end": 67
+                    }
+                  },
                   "value": null,
                   "attributes": []
                 }

@@ -27,7 +27,13 @@ PHP Fatal error:  Property with asymmetric visibility Test::$a must have type in
     {
       "kind": {
         "Class": {
-          "name": "Test",
+          "name": {
+            "name": "Test",
+            "span": {
+              "start": 13,
+              "end": 17
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -39,7 +45,13 @@ PHP Fatal error:  Property with asymmetric visibility Test::$a must have type in
             {
               "kind": {
                 "Property": {
-                  "name": "a",
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 47,
+                      "end": 49
+                    }
+                  },
                   "visibility": "Protected",
                   "set_visibility": "Private",
                   "is_static": false,
@@ -57,7 +69,13 @@ PHP Fatal error:  Property with asymmetric visibility Test::$a must have type in
             {
               "kind": {
                 "Property": {
-                  "name": "b",
+                  "name": {
+                    "name": "b",
+                    "span": {
+                      "start": 75,
+                      "end": 77
+                    }
+                  },
                   "visibility": "Private",
                   "set_visibility": "Public",
                   "is_static": false,
@@ -75,7 +93,13 @@ PHP Fatal error:  Property with asymmetric visibility Test::$a must have type in
             {
               "kind": {
                 "Property": {
-                  "name": "c",
+                  "name": {
+                    "name": "c",
+                    "span": {
+                      "start": 98,
+                      "end": 100
+                    }
+                  },
                   "visibility": null,
                   "set_visibility": "Protected",
                   "is_static": false,
@@ -93,7 +117,13 @@ PHP Fatal error:  Property with asymmetric visibility Test::$a must have type in
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 123,
+                      "end": 134
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -101,7 +131,13 @@ PHP Fatal error:  Property with asymmetric visibility Test::$a must have type in
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "d",
+                      "name": {
+                        "name": "d",
+                        "span": {
+                          "start": 167,
+                          "end": 169
+                        }
+                      },
                       "type_hint": null,
                       "default": null,
                       "by_ref": false,
@@ -117,7 +153,13 @@ PHP Fatal error:  Property with asymmetric visibility Test::$a must have type in
                       }
                     },
                     {
-                      "name": "e",
+                      "name": {
+                        "name": "e",
+                        "span": {
+                          "start": 199,
+                          "end": 201
+                        }
+                      },
                       "type_hint": null,
                       "default": null,
                       "by_ref": false,
@@ -133,7 +175,13 @@ PHP Fatal error:  Property with asymmetric visibility Test::$a must have type in
                       }
                     },
                     {
-                      "name": "f",
+                      "name": {
+                        "name": "f",
+                        "span": {
+                          "start": 226,
+                          "end": 228
+                        }
+                      },
                       "type_hint": null,
                       "default": null,
                       "by_ref": false,

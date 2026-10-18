@@ -12,7 +12,13 @@ function baz(Enum $x): Enum { return $x; }
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -24,7 +30,13 @@ function baz(Enum $x): Enum { return $x; }
             {
               "kind": {
                 "Property": {
-                  "name": "x",
+                  "name": {
+                    "name": "x",
+                    "span": {
+                      "start": 34,
+                      "end": 36
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -59,7 +71,13 @@ function baz(Enum $x): Enum { return $x; }
             {
               "kind": {
                 "Property": {
-                  "name": "y",
+                  "name": {
+                    "name": "y",
+                    "span": {
+                      "start": 61,
+                      "end": 63
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": true,
@@ -94,7 +112,13 @@ function baz(Enum $x): Enum { return $x; }
             {
               "kind": {
                 "Method": {
-                  "name": "bar",
+                  "name": {
+                    "name": "bar",
+                    "span": {
+                      "start": 85,
+                      "end": 88
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -102,7 +126,13 @@ function baz(Enum $x): Enum { return $x; }
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "a",
+                      "name": {
+                        "name": "a",
+                        "span": {
+                          "start": 94,
+                          "end": 96
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {
@@ -212,10 +242,22 @@ function baz(Enum $x): Enum { return $x; }
     {
       "kind": {
         "Function": {
-          "name": "baz",
+          "name": {
+            "name": "baz",
+            "span": {
+              "start": 138,
+              "end": 141
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 147,
+                  "end": 149
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Named": {

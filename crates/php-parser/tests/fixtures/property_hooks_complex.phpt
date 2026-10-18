@@ -21,7 +21,13 @@ class Foo {
     {
       "kind": {
         "Class": {
-          "name": "Foo",
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -33,7 +39,13 @@ class Foo {
             {
               "kind": {
                 "Property": {
-                  "name": "name",
+                  "name": {
+                    "name": "name",
+                    "span": {
+                      "start": 36,
+                      "end": 41
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -195,7 +207,13 @@ class Foo {
                       "by_ref": false,
                       "params": [
                         {
-                          "name": "value",
+                          "name": {
+                            "name": "value",
+                            "span": {
+                              "start": 103,
+                              "end": 109
+                            }
+                          },
                           "type_hint": {
                             "kind": {
                               "Named": {
@@ -245,7 +263,13 @@ class Foo {
             {
               "kind": {
                 "Property": {
-                  "name": "count",
+                  "name": {
+                    "name": "count",
+                    "span": {
+                      "start": 155,
+                      "end": 161
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
@@ -461,7 +485,13 @@ class Foo {
             {
               "kind": {
                 "Property": {
-                  "name": "id",
+                  "name": {
+                    "name": "id",
+                    "span": {
+                      "start": 269,
+                      "end": 272
+                    }
+                  },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,

@@ -25,10 +25,22 @@ class Test {
     {
       "kind": {
         "Function": {
-          "name": "test1",
+          "name": {
+            "name": "test1",
+            "span": {
+              "start": 15,
+              "end": 20
+            }
+          },
           "params": [
             {
-              "name": "x",
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 57,
+                  "end": 59
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -89,7 +101,13 @@ class Test {
               }
             },
             {
-              "name": "y",
+              "name": {
+                "name": "y",
+                "span": {
+                  "start": 94,
+                  "end": 96
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -150,7 +168,13 @@ class Test {
               }
             },
             {
-              "name": "z",
+              "name": {
+                "name": "z",
+                "span": {
+                  "start": 157,
+                  "end": 159
+                }
+              },
               "type_hint": {
                 "kind": {
                   "Union": [
@@ -314,7 +338,13 @@ class Test {
     {
       "kind": {
         "Class": {
-          "name": "Test",
+          "name": {
+            "name": "Test",
+            "span": {
+              "start": 223,
+              "end": 227
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -326,7 +356,13 @@ class Test {
             {
               "kind": {
                 "Property": {
-                  "name": "prop",
+                  "name": {
+                    "name": "prop",
+                    "span": {
+                      "start": 266,
+                      "end": 271
+                    }
+                  },
                   "visibility": "Private",
                   "set_visibility": null,
                   "is_static": false,
@@ -389,7 +425,13 @@ class Test {
             {
               "kind": {
                 "Method": {
-                  "name": "method",
+                  "name": {
+                    "name": "method",
+                    "span": {
+                      "start": 294,
+                      "end": 300
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -397,7 +439,13 @@ class Test {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "param",
+                      "name": {
+                        "name": "param",
+                        "span": {
+                          "start": 348,
+                          "end": 354
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Intersection": [

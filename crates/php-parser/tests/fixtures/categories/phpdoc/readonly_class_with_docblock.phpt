@@ -19,7 +19,13 @@ readonly class DataObject {
     {
       "kind": {
         "Class": {
-          "name": "DataObject",
+          "name": {
+            "name": "DataObject",
+            "span": {
+              "start": 79,
+              "end": 89
+            }
+          },
           "modifiers": {
             "is_abstract": false,
             "is_final": false,
@@ -31,7 +37,13 @@ readonly class DataObject {
             {
               "kind": {
                 "Method": {
-                  "name": "__construct",
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 151,
+                      "end": 162
+                    }
+                  },
                   "visibility": "Public",
                   "is_static": false,
                   "is_abstract": false,
@@ -39,7 +51,13 @@ readonly class DataObject {
                   "by_ref": false,
                   "params": [
                     {
-                      "name": "data",
+                      "name": {
+                        "name": "data",
+                        "span": {
+                          "start": 177,
+                          "end": 182
+                        }
+                      },
                       "type_hint": {
                         "kind": {
                           "Named": {

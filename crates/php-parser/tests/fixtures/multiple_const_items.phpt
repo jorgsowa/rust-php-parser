@@ -7,7 +7,13 @@
       "kind": {
         "Const": [
           {
-            "name": "A",
+            "name": {
+              "name": "A",
+              "span": {
+                "start": 12,
+                "end": 13
+              }
+            },
             "value": {
               "kind": {
                 "Int": 1
@@ -24,7 +30,13 @@
             }
           },
           {
-            "name": "B",
+            "name": {
+              "name": "B",
+              "span": {
+                "start": 19,
+                "end": 20
+              }
+            },
             "value": {
               "kind": {
                 "Int": 2
@@ -41,7 +53,13 @@
             }
           },
           {
-            "name": "C",
+            "name": {
+              "name": "C",
+              "span": {
+                "start": 26,
+                "end": 27
+              }
+            },
             "value": {
               "kind": {
                 "Int": 3
