@@ -153,11 +153,12 @@ pub const HIGH_PREFIX_BP: u8 = 47;
 pub const CLONE_BP: u8 = 61;
 
 /// Returns the postfix binding power for a token, or None if it's not a postfix operator.
-/// Returns (left_bp, ()).
+/// Above every prefix operator, `clone` included: PHP applies `++`/`--` to the variable,
+/// so `@$a++` is `@($a++)` and `(string) $a++` is `(string) ($a++)`.
 #[inline(always)]
 pub fn postfix_binding_power(kind: TokenKind) -> Option<u8> {
     match kind {
-        TokenKind::PlusPlus | TokenKind::MinusMinus => Some(43),
+        TokenKind::PlusPlus | TokenKind::MinusMinus => Some(63),
         _ => None,
     }
 }

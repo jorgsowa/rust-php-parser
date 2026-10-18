@@ -49,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The printer's precedence table placed `and`, `or` and `xor` above assignment, `|>` below `??`, casts above `**` and `!` above `instanceof`, so a tree without `Parenthesized` nodes could print with a different meaning. It now also parenthesizes a property fetch used as a callee (`($a->b)()`), a non-dereferencable operand of `->`, `::`, `[]` or a call, an arrow function followed by more of the expression or on the right of `|>`, a `new` class that is not a variable or name, and a `yield` used as an array or `yield` key. Parsed code that relied on the old table loses redundant parentheses, such as `$a = $b or $c` (`php-printer`).
 - Comments after the last statement start on their own line instead of being appended to it, as in `}// comment` (`php-printer`).
 - A `switch` case whose body ends in inline HTML printed the next `case` or `default` as HTML (`php-printer`).
+- Postfix `++` and `--` bound looser than the prefix operators, so `@$i++`, `(string) $i++`, `-$i++` and `clone $o++` parsed as an increment of `@$i`, `(string) $i`, … and were reported; they now apply to the variable as in PHP (`php-rs-parser`).
 
 ---
 
