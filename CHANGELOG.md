@@ -65,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A heredoc ended at a line inside a multi-line `{$...}` or `${...}` interpolation that looked like its closing label (`php-lexer`, `php-rs-parser`).
 - `const`, `use` and `namespace` declarations inside a function, block or control structure are reported; PHP allows them only at the outermost scope. `__halt_compiler()` in a function body was not reported (`php-rs-parser`).
 - `static` in a parameter or property type, such as `?static $a`, is reported; PHP allows it only in return and class constant types (`php-rs-parser`).
+- Writes through a property or index fetch on something other than a variable or call are reported as temporary, as in `FOO->a = 1`, `C::X[0] = 1`, `(new A)->b = 1` and `unset(FOO->a)`; only array and string literals were (`php-rs-parser`).
 
 ---
 

@@ -194,7 +194,11 @@ fn is_valid_destructure_element(kind: &ExprKind<'_, '_>) -> bool {
             .all(|el| !el.unpack && is_valid_destructure_element(&el.value.kind)),
         // PHP rejects `($a) = …` but accepts `[($a)] = …`.
         ExprKind::Parenthesized(inner) => is_valid_destructure_element(&inner.kind),
-        _ => is_valid_assignment_target(kind) && !has_nullsafe_link(kind),
+        _ => {
+            is_valid_assignment_target(kind)
+                && !has_nullsafe_link(kind)
+                && !is_temporary_write_target(kind)
+        }
     }
 }
 
@@ -278,9 +282,9 @@ fn check_mixed_list_short_syntax<'arena, 'src>(
     }
 }
 
-/// True if the LHS is an `ArrayAccess` chain whose outermost base is a
-/// statically-known temporary (an array or string literal, `[0,1][0] = …`). PHP
-/// rejects these with "Cannot use temporary expression in write context".
+/// True if `kind` is an index or property fetch chain whose base is not a variable or a
+/// call, such as `[0, 1][0]`, `FOO->a` or `(new A)->b`. PHP rejects writes to these with
+/// "Cannot use temporary expression in write context".
 fn is_temporary_write_target(kind: &ExprKind<'_, '_>) -> bool {
     let mut cur = kind;
     let mut saw_access = false;
@@ -290,18 +294,32 @@ fn is_temporary_write_target(kind: &ExprKind<'_, '_>) -> bool {
                 saw_access = true;
                 cur = &a.array.kind;
             }
+            ExprKind::PropertyAccess(p) => {
+                saw_access = true;
+                cur = &p.object.kind;
+            }
+            // Reported as a nullsafe write instead.
+            ExprKind::NullsafePropertyAccess(_) => return false,
             ExprKind::Parenthesized(inner) => cur = &inner.kind,
             _ => break,
         }
     }
     saw_access
-        && matches!(
+        && !matches!(
             cur,
-            ExprKind::Array(_)
-                | ExprKind::String(_)
-                | ExprKind::InterpolatedString(_)
-                | ExprKind::Heredoc { .. }
-                | ExprKind::Nowdoc { .. }
+            ExprKind::Variable(_)
+                | ExprKind::VariableVariable(_)
+                | ExprKind::StaticPropertyAccess(_)
+                | ExprKind::StaticPropertyAccessDynamic { .. }
+                | ExprKind::FunctionCall(_)
+                | ExprKind::MethodCall(_)
+                | ExprKind::NullsafeMethodCall(_)
+                | ExprKind::StaticMethodCall(_)
+                | ExprKind::CallableCreate(_)
+                | ExprKind::Clone(_)
+                | ExprKind::CloneWith(..)
+                | ExprKind::StaticMethodCallDynamic(_)
+                | ExprKind::Error
         )
 }
 
