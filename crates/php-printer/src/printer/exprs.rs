@@ -171,8 +171,14 @@ impl<'src> Printer<'src> {
                 self.print_expr(binary.right, rhs_prec);
             }
             ExprKind::UnaryPrefix(unary) => {
-                self.w(unary_prefix_op_str(unary.op));
+                let op = unary_prefix_op_str(unary.op);
+                self.w(op);
+                let operand_start = self.output.len();
                 self.print_expr(unary.operand, PREC_UNARY);
+                // `- -$a` must not become `--$a`, nor `+ ++$a` become `+++$a`.
+                if matches!(op, "-" | "+") && self.output[operand_start..].starts_with(op) {
+                    self.output.insert(operand_start, ' ');
+                }
             }
             ExprKind::UnaryPostfix(unary) => self.w(unary_postfix_op_str(unary.op)),
             ExprKind::Ternary(ternary) => {
