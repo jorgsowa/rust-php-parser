@@ -347,7 +347,7 @@ fn very_long_concatenation_chain() {
 fn very_long_chains_owned() {
     let concat = format!("<?php echo $a{};", " . $a".repeat(20_000));
     let methods = format!("<?php $a{};", "->b()".repeat(20_000));
-    let mixed = format!("<?php $a{};", "->b[0]::C?->d(...)".repeat(5_000));
+    let mixed = format!("<?php $a{};", "?->b[0]::C->d(...)".repeat(5_000));
     with_stack(256 * 1024, move || {
         for code in [concat, methods, mixed] {
             let result = php_rs_parser::parse(&code);

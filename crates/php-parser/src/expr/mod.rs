@@ -135,7 +135,9 @@ pub(crate) fn check_write_target(
     });
 }
 
-/// True if the fetch chain ending in `kind` passes through `?->`.
+/// True if the fetch chain ending in `kind` passes through `?->`. Like PHP's
+/// short-circuit chain, it runs through property, method, index and static
+/// member links, but not through a class constant or a plain call.
 fn has_nullsafe_link(kind: &ExprKind<'_, '_>) -> bool {
     let mut cur = kind;
     loop {
@@ -144,6 +146,10 @@ fn has_nullsafe_link(kind: &ExprKind<'_, '_>) -> bool {
             ExprKind::PropertyAccess(a) => &a.object.kind,
             ExprKind::MethodCall(c) => &c.object.kind,
             ExprKind::ArrayAccess(a) => &a.array.kind,
+            ExprKind::StaticPropertyAccess(a) => &a.class.kind,
+            ExprKind::StaticPropertyAccessDynamic { class, .. } => &class.kind,
+            ExprKind::StaticMethodCall(c) => &c.class.kind,
+            ExprKind::StaticMethodCallDynamic(c) => &c.class.kind,
             ExprKind::Parenthesized(inner) => &inner.kind,
             _ => return false,
         };
@@ -542,6 +548,14 @@ pub fn parse_expr_bp<'arena, 'src>(
                     match parse_arg_list_or_callable(parser) {
                         ArgListResult::CallableMarker => {
                             let span = Span::new(lhs.span.start, parser.previous_end());
+                            if is_nullsafe || has_nullsafe_link(&lhs.kind) {
+                                parser.error(ParseError::Forbidden {
+                                    message:
+                                        "Cannot combine nullsafe operator with Closure creation"
+                                            .into(),
+                                    span,
+                                });
+                            }
                             let callable_kind = if is_nullsafe {
                                 CallableCreateKind::NullsafeMethod {
                                     object: parser.alloc(lhs),
