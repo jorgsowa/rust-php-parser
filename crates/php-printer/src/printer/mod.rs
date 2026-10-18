@@ -104,6 +104,9 @@ pub(crate) struct Printer<'src> {
     /// of its statement, argument or parentheses, so an arrow function, whose
     /// body runs as far right as it can, needs no parentheses there.
     pub(crate) at_tail: bool,
+    /// Start of the node whose doc comment is printed next; comments between the two
+    /// are printed right after the doc comment, in source order.
+    pub(crate) doc_comment_node_start: Option<u32>,
     /// Set once a comment has broken the method chain being printed onto continuation lines.
     pub(crate) in_chain_continuation: bool,
 }
@@ -131,6 +134,7 @@ impl<'src> Printer<'src> {
             in_html_mode: false,
             has_php_content: false,
             at_tail: true,
+            doc_comment_node_start: None,
             in_chain_continuation: false,
         }
     }
@@ -209,6 +213,18 @@ impl<'src> Printer<'src> {
     // =========================================================================
     // Comment emission
     // =========================================================================
+
+    /// Flush the comments before a node starting at `node_start`, stopping at its doc
+    /// comment at `doc_start` if it has one; the rest follow the doc comment.
+    pub(crate) fn flush_comments_before_node(&mut self, node_start: u32, doc_start: Option<u32>) {
+        match doc_start {
+            Some(doc_start) => {
+                self.flush_leading_comments(doc_start);
+                self.doc_comment_node_start = Some(node_start);
+            }
+            None => self.flush_leading_comments(node_start),
+        }
+    }
 
     pub(crate) fn flush_leading_comments(&mut self, before_offset: u32) {
         while self.comment_cursor < self.comments.len() {
@@ -420,9 +436,11 @@ impl<'src> Printer<'src> {
                     let prev_end = stmts[i - 1].span.end;
                     // Stop at the first pending comment before this statement so that
                     // newlines inside the comment text aren't mistaken for blank lines.
+                    let lead_start =
+                        helpers::stmt_doc_comment_start(stmt).unwrap_or(stmt.span.start);
                     let scan_to = self
-                        .first_pending_comment_before(stmt.span.start)
-                        .unwrap_or(stmt.span.start);
+                        .first_pending_comment_before(lead_start)
+                        .unwrap_or(lead_start);
                     self.blank_lines_between(prev_end, scan_to).max(decl_min)
                 } else {
                     decl_min
@@ -432,7 +450,7 @@ impl<'src> Printer<'src> {
                     self.newline();
                 }
             }
-            self.flush_leading_comments(stmt.span.start);
+            self.flush_comments_before_node(stmt.span.start, helpers::stmt_doc_comment_start(stmt));
             if !self.in_html_mode {
                 self.write_indent();
             }

@@ -108,16 +108,18 @@ impl<'src> Printer<'src> {
             self.newline();
             self.indent();
             for (i, member) in body.members.iter().enumerate() {
-                if i > 0 && !self.has_comments_before(member.span.start) {
+                let doc_start = class_member_doc_comment(member).map(|c| c.span.start);
+                let lead_start = doc_start.unwrap_or(member.span.start);
+                if i > 0 && !self.has_comments_before(lead_start) {
                     // Always at least one blank line between members; preserve more from source.
                     let blank = self
-                        .blank_lines_between(body.members[i - 1].span.end, member.span.start)
+                        .blank_lines_between(body.members[i - 1].span.end, lead_start)
                         .max(1);
                     for _ in 0..blank {
                         self.newline();
                     }
                 }
-                self.flush_leading_comments(member.span.start);
+                self.flush_comments_before_node(member.span.start, doc_start);
                 self.write_indent();
                 self.print_class_member(member);
                 self.newline();
@@ -414,14 +416,16 @@ impl<'src> Printer<'src> {
             self.newline();
             self.indent();
             for (i, member) in enum_decl.body.members.iter().enumerate() {
-                if i > 0 && !self.has_comments_before(member.span.start) {
+                let doc_start = enum_member_doc_comment(member).map(|c| c.span.start);
+                let lead_start = doc_start.unwrap_or(member.span.start);
+                if i > 0 && !self.has_comments_before(lead_start) {
                     let prev_end = enum_decl.body.members[i - 1].span.end;
-                    let blank = self.blank_lines_between(prev_end, member.span.start).max(1);
+                    let blank = self.blank_lines_between(prev_end, lead_start).max(1);
                     for _ in 0..blank {
                         self.newline();
                     }
                 }
-                self.flush_leading_comments(member.span.start);
+                self.flush_comments_before_node(member.span.start, doc_start);
                 self.write_indent();
                 self.print_enum_member(member);
                 self.newline();
@@ -550,6 +554,9 @@ impl<'src> Printer<'src> {
         if let Some(comment) = doc {
             self.write_doc_comment(comment.text);
             self.newline();
+            if let Some(node_start) = self.doc_comment_node_start.take() {
+                self.flush_leading_comments(node_start);
+            }
             self.write_indent();
         }
     }

@@ -12,6 +12,40 @@ pub(crate) fn is_declaration(kind: &StmtKind) -> bool {
     )
 }
 
+/// Start of the doc comment printed before `stmt`, which may sit on its declaration.
+pub(crate) fn stmt_doc_comment_start(stmt: &Stmt) -> Option<u32> {
+    let doc = match &stmt.kind {
+        StmtKind::Function(f) => f.doc_comment.as_ref(),
+        StmtKind::Class(c) => c.doc_comment.as_ref(),
+        StmtKind::Interface(i) => i.doc_comment.as_ref(),
+        StmtKind::Trait(t) => t.doc_comment.as_ref(),
+        StmtKind::Enum(e) => e.doc_comment.as_ref(),
+        StmtKind::Const(items) => items.first().and_then(|c| c.doc_comment.as_ref()),
+        _ => stmt.doc_comment,
+    };
+    doc.map(|c| c.span.start)
+}
+
+pub(crate) fn class_member_doc_comment<'a>(member: &'a ClassMember) -> Option<&'a Comment<'a>> {
+    match &member.kind {
+        ClassMemberKind::Property(p) => p.doc_comment.as_ref(),
+        ClassMemberKind::Method(m) => m.doc_comment.as_ref(),
+        ClassMemberKind::ClassConst(c) => c.doc_comment.as_ref(),
+        ClassMemberKind::TraitUse(t) => t.doc_comment.as_ref(),
+        _ => None,
+    }
+}
+
+pub(crate) fn enum_member_doc_comment<'a>(member: &'a EnumMember) -> Option<&'a Comment<'a>> {
+    match &member.kind {
+        EnumMemberKind::Case(c) => c.doc_comment.as_ref(),
+        EnumMemberKind::Method(m) => m.doc_comment.as_ref(),
+        EnumMemberKind::ClassConst(c) => c.doc_comment.as_ref(),
+        EnumMemberKind::TraitUse(t) => t.doc_comment.as_ref(),
+        _ => None,
+    }
+}
+
 pub(crate) fn needs_double_quotes(s: &str) -> bool {
     s.bytes().any(|b| {
         matches!(
