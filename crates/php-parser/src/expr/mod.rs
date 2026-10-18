@@ -147,7 +147,7 @@ pub(crate) enum WriteKind {
     Unset,
 }
 
-/// Report a write PHP forbids to `$this`, `$GLOBALS` or `$GLOBALS[]`.
+/// Report a write PHP forbids to `$this` or `$GLOBALS`.
 pub(crate) fn check_special_variable_write(
     parser: &mut Parser<'_, '_>,
     target: &Expr<'_, '_>,
@@ -176,9 +176,6 @@ pub(crate) fn check_special_variable_write(
             }
             _ => return,
         },
-        _ if kind != WriteKind::Unset && appends_to_globals(&target.kind) => {
-            "Cannot append to $GLOBALS"
-        }
         _ => return,
     };
     parser.error(ParseError::Forbidden {
@@ -189,23 +186,6 @@ pub(crate) fn check_special_variable_write(
 
 fn is_variable_named(expr: &Expr<'_, '_>, name: &str) -> bool {
     matches!(&expr.kind, ExprKind::Variable(n) if n.as_str() == name)
-}
-
-/// True if the fetch chain ending in `kind` starts with `$GLOBALS[]`.
-fn appends_to_globals(kind: &ExprKind<'_, '_>) -> bool {
-    let mut cur = kind;
-    loop {
-        cur = match cur {
-            ExprKind::ArrayAccess(a)
-                if a.index.is_none() && is_variable_named(a.array, "GLOBALS") =>
-            {
-                return true
-            }
-            ExprKind::ArrayAccess(a) => &a.array.kind,
-            ExprKind::PropertyAccess(p) => &p.object.kind,
-            _ => return false,
-        };
-    }
 }
 
 /// Names PHP registers as auto-globals.

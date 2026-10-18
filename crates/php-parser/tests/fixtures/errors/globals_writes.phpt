@@ -35,11 +35,6 @@ $GLOBALS can only be modified using the $GLOBALS[$name] = $value syntax
 $GLOBALS can only be modified using the $GLOBALS[$name] = $value syntax
 $GLOBALS can only be modified using the $GLOBALS[$name] = $value syntax
 $GLOBALS can only be modified using the $GLOBALS[$name] = $value syntax
-Cannot append to $GLOBALS
-Cannot append to $GLOBALS
-Cannot append to $GLOBALS
-Cannot append to $GLOBALS
-Cannot append to $GLOBALS
 Cannot re-assign auto-global variable GLOBALS
 Cannot re-assign auto-global variable _GET
 Cannot re-assign auto-global variable _SESSION
@@ -47,6 +42,11 @@ Cannot re-assign auto-global variable _SERVER
 Cannot use auto-global as lexical variable
 Cannot use auto-global as lexical variable
 Cannot re-assign auto-global variable _ENV
+Cannot append to $GLOBALS
+Cannot append to $GLOBALS
+Cannot append to $GLOBALS
+Cannot append to $GLOBALS
+Cannot append to $GLOBALS
 ===php_error===
 PHP Fatal error:  $GLOBALS can only be modified using the $GLOBALS[$name] = $value syntax in Standard input code on line 2
 ===ast===

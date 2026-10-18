@@ -2771,6 +2771,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
     struct EmptyDims {
         read: Vec<Span>,
         unset: Vec<Span>,
+        globals_append: Vec<Span>,
         /// Whether each enclosing function returns by reference, which makes its
         /// `return` and `yield` values writes.
         by_ref: Vec<bool>,
@@ -2787,6 +2788,9 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         fn write(&mut self, expr: &Expr<'_, '_>) {
             match &expr.kind {
                 ExprKind::ArrayAccess(a) => {
+                    if a.index.is_none() && is_globals(a.array) {
+                        self.globals_append.push(expr.span);
+                    }
                     self.write(a.array);
                     if let Some(index) = a.index {
                         let _ = self.visit_expr(index);
@@ -2811,6 +2815,80 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
             }
         }
 
+        /// Visit an expression PHP tries to evaluate at compile time, such as an array literal
+        /// element; there `$GLOBALS[]` is reported as a read before it is compiled as a fetch.
+        fn const_eval(&mut self, expr: &Expr<'_, '_>) {
+            match &expr.kind {
+                ExprKind::ArrayAccess(a) => {
+                    self.const_eval(a.array);
+                    match a.index {
+                        Some(index) => self.const_eval(index),
+                        None => self.read.push(expr.span),
+                    }
+                }
+                ExprKind::PropertyAccess(p) | ExprKind::NullsafePropertyAccess(p) => {
+                    self.const_eval(p.object);
+                    self.const_eval(p.property);
+                }
+                ExprKind::ClassConstAccess(c) if !is_class_name_fetch(c) => {
+                    self.const_eval(c.class);
+                    self.const_eval(c.member);
+                }
+                ExprKind::ClassConstAccessDynamic { class, member } => {
+                    self.const_eval(class);
+                    self.const_eval(member);
+                }
+                ExprKind::Binary(b) => {
+                    self.const_eval(b.left);
+                    self.const_eval(b.right);
+                }
+                ExprKind::NullCoalesce(n) => {
+                    self.const_eval(n.left);
+                    self.const_eval(n.right);
+                }
+                ExprKind::Ternary(t) => {
+                    self.const_eval(t.condition);
+                    if let Some(then_expr) = t.then_expr {
+                        self.const_eval(then_expr);
+                    }
+                    self.const_eval(t.else_expr);
+                }
+                ExprKind::UnaryPrefix(u)
+                    if !matches!(
+                        u.op,
+                        UnaryPrefixOp::PreIncrement | UnaryPrefixOp::PreDecrement
+                    ) =>
+                {
+                    self.const_eval(u.operand)
+                }
+                ExprKind::Parenthesized(inner) => self.const_eval(inner),
+                ExprKind::Array(elements) => {
+                    for el in elements.iter() {
+                        if let Some(key) = &el.key {
+                            self.const_eval(key);
+                        }
+                        self.const_eval(&el.value);
+                    }
+                }
+                _ => {
+                    let _ = self.visit_expr(expr);
+                }
+            }
+        }
+
+        /// An `isset` or `empty` operand: a direct `$a[]` is a read, even of `$GLOBALS`.
+        fn isset_operand(&mut self, expr: &Expr<'_, '_>) {
+            match &expr.kind {
+                ExprKind::ArrayAccess(a) if a.index.is_none() => {
+                    self.read.push(expr.span);
+                    let _ = self.visit_expr(a.array);
+                }
+                _ => {
+                    let _ = self.visit_expr(expr);
+                }
+            }
+        }
+
         fn args(&mut self, args: &[Arg<'_, '_>]) {
             for value in args.iter().filter_map(|a| a.value.as_ref()) {
                 match value.kind {
@@ -2822,19 +2900,22 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
             }
         }
 
-        fn unset(&mut self, expr: &Expr<'_, '_>) {
+        fn unset(&mut self, expr: &Expr<'_, '_>, outermost: bool) {
             match &expr.kind {
                 ExprKind::ArrayAccess(a) => {
                     match a.index {
                         Some(index) => {
                             let _ = self.visit_expr(index);
                         }
+                        None if !outermost && is_globals(a.array) => {
+                            self.globals_append.push(expr.span)
+                        }
                         None => self.unset.push(expr.span),
                     }
-                    self.unset(a.array);
+                    self.unset(a.array, false);
                 }
                 ExprKind::PropertyAccess(p) => {
-                    self.unset(p.object);
+                    self.unset(p.object, false);
                     let _ = self.visit_expr(p.property);
                 }
                 _ => {
@@ -2856,7 +2937,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
                 }
                 StmtKind::Unset(exprs) => {
                     for expr in exprs.iter() {
-                        self.unset(expr);
+                        self.unset(expr, true);
                     }
                 }
                 StmtKind::Return(Some(value)) => self.returned(value),
@@ -2898,9 +2979,28 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         fn visit_expr(&mut self, expr: &Expr<'a, 's>) -> ControlFlow<()> {
             match &expr.kind {
                 ExprKind::ArrayAccess(a) if a.index.is_none() => {
-                    self.read.push(expr.span);
+                    if is_globals(a.array) {
+                        self.globals_append.push(expr.span);
+                    } else {
+                        self.read.push(expr.span);
+                    }
                     let _ = self.visit_expr(a.array);
                 }
+                ExprKind::Array(_) => self.const_eval(expr),
+                ExprKind::ClassConstAccess(c) if !is_class_name_fetch(c) => {
+                    self.const_eval(c.class);
+                    let _ = self.visit_expr(c.member);
+                }
+                ExprKind::ClassConstAccessDynamic { class, member } => {
+                    self.const_eval(class);
+                    let _ = self.visit_expr(member);
+                }
+                ExprKind::Isset(exprs) => {
+                    for e in exprs.iter() {
+                        self.isset_operand(e);
+                    }
+                }
+                ExprKind::Empty(e) => self.isset_operand(e),
                 ExprKind::Assign(a) => {
                     if a.op == AssignOp::Coalesce {
                         let _ = self.visit_expr(a.target);
@@ -2967,9 +3067,22 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         }
     }
 
+    fn is_class_name_fetch(access: &StaticAccessExpr<'_, '_>) -> bool {
+        matches!(&access.member.kind, ExprKind::Identifier(name) if name.eq_ignore_ascii_case("class"))
+    }
+
+    fn is_globals(expr: &Expr<'_, '_>) -> bool {
+        match &expr.kind {
+            ExprKind::Variable(name) => name.as_str() == "GLOBALS",
+            ExprKind::Parenthesized(inner) => is_globals(inner),
+            _ => false,
+        }
+    }
+
     let mut finder = EmptyDims {
         read: Vec::new(),
         unset: Vec::new(),
+        globals_append: Vec::new(),
         by_ref: Vec::new(),
     };
     for stmt in stmts {
@@ -2978,6 +3091,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
     for (spans, message) in [
         (finder.read, "cannot use [] for reading"),
         (finder.unset, "cannot use [] for unsetting"),
+        (finder.globals_append, "Cannot append to $GLOBALS"),
     ] {
         for span in spans {
             parser.error(ParseError::Forbidden {
