@@ -35,6 +35,11 @@
 //! }
 //! ```
 //!
+//! # Semantic AST
+//!
+//! Equivalent spellings (`array()`/`[]`, `exit`/`die`, `(integer)`/`(int)`) share one node;
+//! formatting is dropped. Use [`Span`] to recover the original text.
+//!
 //! # Serialization
 //!
 //! With the `serde` feature (off by default), AST types implement `serde::Serialize`
