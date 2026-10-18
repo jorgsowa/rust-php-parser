@@ -85,6 +85,8 @@ pub struct Parser<'arena, 'src> {
     /// Function/method/closure nesting depth — tracks valid yield context.
     /// Incremented when entering a function/method/closure, decremented when exiting.
     pub(crate) function_depth: u32,
+    /// True inside the body of a function, method, closure or hook that returns by reference.
+    pub(crate) by_ref_function: bool,
     /// Number of statements being parsed around the current one; 1 for a top-level statement,
     /// including one directly inside a braced `namespace`.
     pub(crate) stmt_depth: u32,
@@ -157,6 +159,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             nesting_depth: 0,
             loop_depth: 0,
             function_depth: 0,
+            by_ref_function: false,
             stmt_depth: 0,
             in_constructor: false,
             version,
@@ -199,6 +202,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             nesting_depth,
             loop_depth: 0,
             function_depth: 0,
+            by_ref_function: false,
             stmt_depth: 0,
             in_constructor: false,
             version,

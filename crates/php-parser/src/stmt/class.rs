@@ -280,6 +280,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
         let saved_loop_depth = parser.loop_depth;
         parser.loop_depth = 0;
         parser.function_depth += 1;
+        let saved_by_ref = std::mem::replace(&mut parser.by_ref_function, by_ref);
         let body = if parser.check(TokenKind::LeftBrace) {
             let open_brace = parser.expect(TokenKind::LeftBrace);
             let brace_span = open_brace.map(|t| t.span).unwrap_or(parser.current_span());
@@ -306,6 +307,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
             PropertyHookBody::Abstract
         };
         parser.function_depth -= 1;
+        parser.by_ref_function = saved_by_ref;
         parser.loop_depth = saved_loop_depth;
 
         // Check for duplicate hook kinds
@@ -865,6 +867,7 @@ fn parse_method_member<'arena, 'src>(
         let saved_loop_depth = parser.loop_depth;
         parser.loop_depth = 0;
         parser.function_depth += 1;
+        let saved_by_ref = std::mem::replace(&mut parser.by_ref_function, by_ref);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
             stmts.push(super::parse_stmt(parser));
@@ -873,6 +876,7 @@ fn parse_method_member<'arena, 'src>(
             }
         }
         parser.function_depth -= 1;
+        parser.by_ref_function = saved_by_ref;
         parser.loop_depth = saved_loop_depth;
         parser.expect(TokenKind::RightBrace);
         let block_end = parser.previous_end();

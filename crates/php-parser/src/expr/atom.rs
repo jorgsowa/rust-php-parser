@@ -1454,6 +1454,7 @@ pub(crate) fn parse_closure<'arena, 'src>(
     let saved_loop_depth = parser.loop_depth;
     parser.loop_depth = 0;
     parser.function_depth += 1;
+    let saved_by_ref = std::mem::replace(&mut parser.by_ref_function, by_ref);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
         body_stmts.push(stmt::parse_stmt(parser));
@@ -1462,6 +1463,7 @@ pub(crate) fn parse_closure<'arena, 'src>(
         }
     }
     parser.function_depth -= 1;
+    parser.by_ref_function = saved_by_ref;
     parser.loop_depth = saved_loop_depth;
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
@@ -1533,8 +1535,11 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
 
     parser.expect(TokenKind::FatArrow);
     parser.function_depth += 1;
+    let saved_by_ref = std::mem::replace(&mut parser.by_ref_function, by_ref);
     let body = parse_expr(parser);
+    super::check_reference_return(parser, &body);
     parser.function_depth -= 1;
+    parser.by_ref_function = saved_by_ref;
     let span = Span::new(start, body.span.end);
 
     Expr {
@@ -1680,6 +1685,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     // yield key => value
     if parser.eat(TokenKind::FatArrow).is_some() {
         let value = parse_expr(parser);
+        super::check_reference_return(parser, &value);
         let span = Span::new(start, value.span.end);
         return Expr {
             kind: ExprKind::Yield(YieldExpr {
@@ -1692,6 +1698,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     }
 
     // yield value
+    super::check_reference_return(parser, &first);
     let span = Span::new(start, first.span.end);
     Expr {
         kind: ExprKind::Yield(YieldExpr {

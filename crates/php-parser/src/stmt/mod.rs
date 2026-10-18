@@ -734,6 +734,9 @@ fn parse_return<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
     } else {
         Some(expr::parse_expr(parser))
     };
+    if let Some(value) = &expr {
+        expr::check_reference_return(parser, value);
+    }
 
     parser.expect_semicolon("return statement");
     let span = Span::new(start, parser.previous_end());
@@ -1184,6 +1187,7 @@ fn parse_function<'arena, 'src>(
     let saved_loop_depth = parser.loop_depth;
     parser.loop_depth = 0;
     parser.function_depth += 1;
+    let saved_by_ref = std::mem::replace(&mut parser.by_ref_function, by_ref);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
         body_stmts.push(parse_stmt(parser));
@@ -1192,6 +1196,7 @@ fn parse_function<'arena, 'src>(
         }
     }
     parser.function_depth -= 1;
+    parser.by_ref_function = saved_by_ref;
     parser.loop_depth = saved_loop_depth;
     parser.expect_closing(TokenKind::RightBrace, open_brace_span);
     let end = parser.previous_end();

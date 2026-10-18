@@ -202,6 +202,31 @@ fn is_valid_destructure_element(kind: &ExprKind<'_, '_>) -> bool {
     }
 }
 
+/// Report a `return` or `yield` of a nullsafe fetch in a function that returns by reference.
+pub(crate) fn check_reference_return(parser: &mut Parser<'_, '_>, value: &Expr<'_, '_>) {
+    if !parser.by_ref_function {
+        return;
+    }
+    let mut kind = &value.kind;
+    while let ExprKind::Parenthesized(inner) = kind {
+        kind = &inner.kind;
+    }
+    let is_fetch = matches!(
+        kind,
+        ExprKind::ArrayAccess(_)
+            | ExprKind::PropertyAccess(_)
+            | ExprKind::NullsafePropertyAccess(_)
+            | ExprKind::StaticPropertyAccess(_)
+            | ExprKind::StaticPropertyAccessDynamic { .. }
+    );
+    if is_fetch && has_nullsafe_link(kind) {
+        parser.error(ParseError::Forbidden {
+            message: "Cannot take reference of a nullsafe chain".into(),
+            span: value.span,
+        });
+    }
+}
+
 /// True if `kind` is a variable, a fetch or a call: what PHP can take a reference of.
 fn is_variable_or_call(kind: &ExprKind<'_, '_>) -> bool {
     matches!(
