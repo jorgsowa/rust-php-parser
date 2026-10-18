@@ -2198,6 +2198,13 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
     }
 
     let name = parser.parse_name();
+    if name.kind() == NameKind::Relative {
+        parser.error(ParseError::Expected {
+            expected: "namespace name".into(),
+            found: "namespace-relative name".into(),
+            span: name.span(),
+        });
+    }
 
     if parser.check(TokenKind::LeftBrace) {
         // Braced namespace: namespace Foo\Bar { ... }
