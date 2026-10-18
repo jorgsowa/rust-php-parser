@@ -785,6 +785,15 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         )
     }
 
+    /// Report the token after a trailing comma in a list where PHP allows none.
+    pub(crate) fn trailing_comma_error(&mut self, expected: &'static str) {
+        self.error(ParseError::Expected {
+            expected: expected.into(),
+            found: self.current_kind().description().into(),
+            span: self.current_span(),
+        });
+    }
+
     /// Consume the current token as an identifier string, accepting both
     /// Identifier tokens and semi-reserved keywords.
     pub fn eat_identifier_or_keyword(&mut self) -> Option<(&'src str, Span)> {
@@ -1592,7 +1601,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         exprs.push(expr::parse_expr(self));
         while self.eat(TokenKind::Comma).is_some() {
             if self.check(TokenKind::Semicolon) || self.check(TokenKind::CloseTag) {
-                break; // trailing comma
+                self.trailing_comma_error("expression");
+                break;
             }
             exprs.push(expr::parse_expr(self));
         }

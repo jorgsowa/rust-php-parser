@@ -695,8 +695,9 @@ fn parse_echo<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena
 
     while parser.eat(TokenKind::Comma).is_some() {
         if parser.check(TokenKind::Semicolon) {
+            parser.trailing_comma_error("expression");
             break;
-        } // trailing comma
+        }
         exprs.push(expr::parse_expr(parser));
     }
 
@@ -1019,8 +1020,9 @@ fn parse_expr_list_until<'arena, 'src>(
     exprs.push(expr::parse_expr(parser));
     while parser.eat(TokenKind::Comma).is_some() {
         if parser.check(stop) {
+            parser.trailing_comma_error("expression");
             break;
-        } // trailing comma
+        }
         exprs.push(expr::parse_expr(parser));
     }
     exprs
@@ -2011,8 +2013,9 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
     let mut directives = parser.alloc_vec();
     loop {
         if parser.check(TokenKind::RightParen) {
+            parser.trailing_comma_error("identifier");
             break;
-        } // trailing comma
+        }
         if let Some(t) = parser.eat(TokenKind::Identifier) {
             let src = parser.source;
             let name = &src[t.span.start as usize..t.span.end as usize];
@@ -2101,8 +2104,9 @@ fn parse_global<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
     exprs.push(e);
     while parser.eat(TokenKind::Comma).is_some() {
         if parser.check(TokenKind::Semicolon) {
+            parser.trailing_comma_error("variable");
             break;
-        } // trailing comma
+        }
         let e = expr::parse_expr(parser);
         if !is_simple_variable(&e) {
             parser.error(ParseError::Expected {
@@ -2380,8 +2384,9 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
 
         while parser.eat(TokenKind::Comma).is_some() {
             if parser.check(TokenKind::Semicolon) {
+                parser.trailing_comma_error("name");
                 break;
-            } // trailing comma
+            }
             let next_start = parser.start_span();
             let name = parser.parse_name();
 
@@ -2467,8 +2472,9 @@ fn parse_const_with_attrs<'arena, 'src>(
             break;
         }
         if parser.check(TokenKind::Semicolon) {
+            parser.trailing_comma_error("constant name");
             break;
-        } // trailing comma
+        }
     }
 
     parser.expect(TokenKind::Semicolon);
@@ -2561,8 +2567,9 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
             break;
         }
         if parser.check(TokenKind::Semicolon) {
+            parser.trailing_comma_error("variable");
             break;
-        } // trailing comma
+        }
     }
 
     parser.expect(TokenKind::Semicolon);

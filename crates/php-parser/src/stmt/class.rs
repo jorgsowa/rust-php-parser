@@ -137,8 +137,9 @@ pub fn parse_name_list<'arena, 'src>(
     names.push(parser.parse_name());
     while parser.eat(TokenKind::Comma).is_some() {
         if parser.check(TokenKind::LeftBrace) || parser.check(TokenKind::Semicolon) {
+            parser.trailing_comma_error("class name");
             break;
-        } // trailing comma
+        }
         names.push(parser.parse_name());
     }
     names
@@ -495,7 +496,8 @@ pub(super) fn parse_trait_use_decl<'arena, 'src>(
     traits.push(parser.parse_name());
     while parser.eat(TokenKind::Comma).is_some() {
         if parser.check(TokenKind::Semicolon) || parser.check(TokenKind::LeftBrace) {
-            break; // trailing comma
+            parser.trailing_comma_error("trait name");
+            break;
         }
         traits.push(parser.parse_name());
     }
@@ -776,7 +778,8 @@ fn parse_class_const_member<'arena, 'src>(
             break;
         }
         if parser.check(TokenKind::Semicolon) {
-            break; // trailing comma
+            parser.trailing_comma_error("constant name");
+            break;
         }
     }
     parser.expect(TokenKind::Semicolon);
@@ -1113,7 +1116,11 @@ fn parse_property_member<'arena, 'src>(
     if had_hooks_block {
         // Property with hooks block — no comma separation or semicolon needed
     } else if parser.eat(TokenKind::Comma).is_some() {
-        while parser.check(TokenKind::Variable) {
+        loop {
+            if !parser.check(TokenKind::Variable) {
+                parser.trailing_comma_error("variable");
+                break;
+            }
             let var_token = parser.advance();
             let pname = parser.variable_ident(var_token);
 

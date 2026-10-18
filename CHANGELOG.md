@@ -59,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `yield` in a property hook body was reported as outside a function; hooks can be generators. A `break` or `continue` in a hook no longer sees loops around the class (`php-rs-parser`).
 - Attributes on a grouped class constant such as `#[A] const X = 1, Y = 2;` were reported; PHP rejects them only on global constants. Every constant of the group now carries the attributes (`php-rs-parser`).
 - An enum rejected a grouped constant declaration such as `const X = 1, Y = 2;` (`php-rs-parser`).
+- Trailing commas PHP rejects are reported: in `use`, `const`, `echo`, `<?=`, `global` and `static` lists, `for` expression lists, `declare(...)`, `extends` and `implements` lists, trait `use` and `insteadof` lists, and grouped class constants and properties. Argument, parameter, array, closure `use`, `match`, `unset`, `isset` and group `use` lists keep accepting them (`php-rs-parser`).
 
 ---
 

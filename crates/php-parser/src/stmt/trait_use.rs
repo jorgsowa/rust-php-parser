@@ -51,8 +51,9 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
                 };
                 while parser.eat(TokenKind::Comma).is_some() {
                     if parser.check(TokenKind::Semicolon) {
+                        parser.trailing_comma_error("trait name");
                         break;
-                    } // trailing comma
+                    }
                     insteadof.push(parser.parse_name());
                 }
                 parser.expect(TokenKind::Semicolon);
