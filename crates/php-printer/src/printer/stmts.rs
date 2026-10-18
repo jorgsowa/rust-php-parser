@@ -298,7 +298,13 @@ impl<'src> Printer<'src> {
                 self.w(";");
             }
             StmtKind::InlineHtml(html) => {
-                if !self.in_html_mode && self.has_php_content {
+                if self.in_html_mode {
+                    // Adjacent HTML nodes come from separate blocks; merging them
+                    // would keep a newline that the `?>` between them consumed.
+                    if !self.output.is_empty() {
+                        self.w("<?php ?>");
+                    }
+                } else if self.has_php_content {
                     self.w("?>");
                 }
                 self.w(html);
