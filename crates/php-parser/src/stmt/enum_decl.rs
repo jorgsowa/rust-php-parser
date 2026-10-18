@@ -60,9 +60,6 @@ pub(super) fn parse_enum<'arena, 'src>(
     parser.expect(TokenKind::LeftBrace);
 
     let mut members = parser.alloc_vec_with_capacity(4);
-    // Track case names (case-insensitive, since constants are too) to catch
-    // PHP's "Cannot redefine class constant E::X".
-    let mut seen_cases: std::collections::HashSet<String> = std::collections::HashSet::new();
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         if parser.check(TokenKind::Semicolon) {
             parser.advance();
@@ -135,16 +132,6 @@ pub(super) fn parse_enum<'arena, 'src>(
             }
             parser.expect(TokenKind::Semicolon);
             let span = Span::new(member_start, parser.previous_end());
-            if let Some(text) = case_name.as_str() {
-                let key = text.to_ascii_lowercase();
-                if !seen_cases.insert(key) {
-                    parser.error(ParseError::Forbidden {
-                        message: format!("Cannot redefine class constant {}::{}", name, text)
-                            .into(),
-                        span: case_name_span,
-                    });
-                }
-            }
             members.push(EnumMember {
                 kind: EnumMemberKind::Case(EnumCase {
                     name: case_name,
@@ -383,6 +370,12 @@ pub(super) fn parse_enum<'arena, 'src>(
         });
         parser.synchronize_enum_body();
     }
+    let constants = members.iter().filter_map(|m| match &m.kind {
+        EnumMemberKind::Case(c) => Some(&c.name),
+        EnumMemberKind::ClassConst(c) => Some(&c.name),
+        _ => None,
+    });
+    super::class::report_redefined_constants(parser, constants, name.as_str());
 
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();

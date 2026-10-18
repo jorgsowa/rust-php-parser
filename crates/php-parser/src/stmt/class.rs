@@ -486,7 +486,35 @@ pub fn parse_class_members<'arena, 'src>(
         });
         parser.synchronize_class_body();
     }
+    let names = members.iter().filter_map(|m| match &m.kind {
+        ClassMemberKind::ClassConst(c) => Some(&c.name),
+        _ => None,
+    });
+    report_redefined_constants(parser, names, None);
     members
+}
+
+/// Report a class constant or enum case named like an earlier one; constant names are
+/// case-sensitive.
+pub(super) fn report_redefined_constants<'a, 'src: 'a>(
+    parser: &mut Parser<'_, 'src>,
+    names: impl Iterator<Item = &'a Ident<'src>>,
+    class_name: Option<&str>,
+) {
+    let mut seen = std::collections::HashSet::new();
+    for name in names {
+        let Some(text) = name.as_str() else { continue };
+        if !seen.insert(text) {
+            let message = match class_name {
+                Some(class) => format!("Cannot redefine class constant {class}::{text}"),
+                None => format!("Cannot redefine class constant {text}"),
+            };
+            parser.error(ParseError::Forbidden {
+                message: message.into(),
+                span: name.span,
+            });
+        }
+    }
 }
 
 /// Parse a `use Trait1, Trait2 { ... }` trait-use declaration, shared by class/interface/trait
