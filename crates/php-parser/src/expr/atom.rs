@@ -2291,38 +2291,11 @@ fn parse_heredoc_content(text: &str) -> (&str, usize, usize, String) {
     let body_start_in_text = rest_start + newline_pos + 1;
     let body = &text[body_start_in_text..];
 
-    // Find the end-marker line by scanning line-by-line (PHP 7.3+: marker may be indented).
-    let mut line_start = 0;
-    let mut end_line_start = body.len();
-    let mut indent = String::new();
-    loop {
-        if line_start >= body.len() {
-            break;
-        }
-        let line_end = body[line_start..]
-            .find('\n')
-            .map(|p| line_start + p)
-            .unwrap_or(body.len());
-        let line = &body[line_start..line_end];
-        let trimmed = line.trim_start_matches([' ', '\t']);
-        if trimmed == label
-            || (trimmed.starts_with(label)
-                && trimmed[label.len()..]
-                    .trim_start_matches([';', ',', ')'])
-                    .trim()
-                    .is_empty())
-        {
-            end_line_start = line_start;
-            let indent_len = line.len() - trimmed.len();
-            indent = line[..indent_len].to_string();
-            break;
-        }
-        line_start = if line_end < body.len() {
-            line_end + 1
-        } else {
-            body.len()
-        };
-    }
+    // The lexer ends the token at the closing label, so the last line is the end marker.
+    let end_line_start = body.rfind('\n').map_or(0, |p| p + 1);
+    let end_line = &body[end_line_start..];
+    let indent_len = end_line.len() - end_line.trim_start_matches([' ', '\t']).len();
+    let indent = end_line[..indent_len].to_string();
 
     // Content ends just before the end-marker line, with trailing \r\n stripped.
     let content = &body[..end_line_start];

@@ -203,6 +203,21 @@ fn skip_complex_interp(bytes: &[u8], mut p: usize) -> usize {
     p
 }
 
+/// Start of the heredoc body line after the one at `p`. A line break inside a `{$...}` or
+/// `${...}` interpolation does not start a line, so the closing label cannot match there.
+fn next_heredoc_line(bytes: &[u8], mut p: usize) -> usize {
+    while p < bytes.len() {
+        match bytes[p] {
+            b'\n' => return p + 1,
+            b'\\' if bytes.get(p + 1) != Some(&b'\n') => p += 2,
+            b'{' if bytes.get(p + 1) == Some(&b'$') => p = skip_complex_interp(bytes, p),
+            b'$' if bytes.get(p + 1) == Some(&b'{') => p = skip_complex_interp(bytes, p + 1),
+            _ => p += 1,
+        }
+    }
+    bytes.len()
+}
+
 fn skip_nested_squoted(bytes: &[u8], mut p: usize) -> usize {
     debug_assert!(bytes.get(p) == Some(&b'\''));
     p += 1;
@@ -1366,10 +1381,14 @@ impl<'src> Lexer<'src> {
                 break;
             }
 
-            search_pos = if line_end < body.len() {
-                line_end + 1
+            search_pos = if is_nowdoc {
+                if line_end < body.len() {
+                    line_end + 1
+                } else {
+                    body.len()
+                }
             } else {
-                body.len()
+                next_heredoc_line(body.as_bytes(), line_start)
             };
         }
 

@@ -62,6 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Trailing commas PHP rejects are reported: in `use`, `const`, `echo`, `<?=`, `global` and `static` lists, `for` expression lists, `declare(...)`, `extends` and `implements` lists, trait `use` and `insteadof` lists, and grouped class constants and properties. Argument, parameter, array, closure `use`, `match`, `unset`, `isset` and group `use` lists keep accepting them (`php-rs-parser`).
 - A constructor parameter with hooks but no visibility, such as `__construct($a { set => $value * 2; })`, was rejected; hooks promote it like a modifier does, and outside a constructor this is reported (`php-rs-parser`).
 - `?>` ends a `goto`, `unset`, `global`, `static`, `use`, `const` or `namespace Foo` statement like `;` does; these required a `;` before it (`php-rs-parser`).
+- A heredoc ended at a line inside a multi-line `{$...}` or `${...}` interpolation that looked like its closing label (`php-lexer`, `php-rs-parser`).
 
 ---
 
