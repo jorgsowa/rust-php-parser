@@ -961,6 +961,55 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
     /// Parse a type hint: `?T`, `A|B`, `A&B`, `(A&B)|C` (DNF), or simple type.
     pub fn parse_type_hint(&mut self) -> TypeHint<'arena, 'src> {
+        let type_hint = self.parse_type_hint_unchecked();
+        self.check_duplicate_types(&type_hint);
+        type_hint
+    }
+
+    /// Report a type listed twice in a union or intersection, comparing class names
+    /// case-insensitively; `bool` covers `true` and `false`, `iterable` covers `array`.
+    fn check_duplicate_types(&mut self, type_hint: &TypeHint<'arena, 'src>) {
+        let (types, kind) = match &type_hint.kind {
+            TypeHintKind::Union(types) => (types, "union"),
+            TypeHintKind::Intersection(types) => (types, "intersection"),
+            _ => return,
+        };
+        let keys: Vec<Option<String>> = types.iter().map(|t| self.type_hint_key(t)).collect();
+        let has = |name: &str| keys.iter().any(|k| k.as_deref() == Some(name));
+        let (has_bool, has_iterable) = (has("bool"), has("iterable"));
+        let mut seen = std::collections::HashSet::new();
+        for (ty, key) in types.iter().zip(&keys) {
+            let Some(key) = key else { continue };
+            let covered = has_bool && matches!(key.as_str(), "true" | "false")
+                || has_iterable && matches!(key.as_str(), "array" | "traversable");
+            if !seen.insert(key.clone()) || covered {
+                let text = &self.source[ty.span.start as usize..ty.span.end as usize];
+                self.error(ParseError::Forbidden {
+                    message: format!("Duplicate type '{text}' in {kind} type").into(),
+                    span: ty.span,
+                });
+            }
+        }
+        for ty in types.iter() {
+            self.check_duplicate_types(ty);
+        }
+    }
+
+    /// Comparison key for [`check_duplicate_types`](Self::check_duplicate_types): lowercase,
+    /// with the members of an intersection sorted so `A&B` and `B&A` match.
+    fn type_hint_key(&self, ty: &TypeHint<'arena, 'src>) -> Option<String> {
+        if let TypeHintKind::Intersection(types) = &ty.kind {
+            let mut parts = types
+                .iter()
+                .map(|t| self.type_hint_key(t))
+                .collect::<Option<Vec<_>>>()?;
+            parts.sort();
+            return Some(parts.join("&"));
+        }
+        self.type_hint_to_string(ty).map(|s| s.to_ascii_lowercase())
+    }
+
+    fn parse_type_hint_unchecked(&mut self) -> TypeHint<'arena, 'src> {
         let start = self.start_span();
 
         // Nullable: ?Type
@@ -1017,19 +1066,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     if let Some(msg) = msg {
                         self.error(ParseError::Forbidden {
                             message: msg.into(),
-                            span: ty.span,
-                        });
-                    }
-                }
-            }
-            // Check for duplicate types in union
-            let mut seen_types: std::collections::HashSet<String> =
-                std::collections::HashSet::new();
-            for ty in types.iter() {
-                if let Some(type_str) = self.type_hint_to_string(ty) {
-                    if !seen_types.insert(type_str.clone()) {
-                        self.error(ParseError::Forbidden {
-                            message: format!("Duplicate type '{}' in union type", type_str).into(),
                             span: ty.span,
                         });
                     }
