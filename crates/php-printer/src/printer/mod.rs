@@ -208,8 +208,19 @@ impl<'src> Printer<'src> {
             if c.span.start >= before_offset {
                 break;
             }
+            self.leave_html_for_comment();
             self.emit_comment_standalone(c, false);
             self.comment_cursor += 1;
+        }
+    }
+
+    /// Open a PHP block so a comment is not printed as HTML.
+    fn leave_html_for_comment(&mut self) {
+        if self.in_html_mode {
+            self.w("<?php");
+            self.newline();
+            self.in_html_mode = false;
+            self.has_php_content = true;
         }
     }
 
@@ -238,6 +249,7 @@ impl<'src> Printer<'src> {
     pub(crate) fn flush_remaining_comments(&mut self) {
         while self.comment_cursor < self.comments.len() {
             let c = &self.comments[self.comment_cursor];
+            self.leave_html_for_comment();
             self.emit_comment_standalone(c, false);
             self.comment_cursor += 1;
         }
@@ -317,7 +329,7 @@ impl<'src> Printer<'src> {
         );
         if html_at_start {
             self.in_html_mode = true;
-        } else if !program.stmts.is_empty() {
+        } else if !program.stmts.is_empty() || !self.comments.is_empty() {
             self.w("<?php");
             self.newline();
             self.has_php_content = true;

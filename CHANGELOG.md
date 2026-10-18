@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The printer dropped the braces of `"{$a}b"`, `"{$a}[0]"` and `"{$a}->b"`, turning them into `$ab`, an index or a property fetch, and in heredocs and backticks turned a literal `{` before a variable into `{$...}` syntax (`php-printer`).
 - The printer dropped the attributes of an anonymous class such as `new #[A] class {}` (`php-printer`).
 - The printer dropped the hooks of a promoted constructor property; parameter lists with hooks are now printed one parameter per line (`php-printer`).
+- A comment right after `<?php` that follows inline HTML was printed before the `<?php`, so it became page output; a file holding only comments lost its `<?php` tag the same way (`php-printer`).
 
 ---
 
