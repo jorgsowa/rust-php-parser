@@ -2299,6 +2299,19 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                 break;
             } // trailing comma
             let sub_start = parser.start_span();
+            if kind != UseKind::Normal
+                && matches!(
+                    parser.current_kind(),
+                    TokenKind::Function | TokenKind::Const
+                )
+            {
+                // `use function A\{function b}`: the kind is given once, for the whole group.
+                parser.error(ParseError::Expected {
+                    expected: "name".into(),
+                    found: parser.current_kind().description().into(),
+                    span: parser.current_span(),
+                });
+            }
             let item_kind = if parser.check(TokenKind::Function) {
                 parser.advance();
                 Some(UseKind::Function)
