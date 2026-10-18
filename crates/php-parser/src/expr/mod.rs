@@ -100,7 +100,7 @@ pub(crate) fn check_increment_operand(parser: &mut Parser<'_, '_>, operand: &Exp
     } else if has_nullsafe_link(&operand.kind) {
         "Can't use nullsafe operator in write context"
     } else {
-        return;
+        return check_special_variable_write(parser, operand, WriteKind::Modify);
     };
     parser.error(ParseError::Forbidden {
         message: message.into(),
@@ -133,6 +133,95 @@ pub(crate) fn check_write_target(
         message: message.into(),
         span: target.span,
     });
+}
+
+/// How a write reaches its target; PHP rejects different writes to `$this` and `$GLOBALS`.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub(crate) enum WriteKind {
+    /// `=`, `=&`, `??=`, destructuring and `foreach` targets.
+    Assign,
+    /// Compound assignment, `++` / `--` and by-reference array elements.
+    Modify,
+    /// The source of `=&`.
+    Reference,
+    Unset,
+}
+
+/// Report a write PHP forbids to `$this`, `$GLOBALS` or `$GLOBALS[]`.
+pub(crate) fn check_special_variable_write(
+    parser: &mut Parser<'_, '_>,
+    target: &Expr<'_, '_>,
+    kind: WriteKind,
+) {
+    let message = match &target.kind {
+        ExprKind::Array(elems) if kind == WriteKind::Assign => {
+            for el in elems.iter() {
+                let mut value = &el.value;
+                while let ExprKind::Parenthesized(inner) = &value.kind {
+                    value = inner;
+                }
+                // A by-reference element was checked as an array literal.
+                if !el.by_ref || is_variable_named(value, "this") {
+                    check_special_variable_write(parser, value, kind);
+                }
+            }
+            return;
+        }
+        ExprKind::Variable(name) => match (name.as_str(), kind) {
+            ("this", WriteKind::Assign) => "Cannot re-assign $this",
+            ("this", WriteKind::Unset) => "Cannot unset $this",
+            ("GLOBALS", WriteKind::Reference) => "Cannot acquire reference to $GLOBALS",
+            ("GLOBALS", _) => {
+                "$GLOBALS can only be modified using the $GLOBALS[$name] = $value syntax"
+            }
+            _ => return,
+        },
+        _ if kind != WriteKind::Unset && appends_to_globals(&target.kind) => {
+            "Cannot append to $GLOBALS"
+        }
+        _ => return,
+    };
+    parser.error(ParseError::Forbidden {
+        message: message.into(),
+        span: target.span,
+    });
+}
+
+fn is_variable_named(expr: &Expr<'_, '_>, name: &str) -> bool {
+    matches!(&expr.kind, ExprKind::Variable(n) if n.as_str() == name)
+}
+
+/// True if the fetch chain ending in `kind` starts with `$GLOBALS[]`.
+fn appends_to_globals(kind: &ExprKind<'_, '_>) -> bool {
+    let mut cur = kind;
+    loop {
+        cur = match cur {
+            ExprKind::ArrayAccess(a)
+                if a.index.is_none() && is_variable_named(a.array, "GLOBALS") =>
+            {
+                return true
+            }
+            ExprKind::ArrayAccess(a) => &a.array.kind,
+            ExprKind::PropertyAccess(p) => &p.object.kind,
+            _ => return false,
+        };
+    }
+}
+
+/// Names PHP registers as auto-globals.
+pub(crate) fn is_superglobal(name: &str) -> bool {
+    matches!(
+        name,
+        "GLOBALS"
+            | "_GET"
+            | "_POST"
+            | "_COOKIE"
+            | "_FILES"
+            | "_SERVER"
+            | "_ENV"
+            | "_REQUEST"
+            | "_SESSION"
+    )
 }
 
 /// Report `->`, `?->`, `::`, `[` or a call applied to an expression PHP cannot
@@ -462,6 +551,12 @@ fn parse_assign_continuation<'arena, 'src>(
     }
     check_mixed_list_short_syntax(parser, &lhs);
     let op_token = parser.advance();
+    let write_kind = if matches!(op_token.kind, TokenKind::Equals | TokenKind::CoalesceEquals) {
+        WriteKind::Assign
+    } else {
+        WriteKind::Modify
+    };
+    check_special_variable_write(parser, &lhs, write_kind);
     let by_ref = op_token.kind == TokenKind::Equals && parser.eat(TokenKind::Ampersand).is_some();
     let op = match op_token.kind {
         TokenKind::Equals => AssignOp::Assign,
@@ -517,6 +612,8 @@ fn parse_assign_continuation<'arena, 'src>(
             message: "Cannot use temporary expression in write context".into(),
             span: rhs.span,
         });
+    } else if by_ref {
+        check_special_variable_write(parser, &rhs, WriteKind::Reference);
     } else if op == AssignOp::Assign && has_reference_element(&lhs.kind) {
         let mut source = &rhs.kind;
         while let ExprKind::Parenthesized(inner) = source {

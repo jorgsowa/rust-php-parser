@@ -1069,8 +1069,10 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
     };
     if let Some(k) = &key {
         expr::check_write_target(parser, k, false);
+        expr::check_special_variable_write(parser, k, expr::WriteKind::Assign);
     }
     expr::check_write_target(parser, &value, true);
+    expr::check_special_variable_write(parser, &value, expr::WriteKind::Assign);
 
     // The `as` target(s) are destructuring positions, so empty array slots
     // (`foreach ($x as [$a, , $c])`) are legal — retract the eager errors.
@@ -1319,6 +1321,20 @@ pub(crate) fn check_returns_against_type<'arena, 'src>(
     walk(parser, &body.stmts, is_void);
 }
 
+fn check_param_name(parser: &mut Parser<'_, '_>, name: php_ast::Ident<'_>) {
+    let message: std::borrow::Cow<'static, str> = match name.as_str() {
+        Some("this") => "Cannot use $this as parameter".into(),
+        Some(n) if expr::is_superglobal(n) => {
+            format!("Cannot re-assign auto-global variable {n}").into()
+        }
+        _ => return,
+    };
+    parser.error(ParseError::Forbidden {
+        message,
+        span: name.span,
+    });
+}
+
 pub fn parse_param_list<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
 ) -> ArenaVec<'arena, Param<'arena, 'src>> {
@@ -1352,6 +1368,7 @@ pub fn parse_param_list<'arena, 'src>(
             if let Some(param) =
                 try_parse_simple_param_fastpath_minimal(parser, param_start, param_list_floor)
             {
+                check_param_name(parser, param.name);
                 params.push(param);
                 if parser.eat(TokenKind::Comma).is_none() {
                     break;
@@ -1521,6 +1538,7 @@ pub fn parse_param_list<'arena, 'src>(
         let name = name_token
             .map(|t| parser.variable_ident(t))
             .unwrap_or(parser.missing_ident());
+        check_param_name(parser, name);
 
         let default = if parser.eat(TokenKind::Equals).is_some() {
             // Suppress `{` subscript so a following hook block `{ get => ...; }`
@@ -1952,7 +1970,14 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
 
         let var = if parser.check(TokenKind::Variable) {
             let t = parser.advance();
-            Some(parser.variable_ident(t))
+            let var = parser.variable_ident(t);
+            if var.as_str() == Some("this") {
+                parser.error(ParseError::Forbidden {
+                    message: "Cannot re-assign $this".into(),
+                    span: var.span,
+                });
+            }
+            Some(var)
         } else {
             None
         };
@@ -2124,6 +2149,7 @@ fn parse_unset<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
     loop {
         let target = expr::parse_expr(parser);
         expr::check_write_target(parser, &target, false);
+        expr::check_special_variable_write(parser, &target, expr::WriteKind::Unset);
         exprs.push(target);
         if parser.eat(TokenKind::Comma).is_none() || parser.check(TokenKind::RightParen) {
             break;
@@ -2144,13 +2170,7 @@ fn parse_global<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
     parser.advance();
     let mut exprs = parser.alloc_vec();
     let e = expr::parse_expr(parser);
-    if !is_simple_variable(&e) {
-        parser.error(ParseError::Expected {
-            expected: "variable".into(),
-            found: parser.current_kind().description().into(),
-            span: e.span,
-        });
-    }
+    check_global_variable(parser, &e);
     exprs.push(e);
     while parser.eat(TokenKind::Comma).is_some() {
         if parser.check(TokenKind::Semicolon) {
@@ -2158,13 +2178,7 @@ fn parse_global<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
             break;
         }
         let e = expr::parse_expr(parser);
-        if !is_simple_variable(&e) {
-            parser.error(ParseError::Expected {
-                expected: "variable".into(),
-                found: parser.current_kind().description().into(),
-                span: e.span,
-            });
-        }
+        check_global_variable(parser, &e);
         exprs.push(e);
     }
     parser.expect_statement_end();
@@ -2173,6 +2187,21 @@ fn parse_global<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
         kind: StmtKind::Global(exprs),
         span,
         doc_comment: None,
+    }
+}
+
+fn check_global_variable(parser: &mut Parser<'_, '_>, e: &Expr<'_, '_>) {
+    if !is_simple_variable(e) {
+        parser.error(ParseError::Expected {
+            expected: "variable".into(),
+            found: parser.current_kind().description().into(),
+            span: e.span,
+        });
+    } else if matches!(&e.kind, ExprKind::Variable(n) if n.as_str() == "this") {
+        parser.error(ParseError::Forbidden {
+            message: "Cannot use $this as global variable".into(),
+            span: e.span,
+        });
     }
 }
 
@@ -2620,6 +2649,12 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
         let name = var_token
             .map(|t| parser.variable_ident(t))
             .unwrap_or(parser.missing_ident());
+        if name.as_str() == Some("this") {
+            parser.error(ParseError::Forbidden {
+                message: "Cannot use $this as static variable".into(),
+                span: name.span,
+            });
+        }
 
         let default = if parser.eat(TokenKind::Equals).is_some() {
             // Static-variable initializers DO permit `new` (PHP 8.1+).

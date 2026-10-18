@@ -1523,6 +1523,19 @@ fn parse_closure_use_list<'arena, 'src>(
         if let Some(token) = parser.eat(TokenKind::Variable) {
             let name = parser.variable_ident(token);
             let span = Span::new(var_start, token.span.end);
+            let message = match name.as_str() {
+                Some("this") => Some("Cannot use $this as lexical variable"),
+                Some(n) if super::is_superglobal(n) => {
+                    Some("Cannot use auto-global as lexical variable")
+                }
+                _ => None,
+            };
+            if let Some(message) = message {
+                parser.error(ParseError::Forbidden {
+                    message: message.into(),
+                    span: name.span,
+                });
+            }
             vars.push(ClosureUseVar { name, by_ref, span });
         }
         if parser.eat(TokenKind::Comma).is_none() {
@@ -2085,6 +2098,10 @@ fn parse_array_element<'arena, 'src>(
         let value = parse_expr(parser);
         if by_ref {
             super::check_write_target(parser, &value, false);
+            // `[&$GLOBALS[]]` is reported as a read of `[]`.
+            if matches!(value.kind, ExprKind::Variable(_)) {
+                super::check_special_variable_write(parser, &value, super::WriteKind::Modify);
+            }
         }
         let elem_span = Span::new(elem_start, value.span.end);
         ArrayElement {
@@ -2099,6 +2116,9 @@ fn parse_array_element<'arena, 'src>(
         instrument::record_parse_array_simple_value();
         if by_ref_value {
             super::check_write_target(parser, &first_expr, false);
+            if matches!(first_expr.kind, ExprKind::Variable(_)) {
+                super::check_special_variable_write(parser, &first_expr, super::WriteKind::Modify);
+            }
         }
         let elem_span = Span::new(elem_start, first_expr.span.end);
         ArrayElement {
