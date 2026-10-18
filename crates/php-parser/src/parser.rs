@@ -963,7 +963,61 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     pub fn parse_type_hint(&mut self) -> TypeHint<'arena, 'src> {
         let type_hint = self.parse_type_hint_unchecked();
         self.check_duplicate_types(&type_hint);
+        self.check_qualified_type_names(&type_hint);
         type_hint
+    }
+
+    /// Report a builtin type written with a namespace, as in `\int`, `namespace\int` or
+    /// `Foo\int`, which PHP reads as a class name it reserves.
+    fn check_qualified_type_names(&mut self, type_hint: &TypeHint<'arena, 'src>) {
+        match &type_hint.kind {
+            TypeHintKind::Named(Name::Complex { parts, span, .. }) => {
+                let Some(last) = parts.last() else { return };
+                let last = last.to_ascii_lowercase();
+                let builtin = matches!(
+                    last.as_str(),
+                    "int"
+                        | "float"
+                        | "bool"
+                        | "string"
+                        | "true"
+                        | "false"
+                        | "null"
+                        | "void"
+                        | "iterable"
+                        | "object"
+                        | "mixed"
+                        | "never"
+                );
+                let reserved = builtin
+                    || matches!(
+                        last.as_str(),
+                        "array" | "callable" | "self" | "parent" | "static"
+                    );
+                let text = &self.source[span.start as usize..span.end as usize];
+                let message = if parts.len() == 1 && builtin {
+                    format!("Type declaration '{last}' must be unqualified")
+                } else if reserved {
+                    format!(
+                        "Cannot use \"{}\" as a type name as it is reserved",
+                        text.trim_start_matches('\\')
+                    )
+                } else {
+                    return;
+                };
+                self.error(ParseError::Forbidden {
+                    message: message.into(),
+                    span: *span,
+                });
+            }
+            TypeHintKind::Nullable(inner) => self.check_qualified_type_names(inner),
+            TypeHintKind::Union(types) | TypeHintKind::Intersection(types) => {
+                for t in types.iter() {
+                    self.check_qualified_type_names(t);
+                }
+            }
+            _ => {}
+        }
     }
 
     /// Report a type listed twice in a union or intersection, comparing class names
