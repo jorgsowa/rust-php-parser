@@ -14,7 +14,7 @@ readme = "README.md"
 exclude = ["benches/", "tests/", "examples/"]
 
 [package.metadata.docs.rs]
-all-features = true
+features = ["serde"]
 
 [dependencies]
 php-ast = { workspace = true }
