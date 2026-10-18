@@ -211,6 +211,14 @@ impl NameResolver {
                     None => ResolvedName::Fqn(self.prefix_namespace(name)),
                 }
             }
+            NameContext::Const
+                if ["true", "false", "null"]
+                    .iter()
+                    .any(|c| name.eq_ignore_ascii_case(c)) =>
+            {
+                // PHP binds these at compile time and forbids importing them.
+                ResolvedName::Fqn(name.to_owned())
+            }
             NameContext::Function | NameContext::Const => {
                 let imported = if ctx == NameContext::Function {
                     self.functions.get(&name.to_ascii_lowercase())
@@ -304,6 +312,18 @@ mod tests {
         assert_eq!(
             r.resolve(NameContext::Const, NameKind::Unqualified, &["LIMIT"]),
             fqn("Lib\\LIMIT")
+        );
+        assert_eq!(
+            r.resolve(NameContext::Const, NameKind::Unqualified, &["NULL"]),
+            fqn("NULL")
+        );
+        assert_eq!(
+            r.resolve(NameContext::Const, NameKind::Unqualified, &["true"]),
+            fqn("true")
+        );
+        assert_eq!(
+            r.resolve(NameContext::Const, NameKind::Qualified, &["Sub", "null"]),
+            fqn("App\\Sub\\null")
         );
         // Const imports are case-sensitive.
         assert!(matches!(
