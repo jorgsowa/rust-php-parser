@@ -1561,7 +1561,9 @@ pub fn parse_param_list<'arena, 'src>(
         let default = if parser.eat(TokenKind::Equals).is_some() {
             // Suppress `{` subscript so a following hook block `{ get => ...; }`
             // is not consumed as part of the default expression.
-            Some(parser.with_no_brace_subscript(expr::parse_expr))
+            let default = parser.with_no_brace_subscript(expr::parse_expr);
+            expr::check_const_expr(parser, &default, true);
+            Some(default)
         } else {
             None
         };
@@ -2778,8 +2780,7 @@ fn parse_const_with_attrs<'arena, 'src>(
         };
         parser.expect(TokenKind::Equals);
         let value = expr::parse_expr(parser);
-        // Global constant initializers DO permit `new` (PHP 8.1+) — unlike class
-        // constants — so this site intentionally does not reject it.
+        expr::check_const_expr(parser, &value, true);
         let item_span = Span::new(item_start, value.span.end);
         let item_attrs = pending_attrs.take().unwrap_or_else(|| parser.alloc_vec());
         let doc_comment = pending_doc.take();
@@ -3694,7 +3695,15 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
                 return;
             }
             if let Some(keyword) = name.parts_slice().first().and_then(|p| class_keyword(p)) {
+                let reported = self.errors.len();
                 self.keyword(keyword, name.span());
+                if keyword == "static" && self.scope.const_expr && self.errors.len() == reported {
+                    self.errors.push((
+                        "static::class cannot be used for compile-time class name resolution"
+                            .to_string(),
+                        name.span(),
+                    ));
+                }
             }
         }
     }

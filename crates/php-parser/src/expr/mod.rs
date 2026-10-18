@@ -231,6 +231,85 @@ fn check_dereferencable(parser: &mut Parser<'_, '_>, lhs: &Expr<'_, '_>, op: Tok
     }
 }
 
+/// PHP's `class_name_reference`: a name, a parenthesized expression or a `new_variable`.
+fn is_class_name_reference(expr: &Expr<'_, '_>) -> bool {
+    matches!(
+        expr.kind,
+        ExprKind::Name(_) | ExprKind::Parenthesized(_) | ExprKind::Error
+    ) || is_new_variable(expr)
+}
+
+fn is_new_variable(expr: &Expr<'_, '_>) -> bool {
+    match &expr.kind {
+        ExprKind::Variable(_) | ExprKind::VariableVariable(_) => true,
+        ExprKind::ArrayAccess(a) => is_new_variable(a.array),
+        ExprKind::PropertyAccess(p) | ExprKind::NullsafePropertyAccess(p) => {
+            is_new_variable(p.object)
+        }
+        ExprKind::StaticPropertyAccess(StaticAccessExpr { class, .. })
+        | ExprKind::StaticPropertyAccessDynamic { class, .. } => {
+            matches!(class.kind, ExprKind::Name(_)) || is_new_variable(class)
+        }
+        _ => false,
+    }
+}
+
+/// Report a class reference PHP folds to a value that is not a string, such as `(1)::A`.
+pub(crate) fn check_class_name_literal(parser: &mut Parser<'_, '_>, class: &Expr<'_, '_>) {
+    if is_literal(class) && literal_is_string(class) == Some(false) {
+        parser.error(ParseError::Forbidden {
+            message: "Illegal class name".into(),
+            span: class.span,
+        });
+    }
+}
+
+/// `(1)::class` is an illegal class name, while `([])::class` names the type it cannot use.
+fn check_class_name_fetch_literal(parser: &mut Parser<'_, '_>, class: &Expr<'_, '_>) {
+    let message = match &unparenthesized(class).kind {
+        ExprKind::Int(_) | ExprKind::Float(_) => "Illegal class name",
+        ExprKind::Bool(true) => "Cannot use \"::class\" on true",
+        ExprKind::Bool(false) => "Cannot use \"::class\" on false",
+        ExprKind::Null => "Cannot use \"::class\" on null",
+        ExprKind::Array(_) if is_literal(class) => "Cannot use \"::class\" on array",
+        _ => return,
+    };
+    parser.error(ParseError::Forbidden {
+        message: message.into(),
+        span: class.span,
+    });
+}
+
+/// Whether a literal expression folds to a string, when that is known without evaluating it.
+fn literal_is_string(expr: &Expr<'_, '_>) -> Option<bool> {
+    match &expr.kind {
+        ExprKind::String(_) | ExprKind::Nowdoc { .. } | ExprKind::Heredoc { .. } => Some(true),
+        ExprKind::Int(_)
+        | ExprKind::Float(_)
+        | ExprKind::Bool(_)
+        | ExprKind::Null
+        | ExprKind::Array(_) => Some(false),
+        ExprKind::Parenthesized(inner) => literal_is_string(inner),
+        ExprKind::UnaryPrefix(u) => match u.op {
+            UnaryPrefixOp::BitwiseNot => literal_is_string(u.operand),
+            _ => Some(false),
+        },
+        ExprKind::Binary(b) => match b.op {
+            BinaryOp::Concat => Some(true),
+            // Folding fails on a zero divisor.
+            BinaryOp::Div | BinaryOp::Mod => None,
+            BinaryOp::BitwiseAnd | BinaryOp::BitwiseOr | BinaryOp::BitwiseXor => {
+                match (literal_is_string(b.left), literal_is_string(b.right)) {
+                    (Some(left), Some(right)) if left == right => Some(left),
+                    _ => None,
+                }
+            }
+            _ => Some(false),
+        },
+        _ => None,
+    }
+}
+
 /// True if the fetch chain ending in `kind` passes through `?->`. Like PHP's
 /// short-circuit chain, it runs through property, method, index and static
 /// member links, but not through a class constant or a plain call.
@@ -327,38 +406,394 @@ fn has_reference_element(kind: &ExprKind<'_, '_>) -> bool {
         .any(|el| el.by_ref || has_reference_element(&el.value.kind))
 }
 
-/// Find the first `new` expression inside an initializer that PHP rejects
-/// at compile time (class/global const value, property default, static
-/// variable initializer). Returns `None` if there is no offending `new`.
-///
-/// `new` is allowed in function-parameter defaults and attribute arguments
-/// — those sites must not call this helper.
-///
-/// The walk skips closure and arrow-function bodies because they introduce
-/// their own context (a closure-typed constant is permitted as long as the
-/// closure is `static`; the closure body has its own scope).
-pub(crate) fn find_new_in_initializer<'arena, 'src>(expr: &Expr<'arena, 'src>) -> Option<Span> {
-    use php_ast::visitor::{walk_expr, Visitor};
-    use std::ops::ControlFlow;
+const INVALID_CONST_EXPR: &str = "Constant expression contains invalid operations";
 
-    struct NewFinder {
-        found: Option<Span>,
-    }
-    impl<'arena, 'src> Visitor<'arena, 'src> for NewFinder {
-        fn visit_expr(&mut self, expr: &Expr<'arena, 'src>) -> ControlFlow<()> {
-            match &expr.kind {
-                ExprKind::New(_) => {
-                    self.found = Some(expr.span);
-                    ControlFlow::Break(())
-                }
-                ExprKind::Closure(_) | ExprKind::ArrowFunction(_) => ControlFlow::Continue(()),
-                _ => walk_expr(self, expr),
-            }
+enum ConstExprError {
+    Forbidden(&'static str, Span),
+    Version(PhpVersion, &'static str, Span),
+}
+
+/// Report the first part of a constant expression PHP cannot evaluate at compile time.
+pub(crate) fn check_const_expr(parser: &mut Parser<'_, '_>, expr: &Expr<'_, '_>, allow_new: bool) {
+    let checker = ConstExprChecker {
+        version: parser.version,
+        allow_new,
+    };
+    match checker.check(expr) {
+        Ok(()) => {}
+        Err(ConstExprError::Forbidden(message, span)) => parser.error(ParseError::Forbidden {
+            message: message.into(),
+            span,
+        }),
+        Err(ConstExprError::Version(min, feature, span)) => {
+            parser.require_version(min, feature, span)
         }
     }
-    let mut finder = NewFinder { found: None };
-    let _ = finder.visit_expr(expr);
-    finder.found
+}
+
+struct ConstExprChecker {
+    version: PhpVersion,
+    allow_new: bool,
+}
+
+impl ConstExprChecker {
+    fn require(
+        &self,
+        min: PhpVersion,
+        feature: &'static str,
+        span: Span,
+    ) -> Result<(), ConstExprError> {
+        if self.version < min {
+            return Err(ConstExprError::Version(min, feature, span));
+        }
+        Ok(())
+    }
+
+    fn check(&self, expr: &Expr<'_, '_>) -> Result<(), ConstExprError> {
+        use ConstExprError::Forbidden;
+        match &expr.kind {
+            ExprKind::Int(_)
+            | ExprKind::Float(_)
+            | ExprKind::String(_)
+            | ExprKind::Bool(_)
+            | ExprKind::Null
+            | ExprKind::Nowdoc { .. }
+            | ExprKind::MagicConst(_)
+            | ExprKind::Name(_)
+            | ExprKind::Identifier(_)
+            | ExprKind::Omit
+            | ExprKind::Error => Ok(()),
+            ExprKind::Heredoc { parts, .. } if is_literal_parts(parts) => Ok(()),
+            ExprKind::Parenthesized(inner) => self.check(inner),
+            ExprKind::UnaryPrefix(u)
+                if !matches!(
+                    u.op,
+                    UnaryPrefixOp::PreIncrement | UnaryPrefixOp::PreDecrement
+                ) =>
+            {
+                self.check(u.operand)
+            }
+            ExprKind::Binary(b) if !matches!(b.op, BinaryOp::Instanceof | BinaryOp::Pipe) => {
+                self.check(b.left)?;
+                // PHP folds `false && $x` before checking, dropping the right operand.
+                let folded_away = match (b.op, literal_truth(b.left)) {
+                    (BinaryOp::BooleanAnd | BinaryOp::LogicalAnd, Some(truth)) => !truth,
+                    (BinaryOp::BooleanOr | BinaryOp::LogicalOr, Some(truth)) => truth,
+                    (
+                        BinaryOp::BooleanAnd
+                        | BinaryOp::BooleanOr
+                        | BinaryOp::LogicalAnd
+                        | BinaryOp::LogicalOr,
+                        None,
+                    ) => may_fold(b.left),
+                    _ => false,
+                };
+                if folded_away {
+                    return Ok(());
+                }
+                self.check(b.right)
+            }
+            ExprKind::Ternary(t) => {
+                self.check(t.condition)?;
+                match literal_truth(t.condition) {
+                    Some(true) => t
+                        .then_expr
+                        .map_or(Ok(()), |then_expr| self.check(then_expr)),
+                    Some(false) => self.check(t.else_expr),
+                    None if may_fold(t.condition) => Ok(()),
+                    None => {
+                        if let Some(then_expr) = t.then_expr {
+                            self.check(then_expr)?;
+                        }
+                        self.check(t.else_expr)
+                    }
+                }
+            }
+            ExprKind::NullCoalesce(n) => {
+                self.check(n.left)?;
+                let left_is_null = matches!(unparenthesized(n.left).kind, ExprKind::Null);
+                if !left_is_null && may_fold(n.left) {
+                    return Ok(());
+                }
+                self.check(n.right)
+            }
+            ExprKind::Array(elements) => {
+                for el in elements.iter() {
+                    if el.by_ref {
+                        return Err(Forbidden(INVALID_CONST_EXPR, el.span));
+                    }
+                    if let Some(key) = &el.key {
+                        self.check(key)?;
+                    }
+                    self.check(&el.value)?;
+                }
+                Ok(())
+            }
+            ExprKind::ArrayAccess(a) => {
+                self.check(a.array)?;
+                // `[]` reads are reported on their own.
+                match a.index {
+                    Some(index) => self.check(index),
+                    None => Ok(()),
+                }
+            }
+            ExprKind::Cast(kind, inner) => match kind {
+                // Reported on their own wherever they appear.
+                CastKind::Unset | CastKind::Void => Ok(()),
+                _ => {
+                    self.require(
+                        PhpVersion::Php85,
+                        "casts in constant expressions",
+                        expr.span,
+                    )?;
+                    if *kind == CastKind::Object && !self.allow_new {
+                        return Err(Forbidden(
+                            "Object casts are not supported in this context",
+                            expr.span,
+                        ));
+                    }
+                    self.check(inner)
+                }
+            },
+            ExprKind::PropertyAccess(p) | ExprKind::NullsafePropertyAccess(p) => {
+                self.require(
+                    PhpVersion::Php82,
+                    "property fetch in constant expressions",
+                    expr.span,
+                )?;
+                self.check(p.object)?;
+                self.check(p.property)
+            }
+            ExprKind::ClassConstAccess(access) => {
+                let class = access.class;
+                let is_class_name = matches!(&access.member.kind, ExprKind::Identifier(name) if name.eq_ignore_ascii_case("class"));
+                if !is_class_name {
+                    return self.class_const_class(class);
+                }
+                match &class.kind {
+                    // `static::class` is reported with the class scope checks.
+                    ExprKind::Name(_) => Ok(()),
+                    _ if is_literal(class) => Ok(()),
+                    _ => Err(Forbidden(
+                        "(expression)::class cannot be used in constant expressions",
+                        expr.span,
+                    )),
+                }
+            }
+            ExprKind::ClassConstAccessDynamic { class, member } => {
+                self.class_const_class(class)?;
+                self.check(member)
+            }
+            ExprKind::New(new) => {
+                if !self.allow_new {
+                    return Err(Forbidden(
+                        "New expressions are not supported in this context",
+                        expr.span,
+                    ));
+                }
+                self.require(PhpVersion::Php81, "new in initializers", expr.span)?;
+                let class = new.class;
+                match &class.kind {
+                    ExprKind::Name(name) if is_static_name(name) => {
+                        return Err(Forbidden(
+                            "\"static\" is not allowed in compile-time constants",
+                            class.span,
+                        ))
+                    }
+                    ExprKind::Name(_) => {}
+                    ExprKind::AnonymousClass(_) => {
+                        return Err(Forbidden(
+                            "Cannot use anonymous class in constant expression",
+                            class.span,
+                        ))
+                    }
+                    _ if may_fold(class) => {}
+                    _ => {
+                        return Err(Forbidden(
+                            "Cannot use dynamic class name in constant expression",
+                            class.span,
+                        ))
+                    }
+                }
+                for arg in new.args.iter() {
+                    if arg.unpack {
+                        return Err(Forbidden(
+                            "Argument unpacking in constant expressions is not supported",
+                            arg.span,
+                        ));
+                    }
+                    if let Some(value) = &arg.value {
+                        self.check(value)?;
+                    }
+                }
+                Ok(())
+            }
+            // The body is not part of the expression; parameter defaults are checked on their own.
+            ExprKind::Closure(closure) => {
+                self.require(
+                    PhpVersion::Php85,
+                    "closures in constant expressions",
+                    expr.span,
+                )?;
+                if !closure.is_static {
+                    return Err(Forbidden(
+                        "Closures in constant expressions must be static",
+                        expr.span,
+                    ));
+                }
+                if !closure.use_vars.is_empty() {
+                    return Err(Forbidden(
+                        "Cannot use(...) variables in constant expression",
+                        expr.span,
+                    ));
+                }
+                Ok(())
+            }
+            ExprKind::CallableCreate(cc) => {
+                self.require(
+                    PhpVersion::Php85,
+                    "first-class callables in constant expressions",
+                    expr.span,
+                )?;
+                match &cc.kind {
+                    CallableCreateKind::Function(name) => {
+                        if matches!(name.kind, ExprKind::Name(_)) || is_literal(name) {
+                            Ok(())
+                        } else {
+                            Err(Forbidden(
+                                "Cannot use dynamic function name in constant expression",
+                                name.span,
+                            ))
+                        }
+                    }
+                    CallableCreateKind::StaticMethod { class, method } => {
+                        match &class.kind {
+                            ExprKind::Name(name) if is_static_name(name) => {
+                                return Err(Forbidden(
+                                    "\"static\" is not allowed in compile-time constants",
+                                    class.span,
+                                ))
+                            }
+                            ExprKind::Name(_) => {}
+                            _ if may_fold(class) => {}
+                            _ => {
+                                return Err(Forbidden(
+                                    "Cannot use dynamic class name in constant expression",
+                                    class.span,
+                                ))
+                            }
+                        }
+                        if matches!(method.kind, ExprKind::Identifier(_)) || is_literal(method) {
+                            Ok(())
+                        } else {
+                            Err(Forbidden(
+                                "Cannot use dynamic method name in constant expression",
+                                method.span,
+                            ))
+                        }
+                    }
+                    _ => Err(Forbidden(INVALID_CONST_EXPR, expr.span)),
+                }
+            }
+            _ => Err(Forbidden(INVALID_CONST_EXPR, expr.span)),
+        }
+    }
+
+    /// The class of `X::C` or `X::{expr}`.
+    fn class_const_class(&self, class: &Expr<'_, '_>) -> Result<(), ConstExprError> {
+        match &class.kind {
+            ExprKind::Name(name) if is_static_name(name) => Err(ConstExprError::Forbidden(
+                "\"static::\" is not allowed in compile-time constants",
+                class.span,
+            )),
+            ExprKind::Name(_) => Ok(()),
+            _ if may_fold(class) => Ok(()),
+            _ => Err(ConstExprError::Forbidden(
+                "Dynamic class names are not allowed in compile-time class constant references",
+                class.span,
+            )),
+        }
+    }
+}
+
+fn is_static_name(name: &Name<'_, '_>) -> bool {
+    matches!(name, Name::Simple { value, .. } if value.eq_ignore_ascii_case("static"))
+}
+
+fn is_literal_parts(parts: &[StringPart<'_, '_>]) -> bool {
+    parts
+        .iter()
+        .all(|part| matches!(part, StringPart::Literal(_)))
+}
+
+/// Whether `expr` is built from literals only, which PHP always folds at compile time.
+fn is_literal(expr: &Expr<'_, '_>) -> bool {
+    foldable(expr, false)
+}
+
+/// Whether PHP may fold `expr` at compile time, substituting constants whose value it knows.
+fn may_fold(expr: &Expr<'_, '_>) -> bool {
+    foldable(expr, true)
+}
+
+fn unparenthesized<'e, 'arena, 'src>(mut expr: &'e Expr<'arena, 'src>) -> &'e Expr<'arena, 'src> {
+    while let ExprKind::Parenthesized(inner) = &expr.kind {
+        expr = inner;
+    }
+    expr
+}
+
+/// The truthiness of a scalar literal, which PHP uses to fold `?:`, `&&` and `||`.
+fn literal_truth(expr: &Expr<'_, '_>) -> Option<bool> {
+    match &unparenthesized(expr).kind {
+        ExprKind::Int(n) => Some(*n != 0),
+        ExprKind::Float(f) => Some(*f != 0.0),
+        ExprKind::String(s) => Some(!matches!(s.as_str(), "" | "0")),
+        ExprKind::Nowdoc { value, .. } => Some(!matches!(*value, "" | "0")),
+        ExprKind::Bool(b) => Some(*b),
+        ExprKind::Null => Some(false),
+        _ => None,
+    }
+}
+
+fn foldable(expr: &Expr<'_, '_>, constants: bool) -> bool {
+    let operand = |e: &Expr<'_, '_>| foldable(e, constants);
+    match &expr.kind {
+        ExprKind::Int(_)
+        | ExprKind::Float(_)
+        | ExprKind::String(_)
+        | ExprKind::Bool(_)
+        | ExprKind::Null
+        | ExprKind::Nowdoc { .. } => true,
+        ExprKind::Heredoc { parts, .. } => is_literal_parts(parts),
+        ExprKind::MagicConst(_) | ExprKind::Name(_) => constants,
+        ExprKind::ClassConstAccess(access) => {
+            constants
+                && matches!(access.class.kind, ExprKind::Name(_))
+                && matches!(access.member.kind, ExprKind::Identifier(_))
+        }
+        ExprKind::Parenthesized(inner) => operand(inner),
+        ExprKind::UnaryPrefix(u) => {
+            !matches!(
+                u.op,
+                UnaryPrefixOp::PreIncrement | UnaryPrefixOp::PreDecrement
+            ) && operand(u.operand)
+        }
+        ExprKind::Binary(b) => {
+            !matches!(b.op, BinaryOp::Instanceof | BinaryOp::Pipe)
+                && operand(b.left)
+                && operand(b.right)
+        }
+        ExprKind::Ternary(t) => {
+            operand(t.condition) && t.then_expr.is_none_or(operand) && operand(t.else_expr)
+        }
+        ExprKind::NullCoalesce(n) => operand(n.left) && operand(n.right),
+        ExprKind::Array(elements) => elements
+            .iter()
+            .all(|el| !el.by_ref && el.key.as_ref().is_none_or(operand) && operand(&el.value)),
+        ExprKind::ArrayAccess(a) => operand(a.array) && a.index.is_some_and(operand),
+        _ => false,
+    }
 }
 
 /// Report PHP's compile errors for the destructuring list `target` and its nested lists.
@@ -917,6 +1352,13 @@ pub fn parse_expr_bp<'arena, 'src>(
             }
             check_dereferencable(parser, &lhs, kind);
             parser.advance(); // consume ::
+            if matches!(lhs.kind, ExprKind::Parenthesized(_)) {
+                if parser.check(TokenKind::Class) {
+                    check_class_name_fetch_literal(parser, &lhs);
+                } else {
+                    check_class_name_literal(parser, &lhs);
+                }
+            }
 
             // Check what follows ::
             if parser.check(TokenKind::Variable) {
@@ -1227,6 +1669,16 @@ pub fn parse_expr_bp<'arena, 'src>(
             let mut rhs = parse_expr_bp(parser, right_bp);
             if parser.current_kind().is_assignment_op() {
                 rhs = parse_assign_continuation(parser, rhs);
+            }
+            if op == BinaryOp::Instanceof {
+                if is_class_name_reference(&rhs) {
+                    check_class_name_literal(parser, &rhs);
+                } else {
+                    parser.error(ParseError::Forbidden {
+                        message: "right side of instanceof must be a class name, a variable or a parenthesized expression".into(),
+                        span: rhs.span,
+                    });
+                }
             }
             // Check if pipe operator has unparenthesized arrow function on RHS
             if op == BinaryOp::Pipe && matches!(rhs.kind, ExprKind::ArrowFunction(_)) {

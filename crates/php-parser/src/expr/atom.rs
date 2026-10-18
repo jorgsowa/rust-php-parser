@@ -1364,10 +1364,12 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
             let inner = parse_expr(parser);
             parser.expect_closing(TokenKind::RightParen, open.span);
             let paren_span = Span::new(paren_start, parser.previous_end());
-            Expr {
+            let class = Expr {
                 kind: ExprKind::Parenthesized(parser.alloc(inner)),
                 span: paren_span,
-            }
+            };
+            super::check_class_name_literal(parser, &class);
+            class
         }
         _ => name_expr(parser.parse_name()),
     };

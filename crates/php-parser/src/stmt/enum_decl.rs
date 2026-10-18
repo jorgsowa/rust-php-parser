@@ -107,7 +107,9 @@ pub(super) fn parse_enum<'arena, 'src>(
                 };
             let equals_token = parser.eat(TokenKind::Equals);
             let value = if equals_token.is_some() {
-                Some(expr::parse_expr(parser))
+                let value = expr::parse_expr(parser);
+                expr::check_const_expr(parser, &value, false);
+                Some(value)
             } else {
                 None
             };
@@ -248,14 +250,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                 };
                 parser.expect(TokenKind::Equals);
                 let value = expr::parse_expr(parser);
-                // Like class constants, enum constants reject `new` in their
-                // initializer (PHP: "New expressions are not supported in this context").
-                if let Some(span) = expr::find_new_in_initializer(&value) {
-                    parser.error(ParseError::Forbidden {
-                        message: "New expressions are not supported in this context".into(),
-                        span,
-                    });
-                }
+                expr::check_const_expr(parser, &value, false);
                 // Every item of `const A = 1, B = 2;` gets its own copy of the attributes.
                 let attributes = attributes.take().unwrap_or_else(|| {
                     let EnumMemberKind::ClassConst(first) = &members[first_index].kind else {

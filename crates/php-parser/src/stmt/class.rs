@@ -887,12 +887,7 @@ fn parse_class_const_member<'arena, 'src>(
         };
         parser.expect(TokenKind::Equals);
         let value = expr::parse_expr(parser);
-        if let Some(span) = expr::find_new_in_initializer(&value) {
-            parser.error(ParseError::Forbidden {
-                message: "New expressions are not supported in this context".into(),
-                span,
-            });
-        }
+        expr::check_const_expr(parser, &value, false);
         const_items.push((const_name, value));
         if parser.eat(TokenKind::Comma).is_none() {
             break;
@@ -1135,12 +1130,7 @@ fn parse_property_member<'arena, 'src>(
         // Suppress `{` subscript so a following hook block `{ get => ...; }`
         // is not consumed as part of the default expression.
         let e = parser.with_no_brace_subscript(expr::parse_expr);
-        if let Some(span) = expr::find_new_in_initializer(&e) {
-            parser.error(ParseError::Forbidden {
-                message: "New expressions are not supported in this context".into(),
-                span,
-            });
-        }
+        expr::check_const_expr(parser, &e, false);
         Some(e)
     } else {
         None
@@ -1267,7 +1257,9 @@ fn parse_property_member<'arena, 'src>(
             let pname = parser.variable_ident(var_token);
 
             let pdefault = if parser.eat(TokenKind::Equals).is_some() {
-                Some(expr::parse_expr(parser))
+                let e = expr::parse_expr(parser);
+                expr::check_const_expr(parser, &e, false);
+                Some(e)
             } else {
                 None
             };

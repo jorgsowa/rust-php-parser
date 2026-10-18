@@ -1761,7 +1761,20 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 let args = if self.check(TokenKind::LeftParen) {
                     let paren_start = self.current_span().start;
                     match crate::expr::parse_arg_list_or_callable(self) {
-                        crate::expr::ArgListResult::Args(args) => args,
+                        crate::expr::ArgListResult::Args(args) => {
+                            for arg in args.iter() {
+                                if arg.unpack {
+                                    self.error(ParseError::Forbidden {
+                                        message: "Cannot use unpacking in attribute argument list"
+                                            .into(),
+                                        span: arg.span,
+                                    });
+                                } else if let Some(value) = &arg.value {
+                                    crate::expr::check_const_expr(self, value, true);
+                                }
+                            }
+                            args
+                        }
                         crate::expr::ArgListResult::CallableMarker => {
                             // PHP: "Cannot create Closure as attribute argument".
                             self.error(ParseError::Forbidden {
