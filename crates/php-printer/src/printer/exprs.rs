@@ -617,6 +617,7 @@ impl<'src> Printer<'src> {
             if i + 1 < args.len() {
                 self.w(",");
             }
+            self.flush_same_line_comments(arg.span.end);
             self.newline();
         }
         self.flush_leading_comments(until);
@@ -655,6 +656,7 @@ impl<'src> Printer<'src> {
                 }
                 self.print_expr(&elem.value, PREC_LOWEST);
                 self.w(",");
+                self.flush_same_line_comments(elem.span.end);
                 self.newline();
             }
             self.flush_leading_comments(span.end);

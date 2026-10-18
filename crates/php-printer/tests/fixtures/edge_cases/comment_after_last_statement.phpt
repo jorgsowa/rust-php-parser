@@ -9,8 +9,7 @@ if ($a) {
 ===print===
 <?php
 foo(
-    $a,
-    // first
+    $a, // first
     $b
 );
 if ($a) {

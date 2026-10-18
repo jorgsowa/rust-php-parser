@@ -266,11 +266,27 @@ impl<'src> Printer<'src> {
         }
     }
 
-    pub(crate) fn flush_trailing_comments(&mut self, _after_offset: u32, _before_offset: u32) {
-        // Trailing comments are not emitted here.
-        // They are always emitted as leading (standalone) comments before the next node.
-        // This ensures round-trip stability: when we re-parse and re-print, comments
-        // maintain consistent positioning rather than drifting between being inline vs leading.
+    /// Print pending comments that follow `after` on the same source line, separated from it
+    /// only by spaces and commas. A line comment leaves the caller to start a new line.
+    pub(crate) fn flush_same_line_comments(&mut self, mut after: u32) {
+        use php_ast::CommentKind;
+        while let Some(c) = self.comments.get(self.comment_cursor) {
+            let gap = self
+                .source
+                .as_bytes()
+                .get(after as usize..c.span.start as usize);
+            let same_line = gap.is_some_and(|g| g.iter().all(|b| matches!(b, b' ' | b'\t' | b',')));
+            if !same_line || c.kind == CommentKind::Doc {
+                break;
+            }
+            self.w(" ");
+            match c.kind {
+                CommentKind::Line | CommentKind::Hash => self.w(c.text.trim()),
+                _ => self.w(c.text),
+            }
+            after = c.span.end;
+            self.comment_cursor += 1;
+        }
     }
 
     /// Flush any pending comments whose offset precedes `block_start`.
@@ -455,8 +471,9 @@ impl<'src> Printer<'src> {
                 self.write_indent();
             }
             self.print_stmt(stmt);
-            let next_start = stmts.get(i + 1).map(|s| s.span.start).unwrap_or(u32::MAX);
-            self.flush_trailing_comments(stmt.span.end.saturating_sub(1), next_start);
+            if !is_inline_html {
+                self.flush_same_line_comments(stmt.span.end);
+            }
 
             prev_was_inline_html = is_inline_html;
         }

@@ -11,12 +11,10 @@ EOT, // in array
 <?php
 $x = <<<EOT
 a
-EOT;
-// after heredoc
+EOT; // after heredoc
 $y = [
     <<<EOT
 a
-EOT,
-    // in array
+EOT, // in array
     2,
 ];

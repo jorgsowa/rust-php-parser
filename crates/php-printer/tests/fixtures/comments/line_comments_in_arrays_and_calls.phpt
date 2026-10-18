@@ -37,8 +37,7 @@ f(
     // only comment
 );
 $c->d(
-    1,
-    // one
+    1, // one
     2
 );
 $e = new Foo(
