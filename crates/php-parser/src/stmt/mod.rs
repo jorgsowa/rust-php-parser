@@ -1492,13 +1492,9 @@ pub fn parse_param_list<'arena, 'src>(
             .unwrap_or(parser.missing_ident());
 
         let default = if parser.eat(TokenKind::Equals).is_some() {
-            if visibility.is_some() {
-                // Suppress `{` subscript so a following hook block `{ get => ...; }`
-                // is not consumed as part of the default expression.
-                Some(parser.with_no_brace_subscript(expr::parse_expr))
-            } else {
-                Some(expr::parse_expr(parser))
-            }
+            // Suppress `{` subscript so a following hook block `{ get => ...; }`
+            // is not consumed as part of the default expression.
+            Some(parser.with_no_brace_subscript(expr::parse_expr))
         } else {
             None
         };
@@ -1518,8 +1514,24 @@ pub fn parse_param_list<'arena, 'src>(
             .or(name_span_end)
             .unwrap_or(parser.previous_end());
 
-        // Constructor promotion hooks: if this param has visibility and next token is {
-        let hooks = if visibility.is_some() && parser.check(TokenKind::LeftBrace) {
+        // Hooks promote the parameter even without a visibility modifier; without one, a `{`
+        // that does not start a hook is a function body after a missing `)`.
+        let starts_hooks = parser.check(TokenKind::LeftBrace)
+            && (first_modifier_span.is_some()
+                || match parser.peek_kind() {
+                    Some(TokenKind::Ampersand | TokenKind::HashBracket | TokenKind::Final) => true,
+                    Some(TokenKind::Identifier) => parser.peek_text().is_some_and(|t| {
+                        t.eq_ignore_ascii_case("get") || t.eq_ignore_ascii_case("set")
+                    }),
+                    _ => false,
+                });
+        let hooks = if starts_hooks {
+            if first_modifier_span.is_none() && !parser.in_constructor {
+                parser.error(ParseError::Forbidden {
+                    message: "Cannot declare promoted property outside a constructor".into(),
+                    span: parser.current_span(),
+                });
+            }
             class::parse_property_hooks(parser)
         } else {
             parser.alloc_vec()
