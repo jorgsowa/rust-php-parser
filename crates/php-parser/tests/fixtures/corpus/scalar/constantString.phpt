@@ -225,7 +225,7 @@ B"Hi";
       "kind": {
         "Expression": {
           "kind": {
-            "String": "!ÿ!ÿ!!\u0000!"
+            "String": "!ÿ!ÿ!\u0000!\u0000!"
           },
           "span": {
             "start": 113,

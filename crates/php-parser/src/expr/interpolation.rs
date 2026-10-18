@@ -672,8 +672,9 @@ fn decode_escape_at(
             while j < len && j - start < 3 && bytes[j] >= b'0' && bytes[j] <= b'7' {
                 j += 1;
             }
-            if let Ok(val) = u8::from_str_radix(&text[start..j], 8) {
-                out.push(val as char);
+            // PHP keeps the low byte of `\400`..`\777`.
+            if let Ok(val) = u16::from_str_radix(&text[start..j], 8) {
+                out.push(val as u8 as char);
             }
             j
         }
