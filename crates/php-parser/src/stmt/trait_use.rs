@@ -16,7 +16,16 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
 
         // Parse the method reference: either `method` or `TraitName::method`
         // First, parse a name (could be trait name or bare method name)
-        let first_name = parser.parse_name();
+        let first_name = if parser.check(TokenKind::Namespace)
+            && parser.peek_kind() != Some(TokenKind::Backslash)
+        {
+            // A method named `namespace`, not a `namespace\Foo` relative name.
+            let value = parser.current_text();
+            let span = parser.advance().span;
+            Name::Simple { value, span }
+        } else {
+            parser.parse_name()
+        };
 
         if parser.eat(TokenKind::DoubleColon).is_some() {
             // Qualified: TraitName::method
