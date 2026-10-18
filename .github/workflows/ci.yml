@@ -34,7 +34,11 @@ jobs:
         run: cargo fmt --all -- --check
 
       - name: Clippy
-        run: cargo clippy --workspace --tests -- -D warnings
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
+      # Library-only build, so dev-dependencies do not turn the `serde` feature on.
+      - name: Clippy without the serde feature
+        run: cargo clippy -p php-ast -p phpdoc-parser -p php-rs-parser -- -D warnings
 
       - name: Build WASM crate
         run: cargo build -p php-wasm --target wasm32-unknown-unknown
@@ -43,19 +47,6 @@ jobs:
         run: cargo doc --workspace --no-deps
         env:
           RUSTDOCFLAGS: -D warnings
-
-  msrv:
-    name: MSRV
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: dtolnay/rust-toolchain@1.88
-
-      - uses: Swatinem/rust-cache@v2.9.2
-
-      - name: Check
-        run: cargo check --workspace --exclude php-wasm --locked
 
   minimal-versions:
     name: Minimal versions
@@ -131,43 +122,49 @@ jobs:
         run: cargo test --test php_syntax
 
   test:
-    name: Test (PHP ${{ matrix.php-version }})
+    name: Test (${{ matrix.os }}, ${{ matrix.toolchain }})
     needs: php-syntax
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['8.1', '8.2', '8.3', '8.4', '8.5', '8.6']
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        toolchain: [stable]
+        include:
+          # MSRV, kept in sync with `rust-version` in Cargo.toml.
+          - os: ubuntu-latest
+            toolchain: '1.88'
     steps:
+      # Fixtures compare byte-for-byte, so stop Git on Windows from rewriting line endings.
+      - name: Disable autocrlf
+        if: runner.os == 'Windows'
+        run: git config --global core.autocrlf false
+
       - uses: actions/checkout@v7
 
-      - uses: shivammathur/setup-php@v2
+      - uses: dtolnay/rust-toolchain@master
         with:
-          php-version: ${{ matrix.php-version }}
-
-      - uses: dtolnay/rust-toolchain@stable
+          toolchain: ${{ matrix.toolchain }}
 
       - uses: Swatinem/rust-cache@v2.9.2
-        with:
-          key: ${{ matrix.php-version }}
 
       - name: Unit tests
-        run: cargo test --lib
+        run: cargo test --lib --locked
 
       - name: Doc tests
-        run: cargo test --doc --workspace
+        run: cargo test --doc --workspace --locked
 
       - name: Integration tests
-        run: cargo test --test integration
+        run: cargo test --test integration --locked
 
       - name: Lexer tests
-        run: cargo test --test lexer -p php-lexer
+        run: cargo test --test lexer -p php-lexer --locked
 
       - name: PHPDoc parser tests
-        run: cargo test --test fixtures -p phpdoc-parser
+        run: cargo test --test fixtures -p phpdoc-parser --locked
 
       - name: AST fold tests
-        run: cargo test --test fold -p php-ast
+        run: cargo test --test fold -p php-ast --locked
 
   printer:
     name: Printer Tests

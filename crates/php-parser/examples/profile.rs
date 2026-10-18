@@ -1,3 +1,5 @@
+#![cfg_attr(not(unix), allow(unused))]
+
 use std::path::Path;
 use walkdir::WalkDir;
 
@@ -19,6 +21,10 @@ fn collect_corpus(dir: &Path) -> (u64, Vec<String>) {
     (total_bytes, sources)
 }
 
+#[cfg(not(unix))]
+fn main() {}
+
+#[cfg(unix)]
 fn main() {
     println!("Loading Symfony corpus...");
     let base = Path::new("crates/php-parser/benches/corpus");
