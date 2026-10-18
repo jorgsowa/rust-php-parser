@@ -9,6 +9,7 @@ use std::sync::Mutex;
 /// ===config===          (optional)
 /// blank_lines_upper_bound=0
 /// no_source=true
+/// strip_parens=true
 /// ===source===
 /// <?php ...
 /// ===print===
@@ -22,6 +23,9 @@ struct PrinterFixture {
     config: PrinterConfig,
     /// When true, source is not passed to the printer (tests the no-source fallback).
     no_source: bool,
+    /// When true, `Parenthesized` nodes are removed before printing, as in a
+    /// hand-built tree, so the printer must supply every parenthesis itself.
+    strip_parens: bool,
 }
 
 fn parse_printer_fixture(content: &str) -> PrinterFixture {
@@ -53,11 +57,14 @@ fn parse_printer_fixture(content: &str) -> PrinterFixture {
 
     let mut config = PrinterConfig::default();
     let mut no_source = false;
+    let mut strip_parens = false;
     for line in raw_config.lines() {
         if let Some(val) = line.strip_prefix("blank_lines_upper_bound=") {
             config.blank_lines_upper_bound = val.parse().expect("invalid blank_lines_upper_bound");
         } else if line == "no_source=true" {
             no_source = true;
+        } else if line == "strip_parens=true" {
+            strip_parens = true;
         }
     }
 
@@ -67,6 +74,7 @@ fn parse_printer_fixture(content: &str) -> PrinterFixture {
         expected: expected.to_string(),
         config,
         no_source,
+        strip_parens,
     }
 }
 
@@ -84,7 +92,52 @@ fn collect_phpt_files(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
     paths
 }
 
+/// Drops every `Parenthesized` node.
+struct StripParens;
+
+impl<'src> php_ast::fold::Fold<'src> for StripParens {
+    fn fold_expr<'new>(
+        &mut self,
+        arena: &'new bumpalo::Bump,
+        expr: &php_ast::ast::Expr<'_, 'src>,
+    ) -> php_ast::ast::Expr<'new, 'src> {
+        match &expr.kind {
+            php_ast::ast::ExprKind::Parenthesized(inner) => self.fold_expr(arena, inner),
+            _ => php_ast::fold::fold_expr(self, arena, expr),
+        }
+    }
+}
+
+/// Fingerprint of `program`'s shape, which already encodes precedence, so
+/// redundant parentheses do not count as a change.
+fn shape(program: &php_ast::ast::Program) -> u64 {
+    let arena = bumpalo::Bump::new();
+    let stripped = php_ast::fold::fold_program(&mut StripParens, &arena, program);
+    php_ast::fingerprint::structural_fingerprint(&stripped)
+}
+
+/// Print `source` the way `fixture` asks, returning the output and the shape
+/// of the parsed source.
+fn print_fixture(fixture: &PrinterFixture, source: &str) -> (String, u64) {
+    let arena = bumpalo::Bump::new();
+    let result = php_rs_parser::parse_arena(&arena, source);
+    let mut printer = PrettyPrinter::new().config(fixture.config.clone());
+    if !fixture.no_source {
+        printer = printer.comments(result.source, &result.comments);
+    }
+    let printed = if fixture.strip_parens {
+        let stripped = php_ast::fold::fold_program(&mut StripParens, &arena, &result.program);
+        printer.print(&stripped)
+    } else {
+        printer.print(&result.program)
+    };
+    (printed, shape(&result.program))
+}
+
 /// Run all printer fixture tests from `.phpt` files.
+///
+/// Every fixture must print stably. Fixtures under `edge_cases/` must also
+/// re-parse without errors to the same tree, spans and parentheses aside.
 ///
 /// Set `UPDATE_FIXTURES=1` to regenerate expected output.
 #[test]
@@ -105,20 +158,7 @@ fn fixtures() {
         let content = std::fs::read_to_string(path).unwrap();
         let fixture = parse_printer_fixture(&content);
 
-        let actual = {
-            let arena = bumpalo::Bump::new();
-            let result = php_rs_parser::parse_arena(&arena, &fixture.source);
-            if fixture.no_source {
-                PrettyPrinter::new()
-                    .config(fixture.config.clone())
-                    .print(&result.program)
-            } else {
-                PrettyPrinter::new()
-                    .config(fixture.config.clone())
-                    .comments(result.source, &result.comments)
-                    .print(&result.program)
-            }
-        };
+        let (actual, source_shape) = print_fixture(&fixture, &fixture.source);
 
         if update {
             let config_block = if fixture.raw_config.is_empty() {
@@ -131,44 +171,37 @@ fn fixtures() {
                 config_block, fixture.source, actual
             );
             std::fs::write(path, new_content).unwrap();
-        } else {
-            if actual != fixture.expected {
+        } else if actual != fixture.expected {
+            failures.lock().unwrap().push(format!(
+                "output mismatch in {rel}\nsource: {}\nexpected: {}\nactual:   {actual}",
+                fixture.source, fixture.expected
+            ));
+            return;
+        }
+
+        let reparsed = {
+            let arena = bumpalo::Bump::new();
+            let result = php_rs_parser::parse_arena(&arena, &actual);
+            (!result.errors.is_empty()).then(|| format!("{:?}", result.errors))
+        };
+        let (second, printed_shape) = print_fixture(&fixture, &actual);
+        if rel.starts_with("edge_cases") {
+            if let Some(errors) = reparsed {
                 failures.lock().unwrap().push(format!(
-                    "output mismatch in {rel}\nsource: {}\nexpected: {}\nactual:   {actual}",
-                    fixture.source, fixture.expected
+                    "output of {rel} does not parse: {errors}\n{actual}"
                 ));
                 return;
             }
+            if printed_shape != source_shape {
+                failures
+                    .lock()
+                    .unwrap()
+                    .push(format!("meaning changed in {rel}\n{actual}"));
+            }
         }
-
-        // Also verify round-trip stability
-        let arena1 = bumpalo::Bump::new();
-        let result1 = php_rs_parser::parse_arena(&arena1, &fixture.source);
-        let first = if fixture.no_source {
-            PrettyPrinter::new()
-                .config(fixture.config.clone())
-                .print(&result1.program)
-        } else {
-            PrettyPrinter::new()
-                .config(fixture.config.clone())
-                .comments(result1.source, &result1.comments)
-                .print(&result1.program)
-        };
-        let arena2 = bumpalo::Bump::new();
-        let result2 = php_rs_parser::parse_arena(&arena2, &first);
-        let second = if fixture.no_source {
-            PrettyPrinter::new()
-                .config(fixture.config.clone())
-                .print(&result2.program)
-        } else {
-            PrettyPrinter::new()
-                .config(fixture.config.clone())
-                .comments(result2.source, &result2.comments)
-                .print(&result2.program)
-        };
-        if first != second {
+        if actual != second {
             failures.lock().unwrap().push(format!(
-                "round-trip mismatch in {rel}\nfirst:  {first}\nsecond: {second}"
+                "round-trip mismatch in {rel}\nfirst:  {actual}\nsecond: {second}"
             ));
         }
     });

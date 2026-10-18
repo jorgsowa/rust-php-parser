@@ -18,6 +18,7 @@ php-ast.workspace = true
 bumpalo.workspace = true
 
 [dev-dependencies]
+php-ast = { workspace = true, features = ["serde"] }
 php-rs-parser.workspace = true
 bumpalo.workspace = true
 rayon = { workspace = true }
