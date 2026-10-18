@@ -2,7 +2,6 @@
 <?php list() = $arr;
 ===errors===
 Cannot use empty list
-Cannot use empty list
 ===php_error===
 PHP Fatal error:  Cannot use empty list in Standard input code on line 1
 ===ast===

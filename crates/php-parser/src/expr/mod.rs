@@ -361,6 +361,51 @@ pub(crate) fn find_new_in_initializer<'arena, 'src>(expr: &Expr<'arena, 'src>) -
     finder.found
 }
 
+/// Report PHP's compile errors for the destructuring list `target` and its nested lists.
+pub(crate) fn check_list_entries(parser: &mut Parser<'_, '_>, target: &Expr<'_, '_>) {
+    let ExprKind::Array(elems) = &target.kind else {
+        return;
+    };
+    if elems
+        .iter()
+        .all(|el| matches!(el.value.kind, ExprKind::Omit))
+    {
+        parser.error(ParseError::Forbidden {
+            message: "Cannot use empty list".into(),
+            span: target.span,
+        });
+        return;
+    }
+    // PHP takes the list's style from its first non-empty entry and stops at the first mismatch.
+    let is_keyed = elems
+        .iter()
+        .find(|el| !matches!(el.value.kind, ExprKind::Omit))
+        .is_some_and(|el| el.key.is_some());
+    for el in elems.iter() {
+        if matches!(el.value.kind, ExprKind::Omit) {
+            if is_keyed {
+                parser.error(ParseError::Forbidden {
+                    message: "Cannot use empty array entries in keyed array assignment".into(),
+                    span: el.span,
+                });
+                return;
+            }
+            continue;
+        }
+        if el.unpack {
+            return;
+        }
+        if el.key.is_some() != is_keyed {
+            parser.error(ParseError::Forbidden {
+                message: "Cannot mix keyed and unkeyed array entries in assignments".into(),
+                span: el.span,
+            });
+            return;
+        }
+        check_list_entries(parser, &el.value);
+    }
+}
+
 /// True if the array-literal at `span` was written with `list(...)` syntax
 /// rather than the short `[...]` form. Determined by the first source byte
 /// at the span start.
@@ -500,18 +545,11 @@ fn parse_assign_continuation<'arena, 'src>(
             span: lhs.span,
         });
     }
-    // Short-list destructure: `[, , ,] = …` — PHP fatals on "Cannot use empty list"
-    // when every element is omitted (or the array has no elements at all).
     if let ExprKind::Array(elems) = &lhs.kind {
         // This array is a destructuring target, so empty slots are legal here —
         // retract the eager "empty array element" errors emitted while parsing it.
         parser.retract_destructuring_errors_within(lhs.span);
-        if elems.is_empty() || elems.iter().all(|e| matches!(e.value.kind, ExprKind::Omit)) {
-            parser.error(ParseError::Forbidden {
-                message: "Cannot use empty list".into(),
-                span: lhs.span,
-            });
-        }
+        check_list_entries(parser, &lhs);
         // Each non-omitted element must itself be a writable target. PHP
         // rejects e.g. `[null, $b] = …` and `list(1 + 1) = …` with
         // "Assignments can only happen to writable values".
