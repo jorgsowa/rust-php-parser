@@ -228,7 +228,7 @@ pub(crate) fn check_reference_return(parser: &mut Parser<'_, '_>, value: &Expr<'
 }
 
 /// True if `kind` is a variable, a fetch or a call: what PHP can take a reference of.
-fn is_variable_or_call(kind: &ExprKind<'_, '_>) -> bool {
+pub(crate) fn is_variable_or_call(kind: &ExprKind<'_, '_>) -> bool {
     matches!(
         kind,
         ExprKind::Variable(_)

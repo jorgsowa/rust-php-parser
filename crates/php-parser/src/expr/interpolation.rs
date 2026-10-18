@@ -241,20 +241,14 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                 let expr = parse_complex_interpolation(
                     arena,
                     source,
-                    expr_offset,
-                    end_offset,
+                    Span::new(expr_offset, end_offset),
                     version,
                     nesting_depth,
+                    depth == 0,
                     errors,
                 );
-                if matches!(
-                    expr.kind,
-                    ExprKind::ClassConstAccess(_) | ExprKind::ClassConstAccessDynamic { .. }
-                ) {
-                    errors.push(ParseError::Forbidden {
-                        message: "class constant access is not valid as a standalone interpolation expression".into(),
-                        span: expr.span,
-                    });
+                if depth == 0 {
+                    check_curly_interpolation(&expr, errors);
                 }
                 parts.push(StringPart::Expr(expr));
                 literal_start = i;
@@ -501,20 +495,14 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                 let expr = parse_complex_interpolation(
                     arena,
                     source,
-                    expr_offset,
-                    end_offset,
+                    Span::new(expr_offset, end_offset),
                     version,
                     nesting_depth,
+                    depth == 0,
                     errors,
                 );
-                if matches!(
-                    expr.kind,
-                    ExprKind::ClassConstAccess(_) | ExprKind::ClassConstAccessDynamic { .. }
-                ) {
-                    errors.push(ParseError::Forbidden {
-                        message: "class constant access is not valid as a standalone interpolation expression".into(),
-                        span: expr.span,
-                    });
+                if depth == 0 {
+                    check_curly_interpolation(&expr, errors);
                 }
                 parts.push(StringPart::Expr(expr));
             }
@@ -886,14 +874,14 @@ fn parse_dollar_brace<'arena, 'src>(
             span,
         });
     }
-    let sub_expr = |start: usize, end: usize, errors: &mut Vec<ParseError>| {
+    let sub_expr = |start: usize, end: usize, report: bool, errors: &mut Vec<ParseError>| {
         parse_complex_interpolation(
             arena,
             source,
-            offset + start as u32,
-            offset + end as u32,
+            Span::new(offset + start as u32, offset + end as u32),
             version,
             nesting_depth,
+            closed && report,
             errors,
         )
     };
@@ -912,13 +900,14 @@ fn parse_dollar_brace<'arena, 'src>(
     let is_name = name_end > content_start
         && (name_end == close || (bytes[name_end] == b'[' && bytes[close - 1] == b']'));
     if !is_name {
-        if text[content_start..close].trim().is_empty() {
+        let empty = text[content_start..close].trim().is_empty();
+        if empty {
             errors.push(ParseError::Forbidden {
                 message: "empty variable name in '${...}' string interpolation".into(),
                 span,
             });
         }
-        let inner = sub_expr(content_start, close, errors);
+        let inner = sub_expr(content_start, close, !empty, errors);
         let expr = Expr {
             kind: ExprKind::VariableVariable(arena.alloc(inner)),
             span,
@@ -933,13 +922,14 @@ fn parse_dollar_brace<'arena, 'src>(
     if name_end == close {
         return (var, after);
     }
-    if text[name_end + 1..close - 1].trim().is_empty() {
+    let empty = text[name_end + 1..close - 1].trim().is_empty();
+    if empty {
         errors.push(ParseError::Forbidden {
             message: "empty index in string interpolation".into(),
             span: Span::new(offset + name_end as u32, offset + close as u32),
         });
     }
-    let index = sub_expr(name_end + 1, close - 1, errors);
+    let index = sub_expr(name_end + 1, close - 1, !empty, errors);
     let expr = Expr {
         kind: ExprKind::ArrayAccess(ArrayAccessExpr {
             array: arena.alloc(var),
@@ -976,20 +966,35 @@ fn find_closing_brace(bytes: &[u8], mut i: usize) -> (usize, bool) {
     (bytes.len(), false)
 }
 
+/// Report a `{$...}` interpolation that is not a variable, fetch or call, which PHP rejects.
+fn check_curly_interpolation(expr: &Expr<'_, '_>, errors: &mut Vec<ParseError>) {
+    let message = match expr.kind {
+        ExprKind::ClassConstAccess(_) | ExprKind::ClassConstAccessDynamic { .. } => {
+            "class constant access is not valid as a standalone interpolation expression"
+        }
+        _ if crate::expr::is_variable_or_call(&expr.kind) => return,
+        _ => "only a variable, property, index or call can be interpolated with '{$...}'",
+    };
+    errors.push(ParseError::Forbidden {
+        message: message.into(),
+        span: expr.span,
+    });
+}
+
 /// Parse a complex interpolation expression using a sub-parser that starts directly
 /// in the original source at the given offset, avoiding string allocation and span reoffset.
 fn parse_complex_interpolation<'arena, 'src>(
     arena: &'arena bumpalo::Bump,
     source: &'src str,
-    offset: u32,
-    end: u32,
+    span: Span,
     version: PhpVersion,
     nesting_depth: u32,
+    report_syntax_errors: bool,
     errors: &mut Vec<ParseError>,
 ) -> Expr<'arena, 'src> {
     let nesting_depth = nesting_depth + INTERPOLATION_NESTING_COST;
+    let (offset, end) = (span.start, span.end);
     if nesting_depth > MAX_NESTING_DEPTH {
-        let span = Span::new(offset, end);
         errors.push(ParseError::NestingTooDeep { span });
         return Expr {
             kind: ExprKind::Error,
@@ -1001,12 +1006,19 @@ fn parse_complex_interpolation<'arena, 'src>(
     let mut sub =
         crate::parser::Parser::new_at(arena, bounded, offset as usize, version, nesting_depth);
     let expr = crate::expr::parse_expr(&mut sub);
-    // Other sub-parser errors are left to the enclosing string's own checks, but
-    // a blown nesting budget must surface or the cut-off subtree would pass silently.
+    if report_syntax_errors && !sub.check(php_lexer::TokenKind::Eof) {
+        sub.error(ParseError::Expected {
+            expected: "'}'".into(),
+            found: sub.current_kind().description().into(),
+            span: sub.current_span(),
+        });
+    }
+    // Where the enclosing interpolation already reported an error, only a blown nesting
+    // budget is kept, or the cut-off subtree would pass silently.
     errors.extend(
         sub.into_errors()
             .into_iter()
-            .filter(|e| matches!(e, ParseError::NestingTooDeep { .. })),
+            .filter(|e| report_syntax_errors || matches!(e, ParseError::NestingTooDeep { .. })),
     );
     if matches!(expr.kind, ExprKind::Error) {
         Expr {

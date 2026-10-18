@@ -68,6 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Writes through a property or index fetch on something other than a variable or call are reported as temporary, as in `FOO->a = 1`, `C::X[0] = 1`, `(new A)->b = 1` and `unset(FOO->a)`; only array and string literals were (`php-rs-parser`).
 - References to values PHP cannot reference are reported: `$a = &C::X`, `$a = &"s"`, `$a = &FOO->b`, and a destructuring list with a `&` element assigned from something other than a variable or call, as in `[&$a] = [1]`, or from a nullsafe chain (`php-rs-parser`).
 - A `return` or `yield` of a nullsafe fetch such as `$a?->b` in a function, method, closure, arrow function or hook that returns by reference is reported (`php-rs-parser`).
+- Syntax errors inside `{$...}` and `${...}` string interpolation were dropped, so `"{$a $b}"`, `"{$a->}"` and `"{$g{0}}"` parsed without errors. They are reported now, as is a `{$...}` holding something other than a variable, property, index or call, such as `"{$a + 1}"` (`php-rs-parser`).
 
 ---
 
