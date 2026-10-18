@@ -2442,6 +2442,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         parser.expect(TokenKind::LeftBrace);
         let mut stmts = parser.alloc_vec_with_capacity(16);
         let saved_stmt_depth = std::mem::take(&mut parser.stmt_depth);
+        let saved_namespace = parser.namespace.take();
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
             stmts.push(parse_stmt(parser));
@@ -2450,6 +2451,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             }
         }
         parser.stmt_depth = saved_stmt_depth;
+        parser.namespace = saved_namespace;
         parser.expect(TokenKind::RightBrace);
         let end = parser.previous_end();
         let block = parser.alloc(Block {
@@ -2481,6 +2483,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         parser.expect(TokenKind::LeftBrace);
         let mut stmts = parser.alloc_vec_with_capacity(16);
         let saved_stmt_depth = std::mem::take(&mut parser.stmt_depth);
+        let saved_namespace = parser.namespace.replace(name.parts_slice().join("\\"));
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
             stmts.push(parse_stmt(parser));
@@ -2489,6 +2492,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             }
         }
         parser.stmt_depth = saved_stmt_depth;
+        parser.namespace = saved_namespace;
         parser.expect(TokenKind::RightBrace);
         let end = parser.previous_end();
         let block = parser.alloc(Block {
@@ -2505,6 +2509,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         }
     } else {
         // Simple namespace: namespace Foo\Bar;
+        parser.namespace = Some(name.parts_slice().join("\\"));
         parser.expect_statement_end();
         let span = Span::new(start, parser.previous_end());
         Stmt {
@@ -3407,6 +3412,64 @@ pub(crate) fn class_keyword(name: &str) -> Option<&'static str> {
         .find(|kw| name.eq_ignore_ascii_case(kw))
 }
 
+/// The property name PHP folds `${…}` to at compile time: a literal, or a concatenation of literals.
+fn literal_string<'a>(expr: &'a Expr<'_, '_>) -> Option<std::borrow::Cow<'a, str>> {
+    use std::borrow::Cow;
+    match &expr.kind {
+        ExprKind::String(value) => Some(Cow::Borrowed(value.as_str())),
+        ExprKind::Nowdoc { value, .. } => Some(Cow::Borrowed(value)),
+        ExprKind::Heredoc { parts, .. } => parts
+            .iter()
+            .map(|part| match part {
+                StringPart::Literal(text) => Some(*text),
+                _ => None,
+            })
+            .collect::<Option<String>>()
+            .map(Cow::Owned),
+        ExprKind::Int(value) => Some(Cow::Owned(value.to_string())),
+        ExprKind::Float(value) => Some(Cow::Owned(php_float_to_string(*value))),
+        ExprKind::Parenthesized(inner) => literal_string(inner),
+        ExprKind::Binary(b) if b.op == BinaryOp::Concat => {
+            let mut text = literal_string(b.left)?.into_owned();
+            text.push_str(&literal_string(b.right)?);
+            Some(Cow::Owned(text))
+        }
+        _ => None,
+    }
+}
+
+/// A float converted to a string the way PHP does with the default `precision=14`.
+fn php_float_to_string(value: f64) -> String {
+    const PRECISION: i32 = 14;
+    if value.is_nan() {
+        return "NAN".to_string();
+    }
+    if value.is_infinite() {
+        return if value < 0.0 { "-INF" } else { "INF" }.to_string();
+    }
+    let scientific = format!("{:.*e}", PRECISION as usize - 1, value);
+    let (mantissa, exponent) = scientific.split_once('e').unwrap_or((&scientific, "0"));
+    let exponent: i32 = exponent.parse().unwrap_or(0);
+    if !(-4..PRECISION).contains(&exponent) {
+        let mantissa = mantissa.trim_end_matches('0');
+        let mantissa = match mantissa.strip_suffix('.') {
+            Some(int) => format!("{int}.0"),
+            None => mantissa.to_string(),
+        };
+        let sign = if exponent < 0 { '-' } else { '+' };
+        return format!("{mantissa}E{sign}{}", exponent.abs());
+    }
+    let fixed = format!("{:.*}", (PRECISION - 1 - exponent) as usize, value);
+    if fixed.contains('.') {
+        fixed
+            .trim_end_matches('0')
+            .trim_end_matches('.')
+            .to_string()
+    } else {
+        fixed
+    }
+}
+
 /// `\self`, `\parent` or `\static`, which PHP rejects wherever it resolves a class name.
 pub(crate) fn fully_qualified_class_keyword<'src>(name: &Name<'_, 'src>) -> Option<&'src str> {
     match name {
@@ -3512,14 +3575,25 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
             span: Span,
             callable: bool,
         ) -> bool {
-            let ExprKind::StaticPropertyAccess(prop) = &class.kind else {
-                return false;
+            let (prop_class, property) = match &class.kind {
+                ExprKind::StaticPropertyAccess(prop) => match &prop.member.kind {
+                    ExprKind::Identifier(property) => {
+                        (prop.class, std::borrow::Cow::Borrowed(property.as_str()))
+                    }
+                    _ => return false,
+                },
+                // `parent::${'a'}::get()`: PHP folds a literal property name at compile time.
+                ExprKind::StaticPropertyAccessDynamic { class, member } => match &member.kind {
+                    ExprKind::VariableVariable(name) => match literal_string(name) {
+                        Some(property) => (*class, property),
+                        None => return false,
+                    },
+                    _ => return false,
+                },
+                _ => return false,
             };
-            let (
-                ExprKind::Name(parent),
-                ExprKind::Identifier(property),
-                ExprKind::Identifier(hook),
-            ) = (&prop.class.kind, &prop.member.kind, &method.kind)
+            let (ExprKind::Name(parent), ExprKind::Identifier(hook)) =
+                (&prop_class.kind, &method.kind)
             else {
                 return false;
             };
@@ -3537,7 +3611,7 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
             {
                 return false;
             }
-            let (property, hook) = (property.as_str(), hook.as_str());
+            let (property, hook) = (property.as_ref(), hook.as_str());
             let message = match self.scope.hook {
                 _ if self.scope.class.is_none() => {
                     self.errors.push((
@@ -3780,6 +3854,18 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
                 TypeHintKind::Keyword(BuiltinType::Self_, span) => self.keyword("self", *span),
                 TypeHintKind::Keyword(BuiltinType::Parent_, span) => self.keyword("parent", *span),
                 TypeHintKind::Keyword(BuiltinType::Static, span) => self.keyword("static", *span),
+                // A type drops the `namespace\` prefix before looking for a class keyword.
+                TypeHintKind::Named(
+                    name @ Name::Complex {
+                        parts,
+                        kind: NameKind::Relative,
+                        ..
+                    },
+                ) if parts.len() == 1 => {
+                    if let Some(keyword) = class_keyword(parts[0]) {
+                        self.keyword(keyword, name.span());
+                    }
+                }
                 _ => {
                     let _ = walk_type_hint(self, type_hint);
                 }

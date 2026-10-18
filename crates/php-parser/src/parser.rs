@@ -144,6 +144,8 @@ pub struct Parser<'arena, 'src> {
     /// Set once `self`, `parent` or `static` is used as a class name or type, which turns on
     /// the walk that checks them against the enclosing class scope.
     pub(crate) has_class_keyword_ref: bool,
+    /// The namespace of the code being parsed, as written in its declaration.
+    pub(crate) namespace: Option<String>,
 }
 
 impl<'arena, 'src> Parser<'arena, 'src> {
@@ -187,6 +189,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             void_cast_count: 0,
             empty_dim_count: 0,
             has_class_keyword_ref: false,
+            namespace: None,
         }
     }
 
@@ -235,6 +238,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             void_cast_count: 0,
             empty_dim_count: 0,
             has_class_keyword_ref: false,
+            namespace: None,
         }
     }
 
@@ -1000,6 +1004,12 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     return;
                 }
                 let Some(last) = parts.last() else { return };
+                let relative = name.kind() == NameKind::Relative;
+                if relative && parts.len() == 1 && crate::stmt::class_keyword(last).is_some() {
+                    // `namespace\self` names the class scope like `self` does.
+                    self.has_class_keyword_ref = true;
+                    return;
+                }
                 let last = last.to_ascii_lowercase();
                 let builtin = matches!(
                     last.as_str(),
@@ -1021,14 +1031,15 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                         last.as_str(),
                         "array" | "callable" | "self" | "parent" | "static"
                     );
-                let text = &self.source[span.start as usize..span.end as usize];
                 let message = if parts.len() == 1 && builtin {
                     format!("Type declaration '{last}' must be unqualified")
                 } else if reserved {
-                    format!(
-                        "Cannot use \"{}\" as a type name as it is reserved",
-                        text.trim_start_matches('\\')
-                    )
+                    let mut resolved = parts.join("\\");
+                    let qualified = name.kind() != NameKind::FullyQualified;
+                    if let (true, Some(namespace)) = (qualified, &self.namespace) {
+                        resolved = format!("{namespace}\\{resolved}");
+                    }
+                    format!("Cannot use \"{resolved}\" as a type name as it is reserved")
                 } else {
                     return;
                 };
