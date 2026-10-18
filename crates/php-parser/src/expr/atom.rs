@@ -2051,13 +2051,14 @@ fn parse_array_literal<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Ex
     let start = parser.start_span();
     parser.advance(); // consume [
 
-    // Room for a few elements up front: growing from zero reallocates (and
-    // copies) on the first several pushes, since nested elements keep the
-    // vector from growing in place. Empty `[]` is common and stays unallocated.
+    // Room for two elements up front: growing from zero reallocates (and
+    // copies), since nested elements keep the vector from growing in place.
+    // Most arrays hold one or two elements, so a larger start wastes arena
+    // space on each one. Empty `[]` is common and stays unallocated.
     let cap = if parser.check(TokenKind::RightBracket) {
         0
     } else {
-        4
+        2
     };
     let mut elements = parser.alloc_vec_with_capacity(cap);
 
@@ -2117,7 +2118,7 @@ fn parse_array_call<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     let cap = if parser.check(TokenKind::RightParen) {
         0
     } else {
-        4
+        2
     };
     let mut elements = parser.alloc_vec_with_capacity(cap);
 
