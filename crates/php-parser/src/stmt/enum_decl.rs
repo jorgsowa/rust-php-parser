@@ -242,40 +242,62 @@ pub(super) fn parse_enum<'arena, 'src>(
                 None
             };
 
-            let const_name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
-                Ident::new(text, span)
-            } else {
-                parser.error(ParseError::Expected {
-                    expected: "constant name".into(),
-                    found: parser.current_kind().description().into(),
-                    span: parser.current_span(),
+            let first_index = members.len();
+            let mut attributes = Some(member_attrs);
+            loop {
+                let const_name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
+                    Ident::new(text, span)
+                } else {
+                    parser.error(ParseError::Expected {
+                        expected: "constant name".into(),
+                        found: parser.current_kind().description().into(),
+                        span: parser.current_span(),
+                    });
+                    parser.missing_ident()
+                };
+                parser.expect(TokenKind::Equals);
+                let value = expr::parse_expr(parser);
+                // Like class constants, enum constants reject `new` in their
+                // initializer (PHP: "New expressions are not supported in this context").
+                if let Some(span) = expr::find_new_in_initializer(&value) {
+                    parser.error(ParseError::Forbidden {
+                        message: "New expressions are not supported in this context".into(),
+                        span,
+                    });
+                }
+                // Every item of `const A = 1, B = 2;` gets its own copy of the attributes.
+                let attributes = attributes.take().unwrap_or_else(|| {
+                    let EnumMemberKind::ClassConst(first) = &members[first_index].kind else {
+                        unreachable!()
+                    };
+                    super::class::copy_attributes(parser, &first.attributes)
                 });
-                parser.missing_ident()
-            };
-            parser.expect(TokenKind::Equals);
-            let value = expr::parse_expr(parser);
-            // Like class constants, enum constants reject `new` in their
-            // initializer (PHP: "New expressions are not supported in this context").
-            if let Some(span) = expr::find_new_in_initializer(&value) {
-                parser.error(ParseError::Forbidden {
-                    message: "New expressions are not supported in this context".into(),
-                    span,
+                let doc_comment = if members.len() == first_index {
+                    parser.take_doc_comment(member_start)
+                } else {
+                    None
+                };
+                members.push(EnumMember {
+                    kind: EnumMemberKind::ClassConst(ClassConstDecl {
+                        name: const_name,
+                        visibility,
+                        is_final,
+                        type_hint: const_type,
+                        value,
+                        attributes,
+                        doc_comment,
+                    }),
+                    span: Span::new(member_start, parser.previous_end()),
                 });
+                if parser.eat(TokenKind::Comma).is_none() {
+                    break;
+                }
             }
             parser.expect(TokenKind::Semicolon);
             let span = Span::new(member_start, parser.previous_end());
-            members.push(EnumMember {
-                kind: EnumMemberKind::ClassConst(ClassConstDecl {
-                    name: const_name,
-                    visibility,
-                    is_final,
-                    type_hint: const_type,
-                    value,
-                    attributes: member_attrs,
-                    doc_comment: parser.take_doc_comment(member_start),
-                }),
-                span,
-            });
+            for member in &mut members[first_index..] {
+                member.span = span;
+            }
             continue;
         }
 

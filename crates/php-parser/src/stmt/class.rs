@@ -966,7 +966,7 @@ fn parse_method_member<'arena, 'src>(
 struct AstCopy;
 impl<'src> Fold<'src> for AstCopy {}
 
-fn copy_attributes<'arena, 'src>(
+pub(super) fn copy_attributes<'arena, 'src>(
     parser: &Parser<'arena, 'src>,
     attrs: &[Attribute<'arena, 'src>],
 ) -> ArenaVec<'arena, Attribute<'arena, 'src>> {
