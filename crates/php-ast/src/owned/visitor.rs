@@ -119,8 +119,8 @@ pub trait OwnedVisitor {
     }
 
     /// Visits a trait adaptation node.
-    fn visit_trait_adaptation(&mut self, _adaptation: &TraitAdaptation) -> ControlFlow<()> {
-        ControlFlow::Continue(())
+    fn visit_trait_adaptation(&mut self, adaptation: &TraitAdaptation) -> ControlFlow<()> {
+        walk_owned_trait_adaptation(self, adaptation)
     }
 
     /// Visits a name node.
@@ -324,6 +324,9 @@ pub fn walk_owned_stmt<V: OwnedVisitor + ?Sized>(visitor: &mut V, stmt: &Stmt) -
             }
         }
         StmtKind::Namespace(ns) => {
+            if let Some(name) = &ns.name {
+                visitor.visit_name(name)?;
+            }
             if let NamespaceBody::Braced(block) = &ns.body {
                 visitor.visit_block(block)?;
             }
@@ -590,6 +593,9 @@ pub fn walk_owned_param<V: OwnedVisitor + ?Sized>(
 
 /// Visits the value expression of a call argument, skipping PHP 8.6 placeholders.
 pub fn walk_owned_arg<V: OwnedVisitor + ?Sized>(visitor: &mut V, arg: &Arg) -> ControlFlow<()> {
+    if let Some(name) = &arg.name {
+        visitor.visit_name(name)?;
+    }
     match &arg.value {
         Some(value) => visitor.visit_expr(value),
         None => ControlFlow::Continue(()),
@@ -733,6 +739,41 @@ pub fn walk_owned_trait_use<V: OwnedVisitor + ?Sized>(
     }
     for adaptation in trait_use.adaptations.iter() {
         visitor.visit_trait_adaptation(adaptation)?;
+    }
+    ControlFlow::Continue(())
+}
+
+/// Visits the trait and method names of an `insteadof`/`as` adaptation.
+pub fn walk_owned_trait_adaptation<V: OwnedVisitor + ?Sized>(
+    visitor: &mut V,
+    adaptation: &TraitAdaptation,
+) -> ControlFlow<()> {
+    match &adaptation.kind {
+        TraitAdaptationKind::Precedence {
+            trait_name,
+            method,
+            insteadof,
+        } => {
+            visitor.visit_name(trait_name)?;
+            visitor.visit_name(method)?;
+            for name in insteadof.iter() {
+                visitor.visit_name(name)?;
+            }
+        }
+        TraitAdaptationKind::Alias {
+            trait_name,
+            method,
+            new_name,
+            ..
+        } => {
+            if let Some(name) = trait_name {
+                visitor.visit_name(name)?;
+            }
+            visitor.visit_name(method)?;
+            if let Some(name) = new_name {
+                visitor.visit_name(name)?;
+            }
+        }
     }
     ControlFlow::Continue(())
 }
@@ -1152,7 +1193,8 @@ impl<V: OwnedScopeVisitor> OwnedVisitor for OwnedScopeWalker<V> {
     }
 
     fn visit_trait_adaptation(&mut self, adaptation: &TraitAdaptation) -> ControlFlow<()> {
-        self.inner.visit_trait_adaptation(adaptation, &self.scope)
+        self.inner.visit_trait_adaptation(adaptation, &self.scope)?;
+        walk_owned_trait_adaptation(self, adaptation)
     }
 
     fn visit_block(&mut self, block: &Block) -> ControlFlow<()> {

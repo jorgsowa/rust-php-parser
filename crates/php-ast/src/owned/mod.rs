@@ -31,8 +31,8 @@ pub use visitor::{
     walk_owned_arg, walk_owned_attribute, walk_owned_catch_clause, walk_owned_class_member,
     walk_owned_comments, walk_owned_enum_member, walk_owned_expr, walk_owned_match_arm,
     walk_owned_name, walk_owned_param, walk_owned_program, walk_owned_property_hook,
-    walk_owned_stmt, walk_owned_trait_use, walk_owned_type_hint, OwnedScope, OwnedScopeVisitor,
-    OwnedScopeWalker, OwnedVisitor,
+    walk_owned_stmt, walk_owned_trait_adaptation, walk_owned_trait_use, walk_owned_type_hint,
+    OwnedScope, OwnedScopeVisitor, OwnedScopeWalker, OwnedVisitor,
 };
 
 use std::fmt;

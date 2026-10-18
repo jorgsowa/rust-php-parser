@@ -877,6 +877,50 @@ fn visits_class_extends_and_implements() {
 }
 
 #[test]
+fn visits_namespace_named_arg_and_trait_adaptation_names() {
+    let src = "<?php namespace App\\Http;
+        f(label: 1);
+        class Foo {
+            use A, B {
+                A::foo insteadof B;
+                B::foo as protected bar;
+            }
+        }";
+    let expected = vec![
+        "App\\Http",
+        "label",
+        "A",
+        "B",
+        "A",
+        "foo",
+        "B",
+        "B",
+        "foo",
+        "bar",
+    ];
+    with_parsed(src, |_src, program| {
+        let mut v = NameCollector::default();
+        let _ = v.visit_program(program);
+        assert_eq!(v.names, expected);
+    });
+
+    #[derive(Default)]
+    struct OwnedNameCollector {
+        names: Vec<String>,
+    }
+    impl php_ast::owned::OwnedVisitor for OwnedNameCollector {
+        fn visit_name(&mut self, name: &php_ast::owned::Name) -> ControlFlow<()> {
+            self.names.push(name.parts.join("\\"));
+            ControlFlow::Continue(())
+        }
+    }
+    let result = php_rs_parser::parse(src);
+    let mut v = OwnedNameCollector::default();
+    let _ = php_ast::owned::OwnedVisitor::visit_program(&mut v, &result.program);
+    assert_eq!(v.names, expected);
+}
+
+#[test]
 fn visits_interface_extends() {
     with_parsed("<?php interface A extends B, C {}", |_src, program| {
         let mut v = NameCollector::default();

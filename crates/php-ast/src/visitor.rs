@@ -111,9 +111,9 @@ pub trait Visitor<'arena, 'src> {
     /// Visits a trait `insteadof`/`as` adaptation.
     fn visit_trait_adaptation(
         &mut self,
-        _adaptation: &TraitAdaptation<'arena, 'src>,
+        adaptation: &TraitAdaptation<'arena, 'src>,
     ) -> ControlFlow<()> {
-        ControlFlow::Continue(())
+        walk_trait_adaptation(self, adaptation)
     }
 
     /// Visits a name reference.
@@ -352,6 +352,9 @@ pub fn walk_stmt<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
             }
         }
         StmtKind::Namespace(ns) => {
+            if let Some(name) = &ns.name {
+                visitor.visit_name(name)?;
+            }
             if let NamespaceBody::Braced(block) = &ns.body {
                 visitor.visit_block(block)?;
             }
@@ -622,6 +625,9 @@ pub fn walk_arg<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     arg: &Arg<'arena, 'src>,
 ) -> ControlFlow<()> {
+    if let Some(name) = &arg.name {
+        visitor.visit_name(name)?;
+    }
     match &arg.value {
         Some(value) => visitor.visit_expr(value),
         None => ControlFlow::Continue(()),
@@ -765,6 +771,41 @@ pub fn walk_trait_use<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     }
     for adaptation in trait_use.adaptations.iter() {
         visitor.visit_trait_adaptation(adaptation)?;
+    }
+    ControlFlow::Continue(())
+}
+
+/// Visits the trait and method names of an `insteadof`/`as` adaptation.
+pub fn walk_trait_adaptation<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
+    visitor: &mut V,
+    adaptation: &TraitAdaptation<'arena, 'src>,
+) -> ControlFlow<()> {
+    match &adaptation.kind {
+        TraitAdaptationKind::Precedence {
+            trait_name,
+            method,
+            insteadof,
+        } => {
+            visitor.visit_name(trait_name)?;
+            visitor.visit_name(method)?;
+            for name in insteadof.iter() {
+                visitor.visit_name(name)?;
+            }
+        }
+        TraitAdaptationKind::Alias {
+            trait_name,
+            method,
+            new_name,
+            ..
+        } => {
+            if let Some(name) = trait_name {
+                visitor.visit_name(name)?;
+            }
+            visitor.visit_name(method)?;
+            if let Some(name) = new_name {
+                visitor.visit_name(name)?;
+            }
+        }
     }
     ControlFlow::Continue(())
 }
@@ -1281,7 +1322,8 @@ impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> Visitor<'arena, 'src> for Scop
         &mut self,
         adaptation: &TraitAdaptation<'arena, 'src>,
     ) -> ControlFlow<()> {
-        self.inner.visit_trait_adaptation(adaptation, &self.scope)
+        self.inner.visit_trait_adaptation(adaptation, &self.scope)?;
+        walk_trait_adaptation(self, adaptation)
     }
 
     fn visit_block(&mut self, block: &Block<'arena, 'src>) -> ControlFlow<()> {
