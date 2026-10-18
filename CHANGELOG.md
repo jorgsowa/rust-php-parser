@@ -74,6 +74,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `private(set)` and the other set-visibility modifiers are matched like PHP's single case-insensitive token: `private(SET)` was rejected and `private (set)` was accepted (`php-rs-parser`).
 - A `(void)` cast is reported wherever its value is used, such as in an `if`, `echo`, `return` or `for` condition; only expression statements were checked. A `(void)` statement inside a closure assigned to a variable is no longer reported (`php-rs-parser`).
 - A `$` followed by something other than a variable, `$` or `{`, as in `$"abc"`, `$1` or `$a->$"b"`, is reported (`php-rs-parser`).
+- A keyword directly followed by `\` and a name, such as `class\Foo` or `implements\A`, is lexed as the first part of a qualified name like PHP 8 does, so `class\Foo::x()` parses and `class B implements\A {}` is reported (`php-lexer`).
 
 ---
 

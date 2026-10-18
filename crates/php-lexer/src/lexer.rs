@@ -1195,7 +1195,16 @@ impl<'src> Lexer<'src> {
             self.pos += 1;
         }
         let text = &self.source[start..self.pos];
-        let kind = resolve_keyword(text).unwrap_or(TokenKind::Identifier);
+        // PHP lexes `implements\A` as one qualified name, so a keyword directly followed
+        // by `\` and a name is a plain name segment; `namespace\A` stays a relative name.
+        let starts_qualified_name = bytes.get(self.pos) == Some(&b'\\')
+            && bytes.get(self.pos + 1).is_some_and(|&b| is_ident_start(b));
+        let kind = match resolve_keyword(text) {
+            Some(TokenKind::Namespace) => TokenKind::Namespace,
+            Some(_) if starts_qualified_name => TokenKind::Identifier,
+            Some(kind) => kind,
+            None => TokenKind::Identifier,
+        };
         self.tok(kind, start)
     }
 
