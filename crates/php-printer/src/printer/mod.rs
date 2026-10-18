@@ -340,10 +340,16 @@ impl<'src> Printer<'src> {
         }
     }
 
-    pub(crate) fn has_comments_between(&self, from: u32, to: u32) -> bool {
-        self.comments[self.comment_cursor..]
-            .iter()
-            .any(|c| c.span.start > from && c.span.start < to)
+    /// True if a pending comment between `from` and `to` cannot be printed inline before
+    /// the next item: a line comment, or any comment after `last_item_end`.
+    pub(crate) fn comments_need_own_lines(&self, from: u32, to: u32, last_item_end: u32) -> bool {
+        use php_ast::CommentKind;
+        self.comments[self.comment_cursor..].iter().any(|c| {
+            c.span.start > from
+                && c.span.start < to
+                && (matches!(c.kind, CommentKind::Line | CommentKind::Hash)
+                    || c.span.start >= last_item_end)
+        })
     }
 
     pub(crate) fn has_comments_before(&self, offset: u32) -> bool {

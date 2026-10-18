@@ -232,12 +232,12 @@ impl<'src> Printer<'src> {
             }
             ExprKind::FunctionCall(call) => {
                 self.w("(");
-                self.print_args(&call.args);
+                self.print_call_args(&call.args, call.name.span.end, expr.span.end);
                 self.w(")");
             }
             ExprKind::Array(elements) => {
                 self.w("[");
-                self.print_array_elements(elements);
+                self.print_array_elements(elements, expr.span);
                 self.w("]");
             }
             ExprKind::ArrayAccess(access) => {
@@ -311,13 +311,13 @@ impl<'src> Printer<'src> {
                 } else if is_new_class(&new_expr.class.kind) {
                     self.print_expr(new_expr.class, PREC_PRIMARY);
                     self.w("(");
-                    self.print_args(&new_expr.args);
+                    self.print_call_args(&new_expr.args, new_expr.class.span.end, expr.span.end);
                     self.w(")");
                 } else {
                     self.w("(");
                     self.print_expr(new_expr.class, PREC_LOWEST);
                     self.w(")(");
-                    self.print_args(&new_expr.args);
+                    self.print_call_args(&new_expr.args, new_expr.class.span.end, expr.span.end);
                     self.w(")");
                 }
             }
@@ -351,7 +351,7 @@ impl<'src> Printer<'src> {
                     self.print_expr(call.method, PREC_PRIMARY);
                 }
                 self.w("(");
-                self.print_args(&call.args);
+                self.print_call_args(&call.args, call.method.span.end, expr.span.end);
                 self.w(")");
             }
             ExprKind::NullsafeMethodCall(call) => {
@@ -364,7 +364,7 @@ impl<'src> Printer<'src> {
                     self.print_expr(call.method, PREC_PRIMARY);
                 }
                 self.w("(");
-                self.print_args(&call.args);
+                self.print_call_args(&call.args, call.method.span.end, expr.span.end);
                 self.w(")");
             }
             ExprKind::StaticPropertyAccess(access) => {
@@ -388,14 +388,14 @@ impl<'src> Printer<'src> {
                 self.w("::");
                 self.print_member_name(call.method);
                 self.w("(");
-                self.print_args(&call.args);
+                self.print_call_args(&call.args, call.method.span.end, expr.span.end);
                 self.w(")");
             }
             ExprKind::StaticMethodCallDynamic(call) => {
                 self.w("::");
                 self.print_member_name(call.method);
                 self.w("(");
-                self.print_args(&call.args);
+                self.print_call_args(&call.args, call.method.span.end, expr.span.end);
                 self.w(")");
             }
             ExprKind::Closure(closure) => self.print_closure(closure),
@@ -577,6 +577,30 @@ impl<'src> Printer<'src> {
         }
     }
 
+    /// Print call arguments, one per line when a comment between the callee ending at `from`
+    /// and the end of the call at `until` needs a line of its own.
+    fn print_call_args(&mut self, args: &[Arg], from: u32, until: u32) {
+        let last_end = args.last().map_or(from, |a| a.span.end);
+        if !self.comments_need_own_lines(from, until, last_end) {
+            self.print_args(args);
+            return;
+        }
+        self.newline();
+        self.indent();
+        for (i, arg) in args.iter().enumerate() {
+            self.flush_leading_comments(arg.span.start);
+            self.write_indent();
+            self.print_args(std::slice::from_ref(arg));
+            if i + 1 < args.len() {
+                self.w(",");
+            }
+            self.newline();
+        }
+        self.flush_leading_comments(until);
+        self.dedent();
+        self.write_indent();
+    }
+
     pub(crate) fn print_comma_separated_exprs(&mut self, exprs: &[Expr]) {
         for (i, expr) in exprs.iter().enumerate() {
             if i > 0 {
@@ -586,19 +610,15 @@ impl<'src> Printer<'src> {
         }
     }
 
-    fn print_array_elements(&mut self, elements: &[ArrayElement]) {
-        if elements.is_empty() {
-            return;
-        }
-        let multi_line = elements.len() > 1
-            && self.has_comments_between(
-                elements[0].span.start,
-                elements[elements.len() - 1].span.end,
-            );
+    /// Elements go one per line when a comment inside the brackets of `span` needs a line
+    /// of its own, so each comment keeps its place among them.
+    fn print_array_elements(&mut self, elements: &[ArrayElement], span: php_ast::Span) {
+        let last_end = elements.last().map_or(span.start, |e| e.span.end);
+        let multi_line = self.comments_need_own_lines(span.start, span.end, last_end);
         if multi_line {
             self.newline();
             self.indent();
-            for (i, elem) in elements.iter().enumerate() {
+            for elem in elements {
                 self.flush_leading_comments(elem.span.start);
                 self.write_indent();
                 if elem.unpack {
@@ -612,11 +632,9 @@ impl<'src> Printer<'src> {
                 }
                 self.print_expr(&elem.value, PREC_LOWEST);
                 self.w(",");
-                if i < elements.len() - 1 {
-                    self.newline();
-                }
+                self.newline();
             }
-            self.newline();
+            self.flush_leading_comments(span.end);
             self.dedent();
             self.write_indent();
         } else {

@@ -8,8 +8,11 @@ if ($a) {
 // dangling end comment
 ===print===
 <?php
-foo($a, $b);
-// first
+foo(
+    $a,
+    // first
+    $b
+);
 if ($a) {
     x();
 }
