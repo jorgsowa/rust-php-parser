@@ -7,8 +7,12 @@
 //! - A [`Span`] type for tracking byte-offset ranges back to the source text.
 //! - A [`visitor`] module with the [`visitor::Visitor`] and [`visitor::ScopeVisitor`] traits for
 //!   depth-first AST traversal, plus free `walk_*` functions that drive the default recursion.
+//! - A [`fold`] module with the [`fold::Fold`] trait for arena-to-arena AST transformation.
+//! - An [`owned`] module with lifetime-free mirrors of every AST type, plus owned visitor and fold
+//!   traits.
 //! - A [`resolve::NameResolver`] that resolves names to fully qualified names using the current
 //!   namespace and `use` imports.
+//! - With the `serde` feature, a `fingerprint` module for structural AST fingerprints.
 //!
 //! # Quick start
 //!

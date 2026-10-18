@@ -331,7 +331,7 @@ pub enum CastKind {
     Object,
     /// `(unset)` cast — deprecated; casts to `null`.
     Unset,
-    /// `(void)` cast — non-standard; treated as discarding the value.
+    /// `(void)` cast (PHP 8.5+) — discards the value of an expression statement.
     Void,
 }
 

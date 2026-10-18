@@ -304,8 +304,8 @@ pub enum NameKind {
     Error,
 }
 
-/// PHP built-in type keyword — zero-cost alternative to `Name::Simple` for the
-/// 17 reserved type names. One byte instead of a `Cow<str>` + `Span` in the AST.
+/// PHP built-in type keyword — compact alternative to `Name::Simple` for the
+/// 17 reserved type names.
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
@@ -385,9 +385,9 @@ pub struct TypeHint<'arena, 'src> {
 
 /// A PHP type hint.
 ///
-/// `Keyword` is the fast path for the 20 built-in type names (`int`, `string`,
+/// `Keyword` is the fast path for the 17 built-in type names (`int`, `string`,
 /// `bool`, `self`, `array`, etc.). It stores only a 1-byte discriminant and a
-/// `Span`, avoiding the `Cow<str>` that `Named(Name::Simple)` would require.
+/// `Span` instead of a `Name`.
 ///
 /// Serialises identically to `Named` so all existing snapshots remain unchanged.
 #[derive(Debug)]

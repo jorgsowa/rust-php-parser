@@ -1,6 +1,6 @@
 /// Maps byte offsets (as used in [`Span`]) to line/column positions.
 ///
-/// Build once per source file, then query as many offsets as needed in O(1) each.
+/// Build once per source file, then query as many offsets as needed in O(log n) each.
 ///
 /// Lines and columns are **0-based** — the LSP convention. Call
 /// [`LineCol::to_one_based`] if you need 1-based positions.

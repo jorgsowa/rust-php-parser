@@ -217,7 +217,7 @@ pub struct IfStmt<'arena, 'src> {
     pub uses_alternative: bool,
 }
 
-/// An `elseif` (or `else if`) branch.
+/// An `elseif` branch. `else if` parses as an `else` whose body is an `if` statement.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ElseIfBranch<'arena, 'src> {
