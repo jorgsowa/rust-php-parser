@@ -100,6 +100,10 @@ pub(crate) struct Printer<'src> {
     /// True when at least one PHP statement has been emitted in the current PHP block.
     /// `?>` is only emitted when this is true — empty `<?php ?>` blocks are suppressed.
     has_php_content: bool,
+    /// True while nothing follows the expression being printed before the end
+    /// of its statement, argument or parentheses, so an arrow function, whose
+    /// body runs as far right as it can, needs no parentheses there.
+    pub(crate) at_tail: bool,
 }
 
 impl<'src> Printer<'src> {
@@ -124,6 +128,7 @@ impl<'src> Printer<'src> {
             comment_cursor: 0,
             in_html_mode: false,
             has_php_content: false,
+            at_tail: true,
         }
     }
 

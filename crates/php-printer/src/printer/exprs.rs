@@ -15,21 +15,44 @@ impl<'src> Printer<'src> {
         }
         self.flush_inline_comments(expr.span.start);
         let needs_parens = self.open_paren(expr, parent_prec);
+        let at_tail = self.at_tail;
+        if needs_parens || parent_prec == PREC_LOWEST {
+            self.at_tail = true;
+        }
         if is_chain(&expr.kind) {
+            let operand_at_tail = std::mem::replace(&mut self.at_tail, false);
             self.print_chain_operand(expr);
+            self.at_tail = operand_at_tail;
         }
         self.print_expr_inner(expr);
         if needs_parens {
             self.w(")");
         }
+        self.at_tail = at_tail;
         self.depth -= 1;
     }
 
     /// Write `(` if `expr` binds looser than its context requires.
     #[inline]
     fn open_paren(&mut self, expr: &Expr, parent_prec: i8) -> bool {
-        let my_prec = expr_precedence(&expr.kind);
-        let needs_parens = my_prec < parent_prec && my_prec != PREC_PRIMARY;
+        let needs_parens = if parent_prec == PREC_DEREFERENCE {
+            !is_dereferencable(&expr.kind)
+        } else if parent_prec == PREC_CALLEE {
+            !is_dereferencable(&expr.kind)
+                || matches!(
+                    expr.kind,
+                    ExprKind::PropertyAccess(_)
+                        | ExprKind::NullsafePropertyAccess(_)
+                        | ExprKind::StaticPropertyAccess(_)
+                        | ExprKind::StaticPropertyAccessDynamic { .. }
+                )
+        } else {
+            let my_prec = expr_precedence(&expr.kind);
+            my_prec < parent_prec && my_prec != PREC_PRIMARY
+                || matches!(expr.kind, ExprKind::ArrowFunction(_))
+                    && parent_prec > PREC_LOWEST
+                    && !self.at_tail
+        };
         if needs_parens {
             self.w("(");
         }
@@ -172,13 +195,21 @@ impl<'src> Printer<'src> {
                 self.w(" ");
                 self.w(binary_op_str(binary.op));
                 self.w(" ");
-                self.print_expr(binary.right, rhs_prec);
+                if binary.op == BinaryOp::Pipe
+                    && matches!(binary.right.kind, ExprKind::ArrowFunction(_))
+                {
+                    self.w("(");
+                    self.print_expr(binary.right, PREC_LOWEST);
+                    self.w(")");
+                } else {
+                    self.print_expr(binary.right, rhs_prec);
+                }
             }
             ExprKind::UnaryPrefix(unary) => {
                 let op = unary_prefix_op_str(unary.op);
                 self.w(op);
                 let operand_start = self.output.len();
-                self.print_expr(unary.operand, PREC_UNARY);
+                self.print_expr(unary.operand, expr_precedence(&expr.kind));
                 // `- -$a` must not become `--$a`, nor `+ ++$a` become `+++$a`.
                 if matches!(op, "-" | "+") && self.output[operand_start..].starts_with(op) {
                     self.output.insert(operand_start, ' ');
@@ -227,7 +258,7 @@ impl<'src> Printer<'src> {
             }
             ExprKind::Cast(kind, e) => {
                 self.w(cast_str(*kind));
-                self.print_expr(e, PREC_CAST);
+                self.print_expr(e, PREC_UNARY);
             }
             ExprKind::ErrorSuppress(e) => {
                 self.w("@");
@@ -277,9 +308,15 @@ impl<'src> Printer<'src> {
                 self.w("new ");
                 if let ExprKind::AnonymousClass(class) = &new_expr.class.kind {
                     self.print_anonymous_class(class, &new_expr.args);
-                } else {
+                } else if is_new_class(&new_expr.class.kind) {
                     self.print_expr(new_expr.class, PREC_PRIMARY);
                     self.w("(");
+                    self.print_args(&new_expr.args);
+                    self.w(")");
+                } else {
+                    self.w("(");
+                    self.print_expr(new_expr.class, PREC_LOWEST);
+                    self.w(")(");
                     self.print_args(&new_expr.args);
                     self.w(")");
                 }
@@ -378,7 +415,7 @@ impl<'src> Printer<'src> {
                     self.w("yield");
                     if let Some(key) = &y.key {
                         self.w(" ");
-                        self.print_expr(key, PREC_YIELD);
+                        self.print_expr(key, PREC_YIELD + 1);
                         self.w(" => ");
                     } else if y.value.is_some() {
                         self.w(" ");
@@ -505,6 +542,17 @@ impl<'src> Printer<'src> {
         self.w("}");
     }
 
+    /// A `yield` key would take the `=>` and the value as its own.
+    fn print_array_key(&mut self, key: &Expr) {
+        let prec = if matches!(key.kind, ExprKind::Yield(_)) {
+            PREC_YIELD + 1
+        } else {
+            PREC_LOWEST
+        };
+        self.print_expr(key, prec);
+        self.w(" => ");
+    }
+
     pub(crate) fn print_args(&mut self, args: &[Arg]) {
         for (i, arg) in args.iter().enumerate() {
             if i > 0 {
@@ -557,8 +605,7 @@ impl<'src> Printer<'src> {
                     self.w("...");
                 }
                 if let Some(key) = &elem.key {
-                    self.print_expr(key, PREC_LOWEST);
-                    self.w(" => ");
+                    self.print_array_key(key);
                 }
                 if elem.by_ref {
                     self.w("&");
@@ -581,8 +628,7 @@ impl<'src> Printer<'src> {
                     self.w("...");
                 }
                 if let Some(key) = &elem.key {
-                    self.print_expr(key, PREC_LOWEST);
-                    self.w(" => ");
+                    self.print_array_key(key);
                 }
                 if elem.by_ref {
                     self.w("&");
@@ -654,6 +700,54 @@ impl<'src> Printer<'src> {
             self.w(&escape_single_quoted(s));
             self.w("'");
         }
+    }
+}
+
+/// Whether `kind` can be dereferenced (called, indexed, or have `->` or `::`
+/// applied) without parentheses.
+fn is_dereferencable(kind: &ExprKind) -> bool {
+    match kind {
+        ExprKind::New(new_expr) => matches!(new_expr.class.kind, ExprKind::Name(_)),
+        _ => {
+            matches!(
+                kind,
+                ExprKind::Variable(_)
+                    | ExprKind::VariableVariable(_)
+                    | ExprKind::Name(_)
+                    | ExprKind::Parenthesized(_)
+                    | ExprKind::Array(_)
+                    | ExprKind::String(_)
+                    | ExprKind::InterpolatedString(_)
+                    | ExprKind::Heredoc { .. }
+                    | ExprKind::Nowdoc { .. }
+                    | ExprKind::MagicConst(_)
+            ) || is_chain(kind)
+                && !matches!(
+                    kind,
+                    ExprKind::Assign(_)
+                        | ExprKind::Binary(_)
+                        | ExprKind::UnaryPostfix(_)
+                        | ExprKind::Ternary(_)
+                        | ExprKind::NullCoalesce(_)
+                )
+        }
+    }
+}
+
+/// Whether `kind` can follow `new` without parentheses: a variable, a name,
+/// or property and index fetches on one.
+fn is_new_class(kind: &ExprKind) -> bool {
+    match kind {
+        ExprKind::Variable(_)
+        | ExprKind::VariableVariable(_)
+        | ExprKind::Name(_)
+        | ExprKind::Parenthesized(_) => true,
+        ExprKind::ArrayAccess(access) => is_new_class(&access.array.kind),
+        ExprKind::PropertyAccess(access) | ExprKind::NullsafePropertyAccess(access) => {
+            is_new_class(&access.object.kind)
+        }
+        ExprKind::StaticPropertyAccess(access) => is_new_class(&access.class.kind),
+        _ => false,
     }
 }
 
@@ -754,8 +848,8 @@ fn chain_operand<'a, 'arena, 'src>(
         ExprKind::Binary(binary) => return Some((binary.left, binary_op_precedence(binary.op).1)),
         ExprKind::Ternary(ternary) => return Some((ternary.condition, PREC_TERNARY + 1)),
         ExprKind::NullCoalesce(nc) => return Some((nc.left, PREC_NULL_COALESCE + 1)),
-        ExprKind::UnaryPostfix(unary) => unary.operand,
-        ExprKind::FunctionCall(call) => call.name,
+        ExprKind::UnaryPostfix(unary) => return Some((unary.operand, PREC_PRIMARY)),
+        ExprKind::FunctionCall(call) => return Some((call.name, PREC_CALLEE)),
         ExprKind::ArrayAccess(access) => access.array,
         ExprKind::PropertyAccess(access) | ExprKind::NullsafePropertyAccess(access) => {
             access.object
@@ -775,5 +869,5 @@ fn chain_operand<'a, 'arena, 'src>(
         },
         _ => return None,
     };
-    Some((operand, PREC_PRIMARY))
+    Some((operand, PREC_DEREFERENCE))
 }

@@ -1,36 +1,41 @@
-use php_ast::ast::{AssignOp, BinaryOp, ExprKind};
+use php_ast::ast::{AssignOp, BinaryOp, ExprKind, UnaryPrefixOp};
 
 /// Precedence levels matching PHP's operator precedence table.
 /// Higher number = tighter binding.
 pub const PREC_LOWEST: i8 = 0;
 pub const PREC_INCLUDE: i8 = 1;
-pub const PREC_PRINT: i8 = 2;
-pub const PREC_YIELD: i8 = 3;
-pub const PREC_YIELD_FROM: i8 = 4;
-pub const PREC_ASSIGN: i8 = 5;
-pub const PREC_TERNARY: i8 = 6;
-pub const PREC_NULL_COALESCE: i8 = 7;
-pub const PREC_PIPE: i8 = 8;
-pub const PREC_LOGICAL_OR_WORD: i8 = 9;
-pub const PREC_LOGICAL_XOR_WORD: i8 = 10;
-pub const PREC_LOGICAL_AND_WORD: i8 = 11;
-pub const PREC_BOOLEAN_OR: i8 = 12;
-pub const PREC_BOOLEAN_AND: i8 = 13;
-pub const PREC_BITWISE_OR: i8 = 14;
-pub const PREC_BITWISE_XOR: i8 = 15;
-pub const PREC_BITWISE_AND: i8 = 16;
-pub const PREC_EQUALITY: i8 = 17;
-pub const PREC_COMPARISON: i8 = 18;
+pub const PREC_LOGICAL_OR_WORD: i8 = 2;
+pub const PREC_LOGICAL_XOR_WORD: i8 = 3;
+pub const PREC_LOGICAL_AND_WORD: i8 = 4;
+pub const PREC_PRINT: i8 = 5;
+pub const PREC_YIELD: i8 = 6;
+pub const PREC_YIELD_FROM: i8 = 7;
+pub const PREC_ASSIGN: i8 = 8;
+pub const PREC_TERNARY: i8 = 9;
+pub const PREC_NULL_COALESCE: i8 = 10;
+pub const PREC_BOOLEAN_OR: i8 = 11;
+pub const PREC_BOOLEAN_AND: i8 = 12;
+pub const PREC_BITWISE_OR: i8 = 13;
+pub const PREC_BITWISE_XOR: i8 = 14;
+pub const PREC_BITWISE_AND: i8 = 15;
+pub const PREC_EQUALITY: i8 = 16;
+pub const PREC_COMPARISON: i8 = 17;
+pub const PREC_PIPE: i8 = 18;
 pub const PREC_CONCAT: i8 = 19;
 pub const PREC_SHIFT: i8 = 20;
 pub const PREC_ADD: i8 = 21;
 pub const PREC_MUL: i8 = 22;
-pub const PREC_INSTANCEOF: i8 = 23;
-pub const PREC_UNARY: i8 = 24;
-pub const PREC_POW: i8 = 25;
-pub const PREC_CAST: i8 = 26;
-pub const PREC_CLONE: i8 = 26;
-pub const PREC_PRIMARY: i8 = 127;
+pub const PREC_BOOLEAN_NOT: i8 = 23;
+pub const PREC_INSTANCEOF: i8 = 24;
+pub const PREC_UNARY: i8 = 25;
+pub const PREC_POW: i8 = 26;
+pub const PREC_CLONE: i8 = 27;
+pub const PREC_PRIMARY: i8 = 125;
+/// The callee of a call: dereferencable, and not a property fetch, which
+/// would read as a method call.
+pub const PREC_CALLEE: i8 = 126;
+/// The operand of `->`, `::`, `[...]` or a call, which must be dereferencable.
+pub const PREC_DEREFERENCE: i8 = 127;
 
 /// Returns (precedence, lhs_precedence, rhs_precedence) for a binary operator.
 /// Left-associative: lhs = prec, rhs = prec + 1
@@ -94,8 +99,9 @@ pub fn expr_precedence(kind: &ExprKind) -> i8 {
         ExprKind::Throw(_) => PREC_ASSIGN,
         ExprKind::Print(_) => PREC_PRINT,
         ExprKind::Include(_, _) => PREC_INCLUDE,
-        ExprKind::Cast(_, _) => PREC_CAST,
+        ExprKind::Cast(_, _) => PREC_UNARY,
         ExprKind::Clone(_) | ExprKind::CloneWith(_, _) => PREC_CLONE,
+        ExprKind::UnaryPrefix(u) if u.op == UnaryPrefixOp::BooleanNot => PREC_BOOLEAN_NOT,
         ExprKind::UnaryPrefix(_) | ExprKind::ErrorSuppress(_) => PREC_UNARY,
         ExprKind::ArrowFunction(_) | ExprKind::Closure(_) => PREC_PRIMARY,
         _ => PREC_PRIMARY,

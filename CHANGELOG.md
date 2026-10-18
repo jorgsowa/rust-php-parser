@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Block and doc comments inside an expression, such as `foo(/** @var T */ $x)`, are printed where they are instead of before the next statement, where a doc comment attached to that statement or declaration. A doc comment printed on its own line no longer doubles the indentation of the line after it (`php-printer`).
 - The printer re-indented doc comments with each continuation `*` under the `/` instead of one column right of it (`php-printer`).
 - Floats below `1e-4` or from `1e15` up are printed in exponent notation; `1e100` and `5e-324` were spelled out to hundreds of digits (`php-printer`).
+- The printer's precedence table placed `and`, `or` and `xor` above assignment, `|>` below `??`, casts above `**` and `!` above `instanceof`, so a tree without `Parenthesized` nodes could print with a different meaning. It now also parenthesizes a property fetch used as a callee (`($a->b)()`), a non-dereferencable operand of `->`, `::`, `[]` or a call, an arrow function followed by more of the expression or on the right of `|>`, a `new` class that is not a variable or name, and a `yield` used as an array or `yield` key. Parsed code that relied on the old table loses redundant parentheses, such as `$a = $b or $c` (`php-printer`).
 
 ---
 

@@ -25,7 +25,7 @@ $r = $a ?: ($b ?: $c);
 $r = ($a == $b) |> $f;
 $r = ($a & $b) |> $f;
 $r = ($a || $b) |> $f;
-($r = ($a or $b)) and $c;
+$r = ($a or $b) and $c;
 $r = $a ?? ($b and $c);
 $r = (print ($a and $b));
 $r = ($a and $b) ? 1 : 2;
