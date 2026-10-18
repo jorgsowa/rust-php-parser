@@ -41,6 +41,7 @@ abstract class Foo {
                   "set_visibility": null,
                   "is_static": false,
                   "is_readonly": false,
+                  "is_abstract": true,
                   "type_hint": {
                     "kind": {
                       "Named": {

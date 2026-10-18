@@ -30,6 +30,7 @@ PHP Fatal error:  Cannot use the abstract modifier on a property in Standard inp
                   "set_visibility": null,
                   "is_static": false,
                   "is_readonly": false,
+                  "is_abstract": true,
                   "type_hint": {
                     "kind": {
                       "Named": {

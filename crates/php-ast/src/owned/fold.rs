@@ -636,6 +636,8 @@ pub fn fold_owned_class_member<F: FoldOwned + ?Sized>(
                 set_visibility: p.set_visibility,
                 is_static: p.is_static,
                 is_readonly: p.is_readonly,
+                is_final: p.is_final,
+                is_abstract: p.is_abstract,
                 type_hint: p.type_hint.as_ref().map(|t| folder.fold_type_hint(t)),
                 default: p.default.as_ref().map(|e| folder.fold_expr(e)),
                 attributes: fold_owned_attrs(folder, &p.attributes),

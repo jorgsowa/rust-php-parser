@@ -30,6 +30,7 @@ class C {
                   "set_visibility": null,
                   "is_static": false,
                   "is_readonly": false,
+                  "is_final": true,
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -73,6 +74,7 @@ class C {
                   "set_visibility": null,
                   "is_static": false,
                   "is_readonly": false,
+                  "is_final": true,
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -116,6 +118,7 @@ class C {
                   "set_visibility": null,
                   "is_static": false,
                   "is_readonly": false,
+                  "is_final": true,
                   "type_hint": {
                     "kind": {
                       "Named": {

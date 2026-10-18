@@ -197,6 +197,7 @@ PHP Fatal error:  Type of parameter $value of hook Test::$prop4::set must be com
                   "set_visibility": null,
                   "is_static": false,
                   "is_readonly": false,
+                  "is_abstract": true,
                   "type_hint": null,
                   "default": null,
                   "attributes": [],

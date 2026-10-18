@@ -1454,6 +1454,12 @@ pub struct PropertyDecl {
     pub is_static: bool,
     /// Whether `readonly`.
     pub is_readonly: bool,
+    /// Whether `final`.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "is_false"))]
+    pub is_final: bool,
+    /// Whether `abstract`.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "is_false"))]
+    pub is_abstract: bool,
     /// Declared type.
     pub type_hint: Option<TypeHint>,
     /// Default value.
@@ -2448,6 +2454,8 @@ fn owned_class_member(m: &arena_ast::ClassMember<'_, '_>) -> ClassMember {
                 set_visibility: p.set_visibility,
                 is_static: p.is_static,
                 is_readonly: p.is_readonly,
+                is_final: p.is_final,
+                is_abstract: p.is_abstract,
                 type_hint: p.type_hint.as_ref().map(owned_type_hint),
                 default: p.default.as_ref().map(owned_expr),
                 attributes: owned_attrs(&p.attributes),
@@ -3566,6 +3574,8 @@ fn av_class_member<'a>(
                     set_visibility: p.set_visibility,
                     is_static: p.is_static,
                     is_readonly: p.is_readonly,
+                    is_final: p.is_final,
+                    is_abstract: p.is_abstract,
                     type_hint: p.type_hint.as_ref().map(|t| av_type_hint(arena, t)),
                     default: p.default.as_ref().map(|e| av_expr(arena, e)),
                     attributes: av_attrs(arena, &p.attributes),

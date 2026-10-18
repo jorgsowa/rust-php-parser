@@ -37,6 +37,7 @@ PHP Fatal error:  Cannot declare property Test::$prop final, the final modifier 
                   "set_visibility": null,
                   "is_static": false,
                   "is_readonly": false,
+                  "is_final": true,
                   "type_hint": null,
                   "default": null,
                   "attributes": []

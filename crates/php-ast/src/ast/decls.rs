@@ -191,6 +191,12 @@ pub struct PropertyDecl<'arena, 'src> {
     pub is_static: bool,
     /// `true` for `readonly`.
     pub is_readonly: bool,
+    /// `true` for `final` (PHP 8.4+).
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "super::is_false"))]
+    pub is_final: bool,
+    /// `true` for `abstract`; only valid with hooks (PHP 8.4+).
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "super::is_false"))]
+    pub is_abstract: bool,
     /// Declared type, if any.
     pub type_hint: Option<TypeHint<'arena, 'src>>,
     /// Default value expression.

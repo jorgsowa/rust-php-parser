@@ -37,6 +37,7 @@ PHP Fatal error:  Cannot use the final modifier on a property in Standard input 
                   "set_visibility": null,
                   "is_static": false,
                   "is_readonly": false,
+                  "is_final": true,
                   "type_hint": null,
                   "default": null,
                   "attributes": []

@@ -202,6 +202,7 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
                   "set_visibility": null,
                   "is_static": false,
                   "is_readonly": false,
+                  "is_abstract": true,
                   "type_hint": null,
                   "default": null,
                   "attributes": [],

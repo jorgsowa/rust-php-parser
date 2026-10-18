@@ -1031,6 +1031,8 @@ fn fold_property_decl<'new, 'src, F: Fold<'src> + ?Sized>(
         set_visibility: prop.set_visibility,
         is_static: prop.is_static,
         is_readonly: prop.is_readonly,
+        is_final: prop.is_final,
+        is_abstract: prop.is_abstract,
         type_hint: prop
             .type_hint
             .as_ref()

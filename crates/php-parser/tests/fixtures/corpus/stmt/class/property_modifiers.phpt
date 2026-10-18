@@ -35,6 +35,7 @@ PHP Fatal error:  Cannot redeclare Test::$prop in Standard input code on line 4
                   "set_visibility": null,
                   "is_static": false,
                   "is_readonly": false,
+                  "is_final": true,
                   "type_hint": null,
                   "default": null,
                   "attributes": []

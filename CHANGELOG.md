@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Breaking:** `PropertyDecl` has new `is_final` and `is_abstract` fields; the PHP 8.4 `final` and `abstract` property modifiers were parsed and then dropped, so the printer lost them too. Both are serialized only when `true` (`php-ast`, `php-rs-parser`, `php-printer`).
+
 ### Fixed
 
 - In a grouped property declaration such as `#[A] public int $a, $b;`, every property now carries the declared visibility, set visibility, type and attributes; only the first one did (`php-rs-parser`).

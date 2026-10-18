@@ -180,6 +180,12 @@ impl<'src> Printer<'src> {
     fn print_property(&mut self, prop: &PropertyDecl) {
         self.print_doc_comment(prop.doc_comment.as_ref());
         self.print_attributes(&prop.attributes);
+        if prop.is_abstract {
+            self.w("abstract ");
+        }
+        if prop.is_final {
+            self.w("final ");
+        }
         if let Some(vis) = &prop.visibility {
             self.w(visibility_str(*vis));
             self.w(" ");
