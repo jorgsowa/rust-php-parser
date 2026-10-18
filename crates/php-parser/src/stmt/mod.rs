@@ -2691,22 +2691,187 @@ fn parse_expression_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         };
     }
 
-    // Check for invalid array append syntax: $arr[] cannot be used as a bare statement
-    if let ExprKind::ArrayAccess(array_access) = &expr.kind {
-        if array_access.index.is_none() {
-            parser.error(ParseError::Forbidden {
-                message: "cannot use [] for reading".into(),
-                span: expr.span,
-            });
-        }
-    }
-
     parser.expect_semicolon("expression");
     let span = Span::new(start, parser.previous_end());
     Stmt {
         kind: StmtKind::Expression(parser.alloc(expr)),
         span,
         doc_comment: None,
+    }
+}
+
+/// Report every `$a[]` that is read or unset; PHP allows it only where it is written to: as
+/// an assignment, increment, `foreach` or destructuring target, by-reference source, call
+/// argument, or the base of such a fetch, as in `$a[][0] = 1`.
+pub(crate) fn check_empty_dims<'arena, 'src>(
+    parser: &mut Parser<'arena, 'src>,
+    stmts: &[Stmt<'arena, 'src>],
+) {
+    use php_ast::visitor::{walk_expr, walk_stmt, Visitor};
+    use std::ops::ControlFlow;
+
+    struct EmptyDims {
+        read: Vec<Span>,
+        unset: Vec<Span>,
+    }
+    impl EmptyDims {
+        fn write(&mut self, expr: &Expr<'_, '_>) {
+            match &expr.kind {
+                ExprKind::ArrayAccess(a) => {
+                    self.write(a.array);
+                    if let Some(index) = a.index {
+                        let _ = self.visit_expr(index);
+                    }
+                }
+                ExprKind::PropertyAccess(p) => {
+                    self.write(p.object);
+                    let _ = self.visit_expr(p.property);
+                }
+                ExprKind::Array(elements) => {
+                    for el in elements.iter() {
+                        if let Some(key) = &el.key {
+                            let _ = self.visit_expr(key);
+                        }
+                        self.write(&el.value);
+                    }
+                }
+                ExprKind::Parenthesized(inner) => self.write(inner),
+                _ => {
+                    let _ = self.visit_expr(expr);
+                }
+            }
+        }
+
+        fn args(&mut self, args: &[Arg<'_, '_>]) {
+            for value in args.iter().filter_map(|a| a.value.as_ref()) {
+                match value.kind {
+                    ExprKind::ArrayAccess(_) | ExprKind::PropertyAccess(_) => self.write(value),
+                    _ => {
+                        let _ = self.visit_expr(value);
+                    }
+                }
+            }
+        }
+
+        fn unset(&mut self, expr: &Expr<'_, '_>) {
+            match &expr.kind {
+                ExprKind::ArrayAccess(a) => {
+                    match a.index {
+                        Some(index) => {
+                            let _ = self.visit_expr(index);
+                        }
+                        None => self.unset.push(expr.span),
+                    }
+                    self.unset(a.array);
+                }
+                ExprKind::PropertyAccess(p) => {
+                    self.unset(p.object);
+                    let _ = self.visit_expr(p.property);
+                }
+                _ => {
+                    let _ = self.visit_expr(expr);
+                }
+            }
+        }
+    }
+    impl<'a, 's> Visitor<'a, 's> for EmptyDims {
+        fn visit_stmt(&mut self, stmt: &Stmt<'a, 's>) -> ControlFlow<()> {
+            match &stmt.kind {
+                StmtKind::Foreach(f) => {
+                    let _ = self.visit_expr(&f.expr);
+                    if let Some(key) = &f.key {
+                        self.write(key);
+                    }
+                    self.write(&f.value);
+                    let _ = self.visit_stmt(f.body);
+                }
+                StmtKind::Unset(exprs) => {
+                    for expr in exprs.iter() {
+                        self.unset(expr);
+                    }
+                }
+                _ => {
+                    let _ = walk_stmt(self, stmt);
+                }
+            }
+            ControlFlow::Continue(())
+        }
+
+        fn visit_expr(&mut self, expr: &Expr<'a, 's>) -> ControlFlow<()> {
+            match &expr.kind {
+                ExprKind::ArrayAccess(a) if a.index.is_none() => {
+                    self.read.push(expr.span);
+                    let _ = self.visit_expr(a.array);
+                }
+                ExprKind::Assign(a) => {
+                    if a.op == AssignOp::Coalesce {
+                        let _ = self.visit_expr(a.target);
+                    } else {
+                        self.write(a.target);
+                    }
+                    if a.by_ref {
+                        self.write(a.value);
+                    } else {
+                        let _ = self.visit_expr(a.value);
+                    }
+                }
+                ExprKind::UnaryPrefix(u)
+                    if matches!(
+                        u.op,
+                        UnaryPrefixOp::PreIncrement | UnaryPrefixOp::PreDecrement
+                    ) =>
+                {
+                    self.write(u.operand)
+                }
+                ExprKind::UnaryPostfix(u) => self.write(u.operand),
+                ExprKind::FunctionCall(c) => {
+                    let _ = self.visit_expr(c.name);
+                    self.args(&c.args);
+                }
+                ExprKind::MethodCall(c) | ExprKind::NullsafeMethodCall(c) => {
+                    let _ = self.visit_expr(c.object);
+                    let _ = self.visit_expr(c.method);
+                    self.args(&c.args);
+                }
+                ExprKind::StaticMethodCall(c) => {
+                    let _ = self.visit_expr(c.class);
+                    let _ = self.visit_expr(c.method);
+                    self.args(&c.args);
+                }
+                ExprKind::StaticMethodCallDynamic(c) => {
+                    let _ = self.visit_expr(c.class);
+                    let _ = self.visit_expr(c.method);
+                    self.args(&c.args);
+                }
+                ExprKind::New(n) => {
+                    let _ = self.visit_expr(n.class);
+                    self.args(&n.args);
+                }
+                _ => {
+                    let _ = walk_expr(self, expr);
+                }
+            }
+            ControlFlow::Continue(())
+        }
+    }
+
+    let mut finder = EmptyDims {
+        read: Vec::new(),
+        unset: Vec::new(),
+    };
+    for stmt in stmts {
+        let _ = finder.visit_stmt(stmt);
+    }
+    for (spans, message) in [
+        (finder.read, "cannot use [] for reading"),
+        (finder.unset, "cannot use [] for unsetting"),
+    ] {
+        for span in spans {
+            parser.error(ParseError::Forbidden {
+                message: message.into(),
+                span,
+            });
+        }
     }
 }
 

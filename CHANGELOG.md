@@ -89,6 +89,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A heredoc or nowdoc whose closing marker is indented with both tabs and spaces is reported (`php-rs-parser`).
 - `A::{$m}()` parsed as a call of the value of the dynamic class constant `A::{$m}`; it is a static method call whose name is `$m`, now `ExprKind::StaticMethodCallDynamic`. It no longer requires PHP 8.3, which applies only to the constant fetch (`php-rs-parser`).
 - A `foreach` key taken by reference, as in `foreach ($a as &$k => $v)`, is reported (`php-rs-parser`).
+- `$a[]` is reported wherever it is read or unset, such as `$x = $a[]`, `isset($a[])`, `foreach ($a[] as $v)`, `$x ??= $a[]` and `unset($a[])`; only an `$a[];` statement was. Writes, `foreach` and destructuring targets, by-reference sources and call arguments keep accepting it (`php-rs-parser`).
 
 ---
 

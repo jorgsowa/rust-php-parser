@@ -132,6 +132,9 @@ pub struct Parser<'arena, 'src> {
     /// Number of `(void)` casts parsed so far; the void-cast misuse walk over the
     /// program only runs when there is one (a rare PHP 8.5 feature).
     pub(crate) void_cast_count: u32,
+    /// Number of `$a[]` fetches parsed so far; the walk that reports reads of them only
+    /// runs when there is one.
+    pub(crate) empty_dim_count: u32,
 }
 
 impl<'arena, 'src> Parser<'arena, 'src> {
@@ -170,6 +173,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             last_scope_close: 0,
             last_stmt_end: 0,
             void_cast_count: 0,
+            empty_dim_count: 0,
         }
     }
 
@@ -213,6 +217,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             last_scope_close: 0,
             last_stmt_end: 0,
             void_cast_count: 0,
+            empty_dim_count: 0,
         }
     }
 
@@ -1755,6 +1760,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         self.validate_namespace_layout(&stmts);
         if self.void_cast_count > 0 {
             crate::stmt::check_void_casts(self, &stmts);
+        }
+        if self.empty_dim_count > 0 {
+            crate::stmt::check_empty_dims(self, &stmts);
         }
 
         let span = if stmts.is_empty() {

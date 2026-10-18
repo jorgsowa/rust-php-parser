@@ -1012,6 +1012,7 @@ pub fn parse_expr_bp<'arena, 'src>(
             check_dereferencable(parser, &lhs, kind);
             parser.advance(); // consume [
             let index = if parser.check(TokenKind::RightBracket) {
+                parser.empty_dim_count += 1;
                 None
             } else {
                 let e = parse_expr(parser);
