@@ -1477,6 +1477,8 @@ pub(crate) fn parse_closure<'arena, 'src>(
     let mut body_stmts = parser.alloc_vec_with_capacity(16);
     let saved_loop_depth = parser.loop_depth;
     parser.loop_depth = 0;
+    let saved_finally_loop_depth = parser.finally_loop_depth.take();
+    let saved_has_goto_or_label = std::mem::take(&mut parser.has_goto_or_label);
     parser.function_depth += 1;
     let saved_by_ref = std::mem::replace(&mut parser.by_ref_function, by_ref);
     let saved_static_vars = std::mem::take(&mut parser.static_vars);
@@ -1490,6 +1492,11 @@ pub(crate) fn parse_closure<'arena, 'src>(
     parser.function_depth -= 1;
     parser.by_ref_function = saved_by_ref;
     parser.static_vars = saved_static_vars;
+    if parser.has_goto_or_label {
+        stmt::check_gotos(parser, &body_stmts);
+    }
+    parser.has_goto_or_label = saved_has_goto_or_label;
+    parser.finally_loop_depth = saved_finally_loop_depth;
     parser.loop_depth = saved_loop_depth;
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();

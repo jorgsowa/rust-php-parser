@@ -86,6 +86,10 @@ pub struct Parser<'arena, 'src> {
     /// Loop/switch nesting depth — tracks valid break/continue targets.
     /// Resets to 0 when crossing a function/method/closure boundary.
     pub(crate) loop_depth: u32,
+    /// `loop_depth` at the innermost enclosing `finally` block of the current function body.
+    pub(crate) finally_loop_depth: Option<u32>,
+    /// True once the current function body or top-level code contains a `goto` or a label.
+    pub(crate) has_goto_or_label: bool,
     /// Function/method/closure nesting depth — tracks valid yield context.
     /// Incremented when entering a function/method/closure, decremented when exiting.
     pub(crate) function_depth: u32,
@@ -166,6 +170,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             depth: 0,
             nesting_depth: 0,
             loop_depth: 0,
+            finally_loop_depth: None,
+            has_goto_or_label: false,
             function_depth: 0,
             by_ref_function: false,
             static_vars: Vec::new(),
@@ -211,6 +217,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             depth: 0,
             nesting_depth,
             loop_depth: 0,
+            finally_loop_depth: None,
+            has_goto_or_label: false,
             function_depth: 0,
             by_ref_function: false,
             static_vars: Vec::new(),
@@ -1857,6 +1865,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
         if self.empty_dim_count > 0 {
             crate::stmt::check_empty_dims(self, &stmts);
+        }
+        if self.has_goto_or_label {
+            crate::stmt::check_gotos(self, &stmts);
         }
 
         let span = if stmts.is_empty() {

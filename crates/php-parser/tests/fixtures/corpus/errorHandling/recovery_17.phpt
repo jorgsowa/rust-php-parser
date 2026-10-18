@@ -36,6 +36,7 @@ expected ';' after echo statement
 expected ';', found 'throw'
 expected ';' after throw statement
 expected ';', found end of file
+'goto' to undefined label 'label'
 ===php_error===
 PHP Parse error:  syntax error, unexpected token "use", expecting "{" in Standard input code on line 3
 ===ast===

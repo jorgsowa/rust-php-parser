@@ -1193,6 +1193,8 @@ fn parse_function<'arena, 'src>(
     let mut body_stmts = parser.alloc_vec_with_capacity(4);
     let saved_loop_depth = parser.loop_depth;
     parser.loop_depth = 0;
+    let saved_finally_loop_depth = parser.finally_loop_depth.take();
+    let saved_has_goto_or_label = std::mem::take(&mut parser.has_goto_or_label);
     parser.function_depth += 1;
     let saved_by_ref = std::mem::replace(&mut parser.by_ref_function, by_ref);
     let saved_static_vars = std::mem::take(&mut parser.static_vars);
@@ -1206,6 +1208,11 @@ fn parse_function<'arena, 'src>(
     parser.function_depth -= 1;
     parser.by_ref_function = saved_by_ref;
     parser.static_vars = saved_static_vars;
+    if parser.has_goto_or_label {
+        check_gotos(parser, &body_stmts);
+    }
+    parser.has_goto_or_label = saved_has_goto_or_label;
+    parser.finally_loop_depth = saved_finally_loop_depth;
     parser.loop_depth = saved_loop_depth;
     parser.expect_closing(TokenKind::RightBrace, open_brace_span);
     let end = parser.previous_end();
@@ -1754,7 +1761,7 @@ fn validate_break_continue<'arena, 'src>(
 ) {
     use php_ast::ExprKind;
 
-    match expr {
+    let levels = match expr {
         None => {
             // Implicit level 1
             if loop_depth == 0 {
@@ -1762,29 +1769,44 @@ fn validate_break_continue<'arena, 'src>(
                     message: format!("Cannot '{}' 1 level", kw).into(),
                     span,
                 });
+                return;
             }
+            1
         }
         Some(e) => {
-            if let ExprKind::Int(n) = e.kind {
-                if n <= 0 {
-                    parser.error(ParseError::Forbidden {
-                        message: format!("'{}' operator accepts only positive integers", kw).into(),
-                        span,
-                    });
-                } else if n as u32 > loop_depth {
-                    let levels = if n == 1 {
-                        "1 level".to_string()
-                    } else {
-                        format!("{} levels", n)
-                    };
-                    parser.error(ParseError::Forbidden {
-                        message: format!("Cannot '{}' {}", kw, levels).into(),
-                        span,
-                    });
-                }
-            }
             // Non-integer expressions: PHP rejects these at compile time too,
             // but that is covered by the php_syntax test (php -l).
+            let ExprKind::Int(n) = e.kind else {
+                return;
+            };
+            if n <= 0 {
+                parser.error(ParseError::Forbidden {
+                    message: format!("'{}' operator accepts only positive integers", kw).into(),
+                    span,
+                });
+                return;
+            }
+            if n as u64 > loop_depth as u64 {
+                let levels = if n == 1 {
+                    "1 level".to_string()
+                } else {
+                    format!("{} levels", n)
+                };
+                parser.error(ParseError::Forbidden {
+                    message: format!("Cannot '{}' {}", kw, levels).into(),
+                    span,
+                });
+                return;
+            }
+            n as u32
+        }
+    };
+    if let Some(finally_loop_depth) = parser.finally_loop_depth {
+        if levels > loop_depth - finally_loop_depth {
+            parser.error(ParseError::Forbidden {
+                message: "jump out of a finally block is disallowed".into(),
+                span,
+            });
         }
     }
 }
@@ -2032,6 +2054,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         let finally_brace_start = parser.start_span();
         parser.expect(TokenKind::LeftBrace);
         let mut finally_stmts = parser.alloc_vec();
+        let saved_finally_loop_depth = parser.finally_loop_depth.replace(parser.loop_depth);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
             finally_stmts.push(parse_stmt(parser));
@@ -2039,6 +2062,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
                 parser.advance();
             }
         }
+        parser.finally_loop_depth = saved_finally_loop_depth;
         parser.expect(TokenKind::RightBrace);
         let finally_body = parser.alloc(Block {
             stmts: finally_stmts,
@@ -2083,11 +2107,178 @@ fn parse_goto<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena
         .map(|t| Ident::new(&src[t.span.start as usize..t.span.end as usize], t.span))
         .unwrap_or(parser.missing_ident());
     parser.expect_statement_end();
+    parser.has_goto_or_label = true;
     let span = Span::new(start, parser.previous_end());
     Stmt {
         kind: StmtKind::Goto(name),
         span,
         doc_comment: None,
+    }
+}
+
+/// Report PHP's errors for the labels and `goto`s of one function body or the top-level code.
+pub(crate) fn check_gotos<'arena, 'src>(
+    parser: &mut Parser<'arena, 'src>,
+    stmts: &[Stmt<'arena, 'src>],
+) {
+    #[derive(Clone, Copy, PartialEq)]
+    enum Frame {
+        LoopOrSwitch(u32),
+        /// Numbered by the position of its `try`, the order in which PHP checks finally blocks.
+        Finally(u32),
+    }
+    struct Jump<'src> {
+        name: &'src str,
+        span: Span,
+        frames: Vec<Frame>,
+    }
+    #[derive(Default)]
+    struct Collector<'src> {
+        frames: Vec<Frame>,
+        next_id: u32,
+        labels: Vec<Jump<'src>>,
+        gotos: Vec<Jump<'src>>,
+        duplicates: Vec<(&'src str, Span)>,
+    }
+    impl<'src> Collector<'src> {
+        fn nested(&mut self, frame: fn(u32) -> Frame, stmts: &[Stmt<'_, 'src>]) {
+            self.frames.push(frame(self.next_id));
+            self.next_id += 1;
+            self.walk(stmts);
+            self.frames.pop();
+        }
+
+        fn walk(&mut self, stmts: &[Stmt<'_, 'src>]) {
+            for stmt in stmts {
+                match &stmt.kind {
+                    StmtKind::Label(name) => {
+                        let Some(name) = name.as_str() else { continue };
+                        if self.labels.iter().any(|l| l.name == name) {
+                            self.duplicates.push((name, stmt.span));
+                        } else {
+                            self.labels.push(Jump {
+                                name,
+                                span: stmt.span,
+                                frames: self.frames.clone(),
+                            });
+                        }
+                    }
+                    StmtKind::Goto(name) => {
+                        let Some(name) = name.as_str() else { continue };
+                        self.gotos.push(Jump {
+                            name,
+                            span: stmt.span,
+                            frames: self.frames.clone(),
+                        });
+                    }
+                    StmtKind::Block(b) => self.walk(&b.stmts),
+                    StmtKind::If(if_) => {
+                        self.walk(std::slice::from_ref(if_.then_branch));
+                        for eb in if_.elseif_branches.iter() {
+                            self.walk(std::slice::from_ref(&eb.body));
+                        }
+                        if let Some(eb) = if_.else_branch {
+                            self.walk(std::slice::from_ref(eb));
+                        }
+                    }
+                    StmtKind::While(w) => {
+                        self.nested(Frame::LoopOrSwitch, std::slice::from_ref(w.body))
+                    }
+                    StmtKind::DoWhile(d) => {
+                        self.nested(Frame::LoopOrSwitch, std::slice::from_ref(d.body))
+                    }
+                    StmtKind::For(f) => {
+                        self.nested(Frame::LoopOrSwitch, std::slice::from_ref(f.body))
+                    }
+                    StmtKind::Foreach(f) => {
+                        self.nested(Frame::LoopOrSwitch, std::slice::from_ref(f.body))
+                    }
+                    StmtKind::Switch(s) => {
+                        self.frames.push(Frame::LoopOrSwitch(self.next_id));
+                        self.next_id += 1;
+                        for c in s.body.cases.iter() {
+                            self.walk(&c.body);
+                        }
+                        self.frames.pop();
+                    }
+                    StmtKind::TryCatch(t) => {
+                        let id = self.next_id;
+                        self.next_id += 1;
+                        self.walk(&t.body.stmts);
+                        for c in t.catches.iter() {
+                            self.walk(&c.body.stmts);
+                        }
+                        if let Some(fin) = t.finally {
+                            self.frames.push(Frame::Finally(id));
+                            self.walk(&fin.stmts);
+                            self.frames.pop();
+                        }
+                    }
+                    StmtKind::Declare(d) => {
+                        if let Some(body) = d.body {
+                            self.walk(std::slice::from_ref(body));
+                        }
+                    }
+                    StmtKind::Namespace(ns) => {
+                        if let NamespaceBody::Braced(b) = &ns.body {
+                            self.walk(&b.stmts);
+                        }
+                    }
+                    // Function and class bodies have labels of their own.
+                    _ => {}
+                }
+            }
+        }
+    }
+
+    let mut collector = Collector::default();
+    collector.walk(stmts);
+    for (name, span) in collector.duplicates {
+        parser.error(ParseError::Forbidden {
+            message: format!("Label '{name}' already defined").into(),
+            span,
+        });
+    }
+    for goto in &collector.gotos {
+        let Some(label) = collector.labels.iter().find(|l| l.name == goto.name) else {
+            parser.error(ParseError::Forbidden {
+                message: format!("'goto' to undefined label '{}'", goto.name).into(),
+                span: goto.span,
+            });
+            continue;
+        };
+        let label_loop = label
+            .frames
+            .iter()
+            .rev()
+            .find(|f| matches!(f, Frame::LoopOrSwitch(_)));
+        if label_loop.is_some_and(|f| !goto.frames.contains(f)) {
+            parser.error(ParseError::Forbidden {
+                message: "'goto' into loop or switch statement is disallowed".into(),
+                span: goto.span,
+            });
+            continue;
+        }
+        let crossed_finally = |from: &Jump, to: &Jump| {
+            from.frames
+                .iter()
+                .filter_map(|f| match f {
+                    Frame::Finally(id) if !to.frames.contains(f) => Some(*id),
+                    _ => None,
+                })
+                .min()
+        };
+        let message = match (crossed_finally(label, goto), crossed_finally(goto, label)) {
+            (Some(into), out) if out.is_none_or(|out| into < out) => {
+                "jump into a finally block is disallowed"
+            }
+            (_, Some(_)) => "jump out of a finally block is disallowed",
+            _ => continue,
+        };
+        parser.error(ParseError::Forbidden {
+            message: message.into(),
+            span: goto.span,
+        });
     }
 }
 
@@ -2723,6 +2914,7 @@ fn parse_expression_stmt_or_label<'arena, 'src>(
     if let ExprKind::Name(Name::Simple { value, span }) = expr.kind {
         if parser.eat(TokenKind::Colon).is_some() {
             let label = Ident::new(value, span);
+            parser.has_goto_or_label = true;
             let span = Span::new(start, parser.previous_end());
             return Stmt {
                 kind: StmtKind::Label(label),
