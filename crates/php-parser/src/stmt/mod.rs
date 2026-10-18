@@ -64,7 +64,9 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
     let doc_start = parser.current_span().start;
     let scope_open_at = parser.scope_boundary();
     let stmt_open_at = parser.stmt_boundary();
+    parser.stmt_depth += 1;
     let mut stmt = parse_stmt_inner(parser);
+    parser.stmt_depth -= 1;
     stmt.doc_comment = parser
         .take_doc_comment_from(doc_start, scope_open_at.max(stmt_open_at))
         .map(|c| parser.alloc(c));
@@ -323,11 +325,18 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
             if parser.peek_kind() == Some(TokenKind::Backslash) {
                 parse_expression_stmt(parser)
             } else {
+                check_top_level(parser, "namespace declarations");
                 parse_namespace(parser)
             }
         }
-        TokenKind::Use => parse_use(parser),
-        TokenKind::Const => parse_const(parser),
+        TokenKind::Use => {
+            check_top_level(parser, "'use' declarations");
+            parse_use(parser)
+        }
+        TokenKind::Const => {
+            check_top_level(parser, "'const' declarations");
+            parse_const(parser)
+        }
         TokenKind::HaltCompiler => parse_halt_compiler(parser),
         TokenKind::Static => {
             // Could be: static $var = ...; or static function or static as expression
@@ -548,6 +557,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             return enum_decl::parse_enum(parser, attributes);
         }
         TokenKind::Const => {
+            check_top_level(parser, "'const' declarations");
             // Attributes on top-level constants require PHP 8.5.
             let attr_span = parser.current_span();
             parser.require_version(PhpVersion::Php85, "attributes on constants", attr_span);
@@ -2159,6 +2169,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         let brace_start = parser.start_span();
         parser.expect(TokenKind::LeftBrace);
         let mut stmts = parser.alloc_vec_with_capacity(16);
+        let saved_stmt_depth = std::mem::take(&mut parser.stmt_depth);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
             stmts.push(parse_stmt(parser));
@@ -2166,6 +2177,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
                 parser.advance();
             }
         }
+        parser.stmt_depth = saved_stmt_depth;
         parser.expect(TokenKind::RightBrace);
         let end = parser.previous_end();
         let block = parser.alloc(Block {
@@ -2189,6 +2201,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         let brace_start = parser.start_span();
         parser.expect(TokenKind::LeftBrace);
         let mut stmts = parser.alloc_vec_with_capacity(16);
+        let saved_stmt_depth = std::mem::take(&mut parser.stmt_depth);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
             stmts.push(parse_stmt(parser));
@@ -2196,6 +2209,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
                 parser.advance();
             }
         }
+        parser.stmt_depth = saved_stmt_depth;
         parser.expect(TokenKind::RightBrace);
         let end = parser.previous_end();
         let block = parser.alloc(Block {
@@ -2498,16 +2512,20 @@ fn parse_const_with_attrs<'arena, 'src>(
     }
 }
 
-fn parse_halt_compiler<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
-    let start = parser.start_span();
-
-    // __halt_compiler must be at the outermost scope
-    if parser.depth > 0 {
+/// Report `what` when the current statement is nested in a block or function body.
+fn check_top_level(parser: &mut Parser<'_, '_>, what: &str) {
+    if parser.stmt_depth > 1 {
         parser.error(ParseError::Forbidden {
-            message: "__halt_compiler() can only be used at the outermost scope".into(),
+            message: format!("{what} can only be used at the outermost scope").into(),
             span: parser.current_span(),
         });
     }
+}
+
+fn parse_halt_compiler<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
+    let start = parser.start_span();
+
+    check_top_level(parser, "__halt_compiler()");
 
     parser.advance(); // consume '__halt_compiler'
     parser.expect(TokenKind::LeftParen);
