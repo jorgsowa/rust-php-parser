@@ -1989,6 +1989,9 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
     let (body, uses_alternative) = if parser.check(TokenKind::Semicolon) {
         parser.advance();
         (None, false)
+    } else if parser.check(TokenKind::CloseTag) {
+        // `?>` ends the statement like `;`; the HTML after it is not the body.
+        (None, false)
     } else if parser.eat(TokenKind::Colon).is_some() {
         let stmts = parse_stmts_until_end(parser, &[TokenKind::EndDeclare]);
         parser.expect(TokenKind::EndDeclare);
