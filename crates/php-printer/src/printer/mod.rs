@@ -270,6 +270,13 @@ impl<'src> Printer<'src> {
     }
 
     pub(crate) fn flush_remaining_comments(&mut self) {
+        if self.comment_cursor < self.comments.len()
+            && !self.in_html_mode
+            && !self.output.is_empty()
+            && !self.output.ends_with('\n')
+        {
+            self.newline();
+        }
         while self.comment_cursor < self.comments.len() {
             let c = &self.comments[self.comment_cursor];
             self.leave_html_for_comment();
