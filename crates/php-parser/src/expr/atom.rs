@@ -71,18 +71,6 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
     instrument::record_parse_atom();
     let kind = parser.current_kind();
 
-    // Keywords followed by backslash are namespace-qualified names (e.g., fn\use(), private\protected\...)
-    // Exclude keywords that have their own parse_atom handlers and can precede `\ClassName` expressions
-    if parser.is_semi_reserved_keyword()
-        && !matches!(
-            kind,
-            TokenKind::New | TokenKind::Throw | TokenKind::Yield_ | TokenKind::Instanceof
-        )
-        && parser.peek_kind() == Some(TokenKind::Backslash)
-    {
-        return name_expr(parser.parse_name());
-    }
-
     // Attributed closure/arrow function: #[Attr] function(...) { } or #[Attr] fn(...) => ...
     if kind == TokenKind::HashBracket {
         let start = parser.start_span();
