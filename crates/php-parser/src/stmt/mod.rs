@@ -1714,6 +1714,31 @@ fn validate_break_continue<'arena, 'src>(
 // Switch statement
 // =============================================================================
 
+/// Consume `?>` followed directly by `<?php`, or by only the newline that
+/// `?>` swallows and then `<?php`, which together act as a `;`.
+fn skip_empty_php_break(parser: &mut Parser<'_, '_>) -> bool {
+    if !parser.check(TokenKind::CloseTag) {
+        return false;
+    }
+    let is_open_tag = |kind: Option<TokenKind>, text: Option<&str>| {
+        kind == Some(TokenKind::OpenTag) && text.is_some_and(|t| t != "<?=")
+    };
+    let tokens = if is_open_tag(parser.peek_kind(), parser.peek_text()) {
+        2
+    } else if parser.peek_kind() == Some(TokenKind::InlineHtml)
+        && matches!(parser.peek_text(), Some("\n" | "\r\n"))
+        && is_open_tag(parser.peek2_kind(), parser.peek2_text())
+    {
+        3
+    } else {
+        return false;
+    };
+    for _ in 0..tokens {
+        parser.advance();
+    }
+    true
+}
+
 fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     instrument::record_parse_switch();
 
@@ -1729,8 +1754,20 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
     if !alt_syntax {
         parser.expect(TokenKind::LeftBrace);
     }
-    while parser.check(TokenKind::Semicolon) {
-        parser.advance();
+    // PHP allows one `;`, or a `?>` acting as one, before the first case.
+    let mut seen_separator = false;
+    loop {
+        let separator_span = parser.current_span();
+        if parser.eat(TokenKind::Semicolon).is_none() && !skip_empty_php_break(parser) {
+            break;
+        }
+        if seen_separator {
+            parser.error(ParseError::Forbidden {
+                message: "Only one ';' may precede the first case of a switch".into(),
+                span: separator_span,
+            });
+        }
+        seen_separator = true;
     }
 
     let end_tokens: &[TokenKind] = if alt_syntax {
