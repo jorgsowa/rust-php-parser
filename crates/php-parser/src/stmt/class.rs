@@ -497,16 +497,41 @@ pub fn parse_class_members<'arena, 'src>(
     members
 }
 
-/// Report a property of a `readonly` class, declared or promoted, that has no type: every
-/// property of such a class is readonly, and a readonly property must be typed.
+fn report_readonly_default(parser: &mut Parser<'_, '_>, span: Span) {
+    parser.error(ParseError::Forbidden {
+        message: "Readonly property cannot have default value".into(),
+        span,
+    });
+}
+
+/// Report a property of a `readonly` class, declared or promoted, that breaks a readonly
+/// property rule; every property of such a class is readonly.
 pub fn check_readonly_class_members(parser: &mut Parser<'_, '_>, members: &[ClassMember<'_, '_>]) {
     for member in members {
         match &member.kind {
-            ClassMemberKind::Property(p) if p.type_hint.is_none() => {
-                parser.error(ParseError::Forbidden {
-                    message: "readonly property must have type".into(),
-                    span: member.span,
-                });
+            // An explicitly readonly property was already checked where it was declared.
+            ClassMemberKind::Property(p) if !p.is_readonly => {
+                if p.is_static {
+                    parser.error(ParseError::Forbidden {
+                        message: "static properties cannot be readonly".into(),
+                        span: member.span,
+                    });
+                }
+                if p.type_hint.is_none() {
+                    parser.error(ParseError::Forbidden {
+                        message: "readonly property must have type".into(),
+                        span: member.span,
+                    });
+                }
+                if let Some(hook) = p.hooks.first() {
+                    parser.error(ParseError::Forbidden {
+                        message: "A readonly property cannot declare hooks".into(),
+                        span: hook.span,
+                    });
+                }
+                if let Some(default) = &p.default {
+                    report_readonly_default(parser, default.span);
+                }
             }
             ClassMemberKind::Method(m)
                 if m.name
@@ -518,10 +543,19 @@ pub fn check_readonly_class_members(parser: &mut Parser<'_, '_>, members: &[Clas
                         || param.set_visibility.is_some()
                         || param.is_readonly
                         || !param.hooks.is_empty();
-                    if promoted && param.type_hint.is_none() {
+                    if !promoted || param.is_readonly {
+                        continue;
+                    }
+                    if param.type_hint.is_none() {
                         parser.error(ParseError::Forbidden {
                             message: "readonly property must have type".into(),
                             span: param.span,
+                        });
+                    }
+                    if let Some(hook) = param.hooks.first() {
+                        parser.error(ParseError::Forbidden {
+                            message: "A readonly property cannot declare hooks".into(),
+                            span: hook.span,
                         });
                     }
                 }
@@ -1164,6 +1198,9 @@ fn parse_property_member<'arena, 'src>(
                 span: hook.span,
             });
         }
+        if let Some(default) = &default {
+            report_readonly_default(parser, default.span);
+        }
     }
     let span = Span::new(member_start, parser.previous_end());
     let first_index = members.len();
@@ -1201,6 +1238,9 @@ fn parse_property_member<'arena, 'src>(
             } else {
                 None
             };
+            if let Some(default) = pdefault.as_ref().filter(|_| mods.is_readonly) {
+                report_readonly_default(parser, default.span);
+            }
 
             let phooks = if parser.check(TokenKind::LeftBrace) {
                 parser.error(ParseError::Forbidden {

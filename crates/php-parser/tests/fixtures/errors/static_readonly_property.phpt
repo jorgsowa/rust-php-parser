@@ -7,6 +7,7 @@ class Foo {
 }
 ===errors===
 static properties cannot be readonly
+Readonly property cannot have default value
 ===php_error===
 PHP Fatal error:  Readonly property Foo::$x cannot have default value in Standard input code on line 3
 ===ast===

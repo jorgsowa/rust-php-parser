@@ -98,6 +98,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enum methods are parsed like class methods. `yield` in an enum method was reported as outside a function, and a `void` return with a value, a by-reference return of a nullsafe chain and `readonly` on the method went unreported (`php-rs-parser`).
 - Every magic method PHP requires to be an instance method, such as `__get`, `__call`, `__toString` or `__invoke`, is reported when `static`, and `__callStatic` and `__set_state` are reported when not `static`; only `__construct`, `__destruct` and `__clone` were checked (`php-rs-parser`).
 - An untyped property or promoted constructor parameter in a `readonly` class, named or anonymous, is reported; every property of such a class is readonly and must have a type (`php-rs-parser`).
+- A readonly property with a default value, including later items of a grouped declaration, is reported, as are a readonly promoted constructor parameter with hooks and an untyped `readonly` promoted parameter without a visibility. In a `readonly` class, static and hooked properties and property defaults are reported too, and an explicitly readonly untyped property is reported once (`php-rs-parser`).
 
 ---
 
