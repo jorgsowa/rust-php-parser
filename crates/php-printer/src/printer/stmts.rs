@@ -186,7 +186,7 @@ impl<'src> Printer<'src> {
                     if !case.body.is_empty() {
                         self.newline();
                         self.indent();
-                        self.print_stmts(&case.body, false);
+                        self.print_stmts_ensure_php(&case.body, false);
                         self.dedent();
                     }
                     self.newline();
