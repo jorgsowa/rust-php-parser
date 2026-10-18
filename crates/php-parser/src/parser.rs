@@ -803,6 +803,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         )
     }
 
+    /// True if `(set)` follows the visibility keyword ending at `keyword_end` with no
+    /// whitespace; PHP lexes `private(set)` as one case-insensitive token.
+    pub(crate) fn set_visibility_follows(&self, keyword_end: u32) -> bool {
+        self.source
+            .get(keyword_end as usize..keyword_end as usize + 5)
+            .is_some_and(|s| s.eq_ignore_ascii_case("(set)"))
+    }
+
     /// Report the token after a trailing comma in a list where PHP allows none.
     pub(crate) fn trailing_comma_error(&mut self, expected: &'static str) {
         self.error(ParseError::Expected {

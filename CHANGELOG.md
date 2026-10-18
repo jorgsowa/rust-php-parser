@@ -71,6 +71,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Syntax errors inside `{$...}` and `${...}` string interpolation were dropped, so `"{$a $b}"`, `"{$a->}"` and `"{$g{0}}"` parsed without errors. They are reported now, as is a `{$...}` holding something other than a variable, property, index or call, such as `"{$a + 1}"` (`php-rs-parser`).
 - `$a = &$b + $c` parsed as `$a = &($b + $c)`; the right side of `= &` is a single variable, so it is `($a = &$b) + $c` as in PHP (`php-rs-parser`).
 - Octal escapes above `\377`, such as `"\400"`, were dropped from the string; PHP keeps the low byte, so `"\400"` is `"\0"` (`php-rs-parser`).
+- `private(set)` and the other set-visibility modifiers are matched like PHP's single case-insensitive token: `private(SET)` was rejected and `private (set)` was accepted (`php-rs-parser`).
 
 ---
 

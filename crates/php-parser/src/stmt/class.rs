@@ -566,7 +566,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
                 parser.advance();
 
                 if visibility.is_none() {
-                    if parser.check(TokenKind::LeftParen) && parser.peek_text() == Some("set") {
+                    if parser.set_visibility_follows(parser.previous_end()) {
                         // Single-keyword asymmetric visibility: e.g. private(set)
                         // Get visibility is implicitly public (visibility stays None).
                         if set_visibility.is_some() {
@@ -577,9 +577,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
                         }
                         asym_vis_span = Some(Span::new(member_start, parser.previous_end()));
                         parser.advance(); // consume (
-                        if parser.current_text() == "set" {
-                            parser.advance(); // consume "set"
-                        }
+                        parser.advance(); // consume "set"
                         parser.expect(TokenKind::RightParen);
                         set_visibility = Some(vis);
                     } else {
@@ -588,8 +586,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
                         if matches!(
                             parser.current_kind(),
                             TokenKind::Public | TokenKind::Protected | TokenKind::Private
-                        ) && parser.peek_kind() == Some(TokenKind::LeftParen)
-                            && parser.peek2_text() == Some("set")
+                        ) && parser.set_visibility_follows(parser.current_span().end)
                         {
                             let set_vis = match parser.current_kind() {
                                 TokenKind::Public => Visibility::Public,
@@ -600,14 +597,12 @@ fn parse_class_member_modifiers<'arena, 'src>(
                             asym_vis_span = Some(Span::new(member_start, parser.previous_end()));
                             parser.advance(); // consume second visibility
                             parser.advance(); // consume (
-                            if parser.current_text() == "set" {
-                                parser.advance(); // consume "set"
-                            }
+                            parser.advance(); // consume "set"
                             parser.expect(TokenKind::RightParen);
                             set_visibility = Some(set_vis);
                         }
                     }
-                } else if parser.check(TokenKind::LeftParen) && parser.peek_text() == Some("set") {
+                } else if parser.set_visibility_follows(parser.previous_end()) {
                     // Two-keyword form where get-visibility was set in a prior iteration:
                     // e.g. the second modifier in `public private(set)` when the first
                     // iteration didn't consume it via the two-keyword lookahead.
@@ -620,9 +615,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
                     // Save span for deferred version check after is_static is known.
                     asym_vis_span = Some(Span::new(member_start, parser.previous_end()));
                     parser.advance(); // consume (
-                    if parser.current_text() == "set" {
-                        parser.advance(); // consume "set"
-                    }
+                    parser.advance(); // consume "set"
                     parser.expect(TokenKind::RightParen);
                     set_visibility = Some(vis);
                 } else {

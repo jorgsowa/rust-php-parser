@@ -1385,9 +1385,7 @@ pub fn parse_param_list<'arena, 'src>(
                     // Disambiguate from a visibility followed by a parenthesized DNF type
                     // hint (`private (A&B)|null $x`) by requiring the literal token `set`
                     // inside the parens.
-                    if parser.peek_kind() == Some(TokenKind::LeftParen)
-                        && parser.peek2_text() == Some("set")
-                    {
+                    if parser.set_visibility_follows(parser.current_span().end) {
                         let span = Span::new(param_start, parser.previous_end());
                         parser.require_version(PhpVersion::Php84, "asymmetric visibility", span);
                         if set_visibility.is_some() {
@@ -1398,9 +1396,7 @@ pub fn parse_param_list<'arena, 'src>(
                         }
                         parser.advance(); // consume visibility keyword
                         parser.advance(); // consume (
-                        if parser.current_text() == "set" {
-                            parser.advance(); // consume "set"
-                        }
+                        parser.advance(); // consume "set"
                         parser.expect(TokenKind::RightParen);
                         set_visibility = Some(vis);
                     } else {
