@@ -10,11 +10,12 @@ pub use misc::*;
 pub use names::*;
 pub use stmts::*;
 
+#[cfg(feature = "serde")]
 pub(crate) fn is_false(b: &bool) -> bool {
     !*b
 }
 
-/// Arena-allocated Vec. Thin newtype over bumpalo::collections::Vec that implements Serialize and Debug.
+/// Arena-allocated Vec. Thin newtype over bumpalo::collections::Vec that implements Debug and, with the `serde` feature, Serialize.
 pub struct ArenaVec<'arena, T>(bumpalo::collections::Vec<'arena, T>);
 
 impl<'arena, T> ArenaVec<'arena, T> {
@@ -65,6 +66,7 @@ impl<'arena, T> std::ops::DerefMut for ArenaVec<'arena, T> {
     }
 }
 
+#[cfg(feature = "serde")]
 impl<'arena, T: serde::Serialize> serde::Serialize for ArenaVec<'arena, T> {
     fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
         self.0.as_slice().serialize(s)

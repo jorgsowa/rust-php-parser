@@ -247,7 +247,7 @@ The arena-form `Visitor`, `ScopeVisitor`, and `Fold<'src>` traits operate direct
 
 ## Versioning
 
-The crates follow [Semantic Versioning](https://semver.org/) for their Rust API. The JSON/serde shape of the AST (from `serde::Serialize`, also used by the playground) is **not** covered: it is meant for debugging, snapshots and tooling, and may change in any release. `Deserialize` is not implemented.
+The crates follow [Semantic Versioning](https://semver.org/) for their Rust API. The JSON/serde shape of the AST (from `serde::Serialize`, behind the opt-in `serde` feature, also used by the playground) is **not** covered: it is meant for debugging, snapshots and tooling, and may change in any release. `Deserialize` is not implemented.
 
 ## Architecture
 

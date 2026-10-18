@@ -1,3 +1,4 @@
+#[cfg(feature = "serde")]
 use serde::Serialize;
 
 use crate::Span;
@@ -5,7 +6,8 @@ use crate::Span;
 use super::{ArenaVec, Expr, Name, Stmt};
 
 /// A comment found in the source file.
-#[derive(Debug, Clone, Copy, Serialize)]
+#[derive(Debug, Clone, Copy)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct Comment<'src> {
     /// Comment syntax form.
     pub kind: CommentKind,
@@ -16,7 +18,8 @@ pub struct Comment<'src> {
 }
 
 /// Distinguishes the four syntactic forms of PHP comment.
-#[derive(Debug, Serialize, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum CommentKind {
     /// `// …` — single-line slash comment
@@ -30,7 +33,8 @@ pub enum CommentKind {
 }
 
 /// The root AST node representing a complete PHP file.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct Program<'arena, 'src> {
     /// Top-level statements.
     pub stmts: ArenaVec<'arena, Stmt<'arena, 'src>>,
@@ -39,7 +43,8 @@ pub struct Program<'arena, 'src> {
 }
 
 /// A call argument, including named, spread and by-reference forms.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct Arg<'arena, 'src> {
     /// Argument name in a named argument (PHP 8.0+).
     pub name: Option<Name<'arena, 'src>>,
@@ -54,7 +59,8 @@ pub struct Arg<'arena, 'src> {
 }
 
 /// A single attribute: `#[Name(args)]`.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct Attribute<'arena, 'src> {
     /// Attribute class name.
     pub name: Name<'arena, 'src>,

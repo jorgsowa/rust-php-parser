@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Breaking:** `serde` is now an opt-in feature instead of an unconditional dependency. `Serialize` impls for the AST and the `php_ast::fingerprint` module require `features = ["serde"]`; the `php-rs-parser` feature of the same name forwards to `php-ast` and `phpdoc-parser`. A plain parse no longer compiles `serde_derive` or expands `Serialize` for the ~170 AST types (`php-ast`, `phpdoc-parser`, `php-rs-parser`).
+
 ---
 
 ## [0.22.0] - 2026-10-18

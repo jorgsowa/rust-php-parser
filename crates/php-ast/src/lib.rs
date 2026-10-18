@@ -33,7 +33,8 @@
 //!
 //! # Serialization
 //!
-//! AST types implement [`serde::Serialize`] for debugging, snapshots and tooling.
+//! With the `serde` feature (off by default), AST types implement [`serde::Serialize`]
+//! for debugging, snapshots and tooling, and the `fingerprint` module is available.
 //! The serialized shape is **not** covered by semver and may change in any release,
 //! for example when a node is renamed. `Deserialize` is not implemented.
 
@@ -41,6 +42,7 @@
 
 /// Arena-allocated AST node types.
 pub mod ast;
+#[cfg(feature = "serde")]
 pub mod fingerprint;
 pub mod fold;
 pub mod owned;

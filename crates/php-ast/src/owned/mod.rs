@@ -37,6 +37,7 @@ pub use visitor::{
 
 use std::fmt;
 
+#[cfg(feature = "serde")]
 use serde::Serialize;
 
 use crate::ast as arena_ast;
@@ -50,17 +51,20 @@ use crate::Span;
 // Serde helpers
 // ---------------------------------------------------------------------------
 
+#[cfg(feature = "serde")]
 fn is_false(b: &bool) -> bool {
     !*b
 }
 
+#[cfg(feature = "serde")]
 fn slice_is_empty<T>(v: &[T]) -> bool {
     v.is_empty()
 }
 
 /// Owned equivalent of [`Ident`](crate::ast::Ident), with the same API and serialized form.
-#[derive(Clone, PartialEq, Eq, Hash, Serialize)]
-#[serde(transparent)]
+#[derive(Clone, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 pub struct Ident(Option<Box<str>>);
 
 impl Ident {
@@ -121,7 +125,8 @@ impl PartialEq<&str> for Ident {
 // ---------------------------------------------------------------------------
 
 /// A possibly qualified PHP name.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct Name {
     /// Name segments split on `\`.
     pub parts: Box<[Box<str>]>,
@@ -136,7 +141,8 @@ pub struct Name {
 // ---------------------------------------------------------------------------
 
 /// A source comment.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct Comment {
     /// Comment syntax.
     pub kind: CommentKind,
@@ -154,7 +160,8 @@ pub struct Comment {
 // ---------------------------------------------------------------------------
 
 /// A type declaration.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct TypeHint {
     /// Type shape.
     pub kind: TypeHintKind,
@@ -178,6 +185,7 @@ pub enum TypeHintKind {
     Intersection(Box<[TypeHint]>),
 }
 
+#[cfg(feature = "serde")]
 impl Serialize for TypeHintKind {
     fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
         match self {
@@ -217,7 +225,8 @@ impl Serialize for TypeHintKind {
 // ---------------------------------------------------------------------------
 
 /// A call argument.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct Arg {
     /// Name of a named argument.
     pub name: Option<Name>,
@@ -232,7 +241,8 @@ pub struct Arg {
 }
 
 /// A `#[...]` attribute.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct Attribute {
     /// Attribute class name.
     pub name: Name,
@@ -247,7 +257,8 @@ pub struct Attribute {
 // ---------------------------------------------------------------------------
 
 /// Root of a parsed file.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct Program {
     /// Top-level statements.
     pub stmts: Box<[Stmt]>,
@@ -260,14 +271,15 @@ pub struct Program {
 // ---------------------------------------------------------------------------
 
 /// A statement.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct Stmt {
     /// Statement kind.
     pub kind: StmtKind,
     /// Source span.
     pub span: Span,
     /// Preceding doc comment.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
 }
 
@@ -292,18 +304,20 @@ impl Stmt {
 }
 
 /// Owned mirror of [`crate::ast::Block`] — a brace-delimited statement block.
-#[derive(Debug, Clone, Serialize)]
-#[serde(transparent)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 pub struct Block {
     /// Statements in the block.
     pub stmts: Box<[Stmt]>,
     /// Source span.
-    #[serde(skip)]
+    #[cfg_attr(feature = "serde", serde(skip))]
     pub span: Span,
 }
 
 /// The kind of a statement.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum StmtKind {
     /// An expression statement.
@@ -373,7 +387,8 @@ pub enum StmtKind {
 }
 
 /// An `if` statement.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct IfStmt {
     /// The `if` condition.
     pub condition: Expr,
@@ -384,15 +399,16 @@ pub struct IfStmt {
     /// The `else` statement, if any.
     pub else_branch: Option<Box<Stmt>>,
     /// The `else` keyword. Not serialized.
-    #[serde(skip)]
+    #[cfg_attr(feature = "serde", serde(skip))]
     pub else_kw_span: Option<Span>,
     /// Whether the `if: ... endif;` syntax is used.
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
     pub uses_alternative: bool,
 }
 
 /// An `elseif` branch.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ElseIfBranch {
     /// The `elseif` condition.
     pub condition: Expr,
@@ -403,19 +419,21 @@ pub struct ElseIfBranch {
 }
 
 /// A `while` loop.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct WhileStmt {
     /// The loop condition.
     pub condition: Expr,
     /// The loop body.
     pub body: Box<Stmt>,
     /// Whether the `while: ... endwhile;` syntax is used.
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
     pub uses_alternative: bool,
 }
 
 /// A `for` loop.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ForStmt {
     /// Initializer expressions.
     pub init: Box<[Expr]>,
@@ -426,12 +444,13 @@ pub struct ForStmt {
     /// The loop body.
     pub body: Box<Stmt>,
     /// Whether the `for: ... endfor;` syntax is used.
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
     pub uses_alternative: bool,
 }
 
 /// A `foreach` loop.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ForeachStmt {
     /// The iterated expression.
     pub expr: Expr,
@@ -442,12 +461,13 @@ pub struct ForeachStmt {
     /// The loop body.
     pub body: Box<Stmt>,
     /// Whether the `foreach: ... endforeach;` syntax is used.
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
     pub uses_alternative: bool,
 }
 
 /// A `do ... while` loop.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct DoWhileStmt {
     /// The loop body.
     pub body: Box<Stmt>,
@@ -456,30 +476,33 @@ pub struct DoWhileStmt {
 }
 
 /// The braced body of a `switch`.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct SwitchBody {
     /// The cases in source order.
     pub cases: Box<[SwitchCase]>,
     /// Source span.
-    #[serde(skip)]
+    #[cfg_attr(feature = "serde", serde(skip))]
     pub span: Span,
 }
 
 /// A `switch` statement.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct SwitchStmt {
     /// The switched-on expression.
     pub expr: Expr,
     /// The braced case list.
-    #[serde(flatten)]
+    #[cfg_attr(feature = "serde", serde(flatten))]
     pub body: SwitchBody,
     /// Whether the `switch: ... endswitch;` syntax is used.
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
     pub uses_alternative: bool,
 }
 
 /// A `case` or `default` arm.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct SwitchCase {
     /// Case value; `None` for `default`.
     pub value: Option<Expr>,
@@ -490,7 +513,8 @@ pub struct SwitchCase {
 }
 
 /// A `try` statement.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct TryCatchStmt {
     /// The `try` block.
     pub body: Box<Block>,
@@ -499,12 +523,13 @@ pub struct TryCatchStmt {
     /// The `finally` block, if any.
     pub finally: Option<Box<Block>>,
     /// The `finally` keyword. Not serialized.
-    #[serde(skip)]
+    #[cfg_attr(feature = "serde", serde(skip))]
     pub finally_kw_span: Option<Span>,
 }
 
 /// A `catch` clause.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct CatchClause {
     /// Caught exception types (multi-catch allowed).
     pub types: Box<[Name]>,
@@ -517,7 +542,8 @@ pub struct CatchClause {
 }
 
 /// A `namespace` declaration.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct NamespaceDecl {
     /// Namespace name; `None` for the global namespace.
     pub name: Option<Name>,
@@ -526,7 +552,8 @@ pub struct NamespaceDecl {
 }
 
 /// Whether a namespace is braced or statement-terminated.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum NamespaceBody {
     /// `namespace X { ... }`.
@@ -536,19 +563,21 @@ pub enum NamespaceBody {
 }
 
 /// A `declare(...)` statement.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct DeclareStmt {
     /// Directive name and value pairs.
     pub directives: Box<[(Box<str>, Expr)]>,
     /// Statement governed by the declare, if any.
     pub body: Option<Box<Stmt>>,
     /// Whether the `declare: ... enddeclare;` syntax is used.
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
     pub uses_alternative: bool,
 }
 
 /// A `use` import declaration.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct UseDecl {
     /// Import kind (class, function or const).
     pub kind: UseKind,
@@ -557,21 +586,23 @@ pub struct UseDecl {
 }
 
 /// One imported name in a `use` declaration.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct UseItem {
     /// The imported name.
     pub name: Name,
     /// Local alias from `as`.
     pub alias: Option<Box<str>>,
     /// Per-item kind in a mixed group use.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub kind: Option<UseKind>,
     /// Source span.
     pub span: Span,
 }
 
 /// One item of a top-level `const` statement.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ConstItem {
     /// Constant name.
     pub name: Ident,
@@ -582,12 +613,13 @@ pub struct ConstItem {
     /// Source span.
     pub span: Span,
     /// Preceding doc comment.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
 }
 
 /// One variable of a `static` statement.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct StaticVar {
     /// Variable name without `$`.
     pub name: Ident,
@@ -602,7 +634,8 @@ pub struct StaticVar {
 // ---------------------------------------------------------------------------
 
 /// An expression.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct Expr {
     /// Expression kind.
     pub kind: ExprKind,
@@ -611,7 +644,8 @@ pub struct Expr {
 }
 
 /// The kind of an expression.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum ExprKind {
     /// Integer literal.
@@ -957,7 +991,8 @@ fn owned_chain_operand_mut(k: &mut ExprKind) -> Option<&mut Expr> {
 }
 
 /// An assignment.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct AssignExpr {
     /// Assignment target.
     pub target: Box<Expr>,
@@ -966,12 +1001,13 @@ pub struct AssignExpr {
     /// Assigned value.
     pub value: Box<Expr>,
     /// Whether this is a reference assignment (`=&`).
-    #[serde(skip_serializing_if = "is_false")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "is_false"))]
     pub by_ref: bool,
 }
 
 /// A binary operation.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct BinaryExpr {
     /// Left operand.
     pub left: Box<Expr>,
@@ -982,7 +1018,8 @@ pub struct BinaryExpr {
 }
 
 /// A prefix unary operation.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct UnaryPrefixExpr {
     /// Operator.
     pub op: UnaryPrefixOp,
@@ -991,7 +1028,8 @@ pub struct UnaryPrefixExpr {
 }
 
 /// A postfix unary operation.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct UnaryPostfixExpr {
     /// Operand.
     pub operand: Box<Expr>,
@@ -1000,7 +1038,8 @@ pub struct UnaryPostfixExpr {
 }
 
 /// A ternary or short-ternary conditional.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct TernaryExpr {
     /// Condition.
     pub condition: Box<Expr>,
@@ -1011,7 +1050,8 @@ pub struct TernaryExpr {
 }
 
 /// A `??` expression.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct NullCoalesceExpr {
     /// Value tested for null.
     pub left: Box<Expr>,
@@ -1020,7 +1060,8 @@ pub struct NullCoalesceExpr {
 }
 
 /// A function call.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct FunctionCallExpr {
     /// Callee expression.
     pub name: Box<Expr>,
@@ -1029,7 +1070,8 @@ pub struct FunctionCallExpr {
 }
 
 /// An element of an array literal.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ArrayElement {
     /// Key expression, if any.
     pub key: Option<Expr>,
@@ -1038,14 +1080,15 @@ pub struct ArrayElement {
     /// Whether the element is spread with `...`.
     pub unpack: bool,
     /// Whether the value is taken by reference.
-    #[serde(skip_serializing_if = "is_false")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "is_false"))]
     pub by_ref: bool,
     /// Source span.
     pub span: Span,
 }
 
 /// An array offset access.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ArrayAccessExpr {
     /// Accessed expression.
     pub array: Box<Expr>,
@@ -1054,7 +1097,8 @@ pub struct ArrayAccessExpr {
 }
 
 /// A `new` expression.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct NewExpr {
     /// Class name or expression.
     pub class: Box<Expr>,
@@ -1063,7 +1107,8 @@ pub struct NewExpr {
 }
 
 /// A `->` or `?->` property access.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct PropertyAccessExpr {
     /// Object expression.
     pub object: Box<Expr>,
@@ -1072,7 +1117,8 @@ pub struct PropertyAccessExpr {
 }
 
 /// A `->` or `?->` method call.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct MethodCallExpr {
     /// Object expression.
     pub object: Box<Expr>,
@@ -1083,7 +1129,8 @@ pub struct MethodCallExpr {
 }
 
 /// A `::` static property or constant access.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct StaticAccessExpr {
     /// Class expression.
     pub class: Box<Expr>,
@@ -1092,7 +1139,8 @@ pub struct StaticAccessExpr {
 }
 
 /// A `Class::method()` call.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct StaticMethodCallExpr {
     /// Class expression.
     pub class: Box<Expr>,
@@ -1103,7 +1151,8 @@ pub struct StaticMethodCallExpr {
 }
 
 /// A static call with a dynamic method expression.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct StaticMethodCallDynamicExpr {
     /// Class expression.
     pub class: Box<Expr>,
@@ -1114,7 +1163,8 @@ pub struct StaticMethodCallDynamicExpr {
 }
 
 /// An anonymous function.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ClosureExpr {
     /// Whether declared `static`.
     pub is_static: bool,
@@ -1133,7 +1183,8 @@ pub struct ClosureExpr {
 }
 
 /// A variable captured by a closure `use` clause.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ClosureUseVar {
     /// Captured variable name without `$`.
     pub name: Box<str>,
@@ -1144,7 +1195,8 @@ pub struct ClosureUseVar {
 }
 
 /// An `fn` arrow function.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ArrowFunctionExpr {
     /// Whether declared `static`.
     pub is_static: bool,
@@ -1161,19 +1213,21 @@ pub struct ArrowFunctionExpr {
 }
 
 /// A `match` expression.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct MatchExpr {
     /// Matched expression.
     pub subject: Box<Expr>,
     /// Match arms.
     pub arms: Box<[MatchArm]>,
     /// The opening `{`. Not serialized.
-    #[serde(skip)]
+    #[cfg_attr(feature = "serde", serde(skip))]
     pub brace_span: Span,
 }
 
 /// An arm of a `match` expression.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct MatchArm {
     /// Conditions; `None` for `default`.
     pub conditions: Option<Box<[Expr]>>,
@@ -1184,7 +1238,8 @@ pub struct MatchArm {
 }
 
 /// A `yield` or `yield from` expression.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct YieldExpr {
     /// Yielded key, if any.
     pub key: Option<Box<Expr>>,
@@ -1195,14 +1250,16 @@ pub struct YieldExpr {
 }
 
 /// A first-class callable, e.g. `f(...)`.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct CallableCreateExpr {
     /// The callee.
     pub kind: CallableCreateKind,
 }
 
 /// The callee of a first-class callable.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum CallableCreateKind {
     /// `f(...)`.
@@ -1231,7 +1288,8 @@ pub enum CallableCreateKind {
 }
 
 /// A segment of an interpolated string.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum StringPart {
     /// Literal text.
@@ -1245,7 +1303,8 @@ pub enum StringPart {
 // ---------------------------------------------------------------------------
 
 /// A function declaration.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct FunctionDecl {
     /// Function name.
     pub name: Ident,
@@ -1260,12 +1319,13 @@ pub struct FunctionDecl {
     /// Attributes on the function.
     pub attributes: Box<[Attribute]>,
     /// Preceding doc comment.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
 }
 
 /// A function or method parameter.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub struct Param {
     /// Parameter name without `$`.
@@ -1289,10 +1349,10 @@ pub struct Param {
     /// Attributes on the parameter.
     pub attributes: Box<[Attribute]>,
     /// Property hooks of a promoted property.
-    #[serde(skip_serializing_if = "slice_is_empty")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "slice_is_empty"))]
     pub hooks: Box<[PropertyHook]>,
     /// Preceding doc comment.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
     /// Source span.
     pub span: Span,
@@ -1323,17 +1383,19 @@ impl Param {
 }
 
 /// The braced member list of a class-like declaration.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ClassBody {
     /// Members in source order.
     pub members: Box<[ClassMember]>,
     /// Source span.
-    #[serde(skip)]
+    #[cfg_attr(feature = "serde", serde(skip))]
     pub span: Span,
 }
 
 /// A class declaration.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ClassDecl {
     /// Class name; `None` for anonymous classes.
     pub name: Option<Ident>,
@@ -1344,17 +1406,18 @@ pub struct ClassDecl {
     /// Implemented interfaces.
     pub implements: Box<[Name]>,
     /// Class body.
-    #[serde(flatten)]
+    #[cfg_attr(feature = "serde", serde(flatten))]
     pub body: ClassBody,
     /// Attributes on the class.
     pub attributes: Box<[Attribute]>,
     /// Preceding doc comment.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
 }
 
 /// A member of a class-like body.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ClassMember {
     /// Member kind.
     pub kind: ClassMemberKind,
@@ -1363,7 +1426,8 @@ pub struct ClassMember {
 }
 
 /// The kind of a class member.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum ClassMemberKind {
     /// Property declaration.
@@ -1377,7 +1441,8 @@ pub enum ClassMemberKind {
 }
 
 /// A property declaration.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct PropertyDecl {
     /// Property name without `$`.
     pub name: Ident,
@@ -1396,15 +1461,16 @@ pub struct PropertyDecl {
     /// Attributes on the property.
     pub attributes: Box<[Attribute]>,
     /// Property hooks.
-    #[serde(skip_serializing_if = "slice_is_empty")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "slice_is_empty"))]
     pub hooks: Box<[PropertyHook]>,
     /// Preceding doc comment.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
 }
 
 /// A property `get` or `set` hook.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct PropertyHook {
     /// `get` or `set`.
     pub kind: PropertyHookKind,
@@ -1423,7 +1489,8 @@ pub struct PropertyHook {
 }
 
 /// The body of a property hook.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum PropertyHookBody {
     /// Braced body.
@@ -1435,7 +1502,8 @@ pub enum PropertyHookBody {
 }
 
 /// A method declaration.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub struct MethodDecl {
     /// Method name.
@@ -1459,7 +1527,7 @@ pub struct MethodDecl {
     /// Attributes on the method.
     pub attributes: Box<[Attribute]>,
     /// Preceding doc comment.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
 }
 
@@ -1484,7 +1552,8 @@ impl MethodDecl {
 }
 
 /// A class constant declaration.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ClassConstDecl {
     /// Constant name.
     pub name: Ident,
@@ -1493,34 +1562,36 @@ pub struct ClassConstDecl {
     /// Whether `final`.
     pub is_final: bool,
     /// Declared type.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub type_hint: Option<Box<TypeHint>>,
     /// Constant value.
     pub value: Expr,
     /// Attributes on the constant.
     pub attributes: Box<[Attribute]>,
     /// Preceding doc comment.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
 }
 
 /// A `use Trait;` clause inside a class.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct TraitUseDecl {
     /// Used traits.
     pub traits: Box<[Name]>,
     /// Rules in the `{ ... }` block.
     pub adaptations: Box<[TraitAdaptation]>,
     /// The opening `{` of the adaptations block. Not serialized.
-    #[serde(skip)]
+    #[cfg_attr(feature = "serde", serde(skip))]
     pub adaptations_brace_span: Option<Span>,
     /// Preceding doc comment.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
 }
 
 /// A `insteadof` or `as` rule in a trait use.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct TraitAdaptation {
     /// Rule kind.
     pub kind: TraitAdaptationKind,
@@ -1529,7 +1600,8 @@ pub struct TraitAdaptation {
 }
 
 /// The kind of trait adaptation rule.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum TraitAdaptationKind {
     /// `A::m insteadof B;`.
@@ -1555,49 +1627,53 @@ pub enum TraitAdaptationKind {
 }
 
 /// An interface declaration.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct InterfaceDecl {
     /// Interface name.
     pub name: Ident,
     /// Extended interfaces.
     pub extends: Box<[Name]>,
     /// Interface body.
-    #[serde(flatten)]
+    #[cfg_attr(feature = "serde", serde(flatten))]
     pub body: ClassBody,
     /// Attributes on the interface.
     pub attributes: Box<[Attribute]>,
     /// Preceding doc comment.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
 }
 
 /// A trait declaration.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct TraitDecl {
     /// Trait name.
     pub name: Ident,
     /// Trait body.
-    #[serde(flatten)]
+    #[cfg_attr(feature = "serde", serde(flatten))]
     pub body: ClassBody,
     /// Attributes on the trait.
     pub attributes: Box<[Attribute]>,
     /// Preceding doc comment.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
 }
 
 /// The braced member list of an enum.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct EnumBody {
     /// Members in source order.
     pub members: Box<[EnumMember]>,
     /// Source span.
-    #[serde(skip)]
+    #[cfg_attr(feature = "serde", serde(skip))]
     pub span: Span,
 }
 
 /// An enum declaration.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct EnumDecl {
     /// Enum name.
     pub name: Ident,
@@ -1606,17 +1682,18 @@ pub struct EnumDecl {
     /// Implemented interfaces.
     pub implements: Box<[Name]>,
     /// Enum body.
-    #[serde(flatten)]
+    #[cfg_attr(feature = "serde", serde(flatten))]
     pub body: EnumBody,
     /// Attributes on the enum.
     pub attributes: Box<[Attribute]>,
     /// Preceding doc comment.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
 }
 
 /// A member of an enum body.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct EnumMember {
     /// Member kind.
     pub kind: EnumMemberKind,
@@ -1625,7 +1702,8 @@ pub struct EnumMember {
 }
 
 /// The kind of an enum member.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum EnumMemberKind {
     /// Enum case.
@@ -1639,7 +1717,8 @@ pub enum EnumMemberKind {
 }
 
 /// An enum `case`.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct EnumCase {
     /// Case name.
     pub name: Ident,
@@ -1648,7 +1727,7 @@ pub struct EnumCase {
     /// Attributes on the case.
     pub attributes: Box<[Attribute]>,
     /// Preceding doc comment.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
 }
 

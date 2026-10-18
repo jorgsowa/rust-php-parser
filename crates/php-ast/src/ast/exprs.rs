@@ -1,8 +1,11 @@
+#[cfg(feature = "serde")]
 use serde::Serialize;
 
 use crate::Span;
 
-use super::{is_false, ArenaVec, Arg, Attribute, Block, ClassDecl, Param, TypeHint};
+#[cfg(feature = "serde")]
+use super::is_false;
+use super::{ArenaVec, Arg, Attribute, Block, ClassDecl, Param, TypeHint};
 
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
 enum NameStrInner<'arena, 'src> {
@@ -96,6 +99,7 @@ impl<'arena, 'src> std::fmt::Debug for NameStr<'arena, 'src> {
     }
 }
 
+#[cfg(feature = "serde")]
 impl<'arena, 'src> serde::Serialize for NameStr<'arena, 'src> {
     fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         self.as_str().serialize(serializer)
@@ -103,7 +107,8 @@ impl<'arena, 'src> serde::Serialize for NameStr<'arena, 'src> {
 }
 
 /// An expression node.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct Expr<'arena, 'src> {
     /// Expression kind.
     pub kind: ExprKind<'arena, 'src>,
@@ -112,7 +117,8 @@ pub struct Expr<'arena, 'src> {
 }
 
 /// The kinds of expression.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum ExprKind<'arena, 'src> {
     /// Integer literal
@@ -307,7 +313,8 @@ impl<'arena, 'src> Expr<'arena, 'src> {
 }
 
 /// The type of a cast expression.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum CastKind {
     /// `(int)` or `(integer)` cast.
@@ -329,7 +336,8 @@ pub enum CastKind {
 }
 
 /// The include/require keyword used.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum IncludeKind {
     /// `include 'file.php'` — emits a warning if the file is not found.
@@ -343,7 +351,8 @@ pub enum IncludeKind {
 }
 
 /// The magic constants.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum MagicConstKind {
     /// `__CLASS__` — name of the current class, or empty string outside a class.
@@ -369,7 +378,8 @@ pub enum MagicConstKind {
 // --- Expression sub-types ---
 
 /// An assignment expression.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct AssignExpr<'arena, 'src> {
     /// Assignment target.
     pub target: &'arena Expr<'arena, 'src>,
@@ -378,12 +388,13 @@ pub struct AssignExpr<'arena, 'src> {
     /// Assigned value.
     pub value: &'arena Expr<'arena, 'src>,
     /// `true` for reference assignment `=&`.
-    #[serde(skip_serializing_if = "is_false")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "is_false"))]
     pub by_ref: bool,
 }
 
 /// Assignment operators.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum AssignOp {
     /// `=`
@@ -417,7 +428,8 @@ pub enum AssignOp {
 }
 
 /// A binary operation.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct BinaryExpr<'arena, 'src> {
     /// Left operand.
     pub left: &'arena Expr<'arena, 'src>,
@@ -428,7 +440,8 @@ pub struct BinaryExpr<'arena, 'src> {
 }
 
 /// Binary operators.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum BinaryOp {
     /// `+`
@@ -490,7 +503,8 @@ pub enum BinaryOp {
 }
 
 /// A prefix unary operation.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct UnaryPrefixExpr<'arena, 'src> {
     /// Prefix operator.
     pub op: UnaryPrefixOp,
@@ -499,7 +513,8 @@ pub struct UnaryPrefixExpr<'arena, 'src> {
 }
 
 /// Prefix unary operators.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum UnaryPrefixOp {
     /// `-expr` — arithmetic negation.
@@ -517,7 +532,8 @@ pub enum UnaryPrefixOp {
 }
 
 /// A postfix unary operation.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct UnaryPostfixExpr<'arena, 'src> {
     /// Operand expression.
     pub operand: &'arena Expr<'arena, 'src>,
@@ -526,7 +542,8 @@ pub struct UnaryPostfixExpr<'arena, 'src> {
 }
 
 /// Postfix unary operators.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum UnaryPostfixOp {
     /// `$x++` — post-increment; returns the current value then increments.
@@ -536,7 +553,8 @@ pub enum UnaryPostfixOp {
 }
 
 /// A ternary `?:` expression.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct TernaryExpr<'arena, 'src> {
     /// Condition tested.
     pub condition: &'arena Expr<'arena, 'src>,
@@ -547,7 +565,8 @@ pub struct TernaryExpr<'arena, 'src> {
 }
 
 /// A `??` expression.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct NullCoalesceExpr<'arena, 'src> {
     /// Value tested for null.
     pub left: &'arena Expr<'arena, 'src>,
@@ -556,7 +575,8 @@ pub struct NullCoalesceExpr<'arena, 'src> {
 }
 
 /// A function call: `name(args)`.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct FunctionCallExpr<'arena, 'src> {
     /// Callee expression.
     pub name: &'arena Expr<'arena, 'src>,
@@ -565,7 +585,8 @@ pub struct FunctionCallExpr<'arena, 'src> {
 }
 
 /// An element of an array literal.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ArrayElement<'arena, 'src> {
     /// Key expression, if any.
     pub key: Option<Expr<'arena, 'src>>,
@@ -574,14 +595,15 @@ pub struct ArrayElement<'arena, 'src> {
     /// `true` for a spread element (`...$x`).
     pub unpack: bool,
     /// `true` for a reference element (`&$x`).
-    #[serde(skip_serializing_if = "is_false")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "is_false"))]
     pub by_ref: bool,
     /// Source range of this node.
     pub span: Span,
 }
 
 /// An array index access: `$a[i]`.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ArrayAccessExpr<'arena, 'src> {
     /// Array being indexed.
     pub array: &'arena Expr<'arena, 'src>,
@@ -592,7 +614,8 @@ pub struct ArrayAccessExpr<'arena, 'src> {
 // --- OOP Expression sub-types ---
 
 /// An instantiation: `new Foo(args)`.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct NewExpr<'arena, 'src> {
     /// Class expression being instantiated.
     pub class: &'arena Expr<'arena, 'src>,
@@ -601,7 +624,8 @@ pub struct NewExpr<'arena, 'src> {
 }
 
 /// A property access: `$obj->prop`.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct PropertyAccessExpr<'arena, 'src> {
     /// Object expression.
     pub object: &'arena Expr<'arena, 'src>,
@@ -610,7 +634,8 @@ pub struct PropertyAccessExpr<'arena, 'src> {
 }
 
 /// A method call: `$obj->method(args)`.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct MethodCallExpr<'arena, 'src> {
     /// Object expression.
     pub object: &'arena Expr<'arena, 'src>,
@@ -621,7 +646,8 @@ pub struct MethodCallExpr<'arena, 'src> {
 }
 
 /// A static member access: `Class::$prop` or `Class::CONST`.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct StaticAccessExpr<'arena, 'src> {
     /// Class expression or name.
     pub class: &'arena Expr<'arena, 'src>,
@@ -630,7 +656,8 @@ pub struct StaticAccessExpr<'arena, 'src> {
 }
 
 /// A static method call: `Class::method(args)`.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct StaticMethodCallExpr<'arena, 'src> {
     /// Class expression or name.
     pub class: &'arena Expr<'arena, 'src>,
@@ -641,7 +668,8 @@ pub struct StaticMethodCallExpr<'arena, 'src> {
 }
 
 /// A static call with a dynamic method name: `Class::$method(args)`.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct StaticMethodCallDynamicExpr<'arena, 'src> {
     /// Class expression or name.
     pub class: &'arena Expr<'arena, 'src>,
@@ -652,7 +680,8 @@ pub struct StaticMethodCallDynamicExpr<'arena, 'src> {
 }
 
 /// A closure: `function() use ($x) { ... }`.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ClosureExpr<'arena, 'src> {
     /// `true` for `static`.
     pub is_static: bool,
@@ -671,7 +700,8 @@ pub struct ClosureExpr<'arena, 'src> {
 }
 
 /// A variable captured in a closure `use` list.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ClosureUseVar<'src> {
     /// Captured variable name without `$`.
     pub name: &'src str,
@@ -682,7 +712,8 @@ pub struct ClosureUseVar<'src> {
 }
 
 /// An arrow function: `fn($x) => expr`.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ArrowFunctionExpr<'arena, 'src> {
     /// `true` for `static`.
     pub is_static: bool,
@@ -699,19 +730,21 @@ pub struct ArrowFunctionExpr<'arena, 'src> {
 }
 
 /// A `match` expression.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct MatchExpr<'arena, 'src> {
     /// Expression being matched.
     pub subject: &'arena Expr<'arena, 'src>,
     /// Match arms in order.
     pub arms: ArenaVec<'arena, MatchArm<'arena, 'src>>,
     /// The `{` in `match (...) {`. Not serialized.
-    #[serde(skip)]
+    #[cfg_attr(feature = "serde", serde(skip))]
     pub brace_span: Span,
 }
 
 /// One arm of a `match`.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct MatchArm<'arena, 'src> {
     /// None for `default`
     pub conditions: Option<ArenaVec<'arena, Expr<'arena, 'src>>>,
@@ -722,7 +755,8 @@ pub struct MatchArm<'arena, 'src> {
 }
 
 /// A `yield` or `yield from` expression.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct YieldExpr<'arena, 'src> {
     /// Yielded key.
     pub key: Option<&'arena Expr<'arena, 'src>>,
@@ -735,14 +769,16 @@ pub struct YieldExpr<'arena, 'src> {
 // --- First-class callable ---
 
 /// A first-class callable expression.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct CallableCreateExpr<'arena, 'src> {
     /// Kind of callable being created.
     pub kind: CallableCreateKind<'arena, 'src>,
 }
 
 /// The callee forms of a first-class callable.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum CallableCreateKind<'arena, 'src> {
     /// `foo(...)`, `$var(...)`, `\Ns\func(...)`
@@ -773,7 +809,8 @@ pub enum CallableCreateKind<'arena, 'src> {
 // --- String interpolation ---
 
 /// A segment of an interpolated string.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum StringPart<'arena, 'src> {
     /// A plain text segment of an interpolated string or heredoc.

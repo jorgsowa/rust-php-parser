@@ -13,14 +13,24 @@ categories = ["parsing", "development-tools"]
 readme = "README.md"
 exclude = ["tests/"]
 
+[package.metadata.docs.rs]
+all-features = true
+
 [dependencies]
 php-ast = { workspace = true }
-serde = { workspace = true }
+serde = { workspace = true, optional = true }
 
 [dev-dependencies]
+# Self dev-dependency so the crate's own tests see the `serde` feature.
+phpdoc-parser = { path = ".", features = ["serde"] }
 serde_json = { workspace = true }
 walkdir    = { workspace = true }
 rayon      = { workspace = true }
+
+[features]
+default = []
+# `Serialize` impls for the docblock AST.
+serde = ["dep:serde", "php-ast/serde"]
 
 [[test]]
 name = "fixtures"

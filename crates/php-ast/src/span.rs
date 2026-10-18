@@ -1,7 +1,9 @@
+#[cfg(feature = "serde")]
 use serde::Serialize;
 
 /// Half-open byte range into the source.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct Span {
     /// Start byte offset.
     pub start: u32,

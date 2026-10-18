@@ -13,6 +13,9 @@ categories = ["parsing", "development-tools", "compilers"]
 readme = "README.md"
 exclude = ["benches/", "tests/", "examples/"]
 
+[package.metadata.docs.rs]
+all-features = true
+
 [dependencies]
 php-ast = { workspace = true }
 php-lexer = { workspace = true }
@@ -24,6 +27,8 @@ memchr = { workspace = true }
 [dev-dependencies]
 # Path-only so `cargo publish` strips it: php-printer dev-depends on this crate.
 php-printer = { path = "../php-printer" }
+# Self dev-dependency so tests, benches and examples see the `serde` feature.
+php-rs-parser = { path = ".", features = ["serde"] }
 serde = { workspace = true }
 serde_json = { workspace = true }
 criterion = { workspace = true }
@@ -38,6 +43,8 @@ pprof = { workspace = true }
 
 [features]
 default = []
+# `Serialize` impls for the AST (forwards to `php-ast` and `phpdoc-parser`).
+serde = ["php-ast/serde", "phpdoc-parser/serde"]
 # Enable lightweight instrumentation for profiling array parsing and expression parsing
 instrument = []
 

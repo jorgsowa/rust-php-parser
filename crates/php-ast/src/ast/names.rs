@@ -1,5 +1,6 @@
 use std::borrow::Cow;
 
+#[cfg(feature = "serde")]
 use serde::Serialize;
 
 use crate::Span;
@@ -80,6 +81,7 @@ impl<'src> std::fmt::Display for Ident<'src> {
     }
 }
 
+#[cfg(feature = "serde")]
 impl<'src> serde::Serialize for Ident<'src> {
     fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
         if self.0.is_empty() {
@@ -258,6 +260,7 @@ impl<'arena, 'src> std::fmt::Debug for Name<'arena, 'src> {
     }
 }
 
+#[cfg(feature = "serde")]
 impl<'arena, 'src> serde::Serialize for Name<'arena, 'src> {
     fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
         use serde::ser::SerializeStruct;
@@ -285,7 +288,8 @@ impl<'arena, 'src> serde::Serialize for Name<'arena, 'src> {
 }
 
 /// How a name is qualified.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum NameKind {
     /// A bare identifier with no namespace separator: `Foo`, `strlen`.
@@ -303,7 +307,8 @@ pub enum NameKind {
 /// PHP built-in type keyword — zero-cost alternative to `Name::Simple` for the
 /// 20 reserved type names. One byte instead of a `Cow<str>` + `Span` in the AST.
 #[repr(u8)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum BuiltinType {
     /// `int` — integer scalar type.
@@ -378,7 +383,8 @@ impl BuiltinType {
 }
 
 /// A type declaration with its source range.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct TypeHint<'arena, 'src> {
     /// Type form.
     pub kind: TypeHintKind<'arena, 'src>,
@@ -408,6 +414,7 @@ pub enum TypeHintKind<'arena, 'src> {
     Intersection(ArenaVec<'arena, TypeHint<'arena, 'src>>),
 }
 
+#[cfg(feature = "serde")]
 impl<'arena, 'src> serde::Serialize for TypeHintKind<'arena, 'src> {
     fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
         match self {

@@ -723,6 +723,7 @@ name = "php-ast"
 version = "0.22.0"
 dependencies = [
  "bumpalo",
+ "php-ast",
  "serde",
  "serde_json",
 ]
@@ -756,6 +757,7 @@ dependencies = [
  "php-ast",
  "php-lexer",
  "php-printer",
+ "php-rs-parser",
  "phpdoc-parser",
  "pprof",
  "rayon",
@@ -783,6 +785,7 @@ name = "phpdoc-parser"
 version = "0.22.0"
 dependencies = [
  "php-ast",
+ "phpdoc-parser",
  "rayon",
  "serde",
  "serde_json",

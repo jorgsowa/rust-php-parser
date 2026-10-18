@@ -50,7 +50,8 @@
 //!
 //! # Serialization
 //!
-//! The AST implements [`serde::Serialize`]; its serialized shape is not covered by semver.
+//! With the `serde` feature (off by default), the AST implements [`serde::Serialize`];
+//! its serialized shape is not covered by semver.
 
 #![warn(missing_docs)]
 

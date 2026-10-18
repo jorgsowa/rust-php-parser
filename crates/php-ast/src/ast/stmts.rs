@@ -1,3 +1,4 @@
+#[cfg(feature = "serde")]
 use serde::Serialize;
 
 use crate::Span;
@@ -7,12 +8,14 @@ use super::{
     Name, TraitDecl,
 };
 
+#[cfg(feature = "serde")]
 fn is_false(b: &bool) -> bool {
     !b
 }
 
 /// A statement node.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct Stmt<'arena, 'src> {
     /// Statement kind.
     pub kind: StmtKind<'arena, 'src>,
@@ -34,7 +37,7 @@ pub struct Stmt<'arena, 'src> {
     /// Stored as a pointer into the arena rather than inline so that the
     /// `None` case (the vast majority of statements) costs only 8 bytes
     /// instead of the 32 bytes an inline `Option<Comment>` would require.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<&'arena Comment<'src>>,
 }
 
@@ -80,19 +83,21 @@ impl<'arena, 'src> Stmt<'arena, 'src> {
 /// *always* braced (functions, methods, closures, `try`/`catch`/`finally`,
 /// braced namespaces, property-hook blocks) — those positions hold a
 /// `&Block` so the "it's a block" invariant is enforced by the type.
-#[derive(Debug, Serialize)]
-#[serde(transparent)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 pub struct Block<'arena, 'src> {
     /// Statements in the block.
     pub stmts: ArenaVec<'arena, Stmt<'arena, 'src>>,
     /// Span covering `{`..`}` (or the keyword-delimited region for the
     /// alternative-syntax blocks reachable only via [`StmtKind::Block`]).
-    #[serde(skip)]
+    #[cfg_attr(feature = "serde", serde(skip))]
     pub span: Span,
 }
 
 /// The kinds of statement.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum StmtKind<'arena, 'src> {
     /// Expression statement (e.g. `foo();`)
@@ -193,7 +198,8 @@ pub enum StmtKind<'arena, 'src> {
 }
 
 /// An `if` statement with optional `elseif`/`else` branches.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct IfStmt<'arena, 'src> {
     /// `if` condition.
     pub condition: Expr<'arena, 'src>,
@@ -204,15 +210,16 @@ pub struct IfStmt<'arena, 'src> {
     /// `else` statement, if any.
     pub else_branch: Option<&'arena Stmt<'arena, 'src>>,
     /// The `else` keyword; `None` when there is no else branch. Not serialized.
-    #[serde(skip)]
+    #[cfg_attr(feature = "serde", serde(skip))]
     pub else_kw_span: Option<Span>,
     /// `true` when written in alternative syntax (`: ... endX;`).
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
     pub uses_alternative: bool,
 }
 
 /// An `elseif` (or `else if`) branch.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ElseIfBranch<'arena, 'src> {
     /// Condition expression.
     pub condition: Expr<'arena, 'src>,
@@ -223,19 +230,21 @@ pub struct ElseIfBranch<'arena, 'src> {
 }
 
 /// A `while` loop.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct WhileStmt<'arena, 'src> {
     /// Condition expression.
     pub condition: Expr<'arena, 'src>,
     /// Loop body.
     pub body: &'arena Stmt<'arena, 'src>,
     /// `true` when written in alternative syntax (`: ... endX;`).
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
     pub uses_alternative: bool,
 }
 
 /// A `for` loop.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ForStmt<'arena, 'src> {
     /// Initializer expressions.
     pub init: ArenaVec<'arena, Expr<'arena, 'src>>,
@@ -246,12 +255,13 @@ pub struct ForStmt<'arena, 'src> {
     /// Loop body.
     pub body: &'arena Stmt<'arena, 'src>,
     /// `true` when written in alternative syntax (`: ... endX;`).
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
     pub uses_alternative: bool,
 }
 
 /// A `foreach` loop.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ForeachStmt<'arena, 'src> {
     /// Expression being iterated.
     pub expr: Expr<'arena, 'src>,
@@ -262,12 +272,13 @@ pub struct ForeachStmt<'arena, 'src> {
     /// Loop body.
     pub body: &'arena Stmt<'arena, 'src>,
     /// `true` when written in alternative syntax (`: ... endX;`).
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
     pub uses_alternative: bool,
 }
 
 /// A `do ... while` loop.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct DoWhileStmt<'arena, 'src> {
     /// Loop body.
     pub body: &'arena Stmt<'arena, 'src>,
@@ -276,30 +287,33 @@ pub struct DoWhileStmt<'arena, 'src> {
 }
 
 /// The case list of a `switch`.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct SwitchBody<'arena, 'src> {
     /// Cases in source order.
     pub cases: ArenaVec<'arena, SwitchCase<'arena, 'src>>,
     /// Source range of this node.
-    #[serde(skip)]
+    #[cfg_attr(feature = "serde", serde(skip))]
     pub span: Span,
 }
 
 /// A `switch` statement.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct SwitchStmt<'arena, 'src> {
     /// Subject expression.
     pub expr: Expr<'arena, 'src>,
     /// Case list, flattened on serialization.
-    #[serde(flatten)]
+    #[cfg_attr(feature = "serde", serde(flatten))]
     pub body: SwitchBody<'arena, 'src>,
     /// `true` when written in alternative syntax (`: ... endX;`).
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
     pub uses_alternative: bool,
 }
 
 /// A `case` or `default` clause.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct SwitchCase<'arena, 'src> {
     /// Case expression; `None` for `default`.
     pub value: Option<Expr<'arena, 'src>>,
@@ -310,7 +324,8 @@ pub struct SwitchCase<'arena, 'src> {
 }
 
 /// A `try` statement with `catch` and `finally` clauses.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct TryCatchStmt<'arena, 'src> {
     /// `try` block.
     pub body: &'arena Block<'arena, 'src>,
@@ -319,12 +334,13 @@ pub struct TryCatchStmt<'arena, 'src> {
     /// `finally` block, if any.
     pub finally: Option<&'arena Block<'arena, 'src>>,
     /// The `finally` keyword; `None` when there is no finally clause. Not serialized.
-    #[serde(skip)]
+    #[cfg_attr(feature = "serde", serde(skip))]
     pub finally_kw_span: Option<Span>,
 }
 
 /// A `catch (Type $e) { ... }` clause.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct CatchClause<'arena, 'src> {
     /// Caught exception types (`A|B`).
     pub types: ArenaVec<'arena, Name<'arena, 'src>>,
@@ -337,7 +353,8 @@ pub struct CatchClause<'arena, 'src> {
 }
 
 /// A `namespace` declaration.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct NamespaceDecl<'arena, 'src> {
     /// Namespace name; `None` for the global namespace.
     pub name: Option<Name<'arena, 'src>>,
@@ -346,7 +363,8 @@ pub struct NamespaceDecl<'arena, 'src> {
 }
 
 /// Whether a namespace is braced or simple.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum NamespaceBody<'arena, 'src> {
     /// `namespace Foo { … }` — braced form; the statements are scoped to this namespace.
@@ -356,19 +374,21 @@ pub enum NamespaceBody<'arena, 'src> {
 }
 
 /// A `declare(...)` statement.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct DeclareStmt<'arena, 'src> {
     /// `name = value` directives.
     pub directives: ArenaVec<'arena, (&'src str, Expr<'arena, 'src>)>,
     /// Statement scoped by the directive, if any.
     pub body: Option<&'arena Stmt<'arena, 'src>>,
     /// `true` when written in alternative syntax (`: ... endX;`).
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
     pub uses_alternative: bool,
 }
 
 /// A `use` import statement.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct UseDecl<'arena, 'src> {
     /// Whether importing classes, functions or constants.
     pub kind: UseKind,
@@ -377,7 +397,8 @@ pub struct UseDecl<'arena, 'src> {
 }
 
 /// What a `use` import brings in.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum UseKind {
     /// `use Foo\Bar` — imports a class, interface, trait, or enum.
@@ -389,21 +410,23 @@ pub enum UseKind {
 }
 
 /// One imported name in a `use` statement.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct UseItem<'arena, 'src> {
     /// Imported name.
     pub name: Name<'arena, 'src>,
     /// Alias after `as`, if any.
     pub alias: Option<&'src str>,
     /// Per-item kind in a mixed group `use Foo\{function bar}`.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub kind: Option<UseKind>,
     /// Source range of this node.
     pub span: Span,
 }
 
 /// One `NAME = value` item of a top-level `const` statement.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ConstItem<'arena, 'src> {
     /// Constant name.
     pub name: Ident<'src>,
@@ -414,12 +437,13 @@ pub struct ConstItem<'arena, 'src> {
     /// Source range of this node.
     pub span: Span,
     /// Preceding `/** */` doc-block, if any.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
 }
 
 /// One variable of a `static $x = 1;` statement.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct StaticVar<'arena, 'src> {
     /// Variable name without `$`.
     pub name: Ident<'src>,

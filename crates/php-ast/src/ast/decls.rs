@@ -1,3 +1,4 @@
+#[cfg(feature = "serde")]
 use serde::Serialize;
 
 use crate::Span;
@@ -5,7 +6,8 @@ use crate::Span;
 use super::{ArenaVec, Attribute, Block, Comment, Expr, Ident, Name, TypeHint};
 
 /// A named function declaration: `function foo() {}`.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct FunctionDecl<'arena, 'src> {
     /// Function name.
     pub name: Ident<'src>,
@@ -25,12 +27,13 @@ pub struct FunctionDecl<'arena, 'src> {
     /// `ParseResult::comments` — the
     /// two collections are disjoint. All other comment forms (line, hash,
     /// block) remain in `ParseResult::comments` regardless of position.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
 }
 
 /// A function, method, closure or hook parameter.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub struct Param<'arena, 'src> {
     /// Parameter name without `$`.
@@ -54,13 +57,13 @@ pub struct Param<'arena, 'src> {
     /// `#[...]` attributes applied to this node.
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     /// Property hooks on a promoted property (PHP 8.4+).
-    #[serde(skip_serializing_if = "ArenaVec::is_empty")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "ArenaVec::is_empty"))]
     pub hooks: ArenaVec<'arena, PropertyHook<'arena, 'src>>,
     /// A doc-block attached directly to this parameter (PHP 8.6 recognizes
     /// this for reflection purposes), either immediately before it or
     /// trailing it up to the comma. Parsed at every version since a bare
     /// comment is legal PHP regardless of target version.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
     /// Source range of this node.
     pub span: Span,
@@ -91,7 +94,8 @@ impl<'arena, 'src> Param<'arena, 'src> {
 }
 
 /// Member visibility modifier.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum Visibility {
     /// `public` — accessible from anywhere.
@@ -103,17 +107,19 @@ pub enum Visibility {
 }
 
 /// The braced member list of a class-like declaration.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ClassBody<'arena, 'src> {
     /// Class members in source order.
     pub members: ArenaVec<'arena, ClassMember<'arena, 'src>>,
     /// Span covering `{` to `}` of the body.
-    #[serde(skip)]
+    #[cfg_attr(feature = "serde", serde(skip))]
     pub span: Span,
 }
 
 /// A class declaration, or the body of an anonymous class.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ClassDecl<'arena, 'src> {
     /// Class name; `None` for anonymous classes.
     pub name: Option<Ident<'src>>,
@@ -124,17 +130,18 @@ pub struct ClassDecl<'arena, 'src> {
     /// Implemented interfaces.
     pub implements: ArenaVec<'arena, Name<'arena, 'src>>,
     /// Class body, flattened on serialization.
-    #[serde(flatten)]
+    #[cfg_attr(feature = "serde", serde(flatten))]
     pub body: ClassBody<'arena, 'src>,
     /// `#[...]` attributes applied to this node.
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     /// Preceding `/** */` doc-block, if any.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
 }
 
 /// Modifiers preceding `class`.
-#[derive(Debug, Clone, Serialize, Default)]
+#[derive(Debug, Clone, Default)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub struct ClassModifiers {
     /// `true` for `abstract class`.
@@ -146,7 +153,8 @@ pub struct ClassModifiers {
 }
 
 /// A member of a class, interface or trait body.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ClassMember<'arena, 'src> {
     /// Kind of member.
     pub kind: ClassMemberKind<'arena, 'src>,
@@ -155,7 +163,8 @@ pub struct ClassMember<'arena, 'src> {
 }
 
 /// The kinds of class-like member.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum ClassMemberKind<'arena, 'src> {
     /// Property declaration.
@@ -169,7 +178,8 @@ pub enum ClassMemberKind<'arena, 'src> {
 }
 
 /// A property declaration: `public int $x = 0;`.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct PropertyDecl<'arena, 'src> {
     /// Property name without `$`.
     pub name: Ident<'src>,
@@ -188,15 +198,16 @@ pub struct PropertyDecl<'arena, 'src> {
     /// `#[...]` attributes applied to this node.
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     /// Property hooks (PHP 8.4+).
-    #[serde(skip_serializing_if = "ArenaVec::is_empty")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "ArenaVec::is_empty"))]
     pub hooks: ArenaVec<'arena, PropertyHook<'arena, 'src>>,
     /// Preceding `/** */` doc-block, if any.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
 }
 
 /// Which accessor a property hook implements.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum PropertyHookKind {
     /// `get` hook — called when the property is read.
@@ -206,7 +217,8 @@ pub enum PropertyHookKind {
 }
 
 /// The body form of a property hook.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum PropertyHookBody<'arena, 'src> {
     /// `{ stmts }` — a full statement block.
@@ -218,7 +230,8 @@ pub enum PropertyHookBody<'arena, 'src> {
 }
 
 /// A property hook: `get { ... }` or `set => ...` (PHP 8.4+).
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct PropertyHook<'arena, 'src> {
     /// Whether this is a `get` or `set` hook.
     pub kind: PropertyHookKind,
@@ -237,7 +250,8 @@ pub struct PropertyHook<'arena, 'src> {
 }
 
 /// A method declaration inside a class-like body.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub struct MethodDecl<'arena, 'src> {
     /// Method name.
@@ -261,7 +275,7 @@ pub struct MethodDecl<'arena, 'src> {
     /// `#[...]` attributes applied to this node.
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     /// Preceding `/** */` doc-block, if any.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
 }
 
@@ -287,7 +301,8 @@ impl<'arena, 'src> MethodDecl<'arena, 'src> {
 }
 
 /// A class constant: `const X = 1;`.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ClassConstDecl<'arena, 'src> {
     /// Constant name.
     pub name: Ident<'src>,
@@ -296,19 +311,20 @@ pub struct ClassConstDecl<'arena, 'src> {
     /// `true` for `final`.
     pub is_final: bool,
     /// Typed class constant type (PHP 8.3+).
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub type_hint: Option<&'arena TypeHint<'arena, 'src>>,
     /// Constant value expression.
     pub value: Expr<'arena, 'src>,
     /// `#[...]` attributes applied to this node.
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     /// Preceding `/** */` doc-block, if any.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
 }
 
 /// A `use` of traits inside a class-like body.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct TraitUseDecl<'arena, 'src> {
     /// Traits being used.
     pub traits: ArenaVec<'arena, Name<'arena, 'src>>,
@@ -316,15 +332,16 @@ pub struct TraitUseDecl<'arena, 'src> {
     pub adaptations: ArenaVec<'arena, TraitAdaptation<'arena, 'src>>,
     /// The `{` that opens the adaptations block; `None` when there are no
     /// adaptations. Not serialized.
-    #[serde(skip)]
+    #[cfg_attr(feature = "serde", serde(skip))]
     pub adaptations_brace_span: Option<Span>,
     /// Preceding `/** */` doc-block, if any.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
 }
 
 /// A single rule in a trait `use` adaptation block.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct TraitAdaptation<'arena, 'src> {
     /// Kind of adaptation rule.
     pub kind: TraitAdaptationKind<'arena, 'src>,
@@ -333,7 +350,8 @@ pub struct TraitAdaptation<'arena, 'src> {
 }
 
 /// The kinds of trait adaptation rule.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum TraitAdaptationKind<'arena, 'src> {
     /// `A::foo insteadof B, C;`
@@ -359,49 +377,53 @@ pub enum TraitAdaptationKind<'arena, 'src> {
 }
 
 /// An interface declaration.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct InterfaceDecl<'arena, 'src> {
     /// Interface name.
     pub name: Ident<'src>,
     /// Extended interfaces.
     pub extends: ArenaVec<'arena, Name<'arena, 'src>>,
     /// Interface body, flattened on serialization.
-    #[serde(flatten)]
+    #[cfg_attr(feature = "serde", serde(flatten))]
     pub body: ClassBody<'arena, 'src>,
     /// `#[...]` attributes applied to this node.
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     /// Preceding `/** */` doc-block, if any.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
 }
 
 /// A trait declaration.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct TraitDecl<'arena, 'src> {
     /// Trait name.
     pub name: Ident<'src>,
     /// Trait body, flattened on serialization.
-    #[serde(flatten)]
+    #[cfg_attr(feature = "serde", serde(flatten))]
     pub body: ClassBody<'arena, 'src>,
     /// `#[...]` attributes applied to this node.
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     /// Preceding `/** */` doc-block, if any.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
 }
 
 /// The braced member list of an enum.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct EnumBody<'arena, 'src> {
     /// Enum members in source order.
     pub members: ArenaVec<'arena, EnumMember<'arena, 'src>>,
     /// Span covering `{` to `}` of the body.
-    #[serde(skip)]
+    #[cfg_attr(feature = "serde", serde(skip))]
     pub span: Span,
 }
 
 /// An enum declaration (PHP 8.1+).
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct EnumDecl<'arena, 'src> {
     /// Enum name.
     pub name: Ident<'src>,
@@ -410,17 +432,18 @@ pub struct EnumDecl<'arena, 'src> {
     /// Implemented interfaces.
     pub implements: ArenaVec<'arena, Name<'arena, 'src>>,
     /// Enum body, flattened on serialization.
-    #[serde(flatten)]
+    #[cfg_attr(feature = "serde", serde(flatten))]
     pub body: EnumBody<'arena, 'src>,
     /// `#[...]` attributes applied to this node.
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     /// Preceding `/** */` doc-block, if any.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
 }
 
 /// A member of an enum body.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct EnumMember<'arena, 'src> {
     /// Kind of member.
     pub kind: EnumMemberKind<'arena, 'src>,
@@ -429,7 +452,8 @@ pub struct EnumMember<'arena, 'src> {
 }
 
 /// The kinds of enum member.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum EnumMemberKind<'arena, 'src> {
     /// An enum case: `case Foo;` or `case Foo = 'foo';` (backed enum).
@@ -443,7 +467,8 @@ pub enum EnumMemberKind<'arena, 'src> {
 }
 
 /// A `case` inside an enum.
-#[derive(Debug, Serialize)]
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct EnumCase<'arena, 'src> {
     /// Case name.
     pub name: Ident<'src>,
@@ -452,6 +477,6 @@ pub struct EnumCase<'arena, 'src> {
     /// `#[...]` attributes applied to this node.
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     /// Preceding `/** */` doc-block, if any.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
 }

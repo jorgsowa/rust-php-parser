@@ -32,6 +32,10 @@ jobs:
       - name: Clippy
         run: cargo clippy --workspace -- -D warnings
 
+      # Library-only build, so dev-dependencies do not turn the `serde` feature on.
+      - name: Clippy without the serde feature
+        run: cargo clippy -p php-ast -p phpdoc-parser -p php-rs-parser -- -D warnings
+
   php-syntax:
     name: PHP Syntax (${{ matrix.php-version }})
     runs-on: ubuntu-latest
