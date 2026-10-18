@@ -276,6 +276,9 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
         };
 
         // Parse body: { stmts } | => expr; | ;
+        let saved_loop_depth = parser.loop_depth;
+        parser.loop_depth = 0;
+        parser.function_depth += 1;
         let body = if parser.check(TokenKind::LeftBrace) {
             let open_brace = parser.expect(TokenKind::LeftBrace);
             let brace_span = open_brace.map(|t| t.span).unwrap_or(parser.current_span());
@@ -301,6 +304,8 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
             parser.expect(TokenKind::Semicolon);
             PropertyHookBody::Abstract
         };
+        parser.function_depth -= 1;
+        parser.loop_depth = saved_loop_depth;
 
         // Check for duplicate hook kinds
         match kind {

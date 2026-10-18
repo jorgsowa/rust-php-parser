@@ -56,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `"\u{D800}"` through `"\u{DFFF}"` were reported as too large; PHP accepts surrogate code points and encodes them as three UTF-8 bytes, which are now stored one char per byte like `\x` escapes (`php-rs-parser`).
 - `$obj->__halt_compiler` was rejected; after `->` and `?->` PHP accepts any name (`php-rs-parser`).
 - A trait adaptation for a method named `namespace`, such as `namespace as bar;`, was read as the start of a `namespace\Foo` name and rejected (`php-rs-parser`).
+- `yield` in a property hook body was reported as outside a function; hooks can be generators. A `break` or `continue` in a hook no longer sees loops around the class (`php-rs-parser`).
 
 ---
 
