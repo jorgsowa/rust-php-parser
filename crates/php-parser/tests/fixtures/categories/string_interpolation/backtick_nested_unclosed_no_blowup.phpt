@@ -2,21 +2,33 @@
 <?php`{$`{$`{$`{$`{$`{$`{$`{$`{$`{$`{$`{$`{$`{$`{$`{$`{$`{$`{$`{$?`{$?[`{$?`{${{$?`{{{$?`{{$?[`~{={${{$?{{
 ===errors===
 unclosed '{' in string interpolation
+expected variable, found backtick string
 unclosed '{' in string interpolation
+expected variable, found backtick string
 unclosed '{' in string interpolation
+expected variable, found backtick string
 unclosed '{' in string interpolation
+expected variable, found backtick string
 unclosed '{' in string interpolation
+expected variable, found backtick string
 unclosed '{' in string interpolation
+expected variable, found backtick string
 unclosed '{' in string interpolation
+expected variable, found backtick string
 unclosed '{' in string interpolation
+expected variable, found backtick string
 unclosed '{' in string interpolation
+expected variable, found backtick string
 unclosed '{' in string interpolation
+expected variable, found '?'
+expected expression
+unclosed '{' in string interpolation
+expected variable, found '?'
 expected expression
 unclosed '{' in string interpolation
 expected expression
-unclosed '{' in string interpolation
 expected expression
-expected expression
+expected variable, found '?'
 expected expression
 unclosed '{' in string interpolation
 expected ':', found '~'
@@ -24,6 +36,7 @@ expected expression
 expected expression
 expected expression
 expected expression
+expected variable, found '?'
 expected expression
 expected expression
 expected expression

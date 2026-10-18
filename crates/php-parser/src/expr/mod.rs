@@ -1189,7 +1189,7 @@ pub(crate) fn parse_member_name<'arena, 'src>(
                 parser.expect(TokenKind::RightBrace);
                 e
             } else {
-                atom::parse_atom_nested(parser)
+                atom::parse_variable_variable_name(parser)
             };
             let span = Span::new(start, parser.previous_end());
             Expr {

@@ -2,6 +2,7 @@
 <?php
 $
 ===errors===
+expected variable, found end of file
 expected expression
 expected ';' after expression
 ===php_error===

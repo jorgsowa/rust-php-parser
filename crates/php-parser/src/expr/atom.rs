@@ -49,6 +49,23 @@ pub(super) fn parse_atom_nested<'arena, 'src>(
     expr
 }
 
+/// Parse what follows the `$` of `$$a`, which PHP requires to be a variable.
+pub(super) fn parse_variable_variable_name<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+) -> Expr<'arena, 'src> {
+    if !matches!(
+        parser.current_kind(),
+        TokenKind::Variable | TokenKind::Dollar
+    ) {
+        parser.error(ParseError::Expected {
+            expected: "variable".into(),
+            found: parser.current_kind().description().into(),
+            span: parser.current_span(),
+        });
+    }
+    parse_atom_nested(parser)
+}
+
 /// Parse an atomic expression (prefix unaries, literals, variables, etc.)
 pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
     instrument::record_parse_atom();
@@ -618,7 +635,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 expr
             } else {
                 // $$var or $$$var — parse_atom handles recursion
-                parse_atom_nested(parser)
+                parse_variable_variable_name(parser)
             };
             let span = Span::new(token.span.start, parser.previous_end());
             Expr {
@@ -1310,7 +1327,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
                 parser.expect(TokenKind::RightBrace);
                 expr
             } else {
-                parse_atom_nested(parser)
+                parse_variable_variable_name(parser)
             };
             let span = Span::new(token.span.start, parser.previous_end());
             Expr {
