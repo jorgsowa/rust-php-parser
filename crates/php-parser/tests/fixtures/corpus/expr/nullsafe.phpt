@@ -204,16 +204,32 @@ new $a?->b;
               {
                 "Expr": {
                   "kind": {
-                    "Variable": "a"
+                    "NullsafePropertyAccess": {
+                      "object": {
+                        "kind": {
+                          "Variable": "a"
+                        },
+                        "span": {
+                          "start": 52,
+                          "end": 54
+                        }
+                      },
+                      "property": {
+                        "kind": {
+                          "Identifier": "b"
+                        },
+                        "span": {
+                          "start": 57,
+                          "end": 58
+                        }
+                      }
+                    }
                   },
                   "span": {
                     "start": 52,
-                    "end": 54
+                    "end": 58
                   }
                 }
-              },
-              {
-                "Literal": "?->b"
               }
             ]
           },

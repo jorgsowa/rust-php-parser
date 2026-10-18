@@ -187,34 +187,34 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                         span: Span::new(var_offset, base_offset + i as u32),
                     };
 
-                    // Check for ->identifier (simple property access)
-                    if i + 2 < len && bytes[i] == b'-' && bytes[i + 1] == b'>' {
-                        let prop_start = i + 2;
-                        if prop_start < len && is_var_start(bytes[prop_start]) {
-                            i = prop_start;
-                            let pname_start = i;
-                            while i < len && is_var_char(bytes[i]) {
+                    // Check for ->identifier or ?->identifier (simple property access)
+                    if let Some((arrow_len, nullsafe)) = property_arrow(bytes, i, version) {
+                        i += arrow_len;
+                        let pname_start = i;
+                        while i < len && is_var_char(bytes[i]) {
+                            i += 1;
+                            while i < len && is_utf8_continuation(bytes[i]) {
                                 i += 1;
-                                while i < len && is_utf8_continuation(bytes[i]) {
-                                    i += 1;
-                                }
                             }
-                            let prop_name: &'src str = &source
-                                [base_offset as usize + pname_start..base_offset as usize + i];
-                            let prop_span =
-                                Span::new(base_offset + pname_start as u32, base_offset + i as u32);
-                            let span = Span::new(var_offset, base_offset + i as u32);
-                            expr = Expr {
-                                kind: ExprKind::PropertyAccess(PropertyAccessExpr {
-                                    object: arena.alloc(expr),
-                                    property: arena.alloc(Expr {
-                                        kind: ExprKind::Identifier(NameStr::__src(prop_name)),
-                                        span: prop_span,
-                                    }),
-                                }),
-                                span,
-                            };
                         }
+                        let prop_name: &'src str =
+                            &source[base_offset as usize + pname_start..base_offset as usize + i];
+                        let prop_span =
+                            Span::new(base_offset + pname_start as u32, base_offset + i as u32);
+                        let span = Span::new(var_offset, base_offset + i as u32);
+                        let access = PropertyAccessExpr {
+                            object: arena.alloc(expr),
+                            property: arena.alloc(Expr {
+                                kind: ExprKind::Identifier(NameStr::__src(prop_name)),
+                                span: prop_span,
+                            }),
+                        };
+                        let kind = if nullsafe {
+                            ExprKind::NullsafePropertyAccess(access)
+                        } else {
+                            ExprKind::PropertyAccess(access)
+                        };
+                        expr = Expr { kind, span };
                     }
                     // Check for [index] (simple array access, only when no ->prop was consumed)
                     else if i < len && bytes[i] == b'[' {
@@ -465,32 +465,32 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                         span: Span::new(var_offset, body_offset + i as u32),
                     };
 
-                    if i + 2 < len && bytes[i] == b'-' && bytes[i + 1] == b'>' {
-                        let prop_start = i + 2;
-                        if prop_start < len && is_var_start(bytes[prop_start]) {
-                            i = prop_start;
-                            let pname_start = i;
-                            while i < len && is_var_char(bytes[i]) {
+                    if let Some((arrow_len, nullsafe)) = property_arrow(bytes, i, version) {
+                        i += arrow_len;
+                        let pname_start = i;
+                        while i < len && is_var_char(bytes[i]) {
+                            i += 1;
+                            while i < len && is_utf8_continuation(bytes[i]) {
                                 i += 1;
-                                while i < len && is_utf8_continuation(bytes[i]) {
-                                    i += 1;
-                                }
                             }
-                            let prop_name: &'src str = &raw_body[pname_start..i];
-                            let prop_span =
-                                Span::new(body_offset + pname_start as u32, body_offset + i as u32);
-                            let span = Span::new(var_offset, body_offset + i as u32);
-                            expr = Expr {
-                                kind: ExprKind::PropertyAccess(PropertyAccessExpr {
-                                    object: arena.alloc(expr),
-                                    property: arena.alloc(Expr {
-                                        kind: ExprKind::Identifier(NameStr::__src(prop_name)),
-                                        span: prop_span,
-                                    }),
-                                }),
-                                span,
-                            };
                         }
+                        let prop_name: &'src str = &raw_body[pname_start..i];
+                        let prop_span =
+                            Span::new(body_offset + pname_start as u32, body_offset + i as u32);
+                        let span = Span::new(var_offset, body_offset + i as u32);
+                        let access = PropertyAccessExpr {
+                            object: arena.alloc(expr),
+                            property: arena.alloc(Expr {
+                                kind: ExprKind::Identifier(NameStr::__src(prop_name)),
+                                span: prop_span,
+                            }),
+                        };
+                        let kind = if nullsafe {
+                            ExprKind::NullsafePropertyAccess(access)
+                        } else {
+                            ExprKind::PropertyAccess(access)
+                        };
+                        expr = Expr { kind, span };
                     } else if i < len && bytes[i] == b'[' {
                         let bracket_start = i;
                         i += 1; // skip [
@@ -831,6 +831,22 @@ pub fn process_heredoc_escapes(inner: &str) -> String {
         }
     }
     out
+}
+
+/// The length of the `->` (or, from PHP 8.0, `?->`) at `i` in a simple
+/// interpolation, and whether it is nullsafe; `None` unless a name follows.
+fn property_arrow(bytes: &[u8], i: usize, version: PhpVersion) -> Option<(usize, bool)> {
+    let rest = bytes.get(i..)?;
+    let (arrow_len, nullsafe) = if rest.starts_with(b"->") {
+        (2, false)
+    } else if rest.starts_with(b"?->") && version >= PhpVersion::Php80 {
+        (3, true)
+    } else {
+        return None;
+    };
+    rest.get(arrow_len)
+        .is_some_and(|&b| is_var_start(b))
+        .then_some((arrow_len, nullsafe))
 }
 
 fn is_var_start(b: u8) -> bool {
