@@ -2009,7 +2009,7 @@ fn parse_goto<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena
     let name = name_token
         .map(|t| Ident::new(&src[t.span.start as usize..t.span.end as usize], t.span))
         .unwrap_or(parser.missing_ident());
-    parser.expect(TokenKind::Semicolon);
+    parser.expect_statement_end();
     let span = Span::new(start, parser.previous_end());
     Stmt {
         kind: StmtKind::Goto(name),
@@ -2092,7 +2092,7 @@ fn parse_unset<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
         }
     }
     parser.expect(TokenKind::RightParen);
-    parser.expect(TokenKind::Semicolon);
+    parser.expect_statement_end();
     let span = Span::new(start, parser.previous_end());
     Stmt {
         kind: StmtKind::Unset(exprs),
@@ -2129,7 +2129,7 @@ fn parse_global<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
         }
         exprs.push(e);
     }
-    parser.expect(TokenKind::Semicolon);
+    parser.expect_statement_end();
     let span = Span::new(start, parser.previous_end());
     Stmt {
         kind: StmtKind::Global(exprs),
@@ -2212,7 +2212,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         }
     } else {
         // Simple namespace: namespace Foo\Bar;
-        parser.expect(TokenKind::Semicolon);
+        parser.expect_statement_end();
         let span = Span::new(start, parser.previous_end());
         Stmt {
             kind: StmtKind::Namespace(parser.alloc(NamespaceDecl {
@@ -2421,7 +2421,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
         }
     }
 
-    parser.expect(TokenKind::Semicolon);
+    parser.expect_statement_end();
     let span = Span::new(start, parser.previous_end());
     Stmt {
         kind: StmtKind::Use(parser.alloc(UseDecl { kind, uses })),
@@ -2489,7 +2489,7 @@ fn parse_const_with_attrs<'arena, 'src>(
         }
     }
 
-    parser.expect(TokenKind::Semicolon);
+    parser.expect_statement_end();
     let span = Span::new(start, parser.previous_end());
     Stmt {
         kind: StmtKind::Const(items),
@@ -2584,7 +2584,7 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
         }
     }
 
-    parser.expect(TokenKind::Semicolon);
+    parser.expect_statement_end();
     let span = Span::new(start, parser.previous_end());
     Stmt {
         kind: StmtKind::StaticVar(vars),

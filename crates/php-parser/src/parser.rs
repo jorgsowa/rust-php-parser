@@ -391,6 +391,15 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
     }
 
+    /// Like `expect(TokenKind::Semicolon)`, but a `?>` also ends the statement (not consumed).
+    pub fn expect_statement_end(&mut self) -> Option<Token> {
+        if self.check(TokenKind::CloseTag) {
+            None
+        } else {
+            self.expect(TokenKind::Semicolon)
+        }
+    }
+
     /// Run `f` with `no_brace_subscript` temporarily set to `true`, then restore
     /// the previous value. Used to parse property/parameter default expressions
     /// without consuming a following `{ get => ...; }` hook block as subscript.
