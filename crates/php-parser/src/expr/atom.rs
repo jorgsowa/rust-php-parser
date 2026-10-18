@@ -152,6 +152,12 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 op_token.kind
             ),
         };
+        if matches!(
+            op,
+            UnaryPrefixOp::PreIncrement | UnaryPrefixOp::PreDecrement
+        ) {
+            super::check_increment_operand(parser, &operand);
+        }
         let span = op_token.span.merge(operand.span);
         return Expr {
             kind: ExprKind::UnaryPrefix(UnaryPrefixExpr {

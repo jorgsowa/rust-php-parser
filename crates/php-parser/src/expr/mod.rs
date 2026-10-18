@@ -82,6 +82,48 @@ fn is_valid_assignment_target(kind: &ExprKind<'_, '_>) -> bool {
     }
 }
 
+/// Report an operand of `++` or `--` that PHP cannot write to.
+pub(crate) fn check_increment_operand(parser: &mut Parser<'_, '_>, operand: &Expr<'_, '_>) {
+    let message = if !matches!(
+        operand.kind,
+        ExprKind::Variable(_)
+            | ExprKind::VariableVariable(_)
+            | ExprKind::ArrayAccess(_)
+            | ExprKind::PropertyAccess(_)
+            | ExprKind::NullsafePropertyAccess(_)
+            | ExprKind::StaticPropertyAccess(_)
+            | ExprKind::StaticPropertyAccessDynamic { .. }
+            | ExprKind::Error
+    ) {
+        "Cannot increment or decrement an expression that is not a variable"
+    } else if is_temporary_write_target(&operand.kind) {
+        "Cannot use temporary expression in write context"
+    } else if has_nullsafe_link(&operand.kind) {
+        "Can't use nullsafe operator in write context"
+    } else {
+        return;
+    };
+    parser.error(ParseError::Forbidden {
+        message: message.into(),
+        span: operand.span,
+    });
+}
+
+/// True if the fetch chain ending in `kind` passes through `?->`.
+fn has_nullsafe_link(kind: &ExprKind<'_, '_>) -> bool {
+    let mut cur = kind;
+    loop {
+        cur = match cur {
+            ExprKind::NullsafePropertyAccess(_) | ExprKind::NullsafeMethodCall(_) => return true,
+            ExprKind::PropertyAccess(a) => &a.object.kind,
+            ExprKind::MethodCall(c) => &c.object.kind,
+            ExprKind::ArrayAccess(a) => &a.array.kind,
+            ExprKind::Parenthesized(inner) => &inner.kind,
+            _ => return false,
+        };
+    }
+}
+
 /// True if a destructuring-element value is itself a writable target.
 /// `Omit` (the gap slot in `[$a, , $c]`) is allowed; nested destructuring
 /// (`Array`) recurses; everything else falls back to the lvalue rule.
@@ -170,7 +212,7 @@ fn check_mixed_list_short_syntax<'arena, 'src>(
 }
 
 /// True if the LHS is an `ArrayAccess` chain whose outermost base is a
-/// statically-known temporary (e.g. array literal `[0,1][0] = …`). PHP
+/// statically-known temporary (an array or string literal, `[0,1][0] = …`). PHP
 /// rejects these with "Cannot use temporary expression in write context".
 fn is_temporary_write_target(kind: &ExprKind<'_, '_>) -> bool {
     let mut cur = kind;
@@ -185,7 +227,15 @@ fn is_temporary_write_target(kind: &ExprKind<'_, '_>) -> bool {
             _ => break,
         }
     }
-    saw_access && matches!(cur, ExprKind::Array(_))
+    saw_access
+        && matches!(
+            cur,
+            ExprKind::Array(_)
+                | ExprKind::String(_)
+                | ExprKind::InterpolatedString(_)
+                | ExprKind::Heredoc { .. }
+                | ExprKind::Nowdoc { .. }
+        )
 }
 
 /// Parse an assignment operator and its RHS, treating `lhs` as the assignment target.
@@ -345,6 +395,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                             op_token.kind
                         ),
                     };
+                    check_increment_operand(parser, &lhs);
                     let span = lhs.span.merge(op_token.span);
                     lhs = Expr {
                         kind: ExprKind::UnaryPostfix(UnaryPostfixExpr {

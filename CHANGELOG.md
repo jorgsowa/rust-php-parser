@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A float literal longer than 256 bytes was cut off before parsing, so `0.000…5` with hundreds of digits read as `0.0` (`php-rs-parser`).
 - `clone $a ** 2` parsed as `clone ($a ** 2)`; `clone` binds tighter than `**`, so it is now `(clone $a) ** 2` (`php-rs-parser`).
 - `"$a?->b"` (and the same in heredocs and backticks) parsed as `$a` followed by the text `?->b`; from PHP 8.0 it is a nullsafe property fetch (`php-rs-parser`).
+- `++` and `--` on something that is not a variable (`--1`, `---$a`, `++f()`), a nullsafe fetch or a temporary are reported, as are writes to an offset of a string literal such as `"a"[0] = 1` (`php-rs-parser`).
 - `Visitor`, `OwnedVisitor` and both scope walkers call `visit_name` for the namespace name, named-argument names and the names in trait `insteadof`/`as` adaptations, matching `Fold`. The default `visit_trait_adaptation` now walks into the adaptation (`php-ast`).
 - `ScopeWalker` and `OwnedScopeWalker` start every walk from the global scope; a reused walker kept the namespace of the previous program, and the class and function names after a `Break` (`php-ast`).
 - `NameResolver` resolves unqualified `true`, `false` and `null` constants to the global name inside a namespace instead of `ResolvedName::Fallback` (`php-ast`).
