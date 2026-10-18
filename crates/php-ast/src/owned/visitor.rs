@@ -982,6 +982,8 @@ fn owned_name_repr(name: &Name) -> Option<String> {
 
 impl<V: OwnedScopeVisitor> OwnedVisitor for OwnedScopeWalker<V> {
     fn visit_program(&mut self, program: &Program) -> ControlFlow<()> {
+        // A previous walk may have ended inside a namespace or after a `Break`.
+        self.scope = OwnedScope::default();
         self.inner.visit_program(program, &self.scope)?;
         walk_owned_program(self, program)
     }

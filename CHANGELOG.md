@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `ScopeWalker` and `OwnedScopeWalker` start every walk from the global scope; a reused walker kept the namespace of the previous program, and the class and function names after a `Break` (`php-ast`).
 - `NameResolver` resolves unqualified `true`, `false` and `null` constants to the global name inside a namespace instead of `ResolvedName::Fallback` (`php-ast`).
 - In a grouped property declaration such as `#[A] public int $a, $b;`, every property now carries the declared visibility, set visibility, type and attributes; only the first one did (`php-rs-parser`).
 

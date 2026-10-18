@@ -463,6 +463,91 @@ fn scope_visitor_tracks_namespace() {
 }
 
 #[test]
+fn scope_walker_resets_scope_between_walks() {
+    with_parsed(
+        "<?php
+        namespace App;
+        class Foo { public function bar(): void {} }",
+        |src, program| {
+            #[derive(Default)]
+            struct ProgramScopes {
+                at_program: Vec<(Option<String>, Option<String>)>,
+            }
+            impl<'arena, 'src> ScopeVisitor<'arena, 'src> for ProgramScopes {
+                fn visit_program(
+                    &mut self,
+                    _program: &Program<'arena, 'src>,
+                    scope: &Scope<'src>,
+                ) -> ControlFlow<()> {
+                    self.at_program.push((
+                        scope.namespace.map(str::to_string),
+                        scope.class_name.map(str::to_string),
+                    ));
+                    ControlFlow::Continue(())
+                }
+                fn visit_class_member(
+                    &mut self,
+                    _member: &ClassMember<'arena, 'src>,
+                    _scope: &Scope<'src>,
+                ) -> ControlFlow<()> {
+                    ControlFlow::Break(())
+                }
+            }
+
+            let mut walker = ScopeWalker::new(src, ProgramScopes::default());
+            assert!(walker.walk(program).is_break());
+            assert!(walker.walk(program).is_break());
+            assert_eq!(
+                walker.into_inner().at_program,
+                vec![(None, None), (None, None)]
+            );
+        },
+    );
+}
+
+#[test]
+fn owned_scope_walker_resets_scope_between_walks() {
+    use php_ast::owned::{
+        ClassMember as OwnedClassMember, OwnedScope, OwnedScopeVisitor, OwnedScopeWalker,
+        Program as OwnedProgram,
+    };
+    #[derive(Default)]
+    struct ProgramScopes {
+        at_program: Vec<(Option<String>, Option<String>)>,
+    }
+    impl OwnedScopeVisitor for ProgramScopes {
+        fn visit_program(
+            &mut self,
+            _program: &OwnedProgram,
+            scope: &OwnedScope,
+        ) -> ControlFlow<()> {
+            self.at_program
+                .push((scope.namespace.clone(), scope.class_name.clone()));
+            ControlFlow::Continue(())
+        }
+        fn visit_class_member(
+            &mut self,
+            _member: &OwnedClassMember,
+            _scope: &OwnedScope,
+        ) -> ControlFlow<()> {
+            ControlFlow::Break(())
+        }
+    }
+    let result = php_rs_parser::parse(
+        "<?php
+        namespace App;
+        class Foo { public function bar(): void {} }",
+    );
+    let mut walker = OwnedScopeWalker::new(ProgramScopes::default());
+    assert!(walker.walk(&result.program).is_break());
+    assert!(walker.walk(&result.program).is_break());
+    assert_eq!(
+        walker.into_inner().at_program,
+        vec![(None, None), (None, None)]
+    );
+}
+
+#[test]
 fn scope_visitor_function_name_inside_body() {
     with_parsed(
         "<?php

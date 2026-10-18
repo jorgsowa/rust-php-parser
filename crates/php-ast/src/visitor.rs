@@ -1113,6 +1113,8 @@ impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> ScopeWalker<'src, V> {
 
 impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> Visitor<'arena, 'src> for ScopeWalker<'src, V> {
     fn visit_program(&mut self, program: &Program<'arena, 'src>) -> ControlFlow<()> {
+        // A previous walk may have ended inside a namespace or after a `Break`.
+        self.scope = Scope::default();
         self.inner.visit_program(program, &self.scope)?;
         walk_program(self, program)
     }
