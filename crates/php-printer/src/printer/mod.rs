@@ -214,6 +214,24 @@ impl<'src> Printer<'src> {
         }
     }
 
+    /// Print pending block and doc comments that precede `before_offset` in
+    /// place, so one inside an expression is not moved in front of the next
+    /// statement, where a doc comment would attach to it. Line comments need a
+    /// newline and are left for the next statement.
+    pub(crate) fn flush_inline_comments(&mut self, before_offset: u32) {
+        use php_ast::CommentKind;
+        while let Some(c) = self.comments.get(self.comment_cursor) {
+            if c.span.start >= before_offset
+                || !matches!(c.kind, CommentKind::Block | CommentKind::Doc)
+            {
+                break;
+            }
+            self.w(c.text);
+            self.w(" ");
+            self.comment_cursor += 1;
+        }
+    }
+
     /// Open a PHP block so a comment is not printed as HTML.
     fn leave_html_for_comment(&mut self) {
         if self.in_html_mode {
@@ -273,9 +291,6 @@ impl<'src> Printer<'src> {
                     self.w(trimmed);
                 }
                 self.newline();
-                if !inline {
-                    self.write_indent();
-                }
             }
             CommentKind::Line | CommentKind::Hash => {
                 let text = comment.text.trim_start().trim_end();

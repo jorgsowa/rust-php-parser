@@ -13,6 +13,7 @@ impl<'src> Printer<'src> {
             self.depth -= 1;
             return;
         }
+        self.flush_inline_comments(expr.span.start);
         let needs_parens = self.open_paren(expr, parent_prec);
         if is_chain(&expr.kind) {
             self.print_chain_operand(expr);
