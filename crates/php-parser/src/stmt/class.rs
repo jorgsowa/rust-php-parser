@@ -109,6 +109,9 @@ pub(super) fn parse_class<'arena, 'src>(
     let brace_start = parser.start_span();
     parser.expect(TokenKind::LeftBrace);
     let members = parse_class_members(parser, false, false);
+    if modifiers.is_readonly {
+        check_readonly_class_members(parser, &members);
+    }
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
 
@@ -492,6 +495,40 @@ pub fn parse_class_members<'arena, 'src>(
     });
     report_redefined_constants(parser, names, None);
     members
+}
+
+/// Report a property of a `readonly` class, declared or promoted, that has no type: every
+/// property of such a class is readonly, and a readonly property must be typed.
+pub fn check_readonly_class_members(parser: &mut Parser<'_, '_>, members: &[ClassMember<'_, '_>]) {
+    for member in members {
+        match &member.kind {
+            ClassMemberKind::Property(p) if p.type_hint.is_none() => {
+                parser.error(ParseError::Forbidden {
+                    message: "readonly property must have type".into(),
+                    span: member.span,
+                });
+            }
+            ClassMemberKind::Method(m)
+                if m.name
+                    .as_str()
+                    .is_some_and(|n| n.eq_ignore_ascii_case("__construct")) =>
+            {
+                for param in m.params.iter() {
+                    let promoted = param.visibility.is_some()
+                        || param.set_visibility.is_some()
+                        || param.is_readonly
+                        || !param.hooks.is_empty();
+                    if promoted && param.type_hint.is_none() {
+                        parser.error(ParseError::Forbidden {
+                            message: "readonly property must have type".into(),
+                            span: param.span,
+                        });
+                    }
+                }
+            }
+            _ => {}
+        }
+    }
 }
 
 /// Report a class constant or enum case named like an earlier one; constant names are

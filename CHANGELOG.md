@@ -97,6 +97,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A promoted constructor parameter with asymmetric visibility is checked like the same property declaration: a set visibility wider than its visibility, as in `private protected(set) string $a`, and a missing type are reported (`php-rs-parser`).
 - Enum methods are parsed like class methods. `yield` in an enum method was reported as outside a function, and a `void` return with a value, a by-reference return of a nullsafe chain and `readonly` on the method went unreported (`php-rs-parser`).
 - Every magic method PHP requires to be an instance method, such as `__get`, `__call`, `__toString` or `__invoke`, is reported when `static`, and `__callStatic` and `__set_state` are reported when not `static`; only `__construct`, `__destruct` and `__clone` were checked (`php-rs-parser`).
+- An untyped property or promoted constructor parameter in a `readonly` class, named or anonymous, is reported; every property of such a class is readonly and must have a type (`php-rs-parser`).
 
 ---
 

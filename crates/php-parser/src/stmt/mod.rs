@@ -11,7 +11,7 @@ mod class;
 mod enum_decl;
 mod trait_use;
 
-pub use class::{parse_class_members, parse_name_list};
+pub use class::{check_readonly_class_members, parse_class_members, parse_name_list};
 
 /// Parse a single statement.
 ///
