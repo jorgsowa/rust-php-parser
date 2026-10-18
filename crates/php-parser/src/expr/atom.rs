@@ -2412,14 +2412,16 @@ fn parse_int_as_float(bytes: &[u8], base: f64) -> f64 {
     value
 }
 
-/// Parse a float literal, skipping underscores, using a fixed-size stack buffer.
+/// Parse a float literal, skipping underscores, using a fixed-size stack buffer
+/// unless the literal does not fit in it.
 pub(super) fn parse_float_no_alloc(text: &str) -> f64 {
-    // 256 bytes covers the longest realistic PHP float literal (significant digits +
-    // exponent) with room to spare; underscores are stripped before copying.
     let mut buf = [0u8; 256];
+    if text.len() > buf.len() {
+        return text.replace('_', "").parse().unwrap_or(0.0);
+    }
     let mut len = 0;
     for &b in text.as_bytes() {
-        if b != b'_' && len < buf.len() {
+        if b != b'_' {
             buf[len] = b;
             len += 1;
         }
