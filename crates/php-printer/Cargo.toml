@@ -11,7 +11,7 @@ description = "Pretty printer for PHP AST — converts parsed AST back to PHP so
 keywords = ["php", "printer", "pretty-printer", "ast"]
 categories = ["development-tools", "text-processing"]
 readme = "README.md"
-exclude = ["tests/"]
+exclude = ["tests/", "examples/"]
 
 [dependencies]
 php-ast.workspace = true
