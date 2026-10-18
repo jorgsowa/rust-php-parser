@@ -365,6 +365,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     span: token.span,
                 }
             } else if super::interpolation::has_interpolation(inner) {
+                note_interpolated_class_refs(parser, inner);
                 // Compute the byte offset of inner within src via pointer arithmetic so
                 // the result is correct regardless of the b/B prefix or termination.
                 let inner_offset = (inner.as_ptr() as usize - src.as_ptr() as usize) as u32;
@@ -443,6 +444,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             let inner = without_open.strip_suffix('`').unwrap_or(without_open);
 
             if super::interpolation::has_interpolation(inner) {
+                note_interpolated_class_refs(parser, inner);
                 let inner_offset = token.span.start + 1;
                 let parts = super::interpolation::parse_interpolated_parts(
                     parser.arena,
@@ -505,6 +507,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 parser.errors_mut(),
             );
             if super::interpolation::has_interpolation(raw_body) {
+                note_interpolated_class_refs(parser, raw_body);
                 if !indent.is_empty() {
                     // Indented heredoc — raw_body is a verbatim source slice but each line
                     // is prefixed with `indent`. The indented sub-parser works directly on
@@ -669,10 +672,12 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         // self, parent, static — used as class names (e.g. self::method())
         TokenKind::Self_ => {
             let token = parser.advance();
+            parser.has_class_keyword_ref = true;
             simple_name_expr("self", token.span)
         }
         TokenKind::Parent_ => {
             let token = parser.advance();
+            parser.has_class_keyword_ref = true;
             simple_name_expr("parent", token.span)
         }
         TokenKind::Static => {
@@ -685,6 +690,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             if parser.check(TokenKind::Fn_) {
                 return parse_arrow_function(parser, true, token.span.start, parser.alloc_vec());
             }
+            parser.has_class_keyword_ref = true;
             simple_name_expr("static", token.span)
         }
 
@@ -1245,13 +1251,19 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         };
 
         let extends = if parser.eat(TokenKind::Extends).is_some() {
-            Some(parser.parse_name())
+            let name = parser.parse_name();
+            stmt::validate_class_ref(parser, &name, "class");
+            Some(name)
         } else {
             None
         };
 
         let implements = if parser.eat(TokenKind::Implements).is_some() {
-            stmt::parse_name_list(parser)
+            let names = stmt::parse_name_list(parser);
+            for name in names.iter() {
+                stmt::validate_class_ref(parser, name, "interface");
+            }
+            names
         } else {
             parser.alloc_vec()
         };
@@ -1307,14 +1319,17 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
     let class = match parser.current_kind() {
         TokenKind::Self_ => {
             let t = parser.advance();
+            parser.has_class_keyword_ref = true;
             simple_name_expr("self", t.span)
         }
         TokenKind::Parent_ => {
             let t = parser.advance();
+            parser.has_class_keyword_ref = true;
             simple_name_expr("parent", t.span)
         }
         TokenKind::Static => {
             let t = parser.advance();
+            parser.has_class_keyword_ref = true;
             simple_name_expr("static", t.span)
         }
         TokenKind::Variable => {
@@ -2504,4 +2519,17 @@ fn simple_name_expr<'arena, 'src>(value: &'src str, span: Span) -> Expr<'arena, 
         kind: ExprKind::Name(Name::Simple { value, span }),
         span,
     }
+}
+
+/// Interpolated expressions are parsed by a sub-parser whose flags are dropped, so look for
+/// the keywords in the string body instead.
+fn note_interpolated_class_refs(parser: &mut Parser<'_, '_>, body: &str) {
+    if parser.has_class_keyword_ref {
+        return;
+    }
+    parser.has_class_keyword_ref = ["self", "parent", "static"].into_iter().any(|kw| {
+        body.as_bytes()
+            .windows(kw.len())
+            .any(|w| w.eq_ignore_ascii_case(kw.as_bytes()))
+    });
 }

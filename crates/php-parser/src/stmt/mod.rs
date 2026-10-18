@@ -11,6 +11,7 @@ mod class;
 mod enum_decl;
 mod trait_use;
 
+pub(crate) use class::validate_class_ref;
 pub use class::{check_readonly_class_members, parse_class_members, parse_name_list};
 
 /// Parse a single statement.
@@ -1999,6 +2000,19 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         while parser.eat(TokenKind::Pipe).is_some() {
             types.push(parser.parse_name());
         }
+        for name in types.iter() {
+            let message = if let Some(text) = fully_qualified_class_keyword(name) {
+                format!("'\\{text}' is an invalid class name")
+            } else if matches!(name, Name::Simple { value, .. } if class_keyword(value).is_some()) {
+                "Bad class name in the catch statement".to_string()
+            } else {
+                continue;
+            };
+            parser.error(ParseError::Forbidden {
+                message: message.into(),
+                span: name.span(),
+            });
+        }
 
         let var = if parser.check(TokenKind::Variable) {
             let t = parser.advance();
@@ -3381,6 +3395,416 @@ pub(crate) fn check_void_casts<'arena, 'src>(
     for span in finder.misused {
         parser.error(ParseError::Forbidden {
             message: "(void) cast cannot be used in an expression context".into(),
+            span,
+        });
+    }
+}
+
+/// The lowercase spelling of `self`, `parent` or `static` written in any case.
+pub(crate) fn class_keyword(name: &str) -> Option<&'static str> {
+    ["self", "parent", "static"]
+        .into_iter()
+        .find(|kw| name.eq_ignore_ascii_case(kw))
+}
+
+/// `\self`, `\parent` or `\static`, which PHP rejects wherever it resolves a class name.
+pub(crate) fn fully_qualified_class_keyword<'src>(name: &Name<'_, 'src>) -> Option<&'src str> {
+    match name {
+        Name::Complex {
+            parts,
+            kind: NameKind::FullyQualified,
+            ..
+        } if parts.len() == 1 && class_keyword(parts[0]).is_some() => Some(parts[0]),
+        _ => None,
+    }
+}
+
+/// Report `self`, `parent` and `static` where PHP knows at compile time that they name no
+/// class: in a function outside any class, or `parent` in a class without one. Closures,
+/// top-level code and traits can be bound to any class, so they are never checked.
+pub(crate) fn check_class_keyword_refs<'arena, 'src>(
+    parser: &mut Parser<'arena, 'src>,
+    stmts: &[Stmt<'arena, 'src>],
+) {
+    use php_ast::visitor::{
+        walk_class_member, walk_enum_member, walk_expr, walk_property_hook, walk_stmt,
+        walk_type_hint, Visitor,
+    };
+    use std::ops::ControlFlow;
+
+    #[derive(Clone, Copy, PartialEq)]
+    enum Code {
+        File,
+        Function,
+        Closure,
+        Method,
+    }
+    #[derive(Clone, Copy)]
+    struct Class {
+        has_parent: bool,
+        is_trait: bool,
+    }
+    #[derive(Clone, Copy)]
+    struct Scope<'src> {
+        code: Code,
+        class: Option<Class>,
+        /// The property and kind of the hook whose body this is.
+        hook: Option<(&'src str, PropertyHookKind)>,
+        /// In a constant expression PHP resolves only `X::class` at compile time.
+        const_expr: bool,
+    }
+    struct ClassRefs<'src> {
+        scope: Scope<'src>,
+        errors: Vec<(String, Span)>,
+    }
+    impl<'src> ClassRefs<'src> {
+        fn scoped(&mut self, scope: Scope<'src>, walk: impl FnOnce(&mut Self)) {
+            let saved = std::mem::replace(&mut self.scope, scope);
+            walk(self);
+            self.scope = saved;
+        }
+
+        fn in_class(&mut self, has_parent: bool, is_trait: bool, walk: impl FnOnce(&mut Self)) {
+            let scope = Scope {
+                code: self.scope.code,
+                class: Some(Class {
+                    has_parent,
+                    is_trait,
+                }),
+                hook: None,
+                const_expr: false,
+            };
+            self.scoped(scope, walk);
+        }
+
+        fn in_code(&mut self, code: Code, walk: impl FnOnce(&mut Self)) {
+            let class = if code == Code::Function {
+                None
+            } else {
+                self.scope.class
+            };
+            let scope = Scope {
+                code,
+                class,
+                hook: None,
+                const_expr: false,
+            };
+            self.scoped(scope, walk);
+        }
+
+        fn hook(&mut self, property: Option<&'src str>, hook: &PropertyHook<'_, 'src>) {
+            let scope = Scope {
+                code: Code::Method,
+                class: self.scope.class,
+                hook: property.map(|p| (p, hook.kind)),
+                const_expr: false,
+            };
+            self.scoped(scope, |v| {
+                let _ = walk_property_hook(v, hook);
+            });
+        }
+
+        /// `parent::$x::get()` calls the parent's hook of the property whose hook this is.
+        fn parent_hook_call(
+            &mut self,
+            class: &Expr<'_, 'src>,
+            method: &Expr<'_, 'src>,
+            span: Span,
+            callable: bool,
+        ) -> bool {
+            let ExprKind::StaticPropertyAccess(prop) = &class.kind else {
+                return false;
+            };
+            let (
+                ExprKind::Name(parent),
+                ExprKind::Identifier(property),
+                ExprKind::Identifier(hook),
+            ) = (&prop.class.kind, &prop.member.kind, &method.kind)
+            else {
+                return false;
+            };
+            let hook_kind = if hook.eq_ignore_ascii_case("get") {
+                PropertyHookKind::Get
+            } else if hook.eq_ignore_ascii_case("set") {
+                PropertyHookKind::Set
+            } else {
+                return false;
+            };
+            if !matches!(
+                parent.kind(),
+                NameKind::Unqualified | NameKind::FullyQualified
+            ) || !matches!(parent.parts_slice(), [p] if p.eq_ignore_ascii_case("parent"))
+            {
+                return false;
+            }
+            let (property, hook) = (property.as_str(), hook.as_str());
+            let message = match self.scope.hook {
+                _ if self.scope.class.is_none() => {
+                    self.errors.push((
+                        "Cannot use \"parent\" when no class scope is active".to_string(),
+                        parent.span(),
+                    ));
+                    return true;
+                }
+                _ if callable => "Cannot create Closure for parent property hook call".to_string(),
+                None => {
+                    format!("Must not use parent::${property}::{hook}() outside a property hook")
+                }
+                Some((active, _)) if active != property => format!(
+                    "Must not use parent::${property}::{hook}() in a different property (${active})"
+                ),
+                Some((_, active)) if active != hook_kind => format!(
+                    "Must not use parent::${property}::{hook}() in a different property hook ({})",
+                    if active == PropertyHookKind::Get {
+                        "get"
+                    } else {
+                        "set"
+                    }
+                ),
+                Some(_) => return true,
+            };
+            self.errors.push((message, span));
+            true
+        }
+
+        fn const_expr(&mut self, expr: &Expr<'_, 'src>) {
+            let scope = Scope {
+                const_expr: true,
+                ..self.scope
+            };
+            self.scoped(scope, |v| {
+                let _ = v.visit_expr(expr);
+            });
+        }
+
+        fn attributes(&mut self, attributes: &[Attribute<'_, 'src>]) {
+            for attribute in attributes {
+                let _ = self.visit_attribute(attribute);
+            }
+        }
+
+        fn keyword(&mut self, keyword: &str, span: Span) {
+            let scope = self.scope;
+            let scope_known = match (scope.code, scope.class) {
+                (Code::Closure, _) => false,
+                (code, None) => code != Code::File,
+                (_, Some(class)) => !class.is_trait,
+            };
+            if !scope_known {
+                return;
+            }
+            let message = match scope.class {
+                None => format!("Cannot use \"{keyword}\" when no class scope is active"),
+                Some(class) if keyword == "parent" && !class.has_parent => {
+                    "Cannot use \"parent\" when current class scope has no parent".to_string()
+                }
+                Some(_) => return,
+            };
+            self.errors.push((message, span));
+        }
+
+        fn class_ref(&mut self, class: &Expr<'_, '_>, class_name_fetch: bool) {
+            let ExprKind::Name(name) = &class.kind else {
+                return;
+            };
+            if let Some(text) = fully_qualified_class_keyword(name) {
+                // `\self::class` resolves like `self::class`.
+                if !class_name_fetch {
+                    self.errors
+                        .push((format!("'\\{text}' is an invalid class name"), name.span()));
+                    return;
+                }
+            } else if !matches!(name, Name::Simple { .. })
+                || (self.scope.const_expr && !class_name_fetch)
+            {
+                return;
+            }
+            if let Some(keyword) = name.parts_slice().first().and_then(|p| class_keyword(p)) {
+                self.keyword(keyword, name.span());
+            }
+        }
+    }
+    impl<'a, 's> Visitor<'a, 's> for ClassRefs<'s> {
+        fn visit_stmt(&mut self, stmt: &Stmt<'a, 's>) -> ControlFlow<()> {
+            match &stmt.kind {
+                StmtKind::Function(_) => self.in_code(Code::Function, |v| {
+                    let _ = walk_stmt(v, stmt);
+                }),
+                StmtKind::Class(c) => self.in_class(c.extends.is_some(), false, |v| {
+                    let _ = walk_stmt(v, stmt);
+                }),
+                StmtKind::Interface(_) | StmtKind::Enum(_) => self.in_class(false, false, |v| {
+                    let _ = walk_stmt(v, stmt);
+                }),
+                StmtKind::Trait(_) => self.in_class(false, true, |v| {
+                    let _ = walk_stmt(v, stmt);
+                }),
+                StmtKind::Const(items) => {
+                    for item in items.iter() {
+                        self.attributes(&item.attributes);
+                        self.const_expr(&item.value);
+                    }
+                }
+                _ => {
+                    let _ = walk_stmt(self, stmt);
+                }
+            }
+            ControlFlow::Continue(())
+        }
+
+        fn visit_expr(&mut self, expr: &Expr<'a, 's>) -> ControlFlow<()> {
+            match &expr.kind {
+                ExprKind::Closure(_) | ExprKind::ArrowFunction(_) => {
+                    self.in_code(Code::Closure, |v| {
+                        let _ = walk_expr(v, expr);
+                    });
+                    return ControlFlow::Continue(());
+                }
+                ExprKind::AnonymousClass(c) => {
+                    self.in_class(c.extends.is_some(), false, |v| {
+                        let _ = walk_expr(v, expr);
+                    });
+                    return ControlFlow::Continue(());
+                }
+                ExprKind::StaticMethodCall(call) => {
+                    if self.parent_hook_call(call.class, call.method, expr.span, false) {
+                        for arg in call.args.iter() {
+                            let _ = self.visit_arg(arg);
+                        }
+                        return ControlFlow::Continue(());
+                    }
+                    self.class_ref(call.class, false);
+                }
+                ExprKind::StaticMethodCallDynamic(call) => self.class_ref(call.class, false),
+                ExprKind::New(new) => self.class_ref(new.class, false),
+                ExprKind::StaticPropertyAccess(access) => self.class_ref(access.class, false),
+                ExprKind::ClassConstAccess(access) => {
+                    let class_name_fetch = matches!(&access.member.kind, ExprKind::Identifier(name) if name.eq_ignore_ascii_case("class"));
+                    self.class_ref(access.class, class_name_fetch);
+                }
+                ExprKind::ClassConstAccessDynamic { class, .. }
+                | ExprKind::StaticPropertyAccessDynamic { class, .. } => {
+                    self.class_ref(class, false)
+                }
+                ExprKind::Binary(b) if b.op == BinaryOp::Instanceof => {
+                    self.class_ref(b.right, false)
+                }
+                ExprKind::CallableCreate(cc) => {
+                    if let CallableCreateKind::StaticMethod { class, method } = &cc.kind {
+                        if self.parent_hook_call(class, method, expr.span, true) {
+                            return ControlFlow::Continue(());
+                        }
+                        self.class_ref(class, false);
+                    }
+                }
+                _ => {}
+            }
+            walk_expr(self, expr)
+        }
+
+        fn visit_class_member(&mut self, member: &ClassMember<'a, 's>) -> ControlFlow<()> {
+            match &member.kind {
+                ClassMemberKind::Method(_) => self.in_code(Code::Method, |v| {
+                    let _ = walk_class_member(v, member);
+                }),
+                ClassMemberKind::Property(prop) => {
+                    self.attributes(&prop.attributes);
+                    if let Some(type_hint) = &prop.type_hint {
+                        let _ = self.visit_type_hint(type_hint);
+                    }
+                    if let Some(default) = &prop.default {
+                        self.const_expr(default);
+                    }
+                    for hook in prop.hooks.iter() {
+                        self.hook(prop.name.as_str(), hook);
+                    }
+                }
+                ClassMemberKind::ClassConst(cc) => {
+                    self.attributes(&cc.attributes);
+                    if let Some(type_hint) = cc.type_hint {
+                        let _ = self.visit_type_hint(type_hint);
+                    }
+                    self.const_expr(&cc.value);
+                }
+                _ => {}
+            }
+            ControlFlow::Continue(())
+        }
+
+        fn visit_enum_member(&mut self, member: &EnumMember<'a, 's>) -> ControlFlow<()> {
+            match &member.kind {
+                EnumMemberKind::Method(_) => self.in_code(Code::Method, |v| {
+                    let _ = walk_enum_member(v, member);
+                }),
+                EnumMemberKind::Case(case) => {
+                    self.attributes(&case.attributes);
+                    if let Some(value) = &case.value {
+                        self.const_expr(value);
+                    }
+                }
+                EnumMemberKind::ClassConst(cc) => {
+                    self.attributes(&cc.attributes);
+                    if let Some(type_hint) = cc.type_hint {
+                        let _ = self.visit_type_hint(type_hint);
+                    }
+                    self.const_expr(&cc.value);
+                }
+                _ => {}
+            }
+            ControlFlow::Continue(())
+        }
+
+        fn visit_param(&mut self, param: &Param<'a, 's>) -> ControlFlow<()> {
+            self.attributes(&param.attributes);
+            if let Some(type_hint) = &param.type_hint {
+                let _ = self.visit_type_hint(type_hint);
+            }
+            if let Some(default) = &param.default {
+                self.const_expr(default);
+            }
+            for hook in param.hooks.iter() {
+                self.hook(param.name.as_str(), hook);
+            }
+            ControlFlow::Continue(())
+        }
+
+        fn visit_attribute(&mut self, attribute: &Attribute<'a, 's>) -> ControlFlow<()> {
+            for value in attribute.args.iter().filter_map(|a| a.value.as_ref()) {
+                self.const_expr(value);
+            }
+            ControlFlow::Continue(())
+        }
+
+        fn visit_type_hint(&mut self, type_hint: &TypeHint<'a, 's>) -> ControlFlow<()> {
+            match &type_hint.kind {
+                TypeHintKind::Keyword(BuiltinType::Self_, span) => self.keyword("self", *span),
+                TypeHintKind::Keyword(BuiltinType::Parent_, span) => self.keyword("parent", *span),
+                TypeHintKind::Keyword(BuiltinType::Static, span) => self.keyword("static", *span),
+                _ => {
+                    let _ = walk_type_hint(self, type_hint);
+                }
+            }
+            ControlFlow::Continue(())
+        }
+    }
+
+    let mut finder = ClassRefs {
+        scope: Scope {
+            code: Code::File,
+            class: None,
+            hook: None,
+            const_expr: false,
+        },
+        errors: Vec::new(),
+    };
+    for stmt in stmts {
+        let _ = finder.visit_stmt(stmt);
+    }
+    // An anonymous class body is walked before its constructor arguments.
+    finder.errors.sort_by_key(|(_, span)| span.start);
+    for (message, span) in finder.errors {
+        parser.error(ParseError::Forbidden {
+            message: message.into(),
             span,
         });
     }

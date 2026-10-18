@@ -1,7 +1,7 @@
 ===source===
 <?php class A implements parent {}
 ===errors===
-cannot use 'parent' as class name
+Cannot use "parent" as interface name, as it is reserved
 ===php_error===
 PHP Fatal error:  Cannot use "parent" as interface name, as it is reserved in Standard input code on line 1
 ===ast===

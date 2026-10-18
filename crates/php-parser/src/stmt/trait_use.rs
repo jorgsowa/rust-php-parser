@@ -28,6 +28,7 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
         };
 
         if parser.eat(TokenKind::DoubleColon).is_some() {
+            super::validate_class_ref(parser, &first_name, "trait");
             // Qualified: TraitName::method
             let method = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
                 Name::Simple { value: text, span }
@@ -55,6 +56,9 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
                         break;
                     }
                     insteadof.push(parser.parse_name());
+                }
+                for name in insteadof.iter() {
+                    super::validate_class_ref(parser, name, "trait");
                 }
                 parser.expect(TokenKind::Semicolon);
                 let span = Span::new(start, parser.previous_end());

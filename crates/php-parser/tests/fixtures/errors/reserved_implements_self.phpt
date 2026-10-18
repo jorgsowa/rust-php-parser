@@ -1,7 +1,7 @@
 ===source===
 <?php class A implements self {}
 ===errors===
-cannot use 'self' as class name
+Cannot use "self" as interface name, as it is reserved
 ===php_error===
 PHP Fatal error:  Cannot use "self" as interface name, as it is reserved in Standard input code on line 1
 ===ast===

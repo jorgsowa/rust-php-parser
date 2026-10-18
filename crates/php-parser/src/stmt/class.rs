@@ -38,19 +38,31 @@ fn is_reserved_class_name(name: &str) -> bool {
     )
 }
 
-/// Validate a name used in extends/implements is not self/parent/static
-fn validate_class_ref<'arena, 'src>(
+/// Report `self`, `parent` or `static` naming the class, interface or trait in `extends`,
+/// `implements` or a trait `use`; `kind` is "class", "interface" or "trait".
+pub(crate) fn validate_class_ref<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     name: &Name<'arena, 'src>,
+    kind: &str,
 ) {
-    if let Name::Simple { value, span } = name {
-        if is_reserved_class_name(value) {
-            parser.error(ParseError::Forbidden {
-                message: format!("cannot use '{}' as class name", value).into(),
-                span: *span,
-            });
+    let message = if let Some(text) = super::fully_qualified_class_keyword(name) {
+        format!("'\\{text}' is an invalid class name")
+    } else if let Name::Simple { value, .. } = name {
+        // `readonly` and `array` are keyword tokens, a syntax error in PHP.
+        if super::class_keyword(value).is_none()
+            && !value.eq_ignore_ascii_case("readonly")
+            && !value.eq_ignore_ascii_case("array")
+        {
+            return;
         }
-    }
+        format!("Cannot use \"{value}\" as {kind} name, as it is reserved")
+    } else {
+        return;
+    };
+    parser.error(ParseError::Forbidden {
+        message: message.into(),
+        span: name.span(),
+    });
 }
 
 pub(super) fn parse_class<'arena, 'src>(
@@ -87,7 +99,7 @@ pub(super) fn parse_class<'arena, 'src>(
 
     let extends = if parser.eat(TokenKind::Extends).is_some() {
         let n = parser.parse_name();
-        validate_class_ref(parser, &n);
+        validate_class_ref(parser, &n, "class");
         Some(n)
     } else {
         None
@@ -96,7 +108,7 @@ pub(super) fn parse_class<'arena, 'src>(
     let implements = if parser.eat(TokenKind::Implements).is_some() {
         let names = parse_name_list(parser);
         for n in names.iter() {
-            validate_class_ref(parser, n);
+            validate_class_ref(parser, n, "interface");
         }
         names
     } else {
@@ -612,6 +624,9 @@ pub(super) fn parse_trait_use_decl<'arena, 'src>(
             break;
         }
         traits.push(parser.parse_name());
+    }
+    for name in traits.iter() {
+        validate_class_ref(parser, name, "trait");
     }
     // Capture the docblock before parsing adaptations: entering/leaving the
     // adaptations block's own `{ }` scope advances `last_scope_close` past the
@@ -1345,7 +1360,7 @@ pub(super) fn parse_interface<'arena, 'src>(
     let extends = if parser.eat(TokenKind::Extends).is_some() {
         let names = parse_name_list(parser);
         for n in names.iter() {
-            validate_class_ref(parser, n);
+            validate_class_ref(parser, n, "interface");
         }
         names
     } else {

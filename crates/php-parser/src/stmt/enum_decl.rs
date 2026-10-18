@@ -48,7 +48,11 @@ pub(super) fn parse_enum<'arena, 'src>(
     };
 
     let implements = if parser.eat(TokenKind::Implements).is_some() {
-        super::class::parse_name_list(parser)
+        let names = super::class::parse_name_list(parser);
+        for name in names.iter() {
+            super::class::validate_class_ref(parser, name, "interface");
+        }
+        names
     } else {
         parser.alloc_vec()
     };

@@ -4,6 +4,7 @@ min_php=8.2
 <?php function foo(): (self&Stringable) {}
 ===errors===
 A parenthesized intersection type can only be used as part of a union type
+Cannot use "self" when no class scope is active
 ===php_error===
 PHP Parse error:  syntax error, unexpected token "{", expecting "|" in Standard input code on line 1
 ===ast===

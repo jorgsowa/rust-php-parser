@@ -141,6 +141,9 @@ pub struct Parser<'arena, 'src> {
     /// Number of `$a[]` fetches parsed so far; the walk that reports reads of them only
     /// runs when there is one.
     pub(crate) empty_dim_count: u32,
+    /// Set once `self`, `parent` or `static` is used as a class name or type, which turns on
+    /// the walk that checks them against the enclosing class scope.
+    pub(crate) has_class_keyword_ref: bool,
 }
 
 impl<'arena, 'src> Parser<'arena, 'src> {
@@ -183,6 +186,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             last_stmt_end: 0,
             void_cast_count: 0,
             empty_dim_count: 0,
+            has_class_keyword_ref: false,
         }
     }
 
@@ -230,6 +234,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             last_stmt_end: 0,
             void_cast_count: 0,
             empty_dim_count: 0,
+            has_class_keyword_ref: false,
         }
     }
 
@@ -938,6 +943,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
 
         let kind = if fully_qualified {
+            if parts.len() == 1 && crate::stmt::class_keyword(first).is_some() {
+                self.has_class_keyword_ref = true;
+            }
             NameKind::FullyQualified
         } else if relative {
             NameKind::Relative
@@ -979,11 +987,18 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         type_hint
     }
 
-    /// Report a builtin type written with a namespace, as in `\int`, `namespace\int` or
-    /// `Foo\int`, which PHP reads as a class name it reserves.
+    /// Report a builtin type or class keyword written with a namespace, as in `\int`, `\self`,
+    /// `namespace\int` or `Foo\int`, which PHP reads as a class name it reserves.
     fn check_qualified_type_names(&mut self, type_hint: &TypeHint<'arena, 'src>) {
         match &type_hint.kind {
-            TypeHintKind::Named(Name::Complex { parts, span, .. }) => {
+            TypeHintKind::Named(name @ Name::Complex { parts, span, .. }) => {
+                if let Some(text) = crate::stmt::fully_qualified_class_keyword(name) {
+                    self.error(ParseError::Forbidden {
+                        message: format!("'\\{text}' is an invalid class name").into(),
+                        span: *span,
+                    });
+                    return;
+                }
                 let Some(last) = parts.last() else { return };
                 let last = last.to_ascii_lowercase();
                 let builtin = matches!(
@@ -1621,6 +1636,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             }
             TokenKind::Self_ => {
                 let token = self.advance();
+                self.has_class_keyword_ref = true;
                 TypeHint {
                     kind: TypeHintKind::Keyword(BuiltinType::Self_, token.span),
                     span: token.span,
@@ -1628,6 +1644,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             }
             TokenKind::Parent_ => {
                 let token = self.advance();
+                self.has_class_keyword_ref = true;
                 TypeHint {
                     kind: TypeHintKind::Keyword(BuiltinType::Parent_, token.span),
                     span: token.span,
@@ -1635,6 +1652,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             }
             TokenKind::Static => {
                 let token = self.advance();
+                self.has_class_keyword_ref = true;
                 TypeHint {
                     kind: TypeHintKind::Keyword(BuiltinType::Static, token.span),
                     span: token.span,
@@ -1868,6 +1886,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
         if self.has_goto_or_label {
             crate::stmt::check_gotos(self, &stmts);
+        }
+        if self.has_class_keyword_ref {
+            crate::stmt::check_class_keyword_refs(self, &stmts);
         }
 
         let span = if stmts.is_empty() {
