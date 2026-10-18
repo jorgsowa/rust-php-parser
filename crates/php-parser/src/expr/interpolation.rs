@@ -634,6 +634,12 @@ fn decode_escape_at(
                     } else if let Ok(codepoint) = u32::from_str_radix(hex, 16) {
                         if let Some(c) = char::from_u32(codepoint) {
                             out.push(c);
+                        } else if (0xD800..=0xDFFF).contains(&codepoint) {
+                            // PHP encodes surrogates as their three UTF-8 bytes, stored one
+                            // char per byte like `\x` escapes.
+                            out.push((0xE0 | (codepoint >> 12)) as u8 as char);
+                            out.push((0x80 | ((codepoint >> 6) & 0x3F)) as u8 as char);
+                            out.push((0x80 | (codepoint & 0x3F)) as u8 as char);
                         } else {
                             errors.push(ParseError::Forbidden {
                                 message:
