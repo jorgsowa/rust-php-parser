@@ -2656,7 +2656,6 @@ fn parse_expression_stmt_or_label<'arena, 'src>(
 
 fn parse_expression_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
-    let void_casts_before = parser.void_cast_count;
     let expr = expr::parse_expr(parser);
 
     if matches!(expr.kind, ExprKind::Error) {
@@ -2678,20 +2677,6 @@ fn parse_expression_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         }
     }
 
-    // A void cast is invalid in a position where its result is consumed as a value.
-    // Valid: `(void)foo();` (statement), `(void)$a or $b;` (logical-op left).
-    // Invalid: `$x = (void)$y;`, `(void)1 + 2;`, `(void)(void)$x;`.
-    // Only walk the subtree when this statement actually parsed a void cast;
-    // otherwise the walk is guaranteed to find nothing.
-    if parser.void_cast_count != void_casts_before {
-        if let Some(span) = check_void_cast_stmt_expr(&expr) {
-            parser.error(ParseError::Forbidden {
-                message: "(void) cast cannot be used in an expression context".into(),
-                span,
-            });
-        }
-    }
-
     parser.expect_semicolon("expression");
     let span = Span::new(start, parser.previous_end());
     Stmt {
@@ -2701,47 +2686,78 @@ fn parse_expression_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
     }
 }
 
-/// Check for a void cast used as a value in an expression-statement context.
-/// At statement level, `(void)expr` is valid; as an operand of a logical-OR/AND
-/// chain it is also valid. Returns the span of a misused void cast, or None.
-fn check_void_cast_stmt_expr<'arena, 'src>(
-    expr: &Expr<'arena, 'src>,
-) -> Option<php_ast::span::Span> {
-    match &expr.kind {
-        ExprKind::Cast(CastKind::Void, inner) => find_void_cast_used_as_value(inner),
-        // A void cast is permitted as the leftmost-descending leaf of the
-        // statement expression under any binary operator (PHP accepts
-        // `(void) $x + 1`, `(void) $x && $y`, `(void) 5 |> f(...)`), but not as
-        // a right operand (`5 |> (void) f(...)` is rejected).
-        ExprKind::Binary(b) => {
-            check_void_cast_stmt_expr(b.left).or_else(|| find_void_cast_used_as_value(b.right))
-        }
-        _ => find_void_cast_used_as_value(expr),
-    }
-}
-
-/// Walk an expression subtree and return the span of the first void cast found.
-fn find_void_cast_used_as_value<'arena, 'src>(
-    expr: &Expr<'arena, 'src>,
-) -> Option<php_ast::span::Span> {
-    use php_ast::visitor::{walk_expr, Visitor};
+/// Report every `(void)` cast whose result is used as a value. PHP allows one only as an
+/// expression statement or a `for` expression other than the last condition, including as
+/// the leftmost operand of a binary chain there: `(void) $x || $y;`.
+pub(crate) fn check_void_casts<'arena, 'src>(
+    parser: &mut Parser<'arena, 'src>,
+    stmts: &[Stmt<'arena, 'src>],
+) {
+    use php_ast::visitor::{walk_expr, walk_stmt, Visitor};
     use std::ops::ControlFlow;
 
-    struct VoidFinder {
-        found: Option<php_ast::span::Span>,
+    struct VoidCasts {
+        misused: Vec<Span>,
     }
-    impl<'a, 's> Visitor<'a, 's> for VoidFinder {
-        fn visit_expr(&mut self, expr: &Expr<'a, 's>) -> ControlFlow<()> {
-            if matches!(expr.kind, ExprKind::Cast(CastKind::Void, _)) {
-                self.found = Some(expr.span);
-                ControlFlow::Break(())
-            } else {
-                walk_expr(self, expr)
+    impl VoidCasts {
+        fn statement_expr(&mut self, expr: &Expr<'_, '_>) {
+            match &expr.kind {
+                ExprKind::Cast(CastKind::Void, inner) => {
+                    let _ = self.visit_expr(inner);
+                }
+                ExprKind::Binary(b) => {
+                    self.statement_expr(b.left);
+                    let _ = self.visit_expr(b.right);
+                }
+                _ => {
+                    let _ = self.visit_expr(expr);
+                }
             }
         }
     }
+    impl<'a, 's> Visitor<'a, 's> for VoidCasts {
+        fn visit_stmt(&mut self, stmt: &Stmt<'a, 's>) -> ControlFlow<()> {
+            match &stmt.kind {
+                StmtKind::Expression(expr) => self.statement_expr(expr),
+                StmtKind::For(f) => {
+                    // Only the last condition is used as a value.
+                    let (last_condition, conditions) = match f.condition.split_last() {
+                        Some((last, rest)) => (Some(last), rest),
+                        None => (None, &[][..]),
+                    };
+                    for expr in f.init.iter().chain(conditions).chain(f.update.iter()) {
+                        self.statement_expr(expr);
+                    }
+                    if let Some(expr) = last_condition {
+                        let _ = self.visit_expr(expr);
+                    }
+                    let _ = self.visit_stmt(f.body);
+                }
+                _ => {
+                    let _ = walk_stmt(self, stmt);
+                }
+            }
+            ControlFlow::Continue(())
+        }
 
-    let mut finder = VoidFinder { found: None };
-    let _ = finder.visit_expr(expr);
-    finder.found
+        fn visit_expr(&mut self, expr: &Expr<'a, 's>) -> ControlFlow<()> {
+            if matches!(expr.kind, ExprKind::Cast(CastKind::Void, _)) {
+                self.misused.push(expr.span);
+            }
+            walk_expr(self, expr)
+        }
+    }
+
+    let mut finder = VoidCasts {
+        misused: Vec::new(),
+    };
+    for stmt in stmts {
+        let _ = finder.visit_stmt(stmt);
+    }
+    for span in finder.misused {
+        parser.error(ParseError::Forbidden {
+            message: "(void) cast cannot be used in an expression context".into(),
+            span,
+        });
+    }
 }

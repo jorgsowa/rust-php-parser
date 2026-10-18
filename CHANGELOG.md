@@ -72,6 +72,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `$a = &$b + $c` parsed as `$a = &($b + $c)`; the right side of `= &` is a single variable, so it is `($a = &$b) + $c` as in PHP (`php-rs-parser`).
 - Octal escapes above `\377`, such as `"\400"`, were dropped from the string; PHP keeps the low byte, so `"\400"` is `"\0"` (`php-rs-parser`).
 - `private(set)` and the other set-visibility modifiers are matched like PHP's single case-insensitive token: `private(SET)` was rejected and `private (set)` was accepted (`php-rs-parser`).
+- A `(void)` cast is reported wherever its value is used, such as in an `if`, `echo`, `return` or `for` condition; only expression statements were checked. A `(void)` statement inside a closure assigned to a variable is no longer reported (`php-rs-parser`).
 
 ---
 

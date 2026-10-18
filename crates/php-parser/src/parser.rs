@@ -125,9 +125,8 @@ pub struct Parser<'arena, 'src> {
     /// catch this — a statement can fully close without ever opening a scope
     /// (e.g. `foo(fn() => ...);` has no `{`/`}` of its own).
     last_stmt_end: u32,
-    /// Number of `(void)` casts parsed so far. Snapshotted around an expression
-    /// statement so the void-cast misuse walk only runs when the statement's
-    /// subtree actually contains a void cast (a rare PHP 8.5 feature).
+    /// Number of `(void)` casts parsed so far; the void-cast misuse walk over the
+    /// program only runs when there is one (a rare PHP 8.5 feature).
     pub(crate) void_cast_count: u32,
 }
 
@@ -1730,6 +1729,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
 
         self.validate_namespace_layout(&stmts);
+        if self.void_cast_count > 0 {
+            crate::stmt::check_void_casts(self, &stmts);
+        }
 
         let span = if stmts.is_empty() {
             Span::new(start, self.current.span.end)
