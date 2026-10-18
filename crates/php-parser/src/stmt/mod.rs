@@ -1132,7 +1132,6 @@ fn parse_function<'arena, 'src>(
                 | TokenKind::False
                 | TokenKind::Readonly
                 | TokenKind::Enum_
-                | TokenKind::From
                 | TokenKind::Self_
                 | TokenKind::Parent_
         ) {

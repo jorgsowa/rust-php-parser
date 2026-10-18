@@ -1637,8 +1637,8 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
         });
     }
 
-    // yield from expr
-    if parser.check(TokenKind::From) {
+    // `from` is an ordinary name everywhere else, so the lexer has no keyword for it.
+    if parser.check(TokenKind::Identifier) && parser.current_text().eq_ignore_ascii_case("from") {
         parser.advance();
         let value = parse_expr(parser);
         let span = Span::new(start, value.span.end);

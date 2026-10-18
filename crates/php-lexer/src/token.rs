@@ -364,8 +364,6 @@ pub enum TokenKind {
     Enum_,
     /// `yield`
     Yield_,
-    /// `from` — used in `yield from`.
-    From,
     /// `self`
     Self_,
     /// `parent`
@@ -537,9 +535,6 @@ pub fn resolve_keyword(text: &str) -> Option<TokenKind> {
             }
             if t.eq_ignore_ascii_case("self") {
                 return Some(TokenKind::Self_);
-            }
-            if t.eq_ignore_ascii_case("from") {
-                return Some(TokenKind::From);
             }
             if t.eq_ignore_ascii_case("enum") {
                 return Some(TokenKind::Enum_);
@@ -895,7 +890,6 @@ impl TokenKind {
             TokenKind::Readonly => "'readonly'",
             TokenKind::Enum_ => "'enum'",
             TokenKind::Yield_ => "'yield'",
-            TokenKind::From => "'from'",
             TokenKind::Self_ => "'self'",
             TokenKind::Parent_ => "'parent'",
             TokenKind::MagicClass => "'__CLASS__'",

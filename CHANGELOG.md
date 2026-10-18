@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Breaking:** function, class and constant references in expressions (call and `new` targets, the class in `Foo::bar()`, `Foo::C` and `instanceof`, constants) are `ExprKind::Name(Name)` instead of `ExprKind::Identifier`, so `visit_name`, `fold_name` and `NameResolver` see them with their qualification. `Identifier` is kept for member names after `->`, `?->` and `::` (`php-ast`, `php-rs-parser`, `php-printer`).
 - **Breaking:** `Ident` (arena and owned) carries the `span` of its token; for variable names it includes the `$`. `Ident::name(s)` and `Ident::ERROR` are replaced by `Ident::new(s, span)` and `Ident::error(span)`. `CatchClause::var`, `UseItem::alias` and `ClosureUseVar::name` are `Ident` instead of strings. A real identifier serializes as `{"name": ..., "span": ...}` instead of a string; the error state is still `null` (`php-ast`, `php-rs-parser`, `php-printer`).
 - **Breaking:** `TraitAdaptationKind::Alias` (arena and owned) has a new `is_final` field for the PHP 8.3 `foo as final bar;` alias, which was rejected; it is serialized only when `true` (`php-ast`, `php-rs-parser`, `php-printer`).
+- **Breaking:** removed `TokenKind::From`. `from` is lexed as an identifier; the parser recognizes it only after `yield` (`php-lexer`).
 
 ### Fixed
 
@@ -50,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comments after the last statement start on their own line instead of being appended to it, as in `}// comment` (`php-printer`).
 - A `switch` case whose body ends in inline HTML printed the next `case` or `default` as HTML (`php-printer`).
 - Postfix `++` and `--` bound looser than the prefix operators, so `@$i++`, `(string) $i++`, `-$i++` and `clone $o++` parsed as an increment of `@$i`, `(string) $i`, … and were reported; they now apply to the variable as in PHP (`php-rs-parser`).
+- `from` was a keyword, so a function, class or constant named `from` could be declared but not used: `from()`, `From::class`, `new From` and `From` as a type were rejected (`php-lexer`, `php-rs-parser`).
 
 ---
 

@@ -719,7 +719,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 | TokenKind::Use
                 | TokenKind::Readonly
                 | TokenKind::Enum_
-                | TokenKind::From
                 | TokenKind::Self_
                 | TokenKind::Parent_
                 | TokenKind::New
@@ -800,12 +799,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
     /// True if the current token is a keyword that PHP forbids as a *declaration*
     /// name (class/interface/trait/enum/global-const). PHP rejects every reserved
-    /// keyword here; only the contextual `enum` and `from` keywords remain usable
-    /// as names. (Member names — methods, class constants — are unrestricted and
+    /// keyword here; only the contextual `enum` keyword remains usable as a
+    /// name. (Member names — methods, class constants — are unrestricted and
     /// must not use this check.)
     pub fn is_reserved_keyword_as_decl_name(&self) -> bool {
-        self.is_semi_reserved_keyword()
-            && !matches!(self.current_kind(), TokenKind::Enum_ | TokenKind::From)
+        self.is_semi_reserved_keyword() && !self.check(TokenKind::Enum_)
     }
 
     // =========================================================================
