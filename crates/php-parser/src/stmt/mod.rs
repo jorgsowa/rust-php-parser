@@ -1050,6 +1050,10 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
     } else {
         (None, first)
     };
+    if let Some(k) = &key {
+        expr::check_write_target(parser, k, false);
+    }
+    expr::check_write_target(parser, &value, true);
 
     // The `as` target(s) are destructuring positions, so empty array slots
     // (`foreach ($x as [$a, , $c])`) are legal — retract the eager errors.
@@ -2028,12 +2032,13 @@ fn parse_unset<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
     parser.advance();
     parser.expect(TokenKind::LeftParen);
     let mut exprs = parser.alloc_vec();
-    exprs.push(expr::parse_expr(parser));
-    while parser.eat(TokenKind::Comma).is_some() {
-        if parser.check(TokenKind::RightParen) {
+    loop {
+        let target = expr::parse_expr(parser);
+        expr::check_write_target(parser, &target, false);
+        exprs.push(target);
+        if parser.eat(TokenKind::Comma).is_none() || parser.check(TokenKind::RightParen) {
             break;
         }
-        exprs.push(expr::parse_expr(parser));
     }
     parser.expect(TokenKind::RightParen);
     parser.expect(TokenKind::Semicolon);

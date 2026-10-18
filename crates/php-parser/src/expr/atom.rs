@@ -2052,6 +2052,9 @@ fn parse_array_element<'arena, 'src>(
         let by_ref = parser.eat(TokenKind::Ampersand).is_some();
         instrument::record_parse_expr_array_second();
         let value = parse_expr(parser);
+        if by_ref {
+            super::check_write_target(parser, &value, false);
+        }
         let elem_span = Span::new(elem_start, value.span.end);
         ArrayElement {
             key: Some(first_expr),
@@ -2063,6 +2066,9 @@ fn parse_array_element<'arena, 'src>(
     } else {
         // value only (or unpack, or by-ref value)
         instrument::record_parse_array_simple_value();
+        if by_ref_value {
+            super::check_write_target(parser, &first_expr, false);
+        }
         let elem_span = Span::new(elem_start, first_expr.span.end);
         ArrayElement {
             key: None,

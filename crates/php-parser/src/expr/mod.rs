@@ -64,22 +64,21 @@ fn nonassoc_chain_level_for_op(op: BinaryOp) -> Option<u8> {
 /// Returns true if `kind` is a valid PHP assignment target (lvalue).
 ///
 /// Valid targets: variable, variable-variable, array access, property access,
-/// static property access, array/list destructuring, and parenthesized valid targets.
+/// static property access and array/list destructuring.
 /// Invalid targets emit a `ParseError::Forbidden` diagnostic at the assignment site.
 fn is_valid_assignment_target(kind: &ExprKind<'_, '_>) -> bool {
-    match kind {
+    matches!(
+        kind,
         ExprKind::Variable(_)
-        | ExprKind::VariableVariable(_)
-        | ExprKind::ArrayAccess(_)
-        | ExprKind::PropertyAccess(_)
-        | ExprKind::NullsafePropertyAccess(_)
-        | ExprKind::StaticPropertyAccess(_)
-        | ExprKind::StaticPropertyAccessDynamic { .. }
-        | ExprKind::Array(_)
-        | ExprKind::Error => true,
-        ExprKind::Parenthesized(inner) => is_valid_assignment_target(&inner.kind),
-        _ => false,
-    }
+            | ExprKind::VariableVariable(_)
+            | ExprKind::ArrayAccess(_)
+            | ExprKind::PropertyAccess(_)
+            | ExprKind::NullsafePropertyAccess(_)
+            | ExprKind::StaticPropertyAccess(_)
+            | ExprKind::StaticPropertyAccessDynamic { .. }
+            | ExprKind::Array(_)
+            | ExprKind::Error
+    )
 }
 
 /// Report an operand of `++` or `--` that PHP cannot write to.
@@ -109,6 +108,33 @@ pub(crate) fn check_increment_operand(parser: &mut Parser<'_, '_>, operand: &Exp
     });
 }
 
+/// Report `target` where PHP writes to it (an `unset` argument, a `foreach`
+/// target or a by-reference array element) unless it is writable;
+/// `allow_list` permits a destructuring list.
+pub(crate) fn check_write_target(
+    parser: &mut Parser<'_, '_>,
+    target: &Expr<'_, '_>,
+    allow_list: bool,
+) {
+    let message = if is_temporary_write_target(&target.kind) {
+        "Cannot use temporary expression in write context"
+    } else if has_nullsafe_link(&target.kind) {
+        "Can't use nullsafe operator in write context"
+    } else if !is_valid_assignment_target(&target.kind)
+        || !allow_list && matches!(target.kind, ExprKind::Array(_))
+    {
+        "Can't use this expression in write context"
+    } else if !is_valid_destructure_element(&target.kind) {
+        "Assignments can only happen to writable values"
+    } else {
+        return;
+    };
+    parser.error(ParseError::Forbidden {
+        message: message.into(),
+        span: target.span,
+    });
+}
+
 /// True if the fetch chain ending in `kind` passes through `?->`.
 fn has_nullsafe_link(kind: &ExprKind<'_, '_>) -> bool {
     let mut cur = kind;
@@ -128,7 +154,15 @@ fn has_nullsafe_link(kind: &ExprKind<'_, '_>) -> bool {
 /// `Omit` (the gap slot in `[$a, , $c]`) is allowed; nested destructuring
 /// (`Array`) recurses; everything else falls back to the lvalue rule.
 fn is_valid_destructure_element(kind: &ExprKind<'_, '_>) -> bool {
-    matches!(kind, ExprKind::Omit) || is_valid_assignment_target(kind)
+    match kind {
+        ExprKind::Omit => true,
+        ExprKind::Array(elems) => elems
+            .iter()
+            .all(|el| !el.unpack && is_valid_destructure_element(&el.value.kind)),
+        // PHP rejects `($a) = …` but accepts `[($a)] = …`.
+        ExprKind::Parenthesized(inner) => is_valid_destructure_element(&inner.kind),
+        _ => is_valid_assignment_target(kind) && !has_nullsafe_link(kind),
+    }
 }
 
 /// Find the first `new` expression inside an initializer that PHP rejects
@@ -284,6 +318,11 @@ fn parse_assign_continuation<'arena, 'src>(
             message: "Cannot use expression as assignment target.".into(),
             span,
         });
+    } else if has_nullsafe_link(&lhs.kind) {
+        parser.error(ParseError::Forbidden {
+            message: "Can't use nullsafe operator in write context".into(),
+            span: lhs.span,
+        });
     }
     // Short-list destructure: `[, , ,] = …` — PHP fatals on "Cannot use empty list"
     // when every element is omitted (or the array has no elements at all).
@@ -301,7 +340,12 @@ fn parse_assign_continuation<'arena, 'src>(
         // rejects e.g. `[null, $b] = …` and `list(1 + 1) = …` with
         // "Assignments can only happen to writable values".
         for el in elems.iter() {
-            if !is_valid_destructure_element(&el.value.kind) {
+            if el.unpack {
+                parser.error(ParseError::Forbidden {
+                    message: "Spread operator is not supported in assignments".into(),
+                    span: el.span,
+                });
+            } else if !is_valid_destructure_element(&el.value.kind) {
                 parser.error(ParseError::Forbidden {
                     message: "Assignments can only happen to writable values".into(),
                     span: el.value.span,
@@ -336,6 +380,16 @@ fn parse_assign_continuation<'arena, 'src>(
     if by_ref && matches!(rhs.kind, ExprKind::New(..)) {
         parser.error(ParseError::Forbidden {
             message: "Cannot use by-reference assignment with 'new' expression".into(),
+            span: rhs.span,
+        });
+    } else if by_ref && has_nullsafe_link(&rhs.kind) {
+        parser.error(ParseError::Forbidden {
+            message: "Cannot take reference of a nullsafe chain".into(),
+            span: rhs.span,
+        });
+    } else if by_ref && matches!(rhs.kind, ExprKind::Parenthesized(_)) {
+        parser.error(ParseError::Forbidden {
+            message: "Cannot take reference of a parenthesized expression".into(),
             span: rhs.span,
         });
     }
