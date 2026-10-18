@@ -19,12 +19,16 @@ impl<'src> Printer<'src> {
         if needs_parens || parent_prec == PREC_LOWEST {
             self.at_tail = true;
         }
+        let outer_continuation = std::mem::take(&mut self.in_chain_continuation);
         if is_chain(&expr.kind) {
             let operand_at_tail = std::mem::replace(&mut self.at_tail, false);
             self.print_chain_operand(expr);
             self.at_tail = operand_at_tail;
         }
         self.print_expr_inner(expr);
+        if std::mem::replace(&mut self.in_chain_continuation, outer_continuation) {
+            self.dedent();
+        }
         if needs_parens {
             self.w(")");
         }
@@ -322,6 +326,7 @@ impl<'src> Printer<'src> {
                 }
             }
             ExprKind::PropertyAccess(access) => {
+                self.break_chain_for_comments(access.object.span.end, access.property.span.start);
                 self.w("->");
                 if self.needs_braces_for_property(&access.property.kind) {
                     self.w("{");
@@ -332,6 +337,7 @@ impl<'src> Printer<'src> {
                 }
             }
             ExprKind::NullsafePropertyAccess(access) => {
+                self.break_chain_for_comments(access.object.span.end, access.property.span.start);
                 self.w("?->");
                 if self.needs_braces_for_property(&access.property.kind) {
                     self.w("{");
@@ -342,6 +348,7 @@ impl<'src> Printer<'src> {
                 }
             }
             ExprKind::MethodCall(call) => {
+                self.break_chain_for_comments(call.object.span.end, call.method.span.start);
                 self.w("->");
                 if self.needs_braces_for_property(&call.method.kind) {
                     self.w("{");
@@ -355,6 +362,7 @@ impl<'src> Printer<'src> {
                 self.w(")");
             }
             ExprKind::NullsafeMethodCall(call) => {
+                self.break_chain_for_comments(call.object.span.end, call.method.span.start);
                 self.w("?->");
                 if self.needs_braces_for_property(&call.method.kind) {
                     self.w("{");
@@ -575,6 +583,21 @@ impl<'src> Printer<'src> {
                 None => {}
             }
         }
+    }
+
+    /// Before a `->` link, print the line comments between the object ending at `object_end`
+    /// and the member on their own lines, with the link starting a continuation line.
+    fn break_chain_for_comments(&mut self, object_end: u32, member_start: u32) {
+        if !self.line_comment_between(object_end, member_start) {
+            return;
+        }
+        if !self.in_chain_continuation {
+            self.in_chain_continuation = true;
+            self.indent();
+        }
+        self.newline();
+        self.flush_leading_comments(member_start);
+        self.write_indent();
     }
 
     /// Print call arguments, one per line when a comment between the callee ending at `from`

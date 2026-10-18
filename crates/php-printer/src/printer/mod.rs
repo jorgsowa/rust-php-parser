@@ -104,6 +104,8 @@ pub(crate) struct Printer<'src> {
     /// of its statement, argument or parentheses, so an arrow function, whose
     /// body runs as far right as it can, needs no parentheses there.
     pub(crate) at_tail: bool,
+    /// Set once a comment has broken the method chain being printed onto continuation lines.
+    pub(crate) in_chain_continuation: bool,
 }
 
 impl<'src> Printer<'src> {
@@ -129,6 +131,7 @@ impl<'src> Printer<'src> {
             in_html_mode: false,
             has_php_content: false,
             at_tail: true,
+            in_chain_continuation: false,
         }
     }
 
@@ -349,6 +352,16 @@ impl<'src> Printer<'src> {
                 && c.span.start < to
                 && (matches!(c.kind, CommentKind::Line | CommentKind::Hash)
                     || c.span.start >= last_item_end)
+        })
+    }
+
+    /// True if the first pending comment is a line comment between `from` and `to`.
+    pub(crate) fn line_comment_between(&self, from: u32, to: u32) -> bool {
+        use php_ast::CommentKind;
+        self.comments.get(self.comment_cursor).is_some_and(|c| {
+            c.span.start >= from
+                && c.span.start < to
+                && matches!(c.kind, CommentKind::Line | CommentKind::Hash)
         })
     }
 
