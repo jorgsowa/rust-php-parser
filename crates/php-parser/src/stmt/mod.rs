@@ -2722,14 +2722,27 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
     parser: &mut Parser<'arena, 'src>,
     stmts: &[Stmt<'arena, 'src>],
 ) {
-    use php_ast::visitor::{walk_expr, walk_stmt, Visitor};
+    use php_ast::visitor::{
+        walk_class_member, walk_enum_member, walk_expr, walk_property_hook, walk_stmt, Visitor,
+    };
     use std::ops::ControlFlow;
 
     struct EmptyDims {
         read: Vec<Span>,
         unset: Vec<Span>,
+        /// Whether each enclosing function returns by reference, which makes its
+        /// `return` and `yield` values writes.
+        by_ref: Vec<bool>,
     }
     impl EmptyDims {
+        fn returned(&mut self, value: &Expr<'_, '_>) {
+            if self.by_ref.last() == Some(&true) {
+                self.write(value);
+            } else {
+                let _ = self.visit_expr(value);
+            }
+        }
+
         fn write(&mut self, expr: &Expr<'_, '_>) {
             match &expr.kind {
                 ExprKind::ArrayAccess(a) => {
@@ -2805,10 +2818,39 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
                         self.unset(expr);
                     }
                 }
+                StmtKind::Return(Some(value)) => self.returned(value),
+                StmtKind::Function(f) => {
+                    self.by_ref.push(f.by_ref);
+                    let _ = walk_stmt(self, stmt);
+                    self.by_ref.pop();
+                }
                 _ => {
                     let _ = walk_stmt(self, stmt);
                 }
             }
+            ControlFlow::Continue(())
+        }
+
+        fn visit_class_member(&mut self, member: &ClassMember<'a, 's>) -> ControlFlow<()> {
+            let by_ref = matches!(&member.kind, ClassMemberKind::Method(m) if m.by_ref);
+            self.by_ref.push(by_ref);
+            let _ = walk_class_member(self, member);
+            self.by_ref.pop();
+            ControlFlow::Continue(())
+        }
+
+        fn visit_enum_member(&mut self, member: &EnumMember<'a, 's>) -> ControlFlow<()> {
+            let by_ref = matches!(&member.kind, EnumMemberKind::Method(m) if m.by_ref);
+            self.by_ref.push(by_ref);
+            let _ = walk_enum_member(self, member);
+            self.by_ref.pop();
+            ControlFlow::Continue(())
+        }
+
+        fn visit_property_hook(&mut self, hook: &PropertyHook<'a, 's>) -> ControlFlow<()> {
+            self.by_ref.push(hook.by_ref);
+            let _ = walk_property_hook(self, hook);
+            self.by_ref.pop();
             ControlFlow::Continue(())
         }
 
@@ -2862,6 +2904,20 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
                     let _ = self.visit_expr(n.class);
                     self.args(&n.args);
                 }
+                ExprKind::Closure(c) => {
+                    self.by_ref.push(c.by_ref);
+                    let _ = walk_expr(self, expr);
+                    self.by_ref.pop();
+                }
+                ExprKind::ArrowFunction(f) if f.by_ref => self.write(f.body),
+                ExprKind::Yield(y) if !y.is_from => {
+                    if let Some(key) = y.key {
+                        let _ = self.visit_expr(key);
+                    }
+                    if let Some(value) = y.value {
+                        self.returned(value);
+                    }
+                }
                 _ => {
                     let _ = walk_expr(self, expr);
                 }
@@ -2873,6 +2929,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
     let mut finder = EmptyDims {
         read: Vec::new(),
         unset: Vec::new(),
+        by_ref: Vec::new(),
     };
     for stmt in stmts {
         let _ = finder.visit_stmt(stmt);
