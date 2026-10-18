@@ -483,7 +483,15 @@ fn parse_assign_continuation<'arena, 'src>(
             op_token.kind
         ),
     };
-    let rhs = parse_expr_bp(parser, ASSIGNMENT_BP);
+    // `&` takes a single variable, so `$a = &$b + 1` is `($a = &$b) + 1`.
+    let rhs = parse_expr_bp(
+        parser,
+        if by_ref {
+            MEMBER_ACCESS_BP
+        } else {
+            ASSIGNMENT_BP
+        },
+    );
     if by_ref && matches!(rhs.kind, ExprKind::New(..)) {
         parser.error(ParseError::Forbidden {
             message: "Cannot use by-reference assignment with 'new' expression".into(),

@@ -69,6 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - References to values PHP cannot reference are reported: `$a = &C::X`, `$a = &"s"`, `$a = &FOO->b`, and a destructuring list with a `&` element assigned from something other than a variable or call, as in `[&$a] = [1]`, or from a nullsafe chain (`php-rs-parser`).
 - A `return` or `yield` of a nullsafe fetch such as `$a?->b` in a function, method, closure, arrow function or hook that returns by reference is reported (`php-rs-parser`).
 - Syntax errors inside `{$...}` and `${...}` string interpolation were dropped, so `"{$a $b}"`, `"{$a->}"` and `"{$g{0}}"` parsed without errors. They are reported now, as is a `{$...}` holding something other than a variable, property, index or call, such as `"{$a + 1}"` (`php-rs-parser`).
+- `$a = &$b + $c` parsed as `$a = &($b + $c)`; the right side of `= &` is a single variable, so it is `($a = &$b) + $c` as in PHP (`php-rs-parser`).
 
 ---
 
