@@ -355,13 +355,13 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
     hooks
 }
 
-struct ClassMemberModifiers {
-    visibility: Option<Visibility>,
-    set_visibility: Option<Visibility>,
-    is_static: bool,
-    is_abstract: bool,
-    is_final: bool,
-    is_readonly: bool,
+pub(super) struct ClassMemberModifiers {
+    pub(super) visibility: Option<Visibility>,
+    pub(super) set_visibility: Option<Visibility>,
+    pub(super) is_static: bool,
+    pub(super) is_abstract: bool,
+    pub(super) is_final: bool,
+    pub(super) is_readonly: bool,
 }
 
 pub fn parse_class_members<'arena, 'src>(
@@ -846,7 +846,7 @@ fn parse_class_const_member<'arena, 'src>(
     }
 }
 
-fn parse_method_member<'arena, 'src>(
+pub(super) fn parse_method_member<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     member_attrs: ArenaVec<'arena, Attribute<'arena, 'src>>,
     member_start: u32,

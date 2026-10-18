@@ -297,69 +297,22 @@ pub(super) fn parse_enum<'arena, 'src>(
                 });
             }
 
-            parser.advance();
-            let by_ref = parser.eat(TokenKind::Ampersand).is_some();
-            let method_name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
-                Ident::new(text, span)
-            } else {
-                parser.missing_ident()
+            let mods = super::class::ClassMemberModifiers {
+                visibility,
+                set_visibility: None,
+                is_static,
+                is_abstract,
+                is_final,
+                is_readonly,
             };
-
-            parser.expect(TokenKind::LeftParen);
-            let params = super::parse_param_list(parser);
-            parser.expect(TokenKind::RightParen);
-
-            let return_type = if parser.eat(TokenKind::Colon).is_some() {
-                Some(parser.parse_type_hint())
-            } else {
-                None
-            };
-
-            let doc_comment = parser.take_doc_comment(member_start);
-
-            let body = if parser.check(TokenKind::LeftBrace) {
-                let brace_start = parser.start_span();
-                parser.expect(TokenKind::LeftBrace);
-                let mut stmts = parser.alloc_vec_with_capacity(16);
-                let saved_loop_depth = parser.loop_depth;
-                parser.loop_depth = 0;
-                while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
-                    let span_before = parser.current_span();
-                    stmts.push(super::parse_stmt(parser));
-                    if parser.current_span() == span_before {
-                        parser.advance();
-                    }
-                }
-                parser.loop_depth = saved_loop_depth;
-                parser.expect(TokenKind::RightBrace);
-                let block_end = parser.previous_end();
-                Some(parser.alloc(Block {
-                    stmts,
-                    span: Span::new(brace_start, block_end),
-                }))
-            } else {
-                parser.expect(TokenKind::Semicolon);
-                None
-            };
-
-            let span = Span::new(member_start, parser.previous_end());
-            members.push(EnumMember {
-                kind: EnumMemberKind::Method({
-                    let mut method = MethodDecl::new(parser.arena, method_name);
-                    method.visibility = visibility;
-                    method.is_static = is_static;
-                    method.is_abstract = is_abstract;
-                    method.is_final = is_final;
-                    method.by_ref = by_ref;
-                    method.params = params;
-                    method.return_type = return_type;
-                    method.body = body;
-                    method.attributes = member_attrs;
-                    method.doc_comment = doc_comment;
-                    method
-                }),
-                span,
-            });
+            let member =
+                super::class::parse_method_member(parser, member_attrs, member_start, &mods, false);
+            if let ClassMemberKind::Method(method) = member.kind {
+                members.push(EnumMember {
+                    kind: EnumMemberKind::Method(method),
+                    span: member.span,
+                });
+            }
             continue;
         }
 
