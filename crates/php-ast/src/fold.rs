@@ -936,11 +936,13 @@ pub fn fold_trait_adaptation<'new, 'src, F: Fold<'src> + ?Sized>(
             trait_name,
             method,
             new_modifier,
+            is_final,
             new_name,
         } => TraitAdaptationKind::Alias {
             trait_name: trait_name.as_ref().map(|n| folder.fold_name(arena, n)),
             method: folder.fold_name(arena, method),
             new_modifier: *new_modifier,
+            is_final: *is_final,
             new_name: new_name.as_ref().map(|n| folder.fold_name(arena, n)),
         },
     };

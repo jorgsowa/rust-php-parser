@@ -377,6 +377,9 @@ pub enum TraitAdaptationKind<'arena, 'src> {
         method: Name<'arena, 'src>,
         /// New visibility, if changed.
         new_modifier: Option<Visibility>,
+        /// `true` for `foo as final bar;` (PHP 8.3+).
+        #[cfg_attr(feature = "serde", serde(skip_serializing_if = "super::is_false"))]
+        is_final: bool,
         /// Alias name, if given.
         new_name: Option<Name<'arena, 'src>>,
     },

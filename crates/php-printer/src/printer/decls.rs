@@ -330,6 +330,7 @@ impl<'src> Printer<'src> {
                         trait_name,
                         method,
                         new_modifier,
+                        is_final,
                         new_name,
                     } => {
                         if let Some(tn) = trait_name {
@@ -341,6 +342,9 @@ impl<'src> Printer<'src> {
                         if let Some(vis) = new_modifier {
                             self.w(" ");
                             self.w(visibility_str(*vis));
+                        }
+                        if *is_final {
+                            self.w(" final");
                         }
                         if let Some(name) = new_name {
                             self.w(" ");

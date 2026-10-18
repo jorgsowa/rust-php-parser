@@ -1650,6 +1650,9 @@ pub enum TraitAdaptationKind {
         method: Name,
         /// New visibility, if any.
         new_modifier: Option<Visibility>,
+        /// `true` for `m as final alias;` (PHP 8.3+).
+        #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
+        is_final: bool,
         /// Alias name, if any.
         new_name: Option<Name>,
     },
@@ -2563,11 +2566,13 @@ fn owned_trait_use(t: &arena_ast::TraitUseDecl<'_, '_>) -> TraitUseDecl {
                         trait_name,
                         method,
                         new_modifier,
+                        is_final,
                         new_name,
                     } => TraitAdaptationKind::Alias {
                         trait_name: trait_name.as_ref().map(owned_name),
                         method: owned_name(method),
                         new_modifier: *new_modifier,
+                        is_final: *is_final,
                         new_name: new_name.as_ref().map(owned_name),
                     },
                 },
@@ -3694,11 +3699,13 @@ fn av_trait_use<'a>(arena: &'a bumpalo::Bump, t: &TraitUseDecl) -> arena_ast::Tr
                     trait_name,
                     method,
                     new_modifier,
+                    is_final,
                     new_name,
                 } => arena_ast::TraitAdaptationKind::Alias {
                     trait_name: trait_name.as_ref().map(|n| av_name(arena, n)),
                     method: av_name(arena, method),
                     new_modifier: *new_modifier,
+                    is_final: *is_final,
                     new_name: new_name.as_ref().map(|n| av_name(arena, n)),
                 },
             },
