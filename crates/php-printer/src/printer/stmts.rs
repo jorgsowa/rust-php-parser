@@ -485,16 +485,26 @@ impl<'src> Printer<'src> {
     }
 
     fn print_use(&mut self, use_decl: &UseDecl) {
-        self.w("use ");
-        match use_decl.kind {
-            UseKind::Function => self.w("function "),
-            UseKind::Const => self.w("const "),
-            UseKind::Normal => {}
-            _ => self.unsupported("use kind"),
-        }
-        for (i, item) in use_decl.uses.iter().enumerate() {
-            if i > 0 {
+        let mut current_kind = None;
+        for item in use_decl.uses.iter() {
+            // Mixed group uses are flattened; start a new statement whenever the item kind changes.
+            let kind = item.kind.unwrap_or(use_decl.kind);
+            if current_kind == Some(kind) {
                 self.w(", ");
+            } else {
+                if current_kind.is_some() {
+                    self.w(";");
+                    self.newline();
+                    self.write_indent();
+                }
+                current_kind = Some(kind);
+                self.w("use ");
+                match kind {
+                    UseKind::Function => self.w("function "),
+                    UseKind::Const => self.w("const "),
+                    UseKind::Normal => {}
+                    _ => self.unsupported("use kind"),
+                }
             }
             self.print_name(&item.name);
             if let Some(alias) = item.alias {
