@@ -958,18 +958,26 @@ pub(super) fn parse_method_member<'arena, 'src>(
             });
         }
     }
-    // __construct / __destruct / __clone cannot be static (case-insensitive).
-    // PHP emits "Method A::__destruct() cannot be static" preserving the
-    // declared casing (e.g. "__cLoNe" → "__cLoNe()").
-    if mods.is_static {
-        if let Some(name) = method_name.as_str() {
-            let lower = name.to_ascii_lowercase();
-            if matches!(lower.as_str(), "__construct" | "__destruct" | "__clone") {
-                parser.error(ParseError::Forbidden {
-                    message: format!("Method {}() cannot be static", name).into(),
-                    span: Span::new(member_start, parser.previous_end()),
-                });
+    // Magic methods are either instance or static methods. PHP emits "Method A::__destruct()
+    // cannot be static" preserving the declared casing (e.g. "__cLoNe" → "__cLoNe()").
+    if let Some(name) = method_name.as_str() {
+        let lower = name.to_ascii_lowercase();
+        let message = match lower.as_str() {
+            "__construct" | "__destruct" | "__clone" | "__get" | "__set" | "__unset"
+            | "__isset" | "__call" | "__tostring" | "__debuginfo" | "__serialize"
+            | "__unserialize" | "__invoke" | "__sleep" | "__wakeup"
+                if mods.is_static =>
+            {
+                Some("cannot be static")
             }
+            "__callstatic" | "__set_state" if !mods.is_static => Some("must be static"),
+            _ => None,
+        };
+        if let Some(message) = message {
+            parser.error(ParseError::Forbidden {
+                message: format!("Method {name}() {message}").into(),
+                span: Span::new(member_start, parser.previous_end()),
+            });
         }
     }
 
