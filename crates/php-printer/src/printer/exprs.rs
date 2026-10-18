@@ -386,14 +386,14 @@ impl<'src> Printer<'src> {
             }
             ExprKind::StaticMethodCall(call) => {
                 self.w("::");
-                self.print_expr(call.method, PREC_PRIMARY);
+                self.print_member_name(call.method);
                 self.w("(");
                 self.print_args(&call.args);
                 self.w(")");
             }
             ExprKind::StaticMethodCallDynamic(call) => {
                 self.w("::");
-                self.print_expr(call.method, PREC_PRIMARY);
+                self.print_member_name(call.method);
                 self.w("(");
                 self.print_args(&call.args);
                 self.w(")");
@@ -433,17 +433,17 @@ impl<'src> Printer<'src> {
                 CallableCreateKind::Function(_) => self.w("(...)"),
                 CallableCreateKind::Method { method, .. } => {
                     self.w("->");
-                    self.print_expr(method, PREC_PRIMARY);
+                    self.print_member_name(method);
                     self.w("(...)");
                 }
                 CallableCreateKind::NullsafeMethod { method, .. } => {
                     self.w("?->");
-                    self.print_expr(method, PREC_PRIMARY);
+                    self.print_member_name(method);
                     self.w("(...)");
                 }
                 CallableCreateKind::StaticMethod { method, .. } => {
                     self.w("::");
-                    self.print_expr(method, PREC_PRIMARY);
+                    self.print_member_name(method);
                     self.w("(...)");
                 }
                 _ => self.unsupported("callable"),
@@ -680,6 +680,17 @@ impl<'src> Printer<'src> {
                 }
                 _ => self.unsupported("string part"),
             }
+        }
+    }
+
+    /// Print a method name after `->`, `?->` or `::`, bracing an expression: `->{$a . 'b'}`.
+    fn print_member_name(&mut self, name: &Expr) {
+        if self.needs_braces_for_property(&name.kind) {
+            self.w("{");
+            self.print_expr(name, PREC_LOWEST);
+            self.w("}");
+        } else {
+            self.print_expr(name, PREC_PRIMARY);
         }
     }
 
