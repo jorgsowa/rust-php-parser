@@ -36,6 +36,7 @@ impl<'src> Printer<'src> {
     }
 
     pub(crate) fn print_anonymous_class(&mut self, class: &ClassDecl, args: &[Arg]) {
+        self.print_attributes_inline(&class.attributes);
         if class.modifiers.is_abstract {
             self.w("abstract ");
         }

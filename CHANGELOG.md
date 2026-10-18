@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - In a grouped property declaration such as `#[A] public int $a, $b;`, every property now carries the declared visibility, set visibility, type and attributes; only the first one did (`php-rs-parser`).
 - The printer wrote `- -$a` as `--$a` and `+ ++$a` as `+++$a`, a decrement and a syntax error; a space now separates adjacent signs (`php-printer`).
 - The printer dropped the braces of `"{$a}b"`, `"{$a}[0]"` and `"{$a}->b"`, turning them into `$ab`, an index or a property fetch, and in heredocs and backticks turned a literal `{` before a variable into `{$...}` syntax (`php-printer`).
+- The printer dropped the attributes of an anonymous class such as `new #[A] class {}` (`php-printer`).
 
 ---
 
