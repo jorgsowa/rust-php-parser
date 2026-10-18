@@ -450,45 +450,67 @@ impl<'src> Printer<'src> {
     }
 
     pub(crate) fn print_params(&mut self, params: &[Param]) {
+        // Hook bodies span lines, so give each parameter its own.
+        if params.iter().any(|param| !param.hooks.is_empty()) {
+            self.newline();
+            self.indent();
+            for param in params.iter() {
+                self.write_indent();
+                self.print_param(param);
+                self.w(",");
+                self.newline();
+            }
+            self.dedent();
+            self.write_indent();
+            return;
+        }
         for (i, param) in params.iter().enumerate() {
             if i > 0 {
                 self.w(", ");
             }
-            if let Some(doc) = &param.doc_comment {
-                self.w(doc.text);
-                self.w(" ");
-            }
-            self.print_attributes_inline(&param.attributes);
-            if let Some(vis) = &param.visibility {
-                self.w(visibility_str(*vis));
-                self.w(" ");
-            }
-            if let Some(set_vis) = &param.set_visibility {
-                self.w(visibility_str(*set_vis));
-                self.w("(set) ");
-            }
-            if param.is_readonly {
-                self.w("readonly ");
-            }
-            if param.is_final {
-                self.w("final ");
-            }
-            if let Some(th) = &param.type_hint {
-                self.print_type_hint(th);
-                self.w(" ");
-            }
-            if param.by_ref {
-                self.w("&");
-            }
-            if param.variadic {
-                self.w("...");
-            }
-            self.w("$");
-            self.w(param.name.or_error());
-            if let Some(default) = &param.default {
-                self.w(" = ");
-                self.print_expr(default, PREC_LOWEST);
-            }
+            self.print_param(param);
+        }
+    }
+
+    fn print_param(&mut self, param: &Param) {
+        if let Some(doc) = &param.doc_comment {
+            self.w(doc.text);
+            self.w(" ");
+        }
+        self.print_attributes_inline(&param.attributes);
+        if let Some(vis) = &param.visibility {
+            self.w(visibility_str(*vis));
+            self.w(" ");
+        }
+        if let Some(set_vis) = &param.set_visibility {
+            self.w(visibility_str(*set_vis));
+            self.w("(set) ");
+        }
+        if param.is_readonly {
+            self.w("readonly ");
+        }
+        if param.is_final {
+            self.w("final ");
+        }
+        if let Some(th) = &param.type_hint {
+            self.print_type_hint(th);
+            self.w(" ");
+        }
+        if param.by_ref {
+            self.w("&");
+        }
+        if param.variadic {
+            self.w("...");
+        }
+        self.w("$");
+        self.w(param.name.or_error());
+        if let Some(default) = &param.default {
+            self.w(" = ");
+            self.print_expr(default, PREC_LOWEST);
+        }
+        if !param.hooks.is_empty() {
+            self.w(" ");
+            self.print_property_hooks(&param.hooks);
         }
     }
 
