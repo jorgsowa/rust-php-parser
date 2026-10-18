@@ -135,6 +135,33 @@ pub(crate) fn check_write_target(
     });
 }
 
+/// Report `->`, `?->`, `::`, `[` or a call applied to an expression PHP cannot
+/// dereference, such as `match (...) {...}[0]`, `1->a` or `function () {}()`.
+fn check_dereferencable(parser: &mut Parser<'_, '_>, lhs: &Expr<'_, '_>, op: TokenKind) {
+    let dereferencable = match lhs.kind {
+        ExprKind::Match(_)
+        | ExprKind::Closure(_)
+        | ExprKind::ArrowFunction(_)
+        | ExprKind::Int(_)
+        | ExprKind::Float(_)
+        | ExprKind::ShellExec(_)
+        | ExprKind::Isset(_)
+        | ExprKind::Empty(_)
+        | ExprKind::Exit(_)
+        | ExprKind::Eval(_) => false,
+        ExprKind::Array(_) => {
+            op != TokenKind::DoubleColon && !is_list_syntax(parser.source(), lhs.span)
+        }
+        _ => true,
+    };
+    if !dereferencable {
+        parser.error(ParseError::Forbidden {
+            message: "Cannot dereference this expression".into(),
+            span: lhs.span,
+        });
+    }
+}
+
 /// True if the fetch chain ending in `kind` passes through `?->`. Like PHP's
 /// short-circuit chain, it runs through property, method, index and static
 /// member links, but not through a class constant or a plain call.
@@ -533,6 +560,7 @@ pub fn parse_expr_bp<'arena, 'src>(
                 if MEMBER_ACCESS_BP < min_bp {
                     break;
                 }
+                check_dereferencable(parser, &lhs, kind);
                 let is_nullsafe = kind == TokenKind::NullsafeArrow;
                 if is_nullsafe {
                     let span = parser.current_span();
@@ -662,6 +690,7 @@ pub fn parse_expr_bp<'arena, 'src>(
             if SCOPE_RESOLUTION_BP < min_bp {
                 break;
             }
+            check_dereferencable(parser, &lhs, kind);
             parser.advance(); // consume ::
 
             // Check what follows ::
@@ -875,6 +904,7 @@ pub fn parse_expr_bp<'arena, 'src>(
             if MEMBER_ACCESS_BP < min_bp {
                 break;
             }
+            check_dereferencable(parser, &lhs, kind);
             parser.advance(); // consume [
             let index = if parser.check(TokenKind::RightBracket) {
                 None
@@ -930,6 +960,7 @@ pub fn parse_expr_bp<'arena, 'src>(
             if MEMBER_ACCESS_BP < min_bp {
                 break;
             }
+            check_dereferencable(parser, &lhs, kind);
             lhs = parse_function_call(parser, lhs);
             continue;
         }

@@ -1,0 +1,55 @@
+===source===
+<?php `ls`[0];
+===errors===
+Cannot dereference this expression
+===php_error===
+PHP Parse error:  syntax error, unexpected token "[" in Standard input code on line 1
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "ArrayAccess": {
+              "array": {
+                "kind": {
+                  "ShellExec": [
+                    {
+                      "Literal": "ls"
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 6,
+                  "end": 10
+                }
+              },
+              "index": {
+                "kind": {
+                  "Int": 0
+                },
+                "span": {
+                  "start": 11,
+                  "end": 12
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 13
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 14
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 14
+  }
+}
