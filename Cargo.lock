@@ -720,7 +720,7 @@ dependencies = [
 
 [[package]]
 name = "php-ast"
-version = "0.21.0"
+version = "0.22.0"
 dependencies = [
  "bumpalo",
  "serde",
@@ -729,7 +729,7 @@ dependencies = [
 
 [[package]]
 name = "php-lexer"
-version = "0.21.0"
+version = "0.22.0"
 dependencies = [
  "memchr",
  "php-ast",
@@ -737,7 +737,7 @@ dependencies = [
 
 [[package]]
 name = "php-printer"
-version = "0.21.0"
+version = "0.22.0"
 dependencies = [
  "bumpalo",
  "php-ast",
@@ -747,7 +747,7 @@ dependencies = [
 
 [[package]]
 name = "php-rs-parser"
-version = "0.21.0"
+version = "0.22.0"
 dependencies = [
  "bumpalo",
  "criterion 0.8.2",
@@ -767,7 +767,7 @@ dependencies = [
 
 [[package]]
 name = "php-wasm"
-version = "0.21.0"
+version = "0.22.0"
 dependencies = [
  "bumpalo",
  "php-printer",
@@ -780,7 +780,7 @@ dependencies = [
 
 [[package]]
 name = "phpdoc-parser"
-version = "0.21.0"
+version = "0.22.0"
 dependencies = [
  "php-ast",
  "rayon",
