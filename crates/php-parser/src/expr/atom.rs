@@ -298,7 +298,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             let inner = without_open.strip_suffix('\'').unwrap_or(without_open);
             // Fast path: the lexer saw no backslash, so inner is a verbatim source slice
             let value = if parser.is_verbatim_string(token.span.start) {
-                NameStr::from_source(inner)
+                ByteStr::from_source(inner)
             } else {
                 // Decode single-quote escape sequences: \' → ' and \\ → \
                 let mut decoded = String::with_capacity(inner.len());
@@ -332,7 +332,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                         i += ch.len_utf8();
                     }
                 }
-                NameStr::from_arena(parser.arena.alloc_str(&decoded))
+                ByteStr::from_arena_str(parser.arena.alloc_str(&decoded))
             };
             Expr {
                 kind: ExprKind::String(value),
@@ -353,7 +353,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             // strings, so it is safe to treat the missing closing quote as absent here.
             let Some(without_open) = stripped.strip_prefix('"') else {
                 return Expr {
-                    kind: ExprKind::String(NameStr::from_source("")),
+                    kind: ExprKind::String(ByteStr::from_source("")),
                     span: token.span,
                 };
             };
@@ -362,7 +362,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             if parser.is_verbatim_string(token.span.start) {
                 // The lexer saw no backslash and no `$`: a verbatim source slice.
                 Expr {
-                    kind: ExprKind::String(NameStr::from_source(inner)),
+                    kind: ExprKind::String(ByteStr::from_source(inner)),
                     span: token.span,
                 }
             } else if super::interpolation::has_interpolation(inner) {
@@ -386,7 +386,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             } else if memchr::memchr(b'\\', inner.as_bytes()).is_none() {
                 // No interpolation and no escapes — verbatim source slice
                 Expr {
-                    kind: ExprKind::String(NameStr::from_source(inner)),
+                    kind: ExprKind::String(ByteStr::from_source(inner)),
                     span: token.span,
                 }
             } else {
@@ -409,7 +409,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                         .expect("parts.len() == 1 checked above")
                     {
                         StringPart::Literal(s) => Expr {
-                            kind: ExprKind::String(NameStr::from_arena(s)),
+                            kind: ExprKind::String(s),
                             span: token.span,
                         },
                         part => {
@@ -464,9 +464,9 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 // No escapes — verbatim source slice
                 let offset = inner.as_ptr() as usize - src.as_ptr() as usize;
                 let mut parts = parser.alloc_vec_with_capacity(1);
-                parts.push(StringPart::Literal(
-                    parser.arena.alloc_str(&src[offset..offset + inner.len()]),
-                ));
+                parts.push(StringPart::Literal(ByteStr::from_source(
+                    &src[offset..offset + inner.len()],
+                )));
                 Expr {
                     kind: ExprKind::ShellExec(parts),
                     span: token.span,
@@ -558,7 +558,10 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 };
                 let body_str = super::interpolation::process_heredoc_escapes(&de_indented);
                 let mut parts = parser.alloc_vec_with_capacity(1);
-                parts.push(StringPart::Literal(parser.arena.alloc_str(&body_str)));
+                parts.push(StringPart::Literal(ByteStr::new_in(
+                    parser.arena,
+                    &body_str,
+                )));
                 Expr {
                     kind: ExprKind::Heredoc { label, parts },
                     span: token.span,

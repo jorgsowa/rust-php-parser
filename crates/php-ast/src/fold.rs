@@ -458,7 +458,7 @@ pub fn fold_expr<'new, 'src, F: Fold<'src> + ?Sized>(
     let kind = match &expr.kind {
         ExprKind::Int(n) => ExprKind::Int(*n),
         ExprKind::Float(f) => ExprKind::Float(*f),
-        ExprKind::String(s) => ExprKind::String(fold_name_str(*s, arena)),
+        ExprKind::String(s) => ExprKind::String(fold_byte_str(*s, arena)),
         ExprKind::InterpolatedString(parts) => {
             ExprKind::InterpolatedString(fold_string_parts(folder, arena, parts))
         }
@@ -1279,7 +1279,7 @@ fn fold_string_parts<'new, 'src, F: Fold<'src> + ?Sized>(
     let mut vec = ArenaVec::with_capacity_in(parts.len(), arena);
     for part in parts {
         vec.push(match part {
-            StringPart::Literal(s) => StringPart::Literal(arena.alloc_str(s)),
+            StringPart::Literal(s) => StringPart::Literal(fold_byte_str(*s, arena)),
             StringPart::Expr(e) => StringPart::Expr(folder.fold_expr(arena, e)),
         });
     }
@@ -1289,6 +1289,18 @@ fn fold_string_parts<'new, 'src, F: Fold<'src> + ?Sized>(
 // =============================================================================
 // Private helpers — leaf types
 // =============================================================================
+
+/// Moves a [`ByteStr`] into the output arena of a fold: a string borrowed from the source stays
+/// borrowed, anything else is copied into `arena`.
+pub fn fold_byte_str<'new, 'src>(
+    value: ByteStr<'_, 'src>,
+    arena: &'new Bump,
+) -> ByteStr<'new, 'src> {
+    match value.into_src_str() {
+        Some(s) => ByteStr::from_source(s),
+        None => ByteStr::new_in(arena, value.as_bytes()),
+    }
+}
 
 /// Moves a [`NameStr`] into the output arena of a fold: a string borrowed from
 /// the source stays borrowed, an arena string is copied into `arena`. Use it

@@ -186,6 +186,97 @@ impl Name {
 }
 
 // ---------------------------------------------------------------------------
+// ByteString
+// ---------------------------------------------------------------------------
+
+/// The value of a PHP string literal: arbitrary bytes, which need not be valid UTF-8
+/// (`"\xff"`, `"\u{D800}"`). With the `serde` feature, valid UTF-8 serializes as a JSON string
+/// and any other value as `{"bytes": [..]}`.
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub struct ByteString(Box<[u8]>);
+
+impl ByteString {
+    /// The bytes of the string.
+    pub fn as_bytes(&self) -> &[u8] {
+        &self.0
+    }
+
+    /// The value as `&str`, or `None` when it is not valid UTF-8.
+    pub fn to_str(&self) -> Option<&str> {
+        std::str::from_utf8(&self.0).ok()
+    }
+
+    /// The value as text, replacing invalid UTF-8 with `U+FFFD`.
+    pub fn to_string_lossy(&self) -> std::borrow::Cow<'_, str> {
+        String::from_utf8_lossy(&self.0)
+    }
+
+    /// Consumes the string and returns its bytes.
+    pub fn into_bytes(self) -> Box<[u8]> {
+        self.0
+    }
+}
+
+impl std::ops::Deref for ByteString {
+    type Target = [u8];
+    fn deref(&self) -> &[u8] {
+        &self.0
+    }
+}
+
+impl From<&str> for ByteString {
+    fn from(s: &str) -> Self {
+        Self(s.as_bytes().into())
+    }
+}
+
+impl From<String> for ByteString {
+    fn from(s: String) -> Self {
+        Self(s.into_bytes().into_boxed_slice())
+    }
+}
+
+impl From<&[u8]> for ByteString {
+    fn from(b: &[u8]) -> Self {
+        Self(b.into())
+    }
+}
+
+impl From<Vec<u8>> for ByteString {
+    fn from(b: Vec<u8>) -> Self {
+        Self(b.into_boxed_slice())
+    }
+}
+
+impl PartialEq<str> for ByteString {
+    fn eq(&self, other: &str) -> bool {
+        &*self.0 == other.as_bytes()
+    }
+}
+
+impl PartialEq<&str> for ByteString {
+    fn eq(&self, other: &&str) -> bool {
+        &*self.0 == other.as_bytes()
+    }
+}
+
+impl std::fmt::Debug for ByteString {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self.to_str() {
+            Some(s) => std::fmt::Debug::fmt(s, f),
+            None => write!(f, "b{:?}", self.0.escape_ascii().to_string()),
+        }
+    }
+}
+
+#[cfg(feature = "serde")]
+impl Serialize for ByteString {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        crate::ast::serialize_bytes(&self.0, serializer)
+    }
+}
+
+// ---------------------------------------------------------------------------
 // Comment
 // ---------------------------------------------------------------------------
 
@@ -930,7 +1021,7 @@ pub enum ExprKind {
     /// Float literal.
     Float(f64),
     /// String literal without interpolation.
-    String(Box<str>),
+    String(ByteString),
     /// Double-quoted string with interpolation.
     InterpolatedString(Box<[StringPart]>),
     /// Heredoc string.
@@ -1657,7 +1748,7 @@ pub enum CallableCreateKind {
 #[non_exhaustive]
 pub enum StringPart {
     /// Literal text.
-    Literal(Box<str>),
+    Literal(ByteString),
     /// Interpolated expression.
     Expr(Expr),
 }
@@ -2356,7 +2447,9 @@ fn owned_string_parts(parts: &[arena_ast::StringPart<'_, '_>]) -> Box<[StringPar
     parts
         .iter()
         .map(|p| match p {
-            arena_ast::StringPart::Literal(s) => StringPart::Literal(Box::from(*s)),
+            arena_ast::StringPart::Literal(s) => {
+                StringPart::Literal(ByteString::from(s.as_bytes()))
+            }
             arena_ast::StringPart::Expr(e) => StringPart::Expr(owned_expr(e)),
         })
         .collect::<Vec<_>>()
@@ -2439,7 +2532,7 @@ fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
     match k {
         arena_ast::ExprKind::Int(v) => ExprKind::Int(*v),
         arena_ast::ExprKind::Float(v) => ExprKind::Float(*v),
-        arena_ast::ExprKind::String(s) => ExprKind::String(Box::from(s.as_str())),
+        arena_ast::ExprKind::String(s) => ExprKind::String(ByteString::from(s.as_bytes())),
         arena_ast::ExprKind::InterpolatedString(parts) => {
             ExprKind::InterpolatedString(owned_string_parts(parts))
         }
@@ -3332,7 +3425,9 @@ fn av_string_parts<'a>(
     let mut v = arena_ast::ArenaVec::with_capacity_in(parts.len(), arena);
     for p in parts.iter() {
         v.push(match p {
-            StringPart::Literal(s) => arena_ast::StringPart::Literal(arena.alloc_str(s)),
+            StringPart::Literal(s) => {
+                arena_ast::StringPart::Literal(arena_ast::ByteStr::new_in(arena, s.as_bytes()))
+            }
             StringPart::Expr(e) => arena_ast::StringPart::Expr(av_expr(arena, e)),
         });
     }
@@ -3404,7 +3499,9 @@ fn av_leaf_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
     match k {
         ExprKind::Int(v) => arena_ast::ExprKind::Int(*v),
         ExprKind::Float(v) => arena_ast::ExprKind::Float(*v),
-        ExprKind::String(s) => arena_ast::ExprKind::String(av_namestr(arena, s)),
+        ExprKind::String(s) => {
+            arena_ast::ExprKind::String(arena_ast::ByteStr::new_in(arena, s.as_bytes()))
+        }
         ExprKind::InterpolatedString(parts) => {
             arena_ast::ExprKind::InterpolatedString(av_string_parts(arena, parts))
         }

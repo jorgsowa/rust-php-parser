@@ -53,3 +53,18 @@ fn into_kind_moves_the_kind_out_of_a_drop_type() {
     };
     assert!(matches!(inner.into_kind(), ExprKind::Int(7)));
 }
+
+#[test]
+fn byte_string_reads_text_and_raw_bytes() {
+    use php_ast::owned::ByteString;
+    let text = ByteString::from("héllo");
+    assert_eq!(text.to_str(), Some("héllo"));
+    assert_eq!(text, "héllo");
+
+    let raw = ByteString::from(vec![b'a', 0xff]);
+    assert_eq!(raw.as_bytes(), [b'a', 0xff]);
+    assert_eq!(raw.to_str(), None);
+    assert_eq!(raw.to_string_lossy(), "a\u{FFFD}");
+    assert_eq!(&*raw.clone().into_bytes(), [b'a', 0xff]);
+    assert_eq!(format!("{raw:?}"), r#"b"a\\xff""#);
+}

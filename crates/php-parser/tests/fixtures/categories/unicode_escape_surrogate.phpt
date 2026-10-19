@@ -12,7 +12,13 @@ E;
         "Echo": [
           {
             "kind": {
-              "String": "í "
+              "String": {
+                "bytes": [
+                  237,
+                  160,
+                  128
+                ]
+              }
             },
             "span": {
               "start": 11,
@@ -23,7 +29,13 @@ E;
             "kind": {
               "InterpolatedString": [
                 {
-                  "Literal": "í¿¿"
+                  "Literal": {
+                    "bytes": [
+                      237,
+                      191,
+                      191
+                    ]
+                  }
                 },
                 {
                   "Expr": {
@@ -59,7 +71,13 @@ E;
                 "label": "E",
                 "parts": [
                   {
-                    "Literal": "í°"
+                    "Literal": {
+                      "bytes": [
+                        237,
+                        176,
+                        128
+                      ]
+                    }
                   }
                 ]
               }

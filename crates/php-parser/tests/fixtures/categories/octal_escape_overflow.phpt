@@ -20,7 +20,12 @@ echo "\400\501", "a\777$x";
             "kind": {
               "InterpolatedString": [
                 {
-                  "Literal": "aÿ"
+                  "Literal": {
+                    "bytes": [
+                      97,
+                      255
+                    ]
+                  }
                 },
                 {
                   "Expr": {

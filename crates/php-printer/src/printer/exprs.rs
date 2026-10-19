@@ -703,9 +703,9 @@ impl<'src> Printer<'src> {
         for (i, part) in parts.iter().enumerate() {
             match part {
                 StringPart::Literal(s) => {
-                    self.w(&escape(s));
+                    self.w(&escape_bytes(s.as_bytes(), escape));
                     // A bare `$name` after a literal `{` would open `{$...}` syntax.
-                    after_brace = s.ends_with('{');
+                    after_brace = s.as_bytes().ends_with(b"{");
                 }
                 StringPart::Expr(expr) => {
                     match &expr.kind {
@@ -746,15 +746,18 @@ impl<'src> Printer<'src> {
         )
     }
 
-    fn print_string_literal(&mut self, s: &str) {
-        if needs_double_quotes(s) {
-            self.w("\"");
-            self.w(&escape_double_quoted(s));
-            self.w("\"");
-        } else {
-            self.w("'");
-            self.w(&escape_single_quoted(s));
-            self.w("'");
+    fn print_string_literal(&mut self, s: &ByteStr) {
+        match s.to_str() {
+            Some(text) if !needs_double_quotes(s.as_bytes()) => {
+                self.w("'");
+                self.w(&escape_single_quoted(text));
+                self.w("'");
+            }
+            _ => {
+                self.w("\"");
+                self.w(&escape_bytes(s.as_bytes(), escape_double_quoted));
+                self.w("\"");
+            }
         }
     }
 }
@@ -813,9 +816,12 @@ fn extends_simple_variable(next: Option<&StringPart>) -> bool {
     let Some(StringPart::Literal(s)) = next else {
         return false;
     };
-    s.starts_with(|c: char| c.is_ascii_alphanumeric() || c == '_' || c == '[' || !c.is_ascii())
-        || s.starts_with("->")
-        || s.starts_with("?->")
+    let bytes = s.as_bytes();
+    bytes
+        .first()
+        .is_some_and(|b| b.is_ascii_alphanumeric() || *b == b'_' || *b == b'[' || !b.is_ascii())
+        || bytes.starts_with(b"->")
+        || bytes.starts_with(b"?->")
 }
 
 /// The chain operand of `node`, checking the cheap [`is_chain`] first.

@@ -748,7 +748,7 @@ fn literal_truth(expr: &Expr<'_, '_>) -> Option<bool> {
     match &unparenthesized(expr).kind {
         ExprKind::Int(n) => Some(*n != 0),
         ExprKind::Float(f) => Some(*f != 0.0),
-        ExprKind::String(s) => Some(!matches!(s.as_str(), "" | "0")),
+        ExprKind::String(s) => Some(!matches!(s.as_bytes(), b"" | b"0")),
         ExprKind::Nowdoc { value, .. } => Some(!matches!(*value, "" | "0")),
         ExprKind::Bool(b) => Some(*b),
         ExprKind::Null => Some(false),

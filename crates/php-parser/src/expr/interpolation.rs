@@ -26,12 +26,12 @@ pub fn parse_interpolated_parts<'arena, 'src>(
     // Start of the current literal run within `inner`.
     let mut literal_start = 0usize;
     // Accumulated owned string; present only when the run contains escape sequences.
-    let mut owned: Option<String> = None;
+    let mut owned: Option<Vec<u8>> = None;
 
     while i < len {
         match bytes[i] {
             b'\\' => {
-                let buf = owned.get_or_insert_with(|| inner[literal_start..i].to_string());
+                let buf = owned.get_or_insert_with(|| inner.as_bytes()[literal_start..i].to_vec());
                 i = decode_escape_at(bytes, inner, i, buf, errors, base_offset, true);
             }
             b'$' => {
@@ -39,12 +39,12 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                 if i + 1 < len && bytes[i + 1] == b'{' {
                     if let Some(buf) = owned.take() {
                         if !buf.is_empty() {
-                            parts.push(StringPart::Literal(arena.alloc_str(&buf)));
+                            parts.push(StringPart::Literal(ByteStr::new_in(arena, &buf)));
                         }
                     } else if i > literal_start {
-                        parts.push(StringPart::Literal(
-                            arena.alloc_str(&inner[literal_start..i]),
-                        ));
+                        parts.push(StringPart::Literal(ByteStr::from_source(
+                            &inner[literal_start..i],
+                        )));
                     }
                     let (expr, next) = parse_dollar_brace(
                         arena,
@@ -64,12 +64,12 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                     // Flush literal run.
                     if let Some(buf) = owned.take() {
                         if !buf.is_empty() {
-                            parts.push(StringPart::Literal(arena.alloc_str(&buf)));
+                            parts.push(StringPart::Literal(ByteStr::new_in(arena, &buf)));
                         }
                     } else if i > literal_start {
-                        parts.push(StringPart::Literal(
-                            arena.alloc_str(&inner[literal_start..i]),
-                        ));
+                        parts.push(StringPart::Literal(ByteStr::from_source(
+                            &inner[literal_start..i],
+                        )));
                     }
 
                     // Parse variable name
@@ -170,7 +170,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                 } else {
                     // Plain `$` not starting a variable — keep in literal run.
                     if let Some(ref mut buf) = owned {
-                        buf.push('$');
+                        buf.push(b'$');
                     }
                     i += 1;
                 }
@@ -179,12 +179,12 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                 // Complex syntax: {$expr}
                 if let Some(buf) = owned.take() {
                     if !buf.is_empty() {
-                        parts.push(StringPart::Literal(arena.alloc_str(&buf)));
+                        parts.push(StringPart::Literal(ByteStr::new_in(arena, &buf)));
                     }
                 } else if i > literal_start {
-                    parts.push(StringPart::Literal(
-                        arena.alloc_str(&inner[literal_start..i]),
-                    ));
+                    parts.push(StringPart::Literal(ByteStr::from_source(
+                        &inner[literal_start..i],
+                    )));
                 }
 
                 let brace_offset = base_offset + i as u32;
@@ -262,7 +262,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                 // Regular character — push to owned buffer only if we're already materialised.
                 if let Some(ref mut buf) = owned {
                     if bytes[i] < 0x80 {
-                        buf.push(bytes[i] as char);
+                        buf.push(bytes[i]);
                         i += 1;
                     } else {
                         let seq_start = i;
@@ -270,7 +270,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                         while i < len && is_utf8_continuation(bytes[i]) {
                             i += 1;
                         }
-                        buf.push_str(&inner[seq_start..i]);
+                        buf.extend_from_slice(&inner.as_bytes()[seq_start..i]);
                     }
                 } else {
                     i += 1;
@@ -282,12 +282,12 @@ pub fn parse_interpolated_parts<'arena, 'src>(
     // Flush remaining literal run.
     if let Some(buf) = owned {
         if !buf.is_empty() {
-            parts.push(StringPart::Literal(arena.alloc_str(&buf)));
+            parts.push(StringPart::Literal(ByteStr::new_in(arena, &buf)));
         }
     } else if i > literal_start {
-        parts.push(StringPart::Literal(
-            arena.alloc_str(&inner[literal_start..i]),
-        ));
+        parts.push(StringPart::Literal(ByteStr::from_source(
+            &inner[literal_start..i],
+        )));
     }
 
     parts
@@ -316,7 +316,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
     let indent_len = indent.len();
     let mut parts: ArenaVec<'arena, StringPart<'arena, 'src>> =
         ArenaVec::with_capacity_in(4, arena);
-    let mut literal = String::new();
+    let mut literal: Vec<u8> = Vec::new();
     let bytes = raw_body.as_bytes();
     let len = bytes.len();
 
@@ -335,7 +335,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
             }
             b'\n' => {
                 // Preserve the newline in the literal, then skip the indent on the next line
-                literal.push('\n');
+                literal.push(b'\n');
                 i += 1;
                 if indent_len > 0
                     && i + indent_len <= len
@@ -347,7 +347,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
             b'$' => {
                 if i + 1 < len && bytes[i + 1] == b'{' {
                     if !literal.is_empty() {
-                        parts.push(StringPart::Literal(arena.alloc_str(&literal)));
+                        parts.push(StringPart::Literal(ByteStr::new_in(arena, &literal)));
                         literal.clear();
                     }
                     let (expr, next) = parse_dollar_brace(
@@ -364,7 +364,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                     i = next;
                 } else if i + 1 < len && is_var_start(bytes[i + 1]) {
                     if !literal.is_empty() {
-                        parts.push(StringPart::Literal(arena.alloc_str(&literal)));
+                        parts.push(StringPart::Literal(ByteStr::new_in(arena, &literal)));
                         literal.clear();
                     }
                     let var_start = i;
@@ -452,13 +452,13 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                     }
                     parts.push(StringPart::Expr(expr));
                 } else {
-                    literal.push('$');
+                    literal.push(b'$');
                     i += 1;
                 }
             }
             b'{' if i + 1 < len && bytes[i + 1] == b'$' => {
                 if !literal.is_empty() {
-                    parts.push(StringPart::Literal(arena.alloc_str(&literal)));
+                    parts.push(StringPart::Literal(ByteStr::new_in(arena, &literal)));
                     literal.clear();
                 }
                 let brace_offset = body_offset + i as u32;
@@ -518,7 +518,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
             }
             _ => {
                 if bytes[i] < 0x80 {
-                    literal.push(bytes[i] as char);
+                    literal.push(bytes[i]);
                     i += 1;
                 } else {
                     let seq_start = i;
@@ -526,14 +526,14 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                     while i < len && is_utf8_continuation(bytes[i]) {
                         i += 1;
                     }
-                    literal.push_str(&raw_body[seq_start..i]);
+                    literal.extend_from_slice(&raw_body.as_bytes()[seq_start..i]);
                 }
             }
         }
     }
 
     if !literal.is_empty() {
-        parts.push(StringPart::Literal(arena.alloc_str(&literal)));
+        parts.push(StringPart::Literal(ByteStr::new_in(arena, &literal)));
     }
 
     parts
@@ -546,52 +546,52 @@ fn decode_escape_at(
     bytes: &[u8],
     text: &str,
     i: usize,
-    out: &mut String,
+    out: &mut Vec<u8>,
     errors: &mut Vec<ParseError>,
     span_base: u32,
     stop_at_dquote: bool,
 ) -> usize {
     let len = bytes.len();
     if i + 1 >= len {
-        out.push('\\');
+        out.push(b'\\');
         return i + 1;
     }
     let next = bytes[i + 1];
     match next {
         b'$' => {
-            out.push('$');
+            out.push(b'$');
             i + 2
         }
         b'\\' => {
-            out.push('\\');
+            out.push(b'\\');
             i + 2
         }
         b'n' => {
-            out.push('\n');
+            out.push(b'\n');
             i + 2
         }
         b'r' => {
-            out.push('\r');
+            out.push(b'\r');
             i + 2
         }
         b't' => {
-            out.push('\t');
+            out.push(b'\t');
             i + 2
         }
         b'v' => {
-            out.push('\x0B');
+            out.push(b'\x0B');
             i + 2
         }
         b'e' => {
-            out.push('\x1B');
+            out.push(b'\x1B');
             i + 2
         }
         b'f' => {
-            out.push('\x0C');
+            out.push(b'\x0C');
             i + 2
         }
         b'"' => {
-            out.push('"');
+            out.push(b'"');
             i + 2
         }
         b'x' | b'X' => {
@@ -602,11 +602,11 @@ fn decode_escape_at(
             }
             if j > start {
                 if let Ok(val) = u8::from_str_radix(&text[start..j], 16) {
-                    out.push(val as char);
+                    out.push(val);
                 }
             } else {
-                out.push('\\');
-                out.push('x');
+                out.push(b'\\');
+                out.push(b'x');
             }
             j
         }
@@ -631,13 +631,14 @@ fn decode_escape_at(
                         });
                     } else if let Ok(codepoint) = u32::from_str_radix(hex, 16) {
                         if let Some(c) = char::from_u32(codepoint) {
-                            out.push(c);
+                            let mut utf8 = [0u8; 4];
+                            out.extend_from_slice(c.encode_utf8(&mut utf8).as_bytes());
                         } else if (0xD800..=0xDFFF).contains(&codepoint) {
                             // PHP encodes surrogates as their three UTF-8 bytes, stored one
                             // char per byte like `\x` escapes.
-                            out.push((0xE0 | (codepoint >> 12)) as u8 as char);
-                            out.push((0x80 | ((codepoint >> 6) & 0x3F)) as u8 as char);
-                            out.push((0x80 | (codepoint & 0x3F)) as u8 as char);
+                            out.push((0xE0 | (codepoint >> 12)) as u8);
+                            out.push((0x80 | ((codepoint >> 6) & 0x3F)) as u8);
+                            out.push((0x80 | (codepoint & 0x3F)) as u8);
                         } else {
                             errors.push(ParseError::Forbidden {
                                 message:
@@ -671,8 +672,8 @@ fn decode_escape_at(
                     });
                 }
             } else {
-                out.push('\\');
-                out.push('u');
+                out.push(b'\\');
+                out.push(b'u');
             }
             j
         }
@@ -684,15 +685,15 @@ fn decode_escape_at(
             }
             // PHP keeps the low byte of `\400`..`\777`.
             if let Ok(val) = u16::from_str_radix(&text[start..j], 8) {
-                out.push(val as u8 as char);
+                out.push(val as u8);
             }
             j
         }
         _ => {
-            out.push('\\');
+            out.push(b'\\');
             // The character after the backslash might be multi-byte UTF-8
             if next < 0x80 {
-                out.push(next as char);
+                out.push(next);
                 i + 2
             } else {
                 // Read the entire multi-byte sequence and push it
@@ -700,7 +701,7 @@ fn decode_escape_at(
                 while j < len && is_utf8_continuation(bytes[j]) {
                     j += 1;
                 }
-                out.push_str(&text[i + 1..j]);
+                out.extend_from_slice(&text.as_bytes()[i + 1..j]);
                 j
             }
         }
@@ -734,18 +735,18 @@ pub fn has_interpolation(inner: &str) -> bool {
 }
 
 /// Process escape sequences in a heredoc string without interpolation.
-pub fn process_heredoc_escapes(inner: &str) -> String {
+pub fn process_heredoc_escapes(inner: &str) -> Vec<u8> {
     let bytes = inner.as_bytes();
     let len = bytes.len();
     let mut i = 0;
-    let mut out = String::with_capacity(len);
+    let mut out = Vec::with_capacity(len);
     let mut errors = Vec::new();
 
     while i < len {
         if bytes[i] == b'\\' {
             i = decode_escape_at(bytes, inner, i, &mut out, &mut errors, 0, false);
         } else if bytes[i] < 0x80 {
-            out.push(bytes[i] as char);
+            out.push(bytes[i]);
             i += 1;
         } else {
             let seq_start = i;
@@ -753,7 +754,7 @@ pub fn process_heredoc_escapes(inner: &str) -> String {
             while i < len && is_utf8_continuation(bytes[i]) {
                 i += 1;
             }
-            out.push_str(&inner[seq_start..i]);
+            out.extend_from_slice(&inner.as_bytes()[seq_start..i]);
         }
     }
     out
@@ -865,7 +866,7 @@ fn parse_simple_index<'arena, 'src>(
     let key_start = idx_offset as usize;
     let key_end = idx_end as usize;
     Expr {
-        kind: ExprKind::String(NameStr::from_source(&source[key_start..key_end])),
+        kind: ExprKind::String(ByteStr::from_source(&source[key_start..key_end])),
         span,
     }
 }

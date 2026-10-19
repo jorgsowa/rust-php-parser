@@ -5,7 +5,7 @@ use crate::Span;
 
 #[cfg(feature = "serde")]
 use super::is_false;
-use super::{ArenaVec, Arg, Attribute, Block, ClassDecl, Ident, Name, Param, TypeHint};
+use super::{ArenaVec, Arg, Attribute, Block, ByteStr, ClassDecl, Ident, Name, Param, TypeHint};
 
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
 enum NameStrInner<'arena, 'src> {
@@ -110,9 +110,9 @@ pub enum ExprKind<'arena, 'src> {
     /// Float literal
     Float(f64),
 
-    /// String literal, with escape sequences decoded. Borrowed from the source
-    /// when the literal has none.
-    String(NameStr<'arena, 'src>),
+    /// String literal, with escape sequences decoded to the bytes PHP stores. Borrowed from the
+    /// source when the literal has none.
+    String(ByteStr<'arena, 'src>),
 
     /// Interpolated string: `"Hello $name, you are {$age} years old"`
     InterpolatedString(ArenaVec<'arena, StringPart<'arena, 'src>>),
@@ -889,8 +889,8 @@ pub enum CallableCreateKind<'arena, 'src> {
 #[cfg_attr(feature = "serde", derive(Serialize))]
 #[non_exhaustive]
 pub enum StringPart<'arena, 'src> {
-    /// A plain text segment of an interpolated string or heredoc.
-    Literal(&'arena str),
+    /// A plain text segment of an interpolated string or heredoc, with escapes decoded.
+    Literal(ByteStr<'arena, 'src>),
     /// An embedded expression: `$var`, `{$expr}`, or `${var}`.
     Expr(Expr<'arena, 'src>),
 }

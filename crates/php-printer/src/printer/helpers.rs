@@ -46,13 +46,31 @@ pub(crate) fn enum_member_doc_comment<'a>(member: &'a EnumMember) -> Option<&'a 
     }
 }
 
-pub(crate) fn needs_double_quotes(s: &str) -> bool {
-    s.bytes().any(|b| {
+/// Whether a string literal must be written in double quotes: it holds a character that needs a
+/// double-quoted escape, or bytes that are not valid UTF-8 and are written as `\xNN`.
+pub(crate) fn needs_double_quotes(bytes: &[u8]) -> bool {
+    bytes.iter().any(|b| {
         matches!(
             b,
             b'\n' | b'\r' | b'\t' | b'\x1b' | b'\x0c' | b'\x0b' | b'$'
         )
-    })
+    }) || std::str::from_utf8(bytes).is_err()
+}
+
+/// Escapes `bytes` with `escape`, writing every byte that is not part of a valid UTF-8 sequence as
+/// `\xNN`.
+pub(crate) fn escape_bytes(bytes: &[u8], escape: fn(&str) -> String) -> String {
+    if let Ok(text) = std::str::from_utf8(bytes) {
+        return escape(text);
+    }
+    let mut out = String::with_capacity(bytes.len());
+    for chunk in bytes.utf8_chunks() {
+        out.push_str(&escape(chunk.valid()));
+        for byte in chunk.invalid() {
+            out.push_str(&format!("\\x{byte:02x}"));
+        }
+    }
+    out
 }
 
 pub(crate) fn escape_single_quoted(s: &str) -> String {

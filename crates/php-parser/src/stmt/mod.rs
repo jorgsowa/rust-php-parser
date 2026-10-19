@@ -3551,12 +3551,12 @@ pub(crate) fn class_keyword(name: &str) -> Option<&'static str> {
 fn literal_string<'a>(expr: &'a Expr<'_, '_>) -> Option<std::borrow::Cow<'a, str>> {
     use std::borrow::Cow;
     match &expr.kind {
-        ExprKind::String(value) => Some(Cow::Borrowed(value.as_str())),
+        ExprKind::String(value) => Some(value.to_string_lossy()),
         ExprKind::Nowdoc { value, .. } => Some(Cow::Borrowed(value)),
         ExprKind::Heredoc { parts, .. } => parts
             .iter()
             .map(|part| match part {
-                StringPart::Literal(text) => Some(*text),
+                StringPart::Literal(text) => Some(text.to_string_lossy()),
                 _ => None,
             })
             .collect::<Option<String>>()

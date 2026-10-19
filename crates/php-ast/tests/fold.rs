@@ -1,9 +1,9 @@
 use bumpalo::Bump;
 use php_ast::ast::*;
 use php_ast::fold::{
-    fold_arg, fold_attribute, fold_catch_clause, fold_class_member, fold_enum_member, fold_expr,
-    fold_match_arm, fold_name, fold_name_str, fold_param, fold_property_hook, fold_stmt,
-    fold_trait_adaptation, fold_trait_use, fold_type_hint, Fold,
+    fold_arg, fold_attribute, fold_byte_str, fold_catch_clause, fold_class_member,
+    fold_enum_member, fold_expr, fold_match_arm, fold_name, fold_name_str, fold_param,
+    fold_property_hook, fold_stmt, fold_trait_adaptation, fold_trait_use, fold_type_hint, Fold,
 };
 use php_ast::Span;
 
@@ -60,12 +60,12 @@ fn identity_fold_preserves_arena_strings() {
 
     let s = arena.alloc_str("hello world");
     let expr = Expr {
-        kind: ExprKind::String(NameStr::from_arena(s)),
+        kind: ExprKind::String(ByteStr::from_arena_str(s)),
         span: Span::DUMMY,
     };
     let folded_expr = Identity.fold_expr(&out, &expr);
     match folded_expr.kind {
-        ExprKind::String(t) => assert_eq!(t.as_str(), "hello world"),
+        ExprKind::String(t) => assert_eq!(t, "hello world"),
         _ => panic!("expected String"),
     }
 }
@@ -128,14 +128,14 @@ fn string_literal_is_reallocated_into_new_arena() {
 
     let s = src_arena.alloc_str("hello world");
     let expr = Expr {
-        kind: ExprKind::String(NameStr::from_arena(s)),
+        kind: ExprKind::String(ByteStr::from_arena_str(s)),
         span: Span::DUMMY,
     };
     let folded_expr = Identity.fold_expr(&out, &expr);
     let ExprKind::String(t) = folded_expr.kind else {
         panic!("expected String")
     };
-    assert_eq!(t.as_str(), "hello world");
+    assert_eq!(t, "hello world");
     // Must be a fresh allocation in `out`, not a pointer into `src_arena`
     assert_ne!(
         t.as_ptr(),
@@ -331,7 +331,7 @@ fn string_part_literal_in_interpolated_string_is_reallocated() {
         span: Span::DUMMY,
     };
     let mut parts = ArenaVec::new_in(&src);
-    parts.push(StringPart::Literal(s));
+    parts.push(StringPart::Literal(ByteStr::from_arena_str(s)));
     parts.push(StringPart::Expr(var_expr));
     let expr = Expr {
         kind: ExprKind::InterpolatedString(parts),
@@ -1328,4 +1328,39 @@ fn declaration_and_statement_constructors_leave_the_rest_empty() {
 
     let try_catch = TryCatchStmt::new(&arena, block);
     assert!(try_catch.catches.is_empty() && try_catch.finally.is_none());
+}
+
+#[test]
+fn byte_str_holds_bytes_that_are_not_utf8() {
+    let arena = Bump::new();
+    let text = ByteStr::from_source("héllo");
+    assert_eq!(text.to_str(), Some("héllo"));
+    assert_eq!(text, "héllo");
+    assert_eq!(text.to_string_lossy(), "héllo");
+
+    let raw = ByteStr::new_in(&arena, &[b'a', 0xff, b'b']);
+    assert_eq!(raw.as_bytes(), [b'a', 0xff, b'b']);
+    assert_eq!(raw.to_str(), None);
+    assert_eq!(raw.to_string_lossy(), "a\u{FFFD}b");
+    assert_ne!(raw, text);
+    assert_eq!(format!("{raw:?}"), r#"b"a\\xffb""#);
+
+    // Valid bytes copied into the arena read back as text.
+    let copied = ByteStr::new_in(&arena, "ÿ".as_bytes());
+    assert_eq!(copied.to_str(), Some("ÿ"));
+    assert_eq!(copied, ByteStr::from_source("ÿ"));
+}
+
+#[test]
+fn fold_byte_str_keeps_source_slices_and_copies_the_rest() {
+    let src = "plain";
+    let out = Bump::new();
+    let kept = fold_byte_str(ByteStr::from_source(src), &out);
+    assert_eq!(kept.as_bytes().as_ptr(), src.as_ptr());
+
+    let from = Bump::new();
+    let raw = ByteStr::new_in(&from, &[0xff, 0x00]);
+    let copied = fold_byte_str(raw, &out);
+    assert_eq!(copied.as_bytes(), [0xff, 0x00]);
+    assert_ne!(copied.as_bytes().as_ptr(), raw.as_bytes().as_ptr());
 }

@@ -503,3 +503,25 @@ fn owned_program_keeps_comments() {
         .print(&result.program);
     assert_eq!(out, "<?php\n// greet\necho 'hi';");
 }
+
+/// String literals are bytes: ones that are not valid UTF-8 print as `\xNN` and read back as the
+/// same bytes, and valid UTF-8 spelled with escapes (`"\xc3\xbf"`) prints as the character.
+#[test]
+fn string_bytes_survive_printing() {
+    let code = r#"<?php
+$a = "\xff";
+$b = "a\x80b\xc3";
+$c = "\u{D800}";
+$d = "\xc3\xbf";
+$e = "\xffx$y\x80";
+$f = <<<EOT
+\xfe$y
+EOT;
+"#;
+    assert_round_trips(code);
+    let printed = php_printer::pretty_print(&php_rs_parser::parse(code).program);
+    assert!(printed.contains(r#""\xff""#), "{printed}");
+    assert!(printed.contains(r#""a\x80b\xc3""#), "{printed}");
+    assert!(printed.contains(r#""\xed\xa0\x80""#), "{printed}");
+    assert!(printed.contains("'ÿ'"), "{printed}");
+}

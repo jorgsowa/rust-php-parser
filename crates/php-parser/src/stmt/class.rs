@@ -422,7 +422,7 @@ pub(super) fn is_virtual_property(name: &str, hooks: &[PropertyHook<'_, '_>]) ->
     // PHP folds constant names before looking for the property: `${"th" . "is"}->{("x")}`.
     fn folded_str(expr: &Expr<'_, '_>) -> Option<String> {
         match &expr.kind {
-            ExprKind::String(s) => Some(s.as_str().to_owned()),
+            ExprKind::String(s) => Some(s.to_string_lossy().into_owned()),
             ExprKind::Parenthesized(inner) => folded_str(inner),
             ExprKind::Binary(b) if b.op == BinaryOp::Concat => {
                 Some(folded_str(b.left)? + &folded_str(b.right)?)

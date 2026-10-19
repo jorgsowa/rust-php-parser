@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `new` constructors for the structs below; each takes the fields that identify the node (and the arena when it has vector fields) and leaves the rest empty (`php-ast`).
 - Owned `Name::span()`, `kind()`, `to_string_repr()` and `join_parts()`, `Expr::name_str()` and `Expr::into_kind()`, like their arena counterparts. `Expr` implements `Drop` (so long chains are freed iteratively), which is now documented; take the kind out with `into_kind()` instead of destructuring (`php-ast`).
 - `OwnedFold::fold_stmts` hook, called for the program, every block and every `case` body, so a fold can delete, split or insert statements; the free `fold_owned_stmts` is public (`php-ast`).
+- `php_ast::ByteStr` (arena) and `php_ast::owned::ByteString`, the value of a PHP string literal as bytes: `as_bytes()`, `to_str()` (`None` unless valid UTF-8) and `to_string_lossy()`. With `serde`, valid UTF-8 serializes as a JSON string and anything else as `{"bytes": [..]}`. `fold::fold_byte_str` moves one into a fold's output arena (`php-ast`).
 
 ### Changed
 
@@ -38,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Breaking:** the struct variants of `ParseError`, `LexerError` and the `phpdoc-parser` structs `InlineTag`, `PhpDocText`, `PhpDocTag` and `PhpDoc` are `#[non_exhaustive]`; match `ParseError` fields with `..` (`php-rs-parser`, `php-lexer`, `phpdoc-parser`).
 - **Breaking:** `Visitor`, `ScopeVisitor`, `OwnedVisitor` and `OwnedScopeVisitor` have an associated `type Break`, and every `visit_*` and `walk_*` returns `ControlFlow<Self::Break>` / `ControlFlow<V::Break>`, so a visitor can hand a result out of the walk with `ControlFlow::Break(value)`. Existing visitors add `type Break = ();` (`php-ast`).
 - **Breaking:** `OwnedFold` takes every node by value (`fn fold_expr(&mut self, expr: Expr) -> Expr`) and the free `fold_owned_*` functions move the children they keep instead of cloning them. `OwnedFold::fold_program(&program)` becomes `fold_program(program)` (`php-ast`).
+- **Breaking:** `ExprKind::String` and `StringPart::Literal` (arena and owned) hold a `ByteStr` / `ByteString` instead of a `str`, because a PHP string is bytes and `"\xff"` or `"\u{D800}"` are not valid UTF-8. Use `as_bytes()`, or `to_str()` / `to_string_lossy()` when you need text. Nowdoc values are unchanged (`php-ast`, `php-rs-parser`, `php-printer`).
 
 ### Fixed
 
@@ -149,6 +151,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Attributes on a `const` with several items report PHP's wording, `Cannot apply attributes to multiple constants at once` (`php-rs-parser`).
 
 ---
+- String escapes decode to the bytes PHP stores. `"\xff"`, `"\400"` and `"\u{D800}"` were stored one character per byte, so they could not be told apart from `"ÿ"` and the printer wrote different bytes; the printer now writes bytes that are not valid UTF-8 as `\xNN` (`php-rs-parser`, `php-printer`).
 
 ## [0.23.0] - 2026-10-18
 

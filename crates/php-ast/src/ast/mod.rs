@@ -1,9 +1,13 @@
+mod bytes;
 mod decls;
 mod exprs;
 mod misc;
 mod names;
 mod stmts;
 
+#[cfg(feature = "serde")]
+pub(crate) use bytes::serialize_bytes;
+pub use bytes::ByteStr;
 pub use decls::*;
 pub use exprs::*;
 pub use misc::*;
