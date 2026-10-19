@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Report methods without a body outside interfaces and abstract declarations, abstract methods in anonymous classes, and variadic promoted constructor parameters, like PHP (`php-rs-parser`).
 - `new namespace\Foo` dropped the `namespace\` prefix of the class name (`php-rs-parser`).
 - `declare(...) ?>` took the inline HTML after `?>` as its body instead of ending at `?>` like at `;`, so the printer wrote `declare(strict_types=1) { ?>...`, which PHP rejects (`php-rs-parser`).
 - A float literal longer than 256 bytes was cut off before parsing, so `0.000…5` with hundreds of digits read as `0.0` (`php-rs-parser`).

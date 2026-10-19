@@ -188,6 +188,7 @@ fn standalone_type_message(builtin: BuiltinType) -> Option<&'static str> {
 pub(crate) struct ClassScope {
     /// Namespace-qualified name used in messages; `class@anonymous` for anonymous classes.
     pub(crate) name: String,
+    pub(crate) is_anonymous: bool,
     /// What `self` resolves to at compile time; `None` in traits and closures.
     pub(crate) self_name: Option<String>,
     /// What `parent` resolves to at compile time.
@@ -1064,12 +1065,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         parent: Option<&Name<'_, '_>>,
         is_trait: bool,
     ) -> ClassScope {
+        let name_is_none = name.is_none();
         let name = match (name, &self.namespace) {
             (None, _) => "class@anonymous".to_owned(),
             (Some(name), Some(namespace)) => format!("{namespace}\\{name}"),
             (Some(name), None) => name.to_owned(),
         };
         ClassScope {
+            is_anonymous: name_is_none,
             self_name: (!is_trait).then(|| name.clone()),
             parent_name: parent.map(|p| self.resolve_class_name(p)),
             name,

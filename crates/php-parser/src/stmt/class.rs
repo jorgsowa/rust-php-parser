@@ -1208,6 +1208,14 @@ pub(super) fn parse_method_member<'arena, 'src>(
             });
         }
     }
+    if is_constructor {
+        for param in params.iter().filter(|p| p.variadic && is_promoted_param(p)) {
+            parser.error(ParseError::Forbidden {
+                message: "Cannot declare variadic promoted property".into(),
+                span: param.span,
+            });
+        }
+    }
     parser.expect(TokenKind::RightParen);
 
     let return_type = if parser.eat(TokenKind::Colon).is_some() {
@@ -1218,6 +1226,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
 
     let doc_comment = parser.take_doc_comment(member_start);
 
+    let mut terminated_without_body = false;
     let body = if parser.check(TokenKind::LeftBrace) {
         let brace_start = parser.start_span();
         parser.expect(TokenKind::LeftBrace);
@@ -1252,7 +1261,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
             span: Span::new(brace_start, block_end),
         }))
     } else {
-        parser.expect(TokenKind::Semicolon);
+        terminated_without_body = parser.expect(TokenKind::Semicolon).is_some();
         None
     };
 
@@ -1287,7 +1296,19 @@ pub(super) fn parse_method_member<'arena, 'src>(
                 span: member_span,
             });
         }
+    } else if !mods.is_abstract && terminated_without_body {
+        parser.error(ParseError::Forbidden {
+            message: format!("Non-abstract method {method_label} must contain body").into(),
+            span: member_span,
+        });
     } else if mods.is_abstract {
+        if parser.class_scope.as_ref().is_some_and(|s| s.is_anonymous) {
+            parser.error(ParseError::Forbidden {
+                message: format!("Anonymous class method {method_name}() must not be abstract")
+                    .into(),
+                span: member_span,
+            });
+        }
         // Traits may declare abstract private methods.
         if mods.visibility == Some(Visibility::Private) && !in_trait {
             parser.error(ParseError::Forbidden {
