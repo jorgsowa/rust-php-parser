@@ -484,6 +484,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
     }
 
+    /// At a `;` or `?>`, either of which ends a statement.
+    pub fn at_statement_end(&mut self) -> bool {
+        self.check(TokenKind::Semicolon) || self.check(TokenKind::CloseTag)
+    }
+
     /// Like `expect(TokenKind::Semicolon)`, but a `?>` also ends the statement (not consumed).
     pub fn expect_statement_end(&mut self) -> Option<Token> {
         if self.check(TokenKind::CloseTag) {

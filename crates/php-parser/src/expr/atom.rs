@@ -1773,7 +1773,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     let kind = parser.current_kind();
     let is_binary_only = precedence::infix_binding_power(kind).is_some()
         && precedence::prefix_binding_power(kind).is_none();
-    if parser.check(TokenKind::Semicolon)
+    if parser.at_statement_end()
         || parser.check(TokenKind::RightParen)
         || parser.check(TokenKind::RightBracket)
         || parser.check(TokenKind::RightBrace)

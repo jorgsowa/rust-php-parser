@@ -1,0 +1,74 @@
+===source===
+<?php switch ($a) { case 1: break ?>x<?php }
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Switch": {
+          "expr": {
+            "kind": {
+              "Variable": "a"
+            },
+            "span": {
+              "start": 14,
+              "end": 16
+            }
+          },
+          "cases": [
+            {
+              "value": {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 25,
+                  "end": 26
+                }
+              },
+              "body": [
+                {
+                  "kind": {
+                    "Break": null
+                  },
+                  "span": {
+                    "start": 28,
+                    "end": 33
+                  }
+                },
+                {
+                  "kind": {
+                    "InlineHtml": "x"
+                  },
+                  "span": {
+                    "start": 36,
+                    "end": 37
+                  }
+                },
+                {
+                  "kind": "Nop",
+                  "span": {
+                    "start": 43,
+                    "end": 44
+                  }
+                }
+              ],
+              "span": {
+                "start": 20,
+                "end": 42
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 44
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 44
+  }
+}

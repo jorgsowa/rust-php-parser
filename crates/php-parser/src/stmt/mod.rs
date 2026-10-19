@@ -734,7 +734,7 @@ fn parse_return<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
     let start = parser.start_span();
     parser.advance(); // consume 'return'
 
-    let expr = if parser.check(TokenKind::Semicolon) {
+    let expr = if parser.at_statement_end() {
         None
     } else {
         Some(expr::parse_expr(parser))
@@ -1762,7 +1762,7 @@ fn parse_break<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
     let start = parser.start_span();
     let kw_span = parser.current_span();
     parser.advance();
-    let expr = if !parser.check(TokenKind::Semicolon) {
+    let expr = if !parser.at_statement_end() {
         Some(expr::parse_expr(parser))
     } else {
         None
@@ -1781,7 +1781,7 @@ fn parse_continue<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
     let start = parser.start_span();
     let kw_span = parser.current_span();
     parser.advance();
-    let expr = if !parser.check(TokenKind::Semicolon) {
+    let expr = if !parser.at_statement_end() {
         Some(expr::parse_expr(parser))
     } else {
         None
