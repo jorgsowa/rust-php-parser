@@ -73,6 +73,57 @@ fn advance_lexer_skip_comments<'src>(
 pub(crate) const LIST_OUTSIDE_DESTRUCTURING: &str =
     "list() can only be used as an assignment or foreach target";
 
+/// Whether PHP reports a [`ParseError::Forbidden`] message while lexing or
+/// parsing, as opposed to while compiling. Messages whose phase depends on
+/// the construct (reserved names, write contexts) count as parse-time.
+fn is_raised_by_php_parser(message: &str) -> bool {
+    const PREFIXES: &[&str] = &[
+        "unclosed '",
+        "empty index in string interpolation",
+        "empty variable name in '${...}' string interpolation",
+        "class constant access is not valid as a standalone interpolation expression",
+        "invalid offset in simple string interpolation",
+        "Invalid numeric literal",
+        "Invalid UTF-8 codepoint escape sequence",
+        "Invalid indentation",
+        "Invalid body indentation level",
+        "A namespaced name cannot contain whitespace",
+        "cannot use multiple ",
+        "duplicate modifier ",
+        "Multiple final modifiers are not allowed",
+        "Type declarations cannot be union types",
+        "A parenthesized intersection type can only be used as part of a union type",
+        "static cannot be used as a ",
+        "call-time pass-by-reference is not allowed",
+        "Array and string offset access syntax with curly braces is no longer supported",
+        "(void) cast cannot be used in an expression context",
+        "the (real) cast is no longer supported",
+        "Chaining non-associative operators requires explicit parentheses.",
+        "Cannot use increment/decrement as an assignment target.",
+        "Cannot use expression as assignment target.",
+        "Cannot increment or decrement an expression that is not a variable",
+        "Cannot dereference this expression",
+        "Can't use this expression in write context",
+        LIST_OUTSIDE_DESTRUCTURING,
+        "Cannot use by-reference assignment with 'new' expression",
+        "cannot have hooks on comma-separated property",
+        "right side of instanceof must be",
+        "Only one ';' may precede the first case of a switch",
+        "Cannot use partial function application in new expression",
+        "Cannot use a new expression with a class name as a dereferenceable expression",
+        "Cannot use 'static' as a standalone expression",
+        "Cannot take reference of a parenthesized expression",
+        "Cannot assign reference to non referenceable value",
+        "Attribute list cannot be empty",
+    ];
+    PREFIXES.iter().any(|p| message.starts_with(p))
+        // Modifier combinations and keywords used as declaration names.
+        || message.starts_with("cannot use '")
+        || message.ends_with(" as a class name as it is reserved")
+        || message.ends_with(" can only be used at the outermost scope")
+        || message.starts_with("Cannot use the ") && message.contains(" modifier on ")
+}
+
 pub struct Parser<'arena, 'src> {
     current: Token,
     /// End offset of the most recently consumed token.
@@ -90,6 +141,8 @@ pub struct Parser<'arena, 'src> {
     pub(crate) finally_loop_depth: Option<u32>,
     /// True once the current function body or top-level code contains a `goto` or a label.
     pub(crate) has_goto_or_label: bool,
+    /// Right operands that PHP never compiles: `false && …`, `true || …`.
+    pub(crate) uncompiled_spans: Vec<Span>,
     /// Function/method/closure nesting depth — tracks valid yield context.
     /// Incremented when entering a function/method/closure, decremented when exiting.
     pub(crate) function_depth: u32,
@@ -224,6 +277,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             loop_depth: 0,
             finally_loop_depth: None,
             has_goto_or_label: false,
+            uncompiled_spans: Vec::new(),
             function_depth: 0,
             by_ref_function: false,
             static_vars: Vec::new(),
@@ -277,6 +331,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             loop_depth: 0,
             finally_loop_depth: None,
             has_goto_or_label: false,
+            uncompiled_spans: Vec::new(),
             function_depth: 0,
             by_ref_function: false,
             static_vars: Vec::new(),
@@ -619,11 +674,27 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         });
     }
 
+    /// Drop the errors in [`uncompiled_spans`](Self::uncompiled_spans) that PHP
+    /// raises while compiling; only syntax errors are reported there.
+    fn retract_uncompiled_errors(&mut self) {
+        if self.uncompiled_spans.is_empty() {
+            return;
+        }
+        let spans = std::mem::take(&mut self.uncompiled_spans);
+        self.errors.retain(|e| match e {
+            ParseError::Forbidden { message, span } if !is_raised_by_php_parser(message) => !spans
+                .iter()
+                .any(|s| span.start >= s.start && span.end <= s.end),
+            _ => true,
+        });
+    }
+
     pub fn errors_mut(&mut self) -> &mut Vec<ParseError> {
         &mut self.errors
     }
 
-    pub fn into_errors(self) -> Vec<ParseError> {
+    pub fn into_errors(mut self) -> Vec<ParseError> {
+        self.retract_uncompiled_errors();
         let mut errors: Vec<ParseError> = self
             .lexer
             .into_errors()

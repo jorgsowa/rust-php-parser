@@ -1714,9 +1714,17 @@ fn parse_expr_rest<'arena, 'src>(
             //      `$a + $b + $c = 5` → `$a + $b + ($c = 5)`
             // parse_expr_bp with right_bp > ASSIGNMENT_BP won't consume the assignment,
             // so we explicitly apply it here (same pattern as the `??` branch above).
+            let short_circuits = match (op, literal_truth(&lhs)) {
+                (BinaryOp::BooleanAnd | BinaryOp::LogicalAnd, Some(truth)) => !truth,
+                (BinaryOp::BooleanOr | BinaryOp::LogicalOr, Some(truth)) => truth,
+                _ => false,
+            };
             let mut rhs = parse_expr_bp(parser, right_bp);
             if parser.current_kind().is_assignment_op() {
                 rhs = parse_assign_continuation(parser, rhs);
+            }
+            if short_circuits {
+                parser.uncompiled_spans.push(rhs.span);
             }
             if op == BinaryOp::Instanceof {
                 if is_class_name_reference(&rhs) {
