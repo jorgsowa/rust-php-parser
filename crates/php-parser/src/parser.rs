@@ -2352,11 +2352,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
     }
 
-    fn validate_use_scope(
-        &mut self,
-        stmts: &[Stmt<'arena, 'src>],
-        top_level: bool,
-    ) {
+    fn validate_use_scope(&mut self, stmts: &[Stmt<'arena, 'src>], top_level: bool) {
         use std::collections::HashSet;
         // Intra-statement duplicates (incl. group-use) are caught at parse time
         // in `parse_use_items`; this pass closes the cross-statement gap.
