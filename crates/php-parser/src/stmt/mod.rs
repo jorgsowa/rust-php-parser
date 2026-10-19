@@ -339,7 +339,9 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
             check_top_level(parser, "'const' declarations");
             parse_const(parser)
         }
-        TokenKind::HaltCompiler => parse_halt_compiler(parser),
+        TokenKind::HaltCompiler if parser.peek_kind() != Some(TokenKind::Backslash) => {
+            parse_halt_compiler(parser)
+        }
         TokenKind::Static => {
             // Could be: static $var = ...; or static function or static as expression
             let next = parser.peek_kind();

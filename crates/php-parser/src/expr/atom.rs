@@ -661,6 +661,9 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         // Also handles qualified names: App\Models\User
         // Fully qualified (\Foo\Bar) and relative (namespace\Foo) names are handled below.
         TokenKind::Identifier | TokenKind::Backslash => name_expr(parser.parse_name()),
+        TokenKind::HaltCompiler if parser.peek_kind() == Some(TokenKind::Backslash) => {
+            name_expr(parser.parse_name())
+        }
 
         // `enum` as an identifier — valid in any expression position where a name is
         // expected (e.g. `Enum::class`, `Enum::someMethod()`, `new Enum`, `Enum()`).

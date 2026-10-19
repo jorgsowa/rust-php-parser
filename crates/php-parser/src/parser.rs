@@ -939,6 +939,18 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
     }
 
+    /// A name segment after `\`: `__halt_compiler` is only a keyword as a whole token.
+    fn eat_name_segment(&mut self, after_separator: bool) -> Option<(&'src str, Span)> {
+        let halt_compiler_part = self.check(TokenKind::HaltCompiler)
+            && (after_separator || self.peek_kind() == Some(TokenKind::Backslash));
+        if halt_compiler_part {
+            let token = self.advance();
+            let text = &self.source[token.span.start as usize..token.span.end as usize];
+            return Some((text, token.span));
+        }
+        self.eat_identifier_or_keyword()
+    }
+
     /// True if the current token is a keyword that PHP forbids as a *declaration*
     /// name (class/interface/trait/enum/global-const). PHP rejects every reserved
     /// keyword here; only the contextual `enum` keyword remains usable as a
@@ -979,7 +991,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
         // First part
         let (first, first_span): (&'src str, Span) =
-            if let Some((text, span)) = self.eat_identifier_or_keyword() {
+            if let Some((text, span)) = self.eat_name_segment(fully_qualified || relative) {
                 (text, span)
             } else {
                 let err_span = self.current_span();
@@ -1006,7 +1018,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         // Subsequent parts: \Ident
         let mut last_end = first_span.end;
         while let Some(separator) = self.eat(TokenKind::Backslash) {
-            if let Some((text, span)) = self.eat_identifier_or_keyword() {
+            if let Some((text, span)) = self.eat_name_segment(true) {
                 if separator.span.start != last_end || span.start != separator.span.end {
                     separated_at.get_or_insert(separator.span.start);
                 }

@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- A name with a `__halt_compiler` segment (`\__halt_compiler()`, `Foo\__halt_compiler`, `namespace\__halt_compiler`, in `use`, `namespace`, types and `new`) was read as the `__halt_compiler();` statement and swallowed the rest of the file (`php-rs-parser`).
 - `$this?->foo(...)` was rejected with "Cannot combine nullsafe operator with Closure creation"; PHP accepts it, as it compiles `$this?->` as `$this->` (`php-rs-parser`).
 - "Cannot specify default value for virtual hooked property" was reported for classes with a parent; PHP checks it at inheritance there, so only classes without `extends` get the error (`php-rs-parser`).
 - `#[\DelayedTargetValidation]` still reported `#[\Attribute]`, `#[\AllowDynamicProperties]` and `#[\Deprecated]` class-kind errors and `#[\NoDiscard]` on property hooks; it now suppresses them (`php-rs-parser`).
