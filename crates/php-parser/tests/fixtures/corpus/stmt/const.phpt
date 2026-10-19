@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 
@@ -18,11 +16,30 @@ const WithGroupAttributes = 3;
 #[Example]
 const ThisIsInvalid = 4,
     AttributesOnMultipleConstants = 5;
-===errors===
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+'attributes on constants' requires PHP 8.5 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes on constants' requires PHP 8.5 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes on constants' requires PHP 8.5 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes on constants' requires PHP 8.5 or higher
 Cannot apply attributes to multiple constants at once
-===php_error===
+===errors 8.0-8.4===
+'attributes on constants' requires PHP 8.5 or higher
+'attributes on constants' requires PHP 8.5 or higher
+'attributes on constants' requires PHP 8.5 or higher
+'attributes on constants' requires PHP 8.5 or higher
+Cannot apply attributes to multiple constants at once
+===errors >=8.5===
+Cannot apply attributes to multiple constants at once
+===php_error <=8.4===
+PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 6
+===php_error >=8.5===
 PHP Fatal error:  Cannot apply attributes to multiple constants at once in Standard input code on line 16
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

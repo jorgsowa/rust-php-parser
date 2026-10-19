@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 abstract class Foo {
@@ -18,7 +16,7 @@ abstract class Foo {
         set(int $value) { $this->attr_prop = $value; }
     }
 }
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

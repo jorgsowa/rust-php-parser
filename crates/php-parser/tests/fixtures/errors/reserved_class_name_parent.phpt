@@ -1,12 +1,12 @@
-===config===
-min_php=8.4
 ===source===
 <?php class parent {}
-===errors===
+===errors >=7.4===
 Cannot use "parent" as a class name as it is reserved
-===php_error===
+===php_error <=8.3===
+PHP Fatal error:  Cannot use 'parent' as class name as it is reserved in Standard input code on line 1
+===php_error >=8.4===
 PHP Fatal error:  Cannot use "parent" as a class name as it is reserved in Standard input code on line 1
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

@@ -1,6 +1,3 @@
-===config===
-min_php=8.1
-
 ===source===
 <?php
 class A {
@@ -17,7 +14,7 @@ trait T {
 $i = new class {
     public callable $i;
 };
-===errors===
+===errors >=8.1===
 Property A::$a cannot have type void
 Property A::$b cannot have type never
 Property A::$c cannot have type callable
@@ -29,7 +26,7 @@ Property T::$h cannot have type void
 Property class@anonymous::$i cannot have type callable
 ===php_error===
 PHP Fatal error:  Property A::$a cannot have type void in Standard input code on line 3
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

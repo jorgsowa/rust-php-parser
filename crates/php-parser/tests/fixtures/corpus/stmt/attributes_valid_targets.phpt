@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===description===
 Built-in attributes on accepted targets; DelayedTargetValidation defers target errors; an attributed by-reference function is a declaration.
 ===source===
@@ -33,7 +31,7 @@ class H {
     #[Foo] public $p, $q;
     public function __construct(#[SensitiveParameter] public $r) {}
 }
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

@@ -1,6 +1,3 @@
-===config===
-min_php=8.1
-max_php=8.1
 ===source===
 <?php
 function test(
@@ -18,11 +15,13 @@ class Test {
         return $param;
     }
 }
-===errors===
+===errors >=8.1===
 A parenthesized intersection type can only be used as part of a union type
-===php_error===
+===php_error <=8.1===
 PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 3
-===ast===
+===php_error >=8.2===
+PHP Parse error:  syntax error, unexpected variable "$x", expecting "|" in Standard input code on line 3
+===ast >=8.1===
 {
   "stmts": [
     {

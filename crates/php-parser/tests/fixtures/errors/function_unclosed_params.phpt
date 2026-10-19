@@ -1,12 +1,12 @@
-===config===
-min_php=8.4
 ===source===
 <?php function test(int $x { }
-===errors===
+===errors >=7.4===
 expected ')' to close the delimiter opened at byte 19
-===php_error===
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard input code on line 1
+===php_error >=8.4===
 PHP Parse error:  Unclosed '(' in Standard input code on line 1
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

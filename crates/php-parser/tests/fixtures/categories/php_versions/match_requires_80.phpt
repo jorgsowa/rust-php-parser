@@ -1,8 +1,6 @@
-===config===
-min_php=8.0
 ===source===
 <?php $x = match($y) { 1 => 'a', default => 'b' };
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

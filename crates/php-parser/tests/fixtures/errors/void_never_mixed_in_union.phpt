@@ -1,17 +1,15 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 function a(): int|void {}
 function b(): int|never {}
 function c(): int|mixed {}
-===errors===
+===errors >=8.1===
 Void can only be used as a standalone type
 never can only be used as a standalone type
 Type mixed can only be used as a standalone type
 ===php_error===
 PHP Fatal error:  Void can only be used as a standalone type in Standard input code on line 2
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

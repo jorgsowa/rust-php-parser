@@ -1,10 +1,8 @@
-===config===
-min_php=8.0
 ===source===
 <?php enum Status { case Active; case Inactive; }
-===errors===
+===errors 8.0===
 'enums' requires PHP 8.1 or higher
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

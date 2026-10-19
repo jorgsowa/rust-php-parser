@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class Foo {
@@ -7,11 +5,11 @@ class Foo {
         abstract get { return 1; }
     }
 }
-===errors===
+===errors >=8.4===
 Cannot use the abstract modifier on a property hook
 ===php_error===
 PHP Fatal error:  Cannot use the abstract modifier on a property hook in Standard input code on line 4
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

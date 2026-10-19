@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class Foo {
@@ -7,11 +5,11 @@ class Foo {
         get(int $a) { return 1; }
     }
 }
-===errors===
+===errors >=8.4===
 get hook of property must not have a parameter list
 ===php_error===
 PHP Fatal error:  get hook of property Foo::$x must not have a parameter list in Standard input code on line 4
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

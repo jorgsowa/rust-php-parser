@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 
@@ -8,11 +6,13 @@ class A {
     function bar() {}
     static abstract function baz() {}
 }
-===errors===
+===errors >=7.4===
 Abstract function A::baz() cannot contain body
-===php_error===
+===php_error <=8.4===
+PHP Fatal error:  Abstract function A::baz() cannot contain body in Standard input code on line 6
+===php_error >=8.5===
 PHP Fatal error:  Class A declares abstract method baz() and must therefore be declared abstract in Standard input code on line 6
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

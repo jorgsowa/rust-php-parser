@@ -1,5 +1,3 @@
-===config===
-min_php=7.4
 ===source===
 <?php
 // Backslash followed by multi-byte character in regular string
@@ -9,7 +7,7 @@ $b = "{$x["è\é"]}";
 $c = "test\è\é\ù";
 // Escaped backslash before multi-byte
 $d = "\\è";
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

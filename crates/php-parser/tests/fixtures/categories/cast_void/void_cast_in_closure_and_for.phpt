@@ -1,12 +1,10 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 $x = function () { (void) f(); };
 g(function () { (void) f(); });
 for ((void) f(), (void) g(); (void) f(), $i < 3; (void) h()) {}
 class C { function m() { (void) f(); } }
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

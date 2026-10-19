@@ -1,18 +1,16 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 abstract class A {
     abstract private function f();
     abstract private static function g() {}
 }
-===errors===
+===errors >=8.4===
 Abstract function A::f() cannot be declared private
 Abstract function A::g() cannot be declared private
 Abstract function A::g() cannot contain body
 ===php_error===
 PHP Fatal error:  Abstract function A::f() cannot be declared private in Standard input code on line 3
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

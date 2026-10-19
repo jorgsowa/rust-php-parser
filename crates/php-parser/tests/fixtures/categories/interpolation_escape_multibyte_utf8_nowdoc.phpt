@@ -1,5 +1,3 @@
-===config===
-min_php=7.4
 ===source===
 <?php
 // Nowdoc with multi-byte characters (no interpolation, like single-quoted strings)
@@ -20,7 +18,7 @@ EOT;
 $d = <<<'EOT'
 \\è escaped
 EOT;
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

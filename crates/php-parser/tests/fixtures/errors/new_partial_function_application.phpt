@@ -1,13 +1,11 @@
-===config===
-min_php=8.6
 ===source===
 <?php
 new Foo(?);
-===errors===
+===errors >=8.6===
 Cannot use partial function application in new expression
 ===php_error===
 PHP Fatal error:  Cannot create Closure for new expression in Standard input code on line 2
-===ast===
+===ast >=8.6===
 {
   "stmts": [
     {

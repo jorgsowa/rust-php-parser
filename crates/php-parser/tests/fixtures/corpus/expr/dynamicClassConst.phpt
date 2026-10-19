@@ -1,10 +1,8 @@
-===config===
-min_php=8.3
 ===source===
 <?php
 Foo::{bar()};
 $foo::{bar()};
-===ast===
+===ast >=8.3===
 {
   "stmts": [
     {

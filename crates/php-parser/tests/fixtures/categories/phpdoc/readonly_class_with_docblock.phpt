@@ -1,5 +1,3 @@
-===config===
-min_php=8.2
 ===source===
 <?php
 
@@ -13,7 +11,7 @@ readonly class DataObject {
      */
     public function __construct(public string $data) {}
 }
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

@@ -1,13 +1,11 @@
-===config===
-min_php=8.0
 ===source===
 <?php
 #[] class C {}
-===errors===
+===errors >=8.0===
 Attribute list cannot be empty
 ===php_error===
 PHP Parse error:  syntax error, unexpected token "]" in Standard input code on line 2
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

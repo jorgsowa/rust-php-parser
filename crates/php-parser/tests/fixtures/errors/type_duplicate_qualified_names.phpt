@@ -1,15 +1,12 @@
-===config===
-min_php=8.0
-
 ===source===
 <?php
 function foo(\Foo\Bar|\Foo\Bar $x) { }
 
-===errors===
+===errors >=8.0===
 Duplicate type '\Foo\Bar' in union type
 ===php_error===
 PHP Fatal error:  Duplicate type Foo\Bar is redundant in Standard input code on line 2
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

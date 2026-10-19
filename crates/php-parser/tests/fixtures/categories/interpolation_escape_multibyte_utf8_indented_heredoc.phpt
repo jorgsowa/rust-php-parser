@@ -1,5 +1,3 @@
-===config===
-min_php=7.4
 ===source===
 <?php
 $a = <<<EOT
@@ -14,7 +12,7 @@ $b = <<<EOT
 $c = <<<'EOT'
     indented nowdoc \è literal
     EOT;
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

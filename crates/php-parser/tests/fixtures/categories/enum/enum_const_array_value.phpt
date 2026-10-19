@@ -1,8 +1,6 @@
-===config===
-min_php=8.1
 ===source===
 <?php enum Lists { const EMPTY = []; const NUMS = [1, 2, 3]; const ASSOC = ['a' => 1, 'b' => 2]; }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

@@ -1,9 +1,6 @@
-===config===
-min_php=7.4
-max_php=7.4
 ===source===
 <?php (unset)$x;
-===ast===
+===ast <=7.4===
 {
   "stmts": [
     {

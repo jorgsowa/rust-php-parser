@@ -1,8 +1,6 @@
-===config===
-min_php=8.5
 ===source===
 <?php $y = $x |> strlen(...);
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

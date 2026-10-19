@@ -1,15 +1,13 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 class A {
     #[DelayedTargetValidation] #[NoDiscard] public function __construct() {}
 }
-===errors===
+===errors >=8.5===
 Method A::__construct cannot be #[\NoDiscard]
 ===php_error===
 PHP Fatal error:  Method A::__construct cannot be #[\NoDiscard] in Standard input code on line 3
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

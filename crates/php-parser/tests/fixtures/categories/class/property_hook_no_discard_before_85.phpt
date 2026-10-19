@@ -1,12 +1,9 @@
-===config===
-min_php=8.4
-max_php=8.4
 ===source===
 <?php
 class A {
     public $a { #[\NoDiscard] get => 1; }
 }
-===ast===
+===ast 8.4===
 {
   "stmts": [
     {

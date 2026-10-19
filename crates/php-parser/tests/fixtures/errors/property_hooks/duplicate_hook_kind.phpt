@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class Foo {
@@ -8,11 +6,11 @@ class Foo {
         get { return 2; }
     }
 }
-===errors===
+===errors >=8.4===
 duplicate 'get' hook
 ===php_error===
 PHP Fatal error:  Cannot redeclare property hook "get" in Standard input code on line 5
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

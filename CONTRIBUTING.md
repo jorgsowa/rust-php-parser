@@ -90,8 +90,6 @@ cargo fmt --check
 
 ```
 ===config===          (optional)
-min_php=8.1           skip php -l on older PHP; sets the parse target version
-max_php=8.3           skip php -l on newer PHP
 ignore=reason         known bug: skipped by the parser tests (php -l still checks it); the
                       fixture holds the expected output once fixed
 
@@ -107,6 +105,15 @@ PHP message from stderr
 ===ast===             (optional; expected JSON AST — auto-generated)
 { ... }
 ```
+
+A version range on a section marker (`===ast >=8.4===`, `===php_error <=8.3===`, `===errors 8.1-8.2===`;
+also `8.3`) makes the fixture multi-version. The parser targets, and `php -l` checks, exactly the
+versions named by the `===ast===` sections. For a version, the first matching qualified section wins
+and an unqualified section is the fallback. A fixture with no qualified `===ast===` has one default
+parse target and `php -l` runs on every PHP version. `UPDATE_FIXTURES=1` regenerates `errors` and
+`ast` per version, one section per run of identical output. `===php_error===` is recorded by
+`php -l` on the installed PHP only, so other versions' messages are edited by hand. Do not split a
+fixture into `_php83`/`_v82` copies.
 
 ### Fixture format (printer)
 
@@ -124,7 +131,6 @@ expected pretty-printed output
 crates/php-parser/tests/fixtures/
   categories/    feature-organized tests (enums, closures, match, traits, …)
   errors/        tests where the parser is expected to emit errors
-  versioned/     version-specific syntax (use min_php to set target)
   corpus/        adapted from nikic/PHP-Parser test suite
   no_hang/       regression tests for parser hang issues
 

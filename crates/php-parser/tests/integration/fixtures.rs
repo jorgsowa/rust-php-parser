@@ -2,42 +2,6 @@
 
 use crate::common::{php_version, run_fixture_corpus};
 
-/// Rewrite the `===errors===` and `===ast===` sections of a fixture file.
-/// Preserves any existing `===php_error===` section, placed between them.
-fn update_fixture(path: &str, errors: &str, new_ast: &str) {
-    let content =
-        std::fs::read_to_string(path).unwrap_or_else(|e| panic!("failed to read {path}: {e}"));
-
-    let php_error_section = content.find("===php_error===\n").map(|p| {
-        let section = &content[p..];
-        let end = section.find("===ast===\n").unwrap_or(section.len());
-        section[..end].trim_end_matches('\n').to_string() + "\n"
-    });
-
-    let source_marker = "===source===\n";
-    let after_source = content
-        .find(source_marker)
-        .map(|p| p + source_marker.len())
-        .unwrap_or(0);
-
-    let rest = &content[after_source..];
-    let source_end = ["===errors===\n", "===php_error===\n", "===ast===\n"]
-        .iter()
-        .filter_map(|m| rest.find(m))
-        .min()
-        .map(|p| after_source + p)
-        .unwrap_or(content.len());
-
-    let before_sections = &content[..source_end];
-    let php_error = php_error_section.as_deref().unwrap_or("");
-    let new_content = if errors.is_empty() {
-        format!("{before_sections}{php_error}===ast===\n{new_ast}\n")
-    } else {
-        format!("{before_sections}===errors===\n{errors}\n{php_error}===ast===\n{new_ast}\n")
-    };
-    std::fs::write(path, new_content).unwrap_or_else(|e| panic!("failed to write {path}: {e}"));
-}
-
 #[test]
 fn arena_fixtures() {
     let update = std::env::var("UPDATE_FIXTURES").is_ok();
@@ -56,7 +20,7 @@ fn arena_fixtures() {
             let json = serde_json::to_string_pretty(&result.program).unwrap();
             (errors, json)
         },
-        update.then_some(update_fixture as fn(&str, &str, &str)),
+        update,
     );
 }
 
@@ -75,7 +39,7 @@ fn owned_fixtures() {
             let json = serde_json::to_string_pretty(&result.program).unwrap();
             (errors, json)
         },
-        None::<fn(&str, &str, &str)>,
+        false,
     );
 }
 
@@ -108,13 +72,13 @@ fn parse_results_can_be_stored_in_hashmap() {
                 .join("tests/fixtures")
                 .join(rel);
             let content = std::fs::read_to_string(&path).unwrap();
-            let (min_php, source) = crate::common::parse_fixture(&content);
-            let result = match min_php.map(php_version) {
+            let fixture = crate::common::Fixture::parse(&content);
+            let result = match fixture.targets()[0].map(php_version) {
                 Some(v) => php_rs_parser::parse_with(
-                    source,
+                    fixture.source(),
                     &php_rs_parser::ParseOptions::default().version(v),
                 ),
-                None => php_rs_parser::parse(source),
+                None => php_rs_parser::parse(fixture.source()),
             };
             (PathBuf::from(rel), result)
         })

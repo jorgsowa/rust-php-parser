@@ -1,15 +1,13 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 enum Suit: bool {
     case Hearts = true;
 }
-===errors===
+===errors >=8.1===
 Enum backing type must be int or string
 ===php_error===
 PHP Fatal error:  Enum backing type must be int or string, bool given in Standard input code on line 2
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

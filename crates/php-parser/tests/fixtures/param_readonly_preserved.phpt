@@ -1,8 +1,6 @@
-===config===
-min_php=8.1
 ===source===
 <?php class Foo { function __construct(readonly string $x) {} }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

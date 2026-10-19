@@ -1,8 +1,6 @@
-===config===
-min_php=8.3
 ===source===
 <?php enum Status { public const string MODE = 'fit'; const int|string MIXED = 42; }
-===ast===
+===ast >=8.3===
 {
   "stmts": [
     {

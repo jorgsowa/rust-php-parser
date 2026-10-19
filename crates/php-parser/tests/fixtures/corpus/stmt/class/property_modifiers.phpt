@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class Test {
@@ -7,12 +5,20 @@ class Test {
     readonly int $prop;
     private static $prop;
 }
-===errors===
+===errors 8.2-8.3===
+'final properties' requires PHP 8.4 or higher
 Cannot redeclare Test::$prop
 Cannot redeclare Test::$prop
-===php_error===
+===errors >=8.4===
+Cannot redeclare Test::$prop
+Cannot redeclare Test::$prop
+===php_error <=8.2===
+PHP Fatal error:  Cannot declare property Test::$prop final, the final modifier is allowed only for methods, classes, and class constants in Standard input code on line 3
+===php_error 8.3===
+PHP Fatal error:  Cannot use the final modifier on a property in Standard input code on line 3
+===php_error >=8.4===
 PHP Fatal error:  Cannot redeclare Test::$prop in Standard input code on line 4
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

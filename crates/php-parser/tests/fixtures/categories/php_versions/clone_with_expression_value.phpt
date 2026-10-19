@@ -1,8 +1,6 @@
-===config===
-min_php=8.5
 ===source===
 <?php $b = clone($obj, ['prop' => 1 + 2]);
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

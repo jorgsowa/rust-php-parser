@@ -1,5 +1,3 @@
-===config===
-min_php=8.0
 ===source===
 <?php
 class Foo {
@@ -7,11 +5,11 @@ class Foo {
         public public string $x,
     ) {}
 }
-===errors===
+===errors >=8.0===
 cannot use multiple visibility modifiers
 ===php_error===
 PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 4
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

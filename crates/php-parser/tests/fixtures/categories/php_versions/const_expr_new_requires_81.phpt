@@ -1,15 +1,12 @@
-===config===
-min_php=8.0
-max_php=8.0
 ===source===
 <?php
 function f($a = new Foo) {}
 #[Attr(new Foo)]
 function g() {}
-===errors===
+===errors 8.0===
 'new in initializers' requires PHP 8.1 or higher
 'new in initializers' requires PHP 8.1 or higher
-===ast===
+===ast 8.0===
 {
   "stmts": [
     {

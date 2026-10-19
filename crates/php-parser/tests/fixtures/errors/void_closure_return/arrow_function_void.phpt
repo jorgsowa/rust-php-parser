@@ -1,19 +1,17 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 fn(): void => 1;
 fn(): void => f();
 static fn(): void => null;
 fn(): void => throw new E;
-===errors===
+===errors >=8.1===
 A void function must not return a value
 A void function must not return a value
 A void function must not return a value
 A void function must not return a value
 ===php_error===
 PHP Fatal error:  A void function must not return a value in Standard input code on line 2
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

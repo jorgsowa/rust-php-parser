@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class Test {
@@ -7,11 +5,16 @@ class Test {
         get() => 42;
     }
 }
-===errors===
+===errors <=8.3===
+'property hooks' requires PHP 8.4 or higher
 get hook of property must not have a parameter list
-===php_error===
+===errors >=8.4===
+get hook of property must not have a parameter list
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
+===php_error >=8.4===
 PHP Fatal error:  get hook of property Test::$prop must not have a parameter list in Standard input code on line 4
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

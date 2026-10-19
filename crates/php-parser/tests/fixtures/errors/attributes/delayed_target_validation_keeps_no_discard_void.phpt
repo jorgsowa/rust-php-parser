@@ -1,13 +1,11 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 #[DelayedTargetValidation] #[NoDiscard] function f(): void {}
-===errors===
+===errors >=8.5===
 A void function does not return a value, but #[\NoDiscard] requires a return value
 ===php_error===
 PHP Fatal error:  A void function does not return a value, but #[\NoDiscard] requires a return value in Standard input code on line 2
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

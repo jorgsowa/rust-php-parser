@@ -1,13 +1,11 @@
-===config===
-min_php=8.1
 ===source===
 <?php enum Status { case Active = ; } function use_status() { return Status::Active; }
-===errors===
+===errors >=8.1===
 expected expression
 Case Active of pure enum Status must not have a value
 ===php_error===
 PHP Parse error:  syntax error, unexpected token ";" in Standard input code on line 1
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

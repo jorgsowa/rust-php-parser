@@ -1,12 +1,12 @@
-===config===
-min_php=8.3
 ===source===
 <?php class A { abstract final function a(); }
-===errors===
+===errors >=7.4===
 cannot use 'abstract' and 'final' together
-===php_error===
+===php_error <=8.2===
+PHP Fatal error:  Cannot use the final modifier on an abstract class member in Standard input code on line 1
+===php_error >=8.3===
 PHP Fatal error:  Cannot use the final modifier on an abstract method in Standard input code on line 1
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

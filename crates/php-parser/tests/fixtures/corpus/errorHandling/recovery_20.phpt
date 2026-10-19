@@ -1,5 +1,3 @@
-===config===
-min_php=8.3
 ===source===
 <?php
 
@@ -8,11 +6,13 @@ class Foo {
     publi $foo;
     public $bar;
 }
-===errors===
+===errors >=7.4===
 expected modifier, found identifier
-===php_error===
+===php_error <=8.2===
+PHP Parse error:  syntax error, unexpected identifier "publi", expecting "function" or "const" in Standard input code on line 5
+===php_error >=8.3===
 PHP Parse error:  syntax error, unexpected identifier "publi", expecting "function" in Standard input code on line 5
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

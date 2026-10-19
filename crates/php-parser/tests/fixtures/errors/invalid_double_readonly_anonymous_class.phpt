@@ -1,13 +1,17 @@
-===config===
-min_php=8.3
 ===source===
 <?php new readonly readonly class {};
-===errors===
+===errors <=8.1===
+expected ';' after expression
+'readonly class' requires PHP 8.2 or higher
+expected class name, found '{'
+===errors >=8.2===
 expected ';' after expression
 expected class name, found '{'
-===php_error===
+===php_error <=8.2===
+PHP Parse error:  syntax error, unexpected token "readonly" in Standard input code on line 1
+===php_error >=8.3===
 PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input code on line 1
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

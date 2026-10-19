@@ -1,8 +1,6 @@
-===config===
-min_php=8.1
 ===source===
 <?php enum Color: string { case Red = 'red'; case Blue = 'blue'; } $r = match($c) { Color::Red => 1, Color::Blue => 2, default => 0 };
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

@@ -1,12 +1,12 @@
-===config===
-min_php=8.3
 ===source===
 <?php enum Status { abstract const X = 1; }
-===errors===
+===errors >=8.1===
 cannot use 'abstract' as constant modifier
-===php_error===
+===php_error <=8.2===
+PHP Fatal error:  Cannot use 'abstract' as constant modifier in Standard input code on line 1
+===php_error >=8.3===
 PHP Fatal error:  Cannot use the abstract modifier on a class constant in Standard input code on line 1
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

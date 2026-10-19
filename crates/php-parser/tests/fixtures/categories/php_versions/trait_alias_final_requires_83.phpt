@@ -1,11 +1,8 @@
-===config===
-min_php=8.2
-max_php=8.2
 ===source===
 <?php class A { use T { f as final g; } }
-===errors===
+===errors 8.2===
 'final trait method alias' requires PHP 8.3 or higher
-===ast===
+===ast 8.2===
 {
   "stmts": [
     {

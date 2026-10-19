@@ -1,8 +1,6 @@
-===config===
-min_php=8.5
 ===source===
 <?php $b = clone($obj, ['prop' => ['nested' => 1]]);
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

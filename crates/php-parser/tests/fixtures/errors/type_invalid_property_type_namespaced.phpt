@@ -1,6 +1,3 @@
-===config===
-min_php=8.0
-
 ===source===
 <?php
 namespace N;
@@ -8,11 +5,11 @@ use X\Y;
 class A {
     public callable|Y|B|null $a;
 }
-===errors===
+===errors >=8.0===
 Property N\A::$a cannot have type X\Y|N\B|callable|null
 ===php_error===
 PHP Fatal error:  Property N\A::$a cannot have type X\Y|N\B|callable|null in Standard input code on line 5
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

@@ -1,13 +1,10 @@
-===config===
-min_php=8.1
-max_php=8.1
 ===source===
 <?php function f(): null {}
-===errors===
+===errors 8.1===
 'null as standalone type' requires PHP 8.2 or higher
-===php_error===
+===php_error <=8.1===
 PHP Fatal error:  Null can not be used as a standalone type in Standard input code on line 1
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

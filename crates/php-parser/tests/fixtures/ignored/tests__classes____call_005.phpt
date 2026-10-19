@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 class A {
@@ -21,7 +19,7 @@ class B extends A {
 $b = new B();
 $b->test();
 ?>
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

@@ -1,13 +1,10 @@
-===config===
-min_php=8.2
-max_php=8.2
 ===source===
 <?php class Foo { public const string NAME = 'foo'; }
-===errors===
+===errors 8.2===
 'typed class constants' requires PHP 8.3 or higher
-===php_error===
+===php_error <=8.2===
 PHP Parse error:  syntax error, unexpected identifier "NAME", expecting "=" in Standard input code on line 1
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

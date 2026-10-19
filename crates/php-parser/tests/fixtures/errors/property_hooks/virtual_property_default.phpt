@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 interface I {
@@ -20,7 +18,7 @@ abstract class A {
     public $n = 1 { get { function n() { return $this->n; } return 1; } }
     public int $o = 1 { get => $this->p; }
 }
-===errors===
+===errors >=8.4===
 Cannot specify default value for virtual hooked property I::$a
 Cannot specify default value for virtual hooked property A::$b
 Cannot specify default value for virtual hooked property A::$c
@@ -37,7 +35,7 @@ Cannot specify default value for virtual hooked property A::$n
 Cannot specify default value for virtual hooked property A::$o
 ===php_error===
 PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a in Standard input code on line 3
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

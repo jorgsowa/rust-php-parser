@@ -1,10 +1,8 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 namespace N;
 #[\DelayedTargetValidation] #[\Attribute] trait T {}
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

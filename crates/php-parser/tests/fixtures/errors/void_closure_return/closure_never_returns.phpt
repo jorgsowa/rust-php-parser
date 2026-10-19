@@ -1,15 +1,13 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 $f = function(): never { return; };
 $g = function(): never { if ($a) { return 1; } };
-===errors===
+===errors >=8.1===
 A never-returning function must not return
 A never-returning function must not return
 ===php_error===
 PHP Fatal error:  A never-returning function must not return in Standard input code on line 2
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

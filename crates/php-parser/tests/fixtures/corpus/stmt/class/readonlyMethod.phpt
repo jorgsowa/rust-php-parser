@@ -1,12 +1,15 @@
-===config===
-min_php=8.3
 ===source===
 <?php class A { readonly function foo() {} }
-===errors===
+===errors <=8.0===
+'readonly properties' requires PHP 8.1 or higher
 Cannot use the readonly modifier on a method
-===php_error===
+===errors >=8.1===
+Cannot use the readonly modifier on a method
+===php_error <=8.2===
+PHP Fatal error:  Cannot use 'readonly' as method modifier in Standard input code on line 1
+===php_error >=8.3===
 PHP Fatal error:  Cannot use the readonly modifier on a method in Standard input code on line 1
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

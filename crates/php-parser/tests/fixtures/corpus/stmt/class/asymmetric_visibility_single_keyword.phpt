@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 
@@ -13,7 +11,7 @@ class Foo {
         protected(set) int $age,
     ) {}
 }
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

@@ -1,9 +1,7 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class A { final public private(set) int $x; }
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

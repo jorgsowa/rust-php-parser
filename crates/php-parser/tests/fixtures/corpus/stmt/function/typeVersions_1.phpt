@@ -1,5 +1,3 @@
-===config===
-min_php=8.2
 ===source===
 <?php
 function test(
@@ -11,7 +9,7 @@ function test(
     false $a9, // PHP 8.0
 ): void {} // PHP 7.1
 function test2(): never {} // PHP 8.1
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

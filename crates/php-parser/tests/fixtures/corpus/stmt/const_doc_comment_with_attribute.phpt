@@ -1,12 +1,10 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 
 /** @api */
 #[SomeAttribute]
 const VERSION = '1.0.0';
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 exit;
@@ -15,7 +13,7 @@ exit($a, $b);
 \exit($a);
 exit(...);
 DIE($a, $b);
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

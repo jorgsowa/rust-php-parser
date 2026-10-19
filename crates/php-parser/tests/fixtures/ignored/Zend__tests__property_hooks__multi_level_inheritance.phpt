@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 
@@ -27,7 +25,7 @@ test(new B);
 test(new C);
 
 ?>
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

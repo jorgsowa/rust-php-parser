@@ -1,8 +1,6 @@
-===config===
-min_php=8.1
 ===source===
 <?php enum E { case A; #[Override] public function foo(): void {} }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

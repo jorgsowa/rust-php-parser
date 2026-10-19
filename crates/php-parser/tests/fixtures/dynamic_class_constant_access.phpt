@@ -1,12 +1,10 @@
-===config===
-min_php=8.3
 ===source===
 <?php
 $a = Foo::{$name};
 $b = Foo::{'CONST_' . $suffix};
 $c = $class::$$dynamic;
 $d = $class::${'prop_' . $name};
-===ast===
+===ast >=8.3===
 {
   "stmts": [
     {

@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 interface I {
@@ -28,7 +26,7 @@ class B {
 class C {
     final private function __Construct() {}
 }
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

@@ -1,15 +1,13 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class F {
     public static int $x { get => 1; }
 }
-===errors===
+===errors >=8.4===
 Cannot declare hooks for static property
 ===php_error===
 PHP Fatal error:  Cannot declare hooks for static property in Standard input code on line 3
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

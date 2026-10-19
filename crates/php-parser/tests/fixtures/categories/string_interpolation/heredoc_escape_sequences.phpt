@@ -1,5 +1,3 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 $a = <<<EOT
@@ -14,7 +12,7 @@ EOT;
 $d = <<<EOT
 Mixed \n newline \u{41} unicode
 EOT;
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

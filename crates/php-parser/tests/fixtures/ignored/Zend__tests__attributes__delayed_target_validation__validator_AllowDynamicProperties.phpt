@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 
@@ -38,7 +36,7 @@ foreach ($cases as $r) {
 }
 
 ?>
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

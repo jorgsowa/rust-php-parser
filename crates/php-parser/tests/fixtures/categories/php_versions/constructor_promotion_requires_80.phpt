@@ -1,5 +1,3 @@
-===config===
-min_php=7.4
 ===source===
 <?php
 class Point {
@@ -8,10 +6,10 @@ class Point {
         public float $y,
     ) {}
 }
-===errors===
+===errors <=7.4===
 'constructor property promotion' requires PHP 8.0 or higher
 'constructor property promotion' requires PHP 8.0 or higher
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

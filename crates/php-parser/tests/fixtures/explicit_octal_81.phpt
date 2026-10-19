@@ -1,8 +1,6 @@
-===config===
-min_php=8.1
 ===source===
 <?php $x = 0o777;
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

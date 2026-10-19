@@ -1,8 +1,6 @@
-===config===
-min_php=8.1
 ===source===
 <?php $fiber = new Fiber(function(): void { Fiber::suspend('hello'); }); $val = $fiber->start();
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

@@ -1,5 +1,3 @@
-===config===
-min_php=8.2
 ===source===
 <?php
 function foo((A&B)|C $x): (X&Y)|Z {
@@ -8,7 +6,7 @@ function foo((A&B)|C $x): (X&Y)|Z {
 function bar((A&B)|(C&D) $y): (E&F)|null {
     return $y;
 }
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

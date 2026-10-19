@@ -1,5 +1,3 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 $a = <<<EOT
@@ -11,7 +9,7 @@ EOT;
 $c = <<<EOT
 Normal text \u{41} with escape
 EOT;
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

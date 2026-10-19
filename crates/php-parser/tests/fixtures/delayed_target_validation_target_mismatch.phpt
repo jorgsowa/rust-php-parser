@@ -1,12 +1,10 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 #[DelayedTargetValidation] #[NoDiscard] class C {
     #[DelayedTargetValidation] #[NoDiscard] public $p;
     #[DelayedTargetValidation] #[NoDiscard] const X = 1;
 }
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

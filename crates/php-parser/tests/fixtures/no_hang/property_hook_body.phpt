@@ -1,8 +1,6 @@
-===config===
-min_php=8.4
 ===source===
 <?php class A { public string $x { get { ?> <?php } } }
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

@@ -1,5 +1,3 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 function f() {
@@ -13,7 +11,7 @@ function f() {
         }
     }
 }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

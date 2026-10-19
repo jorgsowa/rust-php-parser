@@ -1,5 +1,3 @@
-===config===
-min_php=8.2
 ===source===
 <?php
 // Comments in trait use statements
@@ -100,7 +98,7 @@ class Precedence {
     Trait2::other as Trait2Other;
   }
 }
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

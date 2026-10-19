@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===description===
 Built-in attributes listed more than once on one declaration, in one group or several.
 ===source===
@@ -14,7 +12,7 @@ class D {
 }
 function h(#[SensitiveParameter, SensitiveParameter] $a) {}
 #[\Attribute, ATTRIBUTE] class E {}
-===errors===
+===errors >=8.5===
 Attribute "Attribute" must not be repeated
 Attribute "Attribute" must not be repeated
 Attribute "AllowDynamicProperties" must not be repeated
@@ -26,7 +24,7 @@ Attribute "SensitiveParameter" must not be repeated
 Attribute "ATTRIBUTE" must not be repeated
 ===php_error===
 PHP Fatal error:  Attribute "Attribute" must not be repeated in Standard input code on line 2
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

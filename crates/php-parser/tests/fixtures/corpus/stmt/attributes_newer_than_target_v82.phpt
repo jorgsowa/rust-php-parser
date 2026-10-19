@@ -1,6 +1,3 @@
-===config===
-min_php=8.2
-max_php=8.2
 ===description===
 Attributes added after the target version are ordinary classes, so they are not checked.
 ===source===
@@ -10,7 +7,7 @@ Attributes added after the target version are ordinary classes, so they are not 
 #[NoDiscard] class C {}
 #[Deprecated] #[Deprecated] function f() {}
 #[DelayedTargetValidation] interface I {}
-===ast===
+===ast 8.2===
 {
   "stmts": [
     {

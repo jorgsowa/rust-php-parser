@@ -1,5 +1,3 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 enum Color {
@@ -7,7 +5,7 @@ enum Color {
     case Green;
     case Blue;
 }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

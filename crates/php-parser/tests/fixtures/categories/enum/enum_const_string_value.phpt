@@ -1,8 +1,6 @@
-===config===
-min_php=8.1
 ===source===
 <?php enum Status { const PREFIX = 'status_'; }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

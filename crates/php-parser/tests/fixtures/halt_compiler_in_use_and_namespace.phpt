@@ -1,5 +1,3 @@
-===config===
-min_php=8.0
 ===source===
 <?php
 namespace A\__halt_compiler;
@@ -7,7 +5,7 @@ use B\__halt_compiler;
 use C\__halt_compiler as D;
 use function E\__halt_compiler;
 echo 1;
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

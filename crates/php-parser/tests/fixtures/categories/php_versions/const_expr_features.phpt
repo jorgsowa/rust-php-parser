@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 const A = static function () {};
@@ -7,7 +5,7 @@ const B = strlen(...);
 const C = (int) "1";
 const D = E::A->value;
 function f($a = new Foo) {}
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===description===
 Attribute names resolve like class names: in a namespace an unimported name is not the built-in attribute.
 ===source===
@@ -15,7 +13,7 @@ namespace A {
     #[\A\Attribute] function i() {}
     #[Foo\Attribute] function j() {}
 }
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

@@ -1,10 +1,8 @@
-===config===
-min_php=7.4
 ===source===
 <?php
 $str = "test\è";
 $str = "{$x["key\è"]}";
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

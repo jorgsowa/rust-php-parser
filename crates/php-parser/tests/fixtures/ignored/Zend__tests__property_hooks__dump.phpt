@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 
@@ -72,7 +70,7 @@ echo "\n\nChild::dumpChild():\n";
 (new Child)->dumpChild();
 
 ?>
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

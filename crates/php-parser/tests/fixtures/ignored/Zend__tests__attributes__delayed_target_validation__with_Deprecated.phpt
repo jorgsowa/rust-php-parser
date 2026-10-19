@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 
@@ -68,7 +66,7 @@ var_dump(DemoClass::CLASS_CONST);
 demoFn();
 var_dump(GLOBAL_CONST);
 ?>
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

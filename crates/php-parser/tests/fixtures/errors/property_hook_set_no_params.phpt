@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class Foo {
@@ -7,11 +5,11 @@ class Foo {
         set() { }
     }
 }
-===errors===
+===errors >=8.4===
 set hook must have exactly one parameter
 ===php_error===
 PHP Fatal error:  set hook of property Foo::$x must accept exactly one parameters in Standard input code on line 4
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

@@ -1,5 +1,3 @@
-===config===
-min_php=8.2
 ===source===
 <?php
 readonly class Point {
@@ -9,7 +7,7 @@ readonly class Point {
         public float $z = 0.0,
     ) {}
 }
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

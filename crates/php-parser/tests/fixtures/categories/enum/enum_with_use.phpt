@@ -1,8 +1,6 @@
-===config===
-min_php=8.1
 ===source===
 <?php enum Suit { use SuitTrait; case Hearts; }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 abstract class A {
@@ -11,7 +9,7 @@ interface I {
 trait T {
     abstract function __construct(public $a { get => 1; });
 }
-===errors===
+===errors >=8.4===
 Cannot declare promoted property in an abstract constructor
 Cannot declare promoted property in an abstract constructor
 Cannot declare promoted property in an abstract constructor
@@ -19,7 +17,7 @@ Cannot declare promoted property in an abstract constructor
 Cannot declare promoted property in an abstract constructor
 ===php_error===
 PHP Fatal error:  Cannot declare promoted property in an abstract constructor in Standard input code on line 3
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

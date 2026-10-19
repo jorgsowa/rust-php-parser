@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 class Foo {
@@ -7,11 +5,11 @@ class Foo {
         public readonly $x,
     ) {}
 }
-===errors===
+===errors >=8.5===
 readonly promoted property must have type
 ===php_error===
 PHP Fatal error:  Readonly property Foo::$x must have type in Standard input code on line 4
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

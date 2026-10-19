@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class A {
@@ -11,13 +9,13 @@ trait T {
 $o = new class {
     public $c = 1 { get => 2; }
 };
-===errors===
+===errors >=8.4===
 Cannot specify default value for virtual hooked property A::$a
 Cannot specify default value for virtual hooked property T::$b
 Cannot specify default value for virtual hooked property class@anonymous::$c
 ===php_error===
 PHP Fatal error:  Cannot specify default value for virtual hooked property A::$a in Standard input code on line 3
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

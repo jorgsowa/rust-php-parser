@@ -1,11 +1,8 @@
-===config===
-min_php=8.1
-max_php=8.1
 ===source===
 <?php readonly abstract class Foo {}
-===errors===
+===errors 8.1===
 'abstract readonly class' requires PHP 8.2 or higher
-===ast===
+===ast 8.1===
 {
   "stmts": [
     {

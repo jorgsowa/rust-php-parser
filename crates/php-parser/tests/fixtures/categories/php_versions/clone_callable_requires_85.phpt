@@ -1,13 +1,10 @@
-===config===
-min_php=8.4
-max_php=8.4
 ===source===
 <?php $fn = clone(...);
-===errors===
+===errors 8.4===
 'clone(...) first-class callable' requires PHP 8.5 or higher
 ===php_error===
 PHP Parse error:  syntax error, unexpected token "..." in Standard input code on line 1
-===ast===
+===ast 8.4===
 {
   "stmts": [
     {

@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 namespace N {
@@ -19,7 +17,7 @@ namespace {
         public $f { #[NoDiscard] get => 1; }
     }
 }
-===errors===
+===errors >=8.5===
 #[\NoDiscard] is not supported for property hooks
 #[\NoDiscard] is not supported for property hooks
 #[\NoDiscard] is not supported for property hooks
@@ -28,7 +26,7 @@ namespace {
 #[\NoDiscard] is not supported for property hooks
 ===php_error===
 PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard input code on line 5
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

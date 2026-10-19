@@ -1,12 +1,10 @@
-===config===
-min_php=8.5
 ===source===
 <?php $r = $value |> fn($s) => trim($s);
-===errors===
+===errors >=8.5===
 arrow function on the right side of pipe operator must be parenthesized
 ===php_error===
 PHP Fatal error:  Arrow functions on the right hand side of |> must be parenthesized in Standard input code on line 1
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

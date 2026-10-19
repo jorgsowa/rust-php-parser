@@ -1,5 +1,3 @@
-===config===
-min_php=8.3
 ===description===
 Every identifier carries the span of its token; variable names include the `$`.
 ===source===
@@ -21,7 +19,7 @@ class D {
 enum M { case Y; }
 interface I {}
 trait T {}
-===ast===
+===ast >=8.3===
 {
   "stmts": [
     {

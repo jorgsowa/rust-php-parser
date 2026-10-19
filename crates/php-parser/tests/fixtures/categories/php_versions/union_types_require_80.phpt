@@ -1,8 +1,6 @@
-===config===
-min_php=8.0
 ===source===
 <?php function f(int|string $x) {}
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

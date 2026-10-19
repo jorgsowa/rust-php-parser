@@ -1,11 +1,8 @@
-===config===
-min_php=8.2
-max_php=8.2
 ===source===
 <?php
 #[A]
 abstract readonly class Foo {}
-===ast===
+===ast 8.2===
 {
   "stmts": [
     {

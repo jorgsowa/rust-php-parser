@@ -1,8 +1,6 @@
-===config===
-min_php=8.3
 ===source===
 <?php enum Status { const ?string MAYBE = null; const ?int COUNT = 0; }
-===ast===
+===ast >=8.3===
 {
   "stmts": [
     {

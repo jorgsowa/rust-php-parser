@@ -1,8 +1,6 @@
-===config===
-min_php=8.1
 ===source===
 <?php enum Status { /** Doc for constant */ const VALUE = 1; }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

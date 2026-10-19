@@ -1,13 +1,13 @@
-===config===
-min_php=8.3
 ===source===
 <?php
 new;
-===errors===
+===errors >=7.4===
 expected identifier, found ';'
-===php_error===
+===php_error <=8.2===
+PHP Parse error:  syntax error, unexpected token ";" in Standard input code on line 2
+===php_error >=8.3===
 PHP Parse error:  syntax error, unexpected token ";", expecting "class" in Standard input code on line 2
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

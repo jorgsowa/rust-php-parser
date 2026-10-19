@@ -1,8 +1,6 @@
-===config===
-min_php=8.3
 ===source===
 <?php new readonly class {};
-===ast===
+===ast >=8.3===
 {
   "stmts": [
     {

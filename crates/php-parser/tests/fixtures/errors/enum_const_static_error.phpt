@@ -1,12 +1,12 @@
-===config===
-min_php=8.3
 ===source===
 <?php enum Status { static const X = 1; }
-===errors===
+===errors >=8.1===
 cannot use 'static' as constant modifier
-===php_error===
+===php_error <=8.2===
+PHP Fatal error:  Cannot use 'static' as constant modifier in Standard input code on line 1
+===php_error >=8.3===
 PHP Fatal error:  Cannot use the static modifier on a class constant in Standard input code on line 1
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

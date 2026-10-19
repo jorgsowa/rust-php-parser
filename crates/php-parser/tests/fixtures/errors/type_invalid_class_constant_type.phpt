@@ -1,6 +1,3 @@
-===config===
-min_php=8.3
-
 ===source===
 <?php
 class A {
@@ -17,7 +14,7 @@ enum E {
 $g = new class {
     const void G = 1;
 };
-===errors===
+===errors >=8.3===
 Class constant A::A cannot have type void
 Class constant A::C cannot have type ?callable
 Class constant A::D cannot have type callable|int
@@ -26,7 +23,7 @@ Class constant E::F cannot have type callable
 Class constant class@anonymous::G cannot have type void
 ===php_error===
 PHP Fatal error:  Class constant A::A cannot have type void in Standard input code on line 3
-===ast===
+===ast >=8.3===
 {
   "stmts": [
     {

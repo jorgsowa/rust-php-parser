@@ -1,14 +1,11 @@
-===config===
-min_php=8.4
-max_php=8.4
 ===source===
 <?php $x = $value |> trim(...) |> strtolower(...);
-===errors===
+===errors 8.4===
 'pipe operator (|>)' requires PHP 8.5 or higher
 'pipe operator (|>)' requires PHP 8.5 or higher
-===php_error===
+===php_error <=8.4===
 PHP Parse error:  syntax error, unexpected token ">" in Standard input code on line 1
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

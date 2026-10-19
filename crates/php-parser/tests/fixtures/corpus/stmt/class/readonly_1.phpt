@@ -1,11 +1,9 @@
-===config===
-min_php=8.2
 ===source===
 <?php
 
 readonly class A {
 }
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

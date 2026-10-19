@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 class A {
@@ -37,7 +35,7 @@ $b = new B();
 $b->callYourPrivates();
 $b->notOverridden_callYourPrivates();
 ?>
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

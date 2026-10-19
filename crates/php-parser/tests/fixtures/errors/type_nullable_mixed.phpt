@@ -1,15 +1,12 @@
-===config===
-min_php=8.0
-
 ===source===
 <?php
 function foo(?mixed $x) { }
 
-===errors===
+===errors >=8.0===
 Type mixed cannot be marked as nullable since mixed already includes null
 ===php_error===
 PHP Fatal error:  Type mixed cannot be marked as nullable since mixed already includes null in Standard input code on line 2
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

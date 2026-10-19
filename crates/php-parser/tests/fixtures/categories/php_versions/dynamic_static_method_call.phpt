@@ -1,11 +1,8 @@
-===config===
-min_php=8.0
-max_php=8.0
 ===source===
 <?php
 A::{$m}();
 A::{"b" . $c}(1);
-===ast===
+===ast 8.0===
 {
   "stmts": [
     {

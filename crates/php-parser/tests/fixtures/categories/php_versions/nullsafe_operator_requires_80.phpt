@@ -1,10 +1,8 @@
-===config===
-min_php=7.4
 ===source===
 <?php $result = $obj?->method();
-===errors===
+===errors <=7.4===
 'nullsafe operator (?->)' requires PHP 8.0 or higher
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

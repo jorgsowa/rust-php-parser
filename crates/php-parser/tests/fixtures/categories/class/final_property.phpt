@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class C {
@@ -7,7 +5,7 @@ class C {
     final protected string $y = "z";
     public final float $z = 1.0;
 }
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

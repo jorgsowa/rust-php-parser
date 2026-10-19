@@ -1,5 +1,3 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 enum Status: string {
@@ -7,7 +5,7 @@ enum Status: string {
     case Inactive = 'inactive';
     case Pending = 'pending';
 }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

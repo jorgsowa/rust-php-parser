@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 
@@ -41,7 +39,7 @@ class Foo5 extends Foo3 {
 }
 
 ?>
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

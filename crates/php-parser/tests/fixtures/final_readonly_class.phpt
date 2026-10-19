@@ -1,5 +1,3 @@
-===config===
-min_php=8.2
 ===source===
 <?php
 final readonly class Money {
@@ -8,7 +6,7 @@ final readonly class Money {
         public string $currency,
     ) {}
 }
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

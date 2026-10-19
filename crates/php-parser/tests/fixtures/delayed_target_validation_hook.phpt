@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 class C {
@@ -8,7 +6,7 @@ class C {
         #[DelayedTargetValidation] #[Deprecated] set => $value;
     }
 }
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

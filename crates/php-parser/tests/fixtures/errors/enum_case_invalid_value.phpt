@@ -1,16 +1,14 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 enum Status: int {
     case Active = 1 +;
     case Inactive = 2;
 }
-===errors===
+===errors >=8.1===
 expected expression
 ===php_error===
 PHP Parse error:  syntax error, unexpected token ";" in Standard input code on line 3
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

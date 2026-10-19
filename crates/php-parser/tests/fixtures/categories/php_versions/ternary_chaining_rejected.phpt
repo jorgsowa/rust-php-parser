@@ -1,13 +1,11 @@
-===config===
-min_php=8.0
 ===source===
 <?php
 $b = $x ? 1 : $y ? 2 : 3;
-===errors===
+===errors >=8.0===
 Unparenthesized `a ? b : c ? d : e` is not supported. Use parentheses to make the order explicit.
 ===php_error===
 PHP Fatal error:  Unparenthesized `a ? b : c ? d : e` is not supported. Use either `(a ? b : c) ? d : e` or `a ? b : (c ? d : e)` in Standard input code on line 2
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

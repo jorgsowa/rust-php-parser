@@ -1,6 +1,3 @@
-===config===
-min_php=8.3
-
 ===source===
 <?php
 namespace N {
@@ -35,7 +32,7 @@ namespace {
         public function t(): I|J;
     }
 }
-===ast===
+===ast >=8.3===
 {
   "stmts": [
     {

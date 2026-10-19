@@ -1,8 +1,6 @@
-===config===
-min_php=8.6
 ===source===
 <?php $fn = foo(?);
-===ast===
+===ast >=8.6===
 {
   "stmts": [
     {

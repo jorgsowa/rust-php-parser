@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 #[DelayedTargetValidation] #[Attribute] trait T {}
@@ -7,7 +5,7 @@ min_php=8.5
 #[DelayedTargetValidation] #[AllowDynamicProperties] readonly class R {}
 #[DelayedTargetValidation] #[Attribute] abstract class A {}
 #[DelayedTargetValidation] #[Deprecated] enum E {}
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

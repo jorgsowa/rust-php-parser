@@ -1,13 +1,10 @@
-===config===
-min_php=8.1
-max_php=8.1
 ===source===
 <?php function f((A&B)|C $x) {}
-===errors===
+===errors 8.1===
 'DNF types' requires PHP 8.2 or higher
-===php_error===
+===php_error <=8.1===
 PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 1
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

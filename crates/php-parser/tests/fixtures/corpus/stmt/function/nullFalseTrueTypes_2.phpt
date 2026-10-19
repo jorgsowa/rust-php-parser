@@ -1,12 +1,10 @@
-===config===
-min_php=8.2
 ===source===
 <?php
 
 function f_null(): null {}
 function f_false(): false {}
 function f_true(): true {}
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

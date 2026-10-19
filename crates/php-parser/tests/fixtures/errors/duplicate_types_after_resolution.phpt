@@ -1,6 +1,3 @@
-===config===
-min_php=8.0
-
 ===source===
 <?php
 namespace N {
@@ -20,7 +17,7 @@ namespace N {
 namespace {
     function i(): \Foo|Foo {}
 }
-===errors===
+===errors >=8.0===
 Duplicate type 'F' in union type
 Duplicate type 'G' in union type
 Duplicate type 'B' in union type
@@ -32,7 +29,7 @@ Duplicate type '\X\A' in union type
 Duplicate type 'Foo' in union type
 ===php_error===
 PHP Fatal error:  Duplicate type N\F is redundant in Standard input code on line 5
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

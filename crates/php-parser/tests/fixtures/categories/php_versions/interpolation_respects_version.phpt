@@ -1,9 +1,7 @@
-===config===
-min_php=8.0
 ===source===
 <?php
 $x = "{$obj?->prop}";
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

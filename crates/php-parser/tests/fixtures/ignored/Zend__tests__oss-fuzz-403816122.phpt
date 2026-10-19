@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 
@@ -18,7 +16,7 @@ class C extends P {
 var_dump((new C)->prop);
 
 ?>
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

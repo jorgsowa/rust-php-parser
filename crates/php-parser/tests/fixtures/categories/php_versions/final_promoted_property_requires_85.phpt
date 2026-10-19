@@ -1,13 +1,10 @@
-===config===
-min_php=8.4
-max_php=8.4
 ===source===
 <?php class Foo { public function __construct(public final string $bar) {} }
-===errors===
+===errors 8.4===
 'final promoted properties' requires PHP 8.5 or higher
-===php_error===
+===php_error <=8.4===
 PHP Fatal error:  Cannot use the final modifier on a parameter in Standard input code on line 1
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

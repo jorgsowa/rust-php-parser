@@ -1,10 +1,8 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 (clone($a, []))->b = 1;
 (clone $a)::$s = 1;
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

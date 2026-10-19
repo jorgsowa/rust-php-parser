@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 
@@ -18,7 +16,7 @@ new class {}::foo();
 new class {}::$foo;
 new class {}[0];
 new class {}();
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

@@ -1,12 +1,10 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 enum Enum: string {
     case A = "a";
     case B = "b";
 }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

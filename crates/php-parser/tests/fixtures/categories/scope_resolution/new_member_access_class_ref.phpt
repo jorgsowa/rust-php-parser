@@ -1,12 +1,10 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 $x = new $this->job();
 $y = new $obj->factory->type();
 $z = new $arr['cls']();
 $w = new $a::$b();
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

@@ -1,8 +1,6 @@
-===config===
-min_php=8.2
 ===source===
 <?php function foo((Countable&Traversable)|null $x): (A&B)|null {}
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 interface I {
@@ -16,7 +14,7 @@ interface I {
     private $c { set; }
     final $d { get; }
 }
-===errors===
+===errors >=8.4===
 Access type for interface constant I::A must be public
 Access type for interface constant I::B must be public
 Access type for interface constant I::D must be public
@@ -31,7 +29,7 @@ Property in interface cannot be protected or private
 Property in interface cannot be final
 ===php_error===
 PHP Fatal error:  Access type for interface constant I::A must be public in Standard input code on line 3
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

@@ -1,5 +1,3 @@
-===config===
-min_php=8.3
 ===source===
 <?php
 $obj = new readonly class(1, 2) {
@@ -8,7 +6,7 @@ $obj = new readonly class(1, 2) {
         public int $y,
     ) {}
 };
-===ast===
+===ast >=8.3===
 {
   "stmts": [
     {

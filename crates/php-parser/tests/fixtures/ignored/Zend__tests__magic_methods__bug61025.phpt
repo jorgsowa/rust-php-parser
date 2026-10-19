@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 
@@ -15,7 +13,7 @@ echo $b();
 echo $b->__invoke();
 
 ?>
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

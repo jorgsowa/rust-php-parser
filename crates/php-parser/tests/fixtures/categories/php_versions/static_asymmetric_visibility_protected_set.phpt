@@ -1,8 +1,6 @@
-===config===
-min_php=8.5
 ===source===
 <?php class Foo { public static protected(set) int $count = 0; }
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

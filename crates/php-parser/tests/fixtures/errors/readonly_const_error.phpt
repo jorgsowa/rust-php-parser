@@ -1,12 +1,15 @@
-===config===
-min_php=8.3
 ===source===
 <?php class A { readonly const X = 1; }
-===errors===
+===errors <=8.0===
+'readonly properties' requires PHP 8.1 or higher
 cannot use 'readonly' as constant modifier
-===php_error===
+===errors >=8.1===
+cannot use 'readonly' as constant modifier
+===php_error <=8.2===
+PHP Fatal error:  Cannot use 'readonly' as constant modifier in Standard input code on line 1
+===php_error >=8.3===
 PHP Fatal error:  Cannot use the readonly modifier on a class constant in Standard input code on line 1
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

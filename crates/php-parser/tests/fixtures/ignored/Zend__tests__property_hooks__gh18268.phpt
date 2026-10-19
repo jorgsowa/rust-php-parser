@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 
@@ -19,7 +17,7 @@ array_walk($b, function (&$item) {
 });
 
 ?>
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

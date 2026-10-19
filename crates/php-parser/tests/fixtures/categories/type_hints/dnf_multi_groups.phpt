@@ -1,8 +1,6 @@
-===config===
-min_php=8.2
 ===source===
 <?php function f((A&B)|(C&D) $x) {}
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

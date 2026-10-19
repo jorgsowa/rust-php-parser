@@ -1,6 +1,3 @@
-===config===
-min_php=8.1
-max_php=8.2
 ===source===
 <?php
 trait LoggerTrait {
@@ -8,11 +5,13 @@ trait LoggerTrait {
     @invalid
     public function error(string $msg): void { echo "ERROR: " . $msg; }
 }
-===errors===
+===errors >=8.1===
 expected class member, found '@'
-===php_error===
+===php_error <=8.2===
 PHP Parse error:  syntax error, unexpected token "@", expecting "function" or "const" in Standard input code on line 4
-===ast===
+===php_error >=8.3===
+PHP Parse error:  syntax error, unexpected token "@", expecting "function" in Standard input code on line 4
+===ast >=8.1===
 {
   "stmts": [
     {

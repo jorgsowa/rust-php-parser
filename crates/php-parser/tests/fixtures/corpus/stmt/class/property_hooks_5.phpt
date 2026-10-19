@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class Test {
@@ -11,7 +9,7 @@ class Test {
         readonly get;
     }
 }
-===errors===
+===errors >=8.4===
 Cannot use the public modifier on a property hook
 Cannot use the public modifier on a property hook
 Cannot use the protected modifier on a property hook
@@ -30,7 +28,7 @@ Non-abstract property hook must have a body
 Non-abstract property hook must have a body
 ===php_error===
 PHP Fatal error:  Cannot use the public modifier on a property hook in Standard input code on line 4
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

@@ -1,3 +1,7 @@
+#[path = "../../php-parser/tests/integration/common.rs"]
+mod parser_common;
+
+use parser_common::{collect_phpt_files, php_version, Fixture};
 use php_printer::{PrettyPrinter, PrinterConfig};
 use rayon::prelude::*;
 use std::sync::Mutex;
@@ -76,20 +80,6 @@ fn parse_printer_fixture(content: &str) -> PrinterFixture {
         no_source,
         strip_parens,
     }
-}
-
-/// Recursively collect all `.phpt` files under `dir`.
-fn collect_phpt_files(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
-    let mut paths = Vec::new();
-    for entry in std::fs::read_dir(dir).unwrap().filter_map(|e| e.ok()) {
-        let path = entry.path();
-        if path.is_dir() {
-            paths.extend(collect_phpt_files(&path));
-        } else if path.extension().is_some_and(|ext| ext == "phpt") {
-            paths.push(path);
-        }
-    }
-    paths
 }
 
 /// Drops every `Parenthesized` node.
@@ -218,77 +208,6 @@ fn fixtures() {
 // Parser corpus round-trip
 // =============================================================================
 
-struct ParserFixtureHeader {
-    source_start: usize,
-    has_errors: bool,
-    min_php: Option<(u32, u32)>,
-}
-
-fn parse_parser_fixture_header(content: &str) -> ParserFixtureHeader {
-    let has_errors = content.contains("===errors===\n");
-
-    let mut min_php = None;
-    let rest = if let Some(rest) = content.strip_prefix("===config===\n") {
-        let source_marker = rest.find("===source===\n").unwrap_or(rest.len());
-        for line in rest[..source_marker].lines() {
-            if let Some(val) = line.strip_prefix("min_php=") {
-                min_php = val
-                    .split_once('.')
-                    .and_then(|(a, b)| Some((a.parse::<u32>().ok()?, b.parse::<u32>().ok()?)));
-            }
-        }
-        rest
-    } else {
-        content
-    };
-
-    let source_start = content.len() - rest.len()
-        + rest
-            .find("===source===\n")
-            .map(|p| p + "===source===\n".len())
-            .unwrap_or(rest.len());
-
-    ParserFixtureHeader {
-        source_start,
-        has_errors,
-        min_php,
-    }
-}
-
-fn extract_parser_fixture_source<'a>(content: &'a str, header: &ParserFixtureHeader) -> &'a str {
-    let after = &content[header.source_start..];
-    let end = [
-        after.find("===errors===\n"),
-        after.find("===php_error===\n"),
-        after.find("===ast===\n"),
-    ]
-    .into_iter()
-    .flatten()
-    .min();
-    let raw = match end {
-        Some(e) => &after[..e],
-        None => after,
-    };
-    if end.is_some() {
-        raw.strip_suffix('\n').unwrap_or(raw)
-    } else {
-        raw
-    }
-}
-
-fn php_version(major: u32, minor: u32) -> php_rs_parser::PhpVersion {
-    match (major, minor) {
-        (7, 4) => php_rs_parser::PhpVersion::Php74,
-        (8, 0) => php_rs_parser::PhpVersion::Php80,
-        (8, 1) => php_rs_parser::PhpVersion::Php81,
-        (8, 2) => php_rs_parser::PhpVersion::Php82,
-        (8, 3) => php_rs_parser::PhpVersion::Php83,
-        (8, 4) => php_rs_parser::PhpVersion::Php84,
-        (8, 6) => php_rs_parser::PhpVersion::Php86,
-        _ => php_rs_parser::PhpVersion::Php85,
-    }
-}
-
 #[test]
 fn parser_corpus_round_trip() {
     use std::sync::atomic::{AtomicUsize, Ordering};
@@ -306,44 +225,37 @@ fn parser_corpus_round_trip() {
 
     paths.par_iter().for_each(|path| {
         let content = std::fs::read_to_string(path).unwrap();
-        let header = parse_parser_fixture_header(&content);
-
-        let ignored = content
-            .lines()
-            .take_while(|l| *l != "===source===")
-            .any(|l| l.starts_with("ignore="));
-        if header.has_errors || ignored {
+        let fixture = Fixture::parse(&content);
+        let targets: Vec<_> = fixture
+            .targets()
+            .into_iter()
+            .filter(|t| fixture.section("errors", *t).is_none())
+            .collect();
+        if fixture.is_ignored() || targets.is_empty() {
             skipped.fetch_add(1, Ordering::Relaxed);
             return;
         }
 
         let rel = path.strip_prefix(&parser_fixtures).unwrap();
-        let source = extract_parser_fixture_source(&content, &header);
-
-        let first_print = {
-            let arena = bumpalo::Bump::new();
-            let result = match header.min_php {
-                Some((maj, min)) => php_rs_parser::parse_arena_with(
-                    &arena,
-                    source,
-                    &php_rs_parser::ParseOptions::default().version(php_version(maj, min)),
-                ),
-                None => php_rs_parser::parse_arena(&arena, source),
+        for target in targets {
+            let options = match target {
+                Some(v) => php_rs_parser::ParseOptions::default().version(php_version(v)),
+                None => php_rs_parser::ParseOptions::default(),
             };
-            php_printer::pretty_print(&result.program)
-        };
+            let print = |source: &str| {
+                let arena = bumpalo::Bump::new();
+                let result = php_rs_parser::parse_arena_with(&arena, source, &options);
+                php_printer::pretty_print(&result.program)
+            };
+            let first_print = print(fixture.source());
+            let second_print = print(&first_print);
 
-        let second_print = {
-            let arena = bumpalo::Bump::new();
-            let result = php_rs_parser::parse_arena(&arena, &first_print);
-            php_printer::pretty_print(&result.program)
-        };
-
-        if first_print != second_print {
-            failures.lock().unwrap().push(format!(
-                "FAIL {}\n  first:  {first_print}\n  second: {second_print}",
-                rel.display()
-            ));
+            if first_print != second_print {
+                failures.lock().unwrap().push(format!(
+                    "FAIL {}\n  first:  {first_print}\n  second: {second_print}",
+                    rel.display()
+                ));
+            }
         }
         checked.fetch_add(1, Ordering::Relaxed);
     });

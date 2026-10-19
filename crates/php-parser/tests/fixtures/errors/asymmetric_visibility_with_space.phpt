@@ -1,13 +1,11 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class D { private (set) mixed $v; }
-===errors===
+===errors >=8.4===
 expected class member, found identifier
 ===php_error===
 PHP Parse error:  syntax error, unexpected token ")", expecting token "&" in Standard input code on line 2
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

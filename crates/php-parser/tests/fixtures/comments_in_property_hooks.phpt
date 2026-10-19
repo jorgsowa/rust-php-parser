@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class Test {
@@ -19,7 +17,7 @@ class Test {
         set(int /* set param */ $value) /* comment after param */ => $this->_counter = $value;
     }
 }
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

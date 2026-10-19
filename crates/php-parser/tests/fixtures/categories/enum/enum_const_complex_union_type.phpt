@@ -1,8 +1,6 @@
-===config===
-min_php=8.3
 ===source===
 <?php enum Config { const int|float|string VALUE = 1; const bool|null MAYBE = false; }
-===ast===
+===ast >=8.3===
 {
   "stmts": [
     {

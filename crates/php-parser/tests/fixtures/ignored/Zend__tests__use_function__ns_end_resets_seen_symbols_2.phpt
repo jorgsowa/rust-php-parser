@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 
@@ -42,7 +40,7 @@ namespace Ns {
 }
 
 ?>
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

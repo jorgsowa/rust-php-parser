@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class D {
@@ -7,7 +5,7 @@ class D {
     Protected(Set) int $b;
     public function __construct(public private(Set) int $c, private (A&B)|null $d) {}
 }
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

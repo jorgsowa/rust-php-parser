@@ -1,5 +1,3 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 class Foo {
@@ -7,11 +5,11 @@ class Foo {
         public readonly readonly string $x,
     ) {}
 }
-===errors===
+===errors >=8.1===
 duplicate modifier 'readonly'
 ===php_error===
 PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input code on line 4
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

@@ -1,16 +1,14 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 enum E: int {
     case A = 1;
     const X = new Foo();
 }
-===errors===
+===errors >=8.1===
 New expressions are not supported in this context
 ===php_error===
 PHP Fatal error:  New expressions are not supported in this context in Standard input code on line 4
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

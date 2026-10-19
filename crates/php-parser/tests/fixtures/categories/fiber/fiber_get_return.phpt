@@ -1,8 +1,6 @@
-===config===
-min_php=8.1
 ===source===
 <?php $result = $fiber->getReturn();
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

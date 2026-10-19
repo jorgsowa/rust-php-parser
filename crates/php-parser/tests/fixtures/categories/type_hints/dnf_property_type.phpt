@@ -1,11 +1,9 @@
-===config===
-min_php=8.2
 ===source===
 <?php
 class Foo {
     public (Iterator&Countable)|(ArrayAccess&Stringable) $prop;
 }
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

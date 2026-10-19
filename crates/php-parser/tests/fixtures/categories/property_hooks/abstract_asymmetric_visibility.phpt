@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 abstract class Foo {
@@ -8,7 +6,7 @@ abstract class Foo {
         set;
     }
 }
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

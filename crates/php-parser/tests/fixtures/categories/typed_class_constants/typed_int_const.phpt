@@ -1,8 +1,6 @@
-===config===
-min_php=8.3
 ===source===
 <?php class A { const int X = 1; }
-===ast===
+===ast >=8.3===
 {
   "stmts": [
     {

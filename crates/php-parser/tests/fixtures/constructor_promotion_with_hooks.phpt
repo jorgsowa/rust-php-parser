@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class Point {
@@ -9,7 +7,7 @@ class Point {
         protected int $z = 0,
     ) {}
 }
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

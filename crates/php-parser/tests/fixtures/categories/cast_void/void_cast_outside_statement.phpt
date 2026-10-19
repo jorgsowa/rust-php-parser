@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 if ((void) f()) {}
@@ -7,7 +5,7 @@ echo (void) f();
 for (; (void) f();) {}
 foreach ((void) $a as $b) {}
 function g() { return (void) f(); }
-===errors===
+===errors >=8.5===
 (void) cast cannot be used in an expression context
 (void) cast cannot be used in an expression context
 (void) cast cannot be used in an expression context
@@ -15,7 +13,7 @@ function g() { return (void) f(); }
 (void) cast cannot be used in an expression context
 ===php_error===
 PHP Parse error:  syntax error, unexpected token "(void)" in Standard input code on line 2
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

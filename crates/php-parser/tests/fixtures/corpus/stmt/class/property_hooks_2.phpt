@@ -1,17 +1,26 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class Test {
     public $prop {}
     public function __construct(public $prop2 {}) {}
 }
-===errors===
+===errors <=7.4===
+'property hooks' requires PHP 8.4 or higher
+Property hook list must not be empty
+'constructor property promotion' requires PHP 8.0 or higher
+Property hook list must not be empty
+===errors 8.0-8.3===
+'property hooks' requires PHP 8.4 or higher
 Property hook list must not be empty
 Property hook list must not be empty
-===php_error===
+===errors >=8.4===
+Property hook list must not be empty
+Property hook list must not be empty
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
+===php_error >=8.4===
 PHP Fatal error:  Property hook list must not be empty in Standard input code on line 3
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

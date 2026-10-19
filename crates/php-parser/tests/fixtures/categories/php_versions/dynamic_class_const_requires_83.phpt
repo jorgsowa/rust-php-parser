@@ -1,14 +1,11 @@
-===config===
-min_php=8.2
-max_php=8.2
 ===source===
 <?php
 $x = Foo::{$name};
-===errors===
+===errors 8.2===
 'dynamic class constant fetch' requires PHP 8.3 or higher
 ===php_error===
 PHP Parse error:  syntax error, unexpected token ";", expecting "(" in Standard input code on line 2
-===ast===
+===ast 8.2===
 {
   "stmts": [
     {

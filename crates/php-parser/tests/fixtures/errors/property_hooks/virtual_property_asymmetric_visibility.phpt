@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 interface I {
@@ -14,7 +12,7 @@ class A {
         private(set) int $f { set { } },
     ) {}
 }
-===errors===
+===errors >=8.4===
 Read-only virtual property I::$a must not specify asymmetric visibility
 Read-only virtual property A::$b must not specify asymmetric visibility
 Write-only virtual property A::$c must not specify asymmetric visibility
@@ -22,7 +20,7 @@ Read-only virtual property A::$e must not specify asymmetric visibility
 Write-only virtual property A::$f must not specify asymmetric visibility
 ===php_error===
 PHP Fatal error:  Read-only virtual property I::$a must not specify asymmetric visibility in Standard input code on line 3
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

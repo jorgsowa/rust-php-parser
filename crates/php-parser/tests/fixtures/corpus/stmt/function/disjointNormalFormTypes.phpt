@@ -1,5 +1,3 @@
-===config===
-min_php=8.2
 ===source===
 <?php
 
@@ -9,7 +7,7 @@ class Test {
 }
 
 function test((A&B)|(X&Y) $a): (A&B)|(X&Y) {}
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

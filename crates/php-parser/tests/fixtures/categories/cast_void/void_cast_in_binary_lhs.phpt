@@ -1,12 +1,10 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 (void) 5 |> foo(...);
 (void) $x + 1;
 (void) $x && $y;
 (void) $a * $b + $c;
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

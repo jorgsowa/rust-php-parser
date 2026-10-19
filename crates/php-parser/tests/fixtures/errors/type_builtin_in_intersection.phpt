@@ -1,6 +1,3 @@
-===config===
-min_php=8.2
-
 ===source===
 <?php
 function a(): int&A {}
@@ -26,7 +23,7 @@ class D {
         return function (): (self&A)|B {};
     }
 }
-===errors===
+===errors >=8.2===
 Type int cannot be part of an intersection type
 Type array cannot be part of an intersection type
 Type callable cannot be part of an intersection type
@@ -44,7 +41,7 @@ Type parent cannot be part of an intersection type
 Type self cannot be part of an intersection type
 ===php_error===
 PHP Fatal error:  Type int cannot be part of an intersection type in Standard input code on line 2
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

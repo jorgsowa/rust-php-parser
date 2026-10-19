@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 class User {
@@ -7,7 +5,7 @@ class User {
     public private(set) int $age;
     protected private(set) string $email = '';
 }
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

@@ -1,8 +1,6 @@
-===config===
-min_php=8.1
 ===source===
 <?php enum Status { const ENABLED = true; const DISABLED = false; const NOTHING = null; }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

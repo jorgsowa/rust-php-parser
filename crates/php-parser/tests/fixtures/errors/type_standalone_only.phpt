@@ -1,6 +1,3 @@
-===config===
-min_php=8.1
-
 ===source===
 <?php
 function a(?void $a): ?never {}
@@ -13,7 +10,7 @@ class C {
     public function m(): void|false {}
 }
 $f = fn(): ?void => 1;
-===errors===
+===errors >=8.1===
 Void can only be used as a standalone type
 never can only be used as a standalone type
 Void can only be used as a standalone type
@@ -25,7 +22,7 @@ Void can only be used as a standalone type
 Void can only be used as a standalone type
 ===php_error===
 PHP Fatal error:  never can only be used as a standalone type in Standard input code on line 2
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

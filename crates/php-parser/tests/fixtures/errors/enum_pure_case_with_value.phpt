@@ -1,16 +1,14 @@
-===config===
-min_php=8.2
 ===source===
 <?php
 enum Direction {
     case North = 1;
     case South;
 }
-===errors===
+===errors >=8.2===
 Case North of pure enum Direction must not have a value
 ===php_error===
 PHP Fatal error:  Case North of non-backed enum Direction must not have a value in Standard input code on line 3
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

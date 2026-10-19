@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 try {
@@ -168,7 +166,7 @@ assert(0 && ($a = function (): ?static {
 }
 
 ?>
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

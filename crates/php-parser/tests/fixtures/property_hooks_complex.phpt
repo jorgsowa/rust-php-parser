@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class Foo {
@@ -15,7 +13,7 @@ class Foo {
         &get { return $this->id; }
     }
 }
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

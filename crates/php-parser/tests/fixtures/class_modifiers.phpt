@@ -1,5 +1,3 @@
-===config===
-min_php=8.2
 ===source===
 <?php
 abstract class Base {
@@ -14,7 +12,7 @@ readonly class Value {
         public int $age,
     ) {}
 }
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

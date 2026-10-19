@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 
@@ -23,7 +21,7 @@ foreach ($b->prop as $value) {
 }
 
 ?>
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

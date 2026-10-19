@@ -1,5 +1,3 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 namespace App\Enums;
@@ -46,7 +44,7 @@ class TaskService
         ];
     }
 }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

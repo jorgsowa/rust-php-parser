@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class Test
@@ -8,11 +6,11 @@ class Test
     public $foo, $bar { get { return 42; } }
 
 }
-===errors===
+===errors >=8.4===
 cannot have hooks on comma-separated property
 ===php_error===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 5
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

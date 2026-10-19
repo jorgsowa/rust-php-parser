@@ -1,11 +1,9 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 $a > $b == $c;
 $a >= $b == $c;
 $a instanceof Foo == $c;
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

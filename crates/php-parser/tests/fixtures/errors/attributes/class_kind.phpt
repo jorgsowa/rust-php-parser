@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===description===
 #[Attribute], #[AllowDynamicProperties] and #[Deprecated] reject class-likes PHP cannot apply them to.
 ===source===
@@ -18,7 +16,7 @@ min_php=8.5
 #[Deprecated] enum G {}
 $a = new #[Deprecated] class {};
 $b = new #[AllowDynamicProperties] readonly class {};
-===errors===
+===errors >=8.5===
 Cannot apply #[\Attribute] to interface I
 Cannot apply #[\Attribute] to trait T
 Cannot apply #[\Attribute] to enum E
@@ -35,7 +33,7 @@ Cannot apply #[\Deprecated] to class class@anonymous
 Cannot apply #[\AllowDynamicProperties] to readonly class class@anonymous
 ===php_error===
 PHP Fatal error:  Cannot apply #[\Attribute] to interface I in Standard input code on line 2
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

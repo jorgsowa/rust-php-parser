@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class Foo {
@@ -8,11 +6,11 @@ class Foo {
         get { return $this->x; }
     }
 }
-===errors===
+===errors >=8.4===
 expected 'get' or 'set', found integer
 ===php_error===
 PHP Parse error:  syntax error, unexpected integer "123", expecting identifier in Standard input code on line 4
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

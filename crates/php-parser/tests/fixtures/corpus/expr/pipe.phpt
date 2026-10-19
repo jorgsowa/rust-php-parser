@@ -1,12 +1,10 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 $a |> $b |> $c;
 $a . $b |> $c . $d;
 $a |> $b == $c;
 $c == $a |> $b;
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

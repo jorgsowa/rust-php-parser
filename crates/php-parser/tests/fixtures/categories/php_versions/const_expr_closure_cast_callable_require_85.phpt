@@ -1,16 +1,13 @@
-===config===
-min_php=8.4
-max_php=8.4
 ===source===
 <?php
 const A = static function () {};
 const B = strlen(...);
 const C = (int) "1";
-===errors===
+===errors 8.4===
 'closures in constant expressions' requires PHP 8.5 or higher
 'first-class callables in constant expressions' requires PHP 8.5 or higher
 'casts in constant expressions' requires PHP 8.5 or higher
-===ast===
+===ast 8.4===
 {
   "stmts": [
     {

@@ -1,8 +1,6 @@
-===config===
-min_php=8.5
 ===source===
 <?php $copy = clone($obj, );
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

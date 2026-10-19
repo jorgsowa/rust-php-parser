@@ -1,11 +1,9 @@
-===config===
-min_php=8.0
 ===description===
 PHP: `10 ** $obj?->prop` is `10 ** ($obj?->prop)`. Nullsafe access binds tighter than `**`.
 ===source===
 <?php
 10 ** $obj?->prop;
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 (array)   $a;
@@ -13,12 +11,12 @@ min_php=8.5
 (object)  $a;
 (string)  $a;
 (unset)   $a;
-===errors===
+===errors >=8.5===
 the (real) cast is no longer supported, use (float) instead
 the (unset) cast is no longer supported
 ===php_error===
 PHP Parse error:  The (real) cast has been removed, use (float) instead in Standard input code on line 4
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

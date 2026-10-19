@@ -1,8 +1,6 @@
-===config===
-min_php=8.1
 ===source===
 <?php $val = Fiber::suspend(42);
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

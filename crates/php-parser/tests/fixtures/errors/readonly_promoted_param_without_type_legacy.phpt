@@ -1,5 +1,3 @@
-===config===
-max_php=8.4
 ===source===
 <?php
 class Foo {
@@ -7,11 +5,18 @@ class Foo {
         public readonly $x,
     ) {}
 }
-===errors===
+===errors <=7.4===
+'constructor property promotion' requires PHP 8.0 or higher
+'readonly parameters' requires PHP 8.1 or higher
+readonly promoted property must have type
+===errors 8.0===
+'readonly parameters' requires PHP 8.1 or higher
+readonly promoted property must have type
+===errors 8.1-8.4===
 readonly promoted property must have type
 ===php_error===
 PHP Fatal error:  Readonly property Foo::$x must have type in Standard input code on line 3
-===ast===
+===ast <=8.4===
 {
   "stmts": [
     {

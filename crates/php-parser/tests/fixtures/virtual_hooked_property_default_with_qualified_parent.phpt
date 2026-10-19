@@ -1,12 +1,10 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 namespace N;
 class C extends \P {
     public $e = 1 { get => 2; }
 }
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

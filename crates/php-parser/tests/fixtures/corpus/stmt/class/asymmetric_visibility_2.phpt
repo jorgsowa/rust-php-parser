@@ -1,20 +1,28 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class Test {
     private(set) private(set) $x;
     private(set) public(set) $x;
 }
-===errors===
+===errors 8.3===
+cannot use multiple set-visibility modifiers
+'asymmetric visibility' requires PHP 8.4 or higher
+Property with asymmetric visibility Test::$x must have type
+cannot use multiple set-visibility modifiers
+'asymmetric visibility' requires PHP 8.4 or higher
+Property with asymmetric visibility Test::$x must have type
+Cannot redeclare Test::$x
+===errors >=8.4===
 cannot use multiple set-visibility modifiers
 Property with asymmetric visibility Test::$x must have type
 cannot use multiple set-visibility modifiers
 Property with asymmetric visibility Test::$x must have type
 Cannot redeclare Test::$x
-===php_error===
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token ")", expecting amp in Standard input code on line 3
+===php_error >=8.4===
 PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 3
-===ast===
+===ast >=8.3===
 {
   "stmts": [
     {

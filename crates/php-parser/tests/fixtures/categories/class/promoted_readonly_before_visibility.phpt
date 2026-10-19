@@ -1,5 +1,3 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 class Foo {
@@ -9,7 +7,7 @@ class Foo {
         private readonly int $c,
     ) {}
 }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

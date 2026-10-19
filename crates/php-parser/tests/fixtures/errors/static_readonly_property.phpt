@@ -1,16 +1,20 @@
-===config===
-max_php=8.5
 ===source===
 <?php
 class Foo {
     public static readonly int $x = 1;
 }
-===errors===
+===errors <=8.0===
+'readonly properties' requires PHP 8.1 or higher
 static properties cannot be readonly
 Readonly property cannot have default value
-===php_error===
+===errors >=8.1===
+static properties cannot be readonly
+Readonly property cannot have default value
+===php_error <=8.5===
 PHP Fatal error:  Readonly property Foo::$x cannot have default value in Standard input code on line 3
-===ast===
+===php_error >=8.6===
+PHP Fatal error:  Static property Foo::$x cannot be readonly in Standard input code on line 3
+===ast >=7.4===
 {
   "stmts": [
     {

@@ -1,16 +1,14 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 enum Status: string {
     case Active;
     case Inactive = 'inactive';
 }
-===errors===
+===errors >=8.1===
 Case Active of backed enum Status must have a value
 ===php_error===
 PHP Fatal error:  Case Active of backed enum Status must have a value in Standard input code on line 3
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

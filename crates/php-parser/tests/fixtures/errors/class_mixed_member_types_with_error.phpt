@@ -1,5 +1,3 @@
-===config===
-min_php=8.3
 ===source===
 <?php
 class Foo {
@@ -9,11 +7,11 @@ class Foo {
     private string $y = "hello";
     public function baz(): int { return 3; }
 }
-===errors===
+===errors >=8.3===
 expected class member, found '@'
 ===php_error===
 PHP Parse error:  syntax error, unexpected token "@", expecting "function" in Standard input code on line 5
-===ast===
+===ast >=8.3===
 {
   "stmts": [
     {

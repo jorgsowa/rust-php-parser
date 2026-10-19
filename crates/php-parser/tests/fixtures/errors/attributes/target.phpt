@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===description===
 Built-in attributes applied to a declaration they cannot target. PHP stops at the first; the parser reports each.
 ===source===
@@ -27,7 +25,7 @@ enum E {
 }
 #[Override] const K = 1;
 #[Attribute] const L = 1;
-===errors===
+===errors >=8.5===
 Attribute "Attribute" cannot target function (allowed targets: class)
 Attribute "Override" cannot target class (allowed targets: method, property)
 Attribute "ReturnTypeWillChange" cannot target class (allowed targets: method)
@@ -51,7 +49,7 @@ Attribute "Override" cannot target constant (allowed targets: method, property)
 Attribute "Attribute" cannot target constant (allowed targets: class)
 ===php_error===
 PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets: class) in Standard input code on line 2
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

@@ -1,8 +1,6 @@
-===config===
-min_php=8.1
 ===source===
 <?php $r = match($status) { Status::Active, Status::Pending => 'live', Status::Inactive => 'off' };
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

@@ -1,5 +1,3 @@
-===config===
-min_php=8.3
 ===source===
 <?php
 class Test {
@@ -8,7 +6,7 @@ class Test {
     const array ARRAY = [];
     const Foo|Bar|null FOO = null;
 }
-===ast===
+===ast >=8.3===
 {
   "stmts": [
     {

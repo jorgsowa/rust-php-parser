@@ -1,12 +1,9 @@
-===config===
-min_php=8.0
-max_php=8.0
 ===source===
 <?php
 $x = 0o17;
-===errors===
+===errors 8.0===
 'explicit octal literals (0o)' requires PHP 8.1 or higher
-===ast===
+===ast 8.0===
 {
   "stmts": [
     {

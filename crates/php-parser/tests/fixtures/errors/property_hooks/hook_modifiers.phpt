@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 abstract class A {
@@ -15,7 +13,7 @@ abstract class A {
     public $j { final final get => 1; }
     public $k { final get => 1; final set { } }
 }
-===errors===
+===errors >=8.4===
 Cannot use the public modifier on a property hook
 Cannot use the protected modifier on a property hook
 Cannot use the private modifier on a property hook
@@ -30,7 +28,7 @@ Cannot use the readonly modifier on a property hook
 Multiple final modifiers are not allowed
 ===php_error===
 PHP Fatal error:  Cannot use the public modifier on a property hook in Standard input code on line 3
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

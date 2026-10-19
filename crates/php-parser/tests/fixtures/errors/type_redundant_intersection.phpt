@@ -1,6 +1,3 @@
-===config===
-min_php=8.2
-
 ===source===
 <?php
 function a(): A|(A&B) {}
@@ -13,7 +10,7 @@ function g(): A|B|(A&C)|(B&D) {}
 class K {
     public function h(): (self&B)|K {}
 }
-===errors===
+===errors >=8.2===
 Type A&B is redundant as it is more restrictive than type A
 Type A&B is redundant as it is more restrictive than type A
 Type A&B&C is redundant as it is more restrictive than type A&B
@@ -25,7 +22,7 @@ Type B&D is redundant as it is more restrictive than type B
 Type K&B is redundant as it is more restrictive than type K
 ===php_error===
 PHP Fatal error:  Type A&B is redundant as it is more restrictive than type A in Standard input code on line 2
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

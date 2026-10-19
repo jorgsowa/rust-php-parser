@@ -1,17 +1,16 @@
-===config===
-min_php=8.1
-max_php=8.3
 ===source===
 <?php
 class Foo {
     public function bar(int $x, string $y { return 1; }
     public function baz() { return 2; }
 }
-===errors===
+===errors >=8.1===
 expected ')', found '{'
-===php_error===
+===php_error <=8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard input code on line 3
-===ast===
+===php_error >=8.4===
+PHP Parse error:  syntax error, unexpected token "return", expecting identifier in Standard input code on line 3
+===ast >=8.1===
 {
   "stmts": [
     {

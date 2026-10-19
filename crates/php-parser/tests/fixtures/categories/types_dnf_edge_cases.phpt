@@ -1,6 +1,3 @@
-===config===
-min_php=8.2
-
 ===source===
 <?php
 // Edge case 1: Three-way union of intersections
@@ -81,7 +78,7 @@ function test24(object|int $x) {}
 
 // Edge case 25: Iterable in union
 function test25(iterable|A $x) {}
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

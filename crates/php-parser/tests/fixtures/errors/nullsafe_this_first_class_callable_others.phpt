@@ -1,5 +1,3 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 $a = $x?->foo(...);
@@ -7,7 +5,7 @@ $b = $this?->a?->b(...);
 $c = $THIS?->foo(...);
 $d = $x?->a->b(...);
 $e = $this?->foo(...)?->bar(...);
-===errors===
+===errors >=8.1===
 Cannot combine nullsafe operator with Closure creation
 Cannot combine nullsafe operator with Closure creation
 Cannot combine nullsafe operator with Closure creation
@@ -15,7 +13,7 @@ Cannot combine nullsafe operator with Closure creation
 Cannot combine nullsafe operator with Closure creation
 ===php_error===
 PHP Fatal error:  Cannot combine nullsafe operator with Closure creation in Standard input code on line 2
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

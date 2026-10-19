@@ -1,8 +1,6 @@
-===config===
-min_php=8.1
 ===source===
 <?php enum Numbers { const PI = 3.14; const TAU = 6.28; }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

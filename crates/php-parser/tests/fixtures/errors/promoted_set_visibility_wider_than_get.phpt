@@ -1,15 +1,13 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class C {
     public function __construct(private protected(set) string $a, protected(set) string $b) {}
 }
-===errors===
+===errors >=8.4===
 Visibility of property must not be weaker than set visibility
 ===php_error===
 PHP Fatal error:  Visibility of property C::$a must not be weaker than set visibility in Standard input code on line 3
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

@@ -1,13 +1,11 @@
-===config===
-min_php=8.3
 ===source===
 <?php enum Status { static abstract const X = 1; }
-===errors===
+===errors >=8.3===
 cannot use 'static' as constant modifier
 cannot use 'abstract' as constant modifier
 ===php_error===
 PHP Fatal error:  Cannot use the static modifier on a class constant in Standard input code on line 1
-===ast===
+===ast >=8.3===
 {
   "stmts": [
     {

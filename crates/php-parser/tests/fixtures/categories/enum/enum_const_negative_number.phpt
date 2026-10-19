@@ -1,8 +1,6 @@
-===config===
-min_php=8.1
 ===source===
 <?php enum Numbers { const NEG_INT = -42; const NEG_FLOAT = -3.14; }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

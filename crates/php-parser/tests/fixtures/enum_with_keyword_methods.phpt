@@ -1,5 +1,3 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 enum Status {
@@ -10,7 +8,7 @@ enum Status {
     public function match(): string { return ''; }
     public function switch(): void {}
 }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

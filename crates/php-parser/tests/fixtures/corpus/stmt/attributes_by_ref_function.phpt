@@ -1,5 +1,3 @@
-===config===
-min_php=8.0
 ===description===
 `#[A] function &f() {}` is a declaration, not a by-reference closure.
 ===source===
@@ -7,7 +5,7 @@ min_php=8.0
 #[A] function &f() {}
 #[A] function &(): int { return 1; };
 #[A] function g() {}
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

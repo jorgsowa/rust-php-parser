@@ -1,13 +1,10 @@
-===config===
-min_php=8.1
-max_php=8.1
 ===source===
 <?php readonly class Foo { public string $bar; }
-===errors===
+===errors 8.1===
 'readonly class' requires PHP 8.2 or higher
-===php_error===
+===php_error <=8.1===
 PHP Parse error:  syntax error, unexpected token "readonly", expecting end of file in Standard input code on line 1
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

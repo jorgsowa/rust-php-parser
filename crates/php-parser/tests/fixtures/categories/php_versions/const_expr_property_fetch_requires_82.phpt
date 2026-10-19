@@ -1,14 +1,11 @@
-===config===
-min_php=8.1
-max_php=8.1
 ===source===
 <?php
 const A = E::A->value;
 const B = E::A?->value;
-===errors===
+===errors 8.1===
 'property fetch in constant expressions' requires PHP 8.2 or higher
 'property fetch in constant expressions' requires PHP 8.2 or higher
-===ast===
+===ast 8.1===
 {
   "stmts": [
     {

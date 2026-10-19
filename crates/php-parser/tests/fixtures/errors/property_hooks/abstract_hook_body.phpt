@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 interface I {
@@ -19,7 +17,7 @@ class B {
 trait T {
     abstract private $i { get; }
 }
-===errors===
+===errors >=8.4===
 Abstract property hook cannot have body
 Abstract property hook cannot have body
 Property hook cannot be both abstract and final
@@ -31,7 +29,7 @@ Non-abstract property hook must have a body
 Property hook cannot be both abstract and private
 ===php_error===
 PHP Fatal error:  Abstract property hook cannot have body in Standard input code on line 3
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

@@ -1,86 +1,278 @@
-/// Parse a fixture file and return `(min_php, source)`.
-///
-/// `min_php` is read from an optional `===config===` section and controls both
-/// the Rust parse target version and the minimum PHP version for `php -l` gating.
-/// `source` is the PHP code between `===source===` and the next section marker.
-///
-/// An optional `===description===` section may appear before `===source===` and
-/// contains free-form prose ignored by the runner — use it to document why a
-/// fixture exists, what PHP grouping it pins, or known divergences.
-///
-/// All other section contents (`===errors===`, `===ast===`, `===php_error===`) are
-/// left for each test binary to extract directly from the original content, since
-/// different test binaries need different subsets.
-///
-/// Note: This function appears unused in some test binaries (e.g., visitor.rs)
-/// because `common.rs` is compiled separately into each test binary. The
-/// `#[allow(dead_code)]` suppression allows shared test utilities to coexist
-/// even when not used by every test binary. This function is actually used by
-/// `integration.rs` and `php_syntax.rs`.
+pub type Version = (u32, u32);
+
+/// PHP versions the parser can target.
 #[allow(dead_code)]
-pub fn parse_fixture(content: &str) -> (Option<(u32, u32)>, &str) {
-    let parse_ver = |val: &str| -> Option<(u32, u32)> {
-        val.split_once('.')
-            .and_then(|(a, b)| Some((a.parse().ok()?, b.parse().ok()?)))
-    };
+pub const SUPPORTED: [Version; 8] = [
+    (7, 4),
+    (8, 0),
+    (8, 1),
+    (8, 2),
+    (8, 3),
+    (8, 4),
+    (8, 5),
+    (8, 6),
+];
 
-    let mut min_php = None;
+const SECTION_NAMES: [&str; 3] = ["errors", "php_error", "ast"];
 
-    // Anything before ===source=== is header (===config=== and/or ===description===).
-    // Only ===config=== is interpreted; the rest is ignored.
-    let source_marker = "===source===\n";
-    let source_pos = content.find(source_marker).unwrap_or(content.len());
-    let header = &content[..source_pos];
+fn parse_version(val: &str) -> Option<Version> {
+    let (major, minor) = val.trim().split_once('.')?;
+    Some((major.parse().ok()?, minor.parse().ok()?))
+}
 
-    if let Some(cfg_start) = header.find("===config===\n") {
-        let after_cfg = &header[cfg_start + "===config===\n".len()..];
-        // Config extends until the next ===section=== marker within the header
-        // (e.g. ===description===) or to end of header.
+/// Inclusive range of PHP versions: `8.3`, `<=8.2`, `>=8.4` or `8.1-8.3`.
+#[allow(dead_code)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct VersionSpec {
+    pub lo: Option<Version>,
+    pub hi: Option<Version>,
+}
+
+#[allow(dead_code)]
+impl VersionSpec {
+    pub fn parse(s: &str) -> Option<VersionSpec> {
+        let s = s.trim();
+        if let Some(v) = s.strip_prefix("<=") {
+            return Some(VersionSpec {
+                lo: None,
+                hi: Some(parse_version(v)?),
+            });
+        }
+        if let Some(v) = s.strip_prefix(">=") {
+            return Some(VersionSpec {
+                lo: Some(parse_version(v)?),
+                hi: None,
+            });
+        }
+        if let Some((a, b)) = s.split_once('-') {
+            return Some(VersionSpec {
+                lo: Some(parse_version(a)?),
+                hi: Some(parse_version(b)?),
+            });
+        }
+        let v = parse_version(s)?;
+        Some(VersionSpec {
+            lo: Some(v),
+            hi: Some(v),
+        })
+    }
+
+    pub fn contains(&self, v: Version) -> bool {
+        self.lo.is_none_or(|lo| v >= lo) && self.hi.is_none_or(|hi| v <= hi)
+    }
+
+    /// Spec for a run of consecutive supported versions; open-ended where the run touches an edge.
+    pub fn for_run(run: &[Version]) -> VersionSpec {
+        VersionSpec {
+            lo: (run[0] != SUPPORTED[0]).then_some(run[0]),
+            hi: (run.last() != SUPPORTED.last()).then(|| *run.last().unwrap()),
+        }
+    }
+}
+
+impl std::fmt::Display for VersionSpec {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let v = |(a, b): Version| format!("{a}.{b}");
+        match (self.lo, self.hi) {
+            (None, None) => write!(f, ">={}", v(SUPPORTED[0])),
+            (None, Some(hi)) => write!(f, "<={}", v(hi)),
+            (Some(lo), None) => write!(f, ">={}", v(lo)),
+            (Some(lo), Some(hi)) if lo == hi => write!(f, "{}", v(lo)),
+            (Some(lo), Some(hi)) => write!(f, "{}-{}", v(lo), v(hi)),
+        }
+    }
+}
+
+/// An `===errors===`, `===php_error===` or `===ast===` section, optionally limited to a version range.
+#[allow(dead_code)]
+#[derive(Clone, Debug)]
+pub struct Section {
+    pub name: String,
+    pub spec: Option<VersionSpec>,
+    pub body: String,
+}
+
+/// A parsed `.phpt` fixture.
+///
+/// A fixture with a version-qualified `===ast >=8.4===` section is checked against every
+/// PHP version the `ast` sections name. A section such as `===php_error <=8.3===` applies
+/// only to the versions it names; for a version, the first matching qualified section wins
+/// and an unqualified section is the fallback. Without a qualified `ast` section the fixture
+/// has a single default parse target.
+#[allow(dead_code)]
+#[derive(Debug)]
+pub struct Fixture {
+    header: String,
+    source_block: String,
+    sections: Vec<Section>,
+}
+
+#[allow(dead_code)]
+impl Fixture {
+    pub fn parse(content: &str) -> Fixture {
+        let source_marker = "===source===\n";
+        let source_pos = content.find(source_marker).unwrap_or(content.len());
+        let header = content[..source_pos].to_string();
+        let rest = &content[source_pos..];
+        let after_source = rest.strip_prefix(source_marker).unwrap_or(rest);
+
+        let mut source_end = after_source.len();
+        let mut sections: Vec<Section> = Vec::new();
+        let mut offset = 0;
+        for line in after_source.split_inclusive('\n') {
+            if let Some((name, spec)) = parse_section_marker(line.trim_end_matches('\n')) {
+                if sections.is_empty() {
+                    source_end = offset;
+                }
+                sections.push(Section {
+                    name,
+                    spec,
+                    body: String::new(),
+                });
+            } else if let Some(section) = sections.last_mut() {
+                section.body.push_str(line);
+            }
+            offset += line.len();
+        }
+        for section in &mut sections {
+            section
+                .body
+                .truncate(section.body.trim_end_matches('\n').len());
+        }
+
+        Fixture {
+            header,
+            source_block: after_source[..source_end].to_string(),
+            sections,
+        }
+    }
+
+    /// The PHP source; the newline before the first section marker is not part of it.
+    pub fn source(&self) -> &str {
+        if self.sections.is_empty() {
+            &self.source_block
+        } else {
+            self.source_block
+                .strip_suffix('\n')
+                .unwrap_or(&self.source_block)
+        }
+    }
+
+    fn config_value(&self, key: &str) -> Option<&str> {
+        let marker = "===config===\n";
+        let after_cfg = &self.header[self.header.find(marker)? + marker.len()..];
         let cfg_end = after_cfg
             .find("\n===")
             .map(|p| p + 1)
             .unwrap_or(after_cfg.len());
-        for line in after_cfg[..cfg_end].lines() {
-            if let Some(val) = line.strip_prefix("min_php=") {
-                min_php = parse_ver(val);
+        after_cfg[..cfg_end]
+            .lines()
+            .find_map(|l| l.strip_prefix(key)?.strip_prefix('='))
+    }
+
+    pub fn is_ignored(&self) -> bool {
+        self.config_value("ignore").is_some()
+    }
+
+    /// Versions a multi-version fixture covers; `None` for a single-target fixture.
+    pub fn versions(&self) -> Option<Vec<Version>> {
+        let specs: Vec<VersionSpec> = self
+            .sections
+            .iter()
+            .filter(|s| s.name == "ast")
+            .filter_map(|s| s.spec)
+            .collect();
+        (!specs.is_empty()).then(|| {
+            SUPPORTED
+                .iter()
+                .copied()
+                .filter(|v| specs.iter().any(|spec| spec.contains(*v)))
+                .collect()
+        })
+    }
+
+    /// Parse targets: one per covered version, or the single default target (`None`).
+    pub fn targets(&self) -> Vec<Option<Version>> {
+        match self.versions() {
+            Some(versions) => versions.into_iter().map(Some).collect(),
+            None => vec![None],
+        }
+    }
+
+    fn section_index(&self, name: &str, version: Option<Version>) -> Option<usize> {
+        let named = || {
+            self.sections
+                .iter()
+                .enumerate()
+                .filter(|(_, s)| s.name == name)
+        };
+        version
+            .and_then(|v| named().find(|(_, s)| s.spec.is_some_and(|spec| spec.contains(v))))
+            .or_else(|| named().find(|(_, s)| s.spec.is_none()))
+            .map(|(i, _)| i)
+    }
+
+    /// The section `name` that applies to `version`.
+    pub fn section(&self, name: &str, version: Option<Version>) -> Option<&Section> {
+        self.section_index(name, version).map(|i| &self.sections[i])
+    }
+
+    pub fn replace_sections(&mut self, name: &str, new: Vec<Section>) {
+        self.sections.retain(|s| s.name != name);
+        self.sections.extend(new);
+    }
+
+    /// Set the body of the section applying to `version`, or add one limited to it.
+    pub fn set_section(&mut self, name: &str, version: Option<Version>, body: &str) {
+        match self.section_index(name, version) {
+            Some(i) => self.sections[i].body = body.to_string(),
+            None => {
+                let spec = version
+                    .filter(|_| self.versions().is_some())
+                    .map(|v| VersionSpec {
+                        lo: Some(v),
+                        hi: Some(v),
+                    });
+                self.sections.push(Section {
+                    name: name.to_string(),
+                    spec,
+                    body: body.to_string(),
+                });
             }
         }
     }
 
-    let rest = &content[source_pos..];
-    let after_source = rest.strip_prefix(source_marker).unwrap_or(rest);
-
-    // Source ends at the earliest of ===errors===, ===php_error=== or ===ast===
-    // (or EOF). One trailing '\n' is stripped because it is the newline before
-    // the marker, not part of the PHP source itself.
-    let source = match next_section_pos(after_source) {
-        Some(end) => {
-            let raw = &after_source[..end];
-            raw.strip_suffix('\n').unwrap_or(raw)
+    pub fn render(&self) -> String {
+        let mut out = format!("{}===source===\n{}", self.header, self.source_block);
+        let mut ordered: Vec<&Section> = self.sections.iter().collect();
+        ordered.sort_by_key(|s| {
+            let rank = SECTION_NAMES.iter().position(|n| *n == s.name).unwrap();
+            (rank, s.spec.is_none(), s.spec.and_then(|spec| spec.lo))
+        });
+        if !ordered.is_empty() && !out.ends_with('\n') {
+            out.push('\n');
         }
-        None => after_source,
+        for s in ordered {
+            match s.spec {
+                Some(spec) => out.push_str(&format!("==={} {spec}===\n", s.name)),
+                None => out.push_str(&format!("==={}===\n", s.name)),
+            }
+            out.push_str(&s.body);
+            out.push('\n');
+        }
+        out
+    }
+}
+
+fn parse_section_marker(line: &str) -> Option<(String, Option<VersionSpec>)> {
+    let inner = line.strip_prefix("===")?.strip_suffix("===")?;
+    let (name, spec) = match inner.split_once(' ') {
+        Some((name, spec)) => (name, Some(VersionSpec::parse(spec)?)),
+        None => (inner, None),
     };
-
-    (min_php, source)
-}
-
-/// Whether the fixture's `===config===` has an `ignore=<reason>` line: a known bug, skipped until fixed.
-#[allow(dead_code)]
-pub fn is_ignored(content: &str) -> bool {
-    content
-        .strip_prefix("===config===\n")
-        .and_then(|rest| rest.split("===source===").next())
-        .is_some_and(|cfg| cfg.lines().any(|l| l.starts_with("ignore=")))
-}
-
-/// Position of the earliest `===errors===`, `===php_error===` or `===ast===`
-/// marker in `s`, if any.
-#[allow(dead_code)]
-fn next_section_pos(s: &str) -> Option<usize> {
-    ["===errors===\n", "===php_error===\n", "===ast===\n"]
-        .iter()
-        .filter_map(|m| s.find(m))
-        .min()
+    SECTION_NAMES
+        .contains(&name)
+        .then(|| (name.to_string(), spec))
 }
 
 /// Recursively collect all `.phpt` files under `dir`.
@@ -132,58 +324,17 @@ pub fn php_version(v: (u32, u32)) -> php_rs_parser::PhpVersion {
     }
 }
 
-/// Extract the text of the `===errors===` section, or `None` if absent/empty.
-#[allow(dead_code)]
-pub fn extract_errors_section(content: &str) -> Option<String> {
-    let after = &content[content.find("===errors===\n")? + "===errors===\n".len()..];
-    let end = next_section_pos(after).unwrap_or(after.len());
-    let text = after[..end].trim_end_matches('\n').to_string();
-    if text.is_empty() {
-        None
-    } else {
-        Some(text)
-    }
-}
-
-/// Extract the text of the `===ast===` section, or `None` if absent.
-#[allow(dead_code)]
-pub fn extract_ast_section(content: &str) -> Option<String> {
-    let after = &content[content.find("===ast===\n")? + "===ast===\n".len()..];
-    let end = next_section_pos(after).unwrap_or(after.len());
-    Some(after[..end].trim_end_matches('\n').to_string())
-}
-
-/// If the fixture has a non-empty `===php_error===` section but no `===errors===`
-/// section and the parser produced no errors, return an error message string.
-#[allow(dead_code)]
-pub fn php_error_closure_violation(content: &str, rel: &str) -> Option<String> {
-    if content.contains("===errors===\n") {
-        return None;
-    }
-    let marker = "===php_error===\n";
-    let pos = content.find(marker)?;
-    let after = &content[pos + marker.len()..];
-    let body = after[..next_section_pos(after).unwrap_or(after.len())].trim();
-    if body.is_empty() {
-        return None;
-    }
-    Some(format!(
-        "closure-check failure in {rel}: php -l rejects this input but the parser emitted no \
-         diagnostics. Add a parser check or move the diagnostic into ===errors===."
-    ))
-}
-
 /// Run the full `.phpt` fixture corpus through an arbitrary parse function.
 ///
-/// `parse_fn(source, min_php)` returns `(error_strings, ast_json)`.
+/// `parse_fn(source, version)` returns `(error_strings, ast_json)` for one parse target.
 ///
-/// `update_fn`, when `Some`, is called instead of asserting AST equality —
-/// pass it when `UPDATE_FIXTURES=1` is set to rewrite fixture files in-place.
+/// With `update`, the `===errors===` and `===ast===` sections are rewritten in place
+/// instead of compared. A multi-version fixture gets one qualified section per run of
+/// versions with identical output.
 #[allow(dead_code)]
-pub fn run_fixture_corpus<P, U>(parse_fn: P, update_fn: Option<U>)
+pub fn run_fixture_corpus<P>(parse_fn: P, update: bool)
 where
-    P: Fn(&str, Option<(u32, u32)>) -> (Vec<String>, String) + Sync,
-    U: Fn(&str, &str, &str) + Sync,
+    P: Fn(&str, Option<Version>) -> (Vec<String>, String) + Sync,
 {
     use rayon::prelude::*;
     use std::sync::Mutex;
@@ -201,68 +352,133 @@ where
             .to_string_lossy()
             .to_string();
         let content = std::fs::read_to_string(path).unwrap();
-        if is_ignored(&content) {
+        let mut fixture = Fixture::parse(&content);
+        if fixture.is_ignored() {
             return;
         }
-        let (min_php, source) = parse_fixture(&content);
+        let targets = fixture.targets();
+        let results: Vec<(Vec<String>, String)> = targets
+            .iter()
+            .map(|v| parse_fn(fixture.source(), *v))
+            .collect();
 
-        let (errors, json) = parse_fn(source, min_php);
-
-        let expect_errors = content.contains("===errors===\n");
-        if expect_errors {
-            if errors.is_empty() {
-                failures
-                    .lock()
-                    .unwrap()
-                    .push(format!("expected parse errors in {rel} but got none"));
-                return;
-            }
-        } else if !errors.is_empty() {
-            failures
-                .lock()
-                .unwrap()
-                .push(format!("unexpected parse errors in {rel}: {:?}", errors));
+        if update {
+            update_fixture(&mut fixture, &targets, &results);
+            std::fs::write(path, fixture.render())
+                .unwrap_or_else(|e| panic!("failed to write {}: {e}", path.display()));
             return;
         }
 
-        if errors.is_empty() {
-            if let Some(msg) = php_error_closure_violation(&content, &rel) {
-                failures.lock().unwrap().push(msg);
-                return;
-            }
-        }
-
-        if let Some(expected) = extract_errors_section(&content) {
-            let actual = errors.join("\n");
-            if actual != expected {
-                failures.lock().unwrap().push(format!(
-                    "error messages mismatch in {rel}\nexpected:\n{expected}\nactual:\n{actual}"
-                ));
-                return;
-            }
-        }
-
-        if let Some(ref update) = update_fn {
-            update(path.to_str().unwrap(), &errors.join("\n"), &json);
-        } else {
-            let expected = match extract_ast_section(&content) {
-                Some(e) => e,
-                None => {
-                    failures
-                        .lock()
-                        .unwrap()
-                        .push(format!("missing ===ast=== section in {rel}"));
-                    return;
-                }
+        let multi = fixture.versions().is_some();
+        for (target, (errors, json)) in targets.iter().zip(&results) {
+            let at = match (multi, target) {
+                (true, Some((a, b))) => format!("{rel} (PHP {a}.{b})"),
+                _ => rel.clone(),
             };
-            if json != expected {
-                failures.lock().unwrap().push(format!(
-                    "AST mismatch in {rel}\nexpected:\n{expected}\nactual:\n{json}"
-                ));
+            let expected_errors = fixture.section("errors", *target);
+            let fail = |msg: String| failures.lock().unwrap().push(msg);
+
+            if expected_errors.is_some() && errors.is_empty() {
+                fail(format!("expected parse errors in {at} but got none"));
+                continue;
+            }
+            if expected_errors.is_none() && !errors.is_empty() {
+                fail(format!("unexpected parse errors in {at}: {errors:?}"));
+                continue;
+            }
+            if errors.is_empty() {
+                let php_error = fixture.section("php_error", *target);
+                if php_error.is_some_and(|s| !s.body.trim().is_empty()) {
+                    fail(format!(
+                        "closure-check failure in {at}: php -l rejects this input but the parser \
+                         emitted no diagnostics. Add a parser check or move the diagnostic into \
+                         ===errors===."
+                    ));
+                    continue;
+                }
+            }
+            if let Some(expected) = expected_errors {
+                let actual = errors.join("\n");
+                if actual != expected.body {
+                    fail(format!(
+                        "error messages mismatch in {at}\nexpected:\n{}\nactual:\n{actual}",
+                        expected.body
+                    ));
+                    continue;
+                }
+            }
+            match fixture.section("ast", *target) {
+                None => fail(format!("missing ===ast=== section in {at}")),
+                Some(expected) if expected.body != *json => fail(format!(
+                    "AST mismatch in {at}\nexpected:\n{}\nactual:\n{json}",
+                    expected.body
+                )),
+                Some(_) => {}
             }
         }
     });
 
     let f = failures.into_inner().unwrap();
     assert!(f.is_empty(), "fixture test failure(s):\n{}", f.join("\n\n"));
+}
+
+fn update_fixture(
+    fixture: &mut Fixture,
+    targets: &[Option<Version>],
+    results: &[(Vec<String>, String)],
+) {
+    let multi = fixture.versions().is_some();
+    let errors = targets
+        .iter()
+        .zip(results)
+        .map(|(v, (e, _))| (*v, e.join("\n")))
+        .collect();
+    let asts = targets
+        .iter()
+        .zip(results)
+        .map(|(v, (_, a))| (*v, a.clone()))
+        .collect();
+    fixture.replace_sections("errors", sections_for("errors", errors, multi, true));
+    fixture.replace_sections("ast", sections_for("ast", asts, multi, false));
+}
+
+/// One section per run of consecutive versions with identical output.
+fn sections_for(
+    name: &str,
+    outputs: Vec<(Option<Version>, String)>,
+    multi: bool,
+    skip_empty: bool,
+) -> Vec<Section> {
+    let section = |spec, body: String| Section {
+        name: name.to_string(),
+        spec,
+        body,
+    };
+    if !multi {
+        let body = outputs
+            .into_iter()
+            .next()
+            .map(|(_, b)| b)
+            .unwrap_or_default();
+        return (!(skip_empty && body.is_empty()))
+            .then(|| section(None, body))
+            .into_iter()
+            .collect();
+    }
+    let domain: Vec<Version> = outputs.iter().map(|(v, _)| v.unwrap()).collect();
+    let mut sections = Vec::new();
+    let mut start = 0;
+    while start < outputs.len() {
+        let mut end = start + 1;
+        while end < outputs.len() && outputs[end].1 == outputs[start].1 {
+            end += 1;
+        }
+        let body = outputs[start].1.clone();
+        if !(skip_empty && body.is_empty()) {
+            let spec = VersionSpec::for_run(&domain[start..end]);
+            sections.push(section(Some(spec), body));
+        }
+        start = end;
+    }
+    sections
 }

@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 
@@ -23,7 +21,7 @@ var_dump($b);
 var_dump($b->prop);
 
 ?>
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

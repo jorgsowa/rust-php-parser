@@ -1,16 +1,14 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class Test {
     public $prop { FOO => bar; }
 }
-===errors===
+===errors >=8.4===
 expected 'get' or 'set', found identifier
 Property hook list must not be empty
 ===php_error===
 PHP Fatal error:  Unknown hook "FOO" for property Test::$prop, expected "get" or "set" in Standard input code on line 3
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

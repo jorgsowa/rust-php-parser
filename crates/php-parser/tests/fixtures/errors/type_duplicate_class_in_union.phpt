@@ -1,15 +1,12 @@
-===config===
-min_php=8.0
-
 ===source===
 <?php
 function foo(Foo|Foo $x) { }
 
-===errors===
+===errors >=8.0===
 Duplicate type 'Foo' in union type
 ===php_error===
 PHP Fatal error:  Duplicate type Foo is redundant in Standard input code on line 2
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

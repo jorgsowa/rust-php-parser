@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 class Foo {
@@ -7,11 +5,11 @@ class Foo {
         public final final string $x,
     ) {}
 }
-===errors===
+===errors >=8.5===
 duplicate modifier 'final'
 ===php_error===
 PHP Fatal error:  Multiple final modifiers are not allowed in Standard input code on line 4
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

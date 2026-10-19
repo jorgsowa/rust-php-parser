@@ -1,15 +1,12 @@
-===config===
-min_php=8.2
-
 ===source===
 <?php
 function foo((mixed&Foo)|Bar $x) { }
 
-===errors===
+===errors >=8.2===
 Type mixed cannot be part of an intersection type
 ===php_error===
 PHP Fatal error:  Type mixed cannot be part of an intersection type in Standard input code on line 2
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

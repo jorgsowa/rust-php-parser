@@ -1,14 +1,12 @@
-===config===
-min_php=8.4
 ===source===
 <?php $s = "text {$incomplete";
-===errors===
+===errors >=8.4===
 unterminated string literal
 unclosed '{' in string interpolation
 expected ';' after expression
 ===php_error===
 PHP Parse error:  syntax error, unexpected double-quote mark, expecting "->" or "?->" or "[" in Standard input code on line 1
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

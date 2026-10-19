@@ -1,16 +1,14 @@
-===config===
-min_php=8.2
-max_php=8.4
-
 ===source===
 <?php
 function foo((A|B|C)&D $x) { }
 
-===errors===
+===errors >=8.2===
 Type declarations cannot be union types, use DNF syntax (A&B)|C instead
-===php_error===
+===php_error <=8.4===
 PHP Parse error:  syntax error, unexpected token "|", expecting amp in Standard input code on line 2
-===ast===
+===php_error >=8.5===
+PHP Parse error:  syntax error, unexpected token "|", expecting token "&" in Standard input code on line 2
+===ast >=8.2===
 {
   "stmts": [
     {

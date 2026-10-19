@@ -1,5 +1,3 @@
-===config===
-min_php=8.0
 ===source===
 <?php
 function test(
@@ -18,7 +16,7 @@ class Test {
         return $param;
     }
 }
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

@@ -1,12 +1,10 @@
-===config===
-min_php=8.0
 ===source===
 <?php (unset)$x;
-===errors===
+===errors >=8.0===
 the (unset) cast is no longer supported
 ===php_error===
 PHP Fatal error:  The (unset) cast is no longer supported in Standard input code on line 1
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

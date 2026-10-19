@@ -1,5 +1,3 @@
-===config===
-min_php=8.5
 ===description===
 #[NoDiscard] on void or never functions, constructors and property hooks.
 ===source===
@@ -18,7 +16,7 @@ class A {
 class B {
     #[nodiscard] public function __Construct() {}
 }
-===errors===
+===errors >=8.5===
 A void function does not return a value, but #[\NoDiscard] requires a return value
 A never returning function does not return a value, but #[\NoDiscard] requires a return value
 A void function does not return a value, but #[\NoDiscard] requires a return value
@@ -29,7 +27,7 @@ A never returning method does not return a value, but #[\NoDiscard] requires a r
 Method B::__Construct cannot be #[\NoDiscard]
 ===php_error===
 PHP Fatal error:  A void function does not return a value, but #[\NoDiscard] requires a return value in Standard input code on line 2
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

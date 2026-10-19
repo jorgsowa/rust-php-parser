@@ -1,5 +1,3 @@
-===config===
-min_php=8.0
 ===source===
 <?php
 \__halt_compiler();
@@ -10,7 +8,7 @@ $a = new \__halt_compiler;
 $b = \__halt_compiler\X::y;
 $c = $a instanceof Foo\__halt_compiler;
 echo 1;
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

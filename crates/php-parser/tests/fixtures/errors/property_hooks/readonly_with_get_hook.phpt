@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class Foo {
@@ -7,11 +5,11 @@ class Foo {
         get { return $this->bar; }
     }
 }
-===errors===
+===errors >=8.4===
 A readonly property cannot declare hooks
 ===php_error===
 PHP Fatal error:  Hooked properties cannot be readonly in Standard input code on line 3
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

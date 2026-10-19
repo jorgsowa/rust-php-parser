@@ -1,5 +1,3 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 enum Direction implements HasLabel {
@@ -9,7 +7,7 @@ enum Direction implements HasLabel {
     case East;
     case West;
 }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

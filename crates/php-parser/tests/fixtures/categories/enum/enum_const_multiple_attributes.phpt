@@ -1,8 +1,6 @@
-===config===
-min_php=8.1
 ===source===
 <?php enum Status { #[Attr1] #[Attr2('value')] const X = 1; }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

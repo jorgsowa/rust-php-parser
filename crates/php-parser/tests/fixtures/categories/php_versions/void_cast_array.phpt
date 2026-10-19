@@ -1,8 +1,6 @@
-===config===
-min_php=8.5
 ===source===
 <?php (void)[1, 2, 3];
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

@@ -42,32 +42,36 @@ fn identity_fold_across_corpus() {
             .to_string_lossy()
             .to_string();
         let content = std::fs::read_to_string(path).unwrap();
-        if crate::common::is_ignored(&content) {
+        let fixture = crate::common::Fixture::parse(&content);
+        if fixture.is_ignored() {
             continue;
         }
-        let (min_php, source) = crate::common::parse_fixture(&content);
-        let src_arena = Bump::new();
+        for min_php in fixture.targets() {
+            let source = fixture.source();
+            let src_arena = Bump::new();
 
-        let result = if let Some(ver) = min_php {
-            php_rs_parser::parse_arena_with(
-                &src_arena,
-                source,
-                &php_rs_parser::ParseOptions::default().version(crate::common::php_version(ver)),
-            )
-        } else {
-            php_rs_parser::parse_arena(&src_arena, source)
-        };
+            let result = if let Some(ver) = min_php {
+                php_rs_parser::parse_arena_with(
+                    &src_arena,
+                    source,
+                    &php_rs_parser::ParseOptions::default()
+                        .version(crate::common::php_version(ver)),
+                )
+            } else {
+                php_rs_parser::parse_arena(&src_arena, source)
+            };
 
-        let original_json = to_json(&result.program);
+            let original_json = to_json(&result.program);
 
-        let out_arena = Bump::new();
-        let folded = Identity.fold_program(&out_arena, &result.program);
-        let folded_json = to_json(&folded);
+            let out_arena = Bump::new();
+            let folded = Identity.fold_program(&out_arena, &result.program);
+            let folded_json = to_json(&folded);
 
-        if original_json != folded_json {
-            failures.push(format!(
-                "fold changed AST in {rel}\noriginal:\n{original_json}\nfolded:\n{folded_json}"
-            ));
+            if original_json != folded_json {
+                failures.push(format!(
+                    "fold changed AST in {rel}\noriginal:\n{original_json}\nfolded:\n{folded_json}"
+                ));
+            }
         }
     }
 
@@ -97,22 +101,25 @@ fn owned_identity_fold_matches_original_json_across_corpus() {
             let mut failures = Vec::new();
             for path in &paths {
                 let content = std::fs::read_to_string(path).unwrap();
-                if crate::common::is_ignored(&content) {
+                let fixture = crate::common::Fixture::parse(&content);
+                if fixture.is_ignored() {
                     continue;
                 }
-                let (min_php, source) = crate::common::parse_fixture(&content);
-                let result = match min_php {
-                    Some(ver) => php_rs_parser::parse_with(
-                        source,
-                        &php_rs_parser::ParseOptions::default()
-                            .version(crate::common::php_version(ver)),
-                    ),
-                    None => php_rs_parser::parse(source),
-                };
-                let original = serde_json::to_string(&result.program).unwrap();
-                let folded = OwnedIdentity.fold_program(result.program);
-                if serde_json::to_string(&folded).unwrap() != original {
-                    failures.push(path.display().to_string());
+                for min_php in fixture.targets() {
+                    let source = fixture.source();
+                    let result = match min_php {
+                        Some(ver) => php_rs_parser::parse_with(
+                            source,
+                            &php_rs_parser::ParseOptions::default()
+                                .version(crate::common::php_version(ver)),
+                        ),
+                        None => php_rs_parser::parse(source),
+                    };
+                    let original = serde_json::to_string(&result.program).unwrap();
+                    let folded = OwnedIdentity.fold_program(result.program);
+                    if serde_json::to_string(&folded).unwrap() != original {
+                        failures.push(path.display().to_string());
+                    }
                 }
             }
             assert!(

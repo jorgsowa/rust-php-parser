@@ -1,11 +1,9 @@
-===config===
-min_php=8.5
 ===source===
 <?php
 use A;
 use \B;
 ?>
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

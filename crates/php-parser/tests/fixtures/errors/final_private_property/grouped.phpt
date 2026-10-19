@@ -1,13 +1,11 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class A { final private $a, $b; }
-===errors===
+===errors >=8.4===
 Property cannot be both final and private
 ===php_error===
 PHP Fatal error:  Property cannot be both final and private in Standard input code on line 2
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

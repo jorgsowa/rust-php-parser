@@ -1,16 +1,13 @@
-===config===
-min_php=8.1
-max_php=8.1
 ===source===
 <?php
 trait T {
     const X = 1;
 }
-===errors===
+===errors 8.1===
 'constants in traits' requires PHP 8.2 or higher
 ===php_error===
 PHP Fatal error:  Traits cannot have constants in Standard input code on line 3
-===ast===
+===ast 8.1===
 {
   "stmts": [
     {

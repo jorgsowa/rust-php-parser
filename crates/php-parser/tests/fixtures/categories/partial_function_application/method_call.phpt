@@ -1,8 +1,6 @@
-===config===
-min_php=8.6
 ===source===
 <?php $fn = $obj->method(?, 2);
-===ast===
+===ast >=8.6===
 {
   "stmts": [
     {

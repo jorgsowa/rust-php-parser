@@ -1,19 +1,17 @@
 ===description===
 PHP rejects redeclared enum cases with
 "Cannot redefine class constant E::X". Detection is case-insensitive.
-===config===
-min_php=8.1
 ===source===
 <?php
 enum E {
     case A;
     case A;
 }
-===errors===
+===errors >=8.1===
 Cannot redefine class constant E::A
-===php_error===
+===php_error >=8.1===
 PHP Fatal error:  Cannot redefine class constant E::A in Standard input code on line 4
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

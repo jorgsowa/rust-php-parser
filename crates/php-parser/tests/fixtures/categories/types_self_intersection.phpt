@@ -1,13 +1,10 @@
-===config===
-min_php=8.5
-
 ===source===
 <?php
 // Self in intersection type — valid only from PHP 8.5+
 class TestSelfIntersection {
     public function test(self&A $x) {}
 }
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

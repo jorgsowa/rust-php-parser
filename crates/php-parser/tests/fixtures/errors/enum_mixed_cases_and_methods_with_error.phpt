@@ -1,5 +1,3 @@
-===config===
-min_php=8.3
 ===source===
 <?php
 enum Status {
@@ -8,11 +6,11 @@ enum Status {
     @invalid
     public function label(): string { return "Status"; }
 }
-===errors===
+===errors >=8.3===
 expected enum member, found '@'
 ===php_error===
 PHP Parse error:  syntax error, unexpected token "@", expecting "function" in Standard input code on line 5
-===ast===
+===ast >=8.3===
 {
   "stmts": [
     {

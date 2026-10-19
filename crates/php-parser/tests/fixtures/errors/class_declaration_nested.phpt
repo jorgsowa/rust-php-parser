@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class A {
@@ -16,7 +14,7 @@ class A {
 enum F {
     public function h() { class D {} }
 }
-===errors===
+===errors >=8.4===
 Class declarations may not be nested
 Class declarations may not be nested
 Class declarations may not be nested
@@ -25,7 +23,7 @@ Class declarations may not be nested
 Class declarations may not be nested
 ===php_error===
 PHP Fatal error:  Class declarations may not be nested in Standard input code on line 3
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

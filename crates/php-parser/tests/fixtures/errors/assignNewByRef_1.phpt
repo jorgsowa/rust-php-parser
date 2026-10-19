@@ -1,13 +1,13 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 $a =& new B;
-===errors===
+===errors >=7.4===
 Cannot use by-reference assignment with 'new' expression
-===php_error===
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "new" in Standard input code on line 2
+===php_error >=8.4===
 PHP Parse error:  syntax error, unexpected token ";", expecting "(" in Standard input code on line 2
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

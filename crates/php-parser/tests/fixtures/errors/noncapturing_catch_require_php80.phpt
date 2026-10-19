@@ -1,13 +1,11 @@
-===config===
-min_php=7.4
 ===source===
 <?php
 try {
 } catch (Exception) {
 }
-===errors===
+===errors <=7.4===
 'non-capturing catch' requires PHP 8.0 or higher
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

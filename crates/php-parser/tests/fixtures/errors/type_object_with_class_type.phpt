@@ -1,6 +1,3 @@
-===config===
-min_php=8.2
-
 ===source===
 <?php
 function a(): object|A {}
@@ -12,7 +9,7 @@ class C extends P {
     public function f(): parent|object {}
     public function g(): object|static {}
 }
-===errors===
+===errors >=8.2===
 Type A|object contains both object and a class type, which is redundant
 Type A|object|int|null contains both object and a class type, which is redundant
 Type (A&B)|object contains both object and a class type, which is redundant
@@ -22,7 +19,7 @@ Type P|object contains both object and a class type, which is redundant
 Type static|object contains both object and a class type, which is redundant
 ===php_error===
 PHP Fatal error:  Type A|object contains both object and a class type, which is redundant in Standard input code on line 2
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

@@ -1,5 +1,3 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 class C {
@@ -10,7 +8,7 @@ class C {
         $d = ($this)?->foo(...);
     }
 }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

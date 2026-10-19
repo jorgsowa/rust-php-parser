@@ -1,12 +1,10 @@
-===config===
-min_php=8.0
 ===source===
 <?php
 class A extends B\__halt_compiler implements \__halt_compiler\I {}
 function f(\__halt_compiler $a, X\__halt_compiler|null $b): \__halt_compiler\T {}
 try {} catch (A\__halt_compiler $e) {}
 echo 1;
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

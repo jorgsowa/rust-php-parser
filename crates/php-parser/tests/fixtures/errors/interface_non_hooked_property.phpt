@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===description===
 PHP 8.4 introduced hooked properties in interfaces. A plain (non-hooked)
 property declaration in an interface is rejected with "Interfaces may
@@ -9,11 +7,11 @@ only include hooked properties".
 interface I {
     public int $x;
 }
-===errors===
+===errors >=8.4===
 Interfaces may only include hooked properties
 ===php_error===
 PHP Fatal error:  Interfaces may only include hooked properties in Standard input code on line 3
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

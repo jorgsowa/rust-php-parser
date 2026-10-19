@@ -1,8 +1,6 @@
-===config===
-min_php=8.0
 ===source===
 <?php $x = (true ? 1 : 2) ? 3 : 4;
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {

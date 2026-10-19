@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class Test {
@@ -20,11 +18,19 @@ class Test {
         set(string $value) { }
     }
 }
-===errors===
+===errors 8.3===
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
 Type of parameter $value of hook Test::$prop4::set must be compatible with property type
-===php_error===
+===errors >=8.4===
+Type of parameter $value of hook Test::$prop4::set must be compatible with property type
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
+===php_error >=8.4===
 PHP Fatal error:  Type of parameter $value of hook Test::$prop4::set must be compatible with property type in Standard input code on line 17
-===ast===
+===ast >=8.3===
 {
   "stmts": [
     {

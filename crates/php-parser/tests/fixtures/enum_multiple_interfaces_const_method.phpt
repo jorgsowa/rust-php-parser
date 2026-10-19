@@ -1,5 +1,3 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 enum Status: string implements Loggable, Serializable {
@@ -16,7 +14,7 @@ enum Status: string implements Loggable, Serializable {
         return $this === self::Active;
     }
 }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

@@ -1,5 +1,3 @@
-===config===
-min_php=8.1
 ===source===
 <?php
 const C = new Foo();
@@ -9,7 +7,7 @@ function f() {
     static $a = new Cache();
     static $b = new Store(), $c = new Other();
 }
-===ast===
+===ast >=8.1===
 {
   "stmts": [
     {

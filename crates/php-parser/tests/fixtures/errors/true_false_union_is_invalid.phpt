@@ -1,12 +1,12 @@
-===config===
-min_php=8.4
 ===source===
 <?php function f(): true|false {}
-===errors===
+===errors >=8.2===
 Type contains both true and false, bool must be used instead
-===php_error===
+===php_error <=8.3===
+PHP Fatal error:  Type contains both true and false, bool should be used instead in Standard input code on line 1
+===php_error >=8.4===
 PHP Fatal error:  Type contains both true and false, bool must be used instead in Standard input code on line 1
-===ast===
+===ast >=8.2===
 {
   "stmts": [
     {

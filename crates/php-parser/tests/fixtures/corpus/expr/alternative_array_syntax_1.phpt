@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 
@@ -12,7 +10,7 @@ A{0};
 A::B{0};
 new $array{'className'};
 new $a->b{'c'}();
-===errors===
+===errors >=7.4===
 Array and string offset access syntax with curly braces is no longer supported
 Array and string offset access syntax with curly braces is no longer supported
 Array and string offset access syntax with curly braces is no longer supported
@@ -22,9 +20,11 @@ Array and string offset access syntax with curly braces is no longer supported
 Array and string offset access syntax with curly braces is no longer supported
 Array and string offset access syntax with curly braces is no longer supported
 Array and string offset access syntax with curly braces is no longer supported
-===php_error===
+===php_error <=8.3===
+PHP Fatal error:  Array and string offset access syntax with curly braces is no longer supported in Standard input code on line 3
+===php_error >=8.4===
 PHP Parse error:  syntax error, unexpected token "{" in Standard input code on line 3
-===ast===
+===ast >=7.4===
 {
   "stmts": [
     {

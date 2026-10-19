@@ -1,8 +1,6 @@
-===config===
-min_php=8.5
 ===source===
 <?php $r = $value |> 'strtoupper' |> (fn($s) => trim($s));
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

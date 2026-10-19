@@ -3,18 +3,16 @@ PHP rejects `static` as a parameter modifier with
 "Cannot use the static modifier on a parameter". Replaces the
 generic "expected variable, found identifier" diagnostic that the
 parser previously emitted when encountering `static` in this position.
-===config===
-min_php=8.5
 ===source===
 <?php
 class A {
     public function __construct(public static int $x) {}
 }
-===errors===
+===errors >=8.5===
 Cannot use the static modifier on a parameter
-===php_error===
+===php_error >=8.5===
 PHP Fatal error:  Cannot use the static modifier on a parameter in Standard input code on line 3
-===ast===
+===ast >=8.5===
 {
   "stmts": [
     {

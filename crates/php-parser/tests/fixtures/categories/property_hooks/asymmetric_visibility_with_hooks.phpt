@@ -1,5 +1,3 @@
-===config===
-min_php=8.4
 ===source===
 <?php
 class Foo {
@@ -8,7 +6,7 @@ class Foo {
         set(int $v) { $this->prop = $v; }
     }
 }
-===ast===
+===ast >=8.4===
 {
   "stmts": [
     {

@@ -1,17 +1,15 @@
-===config===
-min_php=8.0
 ===source===
 <?php
 $a = 1 < 2 < 3;
 $b = 1 == 1 == 1;
 $c = $x <=> $y <=> $z;
-===errors===
+===errors >=8.0===
 Chaining non-associative operators requires explicit parentheses.
 Chaining non-associative operators requires explicit parentheses.
 Chaining non-associative operators requires explicit parentheses.
 ===php_error===
 PHP Parse error:  syntax error, unexpected token "<" in Standard input code on line 2
-===ast===
+===ast >=8.0===
 {
   "stmts": [
     {
