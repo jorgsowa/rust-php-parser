@@ -1890,6 +1890,16 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     pub fn parse_simple_type(&mut self) -> TypeHint<'arena, 'src> {
         let start = self.start_span();
 
+        // `int\X` is a class in namespace `int`, not the builtin type followed by `\X`.
+        if self.peek_kind() == Some(TokenKind::Backslash) && !self.check(TokenKind::Backslash) {
+            let name = self.parse_name();
+            let span = Span::new(start, name.span().end);
+            return TypeHint {
+                kind: TypeHintKind::Named(name),
+                span,
+            };
+        }
+
         // Handle builtin type names that are contextual keywords (identifiers).
         // Use TypeHintKind::Keyword — 1-byte enum discriminant instead of Cow<str>.
         if self.check(TokenKind::Identifier) {

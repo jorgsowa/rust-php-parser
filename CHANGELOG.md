@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Class names in a namespace named like a builtin type (`int\X`, `string\Y`, `self\Z`) were rejected in type positions (`php-rs-parser`).
 - `abstract readonly class` (and `readonly abstract class`) was rejected below PHP 8.4; it is valid since PHP 8.2 (`php-rs-parser`).
 - `(void) f() + 1` was parsed as `((void) f()) + 1`; `(void)` is a statement prefix in PHP, so its operand is the whole expression, `(void) (f() + 1)` (`php-rs-parser`).
 - `include $a or $b` and `$x = throw $e or 1` were parsed as `(include $a) or $b` and `throw $e` followed by `or 1`; `include`, `require` and `throw` bind looser than the word operators, so the operand takes them (`php-rs-parser`).
