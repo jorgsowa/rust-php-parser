@@ -80,12 +80,12 @@ function gen() {
               "kind": {
                 "Expression": {
                   "kind": {
-                    "Yield": {
-                      "key": null,
-                      "value": {
+                    "Binary": {
+                      "left": {
                         "kind": {
-                          "Binary": {
-                            "left": {
+                          "Yield": {
+                            "key": null,
+                            "value": {
                               "kind": {
                                 "String": "a"
                               },
@@ -94,24 +94,24 @@ function gen() {
                                 "end": 58
                               }
                             },
-                            "op": "LogicalOr",
-                            "right": {
-                              "kind": {
-                                "Exit": null
-                              },
-                              "span": {
-                                "start": 62,
-                                "end": 65
-                              }
-                            }
+                            "is_from": false
                           }
                         },
                         "span": {
-                          "start": 55,
-                          "end": 65
+                          "start": 49,
+                          "end": 58
                         }
                       },
-                      "is_from": false
+                      "op": "LogicalOr",
+                      "right": {
+                        "kind": {
+                          "Exit": null
+                        },
+                        "span": {
+                          "start": 62,
+                          "end": 65
+                        }
+                      }
                     }
                   },
                   "span": {
@@ -186,20 +186,20 @@ function gen() {
               "kind": {
                 "Expression": {
                   "kind": {
-                    "Yield": {
-                      "key": {
+                    "Binary": {
+                      "left": {
                         "kind": {
-                          "String": "k"
-                        },
-                        "span": {
-                          "start": 105,
-                          "end": 108
-                        }
-                      },
-                      "value": {
-                        "kind": {
-                          "Binary": {
-                            "left": {
+                          "Yield": {
+                            "key": {
+                              "kind": {
+                                "String": "k"
+                              },
+                              "span": {
+                                "start": 105,
+                                "end": 108
+                              }
+                            },
+                            "value": {
                               "kind": {
                                 "String": "a"
                               },
@@ -208,24 +208,24 @@ function gen() {
                                 "end": 115
                               }
                             },
-                            "op": "LogicalOr",
-                            "right": {
-                              "kind": {
-                                "Exit": null
-                              },
-                              "span": {
-                                "start": 119,
-                                "end": 122
-                              }
-                            }
+                            "is_from": false
                           }
                         },
                         "span": {
-                          "start": 112,
-                          "end": 122
+                          "start": 99,
+                          "end": 115
                         }
                       },
-                      "is_from": false
+                      "op": "LogicalOr",
+                      "right": {
+                        "kind": {
+                          "Exit": null
+                        },
+                        "span": {
+                          "start": 119,
+                          "end": 122
+                        }
+                      }
                     }
                   },
                   "span": {

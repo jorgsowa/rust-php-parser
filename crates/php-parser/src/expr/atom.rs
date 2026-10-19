@@ -1756,7 +1756,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     // `from` is an ordinary name everywhere else, so the lexer has no keyword for it.
     if parser.check(TokenKind::Identifier) && parser.current_text().eq_ignore_ascii_case("from") {
         parser.advance();
-        let value = parse_expr(parser);
+        let value = parse_expr_bp(parser, precedence::YIELD_OPERAND_BP);
         let span = Span::new(start, value.span.end);
         return Expr {
             kind: ExprKind::Yield(YieldExpr {
@@ -1791,11 +1791,11 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
         };
     }
 
-    let first = parse_expr(parser);
+    let first = parse_expr_bp(parser, precedence::YIELD_OPERAND_BP);
 
     // yield key => value
     if parser.eat(TokenKind::FatArrow).is_some() {
-        let value = parse_expr(parser);
+        let value = parse_expr_bp(parser, precedence::YIELD_OPERAND_BP);
         super::check_reference_return(parser, &value);
         let span = Span::new(start, value.span.end);
         return Expr {

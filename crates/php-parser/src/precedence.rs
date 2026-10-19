@@ -167,6 +167,9 @@ pub fn postfix_binding_power(kind: TokenKind) -> Option<u8> {
 /// and the LHS must be a valid assignment target.
 pub const ASSIGNMENT_BP: u8 = 8;
 
+/// Minimum binding power of a `yield` operand: `yield $a or $b` is `(yield $a) or $b`.
+pub const YIELD_OPERAND_BP: u8 = 7;
+
 /// Ternary binding power — handled specially in the parser.
 pub const TERNARY_BP: u8 = 10;
 

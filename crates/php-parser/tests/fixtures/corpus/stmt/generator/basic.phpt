@@ -833,12 +833,12 @@ function gen() {
               "kind": {
                 "Expression": {
                   "kind": {
-                    "Yield": {
-                      "key": null,
-                      "value": {
+                    "Binary": {
+                      "left": {
                         "kind": {
-                          "Binary": {
-                            "left": {
+                          "Yield": {
+                            "key": null,
+                            "value": {
                               "kind": {
                                 "Variable": "foo"
                               },
@@ -847,36 +847,36 @@ function gen() {
                                 "end": 605
                               }
                             },
-                            "op": "LogicalAnd",
-                            "right": {
-                              "kind": {
-                                "Yield": {
-                                  "key": null,
-                                  "value": {
-                                    "kind": {
-                                      "Variable": "bar"
-                                    },
-                                    "span": {
-                                      "start": 621,
-                                      "end": 625
-                                    }
-                                  },
-                                  "is_from": true
-                                }
-                              },
-                              "span": {
-                                "start": 610,
-                                "end": 625
-                              }
-                            }
+                            "is_from": true
                           }
                         },
                         "span": {
-                          "start": 601,
-                          "end": 625
+                          "start": 590,
+                          "end": 605
                         }
                       },
-                      "is_from": true
+                      "op": "LogicalAnd",
+                      "right": {
+                        "kind": {
+                          "Yield": {
+                            "key": null,
+                            "value": {
+                              "kind": {
+                                "Variable": "bar"
+                              },
+                              "span": {
+                                "start": 621,
+                                "end": 625
+                              }
+                            },
+                            "is_from": true
+                          }
+                        },
+                        "span": {
+                          "start": 610,
+                          "end": 625
+                        }
+                      }
                     }
                   },
                   "span": {
