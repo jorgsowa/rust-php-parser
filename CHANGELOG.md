@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `#[\DelayedTargetValidation]` still reported `#[\Attribute]`, `#[\AllowDynamicProperties]` and `#[\Deprecated]` class-kind errors and `#[\NoDiscard]` on property hooks; it now suppresses them (`php-rs-parser`).
 - `?>` ending a class member (constant, property, trait `use` and its adaptations, abstract or interface method, enum case, property hook) was rejected; it ends the member like `;`, and the `<?php` that reopens the body goes with it (`php-rs-parser`).
 - `?>` right after a bare `break`, `continue`, `return` or `yield` was rejected with "expected expression"; it ends the statement like `;` (`php-rs-parser`).
 - Class names in a namespace named like a builtin type (`int\X`, `string\Y`, `self\Z`) were rejected in type positions (`php-rs-parser`).

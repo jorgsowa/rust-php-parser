@@ -244,7 +244,12 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 self.attribute_error(format!("Attribute \"{name}\" must not be repeated"), span);
             }
             if target_matches {
-                self.validate_internal_attribute(internal.lower_name, site, span);
+                self.validate_internal_attribute(
+                    internal.lower_name,
+                    site,
+                    span,
+                    delayed_validation,
+                );
             }
         }
     }
@@ -254,9 +259,13 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         lower_name: &str,
         site: &AttrSite<'_, 'arena, 'src>,
         span: Span,
+        delayed_validation: bool,
     ) {
         match lower_name {
             "attribute" | "allowdynamicproperties" | "deprecated" => {
+                if delayed_validation {
+                    return;
+                }
                 let Some((kind, name)) = site.class else {
                     return;
                 };
@@ -291,10 +300,12 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             }
             "nodiscard" => {
                 if site.is_hook {
-                    self.attribute_error(
-                        "#[\\NoDiscard] is not supported for property hooks".into(),
-                        span,
-                    );
+                    if !delayed_validation {
+                        self.attribute_error(
+                            "#[\\NoDiscard] is not supported for property hooks".into(),
+                            span,
+                        );
+                    }
                     return;
                 }
                 if let Some(name) = site.method_name {
